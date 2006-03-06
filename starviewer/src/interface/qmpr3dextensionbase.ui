@@ -1,0 +1,196 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>QMPR3DExtensionBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>QMPR3DExtensionBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>718</width>
+            <height>795</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout15</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_axialViewEnabledButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Axial</string>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="on">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_sagitalViewEnabledButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Sagital</string>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="on">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_coronalViewEnabledButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Coronal</string>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>true</bool>
+                            </property>
+                            <property name="on">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout14</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_axialOrientationButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Axial</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_sagitalOrientationButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Sagital</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>m_coronalOrientationButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Coronal</string>
+                            </property>
+                            <property name="toggleButton">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>51</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="udg::Q3DMPRViewer">
+            <property name="name">
+                <cstring>m_mpr3DView</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>udg::Q3DMPRViewer</class>
+        <header location="local">q3dmprviewer.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="PNG" length="1138">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000043949444154388d95954f6c14551cc73fefcd7476b65bdaaecb6e176ba15428a809c8013910315a389858d27a508f801e38498c170f0d09470cc1c463c13f24822927035ce48f18038924a6a948c116a8a564bb6da5dd76a6bbdd9d9d79cfc3ce2e6ea228bfe49799974c3eeffb7ebf37df9fd05a530d2184040cc0042420c27c52e83015e00381d65a892a786060a0b9bbbbfba0e33807b2d9ec26d775ff835709c771181b1bbb373c3c7cc6f3bc2f8079a06456959e3a75ea605bbb7534d55964fd9602e5a080100221c13441caca3b1a6aa71482402926ffb036e893c6e11b5789029f033933dcd8701ce740aab3c84cee120bee5dfc6085485411946de6a60d161e95405b3cb3ba8167d7978835f994cb1a84c06c8264da007817385d530c98d96c7653d796020bee5dcadac18e4699b8d5c0950bcbdcf9750528849fc6e8ecb6d9d3bf8a1daf19289d070d765402ac05e27f572c5dd7c50b0af8411e3b1ae5c655181a9c0524b155265d1b53484b909df2981c5fe1c4d13c335309dede67a129a154ed124401ab0a1661ad894461e296c9d0e00ca0e8e96d6377af413c2530ed8062a185eb173d8606ffe4fcb759dad25deceeb791325f051b5069c763b084a06c73f99c0bf8f4bc95e29d0f1a684de7316d87dc9ccd95f305f6f435b2ef501230f9eecc23dc798961d46ea500445571a5d026cc650cc67f2bd1dcdccceebd264a2e621a06ee620b5f1d5fe6f6c802f3b31eef7f94e4dac518e3a34b8cdf8963d4912a3fc1e38514cccf97501459f7bc4d3c29304d83fc529cc1a32eb7471648ac6e64c7abab88b514d9bcb51180ecc33242d6a1a8db470810ca0214d2521876406e2eced79f2d7367c405149188c99a8e064cbb8011b648691369d483eb5702e24901c4c83c2c535a69e4fa0f1eb74716686d6d249d6e653ab3c8b18169ee8fc4c9dc2f2291b4afb59042fdbb62ada0bdd367dd86280fee15b8f6bdc7def7622ccdc779656713e9f608c70efb4c4f2e72e4c329bc429e96448417b769b2997a70bd62ad893505bcd9d704c0d913735cbf5464ffa104dbdf08e87a79898f8f749248b5b2bc98c3f37d7afa12746cf4d1e83a547d2f85a05c861dbb0ca61fc6393794e1cbe359ae5d8eb1f9251bc31264266670173c089bf5cb4f79c67b53980dffdc3ced380e81522034be58a67fbf4d6acd462e9c9d65fce612e33773549c51124fd8f4f43dc7cf3fbab8050fafa4585eaa954203ba061e1b1bbb3739696d309a040a89c2a7a74fb27d579abbbf7bcc4e293492351d162f6cd374742b5eef6da35c02d374191d2e014c0301a085d61a2144d4b2ac4fb6ed340e27d30691a844070261280c293142db94d2400815d653619a92650746878b3c9af199cbfaa78193c044d55b1ba838d3a7c0031e4f85ff9b19e01ba01fd80a24ab8a2515578a0389f0192534149e1c3a3cfe0a90a3324172b5d12484308108d018422d9e6ee67921bc00946ae0102e439526953bfe346005f840a0b5567f016ea0ce1cda3674a40000000049454e44ae426082</data>
+    </image>
+</images>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>udg::q3dmprviewer.h</includehint>
+</includehints>
+</UI>

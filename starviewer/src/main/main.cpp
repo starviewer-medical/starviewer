@@ -1,0 +1,37 @@
+/***************************************************************************
+ *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/
+
+#include <qapplication.h>
+#include "qapplicationmainwindow.h"
+//#include <qtranslator.h>
+//#include <qtextcodec.h>
+#include <qsplashscreen.h>
+int main(int argc, char *argv[])
+{ 
+    QApplication app(argc, argv);
+    
+    // translation
+    /*
+    QString qmPath = qApp->applicationDirPath() + "/../translations";
+    QTranslator applicationTranslator;
+    applicationTranslator.load( "starviewer_" + m_locales[ languageID ], qmPath );
+    app->installTranslator( &m_applicationTranslator );
+    */
+    QSplashScreen *splash = new QSplashScreen( QPixmap::fromMimeSource("splash.png") );
+    splash->show();
+    
+    udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
+
+    mainWin->show();
+    
+    QObject::connect( &app, SIGNAL( lastWindowClosed() ),
+                      &app, SLOT( quit() )); 
+    splash->finish( mainWin );
+    delete splash;
+    
+    return app.exec();
+}

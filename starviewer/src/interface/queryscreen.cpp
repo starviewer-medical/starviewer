@@ -1,0 +1,1268 @@
+/***************************************************************************
+ *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/ 
+#include "queryscreen.h"
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qdatetimeedit.h>
+#include <qlabel.h>
+#include <qdatetime.h>
+#include <qstring.h>
+//#include <qlistview.h>
+#include <qmessagebox.h>
+#include <qnamespace.h>
+#include <qcursor.h>
+#include <qtabwidget.h>
+#include <qbuttongroup.h>
+#include <qpushbutton.h>
+#include <string.h>
+
+#include "starviewerprocessimage.h"
+#include "processimagesingleton.h"
+
+
+#include "pacsparameters.h"
+#include "pacsconnection.h"
+#include "mulquerystudy.h"
+#include "studylist.h"
+#include "qstudylistview.h"
+#include "series.h"
+#include "seriesmask.h"
+#include "queryseries.h"
+#include "pacsparameters.h"
+#include "pacsserver.h"
+#include "imagemask.h"
+#include "queryimagenumber.h"
+#include "qseriesiconview.h"
+#include "retrieveimages.h"
+#include "cachepacs.h"
+#include "qconfigurationscreen.h"
+#include "pacslist.h"
+#include "qpacslist.h"
+#include "constkey.h"
+#include "starviewersettings.h"
+#include "retrievethread.h"
+#include "cachepool.h"
+#include "scalestudy.h"
+#include <qdesktopwidget.h>
+#include <qapplication.h>
+
+namespace udg {
+/** Constuctor de la classe
+ */
+QueryScreen::QueryScreen(QWidget *parent, const char *name)
+ : QueryScreenBase(parent, name)
+{
+    Status state;
+    setEnabledModalityChecks(false);
+    QString path;
+    StarviewerSettings settings;
+           
+    CachePacs * localCache;
+    
+    localCache = CachePacs::getCachePacs();
+    
+    state = localCache->delPendingStudies();
+    
+    if (!state.good()) 
+    {
+        queryCacheError(&state);
+        return;
+    }
+
+
+    //connect(StudyListView, Signal
+    
+    //indiquem que la llista de Pacs no es mostra
+    m_PacsListShowed = false;
+        
+    m_retrieveScreen = QRetrieveScreen::getQRetrieveScreen();
+    //Aquest connect s'utilitzarà perque els threads puguin avisar que han finalitzat de descarregar les imatges   
+    connect(m_retrieveScreen, SIGNAL(studyRetrieved(QString)), this, SLOT(studyRetrieved(QString)));
+    //connectem els QStudyListView amb els QSeriesIconView, per poder mantenir la informació de les series actualitzada!
+    connect(StudyLViewPacs,SIGNAL(addSeries(Series * )),SeriesImViewPacs,SLOT(addSeries(Series *)));
+    connect(StudyLViewPacs,SIGNAL(clearIconView()),SeriesImViewPacs,SLOT(clearIconView()));
+    
+    //connectem els signes del SeriesIconView StudyListView
+    connect(StudyLViewCache,SIGNAL(addSeries(Series * )),SeriesImViewCache,SLOT(addSeries(Series *)));
+    connect(StudyLViewCache,SIGNAL(clearIconView()),SeriesImViewCache,SLOT(clearIconView()));    
+    connect(SeriesImViewCache,SIGNAL(selectedSeriesIcon(int)),StudyLViewCache,SLOT(selectedSeriesIcon(int))); 
+    connect(SeriesImViewCache,SIGNAL(viewSeriesIcon()),StudyLViewCache,SLOT(viewStudy())); 
+    connect(StudyLViewCache,SIGNAL(selectedSeriesList(QString)),SeriesImViewCache,SLOT(selectedSeriesList(QString))); 
+    
+    //carreguem el processImageSingleton    
+    m_piSingleton=ProcessImageSingleton::getProcessImageSingleton();
+    m_piSingleton->setPath(settings.getCacheImagePath());
+
+    m_threadsList = RetrieveThreadsList::getRetrieveThreadsList();
+    m_threadsList->setMaxThreads(settings.getMaxConnections().toInt(NULL,10));
+    
+    qPacsList->setMaximumSize(1,1);
+    centerWindow();
+    
+    //Instanciem els llistats
+    m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
+    m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
+}
+
+/** Centra la finestra a la pantalla
+  */
+void QueryScreen::centerWindow()
+{
+
+    QDesktopWidget *d = QApplication::desktop();
+        
+    move((d->width() - frameGeometry().width()) / 2,(d->height() - frameGeometry().height()) / 2);
+
+}
+
+/** Neteja els LineEdit del formulari
+  */
+void QueryScreen::clearTexts()
+{
+    
+    m_textStudyID->setText("");
+    m_textPatientID->setText("");
+    m_textFirstName->setText("");
+    m_textLastName->setText("");
+    m_textAccessionNumber->setText("");
+    m_checkTo->setChecked(false);
+    m_checkFrom->setChecked(false);
+    
+    setEnabledTextTo();
+    setEnabledTextFrom();
+    
+}
+
+/** Activa o desactiva els text i el label de la data fins
+  */
+void QueryScreen::setEnabledTextTo()
+{
+    m_textTo->setEnabled(m_checkTo->isChecked());
+}
+
+/** Activa o desactiva el text de la data desde
+  */
+void QueryScreen::setEnabledTextFrom()
+{
+    m_textFrom->setEnabled(m_checkFrom->isChecked());
+}
+
+/** Activa o desactiva els checkbox per buscar per modalitat
+  */
+void QueryScreen::setEnabledModalityChecks(bool enabled)
+{
+    m_checkAll->setEnabled(enabled);
+    m_checkCR->setEnabled(enabled);
+    m_checkCT->setEnabled(enabled);
+    m_checkDX->setEnabled(enabled);
+    m_checkES->setEnabled(enabled);
+    m_checkMG->setEnabled(enabled);
+    m_checkMR->setEnabled(enabled);
+    m_checkNM->setEnabled(enabled);
+    m_checkDT->setEnabled(enabled);
+    m_checkPT->setEnabled(enabled);
+    m_checkRF->setEnabled(enabled);
+    m_checkSC->setEnabled(enabled);
+    m_checkUS->setEnabled(enabled);
+    m_checkXA->setEnabled(enabled);
+    
+    buttonGroupModality->setEnabled(enabled);
+    
+    clearCheckedModality();
+}
+
+/** Posa a verdader o fals tots els check modality, i deixa a true el all a true
+  */
+void QueryScreen::clearCheckedModality()
+{
+    m_checkAll->setChecked(true);
+    m_checkCR->setChecked(false);
+    m_checkCT->setChecked(false);
+    m_checkDX->setChecked(false);
+    m_checkES->setChecked(false);
+    m_checkMG->setChecked(false);
+    m_checkMR->setChecked(false);
+    m_checkNM->setChecked(false);
+    m_checkDT->setChecked(false);
+    m_checkPT->setChecked(false);
+    m_checkRF->setChecked(false);
+    m_checkSC->setChecked(false);
+    m_checkUS->setChecked(false);
+    m_checkXA->setChecked(false);
+
+}
+
+/** Slot que activa o desactiva el m_checkAll en funció de si hi ha alguna modalitat d'estudi seleccionada
+  */
+void QueryScreen::setCheckAll()
+{
+    if (m_checkCR->isChecked() ||
+        m_checkCT->isChecked() ||
+        m_checkDX->isChecked() ||
+        m_checkES->isChecked() ||
+        m_checkMG->isChecked() ||
+        m_checkMR->isChecked() ||
+        m_checkNM->isChecked() ||
+        m_checkDT->isChecked() ||
+        m_checkPT->isChecked() ||
+        m_checkRF->isChecked() ||
+        m_checkSC->isChecked() ||
+        m_checkUS->isChecked() ||
+        m_checkXA->isChecked()   )
+     {
+         m_checkAll->setChecked(false);
+     } 
+     else m_checkAll->setChecked(true);
+}
+
+/** Quanta la data from canvia, amb aquest slot també es canvia la data del TO
+  *        @param data 
+  */
+void QueryScreen::dateFromChanged(const QDate &data)
+{
+    m_textTo->setDate(data);
+}
+
+
+/** Activa els labels i text de la data segons el parametre d'entrada
+  *                   @param enabled [in]  Indica si s'ha d'activar o desactivar
+  */
+void QueryScreen::setEnabledDates(bool enabled)
+{
+    m_textFrom->setEnabled(enabled);
+    m_checkFrom->setEnabled(enabled);
+    m_checkFrom->setChecked(enabled);
+    
+    m_textTo->setEnabled(enabled);
+    m_checkTo->setEnabled(enabled);
+    m_checkTo->setChecked(enabled);
+}
+
+
+/** Fa una cerca dels estudis fets avui
+  */
+void QueryScreen::searchToday()
+{
+
+    QDate today;
+
+    setEnabledDates(true);
+        
+    m_textTo->setDate(today.currentDate());
+    m_textFrom->setDate(today.currentDate());
+    search();
+}
+
+/** Fa una cerca dels estudis d'ahir
+  */
+void QueryScreen::searchYesterday()
+{
+    QDate today;
+    QDate yesterday(today.currentDate());
+    
+    setEnabledDates(true);
+    yesterday = yesterday.addDays(-1);//calcula la data d'ahir
+    
+    m_textFrom->setDate(yesterday);
+    m_textTo->setDate(yesterday);
+    search();
+}
+
+/** Escull a on fer la cerca, si a nivell local o PACS
+  */
+void QueryScreen::search()
+{
+    
+    this->setCursor(QCursor(Qt::WaitCursor));
+    
+    if (m_Tab->currentPageIndex()==1)
+    {
+        //if (!validateNoEmptyMask())
+        if (1==2)
+        {
+            switch( QMessageBox::information( this, tr("Starviewer"),
+                                        tr("You have not specified any filter. This query could take a long time. Do you want to continue ?"),
+                                        tr("Yes"), tr("No"),
+                                        0, 1 ) ) 
+            {
+                case 0:  queryStudyPacs();
+            }    
+        }
+        else queryStudyPacs();
+
+    }
+    else
+    {
+        queryStudyCache();
+    }
+    
+    this->setCursor(QCursor(Qt::ArrowCursor));
+
+}
+
+
+/** valida que la màscara de cerca no estigui buida, en el cas que ho sigui s'haurà d'avisar al usuari, perquè fer una cerca al Pacs sense 
+  * filtrar potser molt lenta, al haver de mostrar totes les dades
+  *        @return indica si el filtre de cerca està buit
+  */
+bool QueryScreen::validateNoEmptyMask()
+{
+    if ( m_textPatientID->text().length() == 0 &&
+         m_textFirstName->text().length() == 0 &&
+         m_textLastName->text().length() == 0 &&
+         m_textStudyID->text().length() == 0 &&
+         m_textAccessionNumber->text().length() == 0 &&
+         !m_checkFrom->isChecked()  &&
+         !m_checkTo->isChecked() )
+    {
+        return false;
+    }
+    else return true;
+}
+
+/** Fa cerca al pacs seleccionats
+  */
+void QueryScreen::queryStudyPacs()
+{
+
+    PacsList pacsList;
+    PacsParameters pa;
+    QString result;
+    StarviewerSettings settings;
+    
+    pacsList.clear(); //netejem el pacsLIST
+    qPacsList->getSelectedPacs(&pacsList); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    
+    pacsList.firstPacs();
+    
+    if (pacsList.end()) //es comprova que hi hagi pacs seleccionats
+    {
+        QMessageBox::warning( this, tr("StarViewer"),tr("Please select a PACS to query"));
+        return;      
+    }
+    
+    MulQueryStudy mulQueryStudy(settings.getMaxConnections().toInt(NULL,10));//Establim el nombre màxim de threads   
+  
+    mulQueryStudy.setPacsList(pacsList); //indiquem a quins Pacs Cercar
+    mulQueryStudy.setMask(buildMask()); //construim la mascara
+   
+    if(!mulQueryStudy.StartQueries().good())  //fem la query
+    {
+        StudyLViewPacs->clear();
+        QMessageBox::information( this, tr("StarViewer"),tr("ERROR QUERING!."));
+        return;  
+    }
+    
+    //m_studyListSingleton=mulQueryStudy.getStudyList(); //agafem la llista 
+      
+    SeriesImViewPacs->clear(); //netegem el QSeriesIconView dem_studyListSingleton PACS
+    m_studyListSingleton->firstStudy();
+       
+    if (m_studyListSingleton->end())
+    {
+        StudyLViewPacs->clear();        
+        QMessageBox::information( this, tr("StarViewer"),tr("No study match found."));
+        return;
+    }
+    
+    StudyLViewPacs->showStudyList(m_studyListSingleton); //fem que es visualitzi l'studyView seleccionat
+    
+    StudyLViewPacs->setSortColumn(2);//ordenem pel nom
+    
+    
+}
+
+/** Busca un estudi a la cache local
+  */
+void QueryScreen::queryStudyCache()
+{
+    CachePacs * localCache;
+    Status state;
+    
+    localCache = CachePacs::getCachePacs();
+
+    SeriesImViewCache->clear();
+    
+    m_studyListCache.clear();
+    
+    state=localCache->queryStudy(buildMask(),m_studyListCache); //busquem els estudis a la cache
+
+    if (!state.good()) 
+    {
+        StudyLViewCache->clear();
+        queryCacheError(&state);
+        return;
+    }
+    
+    m_studyListCache.firstStudy();
+
+    if (m_studyListCache.end()) //no hi ha estudis
+    {
+        StudyLViewCache->clear();
+        QMessageBox::information( this, tr("StarViewer"),tr("No study match found."));
+        return;
+    }
+    
+    StudyLViewCache->showStudyList(&m_studyListCache);//es mostra la llista d'estudis
+    
+    StudyLViewCache->setSortColumn(2); //ordenem pel nom
+}
+
+/**Busca la informació d'una sèrie
+  *            @param studyUID [in] UID de l'estidi
+  *            @param pacsAETItle [in] AEtitle del pacs a buscar la sèrie          
+  */
+/* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
+void QueryScreen::searchSeries(QString studyUID,QString pacsAETitle)
+{   
+  
+    this->setCursor(QCursor(Qt::WaitCursor));
+    
+    SeriesImViewPacs->clear(); //Netegem el QSeriesIconView del Pacs
+    
+    if (m_Tab->currentPageIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
+    {
+        QuerySeriesPacs(studyUID,pacsAETitle,true);
+    }
+    else if (m_Tab->currentPageIndex() == 0) // si estem a la pestanya de la cache
+    {
+        QuerySeriesCache(studyUID);
+    }
+
+    this->setCursor(QCursor(Qt::ArrowCursor));
+}
+
+/**Busca la informació d'una sèrie en el PACS i la mostra en la interfície
+  *            @param studyUID [in] UID de l'estidi
+  *            @param pacsAETItle [in] AEtitle del pacs a buscar la sèrie    
+  *            @param show [in]    Si es verdader mostra les dades de la sèrie per pantalla, pot ser que no les volguem mostrar, per exemple el cas que volem la informació per guardar-la en la caché al descarragar-nos una imatge
+  */
+void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show)
+{
+    Series serie;
+    ImageMask imagem;
+    QString text,timeoutPacs;
+    PacsParameters pacs;
+    PacsListDB pacsListDB;
+    Status state;   
+    StarviewerSettings settings;
+    int nImages = 0;
+
+    
+    state = pacsListDB.queryPacs(&pacs,pacsAETitle.ascii());//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    if (!state.good())
+    {
+        queryCacheError(&state);
+        return;
+    }
+
+    pacs.setAELocal(settings.getAETitleMachine()); //especifiquem el nostres AE
+    pacs.setTimeOut(settings.getTimeout().toInt(NULL,10)); //li especifiquem el TimeOut
+
+    m_seriesListSingleton->clear();
+      
+    PacsServer pacsConnection(pacs);
+    
+    if (!pacsConnection.Connect(PacsServer::query,PacsServer::seriesLevel).good())
+    {//Error al connectar
+        text.insert(0,tr("Error! connecting to PACS : "));
+        text.append(pacsAETitle);
+        return;         
+    }
+    
+    QuerySeries querySeries(pacsConnection.getConnection(),buildSeriesMask(studyUID));
+    
+    if (!querySeries.find().good())
+    {//Error a la query
+        text.insert(0,tr("Error! Can't query studies in PACS : "));
+        text.append(pacsAETitle);
+        QMessageBox::warning( this, tr("StarViewer"),text);
+        return;         
+    }
+    
+    m_seriesListSingleton->firstSeries();
+    if (m_seriesListSingleton->end())
+    {
+        QMessageBox::information( this, tr("StarViewer"),tr("No series match for this study.\n"));
+        return;
+    }
+    
+    m_seriesListSingleton->firstSeries();
+    
+    if (show)  SeriesImViewPacs->clear();
+    
+    while (!m_seriesListSingleton->end())
+    {
+        serie = m_seriesListSingleton->getSeries();
+        if (settings.getCountImages())
+        {
+            //preparem per fer la cerca d'imatges
+
+            imagem.setStudyUID(serie.getStudyUID().c_str());
+            imagem.setSeriesUID(serie.getSeriesUID().c_str());
+            QueryImageNumber qim(pacsConnection.getConnection(),imagem);
+        
+            qim.count();//contem el nombre d'imatges
+        
+            nImages=  qim.getImageNumber();
+            serie.setImageNumber(nImages);
+        }
+        if (show)
+        {
+            StudyLViewPacs->insertSeries(&serie);//inserim la informació de les imatges al formulari
+ 
+        }
+        m_seriesListSingleton->nextSeries();
+    }
+    pacsConnection.Disconnect();
+    
+}
+
+/** Cerca les sèries d'un estudi a la Cache local
+  *               @param StudyUID [in] UID de l'estudi a cercar
+  */
+void QueryScreen::QuerySeriesCache(QString studyUID)
+{
+    Series serie;
+    ImageMask imageMask;
+    CachePacs * localCache = CachePacs::getCachePacs();
+    int imagesNumber;
+    Status state;
+    
+    m_seriesListCache.clear();//preparem la llista de series
+    
+    //preparem la mascara i cerquem les series a la cache
+    state=localCache->querySeries(buildSeriesMask(studyUID),m_seriesListCache);
+    
+    if (!state.good())
+    {
+        queryCacheError(&state);
+        return;
+    }
+    
+    m_seriesListCache.firstSeries();
+    if (m_seriesListCache.end())
+    {
+        QMessageBox::information( this, tr("StarViewer"),tr("No series match for this study.\n"));
+        return;
+    }
+    
+    m_seriesListCache.firstSeries();
+    SeriesImViewCache->clear();
+    
+    while (!m_seriesListCache.end())
+    {
+        serie= m_seriesListCache.getSeries();
+        
+        //preparem per fer la cerca d'imatges
+        imageMask.setStudyUID(serie.getStudyUID().c_str());
+        imageMask.setSeriesUID(serie.getSeriesUID().c_str());
+        
+        state = localCache->countImageNumber(imageMask,imagesNumber);
+        serie.setImageNumber(imagesNumber);
+        if (!state.good())
+        {
+            queryCacheError(&state);
+            return;
+        }
+        StudyLViewCache->insertSeries(&serie);//inserim la informació de les imatges al formulari
+        m_seriesListCache.nextSeries();
+    }   
+}
+
+
+void QueryScreen::retrieve()
+{
+    switch( QMessageBox::information( this, tr("Starviewer"),
+				      tr("Are you sure you want to retrieve this Study ?"),
+				      tr("Yes"), tr("No"),
+				      0, 1 ) ) 
+    {
+    case 0:
+        retrievePacs(false);
+    }
+
+}
+   
+
+/** Aquest mètode s'encarrega de començar la descarrega d'un estudi, estableix la màscara, insereix l'estudi i la sèria a la caché,
+  * ademés de crear el thread per continuar amb la descàrrega de l'estdui
+  *        @param view [in] boolea que indica si després de la descarrega s'ha de visualitzar l'estudi
+  */
+    
+void QueryScreen::retrievePacs(bool view)
+{
+    
+    pthread_t thread;
+    StudyMask mask;
+    std::string studyUID,defaultSeriesUID;
+    Status state;
+
+    PacsParameters pacs;      
+    bool estat;
+    PacsListDB pacsListDB; 
+    StarviewerSettings settings;
+    QString result;
+    RetrieveThread rThread;
+    CachePool *pool = CachePool::getCachePool();
+    
+    this->setCursor(QCursor(Qt::WaitCursor));
+    if (StudyLViewPacs->getSelectedStudyUID() == "")
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to download "));
+        return;
+    }
+    studyUID.insert(0,StudyLViewPacs->getSelectedStudyUID().ascii());
+    
+    if (pool->getFreeTotalSpace()< 1000) //comprovem que tinguem més 1 GB lliure per poder continuar
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        QMessageBox::warning( this, tr("StarViewer"),tr("Error disk space under 1 Gb. Plese free spaces in your disk "));
+        return;    
+    }
+    
+    //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
+    if (!m_studyListSingleton->findStudy(studyUID))
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        QMessageBox::warning( this, tr("StarViewer"),tr("Internal Error : "));
+        return;
+    }
+   
+    //Inserim l'informació de l'estudi a la caché!
+    estat = insertStudyCache(m_studyListSingleton->getStudy());
+    if (!estat)
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        return;
+    }   
+    
+    //primer guardem la informacio de les series per esbrinar de quina modalitat és l'estudi ja que el Pacs no ens la dona
+    estat = insertSeriesCache(studyUID);
+    if (!estat) 
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        return;
+    }
+
+    mask.setStudyUID(studyUID.c_str());//definim la màscara per descarregar l'estudi
+    
+    //busquem els paràmetres del pacs del qual volem descarregar l'estudi
+    state = pacsListDB.queryPacs(&pacs,StudyLViewPacs->getSelectedStudyPacsAETitle().ascii());
+    if (!state.good())
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        queryCacheError(&state);
+        return;
+    }
+
+    //inserim a la pantalla de retrieve que iniciem la descarrega
+    m_retrieveScreen->insertNewRetrieve(&m_studyListSingleton->getStudy());      
+
+    //emplanem els parametres amb dades del starviewersettings
+    pacs.setAELocal(settings.getAETitleMachine().ascii());
+    pacs.setTimeOut(settings.getTimeout().toInt(NULL,10));
+    pacs.setLocalPort(settings.getLocalPort().ascii());
+    
+    //preparem les dades a passar perl thread
+    retParam.studyUID=studyUID;
+    retParam.pacs = pacs;
+    
+    pthread_create(&thread,NULL,retrieveImages,(void*)&retParam); //es crea el thread
+    
+    rThread.setStudyUID(studyUID); //guardem la informació del thread creat
+    rThread.setThread(thread);
+    rThread.setView(view);
+    
+    if (view)
+    {
+        //si ens han indicat que volen visualitzar una serie en concret definim el seu UID
+        if (StudyLViewPacs->getSelectedSeriesUID() == "")
+        {
+            // si no han escollit cap serie visaualizem la primera per defecte
+            m_seriesListSingleton->firstSeries();
+            rThread.setDefaultSeriesUID(m_seriesListSingleton->getSeries().getSeriesUID());
+        }
+        else rThread.setDefaultSeriesUID(StudyLViewPacs->getSelectedSeriesUID().ascii());
+    }
+    m_threadsList->addThread(rThread);
+    this->setCursor(QCursor(Qt::ArrowCursor));
+
+
+}
+
+/** Insereix un estudi a descarregar a la cache
+  *        @param estudi a insertat
+  *        @return retorna si la operacio s'ha realitzat amb èxit
+  */
+bool QueryScreen::insertStudyCache(Study stu)
+{
+
+    CachePacs *localCache = CachePacs::getCachePacs();
+    std::string absPath;
+    Status state;
+    Study study = stu;
+    StarviewerSettings settings;
+    
+   m_seriesListSingleton->firstSeries();
+   //Cerquem les sèries de l'estudi per saber de quina modalitat és l'estudi, ja que el pacs no ens ho retorna
+   if (!m_seriesListSingleton->end()) 
+   {   
+       if (m_seriesListSingleton->getSeries().getStudyUID()!=study.getStudyUID()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
+       {
+           QuerySeriesPacs(study.getStudyUID(),StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+       }
+   }
+   else QuerySeriesPacs(study.getStudyUID(),StudyLViewPacs->getSelectedStudyPacsAETitle() ,false); 
+    
+    //establim la modalitat de l'estudi
+    m_seriesListSingleton->firstSeries();
+    study.setStudyModality(m_seriesListSingleton->getSeries().getSeriesModality());
+    
+    //creem el path absolut de l'estudi
+    absPath.insert(0,settings.getCacheImagePath().ascii());
+    absPath.append(study.getStudyUID());
+    absPath.append("/");
+    study.setAbsPath(absPath);
+    //inserim l'estudi a la caché
+    state = localCache->insertStudy(&study); 
+    if (!state.good())
+    {   
+        retrieveErrorInsertStudy(&state);
+        return false;
+    }
+   
+    return true;
+}
+
+/** insereix les series de l'estudi UID passat per paràmetre
+  *        @param UID de l'estudi del que s'han d'inserir les series
+  *        @return retorna si la operacio s'ha realitzat amb èxit
+  */
+bool QueryScreen::insertSeriesCache(QString studyUID)
+{
+
+    CachePacs *localCache = CachePacs::getCachePacs();
+    Status state;
+    
+    m_seriesListSingleton->firstSeries();
+
+   if (!m_seriesListSingleton->end())     //Cerquem les sèries de l'estudi per inserir la informació a la bd
+   {   
+       if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.ascii()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
+       {
+           QuerySeriesPacs(studyUID.ascii(),StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+       }
+   } 
+   
+   m_seriesListSingleton->firstSeries();
+
+   while (!m_seriesListSingleton->end())   //inserim les sèries a la base de dades
+   {
+       state = localCache->insertSeries(&m_seriesListSingleton->getSeries());
+       if (!state.good())
+       {
+           retrieveErrorInsertSeries(&state);
+           return false;
+       }
+       m_seriesListSingleton->nextSeries();
+   }  
+   return true;
+
+}
+ 
+/** Descarrega les imatges de l'estudi seleccionat al pacs local
+  */
+/*static */
+/* Ara per ara per la configuració de les dcmtk no he descober com cancel·lar la descarrega d'imatges despres de produir-se un error,
+  *l'únic solució possible ara mateix i que m'han aconsellat als forums es matar el thread però aquesta idea no m'agrada perquè si matem
+  *el thread no desconnectem del PACS, no destruim les senyals amb el QRetreiveScreen i no esborrem el thread de la llista retrieveThreads,
+  *per tant de moment el que es farà es donar el error quant hagi finalitzat la descarrega
+  */
+void *QueryScreen::retrieveImages(void *param)
+{
+    StudyMask mask;
+    StarviewerProcessImage *sProcessImg = new StarviewerProcessImage();
+    std::string studyUID;
+    Status state,retState;
+    ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
+    QRetrieveScreen *retrieveScreen = QRetrieveScreen::getQRetrieveScreen() ;
+    retrieveParameters retParam = *((retrieveParameters*) param);
+    CachePacs *localCache =  CachePacs::getCachePacs();
+    RetrieveThreadsList *threadsList = RetrieveThreadsList::getRetrieveThreadsList();
+    ScaleStudy scaleStudy;
+    RetrieveImages retrieve;
+    
+    studyUID = retParam.studyUID;
+    
+    threadsList->getTurn(); //demanem torn per poder inicia la descarrega
+    
+    mask.setStudyUID(studyUID.c_str());
+   
+    PacsServer pacsConnection(retParam.pacs);//connemtem al pacs
+    state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
+    if (!state.good())
+    {//Error al connectar
+     //   QMessageBox::warning( this, tr("StarViewer"),tr("Error! Can't connect to PACS : "));
+        cout<<state.text()<<endl;
+       //pthread_exit((void *)(code));    
+    }
+    
+    //passem els parametres a la classe retrieveImages
+    retrieve.setConnection(pacsConnection.getConnection());  
+    retrieve.setMask(mask); 
+    retrieve.setNetwork(pacsConnection.getNetwork());
+        
+    piSingleton->addNewProcessImage(studyUID,sProcessImg);//afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
+    retrieveScreen->setConnectSignal(sProcessImg); //indiquem al qretrievescreen de quina instancia ha d'esperar el signal per controlar la descarrega   
+   
+    retState = retrieve.moveSCU();
+    if (!retState.good() || sProcessImg->getErrorRetrieving() )
+    {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
+        retrieveScreen->setErrorRetrieving(studyUID);
+        localCache->delStudy(studyUID);
+    }
+    else 
+    {    
+        scaleStudy.scale(studyUID); //escalem l'estudi per la previsualització de la caché  
+        retrieveScreen->setRetrievedFinished(studyUID); //indiquem que l'estudi s'ha descarregat
+        localCache->setStudyRetrieved(studyUID); //posem l'estudi com a descarregat
+    }
+    
+    pacsConnection.Disconnect();
+  
+    threadsList->releaseTurn();//alliberem el torn per a que un altre thread pugui descarregar les imatges
+
+
+    retrieveScreen->delConnectSignal(sProcessImg);    //esborrem les senyals del thread amb la interficeiq QRetrieveScreen
+    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
+    piSingleton->delProcessImage(studyUID);
+    
+}
+
+/** Accions que es duen a terme quant s'ha descarregat un estudi
+  *        @param UID de l'estudi descarregat
+  */
+void QueryScreen::studyRetrieved(QString studyUID)
+{
+    RetrieveThread rThread;
+  
+    rThread = m_threadsList->getRetrieveThread(studyUID);
+    m_threadsList->deleteRetrieveThread(studyUID);
+    
+    //if (rThread == NULL) return; 
+
+//     cout << " study " << rThread.getStudyUID()<<endl;
+//     cout << " series " << rThread.getDefaultSeriesUID()<<endl;
+//     if (rThread.getView())
+//     {
+//          retrieveCache(rThread.getStudyUID(),rThread.getDefaultSeriesUID());
+//     }
+    
+}
+
+/** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
+  *        @param QWidget (no es fa servir)
+  */
+void QueryScreen::tabChanged(QWidget *)
+{
+
+    if (m_Tab->currentPageIndex()!=0)
+    {
+        setEnabledModalityChecks(false);//desactivem el grup button de modalitat
+        buttonRetrieve->setEnabled(true);//activem el boto retrieve
+        buttonView->setEnabled(true);
+    }
+    else 
+    {
+        setEnabledModalityChecks(true);//activem el grup button de motalitat
+        buttonRetrieve->setEnabled(false);//desactivem el boto retrieve
+        buttonView->setEnabled(true);
+    }
+
+}
+
+/** Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega
+  * a la classe volum i es visualitza
+  */
+void QueryScreen::view()
+{
+       
+    if (m_Tab->currentPageIndex() == 1)
+    {
+        switch( QMessageBox::information( this, tr("Starviewer"),
+				      tr("Are you sure you want to retrieve this Study ?"),
+				      tr("Yes"), tr("No"),
+				      0, 1 ) ) 
+        {
+        case 0:
+            retrievePacs(true);
+        }
+    }
+    else if (m_Tab->currentPageIndex()==0)
+    {
+        retrieveCache(StudyLViewCache->getSelectedStudyUID(),StudyLViewCache->getSelectedSeriesUID());
+    }
+    
+
+    
+}
+
+
+/** Carrega un estudi de la cache perque pugui ser visualitzat a la classe Volum i emet una senyal perque sigui visualitzat
+  *     @param UID de l'estudi
+  *     @param UID de la serie que s'ha de visualitzar per defecte, si es buit, es posara per defecte la primera serie de l'estudi
+  */
+void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
+{
+
+    CachePacs * localCache = CachePacs::getCachePacs(); 
+    Status state;
+    StudyList stuList;
+    Study stu;
+    StudyMask stuMask;
+    SeriesMask mask;
+    SeriesList seriesList;
+    SeriesVolum seriesVol;
+    Series series;
+    ImageMask imageMask;
+    ImageList imageList;
+    QString absSeriesPath;
+    StarviewerSettings settings;
+    StudyVolum volum;
+        
+    stuMask.setStudyUID(studyUID.ascii());
+    state = localCache->queryStudy(stuMask,stuList); //cerquem la informació de l'estudi
+    if (!state.good())
+    {
+        queryCacheError(&state);
+        return;
+    }
+    
+    stuList.firstStudy();    
+    if (stuList.end())
+    {
+        QMessageBox::warning( this, tr("StarViewer"),tr("Error trying to visualitzate the study"));
+        return;      
+    }
+    
+    stu = stuList.getStudy();
+    
+    volum.setPatientAge(stu.getPatientAge());
+    volum.setPatientId(stu.getPatientId());
+    volum.setPatientName(stu.getPatientName());
+    volum.setStudyDate(stu.getStudyDate());
+    volum.setStudyId(stu.getStudyId());
+    volum.setStudyTime(stu.getStudyTime());
+    volum.setStudyUID(stu.getStudyUID());    
+    
+    mask.setStudyUID(stu.getStudyUID().c_str());
+
+    localCache->querySeries(mask,seriesList);
+    if (!state.good())
+    {
+        queryCacheError(&state);
+        return;
+    }
+        
+    seriesList.firstSeries();
+    
+    //si es buit indiquem que per defecte es visualitza la primera serie
+    if (seriesUID == "")
+    {
+        volum.setDefaultSeriesUID(seriesList.getSeries().getSeriesUID());
+    }
+    else volum.setDefaultSeriesUID(seriesUID);
+    
+    while (!seriesList.end())
+    {
+        series = seriesList.getSeries();
+        
+        absSeriesPath = settings.getCacheImagePath();
+        absSeriesPath += series.getSeriesPath();
+        seriesVol.setSeriesUID(series.getSeriesUID());
+        seriesVol.setStudyId(stu.getStudyId());
+        seriesVol.setStudyUID(stu.getStudyUID());
+        seriesVol.setSeriesPath(absSeriesPath);
+        
+        imageMask.setSeriesUID(series.getSeriesUID().c_str());
+        imageMask.setStudyUID(stu.getStudyUID().c_str());
+        
+        imageList.clear();
+        state= localCache->queryImages(imageMask,imageList);
+
+        if (!state.good())
+        {
+            queryCacheError(&state);
+            return;
+        }       
+  
+        imageList.firstImage();
+        
+        while (!imageList.end())
+        {
+            seriesVol.addImage(imageList.getImage().getImagePath().c_str());
+            imageList.nextImage();
+        }
+        
+        volum.addSeriesVolum(seriesVol);
+        seriesList.nextSeries();
+    }
+    
+    localCache->updateStudyAccTime(studyUID);
+    emit(viewStudy(volum));
+}
+
+/**slot que s'activa al esborrar estudi de la caché
+  */
+void QueryScreen::deleteStudyCache()
+{
+    Status state;
+    CachePacs * localCache = CachePacs::getCachePacs();
+    QString studyUID;
+    
+    
+    studyUID = StudyLViewCache->getSelectedStudyUID();
+    
+    if (studyUID=="")
+    {
+        QMessageBox::information( this, tr("StarViewer"),tr("Please select a study to delete"));
+        return;    
+    }
+    
+    state = localCache->delStudy(studyUID.ascii());   
+    if (state.good())
+    {
+        StudyLViewCache->removeStudy(studyUID);
+    }
+    else
+    {
+        databaseError(&state);
+    }
+}
+
+void QueryScreen::closeEvent( QCloseEvent* ce )
+{
+	//ce->ignore();
+        ce->accept();        
+}
+
+void QueryScreen::temporal()
+{
+    m_retrieveScreen->show();
+}
+
+
+void QueryScreen::config()
+{
+    udg::QConfigurationScreen *configScreen = new udg::QConfigurationScreen;
+    
+//    configScreen()->setModal(true);
+    configScreen->setModal(true);
+    configScreen->show();
+}
+
+/**  Modifica la interfície per mostar el QPacsList
+  */
+void QueryScreen::showPacsList()
+{
+    int mida;
+    
+    if (!m_PacsListShowed)
+    {   qPacsList->setFixedSize(200,240);
+        mida = 200 + 20;
+        m_PacsListShowed = true;
+    }
+    else
+    {
+        qPacsList->setFixedSize(1,1);
+        mida = -( 200 + 20);
+        m_PacsListShowed = false;
+    }
+    
+   this->resize(this->width() + mida,this->height());
+
+}
+
+/** Construeix la màscara de cerca de la sèrie
+  *             @param UID de l'estudi
+  *             @return màscara
+  */
+SeriesMask QueryScreen::buildSeriesMask(QString studyUID)
+{
+    SeriesMask mask;
+
+    mask.setStudyUID(studyUID);
+    mask.setSeriesDate(NULL);
+    mask.setSeriesTime(NULL);
+    mask.setSeriesModality(NULL);
+    mask.setSeriesNumber(NULL);
+    mask.setSeriesBodyPartExaminated(NULL);
+    mask.setSeriesUID(NULL);
+    
+    return mask;
+}
+
+
+/** Contrueix el nom del pacient per a crear la màscara, el format del la màscara de pacient ha de ser "*" o "congoms* Nom*"
+  *        @return retorna la màscara amb el nom del pacient
+  */
+QString QueryScreen::buildPatientName()
+{
+
+     QString patientName;
+    
+     
+    if (m_textFirstName->text().length() == 0 && m_textLastName->text().length() == 0)
+    {
+        patientName.append("*");
+    }    
+    else
+    {
+        patientName.append(m_textLastName->text());
+        //posem * per si només posem el primer cognom
+        patientName.append("* ");//posem * per si no posa el nom complet, i espai per separar del nom
+        if (m_textFirstName->text().length() > 0)
+        {
+            patientName.append(m_textFirstName->text());
+            patientName.append("*");//per si no posa el nom complet
+        }
+        else patientName.append("*");
+    }
+    
+    return patientName;
+
+}
+
+/** construeix la màscara de les dates
+  *        @return retorna la màscara de les dates
+  */
+QString QueryScreen::buildStudyDates()
+{
+    QString date;
+    
+    
+    if (m_checkFrom->isChecked() && m_checkTo->isChecked())
+    {
+        date.append(m_textFrom->date().toString("yyyyMMdd"));
+        date.append("-");
+        date.append(m_textTo->date().toString("yyyyMMdd"));
+    }
+    else 
+    {
+        if (m_checkFrom->isChecked())
+        {
+            date.append(m_textFrom->date().toString("yyyyMMdd"));
+            date.append("-"); // indiquem que volem buscar tots els estudis d'aquella data en endavant 
+        }
+        else if (m_checkTo->isChecked())
+        {
+            date.append("-"); //indiquem que volem buscar tots els estudis que no superin aquesta data
+            date.append(m_textTo->date().toString("yyyyMMdd"));
+        }
+    }
+    
+    return date;
+}
+
+/** Construeix la màscara d'entrada pels estudis
+  *        @return retorna la màscara d'un estudi
+  */
+StudyMask QueryScreen::buildMask()
+{
+    /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
+    /*Per defecte si passem un valor null o buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/    
+    /*En aquí hem de fer un set a tots els camps que volem cercar */
+    StudyMask mask;
+    QString modalityMask;
+    
+    mask.setPatientId(m_textPatientID->text());
+    mask.setPatientName(buildPatientName());
+    mask.setStudyId(m_textStudyID->text());
+    mask.setStudyDate(buildStudyDates());
+    mask.setStudyDescription("");
+    mask.setStudyTime("");
+    mask.setStudyUID("");
+    mask.setInstitutionName("");
+    mask.setStudyModality("");
+    mask.setPatientAge("");
+    mask.setAccessionNumber(m_textAccessionNumber->text());
+    
+    /*Aquesta mascara només serveix per la caché, no serveix pel pacs!!!!!!!!!!!!!!!!!!!1*/
+    if (!m_checkAll->isChecked())
+    { //es crea una sentencia per poder fer un in       
+        if (m_checkCT->isChecked())
+        {
+            modalityMask.append(",'CT'");
+        }
+        if (m_checkCR->isChecked())
+        {
+            modalityMask.append(",'CR'");
+        }        
+        if (m_checkDX->isChecked())
+        {
+            modalityMask.append(",'DX'");
+        }        
+        if (m_checkES->isChecked())
+        {
+            modalityMask.append(",'ES'");
+        }        
+        if (m_checkMG->isChecked())
+        {
+            modalityMask.append(",'MG'");
+        }        
+        if (m_checkMR->isChecked())
+        {
+            modalityMask.append(",'MR'");
+        }        
+        if (m_checkNM->isChecked())
+        {
+            modalityMask.append(",'NM'");
+        }        
+        if (m_checkDT->isChecked())
+        {
+            modalityMask.append(",'DT'");
+        }        
+        if (m_checkPT->isChecked())
+        {
+            modalityMask.append(",'PT'");
+        }        
+        if (m_checkRF->isChecked())
+        {
+            modalityMask.append(",'RF'");
+        }
+        if (m_checkSC->isChecked())
+        {
+            modalityMask.append(",'SC'");
+        }        
+        if (m_checkUS->isChecked())
+        {
+            modalityMask.append(",'US'");
+        }        
+        if (m_checkXA->isChecked())
+        {
+            modalityMask.append(",'XA'");
+        }        
+        if  (modalityMask.length()> 0) 
+        {
+            modalityMask = modalityMask.replace(0,1,"(");
+            modalityMask.append(")");
+            mask.setStudyModality(modalityMask.ascii());
+        }
+    }
+    
+    return mask;
+}
+
+QueryScreen::~QueryScreen()
+{
+
+}
+
+};
+
