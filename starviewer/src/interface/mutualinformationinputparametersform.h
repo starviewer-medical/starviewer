@@ -7,25 +7,24 @@
 
 #ifndef UDGMUTUALINFORMATIONINPUTPARAMETERSFORM_H
 #define UDGMUTUALINFORMATIONINPUTPARAMETERSFORM_H
-
-#include "mutualinformationinputparametersformbase.h"
+ 
+#include "ui_mutualinformationinputparametersformbase.h" // defines Ui::MutualInformationInputParametersFormBase
+#include "qinputparameters.h"
 
 #include "identifier.h"
 
 namespace udg {
 
-//fordware declaration
+//forward declaration
 class MutualInformationParameters;
-
-
 
 /**
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class MutualInformationInputParametersForm : public MutualInformationInputParametersFormBase{
+class MutualInformationInputParametersForm : public QInputParameters , private Ui::MutualInformationInputParametersFormBase{
 Q_OBJECT
 public:
-    MutualInformationInputParametersForm( QWidget *parent = 0, const char *name = 0);
+    MutualInformationInputParametersForm( QWidget *parent = 0 );
 
     ~MutualInformationInputParametersForm();
     
@@ -41,7 +40,7 @@ public slots:
     
 private:
     MutualInformationParameters* m_parameters;
-//    Identifier m_fixedID, m_movingID;    
+
 };
 
 };  // end namespace udg

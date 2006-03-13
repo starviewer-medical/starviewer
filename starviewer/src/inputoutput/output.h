@@ -12,7 +12,7 @@
 #include <itkImageSeriesWriter.h>
 #include <itkRescaleIntensityImageFilter.h>
 
-#include <qobject.h>
+#include <QObject>
 
 namespace udg {
 

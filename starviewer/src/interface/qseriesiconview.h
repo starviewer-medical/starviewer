@@ -7,7 +7,9 @@
 #ifndef UDGSERIESICONVIEW_H
 #define UDGSERIESICONVIEW_H
 
-#include "qseriesiconviewbase.h"
+// #include "qseriesiconviewbase.h"
+#include "ui_qseriesiconviewbase.h"
+#include <QWidget>
 #include "series.h"
 namespace udg {
 
@@ -15,8 +17,7 @@ namespace udg {
 @author marc
 */
 
-class QSeriesIconView : public QSeriesIconViewBase
-{
+class QSeriesIconView : public QWidget , private Ui::QSeriesIconViewBase{
 Q_OBJECT
 
 private :
@@ -24,7 +25,7 @@ private :
     QString m_className; 
 
 public:
-    QSeriesIconView(QWidget *parent = 0, const char *name = 0);
+    QSeriesIconView(QWidget *parent = 0 );
 
     void insertSeries(Series *serie);
     void clear();
@@ -34,9 +35,9 @@ public:
 public slots:
     void clearIconView();
     void addSeries(Series *serie);
-    void clicked(QIconViewItem * item);
+    void clicked(Q3IconViewItem * item);
     void selectedSeriesList(QString key);
-    void view(QIconViewItem *item);
+    void view(Q3IconViewItem *item);
 
 signals :
     void selectedSeriesIcon(int index);

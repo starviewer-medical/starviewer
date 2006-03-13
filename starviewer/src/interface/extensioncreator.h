@@ -7,8 +7,8 @@
 #ifndef UDGEXTENSIONCREATOR_H
 #define UDGEXTENSIONCREATOR_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 class QWidget;
 

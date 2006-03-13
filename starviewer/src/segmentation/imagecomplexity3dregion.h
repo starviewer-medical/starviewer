@@ -42,8 +42,7 @@ public:
 
     // Aquests enum estan copiats tal qual, + endavant veurem si cal canviar-los o inclús is són necessaris i en podem prescindidr completament
     typedef enum {NO_COMPUTED, CONSTANT, EQUAL, PROPORTIONAL} COPY_DATA;
-    typedef enum { Any = 0,   Coordenates = 1,  Level = 2,       Volume = 4,
-              Shape = 8, Orientation = 16, FirstData = 32, All = 63} SortType;
+    typedef enum { Any = 0,   Coordenates = 1,  Level = 2, Volume = 4, Shape = 8, Orientation = 16, FirstData = 32, All = 63} SortType;
 
 
     typedef itk::ImageRegion<3> ItkImageRegionType;

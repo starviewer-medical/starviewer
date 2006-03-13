@@ -29,7 +29,7 @@ class Q3DMPRViewer : public QViewer{
 
 Q_OBJECT
 public:
-    Q3DMPRViewer(QWidget *parent = 0, const char *name = 0);
+    Q3DMPRViewer( QWidget *parent = 0 );
 
     ~Q3DMPRViewer();
 

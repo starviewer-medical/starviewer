@@ -7,9 +7,10 @@
 #ifndef UDGQMPRVIEWER_H
 #define UDGQMPRVIEWER_H
 
-#include "qmprextensionbase.h"
+#include "ui_qmprextensionbase.h"
+using namespace Ui; // \TODO sembla que l'obligació de posar això perquè funcioni és culpa dels FWD decls que hi ha fora de udg, en els que no hi ha FWD decls no cal
 
-/// FWD declarations
+// FWD declarations
 class vtkAxisActor2D;
 class vtkPlaneSource;
 class vtkImageReslice;
@@ -25,10 +26,10 @@ Extensió encarregada de fer l'MPR 2D
     
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class QMPRExtension : public QMPRExtensionBase{
+class QMPRExtension : public QWidget , private QMPRExtensionBase /*Ui::QMPRExtensionBase*/{
 Q_OBJECT
 public:
-    QMPRExtension(QWidget *parent = 0, const char *name = 0);
+    QMPRExtension( QWidget *parent = 0 );
 
     ~QMPRExtension();
     /**

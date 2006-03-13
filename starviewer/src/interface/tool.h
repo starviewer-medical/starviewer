@@ -7,8 +7,7 @@
 #ifndef UDGTOOL_H
 #define UDGTOOL_H
 
-#include <qobject.h>
-
+#include <QObject>
 
 namespace udg {
 

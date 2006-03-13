@@ -5,15 +5,19 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "qconfigurationscreen.h"
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qstring.h>
-#include <qmessagebox.h>
-#include <qlistview.h>
-#include <qprocess.h>
-#include <qfiledialog.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
+
+#include <QString>
+
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QCursor>
+#include <QFileDialog>
+#include <QProcess>
+#include <QLabel>
+#include <q3listview.h>
+
 #include "pacsparameters.h"
 #include "status.h"
 #include "pacslistdb.h"
@@ -23,23 +27,24 @@
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include <math.h>
-#include <qlabel.h>
+
 
 
 namespace udg {
 
 /** Constructor de la classe
   */
-QConfigurationScreen::QConfigurationScreen(QWidget *parent, const char *name)
- : QConfigurationScreenBase(parent, name)
+QConfigurationScreen::QConfigurationScreen( QWidget *parent )
+ : QDialog( parent )
 {
     int i;
 
+    setupUi( this );
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
     
     for (i=0;i<=pacsListView->columns();i++)
     {
-        pacsListView->setColumnWidthMode(i,QListView::Manual); 
+        pacsListView->setColumnWidthMode(i,Q3ListView::Manual); 
     }
     m_PacsID=0;
     
@@ -163,13 +168,13 @@ void QConfigurationScreen::addPacs()
     
     if (validatePacsParameters())
     {
-        pacs.setAEPacs(m_TextAETitle->text());
-        pacs.setPacsPort(m_TextPort->text());
-        pacs.setPacsAdr(m_TextAddress->text());
-        pacs.setInstitution(m_TextInstitution->text());
-        pacs.setLocation(m_TextLocation->text());
-        pacs.setDescription(m_TextDescription->text());
-        if (m_CheckDefault->isChecked())
+        pacs.setAEPacs( m_TextAETitle->text().toStdString() );
+        pacs.setPacsPort( m_TextPort->text().toStdString() );
+        pacs.setPacsAdr( m_TextAddress->text().toStdString() );
+        pacs.setInstitution( m_TextInstitution->text().toStdString() );
+        pacs.setLocation( m_TextLocation->text().toStdString() );
+        pacs.setDescription( m_TextDescription->text().toStdString() );
+        if ( m_CheckDefault->isChecked() )
         {
             pacs.setDefault("S");
         }
@@ -193,7 +198,7 @@ void QConfigurationScreen::addPacs()
 
 /** Slot que s'activa quant seleccionem un Pacs del PacsListView, emplena les caixes de texts amb les dades del Pacs
   */
-void QConfigurationScreen::selectedPacs(QListViewItem * item)
+void QConfigurationScreen::selectedPacs(Q3ListViewItem * item)
 {
     PacsList list;
     PacsParameters pacs;
@@ -211,17 +216,17 @@ void QConfigurationScreen::selectedPacs(QListViewItem * item)
             return;
         }
                 
-        if (list.findPacs(item->text(0))) //busquem les dades del PACS
+        if (list.findPacs( item->text(0).toStdString() ) ) //busquem les dades del PACS
         {   
             pacs = list.getPacs();
             
             //emplenem els textots
-            m_TextAETitle->setText(pacs.getAEPacs());
-            m_TextPort->setText(pacs.getPacsPort());
-            m_TextAddress->setText(pacs.getPacsAdr());
-            m_TextInstitution->setText(pacs.getInstitution());
-            m_TextLocation->setText(pacs.getLocation());
-            m_TextDescription->setText(pacs.getDescription());
+            m_TextAETitle->setText( pacs.getAEPacs().c_str() );
+            m_TextPort->setText( pacs.getPacsPort().c_str() );
+            m_TextAddress->setText( pacs.getPacsAdr().c_str() );
+            m_TextInstitution->setText( pacs.getInstitution().c_str() );
+            m_TextLocation->setText( pacs.getLocation().c_str() );
+            m_TextDescription->setText( pacs.getDescription().c_str() );
             m_PacsID = pacs.getPacsID();
             if (pacs.getDefault() == "S")
             {
@@ -251,12 +256,12 @@ void QConfigurationScreen::updatePacs()
     
     if (validatePacsParameters())
     {
-        pacs.setAEPacs(m_TextAETitle->text());
-        pacs.setPacsPort(m_TextPort->text());
-        pacs.setPacsAdr(m_TextAddress->text());
-        pacs.setInstitution(m_TextInstitution->text());
-        pacs.setLocation(m_TextLocation->text());
-        pacs.setDescription(m_TextDescription->text());
+        pacs.setAEPacs( m_TextAETitle->text().toStdString() );
+        pacs.setPacsPort( m_TextPort->text().toStdString() );
+        pacs.setPacsAdr( m_TextAddress->text().toStdString() );
+        pacs.setInstitution( m_TextInstitution->text().toStdString() );
+        pacs.setLocation( m_TextLocation->text().toStdString() );
+        pacs.setDescription( m_TextDescription->text().toStdString() );
         pacs.setPacsID(m_PacsID);
         if (m_CheckDefault->isChecked())
         {
@@ -331,14 +336,14 @@ void QConfigurationScreen::fillPacsListView()
         
         while (!list.end())
         {
-            QListViewItem* item = new QListViewItem(pacsListView);            
+            Q3ListViewItem* item = new Q3ListViewItem(pacsListView);            
             pacs = list.getPacs();
-            item->setText(0,pacs.getAEPacs());
-            item->setText(1,pacs.getPacsAdr());
-            item->setText(2,pacs.getPacsPort());
-            item->setText(3,pacs.getInstitution());
-            item->setText(4,pacs.getLocation());
-            item->setText(5,pacs.getDescription());
+            item->setText(0,pacs.getAEPacs().c_str() );
+            item->setText(1,pacs.getPacsAdr().c_str() );
+            item->setText(2,pacs.getPacsPort().c_str() );
+            item->setText(3,pacs.getInstitution().c_str() );
+            item->setText(4,pacs.getLocation().c_str() );
+            item->setText(5,pacs.getDescription().c_str() );
             if (pacs.getDefault() == "S")
             {
                 item->setText(6,tr("YES"));
@@ -443,7 +448,7 @@ bool QConfigurationScreen::validateChanges()
     
     if (m_DataBaseRoot->isModified())
     {
-        if (!dir.exists(m_DataBaseRoot->text(),true))
+        if ( !dir.exists(m_DataBaseRoot->text()))
         {
             QMessageBox::warning( this, tr("StarViewer"),tr("Invalid database path"));
             return false;             
@@ -452,7 +457,7 @@ bool QConfigurationScreen::validateChanges()
 
     if (m_CacheImagePath->isModified())
     {
-        if (!dir.exists(m_CacheImagePath->text(),true))
+        if (!dir.exists(m_CacheImagePath->text()))
         {
             QMessageBox::warning( this, tr("StarViewer"),tr("Invalid cache image path. The directory doesn't exit"));
             return false;             
@@ -552,16 +557,20 @@ void QConfigurationScreen::configurationChanged (const QString&)
 void QConfigurationScreen::examinateDataBaseRoot()
 {
     QProcess process;
-    QFileDialog *dlg = new QFileDialog( process.workingDirectory().dirName(), "*.sdb (StarViewer Database", 0, 0, TRUE );
+//     dirname , filter , parent , name , modal
+//     QFileDialog *dlg = new QFileDialog( process.workingDirectory().dirName(), "*.sdb (StarViewer Database)", 0, 0, TRUE );
+    
+//     parent , caption ,  dir , filter
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , process.workingDirectory(), tr("*.sdb (StarViewer Database)") );
     QString directory;
 
-    
-    dlg->setCaption( QFileDialog::tr( "Open" ) );
-    dlg->setMode( QFileDialog::ExistingFile );
+    dlg->setFileMode( QFileDialog::ExistingFile );
     
     if ( dlg->exec() == QDialog::Accepted ) {
-        m_DataBaseRoot->setText(dlg->selectedFile());
-        directory = dlg->url();
+        m_DataBaseRoot->setText( dlg->selectedFile() );
+//         directory = dlg->url();
+// \TODO : serveix d'algo aquest directori??????????????
+        directory = dlg->directory().absolutePath();
     }
     
     delete dlg;
@@ -572,17 +581,16 @@ void QConfigurationScreen::examinateDataBaseRoot()
 void QConfigurationScreen::examinateCacheImagePath()
 {
     QProcess process;
-    QFileDialog *dlg = new QFileDialog( process.workingDirectory().dirName(), "*.sdb (StarViewer Database", 0, 0, TRUE );
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , process.workingDirectory(), tr("*.sdb (StarViewer Database)") );
     QString directory;
     
-    
-    
-    dlg->setCaption( QFileDialog::tr( "Open" ) );
-    dlg->setMode(QFileDialog::DirectoryOnly );
+    dlg->setMode( QFileDialog::DirectoryOnly );
     
     if ( dlg->exec() == QDialog::Accepted ) {
         m_CacheImagePath->setText(dlg->selectedFile());
-        directory = dlg->url();
+//         directory = dlg->url();
+// \TODO : serveix d'algo aquest directori??????????????
+        directory = dlg->directory().absolutePath();
     }
        
     delete dlg;
@@ -727,7 +735,7 @@ void QConfigurationScreen::databaseError(Status *state,PacsParameters *pacs)
         switch(state->code())
         {   
             case 2019 : text.insert(0,tr("AETitle "));
-                        text.append(pacs->getAEPacs());
+                        text.append(pacs->getAEPacs().c_str() );
                         text.append(tr(" exists"));
                         text.append("\n");
                         QMessageBox::warning( this, tr("StarViewer"),text);

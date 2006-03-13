@@ -5,11 +5,11 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "qretrievescreen.h"
-#include <qlistview.h>
-#include <qstring.h>
+#include <q3listview.h>
+#include <QString>
 #include <iostream.h>
 #include <qdatetime.h>
-#include <qstring.h>
+#include <QString>
 #include "processimagesingleton.h"
 //#include <qobject.h>
 //#include <qwidget.h>
@@ -17,14 +17,15 @@
 
 namespace udg {
 
-QRetrieveScreen::QRetrieveScreen(QWidget *parent, const char *name)
- : QRetrieveScreenBase(parent, name)
+QRetrieveScreen::QRetrieveScreen( QWidget *parent )
+ : QDialog( parent )
 {
+    setupUi( this );
     listRetrieveStudy->setColumnWidth(9,0);//Conte l'UID de l'estudi
     
     for (int i=0;i<10;i++)
     {
-        listRetrieveStudy->setColumnWidthMode(i,QListView::Manual);
+        listRetrieveStudy->setColumnWidthMode(i,Q3ListView::Manual);
     }
     
     int init_value=1;//Només un thread alhora pot actualitzar la llista de descarregues, ja que les XLIB no són multithread,si ens trobem dos threads actualitzan a la vegada, les XLIB donen error
@@ -40,25 +41,25 @@ QRetrieveScreen::QRetrieveScreen(QWidget *parent, const char *name)
   */
 void QRetrieveScreen::insertNewRetrieve(Study *study)
 {
-    QListViewItem* item = new QListViewItem(listRetrieveStudy);
+    Q3ListViewItem* item = new Q3ListViewItem(listRetrieveStudy);
     QTime time = QTime::currentTime();
     QString name;
     QDate date = QDate::currentDate();
     
-    deleteStudy(study->getStudyUID()); //si l'estudi ja existeix a la llista l'esborrem
-    name.insert(0,study->getPatientName());
+    deleteStudy( study->getStudyUID().c_str() ); //si l'estudi ja existeix a la llista l'esborrem
+    name.insert(0,study->getPatientName().c_str() );
     name.replace("^"," ");
     
     item->setText(0,"PENDING");
     item->setText(1,"Local");
-    item->setText(2,study->getPacsAETitle());
-    item->setText(3,study->getPatientId());
+    item->setText(2,study->getPacsAETitle().c_str() );
+    item->setText(3,study->getPatientId().c_str() );
     item->setText(4,name);
     item->setText(5,date.toString("dd/MM/yyyy"));
     item->setText(6,time.toString("hh:mm"));
     item->setText(7,"0");
     item->setText(8,"0");
-    item->setText(9,study->getStudyUID());
+    item->setText(9,study->getStudyUID().c_str() );
     item->setText(10,"Started");
 
 }
@@ -68,7 +69,7 @@ void QRetrieveScreen::insertNewRetrieve(Study *study)
 void QRetrieveScreen::clearList()
 {
 
-    QListViewItemIterator it(listRetrieveStudy);
+    Q3ListViewItemIterator it(listRetrieveStudy);
     QString text("PENDING");
     
     while (it.current())
@@ -86,7 +87,7 @@ void QRetrieveScreen::clearList()
   */
 void QRetrieveScreen::deleteStudy(QString studyUID)
 {
-    QListViewItemIterator it(listRetrieveStudy);
+    Q3ListViewItemIterator it(listRetrieveStudy);
     
     while (it.current())
     {
@@ -123,8 +124,8 @@ void QRetrieveScreen::delConnectSignal(StarviewerProcessImage *process)
 void QRetrieveScreen::imageRetrieved(Image *img,int downloadedImages)
 {
     
-    QListViewItemIterator it(listRetrieveStudy);
-    QString studyUID(img->getStudyUID()),Images;
+    Q3ListViewItemIterator it(listRetrieveStudy);
+    QString studyUID( img->getStudyUID().c_str() ),Images;
     
     image++;
     
@@ -153,7 +154,7 @@ void QRetrieveScreen::imageRetrieved(Image *img,int downloadedImages)
 void QRetrieveScreen::setSeriesRetrieved(QString studyUID)
 {
     
-    QListViewItemIterator it(listRetrieveStudy);
+    Q3ListViewItemIterator it(listRetrieveStudy);
     QString series;
     int nSeries;
     bool ok;
@@ -187,7 +188,7 @@ void QRetrieveScreen::setSeriesRetrieved(QString studyUID)
   */
 void QRetrieveScreen::setRetrievedFinished(QString studyUID)
 {
-    QListViewItemIterator it(listRetrieveStudy);
+    Q3ListViewItemIterator it(listRetrieveStudy);
 
     //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
     
@@ -211,7 +212,7 @@ void QRetrieveScreen::setRetrievedFinished(QString studyUID)
         }
         else  it.current()->setText(0,"RETRIEVED"); 
     }
-    else cout << studyUID << " no trobat "<<endl;
+    else cout << studyUID.toStdString()  << " no trobat "<<endl;
     
     emit(studyRetrieved(studyUID));
 }
@@ -221,7 +222,7 @@ void QRetrieveScreen::setRetrievedFinished(QString studyUID)
   */
 void QRetrieveScreen::setErrorRetrieving(QString studyUID)
 {
-    QListViewItemIterator it(listRetrieveStudy);
+    Q3ListViewItemIterator it(listRetrieveStudy);
 
     while (it.current())
     {
@@ -236,7 +237,7 @@ void QRetrieveScreen::setErrorRetrieving(QString studyUID)
     {   
         it.current()->setText(0,"ERROR");
     }
-    else cout << studyUID << " no trobat "<<endl;
+    else cout << studyUID.toStdString() << " no trobat "<<endl;
     
 }
 

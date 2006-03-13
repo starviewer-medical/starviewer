@@ -6,7 +6,7 @@
  ***************************************************************************/ 
 #include "qpacslist.h"
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qmessagebox.h>
 
 #include "pacslistdb.h"
@@ -19,16 +19,17 @@ namespace udg {
 
 /** Constructor de la classe
   */
-QPacsList::QPacsList(QWidget *parent, const char *name)
- : QPacsListBase(parent, name)
+QPacsList::QPacsList(QWidget *parent )
+ : QWidget( parent )
 {
+    setupUi( this );
     int i;
 
     m_PacsListView->setColumnWidth(3,0); //La columna default està amagada
 
     for (i=0;i<=m_PacsListView->columns();i++)
     {
-        m_PacsListView->setColumnWidthMode(i,QListView::Manual); 
+        m_PacsListView->setColumnWidthMode(i,Q3ListView::Manual); 
     }
 
     refresh();
@@ -59,12 +60,12 @@ void QPacsList::refresh()
     
     while (!pacsList.end())
     {
-        QListViewItem* item = new QListViewItem(m_PacsListView);
+        Q3ListViewItem* item = new Q3ListViewItem(m_PacsListView);
         pacs = pacsList.getPacs();
-        item->setText(0,pacs.getAEPacs());
-        item->setText(1,pacs.getInstitution());
-        item->setText(2,pacs.getDescription());   
-        item->setText(3,pacs.getDefault());
+        item->setText(0,pacs.getAEPacs().c_str() );
+        item->setText(1,pacs.getInstitution().c_str() );
+        item->setText(2,pacs.getDescription().c_str() );   
+        item->setText(3,pacs.getDefault().c_str() );
         pacsList.nextPacs();
     
     }
@@ -78,7 +79,7 @@ void QPacsList::refresh()
 void QPacsList::setSelectedDefaultPacs()
 {
 
-    QListViewItemIterator it( m_PacsListView );
+    Q3ListViewItemIterator it( m_PacsListView );
     
     while ( it.current() ) 
     {
@@ -98,7 +99,7 @@ void QPacsList::setSelectedDefaultPacs()
   */
 Status QPacsList::getSelectedPacs(PacsList *pacsList)
 {
-    QListViewItemIterator it( m_PacsListView );
+    Q3ListViewItemIterator it( m_PacsListView );
     PacsListDB pacsListDB;
     Status state;
     StarviewerSettings settings;
@@ -108,11 +109,11 @@ Status QPacsList::getSelectedPacs(PacsList *pacsList)
     {
         if (it.current()->isSelected() == true) //si el pacs esta seleccionat buquem els seus paràmetres
         {   PacsParameters pacs;
-            state =pacsListDB.queryPacs(&pacs,it.current()->text(0)); //fem el query per cercar la informació del PACS
+            state =pacsListDB.queryPacs(&pacs,it.current()->text(0).toStdString() ); //fem el query per cercar la informació del PACS
             
             if (state.good())
             {
-                pacs.setAELocal(settings.getAETitleMachine());
+                pacs.setAELocal(settings.getAETitleMachine().toStdString() );
                 //emplenem amb les dades del registre el timeout
                 pacs.setTimeOut(settings.getTimeout().toInt(NULL,10));
                 pacsList->insertPacs(pacs); //inserim a la llista

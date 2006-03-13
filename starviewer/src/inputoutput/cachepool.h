@@ -6,7 +6,7 @@
  ***************************************************************************/
 #ifndef UDGCACHEPOOL_H
 #define UDGCACHEPOOL_H
-#include <qstring.h>
+#include <QString>
 #include "databaseconnection.h"
 
 namespace udg {

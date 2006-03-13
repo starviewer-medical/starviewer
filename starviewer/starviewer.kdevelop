@@ -2,8 +2,8 @@
 <kdevelop>
   <general>
     <author>Grup de Gràfics de Girona  ( GGG )</author>
-    <email>jspinola@gmail.com</email>
-    <version>1.0</version>
+    <email>vismed@ima.udg.es</email>
+    <version>0.1</version>
     <projectmanagement>KDevTrollProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
     <keywords>
@@ -16,7 +16,7 @@
     <secondaryLanguages>
       <language>C</language>
     </secondaryLanguages>
-    <versioncontrol/>
+    <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevfileview>
     <groups>
@@ -30,6 +30,7 @@
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
+      <showvcsfields>false</showvcsfields>
     </tree>
   </kdevfileview>
   <kdevdoctreeview>
@@ -108,7 +109,7 @@
       <envvars/>
     </run>
     <general>
-      <activedir>src/inputoutput</activedir>
+      <activedir>src/interface</activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>
@@ -148,14 +149,14 @@
     </codecompletion>
     <qt>
       <used>true</used>
-      <version>3</version>
-      <root>/usr/lib/qt3/</root>
+      <version>4</version>
+      <root>/usr/lib/qt4/</root>
     </qt>
     <creategettersetter>
       <prefixGet>get</prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_</prefixVariable>
-      <parameterName>theValue</parameterName>
+      <parameterName>newValue</parameterName>
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>

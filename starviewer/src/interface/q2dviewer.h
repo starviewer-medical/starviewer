@@ -10,13 +10,14 @@
 #include "qviewer.h"
 
 // Fordward declarations
+// qt
+class QEvent;
+class QAction;
+// vtk
 class vtkImageViewer2;
 class vtkCellPicker;
 class vtkTextActor;
 class vtkTextMapper;
-//qt
-class QEvent;
-class QAction;
 class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
@@ -65,7 +66,7 @@ public:
     /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
     enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool };
     
-    Q2DViewer(QWidget *parent = 0, const char *name = 0);
+    Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
     
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
@@ -217,15 +218,15 @@ private:
 
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
-    /// El format de cada text
-    QString m_formatedUpperLeftString, m_formatedUpperLeftOffImageString,  m_formatedUpperRightString , m_formatedLowerLeftString , m_formatedLowerRightString;
+    /// El format de cada text ->\TODO això acabarà deprecated \DEPRECATED
+//     QString m_formatedUpperLeftString, m_formatedUpperLeftOffImageString,  m_formatedUpperRightString , m_formatedLowerLeftString , m_formatedLowerRightString;
     
     
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
     /// indica que alguna de la informació que s'ha de mostrar per pantall ha canviat
-    void infoChanged();
+    void infoChanged( void );
     
     
 };

@@ -7,7 +7,7 @@
 #ifndef UDGREPOSITORYBASE_H
 #define UDGREPOSITORYBASE_H
 
-#include <qobject.h>
+#include <QObject>
 
 namespace udg {
 

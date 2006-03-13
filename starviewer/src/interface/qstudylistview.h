@@ -21,14 +21,14 @@
 #ifndef UDGSTUDYLISTVIEW_H
 #define UDGSTUDYLISTVIEW_H
 
-#include "qstudylistviewbase.h"
-#include <qstring.h>
-#include <qpixmap.h>
-#include <qpopupmenu.h>
-#include <qpoint.h>
-#include <qevent.h>
-#include <qpushbutton.h>
-#include <qlistview.h>
+#include "ui_qstudylistviewbase.h"
+#include <QWidget>
+#include <QString>
+#include <QPixmap>
+#include <QPoint>
+#include <q3popupmenu.h>
+#include <q3listview.h>
+
 #include "study.h"
 #include "series.h"
 #include "pacsparameters.h"
@@ -39,14 +39,11 @@ namespace udg {
 /** Aquesta classe és un widget millorar i modificat del listview, que permet mostrar estudis i sèries d'una manera organitzada i fàcilment
 @author marc
 */
-class QStudyListView : public QStudyListViewBase
-{
+class QStudyListView : public QWidget , private Ui::QStudyListViewBase{
 Q_OBJECT
 public:
 
-
-
-    QStudyListView(QWidget *parent = 0, const char *name = 0);
+    QStudyListView( QWidget *parent = 0 , const char * name = 0 );
 
     QString formatName(const std::string);
     QString formatAge(const std::string);
@@ -63,7 +60,7 @@ public:
     QString getSelectedStudyUID();
     QString getSelectedSeriesUID();
     ~QStudyListView();
-    QPopupMenu *m_popupMenu;
+    Q3PopupMenu *m_popupMenu;
 
 signals :
     void click(QString,QString);
@@ -75,11 +72,11 @@ signals :
     void selectedSeriesList(QString);
         
 public slots:
-    void expand(QListViewItem *,const QPoint &,int);
-    void popupMenuShow(QListViewItem *,const QPoint&,int);
+    void expand(Q3ListViewItem *,const QPoint &,int);
+    void popupMenuShow(Q3ListViewItem *,const QPoint&,int);
     void selectedSeriesIcon(int index);
     
-    void clicked(QListViewItem *);
+    void clicked(Q3ListViewItem *);
     void clear();
     void retrieveStudy();
     void deleteStudy();
@@ -94,7 +91,7 @@ private :
     std::string m_oldPacsAETitle,m_OldInstitution;
     void insertStudy(Study *);
     void createPopupMenu(QString);
-    void setSeriesToIconView(QListViewItem *item);
+    void setSeriesToIconView(Q3ListViewItem *item);
 
 };
 

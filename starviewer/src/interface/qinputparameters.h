@@ -9,7 +9,7 @@
 #ifndef UDGQINPUTPARAMETERS_H
 #define UDGQINPUTPARAMETERS_H
 
-#include <qwidget.h>
+#include <QWidget>
 
 namespace udg {
 
@@ -27,7 +27,7 @@ namespace udg {
 class QInputParameters : public QWidget{
 Q_OBJECT
 public:
-    QInputParameters(QWidget *parent = 0, const char *name = 0);
+    QInputParameters( QWidget *parent = 0 );
 
     virtual ~QInputParameters();
 

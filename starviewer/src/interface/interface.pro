@@ -4,17 +4,18 @@
 # L'objectiu és una biblioteca:  
 
 FORMS += mutualinformationinputparametersformbase.ui \
-         qmutualinformationtab.ui \
-         qmpr3d2dextensionbase.ui \
-         qtabaxisviewbase.ui \
          qconfigurationscreenbase.ui \
+         qmpr3d2dextensionbase.ui \
+         qmpr3dextensionbase.ui \
+         qmprextensionbase.ui \
+         qmutualinformationtab.ui \
          qpacslistbase.ui \
          qretrievescreenbase.ui \
-         queryscreenbase.ui \
-         qstudylistviewbase.ui \
          qseriesiconviewbase.ui \
-         qmprextensionbase.ui \
-         qmpr3dextensionbase.ui 
+         qstudylistscreenbase.ui \
+         qstudylistviewbase.ui \
+         qtabaxisviewbase.ui \
+         queryscreenbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -50,8 +51,8 @@ HEADERS += director.h \
            qmpr3dextension.h \
            qmpr3d2dextensioncreator.h \
            qmpr3d2dextension.h \
-	   distancetool.h \
-	   tool.h \
+           distancetool.h \
+           tool.h \
            QVTKWidget.h \
            vtkEventQtSlotConnect.h 
 SOURCES += director.cpp \
@@ -88,8 +89,8 @@ SOURCES += director.cpp \
            qmpr3dextension.cpp \
            qmpr3d2dextensioncreator.cpp \
            qmpr3d2dextension.cpp \
-	   distancetool.cpp \
-	   tool.cpp \
+           distancetool.cpp \
+           tool.cpp \
            QVTKWidget.cxx \
            vtkEventQtSlotConnect.cxx 
 include(../vtk.inc)
@@ -125,3 +126,4 @@ TARGETDEPS += ../repositories/librepositories.a \
 ../tools/libtools.a \
 ../inputoutput/libinputoutput.a \
 ../../src/inputoutput/libinputoutput.a
+QT += qt3support

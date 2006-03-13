@@ -8,13 +8,14 @@
 #include "volume.h"
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
+
 // qt
-#include <qspinbox.h> // pel control m_axialSpinBox
-#include <qslider.h> // pel control m_axialSlider
-#include <qsettings.h>
-#include <qtextstream.h>
-#include <qsplitter.h>
-#include <qpushbutton.h>
+#include <QSpinBox> // pel control m_axialSpinBox
+#include <QSlider> // pel control m_axialSlider
+#include <QSettings>
+#include <QTextStream>
+#include <QSplitter>
+#include <QPushButton>
 // vtk
 #include <vtkRenderer.h>
 #include <vtkMath.h> // pel vtkMath::Cross
@@ -32,10 +33,10 @@
 
 namespace udg {
 
-QMPRExtension::QMPRExtension(QWidget *parent, const char *name)
- : QMPRExtensionBase(parent, name)
+QMPRExtension::QMPRExtension( QWidget *parent )
+ : QWidget( parent )
 {
-        
+    setupUi( this );
     m_axialPlaneSource = vtkPlaneSource::New();
     m_axialPlaneSource->SetXResolution( 1 ); // així estan configurats a vtkImagePlaneWidget
     m_axialPlaneSource->SetYResolution( 1 );
@@ -113,9 +114,7 @@ void QMPRExtension::setInput( Volume *input )
 
     // posta a punt dels planeSource
     initOrientation();
-    
     m_axial2DView->render();
-//     m_axial2DView->displayInformationText( false );
 
     Volume *sagitalResliced = new Volume;
     sagitalResliced->setData( m_sagitalReslice->GetOutput() );
@@ -126,9 +125,8 @@ void QMPRExtension::setInput( Volume *input )
     m_coronal2DView->setInput( coronalResliced );
     
     m_sagital2DView->render();
-//     m_sagital2DView->displayInformationText( false );
     m_coronal2DView->render();
-//     m_coronal2DView->displayInformationText( false );    
+
         
     updateControls();
     
@@ -228,6 +226,12 @@ void QMPRExtension::initOrientation()
 
 void QMPRExtension::createConnections()
 {
+    // conectem els sliders i demés visors
+    // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitaríem les característiques de l'auto connection
+    connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axialSpinBox , SLOT( setValue(int) ) );
+    connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
+    connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
+    
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( axialSliceUpdated(int) ) );
     
     // temporal
@@ -998,12 +1002,12 @@ void QMPRExtension::readSettings()
 {
     QSettings settings;
     settings.setPath("GGG", "StarViewer-App-MPR");
-    settings.beginGroup("/StarViewer-App-MPR");
-    
-    QString str1 = settings.readEntry("/horizontalSplitter");
+    settings.beginGroup("StarViewer-App-MPR");
+
+    QString str1 = settings.value("horizontalSplitter").toString();
     QTextIStream in1(&str1);
     in1 >> *m_horizontalSplitter;
-    QString str2 = settings.readEntry("/verticalSplitter");
+    QString str2 = settings.value("verticalSplitter").toString();
     QTextIStream in2(&str2);
     in2 >> *m_verticalSplitter;
     
@@ -1019,10 +1023,10 @@ void QMPRExtension::writeSettings()
     QString str;
     QTextOStream out1(&str);
     out1 << *m_horizontalSplitter;
-    settings.writeEntry("/horizontalSplitter", str );
+    settings.setValue("horizontalSplitter", str );
     QTextOStream out2(&str);
     out2 << *m_verticalSplitter;
-    settings.writeEntry("/verticalSplitter", str );
+    settings.setValue("verticalSplitter", str );
     
     settings.endGroup();
 }

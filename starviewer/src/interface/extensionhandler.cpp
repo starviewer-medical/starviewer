@@ -6,10 +6,9 @@
  ***************************************************************************/
 #include "extensionhandler.h"
 
-// interfície/Qt
-#include <qfiledialog.h>
-#include <qsettings.h>
-
+// qt
+#include <QFileInfo>
+#include <QDir>
 // recursos
 #include "volumerepository.h"
 #include "input.h"
@@ -41,8 +40,9 @@
 namespace udg {
 
 ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent, const char *name)
- : QObject(parent, name)
+ : QObject(parent )
 {
+    this->setObjectName( name );
     m_volumeRepository = udg::VolumeRepository::getRepository();
     m_inputReader = new udg::Input;
     m_outputWriter = new udg::Output;
@@ -180,9 +180,9 @@ bool ExtensionHandler::open( QString fileName )
     else
     {
         // indiquem que ens obri el fitxer
-        if( QFileInfo( fileName ).extension() == "dcm") // petita prova per provar lectura de DICOM's
+        if( QFileInfo( fileName ).suffix() == "dcm") // petita prova per provar lectura de DICOM's
         {
-            if( m_inputReader->readSeries( QFileInfo(fileName).dirPath( TRUE ).latin1() ) ) 
+            if( m_inputReader->readSeries( QFileInfo(fileName).dir().absolutePath().toLatin1() ) )
             { 
                 // creem el volum
                 udg::Volume *dummyVolume = m_inputReader->getData();
@@ -199,7 +199,7 @@ bool ExtensionHandler::open( QString fileName )
         }
         else
         {
-            if( m_inputReader->openFile( fileName.latin1() ) ) 
+            if( m_inputReader->openFile( fileName.toLatin1() ) )
             { 
                 // creem el volum
                 udg::Volume *dummyVolume = m_inputReader->getData();

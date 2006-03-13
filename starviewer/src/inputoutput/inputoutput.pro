@@ -102,3 +102,6 @@ HEADERS += input.h \
            cachepool.h \
            scaleimage.h \
            scalestudy.h 
+QT += qt3support
+#The following line was inserted by qt3to4
+QT +=  

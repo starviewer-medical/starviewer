@@ -9,10 +9,12 @@
 // include's ITK
 #include <itkNumericSeriesFileNames.h>
 
+// qt
+#include <QString>
+#include <QDir>
+#include <QFileInfo>
 // resta include's
 #include <iostream>
-#include <qstring.h>
-#include <qfileinfo.h>
 
 namespace udg {
 
@@ -91,12 +93,12 @@ Sempre s'ha de fer un casting ( i un rescale image? )
 
     // el format del fitxer serà NomDelFitxerXXXX.extensio on XXXX serà el nº de llesca. El nº de llesca serà de com a màxim 4 dígits
     QString seriesFormat;
-    std::cout << "Output>>BaseName::" << QFileInfo( filename ).baseName( TRUE ) << " extension " << QFileInfo( filename ).extension() << std::endl;
-    seriesFormat.sprintf( "%s/%s-%%04d.%s" , QFileInfo( filename ).dirPath( TRUE ).latin1() , QFileInfo( filename ).baseName( TRUE ).latin1() , QFileInfo( filename ).extension().latin1() );
+//     std::cout << "Output>>BaseName::" << QFileInfo( filename ).baseName( TRUE ) << " extension " << QFileInfo( filename ).extension() << std::endl;
+    seriesFormat.sprintf( "%s/%s-%%04d.%s" , QFileInfo( filename ).dir().absolutePath().utf16() , QFileInfo( filename ).completeBaseName().utf16() , QFileInfo( filename ).suffix().utf16() );
     
     typedef itk::NumericSeriesFileNames    NameGeneratorType;
     NameGeneratorType::Pointer nameGenerator = NameGeneratorType::New();
-    nameGenerator->SetSeriesFormat( seriesFormat.latin1() );
+    nameGenerator->SetSeriesFormat( seriesFormat.toLatin1() );
     nameGenerator->SetStartIndex( 1 );
     nameGenerator->SetEndIndex( m_volumeData->getVtkData()->GetDimensions()[2] ); // el nombre de llesques
     nameGenerator->SetIncrementIndex( 1 );      

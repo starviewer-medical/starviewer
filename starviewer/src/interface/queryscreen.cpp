@@ -5,19 +5,22 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "queryscreen.h"
+#include <QString>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qlabel.h>
 #include <qdatetime.h>
-#include <qstring.h>
+
 //#include <qlistview.h>
 #include <qmessagebox.h>
 #include <qnamespace.h>
 #include <qcursor.h>
 #include <qtabwidget.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
+//Added by qt3to4:
+#include <QCloseEvent>
 #include <string.h>
 
 #include "starviewerprocessimage.h"
@@ -53,9 +56,10 @@
 namespace udg {
 /** Constuctor de la classe
  */
-QueryScreen::QueryScreen(QWidget *parent, const char *name)
- : QueryScreenBase(parent, name)
+QueryScreen::QueryScreen( QWidget *parent )
+ : QWidget(parent )
 {
+    setupUi( this );
     Status state;
     setEnabledModalityChecks(false);
     QString path;
@@ -95,7 +99,7 @@ QueryScreen::QueryScreen(QWidget *parent, const char *name)
     
     //carreguem el processImageSingleton    
     m_piSingleton=ProcessImageSingleton::getProcessImageSingleton();
-    m_piSingleton->setPath(settings.getCacheImagePath());
+    m_piSingleton->setPath( settings.getCacheImagePath().toStdString() );
 
     m_threadsList = RetrieveThreadsList::getRetrieveThreadsList();
     m_threadsList->setMaxThreads(settings.getMaxConnections().toInt(NULL,10));
@@ -279,7 +283,7 @@ void QueryScreen::search()
     
     this->setCursor(QCursor(Qt::WaitCursor));
     
-    if (m_Tab->currentPageIndex()==1)
+    if (m_Tab->currentIndex()==1)
     {
         //if (!validateNoEmptyMask())
         if (1==2)
@@ -424,11 +428,11 @@ void QueryScreen::searchSeries(QString studyUID,QString pacsAETitle)
     
     SeriesImViewPacs->clear(); //Netegem el QSeriesIconView del Pacs
     
-    if (m_Tab->currentPageIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
+    if (m_Tab->currentIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
     {
         QuerySeriesPacs(studyUID,pacsAETitle,true);
     }
-    else if (m_Tab->currentPageIndex() == 0) // si estem a la pestanya de la cache
+    else if (m_Tab->currentIndex() == 0) // si estem a la pestanya de la cache
     {
         QuerySeriesCache(studyUID);
     }
@@ -460,7 +464,7 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
         return;
     }
 
-    pacs.setAELocal(settings.getAETitleMachine()); //especifiquem el nostres AE
+    pacs.setAELocal( settings.getAETitleMachine().toStdString() ); //especifiquem el nostres AE
     pacs.setTimeOut(settings.getTimeout().toInt(NULL,10)); //li especifiquem el TimeOut
 
     m_seriesListSingleton->clear();
@@ -643,7 +647,7 @@ void QueryScreen::retrievePacs(bool view)
     }   
     
     //primer guardem la informacio de les series per esbrinar de quina modalitat és l'estudi ja que el Pacs no ens la dona
-    estat = insertSeriesCache(studyUID);
+    estat = insertSeriesCache( studyUID.c_str() );
     if (!estat) 
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
@@ -715,10 +719,13 @@ bool QueryScreen::insertStudyCache(Study stu)
    {   
        if (m_seriesListSingleton->getSeries().getStudyUID()!=study.getStudyUID()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
        {
-           QuerySeriesPacs(study.getStudyUID(),StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+            QuerySeriesPacs( study.getStudyUID().c_str() ,StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+
        }
    }
-   else QuerySeriesPacs(study.getStudyUID(),StudyLViewPacs->getSelectedStudyPacsAETitle() ,false); 
+   else
+        QuerySeriesPacs(study.getStudyUID().c_str() ,StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+    
     
     //establim la modalitat de l'estudi
     m_seriesListSingleton->firstSeries();
@@ -824,14 +831,14 @@ void *QueryScreen::retrieveImages(void *param)
     retState = retrieve.moveSCU();
     if (!retState.good() || sProcessImg->getErrorRetrieving() )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
-        retrieveScreen->setErrorRetrieving(studyUID);
+        retrieveScreen->setErrorRetrieving( studyUID.c_str() );
         localCache->delStudy(studyUID);
     }
     else 
     {    
         scaleStudy.scale(studyUID); //escalem l'estudi per la previsualització de la caché  
-        retrieveScreen->setRetrievedFinished(studyUID); //indiquem que l'estudi s'ha descarregat
-        localCache->setStudyRetrieved(studyUID); //posem l'estudi com a descarregat
+        retrieveScreen->setRetrievedFinished(studyUID.c_str() ); //indiquem que l'estudi s'ha descarregat
+        localCache->setStudyRetrieved(studyUID.c_str() ); //posem l'estudi com a descarregat
     }
     
     pacsConnection.Disconnect();
@@ -852,8 +859,8 @@ void QueryScreen::studyRetrieved(QString studyUID)
 {
     RetrieveThread rThread;
   
-    rThread = m_threadsList->getRetrieveThread(studyUID);
-    m_threadsList->deleteRetrieveThread(studyUID);
+    rThread = m_threadsList->getRetrieveThread(studyUID.toStdString() );
+    m_threadsList->deleteRetrieveThread(studyUID.toStdString() );
     
     //if (rThread == NULL) return; 
 
@@ -872,7 +879,7 @@ void QueryScreen::studyRetrieved(QString studyUID)
 void QueryScreen::tabChanged(QWidget *)
 {
 
-    if (m_Tab->currentPageIndex()!=0)
+    if (m_Tab->currentIndex()!=0)
     {
         setEnabledModalityChecks(false);//desactivem el grup button de modalitat
         buttonRetrieve->setEnabled(true);//activem el boto retrieve
@@ -893,7 +900,7 @@ void QueryScreen::tabChanged(QWidget *)
 void QueryScreen::view()
 {
        
-    if (m_Tab->currentPageIndex() == 1)
+    if (m_Tab->currentIndex() == 1)
     {
         switch( QMessageBox::information( this, tr("Starviewer"),
 				      tr("Are you sure you want to retrieve this Study ?"),
@@ -904,7 +911,7 @@ void QueryScreen::view()
             retrievePacs(true);
         }
     }
-    else if (m_Tab->currentPageIndex()==0)
+    else if (m_Tab->currentIndex()==0)
     {
         retrieveCache(StudyLViewCache->getSelectedStudyUID(),StudyLViewCache->getSelectedSeriesUID());
     }
@@ -977,18 +984,18 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     {
         volum.setDefaultSeriesUID(seriesList.getSeries().getSeriesUID());
     }
-    else volum.setDefaultSeriesUID(seriesUID);
+    else volum.setDefaultSeriesUID(seriesUID.toStdString() );
     
     while (!seriesList.end())
     {
         series = seriesList.getSeries();
         
         absSeriesPath = settings.getCacheImagePath();
-        absSeriesPath += series.getSeriesPath();
+        absSeriesPath += series.getSeriesPath().c_str();
         seriesVol.setSeriesUID(series.getSeriesUID());
         seriesVol.setStudyId(stu.getStudyId());
         seriesVol.setStudyUID(stu.getStudyUID());
-        seriesVol.setSeriesPath(absSeriesPath);
+        seriesVol.setSeriesPath( absSeriesPath.toStdString() );
         
         imageMask.setSeriesUID(series.getSeriesUID().c_str());
         imageMask.setStudyUID(stu.getStudyUID().c_str());
@@ -1014,7 +1021,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
         seriesList.nextSeries();
     }
     
-    localCache->updateStudyAccTime(studyUID);
+    localCache->updateStudyAccTime(studyUID.toStdString() );
     emit(viewStudy(volum));
 }
 
@@ -1181,17 +1188,17 @@ StudyMask QueryScreen::buildMask()
     StudyMask mask;
     QString modalityMask;
     
-    mask.setPatientId(m_textPatientID->text());
-    mask.setPatientName(buildPatientName());
-    mask.setStudyId(m_textStudyID->text());
-    mask.setStudyDate(buildStudyDates());
+    mask.setPatientId(m_textPatientID->text().toStdString() );
+    mask.setPatientName(buildPatientName().toStdString() );
+    mask.setStudyId(m_textStudyID->text().toStdString() );
+    mask.setStudyDate(buildStudyDates().toStdString() );
     mask.setStudyDescription("");
     mask.setStudyTime("");
     mask.setStudyUID("");
     mask.setInstitutionName("");
     mask.setStudyModality("");
     mask.setPatientAge("");
-    mask.setAccessionNumber(m_textAccessionNumber->text());
+    mask.setAccessionNumber( m_textAccessionNumber->text().toStdString() );
     
     /*Aquesta mascara només serveix per la caché, no serveix pel pacs!!!!!!!!!!!!!!!!!!!1*/
     if (!m_checkAll->isChecked())

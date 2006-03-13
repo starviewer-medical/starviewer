@@ -7,7 +7,7 @@
 #ifndef UDGRESOURCECOLLECTION_H
 #define UDGRESOURCECOLLECTION_H
 
-#include <qobject.h>
+#include <QObject>
 #include "identifier.h"
 
 namespace udg {

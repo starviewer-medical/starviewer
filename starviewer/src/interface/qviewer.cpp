@@ -8,22 +8,26 @@
 
 #include "volume.h"
 
-// include's qt
-#include <qlayout.h>
 // include's vtk
 #include <QVTKWidget.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 
+#include <QtGui/QHBoxLayout>
+
 namespace udg {
 
-QViewer::QViewer(QWidget *parent, const char *name)
- : QWidget(parent, name)
+QViewer::QViewer( QWidget *parent )
+ : QWidget( parent )
 {
-    if ( !name )
-    this->setName( "QViewer" );
+    m_vtkWidget = new QVTKWidget( this );
+
+    //Afegim el layout
+    QHBoxLayout* viewerLayout = new QHBoxLayout( this );
+    viewerLayout->setSpacing(0);
+    viewerLayout->setMargin(0);
+    viewerLayout->addWidget( m_vtkWidget );
     
-    m_vtkWidget = new QVTKWidget( this, "VTKWidget1" );
     // això ho fem perquè la finestra buida quedi en negre en un principi
     m_vtkWidget->GetRenderWindow()->Render();
       

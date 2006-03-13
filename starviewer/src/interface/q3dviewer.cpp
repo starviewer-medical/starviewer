@@ -8,7 +8,8 @@
 #include "volume.h"
 
 // include's qt
-#include <qstring.h>
+#include <QString>
+
 // include's vtk
 #include <QVTKWidget.h>
 #include <vtkRenderer.h>
@@ -35,8 +36,8 @@
 
 namespace udg {
 
-Q3DViewer::Q3DViewer(QWidget *parent, const char *name)
- : QViewer(parent, name)
+Q3DViewer::Q3DViewer( QWidget *parent )
+ : QViewer( parent )
 {
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();

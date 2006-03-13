@@ -30,7 +30,7 @@ Q_OBJECT
 public:
     enum RenderFunction{ RayCasting , MIP3D, IsoSurface };
     
-    Q3DViewer(QWidget *parent = 0, const char *name = 0);
+    Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
     ///\TODO implemenar bé el mètode
     virtual vtkRenderWindowInteractor *getInteractor();

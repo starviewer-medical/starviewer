@@ -2,7 +2,7 @@
   */
   #ifndef CONSTKEY
 #define CONSTKEY
-#include <qstring.h>
+#include <QString>
 
 const QString databaseRootKey("pacs/cache/sdatabasePath"); //indica on es troba la bd
 const QString poolSizeKey("pacs/cache/poolSize");

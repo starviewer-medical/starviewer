@@ -7,21 +7,20 @@
 #ifndef UDGQCONFIGURATIONSCREEN_H
 #define UDGQCONFIGURATIONSCREEN_H
 
-#include <qconfigurationscreenbase.h>
+#include "ui_qconfigurationscreenbase.h"
 #include "pacslistdb.h"
+using namespace Ui; // \TODO això s'hauria d'evitar!
 
 namespace udg {
 
 /** Interfície que permet configurar els paràmetres del pacs i de la caché
 @author marc
 */
-class QConfigurationScreen : public QConfigurationScreenBase
-{
+class QConfigurationScreen : public QDialog , private QConfigurationScreenBase{
 Q_OBJECT
 
 private :
 
-    //PacsListDB m_pacsList;
     int m_PacsID;
 
     bool validatePacsParameters();
@@ -41,10 +40,10 @@ private :
      
 public slots :
 
-    /**Configuració de la llista de Pacs*/
+    /** Configuració de la llista de Pacs */
     void clear();
     void addPacs();
-    void selectedPacs(QListViewItem * item);
+    void selectedPacs( Q3ListViewItem * item );
     void updatePacs();
     void deletePacs();
     void test();
@@ -62,10 +61,10 @@ public slots :
     void cancelChanges();
 
     void configurationChanged(int);
-    void configurationChanged(const QString&);
+    void configurationChanged( const QString& );
        
 public:
-    QConfigurationScreen(QWidget *parent = 0, const char *name = 0);
+    QConfigurationScreen( QWidget *parent = 0 );
 
     ~QConfigurationScreen();
 

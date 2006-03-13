@@ -12,22 +12,21 @@
 // per podr accedir al combo
 #include "qvolumerepositorycombobox.h"
 // per poder connectar signals
-#include <qpushbutton.h> 
-#include <qlineedit.h>
+#include <QPushButton>
+#include <QLineEdit>
 
 // CPP -> cerr
 #include <iostream>
 
 namespace udg {
 
-MutualInformationInputParametersForm::MutualInformationInputParametersForm( QWidget *parent, const char *name )
- : MutualInformationInputParametersFormBase( parent, name )
+MutualInformationInputParametersForm::MutualInformationInputParametersForm( QWidget *parent )
+ : QInputParameters( parent )
 {
+    setupUi( this );
     m_parameters = 0;
     // aquests valors són temporals, més endavant vindrien donats per signals
     // i slots al escollir els volums a tractar
-//     m_fixedID = 0;
-//     m_movingID = 1;
     
     this->disableIndividualSincronization();
 }
@@ -37,9 +36,7 @@ MutualInformationInputParametersForm::~MutualInformationInputParametersForm()
 {
 }
 
-void
-MutualInformationInputParametersForm
-::setParameters( MutualInformationParameters* parameters )
+void MutualInformationInputParametersForm::setParameters( MutualInformationParameters* parameters )
 {
     m_parameters = parameters;
 }
@@ -48,8 +45,7 @@ MutualInformationInputParametersForm
     El mètode abstracte que cal re-implementar
     en el cas que sincronitzem els paràmetres de cop
 */
-void
-MutualInformationInputParametersForm::writeAllParameters()
+void MutualInformationInputParametersForm::writeAllParameters()
 {
     if( !m_parameters )
     {

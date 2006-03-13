@@ -9,8 +9,8 @@
 
 namespace udg {
 
-QVolumeRepositoryComboBox::QVolumeRepositoryComboBox(QWidget *parent, const char *name)
- : QComboBox(parent, name)
+QVolumeRepositoryComboBox::QVolumeRepositoryComboBox( QWidget *parent )
+ : QComboBox( parent )
 {
     m_volumeRepository = VolumeRepository::getRepository();
     connect( m_volumeRepository , SIGNAL( itemAdded(Identifier) ) , this , SLOT( insertVolume(Identifier) ) );
@@ -26,23 +26,21 @@ QVolumeRepositoryComboBox::~QVolumeRepositoryComboBox()
 
 Identifier QVolumeRepositoryComboBox::getVolumeID() const
 {
-    return m_idFromIndex[ this->currentItem() ];
+    return m_idFromIndex[ this->currentIndex() ];
 }
 
 void QVolumeRepositoryComboBox::setVolumeID( Identifier id )
 {
     if( m_indexFromID.contains( id ) ) 
-        this->setCurrentItem( m_indexFromID[id] );
+        this->setCurrentIndex( m_indexFromID[id] );
 }
 
-void QVolumeRepositoryComboBox::addItem( const QString &name, Identifier id )
+void QVolumeRepositoryComboBox::addNewItem( const QString &name, Identifier id )
 {
-    
-    this->insertItem( name ); // aquí estem cridant al mètode de QComboBox
+    this->addItem( name ); // aquí estem cridant al mètode de QComboBox
     // podríem fer l'update mapping, és la manera més senzilla, tot i que no del tot eficient
     m_idFromIndex[ this->count()-1 ] = id;
     m_indexFromID[ id ] = this->count()-1;
-    
 
 }
 
@@ -66,7 +64,7 @@ void QVolumeRepositoryComboBox::insertVolume( Identifier id )
 {
     QString name;
     name.sprintf( "%d-Volume" , id.getValue() );
-    addItem( name , id );
+    addNewItem( name , id );
 }
 
 void QVolumeRepositoryComboBox::updateMapping()

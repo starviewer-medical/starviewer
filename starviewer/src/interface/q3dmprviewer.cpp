@@ -6,10 +6,6 @@
  ***************************************************************************/
 #include "q3dmprviewer.h"
 
-//includes qt
-#include <qlabel.h>
-#include <qlayout.h>
-
 //includes vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -26,7 +22,7 @@
 #include <vtkOutlineFilter.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
-/// Per el maracdor d'orientació
+// Per el maracdor d'orientació
 #include <vtkAnnotatedCubeActor.h>
 #include <vtkProperty.h>
 #include <vtkAxesActor.h>
@@ -34,10 +30,12 @@
 #include <vtkPropAssembly.h>
 #include <vtkOrientationMarkerWidget.h>
 #include <vtkCaptionActor2D.h>
+#include <vtkCommand.h>
+
 //includes propis
 #include "volume.h"
 
-#include <vtkCommand.h>
+
 namespace udg {
 
 
@@ -58,12 +56,9 @@ public:
 
 };
 
-Q3DMPRViewer::Q3DMPRViewer(QWidget *parent, const char *name)
- : QViewer(parent, name)
+Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
+ : QViewer( parent )
 {
-    if ( !name )    this->setName( "Widget 3D" );
-    
-    this->clearWState( WState_Polished );
     
     //Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_ren = vtkRenderer::New();

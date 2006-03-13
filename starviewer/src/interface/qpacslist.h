@@ -7,30 +7,31 @@
 #ifndef UDGQPACSLIST_H
 #define UDGQPACSLIST_H
 
-#include <qpacslistbase.h>
+#include "ui_qpacslistbase.h"
+#include <QWidget>
+using namespace Ui;
 
 namespace udg {
+
+class PacsList;
+class Status;
 
 /** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
 @author marc
 */
 
-class PacsList;
-class Status;
-class QPacsList : public QPacsListBase
-{
+class QPacsList : public QWidget, private /*Ui::*/QPacsListBase{
 Q_OBJECT
-
+public:
+    QPacsList(QWidget *parent = 0 );
+    Status getSelectedPacs(PacsList *);
+    ~QPacsList();
+    
 private :
     
     void refresh();
     void setSelectedDefaultPacs();
     void databaseError(Status *);
-
-public:
-    QPacsList(QWidget *parent = 0, const char *name = 0);
-    Status getSelectedPacs(PacsList *);
-    ~QPacsList();
 
 };
 

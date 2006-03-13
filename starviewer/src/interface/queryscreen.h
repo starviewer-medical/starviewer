@@ -7,21 +7,16 @@
 #ifndef UDGQUERYSCREEN_H
 #define UDGQUERYSCREEN_H
 
-#include "queryscreenbase.h"
+#include "ui_queryscreenbase.h"
+
 #include "qretrievescreen.h"
+#include <QCloseEvent>
 
 #include "mulquerystudy.h"
 #include "processimagesingleton.h"
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
 #include "retrievethreadslist.h"
-
-
-//#include "databaseconnection.h"
-//#include "studymask.h"
-//#include "seriesmask.h"
-//#include "pacsparameters.h"
-//#include "pacsconnection.h"
 
 namespace udg {
 
@@ -32,11 +27,10 @@ namespace udg {
 class SeriesList;
 class Status;
 
-class QueryScreen : public QueryScreenBase
-{
+class QueryScreen : public QWidget , private Ui::QueryScreenBase{
 Q_OBJECT
 public:
-    QueryScreen(QWidget *parent = 0, const char *name = 0);
+    QueryScreen( QWidget *parent = 0 );
 
     ~QueryScreen();
 

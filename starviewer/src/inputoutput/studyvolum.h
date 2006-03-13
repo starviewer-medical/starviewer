@@ -7,7 +7,7 @@
 #ifndef UDGSTUDYVOLUM_H
 #define UDGSTUDYVOLUM_H
 
-#include <vector.h>
+#include <vector>
 #include <string.h>
 #include "seriesvolum.h"
 

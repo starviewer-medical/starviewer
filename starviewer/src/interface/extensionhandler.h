@@ -7,8 +7,8 @@
 #ifndef UDGEXTENSIONHANDLER_H
 #define UDGEXTENSIONHANDLER_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include "identifier.h"
 
 namespace udg {

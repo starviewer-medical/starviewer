@@ -7,7 +7,7 @@
 #ifndef UDGQTABAXISVIEWEXTENSIONCREATOR_H
 #define UDGQTABAXISVIEWEXTENSIONCREATOR_H
 
-#include <extensioncreator.h>
+#include "extensioncreator.h"
 
 namespace udg {
 

@@ -5,15 +5,16 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q2dviewer.h"
-
 #include "volume.h"
+
+// include's qt
+#include <QResizeEvent>
+#include <QSize>
+#include <QMenu>
+#include <QAction>
+
 // Tools
 #include "distancetool.h"
-// include's qt
-#include <qevent.h>
-#include <qsize.h>
-#include <qpopupmenu.h>
-#include <qaction.h>
 
 // include's vtk
 #include <QVTKWidget.h>
@@ -38,8 +39,8 @@
 namespace udg {
 
 
-Q2DViewer::Q2DViewer(QWidget *parent, const char *name)
- : QViewer(parent, name)
+Q2DViewer::Q2DViewer( QWidget *parent )
+ : QViewer( parent )
 {
     m_lastView = None; 
     m_viewer = vtkImageViewer2::New();
@@ -90,8 +91,8 @@ vtkRenderWindowInteractor *Q2DViewer::getInteractor()
 void Q2DViewer::createActions()
 {
     m_resetAction = new QAction( this );
-    m_resetAction->setMenuText(tr("&Reset"));
-    m_resetAction->setAccel( tr("Ctrl+R") );
+    m_resetAction->setText(tr("&Reset"));
+    m_resetAction->setShortcut( tr("Ctrl+R") );
     m_resetAction->setStatusTip(tr("Reset initial parameters"));
     connect( m_resetAction, SIGNAL( activated() ), this, SLOT( reset()) );
 }
@@ -104,13 +105,13 @@ void Q2DViewer::createTools()
 
 void Q2DViewer::initInformationText()
 {
-    m_formatedUpperLeftString = tr("Image Size: %d x %d\nView Size: %d x %d\nX: %4g px Y: %4g px Value: %g\nWW: %.1f WL: %.1f ");
+/*    m_formatedUpperLeftString = tr("Image Size: %d x %d\nView Size: %d x %d\nX: %4g px Y: %4g px Value: %g\nWW: %.1f WL: %.1f ");
     
     m_formatedUpperLeftOffImageString = tr("Image Size: %d x %d\nView Size: %d x %d\nWW: %.1f WL: %.1f ");
         
     m_formatedUpperRightString = "%s";
     m_formatedLowerLeftString = tr("Slice: %d/%d\nZoom: XXX%%  Angle: XXX\nThickness: XXX mm Location: XXX ");
-    m_formatedLowerRightString = "%s";
+    m_formatedLowerRightString = "%s";*/
         
         
     m_upperLeftText = tr("No Info");
@@ -121,11 +122,32 @@ void Q2DViewer::initInformationText()
     m_textAnnotation->SetImageActor( m_viewer->GetImageActor() );
     m_textAnnotation->SetWindowLevel( m_viewer->GetWindowLevel() );
     m_textAnnotation->ShowSliceAndImageOn();
-    
-    m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
-    
-    connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
 
+    m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
+
+    // \FIXME problema amb aquest connect, quan es dispara el signal no crida a la funció que toca i peta ?problema de qt4 +qt3¿
+//     connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
+
+}
+
+
+void Q2DViewer::displayInformationText( bool display )
+{
+    if( display )
+    {
+        m_textAnnotation->VisibilityOn();
+        connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
+    }
+    else
+    {
+        m_textAnnotation->VisibilityOff();
+        disconnect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
+    }
+}
+
+void Q2DViewer::anyEvent()
+{
+    // std::cout << "any event " << std::endl; 
 }
 
 void Q2DViewer::updateInformationText()
@@ -163,39 +185,42 @@ void Q2DViewer::updateInformationText()
         
     if( m_currentCursorPosition[0] == -1 )
     {    
-        m_upperLeftText.sprintf( m_formatedUpperLeftOffImageString , width , height , m_viewer->GetRenderWindow()->GetSize()[0] , m_viewer->GetRenderWindow()->GetSize()[1] , m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+//         m_upperLeftText.sprintf( m_formatedUpperLeftOffImageString , width , height , m_viewer->GetRenderWindow()->GetSize()[0] , m_viewer->GetRenderWindow()->GetSize()[1] , m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nOff Image\nWW: %5 WL: %6 ")
+                .arg( width )
+                .arg( height )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
+                .arg( m_viewer->GetColorWindow() )
+                .arg( m_viewer->GetColorLevel() );
     }
     else
     {
-        m_upperLeftText.sprintf( m_formatedUpperLeftString , width , height , m_viewer->GetRenderWindow()->GetSize()[0] , m_viewer->GetRenderWindow()->GetSize()[1], m_currentCursorPosition[0] , m_currentCursorPosition[1], m_currentImageValue , m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+//         m_upperLeftText.sprintf( m_formatedUpperLeftString , width , height , m_viewer->GetRenderWindow()->GetSize()[0] , m_viewer->GetRenderWindow()->GetSize()[1], m_currentCursorPosition[0] , m_currentCursorPosition[1], m_currentImageValue , m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+
+        m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nX: %5 px Y: %6 px Value: %7\nWW: %8 WL: %9 ")
+                .arg( width )
+                .arg( height )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
+                .arg( m_currentCursorPosition[0] )
+                .arg( m_currentCursorPosition[1] )
+                .arg( m_currentImageValue )
+                .arg( m_viewer->GetColorWindow() )
+                .arg( m_viewer->GetColorLevel() );
     }
-    m_lowerLeftText.sprintf( m_formatedLowerLeftString , m_currentSlice , depth );
+//     m_lowerLeftText.sprintf( m_formatedLowerLeftString , m_currentSlice , depth );
+    m_lowerLeftText = tr("Slice: %1/%2\nZoom: XXX%%  Angle: XXX\nThickness: XXX mm Location: XXX ")
+                .arg( m_currentSlice )
+                .arg( depth );
     
-    m_upperRightText.sprintf( m_formatedUpperRightString , tr("No info").latin1() );
-    m_lowerRightText.sprintf( m_formatedLowerRightString , tr("No info").latin1() );
+    m_upperRightText = tr("No info");
+    m_lowerRightText = tr("No info");
     
     m_textAnnotation->SetText( 0 , m_lowerLeftText );
     m_textAnnotation->SetText( 2 , m_upperLeftText );
 }
 
-void Q2DViewer::displayInformationText( bool display )
-{
-    if( display )
-    {
-        m_textAnnotation->VisibilityOn();
-        connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
-    }
-    else
-    {
-        m_textAnnotation->VisibilityOff();
-        disconnect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
-    }
-}
-
-void Q2DViewer::anyEvent()
-{
-    // std::cout << "any event " << std::endl; 
-}
 void Q2DViewer::onMouseMove()
 {
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
@@ -329,11 +354,12 @@ void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, voi
 
     // aquesta posició no és del tot bona ja que no són les coordenades globals, sin o de finestra
     
-    QPopupMenu contextMenu( this );
-    m_resetAction->addTo( &contextMenu );
+    QMenu contextMenu( this );
+    contextMenu.addAction( m_resetAction );
+    
     
     // map to global
-    QPoint global_pt = contextMenu.parentWidget()->mapToGlobal(pt);
+    QPoint global_pt = contextMenu.parentWidget()->mapToGlobal( pt );
     contextMenu.exec( global_pt );
 }
 

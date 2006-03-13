@@ -31,6 +31,6 @@ public:
     virtual bool initializeExtension( QWidget *extension  /* , Resource *rsrc */);
 };
 
-};  //  end  namespace udg {
+};  //  end  namespace udg 
 
 #endif

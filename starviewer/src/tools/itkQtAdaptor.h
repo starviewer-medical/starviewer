@@ -16,8 +16,8 @@
 =========================================================================*/
 
 
-
-#include <qobject.h>
+// \TODO No es fa servir la classe, treure-la!!
+#include <QObject>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkCommand.h"

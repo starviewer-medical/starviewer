@@ -41,7 +41,6 @@ public:
     void setValues( double x , double y , double z );
     void setValues( double points[3] );
     
-    double *getValues(){ double points[3]; points[0] = m_x; points[1] = m_y; points[2] = m_z; return points; }
     double getX(){ return m_x; }
     double getY(){ return m_y; }
     double getZ(){ return m_z; }

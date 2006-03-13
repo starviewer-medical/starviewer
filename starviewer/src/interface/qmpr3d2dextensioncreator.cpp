@@ -21,7 +21,9 @@ QMPR3D2DExtensionCreator::~QMPR3D2DExtensionCreator()
 
 QWidget *QMPR3D2DExtensionCreator::createExtension( QWidget *parent , QString name )
 {
-    return new QMPR3D2DExtension( parent , name );
+    QMPR3D2DExtension *newWidget = new QMPR3D2DExtension( parent );
+    newWidget->setObjectName( name );
+    return newWidget;
 }
 
 bool QMPR3D2DExtensionCreator::initializeExtension( QWidget *extension /* , Resource *resources */ )

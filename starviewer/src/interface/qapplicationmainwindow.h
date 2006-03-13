@@ -10,15 +10,17 @@
 
 #include "identifier.h"
 // QT
-#include <qmainwindow.h>
-#include <qstringlist.h>
+#include <QMainWindow>
+#include <QStringList>
+#include <QMenu>
 
 #include "studyvolum.h"
 
 // Forward declarations
 class QAction;
-class QDockWindow;
+class QToolBar;
 class QProgressDialog;
+class QCloseEvent;
 
 namespace udg{
 // Forward declarations
@@ -28,20 +30,6 @@ class Input;
 class Output;
 class ExtensionWorkspace;
 class ExtensionHandler;
-
-// ***************************************************************************
-// Inici zona de codi editable [Forward Declarations]
-// ***************************************************************************
-
-// :: tot això anirà a parar a una mini aplicació
-// Registre: Informació Mútua 
-// class MutualInformationDirector;
-// class MutualInformationParameters;
-// class MutualInformationInputParametersForm;
-
-// ***************************************************************************
-// Fi zona de codi editable
-// ***************************************************************************
 
 class QApplicationMainWindow : public QMainWindow
 {
@@ -71,9 +59,9 @@ protected:
     ///Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
     void closeEvent(QCloseEvent *event);
 private:
-// :::::::::::::::::::::::::::
-// membres
-// :::::::::::::::::::::::::::
+    // :::::::::::::::::::::::::::
+    // membres
+    // :::::::::::::::::::::::::::
     /// screen de query del pacs
     QueryScreen *m_queryScreen;
 
@@ -89,6 +77,8 @@ private:
     bool m_modified;
     /// Llista d'arxius recents
     QStringList m_recentFiles;
+    enum { MaxRecentFiles = 5 };
+    QAction *m_recentFileActions[ MaxRecentFiles ];
     /// Arxiu actual que estem visualitzant
     QString m_currentFile;
     /// Filtres per als diàlegs d'obrir/exportar arxius
@@ -110,28 +100,25 @@ private:
     QString m_defaultLocale;
     /// La llista de idiomes disponibles amb la que omplim el menú d'idiomes
     QStringList m_locales;
-    /// \TODO no seria millor fer una const?
-    enum { MaxRecentFiles = 5 }; 
-    int m_recentFileIds[MaxRecentFiles];
     /// Menús
-    QPopupMenu *m_fileMenu;
-    QPopupMenu *m_databaseMenu;
-    QPopupMenu *m_segmentationMenu;
-    QPopupMenu *m_clusteringMenu;
-    QPopupMenu *m_registrationMenu;
-    QPopupMenu *m_visualizationMenu;
-    QPopupMenu *m_colorMenu;
-    QPopupMenu *m_toolsMenu;
-    QPopupMenu *m_optionsMenu;
-    QPopupMenu *m_languageMenu;
-    QPopupMenu *m_helpMenu;
+    QMenu *m_fileMenu;
+    QMenu *m_databaseMenu;
+    QMenu *m_segmentationMenu;
+    QMenu *m_clusteringMenu;
+    QMenu *m_registrationMenu;
+    QMenu *m_visualizationMenu;
+    QMenu *m_colorMenu;
+    QMenu *m_toolsMenu;
+    QMenu *m_optionsMenu;
+    QMenu *m_languageMenu;
+    QMenu *m_helpMenu;
     
-    QPopupMenu *m_windowMenu;
+    QMenu *m_windowMenu;
     
     /// Sub menús
-    QPopupMenu *m_importFilesMenu;
-    QPopupMenu *m_exportFilesMenu;
-    QPopupMenu *m_recentFilesMenu;
+    QMenu *m_importFilesMenu;
+    QMenu *m_exportFilesMenu;
+    QMenu *m_recentFilesMenu;
     
     /// Barres d'eines
     QToolBar *m_extensionsToolBar;
@@ -153,14 +140,13 @@ private:
     QAction *m_closeAction;
     QAction *m_exitAction;
     QAction *m_aboutAction;
-    QAction *m_aboutQtAction;
     QAction *m_exportToJpegAction;
     QAction *m_exportToMetaIOAction;
     QAction *m_exportToTiffAction;
     QAction *m_exportToPngAction;
     QAction *m_exportToBmpAction;
     /// Per indicar el procés al obrir-se un fitxer
-    QProgressDialog *m_progressDialog;  
+    QProgressDialog *m_progressDialog;
     /// El repositori de volums
     udg::VolumeRepository* m_volumeRepository;
     /// Lectura d'arxius
@@ -168,9 +154,9 @@ private:
     /// Escriptura/Exportació de formats d'arxius
     udg::Output* m_outputWriter;
 
-// :::::::::::::::::::::::::::
-// mètodes
-// :::::::::::::::::::::::::::
+    // :::::::::::::::::::::::::::
+    // mètodes
+    // :::::::::::::::::::::::::::
     
     ///Crea i inicialitza les accions de l'aplicació
     void createActions();
@@ -180,8 +166,6 @@ private:
     void createToolBars();
     /// Crea la barra d'estat de l'aplicació
     void createStatusBar();
-    /// Crea el menú des del qual podem escollir l'idioma
-    void createLanguageMenu();
     /// Llegeix la configuració inicial amb la que engega el programa
     void readSettings();
     /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
@@ -191,7 +175,7 @@ private:
     /// Especifica el fitxer acctual que s'està tractant \TODO \deprecated aquest mètode esdevindrà antiquat en breu i no té gaure sentit desar el nom del fitxer, el metode continua existint perquè s'ha arrastrat des del principi
     void setCurrentFile( const QString &fileName );
     /// actualitza el llistat de noms de fitxers oberts recentment \TODO, s'hauria d'adaptar si cal quqan hi hagi lo del pacs
-    void updateRecentFileItems();
+    void updateRecentFileActions();
     /// Mètode intern per extreure el nom del fitxer tal qual sense el path sencer
     QString strippedName(const QString &fullFileName);
 

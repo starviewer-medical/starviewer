@@ -6,10 +6,9 @@
  ***************************************************************************/
 #include "appimportfile.h"
 // qt
-#include <qfiledialog.h>
-#include <qsettings.h>
-#include <qfileinfo.h>
-#include <qfiledialog.h>
+#include <QFileDialog>
+#include <QSettings>
+#include <QFileInfo>
 
 // recursos
 #include "volumerepository.h"
@@ -20,8 +19,9 @@
 namespace udg {
 
 AppImportFile::AppImportFile(QObject *parent, const char *name)
- : QObject(parent, name)
+ : QObject( parent )
 {
+    this->setObjectName( name );
     m_openFileFilters = tr("MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
     
     m_volumeRepository = udg::VolumeRepository::getRepository();
@@ -32,11 +32,12 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
 
 AppImportFile::~AppImportFile()
 {
+    finish();
 }
 
 void AppImportFile::open()
 {
-    QString fileName = QFileDialog::getOpenFileName( m_workingDirectory, m_openFileFilters, 0 , tr("Open file dialog"),tr("Chose an image filename") );
+    QString fileName = QFileDialog::getOpenFileName( 0 , tr("Chose an image filename") ,  m_workingDirectory, m_openFileFilters );
             
     if ( !fileName.isEmpty() )
     {
@@ -45,7 +46,7 @@ void AppImportFile::open()
         {
             // cal informar a l'aplicació de l'id del volum
             // la utilitat
-            m_workingDirectory = QFileInfo(fileName).dirPath();
+            m_workingDirectory = QFileInfo( fileName ).dir().path();
         }
     }
 }
@@ -55,9 +56,9 @@ bool AppImportFile::loadFile( QString fileName )
     bool ok = true; 
 
     // indiquem que ens obri el fitxer
-    if( QFileInfo( fileName ).extension() == "dcm") // petita prova per provar lectura de DICOM's
+    if( QFileInfo( fileName ).suffix() == "dcm") // petita prova per provar lectura de DICOM's
     {
-        if( m_inputReader->readSeries( QFileInfo(fileName).dirPath( TRUE ).latin1() ) ) 
+        if( m_inputReader->readSeries( QFileInfo( fileName ).dir().absolutePath().toLatin1() ) )
         { 
             // afegim el nou volum al repositori
             m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );            
@@ -69,7 +70,7 @@ bool AppImportFile::loadFile( QString fileName )
     }
     else
     {
-        if( m_inputReader->openFile( fileName.latin1() ) ) 
+        if( m_inputReader->openFile( fileName.toLatin1() ) )
         { 
             // afegim el nou volum al repositori
             m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );            
@@ -91,19 +92,17 @@ void AppImportFile::finish()
 
 void AppImportFile::readSettings()
 {
-    QSettings settings;
-    settings.setPath("GGG", "StarViewer-App-ImportFile");
-    settings.beginGroup("/StarViewer-App-ImportFile");
-    m_workingDirectory = settings.readEntry("/workingDirectory", ".");
+    QSettings settings("GGG", "StarViewer-App-ImportFile");
+    settings.beginGroup("StarViewer-App-ImportFile");
+    m_workingDirectory = settings.value("workingDirectory", ".").toString();
     settings.endGroup();
 }
 
 void AppImportFile::writeSettings()
 {
-    QSettings settings;
-    settings.setPath("GGG", "StarViewer-App-ImportFile");
-    settings.beginGroup("/StarViewer-App-ImportFile");
-    settings.writeEntry("/workingDirectory", m_workingDirectory );
+    QSettings settings("GGG", "StarViewer-App-ImportFile");
+    settings.beginGroup("StarViewer-App-ImportFile");
+    settings.setValue("workingDirectory", m_workingDirectory );
     settings.endGroup();
 }
 

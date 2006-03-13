@@ -7,8 +7,8 @@
 #ifndef UDGAPPIMPORTFILE_H
 #define UDGAPPIMPORTFILE_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 #include "identifier.h"
 

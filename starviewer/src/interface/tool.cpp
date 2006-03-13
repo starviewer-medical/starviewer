@@ -15,11 +15,11 @@
 namespace udg {
 
 Tool::Tool(  QViewer *viewer, QObject *parent, const char *name)
- : QObject(parent, name)
+ : QObject( parent )
 {
+    this->setObjectName( name );
     m_viewer = viewer;
 }
-
 
 Tool::~Tool()
 {

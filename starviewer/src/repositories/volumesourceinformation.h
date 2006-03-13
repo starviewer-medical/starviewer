@@ -7,7 +7,7 @@
 #ifndef UDGVOLUMESOURCEINFORMATION_H
 #define UDGVOLUMESOURCEINFORMATION_H
 
-#include <qstring.h>
+#include <QString>
 
 namespace udg {
 
@@ -25,7 +25,7 @@ public:
 
     /// Assignar/Obtenir el nom del pacient
     void setPatientName( const char *name );
-    const char *getPatienName(){ return m_patientName.latin1(); };
+    const char *getPatienName(){ return m_patientName.toLatin1(); };
     
 protected:
     QString m_patientName;

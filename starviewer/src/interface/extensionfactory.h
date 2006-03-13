@@ -7,8 +7,8 @@
 #ifndef UDGEXTENSIONFACTORY_H
 #define UDGEXTENSIONFACTORY_H
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <map>
 
 #include "extensioncreator.h"
@@ -42,6 +42,6 @@ private:
     RegisterMapType m_registerMap;
 };
 
-};  //  end  namespace udg {
+};  //  end  namespace udg 
 
 #endif

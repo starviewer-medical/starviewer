@@ -18,8 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "qstudylistview.h"
+//Added by qt3to4:
+#include <Q3PopupMenu>
 #include "study.h"
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qpixmap.h>
 #include <qimage.h>
 #include "qseriesiconview.h"
@@ -34,10 +36,10 @@ namespace udg {
 
 /** Constructor de la classe
   */
-QStudyListView::QStudyListView(QWidget *parent, const char *name)
- : QStudyListViewBase(parent, name)
+QStudyListView::QStudyListView( QWidget *parent , const char * name )
+ : QWidget( parent )
 {
-
+    setupUi( this );
     int i;
     
     StudyListV->setRootIsDecorated(false);
@@ -51,16 +53,14 @@ QStudyListView::QStudyListView(QWidget *parent, const char *name)
     //Les columnes del Listview només es poden canviar de mida per si soles
     for (i=0;i<=StudyListV->columns();i++)
     {
-        StudyListV->setColumnWidthMode(i,QListView::Manual); 
+        StudyListV->setColumnWidthMode(i,Q3ListView::Manual); 
     }
+
+    m_openFolder = QPixmap(":/images/folderopen.png");
+    m_closeFolder = QPixmap(":/images/folderclose.png");
+    m_iconSeries = QPixmap(":/images/series.png");
     
-    m_openFolder = QPixmap::fromMimeSource("folderopen.png");
-    
-    m_closeFolder = QPixmap::fromMimeSource("folderclose.png");
-    
-    m_iconSeries = QPixmap::fromMimeSource("series.png");
-    
-    createPopupMenu(name);
+    createPopupMenu( name );
 }
 
 /** Creem el popup Menu
@@ -70,11 +70,11 @@ void QStudyListView::createPopupMenu(QString nom)
 {
     int idRet,idDel,idView;
     
-    m_popupMenu = new QPopupMenu( this );
-    idView = m_popupMenu->insertItem(tr("&View"),  this, SLOT(viewStudy()), CTRL+Key_W );
-    idRet = m_popupMenu->insertItem(tr("&Retrieve"),this, SLOT(retrieveStudy()), CTRL+Key_R);
+    m_popupMenu = new Q3PopupMenu( this );
+    idView = m_popupMenu->insertItem(tr("&View"),  this, SLOT(viewStudy()), Qt::CTRL+Qt::Key_W );
+    idRet = m_popupMenu->insertItem(tr("&Retrieve"),this, SLOT(retrieveStudy()), Qt::CTRL+Qt::Key_R);
     m_popupMenu->insertSeparator();
-    idDel = m_popupMenu->insertItem(tr("&Delete"),this, SLOT(deleteStudy()), CTRL+Key_D);
+    idDel = m_popupMenu->insertItem(tr("&Delete"),this, SLOT(deleteStudy()), Qt::CTRL+Qt::Key_D);
     m_oldPacsAETitle = "";
       
    if (nom=="StudyLViewPacs")
@@ -115,17 +115,17 @@ void QStudyListView::insertStudy(Study *stu)
     QString text;
     Status state;
 
-    QListViewItem* item = new QListViewItem(StudyListV);
+    Q3ListViewItem* item = new Q3ListViewItem(StudyListV);
     text.truncate(0);
     text.append("Study ");
-    text.append(stu->getStudyId());
+    text.append(stu->getStudyId().c_str() );
     item->setPixmap(0,m_closeFolder);
     item->setText(0,text);
-    item->setText(1,stu->getPatientId());
+    item->setText(1,stu->getPatientId().c_str() );
     item->setText(2,formatName(stu->getPatientName()));
     item->setText(3,formatAge(stu->getPatientAge()));
-    item->setText(4,stu->getStudyModality());
-    item->setText(5,stu->getStudyDescription());
+    item->setText(4,stu->getStudyModality().c_str() );
+    item->setText(5,stu->getStudyDescription().c_str() );
     item->setText(6,formatDate(stu->getStudyDate()));
     item->setText(7,formatHour(stu->getStudyTime()));
     
@@ -139,17 +139,17 @@ void QStudyListView::insertStudy(Study *stu)
             state = pacsList.queryPacs(&pacs,stu->getPacsAETitle());
             if (state.good())
             {
-                item->setText(8,pacs.getInstitution());
+                item->setText(8,pacs.getInstitution().c_str() );
                 m_OldInstitution = pacs.getInstitution();
             }
             m_oldPacsAETitle = stu->getPacsAETitle();
         }
-        else item->setText(8,m_OldInstitution);
+        else item->setText(8,m_OldInstitution.c_str() );
     }
-    else item->setText(8,stu->getInstitutionName());
-    item->setText(9,stu->getAccessionNumber());
-    item->setText(10,stu->getPacsAETitle());
-    item->setText(11,stu->getStudyUID());
+    else item->setText(8,stu->getInstitutionName().c_str() );
+    item->setText(9,stu->getAccessionNumber().c_str() );
+    item->setText(10,stu->getPacsAETitle().c_str() );
+    item->setText(11,stu->getStudyUID().c_str() );
     item->setText(12,"STUDY");//indiquem de que es tracta d'un estudi
     item->setText(13,"");
     StudyListV->clearSelection();
@@ -164,15 +164,15 @@ void QStudyListView::insertSeries(Series *serie)
     
     QString text;
   
-    QListViewItem* item = new QListViewItem(StudyListV->currentItem());
+    Q3ListViewItem* item = new Q3ListViewItem(StudyListV->currentItem());
     text.truncate(0);
     text.append(tr("Series "));
-    text.append(serie->getSeriesNumber());
-    item->setPixmap(0,m_iconSeries);
+    text.append(serie->getSeriesNumber().c_str() );
+    item->setPixmap(0,m_iconSeries); 
     item->setText(0,text);
     //item->setText(1,formatName(stu.getPatientName()));
     //item->setText(2,formatAge(stu.getPatiFentAge()));
-    item->setText(4,serie->getSeriesModality());
+    item->setText(4,serie->getSeriesModality().c_str() );
     
     
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
@@ -187,7 +187,7 @@ void QStudyListView::insertSeries(Series *serie)
     }
    // item->setText(6,stu.getInstitutionName());
     //item->setText(7,stu.getPacsAETitle());
-    item->setText(11,serie->getSeriesUID());   
+    item->setText(11,serie->getSeriesUID().c_str() );   
     item->setText(12,"SERIES"); //indiquem que es tracta d'una sèrie 
     text.truncate(0);
     text.setNum(serie->getImageNumber(),10);
@@ -203,7 +203,7 @@ void QStudyListView::insertSeries(Series *serie)
   */
 QString QStudyListView::formatAge(const std::string age)
 {
-    QString text(age);
+    QString text( age.c_str() );
     
     if (text.at(0)== '0') 
     {//treiem el 0 de davant els anys, el PACS envia per ex: 047Y nosaltes tornem 47Y
@@ -218,7 +218,7 @@ QString QStudyListView::formatAge(const std::string age)
   */
 QString QStudyListView::formatName(const std::string name)
 {
-    QString text(name);
+    QString text( name.c_str() );
     
     text.replace("^"," ");
     
@@ -230,7 +230,7 @@ QString QStudyListView::formatName(const std::string name)
   */
 QString QStudyListView::formatDate(const std::string date)
 {
-    QString text,dateOrig(date);
+    QString text,dateOrig( date.c_str() );
     
     text.insert(0,dateOrig.mid(6,2)); //dd
     text.append("/");
@@ -246,7 +246,7 @@ QString QStudyListView::formatDate(const std::string date)
   */
 QString QStudyListView::formatHour(const std::string hour)
 {
-    QString text,hourOrig(hour);
+    QString text,hourOrig( hour.c_str() );
     
     text.insert(0,hourOrig.mid(0,2));
     text.append(":");
@@ -278,7 +278,7 @@ void QStudyListView::setSortColumn(int col)
   */
 QString QStudyListView::getSelectedStudyUID()
 {
-    QListViewItem *item;
+    Q3ListViewItem *item;
 
     if (StudyListV->currentItem()!=NULL) 
     {
@@ -322,7 +322,7 @@ QString QStudyListView::getSelectedSeriesUID()
   */
 QString QStudyListView::getSelectedStudyPacsAETitle()
 {
-   QListViewItem * item;
+   Q3ListViewItem * item;
    if (StudyListV->currentItem()==NULL) return "";
     
    if (StudyListV->currentItem()->depth()==0)
@@ -342,7 +342,7 @@ QString QStudyListView::getSelectedStudyPacsAETitle()
   *            @param point on s'ha fet el click
   *            @param columna a la qual s'ha clickat
   */
-void QStudyListView::expand(QListViewItem * item,const QPoint &,int col)
+void QStudyListView::expand(Q3ListViewItem * item,const QPoint &,int col)
 {
 
     if (item==NULL) return;
@@ -364,7 +364,7 @@ void QStudyListView::expand(QListViewItem * item,const QPoint &,int col)
         }
         else 
         {
-            item->setPixmap(0,m_closeFolder);
+            item->setPixmap(0,m_closeFolder); 
             item->setOpen(false);
             emit(clearIconView());
         }
@@ -389,19 +389,19 @@ void QStudyListView::expand(QListViewItem * item,const QPoint &,int col)
   * QSeriesInconView, per mostrar la informació de la sèrie (la connexió entre el QStudyListView i QSeriesIconView es fa la constrcutor de la QueryScreen)
   *        @param Apuntador a l'estudi al list view
   */
-void QStudyListView::setSeriesToIconView(QListViewItem *item)
+void QStudyListView::setSeriesToIconView(Q3ListViewItem *item)
 {
-    QListViewItem  * child = item->firstChild();
+    Q3ListViewItem  * child = item->firstChild();
     
     emit(clearIconView());
     do
     {
         Series serie;
-        serie.setSeriesUID(child->text(11));
+        serie.setSeriesUID(child->text(11).toStdString() );
         serie.setImageNumber(child->text(13).toInt(NULL,10));
-        serie.setSeriesModality(child->text(4));
-        serie.setSeriesNumber((child->text(0).remove(tr("Series"))));  
-        serie.setStudyUID(getSelectedStudyUID());
+        serie.setSeriesModality(child->text(4).toStdString() );
+        serie.setSeriesNumber((child->text(0).remove(tr("Series"))).toStdString());
+        serie.setStudyUID(getSelectedStudyUID().toStdString() );
         emit(addSeries(&serie));   
         child = child->nextSibling(); //busquem el seguent germà!
     }
@@ -413,7 +413,7 @@ void QStudyListView::setSeriesToIconView(QListViewItem *item)
   *    @param punt on s'ha fet el clock
   *    @param columna que s'ha fet el ckcik
   */
-void QStudyListView::popupMenuShow(QListViewItem *,const QPoint& point,int)
+void QStudyListView::popupMenuShow(Q3ListViewItem *,const QPoint& point,int)
 {
 //    expand(item);    
     m_popupMenu->exec(point);
@@ -425,7 +425,7 @@ void QStudyListView::popupMenuShow(QListViewItem *,const QPoint& point,int)
   */
 void QStudyListView::removeStudy(QString studyUID)
 {
-    QListViewItemIterator it(StudyListV );
+    Q3ListViewItemIterator it(StudyListV );
     
     while ( it.current() ) 
     {
@@ -464,7 +464,7 @@ void QStudyListView::selectedSeriesIcon(int index)
     int i=0;    
 
     //busquem l'estudi (el pare) per recorre tots els fills, per tal de seleccionar la mateixa serie que la del QSeriesIconView
-   QListViewItem *parent = NULL;
+   Q3ListViewItem *parent = NULL;
    
    if (StudyListV->currentItem()==NULL) return;
     
@@ -479,7 +479,7 @@ void QStudyListView::selectedSeriesIcon(int index)
    
     if (!parent->isOpen()) parent->setOpen(true);
    
-   QListViewItem *child = parent->firstChild();
+   Q3ListViewItem *child = parent->firstChild();
    
    
    //El qseriesIconView ens indica a quina posicio es troba dins la llista la sèrie que hem de seleccionar
@@ -501,7 +501,7 @@ void QStudyListView::selectedSeriesIcon(int index)
   *  també en el QSeriesIconView
   *         @param item sobre el que s'ha fet click
   */
-void QStudyListView::clicked(QListViewItem *item)
+void QStudyListView::clicked(Q3ListViewItem *item)
 {
 
     if (item!=NULL)

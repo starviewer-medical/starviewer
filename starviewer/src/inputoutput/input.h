@@ -7,7 +7,7 @@
 #ifndef UDGINPUT_H
 #define UDGINPUT_H
 
-#include <qobject.h> 
+#include <QObject>
 #include <iostream>
 
 #include "volume.h"

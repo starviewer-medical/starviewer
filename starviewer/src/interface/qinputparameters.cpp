@@ -4,23 +4,20 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
  
 #include "qinputparameters.h"
 
 namespace udg {
 
-QInputParameters::QInputParameters(QWidget *parent, const char *name)
- : QWidget(parent, name)
+QInputParameters::QInputParameters( QWidget *parent )
+ : QWidget( parent )
 {
     m_individualSincronization = true;
 }
 
-
 QInputParameters::~QInputParameters()
 {
 }
-
 
 void QInputParameters::disableIndividualSincronization()
 {

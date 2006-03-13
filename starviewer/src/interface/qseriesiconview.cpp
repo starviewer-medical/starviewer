@@ -5,19 +5,23 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "qseriesiconview.h"
-#include <qiconview.h>
-#include <qstring.h>
+#include <q3iconview.h>
+#include <QString>
 #include <qpixmap.h>
 #include <qimage.h>
+//Added by qt3to4:
+// #include <QImageIO>
+#include <QImageReader>
 #include "starviewersettings.h"
 
 namespace udg {
 
 /** Constructor de la classe
   */
-QSeriesIconView::QSeriesIconView(QWidget *parent, const char *name)
- : QSeriesIconViewBase(parent, name)
+QSeriesIconView::QSeriesIconView(QWidget *parent )
+ : QWidget( parent )
 {
+    setupUi( this );
     QString className;    
 
     className.insert(0,this->name());
@@ -35,16 +39,17 @@ void QSeriesIconView::insertSeries(Series *serie)
 {
     QString text,num,scaledPathImage,nameClass;
     QPixmap image;
-    QImageIO iio;
+//     QImageIO iio;
+    QImageReader iioReader;
     StarviewerSettings settings;
     
     text.insert(0,tr("Series "));
-    text.append(serie->getSeriesNumber());
+    text.append(serie->getSeriesNumber().c_str() );
     text.append('\n');
     
     if (serie->getImageNumber() > 0)
     {
-        num.setNum(serie->getImageNumber());
+        num.setNum(serie->getImageNumber() );
         text.append(num);
         text.append(" images");
         text.append('\n');
@@ -52,7 +57,7 @@ void QSeriesIconView::insertSeries(Series *serie)
     
     if (serie->getSeriesDescription().length() > 0)
     {//si hi ha descripció la inserim
-        text.append(serie->getSeriesDescription());
+        text.append(serie->getSeriesDescription().c_str() );
         text.append('\n');
     }
         
@@ -60,22 +65,27 @@ void QSeriesIconView::insertSeries(Series *serie)
     if (nameClass == "SeriesImViewCache")
     {
         scaledPathImage.insert(0,settings.getCacheImagePath());
-        scaledPathImage.append(serie->getStudyUID());
+        scaledPathImage.append(serie->getStudyUID().c_str() );
         scaledPathImage.append("/");
-        scaledPathImage.append(serie->getSeriesUID());
+        scaledPathImage.append(serie->getSeriesUID().c_str() );
         scaledPathImage.append("/scaled.jpeg");
-        iio.setFileName(scaledPathImage);
-        if ( iio.read() ) image = iio.image();
+//         iio.setFileName(scaledPathImage);
+//         if ( iio.read() ) image = iio.image();
+        iioReader.setFileName(scaledPathImage);
+        image = iioReader.read();
     }
     else
-    {   
-        iio.setFileName( "/home/marc/starviewer-pacs/bin/images3.jpeg" );
-        if ( iio.read() ) image = iio.image(); // convert to pixmap
+    {
+        // \TODO lleig!!!!!!!!!!!!!!!!!
+//         iio.setFileName( "/home/marc/starviewer-pacs/bin/images3.jpeg" );
+//         if ( iio.read() ) image = iio.image(); // convert to pixmap
+        iioReader.setFileName( "/home/marc/starviewer-pacs/bin/images3.jpeg" );
+        image = iioReader.read();
     }
-    QIconViewItem *series =  new QIconViewItem (SeriesListV, text, image );
+    Q3IconViewItem *series =  new Q3IconViewItem (SeriesListV, text, image );
     //inserim la clau per ordenar les series, la clau és el número de serie
 
-    series->setKey(serie->getSeriesNumber());
+    series->setKey(serie->getSeriesNumber().c_str() );
     
     SeriesListV->selectAll(true);
 }
@@ -83,7 +93,7 @@ void QSeriesIconView::insertSeries(Series *serie)
 /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyListView, perquè selecciona la mateixa serie que el QSeriesIconView
   *        @param serie Seleccionada
   */
-void QSeriesIconView::clicked(QIconViewItem *item)
+void QSeriesIconView::clicked(Q3IconViewItem *item)
 {
 
     if (item != NULL) emit(selectedSeriesIcon(item->index()));
@@ -93,7 +103,7 @@ void QSeriesIconView::clicked(QIconViewItem *item)
 /** slot que s'activa quant es fa doblec
   *        @param serie Seleccionada
   */
-void QSeriesIconView::view(QIconViewItem *item)
+void QSeriesIconView::view(Q3IconViewItem *item)
 {
 
     if (item != NULL) emit(viewSeriesIcon());
@@ -105,7 +115,7 @@ void QSeriesIconView::view(QIconViewItem *item)
   */
 void QSeriesIconView::selectedSeriesList(QString key)
 {
-    QIconViewItem *item;
+    Q3IconViewItem *item;
     
     item = SeriesListV->firstItem();
     

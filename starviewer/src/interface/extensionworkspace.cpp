@@ -5,27 +5,29 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "extensionworkspace.h"
-#include <qpushbutton.h>
+
+#include <QPushButton>
+
 #include <iostream>
+
 namespace udg {
 
 ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, const char *name)
- : QTabWidget(parent, name)
+ : QTabWidget( parent )
 {
+    this->setObjectName( name );
     m_closeTabButton = 0;
     
-    this->setTabPosition( QTabWidget::Bottom );
+    this->setTabPosition( QTabWidget::South );
     m_closeTabButton = new QPushButton( tr("X") , this );
-    this->setCornerWidget( m_closeTabButton , Qt::BottomRight );
+    this->setCornerWidget( m_closeTabButton , Qt::BottomRightCorner );
     connect( m_closeTabButton , SIGNAL( clicked() ), this , SLOT( closeCurrentApplication() ) );
     m_closeTabButton->hide();
 }
 
-
 ExtensionWorkspace::~ExtensionWorkspace()
 {
 }
-
 
 void ExtensionWorkspace::addApplication( QWidget *application , QString caption )
 {
@@ -40,19 +42,19 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     }
     std::cout << "Adding application" << std::endl;        
     this->addTab( application , caption );
-    this->showPage( application );
+    this->setCurrentIndex( this->indexOf( application ) );
 }
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
 {
-    this->removePage( application );
+    this->removeTab( this->indexOf( application ) );
     if( this->count() < 1 )
         m_closeTabButton->hide();
 }
 
 void ExtensionWorkspace::closeCurrentApplication()
 {
-    QWidget *w = this->currentPage();
+    QWidget *w = this->currentWidget();
     removeApplication( w );
     delete w;
 

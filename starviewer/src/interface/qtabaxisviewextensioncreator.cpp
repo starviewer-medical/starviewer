@@ -14,14 +14,15 @@ QTabAxisViewExtensionCreator::QTabAxisViewExtensionCreator(QObject *parent, cons
 {
 }
 
-
 QTabAxisViewExtensionCreator::~QTabAxisViewExtensionCreator()
 {
 }
 
 QWidget *QTabAxisViewExtensionCreator::createExtension( QWidget *parent , QString name )
 {
-    return new QTabAxisView( parent , name );
+    QTabAxisView *newWidget = new QTabAxisView( parent );
+    newWidget->setObjectName( name );
+    return newWidget;
 }
 
 bool QTabAxisViewExtensionCreator::initializeExtension( QWidget *extension /* , Resource *resources */ )

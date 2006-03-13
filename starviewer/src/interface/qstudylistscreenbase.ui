@@ -1,207 +1,181 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>udg::QStudyListScreenBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>udg::QStudyListScreenBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>udg::QStudyListScreenBase</class>
+  <widget class="QWidget" name="udg::QStudyListScreenBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>750</width>
+        <height>213</height>
+      </rect>
     </property>
-    <property name="geometry">
+    <property name="windowTitle" >
+      <string>Form6</string>
+    </property>
+    <widget class="Q3ListView" name="StudyListV" >
+      <property name="geometry" >
         <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>750</width>
-            <height>213</height>
+          <x>0</x>
+          <y>0</y>
+          <width>750</width>
+          <height>210</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>Form6</string>
-    </property>
-    <widget class="QListView">
-        <column>
-            <property name="text">
-                <string>Type                       </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Patient ID  </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Name                                                      </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Age</string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Modality</string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Date          </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Hour  </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Institution                         </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Ac. Number     </string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>AE</string>
-            </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>UID</string>
-            </property>
-            <property name="clickable">
-                <bool>false</bool>
-            </property>
-            <property name="resizable">
-                <bool>false</bool>
-            </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>Type</string>
-            </property>
-            <property name="clickable">
-                <bool>false</bool>
-            </property>
-            <property name="resizable">
-                <bool>false</bool>
-            </property>
-        </column>
-        <property name="name">
-            <cstring>StudyListV</cstring>
+      </property>
+      <property name="focusPolicy" >
+        <enum>Qt::WheelFocus</enum>
+      </property>
+      <property name="frameShape" >
+        <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow" >
+        <enum>QFrame::Sunken</enum>
+      </property>
+      <property name="selectionMode" >
+        <enum>Q3ListView::Single</enum>
+      </property>
+      <property name="showSortIndicator" >
+        <bool>true</bool>
+      </property>
+      <property name="rootIsDecorated" >
+        <bool>true</bool>
+      </property>
+      <column>
+        <property name="text" >
+          <string>Type                       </string>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>750</width>
-                <height>210</height>
-            </rect>
+        <property name="clickable" >
+          <bool>true</bool>
         </property>
-        <property name="focusPolicy">
-            <enum>WheelFocus</enum>
+        <property name="resizable" >
+          <bool>true</bool>
         </property>
-        <property name="frameShape">
-            <enum>StyledPanel</enum>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Patient ID  </string>
         </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
+        <property name="clickable" >
+          <bool>true</bool>
         </property>
-        <property name="selectionMode">
-            <enum>Single</enum>
+        <property name="resizable" >
+          <bool>true</bool>
         </property>
-        <property name="showSortIndicator">
-            <bool>true</bool>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Name                                                      </string>
         </property>
-        <property name="rootIsDecorated">
-            <bool>true</bool>
+        <property name="clickable" >
+          <bool>true</bool>
         </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Age</string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Modality</string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Date          </string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Hour  </string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Institution                         </string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Ac. Number     </string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>AE</string>
+        </property>
+        <property name="clickable" >
+          <bool>true</bool>
+        </property>
+        <property name="resizable" >
+          <bool>true</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>UID</string>
+        </property>
+        <property name="clickable" >
+          <bool>false</bool>
+        </property>
+        <property name="resizable" >
+          <bool>false</bool>
+        </property>
+      </column>
+      <column>
+        <property name="text" >
+          <string>Type</string>
+        </property>
+        <property name="clickable" >
+          <bool>false</bool>
+        </property>
+        <property name="resizable" >
+          <bool>false</bool>
+        </property>
+      </column>
     </widget>
-</widget>
-<connections>
-    <connection>
-        <sender>StudyListV</sender>
-        <signal>returnPressed(QListViewItem*)</signal>
-        <receiver>udg::QStudyListScreenBase</receiver>
-        <slot>expand(QListViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>StudyListV</sender>
-        <signal>rightButtonClicked(QListViewItem*,const QPoint&amp;,int)</signal>
-        <receiver>udg::QStudyListScreenBase</receiver>
-        <slot>popupMenuShow(QListViewItem*,const QPoint&amp;,int)</slot>
-    </connection>
-    <connection>
-        <sender>StudyListV</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>udg::QStudyListScreenBase</receiver>
-        <slot>expand(QListViewItem*)</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>expand(QListViewItem*)</slot>
-    <slot>popupMenuShow(QListViewItem*,const QPoint&amp;,int)</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

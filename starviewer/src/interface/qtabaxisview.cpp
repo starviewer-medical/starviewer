@@ -6,8 +6,8 @@
  ***************************************************************************/
 #include "qtabaxisview.h"
 
-#include <qslider.h>
-#include <qspinbox.h>
+#include <QSlider>
+#include <QSpinBox>
 
 #include "volume.h"
 #include "q2dviewer.h"
@@ -15,12 +15,10 @@
 
 namespace udg {
 
-QTabAxisView::QTabAxisView(QWidget *parent, const char *name)
- : QTabAxisViewBase(parent, name)
+QTabAxisView::QTabAxisView(QWidget *parent )
+ : QWidget( parent )
 {
-// xorrada, no?
-    if (!name)
-        this->setName( "QTabAxisView" );
+    setupUi( this );
 }
 
 QTabAxisView::~QTabAxisView()

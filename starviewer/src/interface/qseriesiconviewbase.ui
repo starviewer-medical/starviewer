@@ -1,78 +1,61 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>udg::QSeriesIconViewBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>udg::QSeriesIconViewBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>udg::QSeriesIconViewBase</class>
+  <widget class="QWidget" name="udg::QSeriesIconViewBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>751</width>
+        <height>214</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>751</width>
-            <height>214</height>
-        </rect>
+    <property name="sizePolicy" >
+      <sizepolicy>
+        <hsizetype>7</hsizetype>
+        <vsizetype>7</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>7</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
+    <property name="windowTitle" >
+      <string>Form1</string>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QIconView">
-            <property name="name">
-                <cstring>SeriesListV</cstring>
-            </property>
-            <property name="font">
-                <font>
-                    <pointsize>12</pointsize>
-                    <bold>1</bold>
-                </font>
-            </property>
-            <property name="acceptDrops">
-                <bool>false</bool>
-            </property>
-            <property name="frameShape">
-                <enum>StyledPanel</enum>
-            </property>
-            <property name="selectionMode">
-                <enum>NoSelection</enum>
-            </property>
-            <property name="spacing">
-                <number>15</number>
-            </property>
-            <property name="itemsMovable">
-                <bool>false</bool>
-            </property>
+    <layout class="QVBoxLayout" >
+      <item>
+        <widget class="Q3IconView" name="SeriesListV" >
+          <property name="font" >
+            <font>
+              <family></family>
+              <pointsize>12</pointsize>
+              <weight>0</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+              <underline>false</underline>
+              <strikeout>false</strikeout>
+            </font>
+          </property>
+          <property name="acceptDrops" >
+            <bool>false</bool>
+          </property>
+          <property name="frameShape" >
+            <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="selectionMode" >
+            <enum>Q3IconView::NoSelection</enum>
+          </property>
+          <property name="spacing" >
+            <number>15</number>
+          </property>
+          <property name="itemsMovable" >
+            <bool>false</bool>
+          </property>
         </widget>
-    </vbox>
-</widget>
-<connections>
-    <connection>
-        <sender>SeriesListV</sender>
-        <signal>clicked(QIconViewItem*)</signal>
-        <receiver>udg::QSeriesIconViewBase</receiver>
-        <slot>clicked(QIconViewItem*)</slot>
-    </connection>
-    <connection>
-        <sender>SeriesListV</sender>
-        <signal>doubleClicked(QIconViewItem*)</signal>
-        <receiver>udg::QSeriesIconViewBase</receiver>
-        <slot>view(QIconViewItem*)</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>clicked(QIconViewItem*)</slot>
-    <slot>viewSeriesIcon(QIconViewItem*)</slot>
-    <slot>view(QIconViewItem*)</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+</ui>

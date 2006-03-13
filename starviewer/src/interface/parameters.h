@@ -9,7 +9,7 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-#include <qobject.h>
+#include <QObject>
 
 /**
     Classe base Parameters. Aquesta classe s'encarrega d'encapsular els paràmetres d'un mètode

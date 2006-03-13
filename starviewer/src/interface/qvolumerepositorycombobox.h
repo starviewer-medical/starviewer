@@ -7,9 +7,9 @@
 #ifndef UDGQVOLUMEREPOSITORYCOMBOBOX_H
 #define UDGQVOLUMEREPOSITORYCOMBOBOX_H
 
-#include <qcombobox.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <QComboBox>
+#include <QString>
+#include <QMap>
 #include "identifier.h"
 
 namespace udg {
@@ -34,7 +34,7 @@ class QVolumeRepositoryComboBox  : public QComboBox{
 Q_OBJECT
 //Q_PROPERTY( Identifier m_volumeID READ getVolumeID WRITE setVolumeID )
 public:
-    QVolumeRepositoryComboBox(QWidget *parent = 0, const char *name = 0);
+    QVolumeRepositoryComboBox( QWidget *parent = 0 );
 
     ~QVolumeRepositoryComboBox();
 
@@ -43,7 +43,7 @@ public:
     /// Indiquem l'actual volum a partir del seu ID
     void setVolumeID( Identifier id );
     /// Afegir un nou volum a la llista [Nom, id del repositori, index opcional]
-    void addItem( const QString &name, Identifier id /*, int index = -1 */);
+    void addNewItem( const QString &name, Identifier id /*, int index = -1 */);
     /// Esborrem un volum de la llista a través de l'identificador
     void deleteItem( Identifier id );
 private:

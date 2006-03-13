@@ -21,7 +21,9 @@ QMPRExtensionCreator::~QMPRExtensionCreator()
 
 QWidget *QMPRExtensionCreator::createExtension( QWidget *parent , QString name )
 {
-    return new QMPRExtension( parent , name );
+    QMPRExtension *newWidget = new QMPRExtension( parent );
+    newWidget->setObjectName( name );
+    return newWidget;
 }
 
 bool QMPRExtensionCreator::initializeExtension( QWidget *extension /* , Resource *resources */ )

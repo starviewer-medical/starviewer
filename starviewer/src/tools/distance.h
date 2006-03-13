@@ -33,8 +33,7 @@ public:
     Point getFirstPoint(){ return m_first; };
     Point getSecondPoint(){ return m_second; };
     void getPoints( Point points[2] ){ points[0] = m_first; points[2] = m_second; };
-    Point *getPoints(){ Point points[2] = { m_first , m_second }; return points; };
-    
+
     /// Retorna la distància euclidiana
     double getDistance();
 private:

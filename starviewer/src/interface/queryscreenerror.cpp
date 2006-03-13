@@ -1,6 +1,6 @@
 #include "queryscreen.h"
 #include <qmessagebox.h>
-#include <qstring.h>
+#include <QString>
 
 /** Aquesta cpp forma part de la queryscreen, conte el tractament d'errors de la classe queryscreen*/
 

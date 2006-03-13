@@ -6,7 +6,7 @@
  ***************************************************************************/ 
 #ifndef UDGSTARVIEWERPROCESSIMAGE_H
 #define UDGSTARVIEWERPROCESSIMAGE_H
-//#include <qstring.h>
+
 #include <qobject.h>
 #include <qwidget.h>
 #include "processimage.h"

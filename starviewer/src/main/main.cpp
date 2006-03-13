@@ -5,23 +5,24 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <qapplication.h>
 #include "qapplicationmainwindow.h"
-//#include <qtranslator.h>
+#include <QApplication>
+#include <QSplashScreen>
+#include <QTranslator>
 //#include <qtextcodec.h>
-#include <qsplashscreen.h>
+
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
     
     // translation
-    /*
-    QString qmPath = qApp->applicationDirPath() + "/../translations";
-    QTranslator applicationTranslator;
-    applicationTranslator.load( "starviewer_" + m_locales[ languageID ], qmPath );
-    app->installTranslator( &m_applicationTranslator );
-    */
-    QSplashScreen *splash = new QSplashScreen( QPixmap::fromMimeSource("splash.png") );
+    
+    QString qmPath = qApp->applicationDirPath() + "/../interface";
+    QTranslator m_applicationTranslator;
+    m_applicationTranslator.load( "interface_ca_ES"/* + m_locales[ languageID ]*/, qmPath );
+    app.installTranslator( &m_applicationTranslator );
+    
+    QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
     splash->show();
     
     udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;

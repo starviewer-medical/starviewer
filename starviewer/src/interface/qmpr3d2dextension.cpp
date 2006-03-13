@@ -9,10 +9,10 @@
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
 // qt
-#include <qtoolbutton.h>
-#include <qsettings.h>
-#include <qsplitter.h>
-#include <qtextstream.h>
+#include <QToolButton>
+#include <QSplitter>
+#include <QTextStream>
+#include <QSettings>
 
 #include <iostream>
 // vtk
@@ -24,9 +24,10 @@
 
 namespace udg {
 
-QMPR3D2DExtension::QMPR3D2DExtension(QWidget *parent, const char *name)
- : QMPR3D2DExtensionBase(parent, name)
+QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
+ : QWidget( parent )
 {
+    setupUi( this );
     connect( m_axialViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setAxialVisibility(bool)));
     connect( m_sagitalViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setSagitalVisibility(bool)));
     connect( m_coronalViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setCoronalVisibility(bool)));
@@ -246,14 +247,13 @@ void QMPR3D2DExtension::updateActors()
 
 void QMPR3D2DExtension::readSettings()
 {
-    QSettings settings;
-    settings.setPath("GGG", "StarViewer-App-MPR-3D-2D");
-    settings.beginGroup("/StarViewer-App-MPR-3D-2D");
+    QSettings settings("GGG", "StarViewer-App-MPR-3D-2D");
+    settings.beginGroup("StarViewer-App-MPR-3D-2D");
     
-    QString str1 = settings.readEntry("/horizontalSplitter");
+    QString str1 = settings.value("horizontalSplitter").toString();
     QTextIStream in1(&str1);
     in1 >> *m_horizontalSplitter;
-    QString str2 = settings.readEntry("/verticalSplitter");
+    QString str2 = settings.value("verticalSplitter").toString();
     QTextIStream in2(&str2);
     in2 >> *m_verticalSplitter;
     
@@ -262,17 +262,16 @@ void QMPR3D2DExtension::readSettings()
 
 void QMPR3D2DExtension::writeSettings()
 {
-    QSettings settings;
-    settings.setPath("GGG", "StarViewer-App-MPR-3D-2D");
-    settings.beginGroup("/StarViewer-App-MPR-3D-2D");
+    QSettings settings("GGG", "StarViewer-App-MPR-3D-2D");
+    settings.beginGroup("StarViewer-App-MPR-3D-2D");
     
     QString str;
     QTextOStream out1(&str);
     out1 << *m_horizontalSplitter;
-    settings.writeEntry("/horizontalSplitter", str );
+    settings.setValue("horizontalSplitter", str );
     QTextOStream out2(&str);
     out2 << *m_verticalSplitter;
-    settings.writeEntry("/verticalSplitter", str );
+    settings.setValue("verticalSplitter", str );
     
     settings.endGroup();
 }

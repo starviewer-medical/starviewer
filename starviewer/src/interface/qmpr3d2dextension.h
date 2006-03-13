@@ -7,7 +7,9 @@
 #ifndef UDGQMPR3D2DEXTENSION_H
 #define UDGQMPR3D2DEXTENSION_H
 
-#include "qmpr3d2dextensionbase.h"
+// #include "qmpr3d2dextensionbase.h"
+#include "ui_qmpr3d2dextensionbase.h"
+using namespace Ui; // \TODO tractar de solucionar això bé
 
 //  FWD decs
 class vtkAxisActor2D;
@@ -21,10 +23,10 @@ Extensió de l'MPR 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class QMPR3D2DExtension : public QMPR3D2DExtensionBase{
+class QMPR3D2DExtension : public QWidget , private QMPR3D2DExtensionBase{
 Q_OBJECT
 public:
-    QMPR3D2DExtension(QWidget *parent = 0, const char *name = 0);
+    QMPR3D2DExtension( QWidget *parent = 0 );
 
     ~QMPR3D2DExtension();
     

@@ -8,7 +8,7 @@
 #include "image.h"
 #include <iostream.h>
 #include "qretrievescreen.h"
-#include <qlistview.h>
+#include <q3listview.h>
 #include <string.h>
 
 namespace udg {
@@ -34,7 +34,7 @@ void StarviewerProcessImage::process(Image *image)
     
     if (m_oldSeriesUID != image->getSeriesUID())
     {
-        emit(seriesRetrieved(image->getStudyUID()));
+        emit(seriesRetrieved( image->getStudyUID().c_str() ) );
         m_oldSeriesUID = image->getSeriesUID();
     }
     m_localCache->insertImage(image);

@@ -1,1144 +1,912 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>udg::QueryScreenBase</class>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>udg::QueryScreenBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>udg::QueryScreenBase</class>
+  <widget class="QWidget" name="udg::QueryScreenBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>820</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>800</width>
-            <height>820</height>
-        </rect>
+    <property name="sizePolicy" >
+      <sizepolicy>
+        <hsizetype>1</hsizetype>
+        <vsizetype>1</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+      </sizepolicy>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
+    <property name="minimumSize" >
+      <size>
+        <width>800</width>
+        <height>770</height>
+      </size>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>800</width>
-            <height>770</height>
-        </size>
+    <property name="windowTitle" >
+      <string>Query Study</string>
     </property>
-    <property name="caption">
-        <string>Query Study</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout41</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout40</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
+    <layout class="QGridLayout" >
+      <item row="0" column="0" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <layout class="QGridLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item row="0" column="0" >
+                <widget class="Q3ButtonGroup" name="buttonGroup3" >
+                  <property name="title" >
+                    <string/>
+                  </property>
+                  <layout class="QVBoxLayout" >
+                    <item>
+                      <widget class="QPushButton" name="buttonSearch" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
                         </property>
-                        <widget class="QButtonGroup" row="0" column="0">
-                            <property name="name">
-                                <cstring>buttonGroup3</cstring>
-                            </property>
-                            <property name="title">
-                                <string></string>
-                            </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>buttonSearch</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Search</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>search</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>buttonToday</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Today</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>buttonYesterday</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Yesterday</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>buttonRetrieve</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Retrieve</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>pushButton6</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Retrieve List</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>buttonView</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>View</string>
-                                    </property>
-                                </widget>
-                                <widget class="QPushButton">
-                                    <property name="name">
-                                        <cstring>buttonClear</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>1</hsizetype>
-                                            <vsizetype>3</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="text">
-                                        <string>Clear Filter</string>
-                                    </property>
-                                </widget>
-                            </vbox>
-                        </widget>
-                        <widget class="QLayoutWidget" row="0" column="1">
-                            <property name="name">
-                                <cstring>layout39</cstring>
-                            </property>
-                            <grid>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLayoutWidget" row="0" column="0">
-                                    <property name="name">
-                                        <cstring>layout36</cstring>
-                                    </property>
-                                    <vbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLayoutWidget">
-                                            <property name="name">
-                                                <cstring>layout31</cstring>
-                                            </property>
-                                            <vbox>
-                                                <property name="name">
-                                                    <cstring>unnamed</cstring>
-                                                </property>
-                                                <widget class="QGroupBox">
-                                                    <property name="name">
-                                                        <cstring>groupBox2</cstring>
-                                                    </property>
-                                                    <property name="title">
-                                                        <string>Patient</string>
-                                                    </property>
-                                                    <grid>
-                                                        <property name="name">
-                                                            <cstring>unnamed</cstring>
-                                                        </property>
-                                                        <widget class="QLabel" row="0" column="0">
-                                                            <property name="name">
-                                                                <cstring>textLabel1</cstring>
-                                                            </property>
-                                                            <property name="minimumSize">
-                                                                <size>
-                                                                    <width>80</width>
-                                                                    <height>0</height>
-                                                                </size>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>&lt;b&gt;Patient ID :&lt;/b&gt;</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLabel" row="0" column="4">
-                                                            <property name="name">
-                                                                <cstring>textLabel3</cstring>
-                                                            </property>
-                                                            <property name="minimumSize">
-                                                                <size>
-                                                                    <width>80</width>
-                                                                    <height>0</height>
-                                                                </size>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>&lt;b&gt;First Name :&lt;/b&gt;</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLineEdit" row="0" column="3">
-                                                            <property name="name">
-                                                                <cstring>m_textLastName</cstring>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLineEdit" row="0" column="1">
-                                                            <property name="name">
-                                                                <cstring>m_textPatientID</cstring>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLabel" row="0" column="2">
-                                                            <property name="name">
-                                                                <cstring>textLabel2</cstring>
-                                                            </property>
-                                                            <property name="minimumSize">
-                                                                <size>
-                                                                    <width>80</width>
-                                                                    <height>0</height>
-                                                                </size>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>&lt;b&gt;Last Name :&lt;/b&gt;</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLineEdit" row="0" column="5">
-                                                            <property name="name">
-                                                                <cstring>m_textFirstName</cstring>
-                                                            </property>
-                                                        </widget>
-                                                    </grid>
-                                                </widget>
-                                                <spacer>
-                                                    <property name="name">
-                                                        <cstring>spacer57</cstring>
-                                                    </property>
-                                                    <property name="orientation">
-                                                        <enum>Vertical</enum>
-                                                    </property>
-                                                    <property name="sizeType">
-                                                        <enum>Fixed</enum>
-                                                    </property>
-                                                    <property name="sizeHint">
-                                                        <size>
-                                                            <width>20</width>
-                                                            <height>16</height>
-                                                        </size>
-                                                    </property>
-                                                </spacer>
-                                            </vbox>
-                                        </widget>
-                                        <widget class="QLayoutWidget">
-                                            <property name="name">
-                                                <cstring>layout34</cstring>
-                                            </property>
-                                            <grid>
-                                                <property name="name">
-                                                    <cstring>unnamed</cstring>
-                                                </property>
-                                                <widget class="QButtonGroup" row="0" column="0">
-                                                    <property name="name">
-                                                        <cstring>buttonGroup1</cstring>
-                                                    </property>
-                                                    <property name="title">
-                                                        <string>Study</string>
-                                                    </property>
-                                                    <grid>
-                                                        <property name="name">
-                                                            <cstring>unnamed</cstring>
-                                                        </property>
-                                                        <widget class="QLineEdit" row="0" column="1">
-                                                            <property name="name">
-                                                                <cstring>m_textStudyID</cstring>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QDateEdit" row="0" column="4">
-                                                            <property name="name">
-                                                                <cstring>m_textFrom</cstring>
-                                                            </property>
-                                                            <property name="enabled">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="1" column="3">
-                                                            <property name="name">
-                                                                <cstring>m_checkTo</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>To</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLabel" row="0" column="0">
-                                                            <property name="name">
-                                                                <cstring>textLabel5</cstring>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>&lt;b&gt;Study ID :&lt;/b&gt;</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QDateEdit" row="1" column="4">
-                                                            <property name="name">
-                                                                <cstring>m_textTo</cstring>
-                                                            </property>
-                                                            <property name="enabled">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="0" column="3">
-                                                            <property name="name">
-                                                                <cstring>m_checkFrom</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>From</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLabel" row="2" column="0">
-                                                            <property name="name">
-                                                                <cstring>textLabel6</cstring>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>&lt;b&gt;Accession Number :&lt;/b&gt;</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QLineEdit" row="2" column="1">
-                                                            <property name="name">
-                                                                <cstring>m_textAccessionNumber</cstring>
-                                                            </property>
-                                                        </widget>
-                                                        <spacer row="0" column="2" rowspan="2" colspan="1">
-                                                            <property name="name">
-                                                                <cstring>spacer52</cstring>
-                                                            </property>
-                                                            <property name="orientation">
-                                                                <enum>Horizontal</enum>
-                                                            </property>
-                                                            <property name="sizeType">
-                                                                <enum>Expanding</enum>
-                                                            </property>
-                                                            <property name="sizeHint">
-                                                                <size>
-                                                                    <width>16</width>
-                                                                    <height>20</height>
-                                                                </size>
-                                                            </property>
-                                                        </spacer>
-                                                    </grid>
-                                                </widget>
-                                                <widget class="QButtonGroup" row="0" column="1">
-                                                    <property name="name">
-                                                        <cstring>buttonGroupModality</cstring>
-                                                    </property>
-                                                    <property name="title">
-                                                        <string>Modality</string>
-                                                    </property>
-                                                    <grid>
-                                                        <property name="name">
-                                                            <cstring>unnamed</cstring>
-                                                        </property>
-                                                        <widget class="QCheckBox" row="2" column="1">
-                                                            <property name="name">
-                                                                <cstring>m_checkMG</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>MG</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="2" column="3">
-                                                            <property name="name">
-                                                                <cstring>m_checkSC</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>SC</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="3" column="2">
-                                                            <property name="name">
-                                                                <cstring>m_checkPT</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>PT</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Penetrant Test</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="3" column="3">
-                                                            <property name="name">
-                                                                <cstring>m_checkUS</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>US</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Ultrasounds</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="2" column="2">
-                                                            <property name="name">
-                                                                <cstring>m_checkDT</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>DT</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string> Dental Technician</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="3" column="1">
-                                                            <property name="name">
-                                                                <cstring>m_checkMR</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>MR</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Magnetic Resonance</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="2" column="0">
-                                                            <property name="name">
-                                                                <cstring>m_checkCT</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>CT</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Computerized Tomography</string>
-                                                            </property>
-                                                            <property name="whatsThis" stdset="0">
-                                                                <string></string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="3" column="0">
-                                                            <property name="name">
-                                                                <cstring>m_checkDX</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>DX</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Direct Radiography</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="1" column="2">
-                                                            <property name="name">
-                                                                <cstring>m_checkNM</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>NM</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Nuclear Medicine</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="1" column="3">
-                                                            <property name="name">
-                                                                <cstring>m_checkRF</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>RF</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Radiography Fluoroscopy</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="1" column="0">
-                                                            <property name="name">
-                                                                <cstring>m_checkCR</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>CR</string>
-                                                            </property>
-                                                            <property name="toolTip" stdset="0">
-                                                                <string>Computerized Radiography</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="1" column="1">
-                                                            <property name="name">
-                                                                <cstring>m_checkES</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>ES</string>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="0" column="0">
-                                                            <property name="name">
-                                                                <cstring>m_checkAll</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>All</string>
-                                                            </property>
-                                                            <property name="checked">
-                                                                <bool>true</bool>
-                                                            </property>
-                                                            <property name="tristate">
-                                                                <bool>false</bool>
-                                                            </property>
-                                                        </widget>
-                                                        <widget class="QCheckBox" row="1" column="4">
-                                                            <property name="name">
-                                                                <cstring>m_checkXA</cstring>
-                                                            </property>
-                                                            <property name="font">
-                                                                <font>
-                                                                    <bold>1</bold>
-                                                                </font>
-                                                            </property>
-                                                            <property name="text">
-                                                                <string>XA</string>
-                                                            </property>
-                                                        </widget>
-                                                    </grid>
-                                                </widget>
-                                            </grid>
-                                        </widget>
-                                    </vbox>
-                                </widget>
-                                <widget class="QLayoutWidget" row="1" column="0">
-                                    <property name="name">
-                                        <cstring>layout38</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <spacer>
-                                            <property name="name">
-                                                <cstring>spacer53</cstring>
-                                            </property>
-                                            <property name="orientation">
-                                                <enum>Horizontal</enum>
-                                            </property>
-                                            <property name="sizeType">
-                                                <enum>Expanding</enum>
-                                            </property>
-                                            <property name="sizeHint">
-                                                <size>
-                                                    <width>365</width>
-                                                    <height>20</height>
-                                                </size>
-                                            </property>
-                                        </spacer>
-                                        <widget class="QPushButton">
-                                            <property name="name">
-                                                <cstring>pushButton17</cstring>
-                                            </property>
-                                            <property name="minimumSize">
-                                                <size>
-                                                    <width>120</width>
-                                                    <height>0</height>
-                                                </size>
-                                            </property>
-                                            <property name="maximumSize">
-                                                <size>
-                                                    <width>100</width>
-                                                    <height>32767</height>
-                                                </size>
-                                            </property>
-                                            <property name="text">
-                                                <string>Show PacsList</string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                            </grid>
-                        </widget>
-                    </grid>
+                        <property name="text" >
+                          <string>Search</string>
+                        </property>
+                        <property name="toolTip" stdset="0" >
+                          <string>search</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="buttonToday" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string>Today</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="buttonYesterday" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string>Yesterday</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="buttonRetrieve" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string>Retrieve</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="pushButton6" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string>Retrieve List</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="buttonView" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string>View</string>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <widget class="QPushButton" name="buttonClear" >
+                        <property name="sizePolicy" >
+                          <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                          </sizepolicy>
+                        </property>
+                        <property name="text" >
+                          <string>Clear Filter</string>
+                        </property>
+                      </widget>
+                    </item>
+                  </layout>
                 </widget>
-                <widget class="udg::QPacsList">
-                    <property name="name">
-                        <cstring>qPacsList</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>20</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QTabWidget" row="1" column="0">
-            <property name="name">
-                <cstring>m_Tab</cstring>
-            </property>
-            <property name="maximumSize">
+              </item>
+              <item row="0" column="1" >
+                <layout class="QGridLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item row="0" column="0" >
+                    <layout class="QVBoxLayout" >
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <item>
+                        <layout class="QVBoxLayout" >
+                          <property name="margin" >
+                            <number>0</number>
+                          </property>
+                          <item>
+                            <widget class="Q3GroupBox" name="groupBox2" >
+                              <property name="title" >
+                                <string>Patient</string>
+                              </property>
+                              <layout class="QGridLayout" >
+                                <item row="0" column="0" >
+                                  <widget class="QLabel" name="textLabel1" >
+                                    <property name="minimumSize" >
+                                      <size>
+                                        <width>80</width>
+                                        <height>0</height>
+                                      </size>
+                                    </property>
+                                    <property name="text" >
+                                      <string>&lt;b>Patient ID :&lt;/b></string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="0" column="4" >
+                                  <widget class="QLabel" name="textLabel3" >
+                                    <property name="minimumSize" >
+                                      <size>
+                                        <width>80</width>
+                                        <height>0</height>
+                                      </size>
+                                    </property>
+                                    <property name="text" >
+                                      <string>&lt;b>First Name :&lt;/b></string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="0" column="3" >
+                                  <widget class="QLineEdit" name="m_textLastName" />
+                                </item>
+                                <item row="0" column="1" >
+                                  <widget class="QLineEdit" name="m_textPatientID" />
+                                </item>
+                                <item row="0" column="2" >
+                                  <widget class="QLabel" name="textLabel2" >
+                                    <property name="minimumSize" >
+                                      <size>
+                                        <width>80</width>
+                                        <height>0</height>
+                                      </size>
+                                    </property>
+                                    <property name="text" >
+                                      <string>&lt;b>Last Name :&lt;/b></string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="0" column="5" >
+                                  <widget class="QLineEdit" name="m_textFirstName" />
+                                </item>
+                              </layout>
+                            </widget>
+                          </item>
+                          <item>
+                            <spacer name="spacer57" >
+                              <property name="sizeHint" >
+                                <size>
+                                  <width>20</width>
+                                  <height>16</height>
+                                </size>
+                              </property>
+                              <property name="sizeType" >
+                                <enum>Fixed</enum>
+                              </property>
+                              <property name="orientation" >
+                                <enum>Vertical</enum>
+                              </property>
+                            </spacer>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QGridLayout" >
+                          <property name="margin" >
+                            <number>0</number>
+                          </property>
+                          <item row="0" column="0" >
+                            <widget class="Q3ButtonGroup" name="buttonGroup1" >
+                              <property name="title" >
+                                <string>Study</string>
+                              </property>
+                              <layout class="QGridLayout" >
+                                <item row="0" column="1" >
+                                  <widget class="QLineEdit" name="m_textStudyID" />
+                                </item>
+                                <item row="0" column="4" >
+                                  <widget class="QDateEdit" name="m_textFrom" >
+                                    <property name="enabled" >
+                                      <bool>false</bool>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="3" >
+                                  <widget class="QCheckBox" name="m_checkTo" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>To</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="0" column="0" >
+                                  <widget class="QLabel" name="textLabel5" >
+                                    <property name="text" >
+                                      <string>&lt;b>Study ID :&lt;/b></string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="4" >
+                                  <widget class="QDateEdit" name="m_textTo" >
+                                    <property name="enabled" >
+                                      <bool>false</bool>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="0" column="3" >
+                                  <widget class="QCheckBox" name="m_checkFrom" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>From</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="2" column="0" >
+                                  <widget class="QLabel" name="textLabel6" >
+                                    <property name="text" >
+                                      <string>&lt;b>Accession Number :&lt;/b></string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="2" column="1" >
+                                  <widget class="QLineEdit" name="m_textAccessionNumber" />
+                                </item>
+                                <item rowspan="2" row="0" column="2" colspan="1" >
+                                  <spacer name="spacer52" >
+                                    <property name="sizeHint" >
+                                      <size>
+                                        <width>16</width>
+                                        <height>20</height>
+                                      </size>
+                                    </property>
+                                    <property name="sizeType" >
+                                      <enum>Expanding</enum>
+                                    </property>
+                                    <property name="orientation" >
+                                      <enum>Horizontal</enum>
+                                    </property>
+                                  </spacer>
+                                </item>
+                              </layout>
+                            </widget>
+                          </item>
+                          <item row="0" column="1" >
+                            <widget class="Q3ButtonGroup" name="buttonGroupModality" >
+                              <property name="title" >
+                                <string>Modality</string>
+                              </property>
+                              <layout class="QGridLayout" >
+                                <item row="2" column="1" >
+                                  <widget class="QCheckBox" name="m_checkMG" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>MG</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="2" column="3" >
+                                  <widget class="QCheckBox" name="m_checkSC" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>SC</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="3" column="2" >
+                                  <widget class="QCheckBox" name="m_checkPT" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>PT</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Penetrant Test</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="3" column="3" >
+                                  <widget class="QCheckBox" name="m_checkUS" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>US</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Ultrasounds</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="2" column="2" >
+                                  <widget class="QCheckBox" name="m_checkDT" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>DT</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string> Dental Technician</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="3" column="1" >
+                                  <widget class="QCheckBox" name="m_checkMR" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>MR</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Magnetic Resonance</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="2" column="0" >
+                                  <widget class="QCheckBox" name="m_checkCT" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>CT</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Computerized Tomography</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0" >
+                                      <string/>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="3" column="0" >
+                                  <widget class="QCheckBox" name="m_checkDX" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>DX</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Direct Radiography</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="2" >
+                                  <widget class="QCheckBox" name="m_checkNM" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>NM</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Nuclear Medicine</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="3" >
+                                  <widget class="QCheckBox" name="m_checkRF" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>RF</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Radiography Fluoroscopy</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="0" >
+                                  <widget class="QCheckBox" name="m_checkCR" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>CR</string>
+                                    </property>
+                                    <property name="toolTip" stdset="0" >
+                                      <string>Computerized Radiography</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="1" >
+                                  <widget class="QCheckBox" name="m_checkES" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>ES</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="0" column="0" >
+                                  <widget class="QCheckBox" name="m_checkAll" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>All</string>
+                                    </property>
+                                    <property name="checked" >
+                                      <bool>true</bool>
+                                    </property>
+                                    <property name="tristate" >
+                                      <bool>false</bool>
+                                    </property>
+                                  </widget>
+                                </item>
+                                <item row="1" column="4" >
+                                  <widget class="QCheckBox" name="m_checkXA" >
+                                    <property name="font" >
+                                      <font>
+                                        <family></family>
+                                        <pointsize>0</pointsize>
+                                        <weight>0</weight>
+                                        <italic>false</italic>
+                                        <bold>true</bold>
+                                        <underline>false</underline>
+                                        <strikeout>false</strikeout>
+                                      </font>
+                                    </property>
+                                    <property name="text" >
+                                      <string>XA</string>
+                                    </property>
+                                  </widget>
+                                </item>
+                              </layout>
+                            </widget>
+                          </item>
+                        </layout>
+                      </item>
+                    </layout>
+                  </item>
+                  <item row="1" column="0" >
+                    <layout class="QHBoxLayout" >
+                      <property name="margin" >
+                        <number>0</number>
+                      </property>
+                      <item>
+                        <spacer name="spacer53" >
+                          <property name="sizeHint" >
+                            <size>
+                              <width>365</width>
+                              <height>20</height>
+                            </size>
+                          </property>
+                          <property name="sizeType" >
+                            <enum>Expanding</enum>
+                          </property>
+                          <property name="orientation" >
+                            <enum>Horizontal</enum>
+                          </property>
+                        </spacer>
+                      </item>
+                      <item>
+                        <widget class="QPushButton" name="pushButton17" >
+                          <property name="minimumSize" >
+                            <size>
+                              <width>120</width>
+                              <height>0</height>
+                            </size>
+                          </property>
+                          <property name="maximumSize" >
+                            <size>
+                              <width>100</width>
+                              <height>32767</height>
+                            </size>
+                          </property>
+                          <property name="text" >
+                            <string>Show PacsList</string>
+                          </property>
+                        </widget>
+                      </item>
+                    </layout>
+                  </item>
+                </layout>
+              </item>
+            </layout>
+          </item>
+          <item>
+            <widget class="udg::QPacsList" name="qPacsList" >
+              <property name="minimumSize" >
                 <size>
-                    <width>32767</width>
-                    <height>32767</height>
+                  <width>20</width>
+                  <height>0</height>
                 </size>
-            </property>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Local Database</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLayoutWidget" row="0" column="0">
-                        <property name="name">
-                            <cstring>layout12</cstring>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="udg::QStudyListView" row="0" column="0">
-                                <property name="name">
-                                    <cstring>StudyLViewCache</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                            </widget>
-                            <widget class="udg::QSeriesIconView" row="1" column="0">
-                                <property name="name">
-                                    <cstring>SeriesImViewCache</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>0</width>
-                                        <height>220</height>
-                                    </size>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                </grid>
+              </property>
             </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Pacs Servers</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="udg::QStudyListView" row="0" column="0">
-                        <property name="name">
-                            <cstring>StudyLViewPacs</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>7</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>0</width>
-                                <height>240</height>
-                            </size>
-                        </property>
+          </item>
+        </layout>
+      </item>
+      <item row="1" column="0" >
+        <widget class="QTabWidget" name="m_Tab" >
+          <property name="maximumSize" >
+            <size>
+              <width>32767</width>
+              <height>32767</height>
+            </size>
+          </property>
+          <widget class="QWidget" name="tab" >
+            <attribute name="title" >
+              <string>Local Database</string>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item row="0" column="0" >
+                <layout class="QGridLayout" >
+                  <property name="margin" >
+                    <number>0</number>
+                  </property>
+                  <item row="0" column="0" >
+                    <widget class="udg::QStudyListView" name="StudyLViewCache" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>7</hsizetype>
+                          <vsizetype>7</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
                     </widget>
-                    <widget class="udg::QSeriesIconView" row="1" column="0">
-                        <property name="name">
-                            <cstring>SeriesImViewPacs</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>7</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>0</width>
-                                <height>220</height>
-                            </size>
-                        </property>
-                    </widget>
-                </grid>
-            </widget>
-        </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
-            <property name="name">
-                <cstring>layout9</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer5</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
+                  </item>
+                  <item row="1" column="0" >
+                    <widget class="udg::QSeriesIconView" name="SeriesImViewCache" >
+                      <property name="sizePolicy" >
+                        <sizepolicy>
+                          <hsizetype>7</hsizetype>
+                          <vsizetype>7</vsizetype>
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                        </sizepolicy>
+                      </property>
+                      <property name="minimumSize" >
                         <size>
-                            <width>21</width>
-                            <height>20</height>
+                          <width>0</width>
+                          <height>220</height>
                         </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>pushButton9</cstring>
-                    </property>
-                    <property name="text">
-                        <string>config</string>
-                    </property>
+                      </property>
+                    </widget>
+                  </item>
+                </layout>
+              </item>
+            </layout>
+          </widget>
+          <widget class="QWidget" name="tab" >
+            <attribute name="title" >
+              <string>Pacs Servers</string>
+            </attribute>
+            <layout class="QGridLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item row="0" column="0" >
+                <widget class="udg::QStudyListView" name="StudyLViewPacs" >
+                  <property name="sizePolicy" >
+                    <sizepolicy>
+                      <hsizetype>7</hsizetype>
+                      <vsizetype>7</vsizetype>
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                    </sizepolicy>
+                  </property>
+                  <property name="minimumSize" >
+                    <size>
+                      <width>0</width>
+                      <height>240</height>
+                    </size>
+                  </property>
                 </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer4</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
+              </item>
+              <item row="1" column="0" >
+                <widget class="udg::QSeriesIconView" name="SeriesImViewPacs" >
+                  <property name="sizePolicy" >
+                    <sizepolicy>
+                      <hsizetype>7</hsizetype>
+                      <vsizetype>7</vsizetype>
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                    </sizepolicy>
+                  </property>
+                  <property name="minimumSize" >
+                    <size>
+                      <width>0</width>
+                      <height>220</height>
+                    </size>
+                  </property>
+                </widget>
+              </item>
+            </layout>
+          </widget>
         </widget>
-    </grid>
-</widget>
-<customwidgets>
+      </item>
+      <item row="2" column="0" >
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <spacer name="spacer5" >
+              <property name="sizeHint" >
+                <size>
+                  <width>21</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+          <item>
+            <widget class="QPushButton" name="pushButton9" >
+              <property name="text" >
+                <string>config</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <spacer name="spacer4" >
+              <property name="sizeHint" >
+                <size>
+                  <width>20</width>
+                  <height>20</height>
+                </size>
+              </property>
+              <property name="sizeType" >
+                <enum>Expanding</enum>
+              </property>
+              <property name="orientation" >
+                <enum>Horizontal</enum>
+              </property>
+            </spacer>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction></pixmapfunction>
+  <customwidgets>
     <customwidget>
-        <class>udg::QStudyListView</class>
-        <header location="local">qstudylistview.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
-        <signal>click(QString,QString)</signal>
-        <signal>retrieve()</signal>
-        <signal>delStudy()</signal>
-        <signal>view()</signal>
-        <slot access="public" specifier="">slot()</slot>
+      <class>udg::QStudyListView</class>
+      <extends></extends>
+      <header location="local" >qstudylistview.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
     <customwidget>
-        <class>udg::QSeriesIconView</class>
-        <header location="local">qseriesiconview.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
+      <class>udg::QSeriesIconView</class>
+      <extends></extends>
+      <header location="local" >qseriesiconview.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
     <customwidget>
-        <class>udg::QPacsList</class>
-        <header location="local">qpacslist.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
+      <class>udg::QPacsList</class>
+      <extends></extends>
+      <header location="local" >qpacslist.h</header>
+      <sizehint>
+        <width>-1</width>
+        <height>-1</height>
+      </sizehint>
+      <container>0</container>
+      <sizepolicy>
+        <hordata>5</hordata>
+        <verdata>5</verdata>
+      </sizepolicy>
+      <pixmap>image0</pixmap>
     </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="PNG" length="826">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000030149444154388db59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a09643cc7ce0000000049454e44ae426082</data>
-    </image>
-</images>
-<connections>
-    <connection>
-        <sender>buttonView</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>view()</slot>
-    </connection>
-    <connection>
-        <sender>m_textAccessionNumber</sender>
-        <signal>returnPressed()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>search()</slot>
-    </connection>
-    <connection>
-        <sender>m_textStudyID</sender>
-        <signal>returnPressed()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>search()</slot>
-    </connection>
-    <connection>
-        <sender>m_textLastName</sender>
-        <signal>returnPressed()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>search()</slot>
-    </connection>
-    <connection>
-        <sender>m_textPatientID</sender>
-        <signal>returnPressed()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>search()</slot>
-    </connection>
-    <connection>
-        <sender>m_textFirstName</sender>
-        <signal>returnPressed()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>search()</slot>
-    </connection>
-    <connection>
-        <sender>m_Tab</sender>
-        <signal>currentChanged(QWidget*)</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>tabChanged(QWidget*)</slot>
-    </connection>
-    <connection>
-        <sender>buttonClear</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>clearTexts()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkFrom</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setEnabledTextFrom()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkTo</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setEnabledTextTo()</slot>
-    </connection>
-    <connection>
-        <sender>buttonYesterday</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>searchYesterday()</slot>
-    </connection>
-    <connection>
-        <sender>buttonToday</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>searchToday()</slot>
-    </connection>
-    <connection>
-        <sender>buttonSearch</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>search()</slot>
-    </connection>
-    <connection>
-        <sender>buttonRetrieve</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>retrieve()</slot>
-    </connection>
-    <connection>
-        <sender>pushButton6</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>temporal()</slot>
-    </connection>
-    <connection>
-        <sender>pushButton17</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>showPacsList()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkAll</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>clearCheckedModality()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkCR</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkES</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkNM</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkCT</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkRF</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkXA</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkMG</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkSC</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkMR</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkPT</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>m_checkUS</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>setCheckAll()</slot>
-    </connection>
-    <connection>
-        <sender>StudyLViewPacs</sender>
-        <signal>click(QString,QString)</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>searchSeries(QString,QString)</slot>
-    </connection>
-    <connection>
-        <sender>StudyLViewCache</sender>
-        <signal>click(QString,QString)</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>searchSeries(QString,QString)</slot>
-    </connection>
-    <connection>
-        <sender>StudyLViewPacs</sender>
-        <signal>retrieve()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>retrieve()</slot>
-    </connection>
-    <connection>
-        <sender>StudyLViewCache</sender>
-        <signal>view()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>view()</slot>
-    </connection>
-    <connection>
-        <sender>pushButton9</sender>
-        <signal>clicked()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>config()</slot>
-    </connection>
-    <connection>
-        <sender>StudyLViewCache</sender>
-        <signal>delStudy()</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>deleteStudyCache()</slot>
-    </connection>
-    <connection>
-        <sender>m_textFrom</sender>
-        <signal>valueChanged(const QDate&amp;)</signal>
-        <receiver>udg::QueryScreenBase</receiver>
-        <slot>dateFromChanged(const QDate&amp;)</slot>
-    </connection>
-</connections>
-<tabstops>
+  </customwidgets>
+  <tabstops>
     <tabstop>m_textPatientID</tabstop>
     <tabstop>m_textLastName</tabstop>
     <tabstop>m_textFirstName</tabstop>
@@ -1172,32 +940,10 @@
     <tabstop>pushButton17</tabstop>
     <tabstop>m_Tab</tabstop>
     <tabstop>pushButton9</tabstop>
-</tabstops>
-<slots>
-    <slot>searchSeries(QString,QString)</slot>
-    <slot>setEnabledTextTo()</slot>
-    <slot>setEnabledTextFrom()</slot>
-    <slot>searchToday()</slot>
-    <slot>searchYesterday()</slot>
-    <slot>search()</slot>
-    <slot access="protected">clearTexts()</slot>
-    <slot>retrieve()</slot>
-    <slot>temporal()</slot>
-    <slot>tabChanged(QWidget *)</slot>
-    <slot>view()</slot>
-    <slot>config()</slot>
-    <slot>showPacsList()</slot>
-    <slot>deleteStudyCache()</slot>
-    <slot>clearCheckedModality()</slot>
-    <slot>setCheckAll()</slot>
-    <slot>dateFromChanged(const QDate&amp;)</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>udg::qpacslist.h</includehint>
-    <includehint>udg::qstudylistview.h</includehint>
-    <includehint>udg::qseriesiconview.h</includehint>
-    <includehint>udg::qstudylistview.h</includehint>
-    <includehint>udg::qseriesiconview.h</includehint>
-</includehints>
-</UI>
+  </tabstops>
+  <images>
+    <image name="image0" >
+      <data format="PNG" length="826" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000030149444154388db59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a09643cc7ce0000000049454e44ae426082</data>
+    </image>
+  </images>
+</ui>

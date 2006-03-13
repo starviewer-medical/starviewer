@@ -7,7 +7,7 @@
 #ifndef UDGEXTENSIONWORKSPACE_H
 #define UDGEXTENSIONWORKSPACE_H
 
-#include <qtabwidget.h>
+#include <QTabWidget>
 
 // Forward declarations
 class QAction;

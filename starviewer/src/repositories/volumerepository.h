@@ -11,7 +11,7 @@
 #include "repository.h"
 #include "volume.h"
 #include "identifier.h"
-#include <qobject.h>
+#include <QObject>
 
 namespace udg {
 

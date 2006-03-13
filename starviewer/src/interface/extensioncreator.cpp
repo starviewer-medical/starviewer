@@ -9,8 +9,9 @@
 namespace udg {
 
 ExtensionCreator::ExtensionCreator( QObject *parent, const char *name ) 
-: QObject( parent, name )
+: QObject( parent )
 {
+    this->setObjectName( name );
 }
 
 

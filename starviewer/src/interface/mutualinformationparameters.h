@@ -9,7 +9,7 @@
 #ifndef MUTUALINFORMATIONPARAMETERS_H
 #define MUTUALINFORMATIONPARAMETERS_H
 
-#include <parameters.h>
+#include "parameters.h"
 #include "identifier.h"
 
 namespace udg{

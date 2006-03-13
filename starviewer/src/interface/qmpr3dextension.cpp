@@ -6,13 +6,14 @@
  ***************************************************************************/
 #include "qmpr3dextension.h"
 #include "q3dmprviewer.h"
-#include <qtoolbutton.h>
+#include <QToolButton>
 
 namespace udg {
 
-QMPR3DExtension::QMPR3DExtension(QWidget *parent, const char *name)
- : QMPR3DExtensionBase(parent, name)
+QMPR3DExtension::QMPR3DExtension( QWidget *parent )
+ : QWidget( parent )
 {
+    setupUi( this );
     connect(m_sagitalViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setSagitalVisibility(bool)));
     connect(m_coronalViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setCoronalVisibility(bool)));
     connect(m_axialViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setAxialVisibility(bool)));

@@ -7,7 +7,8 @@
 #ifndef UDGQTABAXISVIEW_H
 #define UDGQTABAXISVIEW_H
 
-#include <qtabaxisviewbase.h>
+#include "ui_qtabaxisviewbase.h"// defines Ui::QTabAxisViewBase
+#include <QWidget>
 
 namespace udg {
 
@@ -15,10 +16,10 @@ class Volume;
 /**
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class QTabAxisView  : public QTabAxisViewBase{
+class QTabAxisView : public QWidget , private Ui::QTabAxisViewBase{
 Q_OBJECT
 public:
-    QTabAxisView(QWidget *parent = 0, const char *name = 0);
+    QTabAxisView( QWidget *parent = 0 );
 
     ~QTabAxisView();
 

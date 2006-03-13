@@ -19,7 +19,7 @@
 namespace udg {
 
 DistanceTool::DistanceTool( QViewer *viewer, QObject *parent, const char *name)
- : Tool( viewer , parent, name)
+ : Tool( viewer , parent, name )
 {
     m_state = Begin;
     m_viewer = viewer;

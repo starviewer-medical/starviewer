@@ -7,7 +7,7 @@
 #ifndef UDGQVIEWER_H
 #define UDGQVIEWER_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include "point.h"
 
 // Fordward declarations
@@ -29,7 +29,7 @@ class Volume;
 class QViewer : public QWidget{
 Q_OBJECT
 public:
-    QViewer(QWidget *parent = 0, const char *name = 0);
+    QViewer(QWidget *parent = 0);
     ~QViewer();
 
     /// Retorna l'interactor renderer

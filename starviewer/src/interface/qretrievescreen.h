@@ -7,9 +7,10 @@
 #ifndef UDGQRETRIEVESCREEN_H
 #define UDGQRETRIEVESCREEN_H
 
-#include <qretrievescreenbase.h>
-#include <qlistview.h>
-#include <qstring.h>
+#include "ui_qretrievescreenbase.h"
+
+#include <q3listview.h>
+#include <QString>
 #include "study.h"
 #include "image.h"
 #include <starviewerprocessimage.h>
@@ -24,8 +25,7 @@ namespace udg {
 @author marc
 */
 class Status;
-class QRetrieveScreen : public QRetrieveScreenBase
-{
+class QRetrieveScreen : public QDialog , private Ui::QRetrieveScreenBase{
 Q_OBJECT
 public:
 
@@ -53,7 +53,7 @@ signals:
     
 private:
 
-    QRetrieveScreen(QWidget *parent = 0, const char *name =0);
+    QRetrieveScreen( QWidget *parent = 0 );
     ~QRetrieveScreen();
     void deleteStudy(QString studyUID);
     int image;

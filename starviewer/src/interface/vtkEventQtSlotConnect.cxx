@@ -137,7 +137,7 @@ void vtkQtConnection::PrintSelf(ostream& os, vtkIndent indent)
 // hold all the connections
 class vtkQtConnections : public vtkstd::vector< vtkQtConnection* > {};
 
-vtkStandardNewMacro(vtkEventQtSlotConnect)
+vtkStandardNewMacro(vtkEventQtSlotConnect);
 
 // constructor
 vtkEventQtSlotConnect::vtkEventQtSlotConnect()
