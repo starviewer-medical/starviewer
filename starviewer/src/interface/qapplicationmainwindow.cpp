@@ -7,7 +7,6 @@
 
 // Qt
 #include <QAction>
-#include <QLabel>
 #include <QSignalMapper>
 #include <QFileDialog>
 #include <QSettings>
@@ -456,7 +455,7 @@ void QApplicationMainWindow::createMenus()
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
-    createLanguageMenu();
+//     createLanguageMenu();
 
     menuBar()->insertSeparator();
     
@@ -592,24 +591,6 @@ void QApplicationMainWindow::openRecentFile( int param )
 
 void QApplicationMainWindow::createStatusBar()
 {
-    QLabel *locationLabel;
-    QLabel *formulaLabel;
-    QLabel *modLabel;
-    
-    locationLabel = new QLabel( tr(" W999 "), this );
-    locationLabel->setAlignment( Qt::AlignHCenter );
-    locationLabel->setMinimumSize(locationLabel->sizeHint());
-
-    formulaLabel = new QLabel( this );
-
-    modLabel = new QLabel( tr(" MOD "), this );
-    modLabel->setAlignment( Qt::AlignHCenter );
-    modLabel->setMinimumSize(modLabel->sizeHint());
-    modLabel->clear();
-
-    statusBar()->addWidget( locationLabel );
-    statusBar()->addWidget( formulaLabel, 1 );
-    statusBar()->addWidget( modLabel );
 }
 
 void QApplicationMainWindow::about()
