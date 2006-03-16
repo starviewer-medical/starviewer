@@ -17,13 +17,13 @@ class QAction;
 class vtkImageViewer2;
 class vtkCellPicker;
 class vtkTextActor;
-class vtkTextMapper;
 class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
 class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkCornerAnnotation;
+class vtkAxisActor2D;
 
 namespace udg {
 
@@ -47,6 +47,8 @@ Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de c
 
 Per defecte el visualitzador mostra la llesca central de la vista seleccionada, si volem canviar al llesca farem servir el mètode setSlice().
 
+Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums. Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation() que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
+
 @author Grup de Gràfics de Girona  ( GGG )
 */
 
@@ -57,16 +59,28 @@ class Q2DViewer  : public QViewer{
 Q_OBJECT
 public:
 
-    // Axial: XY, Coronal: XZ, Sagittal: YZ
+    /// Axial: XY, Coronal: XZ, Sagittal: YZ
     enum ViewType{ Axial, Coronal, Sagittal , None };
-    // tipus de fusió dels models
+
+    /// tipus de fusió dels models
     enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
 
+    /// Botons del mouse
+    enum Buttons{ LeftButton , MiddleButton , RightButton };
 
-    /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
-    enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool };
+    /// tipus d'accions associables als botons
+    enum Actions{ CursorAction , SliceMotionAction , WindowLevelAction };
+
+    /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
+    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x1 , ReferenceAnnotation = 0x10 , AllAnnotation = 0x111 };
     
-    Q2DViewer( QWidget *parent = 0 );
+    /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
+    enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool , Manipulate };
+
+    enum ManipulateState{ Ready , Picked };
+    ManipulateState m_manipulateState;
+
+    Q2DViewer( QWidget *parent = 0 , unsigned int annotations = Q2DViewer::AllAnnotation );
     ~Q2DViewer();
     
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
@@ -99,7 +113,7 @@ public:
 
 public slots:  
 
-    // Temporal per proves, veurem quins events es criden
+    /// Temporal per proves, veurem quins events es criden
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void* call_data, vtkCommand * command );
     
     /// Indiquem si volem veure la informació del volum per pantalla
@@ -114,6 +128,7 @@ public slots:
     void setCurrentToolToCustom(){ m_currentTool = Custom; };
     void setCurrentToolToPick(){ m_currentTool = Pick; };
     void setCurrentToolToDistance(){ m_currentTool = Distance; };
+    void setCurrentToolToManipulate(){ m_currentTool = Manipulate; };
     
     /// Fa que una determinada tool quedi des/activada \TODO fer mètode específic per cadascuna
     bool enableTool( Tools toolName , bool enable = true ){ return true; };
@@ -139,8 +154,6 @@ public slots:
 
         m_currentImageValue = value;
     }
-    /// Actualitza els valors de window level
-    void updateWindowLevel();
     
     virtual void render();
     
@@ -155,11 +168,34 @@ public slots:
     }
     void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, vtkCommand * command);
     
+    /// Afegir o treure la visibilitat d'una anotació textual
+    void addAnnotation( AnnotationFlags annotation )
+    {
+        m_enabledAnnotations = m_enabledAnnotations | annotation;
+        updateAnnotations();
+    }
+    void removeAnnotation( AnnotationFlags annotation )
+    {
+        // si existeix, llavors la "restem", sinó no cal fer res
+        if( m_enabledAnnotations & annotation )
+        {
+            m_enabledAnnotations -= annotation;
+            updateAnnotations();
+        }
+        
+    }
+    
 private slots:  
     /// refrescarà les dades del texte que es mostrarà en pantalla
     void updateInformationText();
 
 protected:
+    /// asscociació de botons amb accions
+    int m_leftButtonAction , m_middleButtonAction , m_rightButtonAction;
+
+    /// últim botó que s'ha clicat
+    int m_lastButtonPressed;
+
     vtkEventQtSlotConnect *m_vtkQtConnections;
     /// Aquest mètode es fa servir perquè es mostri un menú contextual
     //virtual void contextMenuEvent( QContextMenuEvent *event );
@@ -179,12 +215,15 @@ protected:
     /// El picker per anotar punts de la imatge
     vtkCellPicker *m_cellPicker;
     
-    
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
     
-    /// Calcula el window/level inicial per defecte de la imatge
-    void resetWindowLevel();
+    /// Mètodes per donar diversos window level per defecte
+    void resetWindowLevelToDefault();
+    void resetWindowLevelToBone();
+    void resetWindowLevelToSoftTissue();
+    void resetWindowLevelToFat();
+    void resetWindowLevelToLung();
     /// Actualitza la vista en el rendering
     void updateView();
 
@@ -192,16 +231,38 @@ protected:
     virtual void resizeEvent( QResizeEvent* resize );
 
 private:
+    /// flag que ens indica quines anotacions es veuran per la finestra
+    unsigned int m_enabledAnnotations;
 
+    /// Refresca les anotacions que s'han de veure i les que no
+    void updateAnnotations();
     
     /// inicialitza els strings d'informació que es mostraran a la pantalla
     void initInformationText();
-    /// accions que es fan quan es mou el ratolí (es crida dins d'event handler)
+
+    /// accions associades a interacció amb el ratolí
     void onMouseMove();
+    void onLeftButtonUp();
+    void onLeftButtonDown();
+    void onMiddleButtonUp();
+    void onMiddleButtonDown();
+    void onRightButtonUp();
+    void onRightButtonDown();
+
+    /// Accions
+    void startCursor();
+    void startSliceMotion();
+    void startWindowLevel();
+    void stopCursor();
+    void stopSliceMotion();
+    void stopWindowLevel();
+    
     /// La tool de distància
     DistanceTool *m_distanceTool;
+
     /// Indica la Tool que s'està fent servir en aquell moment
     Tools m_currentTool;
+
     /// Tipu de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
     
@@ -210,24 +271,34 @@ private:
     
     /// Crea i inicialitza totes les accions d'aquest widget
     void createActions();
+
     /// Crea i inicialitza totes les tools d'aquest widget
     void createTools();
+
+    /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
+    void createAnnotations();
     
     /// S'encarrega de fer la feina per defecte que cal fer cada cop que s'invoca qualsevol event, com per exemple registrar el punt sobre el qual es troba el mouse
     void anyEvent();
 
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
-    /// El format de cada text ->\TODO això acabarà deprecated \DEPRECATED
-//     QString m_formatedUpperLeftString, m_formatedUpperLeftOffImageString,  m_formatedUpperRightString , m_formatedLowerLeftString , m_formatedLowerRightString;
+
+    /// Marcadors que indicaran on està l'esquerra/dreta, abaix/amunt en referència al model
+    vtkAxisActor2D *m_sideOrientationMarker , *m_bottomOrientationMarker;
     
+    /// Textes adicionals d'anotoació
+    vtkTextActor *m_sideAnnotationText , *m_bottomAnnotationText;
     
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
+
     /// indica que alguna de la informació que s'ha de mostrar per pantall ha canviat
     void infoChanged( void );
-    
+
+    /// indica el nou window level
+    void windowLevelChanged( double window , double level );
     
 };
 

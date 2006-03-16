@@ -31,6 +31,11 @@
 #include <vtkCellPicker.h>
 #include <vtkInteractorStyleUser.h>
 #include <vtkCornerAnnotation.h>
+#include <vtkTextProperty.h>
+#include <vtkAssemblyPath.h>
+#include <vtkAxisActor2D.h>
+#include <vtkProperty2D.h>
+#include <vtkTextActor.h>
 // interacció
 #include <vtkCell.h>
 #include <vtkPointData.h>
@@ -39,11 +44,13 @@
 namespace udg {
 
 
-Q2DViewer::Q2DViewer( QWidget *parent )
+Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
  : QViewer( parent )
 {
+    m_enabledAnnotations = annotations;
     m_lastView = None; 
     m_viewer = vtkImageViewer2::New();
+    
     m_currentSlice = 0;
     m_overlay = CheckerBoard; // per defecte
     m_overlayVolume = 0;
@@ -59,15 +66,16 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_cellPicker->SetTolerance( 0.005 );
     
     // ANOTACIONS
-    m_textAnnotation = vtkCornerAnnotation::New();
-    initInformationText();
-
+    createAnnotations();
+    
     m_currentTool = NoTool;
+    
+    m_leftButtonAction = Q2DViewer::CursorAction;
+    m_middleButtonAction = Q2DViewer::SliceMotionAction;
+    m_rightButtonAction = Q2DViewer::WindowLevelAction;
     
     createActions();    
     createTools();
-    
-    setupInteraction();
 
 }
 
@@ -102,18 +110,94 @@ void Q2DViewer::createTools()
     m_distanceTool = new DistanceTool( this );
 }
 
+void Q2DViewer::createAnnotations()
+{
+    // anotacions textuals
+    m_textAnnotation = vtkCornerAnnotation::New();
+    initInformationText();
+
+    m_sideAnnotationText = vtkTextActor::New();
+    m_bottomAnnotationText  = vtkTextActor::New();
+
+    m_sideAnnotationText->SetInput("SIDE");
+    m_sideAnnotationText->ScaledTextOff();
+    m_sideAnnotationText->GetTextProperty()->SetFontSize( 12 );
+    m_sideAnnotationText->GetTextProperty()->BoldOn();
+    m_sideAnnotationText->GetTextProperty()->SetJustificationToLeft();
+    
+    m_sideAnnotationText->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
+    m_sideAnnotationText->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
+    m_sideAnnotationText->SetPosition( 0.9 , 0.5 );
+
+//     this->getRenderer()->AddActor2D( m_sideAnnotationText );
+
+    m_bottomAnnotationText->SetInput("BOTTOM");
+    m_bottomAnnotationText->ScaledTextOff();
+    m_bottomAnnotationText->GetTextProperty()->SetFontSize( 12 );
+    m_bottomAnnotationText->GetTextProperty()->BoldOn();
+    m_bottomAnnotationText->GetTextProperty()->SetJustificationToCentered();
+    
+    m_bottomAnnotationText->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
+    m_bottomAnnotationText->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
+    m_bottomAnnotationText->SetPosition( 0.5 , 0.0 );
+
+//     this->getRenderer()->AddActor2D( m_bottomAnnotationText );
+    
+    // Marcadors
+    m_sideOrientationMarker = vtkAxisActor2D::New();
+    m_bottomOrientationMarker = vtkAxisActor2D::New();
+
+    m_sideOrientationMarker->AxisVisibilityOn(); 
+    m_sideOrientationMarker->TickVisibilityOn();
+    m_sideOrientationMarker->LabelVisibilityOff();
+    m_sideOrientationMarker->TitleVisibilityOff();
+    m_sideOrientationMarker->SetTickLength( 50 );
+    m_sideOrientationMarker->GetProperty()->SetColor( 0 , 1 , 0 );
+
+//     this->getRenderer()->AddActor2D( m_sideOrientationMarker );
+
+    m_bottomOrientationMarker->AxisVisibilityOn();
+    m_bottomOrientationMarker->TickVisibilityOn();
+    m_bottomOrientationMarker->LabelVisibilityOff();
+    m_bottomOrientationMarker->TitleVisibilityOff();
+    m_bottomOrientationMarker->SetTickLength( 50 );
+    m_bottomOrientationMarker->GetProperty()->SetColor( 0 , 1 , 0 );
+
+//     this->getRenderer()->AddActor2D( m_bottomOrientationMarker );
+
+    updateAnnotations();
+}
+
+void Q2DViewer::updateAnnotations()
+{
+    if( m_enabledAnnotations && Q2DViewer::ReferenceAnnotation )
+    {
+        m_bottomOrientationMarker->VisibilityOn();
+        m_sideOrientationMarker->VisibilityOn();
+        m_sideAnnotationText->VisibilityOn();
+        m_bottomAnnotationText->VisibilityOn();
+    }
+    else
+    {
+        m_bottomOrientationMarker->VisibilityOff();
+        m_sideOrientationMarker->VisibilityOff();
+        m_sideAnnotationText->VisibilityOff();
+        m_bottomAnnotationText->VisibilityOff();
+    }
+
+    if( m_enabledAnnotations && Q2DViewer::WindowLevelAnnotation )
+    {
+        m_textAnnotation->VisibilityOn();
+    }
+    else
+    {
+        m_textAnnotation->VisibilityOff();
+    }
+
+}
 
 void Q2DViewer::initInformationText()
 {
-/*    m_formatedUpperLeftString = tr("Image Size: %d x %d\nView Size: %d x %d\nX: %4g px Y: %4g px Value: %g\nWW: %.1f WL: %.1f ");
-    
-    m_formatedUpperLeftOffImageString = tr("Image Size: %d x %d\nView Size: %d x %d\nWW: %.1f WL: %.1f ");
-        
-    m_formatedUpperRightString = "%s";
-    m_formatedLowerLeftString = tr("Slice: %d/%d\nZoom: XXX%%  Angle: XXX\nThickness: XXX mm Location: XXX ");
-    m_formatedLowerRightString = "%s";*/
-        
-        
     m_upperLeftText = tr("No Info");
     m_upperRightText = tr("No Info");
     m_lowerLeftText = tr("No Info");
@@ -123,10 +207,13 @@ void Q2DViewer::initInformationText()
     m_textAnnotation->SetWindowLevel( m_viewer->GetWindowLevel() );
     m_textAnnotation->ShowSliceAndImageOn();
 
+//  \TODO posar bé le texte que sempre es mostri a una mida raonable i que no faci els canvis "raros"
+//     m_textAnnotation->GetTextProperty()->SetFontSize( 80 );
+//     m_textAnnotation->GetTextProperty()->ItalicOn();
+    
     m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
-
-    // \FIXME problema amb aquest connect, quan es dispara el signal no crida a la funció que toca i peta ?problema de qt4 +qt3¿
-//     connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
+    
+    connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
 
 }
 
@@ -185,7 +272,6 @@ void Q2DViewer::updateInformationText()
         
     if( m_currentCursorPosition[0] == -1 )
     {    
-//         m_upperLeftText.sprintf( m_formatedUpperLeftOffImageString , width , height , m_viewer->GetRenderWindow()->GetSize()[0] , m_viewer->GetRenderWindow()->GetSize()[1] , m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nOff Image\nWW: %5 WL: %6 ")
                 .arg( width )
                 .arg( height )
@@ -196,8 +282,6 @@ void Q2DViewer::updateInformationText()
     }
     else
     {
-//         m_upperLeftText.sprintf( m_formatedUpperLeftString , width , height , m_viewer->GetRenderWindow()->GetSize()[0] , m_viewer->GetRenderWindow()->GetSize()[1], m_currentCursorPosition[0] , m_currentCursorPosition[1], m_currentImageValue , m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-
         m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nX: %5 px Y: %6 px Value: %7\nWW: %8 WL: %9 ")
                 .arg( width )
                 .arg( height )
@@ -209,8 +293,8 @@ void Q2DViewer::updateInformationText()
                 .arg( m_viewer->GetColorWindow() )
                 .arg( m_viewer->GetColorLevel() );
     }
-//     m_lowerLeftText.sprintf( m_formatedLowerLeftString , m_currentSlice , depth );
-    m_lowerLeftText = tr("Slice: %1/%2\nZoom: XXX%%  Angle: XXX\nThickness: XXX mm Location: XXX ")
+//     m_lowerLeftText = tr("Slice: %1/%2\nZoom: XXX%%  Angle: XXX\nThickness: XXX mm Location: XXX ")
+    m_lowerLeftText = tr("Slice: %1/%2")
                 .arg( m_currentSlice )
                 .arg( depth );
     
@@ -219,13 +303,14 @@ void Q2DViewer::updateInformationText()
     
     m_textAnnotation->SetText( 0 , m_lowerLeftText );
     m_textAnnotation->SetText( 2 , m_upperLeftText );
+
 }
 
 void Q2DViewer::onMouseMove()
 {
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
     // agafem el punt que està apuntant el ratolí en aquell moment
-    interactor->GetPicker()->Pick( interactor->GetEventPosition()[0], 
+    /*interactor->GetPicker()*/m_cellPicker->Pick( interactor->GetEventPosition()[0], 
                 interactor->GetEventPosition()[1], 
                 m_viewer->GetSlice(), 
                 m_viewer->GetRenderer()
@@ -260,20 +345,217 @@ void Q2DViewer::onMouseMove()
         found = 1;
     }
     outPointData->Delete();
-//     std::cout << "EEEEEEEEEEEEEEEEI" << std::endl;
     if( found )
     {
         updateCursor( q[0], q[1], q[2], imageValue );
-//         std::cout << "Update cursor with " << q[0] << "," << q[1] << "," << q[2] << " :: " << imageValue << std::endl;
     }
     else
         updateCursor( -1, -1, -1, -1 );
     
-    // actualitzem la resta de valors \TODO: hauria d'haver alguna manera de connectar l'event del window level amb algun slot
-    
-    updateWindowLevel();
+    emit infoChanged();
     interactor->Render();
 
+}
+
+void Q2DViewer::onLeftButtonDown()
+{
+    switch( m_currentTool )
+    {
+
+    case Q2DViewer::Manipulate:
+        if( m_manipulateState == Q2DViewer::Ready )
+        {
+            // trobar els actors
+            int x = getInteractor()->GetEventPosition()[0];
+            int y = getInteractor()->GetEventPosition()[1];
+
+            // Okay, make sure that the pick is in the current renderer
+            if ( !this->getRenderer() || !this->getRenderer()->IsInViewport( x, y ) )
+            {
+//                 this->State = vtkImagePlaneWidget::Outside;
+                return;
+            }
+            // Okay, we can process this. If anything is picked, then we
+            // can start pushing or check for adjusted states.
+            vtkAssemblyPath *path;
+            m_cellPicker->Pick( x , y , 0.0 , this->getRenderer() );
+            path = m_cellPicker->GetPath();
+            
+/*            int found = 0;
+            int i;
+            if ( path != 0 )
+            {
+                // Deal with the possibility that we may be using a shared picker
+                vtkCollectionSimpleIterator sit;
+                path->InitTraversal(sit);
+                vtkAssemblyNode *node;
+                for( i = 0; i < path->GetNumberOfItems() && !found ;i++ )
+                {
+                    node = path->GetNextNode(sit);
+                    if( node->GetViewProp() == vtkProp::SafeDownCast(this->TexturePlaneActor) )
+                    {
+                        found = 1;
+                    }
+                }
+            }*/
+            
+            if ( /* !found ||*/ path == 0 )
+            {
+//                 this->State = vtkImagePlaneWidget::Outside;
+//                 this->HighlightPlane(0);
+//                 this->ActivateMargins(0);
+                return;
+            }
+            else
+            {
+//                 this->State = vtkImagePlaneWidget::Pushing;
+//                 this->HighlightPlane(1);
+//                 this->ActivateMargins(1);
+//                 this->AdjustState();
+//                 this->UpdateMargins();
+            }
+            
+//             this->EventCallbackCommand->SetAbortFlag(1);
+//             this->StartInteraction();
+//             this->InvokeEvent(vtkCommand::StartInteractionEvent,0);
+//             this->Interactor->Render();
+            getInteractor()->Render();
+            
+        }
+    break;
+
+    default:
+    break;
+    
+    }
+//     switch( m_leftButtonAction )
+//     {
+//     case Q2DViewer::CursorAction:
+//         startCursor();
+//     break;
+//     
+//     case Q2DViewer::SliceMotionAction:
+//         startSliceMotion();
+//     break;
+// 
+//     case Q2DViewer::WindowLevelAction:
+//         startWindowLevel();
+//     break;
+//     }
+}
+
+void Q2DViewer::onLeftButtonUp()
+{
+    switch( m_leftButtonAction )
+    {
+    case Q2DViewer::CursorAction:
+        stopCursor();
+    break;
+    
+    case Q2DViewer::SliceMotionAction:
+        stopSliceMotion();
+    break;
+
+    case Q2DViewer::WindowLevelAction:
+        stopWindowLevel();
+    break;
+    }
+}
+
+void Q2DViewer::onMiddleButtonDown()
+{
+    switch( m_middleButtonAction )
+    {
+    case Q2DViewer::CursorAction:
+        startCursor();
+    break;
+    
+    case Q2DViewer::SliceMotionAction:
+        startSliceMotion();
+    break;
+
+    case Q2DViewer::WindowLevelAction:
+        startWindowLevel();
+    break;
+    }
+}
+
+void Q2DViewer::onMiddleButtonUp()
+{
+    switch( m_middleButtonAction )
+    {
+    case Q2DViewer::CursorAction:
+        stopCursor();
+    break;
+    
+    case Q2DViewer::SliceMotionAction:
+        stopSliceMotion();
+    break;
+
+    case Q2DViewer::WindowLevelAction:
+        stopWindowLevel();
+    break;
+    }
+}
+
+void Q2DViewer::onRightButtonDown()
+{
+    switch( m_rightButtonAction )
+    {
+    case Q2DViewer::CursorAction:
+        startCursor();
+    break;
+    
+    case Q2DViewer::SliceMotionAction:
+        startSliceMotion();
+    break;
+
+    case Q2DViewer::WindowLevelAction:
+        startWindowLevel();
+    break;
+    }
+}
+
+void Q2DViewer::onRightButtonUp()
+{
+    switch( m_rightButtonAction )
+    {
+    case Q2DViewer::CursorAction:
+        stopCursor();
+    break;
+    
+    case Q2DViewer::SliceMotionAction:
+        stopSliceMotion();
+    break;
+
+    case Q2DViewer::WindowLevelAction:
+        stopWindowLevel();
+    break;
+    }
+}
+
+void Q2DViewer::startCursor()
+{
+}
+
+void Q2DViewer::startSliceMotion()
+{
+}
+
+void Q2DViewer::startWindowLevel()
+{
+}
+
+void Q2DViewer::stopCursor()
+{
+}
+
+void Q2DViewer::stopSliceMotion()
+{
+}
+
+void Q2DViewer::stopWindowLevel()
+{
 }
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void * call_data, vtkCommand *command )
@@ -287,7 +569,37 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     case vtkCommand::MouseMoveEvent:
         onMouseMove();
     break;
+
+    case vtkCommand::LeftButtonPressEvent:
+        m_lastButtonPressed = Q2DViewer::LeftButton;
+        onLeftButtonDown();
+    break;
+
+    case vtkCommand::LeftButtonReleaseEvent:
+        m_lastButtonPressed = Q2DViewer::LeftButton;
+        onLeftButtonUp();
+    break;
+
+    case vtkCommand::MiddleButtonPressEvent:
+        m_lastButtonPressed = Q2DViewer::MiddleButton;
+        onMiddleButtonDown();
+    break;
+
+    case vtkCommand::MiddleButtonReleaseEvent:
+        m_lastButtonPressed = Q2DViewer::MiddleButton;
+        onMiddleButtonUp();
+    break;
     
+    case vtkCommand::RightButtonPressEvent:
+        m_lastButtonPressed = Q2DViewer::RightButton;
+        onRightButtonDown();
+    break;
+
+    case vtkCommand::RightButtonReleaseEvent:
+        m_lastButtonPressed = Q2DViewer::RightButton;
+        onRightButtonUp();
+    break;
+
     default:
     break;
     
@@ -306,6 +618,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     // PICK
     // ----------------------------------------------------
     case Pick:
+        //
         // estats?
         // Si l'event és botó esquerre pressionat -> escollir seed candidata : mostrar valor en pantalla
         // ""                            ""        + MouseMove : mostrar valor en pantalla
@@ -317,7 +630,6 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     // ----------------------------------------------------
     case Distance:   
         m_distanceTool->dispatchEvent( DistanceTool::vtkCommandEventToToolEvent( event ) );
-//         m_distanceTool->dispatchEvent( event );
     break;
     
     // ----------------------------------------------------
@@ -327,7 +639,23 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
         // estats?
         // si mouseMove , mostrar cursor sobre el punt en el que estem
     break;
-    
+
+    // ----------------------------------------------------
+    // MANIPULATE
+    // ----------------------------------------------------
+    case Manipulate:
+        // aquesta tool el que fa és es que podem manipular els elements adicionals de l'escena, per tant hi ha dos passos
+        // 1) Escollir/Agafar l'actor. Quan es cliqui el mouse farem un assembly path. Si hi ha algun actor llavors es podrà manipular
+        // 2) En cas que hi hagi actor/s mentre el botó continui pitjat farem la manipulació que toqui (desplaçar, spin, rotar, etc)
+        if( event == vtkCommand::LeftButtonPressEvent && m_manipulateState == Q2DViewer::Ready )
+        {
+            // trobar si hi ha algun objecte allà on hem clicat
+        }
+        if( event == vtkCommand::MouseMoveEvent && m_manipulateState == Q2DViewer::Picked )
+        
+        if( event == vtkCommand::LeftButtonReleaseEvent )
+        
+    break;
     // ----------------------------------------------------
     // DEFAULT
     // ----------------------------------------------------
@@ -353,24 +681,18 @@ void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, voi
     QPoint pt = QPoint( eventPosition[0], size[1]-eventPosition[1]);
 
     // aquesta posició no és del tot bona ja que no són les coordenades globals, sin o de finestra
-    
     QMenu contextMenu( this );
     contextMenu.addAction( m_resetAction );
-    
     
     // map to global
     QPoint global_pt = contextMenu.parentWidget()->mapToGlobal( pt );
     contextMenu.exec( global_pt );
 }
 
-void Q2DViewer::updateWindowLevel( )
-{
-    emit infoChanged();
-}
-
 void Q2DViewer::setupInteraction()
 {   
     // configurem l'Image Viewer i el qvtkWidget
+    // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat \TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
 
@@ -386,15 +708,32 @@ void Q2DViewer::setupInteraction()
     // despatxa qualsevol event-> tools                       
     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*,unsigned long,void *,void *, vtkCommand *) ) );
     
-//     displayTextLabels();
-//     setupLookupTable();
-//     displayScalarBar();
 }
 
 void Q2DViewer::setInput( Volume* volume )
 {
+    if( volume == 0 )
+        return;
+//     if( m_mainVolume )
+//         delete m_mainVolume;
     m_mainVolume = volume;    
     m_viewer->SetInput( m_mainVolume->getVtkData() );
+
+    // fem update de les mides dels indicadors de referència
+    m_sideOrientationMarker->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_sideOrientationMarker->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+    m_sideOrientationMarker->SetPosition(  0.9 , 0.7 );
+    m_sideOrientationMarker->SetPosition2( 0.9 , 0.2 );
+    m_sideOrientationMarker->SetRange( 200 , 5000 );
+
+    m_bottomOrientationMarker->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_bottomOrientationMarker->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+    m_bottomOrientationMarker->SetPosition(  0.9 , 0.7 );
+    m_bottomOrientationMarker->SetPosition2( 0.9 , 0.2 );
+    m_bottomOrientationMarker->SetRange( 200 , 5000 );
+    
+    // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
+    setupInteraction();
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
@@ -459,7 +798,7 @@ void Q2DViewer::render()
     if( m_mainVolume )
     {        
         // li donem el window/level correcte
-        resetWindowLevel();    
+        resetWindowLevelToDefault();
         // Això és necessari perquè la imatge es rescali a les mides de la finestreta
         m_viewer->GetRenderer()->ResetCamera();
         updateView();
@@ -514,9 +853,10 @@ void Q2DViewer::resizeEvent( QResizeEvent *resize )
     emit infoChanged();
 }
 
-void Q2DViewer::resetWindowLevel()
+void Q2DViewer::resetWindowLevelToDefault()
 {
 // això ens dóna un level/level "maco" per defecte
+// situem el level al mig i donem un window complet de tot el rang
     if( m_mainVolume )
     {
         double * range = m_mainVolume->getVtkData()->GetScalarRange();
@@ -524,10 +864,79 @@ void Q2DViewer::resetWindowLevel()
         double level = ( range[1] + range[0] )/ 2.0;
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
-        
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         emit infoChanged();
     }
     // mostrar avís/error si no hi ha volum?
+}
+
+void Q2DViewer::resetWindowLevelToBone()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        // ajustem el rang
+        double window = fabs(range[1] - range[0] ) * 0.3;
+        // situem al punt correcte el level
+        double level = ( range[1] + range[0] ) * 0.8;
+        m_viewer->SetColorLevel( level );
+        m_viewer->SetColorWindow( window );
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        emit infoChanged();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToSoftTissue()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        // ajustem el rang
+        double window = fabs(range[1] - range[0] ) *  0.02;
+        // situem al punt correcte el level
+        double level = ( range[1] + range[0] ) * 0.53;
+        m_viewer->SetColorLevel( level );
+        m_viewer->SetColorWindow( window );
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        emit infoChanged();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToFat()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        // ajustem el rang
+        double window = fabs(range[1] - range[0] ) * 0.02;
+        // situem al punt correcte el level
+        double level = ( range[1] + range[0] ) * 0.46;
+        m_viewer->SetColorLevel( level );
+        m_viewer->SetColorWindow( window );
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        emit infoChanged();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToLung()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        // ajustem el rang
+        double window = fabs(range[1] - range[0] ) * 0.1;
+        // situem al punt correcte el level
+        double level = ( range[1] + range[0] ) * 0.25;
+        m_viewer->SetColorLevel( level );
+        m_viewer->SetColorWindow( window );
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        emit infoChanged();
+    }
 }
 
 void Q2DViewer::setDivisions( int x , int y , int z )
@@ -556,4 +965,4 @@ void Q2DViewer::getDivisions( int data[3] )
     data[2] = m_divisions[2];
 }
 
-};  // end namespace udg {
+};  // end namespace udg 
