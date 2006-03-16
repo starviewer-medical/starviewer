@@ -25,6 +25,8 @@ class Volume;
 Extensió encarregada de fer l'MPR 2D
     
 @author Grup de Gràfics de Girona  ( GGG )
+
+\TODO Afegir l'interacció de l'usuari. Per rotar i traslladar els plans podem seguir com a model el que fan els mètodes vtkImagePlaneWidget::Spin() i vtkImagePlaneWidget::Translate()
 */
 class QMPRExtension : public QWidget , private QMPRExtensionBase /*Ui::QMPRExtensionBase*/{
 Q_OBJECT
@@ -38,7 +40,7 @@ public:
     */
     void setInput( Volume *input );
     
-    // Inicialitza de nou els paràmetres de l'aplicació
+    /// Inicialitza de nou els paràmetres de l'aplicació
     void reset();
     
     /// Indica la llesca que volem veure de cadascuna de les diferents vistes. Aquest canvi repercuteix sobre els eixos de control de cada visor
@@ -68,11 +70,7 @@ private:
     double angleInRadians( double vec1[3] , double vec2[3] );
     /// Calcula l'angle entre dos vectors. Retorna el valor en graus
     double angleInDegrees( double vec1[3] , double vec2[3] );
-    
-    /// Calcula l'angle entre dos punts de 2 rectes que es creuen per un origen
-    /// aquest mètode és "d'ajuda" per fer les rotacions
-    // \TODO to be deprecated
-    double getDegrees( double p1[3] , double p2[3] , double origin[3] );
+
     /// Obtenim els vectors que defineixen els eixos de cada pla ( sagital , coronal )
     void getSagitalXVector( double x[3] );
     void getSagitalYVector( double y[3] );
@@ -137,10 +135,32 @@ private slots:
     void coronalSlicePlus();
     void coronalSliceMinus();
     /// Fan les accions pertinents quan una llesca s'ha actualitzat
-    void axialSliceUpdated(int slice);
-    void sagitalSliceUpdated(int slice);
-    void coronalSliceUpdated(int slice);
+    void axialSliceUpdated( int slice );
+    void sagitalSliceUpdated( int slice );
+    void coronalSliceUpdated( int slice );
 };
+
+/**
+* Encapsula les funcionalitats de l'actor que controla els diferents plans de tall.
+*//*
+class PlaneController2D : public QObject{
+Q_OBJECT
+public:
+    /// Estats en el que es pot trbar. Moving: quan movem el pla ( llesques ), Spinning: rotació sobre un eix
+    enum State{ Moving , Spinning , None };
+    PlaneController2D( QObject *parent = 0 );
+    ~PlaneController2D( );
+    /// Li assignem el color a l'actor
+    void setColor( double r , double g , double b );
+    /// Retorna l'actor 
+    vtkAxisActor2D *getPlaneController();
+private:
+    /// L'actor en qüestió
+    vtkAxisActor2D *m_planeControllerActor;
+    /// L'estat d'interacció en el que es troba
+    State m_state;
+
+};*/
 
 };  //  end  namespace udg 
 

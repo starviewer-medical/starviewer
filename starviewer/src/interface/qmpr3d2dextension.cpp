@@ -44,7 +44,11 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     // connexions que determinen els canvis del plans a l'MPR 3D que s'han de reflexar a les vistes 2D
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( update2DViews() ) );
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( updateActors() ) );
- 
+
+    m_axialViewEnabledButton->setChecked( true );
+    m_sagitalViewEnabledButton->setChecked( true );
+    m_coronalViewEnabledButton->setChecked( true );
+    
     createActors();
     updateActors();
     
@@ -250,13 +254,9 @@ void QMPR3D2DExtension::readSettings()
     QSettings settings("GGG", "StarViewer-App-MPR-3D-2D");
     settings.beginGroup("StarViewer-App-MPR-3D-2D");
     
-    QString str1 = settings.value("horizontalSplitter").toString();
-    QTextIStream in1(&str1);
-    in1 >> *m_horizontalSplitter;
-    QString str2 = settings.value("verticalSplitter").toString();
-    QTextIStream in2(&str2);
-    in2 >> *m_verticalSplitter;
-    
+    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
+
     settings.endGroup();
 }
 
@@ -265,13 +265,8 @@ void QMPR3D2DExtension::writeSettings()
     QSettings settings("GGG", "StarViewer-App-MPR-3D-2D");
     settings.beginGroup("StarViewer-App-MPR-3D-2D");
     
-    QString str;
-    QTextOStream out1(&str);
-    out1 << *m_horizontalSplitter;
-    settings.setValue("horizontalSplitter", str );
-    QTextOStream out2(&str);
-    out2 << *m_verticalSplitter;
-    settings.setValue("verticalSplitter", str );
+    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
     
     settings.endGroup();
 }

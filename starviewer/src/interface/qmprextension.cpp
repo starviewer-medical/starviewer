@@ -62,15 +62,12 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_axialSpacing[1] = 1.;
     m_axialSpacing[2] = 1.;
     
-    //\TODO hauríem de fer un transform per cada pla/reslice
     m_transform = vtkTransform::New();
-        
     
     createConnections();
     createActors();
     
     readSettings();
-    
 }
 
 void QMPRExtension::setInput( Volume *input )
@@ -229,8 +226,9 @@ void QMPRExtension::createConnections()
     // conectem els sliders i demés visors
     // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitaríem les característiques de l'auto connection
     connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axialSpinBox , SLOT( setValue(int) ) );
-    connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
     connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
+    connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
+    
     
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( axialSliceUpdated(int) ) );
     
@@ -796,7 +794,6 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     
     reslice->SetOutputSpacing( planeSizeX/extentX , planeSizeY/extentY , 1 );
     reslice->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    // ¿?caldria posar-li correctament l'extent ! és possiblement pe això que ens dóna la excepció aquella
     reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , 0 ); // obtenim una única llesca
     reslice->Update();
     
@@ -865,22 +862,6 @@ double QMPRExtension::angleInDegrees( double vec1[3] , double vec2[3] )
     return angleInRadians( vec1 , vec2 ) * vtkMath::DoubleRadiansToDegrees();
 }
 
-// to be deprecated
-double QMPRExtension::getDegrees( double p1[3] , double p2[3], double origin[3] )
-{
-    // definim els vectors de les rectes
-    double v1[3] , v2[3];
-    v1[0] = p1[0] - origin[0];
-    v1[1] = p1[1] - origin[1];
-    v1[2] = p1[2] - origin[2];
-    
-    v2[0] = p2[0] - origin[0];
-    v2[1] = p2[1] - origin[1];
-    v2[2] = p2[2] - origin[2];
-    
-//     return acos( vtkMath::Dot( v1,v2 ) / ( vtkMath::Norm(v1)*vtkMath::Norm(v2) ) );
-    return angleInDegrees( v1,v2 );
-}
 bool QMPRExtension::isParallel( double axis[3] )
 {
     double xyzAxis[3] = {1,0,0};
@@ -1000,36 +981,56 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
 
 void QMPRExtension::readSettings()
 {
-    QSettings settings;
-    settings.setPath("GGG", "StarViewer-App-MPR");
+    QSettings settings("GGG", "StarViewer-App-MPR");    
     settings.beginGroup("StarViewer-App-MPR");
 
-    QString str1 = settings.value("horizontalSplitter").toString();
-    QTextIStream in1(&str1);
-    in1 >> *m_horizontalSplitter;
-    QString str2 = settings.value("verticalSplitter").toString();
-    QTextIStream in2(&str2);
-    in2 >> *m_verticalSplitter;
-    
+    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
+
     settings.endGroup();
 }
 
 void QMPRExtension::writeSettings()
 {
-    QSettings settings;
-    settings.setPath("GGG", "StarViewer-App-MPR");
-    settings.beginGroup("/StarViewer-App-MPR");
-    
-    QString str;
-    QTextOStream out1(&str);
-    out1 << *m_horizontalSplitter;
-    settings.setValue("horizontalSplitter", str );
-    QTextOStream out2(&str);
-    out2 << *m_verticalSplitter;
-    settings.setValue("verticalSplitter", str );
-    
+    QSettings settings("GGG", "StarViewer-App-MPR");
+    settings.beginGroup("StarViewer-App-MPR");
+
+    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
+
     settings.endGroup();
 }
 
-};  // end namespace udg 
+// -------------------------------------------------------
+// PLANE CONTROLLLER 2D
+// -------------------------------------------------------
+/*
+PlaneController2D::PlaneController2D( QObject *parent )
+: QObject( parent )
+{
+    m_planeControllerActor = vtkAxisActor2D::New();
+    m_planeControllerActor->AxisVisibilityOn();
+    m_planeControllerActor->TickVisibilityOff();
+    m_planeControllerActor->LabelVisibilityOff();
+    m_planeControllerActor->TitleVisibilityOff();
+    /// assignem un color per defecte
+    m_planeControllerActor->GetProperty()->SetColor( 1 , 0 , 0 );
+}
+
+void PlaneController2D::setColor( double r , double g , double b  )
+{
+    if( !m_planeControllerActor )
+    {
+//     \TODO llançar excepció, error , etc
+    }
+    else
+        m_planeControllerActor->GetProperty()->SetColor( r , g , b  );
+}
+
+vtkAxisActor2D *PlaneController2D::getPlaneController()
+{
+    return m_planeControllerActor;
+}*/
+
+};  // end namespace udg
 
