@@ -14,13 +14,17 @@ QMPR3DExtension::QMPR3DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
+    connect(m_axialViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setAxialVisibility(bool)));
     connect(m_sagitalViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setSagitalVisibility(bool)));
     connect(m_coronalViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setCoronalVisibility(bool)));
-    connect(m_axialViewEnabledButton, SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setAxialVisibility(bool)));
-
+    
     connect(m_sagitalOrientationButton, SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToSagital()));
     connect(m_coronalOrientationButton, SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToCoronal()));
-    connect(m_axialOrientationButton, SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToAxial()));    
+    connect(m_axialOrientationButton, SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToAxial()));
+
+    m_axialViewEnabledButton->setChecked( true );
+    m_sagitalViewEnabledButton->setChecked( true );
+    m_coronalViewEnabledButton->setChecked( true );
 }
 
 

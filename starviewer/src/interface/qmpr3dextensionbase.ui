@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>711</width>
-    <height>582</height>
+    <height>583</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -154,14 +154,6 @@
        <height>16</height>
       </size>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>0</number>
-      </property>
-     </layout>
     </widget>
    </item>
   </layout>
