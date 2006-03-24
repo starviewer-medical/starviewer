@@ -42,10 +42,6 @@ public:
     
     /// Ens retorna l'id del volum que ha obert
     Identifier getVolumeID() const { return m_volumeID; };
-    /// Inserta l'acció duna nova mini-aplicació
-    enum OperationsType{ Segmentation , Registration , Clustering , Color  };
-    void insertApplicationAction( QAction *action , OperationsType operation , bool toToolBar = false );
-    
     
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;

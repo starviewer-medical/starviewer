@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "multquerystudy.h"
+#include "multiplequerystudy.h"
 #include <QLineEdit>
 #include <semaphore.h>
 #include "starviewersettings.h"
@@ -17,7 +17,7 @@ sem_t *activeThreads;
 
 /** Constructor de la Classe
   */
-MultQueryStudy::MultQueryStudy(QObject *parent)
+MultipleQueryStudy::MultipleQueryStudy(QObject *parent)
  : QObject(parent)
 {
     StarviewerSettings settings;
@@ -29,7 +29,7 @@ MultQueryStudy::MultQueryStudy(QObject *parent)
 /** Ens permet indicar quina màscara utilitzarem per fer la query als PACS
   *                @ param StudyMask [in]  Màscara del estudis a cercar
   */
-void MultQueryStudy::setMask(StudyMask mask)
+void MultipleQueryStudy::setMask(StudyMask mask)
 {
     m_searchMask = mask;
 }
@@ -37,19 +37,19 @@ void MultQueryStudy::setMask(StudyMask mask)
 /** Estableix la llista de PACS als quals es farà la cerca
   *         @param PacsList amb els pacs als quals es cercarà
   */
-void MultQueryStudy::setPacsList(PacsList list)
+void MultipleQueryStudy::setPacsList(PacsList list)
 {
      m_pacsList = list;
 }
 
-void MultQueryStudy::threadFinished()
+void MultipleQueryStudy::threadFinished()
 {
     sem_post(activeThreads);
 }
 
 /** Una vegada haguem especificat la màscara, i tots els PACS als que volem realitzar la query, aquesta acció iniciara el procés de cerca a tots els PACS
   */
-Status MultQueryStudy::StartQueries()
+Status MultipleQueryStudy::StartQueries()
 {
     QQueryStudyThread m_thread[20];
     int i = 0,j = 0;
@@ -99,13 +99,13 @@ Status MultQueryStudy::StartQueries()
 /** retorna un apuntador a la llist amb els estudis
   *                @return  Llista amb els estudis trobats que complien amb la màscara.
   */
-StudyListSingleton * MultQueryStudy::getStudyList()
+StudyListSingleton * MultipleQueryStudy::getStudyList()
 {
     m_studyListSingleton->firstStudy();
     return m_studyListSingleton;
 }
 
-MultQueryStudy::~MultQueryStudy()
+MultipleQueryStudy::~MultipleQueryStudy()
 {
 }
 

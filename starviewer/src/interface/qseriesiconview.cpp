@@ -69,7 +69,7 @@ void QSeriesIconView::insertSeries(Series *serie)
         text.append('\n');
     }
         
-    nameClass.insert(0,this->name());
+    nameClass.insert(0,this->objectName());
     if (nameClass == "m_SeriesImViewCache")
     {
         pathImage.insert(0,settings.getCacheImagePath());

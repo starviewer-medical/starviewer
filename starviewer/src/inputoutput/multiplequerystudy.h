@@ -21,13 +21,13 @@ namespace udg {
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class MultQueryStudy : public QObject
+class MultipleQueryStudy : public QObject
 {
 Q_OBJECT
 public:
-    MultQueryStudy(QObject *parent = 0);
+    MultipleQueryStudy(QObject *parent = 0);
     
-    ~MultQueryStudy();
+    ~MultipleQueryStudy();
    
     void setMask(StudyMask);
     void setPacsList(PacsList);

@@ -45,7 +45,7 @@ HEADERS += input.h \
            scaleimage.h \
            scalestudy.h \
            cacheinstallation.h \
-           multquerystudy.h \
+           multiplequerystudy.h \
            qquerystudythread.h 
 SOURCES += input.cpp \
            output.cpp \
@@ -86,7 +86,7 @@ SOURCES += input.cpp \
            scaleimage.cpp \
            scalestudy.cpp \
            cacheinstallation.cpp \
-           multquerystudy.cpp \
+           multiplequerystudy.cpp \
            qquerystudythread.cpp 
 include(../vtk.inc)
 include(../itk.inc)

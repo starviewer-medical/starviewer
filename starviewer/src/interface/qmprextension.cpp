@@ -94,19 +94,19 @@ void QMPRExtension::setInput( Volume *input )
     m_sagital2DView->setViewToAxial();
     
     // refrescar el controls
-    m_axialSpinBox->setMinValue( 0 );
-    m_axialSpinBox->setMaxValue( m_volume->getVtkData()->GetDimensions()[2] );    
-    m_axialSlider->setMaxValue(  m_volume->getVtkData()->GetDimensions()[2] );
+    m_axialSpinBox->setMinimum( 0 );
+    m_axialSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[2] );    
+    m_axialSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[2] );
     m_axialSlider->setValue( m_axial2DView->getSlice() );    
 // Ja no hi són , ho deixem comentat temporalment per si interessés re-incorporar-los, res més 
-//     m_sagitalSpinBox->setMinValue( 0 );
-//     m_sagitalSpinBox->setMaxValue( m_volume->getVtkData()->GetDimensions()[1] );    
-//     m_sagitalSlider->setMaxValue(  m_volume->getVtkData()->GetDimensions()[1] );
+//     m_sagitalSpinBox->setMinimum( 0 );
+//     m_sagitalSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[1] );    
+//     m_sagitalSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[1] );
 //     m_sagitalSlider->setValue( m_sagital2DView->getSlice() );
 //     
-//     m_coronalSpinBox->setMinValue( 0 );
-//     m_coronalSpinBox->setMaxValue( m_volume->getVtkData()->GetDimensions()[0] );    
-//     m_coronalSlider->setMaxValue(  m_volume->getVtkData()->GetDimensions()[0] );
+//     m_coronalSpinBox->setMinimum( 0 );
+//     m_coronalSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[0] );    
+//     m_coronalSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[0] );
 //     m_coronalSlider->setValue( m_coronal2DView->getSlice() );
 
     // posta a punt dels planeSource

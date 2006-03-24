@@ -42,13 +42,13 @@ void QTabAxisView::setInput(Volume* newImageData)
 
     int *size = newImageData->getVtkData()->GetDimensions();
 
-    this->m_xAxisSlider->setMaxValue( size[0]-1 );// Sagital
-    this->m_yAxisSlider->setMaxValue( size[1]-1 );// coronal
-    this->m_zAxisSlider->setMaxValue( size[2]-1 );// axial
+    this->m_xAxisSlider->setMaximum( size[0]-1 );// Sagital
+    this->m_yAxisSlider->setMaximum( size[1]-1 );// coronal
+    this->m_zAxisSlider->setMaximum( size[2]-1 );// axial
     
-    this->m_xAxisSpinBox->setMaxValue( size[0]-1 );// sagital
-    this->m_yAxisSpinBox->setMaxValue( size[1]-1 );// coronal
-    this->m_zAxisSpinBox->setMaxValue( size[2]-1 );// axial
+    this->m_xAxisSpinBox->setMaximum( size[0]-1 );// sagital
+    this->m_yAxisSpinBox->setMaximum( size[1]-1 );// coronal
+    this->m_zAxisSpinBox->setMaximum( size[2]-1 );// axial
 
     // Posem tots els sliders i valors spinboxs a z/2. Els sliders automaticament s'hi posaran
     // igual que les imatges tb. (gracies a la propagacio de signals-slots)

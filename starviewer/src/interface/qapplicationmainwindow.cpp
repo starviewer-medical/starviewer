@@ -60,7 +60,6 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     // aquesta barra de progrés és provisional. Això anirà més lligat dins de les mini-apps
     m_progressDialog = new QProgressDialog( tr("Loading image data...") , tr("Abort") , 0 ,  100 , this );
     m_progressDialog->setMinimumDuration( 0 );
-    m_progressDialog->setCaption( tr("Caption") );
     m_progressDialog->setAutoClose( TRUE );
 
     /** \TODO Aquí podríem tenir un showProgress per cada tipu d'acció, la de carregar i la de desar
@@ -79,8 +78,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     // arxius oberts etc amb QSettings
     readSettings();
     // icona de l'aplicació
-    setIcon( QPixmap(":/images/icon.png") );
-    setCaption( tr("StarViewer") );
+    setWindowIcon( QPixmap(":/images/icon.png") );
+    setWindowTitle( tr("StarViewer") );
     m_openFileFilters = tr("MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
     m_exportFileFilters = tr("JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
     
@@ -256,30 +255,6 @@ void QApplicationMainWindow::createActions()
     }
 }
 
-void QApplicationMainWindow::insertApplicationAction( QAction *action , OperationsType operation , bool toToolBar )
-{
-    // pre: s'han creat els menús sinó petarà!
-    switch( operation )
-    {
-        case Segmentation:
-            action->addTo( m_segmentationMenu );
-            if( toToolBar ) m_segmentationToolBar->addAction( action );
-        break;
-        case Registration:
-            action->addTo( m_registrationMenu );
-            if( toToolBar ) action->addTo( m_registrationToolBar );
-        break;
-        case Clustering:
-            action->addTo( m_clusteringMenu );
-            if( toToolBar ) action->addTo( m_clusteringToolBar );
-        break;
-        case Color:
-            action->addTo( m_colorMenu );
-            if( toToolBar ) action->addTo( m_colorToolBar );
-        break;
-    }
-}
-
 void QApplicationMainWindow::exportFile( int type )
 {
     switch( type )
@@ -317,7 +292,7 @@ void QApplicationMainWindow::exportToJpeg( )
         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
         out->saveSeries( fileName.toLatin1() );
-        m_exportWorkingDirectory = QFileInfo( fileName ).dirPath();
+        m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
     }
 
 }
@@ -335,7 +310,7 @@ void QApplicationMainWindow::exportToPng( )
         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
         out->saveSeries( fileName.toLatin1() );
-        m_exportWorkingDirectory = QFileInfo( fileName ).dirPath();
+        m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
     }
 }
 
@@ -354,7 +329,7 @@ void QApplicationMainWindow::exportToTiff( )
         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
         out->saveSeries( fileName.toLatin1() );
-        m_exportWorkingDirectory = QFileInfo( fileName ).dirPath();
+        m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
     }
 }
 
@@ -373,7 +348,7 @@ void QApplicationMainWindow::exportToBmp( )
         // aquí caldria recòrrer les llesques per guardar per separat en un fitxer cadascuna
         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
         out->saveSeries( fileName.toLatin1() );
-        m_exportWorkingDirectory = QFileInfo( fileName ).dirPath();
+        m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
     }
 }
 
@@ -390,7 +365,7 @@ void QApplicationMainWindow::exportToMetaIO( )
         Output *out = new Output();
         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
         out->saveFile( fileName.toLatin1() );
-        m_exportWorkingDirectory = QFileInfo( fileName ).dirPath();
+        m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
     }
 }
 
@@ -458,7 +433,7 @@ void QApplicationMainWindow::createMenus()
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
 
-    menuBar()->insertSeparator();
+    menuBar()->addSeparator();
     
     // menú d'ajuda, ara només hi ha els típic abouts  
     m_helpMenu = menuBar()->addMenu(tr("&Help") );
@@ -497,7 +472,7 @@ void QApplicationMainWindow::showProgress( int value )
 void QApplicationMainWindow::newFile()
 {
     QString windowName;    
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) );
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
     newMainWindow->show();
 }
 
@@ -527,9 +502,8 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
     {
         if ( QWidget *mainWin = qobject_cast<QWidget *>( list.at(i) ) )
         {
-            if( mainWin->isA("udg::QApplicationMainWindow") )
+            if( mainWin->metaObject()->className() == "udg::QApplicationMainWindow" )
                 count++;
-                
         }
     }
     return count;

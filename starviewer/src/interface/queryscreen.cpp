@@ -26,7 +26,7 @@
 
 #include "pacsparameters.h"
 #include "pacsconnection.h"
-#include "multquerystudy.h"
+#include "multiplequerystudy.h"
 #include "studylist.h"
 #include "qstudylistview.h"
 #include "series.h"
@@ -416,9 +416,9 @@ void QueryScreen::queryStudyPacs()
     }
     
     
-    multQueryStudy.setPacsList(pacsList); //indiquem a quins Pacs Cercar
-    multQueryStudy.setMask(buildMask()); //construim la mascara
-    if(!multQueryStudy.StartQueries().good())  //fem la query
+    multipleQueryStudy.setPacsList(pacsList); //indiquem a quins Pacs Cercar
+    multipleQueryStudy.setMask(buildMask()); //construim la mascara
+    if(!multipleQueryStudy.StartQueries().good())  //fem la query
     {
         m_StudyLViewPacs->clear();
         QMessageBox::information( this, tr("StarViewer"),tr("ERROR QUERING!."));
@@ -518,7 +518,7 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     int nImages = 0;
 
     
-    state = pacsListDB.queryPacs(&pacs,pacsAETitle.ascii());//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    state = pacsListDB.queryPacs(&pacs, pacsAETitle.toAscii().constData() );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
     if (!state.good())
     {
         databaseError(&state);
@@ -682,7 +682,7 @@ void QueryScreen::retrievePacs(bool view)
         QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to download "));
         return;
     }
-    studyUID.insert(0,m_StudyLViewPacs->getSelectedStudyUID().ascii());
+    studyUID.insert(0,m_StudyLViewPacs->getSelectedStudyUID().toAscii().constData());
     
     if (pool->getFreeTotalSpace()< 1000) //comprovem que tinguem més 1 GB lliure per poder continuar
     {
@@ -718,7 +718,7 @@ void QueryScreen::retrievePacs(bool view)
     mask.setStudyUID(studyUID.c_str());//definim la màscara per descarregar l'estudi
     
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    state = pacsListDB.queryPacs(&pacs,m_StudyLViewPacs->getSelectedStudyPacsAETitle().ascii());
+    state = pacsListDB.queryPacs(&pacs,m_StudyLViewPacs->getSelectedStudyPacsAETitle().toAscii().constData());
     if (!state.good())
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
@@ -730,9 +730,9 @@ void QueryScreen::retrievePacs(bool view)
     m_retrieveScreen->insertNewRetrieve(&m_studyListSingleton->getStudy());      
 
     //emplanem els parametres amb dades del starviewersettings
-    pacs.setAELocal(settings.getAETitleMachine().ascii());
+    pacs.setAELocal(settings.getAETitleMachine().toAscii().constData());
     pacs.setTimeOut(settings.getTimeout().toInt(NULL,10));
-    pacs.setLocalPort(settings.getLocalPort().ascii());
+    pacs.setLocalPort(settings.getLocalPort().toAscii().constData());
     
     //preparem les dades a passar perl thread
     retParam.studyUID=studyUID;
@@ -753,7 +753,7 @@ void QueryScreen::retrievePacs(bool view)
             m_seriesListSingleton->firstSeries();
             rThread.setDefaultSeriesUID(m_seriesListSingleton->getSeries().getSeriesUID());
         }
-        else rThread.setDefaultSeriesUID(m_StudyLViewPacs->getSelectedSeriesUID().ascii());
+        else rThread.setDefaultSeriesUID(m_StudyLViewPacs->getSelectedSeriesUID().toAscii().constData());
     }
     m_threadsList->addThread(rThread);
     this->setCursor(QCursor(Qt::ArrowCursor));
@@ -793,7 +793,7 @@ bool QueryScreen::insertStudyCache(Study stu)
     study.setStudyModality(m_seriesListSingleton->getSeries().getSeriesModality());
     
     //creem el path absolut de l'estudi
-    absPath.insert(0,settings.getCacheImagePath().ascii());
+    absPath.insert(0,settings.getCacheImagePath().toAscii().constData());
     absPath.append(study.getStudyUID());
     absPath.append("/");
     study.setAbsPath(absPath);
@@ -826,9 +826,9 @@ bool QueryScreen::insertSeriesCache(QString studyUID)
 
    if (!m_seriesListSingleton->end())     //Cerquem les sèries de l'estudi per inserir la informació a la bd
    {   
-       if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.ascii()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
+       if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.toAscii().constData()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
        {
-           QuerySeriesPacs(studyUID.ascii(),m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+           QuerySeriesPacs(studyUID.toAscii().constData(),m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
        }
    } 
    
@@ -1008,7 +1008,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     StarviewerSettings settings;
     StudyVolum volum;
         
-    stuMask.setStudyUID(studyUID.ascii());
+    stuMask.setStudyUID(studyUID.toAscii().constData());
     state = localCache->queryStudy(stuMask,stuList); //cerquem la informació de l'estudi
     if (!state.good())
     {   
@@ -1115,7 +1115,7 @@ void QueryScreen::deleteStudyCache()
         case 0:
             
             
-            state = localCache->delStudy(studyUID.ascii());   
+            state = localCache->delStudy(studyUID.toAscii().constData());   
             if (state.good())
             {
                 m_StudyLViewCache->removeStudy(studyUID);
@@ -1184,7 +1184,7 @@ SeriesMask QueryScreen::buildSeriesMask(QString studyUID)
 {
     SeriesMask mask;
 
-    mask.setStudyUID(studyUID);
+    mask.setStudyUID( studyUID.toAscii().constData() );
     mask.setSeriesDate(NULL);
     mask.setSeriesTime(NULL);
     mask.setSeriesModality(NULL);
@@ -1339,7 +1339,7 @@ StudyMask QueryScreen::buildMask()
         {
             modalityMask = modalityMask.replace(0,1,"(");
             modalityMask.append(")");
-            mask.setStudyModality(modalityMask.ascii());
+            mask.setStudyModality(modalityMask.toAscii().constData());
         }
     }
     

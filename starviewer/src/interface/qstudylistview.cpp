@@ -54,7 +54,7 @@ QStudyListView::QStudyListView( QWidget *parent)
     m_closeFolder = QIcon(":/images/folderclose.png");
     m_iconSeries = QIcon(":/images/series.png");
     
-    m_parentName = parent->name();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
+    m_parentName = parent->objectName();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
     
     createPopupMenu();
     createConnections();
@@ -426,11 +426,11 @@ void QStudyListView::setSeriesToIconView(QTreeWidgetItem *item)
         if (item != NULL)
         {
             Series serie;
-            serie.setSeriesUID(child->text(11).ascii());
+            serie.setSeriesUID(child->text(11).toAscii().constData());
             serie.setImageNumber(child->text(13).toInt(NULL,10));
-            serie.setSeriesModality(child->text(4).ascii());
-            serie.setSeriesNumber(child->text(0).remove(tr("Series")).ascii());  
-            serie.setStudyUID(getSelectedStudyUID().ascii());
+            serie.setSeriesModality(child->text(4).toAscii().constData());
+            serie.setSeriesNumber(child->text(0).remove(tr("Series")).toAscii().constData());  
+            serie.setStudyUID(getSelectedStudyUID().toAscii().constData());
             emit(addSeries(&serie));
         }
     }  

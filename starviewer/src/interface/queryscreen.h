@@ -11,7 +11,7 @@
 
 #include "qretrievescreen.h"
 #include <QCloseEvent>
-#include "multquerystudy.h"
+#include "multiplequerystudy.h"
 #include "processimagesingleton.h"
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
@@ -92,7 +92,7 @@ struct retrieveParameters
     ProcessImageSingleton *m_piSingleton;
     QRetrieveScreen *m_retrieveScreen;
     RetrieveThreadsList *m_threadsList;
-    MultQueryStudy multQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
+    MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
     
     //StudyVolum m_volum;
     bool m_PacsListShowed;
