@@ -46,6 +46,13 @@ public:
       bool    getPrevImages();
       bool    getCountImages();
       
+    //interficie
+      void setStudyPacsListColumnWidth(int col,int width);
+      void setStudyCacheListColumnWidth(int col,int width);      
+      
+      int getStudyPacsListColumnWidth(int column);
+      int getStudyCacheListColumnWidth(int column);
+      
 private :
 
     QSettings m_starviewerSettings;

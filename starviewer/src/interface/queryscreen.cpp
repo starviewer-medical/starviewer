@@ -8,7 +8,6 @@
 #include <QString>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <q3datetimeedit.h>
 #include <qlabel.h>
 #include <qdatetime.h>
 
@@ -17,7 +16,6 @@
 #include <qnamespace.h>
 #include <qcursor.h>
 #include <qtabwidget.h>
-#include <q3buttongroup.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
 #include <QCloseEvent>
@@ -26,10 +24,9 @@
 #include "starviewerprocessimage.h"
 #include "processimagesingleton.h"
 
-
 #include "pacsparameters.h"
 #include "pacsconnection.h"
-#include "mulquerystudy.h"
+#include "multquerystudy.h"
 #include "studylist.h"
 #include "qstudylistview.h"
 #include "series.h"
@@ -56,47 +53,36 @@
 namespace udg {
 /** Constuctor de la classe
  */
+/**
+ * 
+ * @param parent 
+ * @return 
+ */
 QueryScreen::QueryScreen( QWidget *parent )
  : QWidget(parent )
 {
     setupUi( this );
+
     Status state;
-    setEnabledModalityChecks(false);
     QString path;
     StarviewerSettings settings;
            
-    CachePacs * localCache;
+    CachePacs * localCache= CachePacs::getCachePacs();
+    m_retrieveScreen = QRetrieveScreen::getQRetrieveScreen();
     
-    localCache = CachePacs::getCachePacs();
+    //connectem signals i slots
+    connectSignalsAndSlots();
+    setEnabledModalityChecks(true);
     
     state = localCache->delPendingStudies();
-    
     if (!state.good()) 
     {
-        queryCacheError(&state);
-        return;
+        databaseError(&state);
     }
-
-
-    //connect(StudyListView, Signal
     
     //indiquem que la llista de Pacs no es mostra
     m_PacsListShowed = false;
         
-    m_retrieveScreen = QRetrieveScreen::getQRetrieveScreen();
-    //Aquest connect s'utilitzarà perque els threads puguin avisar que han finalitzat de descarregar les imatges   
-    connect(m_retrieveScreen, SIGNAL(studyRetrieved(QString)), this, SLOT(studyRetrieved(QString)));
-    //connectem els QStudyListView amb els QSeriesIconView, per poder mantenir la informació de les series actualitzada!
-    connect(StudyLViewPacs,SIGNAL(addSeries(Series * )),SeriesImViewPacs,SLOT(addSeries(Series *)));
-    connect(StudyLViewPacs,SIGNAL(clearIconView()),SeriesImViewPacs,SLOT(clearIconView()));
-    
-    //connectem els signes del SeriesIconView StudyListView
-    connect(StudyLViewCache,SIGNAL(addSeries(Series * )),SeriesImViewCache,SLOT(addSeries(Series *)));
-    connect(StudyLViewCache,SIGNAL(clearIconView()),SeriesImViewCache,SLOT(clearIconView()));    
-    connect(SeriesImViewCache,SIGNAL(selectedSeriesIcon(int)),StudyLViewCache,SLOT(selectedSeriesIcon(int))); 
-    connect(SeriesImViewCache,SIGNAL(viewSeriesIcon()),StudyLViewCache,SLOT(viewStudy())); 
-    connect(StudyLViewCache,SIGNAL(selectedSeriesList(QString)),SeriesImViewCache,SLOT(selectedSeriesList(QString))); 
-    
     //carreguem el processImageSingleton    
     m_piSingleton=ProcessImageSingleton::getProcessImageSingleton();
     m_piSingleton->setPath( settings.getCacheImagePath().toStdString() );
@@ -104,12 +90,92 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_threadsList = RetrieveThreadsList::getRetrieveThreadsList();
     m_threadsList->setMaxThreads(settings.getMaxConnections().toInt(NULL,10));
     
-    qPacsList->setMaximumSize(1,1);
-    centerWindow();
-    
     //Instanciem els llistats
     m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
+
+    qPacsList->setMaximumSize(1,1);//amaguem al finestra del QPacsList
+    centerWindow(); //centrem la finestra
+}
+
+/**
+ * 
+ */
+void QueryScreen::connectSignalsAndSlots()
+{
+    //connectem els butons
+    connect(m_buttonConfig, SIGNAL(clicked()), this, SLOT(config()));
+    connect(m_buttonSearch, SIGNAL(clicked()), this, SLOT(search()));
+    connect(m_buttonToday, SIGNAL(clicked()), this, SLOT(searchToday()));
+    connect(m_buttonYesterday, SIGNAL(clicked()), this, SLOT(searchYesterday()));
+    connect(m_buttonClear, SIGNAL(clicked()), this, SLOT(clearTexts()));
+    connect(m_buttonRetrieve, SIGNAL(clicked()), this, SLOT(retrieve()));
+    connect(m_buttonRetrieveList, SIGNAL(clicked()), this, SLOT(showRetrieveScreen()));
+    connect(m_buttonShowPacsList, SIGNAL(clicked()), this, SLOT(showPacsList()));
+    connect(m_buttonView, SIGNAL(clicked()), this, SLOT(view()));
+    
+    //connectem Slots dels StudyList amb la interficie
+    connect(m_StudyLViewPacs, SIGNAL(expand(QString,QString)), this, SLOT(searchSeries(QString,QString)));
+    connect(m_StudyLViewCache, SIGNAL(expand(QString,QString)), this, SLOT(searchSeries(QString,QString)));
+    
+    //es canvia de pestanya del TAB
+    connect(m_tab, SIGNAL(currentChanged(int)),this, SLOT(tabChanged(int)));
+    
+    //connectem els checkbox de les dates
+    connect(m_checkFrom, SIGNAL(stateChanged(int)), this, SLOT(setEnabledTextFrom(int)));
+    connect(m_checkTo, SIGNAL(stateChanged(int)), this, SLOT(setEnabledTextTo(int)));
+    
+    //lineedit al fer entrer que cerquin    
+    connect(m_textPatientID, SIGNAL(returnPressed()), this, SLOT(search()));
+    connect(m_textLastName, SIGNAL(returnPressed()), this, SLOT(search()));
+    connect(m_textFirstName, SIGNAL(returnPressed()), this, SLOT(search()));
+    connect(m_textStudyID, SIGNAL(returnPressed()), this, SLOT(search()));
+    connect(m_textAccessionNumber, SIGNAL(returnPressed()), this, SLOT(search()));
+    
+    //checkbox
+    connect(m_checkAll, SIGNAL(clicked()),this, SLOT(clearCheckedModality()));
+    connect(m_checkCT, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkCR, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkDX, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkES, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkMG, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkMR, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkNM, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkDT, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkPT, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkRF, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkSC, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkUS, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    connect(m_checkXA, SIGNAL(clicked()),this, SLOT(setCheckAll()));
+    
+    //conectem els sinals dels TreeView
+    
+    connect(m_StudyLViewCache, SIGNAL(delStudy()),this, SLOT(deleteStudyCache()));
+    connect(m_StudyLViewCache, SIGNAL(view()), this, SLOT(view()));
+    
+    
+    //Aquest connect s'utilitzarà perque els threads puguin avisar que han finalitzat de descarregar les imatges   
+    connect(m_retrieveScreen, SIGNAL(studyRetrieved(QString)), this, SLOT(studyRetrieved(QString)));
+    
+    //connectem els QStudyListView amb els QSeriesIconView, per poder mantenir la informació de les series actualitzada!
+    connect(m_StudyLViewPacs,SIGNAL(addSeries(Series * )),m_SeriesImViewPacs,SLOT(addSeries(Series *)));
+    connect(m_StudyLViewPacs,SIGNAL(clearIconView()),m_SeriesImViewPacs,SLOT(clearIconView()));
+    connect(m_SeriesImViewPacs,SIGNAL(selectedSeriesIcon(QString)),m_StudyLViewPacs,SLOT(selectedSeriesIcon(QString))); 
+    connect(m_SeriesImViewPacs,SIGNAL(viewSeriesIcon()),m_StudyLViewPacs,SLOT(viewStudy())); 
+    connect(m_StudyLViewPacs,SIGNAL(selectedSeriesList(QString)),m_SeriesImViewPacs,SLOT(selectedSeriesList(QString))); 
+    
+    //connectem els signes del SeriesIconView StudyListView
+    connect(m_StudyLViewCache,SIGNAL(addSeries(Series * )),m_SeriesImViewCache,SLOT(addSeries(Series *)));
+    connect(m_StudyLViewCache,SIGNAL(clearIconView()),m_SeriesImViewCache,SLOT(clearIconView()));    
+    connect(m_SeriesImViewCache,SIGNAL(selectedSeriesIcon(QString)),m_StudyLViewCache,SLOT(selectedSeriesIcon(QString))); 
+    connect(m_SeriesImViewCache,SIGNAL(viewSeriesIcon()),m_StudyLViewCache,SLOT(viewStudy())); 
+    connect(m_StudyLViewCache,SIGNAL(selectedSeriesList(QString)),m_SeriesImViewCache,SLOT(selectedSeriesList(QString))); 
+    
+    //per netejar la QSeriesIconView quant s'esborrar un estudi
+    connect(this,SIGNAL(clearIconView()),m_SeriesImViewCache,SLOT(clearIconView()));
+
+
+    connect(m_StudyLViewPacs, SIGNAL(retrieve()), this, SLOT(retrieve()));
 }
 
 /** Centra la finestra a la pantalla
@@ -136,23 +202,23 @@ void QueryScreen::clearTexts()
     m_checkTo->setChecked(false);
     m_checkFrom->setChecked(false);
     
-    setEnabledTextTo();
-    setEnabledTextFrom();
+    setEnabledTextTo(m_checkTo->isChecked());
+    setEnabledTextFrom(m_checkFrom->isChecked());
     
 }
 
 /** Activa o desactiva els text i el label de la data fins
   */
-void QueryScreen::setEnabledTextTo()
+void QueryScreen::setEnabledTextTo(int value)
 {
-    m_textTo->setEnabled(m_checkTo->isChecked());
+    m_textTo->setEnabled(value);
 }
 
 /** Activa o desactiva el text de la data desde
   */
-void QueryScreen::setEnabledTextFrom()
+void QueryScreen::setEnabledTextFrom(int value)
 {
-    m_textFrom->setEnabled(m_checkFrom->isChecked());
+    m_textFrom->setEnabled(value);
 }
 
 /** Activa o desactiva els checkbox per buscar per modalitat
@@ -174,9 +240,9 @@ void QueryScreen::setEnabledModalityChecks(bool enabled)
     m_checkUS->setEnabled(enabled);
     m_checkXA->setEnabled(enabled);
     
-    buttonGroupModality->setEnabled(enabled);
+    m_buttonGroupModality->setEnabled(enabled);
     
-    clearCheckedModality();
+    //clearCheckedModality();
 }
 
 /** Posa a verdader o fals tots els check modality, i deixa a true el all a true
@@ -283,7 +349,7 @@ void QueryScreen::search()
     
     this->setCursor(QCursor(Qt::WaitCursor));
     
-    if (m_Tab->currentIndex()==1)
+    if (m_tab->currentIndex()==1)
     {
         //if (!validateNoEmptyMask())
         if (1==2)
@@ -349,33 +415,28 @@ void QueryScreen::queryStudyPacs()
         return;      
     }
     
-    MulQueryStudy mulQueryStudy(settings.getMaxConnections().toInt(NULL,10));//Establim el nombre màxim de threads   
-  
-    mulQueryStudy.setPacsList(pacsList); //indiquem a quins Pacs Cercar
-    mulQueryStudy.setMask(buildMask()); //construim la mascara
-   
-    if(!mulQueryStudy.StartQueries().good())  //fem la query
+    
+    multQueryStudy.setPacsList(pacsList); //indiquem a quins Pacs Cercar
+    multQueryStudy.setMask(buildMask()); //construim la mascara
+    if(!multQueryStudy.StartQueries().good())  //fem la query
     {
-        StudyLViewPacs->clear();
+        m_StudyLViewPacs->clear();
         QMessageBox::information( this, tr("StarViewer"),tr("ERROR QUERING!."));
         return;  
     }
-    
-    //m_studyListSingleton=mulQueryStudy.getStudyList(); //agafem la llista 
+     
       
-    SeriesImViewPacs->clear(); //netegem el QSeriesIconView dem_studyListSingleton PACS
+    m_SeriesImViewPacs->clear(); //netegem el QSeriesIconView dem_studyListSingleton PACS
     m_studyListSingleton->firstStudy();
        
     if (m_studyListSingleton->end())
     {
-        StudyLViewPacs->clear();        
+        m_StudyLViewPacs->clear();        
         QMessageBox::information( this, tr("StarViewer"),tr("No study match found."));
         return;
     }
-    
-    StudyLViewPacs->showStudyList(m_studyListSingleton); //fem que es visualitzi l'studyView seleccionat
-    
-    StudyLViewPacs->setSortColumn(2);//ordenem pel nom
+    m_StudyLViewPacs->insertStudyList(m_studyListSingleton); //fem que es visualitzi l'studyView seleccionat
+    m_StudyLViewPacs->setSortColumn(2);//ordenem pel nom
     
     
 }
@@ -389,7 +450,7 @@ void QueryScreen::queryStudyCache()
     
     localCache = CachePacs::getCachePacs();
 
-    SeriesImViewCache->clear();
+    m_SeriesImViewCache->clear();
     
     m_studyListCache.clear();
     
@@ -397,8 +458,8 @@ void QueryScreen::queryStudyCache()
 
     if (!state.good()) 
     {
-        StudyLViewCache->clear();
-        queryCacheError(&state);
+        m_StudyLViewCache->clear();
+        databaseError(&state);
         return;
     }
     
@@ -406,14 +467,14 @@ void QueryScreen::queryStudyCache()
 
     if (m_studyListCache.end()) //no hi ha estudis
     {
-        StudyLViewCache->clear();
+        m_StudyLViewCache->clear();
         QMessageBox::information( this, tr("StarViewer"),tr("No study match found."));
         return;
     }
     
-    StudyLViewCache->showStudyList(&m_studyListCache);//es mostra la llista d'estudis
+    m_StudyLViewCache->insertStudyList(&m_studyListCache);//es mostra la llista d'estudis
     
-    StudyLViewCache->setSortColumn(2); //ordenem pel nom
+    m_StudyLViewCache->setSortColumn(2); //ordenem pel nom
 }
 
 /**Busca la informació d'una sèrie
@@ -426,13 +487,13 @@ void QueryScreen::searchSeries(QString studyUID,QString pacsAETitle)
   
     this->setCursor(QCursor(Qt::WaitCursor));
     
-    SeriesImViewPacs->clear(); //Netegem el QSeriesIconView del Pacs
+    m_SeriesImViewPacs->clear(); //Netegem el QSeriesIconView del Pacs
     
-    if (m_Tab->currentIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
+    if (m_tab->currentIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
     {
         QuerySeriesPacs(studyUID,pacsAETitle,true);
     }
-    else if (m_Tab->currentIndex() == 0) // si estem a la pestanya de la cache
+    else if (m_tab->currentIndex() == 0) // si estem a la pestanya de la cache
     {
         QuerySeriesCache(studyUID);
     }
@@ -460,7 +521,7 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     state = pacsListDB.queryPacs(&pacs,pacsAETitle.ascii());//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
     if (!state.good())
     {
-        queryCacheError(&state);
+        databaseError(&state);
         return;
     }
 
@@ -497,7 +558,7 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     
     m_seriesListSingleton->firstSeries();
     
-    if (show)  SeriesImViewPacs->clear();
+    if (show)  m_SeriesImViewPacs->clear();
     
     while (!m_seriesListSingleton->end())
     {
@@ -517,7 +578,7 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
         }
         if (show)
         {
-            StudyLViewPacs->insertSeries(&serie);//inserim la informació de les imatges al formulari
+            m_StudyLViewPacs->insertSeries(&serie);//inserim la informació de les imatges al formulari
  
         }
         m_seriesListSingleton->nextSeries();
@@ -544,7 +605,7 @@ void QueryScreen::QuerySeriesCache(QString studyUID)
     
     if (!state.good())
     {
-        queryCacheError(&state);
+        databaseError(&state);
         return;
     }
     
@@ -556,7 +617,7 @@ void QueryScreen::QuerySeriesCache(QString studyUID)
     }
     
     m_seriesListCache.firstSeries();
-    SeriesImViewCache->clear();
+    m_SeriesImViewCache->clear();
     
     while (!m_seriesListCache.end())
     {
@@ -570,10 +631,10 @@ void QueryScreen::QuerySeriesCache(QString studyUID)
         serie.setImageNumber(imagesNumber);
         if (!state.good())
         {
-            queryCacheError(&state);
+            databaseError(&state);
             return;
         }
-        StudyLViewCache->insertSeries(&serie);//inserim la informació de les imatges al formulari
+        m_StudyLViewCache->insertSeries(&serie);//inserim la informació de les imatges al formulari
         m_seriesListCache.nextSeries();
     }   
 }
@@ -615,13 +676,13 @@ void QueryScreen::retrievePacs(bool view)
     CachePool *pool = CachePool::getCachePool();
     
     this->setCursor(QCursor(Qt::WaitCursor));
-    if (StudyLViewPacs->getSelectedStudyUID() == "")
+    if (m_StudyLViewPacs->getSelectedStudyUID() == "")
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to download "));
         return;
     }
-    studyUID.insert(0,StudyLViewPacs->getSelectedStudyUID().ascii());
+    studyUID.insert(0,m_StudyLViewPacs->getSelectedStudyUID().ascii());
     
     if (pool->getFreeTotalSpace()< 1000) //comprovem que tinguem més 1 GB lliure per poder continuar
     {
@@ -657,11 +718,11 @@ void QueryScreen::retrievePacs(bool view)
     mask.setStudyUID(studyUID.c_str());//definim la màscara per descarregar l'estudi
     
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    state = pacsListDB.queryPacs(&pacs,StudyLViewPacs->getSelectedStudyPacsAETitle().ascii());
+    state = pacsListDB.queryPacs(&pacs,m_StudyLViewPacs->getSelectedStudyPacsAETitle().ascii());
     if (!state.good())
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
-        queryCacheError(&state);
+        databaseError(&state);
         return;
     }
 
@@ -686,13 +747,13 @@ void QueryScreen::retrievePacs(bool view)
     if (view)
     {
         //si ens han indicat que volen visualitzar una serie en concret definim el seu UID
-        if (StudyLViewPacs->getSelectedSeriesUID() == "")
+        if (m_StudyLViewPacs->getSelectedSeriesUID() == "")
         {
             // si no han escollit cap serie visaualizem la primera per defecte
             m_seriesListSingleton->firstSeries();
             rThread.setDefaultSeriesUID(m_seriesListSingleton->getSeries().getSeriesUID());
         }
-        else rThread.setDefaultSeriesUID(StudyLViewPacs->getSelectedSeriesUID().ascii());
+        else rThread.setDefaultSeriesUID(m_StudyLViewPacs->getSelectedSeriesUID().ascii());
     }
     m_threadsList->addThread(rThread);
     this->setCursor(QCursor(Qt::ArrowCursor));
@@ -719,12 +780,12 @@ bool QueryScreen::insertStudyCache(Study stu)
    {   
        if (m_seriesListSingleton->getSeries().getStudyUID()!=study.getStudyUID()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
        {
-            QuerySeriesPacs( study.getStudyUID().c_str() ,StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+            QuerySeriesPacs( study.getStudyUID().c_str() ,m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
 
        }
    }
    else
-        QuerySeriesPacs(study.getStudyUID().c_str() ,StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+        QuerySeriesPacs(study.getStudyUID().c_str() ,m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
     
     
     //establim la modalitat de l'estudi
@@ -740,7 +801,11 @@ bool QueryScreen::insertStudyCache(Study stu)
     state = localCache->insertStudy(&study); 
     if (!state.good())
     {   
-        retrieveErrorInsertStudy(&state);
+        if (state.code() == 2019)
+        {
+            QMessageBox::warning( this, tr("StarViewer"),tr("The study has been retrieved."));
+        }
+        else databaseError(&state);
         return false;
     }
    
@@ -763,7 +828,7 @@ bool QueryScreen::insertSeriesCache(QString studyUID)
    {   
        if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.ascii()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
        {
-           QuerySeriesPacs(studyUID.ascii(),StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+           QuerySeriesPacs(studyUID.ascii(),m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
        }
    } 
    
@@ -774,7 +839,7 @@ bool QueryScreen::insertSeriesCache(QString studyUID)
        state = localCache->insertSeries(&m_seriesListSingleton->getSeries());
        if (!state.good())
        {
-           retrieveErrorInsertSeries(&state);
+           databaseError(&state);
            return false;
        }
        m_seriesListSingleton->nextSeries();
@@ -876,20 +941,20 @@ void QueryScreen::studyRetrieved(QString studyUID)
 /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
   *        @param QWidget (no es fa servir)
   */
-void QueryScreen::tabChanged(QWidget *)
+void QueryScreen::tabChanged(int index)
 {
 
-    if (m_Tab->currentIndex()!=0)
+    if (index != 0)
     {
         setEnabledModalityChecks(false);//desactivem el grup button de modalitat
-        buttonRetrieve->setEnabled(true);//activem el boto retrieve
-        buttonView->setEnabled(true);
+        m_buttonRetrieve->setEnabled(true);//activem el boto retrieve
+        m_buttonView->setEnabled(true);
     }
     else 
     {
         setEnabledModalityChecks(true);//activem el grup button de motalitat
-        buttonRetrieve->setEnabled(false);//desactivem el boto retrieve
-        buttonView->setEnabled(true);
+        m_buttonRetrieve->setEnabled(false);//desactivem el boto retrieve
+        m_buttonView->setEnabled(true);
     }
 
 }
@@ -900,7 +965,7 @@ void QueryScreen::tabChanged(QWidget *)
 void QueryScreen::view()
 {
        
-    if (m_Tab->currentIndex() == 1)
+    if (m_tab->currentIndex() == 1)
     {
         switch( QMessageBox::information( this, tr("Starviewer"),
 				      tr("Are you sure you want to retrieve this Study ?"),
@@ -911,9 +976,9 @@ void QueryScreen::view()
             retrievePacs(true);
         }
     }
-    else if (m_Tab->currentIndex()==0)
+    else if (m_tab->currentIndex() == 0)
     {
-        retrieveCache(StudyLViewCache->getSelectedStudyUID(),StudyLViewCache->getSelectedSeriesUID());
+        retrieveCache(m_StudyLViewCache->getSelectedStudyUID(),m_StudyLViewCache->getSelectedSeriesUID());
     }
     
 
@@ -946,8 +1011,8 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     stuMask.setStudyUID(studyUID.ascii());
     state = localCache->queryStudy(stuMask,stuList); //cerquem la informació de l'estudi
     if (!state.good())
-    {
-        queryCacheError(&state);
+    {   
+        databaseError(&state);
         return;
     }
     
@@ -973,7 +1038,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     localCache->querySeries(mask,seriesList);
     if (!state.good())
     {
-        queryCacheError(&state);
+        databaseError(&state);
         return;
     }
         
@@ -1005,7 +1070,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
 
         if (!state.good())
         {
-            queryCacheError(&state);
+            databaseError(&state);
             return;
         }       
   
@@ -1034,7 +1099,7 @@ void QueryScreen::deleteStudyCache()
     QString studyUID;
     
     
-    studyUID = StudyLViewCache->getSelectedStudyUID();
+    studyUID = m_StudyLViewCache->getSelectedStudyUID();
     
     if (studyUID=="")
     {
@@ -1042,24 +1107,37 @@ void QueryScreen::deleteStudyCache()
         return;    
     }
     
-    state = localCache->delStudy(studyUID.ascii());   
-    if (state.good())
+    switch( QMessageBox::information( this, tr("Starviewer"),
+				      tr("Are you sure you want to delete this Study ?"),
+				      tr("Yes"), tr("No"),
+				      0, 1 ) ) 
     {
-        StudyLViewCache->removeStudy(studyUID);
+        case 0:
+            
+            
+            state = localCache->delStudy(studyUID.ascii());   
+            if (state.good())
+            {
+                m_StudyLViewCache->removeStudy(studyUID);
+                emit(clearIconView());//Aquest signal es recollit per qSeriesIconView
+            }
+            else
+            {
+                databaseError(&state);
+            }
     }
-    else
-    {
-        databaseError(&state);
-    }
+
 }
 
 void QueryScreen::closeEvent( QCloseEvent* ce )
 {
 	//ce->ignore();
+	m_StudyLViewPacs->saveColumnsWidth();
+	m_StudyLViewCache->saveColumnsWidth();
         ce->accept();        
 }
 
-void QueryScreen::temporal()
+void QueryScreen::showRetrieveScreen()
 {
     m_retrieveScreen->show();
 }
@@ -1084,12 +1162,14 @@ void QueryScreen::showPacsList()
     {   qPacsList->setFixedSize(200,240);
         mida = 200 + 20;
         m_PacsListShowed = true;
+        m_buttonShowPacsList->setText(tr("Hide Pacs List"));
     }
     else
     {
         qPacsList->setFixedSize(1,1);
         mida = -( 200 + 20);
         m_PacsListShowed = false;
+        m_buttonShowPacsList->setText(tr("Show Pacs List"));
     }
     
    this->resize(this->width() + mida,this->height());

@@ -11,8 +11,7 @@
 
 #include "qretrievescreen.h"
 #include <QCloseEvent>
-
-#include "mulquerystudy.h"
+#include "multquerystudy.h"
 #include "processimagesingleton.h"
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
@@ -37,20 +36,15 @@ public:
 public slots:
     void clearTexts();
     
-    void setEnabledTextTo();
-    void setEnabledTextFrom();
-    void setEnabledModalityChecks(bool);
-    void clearCheckedModality();
-    
     void searchToday();
     void searchYesterday();
     void search();
     
     void searchSeries(QString,QString);
-    void tabChanged(QWidget *);
+    void tabChanged(int index);
     void retrieve();
 
-    void temporal();
+    void showRetrieveScreen();
     void view();
     void config();
     void showPacsList();
@@ -61,11 +55,18 @@ public slots:
     void setCheckAll();
     
     void dateFromChanged(const QDate &);
+    
+    void setEnabledTextTo(int);
+    void setEnabledTextFrom(int);
+    
+    
+    void clearCheckedModality();
    
 
 
 signals :
     void viewStudy(StudyVolum );
+    void clearIconView();
 
     void prova();
 
@@ -91,10 +92,15 @@ struct retrieveParameters
     ProcessImageSingleton *m_piSingleton;
     QRetrieveScreen *m_retrieveScreen;
     RetrieveThreadsList *m_threadsList;
+    MultQueryStudy multQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
+    
     //StudyVolum m_volum;
     bool m_PacsListShowed;
     
+
+    void setEnabledModalityChecks(bool);
     
+    void connectSignalsAndSlots();    
     void setEnabledDates(bool);
 
     SeriesMask buildSeriesMask(QString);
@@ -116,9 +122,6 @@ struct retrieveParameters
     void QuerySeriesCache(QString);
     
     //ERRORS
-    void retrieveErrorInsertStudy(Status *state);
-    void retrieveErrorInsertSeries(Status *state);
-    void queryCacheError(Status *state);
     void databaseError(Status *state);
     static void *retrieveImages(void *);
     void centerWindow();

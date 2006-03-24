@@ -32,6 +32,7 @@ public:
      
      sqlite * getConnection();
      
+     bool connected();
      void getLock();
      void releaseLock();
         
@@ -42,7 +43,6 @@ private :
     sem_t *m_databaseLock;
     
     std::string m_databasePath;
-    bool  m_ConnectionOpened;
     
     void closeDB(); 
     void connectDB();

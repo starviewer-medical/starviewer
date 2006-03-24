@@ -17,17 +17,18 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include <QHeaderView>
+#include <QContextMenuEvent>
+#include <QMessageBox>
+
 #include "qstudylistview.h"
-//Added by qt3to4:
-#include <Q3PopupMenu>
 #include "study.h"
-#include <q3listview.h>
-#include <qpixmap.h>
-#include <qimage.h>
 #include "qseriesiconview.h"
 #include "pacslistdb.h"
 #include "cachepacs.h"
-#include <qmessagebox.h>
+#include "starviewersettings.h"
+
 
 
 namespace udg {
@@ -36,66 +37,99 @@ namespace udg {
 
 /** Constructor de la classe
   */
-QStudyListView::QStudyListView( QWidget *parent , const char * name )
+QStudyListView::QStudyListView( QWidget *parent)
  : QWidget( parent )
 {
     setupUi( this );
-    int i;
     
-    StudyListV->setRootIsDecorated(false);
+    m_studyTreeView->setRootIsDecorated(false);
     
     //la columna de UID i AETITLE les fem invisibles, i li indiquem que no poden canvia de tamany automàticament
-    StudyListV->setColumnWidth(10,0);
-    StudyListV->setColumnWidth(11,0);
-    StudyListV->setColumnWidth(12,0);
-    StudyListV->setColumnWidth(13,0);
+    m_studyTreeView->setColumnHidden(10,true);
+    m_studyTreeView->setColumnHidden(11,true);
+    m_studyTreeView->setColumnHidden(12,true);
+    m_studyTreeView->setColumnHidden(13,true);
     
-    //Les columnes del Listview només es poden canviar de mida per si soles
-    for (i=0;i<=StudyListV->columns();i++)
+    m_openFolder = QIcon(":/images/folderopen.png");
+    m_closeFolder = QIcon(":/images/folderclose.png");
+    m_iconSeries = QIcon(":/images/series.png");
+    
+    m_parentName = parent->name();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
+    
+    createPopupMenu();
+    createConnections();
+   
+    setWidthColumns();
+    
+}
+
+void QStudyListView::createConnections()
+{
+    connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(expand(QTreeWidgetItem *,int)));
+    connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(clicked(QTreeWidgetItem *,int)));
+    
+}
+
+/** Creem el popup Menu, en funcio de a quin tab pertany activa unes o altres opcions del menu
+  */
+void QStudyListView::createPopupMenu()
+{
+    
+    QAction *view = m_popUpMenu.addAction(tr("&View"));
+    
+    view->setShortcut(Qt::CTRL+Qt::Key_W);
+    QAction *retrieve = m_popUpMenu.addAction(tr("&Retrieve"));
+    retrieve->setShortcut(Qt::CTRL+Qt::Key_R);
+    m_popUpMenu.addSeparator();
+    QAction *deleteStudy =  m_popUpMenu.addAction(tr("&Delete"));
+    deleteStudy->setShortcut(Qt::CTRL+Qt::Key_D);
+      
+    connect(view, SIGNAL(triggered()), this, SLOT(viewStudy()));
+    connect(retrieve, SIGNAL(triggered()), this, SLOT(retrieveStudy()));
+    connect(deleteStudy, SIGNAL(triggered()), this, SLOT(deleteStudy()));
+      
+    if (m_parentName == "m_tabPacs")
+    { 
+        deleteStudy->setEnabled(false);       
+        view->setEnabled(false);
+    }   
+   
+    if (m_parentName == "m_tabCache")
     {
-        StudyListV->setColumnWidthMode(i,Q3ListView::Manual); 
+        retrieve->setEnabled(false);
+    }
+}
+
+/** Assigna l'ampla a les columnes segons els paràmetres guardats a StarviewerSettings
+  */
+void QStudyListView::setWidthColumns()
+{    
+    StarviewerSettings settings;
+
+    if (m_parentName == "m_tabPacs")
+    { 
+        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        {
+            m_studyTreeView->header()->resizeSection(i,settings.getStudyPacsListColumnWidth(i));
+        }    
+    }   
+   
+    if (m_parentName == "m_tabCache")
+    {
+        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        {
+            m_studyTreeView->header()->resizeSection(i,settings.getStudyCacheListColumnWidth(i));
+        }      
     }
 
-    m_openFolder = QPixmap(":/images/folderopen.png");
-    m_closeFolder = QPixmap(":/images/folderclose.png");
-    m_iconSeries = QPixmap(":/images/series.png");
-    
-    createPopupMenu( name );
 }
-
-/** Creem el popup Menu
-  *        @param nom de l'objecte 
-  */
-void QStudyListView::createPopupMenu(QString nom)
-{
-    int idRet,idDel,idView;
-    
-    m_popupMenu = new Q3PopupMenu( this );
-    idView = m_popupMenu->insertItem(tr("&View"),  this, SLOT(viewStudy()), Qt::CTRL+Qt::Key_W );
-    idRet = m_popupMenu->insertItem(tr("&Retrieve"),this, SLOT(retrieveStudy()), Qt::CTRL+Qt::Key_R);
-    m_popupMenu->insertSeparator();
-    idDel = m_popupMenu->insertItem(tr("&Delete"),this, SLOT(deleteStudy()), Qt::CTRL+Qt::Key_D);
-    m_oldPacsAETitle = "";
-      
-   if (nom=="StudyLViewPacs")
-   { 
-       m_popupMenu->setItemEnabled(idDel,false);       
-       m_popupMenu->setItemEnabled(idView,false);
-   }
-   
-   if (nom=="StudyLViewCache")
-   {
-       m_popupMenu->setItemEnabled(idRet,false);
-   }
-}
-
 /** Mostra l'estudi pel ListView que se li passa per paràmetre
   *        @param StudyList a mostrar
   */
-void QStudyListView::showStudyList(StudyList *ls)
+void QStudyListView::insertStudyList(StudyList *ls)
 {
 
-    StudyListV->clear();
+    m_studyTreeView->clear();
 
     ls->firstStudy();
     
@@ -114,12 +148,12 @@ void QStudyListView::insertStudy(Study *stu)
 
     QString text;
     Status state;
-
-    Q3ListViewItem* item = new Q3ListViewItem(StudyListV);
+    
+    QTreeWidgetItem* item = new QTreeWidgetItem(m_studyTreeView);
     text.truncate(0);
-    text.append("Study ");
+    text.append(tr("Study"));
     text.append(stu->getStudyId().c_str() );
-    item->setPixmap(0,m_closeFolder);
+    item->setIcon(0,m_closeFolder);
     item->setText(0,text);
     item->setText(1,stu->getPatientId().c_str() );
     item->setText(2,formatName(stu->getPatientName()));
@@ -128,7 +162,6 @@ void QStudyListView::insertStudy(Study *stu)
     item->setText(5,stu->getStudyDescription().c_str() );
     item->setText(6,formatDate(stu->getStudyDate()));
     item->setText(7,formatHour(stu->getStudyTime()));
-    
     if (stu->getInstitutionName() == "") //si la informació ve buida l'anem a buscar a la bdd local
     {
         if (m_oldPacsAETitle != stu->getPacsAETitle()) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
@@ -152,7 +185,7 @@ void QStudyListView::insertStudy(Study *stu)
     item->setText(11,stu->getStudyUID().c_str() );
     item->setText(12,"STUDY");//indiquem de que es tracta d'un estudi
     item->setText(13,"");
-    StudyListV->clearSelection();
+    m_studyTreeView->clearSelection();
 
 }
 
@@ -164,29 +197,25 @@ void QStudyListView::insertSeries(Series *serie)
     
     QString text;
   
-    Q3ListViewItem* item = new Q3ListViewItem(StudyListV->currentItem());
+    QTreeWidgetItem* item = new QTreeWidgetItem(m_studyTreeView->currentItem());
     text.truncate(0);
     text.append(tr("Series "));
     text.append(serie->getSeriesNumber().c_str() );
-    item->setPixmap(0,m_iconSeries); 
+    item->setIcon(0,m_iconSeries); 
     item->setText(0,text);
-    //item->setText(1,formatName(stu.getPatientName()));
-    //item->setText(2,formatAge(stu.getPatiFentAge()));
     item->setText(4,serie->getSeriesModality().c_str() );
     
-    
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
-    if (serie->getSeriesDate().length()!=0)
+    if (serie->getSeriesDate().length() != 0)
     {
         item->setText(6,formatDate(serie->getSeriesDate()));
     }
         
-    if (serie->getSeriesTime().length()!=0)
+    if (serie->getSeriesTime().length()!= 0)
     {
         item->setText(7,formatHour(serie->getSeriesTime()));
     }
-   // item->setText(6,stu.getInstitutionName());
-    //item->setText(7,stu.getPacsAETitle());
+    
     item->setText(11,serie->getSeriesUID().c_str() );   
     item->setText(12,"SERIES"); //indiquem que es tracta d'una sèrie 
     text.truncate(0);
@@ -195,7 +224,6 @@ void QStudyListView::insertSeries(Series *serie)
     
     emit(addSeries(serie));//afegim serie al SeriesIconView
     
-    //item->setSelectable(false);
 }
 
 /** formata l'edat per mostrar per pantalla
@@ -205,11 +233,14 @@ QString QStudyListView::formatAge(const std::string age)
 {
     QString text( age.c_str() );
     
-    if (text.at(0)== '0') 
-    {//treiem el 0 de davant els anys, el PACS envia per ex: 047Y nosaltes tornem 47Y
-        text.replace(0,1," ");
-    } 
-    
+    if (text.length() > 0)
+    {
+        if (text.at(0) == '0') 
+        {//treiem el 0 de davant els anys, el PACS envia per ex: 047Y nosaltes tornem 47Y
+            text.replace(0,1," ");
+        } 
+    }
+        
     return text;
 }
 
@@ -259,7 +290,7 @@ QString QStudyListView::formatHour(const std::string hour)
   */
 void QStudyListView::clear()
 {
-    StudyListV->clear();
+    m_studyTreeView->clear();
 }
 
 
@@ -268,8 +299,8 @@ void QStudyListView::clear()
   */
 void QStudyListView::setSortColumn(int col)
 {
-    StudyListV->setSortColumn(col);
-    StudyListV->clearSelection();
+    m_studyTreeView->sortItems(col,Qt::AscendingOrder);
+    m_studyTreeView->clearSelection();
 }
 
 
@@ -278,17 +309,17 @@ void QStudyListView::setSortColumn(int col)
   */
 QString QStudyListView::getSelectedStudyUID()
 {
-    Q3ListViewItem *item;
+    QTreeWidgetItem *item;
 
-    if (StudyListV->currentItem()!=NULL) 
+    if (m_studyTreeView->currentItem() != NULL) 
     {
-        if (StudyListV->currentItem()->depth()==0) //es un estudi
+        if (m_studyTreeView->currentItem()->parent() == NULL) //es un estudi
         {
-            return StudyListV->currentItem()->text(11);   
+            return m_studyTreeView->currentItem()->text(11);   
         }
         else
         {
-            item = StudyListV->currentItem()->parent();
+            item = m_studyTreeView->currentItem()->parent();
             return item->text(11);
         }
     }
@@ -302,11 +333,11 @@ QString QStudyListView::getSelectedStudyUID()
 QString QStudyListView::getSelectedSeriesUID()
 {
 
-    if (StudyListV->currentItem()!=NULL) 
+    if (m_studyTreeView->currentItem() != NULL) 
     {
-        if (StudyListV->currentItem()->depth()==1) //es un estudi
+        if (m_studyTreeView->currentItem()->parent() != NULL) //es un serie
         {
-            return StudyListV->currentItem()->text(11);   
+            return m_studyTreeView->currentItem()->text(11);   
         }
         else
         {
@@ -322,16 +353,17 @@ QString QStudyListView::getSelectedSeriesUID()
   */
 QString QStudyListView::getSelectedStudyPacsAETitle()
 {
-   Q3ListViewItem * item;
-   if (StudyListV->currentItem()==NULL) return "";
+   QTreeWidgetItem * item;
+   
+   if (m_studyTreeView->currentItem() == NULL) return "";
     
-   if (StudyListV->currentItem()->depth()==0)
+   if (m_studyTreeView->currentItem()->parent() == NULL)
    {
-       return StudyListV->currentItem()->text(10);
+       return m_studyTreeView->currentItem()->text(10);
    }
    else 
-   {
-       item = StudyListV->currentItem()->parent();
+   {  
+       item = m_studyTreeView->currentItem()->parent();
        return item->text(10);
    }
 }
@@ -339,45 +371,36 @@ QString QStudyListView::getSelectedStudyPacsAETitle()
 //SLOT CONNECTAT AMB EL SIGNAL D'UN CLICK
 /**al fer un click mostra les sèries d'un estudi,
   *            @param Item element del listview
-  *            @param point on s'ha fet el click
   *            @param columna a la qual s'ha clickat
   */
-void QStudyListView::expand(Q3ListViewItem * item,const QPoint &,int col)
+void QStudyListView::expand(QTreeWidgetItem * item,int col)
 {
 
     if (item==NULL) return;
 
     if (col == 0) //aquesta posicio fan click a la carpeta, per tant despleguem o pleguem!
     {
-        if (!item->isOpen())
+        if (!m_studyTreeView->isItemExpanded(item))
         {    
             if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
             {
-                item->setOpen(true);
-                item->setPixmap(0,m_openFolder); 
+                m_studyTreeView->setItemExpanded(item,true);
+                item->setIcon(0,m_openFolder); 
                 if (item->childCount()==0) //si abans hem consultat le seria ja hi tenim la seva informació, evitem d'haver de consultar el pacs cada vegada
                 {
-                    emit(click(item->text(11),item->text(10)));
+                    emit(expand(item->text(11),item->text(10)));
                 }
                 else setSeriesToIconView(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al iconView amb la informació de la sèrie cridarem aquest mètode
             }
         }
         else 
         {
-            item->setPixmap(0,m_closeFolder); 
-            item->setOpen(false);
+            item->setIcon(0,m_closeFolder); 
+            m_studyTreeView->setItemExpanded(item,false);
             emit(clearIconView());
         }
     }
 
-    if (item->childCount() > 0 && item->text(12)=="STUDY" )
-    {
-        setSeriesToIconView(item);
-    }
-    if (item->text(12) == "SERIES")
-    {
-        setSeriesToIconView(item->parent());
-    }
        
 }
 
@@ -389,53 +412,49 @@ void QStudyListView::expand(Q3ListViewItem * item,const QPoint &,int col)
   * QSeriesInconView, per mostrar la informació de la sèrie (la connexió entre el QStudyListView i QSeriesIconView es fa la constrcutor de la QueryScreen)
   *        @param Apuntador a l'estudi al list view
   */
-void QStudyListView::setSeriesToIconView(Q3ListViewItem *item)
+void QStudyListView::setSeriesToIconView(QTreeWidgetItem *item)
 {
-    Q3ListViewItem  * child = item->firstChild();
+    QTreeWidgetItem *child;
     
-    emit(clearIconView());
-    do
+    if (item == NULL) return;
+    
+    emit(clearIconView()); //es neteja el QSeriesIconView
+    
+    for (int i = 0;i < item->childCount();i++)
     {
-        Series serie;
-        serie.setSeriesUID(child->text(11).toStdString() );
-        serie.setImageNumber(child->text(13).toInt(NULL,10));
-        serie.setSeriesModality(child->text(4).toStdString() );
-        serie.setSeriesNumber((child->text(0).remove(tr("Series"))).toStdString());
-        serie.setStudyUID(getSelectedStudyUID().toStdString() );
-        emit(addSeries(&serie));   
-        child = child->nextSibling(); //busquem el seguent germà!
-    }
-    while (child!=0);
-}
-
-/** ensenya popupMenu al fer click al botó de la dreta
-  *    @param item
-  *    @param punt on s'ha fet el clock
-  *    @param columna que s'ha fet el ckcik
-  */
-void QStudyListView::popupMenuShow(Q3ListViewItem *,const QPoint& point,int)
-{
-//    expand(item);    
-    m_popupMenu->exec(point);
+        child = item->child(i);
+        if (item != NULL)
+        {
+            Series serie;
+            serie.setSeriesUID(child->text(11).ascii());
+            serie.setImageNumber(child->text(13).toInt(NULL,10));
+            serie.setSeriesModality(child->text(4).ascii());
+            serie.setSeriesNumber(child->text(0).remove(tr("Series")).ascii());  
+            serie.setStudyUID(getSelectedStudyUID().ascii());
+            emit(addSeries(&serie));
+        }
+    }  
 }
 
 
-/** removes study from the list
+/** removes study from the lisk
   *    @param esbora l'estudi amb StudyUID de la llista
   */
 void QStudyListView::removeStudy(QString studyUID)
 {
-    Q3ListViewItemIterator it(StudyListV );
+
+    QList<QTreeWidgetItem *> qStudyList(m_studyTreeView->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
     
-    while ( it.current() ) 
+    for (int i = 0;i < qStudyList.count();i++)
     {
-        if ( it.current()->text(11)==studyUID )
+        item = qStudyList.at(i);
+        if (item->text(11) == studyUID)
         {
-           delete it.current();
-           break;
-        } 
-        it++;
+            delete item;
+        }
     }
+
 }
 
 /** ESborra un estudi de la caché 
@@ -443,74 +462,91 @@ void QStudyListView::removeStudy(QString studyUID)
 void QStudyListView::deleteStudy()
 {
     
-    switch( QMessageBox::information( this, tr("Starviewer"),
-				      tr("Are you sure you want to delete this Study ?"),
-				      tr("Yes"), tr("No"),
-				      0, 1 ) ) 
-    {
-    case 0:
-        emit(clearIconView());
-        emit(delStudy());
-    }
+    emit(delStudy()); //aquest signal es recollit per la QueryScreen
 
 
 }
 
 /** Si es selecciona una serie del QSeriesIconView s'ha seleccionar la mateixa en el QStudyListView, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
-  *        @param index de l'icona seleccionada
+  *        @param SeriesUID Uid de la serie seleccionada en QSeriesIconView
   */
-void QStudyListView::selectedSeriesIcon(int index)
+void QStudyListView::selectedSeriesIcon(QString seriesUID)
 {
-    int i=0;    
-
-    //busquem l'estudi (el pare) per recorre tots els fills, per tal de seleccionar la mateixa serie que la del QSeriesIconView
-   Q3ListViewItem *parent = NULL;
-   
-   if (StudyListV->currentItem()==NULL) return;
+    QTreeWidgetItem *item,*current;
     
-   if (StudyListV->currentItem()->depth()==0)
+   //busquem el pare (l'estudi principal),ja que pot estar seleccionada una serie
+   if (m_studyTreeView->currentItem()->parent() == NULL)
    {
-       parent = StudyListV->currentItem(); 
+        current = m_studyTreeView->currentItem();
    }
    else 
-   {
-       parent = StudyListV->currentItem()->parent();
+   {  
+       current = m_studyTreeView->currentItem()->parent();
    }
    
-    if (!parent->isOpen()) parent->setOpen(true);
-   
-   Q3ListViewItem *child = parent->firstChild();
-   
-   
-   //El qseriesIconView ens indica a quina posicio es troba dins la llista la sèrie que hem de seleccionar
-   while (i < index && child != 0)
-   {
-        child =  child->nextSibling();
-        i++;
-   } 
-   
-   if (i == index && child !=0 )
-   {   
-       StudyListV->setCurrentItem(child);
-   }
-   
-//    StudyListV->repaint();
+    
+    for (int i = 0;i < current->childCount();i++)
+    {
+        item = current->child(i);
+        if (item != NULL)
+        {
+            if (item->text(11) == seriesUID)
+            {
+                m_studyTreeView->setItemSelected(item,true);
+                m_studyTreeView->setCurrentItem(item);
+            }
+            else m_studyTreeView->setItemSelected(item,false);
+        }
+    }  
+
 }
 
-/**  Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesIconView per a que hi seleccioni la serie, seleccionada
+/** Mostra el menu contextual
+  *     @param Dades de l'event sol·licitat
+  */
+void QStudyListView::contextMenuEvent(QContextMenuEvent *event)
+{
+
+    m_popUpMenu.exec(event->globalPos());
+}
+
+
+/**  Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesIconView per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesIconView amb les series   
+d'aquell estudi
   *  també en el QSeriesIconView
   *         @param item sobre el que s'ha fet click
   */
-void QStudyListView::clicked(Q3ListViewItem *item)
+void QStudyListView::clicked(QTreeWidgetItem *item,int)
 {
+    
 
-    if (item!=NULL)
+    if (item != NULL)
     {
-        if (item->depth() == 1) //si es tracta d'una serie
-        {   //enviem el numero de serie, ja que la key del QSeriesIconView és el número de Serie
-            emit(selectedSeriesList(item->text(0).remove(tr("Series"))));
+        if (item->parent() != NULL) //si es tracta d'una serie
+        {   //enviem el UID de la serie
+            if (m_oldStudyUID != getSelectedStudyUID())
+            { //si seleccionem una serie pero d'un altre estudi, hem d'actualizar el qseriesiconview
+                QTreeWidgetItem *parent  = item->parent();
+                setSeriesToIconView(parent);
+            }
+            //indiquem que el QSeriesIconView que seleccioni la sèrie amb el UID passa per parametre
+            emit(selectedSeriesList(item->text(11)));
+        }
+        else
+        {
+            if (m_oldStudyUID != getSelectedStudyUID())
+            { //si seleccionem una estudi diferent el seleccionat abans, hem d'actualizar el qseriesiconview
+                if (m_studyTreeView->isItemExpanded(item))
+                {// ha d'estar expendit per visualitzar les series
+                    setSeriesToIconView(item);
+                }
+                else emit(clearIconView());
+            }   
+                 
         }
     }
+    
+    m_oldStudyUID = getSelectedStudyUID();
 }
 
 /** Slot que visualitza l'estudi
@@ -527,11 +563,34 @@ void QStudyListView::retrieveStudy()
     emit(retrieve());    
 }
 
+/** guarda de la mida de les columnes
+  */
+void QStudyListView::saveColumnsWidth()
+{
+    StarviewerSettings settings;
+
+    if (m_parentName == "m_tabPacs")
+    { 
+        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        {
+            settings.setStudyPacsListColumnWidth(i,m_studyTreeView->columnWidth(i)); 
+        }    
+    }   
+   
+    if (m_parentName == "m_tabCache")
+    {
+        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        {
+           settings.setStudyCacheListColumnWidth(i,m_studyTreeView->columnWidth(i)); 
+        }      
+    }
+
+}
+
 /** Destructor de la classe
   */
 QStudyListView::~QStudyListView()
 {
 }
-
 
 };

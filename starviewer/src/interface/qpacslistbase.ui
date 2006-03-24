@@ -1,77 +1,70 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>QPacsListBase</class>
-  <widget class="QWidget" name="QPacsListBase" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>219</width>
-        <height>295</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Form1</string>
-    </property>
-    <layout class="QVBoxLayout" >
-      <item>
-        <widget class="Q3ListView" name="m_PacsListView" >
-          <property name="selectionMode" >
-            <enum>Q3ListView::Extended</enum>
-          </property>
-          <property name="showSortIndicator" >
-            <bool>true</bool>
-          </property>
-          <column>
-            <property name="text" >
-              <string>Pacs                 </string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-          <column>
-            <property name="text" >
-              <string>Institution                           </string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>false</bool>
-            </property>
-          </column>
-          <column>
-            <property name="text" >
-              <string>Description                                                       </string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-          <column>
-            <property name="text" >
-              <string>Default</string>
-            </property>
-            <property name="clickable" >
-              <bool>false</bool>
-            </property>
-            <property name="resizable" >
-              <bool>false</bool>
-            </property>
-          </column>
-        </widget>
-      </item>
-    </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>QPacsListBase</class>
+ <widget class="QWidget" name="QPacsListBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>219</width>
+    <height>264</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form1</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QTreeWidget" name="m_PacsTreeView" >
+     <property name="alternatingRowColors" >
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::MultiSelection</enum>
+     </property>
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
+     <property name="uniformRowHeights" >
+      <bool>true</bool>
+     </property>
+     <property name="sortingEnabled" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Pacs</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Institution</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Description</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Default</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
 </ui>

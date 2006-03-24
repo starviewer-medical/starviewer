@@ -23,12 +23,8 @@
 
 #include "ui_qstudylistviewbase.h"
 #include <QWidget>
+#include <QMenu>
 #include <QString>
-#include <QPixmap>
-#include <QPoint>
-#include <q3popupmenu.h>
-#include <q3listview.h>
-
 #include "study.h"
 #include "series.h"
 #include "pacsparameters.h"
@@ -39,19 +35,16 @@ namespace udg {
 /** Aquesta classe és un widget millorar i modificat del listview, que permet mostrar estudis i sèries d'una manera organitzada i fàcilment
 @author marc
 */
+
+
 class QStudyListView : public QWidget , private Ui::QStudyListViewBase{
 Q_OBJECT
 public:
 
-    QStudyListView( QWidget *parent = 0 , const char * name = 0 );
-
-    QString formatName(const std::string);
-    QString formatAge(const std::string);
-    QString formatDate(const std::string);
-    QString formatHour(const std::string);
+    QStudyListView( QWidget *parent = 0 );
     
     void insertSeries(Series *);
-    void showStudyList(StudyList *);
+    void insertStudyList(StudyList *);
     void removeStudy(QString StudyUID);
  
     void setSortColumn(int);
@@ -59,40 +52,55 @@ public:
     QString getSelectedStudyPacsAETitle();
     QString getSelectedStudyUID();
     QString getSelectedSeriesUID();
+    
+    void saveColumnsWidth();
+    
     ~QStudyListView();
-    Q3PopupMenu *m_popupMenu;
+    
+    
+protected:
+    void contextMenuEvent(QContextMenuEvent *event);
 
 signals :
-    void click(QString,QString);
+    void expand(QString,QString);
     void retrieve();
     void delStudy();
     void view();
     void addSeries(Series *serie);
     void clearIconView();
-    void selectedSeriesList(QString);
-        
-public slots:
-    void expand(Q3ListViewItem *,const QPoint &,int);
-    void popupMenuShow(Q3ListViewItem *,const QPoint&,int);
-    void selectedSeriesIcon(int index);
-    
-    void clicked(Q3ListViewItem *);
-    void clear();
-    void retrieveStudy();
-    void deleteStudy();
-    void viewStudy();
+    void selectedSeriesList(QString); 
 
+public slots:
+    void expand(QTreeWidgetItem *,int);
+    void selectedSeriesIcon(QString );
+    
+    void clicked(QTreeWidgetItem *,int);
+    void clear( );
+    void retrieveStudy( );
+    void deleteStudy( );
+    void viewStudy( );
+
+protected:
 
 private :
-    QPixmap m_openFolder;
-    QPixmap m_closeFolder;
-    QPixmap m_iconSeries;
+
+    QMenu m_popUpMenu;
+    QString m_parentName;
+
+    QIcon m_openFolder, m_closeFolder, m_iconSeries;
     QString m_oldStudyUID;
     std::string m_oldPacsAETitle,m_OldInstitution;
+    
+    void createConnections( );
+    void setWidthColumns( );
+    void createPopupMenu( );
     void insertStudy(Study *);
-    void createPopupMenu(QString);
-    void setSeriesToIconView(Q3ListViewItem *item);
+    void setSeriesToIconView(QTreeWidgetItem *item);
 
+    QString formatName(const std::string);
+    QString formatAge(const std::string);
+    QString formatDate(const std::string);
+    QString formatHour(const std::string);
 };
 
 };

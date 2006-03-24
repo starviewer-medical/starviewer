@@ -38,6 +38,8 @@ public:
 
     void setPath(std::string);
     std::string getPath();
+    
+    ~ProcessImageSingleton();    
         
 private:
 
@@ -54,10 +56,8 @@ private:
     
     sem_t *m_semafor;
     std::string m_imagePath;
-
-    ProcessImageSingleton();
     
-    ~ProcessImageSingleton();
+    ProcessImageSingleton();
     
 };
 

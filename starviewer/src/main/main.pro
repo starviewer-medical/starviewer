@@ -3,7 +3,6 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/main
 # L'objectiu és una aplicaci??:  ../../bin/starviewer
 
-QT += qt3support 
 TARGETDEPS += ../interface/libinterface.a \
               ../repositories/librepositories.a \
               ../inputoutput/libinputoutput.a \

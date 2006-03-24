@@ -20,12 +20,11 @@ public :
 
      //this make this class a singleton class, return a static pointer to this class
      static SeriesListSingleton* getSeriesListSingleton();
+      ~SeriesListSingleton();
      
 private:
     SeriesListSingleton();
-
-    ~SeriesListSingleton();
-     static SeriesListSingleton *pInstance;
+    static SeriesListSingleton *pInstance;
 };
 
 };

@@ -8,7 +8,6 @@
 #include "image.h"
 #include <iostream.h>
 #include "qretrievescreen.h"
-#include <q3listview.h>
 #include <string.h>
 
 namespace udg {

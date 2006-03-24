@@ -19,31 +19,18 @@ namespace udg {
 class QConfigurationScreen : public QDialog , private QConfigurationScreenBase{
 Q_OBJECT
 
-private :
 
-    int m_PacsID;
+public:
+    QConfigurationScreen( QWidget *parent = 0 );
 
-    bool validatePacsParameters();
-    bool validateChanges();
-    void fillPacsListView();
-
-    void databaseError(Status *,PacsParameters *);
-    void databaseError(Status *);
-    
-    void loadCacheDefaults();
-    void loadPacsDefaults();
-    void loadCachePoolDefaults();
-    
-    void applyChangesPacs();
-    void applyChangesCache();
-   
+    ~QConfigurationScreen();
      
 public slots :
 
     /** Configuració de la llista de Pacs */
     void clear();
     void addPacs();
-    void selectedPacs( Q3ListViewItem * item );
+    void selectedPacs( QTreeWidgetItem * item, int);
     void updatePacs();
     void deletePacs();
     void test();
@@ -62,11 +49,28 @@ public slots :
 
     void configurationChanged(int);
     void configurationChanged( const QString& );
+    
+    void cacheImagePathEditingFinish();
        
-public:
-    QConfigurationScreen( QWidget *parent = 0 );
 
-    ~QConfigurationScreen();
+
+private :
+
+    int m_PacsID;
+
+    void connectSignalAndSlots();
+    bool validatePacsParameters();
+    bool validateChanges();
+    void fillPacsListView();
+
+    void databaseError(Status *);
+    
+    void loadCacheDefaults();
+    void loadPacsDefaults();
+    void loadCachePoolDefaults();
+    
+    void applyChangesPacs();
+    void applyChangesCache();
 
 };
 

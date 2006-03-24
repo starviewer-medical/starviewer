@@ -6,8 +6,9 @@
  ***************************************************************************/ 
 #include "qpacslist.h"
 
-#include <q3listview.h>
 #include <qmessagebox.h>
+#include <QTreeView>
+#include <QList>
 
 #include "pacslistdb.h"
 #include "pacslist.h"
@@ -23,14 +24,8 @@ QPacsList::QPacsList(QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
-    int i;
 
-    m_PacsListView->setColumnWidth(3,0); //La columna default està amagada
-
-    for (i=0;i<=m_PacsListView->columns();i++)
-    {
-        m_PacsListView->setColumnWidthMode(i,Q3ListView::Manual); 
-    }
+    m_PacsTreeView->setColumnHidden(3,true); //La columna default està amagada
 
     refresh();
 }
@@ -45,7 +40,7 @@ void QPacsList::refresh()
     PacsParameters pacs;
     Status state;
     
-    m_PacsListView->clear();    
+    m_PacsTreeView->clear();    
 
     state = pacsListDB.queryPacsList(pacsList);
     
@@ -55,12 +50,11 @@ void QPacsList::refresh()
         return;
     }
     
-    
     pacsList.firstPacs();
     
     while (!pacsList.end())
     {
-        Q3ListViewItem* item = new Q3ListViewItem(m_PacsListView);
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_PacsTreeView);
         pacs = pacsList.getPacs();
         item->setText(0,pacs.getAEPacs().c_str() );
         item->setText(1,pacs.getInstitution().c_str() );
@@ -79,17 +73,17 @@ void QPacsList::refresh()
 void QPacsList::setSelectedDefaultPacs()
 {
 
-    Q3ListViewItemIterator it( m_PacsListView );
+    QList<QTreeWidgetItem *> qPacsList(m_PacsTreeView->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
     
-    while ( it.current() ) 
+    for (int i=0;i<qPacsList.count();i++)
     {
-        if ( it.current()->text(3)=="S" )
+        item = qPacsList.at(i);
+        if (item->text(3) == "S")
         {
-            it.current()->setSelected(true);
+            m_PacsTreeView->setItemSelected(item,true);
         }
-        else it.current()->setSelected(false);
         
-        ++it;
     }
 
 }
@@ -99,29 +93,30 @@ void QPacsList::setSelectedDefaultPacs()
   */
 Status QPacsList::getSelectedPacs(PacsList *pacsList)
 {
-    Q3ListViewItemIterator it( m_PacsListView );
     PacsListDB pacsListDB;
     Status state;
     StarviewerSettings settings;
     
     
-    while ( it.current() ) 
+    QList<QTreeWidgetItem *> qPacsList(m_PacsTreeView->selectedItems());
+    QTreeWidgetItem *item;
+    
+    for (int i=0;i<qPacsList.count();i++)
     {
-        if (it.current()->isSelected() == true) //si el pacs esta seleccionat buquem els seus paràmetres
-        {   PacsParameters pacs;
-            state =pacsListDB.queryPacs(&pacs,it.current()->text(0).toStdString() ); //fem el query per cercar la informació del PACS
+        item = qPacsList.at(i);
+        PacsParameters pacs;
+        
+        state =pacsListDB.queryPacs(&pacs,item->text(0).toStdString() ); //fem el query per cercar la informació del PACS
             
-            if (state.good())
-            {
-                pacs.setAELocal(settings.getAETitleMachine().toStdString() );
-                //emplenem amb les dades del registre el timeout
-                pacs.setTimeOut(settings.getTimeout().toInt(NULL,10));
-                pacsList->insertPacs(pacs); //inserim a la llista
-            }
-            else return state;
+        if (state.good())
+        {
+            pacs.setAELocal(settings.getAETitleMachine().toStdString() );
+            //emplenem amb les dades del registre el timeout
+            pacs.setTimeOut(settings.getTimeout().toInt(NULL,10));
+            pacsList->insertPacs(pacs); //inserim a la llista
         }
-        ++it;
-  }
+        else return state;        
+    }
   
   return state;
 }
@@ -143,23 +138,27 @@ void QPacsList::databaseError(Status *state)
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
                         break;
             case 2011 : text.insert(0,tr("Database is corrupted."));
                         text.append("\n");
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
                         break;
+            case 2050 : text.insert(0,"Not Connected to database");
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;            
             default :   text.insert(0,tr("Internal Database error"));
                         text.append("\n");
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
                         break;
         }
+        QMessageBox::critical( this, tr("StarViewer"),text);
     }    
 
 }

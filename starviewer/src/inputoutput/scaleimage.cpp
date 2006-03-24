@@ -146,13 +146,25 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
     //escalem l'imatge    
     DicomImage *newimage;
     
-    //calculem la mida de pixels de x en funcio de l'allargada de y
-//     opt_scale_size_x = pixelsSize * di->getWidthHeightRatio ();
-    opt_scale_size_x = pixelsSize;
-    opt_scale_size_y = pixelsSize;
+        
+    //Escalem pel cantó més gran
+    if (di->getWidth() < di->getHeight())
+    {
+        opt_scale_size_x = 0;
+        opt_scale_size_y = pixelsSize;
+     }
+     else
+     {
+        opt_scale_size_x = pixelsSize;
+        opt_scale_size_y = 0;  
+     }
+    
+    //les imatges es guarden el pacs girades d'esquerra dreta, estan amb els costats a reves, amb aquesta funcio les girem pq es visualitzin correctament;
+    di->flipImage(1, 0);
+    di->setMinMaxWindow(1); //Establim el VOI LUT, aquí indiquem que aquesta imatge és per visualitzar per una finestra, aplica filtres perquè es vegi correctament
     
     newimage = di->createScaledImage(opt_scale_size_x, opt_scale_size_y, (int)opt_useInterpolation, opt_useAspectRatio);
-            
+           
     if (newimage==NULL) 
     {
         return errorScalingImage;

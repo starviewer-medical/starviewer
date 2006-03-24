@@ -4,44 +4,44 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
+
 #include "qretrievescreen.h"
-#include <q3listview.h>
 #include <QString>
 #include <iostream.h>
 #include <qdatetime.h>
-#include <QString>
 #include "processimagesingleton.h"
-//#include <qobject.h>
-//#include <qwidget.h>
 
 
 namespace udg {
 
+/**
+ * 
+ * @param parent 
+ * @return 
+ */
 QRetrieveScreen::QRetrieveScreen( QWidget *parent )
  : QDialog( parent )
 {
     setupUi( this );
-    listRetrieveStudy->setColumnWidth(9,0);//Conte l'UID de l'estudi
+    m_treeRetrieveStudy->setColumnHidden(9,true);//Conte l'UID de l'estudi
     
-    for (int i=0;i<10;i++)
-    {
-        listRetrieveStudy->setColumnWidthMode(i,Q3ListView::Manual);
-    }
+    createConnections();
     
-    int init_value=1;//Només un thread alhora pot actualitzar la llista de descarregues, ja que les XLIB no són multithread,si ens trobem dos threads actualitzan a la vegada, les XLIB donen error
-    semafor = (sem_t*)malloc(sizeof(sem_t));
-    sem_init(semafor,0,init_value);
 }
 
-
-  
+/** Crea les connexions pels signals i slots
+  */
+void QRetrieveScreen::createConnections()
+{
+    connect(m_buttonClear, SIGNAL(clicked()), this, SLOT(clearList()));
+}
 
 /** Insereix un nou estudi per descarregar
   *            @param study[in]    informació de l'estudi a descarregar
   */
 void QRetrieveScreen::insertNewRetrieve(Study *study)
 {
-    Q3ListViewItem* item = new Q3ListViewItem(listRetrieveStudy);
+    QTreeWidgetItem* item = new QTreeWidgetItem(m_treeRetrieveStudy);
     QTime time = QTime::currentTime();
     QString name;
     QDate date = QDate::currentDate();
@@ -50,8 +50,8 @@ void QRetrieveScreen::insertNewRetrieve(Study *study)
     name.insert(0,study->getPatientName().c_str() );
     name.replace("^"," ");
     
-    item->setText(0,"PENDING");
-    item->setText(1,"Local");
+    item->setText(0,tr("PENDING"));
+    item->setText(1,tr("Local"));
     item->setText(2,study->getPacsAETitle().c_str() );
     item->setText(3,study->getPatientId().c_str() );
     item->setText(4,name);
@@ -60,7 +60,7 @@ void QRetrieveScreen::insertNewRetrieve(Study *study)
     item->setText(7,"0");
     item->setText(8,"0");
     item->setText(9,study->getStudyUID().c_str() );
-    item->setText(10,"Started");
+    item->setText(10,tr("Started"));
 
 }
 
@@ -68,17 +68,16 @@ void QRetrieveScreen::insertNewRetrieve(Study *study)
   */
 void QRetrieveScreen::clearList()
 {
-
-    Q3ListViewItemIterator it(listRetrieveStudy);
-    QString text("PENDING");
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
     
-    while (it.current())
+    for (int i=0;i<qRetrieveList.count();i++)
     {
-        if (it.current()->text(0) !=text)
-        {    
-           listRetrieveStudy->takeItem(it.current());
-        }// no avancem si esborrem perquè al esborrar un element l'iterador ja passa a apuntar el següent!
-        else it++;
+        item = qRetrieveList.at(i);
+        if (item->text(0) != tr("PENDING"))
+        {
+            delete item;
+        }
     }
 }
 
@@ -87,15 +86,19 @@ void QRetrieveScreen::clearList()
   */
 void QRetrieveScreen::deleteStudy(QString studyUID)
 {
-    Q3ListViewItemIterator it(listRetrieveStudy);
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
+    int i = 0;
     
-    while (it.current())
+    while (i < qRetrieveList.count())
     {
-        if (it.current()->text(9) == studyUID)
-        {    
-           listRetrieveStudy->takeItem(it.current());
-        }// no avancem si esborrem perquè al esborrar un element l'iterador ja passa a apuntar el següent!
-        else it++;
+        item = qRetrieveList.at(i);
+        if (item->text(9) == studyUID)
+        {
+            delete item;
+            break;
+        }
+        i++;
     }
 }
 
@@ -104,8 +107,8 @@ void QRetrieveScreen::deleteStudy(QString studyUID)
   */
 void QRetrieveScreen::setConnectSignal(StarviewerProcessImage *process)
 {
-    connect(process, SIGNAL(imageRetrieved(Image *,int)), this, SLOT(imageRetrieved(Image *,int)));
-    connect(process, SIGNAL(seriesRetrieved(QString )), this, SLOT(setSeriesRetrieved(QString )));
+    connect(process, SIGNAL(imageRetrieved(Image *,int)), this, SLOT(imageRetrieved(Image *,int)),Qt::QueuedConnection);
+    connect(process, SIGNAL(seriesRetrieved(QString )), this, SLOT(setSeriesRetrieved(QString )),Qt::QueuedConnection);
 }
 
 /** desconnecta els signals imageRetrieved i seriesRetrieved de l'objecte StarviewerProcessImage
@@ -124,27 +127,29 @@ void QRetrieveScreen::delConnectSignal(StarviewerProcessImage *process)
 void QRetrieveScreen::imageRetrieved(Image *img,int downloadedImages)
 {
     
-    Q3ListViewItemIterator it(listRetrieveStudy);
-    QString studyUID( img->getStudyUID().c_str() ),Images;
+    QString studyUID,Images;
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
+    int i = 0;
     
-    image++;
-    
-    while (it.current())
+    if (img->getStudyUID().length()==0)
     {
-        if (it.current()->text(9) != studyUID)
+        qDebug("Eh fallo");
+        return;
+    }
+    studyUID.insert(0,img->getStudyUID().c_str());
+    
+    while (i < qRetrieveList.count())
+    {
+        item = qRetrieveList.at(i);
+        if (item->text(9) == studyUID)
         {
-            it++;
+            Images.setNum(downloadedImages,10);
+            item->setText(8,Images);
+            break;            
         }
-        else break;
-    }
-    
-
-    if (it.current()->text(9) == studyUID)
-    {
-        Images.setNum(downloadedImages,10);
-        it.current()->setText(8,Images);
-    }
-    
+        i++;
+    }    
 
 }
 
@@ -154,32 +159,25 @@ void QRetrieveScreen::imageRetrieved(Image *img,int downloadedImages)
 void QRetrieveScreen::setSeriesRetrieved(QString studyUID)
 {
     
-    Q3ListViewItemIterator it(listRetrieveStudy);
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
     QString series;
-    int nSeries;
+    int nSeries = 0, i =0;
     bool ok;
     
-    image++;
-    
-    while (it.current())
+    while (i < qRetrieveList.count())
     {
-        if (it.current()->text(9) != studyUID)
+        item = qRetrieveList.at(i);
+        if (item->text(9) == studyUID)
         {
-            it++;
+            nSeries = item->text(7).toInt(&ok,10) +1;
+            series.setNum(nSeries,10);
+            item->setText(7,series);
+            break;
         }
-        else break;
-    }
+        i++;
+    }    
     
-
-    if (it.current()->text(9) == studyUID)
-    {
-        nSeries = it.current()->text(7).toInt(&ok,10) +1;
-        
-        series.setNum(nSeries,10);
-        it.current()->setText(7,series);
-    }
-    
-
 }
 
 /**  S'invoca quant s'ha acabat de baixa un estudi. Aquesta accio alhora emiteix un signal per indicar que l'estudi s'ha acabat des descarregar
@@ -188,33 +186,29 @@ void QRetrieveScreen::setSeriesRetrieved(QString studyUID)
   */
 void QRetrieveScreen::setRetrievedFinished(QString studyUID)
 {
-    Q3ListViewItemIterator it(listRetrieveStudy);
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
+    int i = 0;
 
     //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
-    
     setSeriesRetrieved(studyUID);
     
-    while (it.current())
+    while (i < qRetrieveList.count())
     {
-        if (it.current()->text(9) != studyUID)
-        {
-            it++;
+        item = qRetrieveList.at(i);
+        if (item->text(9) == studyUID)
+        {   
+            if (item->text(8) == "0") //si el número d'imatges descarregat és 0! error!
+            {
+                item->setText(0,tr("ERROR"));
+            }
+            else  item->setText(0,tr("RETRIEVED")); 
+            break;
         }
-        else break;
+        i++;
     }
     
-    
-   if (it.current()->text(9) == studyUID)
-    {   
-        if (it.current()->text(8) == "0") //si el número d'imatges descarregat és 0! error!
-        {
-            it.current()->setText(0,"ERROR");
-        }
-        else  it.current()->setText(0,"RETRIEVED"); 
-    }
-    else cout << studyUID.toStdString()  << " no trobat "<<endl;
-    
-    emit(studyRetrieved(studyUID));
+    //emit(studyRetrieved(studyUID));
 }
 
 /**  S'invoca quant es produeix algun error al descarregar un estudi
@@ -222,25 +216,29 @@ void QRetrieveScreen::setRetrievedFinished(QString studyUID)
   */
 void QRetrieveScreen::setErrorRetrieving(QString studyUID)
 {
-    Q3ListViewItemIterator it(listRetrieveStudy);
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems("*",Qt::MatchWildcard,0));
+    QTreeWidgetItem *item;
+    int i = 0;
 
-    while (it.current())
-    {
-        if (it.current()->text(9) != studyUID)
-        {
-            it++;
-        }
-        else break;
-    }
-        
-   if (it.current()->text(9) == studyUID)
-    {   
-        it.current()->setText(0,"ERROR");
-    }
-    else cout << studyUID.toStdString() << " no trobat "<<endl;
+    //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
     
+    setSeriesRetrieved(studyUID);
+    
+    while (i < qRetrieveList.count())
+    {
+        item = qRetrieveList.at(i);
+        if (item->text(9) == studyUID)
+        {   
+            item->setText(0,tr("ERROR"));
+        }
+        
+        i++;
+    }       
+        
 }
 
+/** destructor de la classe
+  */
 QRetrieveScreen::~QRetrieveScreen()
 {
 }

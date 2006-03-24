@@ -14,5 +14,7 @@ const QString maxConnectionsKey("pacs/pacsparam/MaxConnects");
 const QString selectLanguageKey("pacs/language");
 const QString countImagesKey("pacs/pacsparam/countImages");
 const QString prevImagesKey("pacs/pacsparam/prevImages");
+const QString pacsColumnWidthKey("pacs/interfase/studyPacsList/columnWidth");//en aquesta clau a darrera s'hi concatena el número de columna, per diferenciar cada columna
+const QString cacheColumnWidthKey("pacs/interface/studyCacheList/columnWidth");//en aquesta clau a darrera s'hi concatena el número de columna, per diferenciar cada columna
 
 #endif

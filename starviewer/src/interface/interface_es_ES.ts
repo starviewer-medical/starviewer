@@ -2,10 +2,6 @@
 <context>
     <name>MutualInformationInputParametersFormBase</name>
     <message>
-        <source>udg::QInputParametersForm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Gaussian Filter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -74,9 +70,6 @@
     </message>
 </context>
 <context>
-    <name>QAxisViewerBase</name>
-</context>
-<context>
     <name>QConfigurationScreenBase</name>
     <message>
         <source>Configuration</source>
@@ -92,30 +85,6 @@
     </message>
     <message>
         <source>Pacs Device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AE Title           </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address              </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Port  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                          </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Location                </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description                                                       </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -318,6 +287,30 @@
         <source>Previsualitzate the images of a study (reduces the query speed)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>AETitle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QFileDialog</name>
@@ -432,19 +425,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pacs                 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                           </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description                                                       </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pacs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1008,14 +1001,6 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid cache image path. The directory doesn&apos;t exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>*.sdb (StarViewer Database)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1063,6 +1048,26 @@ Thickness: XXX mm Location: XXX </source>
         <source>Database missing.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Create directory ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cache Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QDebugConsoleBase</name>
@@ -1103,29 +1108,20 @@ Thickness: XXX mm Location: XXX </source>
     </message>
 </context>
 <context>
+    <name>udg::QRetrieveScreen</name>
+    <message>
+        <source>PENDING</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::QRetrieveScreenBase</name>
     <message>
         <source>Retrieve list studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Status     </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Direction                </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From/To           </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Patient ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient Name                             </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1152,6 +1148,22 @@ Thickness: XXX mm Location: XXX </source>
         <source>Clear</source>
         <translation type="unfinished">Borrar</translation>
     </message>
+    <message>
+        <source>Status                         </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From/To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QSeriesIconView</name>
@@ -1169,58 +1181,6 @@ Thickness: XXX mm Location: XXX </source>
 </context>
 <context>
     <name>udg::QStudyListScreenBase</name>
-    <message>
-        <source>Form6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type                       </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient ID  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name                                                      </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Age</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Modality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date          </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hour  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                         </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ac. Number     </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QStudyListView</name>
@@ -1260,25 +1220,13 @@ Thickness: XXX mm Location: XXX </source>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Study</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QStudyListViewBase</name>
-    <message>
-        <source>Form6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type                       </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient ID  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name                                                      </source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Age</source>
         <translation type="unfinished"></translation>
@@ -1292,26 +1240,6 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Date          </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hour  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                         </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ac. Number     </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>UID</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1320,7 +1248,35 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Image Number</source>
+        <source>Patient ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acc. Num</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AETitle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Img Num</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1342,9 +1298,6 @@ Thickness: XXX mm Location: XXX </source>
         <source>XZ : Coronal</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>udg::QWidgetVolume</name>
 </context>
 <context>
     <name>udg::QueryScreen</name>
@@ -1435,6 +1388,14 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Internal Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide Pacs List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Pacs List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1617,11 +1578,11 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pacs Servers</source>
+        <source>config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>config</source>
+        <source>PacsServer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

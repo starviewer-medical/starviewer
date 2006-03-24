@@ -33,11 +33,11 @@ bool Status:: good()
 /**Retorna un text descrivint l'error o l'exit del procés
  *      @return text descriptiu de l'exit o l'error de la crida
 */
-string Status:: text()
+std::string Status:: text()
 {
     if (m_dcmtkError)
     {
-        return string((*i).text());
+        return std::string((*i).text());
     }
     return m_descText;
 }

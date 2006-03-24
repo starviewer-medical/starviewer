@@ -33,6 +33,7 @@
 // Mini - aplicacions
 #include "qtabaxisview.h"
 #include "queryscreen.h" // temporal!
+#include "cacheinstallation.h"
 
 namespace udg{
 
@@ -43,9 +44,10 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     this->setObjectName( name );
     m_extensionWorkspace = new ExtensionWorkspace( this );
     setCentralWidget( m_extensionWorkspace );
-
+    CacheInstallation cacheInstallation;
     m_extensionHandler = new ExtensionHandler( this );
     
+    cacheInstallation.checkInstallation();
     m_queryScreen = new QueryScreen( 0 );
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     // ------------------------------------------------------------------------------------
@@ -455,7 +457,6 @@ void QApplicationMainWindow::createMenus()
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
-//     createLanguageMenu();
 
     menuBar()->insertSeparator();
     

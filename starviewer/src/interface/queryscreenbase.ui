@@ -1,949 +1,1180 @@
-<ui version="4.0" stdsetdef="1" >
-  <author></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>udg::QueryScreenBase</class>
-  <widget class="QWidget" name="udg::QueryScreenBase" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>800</width>
-        <height>820</height>
-      </rect>
-    </property>
-    <property name="sizePolicy" >
-      <sizepolicy>
-        <hsizetype>1</hsizetype>
-        <vsizetype>1</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-      </sizepolicy>
-    </property>
-    <property name="minimumSize" >
-      <size>
-        <width>800</width>
-        <height>770</height>
-      </size>
-    </property>
-    <property name="windowTitle" >
-      <string>Query Study</string>
-    </property>
-    <layout class="QGridLayout" >
-      <item row="0" column="0" >
-        <layout class="QHBoxLayout" >
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>udg::QueryScreenBase</class>
+ <widget class="QWidget" name="udg::QueryScreenBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>832</width>
+    <height>833</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>1</hsizetype>
+    <vsizetype>1</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>800</width>
+    <height>770</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>Query Study</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox_7" >
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="title" >
+          <string/>
+         </property>
+         <layout class="QGridLayout" >
           <property name="margin" >
-            <number>0</number>
+           <number>9</number>
           </property>
-          <item>
-            <layout class="QGridLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item row="0" column="0" >
-                <widget class="Q3ButtonGroup" name="buttonGroup3" >
-                  <property name="title" >
-                    <string/>
-                  </property>
-                  <layout class="QVBoxLayout" >
-                    <item>
-                      <widget class="QPushButton" name="buttonSearch" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>Search</string>
-                        </property>
-                        <property name="toolTip" stdset="0" >
-                          <string>search</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="buttonToday" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>Today</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="buttonYesterday" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>Yesterday</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="buttonRetrieve" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>Retrieve</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="pushButton6" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>Retrieve List</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="buttonView" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>View</string>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <widget class="QPushButton" name="buttonClear" >
-                        <property name="sizePolicy" >
-                          <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>3</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                          </sizepolicy>
-                        </property>
-                        <property name="text" >
-                          <string>Clear Filter</string>
-                        </property>
-                      </widget>
-                    </item>
-                  </layout>
-                </widget>
-              </item>
-              <item row="0" column="1" >
-                <layout class="QGridLayout" >
-                  <property name="margin" >
-                    <number>0</number>
-                  </property>
-                  <item row="0" column="0" >
-                    <layout class="QVBoxLayout" >
-                      <property name="margin" >
-                        <number>0</number>
-                      </property>
-                      <item>
-                        <layout class="QVBoxLayout" >
-                          <property name="margin" >
-                            <number>0</number>
-                          </property>
-                          <item>
-                            <widget class="Q3GroupBox" name="groupBox2" >
-                              <property name="title" >
-                                <string>Patient</string>
-                              </property>
-                              <layout class="QGridLayout" >
-                                <item row="0" column="0" >
-                                  <widget class="QLabel" name="textLabel1" >
-                                    <property name="minimumSize" >
-                                      <size>
-                                        <width>80</width>
-                                        <height>0</height>
-                                      </size>
-                                    </property>
-                                    <property name="text" >
-                                      <string>&lt;b>Patient ID :&lt;/b></string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="0" column="4" >
-                                  <widget class="QLabel" name="textLabel3" >
-                                    <property name="minimumSize" >
-                                      <size>
-                                        <width>80</width>
-                                        <height>0</height>
-                                      </size>
-                                    </property>
-                                    <property name="text" >
-                                      <string>&lt;b>First Name :&lt;/b></string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="0" column="3" >
-                                  <widget class="QLineEdit" name="m_textLastName" />
-                                </item>
-                                <item row="0" column="1" >
-                                  <widget class="QLineEdit" name="m_textPatientID" />
-                                </item>
-                                <item row="0" column="2" >
-                                  <widget class="QLabel" name="textLabel2" >
-                                    <property name="minimumSize" >
-                                      <size>
-                                        <width>80</width>
-                                        <height>0</height>
-                                      </size>
-                                    </property>
-                                    <property name="text" >
-                                      <string>&lt;b>Last Name :&lt;/b></string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="0" column="5" >
-                                  <widget class="QLineEdit" name="m_textFirstName" />
-                                </item>
-                              </layout>
-                            </widget>
-                          </item>
-                          <item>
-                            <spacer name="spacer57" >
-                              <property name="sizeHint" >
-                                <size>
-                                  <width>20</width>
-                                  <height>16</height>
-                                </size>
-                              </property>
-                              <property name="sizeType" >
-                                <enum>Fixed</enum>
-                              </property>
-                              <property name="orientation" >
-                                <enum>Vertical</enum>
-                              </property>
-                            </spacer>
-                          </item>
-                        </layout>
-                      </item>
-                      <item>
-                        <layout class="QGridLayout" >
-                          <property name="margin" >
-                            <number>0</number>
-                          </property>
-                          <item row="0" column="0" >
-                            <widget class="Q3ButtonGroup" name="buttonGroup1" >
-                              <property name="title" >
-                                <string>Study</string>
-                              </property>
-                              <layout class="QGridLayout" >
-                                <item row="0" column="1" >
-                                  <widget class="QLineEdit" name="m_textStudyID" />
-                                </item>
-                                <item row="0" column="4" >
-                                  <widget class="QDateEdit" name="m_textFrom" >
-                                    <property name="enabled" >
-                                      <bool>false</bool>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="3" >
-                                  <widget class="QCheckBox" name="m_checkTo" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>To</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="0" column="0" >
-                                  <widget class="QLabel" name="textLabel5" >
-                                    <property name="text" >
-                                      <string>&lt;b>Study ID :&lt;/b></string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="4" >
-                                  <widget class="QDateEdit" name="m_textTo" >
-                                    <property name="enabled" >
-                                      <bool>false</bool>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="0" column="3" >
-                                  <widget class="QCheckBox" name="m_checkFrom" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>From</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="2" column="0" >
-                                  <widget class="QLabel" name="textLabel6" >
-                                    <property name="text" >
-                                      <string>&lt;b>Accession Number :&lt;/b></string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="2" column="1" >
-                                  <widget class="QLineEdit" name="m_textAccessionNumber" />
-                                </item>
-                                <item rowspan="2" row="0" column="2" colspan="1" >
-                                  <spacer name="spacer52" >
-                                    <property name="sizeHint" >
-                                      <size>
-                                        <width>16</width>
-                                        <height>20</height>
-                                      </size>
-                                    </property>
-                                    <property name="sizeType" >
-                                      <enum>Expanding</enum>
-                                    </property>
-                                    <property name="orientation" >
-                                      <enum>Horizontal</enum>
-                                    </property>
-                                  </spacer>
-                                </item>
-                              </layout>
-                            </widget>
-                          </item>
-                          <item row="0" column="1" >
-                            <widget class="Q3ButtonGroup" name="buttonGroupModality" >
-                              <property name="title" >
-                                <string>Modality</string>
-                              </property>
-                              <layout class="QGridLayout" >
-                                <item row="2" column="1" >
-                                  <widget class="QCheckBox" name="m_checkMG" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>MG</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="2" column="3" >
-                                  <widget class="QCheckBox" name="m_checkSC" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>SC</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="3" column="2" >
-                                  <widget class="QCheckBox" name="m_checkPT" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>PT</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Penetrant Test</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="3" column="3" >
-                                  <widget class="QCheckBox" name="m_checkUS" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>US</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Ultrasounds</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="2" column="2" >
-                                  <widget class="QCheckBox" name="m_checkDT" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>DT</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string> Dental Technician</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="3" column="1" >
-                                  <widget class="QCheckBox" name="m_checkMR" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>MR</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Magnetic Resonance</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="2" column="0" >
-                                  <widget class="QCheckBox" name="m_checkCT" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>CT</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Computerized Tomography</string>
-                                    </property>
-                                    <property name="whatsThis" stdset="0" >
-                                      <string/>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="3" column="0" >
-                                  <widget class="QCheckBox" name="m_checkDX" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>DX</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Direct Radiography</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="2" >
-                                  <widget class="QCheckBox" name="m_checkNM" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>NM</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Nuclear Medicine</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="3" >
-                                  <widget class="QCheckBox" name="m_checkRF" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>RF</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Radiography Fluoroscopy</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="0" >
-                                  <widget class="QCheckBox" name="m_checkCR" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>CR</string>
-                                    </property>
-                                    <property name="toolTip" stdset="0" >
-                                      <string>Computerized Radiography</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="1" >
-                                  <widget class="QCheckBox" name="m_checkES" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>ES</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="0" column="0" >
-                                  <widget class="QCheckBox" name="m_checkAll" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>All</string>
-                                    </property>
-                                    <property name="checked" >
-                                      <bool>true</bool>
-                                    </property>
-                                    <property name="tristate" >
-                                      <bool>false</bool>
-                                    </property>
-                                  </widget>
-                                </item>
-                                <item row="1" column="4" >
-                                  <widget class="QCheckBox" name="m_checkXA" >
-                                    <property name="font" >
-                                      <font>
-                                        <family></family>
-                                        <pointsize>0</pointsize>
-                                        <weight>0</weight>
-                                        <italic>false</italic>
-                                        <bold>true</bold>
-                                        <underline>false</underline>
-                                        <strikeout>false</strikeout>
-                                      </font>
-                                    </property>
-                                    <property name="text" >
-                                      <string>XA</string>
-                                    </property>
-                                  </widget>
-                                </item>
-                              </layout>
-                            </widget>
-                          </item>
-                        </layout>
-                      </item>
-                    </layout>
-                  </item>
-                  <item row="1" column="0" >
-                    <layout class="QHBoxLayout" >
-                      <property name="margin" >
-                        <number>0</number>
-                      </property>
-                      <item>
-                        <spacer name="spacer53" >
-                          <property name="sizeHint" >
-                            <size>
-                              <width>365</width>
-                              <height>20</height>
-                            </size>
-                          </property>
-                          <property name="sizeType" >
-                            <enum>Expanding</enum>
-                          </property>
-                          <property name="orientation" >
-                            <enum>Horizontal</enum>
-                          </property>
-                        </spacer>
-                      </item>
-                      <item>
-                        <widget class="QPushButton" name="pushButton17" >
-                          <property name="minimumSize" >
-                            <size>
-                              <width>120</width>
-                              <height>0</height>
-                            </size>
-                          </property>
-                          <property name="maximumSize" >
-                            <size>
-                              <width>100</width>
-                              <height>32767</height>
-                            </size>
-                          </property>
-                          <property name="text" >
-                            <string>Show PacsList</string>
-                          </property>
-                        </widget>
-                      </item>
-                    </layout>
-                  </item>
-                </layout>
-              </item>
-            </layout>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="6" column="0" >
+           <widget class="QPushButton" name="m_buttonClear" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Clear Filter</string>
+            </property>
+           </widget>
           </item>
-          <item>
-            <widget class="udg::QPacsList" name="qPacsList" >
-              <property name="minimumSize" >
-                <size>
+          <item row="5" column="0" >
+           <widget class="QPushButton" name="m_buttonView" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>View</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" >
+           <widget class="QPushButton" name="m_buttonRetrieveList" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Retrieve List</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QPushButton" name="m_buttonRetrieve" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Retrieve</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QPushButton" name="m_buttonYesterday" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Yesterday</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QPushButton" name="m_buttonToday" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Today</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QPushButton" name="m_buttonSearch" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>1</hsizetype>
+              <vsizetype>3</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="toolTip" >
+             <string>search</string>
+            </property>
+            <property name="text" >
+             <string>Search</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QGroupBox" name="groupBox_3" >
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>80</height>
+            </size>
+           </property>
+           <property name="title" >
+            <string>Patient</string>
+           </property>
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>9</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="0" column="0" >
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="textLabel1_3" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text" >
+                 <string>&lt;b>Patient ID :&lt;/b></string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="m_textPatientID" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel2_3" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text" >
+                 <string>&lt;b>Last Name :&lt;/b></string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="m_textLastName" >
+                <property name="minimumSize" >
+                 <size>
                   <width>20</width>
                   <height>0</height>
-                </size>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
-      <item row="1" column="0" >
-        <widget class="QTabWidget" name="m_Tab" >
-          <property name="maximumSize" >
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="textLabel3_3" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>80</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text" >
+                 <string>&lt;b>First Name :&lt;/b></string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="m_textFirstName" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
             <size>
-              <width>32767</width>
-              <height>32767</height>
+             <width>675</width>
+             <height>16</height>
             </size>
-          </property>
-          <widget class="QWidget" name="tab" >
-            <attribute name="title" >
-              <string>Local Database</string>
-            </attribute>
-            <layout class="QGridLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item row="0" column="0" >
-                <layout class="QGridLayout" >
-                  <property name="margin" >
-                    <number>0</number>
-                  </property>
-                  <item row="0" column="0" >
-                    <widget class="udg::QStudyListView" name="StudyLViewCache" >
-                      <property name="sizePolicy" >
-                        <sizepolicy>
-                          <hsizetype>7</hsizetype>
-                          <vsizetype>7</vsizetype>
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                        </sizepolicy>
-                      </property>
-                    </widget>
-                  </item>
-                  <item row="1" column="0" >
-                    <widget class="udg::QSeriesIconView" name="SeriesImViewCache" >
-                      <property name="sizePolicy" >
-                        <sizepolicy>
-                          <hsizetype>7</hsizetype>
-                          <vsizetype>7</vsizetype>
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                        </sizepolicy>
-                      </property>
-                      <property name="minimumSize" >
-                        <size>
-                          <width>0</width>
-                          <height>220</height>
-                        </size>
-                      </property>
-                    </widget>
-                  </item>
-                </layout>
-              </item>
-            </layout>
-          </widget>
-          <widget class="QWidget" name="tab" >
-            <attribute name="title" >
-              <string>Pacs Servers</string>
-            </attribute>
-            <layout class="QGridLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item row="0" column="0" >
-                <widget class="udg::QStudyListView" name="StudyLViewPacs" >
-                  <property name="sizePolicy" >
-                    <sizepolicy>
-                      <hsizetype>7</hsizetype>
-                      <vsizetype>7</vsizetype>
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                    </sizepolicy>
-                  </property>
-                  <property name="minimumSize" >
-                    <size>
-                      <width>0</width>
-                      <height>240</height>
-                    </size>
-                  </property>
-                </widget>
-              </item>
-              <item row="1" column="0" >
-                <widget class="udg::QSeriesIconView" name="SeriesImViewPacs" >
-                  <property name="sizePolicy" >
-                    <sizepolicy>
-                      <hsizetype>7</hsizetype>
-                      <vsizetype>7</vsizetype>
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                    </sizepolicy>
-                  </property>
-                  <property name="minimumSize" >
-                    <size>
-                      <width>0</width>
-                      <height>220</height>
-                    </size>
-                  </property>
-                </widget>
-              </item>
-            </layout>
-          </widget>
-        </widget>
-      </item>
-      <item row="2" column="0" >
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
             <number>0</number>
-          </property>
-          <item>
-            <spacer name="spacer5" >
-              <property name="sizeHint" >
-                <size>
-                  <width>21</width>
-                  <height>20</height>
-                </size>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QGroupBox" name="groupBox_6" >
+             <property name="maximumSize" >
+              <size>
+               <width>16777215</width>
+               <height>140</height>
+              </size>
+             </property>
+             <property name="title" >
+              <string>Study</string>
+             </property>
+             <layout class="QGridLayout" >
+              <property name="margin" >
+               <number>9</number>
               </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
+              <property name="spacing" >
+               <number>6</number>
               </property>
-              <property name="orientation" >
-                <enum>Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="QPushButton" name="pushButton9" >
-              <property name="text" >
-                <string>config</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <spacer name="spacer4" >
-              <property name="sizeHint" >
-                <size>
+              <item row="0" column="1" >
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType" >
+                 <enum>QSizePolicy::Expanding</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
                   <width>20</width>
-                  <height>20</height>
-                </size>
+                  <height>61</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="2" >
+               <layout class="QGridLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <item row="0" column="0" >
+                 <widget class="QCheckBox" name="m_checkFrom" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>From</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1" >
+                 <widget class="QDateEdit" name="m_textTo" >
+                  <property name="enabled" >
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize" >
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" >
+                 <widget class="QDateEdit" name="m_textFrom" >
+                  <property name="enabled" >
+                   <bool>false</bool>
+                  </property>
+                  <property name="minimumSize" >
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="wrapping" >
+                   <bool>false</bool>
+                  </property>
+                  <property name="buttonSymbols" >
+                   <enum>QAbstractSpinBox::UpDownArrows</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" >
+                 <widget class="QCheckBox" name="m_checkTo" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>To</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0" >
+               <layout class="QGridLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <item row="0" column="0" >
+                 <widget class="QLabel" name="textLabel5_3" >
+                  <property name="text" >
+                   <string>&lt;b>Study ID :&lt;/b></string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2" >
+                 <widget class="QLineEdit" name="m_textAccessionNumber" >
+                  <property name="minimumSize" >
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="2" >
+                 <widget class="QLabel" name="textLabel6_3" >
+                  <property name="text" >
+                   <string>&lt;b>Accession Number :&lt;/b></string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1" colspan="2" >
+                 <widget class="QLineEdit" name="m_textStudyID" >
+                  <property name="minimumSize" >
+                   <size>
+                    <width>0</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="m_buttonGroupModality" >
+             <property name="maximumSize" >
+              <size>
+               <width>16777215</width>
+               <height>140</height>
+              </size>
+             </property>
+             <property name="title" >
+              <string>Modality</string>
+             </property>
+             <layout class="QGridLayout" >
+              <property name="margin" >
+               <number>9</number>
               </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
+              <property name="spacing" >
+               <number>6</number>
               </property>
-              <property name="orientation" >
-                <enum>Horizontal</enum>
-              </property>
+              <item row="0" column="0" >
+               <layout class="QGridLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <item row="1" column="0" >
+                 <widget class="QCheckBox" name="m_checkCR" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Computerized Radiography</string>
+                  </property>
+                  <property name="text" >
+                   <string>CR</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0" >
+                 <widget class="QCheckBox" name="m_checkDX" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Direct Radiography</string>
+                  </property>
+                  <property name="text" >
+                   <string>DX</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0" >
+                 <widget class="QCheckBox" name="m_checkCT" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Computerized Tomography</string>
+                  </property>
+                  <property name="whatsThis" >
+                   <string/>
+                  </property>
+                  <property name="text" >
+                   <string>CT</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1" >
+                 <widget class="QCheckBox" name="m_checkMG" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>MG</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0" >
+                 <widget class="QCheckBox" name="m_checkAll" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>All</string>
+                  </property>
+                  <property name="checked" >
+                   <bool>true</bool>
+                  </property>
+                  <property name="tristate" >
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1" >
+                 <widget class="QCheckBox" name="m_checkES" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>ES</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2" >
+                 <widget class="QCheckBox" name="m_checkPT" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Penetrant Test</string>
+                  </property>
+                  <property name="text" >
+                   <string>PT</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2" >
+                 <widget class="QCheckBox" name="m_checkNM" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Nuclear Medicine</string>
+                  </property>
+                  <property name="text" >
+                   <string>NM</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3" >
+                 <widget class="QCheckBox" name="m_checkRF" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Radiography Fluoroscopy</string>
+                  </property>
+                  <property name="text" >
+                   <string>RF</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1" >
+                 <widget class="QCheckBox" name="m_checkMR" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Magnetic Resonance</string>
+                  </property>
+                  <property name="text" >
+                   <string>MR</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2" >
+                 <widget class="QCheckBox" name="m_checkDT" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string> Dental Technician</string>
+                  </property>
+                  <property name="text" >
+                   <string>DT</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3" >
+                 <widget class="QCheckBox" name="m_checkSC" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>SC</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4" >
+                 <widget class="QCheckBox" name="m_checkXA" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="text" >
+                   <string>XA</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3" >
+                 <widget class="QCheckBox" name="m_checkUS" >
+                  <property name="font" >
+                   <font>
+                    <family>Sans Serif</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <italic>false</italic>
+                    <bold>true</bold>
+                    <underline>false</underline>
+                    <strikeout>false</strikeout>
+                   </font>
+                  </property>
+                  <property name="toolTip" >
+                   <string>Ultrasounds</string>
+                  </property>
+                  <property name="text" >
+                   <string>US</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>5</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>547</width>
+               <height>20</height>
+              </size>
+             </property>
             </spacer>
-          </item>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_buttonShowPacsList" >
+             <property name="minimumSize" >
+              <size>
+               <width>120</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>100</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="text" >
+              <string>Show PacsList</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
         </layout>
-      </item>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="udg::QPacsList" name="qPacsList" >
+       <property name="minimumSize" >
+        <size>
+         <width>20</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction></pixmapfunction>
-  <customwidgets>
-    <customwidget>
-      <class>udg::QStudyListView</class>
-      <extends></extends>
-      <header location="local" >qstudylistview.h</header>
-      <sizehint>
-        <width>-1</width>
-        <height>-1</height>
-      </sizehint>
-      <container>0</container>
+   </item>
+   <item row="3" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>21</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_buttonConfig" >
+       <property name="text" >
+        <string>config</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QTabWidget" name="m_tab" >
+     <property name="sizePolicy" >
       <sizepolicy>
-        <hordata>5</hordata>
-        <verdata>5</verdata>
+       <hsizetype>3</hsizetype>
+       <vsizetype>3</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
       </sizepolicy>
-      <pixmap>image0</pixmap>
-    </customwidget>
-    <customwidget>
-      <class>udg::QSeriesIconView</class>
-      <extends></extends>
-      <header location="local" >qseriesiconview.h</header>
-      <sizehint>
-        <width>-1</width>
-        <height>-1</height>
-      </sizehint>
-      <container>0</container>
-      <sizepolicy>
-        <hordata>5</hordata>
-        <verdata>5</verdata>
-      </sizepolicy>
-      <pixmap>image0</pixmap>
-    </customwidget>
-    <customwidget>
-      <class>udg::QPacsList</class>
-      <extends></extends>
-      <header location="local" >qpacslist.h</header>
-      <sizehint>
-        <width>-1</width>
-        <height>-1</height>
-      </sizehint>
-      <container>0</container>
-      <sizepolicy>
-        <hordata>5</hordata>
-        <verdata>5</verdata>
-      </sizepolicy>
-      <pixmap>image0</pixmap>
-    </customwidget>
-  </customwidgets>
-  <tabstops>
-    <tabstop>m_textPatientID</tabstop>
-    <tabstop>m_textLastName</tabstop>
-    <tabstop>m_textFirstName</tabstop>
-    <tabstop>m_textStudyID</tabstop>
-    <tabstop>m_checkFrom</tabstop>
-    <tabstop>m_textFrom</tabstop>
-    <tabstop>m_checkTo</tabstop>
-    <tabstop>m_textTo</tabstop>
-    <tabstop>m_textAccessionNumber</tabstop>
-    <tabstop>m_checkAll</tabstop>
-    <tabstop>m_checkCR</tabstop>
-    <tabstop>m_checkES</tabstop>
-    <tabstop>m_checkNM</tabstop>
-    <tabstop>m_checkRF</tabstop>
-    <tabstop>m_checkXA</tabstop>
-    <tabstop>m_checkCT</tabstop>
-    <tabstop>m_checkMG</tabstop>
-    <tabstop>m_checkDT</tabstop>
-    <tabstop>m_checkSC</tabstop>
-    <tabstop>m_checkDX</tabstop>
-    <tabstop>m_checkMR</tabstop>
-    <tabstop>m_checkPT</tabstop>
-    <tabstop>m_checkUS</tabstop>
-    <tabstop>buttonSearch</tabstop>
-    <tabstop>buttonToday</tabstop>
-    <tabstop>buttonYesterday</tabstop>
-    <tabstop>buttonRetrieve</tabstop>
-    <tabstop>pushButton6</tabstop>
-    <tabstop>buttonView</tabstop>
-    <tabstop>buttonClear</tabstop>
-    <tabstop>pushButton17</tabstop>
-    <tabstop>m_Tab</tabstop>
-    <tabstop>pushButton9</tabstop>
-  </tabstops>
-  <images>
-    <image name="image0" >
-      <data format="PNG" length="826" >89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000030149444154388db59531681b5718c77f0e377c070e3c810a3a70e0041eac51852e0a19e45134830a1d9a4c69a04bc8928e990a693a640e1d0c8642b08742321894c1507991b484c890902bb8701a047760c3bd21701fe4201dde49b6a41a32b8df72dcbbeffdbefffbbfefbd5b1b0c07cce266ebe667ae2006c3c1dada0cdc3be87d6e6c35b0d692a409d9c7ec8b20d65ae29398d19b1114e7e3de4ce98b3f5e10dc0053cf0951b4506496e1b964bf7ce6c585d9054c62d01d617ca48be0596553cf496d8f2c8b01c5f795fc93904e85ec4c01a152857a5d9175d0b2805c872080f18595ccc1499a10a225d4e2fbc2877786fe81253ab6c04c8d106e09db5d43ab0d146e5c64d1a23938fb98a185cea1c33eecfd9eba49eb427dcb201e245365f2b7b2fb5b4a3a31dcb927178afe07d86901df870fefa4842aed6f6b74ba42e52b4014d580e1eb9cbd9d94de7e4aad16d2f9be02d805f0b5e532f927a1ffcacea1777f122a8105b164a7c25faf323a5d9f1f1fd600e1e5bec59e2d4b5c7ef5209d0ad17b8b31864e57c0b3e0815ac3ee33253ab664a770ff5185d1a1cb8d2267d3e58aa1dc7d2508cbe597d0e74fdd269aaaf0f52d414c4ea3e9762c996869e42560d7a72e41c4799a2586e74f95e8d8151481fa86efbe7b3398ac58b1a2b8527589f15451ad303ac2293542ad6648a796278f13a27185e4c4754310facb98c53a79e19a3fdc1426ff28c3d7399d1f7cb25343eb96106cf83c790ce9c4f2eb831855c55485663327992eb6dc8a6259874ed700b0b793323cccb9ffa842b30d6133e3e75fea989ac15a8b16ca76b746b0b92278d919774c5b6d48a78697fb29bbcf52468742a32120909c24e899ce67beed5be2db01e22d1e9485bb620e47f9ee9e606a21bd3f5d3744c7e7c54d55e87443867d8b554515ac5db4620e8e4f62263170fd1cdee90aad7640141992891b0f367c9adfe4049bb07d3b7022bd8c687c0978f46684ee084150b65ac1fcca94591b7a90a496e4c095164fb016a2b192a497795cc0f84817aebe25f7bf70ccc54a575c555c03f78ffa5fc0570d1f0c076bff0232285a09643cc7ce0000000049454e44ae426082</data>
-    </image>
-  </images>
+     </property>
+     <property name="tabPosition" >
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="tabShape" >
+      <enum>QTabWidget::Rounded</enum>
+     </property>
+     <widget class="QWidget" name="m_tabCache" >
+      <attribute name="title" >
+       <string>Local Database</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="udg::QStudyListView" name="m_StudyLViewCache" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>7</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>5</width>
+             <height>5</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="udg::QSeriesIconView" name="m_SeriesImViewCache" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>7</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_tabPacs" >
+      <attribute name="title" >
+       <string>PacsServer</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="1" column="0" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>5</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="0" >
+          <widget class="udg::QStudyListView" name="m_StudyLViewPacs" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>7</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>0</width>
+             <height>159</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" >
+          <widget class="udg::QSeriesIconView" name="m_SeriesImViewPacs" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>7</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>0</width>
+             <height>159</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>udg::QStudyListView</class>
+   <extends></extends>
+   <header>qstudylistview.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>udg::QPacsList</class>
+   <extends></extends>
+   <header>qpacslist.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>udg::QSeriesIconView</class>
+   <extends></extends>
+   <header>qseriesiconview.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_buttonConfig</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
 </ui>

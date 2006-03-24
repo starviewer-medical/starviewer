@@ -16,11 +16,12 @@ namespace udg {
 DatabaseConnection::DatabaseConnection()
 {
    StarviewerSettings settings;
-   m_ConnectionOpened = false;
    
    m_databasePath = settings.getDatabasePath().ascii();
    m_databaseLock = (sem_t*)malloc(sizeof(sem_t));
    sem_init(m_databaseLock,0,1);//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
+   connectDB();
+   
 }
 
 /** Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
@@ -33,9 +34,7 @@ void DatabaseConnection::setDatabasePath(std::string path)
 /*connecta amb la base de dades segons el path*/
 void DatabaseConnection::connectDB()
 {
-  
   m_db = sqlite_open(m_databasePath.c_str(),0,NULL);
-  m_ConnectionOpened = true;
 }
 
 /** Retorna la connexió a la base de dades
@@ -43,9 +42,17 @@ void DatabaseConnection::connectDB()
   */
 sqlite* DatabaseConnection::getConnection()
 {
-    if (!m_ConnectionOpened) connectDB();
+    if (!connected()) connectDB();
     
     return m_db;
+}
+
+/** Indica s'esta connectat a la base de dades
+  *     @return indica si s'esta connectat a la base de dades
+  */
+bool DatabaseConnection::connected()
+{
+    return m_db != NULL;
 }
 
 /** Demana el candeu per accedir a la base de dades!. S'ha de demanar el candau per poder accedir de manera correcte i segura a la base de dades
@@ -67,8 +74,10 @@ void DatabaseConnection::releaseLock()
 /*tanca la connexió de la base de dades*/
 void DatabaseConnection::closeDB()
 {
-  sqlite_close(m_db);
-  m_ConnectionOpened = false;
+    if (connected())
+    {
+        sqlite_close(m_db);
+    }
 }
 
 /**destructor de la classe*/

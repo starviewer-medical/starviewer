@@ -5,13 +5,9 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "qseriesiconview.h"
-#include <q3iconview.h>
 #include <QString>
-#include <qpixmap.h>
-#include <qimage.h>
+#include <QIcon>
 //Added by qt3to4:
-// #include <QImageIO>
-#include <QImageReader>
 #include "starviewersettings.h"
 
 namespace udg {
@@ -21,27 +17,39 @@ namespace udg {
 QSeriesIconView::QSeriesIconView(QWidget *parent )
  : QWidget( parent )
 {
-    setupUi( this );
-    QString className;    
 
-    className.insert(0,this->name());
+    setupUi( this );
+    QSize size;    
+
+    size.setHeight(100);
+    size.setWidth(100);
+    m_seriesListV->setIconSize(size);
     //indiquem que després d'inserir s'ha d'ordenar l'iconview ascendentment
-    SeriesListV->setSorting(true,true);
     
+    createConnections();
+    
+}
+
+/** crea les connexions dels signals i slots 
+  */
+void QSeriesIconView::createConnections()
+{
+    connect(m_seriesListV,SIGNAL(itemClicked ( QListWidgetItem *)), SLOT(clicked(QListWidgetItem *)));
+    connect(m_seriesListV,SIGNAL(itemDoubleClicked ( QListWidgetItem *)), SLOT(view(QListWidgetItem *)));
 }
 
 /** Insereix l'informació d'una sèrie al ListICon
   *          @param descripció de la sèrie
-  *          @param Nombre d'imatges de la sèrie
-  *          @param path de la imatge a mostrar de la sèrie
   */
+/* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vul mostrar i no tinc
+   enlloc per amagar-lo */
 void QSeriesIconView::insertSeries(Series *serie)
 {
-    QString text,num,scaledPathImage,nameClass;
-    QPixmap image;
-//     QImageIO iio;
-    QImageReader iioReader;
+    QString text,num,pathImage,nameClass;
     StarviewerSettings settings;
+    QListWidgetItem *item = new QListWidgetItem( m_seriesListV );
+    QString statusTip;
+    
     
     text.insert(0,tr("Series "));
     text.append(serie->getSeriesNumber().c_str() );
@@ -62,48 +70,40 @@ void QSeriesIconView::insertSeries(Series *serie)
     }
         
     nameClass.insert(0,this->name());
-    if (nameClass == "SeriesImViewCache")
+    if (nameClass == "m_SeriesImViewCache")
     {
-        scaledPathImage.insert(0,settings.getCacheImagePath());
-        scaledPathImage.append(serie->getStudyUID().c_str() );
-        scaledPathImage.append("/");
-        scaledPathImage.append(serie->getSeriesUID().c_str() );
-        scaledPathImage.append("/scaled.jpeg");
-//         iio.setFileName(scaledPathImage);
-//         if ( iio.read() ) image = iio.image();
-        iioReader.setFileName(scaledPathImage);
-        image = iioReader.read();
+        pathImage.insert(0,settings.getCacheImagePath());
+        pathImage.append(serie->getStudyUID().c_str());
+        pathImage.append("/");
+        pathImage.append(serie->getSeriesUID().c_str() );
+        pathImage.append("/scaled.jpeg");
     }
     else
     {
         // \TODO lleig!!!!!!!!!!!!!!!!!
-//         iio.setFileName( "/home/marc/starviewer-pacs/bin/images3.jpeg" );
-//         if ( iio.read() ) image = iio.image(); // convert to pixmap
-        iioReader.setFileName( "/home/marc/starviewer-pacs/bin/images3.jpeg" );
-        image = iioReader.read();
+        pathImage = "/home/marc/starviewer-pacs/bin/images3.jpeg" ;
     }
-    Q3IconViewItem *series =  new Q3IconViewItem (SeriesListV, text, image );
-    //inserim la clau per ordenar les series, la clau és el número de serie
-
-    series->setKey(serie->getSeriesNumber().c_str() );
     
-    SeriesListV->selectAll(true);
+    QIcon   icon(pathImage);
+
+    item->setText(text);
+    item->setIcon(icon);
+    item->setStatusTip(serie->getSeriesUID().c_str()); //guardo a l'status tip l'UID de la serie
 }
 
 /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyListView, perquè selecciona la mateixa serie que el QSeriesIconView
   *        @param serie Seleccionada
   */
-void QSeriesIconView::clicked(Q3IconViewItem *item)
+void QSeriesIconView::clicked(QListWidgetItem *item)
 {
-
-    if (item != NULL) emit(selectedSeriesIcon(item->index()));
-    
+     if (item != NULL) emit(selectedSeriesIcon(item->statusTip()));
+     
 }
 
 /** slot que s'activa quant es fa doblec
-  *        @param serie Seleccionada
+  *        @param item de la serie Seleccionada
   */
-void QSeriesIconView::view(Q3IconViewItem *item)
+void QSeriesIconView::view(QListWidgetItem *item)
 {
 
     if (item != NULL) emit(viewSeriesIcon());
@@ -111,28 +111,23 @@ void QSeriesIconView::view(Q3IconViewItem *item)
 }
 
 /** Slot que s'activa quant es selecciona una sèrie des del StudyListView,selecciona la serie del QStudyListView en el QSeriesIconView
-  *        @param  clau (Número de la sèrie)
+  *        @param  UID de la serie seleccionada
   */
-void QSeriesIconView::selectedSeriesList(QString key)
+void QSeriesIconView::selectedSeriesList(QString seriesUID)
 {
-    Q3IconViewItem *item;
+    QList<QListWidgetItem *> qSeriesList(m_seriesListV->findItems("*",Qt::MatchWildcard));
+    QListWidgetItem *item;
     
-    item = SeriesListV->firstItem();
-    
-    while (item!=0)
+    for (int i = 0;i < qSeriesList.count();i++)
     {
-        if (item->key() == key)
+        item = qSeriesList.at(i);;
+        if (item->statusTip() == seriesUID)
         {
-            //Aquest tall no funciona, bug QT ? he provat d'altres maneres fer que assenyales nomes un iconitem, i quant el sectionMode és single no ho fa  bé
-            SeriesListV->setCurrentItem(item);
-            SeriesListV->setSelected(item,true,false);
-            item->setSelected(true);
-            break;
+            m_seriesListV->setItemSelected(item,true);
+            m_seriesListV->setCurrentItem(item);
         }
-        else item = item->nextItem();
-        
-    }
-    SeriesListV->selectAll(true);
+        else m_seriesListV->setItemSelected(item,false);
+    }  
     
 }
 
@@ -140,11 +135,11 @@ void QSeriesIconView::selectedSeriesList(QString key)
   */
 void QSeriesIconView::clear()
 {
-    SeriesListV->clear();
+    m_seriesListV->clear();
 }
 
 /** Slot, que al rebre la senyal addSeries del del QStudyListView afegeix una sèrie al IconView
-  *        @param [in] serie 
+  *        @param serie 
   */
 void QSeriesIconView::addSeries(Series *serie)
 {

@@ -9,13 +9,13 @@ FORMS += mutualinformationinputparametersformbase.ui \
          qmpr3dextensionbase.ui \
          qmprextensionbase.ui \
          qmutualinformationtab.ui \
-         qpacslistbase.ui \
          qretrievescreenbase.ui \
          qseriesiconviewbase.ui \
-         qstudylistscreenbase.ui \
          qstudylistviewbase.ui \
          qtabaxisviewbase.ui \
-         queryscreenbase.ui 
+         queryscreenbase.ui \
+         qpacslistbase.ui \
+         qnavigatewindowbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -54,7 +54,8 @@ HEADERS += director.h \
            distancetool.h \
            tool.h \
            QVTKWidget.h \
-           vtkEventQtSlotConnect.h 
+           vtkEventQtSlotConnect.h \
+           qnavigatewindow.h 
 SOURCES += director.cpp \
            mutualinformationdirector.cpp \
            mutualinformationinputparametersform.cpp \
@@ -92,7 +93,8 @@ SOURCES += director.cpp \
            distancetool.cpp \
            tool.cpp \
            QVTKWidget.cxx \
-           vtkEventQtSlotConnect.cxx 
+           vtkEventQtSlotConnect.cxx \
+           qnavigatewindow.cpp 
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
@@ -126,4 +128,3 @@ TARGETDEPS += ../repositories/librepositories.a \
 ../tools/libtools.a \
 ../inputoutput/libinputoutput.a \
 ../../src/inputoutput/libinputoutput.a
-QT += qt3support

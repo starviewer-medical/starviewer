@@ -192,6 +192,11 @@ Status CachePool::updatePoolSpace(int size)
     Status state;
     std::string sql;
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     sql.insert(0,"Update Pool Set Space = Space + %i ");
     sql.append("where Param = 'USED'");
     
@@ -217,6 +222,12 @@ Status CachePool::updatePoolTotalSize(int space)
     
     //sqlite no permet en un update entra valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem
     //un string i hi afegim 6 zeros per passar Mb a bytes
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     sprintf(size,"%i",space); //convertim l'espai en Mb a string
     sql.insert(0,"Update Pool Set Space = ");//convertim l'espai en bytes
     sql.append(size);
@@ -241,6 +252,12 @@ Status CachePool::resetPoolSpace()
     Status state;
     std::string sql;
     
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     sql.insert(0,"Update Pool Set Space = 0 ");
     sql.append("where Param = 'USED'");
     
@@ -263,6 +280,11 @@ Status CachePool::getPoolUsedSpace(int &space)
     std::string sql;
     char **resposta = NULL,**error = NULL;
     int col,rows,i;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }    
     
     sql.insert(0,"select round(Space/1000000) from Pool ");
     sql.append("where Param = 'USED'");
@@ -292,6 +314,11 @@ Status CachePool::getPoolTotalSize(int &space)
     std::string sql;
     char **resposta = NULL,**error = NULL;
     int col,rows,i;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
     
     sql.insert(0,"select round(Space/1000000) from Pool "); // dividim per 1.000.000 per obtenir les dades en Mb
     sql.append("where Param = 'POOLSIZE'");

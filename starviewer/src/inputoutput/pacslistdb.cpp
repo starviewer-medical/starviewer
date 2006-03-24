@@ -33,6 +33,8 @@ Status PacsListDB::constructState(int numState)
                                 break;
         case SQLITE_CONSTRAINT: state.setStatus("Constraint Violation",false,2019);
                                 break;
+        case 50 :               state.setStatus("Not connected to database",false,2050);
+                                break;
         case 99 :               state.setStatus("Data Not Found",false,2099);
                                 break;
       //aquests errors en principi no es poden donar, pq l'aplicació no altera cap element de l'estructura, si es produeix algun
@@ -56,6 +58,10 @@ Status PacsListDB::insertPacs(PacsParameters *pacs)
     int i;
     std::string sql;
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
     //hem de comprovar que el pacs no existis ja abans! i ara estigui donat de baixa
     stateQuery = queryPacsDeleted(pacs);
     
@@ -98,7 +104,12 @@ Status PacsListDB::updatePacs(PacsParameters *pacs)
     Status state;
     int i;
     std::string sql;
-   
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     sql.insert(0,"Update PacsList ");
     sql.append("set AETitle = %Q, ");
     sql.append("Server = %Q, ");
@@ -143,7 +154,12 @@ Status PacsListDB::queryPacsList(PacsList &list)
 
     char **resposta = NULL,**error = NULL;
     Status state;
-
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     sql.insert(0,"select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID ");
     sql.append("from PacsList ");
     sql.append("where del = 'N' ");
@@ -189,6 +205,11 @@ Status PacsListDB::queryPacs(PacsParameters *pacs,std::string AETitle)
 
     char **resposta = NULL,**error = NULL;
     Status state;
+
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
 
     sql.insert(0,"select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID ");
     sql.append("from PacsList ");
@@ -246,6 +267,11 @@ Status PacsListDB::deletePacs(PacsParameters *pacs)
     sql.insert(0,"update PacsList  set Del = 'S'");
     sql.append (" where PacsID = %i");
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     m_DBConnect->getLock();
     i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0,
                     pacs->getPacsID()
@@ -274,6 +300,11 @@ Status PacsListDB::queryPacsDeleted(PacsParameters *pacs)
     sql.append(" where AEtitle = '");
     sql.append(pacs->getAEPacs());
     sql.append("' and Del = 'S'");
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
     
     m_DBConnect->getLock();
     estat=sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.

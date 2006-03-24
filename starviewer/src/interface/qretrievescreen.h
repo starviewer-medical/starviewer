@@ -8,8 +8,6 @@
 #define UDGQRETRIEVESCREEN_H
 
 #include "ui_qretrievescreenbase.h"
-
-#include <q3listview.h>
 #include <QString>
 #include "study.h"
 #include "image.h"
@@ -29,7 +27,7 @@ class QRetrieveScreen : public QDialog , private Ui::QRetrieveScreenBase{
 Q_OBJECT
 public:
 
-    void clearList();
+    
     static QRetrieveScreen* getQRetrieveScreen()
      {
          static QRetrieveScreen QRS;
@@ -41,23 +39,24 @@ public:
     void insertNewRetrieve(Study *);
     void setRetrievedFinished(QString studyUID);
     void setErrorRetrieving(QString studyUID);
+    ~QRetrieveScreen();
+    
     
 public slots :
     
     void imageRetrieved(Image *,int downloadedImages);
     void setSeriesRetrieved(QString studyUID);
+    void clearList();
 
 signals:
     void studyRetrieved(QString);
     
-    
 private:
 
     QRetrieveScreen( QWidget *parent = 0 );
-    ~QRetrieveScreen();
+    
+    void createConnections();
     void deleteStudy(QString studyUID);
-    int image;
-    sem_t *semafor;
 };
 
 };

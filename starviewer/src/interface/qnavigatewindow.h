@@ -4,32 +4,27 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#ifndef UDGQNAVIGATEWINDOW_H
+#define UDGQNAVIGATEWINDOW_H
+#include <QWidget>
 
-#ifndef UDGSTUDYLISTSINGLETON_H
-#define UDGSTUDYLISTSINGLETON_H
-
-#include "studylist.h"
+#include "ui_qnavigatewindowbase.h"
 
 namespace udg {
 
-/** Implementa una classe singleton de l'studyList
-@author marc
+/**
+	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class StudyListSingleton: public StudyList{
-    
+class QNavigateWindow : public QWidget, private Ui::QNavigateWindowBase
+{
+Q_OBJECT
 public:
-     //this make this class a singleton class, return a static pointer to this class
-    static StudyListSingleton* getStudyListSingleton();
-    ~StudyListSingleton();
-    
-private :
-    static StudyListSingleton *pInstance;
-    
-    StudyListSingleton();
+    QNavigateWindow(QWidget *parent = 0);
 
+    ~QNavigateWindow();
 
 };
 
-};
+}
 
 #endif

@@ -16,7 +16,7 @@
 #include <QFileDialog>
 #include <QProcess>
 #include <QLabel>
-#include <q3listview.h>
+#include <QTreeView>
 
 #include "pacsparameters.h"
 #include "status.h"
@@ -37,21 +37,75 @@ namespace udg {
 QConfigurationScreen::QConfigurationScreen( QWidget *parent )
  : QDialog( parent )
 {
-    int i;
-
     setupUi( this );
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
-    
-    for (i=0;i<=pacsListView->columns();i++)
-    {
-        pacsListView->setColumnWidthMode(i,Q3ListView::Manual); 
-    }
-    m_PacsID=0;
+
+    m_PacsID = 0;
     
     loadCacheDefaults();
     loadPacsDefaults();
-    m_ButtonCacheApply->setEnabled(false);
-    m_ButtonPacsApply->setEnabled(false);
+    m_buttonApplyCache->setEnabled(false);
+    m_buttonApplyPacs->setEnabled(false);
+    
+    connectSignalAndSlots();
+}
+
+void QConfigurationScreen::connectSignalAndSlots()
+{
+    //connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
+    connect(m_buttonExaminateDataBase, SIGNAL(clicked()), this, SLOT(examinateDataBaseRoot()));
+    
+    //connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
+    connect(m_buttonExaminateCacheImage, SIGNAL(clicked()), this, SLOT(examinateCacheImagePath()));
+    
+    //connecta el boto acceptar de la cache amb l'slot accept
+    connect(m_buttonAcceptCache, SIGNAL(clicked()), this, SLOT(acceptChanges()));
+    
+    //connecta el boto cancelar de la cache amb l'slot cancel
+    connect(m_buttonCancelCache, SIGNAL(clicked()), this, SLOT(cancelChanges()));
+    
+    //connecta el boto aplicar de la cache amb l'slot apply
+    connect(m_buttonApplyCache, SIGNAL(clicked()), this, SLOT(applyChanges()));
+    
+    //connecta el boto acceptar del pacs amb l'slot accept
+    connect(m_buttonAcceptPacs, SIGNAL(clicked()), this, SLOT(acceptChanges()));
+    
+    //connecta el boto cancelar del pacs amb l'slot cancel
+    connect(m_buttonCancelPacs, SIGNAL(clicked()), this, SLOT(cancelChanges()));
+    
+    //connecta el boto aplicar del Pacs amb l'slot apply
+    connect(m_buttonApplyPacs, SIGNAL(clicked()), this, SLOT(applyChanges()));
+    
+    //activen el boto apply quant canvia el seu valor
+    connect(m_textDatabaseRoot,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textCacheImagePath,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textPoolSize,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textAETitleMachine,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textTimeout,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textDatabaseRoot,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textLocalPort,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textMaxConnections,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_checkPrevImages,SIGNAL(stateChanged(int)),this,SLOT(configurationChanged( int )));
+    connect(m_checkCountImages,SIGNAL(stateChanged(int)),this,SLOT(configurationChanged( int )));
+    connect(m_comboLanguage,SIGNAL(editTextChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    
+    //mateniment base de dades
+    connect(m_buttonDeleteStudies,SIGNAL(clicked()),this,SLOT(deleteStudies()));
+    connect(m_buttonCompactDatabase,SIGNAL(clicked()),this,SLOT(compactCache()));
+    
+    //afegeix la / al final del Path de la cache d'imatges
+    connect(m_textCacheImagePath,SIGNAL(editingFinished()),this,SLOT(cacheImagePathEditingFinish()));
+    
+    //manteniment PACS
+    connect(m_buttonAddPacs,SIGNAL(clicked()),this,SLOT(addPacs()));
+    connect(m_buttonDeletePacs,SIGNAL(clicked()),this,SLOT(deletePacs()));
+    connect(m_buttonUpdatePacs,SIGNAL(clicked()),this,SLOT(updatePacs()));
+    connect(m_buttonClear,SIGNAL(clicked()),this,SLOT(clear()));
+    connect(m_buttonTestPacs,SIGNAL(clicked()),this,SLOT(test()));
+    connect(m_PacsTreeView,SIGNAL(itemClicked ( QTreeWidgetItem *, int)),this,SLOT(selectedPacs( QTreeWidgetItem *, int)));
+    
+    
+    
 }
 
 /** Carrega les dades de configuració de la cache
@@ -61,10 +115,8 @@ void QConfigurationScreen::loadCacheDefaults()
 
     StarviewerSettings settings;
 
-
-    m_DataBaseRoot->setText(settings.getDatabasePath());
-    m_CacheImagePath->setText(settings.getCacheImagePath());
-
+    m_textDatabaseRoot->setText(settings.getDatabasePath());
+    m_textCacheImagePath->setText(settings.getCacheImagePath());
     
     loadCachePoolDefaults();
 }
@@ -94,9 +146,9 @@ void QConfigurationScreen::loadCachePoolDefaults()
         return;
     }
     
-    m_PoolSize->setText(text.setNum(space/1000,10));
+    m_textPoolSize->setText(text.setNum(space/1000,10));
     
-    result=used;
+    result = used;
     result = result/1000; //passem Mb a Gb;
     text.setNum(result,'f',2);
     text.append(" Gb");
@@ -130,32 +182,32 @@ void QConfigurationScreen::loadPacsDefaults()
 {
     QString result;
     StarviewerSettings settings;
-    
 
-    m_AETitleMachine->setText(settings.getAETitleMachine());
-    m_LocalPort->setText(settings.getLocalPort());
-    m_Timeout->setText(settings.getTimeout());
-    m_MaxConnections->setText(settings.getMaxConnections());
-    m_CheckCountImages->setChecked(settings.getCountImages());
-    m_CheckPrevImages->setChecked(settings.getPrevImages());
+    m_textAETitleMachine->setText(settings.getAETitleMachine());
+    m_textLocalPort->setText(settings.getLocalPort());
+    m_textTimeout->setText(settings.getTimeout());
+    m_textMaxConnections->setText(settings.getMaxConnections());
+    m_checkCountImages->setChecked(settings.getCountImages());
+    m_checkPrevImages->setChecked(settings.getPrevImages());
 }
 
-/*************************************************************************************************************************************/
-/*                                              PACS DEVICE                                                                          */
-/*************************************************************************************************************************************/
+
+/************************************************************************************************************************/
+/*                                              PACS DEVICE                                                             */
+/************************************************************************************************************************/
 
 /** Neteja els line edit de la pantalla
   */
 void QConfigurationScreen:: clear()
 {
-    m_TextAETitle->setText("");
-    m_TextAddress->setText("");
-    m_TextPort->setText("");
-    m_TextInstitution->setText("");
-    m_TextLocation->setText("");
-    m_TextDescription->setText("");
-    m_CheckDefault->setChecked(false);
-    m_PacsID=0;
+    m_textAETitle->setText("");
+    m_textAddress->setText("");
+    m_textPort->setText("");
+    m_textInstitution->setText("");
+    m_textLocation->setText("");
+    m_textDescription->setText("");
+    m_checkDefault->setChecked(false);
+    m_PacsID = 0;
 }
 
 /** Slot que dona d'alta el PACS a la la base de dades
@@ -168,13 +220,13 @@ void QConfigurationScreen::addPacs()
     
     if (validatePacsParameters())
     {
-        pacs.setAEPacs( m_TextAETitle->text().toStdString() );
-        pacs.setPacsPort( m_TextPort->text().toStdString() );
-        pacs.setPacsAdr( m_TextAddress->text().toStdString() );
-        pacs.setInstitution( m_TextInstitution->text().toStdString() );
-        pacs.setLocation( m_TextLocation->text().toStdString() );
-        pacs.setDescription( m_TextDescription->text().toStdString() );
-        if ( m_CheckDefault->isChecked() )
+        pacs.setAEPacs( m_textAETitle->text().toStdString() );
+        pacs.setPacsPort( m_textPort->text().toStdString() );
+        pacs.setPacsAdr( m_textAddress->text().toStdString() );
+        pacs.setInstitution( m_textInstitution->text().toStdString() );
+        pacs.setLocation( m_textLocation->text().toStdString() );
+        pacs.setDescription( m_textDescription->text().toStdString() );
+        if ( m_checkDefault->isChecked() )
         {
             pacs.setDefault("S");
         }
@@ -185,7 +237,12 @@ void QConfigurationScreen::addPacs()
 
         if (!state.good())
         {
-            databaseError(&state,&pacs);
+            if (state.code() == 2019)
+            {
+            
+                QMessageBox::warning( this, tr("StarViewer"),tr("AETitle ") + pacs.getAEPacs().c_str() + tr(" exists") +"\n");
+            }else databaseError(&state);
+
         }
         else 
         {
@@ -198,21 +255,21 @@ void QConfigurationScreen::addPacs()
 
 /** Slot que s'activa quant seleccionem un Pacs del PacsListView, emplena les caixes de texts amb les dades del Pacs
   */
-void QConfigurationScreen::selectedPacs(Q3ListViewItem * item)
+void QConfigurationScreen::selectedPacs(QTreeWidgetItem * item,int )
 {
     PacsList list;
     PacsParameters pacs;
     Status state;
     PacsListDB pacsList;
 
-    if (item!=NULL)
+    if (item != NULL)
     {
         
         state = pacsList.queryPacsList(list);        
         
         if (!state.good())
         {
-            databaseError(&state,&pacs);
+            databaseError(&state);
             return;
         }
                 
@@ -221,18 +278,18 @@ void QConfigurationScreen::selectedPacs(Q3ListViewItem * item)
             pacs = list.getPacs();
             
             //emplenem els textots
-            m_TextAETitle->setText( pacs.getAEPacs().c_str() );
-            m_TextPort->setText( pacs.getPacsPort().c_str() );
-            m_TextAddress->setText( pacs.getPacsAdr().c_str() );
-            m_TextInstitution->setText( pacs.getInstitution().c_str() );
-            m_TextLocation->setText( pacs.getLocation().c_str() );
-            m_TextDescription->setText( pacs.getDescription().c_str() );
+            m_textAETitle->setText( pacs.getAEPacs().c_str() );
+            m_textPort->setText( pacs.getPacsPort().c_str() );
+            m_textAddress->setText( pacs.getPacsAdr().c_str() );
+            m_textInstitution->setText( pacs.getInstitution().c_str() );
+            m_textLocation->setText( pacs.getLocation().c_str() );
+            m_textDescription->setText( pacs.getDescription().c_str() );
             m_PacsID = pacs.getPacsID();
             if (pacs.getDefault() == "S")
             {
-                m_CheckDefault->setChecked(true);
+                m_checkDefault->setChecked(true);
             }
-            else m_CheckDefault->setChecked(false);
+            else m_checkDefault->setChecked(false);
             
             //bloquegem el AETitle perque es camp clau, no el deixem modificar
        }
@@ -248,7 +305,7 @@ void QConfigurationScreen::updatePacs()
     Status state;
     PacsListDB pacsList;
     
-    if (m_PacsID==0)
+    if (m_PacsID == 0)
     {
         QMessageBox::warning( this, tr("StarViewer"),tr("Select a Pacs for update"));
         return;
@@ -256,14 +313,14 @@ void QConfigurationScreen::updatePacs()
     
     if (validatePacsParameters())
     {
-        pacs.setAEPacs( m_TextAETitle->text().toStdString() );
-        pacs.setPacsPort( m_TextPort->text().toStdString() );
-        pacs.setPacsAdr( m_TextAddress->text().toStdString() );
-        pacs.setInstitution( m_TextInstitution->text().toStdString() );
-        pacs.setLocation( m_TextLocation->text().toStdString() );
-        pacs.setDescription( m_TextDescription->text().toStdString() );
+        pacs.setAEPacs( m_textAETitle->text().toStdString() );
+        pacs.setPacsPort( m_textPort->text().toStdString() );
+        pacs.setPacsAdr( m_textAddress->text().toStdString() );
+        pacs.setInstitution( m_textInstitution->text().toStdString() );
+        pacs.setLocation( m_textLocation->text().toStdString() );
+        pacs.setDescription( m_textDescription->text().toStdString() );
         pacs.setPacsID(m_PacsID);
-        if (m_CheckDefault->isChecked())
+        if (m_checkDefault->isChecked())
         {
             pacs.setDefault("S");
         }
@@ -273,7 +330,7 @@ void QConfigurationScreen::updatePacs()
          
         if (!state.good())
         {
-            databaseError(&state,&pacs);
+            databaseError(&state);
         }
         else 
         {
@@ -293,7 +350,7 @@ void QConfigurationScreen::deletePacs()
     PacsParameters pacs;
     PacsListDB pacsList;
     
-    if (m_PacsID==0)
+    if (m_PacsID == 0)
     {
         QMessageBox::warning( this, tr("StarViewer"),tr("Select a Pacs for delete"));
         return;
@@ -306,7 +363,7 @@ void QConfigurationScreen::deletePacs()
     
     if (!state.good())
     {
-        databaseError(&state,&pacs);
+        databaseError(&state);
     }
     else
     {
@@ -326,7 +383,7 @@ void QConfigurationScreen::fillPacsListView()
     PacsList list;
     PacsListDB pacsList;
     
-    pacsListView->clear();
+    m_PacsTreeView->clear();
     
     state = pacsList.queryPacsList(list);
     
@@ -336,7 +393,7 @@ void QConfigurationScreen::fillPacsListView()
         
         while (!list.end())
         {
-            Q3ListViewItem* item = new Q3ListViewItem(pacsListView);            
+            QTreeWidgetItem* item = new QTreeWidgetItem(m_PacsTreeView);            
             pacs = list.getPacs();
             item->setText(0,pacs.getAEPacs().c_str() );
             item->setText(1,pacs.getPacsAdr().c_str() );
@@ -382,7 +439,7 @@ bool QConfigurationScreen::validatePacsParameters()
     QString text;
     
     //Per força tot els pacs han de tenir algun AETitle
-    text = m_TextAETitle->text();
+    text = m_textAETitle->text();
     if (text.length() == 0)
     {
         QMessageBox::warning( this, tr("StarViewer"),tr("AETitle field can't be empty"));
@@ -390,7 +447,7 @@ bool QConfigurationScreen::validatePacsParameters()
     }
     
     //adreça del pacs no pot estar en blanc
-    text = m_TextAddress->text();
+    text = m_textAddress->text();
     if (text.length() == 0)
     {
         QMessageBox::warning( this, tr("StarViewer"),tr("Incorrect address server"));
@@ -398,7 +455,7 @@ bool QConfigurationScreen::validatePacsParameters()
     }   
     
     //el port ha d'estar entre 0 i 65535
-    text = m_TextPort->text();
+    text = m_textPort->text();
     if (!(text.toInt(NULL,10) >=0 && text.toInt(NULL,10)<=65535) || text.length()==0)
     {
         QMessageBox::warning( this, tr("StarViewer"),tr("PACS Port has to be between 0 and 65535"));
@@ -406,7 +463,7 @@ bool QConfigurationScreen::validatePacsParameters()
     }
     
     //la institució no pot estar en blanc
-    text = m_TextInstitution->text();
+    text = m_textInstitution->text();
     if (text.length() == 0)
     {
         QMessageBox::warning( this, tr("StarViewer"),tr("Institution field can't be empty"));
@@ -428,39 +485,50 @@ bool QConfigurationScreen::validateChanges()
 {
     QDir dir;
 
-    if (m_LocalPort->isModified())
+    if (m_textLocalPort->isModified())
     {
-        if (m_LocalPort->text().toInt(NULL,10)<0 || m_LocalPort->text().toInt(NULL,10) > 65535)
+        if (m_textLocalPort->text().toInt(NULL,10)<0 || m_textLocalPort->text().toInt(NULL,10) > 65535)
         {
             QMessageBox::warning( this, tr("StarViewer"),tr("Local Port has to be between 0 and 65535"));
             return false;        
         }
     }
     
-    if (m_MaxConnections->isModified())
+    if (m_textMaxConnections->isModified())
     {
-        if (m_MaxConnections->text().toInt(NULL,10)<1 || m_MaxConnections->text().toInt(NULL,10) > 15 )
+        if (m_textMaxConnections->text().toInt(NULL,10)<1 || m_textMaxConnections->text().toInt(NULL,10) > 15 )
         {
             QMessageBox::warning( this, tr("StarViewer"),tr("Maximum simultaenious connections has to be between 1 and 15"));
             return false;        
         }
     }    
     
-    if (m_DataBaseRoot->isModified())
+    if (m_textDatabaseRoot->isModified())
     {
-        if ( !dir.exists(m_DataBaseRoot->text()))
+        if ( !dir.exists(m_textDatabaseRoot->text()))
         {
             QMessageBox::warning( this, tr("StarViewer"),tr("Invalid database path"));
             return false;             
         }
     }
 
-    if (m_CacheImagePath->isModified())
+    if (m_textCacheImagePath->isModified())
     {
-        if (!dir.exists(m_CacheImagePath->text()))
+        if (!dir.exists(m_textCacheImagePath->text()))
         {
-            QMessageBox::warning( this, tr("StarViewer"),tr("Invalid cache image path. The directory doesn't exit"));
-            return false;             
+            switch (QMessageBox::question(this,
+                    tr("Create directory ?"),
+                    tr("The cache image directory doesn't exists. Do you want to create it ?"),
+                    tr("&Yes"), tr("&No"), 0, 1))
+                    
+            {
+                case 0:
+                    return dir.mkpath(m_textCacheImagePath->text());
+                case 1: 
+                    return false;
+            }
+                
+        
         }
     }    
 
@@ -506,30 +574,30 @@ void QConfigurationScreen::applyChangesPacs()
     StarviewerSettings settings;
     
     
-    if (m_AETitleMachine->isModified())
+    if (m_textAETitleMachine->isModified())
     {
-        settings.setAETitleMachine(m_AETitleMachine->text());
+        settings.setAETitleMachine(m_textAETitleMachine->text());
     }
     
-    if (m_Timeout->isModified())
+    if (m_textTimeout->isModified())
     {
-        settings.setTimeout(m_Timeout->text());
+        settings.setTimeout(m_textTimeout->text());
     }
     
-    if (m_LocalPort->isModified())
+    if (m_textLocalPort->isModified())
     {
-        settings.setLocalPort(m_LocalPort->text());
+        settings.setLocalPort(m_textLocalPort->text());
     }
     
-    if (m_MaxConnections->isModified())
+    if (m_textMaxConnections->isModified())
     {
-        settings.setMaxConnections( m_MaxConnections->text());
+        settings.setMaxConnections( m_textMaxConnections->text());
     }
     
-    settings.setCountImages(m_CheckCountImages->isChecked());
-    settings.setPrevImages(m_CheckPrevImages->isChecked());
+    settings.setCountImages(m_checkCountImages->isChecked());
+    settings.setPrevImages(m_checkPrevImages->isChecked());
     
-    m_ButtonPacsApply->setEnabled(false);
+    m_buttonApplyPacs->setEnabled(false);
     
 }
 
@@ -538,8 +606,8 @@ void QConfigurationScreen::applyChangesPacs()
   */
 void QConfigurationScreen::configurationChanged (int)
 {
-    m_ButtonPacsApply->setEnabled(true);
-    m_ButtonCacheApply->setEnabled(true);
+    m_buttonApplyPacs->setEnabled(true);
+    m_buttonApplyCache->setEnabled(true);
 }
 
 
@@ -547,8 +615,8 @@ void QConfigurationScreen::configurationChanged (int)
   */
 void QConfigurationScreen::configurationChanged (const QString&)
 {
-    m_ButtonPacsApply->setEnabled(true);
-    m_ButtonCacheApply->setEnabled(true);
+    m_buttonApplyPacs->setEnabled(true);
+    m_buttonApplyCache->setEnabled(true);
 }
 
 
@@ -556,21 +624,12 @@ void QConfigurationScreen::configurationChanged (const QString&)
   */
 void QConfigurationScreen::examinateDataBaseRoot()
 {
-    QProcess process;
-//     dirname , filter , parent , name , modal
-//     QFileDialog *dlg = new QFileDialog( process.workingDirectory().dirName(), "*.sdb (StarViewer Database)", 0, 0, TRUE );
-    
-//     parent , caption ,  dir , filter
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , process.workingDirectory(), tr("*.sdb (StarViewer Database)") );
-    QString directory;
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./", "Starviewer Database (*.sdb)" );
 
     dlg->setFileMode( QFileDialog::ExistingFile );
     
     if ( dlg->exec() == QDialog::Accepted ) {
-        m_DataBaseRoot->setText( dlg->selectedFile() );
-//         directory = dlg->url();
-// \TODO : serveix d'algo aquest directori??????????????
-        directory = dlg->directory().absolutePath();
+        m_textDatabaseRoot->setText( dlg->selectedFile() );
     }
     
     delete dlg;
@@ -580,17 +639,12 @@ void QConfigurationScreen::examinateDataBaseRoot()
   */
 void QConfigurationScreen::examinateCacheImagePath()
 {
-    QProcess process;
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , process.workingDirectory(), tr("*.sdb (StarViewer Database)") );
-    QString directory;
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./", tr("Cache Directory"));
     
     dlg->setMode( QFileDialog::DirectoryOnly );
     
     if ( dlg->exec() == QDialog::Accepted ) {
-        m_CacheImagePath->setText(dlg->selectedFile());
-//         directory = dlg->url();
-// \TODO : serveix d'algo aquest directori??????????????
-        directory = dlg->directory().absolutePath();
+        m_textCacheImagePath->setText(dlg->selectedFile());
     }
        
     delete dlg;
@@ -607,21 +661,21 @@ void QConfigurationScreen::applyChangesCache()
     Status state;
     
     //Aquest els guardem sempre 
-    settings.setCacheImagePath(m_CacheImagePath->text());
-    settings.setDatabasePath(m_DataBaseRoot->text());
+    settings.setCacheImagePath(m_textCacheImagePath->text());
+    settings.setDatabasePath(m_textDatabaseRoot->text());
     
-    if (m_PoolSize->isModified())
+    if (m_textPoolSize->isModified())
     {   
-        state = pool->updatePoolTotalSize(m_PoolSize->text().toInt(NULL,10)*1000);//Passem l'espai a Mb
+        state = pool->updatePoolTotalSize(m_textPoolSize->text().toInt(NULL,10)*1000);//Passem l'espai a Mb
         databaseError(&state);
     }
     
-    if (m_CacheImagePath->isModified())
+    if (m_textCacheImagePath->isModified())
     {
-        settings.setCacheImagePath(m_CacheImagePath->text());
+        settings.setCacheImagePath(m_textCacheImagePath->text());
     }
     
-    m_ButtonCacheApply->setEnabled(false);
+    m_buttonApplyCache->setEnabled(false);
 }
 
 
@@ -680,8 +734,24 @@ void QConfigurationScreen::compactCache()
 }
 
 
-/** Tracta els errors que s'han produït durant els accessos a la base dades
-  *           @param state [in] Estat de l'acció 
+/** Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
+  */
+void QConfigurationScreen::cacheImagePathEditingFinish()
+{
+    QString path;
+    cout<<"entro\n";
+    if (!m_textCacheImagePath->text().endsWith('/',Qt::CaseInsensitive))
+    {
+        cout<<"passo\n";
+        path = m_textCacheImagePath->text();
+        path.append("/");
+        m_textCacheImagePath->setText(path);
+    }
+}
+
+
+/** Tracta els errors que s'han produït a la base de dades en general
+  *           @param state [in] Estat del mètode
   */
 void QConfigurationScreen::databaseError(Status *state)
 {
@@ -690,81 +760,43 @@ void QConfigurationScreen::databaseError(Status *state)
     if (!state->good())
     {
         switch(state->code())
-        {   
-            case 2019 : text.insert(0,tr("Contraint Violation "));
-                        text.append("\n");
-                        QMessageBox::warning( this, tr("StarViewer"),text);
-                        break;
-            case 2001 : text.insert(0,tr("Database not found."));
+        {  case 2001 : text.insert(0,tr("Database not found."));
                         text.append("\n");
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
                         break;
             case 2011 : text.insert(0,tr("Database is corrupted."));
                         text.append("\n");
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
                         break;
+            case 2019 : text.insert(0,tr("Register duplicated."));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2050 : text.insert(0,"Not Connected to database");
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;            
             default :   text.insert(0,tr("Internal Database error"));
                         text.append("\n");
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
                         QMessageBox::warning( this, tr("StarViewer"),text);
-                        break;
         }
+        QMessageBox::critical( this, tr("StarViewer"),text);
     }    
 
 }
 
 
-/** Tracta els errors que s'han produït durant els accessos a la base dades
-  *           @param state [in] Estat de l'acció 
-  *           @param PacsParameters que ha produït l'error
-  */
-void QConfigurationScreen::databaseError(Status *state,PacsParameters *pacs)
-{
-
-    QString text,code;
-    if (!state->good())
-    {
-        switch(state->code())
-        {   
-            case 2019 : text.insert(0,tr("AETitle "));
-                        text.append(pacs->getAEPacs().c_str() );
-                        text.append(tr(" exists"));
-                        text.append("\n");
-                        QMessageBox::warning( this, tr("StarViewer"),text);
-                        break;
-            case 2001 : text.insert(0,tr("Database missing."));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
-                        break;
-            case 2011 : text.insert(0,tr("Database is corrupted."));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
-                        break;
-            default :   text.insert(0,tr("Internal Database error"));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
-                        break;
-        }
-    }    
-
-}
 
 /** destructor de la classe*/
 QConfigurationScreen::~QConfigurationScreen()

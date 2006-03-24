@@ -20,10 +20,6 @@ namespace udg {
 class QSeriesIconView : public QWidget , private Ui::QSeriesIconViewBase{
 Q_OBJECT
 
-private :
-
-    QString m_className; 
-
 public:
     QSeriesIconView(QWidget *parent = 0 );
 
@@ -35,13 +31,19 @@ public:
 public slots:
     void clearIconView();
     void addSeries(Series *serie);
-    void clicked(Q3IconViewItem * item);
+
+    void clicked(QListWidgetItem * item);
     void selectedSeriesList(QString key);
-    void view(Q3IconViewItem *item);
+    void view(QListWidgetItem *item);
 
 signals :
-    void selectedSeriesIcon(int index);
+    void selectedSeriesIcon(QString);
     void viewSeriesIcon();
+    
+private :
+
+    QString m_className; 
+    void createConnections();
 };
 
 };

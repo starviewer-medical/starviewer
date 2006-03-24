@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     
     // translation
     
-    QString qmPath = qApp->applicationDirPath() + "/../interface";
+    QString qmPath = qApp->applicationDirPath() + "/../src/interface";
     QTranslator m_applicationTranslator;
     m_applicationTranslator.load( "interface_ca_ES"/* + m_locales[ languageID ]*/, qmPath );
     app.installTranslator( &m_applicationTranslator );

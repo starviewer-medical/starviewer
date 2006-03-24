@@ -39,6 +39,8 @@ Status CachePacs::constructState(int numState)
                                 break;
         case SQLITE_CONSTRAINT: state.setStatus("Constraint Violation",false,2019);
                                 break;
+        case 50 :               state.setStatus("Not connected to database",false,2050);
+                                break;
       //aquests errors en principi no es poden donar, pq l'aplicació no altera cap element de l'estructura, si es produeix algun
       //Error d'aquests en principi serà perquè la bdd està corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
       //a la pàgina de www.sqlite.org podrem saber de quin error es tracta.
@@ -80,6 +82,11 @@ Status CachePacs::insertStudy(Study *stu)
     int i;
     Status state;
     std::string::size_type pos;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
     
     // Hi ha noms del pacients que depenent de la màquina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
     patientName = stu->getPatientName();
@@ -150,6 +157,11 @@ Status CachePacs::insertSeries(Series *serie)
     Status state;
     std::string sql;
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     sql.insert(0,"Insert into Series (SerInsUID,SerNum,StuInsUID,SerMod,ProNam,SerDes,SerPath,BodParExa)");
     sql.append("values (%Q,%Q,%Q,%Q,%Q,%Q,%Q,%Q)");
     
@@ -181,6 +193,11 @@ Status CachePacs::insertImage(Image *image)
     int i;
     Status state;
     std::string sql;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
     
     sql.insert(0,"Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) ");
     sql.append("values (%Q,%Q,%Q,%i,%Q,%Q,%i,%Q)");
@@ -257,6 +274,11 @@ Status CachePacs::queryStudy(StudyMask studyMask,StudyList &ls)
     char **resposta=NULL,**error=NULL;
     Status state;
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     mask = studyMask.getMask();
     
     m_DBConnect->getLock();
@@ -295,6 +317,7 @@ Status CachePacs::queryStudy(StudyMask studyMask,StudyList &ls)
 std::string CachePacs::buildSqlQueryStudy(DcmDataset* mask)
 {
     std::string sql,patFirstNam,patID,stuDatMin,stuDatMax,stuID,accNum,patLastNam,stuInsUID,stuMod;
+    
     sql.insert(0,"select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AETitle, AbsPath, Modali ");
     sql.append(" from Patient,Study,PacsList ");
     sql.append(" where Study.PatID=Patient.PatId ");
@@ -400,6 +423,11 @@ Status CachePacs::querySeries(SeriesMask seriesMask,SeriesList &ls)
     char **resposta = NULL,**error = NULL;
     Status state;
         
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }    
+        
     mask = seriesMask.getSeriesMask();
                      
     m_DBConnect->getLock();
@@ -456,6 +484,11 @@ Status CachePacs::queryImages(ImageMask imageMask,ImageList &ls)
     char **resposta = NULL,**error = NULL;
     Status state;
     std::string absPath;
+        
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }    
         
     mask = imageMask.getImageMask();
                      
@@ -533,6 +566,11 @@ Status CachePacs::countImageNumber(ImageMask imageMask,int &imageNumber)
     Status state;
     std::string sql;
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     mask = imageMask.getImageMask();
                  
     sql = buildSqlCountImageNumber(mask);
@@ -587,6 +625,11 @@ Status CachePacs::delStudy(std::string studyUID)
     int col,rows,studySize,i;
     std::string sql,absPathStudy;
     CachePool *cacheSpool = CachePool::getCachePool();
+
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
 
     /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna 
       sentencia sql fer un rollback, i així deixa la taula en estat estable, no deixem anar el candau fins al final */ 
@@ -747,7 +790,11 @@ Status CachePacs::delPendingStudies()
     int col,rows,i;
     std::string sql,studyUID;
 
-
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     //cerquem els estudis pendents de finalitzar la descarrega
     sql.insert(0,"select StuInsUID from Study where Status ='PENDING'");
    
@@ -789,6 +836,12 @@ Status CachePacs::clearCache()
     std::string sql;
     CachePool *pool = CachePool::getCachePool();
     
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     //els estudis pendents no els esborrem, perque l'usuari els esta descarregant en aquell moment
     //seleccionem el UID de tots els estudis a esborrar
     sql.insert(0,"select StuInsUID from study ");
@@ -826,6 +879,11 @@ Status CachePacs::setStudyRetrieved(std::string studyUID)
     int i;
     Status state;
     
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
     m_DBConnect->getLock();
     i = sqlite_exec_printf(m_DBConnect->getConnection(),"update study set Status = %Q where StuInsUID= %Q",0,0,0,"RETRIEVED",studyUID.c_str());
     m_DBConnect->releaseLock();
@@ -856,6 +914,11 @@ Status CachePacs::updateStudyAccTime(std::string studyUID)
     sql.append("AccTim = %i ");
     sql.append("where StuInsUID = %Q");
 
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+
     m_DBConnect->getLock();
     i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0
                                 ,getDate()
@@ -882,6 +945,11 @@ Status CachePacs::compactCachePacs()
     int i;
     Status state;
     std::string sql;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
     
     sql.insert(0,"vacuum");//amb l'acció vacuum es compacta la base de dades
     
@@ -1189,7 +1257,6 @@ int CachePacs::getDate()
   time_t hora;
   char cad[9];
   struct tm *tmPtr;
-  std::string prova;
 
   hora = time(NULL);
   tmPtr = localtime(&hora);

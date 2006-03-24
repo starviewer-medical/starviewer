@@ -2,10 +2,6 @@
 <context>
     <name>MutualInformationInputParametersFormBase</name>
     <message>
-        <source>udg::QInputParametersForm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Gaussian Filter</source>
         <translation>Filtre Gaussià</translation>
     </message>
@@ -35,11 +31,11 @@
     </message>
     <message>
         <source>0.0001</source>
-        <translation type="unfinished">0.0001</translation>
+        <translation>0.0001</translation>
     </message>
     <message>
         <source>50</source>
-        <translation type="unfinished">50</translation>
+        <translation>50</translation>
     </message>
     <message>
         <source>Metric</source>
@@ -51,7 +47,7 @@
     </message>
     <message>
         <source>2.0</source>
-        <translation type="unfinished">2.0</translation>
+        <translation>2.0</translation>
     </message>
     <message>
         <source>Moving Image Standard Deviation</source>
@@ -77,250 +73,251 @@
     <name>QConfigurationScreenBase</name>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració</translation>
     </message>
     <message>
         <source>Allows to modify Pacs List</source>
-        <translation type="unfinished"></translation>
+        <translation>Permet modificar la llista de pacs</translation>
     </message>
     <message>
         <source>Allowd to modify Cache configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Permet modificar la configuració de la caché</translation>
     </message>
     <message>
         <source>Pacs Device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AE Title           </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address              </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Port  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                          </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Location                </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description                                                       </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dispositius Pacs</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cercar per defecte</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Afegir</translation>
     </message>
     <message>
         <source>Add the new Pacs to the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Afegeix el nou Pacs a la llista</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualitzar</translation>
     </message>
     <message>
         <source>Update the parameters of the selected Pacs</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualitzar els paràmetres del Pacs seleccionat</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar</translation>
     </message>
     <message>
         <source>Delete selected Pacss</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborra el Pacs seleccionat</translation>
     </message>
     <message>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">testejar</translation>
     </message>
     <message>
         <source>Test if selected Pacs is alive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Testeja si el Pacs respon</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Netejar</translation>
     </message>
     <message>
         <source>Crear the text boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Neteja les caixes de text</translation>
     </message>
     <message>
         <source>&lt;b&gt;AE Title :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;AE Title :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Address :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Adreça :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Port :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Port :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>99999; </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Default </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cercar per defecte</translation>
     </message>
     <message>
         <source>&lt;b&gt;Institution :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Institució :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Location :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Localització :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Description :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Descripció :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Cache Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració Cache</translation>
     </message>
     <message>
         <source>&lt;b&gt;DataBase path :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Ruta base de dades :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Examinate</source>
-        <translation type="unfinished"></translation>
+        <translation>Examinar</translation>
     </message>
     <message>
         <source>Examinate disk  to find the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Examina el disc per trobar la base de dades</translation>
     </message>
     <message>
         <source>Delete All Studies</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar tots els estudis</translation>
     </message>
     <message>
         <source>Delete all the studies of the cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborra tots els estudis de la cache</translation>
     </message>
     <message>
         <source>Compact DataBase</source>
-        <translation type="unfinished"></translation>
+        <translation>Compactar base de dades</translation>
     </message>
     <message>
         <source>Comptact Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Compactar base de dades</translation>
     </message>
     <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Ruta Imatges Cache :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Examinate loca to find the directory to save the retrieved images</source>
-        <translation type="unfinished"></translation>
+        <translation>Examina el disc local per obtenir el directori on guardar les imatges descarregades
+</translation>
     </message>
     <message>
         <source>&lt;b&gt;Pool Size :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Mida Pool:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>999; </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;b&gt;Gb&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>32,5 %</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>67,5 %</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;b&gt;Free :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Lliure :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>20,3 Gb</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;b&gt;Used : &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Utilitzat : &lt;/b&gt;</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceptar</translation>
     </message>
     <message>
         <source>Apply Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar canvis</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·lar</translation>
     </message>
     <message>
         <source>Pacs Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració Pacs</translation>
     </message>
     <message>
         <source>&lt;b&gt;AETitle Machine :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;AETitle Màquina : &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Timeout :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>99; </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;b&gt;seconds&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;segons&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Incoming Connections Port :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Port connexions entrant : &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Maximum Simultaenious Connections :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt; Maxim connexions simultànies: &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Language :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Idioma : &lt;/b&gt;</translation>
     </message>
     <message>
         <source>Count the number of images (reduce the query speed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Compta el número de imatges (redueix velocitat de les consultes)</translation>
     </message>
     <message>
         <source>Previsualitzate the images of a study (reduces the query speed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Previsualitzar imatges de l&apos;estudi  (redueix velocitat de les consultes)</translation>
+    </message>
+    <message>
+        <source>AETitle</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Adreça</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <source>Institution</source>
+        <translation>Institució</translation>
+    </message>
+    <message>
+        <source>Location</source>
+        <translation>Localització</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Descripció</translation>
     </message>
 </context>
 <context>
     <name>QFileDialog</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir</translation>
     </message>
 </context>
 <context>
@@ -429,19 +426,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pacs                 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                           </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description                                                       </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Default</source>
+        <translation type="unfinished">Cercar per defecte</translation>
+    </message>
+    <message>
+        <source>Pacs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution</source>
+        <translation type="unfinished">Institució</translation>
+    </message>
+    <message>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -994,14 +991,6 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Invalid cache image path. The directory doesn&apos;t exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>*.sdb (StarViewer Database)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1049,6 +1038,26 @@ Thickness: XXX mm Location: XXX </source>
         <source>Database missing.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Create directory ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
+        <translation type="unfinished">El directori d&apos;imatges de la cache no existeix. El vols crear ?</translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished">&amp;Si</translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished">&amp;No</translation>
+    </message>
+    <message>
+        <source>Cache Directory</source>
+        <translation type="unfinished">Directori cache</translation>
+    </message>
 </context>
 <context>
     <name>udg::QPacsList</name>
@@ -1058,7 +1067,7 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Error Number : </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Error número :</translation>
     </message>
     <message>
         <source>StarViewer</source>
@@ -1066,11 +1075,18 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Database is corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La base dades està corrupte</translation>
     </message>
     <message>
         <source>Internal Database error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Error intern de la base de dades</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QRetrieveScreen</name>
+    <message>
+        <source>PENDING</source>
+        <translation type="unfinished">PENDENT</translation>
     </message>
 </context>
 <context>
@@ -1080,23 +1096,7 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Status     </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Direction                </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From/To           </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Patient ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient Name                             </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1123,6 +1123,22 @@ Thickness: XXX mm Location: XXX </source>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Status                         </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From/To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QSeriesIconView</name>
@@ -1139,61 +1155,6 @@ Thickness: XXX mm Location: XXX </source>
     </message>
 </context>
 <context>
-    <name>udg::QStudyListScreenBase</name>
-    <message>
-        <source>Form6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type                       </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient ID  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name                                                      </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Age</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Modality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date          </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hour  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                         </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ac. Number     </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>udg::QStudyListView</name>
     <message>
         <source>&amp;View</source>
@@ -1201,97 +1162,93 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>&amp;Retrieve</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Descarregar</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esborrar</translation>
     </message>
     <message>
         <source>Series </source>
-        <translation type="unfinished"></translation>
+        <translation>Serie</translation>
     </message>
     <message>
         <source>Series</source>
-        <translation type="unfinished"></translation>
+        <translation>Series</translation>
     </message>
     <message>
         <source>Starviewer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Are you sure you want to delete this Study ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Estàs segur que vols esborrar aquest estudi ?</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Si</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>No</translation>
+    </message>
+    <message>
+        <source>Study</source>
+        <translation>Estudi</translation>
     </message>
 </context>
 <context>
     <name>udg::QStudyListViewBase</name>
     <message>
-        <source>Form6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Type                       </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient ID  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Name                                                      </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Edat</translation>
     </message>
     <message>
         <source>Modality</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalitat</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date          </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hour  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Institution                         </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ac. Number     </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>AE</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <source>UID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Type</source>
+        <translation>Tipus</translation>
+    </message>
+    <message>
+        <source>Patient ID</source>
+        <translation>ID Pacient</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Data</translation>
+    </message>
+    <message>
+        <source>Hour</source>
+        <translation>Hora</translation>
+    </message>
+    <message>
+        <source>Institution</source>
+        <translation>Institució</translation>
+    </message>
+    <message>
+        <source>Acc. Num</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Image Number</source>
+        <source>AETitle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Img Num</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1330,151 +1287,160 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>No</translation>
     </message>
     <message>
         <source>StarViewer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Please select a PACS to query</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona un Pacs a consultar
+</translation>
     </message>
     <message>
         <source>ERROR QUERING!.</source>
-        <translation type="unfinished"></translation>
+        <translation>ERROR DESCARREGANT!.</translation>
     </message>
     <message>
         <source>No study match found.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;han trobat coincidències.</translation>
     </message>
     <message>
         <source>Error! connecting to PACS : </source>
-        <translation type="unfinished"></translation>
+        <translation>ERROR! Connectant al Pacs :</translation>
     </message>
     <message>
         <source>Error! Can&apos;t query studies in PACS : </source>
-        <translation type="unfinished"></translation>
+        <translation>ERROR! No es poden cercar estudis al PACS :</translation>
     </message>
     <message>
         <source>No series match for this study.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;han trobat sèries per aquest estudi.</translation>
     </message>
     <message>
         <source>Are you sure you want to retrieve this Study ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Estàs segur que desitges descarregar aquest estudi?</translation>
     </message>
     <message>
         <source>Select a study to download </source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona un estudi a descarregar</translation>
     </message>
     <message>
         <source>Error disk space under 1 Gb. Plese free spaces in your disk </source>
-        <translation type="unfinished"></translation>
+        <translation>Espai de disc dur per sota 1 GB. Si us plau allibera espai en el teu disc dur per descarregar nous estudis</translation>
     </message>
     <message>
         <source>Internal Error : </source>
-        <translation type="unfinished"></translation>
+        <translation>Error intern :</translation>
     </message>
     <message>
         <source>Error trying to visualitzate the study</source>
-        <translation type="unfinished"></translation>
+        <translation>ERROR! Intentant visualitzar l&apos;estudi</translation>
     </message>
     <message>
         <source>Please select a study to delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Si us plau selecciona un estudi a esborrar</translation>
     </message>
     <message>
         <source>The study has been retrieved.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;estudi ha estat descarregat.</translation>
     </message>
     <message>
         <source>Database not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha trobat la base de dades.</translation>
     </message>
     <message>
         <source>Error Number : </source>
-        <translation type="unfinished"></translation>
+        <translation>Error Número :</translation>
     </message>
     <message>
         <source>Database is corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades està corrupte.</translation>
     </message>
     <message>
         <source>Internal Database error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error intern de la base de dades</translation>
+    </message>
+    <message>
+        <source>Hide Pacs List</source>
+        <translation>Amagar llista PACS</translation>
+    </message>
+    <message>
+        <source>Show Pacs List</source>
+        <translation>Mostrar llista Pacs</translation>
     </message>
 </context>
 <context>
     <name>udg::QueryScreenBase</name>
     <message>
         <source>Query Study</source>
-        <translation type="unfinished"></translation>
+        <translation>Cercar estudi</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Cercar</translation>
     </message>
     <message>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation>cercar</translation>
     </message>
     <message>
         <source>Today</source>
-        <translation type="unfinished"></translation>
+        <translation>Avui</translation>
     </message>
     <message>
         <source>Yesterday</source>
-        <translation type="unfinished"></translation>
+        <translation>Ahir</translation>
     </message>
     <message>
         <source>Retrieve</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarregar</translation>
     </message>
     <message>
         <source>Retrieve List</source>
-        <translation type="unfinished"></translation>
+        <translation>Llista de descàrrega</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obrir</translation>
     </message>
     <message>
         <source>Clear Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Netejar</translation>
     </message>
     <message>
         <source>Patient</source>
-        <translation type="unfinished"></translation>
+        <translation>Pacient</translation>
     </message>
     <message>
         <source>&lt;b&gt;Patient ID :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;ID Pacient :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;First Name :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Nom :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Last Name :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Cognoms :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Study</source>
-        <translation type="unfinished"></translation>
+        <translation>Estudi</translation>
     </message>
     <message>
         <source>To</source>
-        <translation type="unfinished"></translation>
+        <translation>Fins</translation>
     </message>
     <message>
         <source>&lt;b&gt;Study ID :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt; ID Estudi:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>From</source>
-        <translation type="unfinished"></translation>
+        <translation>Des de</translation>
     </message>
     <message>
         <source>&lt;b&gt;Accession Number :&lt;/b&gt;</source>
@@ -1482,115 +1448,115 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Modality</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalitat</translation>
     </message>
     <message>
         <source>MG</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>SC</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Penetrant Test</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>US</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ultrasounds</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>DT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source> Dental Technician</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>MR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Magnetic Resonance</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>CT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Computerized Tomography</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>DX</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Direct Radiography</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>NM</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Nuclear Medicine</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>RF</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Radiography Fluoroscopy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>CR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Computerized Radiography</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>ES</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tots</translation>
     </message>
     <message>
         <source>XA</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Show PacsList</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mostrar llista Pacs</translation>
     </message>
     <message>
         <source>Local Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pacs Servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Local</translation>
     </message>
     <message>
         <source>config</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurar</translation>
+    </message>
+    <message>
+        <source>PacsServer</source>
+        <translation>PACS</translation>
     </message>
 </context>
 </TS>

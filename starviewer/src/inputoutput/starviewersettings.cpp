@@ -7,6 +7,7 @@
 #include "starviewersettings.h"
 #include <stream.h>
 #include "constkey.h"
+#include <QDir>
 
 namespace udg {
 
@@ -24,7 +25,7 @@ StarviewerSettings::StarviewerSettings()
   */
 void StarviewerSettings::setDatabasePath(QString path)
 {
-    m_starviewerSettings.writeEntry(databaseRootKey,path);
+    m_starviewerSettings.setValue(databaseRootKey,path);
 }
 
 /** estableix el path on es guarden les imatges de la cache
@@ -32,7 +33,7 @@ void StarviewerSettings::setDatabasePath(QString path)
   */
 void StarviewerSettings::setCacheImagePath(QString path)
 {
-    m_starviewerSettings.writeEntry(cacheImagePathKey,path);
+    m_starviewerSettings.setValue(cacheImagePathKey,path);
 }
 
 /** estableix la mida de la pool
@@ -40,7 +41,7 @@ void StarviewerSettings::setCacheImagePath(QString path)
   */
 void StarviewerSettings::setPoolSize(QString size)
 {
-    m_starviewerSettings.writeEntry(poolSizeKey,size);
+    m_starviewerSettings.setValue(poolSizeKey,size);
 }
 
 /** retorna el path de la base de dades
@@ -48,7 +49,14 @@ void StarviewerSettings::setPoolSize(QString size)
   */
 QString StarviewerSettings::getDatabasePath()
 {
-    return m_starviewerSettings.readEntry (databaseRootKey,"./pacscache/database/dicom.sdb",NULL);
+    QDir currentDir;
+    QString defaultDir;
+    
+    //construim directori per defecte
+    defaultDir = currentDir.absolutePath(); //directori actual
+    defaultDir.append("/pacscache/database/dicom.sdb");
+    
+    return m_starviewerSettings.value(databaseRootKey,defaultDir).toString();
 }
 
 /** retorna la mida de la pool
@@ -56,7 +64,7 @@ QString StarviewerSettings::getDatabasePath()
   */
 QString StarviewerSettings::getPoolSize()
 {
-    return m_starviewerSettings.readEntry(poolSizeKey,"30",NULL);
+    return m_starviewerSettings.value(poolSizeKey,"30").toString();
 }
 
 /** retorna el Path on es guarden les imatges
@@ -64,7 +72,15 @@ QString StarviewerSettings::getPoolSize()
   */
 QString StarviewerSettings::getCacheImagePath()
 {
-    return m_starviewerSettings.readEntry(cacheImagePathKey,"/",NULL);
+
+    QDir currentDir;
+    QString defaultDir;
+    
+    //construim directori per defecte
+    defaultDir = currentDir.absolutePath(); //directori actual
+    defaultDir.append("/pacscache/dicom/");
+    
+    return m_starviewerSettings.value(cacheImagePathKey,"/").toString();
 }
 
 
@@ -75,7 +91,7 @@ QString StarviewerSettings::getCacheImagePath()
   */
 void StarviewerSettings::setAETitleMachine(QString AETitle)
 {
-    m_starviewerSettings.writeEntry(AETitleMachineKey,AETitle);
+    m_starviewerSettings.setValue(AETitleMachineKey,AETitle);
 }
 
 /** estableix el Time out
@@ -83,7 +99,7 @@ void StarviewerSettings::setAETitleMachine(QString AETitle)
   */
 void StarviewerSettings::setTimeout(QString time)
 {
-    m_starviewerSettings.writeEntry(timeoutPacsKey,time);
+    m_starviewerSettings.setValue(timeoutPacsKey,time);
 }
 
 /** guarda el port Local pel qual rebrem les imatges descarregades
@@ -91,7 +107,7 @@ void StarviewerSettings::setTimeout(QString time)
   */
 void StarviewerSettings::setLocalPort(QString port)
 {
-    m_starviewerSettings.writeEntry(localPortKey,port);
+    m_starviewerSettings.setValue(localPortKey,port);
 }
 
 /** estableix l'idioma de l'aplicació
@@ -99,7 +115,7 @@ void StarviewerSettings::setLocalPort(QString port)
   */
 void StarviewerSettings::setLanguage(QString lang)
 {
-    m_starviewerSettings.writeEntry(selectLanguageKey,lang);
+    m_starviewerSettings.setValue(selectLanguageKey,lang);
 }
 
 /**  Nombre màxim de connexions simultànies al PACS
@@ -107,7 +123,7 @@ void StarviewerSettings::setLanguage(QString lang)
   */
 void StarviewerSettings::setMaxConnections(QString maxConn)
 {
-    m_starviewerSettings.writeEntry(maxConnectionsKey,maxConn);
+    m_starviewerSettings.setValue(maxConnectionsKey,maxConn);
 }
 
 /** Activa o desactiva la opció de previsualització d'imatges
@@ -115,7 +131,7 @@ void StarviewerSettings::setMaxConnections(QString maxConn)
   */
 void StarviewerSettings::setPrevImages(bool prev)
 {
-    m_starviewerSettings.writeEntry(prevImagesKey,prev);
+    m_starviewerSettings.setValue(prevImagesKey,prev);
 }
 
 /** Activa o desactiva la opció de comptar imatges en el PACS
@@ -123,7 +139,7 @@ void StarviewerSettings::setPrevImages(bool prev)
   */
 void StarviewerSettings::setCountImages(bool count)
 {
-    m_starviewerSettings.writeEntry(countImagesKey,count);
+    m_starviewerSettings.setValue(countImagesKey,count);
 }
 
 /** retorna el AEtitle de la màquina
@@ -131,14 +147,14 @@ void StarviewerSettings::setCountImages(bool count)
   */
 QString StarviewerSettings::getAETitleMachine()
 {
-    return m_starviewerSettings.readEntry ( AETitleMachineKey,"PACS",NULL);
+    return m_starviewerSettings.value( AETitleMachineKey,"PACS").toString();
 }
 /** retorna el time out de l'aplicacio
   *        @retrun timeout
   */
 QString StarviewerSettings::getTimeout()
 {
-    return m_starviewerSettings.readEntry (timeoutPacsKey,"20000",NULL);
+    return m_starviewerSettings.value(timeoutPacsKey,"20000").toString();
 }
 
 /** retorna el port pel qual esperem rebre les imatges descarregades
@@ -146,7 +162,7 @@ QString StarviewerSettings::getTimeout()
   */
 QString StarviewerSettings::getLocalPort()
 {
-    return m_starviewerSettings.readEntry ( localPortKey,"104",NULL);
+    return m_starviewerSettings.value( localPortKey,"104").toString();
 }
 
 /** retorna l'idioma seleccionat per l'usuari
@@ -154,7 +170,7 @@ QString StarviewerSettings::getLocalPort()
   */
 QString StarviewerSettings::getLanguage()
 {
-    return m_starviewerSettings.readEntry (selectLanguageKey,"104",NULL);
+    return m_starviewerSettings.value(selectLanguageKey,"104").toString();
 }
 
 /** retorna el nombre màxim de connexions simultànies que es poden tenir atacant a un PACS
@@ -162,7 +178,7 @@ QString StarviewerSettings::getLanguage()
   */
 QString StarviewerSettings::getMaxConnections()
 {
-    return m_starviewerSettings.readEntry ( maxConnectionsKey,"3",NULL);
+    return m_starviewerSettings.value( maxConnectionsKey,"3").toString();
 }
 
 /** retorna l'indicador de si s'han de previsualitzar les imatges del PACS
@@ -170,7 +186,7 @@ QString StarviewerSettings::getMaxConnections()
   */
 bool StarviewerSettings::getPrevImages()
 {
-    return m_starviewerSettings.readBoolEntry (prevImagesKey,false, NULL);
+    return m_starviewerSettings.value(prevImagesKey,false).toBool();
 }
 
 /** retorna l'indicador de si s'han de comptar les imatges
@@ -178,7 +194,66 @@ bool StarviewerSettings::getPrevImages()
   */
 bool StarviewerSettings::getCountImages()
 {
-    return m_starviewerSettings.readBoolEntry (countImagesKey,false, NULL);
+    return m_starviewerSettings.value(countImagesKey,false).toBool();
+}
+
+/************************ INTERFICIE ************************************************/
+/** guarda la mida de la columna que se li passa per paràmetre del QStudyListView, encarregat de mostrar les dades del Pacs
+  *        @param número de columna
+  *        @param amplada de la columna
+  */
+void StarviewerSettings::setStudyPacsListColumnWidth(int col,int width)
+{
+    QString key,strCol;
+    
+    strCol.setNum(col,10);
+    key.insert(0,pacsColumnWidthKey);
+    key.append(strCol);
+    
+    m_starviewerSettings.setValue(key,width);
+}
+
+/** guarda la mida de la columna que se li passa per paràmetre del QStudyListView, encarregat de mostrar les dades de la cache
+  *        @param número de columna
+  *        @param amplada de la columna
+  */
+void StarviewerSettings::setStudyCacheListColumnWidth(int col,int width)
+{
+    QString key,strCol;
+    
+    strCol.setNum(col,10);
+    key.insert(0,cacheColumnWidthKey);
+    key.append(strCol);
+    
+    m_starviewerSettings.setValue(key,width);
+}
+
+/** retorna l'amplada del número de columna de la llista d'estudis del PACS, passat per paràmetre
+  *        @return amplada de la columna
+  */
+int StarviewerSettings::getStudyPacsListColumnWidth(int col)
+{   
+    QString key,strCol;
+    
+    strCol.setNum(col,10);
+    key.insert(0,pacsColumnWidthKey);
+    key.append(strCol);
+    
+    return m_starviewerSettings.value(key,100).toInt();
+}
+
+/** retorna l'amplada del número de columna de la llista d'estudis de la cache, passat per paràmetre
+  *        @return amplada de la columna
+  */
+int StarviewerSettings::getStudyCacheListColumnWidth(int col)
+{   
+    QString key,strCol;
+    
+    strCol.setNum(col,10);
+    key.insert(0,cacheColumnWidthKey);
+    key.append(strCol);
+    
+    return m_starviewerSettings.value(key,100).toInt();
 }
 
 /** destructor de la classe
