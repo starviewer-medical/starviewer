@@ -34,6 +34,12 @@ private:
     /// El volum d'entrada
     Volume* m_volume;
 
+    /// Estableix les connexions de signals i slots
+    void createConnections();
+
+private slots:
+    /// Canvia els ajustaments del window level per uns de predeterminats. 
+    void changeDefaultWindowLevel( int which );
 };
 
 };  //  end  namespace udg 

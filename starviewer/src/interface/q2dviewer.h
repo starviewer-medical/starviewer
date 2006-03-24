@@ -24,6 +24,8 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
+class vtkWindowToImageFilter;
+class vtkLookupTable;
 
 namespace udg {
 
@@ -72,7 +74,7 @@ public:
     enum Actions{ CursorAction , SliceMotionAction , WindowLevelAction };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x1 , ReferenceAnnotation = 0x10 , AllAnnotation = 0x111 };
+    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x2 , ReferenceAnnotation = 0x4 , AllAnnotation = 0x6 };
     
     /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
     enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool , Manipulate };
@@ -111,6 +113,18 @@ public:
     /// Retorna la tool que s'està fent servir en aquell moment
     Tools getCurrentTool(){ return m_currentTool; };
 
+    /// Desa totes les llesques que es veuen al visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
+    void saveAll( const char *baseName , FileType extension );
+
+    /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
+    void saveCurrent( const char *baseName , FileType extension );
+
+    /// Assigna la LUT en format vtk
+    void setVtkLUT( vtkLookupTable * lut );
+
+    /// Retorna la LUT en format vtk
+    vtkLookupTable *getVtkLUT();
+    
 public slots:  
 
     /// Temporal per proves, veurem quins events es criden
@@ -184,10 +198,16 @@ public slots:
         }
         
     }
-    
-private slots:  
-    /// refrescarà les dades del texte que es mostrarà en pantalla
-    void updateInformationText();
+
+    /// Ajusta el window/level
+    void setWindowLevel( double window , double level );
+
+    /// Mètodes per donar diversos window level per defecte
+    void resetWindowLevelToDefault();
+    void resetWindowLevelToBone();
+    void resetWindowLevelToSoftTissue();
+    void resetWindowLevelToFat();
+    void resetWindowLevelToLung();
 
 protected:
     /// asscociació de botons amb accions
@@ -218,12 +238,6 @@ protected:
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
     
-    /// Mètodes per donar diversos window level per defecte
-    void resetWindowLevelToDefault();
-    void resetWindowLevelToBone();
-    void resetWindowLevelToSoftTissue();
-    void resetWindowLevelToFat();
-    void resetWindowLevelToLung();
     /// Actualitza la vista en el rendering
     void updateView();
 
@@ -288,14 +302,18 @@ private:
     vtkAxisActor2D *m_sideOrientationMarker , *m_bottomOrientationMarker;
     
     /// Textes adicionals d'anotoació
-    vtkTextActor *m_sideAnnotationText , *m_bottomAnnotationText;
-    
+    vtkTextActor *m_patientOrientationTextActor[4];
+
+    /// Actualització d'anotacions vàries
+    void updateWindowLevelAnnotation();
+    void updateSliceAnnotation();
+    void updateWindowSizeAnnotation();
+
+    /// Mida de voxels en cada direcció
+    int m_size[3];
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
-
-    /// indica que alguna de la informació que s'ha de mostrar per pantall ha canviat
-    void infoChanged( void );
 
     /// indica el nou window level
     void windowLevelChanged( double window , double level );

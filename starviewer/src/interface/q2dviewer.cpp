@@ -25,7 +25,7 @@
 #include <vtkImageViewer2.h>
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h> // per composar les imatges
-#include <vtkImageMapToColors.h>
+#include <vtkImageMapToWindowLevelColors.h>
 #include <vtkLookupTable.h>
 #include <vtkImageRectilinearWipe.h>
 #include <vtkCellPicker.h>
@@ -36,6 +36,11 @@
 #include <vtkAxisActor2D.h>
 #include <vtkProperty2D.h>
 #include <vtkTextActor.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkPNGWriter.h>
+#include <vtkPNMWriter.h>
+#include <vtkJPEGWriter.h>
+#include <vtkTIFFWriter.h>
 // interacció
 #include <vtkCell.h>
 #include <vtkPointData.h>
@@ -76,7 +81,9 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     
     createActions();    
     createTools();
-
+    
+    updateCursor( -1, -1, -1, -1 );
+    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 }
 
 Q2DViewer::~Q2DViewer()
@@ -102,7 +109,7 @@ void Q2DViewer::createActions()
     m_resetAction->setText(tr("&Reset"));
     m_resetAction->setShortcut( tr("Ctrl+R") );
     m_resetAction->setStatusTip(tr("Reset initial parameters"));
-    connect( m_resetAction, SIGNAL( activated() ), this, SLOT( reset()) );
+    connect( m_resetAction, SIGNAL( activated() ), this, SLOT( reset() ) );
 }
 
 void Q2DViewer::createTools()
@@ -116,32 +123,36 @@ void Q2DViewer::createAnnotations()
     m_textAnnotation = vtkCornerAnnotation::New();
     initInformationText();
 
-    m_sideAnnotationText = vtkTextActor::New();
-    m_bottomAnnotationText  = vtkTextActor::New();
+    // informació de referència de la orientació del pacient
+    for( int i = 0; i<4; i++ )
+    {
+        m_patientOrientationTextActor[i] = vtkTextActor::New();
+        m_patientOrientationTextActor[i]->ScaledTextOff();
+        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize( 12 );
+        m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
 
-    m_sideAnnotationText->SetInput("SIDE");
-    m_sideAnnotationText->ScaledTextOff();
-    m_sideAnnotationText->GetTextProperty()->SetFontSize( 12 );
-    m_sideAnnotationText->GetTextProperty()->BoldOn();
-    m_sideAnnotationText->GetTextProperty()->SetJustificationToLeft();
-    
-    m_sideAnnotationText->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
-    m_sideAnnotationText->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
-    m_sideAnnotationText->SetPosition( 0.9 , 0.5 );
+        m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
+        m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
 
-//     this->getRenderer()->AddActor2D( m_sideAnnotationText );
+        this->getRenderer()->AddActor2D( m_patientOrientationTextActor[i] );
+    }
+    // ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
+    // les orientacions que donem ara són per posar algo, aquí \TODO cal posar les referències correctes a partir de la informació dels tags DICOM
+    m_patientOrientationTextActor[0]->SetInput( tr("LEFT") );
+    m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
+    m_patientOrientationTextActor[0]->SetPosition( 0.01 , 0.5 );
 
-    m_bottomAnnotationText->SetInput("BOTTOM");
-    m_bottomAnnotationText->ScaledTextOff();
-    m_bottomAnnotationText->GetTextProperty()->SetFontSize( 12 );
-    m_bottomAnnotationText->GetTextProperty()->BoldOn();
-    m_bottomAnnotationText->GetTextProperty()->SetJustificationToCentered();
-    
-    m_bottomAnnotationText->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
-    m_bottomAnnotationText->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
-    m_bottomAnnotationText->SetPosition( 0.5 , 0.0 );
+    m_patientOrientationTextActor[1]->SetInput( tr("ANTERIOR") );
+    m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
+    m_patientOrientationTextActor[1]->SetPosition( 0.5 , 0.01 );
 
-//     this->getRenderer()->AddActor2D( m_bottomAnnotationText );
+    m_patientOrientationTextActor[2]->SetInput( tr("RIGHT") );
+    m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
+    m_patientOrientationTextActor[2]->SetPosition( 0.99 , 0.5 );
+
+    m_patientOrientationTextActor[3]->SetInput( tr("SUPERIOR") );
+    m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
+    m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
     
     // Marcadors
     m_sideOrientationMarker = vtkAxisActor2D::New();
@@ -174,15 +185,19 @@ void Q2DViewer::updateAnnotations()
     {
         m_bottomOrientationMarker->VisibilityOn();
         m_sideOrientationMarker->VisibilityOn();
-        m_sideAnnotationText->VisibilityOn();
-        m_bottomAnnotationText->VisibilityOn();
+        m_patientOrientationTextActor[0]->VisibilityOn();
+        m_patientOrientationTextActor[1]->VisibilityOn();
+        m_patientOrientationTextActor[2]->VisibilityOn();
+        m_patientOrientationTextActor[3]->VisibilityOn();
     }
     else
     {
         m_bottomOrientationMarker->VisibilityOff();
         m_sideOrientationMarker->VisibilityOff();
-        m_sideAnnotationText->VisibilityOff();
-        m_bottomAnnotationText->VisibilityOff();
+        m_patientOrientationTextActor[0]->VisibilityOff();
+        m_patientOrientationTextActor[1]->VisibilityOff();
+        m_patientOrientationTextActor[2]->VisibilityOff();
+        m_patientOrientationTextActor[3]->VisibilityOff();
     }
 
     if( m_enabledAnnotations && Q2DViewer::WindowLevelAnnotation )
@@ -198,10 +213,35 @@ void Q2DViewer::updateAnnotations()
 
 void Q2DViewer::initInformationText()
 {
-    m_upperLeftText = tr("No Info");
-    m_upperRightText = tr("No Info");
-    m_lowerLeftText = tr("No Info");
-    m_lowerRightText = tr("No Info");
+    m_lowerLeftText = tr("Slice: %1/%2")
+                .arg( m_currentSlice )
+                .arg( m_size[2] );
+                
+    m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                .arg( m_size[0] )
+                .arg( m_size[1] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
+                .arg( m_viewer->GetColorWindow() )
+                .arg( m_viewer->GetColorLevel() );
+
+    QString institution = "institution i.e. IDI-GIRONA";
+    QString patientName = "patient name here";
+    QString patientID = "patient ID here";
+    QString date = "00/00/3000";
+
+    m_upperRightText = tr("%1\n%2\n%3\n%4")
+                .arg( institution )
+                .arg( patientName )
+                .arg( patientID )
+                .arg( date );
+                
+    m_lowerRightText = tr("Made by Starviewer %1").arg( QChar(169) );
+    
+    m_textAnnotation->SetText( 0 , m_lowerLeftText );
+    m_textAnnotation->SetText( 1 , m_lowerRightText );
+    m_textAnnotation->SetText( 2 , m_upperLeftText );
+    m_textAnnotation->SetText( 3 , m_upperRightText );
     
     m_textAnnotation->SetImageActor( m_viewer->GetImageActor() );
     m_textAnnotation->SetWindowLevel( m_viewer->GetWindowLevel() );
@@ -213,10 +253,7 @@ void Q2DViewer::initInformationText()
     
     m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
     
-    connect( this , SIGNAL( infoChanged() ) , this , SLOT( updateInformationText() ) );
-
 }
-
 
 void Q2DViewer::displayInformationText( bool display )
 {
@@ -237,80 +274,11 @@ void Q2DViewer::anyEvent()
     // std::cout << "any event " << std::endl; 
 }
 
-void Q2DViewer::updateInformationText()
-{
-    int width, height , depth;
-    switch( m_lastView )
-    {
-    case Axial:
-    //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-        width = m_mainVolume->getDimensions()[0];
-        height = m_mainVolume->getDimensions()[1];
-        depth = m_mainVolume->getDimensions()[2];
-    break;
-    
-    case Sagittal:
-        //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-        width = m_mainVolume->getDimensions()[1];
-        height = m_mainVolume->getDimensions()[2];
-        depth = m_mainVolume->getDimensions()[0];
-    break;
-    
-    case Coronal:
-        //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-        width = m_mainVolume->getDimensions()[0];
-        height = m_mainVolume->getDimensions()[2];
-        depth = m_mainVolume->getDimensions()[1];
-    break;
-    
-    case None:
-    break;
-    
-    default:
-    break;
-    }
-        
-    if( m_currentCursorPosition[0] == -1 )
-    {    
-        m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nOff Image\nWW: %5 WL: %6 ")
-                .arg( width )
-                .arg( height )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
-                .arg( m_viewer->GetColorWindow() )
-                .arg( m_viewer->GetColorLevel() );
-    }
-    else
-    {
-        m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nX: %5 px Y: %6 px Value: %7\nWW: %8 WL: %9 ")
-                .arg( width )
-                .arg( height )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
-                .arg( m_currentCursorPosition[0] )
-                .arg( m_currentCursorPosition[1] )
-                .arg( m_currentImageValue )
-                .arg( m_viewer->GetColorWindow() )
-                .arg( m_viewer->GetColorLevel() );
-    }
-//     m_lowerLeftText = tr("Slice: %1/%2\nZoom: XXX%%  Angle: XXX\nThickness: XXX mm Location: XXX ")
-    m_lowerLeftText = tr("Slice: %1/%2")
-                .arg( m_currentSlice )
-                .arg( depth );
-    
-    m_upperRightText = tr("No info");
-    m_lowerRightText = tr("No info");
-    
-    m_textAnnotation->SetText( 0 , m_lowerLeftText );
-    m_textAnnotation->SetText( 2 , m_upperLeftText );
-
-}
-
 void Q2DViewer::onMouseMove()
-{
+{/*
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
     // agafem el punt que està apuntant el ratolí en aquell moment
-    /*interactor->GetPicker()*/m_cellPicker->Pick( interactor->GetEventPosition()[0], 
+    m_cellPicker->Pick( interactor->GetEventPosition()[0],
                 interactor->GetEventPosition()[1], 
                 m_viewer->GetSlice(), 
                 m_viewer->GetRenderer()
@@ -345,15 +313,13 @@ void Q2DViewer::onMouseMove()
         found = 1;
     }
     outPointData->Delete();
-    if( found )
-    {
-        updateCursor( q[0], q[1], q[2], imageValue );
-    }
-    else
+    if( !found )
         updateCursor( -1, -1, -1, -1 );
-    
-    emit infoChanged();
-    interactor->Render();
+    else
+        updateCursor( q[0], q[1], q[2], imageValue );
+    */    
+    updateWindowLevelAnnotation();
+    this->getInteractor()->Render();
 
 }
 
@@ -562,12 +528,16 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
 {
     // el primer que s'hauria de fer és executar l'acció que es faci en aquell estat indistintament de la tool com és el mostrar en la pantalla el valor del pixel actual
    anyEvent();
+//    std::cout << vtkCommand::GetStringFromEventId( event ) << std::endl;
     // fer el que calgui per cada tipus d'event
+
     switch( event )
     {
     
     case vtkCommand::MouseMoveEvent:
         onMouseMove();
+        //  \TODO això és una cutrada però s'hauria de veure com connectar l'event de vtk perk ens indiqui quan canvia realment el window level
+    emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
     break;
 
     case vtkCommand::LeftButtonPressEvent:
@@ -598,6 +568,10 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     case vtkCommand::RightButtonReleaseEvent:
         m_lastButtonPressed = Q2DViewer::RightButton;
         onRightButtonUp();
+    break;
+
+//     case vtkCommand::WindowLevelEvent:
+//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
     break;
 
     default:
@@ -698,8 +672,9 @@ void Q2DViewer::setupInteraction()
 
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_cellPicker );
     
-    m_vtkQtConnections = vtkEventQtSlotConnect::New(); 
-    // menú contextual
+    m_vtkQtConnections = vtkEventQtSlotConnect::New();
+
+// menú contextual
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
 //                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
 //                        this,
@@ -714,8 +689,6 @@ void Q2DViewer::setInput( Volume* volume )
 {
     if( volume == 0 )
         return;
-//     if( m_mainVolume )
-//         delete m_mainVolume;
     m_mainVolume = volume;    
     m_viewer->SetInput( m_mainVolume->getVtkData() );
 
@@ -731,9 +704,11 @@ void Q2DViewer::setInput( Volume* volume )
     m_bottomOrientationMarker->SetPosition(  0.9 , 0.7 );
     m_bottomOrientationMarker->SetPosition2( 0.9 , 0.2 );
     m_bottomOrientationMarker->SetRange( 200 , 5000 );
-    
+
+    m_mainVolume->getDimensions( m_size );
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
+
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
@@ -816,13 +791,24 @@ void Q2DViewer::updateView()
     switch( m_lastView )
     {
     case Axial:
-        m_viewer->SetSliceOrientationToXY();        
+        m_viewer->SetSliceOrientationToXY();
+        m_size[0] = m_mainVolume->getDimensions()[0];
+        m_size[1] = m_mainVolume->getDimensions()[1];
+        m_size[2] = m_mainVolume->getDimensions()[2];
     break;
     case Sagittal:
         m_viewer->SetSliceOrientationToYZ();
+        //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+        m_size[0] = m_mainVolume->getDimensions()[1];
+        m_size[1] = m_mainVolume->getDimensions()[2];
+        m_size[2] = m_mainVolume->getDimensions()[0];
     break;
     case Coronal:
         m_viewer->SetSliceOrientationToXZ();
+        //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+        m_size[0] = m_mainVolume->getDimensions()[0];
+        m_size[1] = m_mainVolume->getDimensions()[2];
+        m_size[2] = m_mainVolume->getDimensions()[1];
     break;
     default:
     // podem posar en Axial o no fer res
@@ -831,8 +817,7 @@ void Q2DViewer::updateView()
     }
     // cada cop que canviem de llesca posarem per defecte la llesca del mig d'aquella vista
     setSlice( m_viewer->GetSliceRange()[1]/2 );
-    // també farem update del nombre de llesques
-    emit infoChanged();
+    updateWindowSizeAnnotation();
 }
 
 void Q2DViewer::setSlice( int value )
@@ -844,13 +829,23 @@ void Q2DViewer::setSlice( int value )
     {
         m_viewer->SetSlice( m_currentSlice );
     }
-    emit infoChanged();
-    
+    updateSliceAnnotation();
 }
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
-    emit infoChanged();
+    updateWindowSizeAnnotation();
+}
+
+void Q2DViewer::setWindowLevel( double window , double level )
+{
+    if( m_viewer && m_mainVolume )
+    {
+        m_viewer->SetColorLevel( level );
+        m_viewer->SetColorWindow( window );
+        updateWindowLevelAnnotation();
+        getInteractor()->Render();
+    }
 }
 
 void Q2DViewer::resetWindowLevelToDefault()
@@ -864,9 +859,10 @@ void Q2DViewer::resetWindowLevelToDefault()
         double level = ( range[1] + range[0] )/ 2.0;
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
+        this->getInteractor()->Render();
 
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-        emit infoChanged();
+        updateWindowLevelAnnotation();
     }
     // mostrar avís/error si no hi ha volum?
 }
@@ -883,8 +879,10 @@ void Q2DViewer::resetWindowLevelToBone()
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
 
+        this->getInteractor()->Render();
+        
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-        emit infoChanged();
+        updateWindowLevelAnnotation();
     }
 }
 
@@ -900,8 +898,10 @@ void Q2DViewer::resetWindowLevelToSoftTissue()
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
 
+        this->getInteractor()->Render();
+
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-        emit infoChanged();
+        updateWindowLevelAnnotation();
     }
 }
 
@@ -917,8 +917,10 @@ void Q2DViewer::resetWindowLevelToFat()
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
 
+        this->getInteractor()->Render();
+
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-        emit infoChanged();
+        updateWindowLevelAnnotation();
     }
 }
 
@@ -934,11 +936,45 @@ void Q2DViewer::resetWindowLevelToLung()
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
 
+        this->getInteractor()->Render();
+
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-        emit infoChanged();
+        updateWindowLevelAnnotation();   
     }
 }
 
+void Q2DViewer::updateWindowLevelAnnotation()
+{
+    m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                .arg( m_size[0] )
+                .arg( m_size[1] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
+                .arg( m_viewer->GetColorWindow() )
+                .arg( m_viewer->GetColorLevel() );
+    m_textAnnotation->SetText( 2 , m_upperLeftText );    
+}
+
+void Q2DViewer::updateSliceAnnotation()
+{
+    m_lowerLeftText = tr("Slice: %1/%2")
+                .arg( m_currentSlice )
+                .arg( m_size[2] );
+    m_textAnnotation->SetText( 0 , m_lowerLeftText );
+}
+
+void Q2DViewer::updateWindowSizeAnnotation()
+{
+    m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                .arg( m_size[0] )
+                .arg( m_size[1] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
+                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
+                .arg( m_viewer->GetColorWindow() )
+                .arg( m_viewer->GetColorLevel() );
+    m_textAnnotation->SetText( 2 , m_upperLeftText );
+}
+    
 void Q2DViewer::setDivisions( int x , int y , int z )
 {
     m_divisions[0] = x;
@@ -963,6 +999,88 @@ void Q2DViewer::getDivisions( int data[3] )
     data[0] = m_divisions[0];
     data[1] = m_divisions[1];
     data[2] = m_divisions[2];
+}
+
+void Q2DViewer::saveAll( const char *baseName , FileType extension )
+{
+    switch( extension )
+    {
+    case PNG:
+    break;
+    
+    case JPEG:
+    break;
+
+    case TIFF:
+    break;
+     
+    case DICOM:
+    break;
+
+    case META:
+    break;
+    
+    case PNM:
+    break;
+    }
+}
+
+void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
+{
+    m_windowToImageFilter->Update();
+    m_windowToImageFilter->Modified();
+    vtkImageData *image = m_windowToImageFilter->GetOutput();
+    switch( extension )
+    {
+    case PNG:
+        vtkImageWriter *pngWriter = vtkPNGWriter::New();
+        pngWriter->SetInput( image );
+        pngWriter->SetFilePattern( "%s-%d.png" );
+        pngWriter->SetFilePrefix( baseName );
+        pngWriter->Write();
+    break;
+    
+    case JPEG:
+        vtkImageWriter *jpegWriter = vtkJPEGWriter::New();
+        jpegWriter->SetInput( image );
+        jpegWriter->SetFilePattern( "%s-%d.jpg" );
+        jpegWriter->SetFilePrefix( baseName );
+        jpegWriter->Write();
+    break;
+// \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
+    case TIFF:
+        vtkImageWriter *tiffWriter = vtkTIFFWriter::New();
+        tiffWriter->SetInput( image );
+        tiffWriter->SetFilePattern( "%s-%d.tif" );
+        tiffWriter->SetFilePrefix( baseName );
+        tiffWriter->Write();
+    break;
+
+    case PNM:
+        vtkImageWriter *pnmWriter = vtkPNMWriter::New();
+        pnmWriter->SetInput( image );
+        pnmWriter->SetFilePattern( "%s-%d.pnm" );
+        pnmWriter->SetFilePrefix( baseName );
+        pnmWriter->Write();
+    break;
+
+    case DICOM:
+    break;
+
+    case META:
+    break;
+    }
+
+}
+
+void Q2DViewer::setVtkLUT( vtkLookupTable *lut )
+{
+    m_viewer->GetWindowLevel()->SetLookupTable( lut );
+}
+
+vtkLookupTable *Q2DViewer::getVtkLUT( )
+{
+    return vtkLookupTable::SafeDownCast( m_viewer->GetWindowLevel()->GetLookupTable() );
 }
 
 };  // end namespace udg 

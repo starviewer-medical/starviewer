@@ -7,7 +7,7 @@
 #include "cacheinstallation.h"
 #include "starviewersettings.h"
 #include <QDir>
-#include <stdlib.h>
+#include <cstdlib>
 #include <QMessageBox>
 
 namespace udg {
@@ -75,7 +75,7 @@ bool CacheInstallation::existsDatabaseFile()
     StarviewerSettings settings;
     QFile databaseFile;
     
-    return databaseFile.exists(settings.getDatabasePath());
+    return databaseFile.exists( settings.getDatabasePath() );
 }
 
 /** Crea el directori per guardar les imatges de la cache
@@ -111,12 +111,13 @@ void CacheInstallation::createDatabaseFile()
     QString strProcess;
     StarviewerSettings settings;
     
+    // \TODO Veure com guardar el fitxer database.sql (Resource de qt?)
     strProcess.insert(0,"sqlite ");
     strProcess.append(settings.getDatabasePath());
     strProcess.append(" ");
     strProcess.append("< ../src/inputoutput/database.sql"); //va a buscar el fitxer al codi!
-    
-    system(strProcess.ascii()); //Al QProcess no li agrada el '<' , per aixo utilitzo el system 
+
+    system(strProcess.toAscii().constData()); //Al QProcess no li agrada el '<' , per aixo utilitzo el system
 }
 
 

@@ -56,7 +56,7 @@ bool AppImportFile::loadFile( QString fileName )
     bool ok = true; 
 
     // indiquem que ens obri el fitxer
-    if( QFileInfo( fileName ).suffix() == "dcm") // petita prova per provar lectura de DICOM's
+    if( QFileInfo( fileName ).suffix() == "dcm"  ) // petita prova per provar lectura de DICOM's
     {
         if( m_inputReader->readSeries( QFileInfo( fileName ).dir().absolutePath().toLatin1() ) )
         { 

@@ -154,6 +154,12 @@ private:
     ImageIOType::Pointer m_gdcmIO;
     /// el generador dels noms dels fitxers DICOM d'un directori
     NamesGeneratorType::Pointer m_namesGenerator;
+
+    /// Dóna la orientació que toca segons les meta dades
+    void adjustOrientation();
+
+    /// mètode temporal per printar tags dicom
+    void printTag( std::string tag , std::string name );
 };
 
 

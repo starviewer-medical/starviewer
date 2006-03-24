@@ -32,16 +32,20 @@ public:
     
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
+
     ///\TODO implemenar bé el mètode
     virtual vtkRenderWindowInteractor *getInteractor();
+
     /// retorna el tipu de visualització que es té assignat
     RenderFunction getRenderFunction() const { return m_renderFunction; }
+
     /// retorna el tipu de visualització que es té assignat com a un string
     const char* getRenderFunctionAsString();
     
     virtual void setInput( Volume* volume );
 
     virtual vtkRenderer *getRenderer();
+    
 public slots:
 
     virtual void render();
@@ -67,7 +71,7 @@ private:
     /// rescala les dades en el format adequat per als corresponents algorismes
     void rescale();
     
-    // el caster de les imatges
+    /// el caster de les imatges
     vtkImageCast* m_imageCaster;
 };
 

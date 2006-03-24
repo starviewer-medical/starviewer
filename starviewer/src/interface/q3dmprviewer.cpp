@@ -17,6 +17,8 @@
 #include <vtkEventQtSlotConnect.h>
 #include <QVTKWidget.h>
 #include <vtkCamera.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkLookupTable.h>
 
 // Per crear la bounding box del model
 #include <vtkOutlineFilter.h>
@@ -62,12 +64,22 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     
     //Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_ren = vtkRenderer::New();
-    m_vtkWidget->GetRenderWindow()->AddRenderer(m_ren);
+    m_vtkWidget->GetRenderWindow()->AddRenderer( m_ren );
+    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
+    
     // Creem tres vistes ortogonals utilitzant la classe ImagePlaneWidget
     // 
     m_axialImagePlaneWidget =  vtkImagePlaneWidget::New();
     m_sagitalImagePlaneWidget =  vtkImagePlaneWidget::New();
     m_coronalImagePlaneWidget =  vtkImagePlaneWidget::New();
+
+    // 
+    //     INTERACCIÓ
+    // 
+    m_axialImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );    
+    m_sagitalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
+    m_coronalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
+
     
     m_outlineActor = vtkActor::New();
 
@@ -77,6 +89,7 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     m_axialResliced = new Volume; 
     m_sagitalResliced = new Volume;
     m_coronalResliced = new Volume;
+
 }
 
 Q3DMPRViewer::~Q3DMPRViewer()
@@ -107,36 +120,29 @@ void Q3DMPRViewer::setInput( Volume* volume )
 //     Pla AXIAL
 // 
     m_axialImagePlaneWidget->DisplayTextOn();
-    
-    
-    m_axialImagePlaneWidget->SetPicker(picker);
+    m_axialImagePlaneWidget->SetPicker( picker );
     m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_axialImagePlaneWidget->SetKeyPressActivationValue('z');
-    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor(1, 1, 0);
-    m_axialImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
-    
+    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 1 , 0 );
+    m_axialImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
     m_axialImagePlaneWidget->TextureInterpolateOn();
-    
-    m_axialImagePlaneWidget->SetResliceInterpolateToLinear();
-    
+    m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
     m_axialImagePlaneWidget->SetInput( m_mainVolume->getVtkData() ); 
     m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
     
-
 // 
 //     Pla SAGITAL
 // 
     m_sagitalImagePlaneWidget->DisplayTextOn();
     m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-    m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
-        
-    m_sagitalImagePlaneWidget->SetPicker(picker);
+    m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );    
+    m_sagitalImagePlaneWidget->SetPicker( picker );
     m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_sagitalImagePlaneWidget->SetKeyPressActivationValue('x');
-    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor(1, 0, 0);
-    m_sagitalImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
+    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 0 , 0 );
+    m_sagitalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
     m_sagitalImagePlaneWidget->TextureInterpolateOn();
-    m_sagitalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
+    m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
     m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
 
 // 
@@ -145,21 +151,14 @@ void Q3DMPRViewer::setInput( Volume* volume )
     m_coronalImagePlaneWidget->DisplayTextOn();
     m_coronalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
     m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
-    
-    m_coronalImagePlaneWidget->SetPicker(picker);
+    m_coronalImagePlaneWidget->SetPicker( picker );
     m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
-    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor(0, 0, 1);
-    m_coronalImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
+    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( 0 , 0 , 1 );
+    m_coronalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
     m_coronalImagePlaneWidget->TextureInterpolateOn();
-    m_coronalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
+    m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
     m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
     
-// 
-//     INTERACCIÓ
-// 
-    m_axialImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );    
-    m_sagitalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-    m_coronalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
 
     // interacció
     
@@ -251,21 +250,23 @@ void Q3DMPRViewer::setAxialVisibility(bool enable)
 
 void Q3DMPRViewer::resetPlanes()
 {
-    int *size = m_mainVolume->getVtkData()->GetDimensions();
-    
-    m_axialImagePlaneWidget->SetPlaneOrientationToZAxes();
-    m_axialImagePlaneWidget->SetSliceIndex(size[2]/2);
-    
-    m_sagitalImagePlaneWidget->SetPlaneOrientationToXAxes();
-    m_sagitalImagePlaneWidget->SetSliceIndex(size[0]/2);
-    
-    m_coronalImagePlaneWidget->SetPlaneOrientationToYAxes();
-    m_coronalImagePlaneWidget->SetSliceIndex(size[1]/2);
-    
-    m_axialImagePlaneWidget->On();
-    m_sagitalImagePlaneWidget->On();
-    m_coronalImagePlaneWidget->On();
-    
+    if( m_mainVolume )
+    {
+        int *size = m_mainVolume->getVtkData()->GetDimensions();
+        
+        m_axialImagePlaneWidget->SetPlaneOrientationToZAxes();
+        m_axialImagePlaneWidget->SetSliceIndex(size[2]/2);
+        
+        m_sagitalImagePlaneWidget->SetPlaneOrientationToXAxes();
+        m_sagitalImagePlaneWidget->SetSliceIndex(size[0]/2);
+        
+        m_coronalImagePlaneWidget->SetPlaneOrientationToYAxes();
+        m_coronalImagePlaneWidget->SetSliceIndex(size[1]/2);
+        
+        m_axialImagePlaneWidget->On();
+        m_sagitalImagePlaneWidget->On();
+        m_coronalImagePlaneWidget->On();
+    }
 }
 
 void Q3DMPRViewer::setCameraOrientation(int orientation)
@@ -393,6 +394,95 @@ void Q3DMPRViewer::createOrientationMarker()
     m_ren->AddActor( m_cubeActor );
 }
 
+void Q3DMPRViewer::setWindowLevel( double window , double level )
+{
+    if( m_mainVolume )
+    {
+        // amb un n'hi ha prou ja que cada vtkImagePlaneWidget comparteix la mateixa LUT
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+        
+//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
+//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToDefault()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        double window = fabs(range[1] - range[0]);
+        double level = ( range[1] + range[0] )/ 2.0;
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
+//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToBone()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        double window = fabs(range[1] - range[0] ) * 0.3;
+        double level = ( range[1] + range[0] ) * .8;
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
+//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToSoftTissue()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        double window = fabs(range[1] - range[0]) * 0.02;
+        double level = ( range[1] + range[0] ) * .53;
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
+//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToFat()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        double window = fabs(range[1] - range[0]) * .02;
+        double level = ( range[1] + range[0] ) * .46;
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
+//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToLung()
+{
+    if( m_mainVolume )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        double window = fabs(range[1] - range[0]) * .1;
+        double level = ( range[1] + range[0] ) * .25;
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
+//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+}
+
+void Q3DMPRViewer::setVtkLUT( vtkLookupTable *lut )
+{
+    m_axialImagePlaneWidget->SetLookupTable( lut );
+    m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
+    m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
+}
+
+vtkLookupTable *Q3DMPRViewer::getVtkLUT( )
+{
+    return vtkLookupTable::SafeDownCast( m_axialImagePlaneWidget->GetLookupTable() );
+}
+
 void Q3DMPRViewer::planeInteraction()
 {
     emit planesHasChanged();
@@ -473,4 +563,4 @@ void Q3DMPRViewer::getCoronalPlaneNormal( double normal[3] )
     m_coronalImagePlaneWidget->GetNormal( normal );
 }
    
-};  // end namespace udg 
+};  // end namespace udg

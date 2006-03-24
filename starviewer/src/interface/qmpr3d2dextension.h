@@ -47,13 +47,18 @@ private:
     /// Crea actors adicionals que s'afegiran als respectius visors
     void createActors();
     
+    /// Estableix les connexions de signals i slots
+    void createConnections();
 
-    
 private slots:
     /// Actualitza les vistes 2D conforme el que es veu a la vista MPR 3D
     void update2DViews();
+
     /// Refresca la posició dels actors d'acord amb l'interacció
     void updateActors();
+
+    /// Canvia els ajustaments del window level per uns de predeterminats. 
+    void changeDefaultWindowLevel( int which );
 
 };
 

@@ -81,14 +81,15 @@ double CachePool::getFreeTotalSpace()
 #else 
 //codi per linux 
         StarviewerSettings settings;
-        QString sDirPath = QDir::current().absPath();
+        QString sDirPath = QDir::current().absolutePath();
 	
         struct stat stst;
 	struct statfs stfs;
         double Mb = 1024*1024;
 
-	if ( ::stat(sDirPath.local8Bit(),&stst) == -1 ) return false;
-	if ( ::statfs(sDirPath.local8Bit(),&stfs) == -1 ) return false;
+        // \TODO Saber i aclarir què fan les dues línies següents
+	if ( ::stat(sDirPath.toLocal8Bit(),&stst) == -1 ) return false;
+	if ( ::statfs(sDirPath.toLocal8Bit(),&stfs) == -1 ) return false;
 
 	fFree = stfs.f_bavail * ( stst.st_blksize );
 // 	fTotal = stfs.f_blocks * ( stst.st_blksize );
@@ -121,7 +122,7 @@ void CachePool::removeStudy(std::string absPathStudy)
             absSeriesPath.append(*it);
             absSeriesPath.append("/");
             removeSeries( absSeriesPath.toStdString() );
-            seriesDir.rmdir(absSeriesPath,true); //esborra el directori de la sèrie
+            seriesDir.rmdir( absSeriesPath ); //esborra el directori de la sèrie
         }
     }
     studyDir.rmdir( absPathStudy.c_str() ); //esborra el directori de l'estudi

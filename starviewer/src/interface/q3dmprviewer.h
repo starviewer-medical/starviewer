@@ -17,6 +17,7 @@ class vtkAnnotatedCubeActor;
 class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
+class vtkLookupTable;
 
 namespace udg {
 
@@ -60,23 +61,44 @@ public:
     double *getCoronalPlaneNormal();
     void getCoronalPlaneOrigin( double origin[3] );
     void getCoronalPlaneNormal( double normal[3] );
+
+    /// Assigna la LUT en format vtk
+    void setVtkLUT( vtkLookupTable * lut );
+
+    /// Retorna la LUT en format vtk
+    vtkLookupTable *getVtkLUT();
+    
 signals:
     /// senyal que indica que algun dels plans han canviat
     void planesHasChanged( void );
     
 public slots:
+    /// Inicialitza la vista de la càmara per veure el model des d'una orientació per defecte determinada ( acial , sagital o coronal )
     void resetViewToSagital();
     void resetViewToCoronal();
     void resetViewToAxial();
-    
+
+    /// Habilitar/Deshabilitar la visibilitat d'un dels plans
     void setSagitalVisibility( bool enable );
     void setCoronalVisibility( bool enable );
     void setAxialVisibility( bool enable );
-    
+
+    /// Reinicia de nou els plans
     void resetPlanes();
+
+    /// Ajusta el window/level
+    void setWindowLevel( double window , double level );
+
+    /// Mètodes per donar diversos window level per defecte
+    void resetWindowLevelToDefault();
+    void resetWindowLevelToBone();
+    void resetWindowLevelToSoftTissue();
+    void resetWindowLevelToFat();
+    void resetWindowLevelToLung();
     
-    // chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat
+    /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
     void planeInteraction();
+    
 private:
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
     /// Crea l'actor que mostra una referència de l'orientació dels eixos

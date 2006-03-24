@@ -8,13 +8,15 @@
 #include "q3dmprviewer.h"
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
+#include <iostream>
+
 // qt
 #include <QToolButton>
 #include <QSplitter>
 #include <QTextStream>
 #include <QSettings>
+#include <QMessageBox>
 
-#include <iostream>
 // vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
@@ -28,22 +30,7 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
-    connect( m_axialViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setAxialVisibility(bool)));
-    connect( m_sagitalViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setSagitalVisibility(bool)));
-    connect( m_coronalViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setCoronalVisibility(bool)));
-    
-    connect( m_axialOrientationButton , SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToAxial()));
-    connect( m_axialOrientationButton , SIGNAL(clicked()), this , SLOT(update2DViews()));
-    
-    connect( m_sagitalOrientationButton , SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToSagital()));
-    connect( m_sagitalOrientationButton , SIGNAL(clicked()), this , SLOT(update2DViews()));
-    
-    connect( m_coronalOrientationButton , SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToCoronal()));
-    connect( m_coronalOrientationButton , SIGNAL(clicked()), this , SLOT(update2DViews()));
-    
-    // connexions que determinen els canvis del plans a l'MPR 3D que s'han de reflexar a les vistes 2D
-    connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( update2DViews() ) );
-    connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( updateActors() ) );
+    createConnections();
 
     m_axialViewEnabledButton->setChecked( true );
     m_sagitalViewEnabledButton->setChecked( true );
@@ -54,7 +41,6 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     
     readSettings();
 }
-
 
 QMPR3D2DExtension::~QMPR3D2DExtension()
 {
@@ -87,7 +73,11 @@ void QMPR3D2DExtension::setInput( Volume *input )
     {
         coronalCam->SetViewUp(1,0,0);
     }
-
+ 
+    m_mpr3DView->setVtkLUT( m_axial2DView->getVtkLUT() );
+    m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
+    m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
+    
     updateActors();
 }
 
@@ -249,6 +239,82 @@ void QMPR3D2DExtension::updateActors()
     
 }
 
+void QMPR3D2DExtension::createConnections()
+{
+    connect( m_axialViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setAxialVisibility(bool)));
+    connect( m_sagitalViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setSagitalVisibility(bool)));
+    connect( m_coronalViewEnabledButton , SIGNAL(toggled(bool)), m_mpr3DView, SLOT(setCoronalVisibility(bool)));
+    
+    connect( m_axialOrientationButton , SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToAxial()));
+    connect( m_axialOrientationButton , SIGNAL(clicked()), this , SLOT(update2DViews()));
+    
+    connect( m_sagitalOrientationButton , SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToSagital()));
+    connect( m_sagitalOrientationButton , SIGNAL(clicked()), this , SLOT(update2DViews()));
+    
+    connect( m_coronalOrientationButton , SIGNAL(clicked()), m_mpr3DView, SLOT(resetViewToCoronal()));
+    connect( m_coronalOrientationButton , SIGNAL(clicked()), this , SLOT(update2DViews()));
+    
+    // connexions que determinen els canvis del plans a l'MPR 3D que s'han de reflexar a les vistes 2D
+    connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( update2DViews() ) );
+    connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( updateActors() ) );
+
+    connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
+}
+
+void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
+{
+    switch( which )
+    {
+    case 0:
+        m_mpr3DView->resetWindowLevelToDefault();
+        m_axial2DView->resetWindowLevelToDefault();
+        m_sagital2DView->resetWindowLevelToDefault();
+        m_coronal2DView->resetWindowLevelToDefault();
+    break;
+
+    case 1:
+        m_mpr3DView->resetWindowLevelToBone();
+        m_axial2DView->resetWindowLevelToBone();
+        m_sagital2DView->resetWindowLevelToBone();
+        m_coronal2DView->resetWindowLevelToBone();
+    break;
+
+    case 2:
+        m_mpr3DView->resetWindowLevelToLung();
+        m_axial2DView->resetWindowLevelToLung();
+        m_sagital2DView->resetWindowLevelToLung();
+        m_coronal2DView->resetWindowLevelToLung();
+    break;
+
+    case 3:
+        m_mpr3DView->resetWindowLevelToSoftTissue();
+        m_axial2DView->resetWindowLevelToSoftTissue();
+        m_sagital2DView->resetWindowLevelToSoftTissue();
+        m_coronal2DView->resetWindowLevelToSoftTissue();
+    break;
+
+    case 4:
+        m_mpr3DView->resetWindowLevelToFat();
+        m_axial2DView->resetWindowLevelToFat();
+        m_sagital2DView->resetWindowLevelToFat();
+        m_coronal2DView->resetWindowLevelToFat();
+    break;
+
+    case 5:
+        // custom
+        QMessageBox::information( m_mpr3DView , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
+    break;
+
+    default:
+        m_mpr3DView->resetWindowLevelToDefault();
+        m_axial2DView->resetWindowLevelToDefault();
+        m_sagital2DView->resetWindowLevelToDefault();
+        m_coronal2DView->resetWindowLevelToDefault();
+    break;
+    
+    }
+}
+
 void QMPR3D2DExtension::readSettings()
 {
     QSettings settings("GGG", "StarViewer-App-MPR-3D-2D");
@@ -271,4 +337,4 @@ void QMPR3D2DExtension::writeSettings()
     settings.endGroup();
 }
 
-};  // end namespace udg {
+};  // end namespace udg 

@@ -153,6 +153,12 @@ void ExtensionHandler::request( int who )
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
+
+    /// AXIS VIEW
+    case 5:
+        axisView->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+        m_mainApp->m_extensionWorkspace->addApplication( axisView , tr("Volume Axis View"));
+    break;
     
     default:
         axisView->setInput( m_volumeRepository->getVolume( m_volumeID ) );

@@ -14,6 +14,7 @@
 #include <QVTKWidget.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
+#include <vtkWindowToImageFilter.h>
 // rendering 3D
 #include <vtkVolumeProperty.h>
 #include <vtkVolume.h>
@@ -42,6 +43,8 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
+    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
+    
     m_renderFunction = RayCasting; // per defecte
     
     m_imageCaster = vtkImageCast::New();
@@ -141,7 +144,7 @@ void Q3DViewer::renderRayCasting()
     colorTransferFunction->AddRGBPoint( 128.0, 0.0, 0.0, 1.0 );
     colorTransferFunction->AddRGBPoint( 192.0, 0.0, 1.0, 0.0 );
     colorTransferFunction->AddRGBPoint( 255.0, 0.0, 0.2, 0.0 );
-    
+      
     // La propietat descriurà com es veuran les dades
     vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
     volumeProperty->SetColor( colorTransferFunction );
@@ -168,41 +171,39 @@ void Q3DViewer::renderMIP3D()
     rescale();
     //================================================================================================
     // Create a transfer function mapping scalar value to opacity
-    
-    vtkPiecewiseFunction *oTFun2 = vtkPiecewiseFunction::New();
-    oTFun2->AddSegment(  0, 0.0, 128, 1.0);
-    oTFun2->AddSegment(128, 1.0, 255, 0.0);
+    // assignem una rampa d'opacitat total per valors alts i nula per valors petits
+    // després en l'escala de grisos donem un  valor de gris constant ( blanc )
+    vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
+//     opacityTransferFunction->AddSegment(   0 , 0.0 , 128 , 1.0 );
+//     opacityTransferFunction->AddSegment( 128 , 1.0 , 255 , 0.0 );
+    opacityTransferFunction->AddSegment(   0 , 0.0 , 255 , 1.0 );
     
     // Create a transfer function mapping scalar value to color (grey)
-    vtkPiecewiseFunction *gTFun = vtkPiecewiseFunction::New();
-    gTFun->AddSegment(0, 1.0, 255, 1.0);
+    vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
+    grayTransferFunction->AddSegment( 0 , 1.0 , 255 , 1.0 );
     
     // Create a set of properties for mip
-    vtkVolumeProperty *mipprop;
+    vtkVolumeProperty *mipProperty;
     
-    mipprop = vtkVolumeProperty::New();
-    mipprop->SetScalarOpacity(oTFun2);          
-    mipprop->SetColor( gTFun );
-    mipprop->SetInterpolationTypeToLinear();
+    mipProperty = vtkVolumeProperty::New();
+    mipProperty->SetScalarOpacity( opacityTransferFunction );
+    mipProperty->SetColor( grayTransferFunction );
+    mipProperty->SetInterpolationTypeToLinear();
         
-    // creem les funcions del raig MIP
+    // creem la funció del raig MIP, en aquest cas maximitzem l'opacitat, si fos Scalar value, ho faria pel valor
     vtkVolumeRayCastMIPFunction* mipFunction = vtkVolumeRayCastMIPFunction::New();
-    mipFunction->SetMaximizeMethodToScalarValue();
-    
-    vtkVolumeRayCastMIPFunction *mipFunction2 = vtkVolumeRayCastMIPFunction::New();
-    mipFunction2->SetMaximizeMethodToOpacity();
-    
-    vtkFiniteDifferenceGradientEstimator *gradest = vtkFiniteDifferenceGradientEstimator::New();
+    mipFunction->SetMaximizeMethodToOpacity();
+
+    vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
     vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
 
-    // ------------------
     volumeMapper->SetVolumeRayCastFunction( mipFunction );
-    volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
-    volumeMapper->SetGradientEstimator( gradest );
+    volumeMapper->SetInput( m_imageCaster->GetOutput()  ); 
+    volumeMapper->SetGradientEstimator( gradientEstimator );
     // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
     vtkVolume* volume = vtkVolume::New();
     volume->SetMapper( volumeMapper );
-    volume->SetProperty( mipprop );
+    volume->SetProperty( mipProperty );
 
     m_renderer->AddViewProp( volume );
     m_renderer->Render();
@@ -215,13 +216,13 @@ void Q3DViewer::renderIsoSurface()
     vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
     oTFun->AddSegment(10, 0.0, 255, 0.3);
     
-    vtkPiecewiseFunction *oTFun2 = vtkPiecewiseFunction::New();
-    oTFun2->AddSegment(  0, 0.0, 128, 1.0);
-    oTFun2->AddSegment(128, 1.0, 255, 0.0);
+    vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
+    opacityTransferFunction->AddSegment(  0, 0.0, 128, 1.0);
+    opacityTransferFunction->AddSegment(128, 1.0, 255, 0.0);
     
     // Create a transfer function mapping scalar value to color (grey)
-    vtkPiecewiseFunction *gTFun = vtkPiecewiseFunction::New();
-    gTFun->AddSegment(0, 1.0, 255, 1.0);
+    vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
+    grayTransferFunction->AddSegment(0, 1.0, 255, 1.0);
         
     // Create a transfer function mapping scalar value to color (color)
     vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
@@ -250,19 +251,19 @@ void Q3DViewer::renderIsoSurface()
     */
     prop->SetScalarOpacity(oTFun);
     prop->SetGradientOpacity( goTFun );
-   prop->SetColor( cTFun ); 
-//     prop->SetColor( gTFun );
+    prop->SetColor( cTFun ); 
+//     prop->SetColor( grayTransferFunction );
     prop->SetInterpolationTypeToLinear(); //prop[index]->SetInterpolationTypeToNearest();
 
     // Create an isosurface ray function
     vtkVolumeRayCastIsosurfaceFunction *isosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
     isosurfaceFunction->SetIsoValue(80);
-    vtkFiniteDifferenceGradientEstimator *gradest = vtkFiniteDifferenceGradientEstimator::New();
+    vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
   
     vtkVolumeRayCastMapper *volumeMapper = vtkVolumeRayCastMapper::New();    
     volumeMapper->SetVolumeRayCastFunction( isosurfaceFunction );  
     volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
-    volumeMapper->SetGradientEstimator( gradest );
+    volumeMapper->SetGradientEstimator( gradientEstimator );
     // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
     vtkVolume* volume = vtkVolume::New();
     volume->SetMapper( volumeMapper );
@@ -272,6 +273,5 @@ void Q3DViewer::renderIsoSurface()
     m_renderer->Render();
   
 }
-
 
 };  // end namespace udg {

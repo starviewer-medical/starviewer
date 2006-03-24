@@ -59,12 +59,12 @@ void ScaleStudy::scale(std::string studyUID)
             imageRelativePath(mask,relPath);
         }
         absPath.clear();
-        absPath.append(settings.getCacheImagePath().ascii());
+        absPath.append(settings.getCacheImagePath().toAscii().constData());
         absPath.append(relPath); //creem el path absolut a la imatge a la imatge
         
         //creem el nom de la imatge resultant escalada
         absPathScal.clear();
-        absPathScal.append(settings.getCacheImagePath().ascii());
+        absPathScal.append(settings.getCacheImagePath().toAscii().constData());
         absPathScal.append(studyUID);
         absPathScal.append("/");
         absPathScal.append(seriesList.getSeries().getSeriesUID().c_str());

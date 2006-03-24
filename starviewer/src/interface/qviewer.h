@@ -9,11 +9,15 @@
 
 #include <QWidget>
 #include "point.h"
+// llista de captures de pantalla
+#include <list>
+#include <vtkImageData.h>
 
 // Fordward declarations
 class QVTKWidget;
 class vtkRenderer; 
 class vtkRenderWindowInteractor;
+class vtkWindowToImageFilter;
 
 namespace udg {
 
@@ -32,14 +36,21 @@ public:
     QViewer(QWidget *parent = 0);
     ~QViewer();
 
+    /// Tipus de fitxer que pot desar
+    enum FileType{ PNG , JPEG , TIFF , DICOM , PNM , META , BMP };
+    
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor *getInteractor() = 0;
+
     /// Retorna el renderer
     virtual vtkRenderer *getRenderer() = 0;
+
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume* volume) = 0;
+
     /// Ens retorna el volum d'entrada
     virtual Volume* getInput( void ) { return m_mainVolume; }
+
     /// Ens retorna el punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
     Point getModelPointFromCursor() const { return m_modelPointFromCursor; } 
     
@@ -50,6 +61,7 @@ public:
         xyz[1] = m_currentCursorPosition[1];
         xyz[2] = m_currentCursorPosition[2];
     }
+
     /// Retorna el valor de la imatge que hi ha sota el cursor
     double getCurrentImageValue() const { return m_currentImageValue; }
     
@@ -57,25 +69,50 @@ public:
     static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[3] );    
     static void computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] );
     
+    /// Fa una captura de la vista actual i la guarda en una estructura interna
+    void grabCurrentView();
+
+    /// Desa la llista de captures en un arxiu de diversos tipus amb el nom de fitxer base \c baseName i en format especificat per \c extension. Retorna TRUE si hi havia imatges per guardar, FALSE altrament
+    bool saveGrabbedViews( const char *baseName , FileType extension );
+        
+    /// Retorna el nombre de vistes capturades que estan desades
+    int grabbedViewsCount(){ return m_grabList.size(); }
+    
 public slots:
+
     /// Força l'execució de la visualització
     virtual void render() = 0;
     
+    /// Elimina totes les captures de pantalla
+    void clearGrabbedViews(){ m_grabList.clear(); };
+    
 protected:
+    
     /// El volum a visualitzar
     Volume* m_mainVolume;
+
     /// El widget per poder mostrar una finestra vtk amb qt
     QVTKWidget* m_vtkWidget;
+
     /// El punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
     Point m_modelPointFromCursor;
     
     /// Posició sobre la que es troba el ratolí
     double m_currentCursorPosition[3];
+
     /// Valor de la imatge corresponent a la posició on es troba el ratolí. Quan la posició està fora del model li assignarem un valor "d'invalidesa" \TODO definir aquest valor, de moment fem servir -1 ( erròniament )
     double m_currentImageValue;
 
-    
-    
+    typedef std::list< vtkImageData * > GrabListType;
+
+    /// La llista de captures de pantalla
+    GrabListType m_grabList;
+
+    /// L'iterador de la llista de captures de pantalla
+    GrabListType::iterator m_grabListIterator;
+
+    /// Filtre per connectar el que es visualitza pel renderer en un pipeline, epr guardar les imatges en un arxiu, per exemple
+    vtkWindowToImageFilter *m_windowToImageFilter;
 };
 
 };  //  end  namespace udg {

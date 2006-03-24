@@ -8,21 +8,96 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>864</width>
-    <height>841</height>
+    <width>620</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form1</string>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>11</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="0" column="0" >
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="m_saveSelectedImagesPushButton" >
+       <property name="text" >
+        <string>Save Selected</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_mipPushButton" >
+       <property name="text" >
+        <string>MIP</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>WW/WL:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="m_windowLevelAdjustmentComboBox" >
+         <item>
+          <property name="text" >
+           <string>Default</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Bone</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Lung</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Abdomen</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Soft Tissue</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Custom...</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QSplitter" name="m_horizontalSplitter" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
@@ -49,11 +124,23 @@
           </property>
           <item>
            <widget class="QSlider" name="m_axialSlider" >
+            <property name="autoFillBackground" >
+             <bool>false</bool>
+            </property>
             <property name="maximum" >
              <number>0</number>
             </property>
+            <property name="tracking" >
+             <bool>true</bool>
+            </property>
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition" >
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+            <property name="tickInterval" >
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -111,45 +198,7 @@
      </widget>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="m_sagSlicePlus" >
-       <property name="text" >
-        <string>SagitalSlice+</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_sagSliceMinus" >
-       <property name="text" >
-        <string>SagitalSlice-</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_corSlicePlus" >
-       <property name="text" >
-        <string>CoronalSlice+</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_corSliceMinus" >
-       <property name="text" >
-        <string>CoronalSlice-</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" >
+   <item>
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -196,6 +245,44 @@
       <widget class="QPushButton" name="m_rotateYMinus" >
        <property name="text" >
         <string>Coronal Y-</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="m_sagSlicePlus" >
+       <property name="text" >
+        <string>SagitalSlice+</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_sagSliceMinus" >
+       <property name="text" >
+        <string>SagitalSlice-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_corSlicePlus" >
+       <property name="text" >
+        <string>CoronalSlice+</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_corSliceMinus" >
+       <property name="text" >
+        <string>CoronalSlice-</string>
        </property>
       </widget>
      </item>

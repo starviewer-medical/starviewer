@@ -14,7 +14,10 @@
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
-    
+        
+    app.setOrganizationName("GGG");
+    app.setOrganizationDomain("ima.udg.es");
+    app.setApplicationName("Starviewer"); 
     // translation
     
     QString qmPath = qApp->applicationDirPath() + "/../src/interface";

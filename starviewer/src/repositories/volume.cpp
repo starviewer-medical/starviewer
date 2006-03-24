@@ -10,6 +10,9 @@
 // VTK
 #include <vtkImageData.h>
 
+// ITK
+#include <itkMetaDataDictionary.h>
+#include <itkMetaDataObject.h>
 // CPP
 #include <iostream>
 #include "volume.h"
@@ -132,6 +135,62 @@ int *Volume::getDimensions()
 void Volume::getDimensions( int dims[3] )
 {
     getVtkData()->GetDimensions( dims );
+}
+
+const char *Volume::getPatientName()
+{
+    typedef itk::MetaDataDictionary   DictionaryType;
+    const  DictionaryType & dictionary = getItkData()->GetMetaDataDictionary();
+
+    typedef itk::MetaDataObject< std::string > MetaDataStringType;
+
+    DictionaryType::ConstIterator itr = dictionary.Begin();
+    DictionaryType::ConstIterator end = dictionary.End();
+    while( itr != end )
+    {
+        itk::MetaDataObjectBase::Pointer  entry = itr->second;
+    
+        MetaDataStringType::Pointer entryvalue = dynamic_cast<MetaDataStringType *>( entry.GetPointer() ) ;
+    
+        if( entryvalue )
+        {
+            std::string tagkey   = itr->first;
+            std::string tagvalue = entryvalue->GetMetaDataObjectValue();
+            std::cout << tagkey <<  " = " << tagvalue << std::endl;
+        }
+
+        ++itr;
+    }
+  
+    std::string entryId = "0010|0010";
+    std::string patientNameEntryId = "0010|0020";
+    
+    DictionaryType::ConstIterator tagItr = dictionary.Find( entryId );
+
+    if( tagItr == end )
+    {
+        std::cerr << "Tag " << entryId;
+        std::cerr << " not found in the DICOM header" << std::endl;
+    }
+    tagItr = dictionary.Find( patientNameEntryId );
+    if( tagItr == end )
+    {
+        std::cerr << "Tag [patient name] " << patientNameEntryId;
+        std::cerr << " not found in the DICOM header" << std::endl;
+        
+    }
+    else
+    {
+        MetaDataStringType::Pointer entryvalue = dynamic_cast<MetaDataStringType *>( tagItr->second.GetPointer() );
+        if( entryvalue )
+        {
+            std::string tagvalue = entryvalue->GetMetaDataObjectValue();
+            std::cout << "Patient's Name (" << entryId <<  ") ";
+            std::cout << " is: " << tagvalue << std::endl;
+            return tagvalue.c_str();
+        }
+    }
+    return 0;
 }
 
 };

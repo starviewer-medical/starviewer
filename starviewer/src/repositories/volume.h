@@ -89,6 +89,9 @@ public:
     /// Retorna les dimensions del volum
     int *getDimensions();
     void getDimensions( int dims[3] );
+
+    /// Retorna el nom del pacient \TODO mètode temporal i en proves
+    const char *getPatientName();
     
 private:
     

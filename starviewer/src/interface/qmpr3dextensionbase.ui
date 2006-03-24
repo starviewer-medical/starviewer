@@ -130,11 +130,62 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>51</width>
-         <height>21</height>
+         <width>171</width>
+         <height>30</height>
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>WW/WL:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="m_windowLevelAdjustmentComboBox" >
+         <item>
+          <property name="text" >
+           <string>Default</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Bone  </string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Lung</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Soft Tissue</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Fat</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Custom</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

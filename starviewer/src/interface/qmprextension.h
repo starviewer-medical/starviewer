@@ -9,6 +9,7 @@
 
 #include "ui_qmprextensionbase.h"
 using namespace Ui; // \TODO sembla que l'obligació de posar això perquè funcioni és culpa dels FWD decls que hi ha fora de udg, en els que no hi ha FWD decls no cal
+#include <QString>
 
 // FWD declarations
 class vtkAxisActor2D;
@@ -121,6 +122,12 @@ private:
     /// Calcula el punt d'intersecció de 3 plans a l'espai 
     void planeIntersection( vtkPlaneSource *plane1 , vtkPlaneSource *plane2 , vtkPlaneSource *plane3 , double intersectionPoint[3] );
     
+    /// El directori on es desaran les imatges per defecte
+    QString m_defaultSaveDir;
+
+    /// Filtre de fitxers que es poden desar
+    QString m_fileSaveFilter;
+    
 private slots:
     // temporal
     void rotateXPlus();
@@ -138,6 +145,16 @@ private slots:
     void axialSliceUpdated( int slice );
     void sagitalSliceUpdated( int slice );
     void coronalSliceUpdated( int slice );
+
+    /// Canvia els ajustaments del window level per uns de predetrminats. 
+    void changeDefaultWindowLevel( int which );
+
+    /// [TMP] Fa "saltar" una finestra MIP
+    void showMIP();
+
+    /// Fa el procés de guardar les imatges capturades
+    void saveImages();
+
 };
 
 /**

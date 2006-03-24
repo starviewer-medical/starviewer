@@ -8,6 +8,7 @@
 #include "volume.h"
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
+#include "q3dviewer.h"
 
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
@@ -16,6 +17,8 @@
 #include <QTextStream>
 #include <QSplitter>
 #include <QPushButton>
+#include <QMessageBox>
+#include <QFileDialog>
 // vtk
 #include <vtkRenderer.h>
 #include <vtkMath.h> // pel vtkMath::Cross
@@ -51,7 +54,7 @@ QMPRExtension::QMPRExtension( QWidget *parent )
 
     m_sagitalReslice = vtkImageReslice::New();
     m_sagitalReslice->AutoCropOutputOn(); // perquè l'extent d'output sigui suficient i no es "mengi" dades
-    m_sagitalReslice->SetInterpolationModeToCubic();
+    m_sagitalReslice->SetInterpolationModeToLinear();
     
     m_coronalReslice = vtkImageReslice::New();
     m_coronalReslice->AutoCropOutputOn();
@@ -64,10 +67,74 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     
     m_transform = vtkTransform::New();
     
+    m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
+    
     createConnections();
     createActors();
     
     readSettings();
+}
+
+QMPRExtension::~QMPRExtension()
+{
+    writeSettings();
+    
+    m_sagitalOverAxialAxisActor->Delete();
+    m_axialOverSagitalIntersectionAxis->Delete();
+    m_coronalOverAxialIntersectionAxis->Delete();
+    m_coronalOverSagitalIntersectionAxis->Delete();
+
+    m_axialPlaneSource->Delete();
+    m_sagitalPlaneSource->Delete();
+    m_coronalPlaneSource->Delete();
+    
+    m_sagitalReslice->Delete();
+    m_coronalReslice->Delete();
+
+    m_transform->Delete();
+    
+}
+
+void QMPRExtension::createConnections()
+{
+    // conectem els sliders i demés visors
+    // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitaríem les característiques de l'auto connection
+    connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axialSpinBox , SLOT( setValue(int) ) );
+    connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
+    connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
+    
+    connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( axialSliceUpdated(int) ) );
+
+    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
+
+    connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
+    connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
+    
+    // temporal
+    
+    connect( m_rotateXPlus , SIGNAL( clicked() ), this , SLOT( rotateXPlus() ) );
+    connect( m_rotateXMinus , SIGNAL( clicked() ), this , SLOT( rotateXMinus() ) );
+    
+    connect( m_rotateYPlus , SIGNAL( clicked() ), this , SLOT( rotateYPlus() ) );
+    connect( m_rotateYMinus , SIGNAL( clicked() ), this , SLOT( rotateYMinus() ) );
+    
+    connect( m_sagitalYPlus , SIGNAL( clicked() ), this , SLOT( rotateSagitalYPlus() ) );
+    connect( m_sagitalYMinus , SIGNAL( clicked() ), this , SLOT( rotateSagitalYMinus() ) );
+    
+    connect( m_sagSlicePlus , SIGNAL( clicked() ), this , SLOT( sagitalSlicePlus() ) );
+    connect( m_sagSliceMinus , SIGNAL( clicked() ), this , SLOT( sagitalSliceMinus() ) );
+    
+    connect( m_corSlicePlus , SIGNAL( clicked() ), this , SLOT( coronalSlicePlus() ) );
+    connect( m_corSliceMinus , SIGNAL( clicked() ), this , SLOT( coronalSliceMinus() ) );
+
+    connect( m_mipPushButton , SIGNAL( clicked() ) , this , SLOT( showMIP() ) );
+
+    // fi temporal    
 }
 
 void QMPRExtension::setInput( Volume *input )
@@ -98,16 +165,6 @@ void QMPRExtension::setInput( Volume *input )
     m_axialSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[2] );    
     m_axialSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[2] );
     m_axialSlider->setValue( m_axial2DView->getSlice() );    
-// Ja no hi són , ho deixem comentat temporalment per si interessés re-incorporar-los, res més 
-//     m_sagitalSpinBox->setMinimum( 0 );
-//     m_sagitalSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[1] );    
-//     m_sagitalSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[1] );
-//     m_sagitalSlider->setValue( m_sagital2DView->getSlice() );
-//     
-//     m_coronalSpinBox->setMinimum( 0 );
-//     m_coronalSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[0] );    
-//     m_coronalSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[0] );
-//     m_coronalSlider->setValue( m_coronal2DView->getSlice() );
 
     // posta a punt dels planeSource
     initOrientation();
@@ -124,9 +181,11 @@ void QMPRExtension::setInput( Volume *input )
     m_sagital2DView->render();
     m_coronal2DView->render();
 
-        
-    updateControls();
+    m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
+    m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
     
+    updateControls();
+
 }
 
 void QMPRExtension::initOrientation()
@@ -140,7 +199,6 @@ void QMPRExtension::initOrientation()
     En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
     
 */
-
     // This method must be called _after_ setInput
     //
     m_volume->setData( vtkImageData::SafeDownCast( m_coronalReslice->GetInput()) );
@@ -210,8 +268,13 @@ void QMPRExtension::initOrientation()
     
     //ZX, y-normal : vista coronal
     // ídem anterior
-
-    m_coronalPlaneSource->SetOrigin( xbounds[0] /*-diffXBound*0.5*/, ybounds[0] , zbounds[0] /*-diffZBound*0.5*/ );
+// \TODO aquests valors s'han de calcular bé
+//     double maxZBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
+//     double maxXBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
+//     double diffXBound = maxXBound - xbounds[1];
+//     double diffZBound = maxZBound - zbounds[1];
+    
+    m_coronalPlaneSource->SetOrigin( xbounds[0]/* -diffXBound*0.5*/, ybounds[0] , zbounds[0]/* -diffZBound*0.5*/ );
     m_coronalPlaneSource->SetPoint1( xbounds[1] /*maxZBound*/ , ybounds[0] , zbounds[0]);
     m_coronalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] /*maxZBound*/ );
     // posem en la llesca central    
@@ -221,35 +284,47 @@ void QMPRExtension::initOrientation()
 
 }
 
-void QMPRExtension::createConnections()
+void QMPRExtension::showMIP()
 {
-    // conectem els sliders i demés visors
-    // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitaríem les característiques de l'auto connection
-    connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axialSpinBox , SLOT( setValue(int) ) );
-    connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
-    connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
+    Q3DViewer *viewer = new Q3DViewer( 0 );
+    viewer->setInput( m_volume );
+    viewer->setRenderFunctionToMIP3D();
+    viewer->render();
+//     m_axial2DView->grabCurrentView();
+//     m_sagital2DView->grabCurrentView();
+//     m_coronal2DView->grabCurrentView();
+
+}
+
+void QMPRExtension::saveImages()
+{
+    if( m_axial2DView->grabbedViewsCount() == 0 && m_sagital2DView->grabbedViewsCount() == 0 && m_coronal2DView->grabbedViewsCount() == 0 )
+    {
+        QMessageBox::information( 0 , tr("Information") , tr("There are not grabbed views to save") );
+        return;
+    }
     
-    
-    connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( axialSliceUpdated(int) ) );
-    
-    // temporal
-    
-    connect( m_rotateXPlus , SIGNAL( clicked() ), this , SLOT( rotateXPlus() ) );
-    connect( m_rotateXMinus , SIGNAL( clicked() ), this , SLOT( rotateXMinus() ) );
-    
-    connect( m_rotateYPlus , SIGNAL( clicked() ), this , SLOT( rotateYPlus() ) );
-    connect( m_rotateYMinus , SIGNAL( clicked() ), this , SLOT( rotateYMinus() ) );
-    
-    connect( m_sagitalYPlus , SIGNAL( clicked() ), this , SLOT( rotateSagitalYPlus() ) );
-    connect( m_sagitalYMinus , SIGNAL( clicked() ), this , SLOT( rotateSagitalYMinus() ) );
-    
-    connect( m_sagSlicePlus , SIGNAL( clicked() ), this , SLOT( sagitalSlicePlus() ) );
-    connect( m_sagSliceMinus , SIGNAL( clicked() ), this , SLOT( sagitalSliceMinus() ) );
-    
-    connect( m_corSlicePlus , SIGNAL( clicked() ), this , SLOT( coronalSlicePlus() ) );
-    connect( m_corSliceMinus , SIGNAL( clicked() ), this , SLOT( coronalSliceMinus() ) );
-    
-    // fi temporal    
+    QString fileName = QFileDialog::getSaveFileName( this , tr("Save file") , m_defaultSaveDir , m_fileSaveFilter );
+    if ( !fileName.isEmpty() )
+    {
+        QViewer::FileType extension;
+        if( QFileInfo( fileName ).suffix() == "jpg" )
+            extension = QViewer::JPEG;
+        else if( QFileInfo( fileName ).suffix() == "png" )
+            extension = QViewer::PNG;
+        else if( QFileInfo( fileName ).suffix() == "pnm" )
+            extension = QViewer::PNM;
+        else if( QFileInfo( fileName ).suffix() == "bmp" )
+            extension = QViewer::BMP;
+        else if( QFileInfo( fileName ).suffix() == "tif" )
+            extension = QViewer::TIFF;
+        
+        m_axial2DView->saveGrabbedViews( qPrintable( QFileInfo( fileName ).completeBaseName() ) ,  extension );
+        m_sagital2DView->saveGrabbedViews( qPrintable( QFileInfo( fileName ).completeBaseName() ) ,  extension );
+        m_coronal2DView->saveGrabbedViews( qPrintable( QFileInfo( fileName ).completeBaseName() ) ,  extension );
+        
+        m_defaultSaveDir = QFileInfo( fileName ).absolutePath();
+    }
 }
 
 void QMPRExtension::createActors()
@@ -450,17 +525,7 @@ void QMPRExtension::coronalSliceMinus()
     updateControls();
 }
     
-QMPRExtension::~QMPRExtension()
-{
-    writeSettings();
-    
-    m_sagitalOverAxialAxisActor->Delete();
-    m_axialOverSagitalIntersectionAxis->Delete();
-    m_coronalOverAxialIntersectionAxis->Delete();
-    m_coronalOverSagitalIntersectionAxis->Delete();
-    
 
-}
 
 void QMPRExtension::updateControls()
 {
@@ -492,13 +557,13 @@ void QMPRExtension::updateControls()
     // projecció sagital sobre axial i viceversa
     MathTools::planeIntersection( m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
     
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0]*2000 /*- m_volume->getOrigin()[0]*/;
+    position1[1] = r[1] - t[1]*2000 /*- m_volume->getOrigin()[1]*/;
+    position1[2] = r[2] - t[2]*2000 /*- m_volume->getOrigin()[2]*/;
     
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0]*2000 /*- m_volume->getOrigin()[0]*/;
+    position2[1] = r[1] + t[1]*2000 /*- m_volume->getOrigin()[1]*/;
+    position2[2] = r[2] + t[2]*2000 /*- m_volume->getOrigin()[2]*/;
     
     m_sagitalOverAxialAxisActor->SetPosition(  position1[0] , position1[1] );
     m_sagitalOverAxialAxisActor->SetPosition2( position2[0] , position2[1] );
@@ -511,19 +576,20 @@ void QMPRExtension::updateControls()
     
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
     
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0]*2000 - m_volume->getOrigin()[0];
+    position1[1] = r[1] - t[1]*2000 - m_volume->getOrigin()[1];
+    position1[2] = r[2] - t[2]*2000 - m_volume->getOrigin()[2];
     
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0]*2000 - m_volume->getOrigin()[0];
+    position2[1] = r[1] + t[1]*2000 - m_volume->getOrigin()[1];
+    position2[2] = r[2] + t[2]*2000 - m_volume->getOrigin()[2];
     
     m_coronalOverSagitalIntersectionAxis->SetPosition( position1[1] , position1[2] );
     m_coronalOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
     
     
     // projecció coronal sobre axial
+    // \TODO sembla que la projecció no es fa bé del tot perqè segons com es giri no es projecta bé
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() , r , t );
     
     position1[0] = r[0] - t[0]*2000;
@@ -979,6 +1045,43 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
     plane->Update();
 }
 
+void QMPRExtension::changeDefaultWindowLevel( int which )
+{
+    // amb una crida n'hi ha prou ja que els wW/WL estan sincronitzats
+    switch( which )
+    {
+    case 0:
+        m_axial2DView->resetWindowLevelToDefault();
+    break;
+
+    case 1:
+        m_axial2DView->resetWindowLevelToBone();
+    break;
+
+    case 2:
+        m_axial2DView->resetWindowLevelToLung();
+    break;
+
+    case 3:
+        m_axial2DView->resetWindowLevelToSoftTissue();
+    break;
+
+    case 4:
+        m_axial2DView->resetWindowLevelToFat();
+    break;
+
+    case 5:
+        // custom
+        QMessageBox::information( this , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
+    break;
+
+    default:
+        m_axial2DView->resetWindowLevelToDefault();
+    break;
+    
+    }
+}
+
 void QMPRExtension::readSettings()
 {
     QSettings settings("GGG", "StarViewer-App-MPR");    
@@ -986,6 +1089,8 @@ void QMPRExtension::readSettings()
 
     m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
     m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
+
+    m_defaultSaveDir = settings.value("defaultSaveDir", ".").toString();
 
     settings.endGroup();
 }
@@ -998,6 +1103,8 @@ void QMPRExtension::writeSettings()
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
     settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
 
+    settings.setValue("defaultSaveDir", m_defaultSaveDir );
+    
     settings.endGroup();
 }
 

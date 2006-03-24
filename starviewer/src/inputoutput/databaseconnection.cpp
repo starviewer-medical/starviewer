@@ -17,7 +17,7 @@ DatabaseConnection::DatabaseConnection()
 {
    StarviewerSettings settings;
    
-   m_databasePath = settings.getDatabasePath().ascii();
+   m_databasePath = settings.getDatabasePath().toAscii().constData();
    m_databaseLock = (sem_t*)malloc(sizeof(sem_t));
    sem_init(m_databaseLock,0,1);//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
    connectDB();
