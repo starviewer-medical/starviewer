@@ -40,7 +40,7 @@ public:
     RenderFunction getRenderFunction() const { return m_renderFunction; }
 
     /// retorna el tipu de visualització que es té assignat com a un string
-    const char* getRenderFunctionAsString();
+    QString getRenderFunctionAsString();
     
     virtual void setInput( Volume* volume );
 

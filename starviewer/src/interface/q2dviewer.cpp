@@ -138,19 +138,19 @@ void Q2DViewer::createAnnotations()
     }
     // ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
     // les orientacions que donem ara són per posar algo, aquí \TODO cal posar les referències correctes a partir de la informació dels tags DICOM
-    m_patientOrientationTextActor[0]->SetInput( tr("LEFT") );
+    m_patientOrientationTextActor[0]->SetInput( tr("LEFT").toAscii() );
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
     m_patientOrientationTextActor[0]->SetPosition( 0.01 , 0.5 );
 
-    m_patientOrientationTextActor[1]->SetInput( tr("ANTERIOR") );
+    m_patientOrientationTextActor[1]->SetInput( tr("ANTERIOR").toAscii() );
     m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[1]->SetPosition( 0.5 , 0.01 );
 
-    m_patientOrientationTextActor[2]->SetInput( tr("RIGHT") );
+    m_patientOrientationTextActor[2]->SetInput( tr("RIGHT").toAscii() );
     m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
     m_patientOrientationTextActor[2]->SetPosition( 0.99 , 0.5 );
 
-    m_patientOrientationTextActor[3]->SetInput( tr("SUPERIOR") );
+    m_patientOrientationTextActor[3]->SetInput( tr("SUPERIOR").toAscii() );
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
     
@@ -238,10 +238,10 @@ void Q2DViewer::initInformationText()
                 
     m_lowerRightText = tr("Made by Starviewer %1").arg( QChar(169) );
     
-    m_textAnnotation->SetText( 0 , m_lowerLeftText );
-    m_textAnnotation->SetText( 1 , m_lowerRightText );
-    m_textAnnotation->SetText( 2 , m_upperLeftText );
-    m_textAnnotation->SetText( 3 , m_upperRightText );
+    m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
+    m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
+    m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
+    m_textAnnotation->SetText( 3 , m_upperRightText.toAscii() );
     
     m_textAnnotation->SetImageActor( m_viewer->GetImageActor() );
     m_textAnnotation->SetWindowLevel( m_viewer->GetWindowLevel() );
@@ -952,7 +952,7 @@ void Q2DViewer::updateWindowLevelAnnotation()
                 .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
                 .arg( m_viewer->GetColorWindow() )
                 .arg( m_viewer->GetColorLevel() );
-    m_textAnnotation->SetText( 2 , m_upperLeftText );    
+    m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );    
 }
 
 void Q2DViewer::updateSliceAnnotation()
@@ -960,7 +960,7 @@ void Q2DViewer::updateSliceAnnotation()
     m_lowerLeftText = tr("Slice: %1/%2")
                 .arg( m_currentSlice )
                 .arg( m_size[2] );
-    m_textAnnotation->SetText( 0 , m_lowerLeftText );
+    m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
 }
 
 void Q2DViewer::updateWindowSizeAnnotation()
@@ -972,7 +972,7 @@ void Q2DViewer::updateWindowSizeAnnotation()
                 .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
                 .arg( m_viewer->GetColorWindow() )
                 .arg( m_viewer->GetColorLevel() );
-    m_textAnnotation->SetText( 2 , m_upperLeftText );
+    m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
 }
     
 void Q2DViewer::setDivisions( int x , int y , int z )

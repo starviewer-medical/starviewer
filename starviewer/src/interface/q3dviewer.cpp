@@ -66,7 +66,7 @@ vtkRenderer *Q3DViewer::getRenderer()
     return m_renderer;       
 }
 
-const char* Q3DViewer::getRenderFunctionAsString()
+QString Q3DViewer::getRenderFunctionAsString()
 {
     QString result;
     switch( m_renderFunction )
@@ -81,7 +81,7 @@ const char* Q3DViewer::getRenderFunctionAsString()
         result = "IsoSurface";
     break;
     }
-    return result.latin1();
+    return result;
 }
 
 void Q3DViewer::setInput( Volume* volume )
