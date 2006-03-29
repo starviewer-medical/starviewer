@@ -298,6 +298,12 @@ private:
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
+    /// Aquest string indica les anotacions que ens donen les referències del pacient ( Right,Left,Posterior,Anterior,Inferior,Superior)
+    QString m_patientOrientationText[4];
+
+    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
+    void mapOrientationStringToAnnotation();
+    
     /// Marcadors que indicaran on està l'esquerra/dreta, abaix/amunt en referència al model
     vtkAxisActor2D *m_sideOrientationMarker , *m_bottomOrientationMarker;
     

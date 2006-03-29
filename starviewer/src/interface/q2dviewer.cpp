@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "q2dviewer.h"
 #include "volume.h"
-
+#include "volumesourceinformation.h"
 // include's qt
 #include <QResizeEvent>
 #include <QSize>
@@ -121,8 +121,6 @@ void Q2DViewer::createAnnotations()
 {
     // anotacions textuals
     m_textAnnotation = vtkCornerAnnotation::New();
-    initInformationText();
-
     // informació de referència de la orientació del pacient
     for( int i = 0; i<4; i++ )
     {
@@ -138,21 +136,19 @@ void Q2DViewer::createAnnotations()
     }
     // ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
     // les orientacions que donem ara són per posar algo, aquí \TODO cal posar les referències correctes a partir de la informació dels tags DICOM
-    m_patientOrientationTextActor[0]->SetInput( tr("LEFT").toAscii() );
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
     m_patientOrientationTextActor[0]->SetPosition( 0.01 , 0.5 );
 
-    m_patientOrientationTextActor[1]->SetInput( tr("ANTERIOR").toAscii() );
     m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[1]->SetPosition( 0.5 , 0.01 );
-
-    m_patientOrientationTextActor[2]->SetInput( tr("RIGHT").toAscii() );
+    
     m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
     m_patientOrientationTextActor[2]->SetPosition( 0.99 , 0.5 );
 
-    m_patientOrientationTextActor[3]->SetInput( tr("SUPERIOR").toAscii() );
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
+    
+//     mapOrientationStringToAnnotation();
     
     // Marcadors
     m_sideOrientationMarker = vtkAxisActor2D::New();
@@ -177,6 +173,241 @@ void Q2DViewer::createAnnotations()
 //     this->getRenderer()->AddActor2D( m_bottomOrientationMarker );
 
     updateAnnotations();
+}
+
+void Q2DViewer::mapOrientationStringToAnnotation()
+{
+    QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
+
+    // \TODO sembla que la informació del pacient es perd d'un volum a un altre,,, perquè??? és possible que es degui al reslice... perquè nomès passem les dades itk/vtk en sí i prou...
+    QStringList list = orientation.split(",");
+    // \TODO tenir en compte que o hi ha 3 parells de lletres o res. Tenir en compte en els if's que a part de les lletre sper separat podríem tenir parells del tipu LP,I,.. si les orientacions tenen "refinaments"
+    if( list.size() > 1 )
+    {
+        if( list.at(0) == "L" )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("L").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("R").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("P").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("A").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("R").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("L").toAscii() );
+            }
+        }
+        else if( list.at(0) == "R"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("R").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("L").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("A").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("P").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("L").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("R").toAscii() );
+            }
+        }
+        else if( list.at(0) == "A"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("A").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("P").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(0) == "P"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("P").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("A").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(0) == "S"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("S").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("I").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(0) == "I"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("I").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("S").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+            }
+        }
+    
+        if( list.at(1) == "L" )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(1) == "R"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(1) == "A"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("A").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("P").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(1) == "P"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("P").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("A").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(1) == "S"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("S").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("I").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+        }
+        else if( list.at(1) == "I"  )
+        {
+            if( m_lastView == Axial )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("I").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("S").toAscii() );
+            }
+            else if( m_lastView == Sagittal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+            else if( m_lastView == Coronal )
+            {
+                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+            }
+        }
+    }
+    else
+    {
+        // la info no existeix
+    }
+
+        
 }
 
 void Q2DViewer::updateAnnotations()
@@ -225,16 +456,25 @@ void Q2DViewer::initInformationText()
                 .arg( m_viewer->GetColorWindow() )
                 .arg( m_viewer->GetColorLevel() );
 
-    QString institution = "institution i.e. IDI-GIRONA";
-    QString patientName = "patient name here";
-    QString patientID = "patient ID here";
-    QString date = "00/00/3000";
+    QString studyDate = m_mainVolume->getVolumeSourceInformation()->getStudyDate();
+    QString year = studyDate.mid( 0 , 4 );
+    QString month = studyDate.mid( 4 , 2 );
+    QString day = studyDate.mid( 6 , 2 );
+    studyDate = day + QString( "/" ) + month + QString( "/" ) + year;
 
-    m_upperRightText = tr("%1\n%2\n%3\n%4")
-                .arg( institution )
-                .arg( patientName )
-                .arg( patientID )
-                .arg( date );
+    QString studyTime = m_mainVolume->getVolumeSourceInformation()->getStudyTime();
+    QString hour = studyTime.mid( 0 , 2 );
+    QString minute = studyTime.mid( 2 , 2 );
+    QString second = studyTime.mid( 4 , 2 );
+    studyTime = hour + QString( ":" ) + minute + QString( ":" ) + second;
+    
+    m_upperRightText = tr("%1\n%2\n%3\nAcc:%4\n%5\n%6")
+                .arg( m_mainVolume->getVolumeSourceInformation()->getInstitutionName() )
+                .arg( m_mainVolume->getVolumeSourceInformation()->getPatientName() )
+                .arg( m_mainVolume->getVolumeSourceInformation()->getPatientID() )
+                .arg( m_mainVolume->getVolumeSourceInformation()->getAccessionNumber() )
+                .arg( studyDate )
+                .arg( studyTime );
                 
     m_lowerRightText = tr("Made by Starviewer %1").arg( QChar(169) );
     
@@ -639,7 +879,6 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
  
 }
 
-
 void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, void *client_data, vtkCommand *command )
 {
     // Extret dels exemples de vtkEventQtSlotConnect
@@ -705,6 +944,8 @@ void Q2DViewer::setInput( Volume* volume )
     m_bottomOrientationMarker->SetPosition2( 0.9 , 0.2 );
     m_bottomOrientationMarker->SetRange( 200 , 5000 );
 
+    initInformationText();
+    
     m_mainVolume->getDimensions( m_size );
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
@@ -817,6 +1058,7 @@ void Q2DViewer::updateView()
     }
     // cada cop que canviem de llesca posarem per defecte la llesca del mig d'aquella vista
     setSlice( m_viewer->GetSliceRange()[1]/2 );
+    mapOrientationStringToAnnotation();
     updateWindowSizeAnnotation();
 }
 
