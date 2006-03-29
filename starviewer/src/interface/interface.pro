@@ -3,6 +3,35 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
 # L'objectiu és una biblioteca:  
 
+TARGETDEPS += ../repositories/librepositories.a \
+              ../registration/libregistration.a \
+              ../tools/libtools.a \
+              ../../src/inputoutput/libinputoutput.a 
+LIBS += ../../src/inputoutput/libinputoutput.a \
+        ../repositories/librepositories.a \
+        ../inputoutput/libinputoutput.a \
+        ../registration/libregistration.a \
+        ../tools/libtools.a 
+INCLUDEPATH += ../../src/inputoutput \
+               ../tools \
+               ../inputoutput \
+               ../registration \
+               ../repositories 
+MOC_DIR = ../../tmp/moc 
+UI_DIR = ../../tmp/ui 
+OBJECTS_DIR = ../../tmp/obj 
+QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated 
+QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated 
+CONFIG += debug \
+          warn_on \
+          qt \
+          opengl \
+          thread \
+          x11 \
+          staticlib \
+          exceptions \
+          stl 
+TEMPLATE = lib 
 FORMS += mutualinformationinputparametersformbase.ui \
          qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \
@@ -41,7 +70,6 @@ HEADERS += director.h \
            qpacslist.h \
            qretrievescreen.h \
            queryscreen.h \
-           starviewerprocessimage.h \
            qseriesiconview.h \
            qstudylistview.h \
            q3dmprviewer.h \
@@ -80,7 +108,6 @@ SOURCES += director.cpp \
            queryscreen.cpp \
            queryscreenerror.cpp \
            queryscreenmove.cpp \
-           starviewerprocessimage.cpp \
            qseriesiconview.cpp \
            qstudylistview.cpp \
            q3dmprviewer.cpp \
@@ -98,33 +125,3 @@ SOURCES += director.cpp \
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
-TEMPLATE = lib
-CONFIG += debug \
-warn_on \
-qt \
-opengl \
-thread \
-x11 \
-staticlib \
-exceptions \
-stl
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-OBJECTS_DIR = ../../tmp/obj
-UI_DIR = ../../tmp/ui
-MOC_DIR = ../../tmp/moc
-INCLUDEPATH += ../../src/inputoutput \
-../tools \
-../inputoutput \
-../registration \
-../repositories
-LIBS += ../../src/inputoutput/libinputoutput.a \
-../repositories/librepositories.a \
-../inputoutput/libinputoutput.a \
-../registration/libregistration.a \
-../tools/libtools.a
-TARGETDEPS += ../repositories/librepositories.a \
-../registration/libregistration.a \
-../tools/libtools.a \
-../inputoutput/libinputoutput.a \
-../../src/inputoutput/libinputoutput.a

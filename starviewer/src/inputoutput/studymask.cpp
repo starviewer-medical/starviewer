@@ -666,6 +666,24 @@ Status StudyMask:: setAccessionNumber(std::string accession)
     return state.setStatus(correct);
 }
 
+
+/** Extreu de la màscara l'estudi UID
+  *            @param mask [in] màscara de la cerca
+  *            @return   Estudi UID que cerquem
+  */
+std::string StudyMask::getStudyUID()
+{
+    const char * UID=NULL;
+    std::string studyUID;
+    
+    DcmTagKey studyUIDTagKey (DCM_StudyInstanceUID);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( studyUIDTagKey, UID, OFFalse );;
+    
+    if (UID != NULL) studyUID.insert(0,UID);
+        
+    return studyUID;
+}
 /**  Return the generated search mask
               @return returns de search mask
 */

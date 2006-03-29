@@ -91,7 +91,6 @@ void QStudyListView::createPopupMenu()
     if (m_parentName == "m_tabPacs")
     { 
         deleteStudy->setEnabled(false);       
-        view->setEnabled(false);
     }   
    
     if (m_parentName == "m_tabCache")

@@ -25,11 +25,12 @@ StarviewerProcessImage::StarviewerProcessImage()
 void StarviewerProcessImage::process(Image *image)
 {
     if (m_downloadedImages == 0)
-    {
-        m_oldSeriesUID = image->getSeriesUID();
+    {   m_oldSeriesUID = image->getSeriesUID();
+        //enviem un signal indicant que ha començat la descarrega de l'estudi
+        emit(startRetrieving( image->getStudyUID().c_str()));
     }
     m_downloadedImages++;
-    emit(imageRetrieved(image,m_downloadedImages));
+    emit(imageRetrieved(image->getStudyUID().c_str(),m_downloadedImages));
     
     if (m_oldSeriesUID != image->getSeriesUID())
     {

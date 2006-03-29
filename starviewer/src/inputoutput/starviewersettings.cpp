@@ -8,6 +8,7 @@
 #include <stream.h>
 #include "constkey.h"
 #include <QDir>
+#include <QApplication>
 
 namespace udg {
 
@@ -53,7 +54,7 @@ QString StarviewerSettings::getDatabasePath()
     QString defaultDir;
     
     //construim directori per defecte
-    defaultDir = currentDir.absolutePath(); //directori actual
+    defaultDir = QApplication::applicationDirPath(); //directori actual
     defaultDir.append("/pacscache/database/dicom.sdb");
     
     return m_starviewerSettings.value(databaseRootKey,defaultDir).toString();
@@ -72,15 +73,13 @@ QString StarviewerSettings::getPoolSize()
   */
 QString StarviewerSettings::getCacheImagePath()
 {
-
-    QDir currentDir;
     QString defaultDir;
     
     //construim directori per defecte
-    defaultDir = currentDir.absolutePath(); //directori actual
+    defaultDir = QApplication::applicationDirPath(); //directori actual
     defaultDir.append("/pacscache/dicom/");
     
-    return m_starviewerSettings.value(cacheImagePathKey,"/").toString();
+    return m_starviewerSettings.value(cacheImagePathKey,defaultDir).toString();
 }
 
 

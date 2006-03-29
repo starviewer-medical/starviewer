@@ -8,10 +8,10 @@ SUBDIRS += tools \
            registration \
            segmentation \
            visualization \
-           inputoutput \
            colour \
            filters \
            interface \
+           inputoutput \
            main 
 TEMPLATE = subdirs 
 CONFIG += debug \
@@ -32,9 +32,9 @@ TARGETDEPS += ../src/main/../bin/starviewer \
               ../src/filters/libfilters.a \
               ../src/colour/libcolour.a \
               ../src/tools/libtools.a \
-              ../src/inputoutput/libinputoutput.a \
               ../src/visualization/libvisualization.a \
               ../src/registration/libregistration.a \
               ../src/segmentation/libsegmentation.a \
               ../src/interface/libinterface.a \
+              ../src/inputoutput/libinputoutput.a \
               ../src/repositories/librepositories.a 

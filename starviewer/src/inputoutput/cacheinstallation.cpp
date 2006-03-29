@@ -111,6 +111,7 @@ void CacheInstallation::createDatabaseFile()
     QString strProcess;
     StarviewerSettings settings;
     
+    
     // \TODO Veure com guardar el fitxer database.sql (Resource de qt?)
     strProcess.insert(0,"sqlite ");
     strProcess.append(settings.getDatabasePath());

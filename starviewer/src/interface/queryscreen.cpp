@@ -44,17 +44,17 @@
 #include "qpacslist.h"
 #include "constkey.h"
 #include "starviewersettings.h"
-#include "retrievethread.h"
 #include "cachepool.h"
 #include "scalestudy.h"
 #include <qdesktopwidget.h>
 #include <qapplication.h>
+#include "qnavigatewindow.h"
+#include "queueoperationlist.h"
+#include "operation.h"
 
 namespace udg {
-/** Constuctor de la classe
- */
-/**
- * 
+
+/**Constuctor de la classe
  * @param parent 
  * @return 
  */
@@ -87,13 +87,10 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_piSingleton=ProcessImageSingleton::getProcessImageSingleton();
     m_piSingleton->setPath( settings.getCacheImagePath().toStdString() );
 
-    m_threadsList = RetrieveThreadsList::getRetrieveThreadsList();
-    m_threadsList->setMaxThreads(settings.getMaxConnections().toInt(NULL,10));
-    
     //Instanciem els llistats
     m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
-
+   
     qPacsList->setMaximumSize(1,1);//amaguem al finestra del QPacsList
     centerWindow(); //centrem la finestra
 }
@@ -173,9 +170,13 @@ void QueryScreen::connectSignalsAndSlots()
     
     //per netejar la QSeriesIconView quant s'esborrar un estudi
     connect(this,SIGNAL(clearIconView()),m_SeriesImViewCache,SLOT(clearIconView()));
-
-
+    
+    //per poder descarregar i veure un estudi amb el menu contextual dels del QStudyList del PACS
+    connect(m_StudyLViewPacs,SIGNAL(view()), this,SLOT(view()));
     connect(m_StudyLViewPacs, SIGNAL(retrieve()), this, SLOT(retrieve()));
+    
+    //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
+    QObject::connect(&m_qexecuteOperationThread,SIGNAL(viewStudy(QString)),this,SLOT(studyRetrievedView(QString)),Qt::QueuedConnection);
 }
 
 /** Centra la finestra a la pantalla
@@ -396,6 +397,9 @@ bool QueryScreen::validateNoEmptyMask()
 
 /** Fa cerca al pacs seleccionats
   */
+/**
+ * 
+ */
 void QueryScreen::queryStudyPacs()
 {
 
@@ -518,7 +522,7 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     int nImages = 0;
 
     
-    state = pacsListDB.queryPacs(&pacs, pacsAETitle.toAscii().constData() );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    state = pacsListDB.queryPacs(&pacs,pacsAETitle.toAscii().constData());//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
     if (!state.good())
     {
         databaseError(&state);
@@ -661,25 +665,25 @@ void QueryScreen::retrieve()
     
 void QueryScreen::retrievePacs(bool view)
 {
-    
-    pthread_t thread;
-    StudyMask mask;
-    std::string studyUID,defaultSeriesUID;
-    Status state;
 
+    StudyMask mask;
+    QString studyUID,defaultSeriesUID;
+    Status state;
+    Operation operation;
     PacsParameters pacs;      
-    bool estat;
     PacsListDB pacsListDB; 
     StarviewerSettings settings;
-    QString result;
-    RetrieveThread rThread;
     CachePool *pool = CachePool::getCachePool();
     
     this->setCursor(QCursor(Qt::WaitCursor));
     if (m_StudyLViewPacs->getSelectedStudyUID() == "")
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
-        QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to download "));
+        if (view)
+        {
+            QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to view "));
+        }
+        else QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to download "));
         return;
     }
     studyUID.insert(0,m_StudyLViewPacs->getSelectedStudyUID().toAscii().constData());
@@ -692,30 +696,29 @@ void QueryScreen::retrievePacs(bool view)
     }
     
     //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
-    if (!m_studyListSingleton->findStudy(studyUID))
+    if (!m_studyListSingleton->findStudy(studyUID.toAscii().constData()))
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::warning( this, tr("StarViewer"),tr("Internal Error : "));
         return;
     }
    
+    
     //Inserim l'informació de l'estudi a la caché!
-    estat = insertStudyCache(m_studyListSingleton->getStudy());
-    if (!estat)
+    if (!insertStudyCache(m_studyListSingleton->getStudy()))
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
         return;
     }   
     
     //primer guardem la informacio de les series per esbrinar de quina modalitat és l'estudi ja que el Pacs no ens la dona
-    estat = insertSeriesCache( studyUID.c_str() );
-    if (!estat) 
+    if (!insertSeriesCache( studyUID.toAscii().constData() )) 
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
         return;
     }
 
-    mask.setStudyUID(studyUID.c_str());//definim la màscara per descarregar l'estudi
+    mask.setStudyUID(studyUID.toAscii().constData());//definim la màscara per descarregar l'estudi
     
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
     state = pacsListDB.queryPacs(&pacs,m_StudyLViewPacs->getSelectedStudyPacsAETitle().toAscii().constData());
@@ -734,31 +737,18 @@ void QueryScreen::retrievePacs(bool view)
     pacs.setTimeOut(settings.getTimeout().toInt(NULL,10));
     pacs.setLocalPort(settings.getLocalPort().toAscii().constData());
     
-    //preparem les dades a passar perl thread
-    retParam.studyUID=studyUID;
-    retParam.pacs = pacs;
-    
-    pthread_create(&thread,NULL,retrieveImages,(void*)&retParam); //es crea el thread
-    
-    rThread.setStudyUID(studyUID); //guardem la informació del thread creat
-    rThread.setThread(thread);
-    rThread.setView(view);
-    
+    //definim l'operacio
+    operation.setPacsParameters(pacs);
+    operation.setStudyMask(mask);
     if (view)
     {
-        //si ens han indicat que volen visualitzar una serie en concret definim el seu UID
-        if (m_StudyLViewPacs->getSelectedSeriesUID() == "")
-        {
-            // si no han escollit cap serie visaualizem la primera per defecte
-            m_seriesListSingleton->firstSeries();
-            rThread.setDefaultSeriesUID(m_seriesListSingleton->getSeries().getSeriesUID());
-        }
-        else rThread.setDefaultSeriesUID(m_StudyLViewPacs->getSelectedSeriesUID().toAscii().constData());
+        operation.setOperation(operationView);
     }
-    m_threadsList->addThread(rThread);
+    else operation.setOperation(operationRetrieve);
+    
+    m_qexecuteOperationThread.queueOperation(operation);
+
     this->setCursor(QCursor(Qt::ArrowCursor));
-
-
 }
 
 /** Insereix un estudi a descarregar a la cache
@@ -781,11 +771,9 @@ bool QueryScreen::insertStudyCache(Study stu)
        if (m_seriesListSingleton->getSeries().getStudyUID()!=study.getStudyUID()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
        {
             QuerySeriesPacs( study.getStudyUID().c_str() ,m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
-
        }
    }
-   else
-        QuerySeriesPacs(study.getStudyUID().c_str() ,m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
+   else QuerySeriesPacs(study.getStudyUID().c_str() ,m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
     
     
     //establim la modalitat de l'estudi
@@ -823,10 +811,11 @@ bool QueryScreen::insertSeriesCache(QString studyUID)
     Status state;
     
     m_seriesListSingleton->firstSeries();
-
-   if (!m_seriesListSingleton->end())     //Cerquem les sèries de l'estudi per inserir la informació a la bd
-   {   
-       if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.toAscii().constData()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
+ 
+   //Cerquem les sèries de l'estudi per inserir la informació a la bd
+   if (!m_seriesListSingleton->end())    
+   {   //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
+       if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.toAscii().constData()) 
        {
            QuerySeriesPacs(studyUID.toAscii().constData(),m_StudyLViewPacs->getSelectedStudyPacsAETitle() ,false);
        }
@@ -848,94 +837,15 @@ bool QueryScreen::insertSeriesCache(QString studyUID)
 
 }
  
-/** Descarrega les imatges de l'estudi seleccionat al pacs local
-  */
-/*static */
-/* Ara per ara per la configuració de les dcmtk no he descober com cancel·lar la descarrega d'imatges despres de produir-se un error,
-  *l'únic solució possible ara mateix i que m'han aconsellat als forums es matar el thread però aquesta idea no m'agrada perquè si matem
-  *el thread no desconnectem del PACS, no destruim les senyals amb el QRetreiveScreen i no esborrem el thread de la llista retrieveThreads,
-  *per tant de moment el que es farà es donar el error quant hagi finalitzat la descarrega
-  */
-void *QueryScreen::retrieveImages(void *param)
-{
-    StudyMask mask;
-    StarviewerProcessImage *sProcessImg = new StarviewerProcessImage();
-    std::string studyUID;
-    Status state,retState;
-    ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    QRetrieveScreen *retrieveScreen = QRetrieveScreen::getQRetrieveScreen() ;
-    retrieveParameters retParam = *((retrieveParameters*) param);
-    CachePacs *localCache =  CachePacs::getCachePacs();
-    RetrieveThreadsList *threadsList = RetrieveThreadsList::getRetrieveThreadsList();
-    ScaleStudy scaleStudy;
-    RetrieveImages retrieve;
-    
-    studyUID = retParam.studyUID;
-    
-    threadsList->getTurn(); //demanem torn per poder inicia la descarrega
-    
-    mask.setStudyUID(studyUID.c_str());
-   
-    PacsServer pacsConnection(retParam.pacs);//connemtem al pacs
-    state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
-    if (!state.good())
-    {//Error al connectar
-     //   QMessageBox::warning( this, tr("StarViewer"),tr("Error! Can't connect to PACS : "));
-        cout<<state.text()<<endl;
-       //pthread_exit((void *)(code));    
-    }
-    
-    //passem els parametres a la classe retrieveImages
-    retrieve.setConnection(pacsConnection.getConnection());  
-    retrieve.setMask(mask); 
-    retrieve.setNetwork(pacsConnection.getNetwork());
-        
-    piSingleton->addNewProcessImage(studyUID,sProcessImg);//afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
-    retrieveScreen->setConnectSignal(sProcessImg); //indiquem al qretrievescreen de quina instancia ha d'esperar el signal per controlar la descarrega   
-   
-    retState = retrieve.moveSCU();
-    if (!retState.good() || sProcessImg->getErrorRetrieving() )
-    {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
-        retrieveScreen->setErrorRetrieving( studyUID.c_str() );
-        localCache->delStudy(studyUID);
-    }
-    else 
-    {    
-        scaleStudy.scale(studyUID); //escalem l'estudi per la previsualització de la caché  
-        retrieveScreen->setRetrievedFinished(studyUID.c_str() ); //indiquem que l'estudi s'ha descarregat
-        localCache->setStudyRetrieved(studyUID.c_str() ); //posem l'estudi com a descarregat
-    }
-    
-    pacsConnection.Disconnect();
-  
-    threadsList->releaseTurn();//alliberem el torn per a que un altre thread pugui descarregar les imatges
-
-
-    retrieveScreen->delConnectSignal(sProcessImg);    //esborrem les senyals del thread amb la interficeiq QRetrieveScreen
-    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
-    piSingleton->delProcessImage(studyUID);
-    
-}
-
-/** Accions que es duen a terme quant s'ha descarregat un estudi
+/** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si 
+l'usuari així ho ha indicat
   *        @param UID de l'estudi descarregat
   */
-void QueryScreen::studyRetrieved(QString studyUID)
+void QueryScreen::studyRetrievedView(QString studyUID)
 {
-    RetrieveThread rThread;
-  
-    rThread = m_threadsList->getRetrieveThread(studyUID.toStdString() );
-    m_threadsList->deleteRetrieveThread(studyUID.toStdString() );
+    QString series = "";
     
-    //if (rThread == NULL) return; 
-
-//     cout << " study " << rThread.getStudyUID()<<endl;
-//     cout << " series " << rThread.getDefaultSeriesUID()<<endl;
-//     if (rThread.getView())
-//     {
-//          retrieveCache(rThread.getStudyUID(),rThread.getDefaultSeriesUID());
-//     }
-    
+    retrieveCache(studyUID,series);
 }
 
 /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
@@ -978,6 +888,7 @@ void QueryScreen::view()
     }
     else if (m_tab->currentIndex() == 0)
     {
+        
         retrieveCache(m_StudyLViewCache->getSelectedStudyUID(),m_StudyLViewCache->getSelectedSeriesUID());
     }
     
@@ -1007,6 +918,13 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     QString absSeriesPath;
     StarviewerSettings settings;
     StudyVolum volum;
+        
+    if (studyUID == "")
+    {
+        this->setCursor(QCursor(Qt::ArrowCursor));
+        QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to view "));
+        return;
+    }    
         
     stuMask.setStudyUID(studyUID.toAscii().constData());
     state = localCache->queryStudy(stuMask,stuList); //cerquem la informació de l'estudi
@@ -1184,7 +1102,7 @@ SeriesMask QueryScreen::buildSeriesMask(QString studyUID)
 {
     SeriesMask mask;
 
-    mask.setStudyUID( studyUID.toAscii().constData() );
+    mask.setStudyUID(studyUID.toAscii().constData());
     mask.setSeriesDate(NULL);
     mask.setSeriesTime(NULL);
     mask.setSeriesModality(NULL);

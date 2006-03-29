@@ -109,7 +109,7 @@
       <envvars/>
     </run>
     <general>
-      <activedir>src/interface</activedir>
+      <activedir>src/inputoutput</activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>

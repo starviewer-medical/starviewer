@@ -7,12 +7,13 @@
 #ifndef UDGQRETRIEVESCREEN_H
 #define UDGQRETRIEVESCREEN_H
 
-#include "ui_qretrievescreenbase.h"
+
 #include <QString>
 #include "study.h"
 #include "image.h"
-#include <starviewerprocessimage.h>
+#include "starviewerprocessimage.h"
 #include <semaphore.h>
+#include "ui_qretrievescreenbase.h"
 
 /** Singleton
   */
@@ -37,19 +38,21 @@ public:
     void setConnectSignal(StarviewerProcessImage *);
     void delConnectSignal(StarviewerProcessImage *);
     void insertNewRetrieve(Study *);
-    void setRetrievedFinished(QString studyUID);
-    void setErrorRetrieving(QString studyUID);
+
+    
     ~QRetrieveScreen();
     
     
 public slots :
     
-    void imageRetrieved(Image *,int downloadedImages);
+    void imageRetrieved(QString studyUID,int downloadedImages);
     void setSeriesRetrieved(QString studyUID);
+    void setRetrievedFinished(QString studyUID);
+    void setErrorRetrieving(QString studyUID);
+    void setRetrieving( QString );
+    
     void clearList();
 
-signals:
-    void studyRetrieved(QString);
     
 private:
 

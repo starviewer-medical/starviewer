@@ -624,14 +624,15 @@ void QConfigurationScreen::configurationChanged (const QString&)
   */
 void QConfigurationScreen::examinateDataBaseRoot()
 {
-    // \TODO canviar la manera d'escollir els fitxers , perque ara ens tornen una llista i nomes en volem un fitxer
+      //a la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
+      
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./", "Starviewer Database (*.sdb)" );
 
     dlg->setFileMode( QFileDialog::ExistingFile );
     
     if ( dlg->exec() == QDialog::Accepted ) 
     {
-        m_textDatabaseRoot->setText( dlg->selectedFiles().takeFirst() );
+        if (!dlg->selectedFiles().empty()) m_textDatabaseRoot->setText( dlg->selectedFiles().takeFirst() );
     }
     
     delete dlg;
@@ -641,14 +642,14 @@ void QConfigurationScreen::examinateDataBaseRoot()
   */
 void QConfigurationScreen::examinateCacheImagePath()
 {
-    // \TODO canviar la manera d'escollir els fitxers , perque ara ens tornen una llista i nomes en volem un fitxer
+  
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./", tr("Cache Directory"));
     
     dlg->setFileMode( QFileDialog::DirectoryOnly );
     
     if ( dlg->exec() == QDialog::Accepted )
     {
-        m_textCacheImagePath->setText(dlg->selectedFiles().takeFirst() );
+        if (!dlg->selectedFiles().empty()) m_textCacheImagePath->setText(dlg->selectedFiles().takeFirst() );
     }
        
     delete dlg;

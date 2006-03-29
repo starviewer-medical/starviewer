@@ -26,7 +26,6 @@ HEADERS += input.h \
            queryseries.h \
            querystudy.h \
            retrieveimages.h \
-           retrievethreadslist.h \
            series.h \
            serieslist.h \
            serieslistsingleton.h \
@@ -38,15 +37,18 @@ HEADERS += input.h \
            studylistsingleton.h \
            studymask.h \
            studylist.h \
-           retrievethread.h \
            seriesvolum.h \
            studyvolum.h \
            cachepool.h \
            scaleimage.h \
            scalestudy.h \
-           cacheinstallation.h \
            multiplequerystudy.h \
-           qquerystudythread.h 
+           qquerystudythread.h \
+           operation.h \
+           queueoperationlist.h \
+           qexecuteoperationthread.h \
+           starviewerprocessimage.h \
+           cacheinstallation.h 
 SOURCES += input.cpp \
            output.cpp \
            cachepacs.cpp \
@@ -68,7 +70,6 @@ SOURCES += input.cpp \
            queryseries.cpp \
            querystudy.cpp \
            retrieveimages.cpp \
-           retrievethreadslist.cpp \
            series.cpp \
            serieslist.cpp \
            serieslistsingleton.cpp \
@@ -79,30 +80,36 @@ SOURCES += input.cpp \
            studylistsingleton.cpp \
            studymask.cpp \
            studylist.cpp \
-           retrievethread.cpp \
            seriesvolum.cpp \
            studyvolum.cpp \
            cachepool.cpp \
            scaleimage.cpp \
            scalestudy.cpp \
-           cacheinstallation.cpp \
            multiplequerystudy.cpp \
-           qquerystudythread.cpp 
-include(../vtk.inc)
-include(../itk.inc)
-include(../dcmtk.inc)
-TEMPLATE = lib
+           qquerystudythread.cpp \
+           operation.cpp \
+           queueoperationlist.cpp \
+           qexecuteoperationthread.cpp \
+           starviewerprocessimage.cpp \
+           cacheinstallation.cpp 
+TARGETDEPS += ../interface/libinterface.a \
+../tools/libtools.a \
+../../src/repositories/librepositories.a \
+../../src/interface/libinterface.a
+LIBS += ../../src/tools/libtools.a \
+../../src/repositories/librepositories.a
+INCLUDEPATH += ../../src/interface \
+../../src/repositories \
+../../src/tools
+MOC_DIR = ../../tmp/moc
+UI_DIR = ../../tmp/ui
+OBJECTS_DIR = ../../tmp/obj
+QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
+QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
 CONFIG += debug \
 warn_on \
 staticlib
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-OBJECTS_DIR = ../../tmp/obj
-UI_DIR = ../../tmp/ui
-MOC_DIR = ../../tmp/moc
-INCLUDEPATH += ../../src/repositories \
-../../src/tools
-LIBS += ../../src/tools/libtools.a \
-../../src/repositories/librepositories.a
-TARGETDEPS += ../tools/libtools.a \
-../../src/repositories/librepositories.a
+TEMPLATE = lib
+include(../vtk.inc)
+include(../itk.inc)
+include(../dcmtk.inc)

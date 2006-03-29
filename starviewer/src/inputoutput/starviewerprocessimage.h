@@ -41,8 +41,9 @@ public:
     void studyRetrieved();
     
 signals :
-    void imageRetrieved(Image *,int);
+    void imageRetrieved(QString studyUID,int);
     void seriesRetrieved(QString studyUID);
+    void startRetrieving( QString );
 
 private :
 

@@ -60,7 +60,8 @@ public:
     
     Status setInstitutionName(std::string);
     Status setAccessionNumber(std::string);
-    
+        
+    std::string getStudyUID();
     
     DcmDataset* getMask();
     

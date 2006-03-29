@@ -15,7 +15,7 @@
 #include "processimagesingleton.h"
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
-#include "retrievethreadslist.h"
+#include "qexecuteoperationthread.h"
 
 namespace udg {
 
@@ -50,7 +50,7 @@ public slots:
     void showPacsList();
     
     void deleteStudyCache();
-    void studyRetrieved(QString);   
+    void studyRetrievedView(QString);   
     
     void setCheckAll();
     
@@ -91,8 +91,8 @@ struct retrieveParameters
     SeriesList m_seriesListCache;
     ProcessImageSingleton *m_piSingleton;
     QRetrieveScreen *m_retrieveScreen;
-    RetrieveThreadsList *m_threadsList;
     MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
+    QExecuteOperationThread m_qexecuteOperationThread;
     
     //StudyVolum m_volum;
     bool m_PacsListShowed;
