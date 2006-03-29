@@ -155,11 +155,17 @@ private:
     /// el generador dels noms dels fitxers DICOM d'un directori
     NamesGeneratorType::Pointer m_namesGenerator;
 
-    /// Dóna la orientació que toca segons les meta dades
-    void adjustOrientation();
-
     /// mètode temporal per printar tags dicom
     void printTag( std::string tag , std::string name );
+
+    /// Demana per un tag DICOM que serà retornat en format string. Retorna true si es troba el tag al header DICOM
+    bool queryTagAsString( std::string tag , std::string &result );
+    
+    /// Es dedica a proporcionar al volum la informació que ens dóna el DICOM
+    void setVolumeInformation();
+
+    /// a partir dels direction cosines d'un eix ens dóna l'orientació referent al pacient en string
+    char *getOrientation( double vector[3] );
 };
 
 
