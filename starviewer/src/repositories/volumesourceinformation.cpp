@@ -16,9 +16,4 @@ VolumeSourceInformation::~VolumeSourceInformation()
 {
 }
 
-void VolumeSourceInformation::setPatientName( const char *name )
-{
-    m_patientName = name;
-}
-
 };  // end namespace udg 
