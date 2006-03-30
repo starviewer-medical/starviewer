@@ -52,7 +52,7 @@ void QMPR3D2DExtension::setInput( Volume *input )
     m_volume = input; 
     
     m_mpr3DView->setInput( m_volume );
-    
+
     m_axial2DView->setInput( m_mpr3DView->getAxialResliceOutput() );
     m_axial2DView->render();
     // posem bé la càmara

@@ -128,14 +128,15 @@ void Q3DMPRViewer::setInput( Volume* volume )
     m_axialImagePlaneWidget->TextureInterpolateOn();
     m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
     m_axialImagePlaneWidget->SetInput( m_mainVolume->getVtkData() ); 
+
     m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
+    m_axialResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
     
 // 
 //     Pla SAGITAL
 // 
     m_sagitalImagePlaneWidget->DisplayTextOn();
     m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-    m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );    
     m_sagitalImagePlaneWidget->SetPicker( picker );
     m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_sagitalImagePlaneWidget->SetKeyPressActivationValue('x');
@@ -144,13 +145,13 @@ void Q3DMPRViewer::setInput( Volume* volume )
     m_sagitalImagePlaneWidget->TextureInterpolateOn();
     m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
     m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
-
+    m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
+    m_sagitalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );    
 // 
 //     Pla CORONAL
 //     
     m_coronalImagePlaneWidget->DisplayTextOn();
     m_coronalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-    m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
     m_coronalImagePlaneWidget->SetPicker( picker );
     m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
     m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( 0 , 0 , 1 );
@@ -158,7 +159,8 @@ void Q3DMPRViewer::setInput( Volume* volume )
     m_coronalImagePlaneWidget->TextureInterpolateOn();
     m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
     m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
-    
+    m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
+    m_coronalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
 
     // interacció
     
