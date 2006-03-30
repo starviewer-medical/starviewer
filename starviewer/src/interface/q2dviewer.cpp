@@ -961,6 +961,16 @@ void Q2DViewer::setInput( Volume* volume )
     initInformationText();
     
     m_mainVolume->getDimensions( m_size );
+
+    // ajustem el window Level per defecte
+    m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
+    m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+    if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        m_defaultWindow = fabs(range[1] - range[0]);
+        m_defaultLevel = ( range[1] + range[0] )/ 2.0;
+    }
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
 
@@ -1110,12 +1120,8 @@ void Q2DViewer::resetWindowLevelToDefault()
 // situem el level al mig i donem un window complet de tot el rang
     if( m_mainVolume )
     {
-        
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        double window = fabs(range[1] - range[0]);
-        double level = ( range[1] + range[0] )/ 2.0;
-        m_viewer->SetColorWindow( window );
-        m_viewer->SetColorLevel( level );
+        m_viewer->SetColorWindow( m_defaultWindow );
+        m_viewer->SetColorLevel( m_defaultLevel );
         
         this->getInteractor()->Render();
 

@@ -128,6 +128,8 @@ private:
     /// connexions d'events vtk amb slots / signals qt
     vtkEventQtSlotConnect *m_vtkQtConnections; 
 
+    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
+    double m_defaultWindow , m_defaultLevel;
 };
 
 };  //  end  namespace udg 

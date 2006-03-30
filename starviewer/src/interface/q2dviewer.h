@@ -336,6 +336,11 @@ private:
 
     /// Mida de voxels en cada direcció
     int m_size[3];
+
+    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
+    double m_defaultWindow, m_defaultLevel;
+
+    
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);

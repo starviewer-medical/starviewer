@@ -36,7 +36,7 @@
 
 //includes propis
 #include "volume.h"
-
+#include "volumesourceinformation.h"
 
 namespace udg {
 
@@ -101,7 +101,16 @@ void Q3DMPRViewer::setInput( Volume* volume )
 {
     m_mainVolume = volume;    
     int *size = m_mainVolume->getVtkData()->GetDimensions();
-    
+
+    // ajustem el window Level per defecte
+    m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
+    m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+    if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
+    {
+        double * range = m_mainVolume->getVtkData()->GetScalarRange();
+        m_defaultWindow = fabs(range[1] - range[0]);
+        m_defaultLevel = ( range[1] + range[0] )/ 2.0;
+    }
     //------------------------------------------------------------------------
     // VTK pipeline.
     //------------------------------------------------------------------------
@@ -186,7 +195,8 @@ void Q3DMPRViewer::setInput( Volume* volume )
     m_outlineActor->SetMapper( outlineMapper );
     m_ren->AddActor( m_outlineActor );
                        
-    // Executem el Renderer perquè mostri les imatges    
+    // Executem el Renderer perquè mostri les imatges
+    this->resetWindowLevelToDefault();
     render();
 }
 
@@ -412,10 +422,7 @@ void Q3DMPRViewer::resetWindowLevelToDefault()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        double window = fabs(range[1] - range[0]);
-        double level = ( range[1] + range[0] )/ 2.0;
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel( m_defaultWindow , m_defaultLevel );
 //         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
 //         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
     }
