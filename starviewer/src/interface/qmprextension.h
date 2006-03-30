@@ -155,6 +155,8 @@ private slots:
     /// Fa el procés de guardar les imatges capturades
     void saveImages();
 
+    /// gestiona els events de mouse que es produeixen sobre la vista axial
+    void handleAxialViewMouseEvent( QMouseEvent* );
 };
 
 /**

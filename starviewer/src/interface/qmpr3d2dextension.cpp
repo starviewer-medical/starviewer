@@ -287,20 +287,69 @@ void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
     break;
 
     case 3:
-        m_mpr3DView->resetWindowLevelToSoftTissue();
-        m_axial2DView->resetWindowLevelToSoftTissue();
-        m_sagital2DView->resetWindowLevelToSoftTissue();
-        m_coronal2DView->resetWindowLevelToSoftTissue();
+        m_mpr3DView->resetWindowLevelToSoftTissuesNonContrast();
+        m_axial2DView->resetWindowLevelToSoftTissuesNonContrast();
+        m_sagital2DView->resetWindowLevelToSoftTissuesNonContrast();
+        m_coronal2DView->resetWindowLevelToSoftTissuesNonContrast();
     break;
 
     case 4:
-        m_mpr3DView->resetWindowLevelToFat();
-        m_axial2DView->resetWindowLevelToFat();
-        m_sagital2DView->resetWindowLevelToFat();
-        m_coronal2DView->resetWindowLevelToFat();
+        m_mpr3DView->resetWindowLevelToLiverNonContrast();
+        m_axial2DView->resetWindowLevelToLiverNonContrast();
+        m_sagital2DView->resetWindowLevelToLiverNonContrast();
+        m_coronal2DView->resetWindowLevelToLiverNonContrast();
     break;
 
     case 5:
+        m_mpr3DView->resetWindowLevelToSoftTissuesContrastMedium();
+        m_axial2DView->resetWindowLevelToSoftTissuesContrastMedium();
+        m_sagital2DView->resetWindowLevelToSoftTissuesContrastMedium();
+        m_coronal2DView->resetWindowLevelToSoftTissuesContrastMedium();
+    break;
+
+    case 6:
+        m_mpr3DView->resetWindowLevelToLiverContrastMedium();
+        m_axial2DView->resetWindowLevelToLiverContrastMedium();
+        m_sagital2DView->resetWindowLevelToLiverContrastMedium();
+        m_coronal2DView->resetWindowLevelToLiverContrastMedium();
+    break;
+
+    case 7:
+        m_mpr3DView->resetWindowLevelToNeckContrastMedium();
+        m_axial2DView->resetWindowLevelToNeckContrastMedium();
+        m_sagital2DView->resetWindowLevelToNeckContrastMedium();
+        m_coronal2DView->resetWindowLevelToNeckContrastMedium();
+    break;
+
+    case 8:
+        m_mpr3DView->resetWindowLevelToAngiography();
+        m_axial2DView->resetWindowLevelToAngiography();
+        m_sagital2DView->resetWindowLevelToAngiography();
+        m_coronal2DView->resetWindowLevelToAngiography();
+    break;
+
+    case 9:
+        m_mpr3DView->resetWindowLevelToOsteoporosis();
+        m_axial2DView->resetWindowLevelToOsteoporosis();
+        m_sagital2DView->resetWindowLevelToOsteoporosis();
+        m_coronal2DView->resetWindowLevelToOsteoporosis();
+    break;
+
+    case 10:
+        m_mpr3DView->resetWindowLevelToEmphysema();
+        m_axial2DView->resetWindowLevelToEmphysema();
+        m_sagital2DView->resetWindowLevelToEmphysema();
+        m_coronal2DView->resetWindowLevelToEmphysema();
+    break;
+
+    case 11:
+        m_mpr3DView->resetWindowLevelToPetrousBone();
+        m_axial2DView->resetWindowLevelToPetrousBone();
+        m_sagital2DView->resetWindowLevelToPetrousBone();
+        m_coronal2DView->resetWindowLevelToPetrousBone();
+    break;
+    
+    case 12:
         // custom
         QMessageBox::information( m_mpr3DView , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
     break;

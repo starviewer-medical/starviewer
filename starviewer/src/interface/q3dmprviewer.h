@@ -92,8 +92,15 @@ public slots:
     /// Mètodes per donar diversos window level per defecte
     void resetWindowLevelToDefault();
     void resetWindowLevelToBone();
-    void resetWindowLevelToSoftTissue();
-    void resetWindowLevelToFat();
+    void resetWindowLevelToEmphysema();
+    void resetWindowLevelToSoftTissuesNonContrast();
+    void resetWindowLevelToLiverNonContrast();
+    void resetWindowLevelToSoftTissuesContrastMedium();
+    void resetWindowLevelToLiverContrastMedium();
+    void resetWindowLevelToNeckContrastMedium();
+    void resetWindowLevelToAngiography();
+    void resetWindowLevelToOsteoporosis();
+    void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
     
     /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això

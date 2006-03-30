@@ -19,6 +19,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QMouseEvent>
 // vtk
 #include <vtkRenderer.h>
 #include <vtkMath.h> // pel vtkMath::Cross
@@ -71,7 +72,8 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     
     createConnections();
     createActors();
-    
+
+    m_axial2DView->setMouseTracking( true );
     readSettings();
 }
 
@@ -114,6 +116,9 @@ void QMPRExtension::createConnections()
 
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
     connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
+
+    // connectem els events de mouse de cada finestreta 
+    connect( m_axial2DView , SIGNAL( mouseEvent( QMouseEvent* ) ) , this , SLOT( handleAxialViewMouseEvent( QMouseEvent* ) ) );
     
     // temporal
     
@@ -137,10 +142,36 @@ void QMPRExtension::createConnections()
     // fi temporal    
 }
 
+void QMPRExtension::handleAxialViewMouseEvent( QMouseEvent* event )
+{
+    switch( event->button() )
+    {
+    case Qt::NoButton:
+        std::cout << "Cap botó" << std::endl;
+    break;
+    
+    case Qt::LeftButton:
+        std::cout << "Botó Esquerre" << std::endl;
+    break;
+
+    case Qt::RightButton:
+        std::cout << "Botó dret" << std::endl;
+    break;
+
+    case Qt::MidButton:
+        std::cout << "Botó del mig" << std::endl;
+    break;
+
+    default:
+        std::cout << "Default case :(" << std::endl;
+    break;
+    }
+}
+
 void QMPRExtension::setInput( Volume *input )
 { 
     m_volume = input; 
-
+   
     m_volume->updateInformation();
     m_volume->getSpacing( m_axialSpacing );
     
@@ -172,10 +203,12 @@ void QMPRExtension::setInput( Volume *input )
 
     Volume *sagitalResliced = new Volume;
     sagitalResliced->setData( m_sagitalReslice->GetOutput() );
+    sagitalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
     m_sagital2DView->setInput( sagitalResliced );
 
     Volume *coronalResliced = new Volume;
     coronalResliced->setData( m_coronalReslice->GetOutput() );
+    coronalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
     m_coronal2DView->setInput( coronalResliced );
     
     m_sagital2DView->render();
@@ -183,9 +216,8 @@ void QMPRExtension::setInput( Volume *input )
 
     m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
     m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-    
-    updateControls();
 
+    updateControls();
 }
 
 void QMPRExtension::initOrientation()
@@ -1063,14 +1095,42 @@ void QMPRExtension::changeDefaultWindowLevel( int which )
     break;
 
     case 3:
-        m_axial2DView->resetWindowLevelToSoftTissue();
+        m_axial2DView->resetWindowLevelToSoftTissuesNonContrast();
     break;
 
     case 4:
-        m_axial2DView->resetWindowLevelToFat();
+        m_axial2DView->resetWindowLevelToLiverNonContrast();
     break;
 
     case 5:
+        m_axial2DView->resetWindowLevelToSoftTissuesContrastMedium();
+    break;
+
+    case 6:
+        m_axial2DView->resetWindowLevelToLiverContrastMedium();
+    break;
+
+    case 7:
+        m_axial2DView->resetWindowLevelToNeckContrastMedium();
+    break;
+
+    case 8:
+        m_axial2DView->resetWindowLevelToAngiography();
+    break;
+
+    case 9:
+        m_axial2DView->resetWindowLevelToOsteoporosis();
+    break;
+
+    case 10:
+        m_axial2DView->resetWindowLevelToEmphysema();
+    break;
+    
+    case 11:
+        m_axial2DView->resetWindowLevelToPetrousBone();
+    break;
+
+    case 12:
         // custom
         QMessageBox::information( this , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
     break;

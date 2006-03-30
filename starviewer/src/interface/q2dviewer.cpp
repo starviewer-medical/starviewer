@@ -44,7 +44,7 @@
 // interacció
 #include <vtkCell.h>
 #include <vtkPointData.h>
-
+#include <vtkPropPicker.h>
 
 namespace udg {
 
@@ -69,11 +69,13 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     // preparem el picker
     m_cellPicker = vtkCellPicker::New();
     m_cellPicker->SetTolerance( 0.005 );
+
+    m_linePicker = vtkPropPicker::New();
     
     // ANOTACIONS
     createAnnotations();
     
-    m_currentTool = NoTool;
+    m_currentTool = Manipulate;
     
     m_leftButtonAction = Q2DViewer::CursorAction;
     m_middleButtonAction = Q2DViewer::SliceMotionAction;
@@ -84,10 +86,20 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     
     updateCursor( -1, -1, -1, -1 );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
+
+    connect( m_vtkWidget , SIGNAL( mouseEvent( QMouseEvent* ) ) , this , SLOT( handleMouseEvent( QMouseEvent* ) ) );
+    this->setMouseTracking( true );
+
+    m_manipulateState = Q2DViewer::Ready;
 }
 
 Q2DViewer::~Q2DViewer()
 {
+}
+
+void Q2DViewer::handleMouseEvent( QMouseEvent* event )
+{
+    emit mouseEvent( event );
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
@@ -571,6 +583,7 @@ void Q2DViewer::onLeftButtonDown()
     case Q2DViewer::Manipulate:
         if( m_manipulateState == Q2DViewer::Ready )
         {
+            std::cout << "MIAU 2" << std::endl;
             // trobar els actors
             int x = getInteractor()->GetEventPosition()[0];
             int y = getInteractor()->GetEventPosition()[1];
@@ -584,28 +597,28 @@ void Q2DViewer::onLeftButtonDown()
             // Okay, we can process this. If anything is picked, then we
             // can start pushing or check for adjusted states.
             vtkAssemblyPath *path;
-            m_cellPicker->Pick( x , y , 0.0 , this->getRenderer() );
-            path = m_cellPicker->GetPath();
+            m_linePicker->PickProp( x , y , this->getRenderer() );
+            path = m_linePicker->GetPath();
             
-/*            int found = 0;
+            int found = 0;
             int i;
-            if ( path != 0 )
-            {
-                // Deal with the possibility that we may be using a shared picker
-                vtkCollectionSimpleIterator sit;
-                path->InitTraversal(sit);
-                vtkAssemblyNode *node;
-                for( i = 0; i < path->GetNumberOfItems() && !found ;i++ )
-                {
-                    node = path->GetNextNode(sit);
-                    if( node->GetViewProp() == vtkProp::SafeDownCast(this->TexturePlaneActor) )
-                    {
-                        found = 1;
-                    }
-                }
-            }*/
-            
-            if ( /* !found ||*/ path == 0 )
+//             if ( path != 0 )
+//             {
+//                 // Deal with the possibility that we may be using a shared picker
+//                 vtkCollectionSimpleIterator sit;
+//                 path->InitTraversal(sit);
+//                 vtkAssemblyNode *node;
+//                 for( i = 0; i < path->GetNumberOfItems() && !found ;i++ )
+//                 {
+//                     node = path->GetNextNode(sit);
+//                     if( node->GetViewProp() == vtkProp::SafeDownCast( m_pickedAxisActor ) )
+//                     {
+//                         found = 1;
+//                     }
+//                 }
+//             }
+//             std::cout << "FOUND? : " << found << " PATH??? : " << path << std::endl;
+            if (  !found || path == 0 )
             {
 //                 this->State = vtkImagePlaneWidget::Outside;
 //                 this->HighlightPlane(0);
@@ -910,6 +923,7 @@ void Q2DViewer::setupInteraction()
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
 
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_cellPicker );
+    m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_linePicker );
     
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
 
@@ -1096,11 +1110,13 @@ void Q2DViewer::resetWindowLevelToDefault()
 // situem el level al mig i donem un window complet de tot el rang
     if( m_mainVolume )
     {
+        
         double * range = m_mainVolume->getVtkData()->GetScalarRange();
         double window = fabs(range[1] - range[0]);
         double level = ( range[1] + range[0] )/ 2.0;
-        m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
+        m_viewer->SetColorLevel( level );
+        
         this->getInteractor()->Render();
 
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
@@ -1113,13 +1129,8 @@ void Q2DViewer::resetWindowLevelToBone()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        // ajustem el rang
-        double window = fabs(range[1] - range[0] ) * 0.3;
-        // situem al punt correcte el level
-        double level = ( range[1] + range[0] ) * 0.8;
-        m_viewer->SetColorLevel( level );
-        m_viewer->SetColorWindow( window );
+        m_viewer->SetColorWindow( 2000 );
+        m_viewer->SetColorLevel( 500 );
 
         this->getInteractor()->Render();
         
@@ -1128,17 +1139,40 @@ void Q2DViewer::resetWindowLevelToBone()
     }
 }
 
-void Q2DViewer::resetWindowLevelToSoftTissue()
+void Q2DViewer::resetWindowLevelToEmphysema()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        // ajustem el rang
-        double window = fabs(range[1] - range[0] ) *  0.02;
-        // situem al punt correcte el level
-        double level = ( range[1] + range[0] ) * 0.53;
-        m_viewer->SetColorLevel( level );
-        m_viewer->SetColorWindow( window );
+        m_viewer->SetColorWindow( 800 );
+        m_viewer->SetColorLevel( -800 );
+        
+        this->getInteractor()->Render();
+        
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToSoftTissuesNonContrast()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 400 );
+        m_viewer->SetColorLevel( 40 );
+        
+        this->getInteractor()->Render();
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToLiverNonContrast()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 200 );
+        m_viewer->SetColorLevel( 40 );
 
         this->getInteractor()->Render();
 
@@ -1147,22 +1181,87 @@ void Q2DViewer::resetWindowLevelToSoftTissue()
     }
 }
 
-void Q2DViewer::resetWindowLevelToFat()
+void Q2DViewer::resetWindowLevelToSoftTissuesContrastMedium()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        // ajustem el rang
-        double window = fabs(range[1] - range[0] ) * 0.02;
-        // situem al punt correcte el level
-        double level = ( range[1] + range[0] ) * 0.46;
-        m_viewer->SetColorLevel( level );
-        m_viewer->SetColorWindow( window );
+        m_viewer->SetColorWindow( 400 );
+        m_viewer->SetColorLevel( 70 );
+        
+        this->getInteractor()->Render();
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToLiverContrastMedium()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 300 );
+        m_viewer->SetColorLevel( 60 ); // 60-100
 
         this->getInteractor()->Render();
 
         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToNeckContrastMedium()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 300 );
+        m_viewer->SetColorLevel( 50 );
+
+        this->getInteractor()->Render();
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();
+    }
+}
+
+void Q2DViewer::resetWindowLevelToAngiography()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 500 );
+        m_viewer->SetColorLevel( 100 ); // 100-200
+
+        this->getInteractor()->Render();
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();   
+    }
+}
+
+void Q2DViewer::resetWindowLevelToOsteoporosis()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 1000 ); // 1000-1500
+        m_viewer->SetColorLevel( 300 );
+
+        this->getInteractor()->Render();
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();   
+    }
+}
+
+void Q2DViewer::resetWindowLevelToPetrousBone()
+{
+    if( m_mainVolume )
+    {
+        m_viewer->SetColorWindow( 4000 );
+        m_viewer->SetColorLevel( 700 );
+
+        this->getInteractor()->Render();
+
+        emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+        updateWindowLevelAnnotation();   
     }
 }
 
@@ -1170,13 +1269,8 @@ void Q2DViewer::resetWindowLevelToLung()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        // ajustem el rang
-        double window = fabs(range[1] - range[0] ) * 0.1;
-        // situem al punt correcte el level
-        double level = ( range[1] + range[0] ) * 0.25;
-        m_viewer->SetColorLevel( level );
-        m_viewer->SetColorWindow( window );
+        m_viewer->SetColorWindow( 1500 );
+        m_viewer->SetColorLevel( -650 );
 
         this->getInteractor()->Render();
 

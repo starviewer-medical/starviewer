@@ -63,14 +63,42 @@ void QMPR3DExtension::changeDefaultWindowLevel( int which )
     break;
 
     case 3:
-        m_mpr3DView->resetWindowLevelToSoftTissue();
+        m_mpr3DView->resetWindowLevelToSoftTissuesNonContrast();
     break;
 
     case 4:
-        m_mpr3DView->resetWindowLevelToFat();
+        m_mpr3DView->resetWindowLevelToLiverNonContrast();
     break;
 
     case 5:
+        m_mpr3DView->resetWindowLevelToSoftTissuesContrastMedium();
+    break;
+
+    case 6:
+        m_mpr3DView->resetWindowLevelToLiverContrastMedium();
+    break;
+
+    case 7:
+        m_mpr3DView->resetWindowLevelToNeckContrastMedium();
+    break;
+
+    case 8:
+        m_mpr3DView->resetWindowLevelToAngiography();
+    break;
+
+    case 9:
+        m_mpr3DView->resetWindowLevelToOsteoporosis();
+    break;
+
+    case 10:
+        m_mpr3DView->resetWindowLevelToEmphysema();
+    break;
+
+    case 11:
+        m_mpr3DView->resetWindowLevelToPetrousBone();
+    break;
+
+    case 12:
         // custom
         QMessageBox::information( m_mpr3DView , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
     break;

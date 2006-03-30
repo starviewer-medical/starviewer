@@ -423,38 +423,82 @@ void Q3DMPRViewer::resetWindowLevelToBone()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        double window = fabs(range[1] - range[0] ) * 0.3;
-        double level = ( range[1] + range[0] ) * .8;
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel( 2000 , 500 );
 //         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
 //         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
     }
 }
 
-void Q3DMPRViewer::resetWindowLevelToSoftTissue()
+void Q3DMPRViewer::resetWindowLevelToEmphysema()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        double window = fabs(range[1] - range[0]) * 0.02;
-        double level = ( range[1] + range[0] ) * .53;
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel( 800 , -800 );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToSoftTissuesNonContrast()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 400 , 40 );
 //         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
 //         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
     }
 }
 
-void Q3DMPRViewer::resetWindowLevelToFat()
+void Q3DMPRViewer::resetWindowLevelToLiverNonContrast()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        double window = fabs(range[1] - range[0]) * .02;
-        double level = ( range[1] + range[0] ) * .46;
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
-//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
-//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel( 200 , 40 );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToSoftTissuesContrastMedium()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 400 , 70 );
+    }
+}
+void Q3DMPRViewer::resetWindowLevelToLiverContrastMedium()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 300 , 60 ); // 60-100
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToNeckContrastMedium()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 300 , 50 );
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToAngiography()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 500 , 100 ); // 100-200
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToOsteoporosis()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 1000 , 300 ); // 1000-1500
+    }
+}
+
+void Q3DMPRViewer::resetWindowLevelToPetrousBone()
+{
+    if( m_mainVolume )
+    {
+        m_axialImagePlaneWidget->SetWindowLevel( 4000 , 700 );
     }
 }
 
@@ -462,10 +506,7 @@ void Q3DMPRViewer::resetWindowLevelToLung()
 {
     if( m_mainVolume )
     {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        double window = fabs(range[1] - range[0]) * .1;
-        double level = ( range[1] + range[0] ) * .25;
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel( 1500 , -650 );
 //         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
 //         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
     }

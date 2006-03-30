@@ -26,6 +26,7 @@ class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkLookupTable;
+class vtkPropPicker;
 
 namespace udg {
 
@@ -205,10 +206,22 @@ public slots:
     /// Mètodes per donar diversos window level per defecte
     void resetWindowLevelToDefault();
     void resetWindowLevelToBone();
-    void resetWindowLevelToSoftTissue();
-    void resetWindowLevelToFat();
+    void resetWindowLevelToEmphysema();
+    void resetWindowLevelToSoftTissuesNonContrast();
+    void resetWindowLevelToLiverNonContrast();
+    void resetWindowLevelToSoftTissuesContrastMedium();
+    void resetWindowLevelToLiverContrastMedium();
+    void resetWindowLevelToNeckContrastMedium();
+    void resetWindowLevelToAngiography();
+    void resetWindowLevelToOsteoporosis();
+    void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
 
+private slots:
+
+    /// Captura l'event de mouse sobre el qvtkwidget i emet un signal
+    void handleMouseEvent( QMouseEvent* event );
+    
 protected:
     /// asscociació de botons amb accions
     int m_leftButtonAction , m_middleButtonAction , m_rightButtonAction;
@@ -234,6 +247,12 @@ protected:
     int m_divisions[3];
     /// El picker per anotar punts de la imatge
     vtkCellPicker *m_cellPicker;
+
+    /// el picker per agafar i manipul·lar les línies de control
+    vtkPropPicker *m_linePicker;
+
+    /// actor que agafem de l'escena
+    vtkAxisActor2D *m_pickedAxisActor;
     
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
@@ -323,6 +342,9 @@ signals:
 
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
+
+    /// S'envia quan hi ha un event de mouse
+    void mouseEvent( QMouseEvent* );
     
 };
 

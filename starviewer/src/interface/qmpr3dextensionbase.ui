@@ -170,12 +170,47 @@
          </item>
          <item>
           <property name="text" >
-           <string>CT Soft Tissue</string>
+           <string>CT Soft Tissues , noncontrast</string>
           </property>
          </item>
          <item>
           <property name="text" >
-           <string>CT Fat</string>
+           <string>CT Liver , noncontrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Soft Tissues , medium contrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Liver , medium contrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Neck , medium contrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Angiography</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Osteoporosis</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Emphysema</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Petrous Bone</string>
           </property>
          </item>
          <item>

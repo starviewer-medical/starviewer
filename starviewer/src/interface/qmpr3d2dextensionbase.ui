@@ -170,12 +170,47 @@
          </item>
          <item>
           <property name="text" >
-           <string>CT Soft Tissue</string>
+           <string>CT Soft Tissues , noncontrast</string>
           </property>
          </item>
          <item>
           <property name="text" >
-           <string>CT Fat</string>
+           <string>CT Liver , noncontrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Soft Tissues , medium contrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CT Liver , medium contrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Neck , medium contrast</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Angiography</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Osteoporosis</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Emphysema</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Petrous Bone</string>
           </property>
          </item>
          <item>
@@ -264,14 +299,14 @@
  <customwidgets>
   <customwidget>
    <class>udg::Q2DViewer</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>q2dviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>udg::Q3DMPRViewer</class>
-   <extends></extends>
+   <extends>QFrame</extends>
    <header>q3dmprviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>

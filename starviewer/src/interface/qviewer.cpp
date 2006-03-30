@@ -52,6 +52,7 @@ QViewer::QViewer( QWidget *parent )
     m_currentImageValue = -1;
 
     m_windowToImageFilter = vtkWindowToImageFilter::New();
+    this->setMouseTracking( true );
 }
 
 QViewer::~QViewer()
