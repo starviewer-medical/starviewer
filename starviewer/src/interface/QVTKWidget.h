@@ -31,8 +31,8 @@
 #ifndef Q_VTK_WIDGET_H
 #define Q_VTK_WIDGET_H
 
-#include <qwidget.h>
-#include <qtimer.h>
+#include <QWidget>
+#include <QTimer>
 class QPaintEngine;
 
 class vtkRenderWindow;
@@ -41,10 +41,6 @@ class QVTKInteractor;
 #include <vtkCommand.h>
 #include <vtkConfigure.h>
 class vtkUnsignedCharArray;
-
-#if defined(Q_WS_MAC) && QT_VERSION >= 0x040000
-#include <Carbon/Carbon.h>    // Event handling for dirty region
-#endif
 
 #if defined(WIN32) && defined(VTK_BUILD_SHARED_LIBS)
 #if defined(QVTK_EXPORTS) || defined(QVTKWidgetPlugin_EXPORTS)
@@ -69,13 +65,9 @@ class QVTK_EXPORT QVTKWidget : public QWidget
              WRITE setMaxRenderRateForImageCache)
 
   public:
-#if QT_VERSION < 0x040000
-    //! constructor for Qt 3
-    QVTKWidget(QWidget* parent = NULL, const char* name = NULL, Qt::WFlags f = 0);
-#else
     //! constructor for Qt 4
     QVTKWidget(QWidget* parent = NULL, Qt::WFlags f = 0);
-#endif
+
     //! destructor
     virtual ~QVTKWidget();
 
@@ -125,12 +117,6 @@ class QVTK_EXPORT QVTKWidget : public QWidget
     // to date, that is returned to avoid grabbing other windows.
     virtual vtkUnsignedCharArray* cachedImage();
     
-#if QT_VERSION < 0x040000
-    // Description:
-    // Handle reparenting of this widget in Qt 3.x
-    virtual void reparent(QWidget* parent, Qt::WFlags f, const QPoint& p, bool showit);
-#endif
-    
     // Description:
     // Handle showing of the Widget
     virtual void showEvent(QShowEvent*);
@@ -151,7 +137,6 @@ class QVTK_EXPORT QVTKWidget : public QWidget
     // Description:
     // This signal will be emitted whenever the cached image is refreshed.
     void cachedImageClean();
-
 
   public slots:
     // Description:
@@ -217,21 +202,6 @@ class QVTK_EXPORT QVTKWidget : public QWidget
     // set up an X11 window based on a visual and colormap
     // that VTK chooses
     void x11_setup_window();
-
-#if defined(Q_WS_MAC) && QT_VERSION < 0x040000
-    void macFixRect();
-    virtual void setRegionDirty(bool);
-    virtual void macWidgetChangedWindow();
-#endif    
-
-#if defined(Q_WS_MAC) && QT_VERSION >= 0x040000
-    EventHandlerUPP DirtyRegionHandlerUPP;
-    EventHandlerRef DirtyRegionHandler;
-    static OSStatus DirtyRegionProcessor(EventHandlerCallRef er, EventRef event, void*);
-#endif
-
-  private slots:
-    void internalMacFixRect();
 
   protected:
     

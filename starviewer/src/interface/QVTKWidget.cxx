@@ -30,18 +30,16 @@
 
 #include "QVTKWidget.h"
 
-#include "qevent.h"
-#include "qapplication.h"
-#include "qpainter.h"
+#include <QEvent>
+#include <QKeyEvent>
+#include <QApplication>
+#include <QPainter>
 #if QT_VERSION >= 0x040000 && defined(Q_WS_X11)
 #include "qx11info_x11.h"
 #endif
 
 #include "vtkInteractorStyleTrackballCamera.h"
 #include "vtkRenderWindow.h"
-#if defined(Q_WS_MAC)
-#  include "vtkCarbonRenderWindow.h"
-#endif
 #include "vtkCommand.h"
 #include "vtkOStrStreamWrapper.h"
 #include "vtkObjectFactory.h"
@@ -69,40 +67,6 @@ static const char* qt_key_to_key_sym(Qt::Key);
 static void dirty_cache(vtkObject *, unsigned long, void *, void *);
 
 
-
-#if QT_VERSION < 0x040000
-/*! constructor */
-QVTKWidget::QVTKWidget(QWidget* parent, const char* name, Qt::WFlags f)
-#if QT_VERSION < 0x030000
-    : QWidget(parent, name, f | 0x10000000)  // WWinOwnDC
-#else
-    : QWidget(parent, name, f | Qt::WWinOwnDC )
-#endif
-     , mRenWin(NULL), 
-     cachedImageCleanFlag(false),
-     automaticImageCache(false), maxImageCacheRenderRate(1.0)
-{
-  // no background
-  setBackgroundMode( Qt::NoBackground );
-
-   // default to strong focus
-  this->setFocusPolicy(QWidget::StrongFocus);
-
-  // default to enable mouse events when a mouse button isn't down
-  // so we can send enter/leave events to VTK
-  this->setMouseTracking(true);       
-  
-  // set expanding to take up space for better default layouts
-  this->setSizePolicy( 
-       QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding )
-       );
-
-  this->mCachedImage = vtkUnsignedCharArray::New();
-}
-#endif
-
-
-#if QT_VERSION >= 0x040000
 /*! constructor */
 QVTKWidget::QVTKWidget(QWidget* p, Qt::WFlags f)
     : QWidget(p, f | Qt::MSWindowsOwnDC), mRenWin(NULL),
@@ -129,13 +93,8 @@ QVTKWidget::QVTKWidget(QWidget* p, Qt::WFlags f)
 
   this->mCachedImage = vtkUnsignedCharArray::New();
 
-#if defined(Q_WS_MAC)
-  this->DirtyRegionHandler = 0;
-  this->DirtyRegionHandlerUPP = 0;
-#endif
-
 }
-#endif
+
 
 
 /*! destructor */
@@ -205,11 +164,7 @@ void QVTKWidget::SetRenderWindow(vtkRenderWindow* w)
 
 #ifdef Q_WS_X11
     // give the qt display id to the vtk window
-#if QT_VERSION < 0x040000
-    this->mRenWin->SetDisplayId( this->x11Display() );
-#else
     this->mRenWin->SetDisplayId(QX11Info::display());
-#endif
 #endif
 
     // special x11 setup
@@ -217,22 +172,6 @@ void QVTKWidget::SetRenderWindow(vtkRenderWindow* w)
     
     // give the qt window id to the vtk window
     this->mRenWin->SetWindowId( reinterpret_cast<void*>(this->winId()));
-    
-    // mac compatibility issues
-#ifdef Q_WS_MAC
-# ifdef QVTK_HAVE_VTK_4_5
-#  if QT_VERSION < 0x040000
-    this->mRenWin->SetWindowId( NULL );
-    static_cast<vtkCarbonRenderWindow*>(this->mRenWin)->SetRootWindow(
-                  reinterpret_cast<WindowPtr>(this->handle()));
-#  endif
-# else
-    // give the Qt/Mac window handle to VTK and flag whether we have a parent
-    this->mRenWin->SetWindowId(reinterpret_cast<void*>(this->handle()));
-    this->mRenWin->SetParentId(reinterpret_cast<void*>(0x1));
-# endif
-# endif
-
 
     // tell the vtk window what the size of this window is
     this->mRenWin->vtkRenderWindow::SetSize(this->width(), this->height());
@@ -242,9 +181,6 @@ void QVTKWidget::SetRenderWindow(vtkRenderWindow* w)
     if(isVisible())
       {
       this->mRenWin->Start();
-#if defined (Q_WS_MAC) && (QT_VERSION < 0x040000)
-      macFixRect();
-#endif
       }
     
     // if an interactor wasn't provided, we'll make one by default
@@ -276,26 +212,6 @@ void QVTKWidget::SetRenderWindow(vtkRenderWindow* w)
     cbc->Delete();
   }
 
-#if defined(Q_WS_MAC) && QT_VERSION >= 0x040000
-  if(mRenWin && !this->DirtyRegionHandlerUPP)
-    {
-    this->DirtyRegionHandlerUPP = NewEventHandlerUPP(QVTKWidget::DirtyRegionProcessor);
-    static EventTypeSpec events[] = { {'cute', 20} };  
-       // kEventClassQt, kEventQtRequestWindowChange from qt_mac_p.h
-       // Suggested by Sam Magnuson at Trolltech as best portabile hack 
-       // around Apple's missing functionality in HI Toolbox.
-    InstallEventHandler(GetApplicationEventTarget(), this->DirtyRegionHandlerUPP, 
-                        GetEventTypeCount(events), events, 
-                        reinterpret_cast<void*>(this), &this->DirtyRegionHandler);
-    }
-  else if(!mRenWin && this->DirtyRegionHandlerUPP)
-    {
-    RemoveEventHandler(this->DirtyRegionHandler);
-    DisposeEventHandlerUPP(this->DirtyRegionHandlerUPP);
-    this->DirtyRegionHandler = 0;
-    this->DirtyRegionHandlerUPP = 0;
-    }
-#endif
 }
 
 
@@ -419,9 +335,6 @@ void QVTKWidget::resizeEvent(QResizeEvent* e)
     this->mRenWin->GetInteractor()->SetSize(this->width(), this->height());
   this->markCachedImageAsDirty();
   
-#if defined (Q_WS_MAC) && (QT_VERSION < 0x040000)
-  macFixRect();
-#endif
 }
 
 void QVTKWidget::moveEvent(QMoveEvent* e)
@@ -434,9 +347,6 @@ void QVTKWidget::moveEvent(QMoveEvent* e)
   // give the size to the interactor and vtk window
   this->mRenWin->vtkRenderWindow::SetPosition(this->x(), this->y());
   
-#if defined (Q_WS_MAC) && (QT_VERSION < 0x040000)
-  macFixRect();
-#endif
 }
 
 /*! handle paint event
@@ -484,19 +394,11 @@ void QVTKWidget::mousePressEvent(QMouseEvent* e)
     return;
 
   // give interactor the event information
-#if QT_VERSION < 0x040000
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
-      (e->state() & Qt::ControlButton), 
-      (e->state() & Qt::ShiftButton ),
-      0,
-      e->type() == QEvent::MouseButtonDblClick ? 1 : 0);
-#else
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
+  iren->SetEventInformationFlipY(e->x(), e->y(),
       (e->modifiers() & Qt::ControlModifier), 
       (e->modifiers() & Qt::ShiftModifier ),
       0,
       e->type() == QEvent::MouseButtonDblClick ? 1 : 0);
-#endif
 
   // invoke appropriate vtk event
   switch(e->button())
@@ -530,15 +432,10 @@ void QVTKWidget::mouseMoveEvent(QMouseEvent* e)
     return;
   
   // give interactor the event information
-#if QT_VERSION < 0x040000
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
-      (e->state() & Qt::ControlButton), 
-      (e->state() & Qt::ShiftButton ));
-#else
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
+  iren->SetEventInformationFlipY(e->x(), e->y(),
       (e->modifiers() & Qt::ControlModifier), 
       (e->modifiers() & Qt::ShiftModifier ));
-#endif
+
   
   // invoke vtk event
   iren->InvokeEvent(vtkCommand::MouseMoveEvent, e);
@@ -585,15 +482,10 @@ void QVTKWidget::mouseReleaseEvent(QMouseEvent* e)
     return;
   
   // give vtk event information
-#if QT_VERSION < 0x040000
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
-      (e->state() & Qt::ControlButton), 
-      (e->state() & Qt::ShiftButton ));
-#else
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
+  iren->SetEventInformationFlipY(e->x(), e->y(),
       (e->modifiers() & Qt::ControlModifier), 
       (e->modifiers() & Qt::ShiftModifier ));
-#endif
+
   
   // invoke appropriate vtk event
   switch(e->button())
@@ -627,11 +519,7 @@ void QVTKWidget::keyPressEvent(QKeyEvent* e)
     return;
   
   // get key and keysym information
-#if QT_VERSION < 0x040000
-  int ascii_key = e->text().length() ? e->text().unicode()->latin1() : 0;
-#else
   int ascii_key = e->text().length() ? e->text().unicode()->toLatin1() : 0;
-#endif
   const char* keysym = ascii_to_key_sym(ascii_key);
   if(!keysym)
   {
@@ -645,18 +533,11 @@ void QVTKWidget::keyPressEvent(QKeyEvent* e)
   }
   
   // give interactor event information
-#if QT_VERSION < 0x040000
-  iren->SetKeyEventInformation(
-      (e->state() & Qt::ControlButton),
-      (e->state() & Qt::ShiftButton),
-      ascii_key, e->count(), keysym);
-#else
   iren->SetKeyEventInformation(
       (e->modifiers() & Qt::ControlModifier),
       (e->modifiers() & Qt::ShiftModifier),
       ascii_key, e->count(), keysym);
-#endif
-  
+
   // invoke vtk event
   iren->InvokeEvent(vtkCommand::KeyPressEvent, e);
   
@@ -678,11 +559,7 @@ void QVTKWidget::keyReleaseEvent(QKeyEvent* e)
     return;
   
   // get key and keysym info
-#if QT_VERSION < 0x040000
-  int ascii_key = e->text().length() ? e->text().unicode()->latin1() : 0;
-#else
   int ascii_key = e->text().length() ? e->text().unicode()->toLatin1() : 0;
-#endif
   const char* keysym = ascii_to_key_sym(ascii_key);
   if(!keysym)
   {
@@ -696,17 +573,10 @@ void QVTKWidget::keyReleaseEvent(QKeyEvent* e)
   }
 
   // give event information to interactor
-#if QT_VERSION < 0x040000
-  iren->SetKeyEventInformation(
-      (e->state() & Qt::ControlButton),
-      (e->state() & Qt::ShiftButton),
-      ascii_key, e->count(), keysym);
-#else
   iren->SetKeyEventInformation(
       (e->modifiers() & Qt::ControlModifier),
       (e->modifiers() & Qt::ShiftModifier),
       ascii_key, e->count(), keysym);
-#endif
 
   // invoke vtk event
   iren->InvokeEvent(vtkCommand::KeyReleaseEvent, e);
@@ -726,16 +596,10 @@ void QVTKWidget::wheelEvent(QWheelEvent* e)
 #if defined(QVTK_HAVE_VTK_4_5)
   
   // give event information to interactor
-#if QT_VERSION < 0x040000
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
-      (e->state() & Qt::ControlButton), 
-      (e->state() & Qt::ShiftButton ));
-#else
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
+  iren->SetEventInformationFlipY(e->x(), e->y(),
       (e->modifiers() & Qt::ControlModifier), 
       (e->modifiers() & Qt::ShiftModifier ));
-#endif
-  
+ 
   // invoke vtk event
   // if delta is positive, it is a forward wheel event
   if(e->delta() > 0)
@@ -778,16 +642,9 @@ void QVTKWidget::contextMenuEvent(QContextMenuEvent* e)
     return;
   
   // give interactor the event information
-#if QT_VERSION < 0x040000
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
-      (e->state() & Qt::ControlButton), 
-      (e->state() & Qt::ShiftButton ));
-#else
-  iren->SetEventInformationFlipY(e->x(), e->y(), 
+  iren->SetEventInformationFlipY(e->x(), e->y(),
       (e->modifiers() & Qt::ControlModifier), 
       (e->modifiers() & Qt::ShiftModifier ));
-#endif
-
   // invoke event and pass qt event for additional data as well
   iren->InvokeEvent(QVTKWidget::ContextMenuEvent, e);
   
@@ -850,46 +707,6 @@ void QVTKWidget::dropEvent(QDropEvent* e)
   // invoke event and pass qt event for additional data as well
   iren->InvokeEvent(QVTKWidget::DropEvent, e);
 }
-
-
-/*! handle reparenting of widgets
- */
-#if QT_VERSION < 0x040000
-void QVTKWidget::reparent(QWidget* parent, Qt::WFlags f, const QPoint& p, bool showit)
-{
-  this->markCachedImageAsDirty();
-
-#if defined(QVTK_HAVE_VTK_4_5)
-  if (this->mRenWin)
-    {
-    // Finalize the window to remove graphics resources associated with
-    // this window
-    if(this->mRenWin->GetMapped())
-      this->mRenWin->Finalize();
-
-    // have QWidget reparent as normal, but don't show
-    QWidget::reparent(parent, f, p, false);
-
-    x11_setup_window();
- 
-    // connect to new window
-#if defined(Q_WS_MAC)
-    this->mRenWin->SetWindowId(reinterpret_cast<void*>(this->handle()));
-#else
-    this->mRenWin->SetWindowId( reinterpret_cast<void*>(this->winId()));
-#endif
-
-    // start up the window to create graphics resources for this window
-    if(isVisible())
-      this->mRenWin->Start();
-    }
-  
-  // show if requested
-  if(showit)
-    show();
-#endif
-}
-#endif
 
 void QVTKWidget::showEvent(QShowEvent* e)
 {
@@ -1014,11 +831,7 @@ const char* qt_key_to_key_sym(Qt::Key i)
     // Cancel
     QVTK_HANDLE(Qt::Key_Backspace, "BackSpace")
     QVTK_HANDLE(Qt::Key_Tab, "Tab")
-#if QT_VERSION < 0x040000
-    QVTK_HANDLE(Qt::Key_BackTab, "Tab")
-#else
     QVTK_HANDLE(Qt::Key_Backtab, "Tab")
-#endif
     //QVTK_HANDLE(Qt::Key_Clear, "Clear")
     QVTK_HANDLE(Qt::Key_Return, "Return")
     QVTK_HANDLE(Qt::Key_Enter, "Return")
@@ -1148,11 +961,7 @@ void QVTKWidget::x11_setup_window()
   
   // save widget states
   bool tracking = this->hasMouseTracking();       
-#if QT_VERSION < 0x040000
-  FocusPolicy focus_policy = focusPolicy();
-#else
   Qt::FocusPolicy focus_policy = focusPolicy();
-#endif
   bool visible = isVisible();
   if(visible)
     hide();
@@ -1250,12 +1059,8 @@ void QVTKWidget::x11_setup_window()
 
   // restore widget states
   this->setMouseTracking(tracking);
-#if QT_VERSION < 0x040000
-  setBackgroundMode( Qt::NoBackground );
-#else
   this->setAttribute(Qt::WA_NoBackground);
   this->setAttribute(Qt::WA_PaintOnScreen);
-#endif
   setFocusPolicy(focus_policy);
   if(visible)
     show();
@@ -1275,92 +1080,6 @@ OSStatus QVTKWidget::DirtyRegionProcessor(EventHandlerCallRef, EventRef event, v
 }
 
 #endif
-
-#if defined (Q_WS_MAC) && QT_VERSION < 0x040000
-
-// gotta do some special stuff on the MAC to make it work right
-// this stuff will need changing when using Qt4 with HIViews
-
-#include <AGL/agl.h>
-
-void QVTKWidget::macFixRect()
-{
-  AGLContext context = static_cast<vtkCarbonRenderWindow*>(this->GetRenderWindow())->GetContextId();
-  
-  if(!this->isTopLevel())
-  {
-    GLint bufRect[4];
-
-    // always do AGL_BUFFER_RECT if we have a parent
-    if(!aglIsEnabled(context, AGL_BUFFER_RECT))
-      aglEnable(context, AGL_BUFFER_RECT);
-
-    // get the clip region
-    QRegion clip = this->clippedRegion();
-    QRect clip_rect = clip.boundingRect();
-    
-    // get the position of this widget with respect to the top level widget
-    QPoint mp(posInWindow(this));
-    int win_height = this->topLevelWidget()->height();
-    win_height -= win_height - this->topLevelWidget()->clippedRegion(FALSE).boundingRect().height();
-
-    // give the position and size to agl
-    bufRect[0] = mp.x();
-    bufRect[1] = win_height -(mp.y() + this->height());
-    bufRect[2] = this->width();
-    bufRect[3] = this->height();
-    aglSetInteger(context, AGL_BUFFER_RECT, bufRect);
-
-    if(clip_rect.isEmpty())
-    {
-      // no clipping, disable it
-      if(!aglIsEnabled(context, AGL_CLIP_REGION))
-        aglDisable(context, AGL_CLIP_REGION);
-      
-      bufRect[0] = 0;
-      bufRect[1] = 0;
-      bufRect[2] = 0;
-      bufRect[3] = 0;
-      aglSetInteger(context, AGL_BUFFER_RECT, bufRect);
-    }
-    else
-    {
-      // we are clipping, so lets enable it
-      if(!aglIsEnabled(context, AGL_CLIP_REGION))
-        aglEnable(context, AGL_CLIP_REGION);
-
-      // give agl the clip region
-      aglSetInteger(context, AGL_CLIP_REGION, (const GLint*)clip.handle(TRUE));
-    }
-  }
-  
-  // update the context
-  aglUpdateContext(context);
-}
-
-void QVTKWidget::setRegionDirty(bool b)
-{
-  // the region is dirty and needs redrawn, but not yet
-  // signal that it needs to be done when it is possible
-  QWidget::setRegionDirty(b);
-  QTimer::singleShot(1, this, SLOT(internalMacFixRect()));
-
-}
-
-void QVTKWidget::macWidgetChangedWindow()
-{
-  macFixRect();
-}
-#endif
-
-// slot to update the draw region and draw the scene
-void QVTKWidget::internalMacFixRect()
-{
-#if defined(Q_WS_MAC) && QT_VERSION < 0x040000
-  this->macFixRect();
-  this->update();
-#endif
-}
 
 static void dirty_cache(vtkObject *caller, unsigned long,
                         void *clientdata, void *)
