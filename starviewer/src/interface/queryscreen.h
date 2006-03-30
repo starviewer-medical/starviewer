@@ -66,7 +66,7 @@ public slots:
 
 signals :
     void viewStudy(StudyVolum );
-    void clearIconView();
+    void clearSeriesListWidget();
 
     void prova();
 

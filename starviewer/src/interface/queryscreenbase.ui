@@ -1013,7 +1013,7 @@
           <number>6</number>
          </property>
          <item>
-          <widget class="udg::QStudyListView" name="m_StudyLViewCache" >
+          <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetCache" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>7</hsizetype>
@@ -1047,7 +1047,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="udg::QSeriesIconView" name="m_SeriesImViewCache" >
+          <widget class="udg::QSeriesListWidget" name="m_seriesListWidgetCache" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>7</hsizetype>
@@ -1104,7 +1104,7 @@
           </spacer>
          </item>
          <item row="0" column="0" >
-          <widget class="udg::QStudyListView" name="m_StudyLViewPacs" >
+          <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetPacs" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>7</hsizetype>
@@ -1122,7 +1122,7 @@
           </widget>
          </item>
          <item row="2" column="0" >
-          <widget class="udg::QSeriesIconView" name="m_SeriesImViewPacs" >
+          <widget class="udg::QSeriesListWidget" name="m_seriesListWidgetPacs" >
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>7</hsizetype>
@@ -1151,9 +1151,9 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>udg::QStudyListView</class>
+   <class>udg::QStudyTreeWidget</class>
    <extends></extends>
-   <header>qstudylistview.h</header>
+   <header>qstudytreewidget.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
@@ -1165,9 +1165,9 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>udg::QSeriesIconView</class>
+   <class>udg::QSeriesListWidget</class>
    <extends></extends>
-   <header>qseriesiconview.h</header>
+   <header>qserieslistwidget.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

@@ -4,32 +4,32 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#ifndef UDGSERIESICONVIEW_H
-#define UDGSERIESICONVIEW_H
+#ifndef UDGSERIESLISTWIDGET_H
+#define UDGSERIESLISTWIDGET_H
 
 // #include "qseriesiconviewbase.h"
-#include "ui_qseriesiconviewbase.h"
+#include "ui_qserieslistwidgetbase.h"
 #include <QWidget>
 #include "series.h"
 namespace udg {
 
-/** Aquesta classe és un widget millorat del Icon View de QT, fet  modificat per poder mostrar les sèries d'un estudi. 
+/** Aquesta classe és un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sèries d'un estudi. 
 @author marc
 */
 
-class QSeriesIconView : public QWidget , private Ui::QSeriesIconViewBase{
+class QSeriesListWidget : public QWidget , private Ui::QSeriesListWidgetBase{
 Q_OBJECT
 
 public:
-    QSeriesIconView(QWidget *parent = 0 );
+    QSeriesListWidget(QWidget *parent = 0 );
 
     void insertSeries(Series *serie);
     void clear();
     
-    ~QSeriesIconView();
+    ~QSeriesListWidget();
 
 public slots:
-    void clearIconView();
+    void clearSeriesListWidget();
     void addSeries(Series *serie);
 
     void clicked(QListWidgetItem * item);

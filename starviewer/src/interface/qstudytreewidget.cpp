@@ -22,9 +22,9 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 
-#include "qstudylistview.h"
+#include "qstudytreewidget.h"
 #include "study.h"
-#include "qseriesiconview.h"
+#include "qserieslistwidget.h"
 #include "pacslistdb.h"
 #include "cachepacs.h"
 #include "starviewersettings.h"
@@ -37,7 +37,7 @@ namespace udg {
 
 /** Constructor de la classe
   */
-QStudyListView::QStudyListView( QWidget *parent)
+QStudyTreeWidget::QStudyTreeWidget( QWidget *parent)
  : QWidget( parent )
 {
     setupUi( this );
@@ -63,16 +63,16 @@ QStudyListView::QStudyListView( QWidget *parent)
     
 }
 
-void QStudyListView::createConnections()
+void QStudyTreeWidget::createConnections()
 {
     connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(expand(QTreeWidgetItem *,int)));
     connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(clicked(QTreeWidgetItem *,int)));
-    
+    connect(m_studyTreeView, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), this, SLOT(doubleClicked(QTreeWidgetItem *,int)));
 }
 
 /** Creem el popup Menu, en funcio de a quin tab pertany activa unes o altres opcions del menu
   */
-void QStudyListView::createPopupMenu()
+void QStudyTreeWidget::createPopupMenu()
 {
     
     QAction *view = m_popUpMenu.addAction(tr("&View"));
@@ -101,7 +101,7 @@ void QStudyListView::createPopupMenu()
 
 /** Assigna l'ampla a les columnes segons els paràmetres guardats a StarviewerSettings
   */
-void QStudyListView::setWidthColumns()
+void QStudyTreeWidget::setWidthColumns()
 {    
     StarviewerSettings settings;
 
@@ -125,7 +125,7 @@ void QStudyListView::setWidthColumns()
 /** Mostra l'estudi pel ListView que se li passa per paràmetre
   *        @param StudyList a mostrar
   */
-void QStudyListView::insertStudyList(StudyList *ls)
+void QStudyTreeWidget::insertStudyList(StudyList *ls)
 {
 
     m_studyTreeView->clear();
@@ -142,7 +142,7 @@ void QStudyListView::insertStudyList(StudyList *ls)
 /** Inseriex la informació d'un estudi
   *                @param Dades de l'estudi
   */
-void QStudyListView::insertStudy(Study *stu)
+void QStudyTreeWidget::insertStudy(Study *stu)
 {
 
     QString text;
@@ -188,10 +188,10 @@ void QStudyListView::insertStudy(Study *stu)
 
 }
 
-/**Insereix una serie d'un estudi, i emiteix un signal al QSeriesIconView per a insereixi també la informació de la sèrie
+/**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
   *                    @param informació de la serie
   */
-void QStudyListView::insertSeries(Series *serie)
+void QStudyTreeWidget::insertSeries(Series *serie)
 {
     
     QString text;
@@ -228,7 +228,7 @@ void QStudyListView::insertSeries(Series *serie)
 /** formata l'edat per mostrar per pantalla
   *            @param edat
   */
-QString QStudyListView::formatAge(const std::string age)
+QString QStudyTreeWidget::formatAge(const std::string age)
 {
     QString text( age.c_str() );
     
@@ -246,7 +246,7 @@ QString QStudyListView::formatAge(const std::string age)
 /**Formata el nom
   *             @param Nom i cognoms del pacient
   */
-QString QStudyListView::formatName(const std::string name)
+QString QStudyTreeWidget::formatName(const std::string name)
 {
     QString text( name.c_str() );
     
@@ -258,7 +258,7 @@ QString QStudyListView::formatName(const std::string name)
 /**Formata la data
   *             @param data de l'estudi
   */
-QString QStudyListView::formatDate(const std::string date)
+QString QStudyTreeWidget::formatDate(const std::string date)
 {
     QString text,dateOrig( date.c_str() );
     
@@ -274,7 +274,7 @@ QString QStudyListView::formatDate(const std::string date)
 /**Formata l'hora
   *             @param Hora de l'estudi
   */
-QString QStudyListView::formatHour(const std::string hour)
+QString QStudyTreeWidget::formatHour(const std::string hour)
 {
     QString text,hourOrig( hour.c_str() );
     
@@ -285,9 +285,9 @@ QString QStudyListView::formatHour(const std::string hour)
     return text;
 }
 
-/** Neteja el listview
+/** Neteja el TreeView
   */
-void QStudyListView::clear()
+void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
 }
@@ -296,7 +296,7 @@ void QStudyListView::clear()
 /**Ordena per columna
   *             @param Indica la columna per la que s'ha d'ordenar
   */
-void QStudyListView::setSortColumn(int col)
+void QStudyTreeWidget::setSortColumn(int col)
 {
     m_studyTreeView->sortItems(col,Qt::AscendingOrder);
     m_studyTreeView->clearSelection();
@@ -306,7 +306,7 @@ void QStudyListView::setSortColumn(int col)
 /** Retorna el UID Study de l'estudi seleccionat
   *            @return UID de l'estudi seleccionat
   */
-QString QStudyListView::getSelectedStudyUID()
+QString QStudyTreeWidget::getSelectedStudyUID()
 {
     QTreeWidgetItem *item;
 
@@ -329,7 +329,7 @@ QString QStudyListView::getSelectedStudyUID()
 /** Retorna el UID Study de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
   *            @return UID de la sèrie seleccionat
   */
-QString QStudyListView::getSelectedSeriesUID()
+QString QStudyTreeWidget::getSelectedSeriesUID()
 {
 
     if (m_studyTreeView->currentItem() != NULL) 
@@ -350,7 +350,7 @@ QString QStudyListView::getSelectedSeriesUID()
 /** Retorna el AETitle del PACS  l'estudi seleccionat
   *            @return AETitle del PACS de l'estudi seleccionat
   */
-QString QStudyListView::getSelectedStudyPacsAETitle()
+QString QStudyTreeWidget::getSelectedStudyPacsAETitle()
 {
    QTreeWidgetItem * item;
    
@@ -369,10 +369,10 @@ QString QStudyListView::getSelectedStudyPacsAETitle()
 
 //SLOT CONNECTAT AMB EL SIGNAL D'UN CLICK
 /**al fer un click mostra les sèries d'un estudi,
-  *            @param Item element del listview
+  *            @param Item element del treeview
   *            @param columna a la qual s'ha clickat
   */
-void QStudyListView::expand(QTreeWidgetItem * item,int col)
+void QStudyTreeWidget::expand(QTreeWidgetItem * item,int col)
 {
 
     if (item==NULL) return;
@@ -389,14 +389,14 @@ void QStudyListView::expand(QTreeWidgetItem * item,int col)
                 {
                     emit(expand(item->text(11),item->text(10)));
                 }
-                else setSeriesToIconView(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al iconView amb la informació de la sèrie cridarem aquest mètode
+                else setSeriesToSeriesListWidget(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
             }
         }
         else 
         {
             item->setIcon(0,m_closeFolder); 
             m_studyTreeView->setItemExpanded(item,false);
-            emit(clearIconView());
+            emit(clearSeriesListWidget());
         }
     }
 
@@ -405,19 +405,19 @@ void QStudyListView::expand(QTreeWidgetItem * item,int col)
 
 
 /** Quant es consulten les sèries d'un estudi, es fa un acces al pacs demanant la informació d'aquelles series,si es tornen a consultar una segona vegada
-  * les sèries de l'estudi,no cal tornar a accedir al pacs perquè ja tenim la informació de la sèrie al ListView, però s'ha d'actualitzar l'iconView amb 
+  * les sèries de l'estudi,no cal tornar a accedir al pacs perquè ja tenim la informació de la sèrie al TreeView, però s'ha d'actualitzar QSeriesListWidget amb 
   * la informació de les sèries de l'estudi, com no tornem a accedir al pacs, la informació de les sèries li hem de passar d'algun mode, per això el que fem
   * és invocar aquest mètode que crea reconstrueix l'objecte series, amb la principal informació de les sèries, i que fa un emit, que és capturat pel 
-  * QSeriesInconView, per mostrar la informació de la sèrie (la connexió entre el QStudyListView i QSeriesIconView es fa la constrcutor de la QueryScreen)
-  *        @param Apuntador a l'estudi al list view
+  * QSeriesInconView, per mostrar la informació de la sèrie (la connexió entre el QStudyTreeWidget i QSeriesListWidget es fa la constrcutor de la QueryScreen)
+  *        @param Apuntador a l'estudi al tree view
   */
-void QStudyListView::setSeriesToIconView(QTreeWidgetItem *item)
+void QStudyTreeWidget::setSeriesToSeriesListWidget(QTreeWidgetItem *item)
 {
     QTreeWidgetItem *child;
     
     if (item == NULL) return;
     
-    emit(clearIconView()); //es neteja el QSeriesIconView
+    emit(clearSeriesListWidget()); //es neteja el QSeriesListWidget
     
     for (int i = 0;i < item->childCount();i++)
     {
@@ -439,7 +439,7 @@ void QStudyListView::setSeriesToIconView(QTreeWidgetItem *item)
 /** removes study from the lisk
   *    @param esbora l'estudi amb StudyUID de la llista
   */
-void QStudyListView::removeStudy(QString studyUID)
+void QStudyTreeWidget::removeStudy(QString studyUID)
 {
 
     QList<QTreeWidgetItem *> qStudyList(m_studyTreeView->findItems("*",Qt::MatchWildcard,0));
@@ -458,7 +458,7 @@ void QStudyListView::removeStudy(QString studyUID)
 
 /** ESborra un estudi de la caché 
   */
-void QStudyListView::deleteStudy()
+void QStudyTreeWidget::deleteStudy()
 {
     
     emit(delStudy()); //aquest signal es recollit per la QueryScreen
@@ -466,10 +466,10 @@ void QStudyListView::deleteStudy()
 
 }
 
-/** Si es selecciona una serie del QSeriesIconView s'ha seleccionar la mateixa en el QStudyListView, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
-  *        @param SeriesUID Uid de la serie seleccionada en QSeriesIconView
+/** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
+  *        @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
   */
-void QStudyListView::selectedSeriesIcon(QString seriesUID)
+void QStudyTreeWidget::selectedSeriesIcon(QString seriesUID)
 {
     QTreeWidgetItem *item,*current;
     
@@ -503,19 +503,19 @@ void QStudyListView::selectedSeriesIcon(QString seriesUID)
 /** Mostra el menu contextual
   *     @param Dades de l'event sol·licitat
   */
-void QStudyListView::contextMenuEvent(QContextMenuEvent *event)
+void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
 {
 
     m_popUpMenu.exec(event->globalPos());
 }
 
 
-/**  Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesIconView per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesIconView amb les series   
+/**  Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesListWidget per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesListWidget amb les series   
 d'aquell estudi
-  *  també en el QSeriesIconView
+  *  també en el QSeriesListWidget
   *         @param item sobre el que s'ha fet click
   */
-void QStudyListView::clicked(QTreeWidgetItem *item,int)
+void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int)
 {
     
 
@@ -524,22 +524,22 @@ void QStudyListView::clicked(QTreeWidgetItem *item,int)
         if (item->parent() != NULL) //si es tracta d'una serie
         {   //enviem el UID de la serie
             if (m_oldStudyUID != getSelectedStudyUID())
-            { //si seleccionem una serie pero d'un altre estudi, hem d'actualizar el qseriesiconview
+            { //si seleccionem una serie pero d'un altre estudi, hem d'actualizar el qserieslistwidget
                 QTreeWidgetItem *parent  = item->parent();
-                setSeriesToIconView(parent);
+                setSeriesToSeriesListWidget(parent);
             }
-            //indiquem que el QSeriesIconView que seleccioni la sèrie amb el UID passa per parametre
+            //indiquem que el QSeriesListWidget que seleccioni la sèrie amb el UID passa per parametre
             emit(selectedSeriesList(item->text(11)));
         }
         else
         {
             if (m_oldStudyUID != getSelectedStudyUID())
-            { //si seleccionem una estudi diferent el seleccionat abans, hem d'actualizar el qseriesiconview
+            { //si seleccionem una estudi diferent el seleccionat abans, hem d'actualizar el qserieslistwidget
                 if (m_studyTreeView->isItemExpanded(item))
                 {// ha d'estar expendit per visualitzar les series
-                    setSeriesToIconView(item);
+                    setSeriesToSeriesListWidget(item);
                 }
-                else emit(clearIconView());
+                else emit(clearSeriesListWidget());
             }   
                  
         }
@@ -548,23 +548,42 @@ void QStudyListView::clicked(QTreeWidgetItem *item,int)
     m_oldStudyUID = getSelectedStudyUID();
 }
 
+/**  Si fem doble click a una serie del TreeView es visualitzarà!
+  *         @param item sobre el que s'ha fet click
+  */
+void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item,int)
+{
+    
+
+    if (item != NULL)
+    {
+        if (item->parent() != NULL) //si es tracta d'una serie
+        {   //enviem el UID de la serie
+            emit(view());
+        }
+
+    }
+    
+    m_oldStudyUID = getSelectedStudyUID();
+}
+
 /** Slot que visualitza l'estudi
   */
-void QStudyListView::viewStudy()
+void QStudyTreeWidget::viewStudy()
 {
     emit(view());
 }
 
 /** Slot que descarrega un estudi
   */
-void QStudyListView::retrieveStudy()
+void QStudyTreeWidget::retrieveStudy()
 {
     emit(retrieve());    
 }
 
 /** guarda de la mida de les columnes
   */
-void QStudyListView::saveColumnsWidth()
+void QStudyTreeWidget::saveColumnsWidth()
 {
     StarviewerSettings settings;
 
@@ -588,7 +607,7 @@ void QStudyListView::saveColumnsWidth()
 
 /** Destructor de la classe
   */
-QStudyListView::~QStudyListView()
+QStudyTreeWidget::~QStudyTreeWidget()
 {
 }
 

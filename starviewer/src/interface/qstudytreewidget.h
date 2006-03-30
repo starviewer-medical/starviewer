@@ -18,10 +18,10 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef UDGSTUDYLISTVIEW_H
-#define UDGSTUDYLISTVIEW_H
+#ifndef UDGQSTUDYTREEWIDGET_H
+#define UDGQSTUDYTREEWIDGET_H
 
-#include "ui_qstudylistviewbase.h"
+#include "ui_qstudytreewidgetbase.h"
 #include <QWidget>
 #include <QMenu>
 #include <QString>
@@ -32,16 +32,16 @@
 
 namespace udg {
 
-/** Aquesta classe és un widget millorar i modificat del listview, que permet mostrar estudis i sèries d'una manera organitzada i fàcilment
+/** Aquesta classe és un widget millorar i modificat del TreeVidget, que permet mostrar estudis i sèries d'una manera organitzada i fàcilment
 @author marc
 */
 
 
-class QStudyListView : public QWidget , private Ui::QStudyListViewBase{
+class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase{
 Q_OBJECT
 public:
 
-    QStudyListView( QWidget *parent = 0 );
+    QStudyTreeWidget( QWidget *parent = 0 );
     
     void insertSeries(Series *);
     void insertStudyList(StudyList *);
@@ -55,7 +55,7 @@ public:
     
     void saveColumnsWidth();
     
-    ~QStudyListView();
+    ~QStudyTreeWidget();
     
     
 protected:
@@ -67,7 +67,7 @@ signals :
     void delStudy();
     void view();
     void addSeries(Series *serie);
-    void clearIconView();
+    void clearSeriesListWidget();
     void selectedSeriesList(QString); 
 
 public slots:
@@ -75,6 +75,7 @@ public slots:
     void selectedSeriesIcon(QString );
     
     void clicked(QTreeWidgetItem *,int);
+    void doubleClicked(QTreeWidgetItem *,int);
     void clear( );
     void retrieveStudy( );
     void deleteStudy( );
@@ -95,7 +96,7 @@ private :
     void setWidthColumns( );
     void createPopupMenu( );
     void insertStudy(Study *);
-    void setSeriesToIconView(QTreeWidgetItem *item);
+    void setSeriesToSeriesListWidget(QTreeWidgetItem *item);
 
     QString formatName(const std::string);
     QString formatAge(const std::string);

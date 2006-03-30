@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#include "qseriesiconview.h"
+#include "qserieslistwidget.h"
 #include <QString>
 #include <QIcon>
 //Added by qt3to4:
@@ -14,7 +14,7 @@ namespace udg {
 
 /** Constructor de la classe
   */
-QSeriesIconView::QSeriesIconView(QWidget *parent )
+QSeriesListWidget::QSeriesListWidget(QWidget *parent )
  : QWidget( parent )
 {
 
@@ -23,8 +23,7 @@ QSeriesIconView::QSeriesIconView(QWidget *parent )
 
     size.setHeight(100);
     size.setWidth(100);
-    m_seriesListV->setIconSize(size);
-    //indiquem que després d'inserir s'ha d'ordenar l'iconview ascendentment
+    m_seriesListWidget->setIconSize(size);
     
     createConnections();
     
@@ -32,10 +31,10 @@ QSeriesIconView::QSeriesIconView(QWidget *parent )
 
 /** crea les connexions dels signals i slots 
   */
-void QSeriesIconView::createConnections()
+void QSeriesListWidget::createConnections()
 {
-    connect(m_seriesListV,SIGNAL(itemClicked ( QListWidgetItem *)), SLOT(clicked(QListWidgetItem *)));
-    connect(m_seriesListV,SIGNAL(itemDoubleClicked ( QListWidgetItem *)), SLOT(view(QListWidgetItem *)));
+    connect(m_seriesListWidget,SIGNAL(itemClicked ( QListWidgetItem *)), SLOT(clicked(QListWidgetItem *)));
+    connect(m_seriesListWidget,SIGNAL(itemDoubleClicked ( QListWidgetItem *)), SLOT(view(QListWidgetItem *)));
 }
 
 /** Insereix l'informació d'una sèrie al ListICon
@@ -43,11 +42,11 @@ void QSeriesIconView::createConnections()
   */
 /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vul mostrar i no tinc
    enlloc per amagar-lo */
-void QSeriesIconView::insertSeries(Series *serie)
+void QSeriesListWidget::insertSeries(Series *serie)
 {
     QString text,num,pathImage,nameClass;
     StarviewerSettings settings;
-    QListWidgetItem *item = new QListWidgetItem( m_seriesListV );
+    QListWidgetItem *item = new QListWidgetItem( m_seriesListWidget );
     QString statusTip;
     
     
@@ -70,7 +69,7 @@ void QSeriesIconView::insertSeries(Series *serie)
     }
         
     nameClass.insert(0,this->objectName());
-    if (nameClass == "m_SeriesImViewCache")
+    if (nameClass == "m_seriesListWidgetCache")
     {
         pathImage.insert(0,settings.getCacheImagePath());
         pathImage.append(serie->getStudyUID().c_str());
@@ -91,10 +90,10 @@ void QSeriesIconView::insertSeries(Series *serie)
     item->setStatusTip(serie->getSeriesUID().c_str()); //guardo a l'status tip l'UID de la serie
 }
 
-/** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyListView, perquè selecciona la mateixa serie que el QSeriesIconView
+/** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
   *        @param serie Seleccionada
   */
-void QSeriesIconView::clicked(QListWidgetItem *item)
+void QSeriesListWidget::clicked(QListWidgetItem *item)
 {
      if (item != NULL) emit(selectedSeriesIcon(item->statusTip()));
      
@@ -103,19 +102,19 @@ void QSeriesIconView::clicked(QListWidgetItem *item)
 /** slot que s'activa quant es fa doblec
   *        @param item de la serie Seleccionada
   */
-void QSeriesIconView::view(QListWidgetItem *item)
+void QSeriesListWidget::view(QListWidgetItem *item)
 {
 
     if (item != NULL) emit(viewSeriesIcon());
     
 }
 
-/** Slot que s'activa quant es selecciona una sèrie des del StudyListView,selecciona la serie del QStudyListView en el QSeriesIconView
+/** Slot que s'activa quant es selecciona una sèrie des del StudyTreeWidget,selecciona la serie del QStudyTreeWidget en el QSeriesListWidget
   *        @param  UID de la serie seleccionada
   */
-void QSeriesIconView::selectedSeriesList(QString seriesUID)
+void QSeriesListWidget::selectedSeriesList(QString seriesUID)
 {
-    QList<QListWidgetItem *> qSeriesList(m_seriesListV->findItems("*",Qt::MatchWildcard));
+    QList<QListWidgetItem *> qSeriesList(m_seriesListWidget->findItems("*",Qt::MatchWildcard));
     QListWidgetItem *item;
     
     for (int i = 0;i < qSeriesList.count();i++)
@@ -123,39 +122,39 @@ void QSeriesIconView::selectedSeriesList(QString seriesUID)
         item = qSeriesList.at(i);;
         if (item->statusTip() == seriesUID)
         {
-            m_seriesListV->setItemSelected(item,true);
-            m_seriesListV->setCurrentItem(item);
+            m_seriesListWidget->setItemSelected(item,true);
+            m_seriesListWidget->setCurrentItem(item);
         }
-        else m_seriesListV->setItemSelected(item,false);
+        else m_seriesListWidget->setItemSelected(item,false);
     }  
     
 }
 
-/** Neteja el Icon View de sèries
+/** Neteja el ListWidget de sèries
   */
-void QSeriesIconView::clear()
+void QSeriesListWidget::clear()
 {
-    m_seriesListV->clear();
+    m_seriesListWidget->clear();
 }
 
-/** Slot, que al rebre la senyal addSeries del del QStudyListView afegeix una sèrie al IconView
+/** Slot, que al rebre la senyal addSeries del del QStudyTreeWidget afegeix una sèrie al IconView
   *        @param serie 
   */
-void QSeriesIconView::addSeries(Series *serie)
+void QSeriesListWidget::addSeries(Series *serie)
 {
     insertSeries(serie);
 }
 
-/** Slot, que al rebre la senya del QStudyListView neteja el IconView
+/** Slot, que al rebre la senya del QStudyTreeWidget neteja el ListWidget
   */
-void QSeriesIconView::clearIconView()
+void QSeriesListWidget::clearSeriesListWidget()
 {
     clear();
 }
 
 /** Destructor de la classe
   */
-QSeriesIconView::~QSeriesIconView()
+QSeriesListWidget::~QSeriesListWidget()
 {
 }
 

@@ -3,35 +3,6 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
 # L'objectiu és una biblioteca:  
 
-TARGETDEPS += ../repositories/librepositories.a \
-              ../registration/libregistration.a \
-              ../tools/libtools.a \
-              ../../src/inputoutput/libinputoutput.a 
-LIBS += ../../src/inputoutput/libinputoutput.a \
-        ../repositories/librepositories.a \
-        ../inputoutput/libinputoutput.a \
-        ../registration/libregistration.a \
-        ../tools/libtools.a 
-INCLUDEPATH += ../../src/inputoutput \
-               ../tools \
-               ../inputoutput \
-               ../registration \
-               ../repositories 
-MOC_DIR = ../../tmp/moc 
-UI_DIR = ../../tmp/ui 
-OBJECTS_DIR = ../../tmp/obj 
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated 
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated 
-CONFIG += debug \
-          warn_on \
-          qt \
-          opengl \
-          thread \
-          x11 \
-          staticlib \
-          exceptions \
-          stl 
-TEMPLATE = lib 
 FORMS += mutualinformationinputparametersformbase.ui \
          qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \
@@ -39,12 +10,12 @@ FORMS += mutualinformationinputparametersformbase.ui \
          qmprextensionbase.ui \
          qmutualinformationtab.ui \
          qretrievescreenbase.ui \
-         qseriesiconviewbase.ui \
-         qstudylistviewbase.ui \
          qtabaxisviewbase.ui \
          queryscreenbase.ui \
          qpacslistbase.ui \
-         qnavigatewindowbase.ui 
+         qnavigatewindowbase.ui \
+         qstudytreewidgetbase.ui \
+         qserieslistwidgetbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -70,8 +41,6 @@ HEADERS += director.h \
            qpacslist.h \
            qretrievescreen.h \
            queryscreen.h \
-           qseriesiconview.h \
-           qstudylistview.h \
            q3dmprviewer.h \
            qmprextension.h \
            qmprextensioncreator.h \
@@ -83,7 +52,9 @@ HEADERS += director.h \
            tool.h \
            QVTKWidget.h \
            vtkEventQtSlotConnect.h \
-           qnavigatewindow.h 
+           qnavigatewindow.h \
+           qstudytreewidget.h \
+           qserieslistwidget.h 
 SOURCES += director.cpp \
            mutualinformationdirector.cpp \
            mutualinformationinputparametersform.cpp \
@@ -108,8 +79,6 @@ SOURCES += director.cpp \
            queryscreen.cpp \
            queryscreenerror.cpp \
            queryscreenmove.cpp \
-           qseriesiconview.cpp \
-           qstudylistview.cpp \
            q3dmprviewer.cpp \
            qmprextension.cpp \
            qmprextensioncreator.cpp \
@@ -121,7 +90,38 @@ SOURCES += director.cpp \
            tool.cpp \
            QVTKWidget.cxx \
            vtkEventQtSlotConnect.cxx \
-           qnavigatewindow.cpp 
+           qnavigatewindow.cpp \
+           qstudytreewidget.cpp \
+           qserieslistwidget.cpp 
+TARGETDEPS += ../repositories/librepositories.a \
+../registration/libregistration.a \
+../tools/libtools.a \
+../../src/inputoutput/libinputoutput.a
+LIBS += ../../src/inputoutput/libinputoutput.a \
+../repositories/librepositories.a \
+../inputoutput/libinputoutput.a \
+../registration/libregistration.a \
+../tools/libtools.a
+INCLUDEPATH += ../../src/inputoutput \
+../tools \
+../inputoutput \
+../registration \
+../repositories
+MOC_DIR = ../../tmp/moc
+UI_DIR = ../../tmp/ui
+OBJECTS_DIR = ../../tmp/obj
+QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
+QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
+CONFIG += debug \
+warn_on \
+qt \
+opengl \
+thread \
+x11 \
+staticlib \
+exceptions \
+stl
+TEMPLATE = lib
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)

@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>udg::QStudyListViewBase</class>
- <widget class="QWidget" name="udg::QStudyListViewBase" >
+ <class>udg::QStudyTreeWidgetBase</class>
+ <widget class="QWidget" name="udg::QStudyTreeWidgetBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

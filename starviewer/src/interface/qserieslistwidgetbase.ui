@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>udg::QSeriesIconViewBase</class>
- <widget class="QWidget" name="udg::QSeriesIconViewBase" >
+ <class>udg::QSeriesListWidgetBase</class>
+ <widget class="QWidget" name="udg::QSeriesListWidgetBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -31,7 +31,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0" >
-    <widget class="QListWidget" name="m_seriesListV" >
+    <widget class="QListWidget" name="m_seriesListWidget" >
      <property name="contextMenuPolicy" >
       <enum>Qt::NoContextMenu</enum>
      </property>
