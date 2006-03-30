@@ -403,9 +403,9 @@ void QConfigurationScreen::fillPacsListView()
             item->setText(5,pacs.getDescription().c_str() );
             if (pacs.getDefault() == "S")
             {
-                item->setText(6,tr("YES"));
+                item->setText(6,tr("&Yes"));
             }
-            else item->setText(6,tr("NO"));
+            else item->setText(6,tr("&No"));
             
             list.nextPacs();
         }
@@ -694,7 +694,7 @@ void QConfigurationScreen::deleteStudies()
    
    switch( QMessageBox::information( this, tr("Starviewer"),
 				      tr("Are you sure you want to delete all Studies of the cache ?"),
-				      tr("Yes"), tr("No"),
+				      tr("&Yes"), tr("&No"),
 				      0, 1 ) ) 
     {
     case 0:

@@ -216,19 +216,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>32,5 %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>67,5 %</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;b&gt;Free :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>20,3 Gb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -311,6 +299,14 @@
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>     %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>     Gb</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QFileDialog</name>
@@ -337,6 +333,62 @@
         <source>Coronal</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>WW/WL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , medium contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , medium contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Neck , medium contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMPR3DExtensionBase</name>
@@ -354,6 +406,62 @@
     </message>
     <message>
         <source>Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WW/WL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , medium contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , medium contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Neck , medium contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -401,6 +509,70 @@
     </message>
     <message>
         <source>Coronal Y-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WW/WL:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Neck , Constrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -540,31 +712,62 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>No Info</source>
-        <translation type="unfinished">Sin Información</translation>
+        <translation type="obsolete">Sin Información</translation>
+    </message>
+    <message>
+        <source>No info</source>
+        <translation type="obsolete">Sin Información</translation>
+    </message>
+    <message>
+        <source>L</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>P</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No se</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slice: %1/%2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
-Off Image
 WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Image Size: %1 x %2
-View Size: %3 x %4
-X: %5 px Y: %6 px Value: %7
-WW: %8 WL: %9 </source>
+        <source>%1
+%2
+%3
+Acc:%4
+%5
+%6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Slice: %1/%2
-Zoom: XXX%%  Angle: XXX
-Thickness: XXX mm Location: XXX </source>
+        <source>Made by Starviewer %1</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No info</source>
-        <translation type="unfinished">Sin Información</translation>
     </message>
 </context>
 <context>
@@ -587,7 +790,7 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Caption</source>
-        <translation>Leyenda</translation>
+        <translation type="obsolete">Leyenda</translation>
     </message>
     <message>
         <source>StarViewer</source>
@@ -830,10 +1033,6 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> MOD </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>About StarViewer</source>
         <translation>Sobre Starviewer</translation>
     </message>
@@ -942,11 +1141,19 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> W999 </source>
+        <source>&lt;h2&gt;StarViewer 2006 &#xfe;Beta&#xfe;&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2004 Universitat de Girona&lt;p&gt;StarViewer is a small application that lets you view &lt;b&gt;DICOM&lt;/b&gt;, &lt;b&gt;MHD&apos;s&lt;/b&gt;,... files and manipulate them.&lt;p&gt;Last Redisign Version : in early development</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &#xfe;Beta&#xfe;&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2004 Universitat de Girona&lt;p&gt;StarViewer is a small application that lets you view &lt;b&gt;DICOM&lt;/b&gt;, &lt;b&gt;MHD&apos;s&lt;/b&gt;,... files and manipulate them.&lt;p&gt;Last Redisign Version : in early development</source>
+        <source>2D &amp;Basic Viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+B</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Basic Application Viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -962,14 +1169,6 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Select a Pacs for delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YES</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>NO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1009,18 +1208,6 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contraint Violation </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Database not found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1045,10 +1232,6 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database missing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1068,6 +1251,10 @@ Thickness: XXX mm Location: XXX </source>
         <source>Cache Directory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Register duplicated.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QDebugConsoleBase</name>
@@ -1082,6 +1269,58 @@ Thickness: XXX mm Location: XXX </source>
     <message>
         <source>Clear</source>
         <translation type="obsolete">Borrar</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QMPR3D2DExtension</name>
+    <message>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Window/Level Functions are not yet available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QMPR3DExtension</name>
+    <message>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Window/Level Functions are not yet available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QMPRExtension</name>
+    <message>
+        <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are not grabbed views to save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Window/Level Functions are not yet available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QNavigateWindowBase</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1113,6 +1352,26 @@ Thickness: XXX mm Location: XXX </source>
         <source>PENDING</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RETRIEVING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RETRIEVED</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QRetrieveScreenBase</name>
@@ -1122,10 +1381,6 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Patient ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Study Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1164,26 +1419,34 @@ Thickness: XXX mm Location: XXX </source>
         <source>Patient Name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
-    <name>udg::QSeriesIconView</name>
+    <name>udg::QSeriesListWidget</name>
     <message>
         <source>Series </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>udg::QSeriesIconViewBase</name>
+    <name>udg::QSeriesListWidgetBase</name>
     <message>
         <source>Form1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>udg::QStudyListScreenBase</name>
+    <name>udg::QStudyListView</name>
+    <message>
+        <source>&amp;View</source>
+        <translation type="obsolete">V&amp;ista</translation>
+    </message>
 </context>
 <context>
-    <name>udg::QStudyListView</name>
+    <name>udg::QStudyTreeWidget</name>
     <message>
         <source>&amp;View</source>
         <translation type="unfinished">V&amp;ista</translation>
@@ -1197,6 +1460,10 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Study</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Series </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1204,45 +1471,9 @@ Thickness: XXX mm Location: XXX </source>
         <source>Series</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Starviewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Are you sure you want to delete this Study ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Study</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
-    <name>udg::QStudyListViewBase</name>
-    <message>
-        <source>Age</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Modality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UID</source>
-        <translation type="unfinished"></translation>
-    </message>
+    <name>udg::QStudyTreeWidgetBase</name>
     <message>
         <source>Type</source>
         <translation type="unfinished"></translation>
@@ -1253,6 +1484,18 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1273,6 +1516,10 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>AETitle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1396,6 +1643,18 @@ Thickness: XXX mm Location: XXX </source>
     </message>
     <message>
         <source>Show Pacs List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a study to view </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete this Study ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

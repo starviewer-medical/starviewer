@@ -69,7 +69,7 @@
      </column>
      <column>
       <property name="text" >
-       <string>Study Date</string>
+       <string>Date</string>
       </property>
      </column>
      <column>
