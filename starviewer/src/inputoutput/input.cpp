@@ -290,6 +290,36 @@ void Input::setVolumeInformation()
     {
         m_volumeData->getVolumeSourceInformation()->setAccessionNumber( value.c_str() );
     }
+
+    // window level
+    if( queryTagAsString( "0028|1051" , value ) )
+    {
+        QString str = QString::fromStdString( value );
+        if( str.contains("\\") )
+        {
+            str = str.left( str.indexOf("\\") );
+        }
+        double window = str.toDouble();
+        
+        m_volumeData->getVolumeSourceInformation()->setWindow( window );
+
+        queryTagAsString( "0028|1050" , value );
+        str = QString::fromStdString( value );
+        if( str.contains("\\") )
+        {
+            str = str.left( str.indexOf("\\") );
+        }
+        double level = str.toDouble();
+        m_volumeData->getVolumeSourceInformation()->setLevel( level );
+
+    }
+
+    // Protocol name
+    if( queryTagAsString( "0018|1030" , value ) )
+    {
+        m_volumeData->getVolumeSourceInformation()->setProtocolName( value.c_str() );
+    }
+    
 }
 
 }; // end namespace udg
