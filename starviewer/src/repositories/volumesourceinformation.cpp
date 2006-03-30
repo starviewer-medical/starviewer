@@ -10,6 +10,8 @@ namespace udg {
 
 VolumeSourceInformation::VolumeSourceInformation()
 {
+    m_windowLevel[0] = 0.0;
+    m_windowLevel[1] = 0.0;
 }
 
 VolumeSourceInformation::~VolumeSourceInformation()

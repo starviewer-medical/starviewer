@@ -117,6 +117,57 @@ public:
     {
         return m_accessionNumber;
     };
+
+    /// Assigna/ retorna el window/level que ens proporciona el DICOM
+    void setWindowLevel( double window , double level )
+    {
+        m_windowLevel[0] = window;
+        m_windowLevel[1] = level;
+    }
+    void setWindowLevel( double windowLevel[2] )
+    {
+        this->setWindowLevel( windowLevel[0] , windowLevel[1] );
+    }
+    void setWindow( double window )
+    {
+        m_windowLevel[0] = window;
+    }
+    void setLevel( double level )
+    {
+        m_windowLevel[1] = level;
+    }
+    double getWindow()
+    {
+        return m_windowLevel[0];
+    }
+    double getLevel()
+    {
+        return m_windowLevel[1];
+    }
+    double *getWindowLevel()
+    {
+        return m_windowLevel;
+    }
+    void getWindowLevel( double &window , double &level )
+    {
+        window = m_windowLevel[0];
+        level = m_windowLevel[1];
+    }
+    void getWindowLevel( double windowLevel[2] )
+    {
+        windowLevel[0] = m_windowLevel[0];
+        windowLevel[1] = m_windowLevel[1];
+    }
+
+    /// Assigna/Retorna el nom del protocol
+    void setProtocolName( const char * protocol )
+    {
+        m_protocolName = QString::fromLatin1( protocol );
+    };
+    QString getProtocolName()
+    {
+        return m_protocolName;
+    };
     
 private:
 
@@ -127,6 +178,8 @@ private:
     QString m_institution;
     QString m_studyDate;
     QString m_studyTime;
+    QString m_protocolName;
+    double m_windowLevel[2];
 
 };
 
