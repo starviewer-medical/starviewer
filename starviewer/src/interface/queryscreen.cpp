@@ -156,7 +156,7 @@ void QueryScreen::connectSignalsAndSlots()
     
     //connectem els QStudyTreeWidget amb els QSeriesListWidget, per poder mantenir la informació de les series actualitzada!
     connect(m_studyTreeWidgetPacs,SIGNAL(addSeries(Series * )),m_seriesListWidgetPacs,SLOT(addSeries(Series *)));
-    connect(m_studyTreeWidgetPacs,SIGNAL(clearSeriesListWidget()),m_seriesListWidgetPacs,SLOT(clearListWidget()));
+    connect(m_studyTreeWidgetPacs,SIGNAL(clearSeriesListWidget()),m_seriesListWidgetPacs,SLOT(clearSeriesListWidget()));
     connect(m_seriesListWidgetPacs,SIGNAL(selectedSeriesIcon(QString)),m_studyTreeWidgetPacs,SLOT(selectedSeriesIcon(QString))); 
     connect(m_seriesListWidgetPacs,SIGNAL(viewSeriesIcon()),m_studyTreeWidgetPacs,SLOT(viewStudy())); 
     connect(m_studyTreeWidgetPacs,SIGNAL(selectedSeriesList(QString)),m_seriesListWidgetPacs,SLOT(selectedSeriesList(QString))); 

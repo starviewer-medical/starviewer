@@ -390,14 +390,20 @@ void QStudyTreeWidget::expand(QTreeWidgetItem * item,int col)
                     emit(expand(item->text(11),item->text(10)));
                 }
                 else setSeriesToSeriesListWidget(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
+                m_oldStudyUID = getSelectedStudyUID();
             }
         }
         else 
         {
-            item->setIcon(0,m_closeFolder); 
-            m_studyTreeView->setItemExpanded(item,false);
-            emit(clearSeriesListWidget());
+            if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
+            {
+                item->setIcon(0,m_closeFolder); 
+                m_studyTreeView->setItemExpanded(item,false);
+                emit(clearSeriesListWidget());
+                m_oldStudyUID = getSelectedStudyUID();
+            }
         }
+
     }
 
        
@@ -543,9 +549,10 @@ void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int)
             }   
                  
         }
+        m_oldStudyUID = getSelectedStudyUID();
     }
     
-    m_oldStudyUID = getSelectedStudyUID();
+    
 }
 
 /**  Si fem doble click a una serie del TreeView es visualitzarà!
