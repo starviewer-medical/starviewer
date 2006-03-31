@@ -59,7 +59,7 @@ void StarviewerProcessImage::setErrorRetrieving()
   */
 bool StarviewerProcessImage::getErrorRetrieving()
 {
-    return m_error;
+    return m_error || m_downloadedImages == 0;
 } 
 
 StarviewerProcessImage::~StarviewerProcessImage()
