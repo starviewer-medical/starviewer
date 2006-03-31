@@ -488,7 +488,8 @@ void Q2DViewer::initInformationText()
                 .arg( studyDate )
                 .arg( studyTime );
                 
-    m_lowerRightText = tr("Made by Starviewer %1").arg( QChar(169) );
+    m_lowerRightText = tr("%1")
+                    .arg( m_mainVolume->getVolumeSourceInformation()->getProtocolName() );
     
     m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
     m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
