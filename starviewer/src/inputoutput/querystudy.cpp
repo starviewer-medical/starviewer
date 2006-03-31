@@ -118,8 +118,8 @@ void progressCallbackStudy(
     
 }
 
-
-static const char *     opt_abstractSyntax = UID_FINDModalityWorklistInformationModel;
+//Diem a quin nivell fem les cerques d'estudis! Molt important hem de fer a nivell de root
+static const char *     opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
 /** Query studies to the pacs
   *        @param status

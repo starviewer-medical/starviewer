@@ -78,13 +78,13 @@ Status SeriesMask:: setSeriesNumber(const char *seriesNumber )
     //if the seriesNumber is null we supose that the user don't apply a criterium in this field
     if (seriesNumber==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(seriesNumber)>0)
     {
         strcpy(val,seriesNumber);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -118,7 +118,7 @@ Status SeriesMask:: setSeriesDate(const char *date )
     //if the Date is null we supose that the user don't apply a criterium in this field
     if (date==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(date)==8)
     {
@@ -192,13 +192,13 @@ Status SeriesMask:: setSeriesDescription(const char *desc)
     //if the desc is null we supose that the user don't apply a criterium in this field
     if (desc==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(desc)>0)
     {
         strcpy(val,desc);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
 
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -232,13 +232,13 @@ Status SeriesMask:: setSeriesModality(const char *modality)
     //if the modality is null we supose that the user don't apply a criterium in this field
     if (modality==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(modality)>0)
     {
         strcpy(val,modality);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -270,7 +270,7 @@ Status SeriesMask:: setSeriesTime(const char *time)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (time==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(time)==4)
     {
@@ -349,13 +349,13 @@ Status SeriesMask:: setSeriesUID(const char *uid)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (uid==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(uid)>0)
     {
         strcpy(val,uid);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -388,13 +388,13 @@ Status SeriesMask:: setStudyUID(const char *uid)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (uid==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(uid)>0)
     {
         strcpy(val,uid);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -428,13 +428,13 @@ Status SeriesMask:: setSeriesOperator(const char *name)
     //if the is null we supose that the user don't apply a criterium in this field
     if (name==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(name)>0)
     {
         strcpy(val,name);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -465,13 +465,13 @@ Status SeriesMask:: setSeriesBodyPartExaminated(const char *part)
     //if the is null we supose that the user don't apply a criterium in this field
     if (part==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(part)>0)
     {
         strcpy(val,part);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -502,13 +502,13 @@ Status SeriesMask:: setSeriesProtocolName(const char *name)
     //if the is null we supose that the user don't apply a criterium in this field
     if (name==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(name)>0)
     {
         strcpy(val,name);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)

@@ -43,13 +43,13 @@ Status StudyMask:: setPatientId(std::string patientID )
     //if the patientId is null we supose that the user don't apply a criterium in this field
     if (patientID.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (patientID.length()>0)
     {
         value = patientID.c_str();
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -84,13 +84,13 @@ Status StudyMask:: setPatientName(std::string patientName )
     
     if (patientName.length() == 0)
     {
-         value = "*";
+         value = "";
     }
     else if (patientName.length()>0)
     {
         value =  patientName;
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -122,7 +122,7 @@ Status StudyMask:: setPatientBirth(std::string date)
     
     if (date.length() == 0)
     {
-       value = "*"; 
+       value = ""; 
     }
     else if (date.length() >0)
     {
@@ -203,13 +203,13 @@ Status StudyMask:: setPatientSex(std::string patientSex )
     //if the patientId is null we supose that the user don't apply a criterium in this field
     if (patientSex.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (patientSex.length()>0)
     {
         value = patientSex;
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -242,13 +242,13 @@ Status StudyMask:: setPatientAge(std::string patientAge )
     //if the patientAge is null we supose that the user don't apply a criterium in this field
     if (patientAge.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (patientAge.length()>0)
     {
         value = patientAge;
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     
@@ -283,13 +283,13 @@ Status StudyMask:: setStudyId(std::string studyID )
     //if the StudyId is null we supose that the user don't apply a criterium in this field
     if (studyID.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (studyID.length()>0)
     {
        value= studyID;
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     
@@ -323,7 +323,7 @@ Status StudyMask:: setStudyDate(std::string date )
     //if the Date is null we supose that the user don't apply a criterium in this field
     if (date.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (date.length()>0)
     {
@@ -404,13 +404,13 @@ Status StudyMask:: setStudyDescription(std::string desc)
     //if the desc is null we supose that the user don't apply a criterium in this field
     if (desc.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (desc.length()>0)
     {
         value = desc;
     }
-    else value = "*";
+    else value = "";
 
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -444,13 +444,13 @@ Status StudyMask:: setStudyModality(std::string modality)
     //if the modality is null we supose that the user don't apply a criterium in this field
     if (modality.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (modality.length()>0)
     {
         value = modality;
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -483,7 +483,7 @@ Status StudyMask:: setStudyTime(std::string time)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (time.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (time.length()==4)
     {
@@ -563,13 +563,13 @@ Status StudyMask:: setStudyUID(std::string uid)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (uid.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (uid.length()>0)
     {
         value = uid;
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -602,13 +602,13 @@ Status StudyMask:: setInstitutionName(std::string institution)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (institution.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (institution.length()>0)
     {
         value = institution;
     }
-    else value = "*";;
+    else value = "";;
     
     elem->putString(value.c_str());
     if (elem->error() != EC_Normal)
@@ -642,13 +642,13 @@ Status StudyMask:: setAccessionNumber(std::string accession)
     //if the time is null we supose that the user don't apply a criterium in this field
     if (accession.length()==0)
     {
-        value = "*";
+        value = "";
     }
     else if (accession.length()>0)
     {
         value = accession;
     }
-    else value = "*";
+    else value = "";
     
     elem->putString(value.c_str());
     

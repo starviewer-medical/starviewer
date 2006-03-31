@@ -56,13 +56,13 @@ Status ImageMask:: setSeriesUID(const char *uid)
     
     if (uid==NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(uid)>0)
     {
         strcpy(val,uid);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -96,13 +96,13 @@ Status ImageMask:: setStudyUID(const char *uid)
     
     if (uid == NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(uid)>0)
     {
         strcpy(val,uid);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
@@ -134,13 +134,13 @@ Status ImageMask:: setImageNumber(const char *imgNum)
 
     if (imgNum == NULL)
     {
-        strcpy(val,"*");
+        strcpy(val,"");
     }
     else if (strlen(imgNum)>0)
     {
         strcpy(val,imgNum);
     }
-    else strcpy(val,"*");
+    else strcpy(val,"");
     
     elem->putString(val);
     if (elem->error() != EC_Normal)
