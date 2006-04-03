@@ -205,8 +205,7 @@ void QStudyTreeWidget::insertSeries(Series *serie)
     item->setText(4,serie->getSeriesModality().c_str() );
     
     description = serie->getSeriesDescription().c_str();
-    description.simplified(); //treiem els espaics en blanc del davant i darrera
-    item->setText( 5 , description );
+    item->setText( 5 , description.simplified() );//treiem els espaics en blanc del davant i darrera
     
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
     if (serie->getSeriesDate().length() != 0)
