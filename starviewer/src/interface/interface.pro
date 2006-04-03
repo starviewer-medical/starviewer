@@ -50,8 +50,6 @@ HEADERS += director.h \
            qmpr3d2dextension.h \
            distancetool.h \
            tool.h \
-           QVTKWidget.h \
-           vtkEventQtSlotConnect.h \
            qnavigatewindow.h \
            qstudytreewidget.h \
            qexecuteoperationthread.h \
@@ -89,8 +87,6 @@ SOURCES += director.cpp \
            qmpr3d2dextension.cpp \
            distancetool.cpp \
            tool.cpp \
-           QVTKWidget.cxx \
-           vtkEventQtSlotConnect.cxx \
            qnavigatewindow.cpp \
            qstudytreewidget.cpp \
            qexecuteoperationthread.cpp \

@@ -12,16 +12,9 @@ LIBS += -L$(VTKLIBDIR) \
         -lvtkImaging \
         -lvtkRendering \
         -lvtkVolumeRendering \
-        #-lvtkParallel \
-        #-lvtkexpat \
-        -lvtkfreetype \
         -lvtkftgl \
-        #-lvtkjpeg \
-        #-lvtkpng \
         -lvtksys \
-        #-lvtktiff \
-        #-lvtkzlib \
-        #-lQVTK \
+        -lQVTK \
         -lvtkWidgets \
         -lvtkexoIIc \
         -lvtkNetCDF \
