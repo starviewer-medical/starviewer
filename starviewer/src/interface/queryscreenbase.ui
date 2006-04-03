@@ -877,6 +877,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="m_buttonShowPacsList" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
              <property name="minimumSize" >
               <size>
                <width>120</width>
@@ -1151,13 +1154,6 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>udg::QStudyTreeWidget</class>
-   <extends></extends>
-   <header>qstudytreewidget.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>udg::QPacsList</class>
    <extends></extends>
    <header>qpacslist.h</header>
@@ -1168,6 +1164,13 @@
    <class>udg::QSeriesListWidget</class>
    <extends></extends>
    <header>qserieslistwidget.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>udg::QStudyTreeWidget</class>
+   <extends></extends>
+   <header>qstudytreewidget.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

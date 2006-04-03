@@ -81,7 +81,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     }
     
     //indiquem que la llista de Pacs no es mostra
-    m_PacsListShowed = false;
+    m_PacsListShow = false;
         
     //carreguem el processImageSingleton    
     m_piSingleton=ProcessImageSingleton::getProcessImageSingleton();
@@ -799,13 +799,17 @@ void QueryScreen::tabChanged(int index)
         setEnabledModalityChecks(false);//desactivem el grup button de modalitat
         m_buttonRetrieve->setEnabled(true);//activem el boto retrieve
         m_buttonView->setEnabled(true);
+        m_buttonShowPacsList->setEnabled(true);//activem el boto d'ensenyar la llista de pacs
     }
     else 
     {
         setEnabledModalityChecks(true);//activem el grup button de motalitat
         m_buttonRetrieve->setEnabled(false);//desactivem el boto retrieve
         m_buttonView->setEnabled(true);
+        m_buttonShowPacsList->setEnabled(false);//activem el boto d'ensenyar la llista de pacs
     }
+    
+    if ( m_PacsListShow ) resizePacsList();
 
 }
 
@@ -1014,24 +1018,39 @@ void QueryScreen::config()
   */
 void QueryScreen::showPacsList()
 {
+        
+    if (!m_PacsListShow)
+    {   
+        m_PacsListShow = true;
+        m_buttonShowPacsList->setText(tr("Hide Pacs List"));
+    }
+    else
+    {
+        m_PacsListShow = false;
+    }
+    
+    resizePacsList();
+}
+
+/** Assigna la mida al PacsList en funcio del tab en que es trobi i de la variable m_PacsListShow
+  */
+void QueryScreen::resizePacsList()
+{
     int mida;
     
-    if (!m_PacsListShowed)
+    //si es fals i estem al tab del Pacs s'ha de mostrar la llistat de PACS
+    if ( m_PacsListShow && m_tab->currentWidget()->objectName() == "m_tabPacs" )
     {   qPacsList->setFixedSize(200,240);
         mida = 200 + 20;
-        m_PacsListShowed = true;
-        m_buttonShowPacsList->setText(tr("Hide Pacs List"));
     }
     else
     {
         qPacsList->setFixedSize(1,1);
         mida = -( 200 + 20);
-        m_PacsListShowed = false;
-        m_buttonShowPacsList->setText(tr("Show Pacs List"));
     }
     
    this->resize(this->width() + mida,this->height());
-
+   
 }
 
 /** Construeix la màscara de cerca de la sèrie

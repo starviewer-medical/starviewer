@@ -95,7 +95,7 @@ struct retrieveParameters
     QExecuteOperationThread m_qexecuteOperationThread;
     
     //StudyVolum m_volum;
-    bool m_PacsListShowed;
+    bool m_PacsListShow;
     
 
     void setEnabledModalityChecks(bool);
@@ -125,6 +125,7 @@ struct retrieveParameters
     static void *retrieveImages(void *);
     void centerWindow();
     
+    void resizePacsList();
 };
 
 };
