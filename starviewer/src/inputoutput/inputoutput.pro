@@ -46,7 +46,6 @@ HEADERS += input.h \
            qquerystudythread.h \
            operation.h \
            queueoperationlist.h \
-           qexecuteoperationthread.h \
            starviewerprocessimage.h \
            cacheinstallation.h \
            imagedicominformation.h 
@@ -90,18 +89,14 @@ SOURCES += input.cpp \
            qquerystudythread.cpp \
            operation.cpp \
            queueoperationlist.cpp \
-           qexecuteoperationthread.cpp \
            starviewerprocessimage.cpp \
            cacheinstallation.cpp \
            imagedicominformation.cpp 
-TARGETDEPS += ../interface/libinterface.a \
-../tools/libtools.a \
-../../src/repositories/librepositories.a \
-../../src/interface/libinterface.a
+TARGETDEPS += ../tools/libtools.a \
+../../src/repositories/librepositories.a
 LIBS += ../../src/tools/libtools.a \
 ../../src/repositories/librepositories.a
-INCLUDEPATH += ../../src/interface \
-../../src/repositories \
+INCLUDEPATH += ../../src/repositories \
 ../../src/tools
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui

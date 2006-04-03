@@ -8,10 +8,10 @@ SUBDIRS += tools \
            registration \
            segmentation \
            visualization \
+           inputoutput \
            colour \
            filters \
            interface \
-           inputoutput \
            main 
 TEMPLATE = subdirs 
 CONFIG += debug \
