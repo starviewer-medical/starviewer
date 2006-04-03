@@ -23,10 +23,6 @@ StarviewerProcessImage::StarviewerProcessImage()
 
 /** Enviar un signal de imatge descarregada a qretrievescreen, i quant es descarrega una sèrie nova envia signal de series descarregada
   */
-/**
- * 
- * @param image 
- */
 void StarviewerProcessImage::process(Image *image)
 {
     Status state;
