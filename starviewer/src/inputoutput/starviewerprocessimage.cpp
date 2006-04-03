@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "starviewerprocessimage.h"
-#include "qretrievescreen.h"
 #include <string.h>
 #include "imagedicominformation.h"
 #include "series.h"
@@ -37,7 +36,7 @@ void StarviewerProcessImage::process(Image *image)
         emit(startRetrieving( image->getStudyUID().c_str()));
         
         //canviem l'estat de l'estudi de PENDING A RETRIEVING
-        state = m_localCache->setStudyRetrieving( image->getStudyUID().c_str() );
+        state = m_localCache->setStudyRetrieved( image->getStudyUID().c_str() );
         if ( !state.good() ) m_error = true;
         
         //inserim serie
