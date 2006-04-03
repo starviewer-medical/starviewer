@@ -148,7 +148,7 @@ void QApplicationMainWindow::createActions()
     m_newAction->setShortcut( tr("Ctrl+N") );
     m_newAction->setStatusTip(tr("Open a new working window") );
     m_newAction->setIcon( QIcon(":/images/new.png") );
-    connect( m_newAction , SIGNAL( activated() ), this, SLOT( newFile() ) );
+    connect( m_newAction , SIGNAL( triggered() ), this, SLOT( newFile() ) );
 
     m_openAction = new QAction( this );
     m_openAction->setText( tr("&Open...") );
@@ -157,14 +157,14 @@ void QApplicationMainWindow::createActions()
     m_openAction->setIcon( QIcon(":/images/open.png") );
     signalMapper->setMapping( m_openAction , 1 );
     signalMapper->setMapping( m_openAction , "Open File" );
-    connect( m_openAction , SIGNAL( activated() ) , signalMapper , SLOT( map() ) );
+    connect( m_openAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
     
     m_pacsAction = new QAction( this );
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
     m_pacsAction->setIcon( QIcon(":/images/find.png") );
-    connect( m_pacsAction, SIGNAL( activated() ) , this , SLOT( pacsQueryScreen() ) );
+    connect( m_pacsAction, SIGNAL( triggered() ) , this , SLOT( pacsQueryScreen() ) );
 
     m_basicViewAction = new QAction( this );
     m_basicViewAction->setText( tr("2D &Basic Viewer") );
@@ -172,7 +172,7 @@ void QApplicationMainWindow::createActions()
     m_basicViewAction->setStatusTip( tr("Open Basic Application Viewer") );
     signalMapper->setMapping( m_basicViewAction , 5 );
     signalMapper->setMapping( m_basicViewAction , "Basic Viewer" );
-    connect( m_basicViewAction , SIGNAL( activated() ) , signalMapper , SLOT( map() ) );
+    connect( m_basicViewAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
     
     m_mpr2DAction = new QAction( this );
     m_mpr2DAction->setText( tr("2D &MPR Viewer") );
@@ -180,7 +180,7 @@ void QApplicationMainWindow::createActions()
     m_mpr2DAction->setStatusTip( tr("Open the 2D MPR Application Viewer") );
     signalMapper->setMapping( m_mpr2DAction , 2 );
     signalMapper->setMapping( m_mpr2DAction , "2D MPR" );
-    connect( m_mpr2DAction , SIGNAL( activated() ) , signalMapper , SLOT( map() ) );
+    connect( m_mpr2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
 
     m_mpr3DAction = new QAction( this );
     m_mpr3DAction->setText( tr("3D M&PR Viewer") );
@@ -188,7 +188,7 @@ void QApplicationMainWindow::createActions()
     m_mpr3DAction->setStatusTip( tr("Open the 3D MPR Application Viewer") );
     signalMapper->setMapping( m_mpr3DAction , 3 );
     signalMapper->setMapping( m_mpr3DAction , "3D MPR" );
-    connect( m_mpr3DAction , SIGNAL( activated() ) , signalMapper , SLOT( map() ) );
+    connect( m_mpr3DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
 
     m_mpr3D2DAction = new QAction( this );
     m_mpr3D2DAction->setText( tr("3D-2D MP&R Viewer") );
@@ -196,55 +196,55 @@ void QApplicationMainWindow::createActions()
     m_mpr3D2DAction->setStatusTip( tr("Open the 3D-2D MPR Application Viewer") );
     signalMapper->setMapping( m_mpr3D2DAction , 4 );
     signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
-    connect( m_mpr3D2DAction , SIGNAL( activated() ) , signalMapper , SLOT( map() ) );
+    connect( m_mpr3D2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
     
     m_exportToJpegAction = new QAction( this );
     m_exportToJpegAction->setText(tr("Export to JPEG"));
     m_exportToJpegAction->setShortcut( 0 );
     m_exportToJpegAction->setStatusTip( tr("Export the volume to jpeg format") );
-    connect( m_exportToJpegAction , SIGNAL( activated() ) , this , SLOT( exportToJpeg() ) );
+    connect( m_exportToJpegAction , SIGNAL( triggered() ) , this , SLOT( exportToJpeg() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_exportToJpegAction, SLOT( setEnabled(bool) ) );
     
     m_exportToMetaIOAction = new QAction( this );
     m_exportToMetaIOAction->setText(tr("Export to MetaIO"));
     m_exportToMetaIOAction->setShortcut( 0 );
     m_exportToMetaIOAction->setStatusTip( tr("Export the volume to MetaIO format") );
-    connect( m_exportToMetaIOAction , SIGNAL( activated() ) , this , SLOT( exportToMetaIO() ) );
+    connect( m_exportToMetaIOAction , SIGNAL( triggered() ) , this , SLOT( exportToMetaIO() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_exportToMetaIOAction, SLOT( setEnabled(bool) ) );
     
     m_exportToPngAction = new QAction( this );
     m_exportToPngAction->setText(tr("Export to PNG"));
     m_exportToPngAction->setShortcut( 0 );
     m_exportToPngAction->setStatusTip( tr("Export the volume to png format") );
-    connect( m_exportToPngAction , SIGNAL( activated() ) , this , SLOT( exportToPng() ) );
+    connect( m_exportToPngAction , SIGNAL( triggered() ) , this , SLOT( exportToPng() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_exportToPngAction, SLOT( setEnabled(bool) ) );
     
     m_exportToTiffAction = new QAction( this );
     m_exportToTiffAction->setText(tr("Export to TIFF"));
     m_exportToTiffAction->setShortcut( 0 );
     m_exportToTiffAction->setStatusTip( tr("Export the volume to tiff format") );
-    connect( m_exportToTiffAction , SIGNAL( activated() ) , this , SLOT( exportToTiff() ) );
+    connect( m_exportToTiffAction , SIGNAL( triggered() ) , this , SLOT( exportToTiff() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_exportToTiffAction, SLOT( setEnabled(bool) ) );
     
     m_exportToBmpAction = new QAction( this );
     m_exportToBmpAction->setText(tr("Export to BMP"));
     m_exportToBmpAction->setShortcut( 0 );
     m_exportToBmpAction->setStatusTip( tr("Export the volume to bmp format") );
-    connect( m_exportToBmpAction , SIGNAL( activated() ) , this , SLOT( exportToBmp() ) );
+    connect( m_exportToBmpAction , SIGNAL( triggered() ) , this , SLOT( exportToBmp() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_exportToBmpAction, SLOT( setEnabled(bool) ) );
     
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
     m_aboutAction->setShortcut( 0 );
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
-    connect(m_aboutAction, SIGNAL(activated()), this, SLOT(about()));
+    connect(m_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
     m_closeAction = new QAction( this );
     m_closeAction->setText( tr("&Close") );
     m_closeAction->setShortcut( tr("Ctrl+W") );
     m_closeAction->setStatusTip(tr("Close the current volume"));
     m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
-    connect( m_closeAction, SIGNAL( activated() ), this, SLOT( close() ) );            
+    connect( m_closeAction, SIGNAL( triggered() ), this, SLOT( close() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_closeAction, SLOT( setEnabled(bool) ) );
     
     m_exitAction = new QAction( this );
@@ -252,7 +252,7 @@ void QApplicationMainWindow::createActions()
     m_exitAction->setShortcut(tr("Ctrl+Q") );
     m_exitAction->setStatusTip(tr("Exit the application"));
     m_exitAction->setIcon( QIcon(":/images/exit.png") );
-    connect(m_exitAction, SIGNAL(activated()), qApp, SLOT(closeAllWindows()));
+    connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
     for (int i = 0; i < MaxRecentFiles; ++i)
     {
@@ -566,10 +566,11 @@ void QApplicationMainWindow::updateRecentFileActions()
 
 }
 
-void QApplicationMainWindow::openRecentFile( int param )
+void QApplicationMainWindow::openRecentFile()
 {
-//     if (maybeSave())
-//         loadFile(m_recentFiles[param]);
+//     QAction *action = qobject_cast<QAction *>( sender() );
+//     if ( action )
+//         loadFile( action->data().toString() );
 }
 
 void QApplicationMainWindow::createStatusBar()

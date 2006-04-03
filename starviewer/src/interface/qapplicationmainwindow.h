@@ -188,7 +188,7 @@ private slots:
     /// mostra el formulari d'about
     void about();
     /// obre un dels arxius recents::\TODO passar responsabilitat a la mini-app encarregada de fer això
-    void openRecentFile(int param);
+    void openRecentFile();
     /// Exporta la imatge a un format especificat
     void exportFile( int type );
     /// Exporta la imatge a JPEG
