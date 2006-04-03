@@ -52,22 +52,23 @@ void QSeriesListWidget::insertSeries(Series *serie)
     
     text.insert(0,tr("Series "));
     text.append(serie->getSeriesNumber().c_str() );
-    text.append('\n');
+    
+    if (serie->getProtocolName().length() > 0)
+    {//si hi ha descripció la inserim
+        text.append(" ");
+        text.append(serie->getProtocolName().c_str() );
+        text.append('\n');
+    }
+    else text.append('\n');
     
     if (serie->getImageNumber() > 0)
     {
         num.setNum(serie->getImageNumber() );
         text.append(num);
-        text.append(" images");
+        text.append( tr(" images") );
         text.append('\n');
     }
     
-    if (serie->getSeriesDescription().length() > 0)
-    {//si hi ha descripció la inserim
-        text.append(serie->getSeriesDescription().c_str() );
-        text.append('\n');
-    }
-        
     nameClass.insert(0,this->objectName());
     if (nameClass == "m_seriesListWidgetCache")
     {

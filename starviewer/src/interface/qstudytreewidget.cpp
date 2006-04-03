@@ -194,7 +194,7 @@ void QStudyTreeWidget::insertStudy(Study *stu)
 void QStudyTreeWidget::insertSeries(Series *serie)
 {
     
-    QString text;
+    QString text, description;
   
     QTreeWidgetItem* item = new QTreeWidgetItem(m_studyTreeView->currentItem());
     text.truncate(0);
@@ -203,6 +203,10 @@ void QStudyTreeWidget::insertSeries(Series *serie)
     item->setIcon(0,m_iconSeries); 
     item->setText(0,text);
     item->setText(4,serie->getSeriesModality().c_str() );
+    
+    description = serie->getSeriesDescription().c_str();
+    description.simplified(); //treiem els espaics en blanc del davant i darrera
+    item->setText( 5 , description );
     
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
     if (serie->getSeriesDate().length() != 0)
