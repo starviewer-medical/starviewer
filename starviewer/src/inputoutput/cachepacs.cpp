@@ -894,6 +894,32 @@ Status CachePacs::setStudyRetrieved(std::string studyUID)
                                 
 }
 
+/** Updata la modalitat d'un estudi
+  *        @param Uid de l'estudi a actualitzar
+  *        @param Modalitat de l'estudi
+  *        @return retorna estat del mètode
+  */
+Status CachePacs::setStudyModality(std::string studyUID,std::string modality)
+{
+    int i;
+    Status state;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
+    m_DBConnect->getLock();
+    i = sqlite_exec_printf(m_DBConnect->getConnection(),"update study set Modali = %Q where StuInsUID= %Q",0,0,0,modality.c_str(),
+              studyUID.c_str());
+    m_DBConnect->releaseLock();
+                                
+    state=constructState(i);
+
+    return state;
+                                
+}
+
 /** actualitza l'última vegada que un estudi ha estat visualitzat, d'aquesta manera quant haguem d'esborrar estudis
   * automàticament per falta d'espai, esborarrem els que fa més temps que no s'han visualitzat
   *        @param UID de l'estudi

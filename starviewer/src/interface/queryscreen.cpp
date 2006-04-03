@@ -711,13 +711,6 @@ void QueryScreen::retrievePacs(bool view)
         return;
     }   
     
-    //primer guardem la informacio de les series per esbrinar de quina modalitat és l'estudi ja que el Pacs no ens la dona
-    if (!insertSeriesCache( studyUID.toAscii().constData() )) 
-    {
-        this->setCursor(QCursor(Qt::ArrowCursor));
-        return;
-    }
-
     mask.setStudyUID(studyUID.toAscii().constData());//definim la màscara per descarregar l'estudi
     
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
@@ -763,23 +756,7 @@ bool QueryScreen::insertStudyCache(Study stu)
     Status state;
     Study study = stu;
     StarviewerSettings settings;
-    
-   m_seriesListSingleton->firstSeries();
-   //Cerquem les sèries de l'estudi per saber de quina modalitat és l'estudi, ja que el pacs no ens ho retorna
-   if (!m_seriesListSingleton->end()) 
-   {   
-       if (m_seriesListSingleton->getSeries().getStudyUID()!=study.getStudyUID()) //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
-       {
-            QuerySeriesPacs( study.getStudyUID().c_str() ,m_studyTreeWidgetPacs->getSelectedStudyPacsAETitle() ,false);
-       }
-   }
-   else QuerySeriesPacs(study.getStudyUID().c_str() ,m_studyTreeWidgetPacs->getSelectedStudyPacsAETitle() ,false);
-    
-    
-    //establim la modalitat de l'estudi
-    m_seriesListSingleton->firstSeries();
-    study.setStudyModality(m_seriesListSingleton->getSeries().getSeriesModality());
-    
+       
     //creem el path absolut de l'estudi
     absPath.insert(0,settings.getCacheImagePath().toAscii().constData());
     absPath.append(study.getStudyUID());
@@ -798,43 +775,6 @@ bool QueryScreen::insertStudyCache(Study stu)
     }
    
     return true;
-}
-
-/** insereix les series de l'estudi UID passat per paràmetre
-  *        @param UID de l'estudi del que s'han d'inserir les series
-  *        @return retorna si la operacio s'ha realitzat amb èxit
-  */
-bool QueryScreen::insertSeriesCache(QString studyUID)
-{
-
-    CachePacs *localCache = CachePacs::getCachePacs();
-    Status state;
-    
-    m_seriesListSingleton->firstSeries();
- 
-   //Cerquem les sèries de l'estudi per inserir la informació a la bd
-   if (!m_seriesListSingleton->end())    
-   {   //comprovem que a la llista actual de sèries no hi tinguem ja les sèries de l'estudi
-       if (m_seriesListSingleton->getSeries().getStudyUID()!=studyUID.toAscii().constData()) 
-       {
-           QuerySeriesPacs(studyUID.toAscii().constData(),m_studyTreeWidgetPacs->getSelectedStudyPacsAETitle() ,false);
-       }
-   } 
-   
-   m_seriesListSingleton->firstSeries();
-
-   while (!m_seriesListSingleton->end())   //inserim les sèries a la base de dades
-   {
-       state = localCache->insertSeries(&m_seriesListSingleton->getSeries());
-       if (!state.good())
-       {
-           databaseError(&state);
-           return false;
-       }
-       m_seriesListSingleton->nextSeries();
-   }  
-   return true;
-
 }
  
 /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si 

@@ -78,6 +78,7 @@ public:
     
     Status updateStudyAccTime(std::string studyUID);
     Status setStudyRetrieved(std::string studyUID);
+    Status setStudyModality(std::string studyUID,std::string modality);
     
     Status delStudy(std::string);
     Status delPendingStudies();    

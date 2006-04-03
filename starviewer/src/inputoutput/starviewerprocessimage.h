@@ -12,7 +12,7 @@
 #include "processimage.h"
 #include "cachepacs.h"
 #include "image.h"
-#include <string.h>
+#include <QString>
 
 namespace udg {
 
@@ -49,8 +49,13 @@ private :
 
     CachePacs *m_localCache;
     int m_downloadedImages;
-    std::string m_studyUID,m_oldSeriesUID;
+    QString m_oldSeriesUID;
     bool m_error;
+    
+    QString createImagePath( Image* image );
+    
+    Status getSeriesInformation( QString imagePath,Series &serie );
+    
 //
 };
 

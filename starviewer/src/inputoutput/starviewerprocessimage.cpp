@@ -5,10 +5,11 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "starviewerprocessimage.h"
-#include "image.h"
-#include <iostream.h>
 #include "qretrievescreen.h"
 #include <string.h>
+#include "imagedicominformation.h"
+#include "series.h"
+#include "starviewersettings.h"
 
 namespace udg {
 
@@ -24,22 +25,69 @@ StarviewerProcessImage::StarviewerProcessImage()
   */
 void StarviewerProcessImage::process(Image *image)
 {
+    Status state;
+
+    /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera
+    serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
     if (m_downloadedImages == 0)
-    {   m_oldSeriesUID = image->getSeriesUID();
+    {  
+        Series serie;
+        
         //enviem un signal indicant que ha començat la descarrega de l'estudi
         emit(startRetrieving( image->getStudyUID().c_str()));
+        
+        //inserim serie
+        state = getSeriesInformation ( createImagePath( image ), serie );
+        
+        if (state.good())
+        {
+            state = m_localCache->insertSeries( &serie );
+        }
+        //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
+        if ( !state.good() ) m_error = true;
+        
+        state = m_localCache->setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
+        //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
+        if ( !state.good() ) 
+        {
+            m_error = true;
+        }
+        else m_oldSeriesUID = image->getSeriesUID().c_str();
     }
+    
+    //inserim la nova sèrie que es descarrega
+    if (m_oldSeriesUID != image->getSeriesUID().c_str())
+    {
+        Series serie;
+    
+        //inserim serie
+        state = getSeriesInformation ( createImagePath( image ), serie );
+        
+        if (state.good())
+        {
+            state = m_localCache->insertSeries( &serie );
+        }
+        //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
+        if (!state.good())
+        {
+            m_error = true;
+        }
+        //Nomes emitirem el signal quant la operacio s'hagi realitzat amb exit, pq hi ha alguns PACS que retornen les
+        //imatges desordenades, i no venen agrupades per sèries
+        else  
+        {
+            emit(seriesRetrieved( image->getStudyUID().c_str() ) );
+        }
+        m_oldSeriesUID = image->getSeriesUID().c_str();
+    }
+    
+    //inserim imatge
+    state = m_localCache->insertImage(image);
+    //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
+    if (!state.good()) m_error = true;
+   
     m_downloadedImages++;
     emit(imageRetrieved(image->getStudyUID().c_str(),m_downloadedImages));
-    
-    if (m_oldSeriesUID != image->getSeriesUID())
-    {
-        emit(seriesRetrieved( image->getStudyUID().c_str() ) );
-        m_oldSeriesUID = image->getSeriesUID();
-    }
-    m_localCache->insertImage(image);
-    
-    m_studyUID = image->getStudyUID();
     
 }
 
@@ -61,6 +109,49 @@ bool StarviewerProcessImage::getErrorRetrieving()
 {
     return m_error || m_downloadedImages == 0;
 } 
+
+/** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
+  *     @param path de la imatge d'on obtenir la informació de la sèrie
+  */
+Status StarviewerProcessImage::getSeriesInformation( QString imagePath, Series &serie )
+{
+    Status state;
+    
+    ImageDicomInformation dInfo;
+    
+    state = dInfo.openDicomFile( imagePath.toAscii().constData() );
+    
+    serie.setStudyUID( dInfo.getStudyUID() );
+    serie.setSeriesUID( dInfo.getSeriesUID() );
+    serie.setSeriesNumber( dInfo.getSeriesNumber() );
+    serie.setSeriesModality( dInfo.getSeriesModality() );
+    serie.setSeriesDescription( dInfo.getSeriesDescription() );
+    serie.setBodyPartExaminated( dInfo.getSeriesBodyPartExamined() );
+    serie.setProtocolName( dInfo.getSeriesProtocolName() );
+    
+    return state; 
+
+}
+
+/** Crea el path de la imatge d'on obtenir la informació de les series
+  *     @param imatge de la que s'ha d'obtenir el path
+  */
+QString StarviewerProcessImage::createImagePath(Image *image)
+{
+
+    StarviewerSettings settings;
+    Series serie;
+    QString imagePath;   
+    
+    imagePath.insert( 0,settings.getCacheImagePath() );
+    imagePath.append( image->getStudyUID().c_str() );
+    imagePath.append( "/" );
+    imagePath.append( image->getSeriesUID().c_str() );
+    imagePath.append("/");
+    imagePath.append( image->getImageName().c_str() );
+
+    return imagePath;
+}
 
 StarviewerProcessImage::~StarviewerProcessImage()
 {
