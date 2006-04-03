@@ -23,6 +23,10 @@ StarviewerProcessImage::StarviewerProcessImage()
 
 /** Enviar un signal de imatge descarregada a qretrievescreen, i quant es descarrega una sèrie nova envia signal de series descarregada
   */
+/**
+ * 
+ * @param image 
+ */
 void StarviewerProcessImage::process(Image *image)
 {
     Status state;
@@ -36,6 +40,10 @@ void StarviewerProcessImage::process(Image *image)
         //enviem un signal indicant que ha començat la descarrega de l'estudi
         emit(startRetrieving( image->getStudyUID().c_str()));
         
+        //canviem l'estat de l'estudi de PENDING A RETRIEVING
+        state = m_localCache->setStudyRetrieving( image->getStudyUID().c_str() );
+        if ( !state.good() ) m_error = true;
+        
         //inserim serie
         state = getSeriesInformation ( createImagePath( image ), serie );
         
@@ -47,6 +55,7 @@ void StarviewerProcessImage::process(Image *image)
         if ( !state.good() ) m_error = true;
         
         state = m_localCache->setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
+        
         //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
         if ( !state.good() ) 
         {
@@ -116,6 +125,7 @@ bool StarviewerProcessImage::getErrorRetrieving()
 Status StarviewerProcessImage::getSeriesInformation( QString imagePath, Series &serie )
 {
     Status state;
+    QString path;
     
     ImageDicomInformation dInfo;
     
@@ -128,6 +138,14 @@ Status StarviewerProcessImage::getSeriesInformation( QString imagePath, Series &
     serie.setSeriesDescription( dInfo.getSeriesDescription() );
     serie.setBodyPartExaminated( dInfo.getSeriesBodyPartExamined() );
     serie.setProtocolName( dInfo.getSeriesProtocolName() );
+    
+    //calculem el path de la serie
+    path = dInfo.getStudyUID().c_str();
+    path.append( "/" );
+    path.append( dInfo.getSeriesUID().c_str() );
+    path.append( "/" );
+    
+    serie.setSeriesPath( path.toAscii().constData());
     
     return state; 
 
