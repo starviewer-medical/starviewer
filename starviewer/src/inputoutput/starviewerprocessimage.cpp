@@ -35,10 +35,6 @@ void StarviewerProcessImage::process(Image *image)
         //enviem un signal indicant que ha començat la descarrega de l'estudi
         emit(startRetrieving( image->getStudyUID().c_str()));
         
-        //canviem l'estat de l'estudi de PENDING A RETRIEVING
-        state = m_localCache->setStudyRetrieved( image->getStudyUID().c_str() );
-        if ( !state.good() ) m_error = true;
-        
         //inserim serie
         state = getSeriesInformation ( createImagePath( image ), serie );
         
