@@ -32,7 +32,7 @@ private :
     
     bool createCacheImageDir();
     bool createDatabaseDir();
-    void createDatabaseFile();
+    bool createDatabaseFile();
 
 };
 

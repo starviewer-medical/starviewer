@@ -21,5 +21,6 @@
     <file>images/folderclose.png</file>
     <file>images/folderopen.png</file>
     <file>images/series.png</file>
+    <file>cache/database.sql</file>
 </qresource>
 </RCC>

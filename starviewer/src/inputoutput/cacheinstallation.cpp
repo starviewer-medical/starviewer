@@ -7,8 +7,9 @@
 #include "cacheinstallation.h"
 #include "starviewersettings.h"
 #include <QDir>
-#include <cstdlib>
 #include <QMessageBox>
+#include <QFile>
+#include "databaseconnection.h"
 
 namespace udg {
 
@@ -38,8 +39,8 @@ bool CacheInstallation::checkInstallation()
     
     if (!existsDatabaseFile())
     {
-        createDatabaseFile();
-        if (!existsDatabaseFile()) return false;
+        if ( !createDatabaseFile()) return false;
+        
     }
     
     return true;
@@ -106,19 +107,28 @@ bool CacheInstallation::createDatabaseDir()
 
 /** crea la base de dades amb les taules!
  */
-void CacheInstallation::createDatabaseFile()
+bool CacheInstallation::createDatabaseFile()
 {
-    QString strProcess;
-    StarviewerSettings settings;
+    QFile sqlTablesScriptFile(":cache/database.sql");
+    QByteArray sqlTablesScript;
+    DatabaseConnection *DBConnect = DatabaseConnection::getDatabaseConnection();//obrim la bdd
+    int estat;
+   
+    sqlTablesScriptFile.open(QIODevice::ReadOnly); //obrim el fitxer
     
-    
-    // \TODO Veure com guardar el fitxer database.sql (Resource de qt?)
-    strProcess.insert(0,"sqlite ");
-    strProcess.append(settings.getDatabasePath());
-    strProcess.append(" ");
-    strProcess.append("< ../src/inputoutput/database.sql"); //va a buscar el fitxer al codi!
+    sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size()); //el llegim
 
-    system(strProcess.toAscii().constData()); //Al QProcess no li agrada el '<' , per aixo utilitzo el system
+    if ( !DBConnect->connected() ) return false;
+    
+    estat = sqlite_exec_printf( DBConnect->getConnection() ,sqlTablesScript.constData(), 0, 0, 0); //creem les taules i els registres
+    
+    sqlTablesScriptFile.close(); //tanquem el fitxer
+    
+    if ( estat == 0 )
+    {
+        return true;
+    }
+    else return false;
 }
 
 
