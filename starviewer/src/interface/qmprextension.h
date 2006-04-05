@@ -17,6 +17,7 @@ class vtkPlaneSource;
 class vtkImageReslice;
 class vtkTransform;
 class vtkActor2D;
+class vtkLookupTable;
 
 namespace udg {
 
@@ -127,9 +128,24 @@ private:
 
     /// Filtre de fitxers que es poden desar
     QString m_fileSaveFilter;
+
+    /// Cosetes per controlar el moviment del plans a partir de l'interacció de l'usuari
+    double m_initialPickX , m_initialPickY;
+    vtkAxisActor2D* m_pickedAxisActor;
+
+    /// Taula perquè el mapeig dels colors del window level quedin centralitzats
+    vtkLookupTable* m_lookupTable;
     
 private slots:
-    // temporal
+
+    void detectAxialViewAxisActor( double x , double y );
+    void moveAxialViewAxisActor( double x , double y );
+    void releaseAxialViewAxisActor( double x , double y );
+
+    void detectSagitalViewAxisActor( double x , double y );
+    void moveSagitalViewAxisActor( double x , double y );
+    void releaseSagitalViewAxisActor( double x , double y );
+     
     void rotateXPlus();
     void rotateXMinus();
     void rotateYPlus();
@@ -155,31 +171,7 @@ private slots:
     /// Fa el procés de guardar les imatges capturades
     void saveImages();
 
-    /// gestiona els events de mouse que es produeixen sobre la vista axial
-    void handleAxialViewMouseEvent( QMouseEvent* );
 };
-
-/**
-* Encapsula les funcionalitats de l'actor que controla els diferents plans de tall.
-*//*
-class PlaneController2D : public QObject{
-Q_OBJECT
-public:
-    /// Estats en el que es pot trbar. Moving: quan movem el pla ( llesques ), Spinning: rotació sobre un eix
-    enum State{ Moving , Spinning , None };
-    PlaneController2D( QObject *parent = 0 );
-    ~PlaneController2D( );
-    /// Li assignem el color a l'actor
-    void setColor( double r , double g , double b );
-    /// Retorna l'actor 
-    vtkAxisActor2D *getPlaneController();
-private:
-    /// L'actor en qüestió
-    vtkAxisActor2D *m_planeControllerActor;
-    /// L'estat d'interacció en el que es troba
-    State m_state;
-
-};*/
 
 };  //  end  namespace udg 
 

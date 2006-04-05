@@ -27,6 +27,7 @@ class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkLookupTable;
 class vtkPropPicker;
+class vtkPropAssembly;
 
 namespace udg {
 
@@ -61,7 +62,9 @@ class Volume;
 class Q2DViewer  : public QViewer{
 Q_OBJECT
 public:
-
+    /// Actualització d'anotacions vàries
+    void updateWindowLevelAnnotation();
+    
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
     enum ViewType{ Axial, Coronal, Sagittal , None };
 
@@ -129,7 +132,7 @@ public:
 public slots:  
 
     /// Temporal per proves, veurem quins events es criden
-    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void* call_data, vtkCommand * command );
+    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
     
     /// Indiquem si volem veure la informació del volum per pantalla
     void displayInformationText( bool display );
@@ -216,11 +219,6 @@ public slots:
     void resetWindowLevelToOsteoporosis();
     void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
-
-private slots:
-
-    /// Captura l'event de mouse sobre el qvtkwidget i emet un signal
-    void handleMouseEvent( QMouseEvent* event );
     
 protected:
     /// asscociació de botons amb accions
@@ -250,9 +248,21 @@ protected:
 
     /// el picker per agafar i manipul·lar les línies de control
     vtkPropPicker *m_linePicker;
+//     vtkCellPicker *m_linePicker;
+
+    /// L'assembly per poder agafar els actors
+    vtkPropAssembly *m_actorsAssembly;
+
+    /// sabem si l'actor s'ha pillat
+    bool m_picked;
 
     /// actor que agafem de l'escena
     vtkAxisActor2D *m_pickedAxisActor;
+
+    /// Posicions de l'actor agafat
+    double* m_pickedActorPosition;
+    int m_initialPickedActorPositionX , m_initialPickedActorPositionY;
+    int m_initialPickX, m_initialPickY;
     
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
@@ -330,7 +340,7 @@ private:
     vtkTextActor *m_patientOrientationTextActor[4];
 
     /// Actualització d'anotacions vàries
-    void updateWindowLevelAnnotation();
+//     void updateWindowLevelAnnotation();
     void updateSliceAnnotation();
     void updateWindowSizeAnnotation();
 
@@ -348,8 +358,15 @@ signals:
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
 
-    /// S'envia quan hi ha un event de mouse
-    void mouseEvent( QMouseEvent* );
+    /// informem del punt que hem clicat, coordenades de món
+    void leftButtonDown( double x , double y );
+
+    /// informem del punt sobre el que movem el mouse, coordenades de món
+    void mouseMove( double x, double y );
+
+    /// informem del punt que hem deixat de clicar, coordenades de món
+    void leftButtonUp( double x , double y );
+    
     
 };
 

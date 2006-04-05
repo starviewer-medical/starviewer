@@ -34,6 +34,8 @@
 #include <vtkMatrix4x4.h>
 #include <vtkTransform.h>
 #include <vtkCamera.h>
+#include <vtkLookupTable.h>
+#include <vtkLine.h>
 
 namespace udg {
 
@@ -73,7 +75,7 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createConnections();
     createActors();
 
-    m_axial2DView->setMouseTracking( true );
+    m_lookupTable = vtkLookupTable::New();
     readSettings();
 }
 
@@ -117,11 +119,14 @@ void QMPRExtension::createConnections()
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
     connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
 
-    // connectem els events de mouse de cada finestreta 
-    connect( m_axial2DView , SIGNAL( mouseEvent( QMouseEvent* ) ) , this , SLOT( handleAxialViewMouseEvent( QMouseEvent* ) ) );
-    
     // temporal
-    
+
+    connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
+    connect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
+
+    connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
+    connect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
+
     connect( m_rotateXPlus , SIGNAL( clicked() ), this , SLOT( rotateXPlus() ) );
     connect( m_rotateXMinus , SIGNAL( clicked() ), this , SLOT( rotateXMinus() ) );
     
@@ -142,30 +147,157 @@ void QMPRExtension::createConnections()
     // fi temporal    
 }
 
-void QMPRExtension::handleAxialViewMouseEvent( QMouseEvent* event )
+void QMPRExtension::detectAxialViewAxisActor( double x , double y )
 {
-    switch( event->button() )
-    {
-    case Qt::NoButton:
-        std::cout << "Cap botó" << std::endl;
-    break;
+    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
+    double point[3] = { x , y , 0.0 };
+    double *r1 , *r2;
+    double distanceToCoronal , distanceToSagital;
     
-    case Qt::LeftButton:
-        std::cout << "Botó Esquerre" << std::endl;
-    break;
+    r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
+    r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
+    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
 
-    case Qt::RightButton:
-        std::cout << "Botó dret" << std::endl;
-    break;
-
-    case Qt::MidButton:
-        std::cout << "Botó del mig" << std::endl;
-    break;
-
-    default:
-        std::cout << "Default case :(" << std::endl;
-    break;
+    r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
+    r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
+    distanceToSagital = vtkLine::DistanceToLine( point , r1 , r2 );
+    
+    // donem una "tolerància" mínima 
+    if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
+    {
+        if( distanceToCoronal < distanceToSagital )
+        {
+            m_pickedAxisActor = m_coronalOverAxialIntersectionAxis;
+        }
+        else
+        {
+            m_pickedAxisActor = m_sagitalOverAxialAxisActor;
+        }
+        m_initialPickX = x;
+        m_initialPickY = y;
+        // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
+        connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
     }
+    else
+        m_pickedAxisActor = 0;
+}
+    
+void QMPRExtension::moveAxialViewAxisActor( double x , double y )
+{
+    vtkPlaneSource *planeSource = 0;
+    vtkImageReslice *imageReslice = 0;
+    double vec1[3], vec2[3];
+    double axis[3];
+    if( m_pickedAxisActor == m_sagitalOverAxialAxisActor )
+    {
+        planeSource = m_sagitalPlaneSource;
+        imageReslice = m_sagitalReslice;
+
+        vec1[0] = m_initialPickX - planeSource->GetCenter()[0];
+        vec1[1] = m_initialPickY - planeSource->GetCenter()[1];
+        vec1[2] = 0.0;
+
+        vec2[0] = x - planeSource->GetCenter()[0];
+        vec2[1] = y - planeSource->GetCenter()[1];
+        vec2[2] = 0.0;
+    }
+    else if( m_pickedAxisActor == m_coronalOverAxialIntersectionAxis )
+    {
+        planeSource = m_coronalPlaneSource;
+        imageReslice = m_coronalReslice;
+
+        vec1[0] = m_initialPickX - planeSource->GetCenter()[0];
+        vec1[1] = m_initialPickY - planeSource->GetCenter()[1];
+        vec1[2] = 0.0;
+
+        vec2[0] = x - planeSource->GetCenter()[0];
+        vec2[1] = y - planeSource->GetCenter()[1];
+        vec2[2] = 0.0;
+    }
+
+    if( planeSource )
+    {
+        double degrees = MathTools::angleInDegrees( vec1 , vec2 );
+    
+        m_initialPickX = x;
+        m_initialPickY = y;
+        vtkMath::Cross( vec1 , vec2 , axis );
+        vtkMath::Normalize( axis );
+        rotateMiddle( degrees , axis , planeSource , imageReslice );
+        updatePlanes();
+        updateControls();
+    }
+}
+
+void QMPRExtension::releaseAxialViewAxisActor( double x , double y )
+{
+    disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
+}
+    
+void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
+{
+    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
+    double point[3] = { x , y , 0.0 };
+    double *r1 , *r2;
+    double distanceToCoronal;
+    
+    r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
+    r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
+    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+    
+    // donem una "tolerància" mínima 
+    if( distanceToCoronal < 50.0 )
+    {
+        m_pickedAxisActor = m_coronalOverSagitalIntersectionAxis;
+        m_initialPickX = x;
+        m_initialPickY = y;
+        // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
+        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
+    }
+    else
+        m_pickedAxisActor = 0;
+}
+    
+void QMPRExtension::moveSagitalViewAxisActor( double x , double y )
+{
+    vtkPlaneSource *planeSource = 0;
+    vtkImageReslice *imageReslice = 0;
+    double vec1[3], vec2[3];
+    double axis[3];
+    if( m_pickedAxisActor == m_axialOverSagitalIntersectionAxis )
+    {
+        std::cout << "[Aquest no es pot rotar! Només amunt i avall]" << std::endl;
+    }
+    else if( m_pickedAxisActor == m_coronalOverSagitalIntersectionAxis )
+    {
+        planeSource = m_coronalPlaneSource;
+        imageReslice = m_coronalReslice;
+
+        vec1[1] = m_initialPickX - planeSource->GetCenter()[0];
+        vec1[2] = m_initialPickY - planeSource->GetCenter()[1];
+        vec1[0] = 0.0;
+
+        vec2[1] = x - planeSource->GetCenter()[0];
+        vec2[2] = y - planeSource->GetCenter()[1];
+        vec2[0] = 0.0;
+    }
+    if( planeSource )
+    {
+        double degrees = MathTools::angleInDegrees( vec1 , vec2 );
+    
+        m_initialPickX = x;
+        m_initialPickY = y;
+        vtkMath::Cross( vec1 , vec2 , axis );
+        vtkMath::Normalize( axis );
+        rotateMiddle( degrees , axis , planeSource , imageReslice );
+        updatePlanes();
+        updateControls();
+    }
+}
+
+void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
+{
+    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
 }
 
 void QMPRExtension::setInput( Volume *input )
@@ -214,6 +346,16 @@ void QMPRExtension::setInput( Volume *input )
     m_sagital2DView->render();
     m_coronal2DView->render();
 
+//     double *range = m_volume->getVtkData()->GetScalarRange();
+//     m_lookupTable->SetTableRange( range[0] , range[1] );
+//     m_lookupTable->SetNumberOfColors( range[1] - range[0] );
+//     m_lookupTable->SetHueRange( 0 , 0 );
+//     m_lookupTable->SetSaturationRange( 0, 0 );
+//     m_lookupTable->SetValueRange( 0 , 1 );
+//     m_lookupTable->SetAlphaRange( 1, 1 );
+//     m_lookupTable->Build();
+//     m_axial2DView->setVtkLUT( m_lookupTable );
+    
     m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
     m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
 
@@ -322,6 +464,7 @@ void QMPRExtension::showMIP()
     viewer->setInput( m_volume );
     viewer->setRenderFunctionToMIP3D();
     viewer->render();
+    viewer->show();
 //     m_axial2DView->grabCurrentView();
 //     m_sagital2DView->grabCurrentView();
 //     m_coronal2DView->grabCurrentView();
@@ -1167,37 +1310,6 @@ void QMPRExtension::writeSettings()
     
     settings.endGroup();
 }
-
-// -------------------------------------------------------
-// PLANE CONTROLLLER 2D
-// -------------------------------------------------------
-/*
-PlaneController2D::PlaneController2D( QObject *parent )
-: QObject( parent )
-{
-    m_planeControllerActor = vtkAxisActor2D::New();
-    m_planeControllerActor->AxisVisibilityOn();
-    m_planeControllerActor->TickVisibilityOff();
-    m_planeControllerActor->LabelVisibilityOff();
-    m_planeControllerActor->TitleVisibilityOff();
-    /// assignem un color per defecte
-    m_planeControllerActor->GetProperty()->SetColor( 1 , 0 , 0 );
-}
-
-void PlaneController2D::setColor( double r , double g , double b  )
-{
-    if( !m_planeControllerActor )
-    {
-//     \TODO llançar excepció, error , etc
-    }
-    else
-        m_planeControllerActor->GetProperty()->SetColor( r , g , b  );
-}
-
-vtkAxisActor2D *PlaneController2D::getPlaneController()
-{
-    return m_planeControllerActor;
-}*/
 
 };  // end namespace udg
 
