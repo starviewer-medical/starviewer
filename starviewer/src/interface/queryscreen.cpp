@@ -938,6 +938,8 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     }
     
     localCache->updateStudyAccTime(studyUID.toStdString() );
+    
+    this->close();//s'amaga per poder visualitzar la serie
     emit(viewStudy(volum));
 }
 
