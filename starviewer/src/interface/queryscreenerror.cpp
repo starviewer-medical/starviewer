@@ -18,7 +18,15 @@ void QueryScreen::databaseError(Status *state)
     if (!state->good())
     {
         switch(state->code())
-        {  case 2001 : text.insert(0,tr("Database not found."));
+        {  case 2001 : text.insert(0,tr("Database is corrupted or SQL syntax error"));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2005 : text.insert(0,tr("Database is looked"));
+                        text.append("\n");
+                        text.append("To solve this error restart the user session");
                         text.append("\n");
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);

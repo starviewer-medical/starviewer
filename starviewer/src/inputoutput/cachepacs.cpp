@@ -12,6 +12,7 @@
 #include "image.h"
 #include <time.h>
 #include "cachepool.h"
+#include <QString>
 
 namespace udg {
 
@@ -33,11 +34,13 @@ Status CachePacs::constructState(int numState)
     {//aqui tractem els errors que ens poden afectar de manera més directe, i els quals l'usuari pot intentar solucionbar                         
         case SQLITE_OK :        state.setStatus("Normal",true,0);
                                 break;
-        case SQLITE_ERROR :     state.setStatus("Database missing ",false,2001);
+        case SQLITE_ERROR :     state.setStatus("Database is corrupted or SQL error syntax ",false,2001);
+                                break;
+        case SQLITE_BUSY :      state.setStatus("Database is locked",false,2011);
                                 break;
         case SQLITE_CORRUPT :   state.setStatus("Database corrupted",false,2011);
                                 break;
-        case SQLITE_CONSTRAINT: state.setStatus("Constraint Violation",false,2019);
+        case SQLITE_CONSTRAINT: state.setStatus("The new register is duplicated",false,2019);
                                 break;
         case 50 :               state.setStatus("Not connected to database",false,2050);
                                 break;
