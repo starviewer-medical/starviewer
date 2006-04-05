@@ -244,12 +244,6 @@ protected:
     /// El picker per anotar punts de la imatge
     vtkCellPicker *m_cellPicker;
 
-    /// L'assembly per poder agafar els actors
-    vtkPropAssembly *m_actorsAssembly;
-
-    /// sabem si l'actor s'ha pillat
-    bool m_picked;
-
     /// actor que agafem de l'escena
     vtkAxisActor2D *m_pickedAxisActor;
 

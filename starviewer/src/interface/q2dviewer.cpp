@@ -110,7 +110,6 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
     m_manipulateState = Q2DViewer::Ready;
-    m_picked = false;
 }
 
 Q2DViewer::~Q2DViewer()
@@ -870,7 +869,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
         {
             // trobar si hi ha algun objecte allà on hem clicat
         }
-        if( event == vtkCommand::MouseMoveEvent && m_manipulateState == Q2DViewer::m_picked )
+        if( event == vtkCommand::MouseMoveEvent && m_manipulateState == Q2DViewer::Picked )
         
         if( event == vtkCommand::LeftButtonReleaseEvent )
         
