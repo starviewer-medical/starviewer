@@ -644,12 +644,15 @@ void QConfigurationScreen::examinateCacheImagePath()
 {
   
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./", tr("Cache Directory"));
+    QString path;
     
     dlg->setFileMode( QFileDialog::DirectoryOnly );
     
     if ( dlg->exec() == QDialog::Accepted )
     {
         if (!dlg->selectedFiles().empty()) m_textCacheImagePath->setText(dlg->selectedFiles().takeFirst() );
+        
+        cacheImagePathEditingFinish();//afegeix la '/' al final
     }
        
     delete dlg;
