@@ -992,7 +992,9 @@ void QueryScreen::closeEvent( QCloseEvent* ce )
 
 void QueryScreen::showRetrieveScreen()
 {
-    m_retrieveScreen->show();
+    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra
+    m_retrieveScreen->setVisible(false);
+    m_retrieveScreen->setVisible(true);
 }
 
 
