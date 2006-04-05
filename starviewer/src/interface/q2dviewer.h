@@ -26,8 +26,6 @@ class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkLookupTable;
-class vtkPropPicker;
-class vtkPropAssembly;
 
 namespace udg {
 
@@ -245,10 +243,6 @@ protected:
     int m_divisions[3];
     /// El picker per anotar punts de la imatge
     vtkCellPicker *m_cellPicker;
-
-    /// el picker per agafar i manipul·lar les línies de control
-    vtkPropPicker *m_linePicker;
-//     vtkCellPicker *m_linePicker;
 
     /// L'assembly per poder agafar els actors
     vtkPropAssembly *m_actorsAssembly;

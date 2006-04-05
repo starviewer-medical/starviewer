@@ -32,7 +32,6 @@
 #include <vtkInteractorStyleUser.h>
 #include <vtkCornerAnnotation.h>
 #include <vtkTextProperty.h>
-#include <vtkAssemblyPath.h>
 #include <vtkAxisActor2D.h>
 #include <vtkProperty2D.h>
 #include <vtkTextActor.h>
@@ -44,8 +43,6 @@
 // interacció
 #include <vtkCell.h>
 #include <vtkPointData.h>
-#include <vtkPropPicker.h>
-#include <vtkPropAssembly.h>
 #include <vtkInteractorStyleImage.h>
 
 namespace udg {
@@ -96,8 +93,6 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     // preparem el picker
     m_cellPicker = vtkCellPicker::New();
     m_cellPicker->SetTolerance( 1.0 );
-
-     m_linePicker = vtkPropPicker::New();
 
     // ANOTACIONS
     createAnnotations();
@@ -920,7 +915,6 @@ void Q2DViewer::setupInteraction()
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
 
 //     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_cellPicker );
-//     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_linePicker );
     
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
 
