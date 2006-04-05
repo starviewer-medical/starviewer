@@ -92,6 +92,7 @@ public:
     void setViewToAxial(){ setView( Q2DViewer::Axial ); }
     void setViewToCoronal(){ setView( Q2DViewer::Coronal ); }
     void setViewToSagittal(){ setView( Q2DViewer::Sagittal ); }
+    
     /// ens retorna la vista que tenim en aquells moments del volum
     ViewType getView() const { return m_lastView; }
 
@@ -109,6 +110,7 @@ public:
     /// Obtenim el nombre de divisions
     int * getDivisions();
     void getDivisions( int data[3] );
+
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int data[3] );
     
@@ -153,8 +155,10 @@ public slots:
     
     /// retorna la llesca actual
     int getSlice( void ){ return m_currentSlice; }
+
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
+
     /// indica el tipu de solapament dels volums, per defecte checkerboard
     void setOverlay( OverlayType overlay ){ m_overlay = overlay; }
     void setOverlayToBlend(){ setOverlay( Q2DViewer::Blend ); };
@@ -182,6 +186,7 @@ public slots:
     {    
         updateView();
     }
+
     void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, vtkCommand * command);
     
     /// Afegir o treure la visibilitat d'una anotació textual
@@ -231,16 +236,22 @@ protected:
     
     /// Acció temporal de proves. Simplement fa un reset mostrant la llesca central de nou
     QAction *m_resetAction;
+
     /// per a les vistes 2D farem servir el vtkImageViewer2
     vtkImageViewer2 *m_viewer;
+
     /// conserva la vista actual
     ViewType m_lastView;    
+
     /// La llesca actual que estem visualitzant
     int m_currentSlice;
+
     /// Aquest és el segon volum afegit a solapar
     Volume* m_overlayVolume;
+
     /// El nombre de divisions per cada dimensió
     int m_divisions[3];
+
     /// El picker per anotar punts de la imatge
     vtkCellPicker *m_cellPicker;
 
@@ -350,11 +361,8 @@ signals:
     /// informem del punt que hem deixat de clicar, coordenades de món
     void leftButtonUp( double x , double y );
     
-    
 };
 
-
-
-};  //  end  namespace udg {
+};  //  end  namespace udg 
 
 #endif

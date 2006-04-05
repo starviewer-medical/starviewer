@@ -4,6 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumesourceinformation.h"
@@ -432,8 +433,6 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     {
         // la info no existeix
     }
-
-        
 }
 
 void Q2DViewer::updateAnnotations()
@@ -465,7 +464,6 @@ void Q2DViewer::updateAnnotations()
     {
         m_textAnnotation->VisibilityOff();
     }
-
 }
 
 void Q2DViewer::initInformationText()
@@ -519,7 +517,6 @@ void Q2DViewer::initInformationText()
 //     m_textAnnotation->GetTextProperty()->ItalicOn();
     
     m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
-    
 }
 
 void Q2DViewer::displayInformationText( bool display )
@@ -538,7 +535,6 @@ void Q2DViewer::displayInformationText( bool display )
 
 void Q2DViewer::anyEvent()
 {
-    // std::cout << "any event " << std::endl; 
 }
 
 void Q2DViewer::onMouseMove()
@@ -584,11 +580,9 @@ void Q2DViewer::onMouseMove()
         updateCursor( -1, -1, -1, -1 );
     else
         updateCursor( q[0], q[1], q[2], imageValue );
-    */
-    
+    */   
     switch( m_currentTool )
     {
-
     case Q2DViewer::Manipulate:
         int x = this->getInteractor()->GetEventPosition()[0];
         int y = this->getInteractor()->GetEventPosition()[1];
@@ -599,17 +593,14 @@ void Q2DViewer::onMouseMove()
 
     default:
     break;
-
     }
 //     updateWindowLevelAnnotation();
 }
 
 void Q2DViewer::onLeftButtonDown()
 {
-    
     switch( m_currentTool )
     {
-
     case Q2DViewer::Manipulate:
         int x, y;
         x = this->getInteractor()->GetEventPosition()[0];
@@ -621,7 +612,6 @@ void Q2DViewer::onLeftButtonDown()
 
     default:
     break;
-    
     }
 //     switch( m_leftButtonAction )
 //     {
@@ -643,7 +633,6 @@ void Q2DViewer::onLeftButtonUp()
 {
     switch( m_currentTool )
     {
-
     case Q2DViewer::Manipulate:
         int x, y;
         x = this->getInteractor()->GetEventPosition()[0];
@@ -774,10 +763,8 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
    anyEvent();
 //     std::cout << vtkCommand::GetStringFromEventId( event ) << std::endl;
     // fer el que calgui per cada tipus d'event
-
     switch( event )
     {
-    
     case vtkCommand::MouseMoveEvent:
         onMouseMove();
         //  \TODO això és una cutrada però s'hauria de veure com connectar l'event de vtk perk ens indiqui quan canvia realment el window level
@@ -820,7 +807,6 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
 
     default:
     break;
-    
     }
     
     // ara de mentres serà així segons la tool activa analitzarem uns events o uns altres
@@ -880,7 +866,6 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     default:
     break;
     }
- 
 }
 
 void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, void *client_data, vtkCommand *command )
@@ -973,7 +958,6 @@ void Q2DViewer::setInput( Volume* volume )
     }
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
-
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
@@ -1028,7 +1012,6 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         wipe->SetWipeToUpperLeft();        
         m_viewer->SetInput( wipe->GetOutput() );
     break;    
-    
     }
 }
 
@@ -1061,6 +1044,7 @@ void Q2DViewer::updateView()
         m_size[1] = m_mainVolume->getDimensions()[1];
         m_size[2] = m_mainVolume->getDimensions()[2];
     break;
+    
     case Sagittal:
         m_viewer->SetSliceOrientationToYZ();
         //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
@@ -1068,6 +1052,7 @@ void Q2DViewer::updateView()
         m_size[1] = m_mainVolume->getDimensions()[2];
         m_size[2] = m_mainVolume->getDimensions()[0];
     break;
+
     case Coronal:
         m_viewer->SetSliceOrientationToXZ();
         //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
@@ -1075,6 +1060,7 @@ void Q2DViewer::updateView()
         m_size[1] = m_mainVolume->getDimensions()[2];
         m_size[2] = m_mainVolume->getDimensions()[1];
     break;
+
     default:
     // podem posar en Axial o no fer res
         m_viewer->SetSliceOrientationToXY();
@@ -1146,7 +1132,6 @@ void Q2DViewer::resetWindowLevelToBone()
         m_viewer->SetColorLevel( 500 );
 
         this->getInteractor()->Render();
-        
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1160,7 +1145,6 @@ void Q2DViewer::resetWindowLevelToEmphysema()
         m_viewer->SetColorLevel( -800 );
         
         this->getInteractor()->Render();
-        
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1174,7 +1158,6 @@ void Q2DViewer::resetWindowLevelToSoftTissuesNonContrast()
         m_viewer->SetColorLevel( 40 );
         
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1188,7 +1171,6 @@ void Q2DViewer::resetWindowLevelToLiverNonContrast()
         m_viewer->SetColorLevel( 40 );
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1202,7 +1184,6 @@ void Q2DViewer::resetWindowLevelToSoftTissuesContrastMedium()
         m_viewer->SetColorLevel( 70 );
         
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1216,7 +1197,6 @@ void Q2DViewer::resetWindowLevelToLiverContrastMedium()
         m_viewer->SetColorLevel( 60 ); // 60-100
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1230,7 +1210,6 @@ void Q2DViewer::resetWindowLevelToNeckContrastMedium()
         m_viewer->SetColorLevel( 50 );
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
@@ -1244,7 +1223,6 @@ void Q2DViewer::resetWindowLevelToAngiography()
         m_viewer->SetColorLevel( 100 ); // 100-200
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
@@ -1258,7 +1236,6 @@ void Q2DViewer::resetWindowLevelToOsteoporosis()
         m_viewer->SetColorLevel( 300 );
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
@@ -1272,7 +1249,6 @@ void Q2DViewer::resetWindowLevelToPetrousBone()
         m_viewer->SetColorLevel( 700 );
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
@@ -1286,7 +1262,6 @@ void Q2DViewer::resetWindowLevelToLung()
         m_viewer->SetColorLevel( -650 );
 
         this->getInteractor()->Render();
-
 //         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
