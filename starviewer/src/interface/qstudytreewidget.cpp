@@ -515,6 +515,7 @@ void QStudyTreeWidget::selectedSeriesIcon(QString seriesUID)
 void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
 {
 
+    clicked(m_studyTreeView->currentItem(),0);
     m_popUpMenu.exec(event->globalPos());
 }
 
