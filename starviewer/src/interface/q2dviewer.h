@@ -247,11 +247,6 @@ protected:
     /// actor que agafem de l'escena
     vtkAxisActor2D *m_pickedAxisActor;
 
-    /// Posicions de l'actor agafat
-    double* m_pickedActorPosition;
-    int m_initialPickedActorPositionX , m_initialPickedActorPositionY;
-    int m_initialPickX, m_initialPickY;
-    
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
     
