@@ -76,7 +76,8 @@ void StarviewerProcessImage::process(Image *image)
             state = m_localCache->insertSeries( &serie );
         }
         //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
-        if (!state.good())
+        //l'error 2019 no el tractem, perquè indica serie duplicada, alguns pacs envien les imatges desornades per tant pot ser que les imatges d'una mateixa serie arribin separades, i intentem inserir altre vegada la serie
+        if (!state.good() && state.code() != 2019 )
         {
             m_error = true;
         }
