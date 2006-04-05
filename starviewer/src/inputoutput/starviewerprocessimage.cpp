@@ -17,6 +17,7 @@ StarviewerProcessImage::StarviewerProcessImage()
         m_downloadedImages=0;
         m_localCache = CachePacs::getCachePacs();
         m_error = false;
+        m_downloadedSeries = 0;
 }
 
 
@@ -34,6 +35,11 @@ void StarviewerProcessImage::process(Image *image)
         
         //enviem un signal indicant que ha començat la descarrega de l'estudi
         emit(startRetrieving( image->getStudyUID().c_str()));
+        
+        //canviem l'estat de l'estudi de PENDING A RETRIEVING
+        state = m_localCache->setStudyRetrieving( image->getStudyUID().c_str() );
+        if ( !state.good() ) m_error = true;
+        
         
         //inserim serie
         state = getSeriesInformation ( createImagePath( image ), serie );
@@ -53,6 +59,8 @@ void StarviewerProcessImage::process(Image *image)
             m_error = true;
         }
         else m_oldSeriesUID = image->getSeriesUID().c_str();
+        
+        m_studyUID = image->getStudyUID().c_str();
     }
     
     //inserim la nova sèrie que es descarrega
@@ -77,7 +85,14 @@ void StarviewerProcessImage::process(Image *image)
         else  
         {
             emit(seriesRetrieved( image->getStudyUID().c_str() ) );
+            
+            if ( m_downloadedSeries == 0 )
+            {
+                emit( seriesView( image->getStudyUID().c_str() ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
+            }
+            m_downloadedSeries++;
         }
+
         m_oldSeriesUID = image->getSeriesUID().c_str();
     }
     

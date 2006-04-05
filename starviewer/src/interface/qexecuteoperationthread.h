@@ -42,11 +42,18 @@ public:
     ~QExecuteOperationThread();
 
 signals :
-    void viewStudy(QString studyUID);
+    void viewStudy( QString studyUID );
     
     void setStudyRetrieving( QString studyUID );
     void setStudyRetrieved( QString studyUID );
     void setErrorRetrieving( QString studyUID );
+
+private slots :
+
+    /** Emet un signal perquè es visualitzi una seria de l'estudi amb l'UID passat per parametre
+      *     @param studyUID de l'estudi a descarregar
+      */
+    void seriesRetrieved( QString );
 
 private :
     
@@ -56,15 +63,12 @@ private :
     /** Crea connexions entre el QRetrieveScreen i aquesta classe
       */
     void createConnections();
-    /** Descarrega un estudi, segons els paràmetres a operation
+    /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar 
+      * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie
       *     @param operation a executar
+      *     @param indica si l'estudi s'ha de visualitzar
       */
-    void retrieveStudy(Operation operation);
-    
-    /** Descarrega un estudi i emet un signal perquè l'starviewer el visualitzi, una vegada acabat de descarregar
-      *     @param operation a executar        
-      */
-    void viewStudy(Operation operation);
+    void retrieveStudy(Operation operation,bool view);
     
 
 };

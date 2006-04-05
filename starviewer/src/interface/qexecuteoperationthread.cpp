@@ -72,10 +72,10 @@ void QExecuteOperationThread::run()
         switch (operation.getOperation())
         {
             case operationRetrieve : 
-                 retrieveStudy(operation);
+                 retrieveStudy(operation,false);
                  break;
             case operationView : 
-                 viewStudy(operation);
+                 retrieveStudy(operation,true);
                  break;
         }
         
@@ -87,7 +87,7 @@ void QExecuteOperationThread::run()
 }
 
 //descarrega un estudi
-void QExecuteOperationThread::retrieveStudy(Operation operation)
+void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
 {
     StarviewerProcessImage *sProcessImg = new StarviewerProcessImage::StarviewerProcessImage();
     QString studyUID;
@@ -102,6 +102,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         
     //s'indica que comença la descarreca de l'estudi al qretrieveScreen
     emit( setStudyRetrieving( studyUID.toAscii().constData() ) );
+   
    
     PacsServer pacsConnection(operation.getPacsParameters());//connemtem al pacs
     state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
@@ -120,6 +121,11 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     piSingleton->addNewProcessImage( studyUID.toAscii().constData(),sProcessImg) ;
     //indiquem al qretrievescreen de quina instancia ha d'esperar el signal per controlar la descarrega   
     m_qretrieveScreen->setConnectSignal( sProcessImg ); 
+   
+    if ( view )
+    {
+        connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( seriesRetrieved( QString ) ) );
+    }
    
     retState = retrieve.moveSCU();
     if (!retState.good() || sProcessImg->getErrorRetrieving() )
@@ -143,11 +149,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     
 }
 
-void QExecuteOperationThread::viewStudy(Operation operation)
+void QExecuteOperationThread::seriesRetrieved( QString studyUID )
 {
-    //descarrega l'estudi i quant acaba fa un emit perquè sigui obert per l'starviewer
-    retrieveStudy( operation ); 
-    emit(viewStudy( operation.getStudyMask().getStudyUID().c_str()) );
+    emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
 }
 
 QExecuteOperationThread::~QExecuteOperationThread()

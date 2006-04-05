@@ -852,7 +852,6 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     Status state;
     StudyList stuList;
     Study stu;
-    StudyMask stuMask;
     SeriesMask mask;
     SeriesList seriesList;
     SeriesVolum seriesVol;
@@ -870,22 +869,12 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
         return;
     }    
         
-    stuMask.setStudyUID(studyUID.toAscii().constData());
-    state = localCache->queryStudy(stuMask,stuList); //cerquem la informació de l'estudi
+    state = localCache->queryStudy(studyUID.toAscii().constData(),stu); //cerquem la informació de l'estudi
     if (!state.good())
     {   
         databaseError(&state);
         return;
     }
-    
-    stuList.firstStudy();    
-    if (stuList.end())
-    {
-        QMessageBox::warning( this, tr("StarViewer"),tr("Error trying to visualitzate the study"));
-        return;      
-    }
-    
-    stu = stuList.getStudy();
     
     volum.setPatientAge(stu.getPatientAge());
     volum.setPatientId(stu.getPatientId());
@@ -894,7 +883,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     volum.setStudyId(stu.getStudyId());
     volum.setStudyTime(stu.getStudyTime());
     volum.setStudyUID(stu.getStudyUID());    
-    
+
     mask.setStudyUID(stu.getStudyUID().c_str());
 
     localCache->querySeries(mask,seriesList);

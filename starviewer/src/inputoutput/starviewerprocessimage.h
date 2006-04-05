@@ -44,12 +44,13 @@ signals :
     void imageRetrieved(QString studyUID,int);
     void seriesRetrieved(QString studyUID);
     void startRetrieving( QString );
-
+    void seriesView ( QString );
+    
 private :
 
     CachePacs *m_localCache;
-    int m_downloadedImages;
-    QString m_oldSeriesUID;
+    int m_downloadedImages , m_downloadedSeries;
+    QString m_oldSeriesUID,m_studyUID;
     bool m_error;
     
     QString createImagePath( Image* image );

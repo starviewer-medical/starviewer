@@ -72,6 +72,7 @@ public:
     Status insertImage(Image *);
 
     Status queryStudy(StudyMask mask,StudyList &list);
+    Status queryStudy(std::string studyUID,Study &study);
     Status querySeries(SeriesMask mask,SeriesList &list);
     Status queryImages(ImageMask mask,ImageList &list);
     Status countImageNumber(ImageMask mask,int &imageNumber);
@@ -79,6 +80,7 @@ public:
     Status updateStudyAccTime(std::string studyUID);
     Status setStudyRetrieved(std::string studyUID);
     Status setStudyModality(std::string studyUID,std::string modality);
+    Status setStudyRetrieving(std::string studyUID);
     
     Status delStudy(std::string);
     Status delPendingStudies();    

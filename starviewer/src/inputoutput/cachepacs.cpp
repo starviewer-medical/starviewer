@@ -310,6 +310,63 @@ Status CachePacs::queryStudy(StudyMask studyMask,StudyList &ls)
     
 }
 
+/** Cerca l'estudi que compleix amb la màscara de cerca. Cerca ens els estudis que estan en estat Retrived o Retrieving
+  *            @param    Màscara de  la cerca
+  *            @param    StudyList amb els resultats
+  *            @return retorna estat del mètode
+  */
+Status CachePacs::queryStudy(std::string studyUID,Study &study)
+{
+
+    DcmDataset* mask=NULL;
+    int col,rows,i=0,estat;
+
+    char **resposta=NULL,**error=NULL;
+    Status state;
+    std::string sql;
+    
+    sql.insert(0,"select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AETitle, AbsPath, Modali ");
+    sql.append(" from Patient,Study,PacsList ");
+    sql.append(" where Study.PatID=Patient.PatId ");
+    sql.append(" and Status in ('RETRIEVED','RETRIEVING') ");
+    sql.append(" and PacsList.PacsID=Study.PacsID"); //busquem el nom del pacs
+    sql.append(" and StuInsUID = '");
+    sql.append(studyUID);
+    sql.append("'");
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
+    m_DBConnect->getLock();
+    estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    m_DBConnect->releaseLock();
+    state = constructState(estat);
+    
+    if (!state.good()) return state;
+    
+    i = 1;//ignorem les capçaleres
+    if (rows > 0) 
+    {
+        study.setPatientId(resposta[0 + i*col]);
+        study.setPatientName(resposta[1 + i*col]);
+        study.setPatientAge(resposta[2+ i*col]);
+        study.setStudyId(resposta[3+ i*col]);
+        study.setStudyDate(resposta[4+ i*col]);
+        study.setStudyTime(resposta[5+ i*col]);
+        study.setStudyDescription(resposta[6+ i*col]);
+        study.setStudyUID(resposta[7+ i*col]);
+        study.setPacsAETitle(resposta[8 + i*col]);
+        study.setAbsPath(resposta[9 + i*col]);
+        study.setStudyModality(resposta[10 + i*col]);
+    }
+    else estat = 99; //no trobat
+    
+    return state;
+    
+}
+
 /** Construeix la sentència sql per fer la query de l'estudi en funció dels parametres de cerca
   *         @param mascara de cerca
   *         @return retorna estat del mètode
@@ -870,7 +927,7 @@ Status CachePacs::clearCache()
  ************************************************************************************************************************************************
  */
 
-/** Updata un estudi pendent de descarregar a l'estat de descarregat
+/** Updata un estudi a Retrieved
   *        @param Uid de l'estudi a actualitzar
   *        @return retorna estat del mètode
   */
@@ -886,6 +943,30 @@ Status CachePacs::setStudyRetrieved(std::string studyUID)
     
     m_DBConnect->getLock();
     i = sqlite_exec_printf(m_DBConnect->getConnection(),"update study set Status = %Q where StuInsUID= %Q",0,0,0,"RETRIEVED",studyUID.c_str());
+    m_DBConnect->releaseLock();
+                                
+    state=constructState(i);
+
+    return state;
+                                
+}
+
+/** Updata un estudi PENDING a RETRIEVING, per indicar que l'estudi s'esta descarregant
+  *        @param Uid de l'estudi a actualitzar
+  *        @return retorna estat del mètode
+  */
+Status CachePacs::setStudyRetrieving(std::string studyUID)
+{
+    int i;
+    Status state;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
+    m_DBConnect->getLock();
+    i = sqlite_exec_printf(m_DBConnect->getConnection(),"update study set Status = %Q where StuInsUID= %Q",0,0,0,"RETRIEVING",studyUID.c_str());
     m_DBConnect->releaseLock();
                                 
     state=constructState(i);
