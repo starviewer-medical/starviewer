@@ -119,22 +119,13 @@ void QMPRExtension::createConnections()
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
     connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
 
-    // temporal
-
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
     connect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
 
     connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
 
-    connect( m_rotateXPlus , SIGNAL( clicked() ), this , SLOT( rotateXPlus() ) );
-    connect( m_rotateXMinus , SIGNAL( clicked() ), this , SLOT( rotateXMinus() ) );
-    
-    connect( m_rotateYPlus , SIGNAL( clicked() ), this , SLOT( rotateYPlus() ) );
-    connect( m_rotateYMinus , SIGNAL( clicked() ), this , SLOT( rotateYMinus() ) );
-    
-    connect( m_sagitalYPlus , SIGNAL( clicked() ), this , SLOT( rotateSagitalYPlus() ) );
-    connect( m_sagitalYMinus , SIGNAL( clicked() ), this , SLOT( rotateSagitalYMinus() ) );
+// temporal
     
     connect( m_sagSlicePlus , SIGNAL( clicked() ), this , SLOT( sagitalSlicePlus() ) );
     connect( m_sagSliceMinus , SIGNAL( clicked() ), this , SLOT( sagitalSliceMinus() ) );
@@ -355,9 +346,8 @@ void QMPRExtension::setInput( Volume *input )
 //     m_lookupTable->SetAlphaRange( 1, 1 );
 //     m_lookupTable->Build();
 //     m_axial2DView->setVtkLUT( m_lookupTable );
-    
-    m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-    m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
+//     m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
+//     m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
 
     updateControls();
 }
@@ -589,83 +579,6 @@ void QMPRExtension::sagitalSliceUpdated( int slice )
 
 void QMPRExtension::coronalSliceUpdated( int slice )
 {
-}
-
-void QMPRExtension::rotateXPlus()
-{
-    updateIntersectionPoint();
-    
-    double axis[3];
-    getCoronalYVector( axis );
-    rotateMiddle( 5 , axis , m_coronalPlaneSource , m_coronalReslice );
-   
-    updatePlanes();
-    updateControls();
-    
-}
-
-void QMPRExtension::rotateXMinus()
-{
-    updateIntersectionPoint();
-        
-    double axis[3];
-    getCoronalYVector( axis );
-    rotateMiddle( -5 , axis , m_coronalPlaneSource , m_coronalReslice );
-    
-
-    updatePlanes();
-    updateControls();
-}
-
-void QMPRExtension::rotateSagitalYPlus()
-{
-    updateIntersectionPoint();
-
-    double axis[3];
-    getSagitalYVector( axis );
-    rotateMiddle( 5 , axis , m_sagitalPlaneSource , m_sagitalReslice );    
-   
-    updatePlanes();
-    updateControls();
-    
-}
-
-void QMPRExtension::rotateSagitalYMinus()
-{
-    updateIntersectionPoint();
-    
-    double axis[3];
-    getSagitalYVector( axis );
-    rotateMiddle( -5 , axis , m_sagitalPlaneSource , m_sagitalReslice );
-
-    updatePlanes();
-    updateControls();
-}
-
-void QMPRExtension::rotateYPlus()
-{   
-
-    updateIntersectionPoint();    
-     
-    double axis[3];
-    getCoronalXVector( axis );
-    rotateMiddle( 5 , axis , m_coronalPlaneSource , m_coronalReslice );
-       
-    updatePlanes();
-    updateControls();
-}
-
-void QMPRExtension::rotateYMinus()
-{
-
-    updateIntersectionPoint();
-    
-    double axis[3];
-    getCoronalXVector( axis );
-    rotateMiddle( -5 , axis , m_coronalPlaneSource , m_coronalReslice );
-    
-    updatePlanes();
-    updateControls();
 }
 
 void QMPRExtension::sagitalSlicePlus()

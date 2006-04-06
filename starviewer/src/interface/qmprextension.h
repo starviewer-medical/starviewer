@@ -145,13 +145,6 @@ private slots:
     void detectSagitalViewAxisActor( double x , double y );
     void moveSagitalViewAxisActor( double x , double y );
     void releaseSagitalViewAxisActor( double x , double y );
-     
-    void rotateXPlus();
-    void rotateXMinus();
-    void rotateYPlus();
-    void rotateYMinus();
-    void rotateSagitalYPlus();
-    void rotateSagitalYMinus();
     
     void sagitalSlicePlus();
     void sagitalSliceMinus();
