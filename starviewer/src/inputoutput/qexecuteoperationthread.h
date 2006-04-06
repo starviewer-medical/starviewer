@@ -8,7 +8,6 @@
 #define UDGQEXECUTEOPERATIONTHREAD_H
 
 #include <QThread>
-#include "../interface/qretrievescreen.h"
 
 
 namespace udg {
@@ -47,22 +46,32 @@ signals :
     void setStudyRetrieving( QString studyUID );
     void setStudyRetrieved( QString studyUID );
     void setErrorRetrieving( QString studyUID );
-
+    
+    void imageRetrieved( QString studyUID , int );
+    void seriesRetrieved( QString );
+    
 private slots :
 
     /** Emet un signal perquè es visualitzi una seria de l'estudi amb l'UID passat per parametre
       *     @param studyUID de l'estudi a descarregar
       */
-    void seriesRetrieved( QString );
+//     void seriesRetrieved( QString );
+
+    /** Emet un singnal cap al queryscreen per indicar que s'ha descarregat una imatge
+      *     @param UID de l'estudi
+      *     @param número d'imatge
+      */
+    void imageRetrievedSlot( QString , int );
+    
+    /** Emet un signal perquè es visualitzi una seria de l'estudi amb l'UID passat per parametre
+      *     @param studyUID de l'estudi a descarregar
+      */
+    void seriesRetrievedSlot( QString );
 
 private :
     
-    QRetrieveScreen * m_qretrieveScreen;
     bool m_stop;//indica si el thread esta parat
         
-    /** Crea connexions entre el QRetrieveScreen i aquesta classe
-      */
-    void createConnections();
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar 
       * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie
       *     @param operation a executar

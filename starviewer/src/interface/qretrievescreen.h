@@ -35,8 +35,7 @@ public:
          return &QRS; 
      }
      
-    void setConnectSignal(StarviewerProcessImage *);
-    void delConnectSignal(StarviewerProcessImage *);
+
     void insertNewRetrieve(Study *);
 
     

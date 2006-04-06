@@ -102,23 +102,6 @@ void QRetrieveScreen::deleteStudy(QString studyUID)
     }
 }
 
-/** Connecta signals d'StarviewerProcessImage amb aquesta classe. Connecta el signal d'imageRetrieved i seriesRetrieved 
-  *        @param Objecte StarviewerProcessImage dels que connectarem els signal
-  */
-void QRetrieveScreen::setConnectSignal(StarviewerProcessImage *process)
-{
-    connect(process, SIGNAL(imageRetrieved(QString,int)), this, SLOT(imageRetrieved(QString,int)),Qt::QueuedConnection);
-    connect(process, SIGNAL(seriesRetrieved(QString )), this, SLOT(setSeriesRetrieved(QString )),Qt::QueuedConnection);
-}
-
-/** desconnecta els signals imageRetrieved i seriesRetrieved de l'objecte StarviewerProcessImage
-  *        @param Objecte StarviewerProcessImage dels que desconnectarem els signal
-  */
-void QRetrieveScreen::delConnectSignal(StarviewerProcessImage *process)
-{
-    disconnect(process, SIGNAL(imageRetrieved(Image *,int)), this, 0);
-    disconnect(process, SIGNAL(seriesRetrieved(QString)), this, 0);
-}
 
 /** slot que s'invoca quant un StarviewerProcessImage emet un signal imageRetrieved
   *        @param uid de l'estudi descarregat de l'imatge

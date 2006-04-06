@@ -26,15 +26,7 @@ QSemaphore m_semaphor(1);//controlar l'acces a la variable m_stop
 QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
  : QThread(parent)
 {
-     m_qretrieveScreen  = QRetrieveScreen::getQRetrieveScreen();
      m_stop = true;
-}
-
-void QExecuteOperationThread::createConnections()
-{
-    connect(this , SIGNAL( setErrorRetrieving( QString ) ) , m_qretrieveScreen, SLOT( setErrorRetrieving( QString ) ), Qt::QueuedConnection);
-    connect(this , SIGNAL( setStudyRetrieved( QString ) ) , m_qretrieveScreen, SLOT( setRetrievedFinished( QString ) ), Qt::QueuedConnection); 
-    connect(this , SIGNAL( setStudyRetrieving( QString ) ) , m_qretrieveScreen, SLOT( setRetrieving( QString ) ), Qt::QueuedConnection);
 }
 
 void QExecuteOperationThread::queueOperation(Operation operation)
@@ -61,7 +53,6 @@ void QExecuteOperationThread::run()
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
     
     //creem les connexions amb l'objecte QRetrieveScreen, per indicar descarregues
-    createConnections();
     
     while (!m_stop)
     {
@@ -119,14 +110,12 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage( studyUID.toAscii().constData(),sProcessImg) ;
-    //indiquem al qretrievescreen de quina instancia ha d'esperar el signal per controlar la descarrega   
-    m_qretrieveScreen->setConnectSignal( sProcessImg ); 
    
-    if ( view )
-    {
-        connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( seriesRetrieved( QString ) ) );
-    }
-   
+    //connectem els signals del starviewerProcessImage
+    connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( seriesRetrieved( QString ) ) );
+    connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageRetrievedSlot( QString , int ) ) );
+    connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesRetrievedSlot( QString ) ) );
+
     retState = retrieve.moveSCU();
     if (!retState.good() || sProcessImg->getErrorRetrieving() )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
@@ -142,16 +131,24 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     
     pacsConnection.Disconnect();
 
-   //esborrem les senyals del thread amb la interficeiq QRetrieveScreen
-    m_qretrieveScreen->delConnectSignal( sProcessImg) ;    
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID.toAscii().constData() );
     
 }
 
-void QExecuteOperationThread::seriesRetrieved( QString studyUID )
+// void QExecuteOperationThread::seriesRetrieved( QString studyUID )
+// {
+//     emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
+// }
+
+void QExecuteOperationThread::imageRetrievedSlot( QString studyUID , int imageNumber)
 {
-    emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
+    emit( imageRetrieved( studyUID , imageNumber ) ) ;
+}
+
+void QExecuteOperationThread::seriesRetrievedSlot( QString studyUID)
+{
+    emit( seriesRetrieved( studyUID ));
 }
 
 QExecuteOperationThread::~QExecuteOperationThread()

@@ -48,7 +48,8 @@ HEADERS += input.h \
            queueoperationlist.h \
            starviewerprocessimage.h \
            cacheinstallation.h \
-           imagedicominformation.h 
+           imagedicominformation.h \
+           qexecuteoperationthread.h 
 SOURCES += input.cpp \
            output.cpp \
            cachepacs.cpp \
@@ -91,7 +92,8 @@ SOURCES += input.cpp \
            queueoperationlist.cpp \
            starviewerprocessimage.cpp \
            cacheinstallation.cpp \
-           imagedicominformation.cpp 
+           imagedicominformation.cpp \
+           qexecuteoperationthread.cpp 
 TARGETDEPS += ../tools/libtools.a \
 ../../src/repositories/librepositories.a
 LIBS += ../../src/tools/libtools.a \

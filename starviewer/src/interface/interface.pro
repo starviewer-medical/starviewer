@@ -52,7 +52,6 @@ HEADERS += director.h \
            tool.h \
            qnavigatewindow.h \
            qstudytreewidget.h \
-           qexecuteoperationthread.h \
            qserieslistwidget.h 
 SOURCES += director.cpp \
            mutualinformationdirector.cpp \
@@ -89,7 +88,6 @@ SOURCES += director.cpp \
            tool.cpp \
            qnavigatewindow.cpp \
            qstudytreewidget.cpp \
-           qexecuteoperationthread.cpp \
            qserieslistwidget.cpp 
 TARGETDEPS += ../repositories/librepositories.a \
 ../registration/libregistration.a \
