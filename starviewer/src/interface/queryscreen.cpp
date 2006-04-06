@@ -176,7 +176,7 @@ void QueryScreen::connectSignalsAndSlots()
     connect(m_studyTreeWidgetPacs, SIGNAL(retrieve()), this, SLOT(retrieve()));
     
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
-//     QObject::connect(&m_qexecuteOperationThread,SIGNAL(viewStudy(QString)),this,SLOT(studyRetrievedView(QString)),Qt::QueuedConnection);
+     QObject::connect(&m_qexecuteOperationThread,SIGNAL(viewStudy(QString)),this,SLOT(studyRetrievedView(QString)),Qt::QueuedConnection);
     
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect(&m_qexecuteOperationThread , SIGNAL( setErrorRetrieving( QString ) ) , m_retrieveScreen, SLOT( setErrorRetrieving( QString ) ));
@@ -1147,7 +1147,7 @@ StudyMask QueryScreen::buildMask()
     QString modalityMask;
     
     mask.setPatientId(m_textPatientID->text().toStdString() );
-//     mask.setPatientName(buildPatientName().toStdString() );
+    mask.setPatientName(buildPatientName().toStdString() );
     mask.setStudyId(m_textStudyID->text().toStdString() );
     mask.setStudyDate(buildStudyDates().toStdString() );
     mask.setStudyDescription("");

@@ -52,10 +52,10 @@ signals :
     
 private slots :
 
-    /** Emet un signal perquè es visualitzi una seria de l'estudi amb l'UID passat per parametre
+    /** Si la operacio es un view, emet un signal per indicar que ja es pot obrir la primera serie de l'estudi
       *     @param studyUID de l'estudi a descarregar
       */
-//     void seriesRetrieved( QString );
+     void firstSeriesRetrieved( QString );
 
     /** Emet un singnal cap al queryscreen per indicar que s'ha descarregat una imatge
       *     @param UID de l'estudi
@@ -63,14 +63,16 @@ private slots :
       */
     void imageRetrievedSlot( QString , int );
     
-    /** Emet un signal perquè es visualitzi una seria de l'estudi amb l'UID passat per parametre
+    /** Emet un singal per indicar que s'ha descarregat una sèrie
       *     @param studyUID de l'estudi a descarregar
       */
     void seriesRetrievedSlot( QString );
+    
 
 private :
     
     bool m_stop;//indica si el thread esta parat
+    bool m_view;//indica si la operacio que s'esta realitzant és la descarrega d'un estudi per visualitzar-lo    
         
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar 
       * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie

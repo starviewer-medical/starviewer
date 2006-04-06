@@ -63,10 +63,12 @@ void QExecuteOperationThread::run()
         switch (operation.getOperation())
         {
             case operationRetrieve : 
-                 retrieveStudy(operation,false);
+                 m_view = false;
+                 retrieveStudy(operation,m_view);
                  break;
             case operationView : 
-                 retrieveStudy(operation,true);
+                 m_view = true;
+                 retrieveStudy(operation,m_view);
                  break;
         }
         
@@ -112,7 +114,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     piSingleton->addNewProcessImage( studyUID.toAscii().constData(),sProcessImg) ;
    
     //connectem els signals del starviewerProcessImage
-    connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( seriesRetrieved( QString ) ) );
+    connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( firstSeriesRetrieved( QString ) ) );
     connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageRetrievedSlot( QString , int ) ) );
     connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesRetrievedSlot( QString ) ) );
 
@@ -136,10 +138,11 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     
 }
 
-// void QExecuteOperationThread::seriesRetrieved( QString studyUID )
-// {
-//     emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
-// }
+void QExecuteOperationThread::firstSeriesRetrieved( QString studyUID )
+{
+     cout<<"entro\n";
+     if ( m_view ) emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
+}
 
 void QExecuteOperationThread::imageRetrievedSlot( QString studyUID , int imageNumber)
 {
