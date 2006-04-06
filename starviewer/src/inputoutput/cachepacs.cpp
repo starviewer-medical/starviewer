@@ -837,12 +837,12 @@ Status CachePacs::delStudy(std::string studyUID)
 }
 
 
-/** Aquesta acció es per mantenir la coherencia de la base de dades, si ens trobem estudis al iniciar l'aplicació que tenen l'estat pendent
+/** Aquesta acció es per mantenir la coherencia de la base de dades, si ens trobem estudis al iniciar l'aplicació que tenen l'estat pendent o descarregant
   * vol dir que l'aplicació en l'anterior execussió ha finalitzat anòmalament, per tant aquest estudis en estat pendents, les seves sèrie i 
   * imatges han de ser borrades perquè es puguin tornar a descarregar. Aquesta acció és simplement per seguretat!
   *            @return estat de l'operació
   */
-Status CachePacs::delPendingStudies()
+Status CachePacs::delNotRetrievedStudies()
 {
     Status state;
     int estat;
@@ -856,7 +856,7 @@ Status CachePacs::delPendingStudies()
     }
     
     //cerquem els estudis pendents de finalitzar la descarrega
-    sql.insert(0,"select StuInsUID from Study where Status ='PENDING'");
+    sql.insert(0,"select StuInsUID from Study where Status in ('PENDING','RETRIEVING')");
    
     m_DBConnect->getLock();
     estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.

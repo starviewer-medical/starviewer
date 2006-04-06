@@ -74,7 +74,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     connectSignalsAndSlots();
     setEnabledModalityChecks(true);
     
-    state = localCache->delPendingStudies();
+    state = localCache->delNotRetrievedStudies();//Esborrem els estudis en estat 'PENDING' o 'RETRIEVING'
     if (!state.good()) 
     {
         databaseError(&state);

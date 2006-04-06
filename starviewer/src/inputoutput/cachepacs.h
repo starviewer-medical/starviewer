@@ -83,7 +83,7 @@ public:
     Status setStudyRetrieving(std::string studyUID);
     
     Status delStudy(std::string);
-    Status delPendingStudies();    
+    Status delNotRetrievedStudies();    
     Status clearCache();
     
     Status compactCachePacs();
