@@ -15,7 +15,7 @@
 #include <semaphore.h>
 #include "ui_qretrievescreenbase.h"
 
-/** Singleton
+/** Interfície que implementa la llista d'operacions realitzades cap a un PACS 
   */
   
 namespace udg {
@@ -27,14 +27,7 @@ class Status;
 class QRetrieveScreen : public QDialog , private Ui::QRetrieveScreenBase{
 Q_OBJECT
 public:
-
-    
-    static QRetrieveScreen* getQRetrieveScreen()
-     {
-         static QRetrieveScreen QRS;
-         return &QRS; 
-     }
-     
+    QRetrieveScreen( QWidget *parent = 0 );
 
     void insertNewRetrieve(Study *);
 
@@ -55,7 +48,6 @@ public slots :
     
 private:
 
-    QRetrieveScreen( QWidget *parent = 0 );
     
     void createConnections();
     void deleteStudy(QString studyUID);

@@ -68,7 +68,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     StarviewerSettings settings;
            
     CachePacs * localCache= CachePacs::getCachePacs();
-    m_retrieveScreen = QRetrieveScreen::getQRetrieveScreen();
+    m_retrieveScreen = new udg::QRetrieveScreen;
     
     //connectem signals i slots
     connectSignalsAndSlots();
