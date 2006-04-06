@@ -311,8 +311,10 @@ void QMPRExtension::setInput( Volume *input )
     {
         axialCam->SetViewUp(0,-1,0);
     }
-    m_coronal2DView->setViewToAxial();
     m_sagital2DView->setViewToAxial();
+    m_sagital2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
+    m_coronal2DView->setViewToAxial();
+    m_coronal2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
     
     // refrescar el controls
     m_axialSpinBox->setMinimum( 0 );

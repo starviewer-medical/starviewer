@@ -60,7 +60,7 @@ public:
     {        
         switch( event )
         {
-        case vtkCommand::StartWindowLevelEvent:
+        case vtkCommand::StartWindowLevelEvent:            
         break;
 
         case vtkCommand::WindowLevelEvent:
@@ -437,7 +437,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 
 void Q2DViewer::updateAnnotations()
 {
-    if( m_enabledAnnotations && Q2DViewer::ReferenceAnnotation )
+    if( m_enabledAnnotations & Q2DViewer::ReferenceAnnotation )
     {
         m_bottomOrientationMarker->VisibilityOn();
         m_sideOrientationMarker->VisibilityOn();
@@ -456,7 +456,7 @@ void Q2DViewer::updateAnnotations()
         m_patientOrientationTextActor[3]->VisibilityOff();
     }
 
-    if( m_enabledAnnotations && Q2DViewer::WindowLevelAnnotation )
+    if( m_enabledAnnotations & Q2DViewer::WindowLevelAnnotation )
     {
         m_textAnnotation->VisibilityOn();
     }
