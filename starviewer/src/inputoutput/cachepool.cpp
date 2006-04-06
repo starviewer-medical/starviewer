@@ -64,7 +64,7 @@ Status CachePool::constructState(int numState)
   */
 double CachePool::getFreeTotalSpace()
 {
-    double fFree;
+    double fFree, blocksFree, blockSize;
 #ifdef _WIN32
 //codi per Windows
 	QString sCurDir = QDir::current().absPath();
@@ -87,13 +87,12 @@ double CachePool::getFreeTotalSpace()
 	struct statfs stfs;
         double Mb = 1024*1024;
 
-        // \TODO Saber i aclarir què fan les dues línies següents
-	if ( ::stat(sDirPath.toLocal8Bit(),&stst) == -1 ) return false;
-	if ( ::statfs(sDirPath.toLocal8Bit(),&stfs) == -1 ) return false;
+	if ( ::stat(sDirPath.toLocal8Bit(),&stst) == -1 ) return false; //retrona el numero de blocs lliures
+	if ( ::statfs(sDirPath.toLocal8Bit(),&stfs) == -1 ) return false; //retorna la mida dels blocs
 
-	fFree = stfs.f_bavail * ( stst.st_blksize );
-// 	fTotal = stfs.f_blocks * ( stst.st_blksize );
-                fFree = fFree / Mb;
+	blocksFree = stfs.f_bavail;
+	blockSize = stst.st_blksize;
+        fFree = ( blocksFree * blockSize ) / Mb;
 
 #endif // _WIN32
 	
