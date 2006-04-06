@@ -84,7 +84,6 @@ public:
     
     Status delStudy(std::string);
     Status delNotRetrievedStudies();    
-    Status clearCache();
     
     Status compactCachePacs();
     

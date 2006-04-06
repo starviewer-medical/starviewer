@@ -27,6 +27,7 @@
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include <math.h>
+#include "cachelayer.h"
 
 
 
@@ -693,6 +694,7 @@ void QConfigurationScreen::deleteStudies()
 {
     CachePacs * localCache;
     Status state;
+    CacheLayer cacheLayer;
             
    
    switch( QMessageBox::information( this, tr("Starviewer"),
@@ -703,9 +705,7 @@ void QConfigurationScreen::deleteStudies()
     case 0:
         this->setCursor(QCursor(Qt::WaitCursor));
             
-        localCache = CachePacs::getCachePacs();
-        
-        state = localCache->clearCache();
+        state =  cacheLayer.clearCache();
         
         if (!state.good())
         {

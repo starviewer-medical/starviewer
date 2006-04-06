@@ -805,7 +805,7 @@ Status CachePacs::delStudy(std::string studyUID)
     }
 
     sql.clear();    
-    sql.insert(0,"Update Pool Set Space = Space + %i ");
+    sql.insert(0,"Update Pool Set Space = Space - %i ");
     sql.append("where Param = 'USED'");
     
     estat = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0
@@ -884,46 +884,6 @@ Status CachePacs::delNotRetrievedStudies()
    
 }
 
-/** Esborra totes les dades de la cache, exceptuant la taula PacsList, ja que no pertany a l'ambit d'aquesta classe
-  *         @return retorna estat del mètode
-  */
-Status CachePacs::clearCache()
-{
-    int col,rows,i = 0,estat;
-    Series series;
-    char **resposta = NULL,**error = NULL;
-    Status state;
-    std::string sql;
-    CachePool *pool = CachePool::getCachePool();
-    
-    
-    if (!m_DBConnect->connected())
-    {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
-    }
-    
-    //els estudis pendents no els esborrem, perque l'usuari els esta descarregant en aquell moment
-    //seleccionem el UID de tots els estudis a esborrar
-    sql.insert(0,"select StuInsUID from study ");
-    sql.append(" where Status <> 'PENDING'");                     
-    m_DBConnect->getLock();
-    estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
-    m_DBConnect->releaseLock();
-    
-    state = constructState(estat);
-    if (!state.good()) return state;
-    
-    i = 1;//ignorem les capçaleres
-    while (i <= rows)
-    {   
-        delStudy(resposta[i]); //esborrar l'etudi
-        i++;
-    }
-    
-    pool->resetPoolSpace();
-    
-    return state;
-}
 
 /************************************************************************************************************************************************
  *                                                        ZONA UPDATES                                                                          *
