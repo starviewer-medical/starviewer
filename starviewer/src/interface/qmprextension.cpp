@@ -294,7 +294,7 @@ void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
 void QMPRExtension::setInput( Volume *input )
 { 
     m_volume = input; 
-   
+    
     m_volume->updateInformation();
     m_volume->getSpacing( m_axialSpacing );
     
@@ -384,7 +384,7 @@ void QMPRExtension::initOrientation()
     
     // Prevent obscuring voxels by offsetting the plane geometry
     //
-    double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5),
+    double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5) ,
                         origin[0] + spacing[0] * (extent[1] + 0.5)};
     double ybounds[] = {origin[1] + spacing[1] * (extent[2] - 0.5),
                         origin[1] + spacing[1] * (extent[3] + 0.5)};
@@ -413,8 +413,7 @@ void QMPRExtension::initOrientation()
     m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
-    // posem en la llesca central    \TODO: sincronitzar bé aquestes llesques amb les del visor
-    m_sagitalPlaneSource->Push( 0.5 * ( zbounds[1] - zbounds[0] ) );
+//     m_axialPlaneSource->Push( zbounds[0] + 0.5 * ( zbounds[1] - zbounds[0] ) );
     
     //YZ, x-normal : vista sagital
     // estem ajustant la mida del pla a les dimensions d'aquesta orientació
@@ -429,8 +428,8 @@ void QMPRExtension::initOrientation()
         
     // \TODO aqui caldria canviar-li els bounds del point 2 perquè siguin més llargs i encaixi amb la diagonal
     // perquè quedi centrat hauriem de desplaçar la meitat de l'espai extra per l'origen i pel punt2
-    // posem en la llesca central    
-    m_sagitalPlaneSource->Push( 0.5 * ( xbounds[1] - xbounds[0] ) );
+    // posem en la llesca central
+    m_sagitalPlaneSource->Push( xbounds[0] + 0.5 * ( xbounds[1] - xbounds[0] ) );
     
     //ZX, y-normal : vista coronal
     // ídem anterior
@@ -444,7 +443,7 @@ void QMPRExtension::initOrientation()
     m_coronalPlaneSource->SetPoint1( xbounds[1] /*maxZBound*/ , ybounds[0] , zbounds[0]);
     m_coronalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] /*maxZBound*/ );
     // posem en la llesca central    
-    m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) );
+    m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) + ybounds[0] );
     
     updatePlanes();
 
@@ -615,8 +614,6 @@ void QMPRExtension::coronalSliceMinus()
     updateControls();
 }
     
-
-
 void QMPRExtension::updateControls()
 {
 
@@ -647,13 +644,13 @@ void QMPRExtension::updateControls()
     // projecció sagital sobre axial i viceversa
     MathTools::planeIntersection( m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
     
-    position1[0] = r[0] - t[0]*2000 /*- m_volume->getOrigin()[0]*/;
-    position1[1] = r[1] - t[1]*2000 /*- m_volume->getOrigin()[1]*/;
-    position1[2] = r[2] - t[2]*2000 /*- m_volume->getOrigin()[2]*/;
+    position1[0] = r[0] - t[0]*2000;
+    position1[1] = r[1] - t[1]*2000;
+    position1[2] = r[2] - t[2]*2000;
     
-    position2[0] = r[0] + t[0]*2000 /*- m_volume->getOrigin()[0]*/;
-    position2[1] = r[1] + t[1]*2000 /*- m_volume->getOrigin()[1]*/;
-    position2[2] = r[2] + t[2]*2000 /*- m_volume->getOrigin()[2]*/;
+    position2[0] = r[0] + t[0]*2000;
+    position2[1] = r[1] + t[1]*2000;
+    position2[2] = r[2] + t[2]*2000;
     
     m_sagitalOverAxialAxisActor->SetPosition(  position1[0] , position1[1] );
     m_sagitalOverAxialAxisActor->SetPosition2( position2[0] , position2[1] );
@@ -663,36 +660,32 @@ void QMPRExtension::updateControls()
     
     // projecció coronal sobre sagital
     
-    
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
-    
-    position1[0] = r[0] - t[0]*2000 - m_volume->getOrigin()[0];
-    position1[1] = r[1] - t[1]*2000 - m_volume->getOrigin()[1];
-    position1[2] = r[2] - t[2]*2000 - m_volume->getOrigin()[2];
-    
-    position2[0] = r[0] + t[0]*2000 - m_volume->getOrigin()[0];
-    position2[1] = r[1] + t[1]*2000 - m_volume->getOrigin()[1];
-    position2[2] = r[2] + t[2]*2000 - m_volume->getOrigin()[2];
+
+    position1[0] = r[0] - t[0]*2000;
+    position1[1] = r[1] - t[1]*2000;
+    position1[2] = r[2] - t[2]*2000;
+
+    position2[0] = r[0] + t[0]*2000;
+    position2[1] = r[1] + t[1]*2000;
+    position2[2] = r[2] + t[2]*2000;
     
     m_coronalOverSagitalIntersectionAxis->SetPosition( position1[1] , position1[2] );
     m_coronalOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
     
-    
     // projecció coronal sobre axial
-    // \TODO sembla que la projecció no es fa bé del tot perqè segons com es giri no es projecta bé
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() , r , t );
     
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
     position1[2] = r[2] - t[2]*2000;
-    
+
     position2[0] = r[0] + t[0]*2000;
     position2[1] = r[1] + t[1]*2000;
     position2[2] = r[2] + t[2]*2000;
     
     m_coronalOverAxialIntersectionAxis->SetPosition(  position1[0] , position1[1] );
     m_coronalOverAxialIntersectionAxis->SetPosition2( position2[0] , position2[1] );  
-
 // 
 // 
 //     Indicadors d'slices
@@ -768,7 +761,7 @@ void QMPRExtension::setSlice( int slice , int view )
 
 void QMPRExtension::updateIntersectionPoint()
 {
-    MathTools::planeIntersection(  m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_intersectionPoint );   
+    MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_intersectionPoint );
 }
 
 void QMPRExtension::updatePlanes()
@@ -793,10 +786,10 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     m_volume->getSpacing( spacing );
     
     int i;
-    /*
-    if ( this->RestrictPlaneToVolume )
-    {
-    *//*
+
+//     if ( this->RestrictPlaneToVolume )
+//     {
+    
         double origin[3];
         m_volume->getOrigin( origin );
         int extent[6];
@@ -844,7 +837,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
             planeCenter[k] = bounds[2*k];
         }
     
-        planeSource->SetCenter(planeCenter);*/
+        planeSource->SetCenter(planeCenter);
 //     }
     
     double planeAxis1[3];
