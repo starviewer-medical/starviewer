@@ -57,11 +57,11 @@ QMPRExtension::QMPRExtension( QWidget *parent )
 
     m_sagitalReslice = vtkImageReslice::New();
     m_sagitalReslice->AutoCropOutputOn(); // perquè l'extent d'output sigui suficient i no es "mengi" dades
-    m_sagitalReslice->SetInterpolationModeToLinear();
+    m_sagitalReslice->SetInterpolationModeToCubic();
     
     m_coronalReslice = vtkImageReslice::New();
     m_coronalReslice->AutoCropOutputOn();
-    m_coronalReslice->SetInterpolationModeToLinear();
+    m_coronalReslice->SetInterpolationModeToCubic();
 
     /// per defecte isomètric
     m_axialSpacing[0] = 1.;
@@ -159,10 +159,12 @@ void QMPRExtension::detectAxialViewAxisActor( double x , double y )
         if( distanceToCoronal < distanceToSagital )
         {
             m_pickedAxisActor = m_coronalOverAxialIntersectionAxis;
+            m_coronalReslice->SetInterpolationModeToNearestNeighbor();
         }
         else
         {
             m_pickedAxisActor = m_sagitalOverAxialAxisActor;
+            m_sagitalReslice->SetInterpolationModeToNearestNeighbor();
         }
         m_initialPickX = x;
         m_initialPickY = y;
@@ -222,6 +224,17 @@ void QMPRExtension::moveAxialViewAxisActor( double x , double y )
 
 void QMPRExtension::releaseAxialViewAxisActor( double x , double y )
 {
+    if( m_pickedAxisActor == m_sagitalOverAxialAxisActor )
+    {
+        m_sagitalReslice->SetInterpolationModeToCubic();
+        m_sagital2DView->getInteractor()->Render();
+    }
+    else
+    {
+        m_coronalReslice->SetInterpolationModeToCubic();
+        m_coronal2DView->getInteractor()->Render();
+    }
+
     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
 }
     
@@ -240,6 +253,7 @@ void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
     if( distanceToCoronal < 50.0 )
     {
         m_pickedAxisActor = m_coronalOverSagitalIntersectionAxis;
+        m_coronalReslice->SetInterpolationModeToNearestNeighbor();
         m_initialPickX = x;
         m_initialPickY = y;
         // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
@@ -288,6 +302,8 @@ void QMPRExtension::moveSagitalViewAxisActor( double x , double y )
 
 void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
 {
+    m_coronalReslice->SetInterpolationModeToCubic();
+    m_coronal2DView->getInteractor()->Render();
     disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
 }
 
