@@ -31,7 +31,7 @@ Status CacheLayer::clearCache()
     
     pool.getPoolUsedSpace( usedSpaceInit );
     QProgressDialog *progress;
-    progress = new QProgressDialog(tr("Clearing cache..."), tr("Cancel"), 0, usedSpaceInit);
+    progress = new QProgressDialog(tr("Clearing cache..."),"", 0, usedSpaceInit);
     progress->setMinimumDuration(0);
 
     state = localCache->queryStudy( studyMask , studyList );
@@ -50,8 +50,6 @@ Status CacheLayer::clearCache()
     }
     
     progress->setValue (usedSpaceInit);
-    
-    pool.resetPoolSpace();
     
     if (!state.good())
     {
