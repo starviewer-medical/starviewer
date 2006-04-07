@@ -19,12 +19,7 @@ class string;
 class CachePool{
 public:
 
-     static CachePool* getCachePool()
-     {
-         static CachePool cache;
-         return &cache; 
-     }
-     
+    CachePool();
     double getFreeTotalSpace();
 
     void removeStudy(std::string studyUID);    
@@ -38,7 +33,6 @@ public:
 
     ~CachePool();
 private:
-    CachePool();
     
     DatabaseConnection *m_DBConnect;
     Status constructState(int numState);

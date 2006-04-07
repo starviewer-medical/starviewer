@@ -130,17 +130,17 @@ void QConfigurationScreen::loadCachePoolDefaults()
     int space,used;
     float result;
     QString text;
-    CachePool *pool = CachePool::getCachePool();
+    CachePool pool;
     
     //accemdim a la caché a agafar les dades del Pool
-    state = pool->getPoolTotalSize(space);   
+    state = pool.getPoolTotalSize(space);   
     if (!state.good())
     {
         databaseError(&state);
         return;
     }
     
-    state = pool->getPoolUsedSpace(used);
+    state = pool.getPoolUsedSpace(used);
     if (!state.good())
     {
         databaseError(&state);
@@ -666,7 +666,7 @@ void QConfigurationScreen::applyChangesCache()
 {
 
     StarviewerSettings settings;
-    CachePool * pool = CachePool::getCachePool();
+    CachePool pool;
     Status state;
     
     //Aquest els guardem sempre 
@@ -675,7 +675,7 @@ void QConfigurationScreen::applyChangesCache()
     
     if (m_textPoolSize->isModified())
     {   
-        state = pool->updatePoolTotalSize(m_textPoolSize->text().toInt(NULL,10)*1000);//Passem l'espai a Mb
+        state = pool.updatePoolTotalSize(m_textPoolSize->text().toInt(NULL,10)*1000);//Passem l'espai a Mb
         databaseError(&state);
     }
     

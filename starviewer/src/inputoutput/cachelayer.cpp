@@ -26,10 +26,10 @@ Status CacheLayer::clearCache()
     StudyList studyList;
     Study study;
     Status state;
-    CachePool *pool = CachePool::getCachePool();
+    CachePool pool;
     int usedSpaceInit, deletedSpace = 0, usedSpace;
     
-    pool->getPoolUsedSpace( usedSpaceInit );
+    pool.getPoolUsedSpace( usedSpaceInit );
     QProgressDialog *progress;
     progress = new QProgressDialog(tr("Clearing cache..."), tr("Cancel"), 0, usedSpaceInit);
     progress->setMinimumDuration(0);
@@ -42,7 +42,7 @@ Status CacheLayer::clearCache()
         study = studyList.getStudy();
         state = localCache->delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
         
-        pool->getPoolUsedSpace(usedSpace);
+        pool.getPoolUsedSpace(usedSpace);
         deletedSpace = usedSpaceInit - usedSpace;//calculem l'espai esborrat
         progress->setValue( deletedSpace );
         progress->repaint();
@@ -51,7 +51,7 @@ Status CacheLayer::clearCache()
     
     progress->setValue (usedSpaceInit);
     
-    pool->resetPoolSpace();
+    pool.resetPoolSpace();
     
     if (!state.good())
     {

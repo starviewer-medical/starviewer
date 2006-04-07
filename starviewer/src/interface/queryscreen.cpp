@@ -681,7 +681,7 @@ void QueryScreen::retrievePacs(bool view)
     PacsParameters pacs;      
     PacsListDB pacsListDB; 
     StarviewerSettings settings;
-    CachePool *pool = CachePool::getCachePool();
+    CachePool pool;
     
     this->setCursor(QCursor(Qt::WaitCursor));
     if (m_studyTreeWidgetPacs->getSelectedStudyUID() == "")
@@ -696,7 +696,7 @@ void QueryScreen::retrievePacs(bool view)
     }
     studyUID.insert(0,m_studyTreeWidgetPacs->getSelectedStudyUID().toAscii().constData());
     
-    if (pool->getFreeTotalSpace()< 1000) //comprovem que tinguem més 1 GB lliure per poder continuar
+    if (pool.getFreeTotalSpace()< 1000) //comprovem que tinguem més 1 GB lliure per poder continuar
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::warning( this, tr("StarViewer"),tr("Error disk space under 1 Gb. Plese free spaces in your disk "));

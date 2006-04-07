@@ -684,7 +684,7 @@ Status CachePacs::delStudy(std::string studyUID)
     char **resposta = NULL,**error = NULL;
     int col,rows,studySize,i;
     std::string sql,absPathStudy;
-    CachePool *cacheSpool = CachePool::getCachePool();
+    CachePool cachePool;
 
     if (!m_DBConnect->connected())
     {//el 50 es l'error de no connectat a la base de dades
@@ -830,7 +830,7 @@ Status CachePacs::delStudy(std::string studyUID)
     
     //una vegada hem esborrat les dades de la bd, podem esborrar les imatges, això s'ha de fer al final, perqué si hi ha un error i esborrem les
     //imatges al principi, no les podrem recuperar i la informació a la base de dades hi continuarà estant
-    cacheSpool->removeStudy(absPathStudy);
+    cachePool.removeStudy(absPathStudy);
     
     return state;
    
