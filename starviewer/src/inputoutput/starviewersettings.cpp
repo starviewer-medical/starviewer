@@ -6,7 +6,6 @@
  ***************************************************************************/ 
 #include "starviewersettings.h"
 #include <stream.h>
-#include "constkey.h"
 #include <QDir>
 #include <QApplication>
 

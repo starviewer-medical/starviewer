@@ -7,7 +7,6 @@ HEADERS += input.h \
            output.h \
            cachepacs.h \
            const.h \
-           constkey.h \
            databaseconnection.h \
            image.h \
            imagelist.h \

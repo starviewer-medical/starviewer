@@ -42,7 +42,6 @@
 #include "qconfigurationscreen.h"
 #include "pacslist.h"
 #include "qpacslist.h"
-#include "constkey.h"
 #include "starviewersettings.h"
 #include "cachepool.h"
 #include "scalestudy.h"
