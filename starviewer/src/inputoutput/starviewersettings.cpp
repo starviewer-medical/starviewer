@@ -45,6 +45,14 @@ void StarviewerSettings::setPoolSize(QString size)
     m_starviewerSettings.setValue(poolSizeKey,size);
 }
 
+/** Estableix el número de dies màxim que un estudi pot estar a la cache sense ser vist, a partir d'aquest número de dies l'estudi és esborrat
+  *     @param número maxim de dies
+  */
+void StarviewerSettings::setMaximumDaysNotViewedStudy( QString  days)
+{
+    m_starviewerSettings.setValue( MaximumDaysNotViewedStudy , days );
+}
+
 /** retorna el path de la base de dades
   *        @return retorna el path de la base de dades
   */
@@ -82,6 +90,13 @@ QString StarviewerSettings::getCacheImagePath()
     return m_starviewerSettings.value(cacheImagePathKey,defaultDir).toString();
 }
 
+/** Retorna el número de dies màxim que un estudi pot estar a la cache sense ser vist, a partir d'aquest número de dies l'estudi és esborrat
+  *     @return número maxim de dies
+  */
+QString StarviewerSettings::getMaximumDaysNotViewedStudy()
+{
+    return m_starviewerSettings.value( MaximumDaysNotViewedStudy , "15" ).toString();
+}
 
 /************************ CONFIGURACIO PACS************************************************/
 

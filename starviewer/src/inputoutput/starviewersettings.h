@@ -24,10 +24,12 @@ public:
       void setDatabasePath(QString);
       void setPoolSize(QString );
       void setCacheImagePath(QString);
+      void setMaximumDaysNotViewedStudy( QString );
       
       QString getDatabasePath();
       QString getPoolSize();
       QString getCacheImagePath();
+      QString getMaximumDaysNotViewedStudy();
     
     //Pacs
       void setAETitleMachine(QString);

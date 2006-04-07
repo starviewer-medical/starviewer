@@ -83,12 +83,13 @@ void QConfigurationScreen::connectSignalAndSlots()
     connect(m_textPoolSize,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     connect(m_textAETitleMachine,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     connect(m_textTimeout,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
-    connect(m_textDatabaseRoot,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textDatabaseRoot,SIGNAL(textChanged(const QString &)),this,SLOT(co7nfigurationChanged( const QString& )));
     connect(m_textLocalPort,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     connect(m_textMaxConnections,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     connect(m_checkPrevImages,SIGNAL(stateChanged(int)),this,SLOT(configurationChanged( int )));
     connect(m_checkCountImages,SIGNAL(stateChanged(int)),this,SLOT(configurationChanged( int )));
     connect(m_comboLanguage,SIGNAL(editTextChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
+    connect(m_textMaximumDaysNotViewed,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     
     //mateniment base de dades
     connect(m_buttonDeleteStudies,SIGNAL(clicked()),this,SLOT(deleteStudies()));
@@ -118,6 +119,7 @@ void QConfigurationScreen::loadCacheDefaults()
 
     m_textDatabaseRoot->setText(settings.getDatabasePath());
     m_textCacheImagePath->setText(settings.getCacheImagePath());
+    m_textMaximumDaysNotViewed->setText( settings.getMaximumDaysNotViewedStudy() );
     
     loadCachePoolDefaults();
 }
@@ -682,6 +684,11 @@ void QConfigurationScreen::applyChangesCache()
     if (m_textCacheImagePath->isModified())
     {
         settings.setCacheImagePath(m_textCacheImagePath->text());
+    }
+    
+    if ( m_textMaximumDaysNotViewed->isModified() )
+    {
+        settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
     }
     
     m_buttonApplyCache->setEnabled(false);
