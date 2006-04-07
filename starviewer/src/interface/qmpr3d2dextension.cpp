@@ -72,12 +72,7 @@ void QMPR3D2DExtension::setInput( Volume *input )
     if ( coronalCam )
     {
         coronalCam->SetViewUp(1,0,0);
-    }
- 
-    m_mpr3DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-    m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-    m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-    
+    }   
     updateActors();
 }
 
