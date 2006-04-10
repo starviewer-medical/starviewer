@@ -328,6 +328,7 @@ Status CachePacs::queryOldStudies(std::string OldStudiesDate , StudyList &ls)
     sql.append(" from Study");
     sql.append(" where AccDat < ");
     sql.append( OldStudiesDate );
+    sql.append(" order by StuDat,StuTim ");
 
     char **resposta=NULL,**error=NULL;
     Status state;
