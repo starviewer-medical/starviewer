@@ -29,6 +29,10 @@ public:
       */
     Status clearCache();
     
+    /** Esborra els estudis vells que superen el temps maxim que poden estar a la cache especificats per a l'usuari
+      */
+    Status deleteOldStudies();
+    
     /**Destructor de la classe
       */
     ~CacheLayer();

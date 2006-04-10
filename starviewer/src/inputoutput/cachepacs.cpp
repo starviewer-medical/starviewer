@@ -313,6 +313,56 @@ Status CachePacs::queryStudy(StudyMask studyMask,StudyList &ls)
     
 }
 
+/** Selecciona els estudis vells que no han estat visualitzats des de una data inferior a la que es passa per parametre
+  *            @param  Data a partir de la qual es seleccionaran els estudis vells
+  *            @param  StudyList amb els resultats dels estudis, que l'ultima vegada visualitzats es una data inferior a la passa per paràmetre
+  *            @return retorna estat del mètode
+  */
+Status CachePacs::queryOldStudies(std::string OldStudiesDate , StudyList &ls)
+{
+    int col,rows,i=0,estat;
+    Study stu;
+    std::string sql;
+    
+    sql.insert(0,"select PatId, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali ");
+    sql.append(" from Study");
+    sql.append(" where AccDat < ");
+    sql.append( OldStudiesDate );
+
+    char **resposta=NULL,**error=NULL;
+    Status state;
+    
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+    
+    m_DBConnect->getLock();
+    estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    m_DBConnect->releaseLock();
+    state = constructState(estat);
+    
+    if (!state.good()) return state;
+    
+    i = 1;//ignorem les capçaleres
+    while (i <= rows)
+    {   
+        stu.setPatientId(resposta[0 + i*col]);
+        stu.setStudyId(resposta[1 + i*col]);
+        stu.setStudyDate(resposta[2 + i*col]);
+        stu.setStudyTime(resposta[3 + i*col]);
+        stu.setStudyDescription(resposta[4 + i*col]);
+        stu.setStudyUID(resposta[5 + i*col]);
+        stu.setAbsPath(resposta[6 + i*col]);
+        stu.setStudyModality(resposta[7 + i*col]);
+        ls.insert(stu);
+        i++;
+    }
+    
+    return state;
+    
+}
+
 /** Cerca l'estudi que compleix amb la màscara de cerca. Cerca ens els estudis que estan en estat Retrived o Retrieving
   *            @param    Màscara de  la cerca
   *            @param    StudyList amb els resultats

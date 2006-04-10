@@ -119,6 +119,7 @@ struct retrieveParameters
     void queryStudyCache();
     void QuerySeriesPacs(QString,QString,bool);
     void QuerySeriesCache(QString);
+    void deleteOldStudies();
     
     //ERRORS
     void databaseError(Status *state);

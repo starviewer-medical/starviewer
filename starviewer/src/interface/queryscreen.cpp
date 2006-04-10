@@ -50,6 +50,7 @@
 #include "qnavigatewindow.h"
 #include "queueoperationlist.h"
 #include "operation.h"
+#include "cachelayer.h"
 
 namespace udg {
 
@@ -77,7 +78,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     if (!state.good()) 
     {
         databaseError(&state);
-    }
+    } //si no hi ha error a la base de dades, podem esborrar els estudis vells
+    else deleteOldStudies();
     
     //indiquem que la llista de Pacs no es mostra
     m_PacsListShow = false;
@@ -92,6 +94,22 @@ QueryScreen::QueryScreen( QWidget *parent )
    
     qPacsList->setMaximumSize(1,1);//amaguem al finestra del QPacsList
     centerWindow(); //centrem la finestra
+}
+
+/** esborra els estudis vells de la cache
+  */
+void QueryScreen::deleteOldStudies()
+{  
+    Status state;
+    CacheLayer cacheLayer;
+        
+    state = cacheLayer.deleteOldStudies();
+    
+    if (!state.good()) 
+    {
+        QMessageBox::warning( this , tr("StarViewer") , tr("Error deleting old studies") );
+        databaseError(&state);
+    }
 }
 
 /**

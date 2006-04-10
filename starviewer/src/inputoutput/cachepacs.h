@@ -73,6 +73,7 @@ public:
 
     Status queryStudy(StudyMask mask,StudyList &list);
     Status queryStudy(std::string studyUID,Study &study);
+    Status queryOldStudies( std::string , StudyList &list );
     Status querySeries(SeriesMask mask,SeriesList &list);
     Status queryImages(ImageMask mask,ImageList &list);
     Status countImageNumber(ImageMask mask,int &imageNumber);

@@ -11,6 +11,8 @@
 #include <iostream.h>
 #include <cachepool.h>
 #include <QProgressDialog>
+#include "starviewersettings.h"
+#include <QDate>
 
 namespace udg {
 
@@ -59,6 +61,48 @@ Status CacheLayer::clearCache()
     {        
         return state.setStatus( CORRECT );
     }
+}
+
+Status CacheLayer::deleteOldStudies()
+{
+    QDate today;
+    StarviewerSettings settings;
+    CachePacs *localCache = CachePacs::getCachePacs();
+    StudyList studyList;
+    Status state;
+    Study study;
+    int comptador = 0;
+       
+    today = today.currentDate();
+    //calculem fins a quin dia conservarem els estudis
+    //de la data del dia restem el paràmetre definit per l'usuari, que estableix quants dies pot estar un estudi sense ser visualitzat
+    today = today.addDays( - settings.getMaximumDaysNotViewedStudy().toInt( NULL , 10 ) );
+    
+    //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre
+    state = localCache->queryOldStudies( today.toString("yyyyMMdd").toAscii().constData() , studyList );
+    studyList.firstStudy();
+    
+    QProgressDialog *progress;
+    progress = new QProgressDialog(tr("Clearing old studies..."), "" , 0 , studyList.count() );
+    progress->setMinimumDuration(0);
+    
+    while ( state.good() && !studyList.end() )
+    {
+        study = studyList.getStudy();
+        state = localCache->delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar   
+        studyList.nextStudy();
+        comptador++;
+        progress->setValue( comptador );
+        progress->repaint();
+    }
+    
+    progress->close();
+    
+    if ( !state.good() )
+    {
+        return state;
+    }
+    else return state.setStatus( CORRECT );
 }
 
 CacheLayer::~CacheLayer()
