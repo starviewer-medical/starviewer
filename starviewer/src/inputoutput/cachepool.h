@@ -18,6 +18,7 @@ class string;
 */
 class CachePool{
 public:
+    static const unsigned int MinimumMBytesOfDiskSpaceRequired = 1000;
 
     CachePool();
 

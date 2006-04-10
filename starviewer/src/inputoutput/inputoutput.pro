@@ -49,8 +49,7 @@ HEADERS += input.h \
            cacheinstallation.h \
            imagedicominformation.h \
            qexecuteoperationthread.h \
-           cachelayer.h \
-           systeminformation.h 
+           cachelayer.h
 SOURCES += input.cpp \
            output.cpp \
            cachepacs.cpp \
@@ -95,8 +94,7 @@ SOURCES += input.cpp \
            cacheinstallation.cpp \
            imagedicominformation.cpp \
            qexecuteoperationthread.cpp \
-           cachelayer.cpp \
-           systeminformation.cpp 
+           cachelayer.cpp
 TARGETDEPS += ../tools/libtools.a \
 ../../src/repositories/librepositories.a
 LIBS += ../../src/tools/libtools.a \

@@ -18,9 +18,11 @@ HEADERS += itkImageToVTKImageFilter.h \
            mathtools.h \
            itkQtAdaptor.h \
            distance.h \
+           harddiskinformation.h \
            point.h 
 SOURCES += mathtools.cpp \
            distance.cpp \
+           harddiskinformation.cpp \
            point.cpp 
 include(../itk.inc)
 include(../vtk.inc)
