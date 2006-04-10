@@ -171,7 +171,8 @@ Status CachePool::updatePoolTotalSize(int space)
     int i;
     Status state;
     std::string sql;
-    char size[7];
+    char *size;
+    unsigned long long spaceBytes;
     
     //sqlite no permet en un update entra valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem
     //un string i hi afegim 6 zeros per passar Mb a bytes
@@ -181,10 +182,12 @@ Status CachePool::updatePoolTotalSize(int space)
         return constructState(50);
     }
     
-    sprintf(size,"%i",space); //convertim l'espai en Mb a string
+    spaceBytes = space;
+    spaceBytes = spaceBytes * 1024 * 1024; //convertim els Mb en bytes, ja que es guarden en bytes les unitats a la base de dades
+    
+    sprintf(size,"%Li",spaceBytes); //convertim l'espai en bytes a string %Li significa long integer
     sql.insert(0,"Update Pool Set Space = ");//convertim l'espai en bytes
     sql.append(size);
-    sql.append("000000");
     sql.append(" where Param = 'POOLSIZE'");
     
     m_DBConnect->getLock();
@@ -239,7 +242,7 @@ Status CachePool::getPoolUsedSpace(int &space)
         return constructState(50);
     }    
     
-    sql.insert(0,"select round(Space/1000000) from Pool ");
+    sql.insert(0,"select round(Space/(1024*1024)) from Pool "); //convertim de bytes a Mb
     sql.append("where Param = 'USED'");
     
     m_DBConnect->getLock();
@@ -273,7 +276,7 @@ Status CachePool::getPoolTotalSize(int &space)
         return constructState(50);
     }
     
-    sql.insert(0,"select round(Space/1000000) from Pool "); // dividim per 1.000.000 per obtenir les dades en Mb
+    sql.insert(0,"select round(Space/(1024*1024)) from Pool "); //convertim de bytes a Mb
     sql.append("where Param = 'POOLSIZE'");
     
     m_DBConnect->getLock();
