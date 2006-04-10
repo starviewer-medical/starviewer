@@ -29,6 +29,7 @@ public:
     Status getPoolUsedSpace(int &usedSpace);
     Status getPoolTotalSize(int &totalSize);
     Status updatePoolTotalSize(int);    
+    Status getPoolFreeSpace( int &freeSpace );
 
     ~CachePool();
 private:

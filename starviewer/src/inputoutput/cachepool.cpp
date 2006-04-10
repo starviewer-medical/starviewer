@@ -294,4 +294,24 @@ Status CachePool::getPoolTotalSize(int &space)
     return state;
 }
 
+/** Calcula l'espai lliure disponible a la Pool
+  *         @param space  Espai lliure en Mb de la Pool (la caché)
+  *         @return estat el mètode
+  */
+Status CachePool::getPoolFreeSpace( int &freeSpace )
+{
+    Status state;
+    int usedSpace , totalSpace;
+    
+    state = getPoolTotalSize( totalSpace );
+    
+    if ( !state.good() ) return state;
+    
+    state = getPoolUsedSpace( usedSpace );
+    
+    freeSpace = totalSpace - usedSpace;
+    
+    return state;
+}
+
 };
