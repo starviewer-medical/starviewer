@@ -62,7 +62,7 @@ Image ImageList::getImage()
 /** retorna el número d'imatges de la llista
   *              @return  número d'imatges de la llista
   */
-int ImageList::getNumberOfImages()
+int ImageList::count()
 {
     return m_imageList.size();
 }

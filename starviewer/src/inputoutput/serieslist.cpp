@@ -63,7 +63,7 @@ Series SeriesList::getSeries()
 /** This function gets the number of series in the list
   *              @return  number of series that match the search
   */
-int SeriesList::getNumberOfSeries()
+int SeriesList::count()
 {
     return m_seriesList.size();
 }

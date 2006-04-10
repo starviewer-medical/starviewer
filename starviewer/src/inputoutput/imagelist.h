@@ -32,7 +32,7 @@ public:
     void nextImage();
     bool end();    
 
-    int getNumberOfImages();
+    int count();
   
     Image getImage();
       

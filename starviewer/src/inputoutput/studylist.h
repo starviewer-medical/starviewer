@@ -26,7 +26,7 @@ class StudyList{
     Study getStudy();
     bool findStudy(std::string);
     void clear();
-    int getNumberOfStudies();
+    int count();
     
  private :
 

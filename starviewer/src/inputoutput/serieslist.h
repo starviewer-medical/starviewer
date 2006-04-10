@@ -26,7 +26,7 @@ class SeriesList{
     void nextSeries();
     bool end();    
 
-    int getNumberOfSeries();
+    int count();
   
     Series getSeries();
       

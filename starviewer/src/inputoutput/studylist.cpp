@@ -91,7 +91,7 @@ Study StudyList::getStudy()
 /** This function gets the number of studies in the list
   *              @return  number of studies in the list
   */
-int StudyList::getNumberOfStudies()
+int StudyList::count()
 {
     return m_listStudy.size();
 }
