@@ -13,7 +13,7 @@
 #ifdef _WIN32
 	#include <windows.h>
 #else // linux stuff
-	#include <sys/vfs.h>
+	#include <sys/statvfs.h>
 	#include <sys/stat.h>
 #endif // _WIN32
 #include "starviewersettings.h"
@@ -62,9 +62,9 @@ Status CachePool::constructState(int numState)
 /** retorna l'espai lliure del disc dur
   *        @return espai lliure al disc dur
   */
-double CachePool::getFreeTotalSpace()
+unsigned long long CachePool::getFreeTotalSpace()
 {
-    double fFree, blocksFree, blockSize;
+    unsigned long long fFree, blocksFree, blockSize;
 #ifdef _WIN32
 //codi per Windows
 	QString sCurDir = QDir::current().absPath();
@@ -84,13 +84,13 @@ double CachePool::getFreeTotalSpace()
         QString sDirPath = QDir::current().absolutePath();
 	
         struct stat stst;
-	struct statfs stfs;
+	struct statvfs stvfs;
         double Mb = 1024*1024;
 
 	if ( ::stat(sDirPath.toLocal8Bit(),&stst) == -1 ) return false; //retrona el numero de blocs lliures
-	if ( ::statfs(sDirPath.toLocal8Bit(),&stfs) == -1 ) return false; //retorna la mida dels blocs
+	if ( ::statvfs(sDirPath.toLocal8Bit(),&stvfs) == -1 ) return false; //retorna la mida dels blocs
 
-	blocksFree = stfs.f_bavail;
+	blocksFree = stvfs.f_bavail;
 	blockSize = stst.st_blksize;
         fFree = ( blocksFree * blockSize ) / Mb;
 
