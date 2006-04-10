@@ -717,7 +717,7 @@ void QueryScreen::retrievePacs(bool view)
     //comprovem que tinguem espai suficient lliure per poder continuar
     HardDiskInformation harddisk;
 
-    if (harddisk.getNumberOfFreeMBytes(settings.getDatabasePath()) < CachePool::MinimumMBytesOfDiskSpaceRequired)
+    if (harddisk.getNumberOfFreeMBytes(settings.getCacheImagePath()) < CachePool::MinimumMBytesOfDiskSpaceRequired)
     {
         this->setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::warning( this, tr("StarViewer"),tr("Error: Disk space under 1 Gb. Please free some space in your disk "));
