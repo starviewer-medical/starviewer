@@ -148,17 +148,17 @@ void QConfigurationScreen::loadCachePoolDefaults()
         return;
     }
     
-    m_textPoolSize->setText(text.setNum(space/1000,10));
+    m_textPoolSize->setText(text.setNum(space/1024,10));
     
     result = used;
-    result = result/1000; //passem Mb a Gb;
+    result = result/1024; //passem Mb a Gb;
     text.setNum(result,'f',2);
     text.append(" Gb");
     m_PoolUsed->setText(text);
     
 //     //espai lliure
     result = space - used;
-    result = result /1000;
+    result = result /1024;
     text.setNum(result,'f',2);
     text.append(" Gb");
     m_PoolFree->setText(text);
@@ -676,7 +676,7 @@ void QConfigurationScreen::applyChangesCache()
     
     if (m_textPoolSize->isModified())
     {   
-        state = pool.updatePoolTotalSize(m_textPoolSize->text().toInt(NULL,10)*1000);//Passem l'espai a Mb
+        state = pool.updatePoolTotalSize(m_textPoolSize->text().toInt(NULL,10)*1024);//Passem l'espai a Mb
         databaseError(&state);
     }
     
