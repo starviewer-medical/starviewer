@@ -20,7 +20,6 @@ class CachePool{
 public:
 
     CachePool();
-    unsigned long long getFreeTotalSpace();
 
     void removeStudy(std::string studyUID);    
 
