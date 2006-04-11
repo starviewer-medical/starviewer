@@ -35,12 +35,12 @@ unsigned long HardDiskInformation::getNumberOfFreeBytes(QString path)
 
 unsigned long HardDiskInformation::getTotalNumberOfMBytes(QString path)
 {
-    return static_cast<unsigned long>( getTotalBytesPlataformEspecific(path) / 4096 );
+    return static_cast<unsigned long>( getTotalBytesPlataformEspecific(path) / 1048576 );
 }
 
 unsigned long HardDiskInformation::getNumberOfFreeMBytes(QString path)
 {
-    return static_cast<unsigned long>( getFreeBytesPlataformEspecific(path) / 4096);
+    return static_cast<unsigned long>( getFreeBytesPlataformEspecific(path) / 1048576 );
 }
 
 quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
