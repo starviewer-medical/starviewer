@@ -17,7 +17,6 @@ class vtkPlaneSource;
 class vtkImageReslice;
 class vtkTransform;
 class vtkActor2D;
-class vtkLookupTable;
 
 namespace udg {
 
@@ -132,9 +131,6 @@ private:
     /// Cosetes per controlar el moviment del plans a partir de l'interacció de l'usuari
     double m_initialPickX , m_initialPickY;
     vtkAxisActor2D* m_pickedAxisActor;
-
-    /// Taula perquè el mapeig dels colors del window level quedin centralitzats
-    vtkLookupTable* m_lookupTable;
     
 private slots:
 

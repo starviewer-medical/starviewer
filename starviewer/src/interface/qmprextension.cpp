@@ -34,7 +34,6 @@
 #include <vtkMatrix4x4.h>
 #include <vtkTransform.h>
 #include <vtkCamera.h>
-#include <vtkLookupTable.h>
 #include <vtkLine.h>
 
 namespace udg {
@@ -75,7 +74,6 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createConnections();
     createActors();
 
-    m_lookupTable = vtkLookupTable::New();
     readSettings();
 }
 
@@ -355,18 +353,6 @@ void QMPRExtension::setInput( Volume *input )
     m_sagital2DView->render();
     m_coronal2DView->render();
 
-//     double *range = m_volume->getVtkData()->GetScalarRange();
-//     m_lookupTable->SetTableRange( range[0] , range[1] );
-//     m_lookupTable->SetNumberOfColors( range[1] - range[0] );
-//     m_lookupTable->SetHueRange( 0 , 0 );
-//     m_lookupTable->SetSaturationRange( 0, 0 );
-//     m_lookupTable->SetValueRange( 0 , 1 );
-//     m_lookupTable->SetAlphaRange( 1, 1 );
-//     m_lookupTable->Build();
-//     m_axial2DView->setVtkLUT( m_lookupTable );
-//     m_sagital2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-//     m_coronal2DView->setVtkLUT( m_axial2DView->getVtkLUT() );
-
     updateControls();
 }
 
@@ -397,7 +383,7 @@ void QMPRExtension::initOrientation()
     m_volume->getOrigin(origin);
     double spacing[3];
     m_volume->getSpacing(spacing);
-    
+
     // Prevent obscuring voxels by offsetting the plane geometry
     //
     double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5) ,
@@ -406,6 +392,15 @@ void QMPRExtension::initOrientation()
                         origin[1] + spacing[1] * (extent[3] + 0.5)};
     double zbounds[] = {origin[2] + spacing[2] * (extent[4] - 0.5),
                         origin[2] + spacing[2] * (extent[5] + 0.5)};
+
+//     int size[3];
+//     m_volume->getDimensions( size );
+//     double xbounds[] = {origin[0] + spacing[0] * ( - 0.5) ,
+//                         origin[0] + spacing[0] * (size[0] + 0.5)};
+//     double ybounds[] = {origin[1] + spacing[1] * ( - 0.5),
+//                         origin[1] + spacing[1] * (size[1] + 0.5)};
+//     double zbounds[] = {origin[2] + spacing[2] * ( - 0.5),
+//                         origin[2] + spacing[2] * (size[2] + 0.5)};
     
     if ( spacing[0] < 0.0 )
     {
@@ -663,11 +658,11 @@ void QMPRExtension::updateControls()
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
     position1[2] = r[2] - t[2]*2000;
-    
+
     position2[0] = r[0] + t[0]*2000;
     position2[1] = r[1] + t[1]*2000;
     position2[2] = r[2] + t[2]*2000;
-    
+
     m_sagitalOverAxialAxisActor->SetPosition(  position1[0] , position1[1] );
     m_sagitalOverAxialAxisActor->SetPosition2( position2[0] , position2[1] );
     

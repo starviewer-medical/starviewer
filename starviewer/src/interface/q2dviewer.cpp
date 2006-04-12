@@ -1397,15 +1397,5 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
 
 }
 
-void Q2DViewer::setVtkLUT( vtkLookupTable *lut )
-{
-    m_viewer->GetWindowLevel()->SetLookupTable( lut );
-}
-
-vtkLookupTable *Q2DViewer::getVtkLUT( )
-{
-    return vtkLookupTable::SafeDownCast( m_viewer->GetWindowLevel()->GetLookupTable() );
-}
-
 };  // end namespace udg 
 

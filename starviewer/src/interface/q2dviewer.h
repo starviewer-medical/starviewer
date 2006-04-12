@@ -25,7 +25,6 @@ class vtkRenderWindowInteractor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
-class vtkLookupTable;
 
 namespace udg {
 
@@ -123,12 +122,6 @@ public:
     /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
     void saveCurrent( const char *baseName , FileType extension );
 
-    /// Assigna la LUT en format vtk
-    void setVtkLUT( vtkLookupTable * lut );
-
-    /// Retorna la LUT en format vtk
-    vtkLookupTable *getVtkLUT();
-    
 public slots:  
 
     /// Temporal per proves, veurem quins events es criden
