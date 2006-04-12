@@ -8,6 +8,7 @@
 #define UDGQEXECUTEOPERATIONTHREAD_H
 
 #include <QThread>
+#include "status.h"
 
 
 namespace udg {
@@ -81,6 +82,12 @@ private :
       */
     void retrieveStudy(Operation operation,bool view);
     
+    /** Indica si hi ha com a minim 1Gb d'espai lliure tant a la cache com al disc per descarregar el nou estudi. 
+      * Si detecta,que no hi ha suficient a la cache o al disc, intenterà alliberar 2000 Mb, esborrant estudis vells, si no retornara que no hi ha suficient espai al disc
+      *     @param retorna si hi ha suficient espai per descarregar l'estudi
+      *     @return retorna l'estat de l'operacio
+      */
+    Status enoughFreeSpace( bool &enoughSpace);
 
 };
 

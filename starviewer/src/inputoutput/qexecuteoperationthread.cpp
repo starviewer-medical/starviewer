@@ -13,9 +13,13 @@
 #include "processimagesingleton.h"
 #include "starviewerprocessimage.h"
 #include "cachepacs.h"
+#include "harddiskinformation.h"
 #include "scalestudy.h"
-#include "status.h"
 #include <QSemaphore>
+#include "cachepool.h"
+#include "starviewersettings.h"
+#include "const.h"
+#include "cachelayer.h"
 
 
 namespace udg {
@@ -90,19 +94,30 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     CachePacs *localCache =  CachePacs::getCachePacs();
     ScaleStudy scaleStudy;
     RetrieveImages retrieve;
+    bool enoughSpace;
     
     studyUID = operation.getStudyMask().getStudyUID().c_str();
+        
+    state = enoughFreeSpace( enoughSpace );    
         
     //s'indica que comença la descarreca de l'estudi al qretrieveScreen
     emit( setStudyRetrieving( studyUID.toAscii().constData() ) );
    
    
+    if ( !state.good() || !enoughSpace ) 
+    {
+        emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+        localCache->delStudy( studyUID.toAscii().constData());
+        return;
+    }
+    
     PacsServer pacsConnection(operation.getPacsParameters());//connemtem al pacs
     state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
     if (!state.good())
     {   
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         localCache->delStudy( studyUID.toAscii().constData()) ;        
+        return; 
     }
     
     //passem els parametres a la classe retrieveImages
@@ -152,6 +167,44 @@ void QExecuteOperationThread::imageRetrievedSlot( QString studyUID , int imageNu
 void QExecuteOperationThread::seriesRetrievedSlot( QString studyUID)
 {
     emit( seriesRetrieved( studyUID ));
+}
+
+Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
+{
+    HardDiskInformation hardDiskInformation;
+    CachePool pool;
+    StarviewerSettings settings;
+    int freePoolSpace, freeSystemSpace;
+    Status state;
+    CacheLayer cacheLayer;
+    
+    freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
+    if ( freeSystemSpace == 0 ) return state.setStatus( ERROR );
+    pool.getPoolFreeSpace( freePoolSpace );  
+    
+    //si no hi ha suficient espai lliure a la cache o al disc dur intera esborrar dos Gb
+    if ( freeSystemSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired || 
+         freePoolSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired )
+    {
+        cacheLayer.deleteOldStudies( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis 
+        
+        freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
+        if ( freeSystemSpace == 0 ) return state.setStatus( ERROR );
+        
+        pool.getPoolFreeSpace( freePoolSpace );  
+        
+        //hem intentat esborrar pero no hi ha hagut suficient espai
+        if ( freeSystemSpace <=  CachePool::MinimumMBytesOfDiskSpaceRequired || 
+             freePoolSpace <=  CachePool::MinimumMBytesOfDiskSpaceRequired )
+        {
+            //si no hi ha suficient espai,significa que no hi ha prou espai al disc, perque de la cache sempre podem alliberar espai
+            enoughSpace = false;
+        }
+        else enoughSpace = true;
+    }
+    else enoughSpace = true;
+    
+    return state.setStatus( CORRECT );
 }
 
 QExecuteOperationThread::~QExecuteOperationThread()

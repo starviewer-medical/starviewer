@@ -50,7 +50,6 @@
 #include "qnavigatewindow.h"
 #include "queueoperationlist.h"
 #include "operation.h"
-#include "harddiskinformation.h"
 #include "cachelayer.h"
 
 namespace udg {
@@ -714,16 +713,6 @@ void QueryScreen::retrievePacs(bool view)
     }
     studyUID.insert(0,m_studyTreeWidgetPacs->getSelectedStudyUID().toAscii().constData());
 
-    //comprovem que tinguem espai suficient lliure per poder continuar
-    HardDiskInformation harddisk;
-
-    if (harddisk.getNumberOfFreeMBytes(settings.getCacheImagePath()) < CachePool::MinimumMBytesOfDiskSpaceRequired)
-    {
-        this->setCursor(QCursor(Qt::ArrowCursor));
-        QMessageBox::warning( this, tr("StarViewer"),tr("Error: Disk space under 1 Gb. Please free some space in your disk "));
-        return;    
-    }
-    
     //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
     if (!m_studyListSingleton->findStudy(studyUID.toAscii().constData()))
     {
