@@ -328,6 +328,7 @@ Status CachePacs::queryOldStudies(std::string OldStudiesDate , StudyList &ls)
     sql.append(" from Study");
     sql.append(" where AccDat < ");
     sql.append( OldStudiesDate );
+    sql.append(" and Status = 'RETRIEVED' ");
     sql.append(" order by StuDat,StuTim ");
 
     char **resposta=NULL,**error=NULL;
@@ -415,7 +416,11 @@ Status CachePacs::queryStudy(std::string studyUID,Study &study)
         study.setAbsPath(resposta[9 + i*col]);
         study.setStudyModality(resposta[10 + i*col]);
     }
-    else estat = 99; //no trobat
+    else
+    { 
+        estat = 99; //no trobat
+        state = constructState(estat);
+    }
     
     return state;
     
@@ -757,9 +762,9 @@ Status CachePacs::delStudy(std::string studyUID)
 
     //sql per saber el directori on es guarda l'estudi
     sql.clear();
-    sql.insert(0,"select AbsPath from study where PatID in (select PatID from study where StuInsUID = '");
+    sql.insert(0,"select AbsPath from study where StuInsUID = '");
     sql.append(studyUID);
-    sql.append("')");
+    sql.append("'");
       
 
     estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
@@ -771,8 +776,16 @@ Status CachePacs::delStudy(std::string studyUID)
         m_DBConnect->releaseLock();
         return state;
     }       
-        
-    absPathStudy = resposta[1];
+    else if ( rows == 0 )
+    {
+        estat = sqlite_exec_printf(m_DBConnect->getConnection(),"ROLLBACK TRANSACTION ",0,0,0);
+        m_DBConnect->releaseLock();
+        return constructState( 99 );//error 99 registre no trobat           
+    }
+    else
+    {
+        absPathStudy = resposta[1];
+    }
     
     //sql per saber quants estudis te el pacient
     sql.clear();
@@ -790,6 +803,12 @@ Status CachePacs::delStudy(std::string studyUID)
         m_DBConnect->releaseLock();
         return state;
     }   
+    else if ( rows == 0 )
+    {    
+        estat = sqlite_exec_printf(m_DBConnect->getConnection(),"ROLLBACK TRANSACTION ",0,0,0);
+        m_DBConnect->releaseLock();
+        return constructState ( 99 );//error 99 registre no trobat   
+    }
     
     //ignorem el resposta [0], perque hi ha la capçalera
     if (atoi(resposta[1]) == 1)
