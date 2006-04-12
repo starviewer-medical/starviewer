@@ -28,10 +28,10 @@ public:
     Status resetPoolSpace();
     Status updatePoolSpace(int);
     
-    Status getPoolUsedSpace(int &usedSpace);
-    Status getPoolTotalSize(int &totalSize);
+    Status getPoolUsedSpace(unsigned int &usedSpace);
+    Status getPoolTotalSize(unsigned int &totalSize);
     Status updatePoolTotalSize(int);    
-    Status getPoolFreeSpace( int &freeSpace );
+    Status getPoolFreeSpace(unsigned int &freeSpace );
 
     ~CachePool();
 private:

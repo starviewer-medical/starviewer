@@ -230,7 +230,7 @@ Status CachePool::resetPoolSpace()
   *         @param space [in/out] Espai ocupat del Pool (la caché) actualment en Mb
   *         @return estat el mètode
   */
-Status CachePool::getPoolUsedSpace(int &space)
+Status CachePool::getPoolUsedSpace(unsigned int &space)
 {
     Status state;
     std::string sql;
@@ -264,7 +264,7 @@ Status CachePool::getPoolUsedSpace(int &space)
   *         @param space [in/out] Espai assignat en Mb que pot ocupar el Pool (la caché)
   *         @return estat el mètode
   */
-Status CachePool::getPoolTotalSize(int &space)
+Status CachePool::getPoolTotalSize(unsigned int &space)
 {
     Status state;
     std::string sql;
@@ -298,10 +298,10 @@ Status CachePool::getPoolTotalSize(int &space)
   *         @param space  Espai lliure en Mb de la Pool (la caché)
   *         @return estat el mètode
   */
-Status CachePool::getPoolFreeSpace( int &freeSpace )
+Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
 {
     Status state;
-    int usedSpace , totalSpace;
+    unsigned int usedSpace , totalSpace;
     
     state = getPoolTotalSize( totalSpace );
     

@@ -128,7 +128,7 @@ void QConfigurationScreen::loadCacheDefaults()
 void QConfigurationScreen::loadCachePoolDefaults()
 {
     Status state;
-    int space,used;
+    unsigned int space,used;
     float result;
     QString text;
     CachePool pool;

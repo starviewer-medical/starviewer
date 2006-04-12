@@ -29,7 +29,8 @@ Status CacheLayer::clearCache()
     Study study;
     Status state;
     CachePool pool;
-    int usedSpaceInit, deletedSpace = 0, usedSpace;
+    unsigned usedSpaceInit , usedSpace;
+    int deletedSpace = 0;
     
     pool.getPoolUsedSpace( usedSpaceInit );
     QProgressDialog *progress;
@@ -115,7 +116,8 @@ Status CacheLayer::deleteOldStudies(int MbytesToErase)
     Status state;
     Study study;
     CachePool pool;
-    int usedSpaceInit = 0 , usedSpace = 0 , deletedSpace = 0;
+    unsigned int usedSpaceInit = 0 , usedSpace = 0;
+    int deletedSpace = 0;
          
     maxDate = maxDate.currentDate();
     maxDate = maxDate.addDays( 1 ); //com que la funcio queryOldStudies, retorna els que no ha estat visualitzats en una data inferior a la passada per parametre, per incloure els del mateix dia a la llista que retorna, hi sumem un dia
