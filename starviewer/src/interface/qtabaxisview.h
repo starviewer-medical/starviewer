@@ -29,6 +29,9 @@ public:
     */
     void setInput(Volume* newImageData);
 
+private:
+    /// crea les connexions de signals i slots
+    void createConnections();
 };
 
 };  //  end  namespace udg 

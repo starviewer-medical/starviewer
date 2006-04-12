@@ -40,6 +40,8 @@ void QTabAxisView::setInput(Volume* newImageData)
     this->m_sagitalView->render();
     this->m_axialView->render();
 
+    createConnections();
+    
     int *size = newImageData->getVtkData()->GetDimensions();
 
     this->m_xAxisSlider->setMaximum( size[0]-1 );// Sagital
@@ -60,8 +62,23 @@ void QTabAxisView::setInput(Volume* newImageData)
     this->m_3DView->setInput( newImageData );
     this->m_3DView->setRenderFunctionToRayCasting();
     this->m_3DView->render();
+
     
 } 
 
+void QTabAxisView::createConnections()
+{
+    connect( m_zAxisSlider , SIGNAL( valueChanged(int) ) , m_zAxisSpinBox , SLOT( setValue(int) ) );
+    connect( m_zAxisSpinBox , SIGNAL( valueChanged(int) ) , m_axialView , SLOT( setSlice(int) ) );
+    connect( m_axialView , SIGNAL( sliceChanged(int) ) , m_zAxisSlider , SLOT( setValue(int) ) );
+
+    connect( m_xAxisSlider , SIGNAL( valueChanged(int) ) , m_xAxisSpinBox , SLOT( setValue(int) ) );
+    connect( m_xAxisSpinBox , SIGNAL( valueChanged(int) ) , m_sagitalView , SLOT( setSlice(int) ) );
+    connect( m_sagitalView , SIGNAL( sliceChanged(int) ) , m_xAxisSlider , SLOT( setValue(int) ) );
+
+    connect( m_yAxisSlider , SIGNAL( valueChanged(int) ) , m_yAxisSpinBox , SLOT( setValue(int) ) );
+    connect( m_yAxisSpinBox , SIGNAL( valueChanged(int) ) , m_coronalView , SLOT( setSlice(int) ) );
+    connect( m_coronalView , SIGNAL( sliceChanged(int) ) , m_yAxisSlider , SLOT( setValue(int) ) );
+}
 
 };  // end namespace udg {
