@@ -383,13 +383,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("I").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("S").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("I").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("S").toAscii() );
             }
         }
         else if( list.at(1) == "S"  )
@@ -946,7 +946,6 @@ void Q2DViewer::setInput( Volume* volume )
     initInformationText();
     
     m_mainVolume->getDimensions( m_size );
-
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
