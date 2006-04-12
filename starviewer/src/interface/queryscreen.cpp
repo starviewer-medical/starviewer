@@ -723,9 +723,20 @@ void QueryScreen::retrievePacs(bool view)
    
     
     //Inserim l'informació de l'estudi a la caché!
-    if (!insertStudyCache(m_studyListSingleton->getStudy()))
-    {
-        this->setCursor(QCursor(Qt::ArrowCursor));
+    state = insertStudyCache( m_studyListSingleton->getStudy() );
+    
+    if ( !state.good() )
+    {   
+        if ( state.code() == 2019 ) //l'estudi ja existeix
+        {   
+            if ( view )  //si es vol visualitzar no donem missatge de que ja esta descarregat, obrim l'estudi
+            {
+                studyRetrievedView( studyUID ); 
+            }
+            else QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study has been retrieved or is retrieving." ) );
+        }
+        else databaseError( &state );
+        this->setCursor( QCursor( Qt::ArrowCursor ) );
         return;
     }   
     
@@ -766,7 +777,7 @@ void QueryScreen::retrievePacs(bool view)
   *        @param estudi a insertat
   *        @return retorna si la operacio s'ha realitzat amb èxit
   */
-bool QueryScreen::insertStudyCache(Study stu)
+Status QueryScreen::insertStudyCache(Study stu)
 {
 
     CachePacs *localCache = CachePacs::getCachePacs();
@@ -782,17 +793,8 @@ bool QueryScreen::insertStudyCache(Study stu)
     study.setAbsPath(absPath);
     //inserim l'estudi a la caché
     state = localCache->insertStudy(&study); 
-    if (!state.good())
-    {   
-        if (state.code() == 2019)
-        {
-            QMessageBox::warning( this, tr("StarViewer"),tr("The study has been retrieved."));
-        }
-        else databaseError(&state);
-        return false;
-    }
    
-    return true;
+    return state;
 }
  
 /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si 
@@ -840,8 +842,8 @@ void QueryScreen::view()
     if (m_tab->currentIndex() == 1)
     {
         switch( QMessageBox::information( this, tr("Starviewer"),
-				      tr("Are you sure you want to retrieve this Study ?"),
-				      tr("Yes"), tr("No"),
+				      tr("Are you sure you want to view this Study ?"),
+				      tr("&Yes"), tr("&No"),
 				      0, 1 ) ) 
         {
         case 0:

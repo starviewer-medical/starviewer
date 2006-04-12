@@ -112,7 +112,7 @@ struct retrieveParameters
     void retrievePacs(bool view);
     void retrieveCache(QString StudyUID,QString SeriesUID);
     
-    bool insertStudyCache(Study);
+    Status insertStudyCache(Study);
     
     void QListView_InsertStudy();
     void queryStudyPacs();
