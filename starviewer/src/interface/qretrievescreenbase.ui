@@ -44,7 +44,7 @@
      </property>
      <column>
       <property name="text" >
-       <string>Status                         </string>
+       <string>Status</string>
       </property>
      </column>
      <column>
