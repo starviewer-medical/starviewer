@@ -564,6 +564,7 @@ void QConfigurationScreen::applyChanges()
     {
         applyChangesPacs();
         applyChangesCache();
+        loadCachePoolDefaults();
     }
 }
 
