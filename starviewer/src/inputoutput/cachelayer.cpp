@@ -52,7 +52,7 @@ Status CacheLayer::clearCache()
         studyList.nextStudy();
     }
     
-    progress->setValue (usedSpaceInit);
+    progress->close();
     
     if (!state.good())
     {
