@@ -92,10 +92,10 @@ void ExtensionHandler::request( int who )
     {
     
     case 1:
-        // open!
-        // caldria comprovar si cal obrir una nova MainWindow
         if( m_volumeID.isNull() )
         {
+        // open!
+        // caldria comprovar si cal obrir una nova MainWindow
             m_importFileApp = new AppImportFile();
             m_importFileApp->open();
             m_volumeID = m_importFileApp->getVolumeIdentifier();
@@ -110,6 +110,7 @@ void ExtensionHandler::request( int who )
         else
         {
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            m_mainApp->newAndOpen();
         }
     break;
     
@@ -124,6 +125,7 @@ void ExtensionHandler::request( int who )
         }
         else
         {
+            std::cerr << "Error:: trying to open a volume with an invalid id" << std::endl;
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
@@ -138,6 +140,7 @@ void ExtensionHandler::request( int who )
         else
         {
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            std::cerr << "Error:: trying to open a volume with an invalid id" << std::endl;
         }
     break;
     
@@ -151,6 +154,7 @@ void ExtensionHandler::request( int who )
         else
         {
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            std::cerr << "Error:: trying to open a volume with an invalid id" << std::endl;
         }
     break;
 
@@ -179,11 +183,7 @@ bool ExtensionHandler::open( QString fileName )
 {
     bool ok = true; 
     
-    if ( ! m_volumeID.isNull() )
-    {
-        //Si ja tenim obert un model, obrim una finestra nova ???
-    }
-    else
+    if ( m_volumeID.isNull() )
     {
         // indiquem que ens obri el fitxer
         if( QFileInfo( fileName ).suffix() == "dcm") // petita prova per provar lectura de DICOM's
@@ -218,7 +218,12 @@ bool ExtensionHandler::open( QString fileName )
                 // no s'ha pogut obrir l'arxiu per algun motiu
                 ok = false;
             }
-        }
+        }        
+    }
+    else
+    {
+        //Si ja tenim obert un model, obrim una finestra nova ???
+
     } 
     return ok;  
 }

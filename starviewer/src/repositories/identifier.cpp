@@ -42,13 +42,13 @@ void Identifier::setValue( int newId )
 
 bool Identifier::isNull()
 {
-    if( m_id > -1 )
+    if( m_id == -1 )
     {
-        return false;
+        return true;
     }
     else
     {
-        return true;
+        return false;
     }
 }
 
