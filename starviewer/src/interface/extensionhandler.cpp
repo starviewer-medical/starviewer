@@ -96,7 +96,8 @@ void ExtensionHandler::request( int who )
         {
         // open!
         // caldria comprovar si cal obrir una nova MainWindow
-            m_importFileApp = new AppImportFile();
+            if( !m_importFileApp )
+                m_importFileApp = new AppImportFile();
             m_importFileApp->open();
             m_volumeID = m_importFileApp->getVolumeIdentifier();
             m_importFileApp->finish();
@@ -125,7 +126,6 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            std::cerr << "Error:: trying to open a volume with an invalid id" << std::endl;
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
@@ -140,7 +140,6 @@ void ExtensionHandler::request( int who )
         else
         {
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
-            std::cerr << "Error:: trying to open a volume with an invalid id" << std::endl;
         }
     break;
     
@@ -154,7 +153,6 @@ void ExtensionHandler::request( int who )
         else
         {
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
-            std::cerr << "Error:: trying to open a volume with an invalid id" << std::endl;
         }
     break;
 
@@ -162,6 +160,24 @@ void ExtensionHandler::request( int who )
     case 5:
         axisView->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( axisView , tr("Volume Axis View"));
+    break;
+
+    case 6:
+        if( m_volumeID.isNull() )
+        {
+        // open dicom dir
+            if( !m_importFileApp )
+                m_importFileApp = new AppImportFile();
+            m_importFileApp->openDirectory();
+            m_volumeID = m_importFileApp->getVolumeIdentifier();
+            m_importFileApp->finish();
+//    APLICACIÓ QUE S'OBRE PER DEFECTE QUAN OBRIM UN VOLUM
+            request(2);
+        }
+        else
+        {
+            m_mainApp->newAndOpenDir();
+        }
     break;
     
     default:
