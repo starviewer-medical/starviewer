@@ -187,7 +187,8 @@ void QApplicationMainWindow::createActions()
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
-    m_pacsAction->setIcon( QIcon(":/images/find.png") );
+//     m_pacsAction->setIcon( QIcon(":/images/find.png") );
+    m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") );
     connect( m_pacsAction, SIGNAL( triggered() ) , this , SLOT( pacsQueryScreen() ) );
 
     m_basicViewAction = new QAction( this );
@@ -261,6 +262,7 @@ void QApplicationMainWindow::createActions()
     m_aboutAction->setText(tr("&About") );
     m_aboutAction->setShortcut( 0 );
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
+    m_aboutAction->setIcon( QIcon(":/images/info.png"));
     connect(m_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
     m_closeAction = new QAction( this );
