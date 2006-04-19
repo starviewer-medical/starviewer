@@ -71,7 +71,6 @@ public slots:
     void request( int who );
     void request( const QString &who );
 
-private slots:
     /// aplicació que s'executa per defecte quan carreguem un volum al repositori
     void onVolumeLoaded( Identifier id );
     
