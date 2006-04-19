@@ -11,7 +11,7 @@
     <file>images/find.png</file>
     <file>images/fileclose.png</file>
     <file>images/exit.png</file>
-    <file>images/delete.png</file>
+    <file>images/delete.png</file> 
     <file>images/gotocell.png</file>
     <file>images/airbrush.png</file>
     <file>images/debug.png</file>
@@ -21,6 +21,7 @@
     <file>images/folderclose.png</file>
     <file>images/folderopen.png</file>
     <file>images/series.png</file>
+    <file>images/openDicom.png</file>
     <file>cache/database.sql</file>
 </qresource>
 </RCC>
