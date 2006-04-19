@@ -22,6 +22,8 @@
     <file>images/folderopen.png</file>
     <file>images/series.png</file>
     <file>images/openDicom.png</file>
+    <file>images/pacsQuery.png</file>
+    <file>images/info.png</file>
     <file>cache/database.sql</file>
 </qresource>
 </RCC>
