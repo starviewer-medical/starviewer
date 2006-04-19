@@ -130,11 +130,27 @@ void QApplicationMainWindow::viewStudy( StudyVolum study )
     
     udg::Volume *dummyVolume = input->getData();
     m_volumeID = m_volumeRepository->addVolume( dummyVolume );
+//     if( m_volumeID.isNull() )
+//     {
+//     }
+//     else
+//     {
+//         if( QMessageBox::question( this , tr("Opening new data") , tr("Would you like to open the data in a new window? (Data will be opened on the same window instead)") , QMessageBox::Yes , QMessageBox::No ) == QMessageBox::Yes )
+//         {
+//         // de mentres no fa res...
+//         }
+//     }
     m_extensionHandler->setVolumeID( m_volumeID );    
     m_extensionHandler->request( 2 );
 
     this->setCursor( QCursor(Qt::ArrowCursor) );    
 
+}
+
+void QApplicationMainWindow::setVolumeID( Identifier id )
+{
+    m_volumeID = id;
+    m_extensionHandler->setVolumeID( m_volumeID );
 }
 
 void QApplicationMainWindow::createActions()
@@ -154,10 +170,19 @@ void QApplicationMainWindow::createActions()
     m_openAction->setText( tr("&Open...") );
     m_openAction->setShortcut( tr("Ctrl+O") );
     m_openAction->setStatusTip(tr("Open an existing volume file"));
-    m_openAction->setIcon( QIcon(":/images/open.png") );
+    m_openAction->setIcon( QIcon(":/images/open.png") );   
     signalMapper->setMapping( m_openAction , 1 );
     signalMapper->setMapping( m_openAction , "Open File" );
     connect( m_openAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+
+    m_openDirAction = new QAction( this );
+    m_openDirAction->setText( tr("Open &DICOM Directory") );
+    m_openDirAction->setShortcut( tr("Ctrl+D") );
+    m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
+    m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
+    signalMapper->setMapping( m_openDirAction , 6 );
+    signalMapper->setMapping( m_openDirAction , "Open Dicom Dir" );
+    connect( m_openDirAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
     
     m_pacsAction = new QAction( this );
     m_pacsAction->setText(tr("&PACS...") );
@@ -382,6 +407,7 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu = menuBar()->addMenu( tr("&File") );
     m_fileMenu->addAction( m_newAction );
     m_fileMenu->addAction( m_openAction );
+    m_fileMenu->addAction( m_openDirAction );
     m_fileMenu->addAction( m_pacsAction );
     
     m_fileMenu->addSeparator();
@@ -453,6 +479,7 @@ void QApplicationMainWindow::createToolBars()
     m_fileToolBar = addToolBar( tr("File") );
     m_fileToolBar->addAction( m_newAction );
     m_fileToolBar->addAction( m_openAction );
+    m_fileToolBar->addAction( m_openDirAction );
     m_fileToolBar->addAction( m_pacsAction );
     
     m_databaseToolBar = addToolBar( tr("Database") );
@@ -482,6 +509,22 @@ void QApplicationMainWindow::newFile()
     QString windowName;    
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
     newMainWindow->show();
+}
+
+void QApplicationMainWindow::newAndOpen()
+{
+    QString windowName;    
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
+    newMainWindow->show();
+    newMainWindow->m_openAction->trigger();
+}
+
+void QApplicationMainWindow::newAndOpenDir()
+{
+    QString windowName;    
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
+    newMainWindow->show();
+    newMainWindow->m_openDirAction->trigger();
 }
 
 void QApplicationMainWindow::pacsQueryScreen()

@@ -42,10 +42,16 @@ public:
     
     /// Ens retorna l'id del volum que ha obert
     Identifier getVolumeID() const { return m_volumeID; };
+
+    /// [apanyo] Li indiquem quin és el seu id de volum
+    void setVolumeID( Identifier id );
     
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
-    
+
+    /// Mètode de conveniència per sortir del pas de mentres. Es crida quan tenim ja un model obert i volem obri-ne un de nou
+    void newAndOpen();
+    void newAndOpenDir();
 public slots:   
     /// mostra el progrés d'un procés (ara mateix només serà obrir fitxers) amb un diàleg
     void showProgress( int value );
@@ -134,6 +140,7 @@ private:
     QAction *m_pacsAction;
     QAction *m_newAction;
     QAction *m_openAction;
+    QAction *m_openDirAction;
     QAction *m_closeAction;
     QAction *m_exitAction;
     QAction *m_aboutAction;

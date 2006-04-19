@@ -51,35 +51,50 @@ void AppImportFile::open()
     }
 }
 
+void AppImportFile::openDirectory()
+{
+    QString directoryName = QFileDialog::getExistingDirectory( 0 , tr("Choose a directory") , m_workingDicomDirectory , QFileDialog::ShowDirsOnly );
+    if ( !directoryName.isEmpty() )
+    {
+        if( loadDirectory( directoryName ) )
+        {
+            m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
+        }
+    }
+}
+
 bool AppImportFile::loadFile( QString fileName )
 {
     bool ok = true; 
 
-    // indiquem que ens obri el fitxer
-    if( QFileInfo( fileName ).suffix() == "dcm"  ) // petita prova per provar lectura de DICOM's
+    if( m_inputReader->openFile( fileName.toLatin1() ) )
     {
-        if( m_inputReader->readSeries( QFileInfo( fileName ).dir().absolutePath().toLatin1() ) )
-        { 
-            // afegim el nou volum al repositori
-            m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );            
-        }
-        else
-        {
-            ok = false;
-        }
+        // afegim el nou volum al repositori
+        m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
+        emit newVolume( m_volumeID );
     }
     else
     {
-        if( m_inputReader->openFile( fileName.toLatin1() ) )
-        { 
-            // afegim el nou volum al repositori
-            m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );            
-        }
-        else
-        {
-            // no s'ha pogut obrir l'arxiu per algun motiu
-            ok = false;
-        }
+        // no s'ha pogut obrir l'arxiu per algun motiu
+        ok = false;
+    }
+
+    return ok;
+}
+
+bool AppImportFile::loadDirectory( QString directoryName )
+{
+    bool ok = true; 
+
+    if( m_inputReader->readSeries( directoryName.toLatin1() ) )
+    {
+        // afegim el nou volum al repositori
+        m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
+        emit newVolume( m_volumeID );
+    }
+    else
+    {
+        ok = false;
     }
 
     return ok;
@@ -95,6 +110,7 @@ void AppImportFile::readSettings()
     QSettings settings("GGG", "StarViewer-App-ImportFile");
     settings.beginGroup("StarViewer-App-ImportFile");
     m_workingDirectory = settings.value("workingDirectory", ".").toString();
+    m_workingDicomDirectory = settings.value("workingDicomDirectory", ".").toString();
     settings.endGroup();
 }
 
@@ -103,6 +119,7 @@ void AppImportFile::writeSettings()
     QSettings settings("GGG", "StarViewer-App-ImportFile");
     settings.beginGroup("StarViewer-App-ImportFile");
     settings.setValue("workingDirectory", m_workingDirectory );
+    settings.setValue("workingDicomDirectory", m_workingDicomDirectory );
     settings.endGroup();
 }
 

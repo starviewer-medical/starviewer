@@ -33,21 +33,40 @@ public:
     
     /// Obre el diàleg per poder obrir arxius
     void open();
+
+    /// Obre el diàleg per poder obrir arxius d'un directori DICOM
+    void openDirectory();
+    
     /// Retorna l'id de l'últim volum que ha depositat al repositori
     Identifier getVolumeIdentifier(){ return m_volumeID; }
+
+signals:
+    /// Aquesta senyal s'emetrà quan s'hagi afegit un volum al repositori
+    void newVolume( Identifier );
     
 public slots:
     /// Mètode específic per quan es tanca l'aplicació, allibera recursos i "deixa les coses al seu lloc"
     void finish();
 
 private:
+    /// Directori de treball per fitxers ordinaris
     QString m_workingDirectory;
+
+    /// Directori de treball per directoris dicom
+    QString m_workingDicomDirectory;
+
+    /// Filtres de fitxer
     QString m_openFileFilters;
+
     /// llegeix escriu configuracions
     void readSettings();
     void writeSettings();
+
     /// fa la feina 'bruta' d'obrir l'arxiu
     bool loadFile( QString fileName );
+
+    /// fa la feina 'bruta' d'obrir un directori d'arxius dicom
+    bool loadDirectory( QString directoryName );
     
     // :::::::::::::::::::::::::::::::::::::::::
     // Recursos
