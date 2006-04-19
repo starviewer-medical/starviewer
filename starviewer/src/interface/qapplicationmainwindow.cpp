@@ -140,8 +140,7 @@ void QApplicationMainWindow::viewStudy( StudyVolum study )
 //         // de mentres no fa res...
 //         }
 //     }
-    m_extensionHandler->setVolumeID( m_volumeID );    
-    m_extensionHandler->request( 2 );
+    m_extensionHandler->onVolumeLoaded( m_volumeID );
 
     this->setCursor( QCursor(Qt::ArrowCursor) );    
 
