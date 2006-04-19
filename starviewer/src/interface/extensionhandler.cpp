@@ -52,7 +52,8 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     // ::::::::::::::::
     
     // Aquí en principi només farem l'inicialització
-    m_importFileApp = 0;
+    m_importFileApp = new AppImportFile;
+    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
     registerExtensions();
 }
 
@@ -96,17 +97,8 @@ void ExtensionHandler::request( int who )
         {
         // open!
         // caldria comprovar si cal obrir una nova MainWindow
-            if( !m_importFileApp )
-                m_importFileApp = new AppImportFile();
             m_importFileApp->open();
-            m_volumeID = m_importFileApp->getVolumeIdentifier();
             m_importFileApp->finish();
-// **************************************************************************************
-//
-//    APLICACIÓ QUE S'OBRE PER DEFECTE QUAN OBRIM UN VOLUM
-//
-// **************************************************************************************
-            request(2);
         }
         else
         {
@@ -165,14 +157,9 @@ void ExtensionHandler::request( int who )
     case 6:
         if( m_volumeID.isNull() )
         {
-        // open dicom dir
-            if( !m_importFileApp )
-                m_importFileApp = new AppImportFile();
+            // open dicom dir
             m_importFileApp->openDirectory();
-            m_volumeID = m_importFileApp->getVolumeIdentifier();
             m_importFileApp->finish();
-//    APLICACIÓ QUE S'OBRE PER DEFECTE QUAN OBRIM UN VOLUM
-            request(2);
         }
         else
         {
@@ -189,6 +176,12 @@ void ExtensionHandler::request( int who )
 
 void ExtensionHandler::request( const QString &who )
 {
+}
+
+void ExtensionHandler::onVolumeLoaded( Identifier id )
+{
+    m_volumeID = id;
+    request( 2 );
 }
 
 void ExtensionHandler::introduceApplications()

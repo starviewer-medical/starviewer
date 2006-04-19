@@ -70,7 +70,11 @@ public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
     void request( int who );
     void request( const QString &who );
-        
+
+private slots:
+    /// aplicació que s'executa per defecte quan carreguem un volum al repositori
+    void onVolumeLoaded( Identifier id );
+    
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
