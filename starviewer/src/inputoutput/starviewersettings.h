@@ -23,8 +23,6 @@ const QString localPortKey("pacs/pacsparam/localPort");
 const QString timeoutPacsKey("pacs/pacsparam/timeout");
 const QString maxConnectionsKey("pacs/pacsparam/MaxConnects");
 const QString selectLanguageKey("pacs/language");
-const QString countImagesKey("pacs/pacsparam/countImages");
-const QString prevImagesKey("pacs/pacsparam/prevImages");
 const QString pacsColumnWidthKey("pacs/interfase/studyPacsList/columnWidth");//en aquesta clau a darrera s'hi concatena el número de columna, per diferenciar cada columna
 const QString cacheColumnWidthKey("pacs/interface/studyCacheList/columnWidth");//en aquesta clau a darrera s'hi concatena el número de columna, per diferenciar cada columna
 const QString MaximumDaysNotViewedStudy("pacs/cache/MaximumDaysNotViewedStudy");
@@ -52,16 +50,12 @@ public:
       void setLocalPort(QString);
       void setLanguage(QString);
       void setMaxConnections(QString);
-      void setPrevImages(bool);
-      void setCountImages(bool);
       
       QString getAETitleMachine();
       QString getTimeout();
       QString getLocalPort();
       QString getLanguage();
       QString getMaxConnections();
-      bool    getPrevImages();
-      bool    getCountImages();
       
     //interficie
       void setStudyPacsListColumnWidth(int col,int width);

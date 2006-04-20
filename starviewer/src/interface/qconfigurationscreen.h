@@ -47,7 +47,6 @@ public slots :
     void acceptChanges();
     void cancelChanges();
 
-    void configurationChanged(int);
     void configurationChanged( const QString& );
     
     void cacheImagePathEditingFinish();

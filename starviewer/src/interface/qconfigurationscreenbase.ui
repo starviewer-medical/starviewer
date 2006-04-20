@@ -1512,35 +1512,6 @@
              <property name="spacing" >
               <number>6</number>
              </property>
-             <item row="3" column="0" >
-              <widget class="QCheckBox" name="m_checkPrevImages" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>7</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="font" >
-                <font>
-                 <family>Sans Serif</family>
-                 <pointsize>9</pointsize>
-                 <weight>75</weight>
-                 <italic>false</italic>
-                 <bold>true</bold>
-                 <underline>false</underline>
-                 <strikeout>false</strikeout>
-                </font>
-               </property>
-               <property name="text" >
-                <string>Previsualitzate the images of a study (reduces the query speed)</string>
-               </property>
-               <property name="tristate" >
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="0" >
               <spacer>
                <property name="orientation" >
@@ -1636,32 +1607,6 @@
                 </spacer>
                </item>
               </layout>
-             </item>
-             <item row="2" column="0" >
-              <widget class="QCheckBox" name="m_checkCountImages" >
-               <property name="sizePolicy" >
-                <sizepolicy>
-                 <hsizetype>3</hsizetype>
-                 <vsizetype>0</vsizetype>
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="font" >
-                <font>
-                 <family>Sans Serif</family>
-                 <pointsize>9</pointsize>
-                 <weight>75</weight>
-                 <italic>false</italic>
-                 <bold>true</bold>
-                 <underline>false</underline>
-                 <strikeout>false</strikeout>
-                </font>
-               </property>
-               <property name="text" >
-                <string>Count the number of images (reduce the query speed)</string>
-               </property>
-              </widget>
              </item>
             </layout>
            </widget>
@@ -2119,8 +2064,6 @@
   <tabstop>m_textLocalPort</tabstop>
   <tabstop>m_textMaxConnections</tabstop>
   <tabstop>m_comboLanguage</tabstop>
-  <tabstop>m_checkCountImages</tabstop>
-  <tabstop>m_checkPrevImages</tabstop>
   <tabstop>m_buttonAcceptPacs</tabstop>
   <tabstop>m_buttonApplyPacs</tabstop>
   <tabstop>m_buttonCancelPacs</tabstop>

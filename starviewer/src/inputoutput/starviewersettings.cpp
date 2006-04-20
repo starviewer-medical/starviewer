@@ -139,22 +139,6 @@ void StarviewerSettings::setMaxConnections(QString maxConn)
     m_starviewerSettings.setValue(maxConnectionsKey,maxConn);
 }
 
-/** Activa o desactiva la opció de previsualització d'imatges
-  *        @param boolea indicant si s'ha de previsualitzar les imatges
-  */
-void StarviewerSettings::setPrevImages(bool prev)
-{
-    m_starviewerSettings.setValue(prevImagesKey,prev);
-}
-
-/** Activa o desactiva la opció de comptar imatges en el PACS
-  *        @param boolea indicant si s'han de comptar les imatges del PACS
-  */
-void StarviewerSettings::setCountImages(bool count)
-{
-    m_starviewerSettings.setValue(countImagesKey,count);
-}
-
 /** retorna el AEtitle de la màquina
   *        @return AETitle de la màquina
   */
@@ -192,22 +176,6 @@ QString StarviewerSettings::getLanguage()
 QString StarviewerSettings::getMaxConnections()
 {
     return m_starviewerSettings.value( maxConnectionsKey,"3").toString();
-}
-
-/** retorna l'indicador de si s'han de previsualitzar les imatges del PACS
-  *        @return indica si s'han de previsualitzar les imatges
-  */
-bool StarviewerSettings::getPrevImages()
-{
-    return m_starviewerSettings.value(prevImagesKey,false).toBool();
-}
-
-/** retorna l'indicador de si s'han de comptar les imatges
-  *        @return indica si s'han de compter les imatges
-  */
-bool StarviewerSettings::getCountImages()
-{
-    return m_starviewerSettings.value(countImagesKey,false).toBool();
 }
 
 /************************ INTERFICIE ************************************************/

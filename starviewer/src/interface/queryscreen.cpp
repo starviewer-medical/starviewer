@@ -171,13 +171,6 @@ void QueryScreen::connectSignalsAndSlots()
     //Aquest connect s'utilitzarà perque els threads puguin avisar que han finalitzat de descarregar les imatges   
     connect(m_retrieveScreen, SIGNAL(studyRetrieved(QString)), this, SLOT(studyRetrieved(QString)));
     
-    //connectem els QStudyTreeWidget amb els QSeriesListWidget, per poder mantenir la informació de les series actualitzada!
-    connect(m_studyTreeWidgetPacs,SIGNAL(addSeries(Series * )),m_seriesListWidgetPacs,SLOT(addSeries(Series *)));
-    connect(m_studyTreeWidgetPacs,SIGNAL(clearSeriesListWidget()),m_seriesListWidgetPacs,SLOT(clearSeriesListWidget()));
-    connect(m_seriesListWidgetPacs,SIGNAL(selectedSeriesIcon(QString)),m_studyTreeWidgetPacs,SLOT(selectedSeriesIcon(QString))); 
-    connect(m_seriesListWidgetPacs,SIGNAL(viewSeriesIcon()),m_studyTreeWidgetPacs,SLOT(viewStudy())); 
-    connect(m_studyTreeWidgetPacs,SIGNAL(selectedSeriesList(QString)),m_seriesListWidgetPacs,SLOT(selectedSeriesList(QString))); 
-    
     //connectem els signes del SeriesIconView StudyListView
     connect(m_studyTreeWidgetCache,SIGNAL(addSeries(Series * )),m_seriesListWidgetCache,SLOT(addSeries(Series *)));
     connect(m_studyTreeWidgetCache,SIGNAL(clearSeriesListWidget()),m_seriesListWidgetCache,SLOT(clearSeriesListWidget()));    
@@ -458,8 +451,6 @@ void QueryScreen::queryStudyPacs()
         return;  
     }
      
-      
-    m_seriesListWidgetPacs->clear(); //netegem el QSeriesIconView dem_studyListSingleton PACS
     m_studyListSingleton->firstStudy();
        
     if (m_studyListSingleton->end())
@@ -519,8 +510,6 @@ void QueryScreen::searchSeries(QString studyUID,QString pacsAETitle)
 {   
   
     this->setCursor(QCursor(Qt::WaitCursor));
-    
-    m_seriesListWidgetPacs->clear(); //Netegem el QSeriesIconView del Pacs
     
     if (m_tab->currentIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
     {
@@ -591,24 +580,10 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     
     m_seriesListSingleton->firstSeries();
     
-    if (show)  m_seriesListWidgetPacs->clear();
-    
     while (!m_seriesListSingleton->end())
     {
         serie = m_seriesListSingleton->getSeries();
-        if (settings.getCountImages())
-        {
-            //preparem per fer la cerca d'imatges
-
-            imagem.setStudyUID(serie.getStudyUID().c_str());
-            imagem.setSeriesUID(serie.getSeriesUID().c_str());
-            QueryImageNumber qim(pacsConnection.getConnection(),imagem);
         
-            qim.count();//contem el nombre d'imatges
-        
-            nImages=  qim.getImageNumber();
-            serie.setImageNumber(nImages);
-        }
         if (show)
         {
             m_studyTreeWidgetPacs->insertSeries(&serie);//inserim la informació de les imatges al formulari

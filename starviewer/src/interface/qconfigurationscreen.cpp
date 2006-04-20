@@ -85,8 +85,6 @@ void QConfigurationScreen::connectSignalAndSlots()
     connect(m_textDatabaseRoot,SIGNAL(textChanged(const QString &)),this,SLOT(co7nfigurationChanged( const QString& )));
     connect(m_textLocalPort,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     connect(m_textMaxConnections,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
-    connect(m_checkPrevImages,SIGNAL(stateChanged(int)),this,SLOT(configurationChanged( int )));
-    connect(m_checkCountImages,SIGNAL(stateChanged(int)),this,SLOT(configurationChanged( int )));
     connect(m_comboLanguage,SIGNAL(editTextChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     connect(m_textMaximumDaysNotViewed,SIGNAL(textChanged(const QString &)),this,SLOT(configurationChanged( const QString& )));
     
@@ -189,8 +187,6 @@ void QConfigurationScreen::loadPacsDefaults()
     m_textLocalPort->setText(settings.getLocalPort());
     m_textTimeout->setText(settings.getTimeout());
     m_textMaxConnections->setText(settings.getMaxConnections());
-    m_checkCountImages->setChecked(settings.getCountImages());
-    m_checkPrevImages->setChecked(settings.getPrevImages());
 }
 
 
@@ -597,20 +593,8 @@ void QConfigurationScreen::applyChangesPacs()
         settings.setMaxConnections( m_textMaxConnections->text());
     }
     
-    settings.setCountImages(m_checkCountImages->isChecked());
-    settings.setPrevImages(m_checkPrevImages->isChecked());
-    
     m_buttonApplyPacs->setEnabled(false);
     
-}
-
-
-/** Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
-  */
-void QConfigurationScreen::configurationChanged (int)
-{
-    m_buttonApplyPacs->setEnabled(true);
-    m_buttonApplyCache->setEnabled(true);
 }
 
 
