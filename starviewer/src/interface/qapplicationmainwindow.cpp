@@ -19,7 +19,7 @@
 #include <QFileInfo> //Per m_workingDirectory
 #include <QCursor>
 #include <QProgressDialog>
-
+#include <QApplication>
 // els nostres widgets/elements de la plataforma
 #include "qapplicationmainwindow.h"
 #include "volumerepository.h"
@@ -31,7 +31,6 @@
 #include "extensionworkspace.h"
 
 // Mini - aplicacions
-#include "queryscreen.h" // temporal!
 #include "cacheinstallation.h"
 
 namespace udg{
@@ -47,8 +46,6 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     m_extensionHandler = new ExtensionHandler( this );
     
     cacheInstallation.checkInstallation();
-    m_queryScreen = new QueryScreen( 0 );
-    connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     // ------------------------------------------------------------------------------------
     // aquí creem el repositori de volums i l'objecte input per poder accedir als arxius
     // ------------------------------------------------------------------------------------
@@ -103,55 +100,6 @@ QApplicationMainWindow::~QApplicationMainWindow()
     }
 }
 
-void QApplicationMainWindow::viewStudy( StudyVolum study )
-{
-    Input *input = new Input;
-    SeriesVolum serie;
-    
-    this->setCursor( QCursor(Qt::WaitCursor) );
-    study.firstSerie();
-    while ( !study.end() )
-    {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
-        {
-            break;
-        }
-        study.nextSerie();
-    }
-    if ( study.end() )
-    { 
-        //si no l'hem trobat per defecte mostrarem la primera serie
-        study.firstSerie();
-    }
-    
-    serie = study.getSeriesVolum();
-
-    input->readSeries( serie.getSeriesPath().c_str() );
-    
-    udg::Volume *dummyVolume = input->getData();
-    m_volumeID = m_volumeRepository->addVolume( dummyVolume );
-//     if( m_volumeID.isNull() )
-//     {
-//     }
-//     else
-//     {
-//         if( QMessageBox::question( this , tr("Opening new data") , tr("Would you like to open the data in a new window? (Data will be opened on the same window instead)") , QMessageBox::Yes , QMessageBox::No ) == QMessageBox::Yes )
-//         {
-//         // de mentres no fa res...
-//         }
-//     }
-    m_extensionHandler->onVolumeLoaded( m_volumeID );
-
-    this->setCursor( QCursor(Qt::ArrowCursor) );    
-
-}
-
-void QApplicationMainWindow::setVolumeID( Identifier id )
-{
-    m_volumeID = id;
-    m_extensionHandler->setVolumeID( m_volumeID );
-}
-
 void QApplicationMainWindow::createActions()
 {
     QSignalMapper* signalMapper = new QSignalMapper( this );
@@ -187,9 +135,10 @@ void QApplicationMainWindow::createActions()
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
-//     m_pacsAction->setIcon( QIcon(":/images/find.png") );
     m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") );
-    connect( m_pacsAction, SIGNAL( triggered() ) , this , SLOT( pacsQueryScreen() ) );
+    signalMapper->setMapping( m_pacsAction , 7 );
+    signalMapper->setMapping( m_pacsAction , "Open Pacs Browser" );
+    connect( m_pacsAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
 
     m_basicViewAction = new QAction( this );
     m_basicViewAction->setText( tr("2D &Basic Viewer") );
@@ -315,7 +264,6 @@ void QApplicationMainWindow::exportToJpeg( )
     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToJpegFilter );
     if ( !fileName.isEmpty() )
     {
-//         std::cout << "Extension::" << QFileInfo( fileName ).suffix() << std::endl;
         if( QFileInfo( fileName ).suffix() != "jpg" )
         {
             fileName += ".jpg";
@@ -526,11 +474,6 @@ void QApplicationMainWindow::newAndOpenDir()
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
     newMainWindow->show();
     newMainWindow->m_openDirAction->trigger();
-}
-
-void QApplicationMainWindow::pacsQueryScreen()
-{
-    m_queryScreen->show();
 }
 
 void QApplicationMainWindow::close()

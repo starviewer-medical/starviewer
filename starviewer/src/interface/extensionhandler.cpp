@@ -34,7 +34,7 @@
 
 // PACS --------------------------------------------
 #include "queryscreen.h"
-
+#include "seriesvolum.h"
 
 
 namespace udg {
@@ -54,6 +54,8 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
+    m_queryScreen = new QueryScreen( 0 );
+    connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     registerExtensions();
 }
 
@@ -167,6 +169,10 @@ void ExtensionHandler::request( int who )
         }
     break;
     
+    case 7:
+        m_queryScreen->show();
+    break;
+    
     default:
         axisView->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( axisView , tr("Volume Axis View"));
@@ -235,6 +241,49 @@ bool ExtensionHandler::open( QString fileName )
 
     } 
     return ok;  
+}
+
+void ExtensionHandler::viewStudy( StudyVolum study )
+{
+    Input *input = new Input;
+    SeriesVolum serie;
+    
+    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
+    study.firstSerie();
+    while ( !study.end() )
+    {
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
+        {
+            break;
+        }
+        study.nextSerie();
+    }
+    if ( study.end() )
+    { 
+        //si no l'hem trobat per defecte mostrarem la primera serie
+        study.firstSerie();
+    }
+    
+    serie = study.getSeriesVolum();
+
+    input->readSeries( serie.getSeriesPath().c_str() );
+    
+    udg::Volume *dummyVolume = input->getData();
+    m_volumeID = m_volumeRepository->addVolume( dummyVolume );
+//     if( m_volumeID.isNull() )
+//     {
+//     }
+//     else
+//     {
+//         if( QMessageBox::question( this , tr("Opening new data") , tr("Would you like to open the data in a new window? (Data will be opened on the same window instead)") , QMessageBox::Yes , QMessageBox::No ) == QMessageBox::Yes )
+//         {
+//         // de mentres no fa res...
+//         }
+//     }
+    this->onVolumeLoaded( m_volumeID );
+
+    m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+
 }
 
 };  // end namespace udg 

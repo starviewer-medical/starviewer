@@ -14,8 +14,6 @@
 #include <QStringList>
 #include <QMenu>
 
-#include "studyvolum.h"
-
 // Forward declarations
 class QAction;
 class QToolBar;
@@ -24,7 +22,6 @@ class QCloseEvent;
 
 namespace udg{
 // Forward declarations
-class QueryScreen;
 class VolumeRepository;
 class Input;
 class Output;
@@ -64,9 +61,6 @@ private:
     // :::::::::::::::::::::::::::
     // membres
     // :::::::::::::::::::::::::::
-    /// screen de query del pacs
-    QueryScreen *m_queryScreen;
-
     /// Gestor de serveis i miniaplicacions
     ExtensionHandler *m_extensionHandler;
     /// Tipus de fitxer a exportar
@@ -184,10 +178,6 @@ private:
     QString strippedName(const QString &fullFileName);
 
 private slots:
-    /// es crida quan es demana un studi descarregat, es veui la pimera serie
-    void viewStudy(StudyVolum study);
-    /// Obre la finestra de query del pacs
-    void pacsQueryScreen();
     /// Obre una nova finestra
     void newFile();
     /// Slot tancar volum

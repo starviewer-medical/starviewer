@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QString>
 #include "identifier.h"
+#include "studyvolum.h"
 
 namespace udg {
 
@@ -31,7 +32,7 @@ class QMPR3D2DExtensionCreator;
 class AppImportFile;
 
 // Fi de l'Espai reservat pels fwd decl de les mini-apps
-
+class QueryScreen;
 /**
 Gestor de mini-aplicacions i serveis de l'aplicació principal
 
@@ -73,7 +74,9 @@ public slots:
 
     /// aplicació que s'executa per defecte quan carreguem un volum al repositori
     void onVolumeLoaded( Identifier id );
-    
+
+    /// [apanyo]es crida quan es demana un studi descarregat, es veu la pimera serie
+    void viewStudy( StudyVolum study );
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
@@ -112,11 +115,11 @@ private:
     
     /// Importar models del sistema de fitxers al repositori de volums
     AppImportFile *m_importFileApp;
-    /// visor simple del model
     
-    
+    /// La pantalla d'accés al pacs
+    QueryScreen *m_queryScreen;
 };
 
-};  //  end  namespace udg {
+};  //  end  namespace udg 
 
 #endif
