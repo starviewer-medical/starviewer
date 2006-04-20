@@ -164,6 +164,9 @@ void QMPRExtension::detectAxialViewAxisActor( double x , double y )
             m_pickedAxisActor = m_sagitalOverAxialAxisActor;
             m_sagitalReslice->SetInterpolationModeToNearestNeighbor();
         }
+        std::cout << "a:::::::::::" << m_axial2DView->isManipulateOn() << std::endl;
+        m_axial2DView->setManipulate( true );
+        std::cout << "b:::::::::::" << m_axial2DView->isManipulateOn() << std::endl;
         m_initialPickX = x;
         m_initialPickY = y;
         // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
@@ -233,6 +236,7 @@ void QMPRExtension::releaseAxialViewAxisActor( double x , double y )
         m_coronal2DView->getInteractor()->Render();
     }
 
+    m_axial2DView->setManipulate( false );
     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
 }
     
@@ -252,6 +256,7 @@ void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
     {
         m_pickedAxisActor = m_coronalOverSagitalIntersectionAxis;
         m_coronalReslice->SetInterpolationModeToNearestNeighbor();
+        m_sagital2DView->setManipulate( true );
         m_initialPickX = x;
         m_initialPickY = y;
         // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
@@ -302,6 +307,7 @@ void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
 {
     m_coronalReslice->SetInterpolationModeToCubic();
     m_coronal2DView->getInteractor()->Render();
+    m_sagital2DView->setManipulate( false );
     disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
 }
 

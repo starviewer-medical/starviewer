@@ -122,6 +122,9 @@ public:
     /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
     void saveCurrent( const char *baseName , FileType extension );
 
+    /// [apanyo] mentre estiguem manipulant els plans serà true
+    bool isManipulateOn(){ return m_manipulating; };
+    void setManipulate( bool manip ){ m_manipulating = manip; }
 public slots:  
 
     /// Temporal per proves, veurem quins events es criden
@@ -261,6 +264,9 @@ protected:
     virtual void resizeEvent( QResizeEvent* resize );
 
 private:
+    /// [apanyo] per saber si estem manipulant els plans
+    bool m_manipulating;
+    
     /// flag que ens indica quines anotacions es veuran per la finestra
     unsigned int m_enabledAnnotations;
 

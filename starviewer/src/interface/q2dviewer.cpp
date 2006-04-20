@@ -26,7 +26,7 @@
 #include <vtkImageViewer2.h>
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h> // per composar les imatges
-#include <vtkImageMapToWindowLevelColors.h>
+    #include <vtkImageMapToWindowLevelColors.h>
 #include <vtkLookupTable.h>
 #include <vtkImageRectilinearWipe.h>
 #include <vtkCellPicker.h>
@@ -57,14 +57,22 @@ public:
        return new WindowLevelCallback;
     }
     virtual void Execute( vtkObject *caller, unsigned long event, void* )
-    {        
+    {
+        vtkInteractorStyleImage *interactor = vtkInteractorStyleImage::SafeDownCast( caller );
         switch( event )
         {
-        case vtkCommand::StartWindowLevelEvent:            
+        case vtkCommand::StartWindowLevelEvent:
         break;
 
         case vtkCommand::WindowLevelEvent:
-            m_viewer->updateWindowLevelAnnotation();
+            if( m_viewer->isManipulateOn() )
+            {
+                interactor->EndWindowLevel();
+            }
+            else
+            {
+                m_viewer->updateWindowLevelAnnotation();
+            }
         break;
         
         case vtkCommand::EndWindowLevelEvent:
@@ -111,6 +119,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
     m_manipulateState = Q2DViewer::Ready;
+    m_manipulating = false;
 }
 
 Q2DViewer::~Q2DViewer()
@@ -205,7 +214,6 @@ void Q2DViewer::createAnnotations()
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
-
     // \TODO sembla que la informació del pacient es perd d'un volum a un altre,,, perquè??? és possible que es degui al reslice... perquè nomès passem les dades itk/vtk en sí i prou...
     QStringList list = orientation.split(",");
     // \TODO tenir en compte que o hi ha 3 parells de lletres o res. Tenir en compte en els if's que a part de les lletre sper separat podríem tenir parells del tipu LP,I,.. si les orientacions tenen "refinaments"
@@ -911,16 +919,17 @@ void Q2DViewer::setupInteraction()
     // despatxa qualsevol event-> tools                       
     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*,unsigned long,void *, vtkCommand *) ) );
 
-    
-//     m_vtkQtConnections->Connect( m_viewer->GetInteractorStyle() ,
-//     vtkCommand::StartWindowLevelEvent ,
-//     this ,
-//     SLOT( eventHandler(vtkObject*,unsigned long,void *, vtkCommand *) ) );
     WindowLevelCallback * wlcbk = WindowLevelCallback::New();
     wlcbk->m_viewer = this;
+    // anulem el window levelling manual
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
+    // aquests observers estan de prova
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
+
 }
 
 void Q2DViewer::setInput( Volume* volume )

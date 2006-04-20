@@ -131,7 +131,7 @@ private:
     /// Cosetes per controlar el moviment del plans a partir de l'interacció de l'usuari
     double m_initialPickX , m_initialPickY;
     vtkAxisActor2D* m_pickedAxisActor;
-    
+
 private slots:
 
     void detectAxialViewAxisActor( double x , double y );
