@@ -1074,6 +1074,17 @@ void QueryScreen::resizePacsList()
    
 }
 
+/** Slot que s'activa pel signal notEnoughFreeSpace de QExecuteOperationThread, que s'emiteix quan no hi ha prou espai
+  * al disc per descarregar nous estudis
+  */
+void QueryScreen::notEnoughFreeSpace()
+{
+    QMessageBox::warning( this , tr("StarViewer") , tr("Not enough space to retrieve studies. Please free space") );
+}
+
+/** Slot que s'activa pel signal errorFreeingCacheSpace de QExecuteOperationThread, que s'emiteix quant no hi ha prou espai 
+  * al disc o a la cache per descarregar nous estudis, i al intentar esborrar-ne per alliberar espai es produeix un error.
+  */
 void QueryScreen::errorFreeingCacheSpace()
 {
     QMessageBox::critical( this , tr("StarViewer") , tr("Error Freeing Space. The study couldn't be retrieved") );
@@ -1099,10 +1110,6 @@ SeriesMask QueryScreen::buildSeriesMask(QString studyUID)
 }
 
 
-void QueryScreen::notEnoughFreeSpace()
-{
-    QMessageBox::warning( this , tr("StarViewer") , tr("Not enough space to retrieve studies. Please free space") );
-}
 /** Contrueix el nom del pacient per a crear la màscara, el format del la màscara de pacient ha de ser "*" o "congoms* Nom*"
   *        @return retorna la màscara amb el nom del pacient
   */
