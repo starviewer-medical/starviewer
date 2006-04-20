@@ -130,22 +130,29 @@ private:
 
     /// Cosetes per controlar el moviment del plans a partir de l'interacció de l'usuari
     double m_initialPickX , m_initialPickY;
-    vtkAxisActor2D* m_pickedAxisActor;
+    vtkPlaneSource *m_pickedActorPlaneSource;
+    vtkImageReslice *m_pickedActorReslice;
 
 private slots:
-
+    /// S'encarreguen de rotar els eixos dels plans
     void detectAxialViewAxisActor( double x , double y );
-    void moveAxialViewAxisActor( double x , double y );
     void releaseAxialViewAxisActor( double x , double y );
-
-    void detectSagitalViewAxisActor( double x , double y );
-    void moveSagitalViewAxisActor( double x , double y );
-    void releaseSagitalViewAxisActor( double x , double y );
     
-    void sagitalSlicePlus();
-    void sagitalSliceMinus();
-    void coronalSlicePlus();
-    void coronalSliceMinus();
+    void detectSagitalViewAxisActor( double x , double y );
+    void releaseSagitalViewAxisActor( double x , double y );
+
+    void moveAxialViewAxisActor( double x , double y );
+    void rotateAxisActor( double x , double y );
+
+    /// s'encarreguen de moure les llesques dels plans
+    void detectPushAxialViewAxisActor( double x , double y );
+    void releasePushAxialViewAxisActor( double x , double y );
+
+    void detectPushSagitalViewAxisActor( double x , double y );
+    void releasePushSagitalViewAxisActor( double x , double y );
+
+    void pushAxisActor( double x , double y );
+    
     /// Fan les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
     void sagitalSliceUpdated( int slice );

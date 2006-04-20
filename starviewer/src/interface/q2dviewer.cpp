@@ -26,7 +26,7 @@
 #include <vtkImageViewer2.h>
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h> // per composar les imatges
-    #include <vtkImageMapToWindowLevelColors.h>
+#include <vtkImageMapToWindowLevelColors.h>
 #include <vtkLookupTable.h>
 #include <vtkImageRectilinearWipe.h>
 #include <vtkCellPicker.h>
@@ -588,7 +588,7 @@ void Q2DViewer::onMouseMove()
         updateCursor( -1, -1, -1, -1 );
     else
         updateCursor( q[0], q[1], q[2], imageValue );
-    */   
+    */
     switch( m_currentTool )
     {
     case Q2DViewer::Manipulate:
@@ -707,38 +707,66 @@ void Q2DViewer::onMiddleButtonUp()
 
 void Q2DViewer::onRightButtonDown()
 {
-    switch( m_rightButtonAction )
+    switch( m_currentTool )
     {
-    case Q2DViewer::CursorAction:
-        startCursor();
-    break;
-    
-    case Q2DViewer::SliceMotionAction:
-        startSliceMotion();
+    case Q2DViewer::Manipulate:
+        int x, y;
+        x = this->getInteractor()->GetEventPosition()[0];
+        y = this->getInteractor()->GetEventPosition()[1];
+        double toWorld[3];
+        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
+        emit rightButtonDown( toWorld[0] , toWorld[1] );
     break;
 
-    case Q2DViewer::WindowLevelAction:
-        startWindowLevel();
+    default:
     break;
     }
+//     switch( m_rightButtonAction )
+//     {
+//     case Q2DViewer::CursorAction:
+//         startCursor();
+//     break;
+//     
+//     case Q2DViewer::SliceMotionAction:
+//         startSliceMotion();
+//     break;
+// 
+//     case Q2DViewer::WindowLevelAction:
+//         startWindowLevel();
+//     break;
+//     }
 }
 
 void Q2DViewer::onRightButtonUp()
 {
-    switch( m_rightButtonAction )
+    switch( m_currentTool )
     {
-    case Q2DViewer::CursorAction:
-        stopCursor();
-    break;
-    
-    case Q2DViewer::SliceMotionAction:
-        stopSliceMotion();
+    case Q2DViewer::Manipulate:
+        int x, y;
+        x = this->getInteractor()->GetEventPosition()[0];
+        y = this->getInteractor()->GetEventPosition()[1];
+        double toWorld[3];
+        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
+        emit rightButtonUp( toWorld[0] , toWorld[1] );
     break;
 
-    case Q2DViewer::WindowLevelAction:
-        stopWindowLevel();
+    default:
     break;
     }
+//     switch( m_rightButtonAction )
+//     {
+//     case Q2DViewer::CursorAction:
+//         stopCursor();
+//     break;
+//     
+//     case Q2DViewer::SliceMotionAction:
+//         stopSliceMotion();
+//     break;
+// 
+//     case Q2DViewer::WindowLevelAction:
+//         stopWindowLevel();
+//     break;
+//     }
 }
 
 void Q2DViewer::startCursor()
@@ -773,7 +801,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     // fer el que calgui per cada tipus d'event
     switch( event )
     {
-    case vtkCommand::MouseMoveEvent:
+    case vtkCommand::MouseMoveEvent:    
         onMouseMove();
         //  \TODO això és una cutrada però s'hauria de veure com connectar l'event de vtk perk ens indiqui quan canvia realment el window level
 //     emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
@@ -930,6 +958,7 @@ void Q2DViewer::setupInteraction()
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
 
+    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
 }
 
 void Q2DViewer::setInput( Volume* volume )

@@ -351,14 +351,20 @@ signals:
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
 
-    /// informem del punt que hem clicat, coordenades de món
+    /// informem del punt que hem clicat amb el botó esquerre, coordenades de món
     void leftButtonDown( double x , double y );
 
     /// informem del punt sobre el que movem el mouse, coordenades de món
     void mouseMove( double x, double y );
 
-    /// informem del punt que hem deixat de clicar, coordenades de món
+    /// informem del punt que hem deixat de clicar amb el botó esquerre, coordenades de món
     void leftButtonUp( double x , double y );
+
+    /// informem del punt que hem clicat amb el botó dret, coordenades de món
+    void rightButtonDown( double x , double y );
+
+    /// informem del punt que hem deixat de clicar amb el botó dret, coordenades de món
+    void rightButtonUp( double x , double y );
     
 };
 

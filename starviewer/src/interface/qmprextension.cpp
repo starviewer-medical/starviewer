@@ -123,17 +123,13 @@ void QMPRExtension::createConnections()
     connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
 
-// temporal
-    
-    connect( m_sagSlicePlus , SIGNAL( clicked() ), this , SLOT( sagitalSlicePlus() ) );
-    connect( m_sagSliceMinus , SIGNAL( clicked() ), this , SLOT( sagitalSliceMinus() ) );
-    
-    connect( m_corSlicePlus , SIGNAL( clicked() ), this , SLOT( coronalSlicePlus() ) );
-    connect( m_corSliceMinus , SIGNAL( clicked() ), this , SLOT( coronalSliceMinus() ) );
 
-    connect( m_mipPushButton , SIGNAL( clicked() ) , this , SLOT( showMIP() ) );
+    connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
+    connect( m_axial2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushAxialViewAxisActor(double,double) ) );
 
-    // fi temporal    
+    connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
+    connect( m_sagital2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushSagitalViewAxisActor(double,double) ) );
+    
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
@@ -156,90 +152,42 @@ void QMPRExtension::detectAxialViewAxisActor( double x , double y )
     {
         if( distanceToCoronal < distanceToSagital )
         {
-            m_pickedAxisActor = m_coronalOverAxialIntersectionAxis;
-            m_coronalReslice->SetInterpolationModeToNearestNeighbor();
+            m_pickedActorPlaneSource = m_coronalPlaneSource;
+            m_pickedActorReslice = m_coronalReslice;
         }
         else
         {
-            m_pickedAxisActor = m_sagitalOverAxialAxisActor;
-            m_sagitalReslice->SetInterpolationModeToNearestNeighbor();
+            m_pickedActorPlaneSource = m_sagitalPlaneSource;
+            m_pickedActorReslice = m_sagitalReslice;
         }
-        std::cout << "a:::::::::::" << m_axial2DView->isManipulateOn() << std::endl;
+        m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         m_axial2DView->setManipulate( true );
-        std::cout << "b:::::::::::" << m_axial2DView->isManipulateOn() << std::endl;
         m_initialPickX = x;
         m_initialPickY = y;
         // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
         connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
+//         connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
     }
-    else
-        m_pickedAxisActor = 0;
+
 }
     
-void QMPRExtension::moveAxialViewAxisActor( double x , double y )
-{
-    vtkPlaneSource *planeSource = 0;
-    vtkImageReslice *imageReslice = 0;
-    double vec1[3], vec2[3];
-    double axis[3];
-    if( m_pickedAxisActor == m_sagitalOverAxialAxisActor )
-    {
-        planeSource = m_sagitalPlaneSource;
-        imageReslice = m_sagitalReslice;
-
-        vec1[0] = m_initialPickX - planeSource->GetCenter()[0];
-        vec1[1] = m_initialPickY - planeSource->GetCenter()[1];
-        vec1[2] = 0.0;
-
-        vec2[0] = x - planeSource->GetCenter()[0];
-        vec2[1] = y - planeSource->GetCenter()[1];
-        vec2[2] = 0.0;
-    }
-    else if( m_pickedAxisActor == m_coronalOverAxialIntersectionAxis )
-    {
-        planeSource = m_coronalPlaneSource;
-        imageReslice = m_coronalReslice;
-
-        vec1[0] = m_initialPickX - planeSource->GetCenter()[0];
-        vec1[1] = m_initialPickY - planeSource->GetCenter()[1];
-        vec1[2] = 0.0;
-
-        vec2[0] = x - planeSource->GetCenter()[0];
-        vec2[1] = y - planeSource->GetCenter()[1];
-        vec2[2] = 0.0;
-    }
-
-    if( planeSource )
-    {
-        double degrees = MathTools::angleInDegrees( vec1 , vec2 );
-    
-        m_initialPickX = x;
-        m_initialPickY = y;
-        vtkMath::Cross( vec1 , vec2 , axis );
-        vtkMath::Normalize( axis );
-        rotateMiddle( degrees , axis , planeSource , imageReslice );
-        updatePlanes();
-        updateControls();
-    }
-}
-
 void QMPRExtension::releaseAxialViewAxisActor( double x , double y )
 {
-    if( m_pickedAxisActor == m_sagitalOverAxialAxisActor )
+    m_pickedActorReslice->SetInterpolationModeToCubic();
+    if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
     {
-        m_sagitalReslice->SetInterpolationModeToCubic();
         m_sagital2DView->getInteractor()->Render();
     }
     else
     {
-        m_coronalReslice->SetInterpolationModeToCubic();
         m_coronal2DView->getInteractor()->Render();
     }
 
     m_axial2DView->setManipulate( false );
     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
+//     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
 }
-    
+
 void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
 {
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -254,61 +202,170 @@ void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
     // donem una "tolerància" mínima 
     if( distanceToCoronal < 50.0 )
     {
-        m_pickedAxisActor = m_coronalOverSagitalIntersectionAxis;
-        m_coronalReslice->SetInterpolationModeToNearestNeighbor();
+        m_pickedActorReslice = m_coronalReslice;
+        m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
+        m_pickedActorPlaneSource = m_coronalPlaneSource;
+        
         m_sagital2DView->setManipulate( true );
         m_initialPickX = x;
         m_initialPickY = y;
-        // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
-        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
-    }
-    else
-        m_pickedAxisActor = 0;
-}
-    
-void QMPRExtension::moveSagitalViewAxisActor( double x , double y )
-{
-    vtkPlaneSource *planeSource = 0;
-    vtkImageReslice *imageReslice = 0;
-    double vec1[3], vec2[3];
-    double axis[3];
-    if( m_pickedAxisActor == m_axialOverSagitalIntersectionAxis )
-    {
-        std::cout << "[Aquest no es pot rotar! Només amunt i avall]" << std::endl;
-    }
-    else if( m_pickedAxisActor == m_coronalOverSagitalIntersectionAxis )
-    {
-        planeSource = m_coronalPlaneSource;
-        imageReslice = m_coronalReslice;
-
-        vec1[1] = m_initialPickX - planeSource->GetCenter()[0];
-        vec1[2] = m_initialPickY - planeSource->GetCenter()[1];
-        vec1[0] = 0.0;
-
-        vec2[1] = x - planeSource->GetCenter()[0];
-        vec2[2] = y - planeSource->GetCenter()[1];
-        vec2[0] = 0.0;
-    }
-    if( planeSource )
-    {
-        double degrees = MathTools::angleInDegrees( vec1 , vec2 );
-    
-        m_initialPickX = x;
-        m_initialPickY = y;
-        vtkMath::Cross( vec1 , vec2 , axis );
-        vtkMath::Normalize( axis );
-        rotateMiddle( degrees , axis , planeSource , imageReslice );
-        updatePlanes();
-        updateControls();
+//         connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
+        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
     }
 }
-
+    
 void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
 {
-    m_coronalReslice->SetInterpolationModeToCubic();
+    m_pickedActorReslice->SetInterpolationModeToCubic();
     m_coronal2DView->getInteractor()->Render();
     m_sagital2DView->setManipulate( false );
-    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
+//     disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
+    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
+}
+
+void QMPRExtension::moveAxialViewAxisActor( double x , double y )
+{
+    double vec1[3], vec2[3];
+    double axis[3];
+
+    vec1[0] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
+    vec1[1] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
+    vec1[2] = 0.0;
+
+    vec2[0] = x - m_pickedActorPlaneSource->GetCenter()[0];
+    vec2[1] = y - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[2] = 0.0;
+
+    double degrees = MathTools::angleInDegrees( vec1 , vec2 );
+
+    m_initialPickX = x;
+    m_initialPickY = y;
+    vtkMath::Cross( vec1 , vec2 , axis );
+    vtkMath::Normalize( axis );
+    rotateMiddle( degrees , axis , m_pickedActorPlaneSource , m_pickedActorReslice );
+    updatePlanes();
+    updateControls();
+}
+
+void QMPRExtension::rotateAxisActor( double x , double y )
+{
+    double vec1[3], vec2[3];
+    double axis[3];
+    
+    vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
+    vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
+    vec1[0] = 0.0;
+    
+    vec2[1] = x - m_pickedActorPlaneSource->GetCenter()[0];
+    vec2[2] = y - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[0] = 0.0;
+    
+    double degrees = MathTools::angleInDegrees( vec1 , vec2 );
+
+    m_initialPickX = x;
+    m_initialPickY = y;
+    
+    vtkMath::Cross( vec1 , vec2 , axis );
+    vtkMath::Normalize( axis );
+    
+    rotateMiddle( degrees , axis , m_pickedActorPlaneSource , m_pickedActorReslice );
+    updatePlanes();
+    updateControls();
+}
+
+void QMPRExtension::detectPushAxialViewAxisActor( double x , double y )
+{
+    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
+    double point[3] = { x , y , 0.0 };
+    double *r1 , *r2;
+    double distanceToCoronal , distanceToSagital;
+    
+    r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
+    r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
+    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+
+    r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
+    r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
+    distanceToSagital = vtkLine::DistanceToLine( point , r1 , r2 );
+    
+    // donem una "tolerància" mínima 
+    if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
+    {
+        if( distanceToCoronal < distanceToSagital )
+        {
+            m_pickedActorPlaneSource = m_coronalPlaneSource;
+            m_pickedActorReslice = m_coronalReslice;
+        }
+        else
+        {
+            m_pickedActorPlaneSource = m_sagitalPlaneSource;
+            m_pickedActorReslice = m_sagitalReslice;
+        }
+        m_axial2DView->setManipulate( true );
+        m_initialPickX = x;
+        m_initialPickY = y;
+        connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+    }
+}
+
+void QMPRExtension::releasePushAxialViewAxisActor( double x , double y )
+{
+    if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
+    {
+        m_sagital2DView->getInteractor()->Render();
+    }
+    else
+    {
+        m_coronal2DView->getInteractor()->Render();
+    }
+    m_axial2DView->setManipulate( false );
+    disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+}
+    
+void QMPRExtension::detectPushSagitalViewAxisActor( double x , double y )
+{
+    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
+    double point[3] = { x , y , 0.0 };
+    double *r1 , *r2;
+    double distanceToCoronal;
+    
+    r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
+    r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
+    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+    
+    // donem una "tolerància" mínima 
+    if( distanceToCoronal < 50.0 )
+    {
+        m_pickedActorReslice = m_coronalReslice;
+        m_pickedActorPlaneSource = m_coronalPlaneSource;
+        m_sagital2DView->setManipulate( true );
+        m_initialPickX = x;
+        m_initialPickY = y;
+        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+    }
+}
+
+void QMPRExtension::releasePushSagitalViewAxisActor( double x , double y )
+{
+    m_coronal2DView->getInteractor()->Render();
+    m_sagital2DView->setManipulate( false );
+    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+}
+
+void QMPRExtension::pushAxisActor( double x , double y )
+{
+    // Get the motion vector
+    //
+    double v[3];
+    v[0] = x - m_initialPickX;
+    v[1] = y - m_initialPickY;
+    v[2] = 0.0;
+    m_pickedActorPlaneSource->Push( vtkMath::Dot( v, m_pickedActorPlaneSource->GetNormal() ) );
+    updatePlanes();
+    updateControls();
+
+    m_initialPickX = x;
+    m_initialPickY = y;
 }
 
 void QMPRExtension::setInput( Volume *input )
@@ -582,38 +639,6 @@ void QMPRExtension::sagitalSliceUpdated( int slice )
 
 void QMPRExtension::coronalSliceUpdated( int slice )
 {
-}
-
-void QMPRExtension::sagitalSlicePlus()
-{
-    m_sagitalPlaneSource->Push( 10 );
-    m_sagitalPlaneSource->Update();
-    updatePlanes();
-    updateControls();
-}
-
-void QMPRExtension::sagitalSliceMinus()
-{
-    m_sagitalPlaneSource->Push( -10 );
-    m_sagitalPlaneSource->Update();
-    updatePlanes();
-    updateControls();
-}
-
-void QMPRExtension::coronalSlicePlus()
-{
-    m_coronalPlaneSource->Push( 10 );
-    m_coronalPlaneSource->Update();
-    updatePlanes();
-    updateControls();
-}
-
-void QMPRExtension::coronalSliceMinus()
-{
-    m_coronalPlaneSource->Push( -10 );
-    m_coronalPlaneSource->Update();
-    updatePlanes();
-    updateControls();
 }
     
 void QMPRExtension::updateControls()
