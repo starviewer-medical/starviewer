@@ -393,15 +393,6 @@ void QMPRExtension::initOrientation()
     double zbounds[] = {origin[2] + spacing[2] * (extent[4] - 0.5),
                         origin[2] + spacing[2] * (extent[5] + 0.5)};
 
-//     int size[3];
-//     m_volume->getDimensions( size );
-//     double xbounds[] = {origin[0] + spacing[0] * ( - 0.5) ,
-//                         origin[0] + spacing[0] * (size[0] + 0.5)};
-//     double ybounds[] = {origin[1] + spacing[1] * ( - 0.5),
-//                         origin[1] + spacing[1] * (size[1] + 0.5)};
-//     double zbounds[] = {origin[2] + spacing[2] * ( - 0.5),
-//                         origin[2] + spacing[2] * (size[2] + 0.5)};
-    
     if ( spacing[0] < 0.0 )
     {
         double t = xbounds[0];
@@ -424,19 +415,18 @@ void QMPRExtension::initOrientation()
     m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
-//     m_axialPlaneSource->Push( zbounds[0] + 0.5 * ( zbounds[1] - zbounds[0] ) );
     
     //YZ, x-normal : vista sagital
     // estem ajustant la mida del pla a les dimensions d'aquesta orientació
     // \TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
 
-    double maxYBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
-    double diffYBound = maxYBound - ybounds[1];
+//     double maxYBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
+//     double diffYBound = maxYBound - ybounds[1];
 // \TODO maxYBound és correcte, el problema que hi ha és que inicialment està ben distribuit (0.5 amunt i avall ) perquè tenim les llesques centrades, però al canviar de llesca hauríem de tenir en compte que aquestes diferències s'han de canviar i equilibrar segons la llesca en que ens trobem
-    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0]/* - diffYBound*0.5*/ , zbounds[0]  );
-    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] /*maxYBound - diffYBound*0.5*/ , zbounds[0] );
-    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0]/* - diffYBound*0.5*/ , zbounds[1] );
-        
+    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
+    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[0] );
+    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] );
+
     // \TODO aqui caldria canviar-li els bounds del point 2 perquè siguin més llargs i encaixi amb la diagonal
     // perquè quedi centrat hauriem de desplaçar la meitat de l'espai extra per l'origen i pel punt2
     // posem en la llesca central
@@ -444,20 +434,19 @@ void QMPRExtension::initOrientation()
     
     //ZX, y-normal : vista coronal
     // ídem anterior
-// \TODO aquests valors s'han de calcular bé
-//     double maxZBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
-//     double maxXBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
-//     double diffXBound = maxXBound - xbounds[1];
-//     double diffZBound = maxZBound - zbounds[1];
+// \TODO comprovar si és correcte aquest ajustament de mides
+    double maxZBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
+    double maxXBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
+    double diffXBound = maxXBound - xbounds[1];
+    double diffZBound = maxZBound - zbounds[1];
     
-    m_coronalPlaneSource->SetOrigin( xbounds[0]/* -diffXBound*0.5*/, ybounds[0] , zbounds[0]/* -diffZBound*0.5*/ );
-    m_coronalPlaneSource->SetPoint1( xbounds[1] /*maxZBound*/ , ybounds[0] , zbounds[0]);
-    m_coronalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] /*maxZBound*/ );
+    m_coronalPlaneSource->SetOrigin( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint1( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
     // posem en la llesca central    
     m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) + ybounds[0] );
     
     updatePlanes();
-
 }
 
 void QMPRExtension::showMIP()
@@ -467,10 +456,6 @@ void QMPRExtension::showMIP()
     viewer->setRenderFunctionToMIP3D();
     viewer->render();
     viewer->show();
-//     m_axial2DView->grabCurrentView();
-//     m_sagital2DView->grabCurrentView();
-//     m_coronal2DView->grabCurrentView();
-
 }
 
 void QMPRExtension::saveImages()
@@ -777,9 +762,8 @@ void QMPRExtension::updateIntersectionPoint()
 
 void QMPRExtension::updatePlanes()
 {
-    Volume *resliced = new Volume;
     updatePlane( m_sagitalPlaneSource , m_sagitalReslice );
-    updatePlane( m_coronalPlaneSource , m_coronalReslice );    
+    updatePlane( m_coronalPlaneSource , m_coronalReslice );
     updateIntersectionPoint();
 }
 
@@ -951,7 +935,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
             extentY = extentY << 1;
         }
     }
-    
+
     reslice->SetOutputSpacing( planeSizeX/extentX , planeSizeY/extentY , 1 );
     reslice->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
     reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , 0 ); // obtenim una única llesca
