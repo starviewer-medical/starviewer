@@ -204,6 +204,8 @@ void QueryScreen::connectSignalsAndSlots()
     
     //connecta el signal de que no hi ha suficient espai de disc
     connect( &m_qexecuteOperationThread , SIGNAL( notEnoughFreeSpace() ) , this , SLOT( notEnoughFreeSpace() ) );
+    //error alliberant espai de la cache
+    connect( &m_qexecuteOperationThread , SIGNAL( errorFreeingCacheSpace() ), this , SLOT( errorFreeingCacheSpace() ));
 }
 
 /** Centra la finestra a la pantalla
@@ -1070,6 +1072,11 @@ void QueryScreen::resizePacsList()
     
    this->resize(this->width() + mida,this->height());
    
+}
+
+void QueryScreen::errorFreeingCacheSpace()
+{
+    QMessageBox::critical( this , tr("StarViewer") , tr("Error Freeing Space. The study couldn't be retrieved") );
 }
 
 /** Construeix la màscara de cerca de la sèrie

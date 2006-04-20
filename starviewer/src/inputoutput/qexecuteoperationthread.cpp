@@ -107,7 +107,13 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     if ( !state.good() || !enoughSpace ) 
     {
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
-        emit( notEnoughFreeSpace() );
+        
+        if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
+        {
+            emit( notEnoughFreeSpace() );
+        }
+        else emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
+        
         localCache->delStudy( studyUID.toAscii().constData());
         return;
     }
@@ -180,14 +186,24 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     CacheLayer cacheLayer;
     
     freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
-    if ( freeSystemSpace == 0 ) return state.setStatus( ERROR );
+    if ( freeSystemSpace == 0 ) 
+    {
+        enoughSpace = false;
+        return state.setStatus( ERROR );
+    }
     pool.getPoolFreeSpace( freePoolSpace );  
     
     //si no hi ha suficient espai lliure a la cache o al disc dur intera esborrar dos Gb
     if ( freeSystemSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired || 
          freePoolSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired )
     {
-        cacheLayer.deleteOldStudies( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis 
+        state = cacheLayer.deleteOldStudies( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis 
+        
+        if ( !state.good() )
+        {
+            enoughSpace = false;
+            return state;
+        }
         
         freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
         if ( freeSystemSpace == 0 ) return state.setStatus( ERROR );

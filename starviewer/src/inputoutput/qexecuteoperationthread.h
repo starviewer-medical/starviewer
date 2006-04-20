@@ -52,6 +52,7 @@ signals :
     void seriesRetrieved( QString );
     
     void notEnoughFreeSpace();
+    void errorFreeingCacheSpace();
     
 private slots :
 
