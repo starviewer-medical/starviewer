@@ -202,6 +202,8 @@ void QueryScreen::connectSignalsAndSlots()
     connect(&m_qexecuteOperationThread , SIGNAL( imageRetrieved( QString , int) ) , m_retrieveScreen , SLOT( imageRetrieved( QString , int ) ) );
     connect(&m_qexecuteOperationThread , SIGNAL( seriesRetrieved( QString ) ) ,  m_retrieveScreen , SLOT( setSeriesRetrieved( QString ) ) );
     
+    //connecta el signal de que no hi ha suficient espai de disc
+    connect( &m_qexecuteOperationThread , SIGNAL( notEnoughFreeSpace() ) , this , SLOT( notEnoughFreeSpace() ) );
 }
 
 /** Centra la finestra a la pantalla
@@ -1090,6 +1092,10 @@ SeriesMask QueryScreen::buildSeriesMask(QString studyUID)
 }
 
 
+void QueryScreen::notEnoughFreeSpace()
+{
+    QMessageBox::warning( this , tr("StarViewer") , tr("Not enough space to retrieve studies. Please free space") );
+}
 /** Contrueix el nom del pacient per a crear la màscara, el format del la màscara de pacient ha de ser "*" o "congoms* Nom*"
   *        @return retorna la màscara amb el nom del pacient
   */

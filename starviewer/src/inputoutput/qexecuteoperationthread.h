@@ -51,6 +51,8 @@ signals :
     void imageRetrieved( QString studyUID , int );
     void seriesRetrieved( QString );
     
+    void notEnoughFreeSpace();
+    
 private slots :
 
     /** Si la operacio es un view, emet un signal per indicar que ja es pot obrir la primera serie de l'estudi

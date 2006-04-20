@@ -62,7 +62,7 @@ public slots:
     
     void clearCheckedModality();
    
-
+    void notEnoughFreeSpace();
 
 signals :
     void viewStudy(StudyVolum );

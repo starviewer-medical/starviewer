@@ -107,6 +107,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     if ( !state.good() || !enoughSpace ) 
     {
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+        emit( notEnoughFreeSpace() );
         localCache->delStudy( studyUID.toAscii().constData());
         return;
     }
