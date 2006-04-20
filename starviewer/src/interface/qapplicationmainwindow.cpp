@@ -42,10 +42,12 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     this->setObjectName( name );
     m_extensionWorkspace = new ExtensionWorkspace( this );
     setCentralWidget( m_extensionWorkspace );
+
     CacheInstallation cacheInstallation;
+    cacheInstallation.checkInstallation();
+    
     m_extensionHandler = new ExtensionHandler( this );
     
-    cacheInstallation.checkInstallation();
     // ------------------------------------------------------------------------------------
     // aquí creem el repositori de volums i l'objecte input per poder accedir als arxius
     // ------------------------------------------------------------------------------------
