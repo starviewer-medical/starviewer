@@ -1164,6 +1164,38 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>m_textPatientID</tabstop>
+  <tabstop>m_textLastName</tabstop>
+  <tabstop>m_textFirstName</tabstop>
+  <tabstop>m_textStudyID</tabstop>
+  <tabstop>m_textAccessionNumber</tabstop>
+  <tabstop>m_checkFrom</tabstop>
+  <tabstop>m_textFrom</tabstop>
+  <tabstop>m_checkTo</tabstop>
+  <tabstop>m_textTo</tabstop>
+  <tabstop>m_checkAll</tabstop>
+  <tabstop>m_checkCR</tabstop>
+  <tabstop>m_checkES</tabstop>
+  <tabstop>m_checkNM</tabstop>
+  <tabstop>m_checkRF</tabstop>
+  <tabstop>m_checkXA</tabstop>
+  <tabstop>m_checkCT</tabstop>
+  <tabstop>m_checkMG</tabstop>
+  <tabstop>m_checkDT</tabstop>
+  <tabstop>m_checkSC</tabstop>
+  <tabstop>m_checkDX</tabstop>
+  <tabstop>m_checkMR</tabstop>
+  <tabstop>m_checkPT</tabstop>
+  <tabstop>m_checkUS</tabstop>
+  <tabstop>m_buttonSearch</tabstop>
+  <tabstop>m_buttonToday</tabstop>
+  <tabstop>m_buttonYesterday</tabstop>
+  <tabstop>m_buttonRetrieve</tabstop>
+  <tabstop>m_buttonRetrieveList</tabstop>
+  <tabstop>m_buttonView</tabstop>
+  <tabstop>m_buttonClear</tabstop>
+  <tabstop>m_buttonShowPacsList</tabstop>
+  <tabstop>m_tab</tabstop>
   <tabstop>m_buttonConfig</tabstop>
  </tabstops>
  <resources/>

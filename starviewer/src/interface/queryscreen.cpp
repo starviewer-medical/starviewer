@@ -94,6 +94,8 @@ QueryScreen::QueryScreen( QWidget *parent )
    
     qPacsList->setMaximumSize(1,1);//amaguem al finestra del QPacsList
     centerWindow(); //centrem la finestra
+    
+    m_textPatientID->setFocus();
 }
 
 /** esborra els estudis vells de la cache
