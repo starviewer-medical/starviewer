@@ -45,7 +45,7 @@
 #include <vtkCell.h>
 #include <vtkPointData.h>
 #include <vtkInteractorStyleImage.h>
-
+#include <vtkCamera.h>
 namespace udg {
 
 class WindowLevelCallback : public vtkCommand
@@ -223,8 +223,8 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         {
             if( m_lastView == Axial )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("L").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("R").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("R").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("L").toAscii() );
             }
             else if( m_lastView == Sagittal )
             {
@@ -241,8 +241,8 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         {
             if( m_lastView == Axial )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("R").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("L").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("L").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("R").toAscii() );
             }
             else if( m_lastView == Sagittal )
             {
