@@ -53,10 +53,10 @@ public:
     
     /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans. EL primer pla es el que volem rotar i l'altre sobre el qual estroba l'eix d'intersecció/rotació
     // caldria resoldre què fer quan els plans son coplanars!!!!
-    void rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane , vtkImageReslice *reslice );
+    void rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane );
     
     /// Rota el pla especificat pel seu centre
-    void rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane , vtkImageReslice *reslice );
+    void rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane );
        
 signals:
     /// Notificació del canvi de direcció de cadascun dels eixos que podem manipular. Aquests senyals haurien de ser enviats quan canviem la direcció a través dels controls ( línies blaves i vermella)

@@ -232,7 +232,7 @@ void QMPRExtension::moveAxialViewAxisActor( double x , double y )
     m_initialPickY = y;
     vtkMath::Cross( vec1 , vec2 , axis );
     vtkMath::Normalize( axis );
-    rotateMiddle( degrees , axis , m_pickedActorPlaneSource , m_pickedActorReslice );
+    rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
     updateControls();
 }
@@ -258,7 +258,7 @@ void QMPRExtension::rotateAxisActor( double x , double y )
     vtkMath::Cross( vec1 , vec2 , axis );
     vtkMath::Normalize( axis );
     
-    rotateMiddle( degrees , axis , m_pickedActorPlaneSource , m_pickedActorReslice );
+    rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
     updateControls();
 }
@@ -1079,7 +1079,7 @@ bool QMPRExtension::isParallel( double axis[3] )
     return false;
 }
 
-void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane , vtkImageReslice *reslice )
+void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
     vtkMath::Normalize( rotationAxis );
     m_transform->Identity();
@@ -1097,7 +1097,7 @@ void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtk
     plane->Update();
 }
 
-void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane , vtkImageReslice *reslice )
+void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
 //    Normalitzem l'eix de rotació, serà molt millor per les operacions a fer
      vtkMath::Normalize( rotationAxis );
