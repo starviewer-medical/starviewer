@@ -1323,6 +1323,7 @@ void Q2DViewer::updateSliceAnnotation()
                 .arg( m_currentSlice )
                 .arg( m_size[2] );
     m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
+    this->getInteractor()->Render();
 }
 
 void Q2DViewer::updateWindowSizeAnnotation()
