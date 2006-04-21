@@ -28,7 +28,7 @@
 #include "pacslistdb.h"
 #include "cachepacs.h"
 #include "starviewersettings.h"
-
+#include <QShortcut>
 
 
 namespace udg {
@@ -77,17 +77,22 @@ void QStudyTreeWidget::createPopupMenu()
     
     QAction *view = m_popUpMenu.addAction(tr("&View"));
     
-    view->setShortcut(Qt::CTRL+Qt::Key_W);
+    view->setShortcut(tr("Ctrl+V"));
     QAction *retrieve = m_popUpMenu.addAction(tr("&Retrieve"));
-    retrieve->setShortcut(Qt::CTRL+Qt::Key_R);
+    retrieve->setShortcut(tr("Ctrl+R"));
     m_popUpMenu.addSeparator();
     QAction *deleteStudy =  m_popUpMenu.addAction(tr("&Delete"));
-    deleteStudy->setShortcut(Qt::CTRL+Qt::Key_D);
+    deleteStudy->setShortcut(tr("Ctrl+D"));
       
     connect(view, SIGNAL(triggered()), this, SLOT(viewStudy()));
     connect(retrieve, SIGNAL(triggered()), this, SLOT(retrieveStudy()));
     connect(deleteStudy, SIGNAL(triggered()), this, SLOT(deleteStudy()));
       
+    /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
+    (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );  
+    (void) new QShortcut( view->shortcut() , this , SLOT( viewStudy() ) );
+    (void) new QShortcut( retrieve->shortcut() , this , SLOT( retrieveStudy() ) );
+    
     if (m_parentName == "m_tabPacs")
     { 
         deleteStudy->setEnabled(false);       
