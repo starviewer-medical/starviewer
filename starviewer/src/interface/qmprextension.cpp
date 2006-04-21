@@ -118,18 +118,9 @@ void QMPRExtension::createConnections()
     connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
 
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
-    connect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
-
     connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
-    connect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
-
-
     connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
-    connect( m_axial2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushAxialViewAxisActor(double,double) ) );
-
     connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
-    connect( m_sagital2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushSagitalViewAxisActor(double,double) ) );
-    
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
@@ -164,9 +155,8 @@ void QMPRExtension::detectAxialViewAxisActor( double x , double y )
         m_axial2DView->setManipulate( true );
         m_initialPickX = x;
         m_initialPickY = y;
-        // podríem fer que la distància fos com a mínim un valor, per tant es podria donar el cas que no s'agafi cap
         connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
-//         connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
+        connect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
     }
 
 }
@@ -185,7 +175,7 @@ void QMPRExtension::releaseAxialViewAxisActor( double x , double y )
 
     m_axial2DView->setManipulate( false );
     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
-//     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
+    disconnect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
 }
 
 void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
@@ -209,8 +199,8 @@ void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
         m_sagital2DView->setManipulate( true );
         m_initialPickX = x;
         m_initialPickY = y;
-//         connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
         connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
+        connect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
     }
 }
     
@@ -219,8 +209,8 @@ void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
     m_pickedActorReslice->SetInterpolationModeToCubic();
     m_coronal2DView->getInteractor()->Render();
     m_sagital2DView->setManipulate( false );
-//     disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveSagitalViewAxisActor( double , double ) ) );
     disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
+    disconnect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
 }
 
 void QMPRExtension::moveAxialViewAxisActor( double x , double y )
@@ -305,6 +295,7 @@ void QMPRExtension::detectPushAxialViewAxisActor( double x , double y )
         m_initialPickX = x;
         m_initialPickY = y;
         connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+        connect( m_axial2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushAxialViewAxisActor(double,double) ) );
     }
 }
 
@@ -320,6 +311,7 @@ void QMPRExtension::releasePushAxialViewAxisActor( double x , double y )
     }
     m_axial2DView->setManipulate( false );
     disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+    disconnect( m_axial2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushAxialViewAxisActor(double,double) ) );
 }
     
 void QMPRExtension::detectPushSagitalViewAxisActor( double x , double y )
@@ -342,6 +334,7 @@ void QMPRExtension::detectPushSagitalViewAxisActor( double x , double y )
         m_initialPickX = x;
         m_initialPickY = y;
         connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+        connect( m_sagital2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushSagitalViewAxisActor(double,double) ) );
     }
 }
 
@@ -350,6 +343,7 @@ void QMPRExtension::releasePushSagitalViewAxisActor( double x , double y )
     m_coronal2DView->getInteractor()->Render();
     m_sagital2DView->setManipulate( false );
     disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
+    disconnect( m_sagital2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushSagitalViewAxisActor(double,double) ) );
 }
 
 void QMPRExtension::pushAxisActor( double x , double y )
