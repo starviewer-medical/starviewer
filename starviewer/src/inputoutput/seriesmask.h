@@ -42,19 +42,19 @@ public:
 
     SeriesMask();
 
-    Status setSeriesNumber(const char *);
-    Status setSeriesDate(const char* date);
-    Status setSeriesDate(const char* dateMin,const char* dateMax);
-    Status setSeriesTime(const char *);
-    Status setSeriesTime(const char* timeMin,const char* timeMax);
-    Status setSeriesDescription(const char*);  
-    Status setSeriesModality(const char *);  
-    Status setSeriesOperator(const char *);
-    Status setSeriesBodyPartExaminated(const char*);
-    Status setSeriesProtocolName(const char *);
+    Status setSeriesNumber(std:: string );
+    Status setSeriesDate(std::string date);
+    Status setSeriesDate(std::string dateMin,std::string dateMax);
+    Status setSeriesTime(std::string);
+    Status setSeriesTime(std::string timeMin,std::string timeMax);
+    Status setSeriesDescription(std::string);  
+    Status setSeriesModality(std::string);  
+    Status setSeriesOperator(std::string);
+    Status setSeriesBodyPartExaminated(std::string);
+    Status setSeriesProtocolName(std::string);
     
-    Status setStudyUID(const char *);
-    Status setSeriesUID(const char* date);
+    Status setStudyUID(std::string);
+    Status setSeriesUID(std::string date);
     
     /** Retorna el series Number
     *            @return   series Number 

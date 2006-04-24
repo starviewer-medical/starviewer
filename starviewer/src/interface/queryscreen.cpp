@@ -1077,12 +1077,12 @@ SeriesMask QueryScreen::buildSeriesMask(QString studyUID)
     SeriesMask mask;
 
     mask.setStudyUID(studyUID.toAscii().constData());
-    mask.setSeriesDate(NULL);
-    mask.setSeriesTime(NULL);
-    mask.setSeriesModality(NULL);
-    mask.setSeriesNumber(NULL);
-    mask.setSeriesBodyPartExaminated(NULL);
-    mask.setSeriesUID(NULL);
+    mask.setSeriesDate("");
+    mask.setSeriesTime("");
+    mask.setSeriesModality("");
+    mask.setSeriesNumber("");
+    mask.setSeriesBodyPartExaminated("");
+    mask.setSeriesUID("");
     
     return mask;
 }
@@ -1155,7 +1155,7 @@ QString QueryScreen::buildStudyDates()
 StudyMask QueryScreen::buildMask()
 {
     /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
-    /*Per defecte si passem un valor null o buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/    
+    /*Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/    
     /*En aquí hem de fer un set a tots els camps que volem cercar */
     StudyMask mask;
     QString modalityMask;

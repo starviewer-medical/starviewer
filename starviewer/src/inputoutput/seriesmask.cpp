@@ -67,26 +67,13 @@ void SeriesMask:: retrieveLevel()
 /** This action especified in the search which series number we want to match
   *              @param seriesNumber' Number of the series to search. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setSeriesNumber(const char *seriesNumber )
+Status SeriesMask:: setSeriesNumber(std::string seriesNumber )
 {
-    char val[70];
-    val[0] = '\0';
 
     DcmElement *elem = newDicomElement(DCM_SeriesNumber);
     Status state;
     
-    //if the seriesNumber is null we supose that the user don't apply a criterium in this field
-    if (seriesNumber==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(seriesNumber)>0)
-    {
-        strcpy(val,seriesNumber);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString(seriesNumber.c_str());
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskSeriesNumber);
@@ -107,26 +94,17 @@ Status SeriesMask:: setSeriesNumber(const char *seriesNumber )
 /** This action especified that in the search we want the series date. Date's format is YYYYMMDD
   *              @param series date of the series to search. If this parameter is null it's supose that any mask is applied at this field. 
   */
-Status SeriesMask:: setSeriesDate(const char *date )
+Status SeriesMask:: setSeriesDate(std::string date )
 {
-    char val[10];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesDate);
     
     //if the Date is null we supose that the user don't apply a criterium in this field
-    if (date==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(date)==8)
-    {
-        strcpy(val,date);
-    }
-    else return state.setStatus(error_MaskLengthDate);
+    if (date.length() != 8)
+    return state.setStatus(error_MaskLengthDate);
     
-    elem->putString(val);
+    elem->putString(date.c_str());
     if (elem->error() != EC_Normal)
     {
        return state.setStatus(errorMaskSeriesDate);
@@ -143,24 +121,23 @@ Status SeriesMask:: setSeriesDate(const char *date )
   *              @param Min date Study of the study to search.  
   *              @param Max date Study of the study to search.
   */
-Status SeriesMask:: setSeriesDate(const char *dateMin,const char* dateMax )
+Status SeriesMask:: setSeriesDate(std::string dateMin,std::string dateMax )
 {
-    char val[20];
-    val[0] = '\0';
+    std::string value;
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesDate);
 
     //the length of the date must be 8 numbers. The correct format is YYYYMMDD   
-    if (strlen(dateMin)!=8 || strlen(dateMax)!=8) 
+    if (dateMin.length() != 8 || dateMax.length() != 8) 
     {
         return state.setStatus(error_MaskLengthDate);
     }
      
-    strcpy(val,dateMin);
-    strcat(val,"-");
-    strcat(val,dateMax);
-    elem->putString(val);
+    value.insert( 0 , dateMin );
+    value.append( "-" );
+    value.append( dateMax );
+    elem->putString( value.c_str() );
     
     if (elem->error() != EC_Normal)
     {
@@ -180,27 +157,13 @@ Status SeriesMask:: setSeriesDate(const char *dateMin,const char* dateMax )
 /** This action especified that in the search we want the seriess description
   *              @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field. 
   */
-Status SeriesMask:: setSeriesDescription(const char *desc)
+Status SeriesMask:: setSeriesDescription(std::string desc)
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesDescription);
 
-    
-    //if the desc is null we supose that the user don't apply a criterium in this field
-    if (desc==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(desc)>0)
-    {
-        strcpy(val,desc);
-    }
-    else strcpy(val,"");
-
-    elem->putString(val);
+    elem->putString( desc.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskSeriesDescription);
@@ -220,33 +183,18 @@ Status SeriesMask:: setSeriesDescription(const char *desc)
 /** This action especified that in the search we want the series modality
   *              @param series modality the study to search. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setSeriesModality(const char *modality)
+Status SeriesMask:: setSeriesModality(std::string modality)
 {
-    char val[50];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_Modality);
 
-    
-    //if the modality is null we supose that the user don't apply a criterium in this field
-    if (modality==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(modality)>0)
-    {
-        strcpy(val,modality);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( modality.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskSeriesModality);
     }
     
-
     //insert the tag series Modality in the search mask    
     m_seriesMask->insert(elem, OFTrue);
     if (m_seriesMask->error() != EC_Normal) {
@@ -259,26 +207,17 @@ Status SeriesMask:: setSeriesModality(const char *modality)
 /** This action especified that in the search we want the series time
   *              @param Series time the study to search. If this parameter is null it's supose that any mask is applied at this field. Time's format is HHMM
   */
-Status SeriesMask:: setSeriesTime(const char *time)
+Status SeriesMask:: setSeriesTime(std::string time)
 {
-    char val[6];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesTime);
     
     //if the time is null we supose that the user don't apply a criterium in this field
-    if (time==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(time)==4)
-    {
-        strcpy(val,time);
-    }
-    else return state.setStatus(error_MaskLengthTime);
+    if ( time.length() != 4 )
+    return state.setStatus(error_MaskLengthTime);
     
-    elem->putString(val);
+    elem->putString( time.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskSeriesTime);
@@ -298,26 +237,25 @@ Status SeriesMask:: setSeriesTime(const char *time)
   *              @param Min time  Study of the series to search.  
   *              @param Max time Study of the series to search.
   */
-Status SeriesMask:: setSeriesTime(const char *timeMin,const char *timeMax)
+Status SeriesMask:: setSeriesTime(std::string timeMin,std::string timeMax)
 {
-    char val[14];
-    val[0] = '\0';
+    std::string value;
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesTime);
 
     //the length of the time must be 4 numbers. The correct format is YYYYMMDD
     
-    if (strlen(timeMin)!=4 || strlen(timeMax)!=4) 
+    if ( timeMin.length () !=4 || timeMax.length() != 4 ) 
     {
         return state.setStatus(error_MaskLengthTime);
     }
      
-    strcpy(val,timeMin);
-    strcat(val,"-");
-    strcat(val,timeMax);
+    value.insert( 0 , timeMin );
+    value.append( "-" );
+    value.append( timeMax );
     
-    elem->putString(val);
+    elem->putString( value.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskSeriesTime);
@@ -337,27 +275,13 @@ Status SeriesMask:: setSeriesTime(const char *timeMin,const char *timeMax)
 /** This action especified that in the search we want the Series instance UID
   *              @param Series instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setSeriesUID(const char *uid)
+Status SeriesMask:: setSeriesUID(std::string seriesUID)
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
 
-    
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if (uid==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(uid)>0)
-    {
-        strcpy(val,uid);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( seriesUID.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskSeriesUID);
@@ -377,26 +301,13 @@ Status SeriesMask:: setSeriesUID(const char *uid)
 /** This action especified that in the search we want to query the series that have this Study UID
   *              @param Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setStudyUID(const char *uid)
+Status SeriesMask:: setStudyUID(std::string studyUID)
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
 
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if (uid==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(uid)>0)
-    {
-        strcpy(val,uid);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( studyUID.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskStudyUID);
@@ -416,27 +327,13 @@ Status SeriesMask:: setStudyUID(const char *uid)
 /** This action especified that in the search we want to query the operator's name
   *              @param Operator's name. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setSeriesOperator(const char *name)
+Status SeriesMask:: setSeriesOperator(std::string name)
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_OperatorsName);
 
-    
-    //if the is null we supose that the user don't apply a criterium in this field
-    if (name==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(name)>0)
-    {
-        strcpy(val,name);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( name.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskOperatorName);
@@ -453,27 +350,13 @@ Status SeriesMask:: setSeriesOperator(const char *name)
 /** This action especified that in the search we want to query the body part examinated
   *              @param Body Part. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setSeriesBodyPartExaminated(const char *part)
+Status SeriesMask:: setSeriesBodyPartExaminated(std::string part)
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_BodyPartExamined);
 
-    
-    //if the is null we supose that the user don't apply a criterium in this field
-    if (part==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(part)>0)
-    {
-        strcpy(val,part);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( part.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskBodyPartExaminated);
@@ -490,27 +373,13 @@ Status SeriesMask:: setSeriesBodyPartExaminated(const char *part)
 /** This action especified that in the search we want to query the Protocol Name
   *              @param Protocol Name. If this parameter is null it's supose that any mask is applied at this field
   */
-Status SeriesMask:: setSeriesProtocolName(const char *name)
+Status SeriesMask:: setSeriesProtocolName(std::string name)
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_ProtocolName);
 
-    
-    //if the is null we supose that the user don't apply a criterium in this field
-    if (name==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(name)>0)
-    {
-        strcpy(val,name);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( name.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskProtocolName);
