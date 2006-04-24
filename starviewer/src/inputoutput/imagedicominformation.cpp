@@ -157,6 +157,34 @@ std::string ImageDicomInformation::getSeriesBodyPartExamined ()
     else return seriesBodyPartExamined ;
 }
 
+std::string ImageDicomInformation::getSeriesTime()
+{
+    DcmTagKey seriesTimeTagKey( DCM_SeriesTime ); 
+    const char *seriesTime = NULL;
+
+    OFCondition cond = m_dataset->findAndGetString( seriesTimeTagKey, seriesTime, OFFalse );
+       
+    if (!cond.good() || seriesTime == NULL )
+    {
+        return "";
+    }
+    else return seriesTime;
+}
+
+std::string ImageDicomInformation::getSeriesDate()
+{
+    DcmTagKey seriesDateTagKey( DCM_SeriesDate ); 
+    const char *seriesDate = NULL;
+
+    OFCondition cond = m_dataset->findAndGetString( seriesDateTagKey, seriesDate, OFFalse );
+       
+    if (!cond.good() || seriesDate == NULL )
+    {
+        return "";
+    }
+    else return seriesDate;
+}
+
 ImageDicomInformation::~ImageDicomInformation()
 {
 }

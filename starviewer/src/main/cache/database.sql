@@ -33,7 +33,9 @@ CREATE TABLE Series
   SerMod	VARCHAR2(16),
   ProNam	VARCHAR2(16),
   SerDes	VARCHAR2(64),
-  serPath 	VARCHAR2(1024),
+  SerPath 	VARCHAR2(1024),
+  SerDat	VARCHAR2(8),
+  SerTim	VARCHAR2(8), 
   BodParExa 	VARCHAR2(16)
 );
 
@@ -71,5 +73,5 @@ create table Pool
     Space       NUMBER (16)
 );
 
-insert into Pool Values ('POOLSIZE',30000000000);
+insert into Pool Values ('POOLSIZE',32212254720);
 insert into Pool Values ('USED',0);

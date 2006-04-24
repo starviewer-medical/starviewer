@@ -165,8 +165,9 @@ Status CachePacs::insertSeries(Series *serie)
         return constructState(50);
     }
     
-    sql.insert(0,"Insert into Series (SerInsUID,SerNum,StuInsUID,SerMod,ProNam,SerDes,SerPath,BodParExa)");
-    sql.append("values (%Q,%Q,%Q,%Q,%Q,%Q,%Q,%Q)");
+    sql.insert(0,"Insert into Series ");
+    sql.append(" ( SerInsUID , SerNum , StuInsUID , SerMod , ProNam , SerDes , SerPath , BodParExa , SerDat , SerTim ) ");
+    sql.append(" values ( %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q ) ");
     
     m_DBConnect->getLock();
     i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0
@@ -177,7 +178,9 @@ Status CachePacs::insertSeries(Series *serie)
                                 ,serie->getProtocolName().c_str()
                                 ,serie->getSeriesDescription().c_str()
                                 ,serie->getSeriesPath().c_str()
-                                ,serie->getBodyPartExaminated().c_str());
+                                ,serie->getBodyPartExaminated().c_str()
+                                ,serie->getSeriesDate().c_str()
+                                ,serie->getSeriesTime().c_str());
     m_DBConnect->releaseLock();
     
     state = constructState(i);
@@ -564,6 +567,8 @@ Status CachePacs::querySeries(SeriesMask seriesMask,SeriesList &ls)
         series.setProtocolName(resposta[5 + i*col]);
         series.setSeriesPath(resposta[6 + i*col]);
         series.setBodyPartExaminated(resposta[7 + i*col]);
+        series.setSeriesDate( resposta[8 + i*col] );
+        series.setSeriesTime( resposta[9 + i*col] );
         ls.insert(series);
         i++;
     }
@@ -578,7 +583,9 @@ std::string CachePacs::buildSqlQuerySeries(DcmDataset* mask)
 {
     std::string sql;
     
-    sql.insert(0,"select SerInsUID,SerNum,StuInsUID,SerMod,SerDes,ProNam,SerPath,BodParExa from series where StuInsUID = '");
+    sql.insert(0,"select SerInsUID , SerNum , StuInsUID , SerMod , SerDes , ProNam, SerPath , BodParExa ");
+    sql.append(", SerDat , SerTim ");
+    sql.append(" from series where StuInsUID = '");
     sql.append(getStudyUID(mask));
     sql.append("'");
     

@@ -71,6 +71,16 @@ public:
       */
     std::string getSeriesBodyPartExamined();
     
+    /** Retorna l'hora en que s'ha capturat la serie
+      *         @return hora en que s'ha capturat la serie
+      */
+    std::string getSeriesTime();
+    
+    /** Retorna data en que s'ha capturat la serie
+      *         @return data en que s'ha capturat la serie
+      */
+    std::string getSeriesDate();    
+    
     /** Destructor de la classe
       */
     ~ImageDicomInformation();

@@ -145,6 +145,8 @@ Status StarviewerProcessImage::getSeriesInformation( QString imagePath, Series &
     serie.setSeriesDescription( dInfo.getSeriesDescription() );
     serie.setBodyPartExaminated( dInfo.getSeriesBodyPartExamined() );
     serie.setProtocolName( dInfo.getSeriesProtocolName() );
+    serie.setSeriesTime( dInfo.getSeriesTime() );
+    serie.setSeriesDate( dInfo.getSeriesDate() );
     
     //calculem el path de la serie
     path = dInfo.getStudyUID().c_str();
