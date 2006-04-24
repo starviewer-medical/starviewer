@@ -47,6 +47,8 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     m_buttonApplyCache->setEnabled(false);
     m_buttonApplyPacs->setEnabled(false);
     
+    m_configurationChanged = false;
+    
     connectSignalAndSlots();
 }
 
@@ -540,12 +542,17 @@ bool QConfigurationScreen::validateChanges()
   */
 void QConfigurationScreen::acceptChanges()
 {
-    if (validateChanges())
-    {    
-        applyChangesPacs();
-        applyChangesCache();
-        this->hide();
+    if ( m_configurationChanged )        
+    {
+        if (validateChanges())
+        {   
+            applyChangesPacs();
+            applyChangesCache();
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
+            this->hide();
+        }
     }
+    else this->hide();
 }
 
 /** Tanca la pantalla de configuració
@@ -564,6 +571,8 @@ void QConfigurationScreen::applyChanges()
         applyChangesPacs();
         applyChangesCache();
         loadCachePoolDefaults();
+        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
+        m_configurationChanged = false;
     }
 }
 
@@ -607,6 +616,7 @@ void QConfigurationScreen::configurationChanged (const QString&)
 {
     m_buttonApplyPacs->setEnabled(true);
     m_buttonApplyCache->setEnabled(true);
+    m_configurationChanged = true;
 }
 
 

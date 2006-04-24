@@ -59,6 +59,7 @@ signals :
 private :
 
     int m_PacsID;
+    bool m_configurationChanged;
 
     void connectSignalAndSlots();
     bool validatePacsParameters();
