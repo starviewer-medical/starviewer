@@ -246,6 +246,7 @@ void QConfigurationScreen::addPacs()
         {
             fillPacsListView();
             clear();
+            emit( pacsListChanged() ); 
         }
     }
 
@@ -334,6 +335,7 @@ void QConfigurationScreen::updatePacs()
         {
             fillPacsListView();
             clear();
+            emit( pacsListChanged() ); 
         }
             
     }
@@ -367,6 +369,7 @@ void QConfigurationScreen::deletePacs()
     {
         fillPacsListView();
         clear();
+        emit( pacsListChanged() ); 
     }
 
 }
@@ -704,6 +707,7 @@ void QConfigurationScreen::deleteStudies()
         }
         
         loadCachePoolDefaults();
+        emit( cacheCleared() );
         this->setCursor(QCursor(Qt::ArrowCursor));
 	break;
 

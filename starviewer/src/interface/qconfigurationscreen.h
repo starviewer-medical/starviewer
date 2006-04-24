@@ -51,7 +51,10 @@ public slots :
     
     void cacheImagePathEditingFinish();
        
+signals :
 
+    void pacsListChanged();
+    void cacheCleared();
 
 private :
 

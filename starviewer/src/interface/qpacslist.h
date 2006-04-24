@@ -26,10 +26,13 @@ public:
     QPacsList(QWidget *parent = 0 );
     Status getSelectedPacs(PacsList *);
     ~QPacsList();
+   
+public slots :
     
+    void refresh();   
+   
 private :
     
-    void refresh();
     void setSelectedDefaultPacs();
     void databaseError(Status *);
 

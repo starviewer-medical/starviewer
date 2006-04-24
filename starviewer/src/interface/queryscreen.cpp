@@ -1007,7 +1007,8 @@ void QueryScreen::config()
 {
     udg::QConfigurationScreen *configScreen = new udg::QConfigurationScreen;
     
-//    configScreen()->setModal(true);
+    connect( configScreen , SIGNAL( pacsListChanged() ) , qPacsList , SLOT( refresh()  ) );
+    connect( configScreen , SIGNAL( cacheCleared() ) , m_studyTreeWidgetCache , SLOT( clear() ) );
     configScreen->setModal(true);
     configScreen->show();
 }
