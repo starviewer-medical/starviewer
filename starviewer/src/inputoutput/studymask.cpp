@@ -106,9 +106,14 @@ Status StudyMask:: setPatientName(std::string patientName )
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want the Patient's Birth
-  *               @param Date of birth of the patient to search. If this parameter is null it's supose that any mask is applied at this field. Date's format is YYYYMMDD
-  **              @return state of the method
+/** Aquest mètode especifica la data de naixement del pacient amb la que s'han de cercar els estudis. El format és DDMMYYYY
+  * Si el paràmetre no té valor, busca per totes les dates
+  * Si passem una data sola, per exemple 20040505 només buscara sèries d'aquell dia
+  * Si passem una data amb un guio a davant, per exemple -20040505 , buscarà sèries fetes aquell dia o abans
+  * Si passem una data amb un guio a darrera, per exemple 20040505- , buscarà series fetes aquell dia, o dies posteriors
+  * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscarà sèries fetes entre aquelles dos dates
+  *              @param  Study's Data de naixement del pacient
+  *              @return state of the method 
   */
 Status StudyMask:: setPatientBirth(std::string date)
 {
@@ -145,47 +150,6 @@ Status StudyMask:: setPatientBirth(std::string date)
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want select patient who has born between these two dates. Time's format is YYYYMMDD
-  *              @param Min Patient's Bitrh  to search.  
-  *              @param Max Patient's  to search.
-  *              @return state of the method
-  */
-Status StudyMask:: setPatientBirth(std::string dateMin,std::string dateMax)
-{
-    char val[20];
-    val[0] = '\0';
-    std::string value;
-    Status state;
-    
-    //The length of the date must be 8 numbers. The correct Format is YYYYMMDD
-    if (dateMin.length()!=8 || dateMax.length()!=8) 
-    {
-        return state.setStatus(error_MaskLengthDate);
-    } 
-    
-    //We specified that we will use the tag Patient Birth Date
-    DcmElement *elem = newDicomElement(DCM_PatientsBirthDate);
-     
-    value = dateMin;
-    value.append("-");
-    value.append(dateMax);      
-    elem->putString(value.c_str());
-    
-    if (elem->error() != EC_Normal)
-    {
-        return state.setStatus(errorMaskPatientBirth);
-    }
-
-
-    //insert the tag PATIENT BIRTH in the search mask    
-    m_mask->insert(elem, OFTrue);
-    if (m_mask->error() != EC_Normal) 
-    {
-        return state.setStatus(errorMaskPatientBirth);
-    }
-
-    return state.setStatus(correct);
-}
 
 /** This action especified that in the search we want the Patient's sex
   *              @param Patient's sex of the patient to search. If this parameter is null it's supose that any mask is applied at this field
@@ -307,8 +271,13 @@ Status StudyMask:: setStudyId(std::string studyID )
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want the Study's date. Date's format is YYYYMMDD
-  *              @param  Study's date of the study to search. If this parameter is null it's supose that any mask is applied at this field.
+/** Aquest mètode especifica la data amb la que s'han de cercar els estudis. El format és DDMMYYYY
+  * Si el paràmetre no té valor, busca per totes les dates
+  * Si passem una data sola, per exemple 20040505 només buscara sèries d'aquell dia
+  * Si passem una data amb un guio a davant, per exemple -20040505 , buscarà sèries fetes aquell dia o abans
+  * Si passem una data amb un guio a darrera, per exemple 20040505- , buscarà series fetes aquell dia, o dies posteriors
+  * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscarà sèries fetes entre aquelles dos dates
+  *              @param  Study's date of the study to search.
   *              @return state of the method 
   */
 Status StudyMask:: setStudyDate(std::string date )
@@ -320,12 +289,12 @@ Status StudyMask:: setStudyDate(std::string date )
     
     DcmElement *elem = newDicomElement(DCM_StudyDate);
     
-    //if the Date is null we supose that the user don't apply a criterium in this field
+    //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters) 
     if (date.length()==0)
     {
         value = "";
     }
-    else if (date.length()>0)
+    else if (date.length() == 8 || date.length() == 9 || date.length() == 17 )
     {
         value = date;
     }
@@ -348,45 +317,6 @@ Status StudyMask:: setStudyDate(std::string date )
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want the Study's time. Time's format is HHMM
-  *              @param Min date Study of the study to search.  
-  *              @param Max date Study of the study to search.
-  *              @return state of the method
-  */
-Status StudyMask:: setStudyDate(std::string dateMin,std::string dateMax )
-{
-    char val[20];
-    val[0] = '\0';
-    std::string value;
-    Status state;
-    
-    DcmElement *elem = newDicomElement(DCM_StudyDate);
-
-    //the length of the date must be 8 numbers. The correct format is YYYYMMDD   
-    if (dateMin.length()!=8 || dateMax.length()!=8) 
-    {
-        return state.setStatus(error_MaskLengthDate);
-    }
-     
-    value =dateMin;
-    value.append("-");
-    value.append(dateMax);
-    elem->putString(value.c_str());
-    
-    if (elem->error() != EC_Normal)
-    {
-        return state.setStatus(errorMaskStudyDate);
-    }
-    
-    //insert the tag STUDY DATE in the search mask    
-    if (m_mask == NULL) m_mask = new DcmDataset;
-    m_mask->insert(elem, OFTrue);
-    if (m_mask->error() != EC_Normal) {
-        return state.setStatus(errorMaskStudyDate);
-    }
-
-    return state.setStatus(correct);
-}
 
 /** This action especified that in the search we want the Study's description
   *              @param Study's description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
@@ -467,9 +397,14 @@ Status StudyMask:: setStudyModality(std::string modality)
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want the Study's time
-  *              @param Study's time the study to search. If this parameter is null it's supose that any mask is applied at this field. Time's format is HHMM
-  *              @return state of the method
+/** Especifica l'hora de l'estudi a buscar, les hores es passen en format HHMM
+  *         Si es buit busca per qualsevol hora.
+  *         Si se li passa una hora com 1753, buscarà series d'aquella hora
+  *         Si se li passa una hora amb guió a davant, com -1753 , buscarà sèries d'aquella hora o fetes abans
+  *         Si se li passa una hora amb guió a darrera, com 1753- , buscarà series fetes a partir d'aquella hora
+  *         Si se li passa dos hores separades per un guió, com 1223-1753 , buscarà series fetes entre aquelles hores 
+  *              @param  Hora de l'estudi
+  *              @retun estat del mètode
   */
 Status StudyMask:: setStudyTime(std::string time)
 {
@@ -484,8 +419,8 @@ Status StudyMask:: setStudyTime(std::string time)
     if (time.length()==0)
     {
         value = "";
-    }
-    else if (time.length()==4)
+    }//la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
+    else if ( time.length() == 4 || time.length() == 5 || time.length() == 9 )
     {
         value = time;
     }
@@ -501,46 +436,6 @@ Status StudyMask:: setStudyTime(std::string time)
     m_mask->insert(elem, OFTrue);
     if (m_mask->error() != EC_Normal) 
     {
-        return state.setStatus(error_MaskStudyTime);
-    }
-       
-    return state.setStatus(correct);
-}
-
-/** This action especified that in the search we want to select Studies realized between these two times. Time's format is HHMM
-  *              @param Min time  Study of the study to search.  
-  *              @param Max time Study of the study to search.
-  *              @return state of the method
-  */
-Status StudyMask:: setStudyTime(std::string timeMin,std::string timeMax)
-{
-    char val[14];
-    val[0] = '\0';
-    std::string value;
-    Status state;
-    
-    DcmElement *elem = newDicomElement(DCM_StudyTime);
-
-    //the length of the time must be 4 numbers. The correct format is YYYYMMDD
-    if (timeMin.length()!=4 || timeMax.length()!=4) 
-    {
-        return state.setStatus(error_MaskLengthTime);
-    }
-     
-    value = timeMin;
-    value.append("-");
-    value.append(timeMax);
-    
-    elem->putString(value.c_str());
-    if (elem->error() != EC_Normal)
-    {
-        return state.setStatus(error_MaskStudyTime);
-    }
-    
-
-    //insert the tag STUDY TIME in the search mask    
-    m_mask->insert(elem, OFTrue);
-    if (m_mask->error() != EC_Normal) {
         return state.setStatus(error_MaskStudyTime);
     }
        

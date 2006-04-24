@@ -44,18 +44,15 @@ public:
 
     Status setPatientName(std::string);
     Status setPatientBirth(std::string date);
-    Status setPatientBirth(std::string dateMin,std::string dateMax);
     Status setPatientSex(std::string);  
     Status setPatientId(std::string);
     Status setPatientAge(std::string);  
     
     Status setStudyId(std::string);
     Status setStudyDate(std::string date);
-    Status setStudyDate(std::string dateMin,std::string dateMax);
     Status setStudyDescription(std::string);   
     Status setStudyModality(std::string);
     Status setStudyTime(std::string);
-    Status setStudyTime(std::string timeMin,std::string timeMax);
     Status setStudyUID(std::string);
     
     Status setInstitutionName(std::string);

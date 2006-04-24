@@ -91,8 +91,13 @@ Status SeriesMask:: setSeriesNumber(std::string seriesNumber )
 }
 
 
-/** This action especified that in the search we want the series date. Date's format is YYYYMMDD
-  *              @param series date of the series to search. If this parameter is null it's supose that any mask is applied at this field. 
+/** Aquest mètode especifica per quina data s'ha de buscar la serie. El format es YYYYMMDD
+  * Si passem una data sola, per exemple 20040505 només buscara sèries d'aquell dia
+  * Si passem una data amb un guio a davant, per exemple -20040505 , buscarà sèries fetes aquell dia o abans
+  * Si passem una data amb un guio a darrera, per exemple 20040505- , buscarà series fetes aquell dia, o dies posteriors
+  * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscarà sèries fetes entre aquelles dos dates
+  *              @param series data a cercar la sèrie 
+  *              @return estat del mètode 
   */
 Status SeriesMask:: setSeriesDate(std::string date )
 {
@@ -100,8 +105,8 @@ Status SeriesMask:: setSeriesDate(std::string date )
 
     DcmElement *elem = newDicomElement(DCM_SeriesDate);
     
-    //if the Date is null we supose that the user don't apply a criterium in this field
-    if (date.length() != 8)
+    //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters) 
+    if (date.length() != 8 && date.length() != 9 && date.length() != 17)
     return state.setStatus(error_MaskLengthDate);
     
     elem->putString(date.c_str());
@@ -117,42 +122,6 @@ Status SeriesMask:: setSeriesDate(std::string date )
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want the series date between the two parameter dates. Date's format is YYYYMMDD
-  *              @param Min date Study of the study to search.  
-  *              @param Max date Study of the study to search.
-  */
-Status SeriesMask:: setSeriesDate(std::string dateMin,std::string dateMax )
-{
-    std::string value;
-    Status state;
-
-    DcmElement *elem = newDicomElement(DCM_SeriesDate);
-
-    //the length of the date must be 8 numbers. The correct format is YYYYMMDD   
-    if (dateMin.length() != 8 || dateMax.length() != 8) 
-    {
-        return state.setStatus(error_MaskLengthDate);
-    }
-     
-    value.insert( 0 , dateMin );
-    value.append( "-" );
-    value.append( dateMax );
-    elem->putString( value.c_str() );
-    
-    if (elem->error() != EC_Normal)
-    {
-        return state.setStatus(errorMaskSeriesDate);
-    }
-    
-
-    //insert the tag SERIES DATE in the search mask    
-    m_seriesMask->insert(elem, OFTrue);
-    if (m_seriesMask->error() != EC_Normal) {
-        return state.setStatus(errorMaskSeriesDate);
-    }
-
-    return state.setStatus(correct);
-}
 
 /** This action especified that in the search we want the seriess description
   *              @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field. 
@@ -204,8 +173,14 @@ Status SeriesMask:: setSeriesModality(std::string modality)
     return state.setStatus(correct);
 }
 
-/** This action especified that in the search we want the series time
-  *              @param Series time the study to search. If this parameter is null it's supose that any mask is applied at this field. Time's format is HHMM
+/** Especifica l'hora de la serie a buscar, les hores es passen en format HHMM
+  *         Si es buit busca per qualsevol hora.
+  *         Si se li passa una hora com 1753, buscarà series d'aquella hora
+  *         Si se li passa una hora amb guió a davant, com -1753 , buscarà sèries d'aquella hora o fetes abans
+  *         Si se li passa una hora amb guió a darrera, com 1753- , buscarà series fetes a partir d'aquella hora
+  *         Si se li passa dos hores separades per un guió, com 1223-1753 , buscarà series fetes entre aquelles hores 
+  *              @param Series Hora de la serie
+  *              @retun estat del mètode
   */
 Status SeriesMask:: setSeriesTime(std::string time)
 {
@@ -213,8 +188,8 @@ Status SeriesMask:: setSeriesTime(std::string time)
 
     DcmElement *elem = newDicomElement(DCM_SeriesTime);
     
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if ( time.length() != 4 )
+    //la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
+    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 )
     return state.setStatus(error_MaskLengthTime);
     
     elem->putString( time.c_str() );
@@ -232,45 +207,6 @@ Status SeriesMask:: setSeriesTime(std::string time)
        
     return state.setStatus(correct);
 }
-
-/** This action especified that in the search we want to select series realized between these two times. Time's format is HHMM
-  *              @param Min time  Study of the series to search.  
-  *              @param Max time Study of the series to search.
-  */
-Status SeriesMask:: setSeriesTime(std::string timeMin,std::string timeMax)
-{
-    std::string value;
-    Status state;
-
-    DcmElement *elem = newDicomElement(DCM_SeriesTime);
-
-    //the length of the time must be 4 numbers. The correct format is YYYYMMDD
-    
-    if ( timeMin.length () !=4 || timeMax.length() != 4 ) 
-    {
-        return state.setStatus(error_MaskLengthTime);
-    }
-     
-    value.insert( 0 , timeMin );
-    value.append( "-" );
-    value.append( timeMax );
-    
-    elem->putString( value.c_str() );
-    if (elem->error() != EC_Normal)
-    {
-        return state.setStatus(error_MaskSeriesTime);
-    }
-    
-
-    //insert the tag SERIES TIME in the search mask    
-    m_seriesMask->insert(elem, OFTrue);
-    if (m_seriesMask->error() != EC_Normal) {
-        return state.setStatus(error_MaskSeriesTime);
-    }
-       
-    return state.setStatus(correct);
-}
-
 
 /** This action especified that in the search we want the Series instance UID
   *              @param Series instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field

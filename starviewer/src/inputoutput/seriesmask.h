@@ -44,9 +44,7 @@ public:
 
     Status setSeriesNumber(std:: string );
     Status setSeriesDate(std::string date);
-    Status setSeriesDate(std::string dateMin,std::string dateMax);
     Status setSeriesTime(std::string);
-    Status setSeriesTime(std::string timeMin,std::string timeMax);
     Status setSeriesDescription(std::string);  
     Status setSeriesModality(std::string);  
     Status setSeriesOperator(std::string);
@@ -71,11 +69,6 @@ public:
     */    
     std::string getSeriesTime(); 
     
-    /** Retorna l'hora de la sèrie
-    *            @return   hora de la sèrie
-    */    
-    std::string getSeriesTime( std::string minTime , std::string maxTime );       
-        
     /** Retorna la descripcio de la sèrie
       *         @return descripcio de la serie
       */
