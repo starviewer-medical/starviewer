@@ -106,8 +106,7 @@ Status SeriesMask:: setSeriesDate(std::string date )
     DcmElement *elem = newDicomElement(DCM_SeriesDate);
     
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters) 
-    if (date.length() != 8 && date.length() != 9 && date.length() != 17)
-    return state.setStatus(error_MaskLengthDate);
+    if (date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length()!= 0 )return state.setStatus(error_MaskLengthDate);
     
     elem->putString(date.c_str());
     if (elem->error() != EC_Normal)
@@ -189,8 +188,7 @@ Status SeriesMask:: setSeriesTime(std::string time)
     DcmElement *elem = newDicomElement(DCM_SeriesTime);
     
     //la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
-    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 )
-    return state.setStatus(error_MaskLengthTime);
+    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 && time.length() !=0 ) return state.setStatus(error_MaskLengthTime);
     
     elem->putString( time.c_str() );
     if (elem->error() != EC_Normal)
