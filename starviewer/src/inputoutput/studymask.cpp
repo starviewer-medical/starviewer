@@ -28,30 +28,16 @@ void StudyMask:: retrieveLevel()
 /************************* PATIENT  *********************************************************************/
 
 /** This action especified that in the search we want the Patient's ID
-  *              @param   patientID Patient's ID of the patient to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param   patientID Patient's ID of the patient to search. 
   *              @return state of the method
   */
-Status StudyMask:: setPatientId(std::string patientID )
+Status StudyMask:: setPatientId( std::string patientID )
 {
-    char val[70];
-    val[0] = '\0';
-    std::string value;
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_PatientID);
     
-    //if the patientId is null we supose that the user don't apply a criterium in this field
-    if (patientID.length()==0)
-    {
-        value = "";
-    }
-    else if (patientID.length()>0)
-    {
-        value = patientID.c_str();
-    }
-    else value = "";
-    
-    elem->putString(value.c_str());
+    elem->putString( patientID.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskPatientId);     
@@ -67,32 +53,17 @@ Status StudyMask:: setPatientId(std::string patientID )
 }
 
 /** This action especified that in the search we want the Patient's Name
-  *              @param Name of the patient to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param Name of the patient to search.
   *              @return state of the method
   */
-Status StudyMask:: setPatientName(std::string patientName )
+Status StudyMask:: setPatientName( std::string patientName )
 {
-    char val[70];
-    val[0] = '\0';
-    std::string value;
     Status state;
         
     //We spicified that we will use de PatientsName Tag
     DcmElement *elem = newDicomElement(DCM_PatientsName);
     
-    //if the patientId is null we supose that the user don't apply a criterium in this field
-    
-    if (patientName.length() == 0)
-    {
-         value = "";
-    }
-    else if (patientName.length()>0)
-    {
-        value =  patientName;
-    }
-    else value = "";
-    
-    elem->putString(value.c_str());
+    elem->putString( patientName.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskPatientName);
@@ -115,27 +86,16 @@ Status StudyMask:: setPatientName(std::string patientName )
   *              @param  Study's Data de naixement del pacient
   *              @return state of the method 
   */
-Status StudyMask:: setPatientBirth(std::string date)
+Status StudyMask:: setPatientBirth( std::string date )
 {
-    char val[10];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     //We specified that we will use the tag Patient Birth Date
     DcmElement *elem = newDicomElement(DCM_PatientsBirthDate);
     
-    if (date.length() == 0)
-    {
-       value = ""; 
-    }
-    else if (date.length() >0)
-    {
-        value = date;
-    }
-    else return state.setStatus(error_MaskLengthDate);
+    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length != 0 ) return state.setStatus(error_MaskLengthDate);
      
-    elem->putString(value.c_str());
+    elem->putString( date.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskPatientBirth);
@@ -152,30 +112,16 @@ Status StudyMask:: setPatientBirth(std::string date)
 
 
 /** This action especified that in the search we want the Patient's sex
-  *              @param Patient's sex of the patient to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param Patient's sex of the patient to search. 
   *              @return state of the method
   */
-Status StudyMask:: setPatientSex(std::string patientSex )
+Status StudyMask:: setPatientSex( std::string patientSex )
 {
-    char val[3];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_PatientsSex);
     
-    //if the patientId is null we supose that the user don't apply a criterium in this field
-    if (patientSex.length()==0)
-    {
-        value = "";
-    }
-    else if (patientSex.length()>0)
-    {
-        value = patientSex;
-    }
-    else value = "";
-    
-    elem->putString(value.c_str());
+    elem->putString( patientSex.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskPatientSex);
@@ -191,30 +137,16 @@ Status StudyMask:: setPatientSex(std::string patientSex )
 }
 
 /** This action especified that in the search we want the Patient's Age
-  *              @param  Patient's age of the patient to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param  Patient's age of the patient to search. 
   *              @return state of the method
   */
-Status StudyMask:: setPatientAge(std::string patientAge )
+Status StudyMask:: setPatientAge( std::string patientAge )
 {
-    char val[3];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_PatientsAge);
     
-    //if the patientAge is null we supose that the user don't apply a criterium in this field
-    if (patientAge.length()==0)
-    {
-        value = "";
-    }
-    else if (patientAge.length()>0)
-    {
-        value = patientAge;
-    }
-    else value = "";
-    
-    elem->putString(value.c_str());
+    elem->putString( patientAge.c_str() );
     
     if (elem->error() != EC_Normal)
     {
@@ -232,30 +164,16 @@ Status StudyMask:: setPatientAge(std::string patientAge )
 /************************************************************ STUDY MASK********************************************************************************/
 
 /** This action especified that in the search we want the Study's Id
-  *              @param  Study's Id of the study to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param  Study's Id of the study to search.
   *              @return state of the method
   */
-Status StudyMask:: setStudyId(std::string studyID )
+Status StudyMask:: setStudyId( std::string studyID )
 {
-    char val[20];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_StudyID);
     
-    //if the StudyId is null we supose that the user don't apply a criterium in this field
-    if (studyID.length()==0)
-    {
-        value = "";
-    }
-    else if (studyID.length()>0)
-    {
-       value= studyID;
-    }
-    else value = "";
-    
-    elem->putString(value.c_str());
+    elem->putString( studyID.c_str() );
     
     if (elem->error() != EC_Normal)
     {
@@ -280,27 +198,16 @@ Status StudyMask:: setStudyId(std::string studyID )
   *              @param  Study's date of the study to search.
   *              @return state of the method 
   */
-Status StudyMask:: setStudyDate(std::string date )
+Status StudyMask:: setStudyDate( std::string date )
 {
-    char val[10];
-    val[0] = '\0';
-    std::string value;    
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_StudyDate);
     
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters) 
-    if (date.length()==0)
-    {
-        value = "";
-    }
-    else if (date.length() == 8 || date.length() == 9 || date.length() == 17 )
-    {
-        value = date;
-    }
-    else return state.setStatus(error_MaskLengthDate);
+    if (date.length() != 8 && date.length() != 9 && date.length() != 17 ) return state.setStatus(error_MaskLengthDate);
     
-    elem->putString(value.c_str());
+    elem->putString( date.c_str() );
     
     if (elem->error() != EC_Normal)
     {
@@ -319,30 +226,16 @@ Status StudyMask:: setStudyDate(std::string date )
 
 
 /** This action especified that in the search we want the Study's description
-  *              @param Study's description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
+  *              @param Study's description of the study to search. 
   *              @return state of the method 
   */
-Status StudyMask:: setStudyDescription(std::string desc)
+Status StudyMask:: setStudyDescription( std::string desc )
 {
-    char val[70];
-    val[0] = '\0';
-    std::string value;
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_StudyDescription);
 
-    //if the desc is null we supose that the user don't apply a criterium in this field
-    if (desc.length()==0)
-    {
-        value = "";
-    }
-    else if (desc.length()>0)
-    {
-        value = desc;
-    }
-    else value = "";
-
-    elem->putString(value.c_str());
+    elem->putString( desc.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(errorMaskStudyDescription);
@@ -359,30 +252,17 @@ Status StudyMask:: setStudyDescription(std::string desc)
 }
 
 /** This action especified that in the search we want the Study's modality
-  *              @param Study's modality the study to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param Study's modality the study to search.
   *              @return state of the method
   */
-Status StudyMask:: setStudyModality(std::string modality)
+Status StudyMask:: setStudyModality( std::string modality )
 {
-    char val[50];
-    val[0] = '\0';
-    std::string value;
+
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_ModalitiesInStudy);
-
-    //if the modality is null we supose that the user don't apply a criterium in this field
-    if (modality.length()==0)
-    {
-        value = "";
-    }
-    else if (modality.length()>0)
-    {
-        value = modality;
-    }
-    else value = "";
     
-    elem->putString(value.c_str());
+    elem->putString( modality.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskStudyModality);
@@ -406,27 +286,16 @@ Status StudyMask:: setStudyModality(std::string modality)
   *              @param  Hora de l'estudi
   *              @retun estat del mètode
   */
-Status StudyMask:: setStudyTime(std::string time)
+Status StudyMask:: setStudyTime( std::string time )
 {
-    char val[6];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_StudyTime);
     
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if (time.length()==0)
-    {
-        value = "";
-    }//la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
-    else if ( time.length() == 4 || time.length() == 5 || time.length() == 9 )
-    {
-        value = time;
-    }
-    else return state.setStatus(error_MaskLengthTime);
+    //la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
+    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 ) return state.setStatus(error_MaskLengthTime);
     
-    elem->putString(value.c_str());
+    elem->putString( time.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskStudyTime);
@@ -443,30 +312,16 @@ Status StudyMask:: setStudyTime(std::string time)
 }
 
 /** This action especified that in the search we want the Study's instance UID
-  *              @param Study's instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param Study's instance UID the study to search. 
   *              @return state of the method
   */
-Status StudyMask:: setStudyUID(std::string uid)
+Status StudyMask:: setStudyUID( std::string studyUID )
 {
-    char val[70];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
 
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if (uid.length()==0)
-    {
-        value = "";
-    }
-    else if (uid.length()>0)
-    {
-        value = uid;
-    }
-    else strcpy(val,"");
-    
-    elem->putString(value.c_str());
+    elem->putString( studyUID.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskStudyUID);
@@ -482,30 +337,16 @@ Status StudyMask:: setStudyUID(std::string uid)
 }
 
 /** This action especified that in the search we want the Institution name
-  *              @param Institution name of the study to search. If this parameter is null it's supose that any mask is applied at this field
+  *              @param Institution name of the study to search. 
   *              @return state of the method
   */
-Status StudyMask:: setInstitutionName(std::string institution)
+Status StudyMask:: setInstitutionName( std::string institution )
 {
-    char val[100];
-    val[0] = '\0';
-    std::string value;
     Status state;
     
     DcmElement *elem = newDicomElement(DCM_InstitutionName );
 
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if (institution.length()==0)
-    {
-        value = "";
-    }
-    else if (institution.length()>0)
-    {
-        value = institution;
-    }
-    else value = "";;
-    
-    elem->putString(value.c_str());
+    elem->putString( institution.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskInstitutionName);
@@ -521,11 +362,11 @@ Status StudyMask:: setInstitutionName(std::string institution)
 }
 
 /** This action especified that in the search we want the Accession Number
-  *              @param Accession Number of the study to search. If this parameter is null it's supose that any mask is applied at this field
-  **             @return state of the method
+  *              @param Accession Number of the study to search. 
+  *             @return state of the method
   */
 
-Status StudyMask:: setAccessionNumber(std::string accession)
+Status StudyMask:: setAccessionNumber( std::string accession )
 {
     char val[100];
     val[0] = '\0';
@@ -534,18 +375,7 @@ Status StudyMask:: setAccessionNumber(std::string accession)
 
     DcmElement *elem = newDicomElement(DCM_AccessionNumber );
 
-    //if the time is null we supose that the user don't apply a criterium in this field
-    if (accession.length()==0)
-    {
-        value = "";
-    }
-    else if (accession.length()>0)
-    {
-        value = accession;
-    }
-    else value = "";
-    
-    elem->putString(value.c_str());
+    elem->putString( accession.c_str() );
     
     if (elem->error() != EC_Normal)
     {

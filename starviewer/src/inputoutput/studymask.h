@@ -31,8 +31,7 @@
 #include "status.h"
 
 #include <string>
-/** This class construct a mask to search the patients in the pacs. Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor 
-null per aquell camp. Per tots els camps podem passar, null o cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
+/** Aquesta classe construeix una màscara per la cerca d'estudis. Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
  */
 namespace udg{
 
