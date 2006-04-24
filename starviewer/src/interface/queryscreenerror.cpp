@@ -55,7 +55,6 @@ void QueryScreen::databaseError(Status *state)
                         text.append(tr("Error Number : "));
                         code.setNum(state->code(),10);
                         text.append(code);
-                        QMessageBox::warning( this, tr("StarViewer"),text);
         }
         QMessageBox::critical( this, tr("StarViewer"),text);
     }    
