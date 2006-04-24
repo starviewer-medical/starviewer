@@ -42,9 +42,9 @@ public:
 
     ImageMask();
         
-    Status setStudyUID(const char*);
-    Status setSeriesUID(const char*);
-    Status setImageNumber(const char*);
+    Status setStudyUID( std::string );
+    Status setSeriesUID( std::string );
+    Status setImageNumber( std::string );
     
     /** Retorna el uid de l'estudi
       *         @return StudyUID

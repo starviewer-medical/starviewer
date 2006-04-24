@@ -14,8 +14,8 @@ ImageMask::ImageMask()
     retrieveLevel();
     
     //afegim els camps obligatoris
-    setStudyUID(NULL);
-    setSeriesUID(NULL);
+    setStudyUID( "" );
+    setSeriesUID( "" );
     
 }
 
@@ -45,26 +45,13 @@ void ImageMask:: retrieveLevel()
   *              @param Series UID
   *              @return The status of the action
   */
-Status ImageMask:: setSeriesUID(const char *uid)
+Status ImageMask:: setSeriesUID( std::string seriesUID )
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
 
-    
-    if (uid==NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(uid)>0)
-    {
-        strcpy(val,uid);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( seriesUID.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskSeriesUID);
@@ -85,26 +72,13 @@ Status ImageMask:: setSeriesUID(const char *uid)
   *              @param   Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
   *              @return The state of the action
   */
-Status ImageMask:: setStudyUID(const char *uid)
+Status ImageMask:: setStudyUID( std::string studyUID )
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
 
-    
-    if (uid == NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(uid)>0)
-    {
-        strcpy(val,uid);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( studyUID.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskStudyUID);
@@ -124,25 +98,13 @@ Status ImageMask:: setStudyUID(const char *uid)
   *              @param image Number
   *              @return The status of the action
   */
-Status ImageMask:: setImageNumber(const char *imgNum)
+Status ImageMask:: setImageNumber( std::string imgNum )
 {
-    char val[70];
-    val[0] = '\0';
     Status state;
 
     DcmElement *elem = newDicomElement(DCM_InstanceNumber);
 
-    if (imgNum == NULL)
-    {
-        strcpy(val,"");
-    }
-    else if (strlen(imgNum)>0)
-    {
-        strcpy(val,imgNum);
-    }
-    else strcpy(val,"");
-    
-    elem->putString(val);
+    elem->putString( imgNum.c_str() );
     if (elem->error() != EC_Normal)
     {
         return state.setStatus(error_MaskInstanceNumber);

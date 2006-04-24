@@ -634,8 +634,8 @@ void QueryScreen::QuerySeriesCache(QString studyUID)
         serie= m_seriesListCache.getSeries();
         
         //preparem per fer la cerca d'imatges
-        imageMask.setStudyUID(serie.getStudyUID().c_str());
-        imageMask.setSeriesUID(serie.getSeriesUID().c_str());
+        imageMask.setStudyUID( serie.getStudyUID() );
+        imageMask.setSeriesUID( serie.getSeriesUID() );
         
         state = localCache->countImageNumber(imageMask,imagesNumber);
         serie.setImageNumber(imagesNumber);
