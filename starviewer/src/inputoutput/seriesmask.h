@@ -56,6 +56,62 @@ public:
     Status setStudyUID(const char *);
     Status setSeriesUID(const char* date);
     
+    /** Retorna el series Number
+    *            @return   series Number 
+    */
+    std::string getSeriesNumber();
+    
+    /** Retorna la data de la sèrie
+    *            @return   data de la sèrie
+    */
+    std::string getSeriesDate();
+    
+    /** Retorna l'hora de la sèrie
+    *            @return   hora de la sèrie
+    */    
+    std::string getSeriesTime(); 
+    
+    /** Retorna l'hora de la sèrie
+    *            @return   hora de la sèrie
+    */    
+    std::string getSeriesTime( std::string minTime , std::string maxTime );       
+        
+    /** Retorna la descripcio de la sèrie
+      *         @return descripcio de la serie
+      */
+    std::string getSeriesDescription();  
+      
+    /** Retorna la modalitat de la sèrie
+      *         @return modalitat de la sèrie
+      */
+    std::string getSeriesModality();  
+      
+      
+    /** Retorna l'operador que captat la serie
+      *         @return operdor
+      */  
+    std::string getSeriesOperator();
+    
+    /** Retorna la part del cos examinada en la serie
+      *         @return part del cos examinada
+      */
+    std::string getSeriesBodyPartExaminated();
+    
+    /** Retorna el nom del protocol utiltizat la serie
+      *         @return nom del protocol utilitzat a la seire
+      */
+    std::string getSeriesProtocolName();
+      
+    /** Retorna l'uid de la serie
+      *         @return SeriesUID
+      */  
+    std::string getSeriesUID();
+    
+    /** Retorna l'UID de l'estudi 
+      *         @return StudyUID
+      */
+    std::string getStudyUID();
+      
     DcmDataset* getSeriesMask();
    
 private:

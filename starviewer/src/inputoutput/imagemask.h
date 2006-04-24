@@ -46,6 +46,21 @@ public:
     Status setSeriesUID(const char*);
     Status setImageNumber(const char*);
     
+    /** Retorna el uid de l'estudi
+      *         @return StudyUID
+      */
+    std::string getStudyUID();
+    
+    /** Retorna el UID de la serie
+      *         @return SeriesUID
+      */
+    std::string getSeriesUID();
+    
+    /** Retorna el número d'imatge
+      *         @return número d'imatge
+      */
+    std::string getImageNumber();
+    
     DcmDataset* getImageMask();
     
 private:

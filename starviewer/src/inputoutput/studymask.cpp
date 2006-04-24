@@ -666,8 +666,9 @@ Status StudyMask:: setAccessionNumber(std::string accession)
     return state.setStatus(correct);
 }
 
+/***************************************************************   GET **********************************************/
 
-/** Extreu de la màscara l'estudi UID
+/** Retorna de la màscara l'estudi UID
   *            @param mask [in] màscara de la cerca
   *            @return   Estudi UID que cerquem
   */
@@ -684,6 +685,214 @@ std::string StudyMask::getStudyUID()
         
     return studyUID;
 }
+
+/** Retorna el Id del pacient a buscar
+  *            @return   ID del pacient
+  */
+std::string StudyMask::getPatientId()
+{
+    const char * ID = NULL;
+    std::string patientID;
+    
+    DcmTagKey patientIDTagKey (DCM_PatientID);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( patientIDTagKey, ID, OFFalse );
+    
+    
+    if (ID != NULL) patientID.insert(0,ID);
+    
+    return patientID;
+}
+
+/** Retorna el nom del pacient 
+  *            @return Nom del pacient 
+  */
+std::string StudyMask::getPatientName()
+{
+    const char * name = NULL;
+    std::string patientName;
+    
+    DcmTagKey patientIDTagKey (DCM_PatientsName);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( patientIDTagKey, name, OFFalse );
+    
+    
+    if (name != NULL) patientName.insert(0,name);
+    
+    return patientName;
+}
+
+/** Retorna la data naixement
+  *            @return Data de naixament del pacient
+  */
+std::string StudyMask::getPatientBirth()
+{
+    const char * birth = NULL;
+    std::string patientBirth;
+    
+    DcmTagKey patientBirthTagKey (DCM_PatientsBirthDate);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( patientBirthTagKey, birth, OFFalse );
+    
+    
+    if ( birth != NULL) patientBirth.insert(0,birth);
+    
+    return patientBirth;
+}
+
+/** Retorna el sexe del pacient
+  *            @return sexe del pacient 
+  */
+std::string StudyMask::getPatientSex()
+{
+    const char * sex = NULL;
+    std::string patientSex;
+    
+    DcmTagKey patientSexTagKey (DCM_PatientsSex);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( patientSexTagKey, sex, OFFalse );
+    
+    if (sex != NULL) patientSex.insert(0,sex);
+    
+    return patientSex;
+}
+
+/** Retorna l'edat de pacient
+  *            @return edat del pacient 
+  */
+std::string StudyMask::getPatientAge()
+{
+    const char * age = NULL;
+    std::string patientAge;
+    
+    DcmTagKey patientAgeTagKey (DCM_PatientsAge);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( patientAgeTagKey, age, OFFalse );
+    
+    if (age != NULL) patientAge.insert(0,age);
+    
+    return patientAge;
+}
+
+/** Retorna Id de l'estudi
+  *            @return   ID de l'estudi
+  */
+std::string StudyMask::getStudyId()
+{
+    const char * ID = NULL;
+    std::string studyID;
+    
+    DcmTagKey studyIDTagKey (DCM_StudyID);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( studyIDTagKey, ID, OFFalse );
+    
+    if (ID != NULL) studyID.insert(0,ID);
+    
+    return studyID;
+}
+
+/** Retorna la data de l'estudi
+  *            @return   Data de l'estudi
+  */
+std::string StudyMask::getStudyDate()
+{
+    const char * date = NULL;
+    std::string studyDate;
+    
+    DcmTagKey studyDateTagKey (DCM_StudyDate);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( studyDateTagKey, date, OFFalse );
+    
+    if (date != NULL) studyDate.insert(0,date);
+    
+    return studyDate;
+}
+
+/** Retorna la descripció de l'estudi
+  *            @return   descripció de l'estudi
+  */
+std::string StudyMask::getStudyDescription()
+{
+    const char * description = NULL;
+    std::string studyDescription;
+    
+    DcmTagKey studyDescriptionTagKey (DCM_StudyDescription);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( studyDescriptionTagKey, description, OFFalse );
+    
+    if (description != NULL) studyDescription.insert(0 , description);
+    
+    return studyDescription;
+}
+
+/** Retorna l'hora de l'estudi
+  *            @return   hora de l'estudi 
+  */
+std::string StudyMask::getStudyTime()
+{
+    const char * time = NULL;
+    std::string studyTime;
+    
+    DcmTagKey studyTimeTagKey (DCM_StudyTime);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( studyTimeTagKey, time, OFFalse );
+    
+    if (time != NULL) studyTime.insert(0,time);
+    
+    return studyTime;
+}
+
+/** Retorna de la modalitat de l'estudi 
+  *            @return   Modalitat de l'estudi
+  */
+std::string StudyMask::getStudyModality()
+{
+    const char * mod = NULL;
+    std::string studyModality;
+    
+    DcmTagKey studyModalityTagKey (DCM_ModalitiesInStudy);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( studyModalityTagKey, mod, OFFalse );
+    
+    if (mod != NULL) studyModality.insert(0,mod);
+    
+    return studyModality;
+}
+
+/** Retorna el accession number de l'estudi 
+  *            @return   accession number de l'estudi
+  */
+std::string StudyMask::getAccessionNumber()
+{
+    const char * aNumber = NULL;
+    std::string accessionNumber;
+    
+    DcmTagKey accessionNumberTagKey (DCM_AccessionNumber);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( accessionNumberTagKey, aNumber, OFFalse );
+    
+    if (aNumber != NULL) accessionNumber.insert(0,aNumber);
+        
+    return accessionNumber;
+}
+
+/** Retorna el nom de l'institució on s'ha realitzat l'estudi 
+  *            @return   Nom de l'institucio
+  */
+std::string StudyMask::getInstitutionName()
+{
+    const char * institution = NULL;
+    std::string institutionName;
+    
+    DcmTagKey institutionNameTagKey (DCM_InstitutionName);
+    OFCondition ec;
+    ec = m_mask->findAndGetString( institutionNameTagKey, institution, OFFalse );
+    
+    if (institution != NULL) institutionName.insert(0,institution);
+        
+    return institutionName;
+}
+
 /**  Return the generated search mask
               @return returns de search mask
 */

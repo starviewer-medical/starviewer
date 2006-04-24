@@ -156,6 +156,47 @@ Status ImageMask:: setImageNumber(const char *imgNum)
     return state.setStatus(correct);
 }
 
+std::string ImageMask::getStudyUID()
+{
+    const char * UID=NULL;
+    std::string studyUID;
+    
+    DcmTagKey studyUIDTagKey (DCM_StudyInstanceUID);
+    OFCondition ec;
+    ec = m_imageMask->findAndGetString( studyUIDTagKey, UID, OFFalse );;
+    
+    if (UID != NULL) studyUID.insert(0,UID);
+        
+    return studyUID;
+}
+
+std::string ImageMask::getSeriesUID()
+{
+    const char * UID = NULL;
+    std::string seriesUID;
+    
+    DcmTagKey seriesUIDTagKey (DCM_SeriesInstanceUID);
+    OFCondition ec;
+    ec = m_imageMask->findAndGetString( seriesUIDTagKey, UID, OFFalse );;
+    
+    if (UID != NULL) seriesUID.insert(0,UID);
+        
+    return seriesUID;
+}
+
+std::string ImageMask::getImageNumber()
+{
+    const char * number = NULL;
+    std::string imageNumber;
+    
+    DcmTagKey instanceNumberTagKey (DCM_InstanceNumber);
+    OFCondition ec;
+    ec = m_imageMask->findAndGetString( instanceNumberTagKey, number, OFFalse );;
+    
+    if (number != NULL) imageNumber.insert(0, number);
+        
+    return imageNumber;
+}
 
 /**  Return the generated image mask
               @return returns the image mask

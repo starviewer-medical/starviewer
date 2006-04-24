@@ -525,6 +525,155 @@ Status SeriesMask:: setSeriesProtocolName(const char *name)
 }
 
 
+/************************************************ GET **************************************************************/
+
+/** Retorna el series Number
+  *            @return   series Number 
+  */
+std::string SeriesMask::getSeriesNumber( )
+{
+    const char * seriesNum = NULL;
+    std::string seriesNumber;
+    
+    DcmTagKey seriesNumberTagKey (DCM_SeriesNumber);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( seriesNumberTagKey, seriesNum, OFFalse );;
+    
+    if (seriesNum != NULL) seriesNumber.insert(0,seriesNum);
+        
+    return seriesNum;
+}
+
+
+std::string SeriesMask::getSeriesDate( )
+{
+    const char * date = NULL;
+    std::string seriesDate;
+    
+    DcmTagKey seriesDateTagKey (DCM_SeriesDate);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( seriesDateTagKey, date, OFFalse );;
+    
+    if (date != NULL) seriesDate.insert(0,date);
+        
+    return seriesDate;
+}
+
+
+std::string SeriesMask::getSeriesTime( )
+{
+    const char * time = NULL;
+    std::string seriesTime;
+    
+    DcmTagKey seriesTimeTagKey (DCM_SeriesTime);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( seriesTimeTagKey, time, OFFalse );;
+    
+    if (time != NULL) seriesTime.insert(0,time);
+        
+    return seriesTime;
+}
+
+std::string SeriesMask::getSeriesDescription( )
+{
+    const char * description = NULL;
+    std::string seriesDescription;
+    
+    DcmTagKey seriesDescriptionTagKey (DCM_SeriesDescription);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( seriesDescriptionTagKey, description, OFFalse );;
+    
+    if (description != NULL) seriesDescription.insert(0,description);
+        
+    return seriesDescription;
+}
+
+std::string SeriesMask::getSeriesModality( )
+{
+    const char * modality = NULL;
+    std::string seriesModality;
+    
+    DcmTagKey seriesModalityTagKey (DCM_Modality);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( seriesModalityTagKey, modality, OFFalse );;
+    
+    if (modality != NULL) seriesModality.insert(0,modality);
+        
+    return seriesModality;
+}
+
+std::string SeriesMask::getSeriesOperator( )
+{
+    const char * oper = NULL;
+    std::string operatorsName;
+    
+    DcmTagKey operatorsNameTagKey (DCM_OperatorsName);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( operatorsNameTagKey, oper, OFFalse );;
+    
+    if (oper != NULL) operatorsName.insert(0, oper);
+        
+    return operatorsName;
+}
+
+
+std::string SeriesMask::getSeriesBodyPartExaminated( )
+{
+    const char * bodyPart = NULL;
+    std::string bodyPartExaminated;
+    
+    DcmTagKey bodyPartExaminatedTagKey (DCM_BodyPartExamined);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( bodyPartExaminatedTagKey, bodyPart, OFFalse );;
+    
+    if (bodyPart != NULL) bodyPartExaminated.insert(0, bodyPart);
+        
+    return bodyPartExaminated;
+}
+
+std::string SeriesMask::getSeriesProtocolName( )
+{
+    const char * protocol = NULL;
+    std::string ProtocolName;
+    
+    DcmTagKey ProtocolNameTagKey (DCM_ProtocolName);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( ProtocolNameTagKey, protocol, OFFalse );;
+    
+    if (protocol != NULL) ProtocolName.insert(0, protocol);
+        
+    return ProtocolName;
+}
+
+std::string SeriesMask::getSeriesUID()
+{
+    const char * UID = NULL;
+    std::string seriesUID;
+    
+    DcmTagKey seriesUIDTagKey (DCM_SeriesInstanceUID);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( seriesUIDTagKey, UID, OFFalse );;
+    
+    if (UID != NULL) seriesUID.insert(0,UID);
+        
+    return seriesUID;
+}
+
+std::string SeriesMask::getStudyUID()
+{
+    const char * UID=NULL;
+    std::string studyUID;
+    
+    DcmTagKey studyUIDTagKey (DCM_StudyInstanceUID);
+    OFCondition ec;
+    ec = m_seriesMask->findAndGetString( studyUIDTagKey, UID, OFFalse );;
+    
+    if (UID != NULL) studyUID.insert(0,UID);
+        
+    return studyUID;
+}
+
+
 /**  Return the generated search mask
               @return returns de search mask
 */

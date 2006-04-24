@@ -62,6 +62,19 @@ public:
     Status setAccessionNumber(std::string);
         
     std::string getStudyUID();
+    std::string getPatientId();
+    std::string getPatientName();
+    std::string getPatientBirth();
+    std::string getPatientAge();
+    std::string getPatientSex();
+    
+    std::string getStudyId();
+    std::string getStudyDate();
+    std::string getStudyDescription();
+    std::string getStudyModality();
+    std::string getStudyTime();
+    std::string getAccessionNumber();
+    std::string getInstitutionName();
     
     DcmDataset* getMask();
     
