@@ -71,7 +71,6 @@ signals :
     void selectedSeriesList(QString); 
 
 public slots:
-    void expand(QTreeWidgetItem *,int);
     void selectedSeriesIcon(QString );
     
     void clicked(QTreeWidgetItem *,int);
@@ -97,6 +96,7 @@ private :
     void createPopupMenu( );
     void insertStudy(Study *);
     void setSeriesToSeriesListWidget(QTreeWidgetItem *item);
+    void expand(QTreeWidgetItem *);
 
     QString formatName(const std::string);
     QString formatAge(const std::string);

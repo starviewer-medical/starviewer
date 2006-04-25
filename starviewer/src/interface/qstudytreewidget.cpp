@@ -30,7 +30,6 @@
 #include "starviewersettings.h"
 #include <QShortcut>
 
-
 namespace udg {
 
 
@@ -65,7 +64,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent)
 
 void QStudyTreeWidget::createConnections()
 {
-    connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(expand(QTreeWidgetItem *,int)));
     connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(clicked(QTreeWidgetItem *,int)));
     connect(m_studyTreeView, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), this, SLOT(doubleClicked(QTreeWidgetItem *,int)));
 }
@@ -378,40 +376,35 @@ QString QStudyTreeWidget::getSelectedStudyPacsAETitle()
 //SLOT CONNECTAT AMB EL SIGNAL D'UN CLICK
 /**al fer un click mostra les sèries d'un estudi,
   *            @param Item element del treeview
-  *            @param columna a la qual s'ha clickat
   */
-void QStudyTreeWidget::expand(QTreeWidgetItem * item,int col)
+void QStudyTreeWidget::expand(QTreeWidgetItem * item)
 {
 
     if (item==NULL) return;
 
-    if (col == 0) //aquesta posicio fan click a la carpeta, per tant despleguem o pleguem!
-    {
-        if (!m_studyTreeView->isItemExpanded(item))
-        {    
-            if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
-            {
-                m_studyTreeView->setItemExpanded(item,true);
-                item->setIcon(0,m_openFolder); 
-                if (item->childCount()==0) //si abans hem consultat le seria ja hi tenim la seva informació, evitem d'haver de consultar el pacs cada vegada
-                {
-                    emit(expand(item->text(11),item->text(10)));
-                }
-                else setSeriesToSeriesListWidget(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
-                m_oldStudyUID = getSelectedStudyUID();
-            }
-        }
-        else 
+    if (!m_studyTreeView->isItemExpanded(item))
+    {    
+        if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
         {
-            if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
+            m_studyTreeView->setItemExpanded(item,true);
+            item->setIcon(0,m_openFolder); 
+            if (item->childCount()==0) //si abans hem consultat le seria ja hi tenim la seva informació, evitem d'haver de consultar el pacs cada vegada
             {
-                item->setIcon(0,m_closeFolder); 
-                m_studyTreeView->setItemExpanded(item,false);
-                emit(clearSeriesListWidget());
-                m_oldStudyUID = getSelectedStudyUID();
+                emit(expand(item->text(11),item->text(10)));
             }
+            else setSeriesToSeriesListWidget(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
+            m_oldStudyUID = getSelectedStudyUID();
         }
-
+    }
+    else 
+    {
+        if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
+        {
+            item->setIcon(0,m_closeFolder); 
+            m_studyTreeView->setItemExpanded(item,false);
+            emit(clearSeriesListWidget());
+            m_oldStudyUID = getSelectedStudyUID();
+        }
     }
 
        
@@ -530,7 +523,7 @@ d'aquell estudi
   *  també en el QSeriesListWidget
   *         @param item sobre el que s'ha fet click
   */
-void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int)
+void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int col)
 {
     
 
@@ -548,6 +541,11 @@ void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int)
         }
         else
         {
+            if (col == 0)
+            {
+                expand( item );
+            }
+            
             if (m_oldStudyUID != getSelectedStudyUID())
             { //si seleccionem una estudi diferent el seleccionat abans, hem d'actualizar el qserieslistwidget
                 if (m_studyTreeView->isItemExpanded(item))
@@ -564,7 +562,7 @@ void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int)
     
 }
 
-/**  Si fem doble click a una serie del TreeView es visualitzarà!
+/**  Si fem doble click a una serie del TreeView es visualitzarà si és una sèrie, o si és un estudi es mostraran les series o s'amagaran si abans es mostraven
   *         @param item sobre el que s'ha fet click
   */
 void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item,int)
@@ -577,7 +575,12 @@ void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item,int)
         {   //enviem el UID de la serie
             emit(view());
         }
-
+        else 
+        {
+            expand( item ); //es tracta d'un estudi
+            //QTreeWidget automaticament al fer doble click modifica l'estat de Expanded, llavors tenim el problema que a al metode expand tambe es modifica, i al modificar-lo dos vegades, queda en el seu estat inicial, per això aquí hem de ficar un altre Expanded perquè realment l'expandeixi o amagui en funció de si es mostraven o no les series
+            m_studyTreeView->setItemExpanded( item , !m_studyTreeView->isItemExpanded( item ) );
+        }
     }
     
     m_oldStudyUID = getSelectedStudyUID();
