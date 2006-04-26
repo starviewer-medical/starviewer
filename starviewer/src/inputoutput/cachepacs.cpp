@@ -93,12 +93,11 @@ Status CachePacs::insertStudy(Study *stu)
     
     // Hi ha noms del pacients que depenent de la màquina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
     patientName = stu->getPatientName();
-    pos = patientName.find('^',0);
     
-    if (pos != std::string::npos)
+    while ( patientName.find('^') != std::string::npos )
     {
-        patientName.replace(pos,1," ");
-    } 
+        patientName.replace(patientName.find('^'),1," ",1);
+    }
     
     m_DBConnect->getLock(); //s'insereix el pacient 
     i=sqlite_exec_printf(m_DBConnect->getConnection(),"Insert into Patient (PatId,PatNam,PatBirDat,PatSex) values (%Q,%Q,%Q,%Q)",0,0,0
