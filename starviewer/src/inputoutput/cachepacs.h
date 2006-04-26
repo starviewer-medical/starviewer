@@ -39,25 +39,15 @@ private:
     
     Status constructState(int error);
 
-    std::string buildSqlQueryStudy(DcmDataset *);
-    std::string buildSqlQuerySeries(DcmDataset *);
-    std::string buildSqlQueryImages(DcmDataset *);
-    std::string buildSqlCountImageNumber(DcmDataset *);    
+    std::string buildSqlQueryStudy( StudyMask *studyMask );
+    std::string buildSqlQuerySeries( SeriesMask *seriesMask );
+    std::string buildSqlQueryImages( ImageMask *imageMask );
+    std::string buildSqlCountImageNumber( ImageMask *imageMask );    
             
-    std::string getPatientFirstNameMask(DcmDataset *);
-    std::string getPatientLastNameMask(DcmDataset *);
-    std::string getPatientIDMask(DcmDataset *);
-    std::string getStudyDateMaskMin(DcmDataset *);
-    std::string getStudyDateMaskMax(DcmDataset *);
-    std::string getStudyIDMask(DcmDataset *);
-    std::string getStudyModalityMask(DcmDataset *);    
-    std::string getStudyUID(DcmDataset *);
-    std::string getAccessionNumber(DcmDataset *);
-    std::string getSeriesUID(DcmDataset *);
-    std::string getImageNumber(DcmDataset *);
-
     int getTime();
     int getDate();
+    
+    std::string replaceAsterisk( std::string );
 
 public:
  

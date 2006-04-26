@@ -13,6 +13,8 @@
 #include <time.h>
 #include "cachepool.h"
 #include <QString>
+#include "seriesmask.h"
+#include "studymask.h"
 
 namespace udg {
 
@@ -84,7 +86,6 @@ Status CachePacs::insertStudy(Study *stu)
     std::string insertPatient,insertStudy,sql,patientName;
     int i;
     Status state;
-    std::string::size_type pos;
     
     if (!m_DBConnect->connected())
     {//el 50 es l'error de no connectat a la base de dades
@@ -272,7 +273,6 @@ Status CachePacs::insertImage(Image *image)
 Status CachePacs::queryStudy(StudyMask studyMask,StudyList &ls)
 {
 
-    DcmDataset* mask=NULL;
     int col,rows,i=0,estat;
     Study stu;
 
@@ -284,10 +284,8 @@ Status CachePacs::queryStudy(StudyMask studyMask,StudyList &ls)
         return constructState(50);
     }
     
-    mask = studyMask.getMask();
-    
     m_DBConnect->getLock();
-    estat = sqlite_get_table(m_DBConnect->getConnection(),buildSqlQueryStudy(mask).c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite_get_table(m_DBConnect->getConnection(), buildSqlQueryStudy( & studyMask ).c_str() ,&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     state = constructState(estat);
     
@@ -375,7 +373,6 @@ Status CachePacs::queryOldStudies(std::string OldStudiesDate , StudyList &ls)
 Status CachePacs::queryStudy(std::string studyUID,Study &study)
 {
 
-    DcmDataset* mask=NULL;
     int col,rows,i=0,estat;
 
     char **resposta=NULL,**error=NULL;
@@ -432,9 +429,9 @@ Status CachePacs::queryStudy(std::string studyUID,Study &study)
   *         @param mascara de cerca
   *         @return retorna estat del mètode
   */
-std::string CachePacs::buildSqlQueryStudy(DcmDataset* mask)
+std::string CachePacs::buildSqlQueryStudy(StudyMask* studyMask)
 {
-    std::string sql,patFirstNam,patID,stuDatMin,stuDatMax,stuID,accNum,patLastNam,stuInsUID,stuMod;
+    std::string sql,patientName,patID,stuDatMin,stuDatMax,stuID,accNum,stuInsUID,stuMod,studyDate;
     
     sql.insert(0,"select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AETitle, AbsPath, Modali ");
     sql.append(" from Patient,Study,PacsList ");
@@ -443,30 +440,20 @@ std::string CachePacs::buildSqlQueryStudy(DcmDataset* mask)
     sql.append(" and PacsList.PacsID=Study.PacsID"); //busquem el nom del pacs
     
     //llegim la informació de la màscara
-    patFirstNam = getPatientFirstNameMask(mask);
-    patLastNam = getPatientLastNameMask(mask);
-    patID = getPatientIDMask(mask);
-    stuDatMin = getStudyDateMaskMin(mask);
-    stuDatMax = getStudyDateMaskMax(mask);
-    stuID = getStudyIDMask(mask);
-    accNum = getAccessionNumber(mask);
-    stuMod = getStudyModalityMask(mask);
-
-    stuInsUID = getStudyUID(mask);
-    //Nom del pacient
-    if (patFirstNam.length() > 0)
-    {
-        sql.append(" and PatNam like '% ");
-        sql.append(patFirstNam);
-        sql.append("%' ");
-    }                
+    patientName = replaceAsterisk( studyMask->getPatientName() );
+    patID = studyMask->getPatientId();
+    studyDate = studyMask->getStudyDate();
+    stuID = studyMask->getStudyId();
+    accNum = studyMask->getAccessionNumber();
+    stuMod = studyMask->getStudyModality();
+    stuInsUID = studyMask->getStudyUID();
     
     //cognoms del pacient
-    if (patLastNam.length() > 0)
+    if (patientName.length() > 0)
     {
         sql.append(" and PatNam like '");
-        sql.append(patLastNam);
-        sql.append("%' ");
+        sql.append(patientName);
+        sql.append("' ");
     }          
     
     //Id del pacient
@@ -478,18 +465,34 @@ std::string CachePacs::buildSqlQueryStudy(DcmDataset* mask)
     }
     
     //data
-    if (stuDatMin != "00000000" && stuDatMin.length() > 0)
+    if ( studyDate.length() == 8 )
     {
-        sql.append(" and StuDat >= '");
-        sql.append(stuDatMin);
-        sql.append("' ");
+        sql.append( " and StuDat = '" );
+        sql.append( studyDate );
+        sql.append( "' " );        
     }
-    
-    if (stuDatMax != "99999999" && stuDatMax.length() > 0)
+    else if ( studyDate.length() == 9) 
     {
-        sql.append(" and Studat <= '");
-        sql.append(stuDatMax);
-        sql.append("' ");
+        if ( studyDate.at( 0 ) == '-' )
+        {
+            sql.append( " and StuDat <= '" );
+            sql.append( studyDate.substr( 1 , 8 ) );
+            sql.append( "' " );
+        }
+        else if ( studyDate.at( 8 ) == '-' )
+        {
+            sql.append( " and StuDat >= '" );
+            sql.append( studyDate.substr( 0 , 8 ) );
+            sql.append( "' " ); 
+        }
+    }
+    else if ( studyDate.length() == 17 )
+    {
+        sql.append( " and StuDat between '" );
+        sql.append( studyDate.substr( 0 , 8 ) );
+        sql.append( "' and '" );
+        sql.append( studyDate.substr( 9, 8 ) );
+        sql.append( "'" );
     }
     
     //id estudi
@@ -549,7 +552,7 @@ Status CachePacs::querySeries(SeriesMask seriesMask,SeriesList &ls)
     mask = seriesMask.getSeriesMask();
                      
     m_DBConnect->getLock();
-    estat = sqlite_get_table(m_DBConnect->getConnection(),buildSqlQuerySeries(mask).c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite_get_table(m_DBConnect->getConnection() , buildSqlQuerySeries( &seriesMask ).c_str() ,&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     state = constructState(estat);
@@ -578,16 +581,17 @@ Status CachePacs::querySeries(SeriesMask seriesMask,SeriesList &ls)
   *            @param mask [in] màscara de cerca
   *            @return sentència sql
   */
-std::string CachePacs::buildSqlQuerySeries(DcmDataset* mask)
+std::string CachePacs::buildSqlQuerySeries( SeriesMask *seriesMask )
 {
     std::string sql;
     
     sql.insert(0,"select SerInsUID , SerNum , StuInsUID , SerMod , SerDes , ProNam, SerPath , BodParExa ");
     sql.append(", SerDat , SerTim ");
     sql.append(" from series where StuInsUID = '");
-    sql.append(getStudyUID(mask));
+    sql.append( seriesMask->getStudyUID() );
     sql.append("'");
     
+    cout<<sql<<endl;
     return sql;
 }
 
@@ -600,7 +604,6 @@ std::string CachePacs::buildSqlQuerySeries(DcmDataset* mask)
 Status CachePacs::queryImages(ImageMask imageMask,ImageList &ls)
 {
 
-    DcmDataset* mask = NULL;
     int col,rows,i = 0,estat;
     Image image;
     char **resposta = NULL,**error = NULL;
@@ -612,10 +615,8 @@ Status CachePacs::queryImages(ImageMask imageMask,ImageList &ls)
         return constructState(50);
     }    
         
-    mask = imageMask.getImageMask();
-                     
     m_DBConnect->getLock();
-    estat = sqlite_get_table(m_DBConnect->getConnection(),buildSqlQueryImages(mask).c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite_get_table(m_DBConnect->getConnection(), buildSqlQueryImages( &imageMask ).c_str() ,&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     state = constructState(estat);
@@ -650,17 +651,17 @@ Status CachePacs::queryImages(ImageMask imageMask,ImageList &ls)
   *            @param mask [in] màscara de cerca
   *            @return sentència sql
   */
-std::string CachePacs::buildSqlQueryImages(DcmDataset* mask)
+std::string CachePacs::buildSqlQueryImages( ImageMask *imageMask )
 {
     std::string sql,imgNum;
     
     sql.insert(0,"select ImgNum, AbsPath, Image.StuInsUID, SerInsUID, SopInsUID, ImgNam from image,study where Image.StuInsUID = '");
-    sql.append(getStudyUID(mask));
+    sql.append( imageMask->getStudyUID() );
     sql.append("' and SerInsUID = '");
-    sql.append(getSeriesUID(mask));
+    sql.append( imageMask->getSeriesUID() );
     sql.append("' and Study.StuInsUID = Image.StuInsUID ");
     
-    imgNum = getImageNumber(mask);
+    imgNum = imageMask->getImageNumber();
     
     if (imgNum.length() > 0)
     {
@@ -681,7 +682,6 @@ std::string CachePacs::buildSqlQueryImages(DcmDataset* mask)
   */
 Status CachePacs::countImageNumber(ImageMask imageMask,int &imageNumber)
 {
-    DcmDataset* mask = NULL;
     int col,rows,i = 0,estat;
     Series series;
     char **resposta = NULL,**error = NULL;
@@ -693,12 +693,8 @@ Status CachePacs::countImageNumber(ImageMask imageMask,int &imageNumber)
         return constructState(50);
     }
     
-    mask = imageMask.getImageMask();
-                 
-    sql = buildSqlCountImageNumber(mask);
-    
     m_DBConnect->getLock();
-    estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error);;
+    estat = sqlite_get_table(m_DBConnect->getConnection(), buildSqlCountImageNumber( &imageMask ).c_str() ,&resposta,&rows,&col,error);;
     m_DBConnect->releaseLock();
     
     state = constructState(estat);
@@ -715,14 +711,14 @@ Status CachePacs::countImageNumber(ImageMask imageMask,int &imageNumber)
 /** Construiex la sentència sql per comptar el nombre d'imatges de la sèrie d'un estudi
   *            @param mask [in]
   */
-std::string CachePacs::buildSqlCountImageNumber(DcmDataset* mask)
+std::string CachePacs::buildSqlCountImageNumber( ImageMask *imageMask )
 {
     std::string sql;
     
     sql.insert(0,"select count(*) from image where StuInsUID = '");
-    sql.append(getStudyUID(mask));
+    sql.append( imageMask->getStudyUID() );
     sql.append("' and SerInsUID = '");
-    sql.append(getSeriesUID(mask));
+    sql.append( imageMask->getSeriesUID() );
     sql.append("'");
 
     return sql;
@@ -1108,277 +1104,6 @@ Status CachePacs::compactCachePacs()
     return state;
 }
 
-/*************************************************************************************************************************************
- *                                            ZONA DE LLEGIR LES DADES DE LA MASCARA                                                 *
- *************************************************************************************************************************************
- */
- 
-/** Extreu de la mascara el nom del pacient a buscar el format del Patient Name és "cognoms* Nom*" o "*" d'aquest format treiem el nom
-  *            @param mask [in] màscara de la cerca
-  *            @return   nom del pacient a buscar
-  */  
-std::string CachePacs::getPatientFirstNameMask(DcmDataset* mask)
-{
-    const char * name = NULL;
-    std::string patientName;
-    std::string::size_type ipos = 0;
-    
-    /*El nom esta format per cognoms*^nom, per agafar el nom hem d'agafar el que hi ha despres de *^ */
-    
-    DcmTagKey patientNameTagKey (DCM_PatientsName);
-    OFCondition ec;
-    ec = mask->findAndGetString( patientNameTagKey, name, OFFalse );
-    
-    if (name == NULL) return "";
-    
-    patientName.insert(0,name);
-    
-    if (patientName != "*")
-    {
-        ipos = patientName.find("* ");
-        //si és un * sol vol dir no hi ha mascara de nom
-        if (patientName.substr(ipos+2,1) != "*")
-        {
-            patientName = patientName.substr(ipos+2,patientName.length());
-            ipos = patientName.find("*"); //treiem el * del final
-            patientName.replace(ipos,1,"");
-            return patientName;
-        }
-        else return "";
-    }
-    else return "";
-}
-
-/** Extreu de la mascara els cognoms del pacient a buscar. El format del Patient Name és "cognoms* Nom*" o "*" d'aquest format treiem el cognom
-  *            @param mask [in] màscara de la cerca
-  *            @return   cognoms del pacient a buscar
-  */  
-std::string CachePacs::getPatientLastNameMask(DcmDataset* mask)
-{
-    const char * name = NULL;
-    std::string patientName;
-    std::string::size_type ipos = 0;
-    
-        /*El nom esta format per cognoms*^nom, per agafar el nom hem d'agafar el que hi ha abans de *^ */
-    DcmTagKey patientNameTagKey (DCM_PatientsName);
-    OFCondition ec;
-    ec = mask->findAndGetString( patientNameTagKey, name, OFFalse );
-    
-    if (name == NULL) return "";
-    
-    patientName.insert(0,name);
-    
-    if (patientName != "*")
-    {
-        ipos = patientName.find("* ");
-        //Si esta a la posicio 0 vol dir que no hi ha mascara de cognoms
-        if (ipos != 0)
-        {
-            patientName = patientName.substr(0,ipos);
-            return patientName;
-        }
-        else return "";
-    }
-    else return "";
-}
-
-/** Extreu de la mascara el Id del pacient a buscar
-  *            @param mask [in] màscara de la cerca
-  *            @return   ID del pacient a buscar
-  */
-std::string CachePacs::getPatientIDMask(DcmDataset* mask)
-{
-    const char * ID = NULL;
-    std::string patientID;
-    
-    DcmTagKey patientIDTagKey (DCM_PatientID);
-    OFCondition ec;
-    ec = mask->findAndGetString( patientIDTagKey, ID, OFFalse );
-    
-    
-    if (ID != NULL) patientID.insert(0,ID);
-    
-    return patientID;
-}
-
-
-/** Extreu de la mascara el Id de l'estudi a buscar
-  *            @param mask [in] ID de l'estudi de la cerca
-  *            @return   ID de l'estudi a buscar
-  */
-std::string CachePacs::getStudyIDMask(DcmDataset* mask)
-{
-    const char * ID = NULL;
-    std::string studyID;
-    
-    DcmTagKey studyIDTagKey (DCM_StudyID);
-    OFCondition ec;
-    ec = mask->findAndGetString( studyIDTagKey, ID, OFFalse );
-    
-    if (ID != NULL) studyID.insert(0,ID);
-    
-    return studyID;
-}
-
-/** Extreu de la mascara de la modalitat de l'estudi a buscar
-  *            @param mask [in] ID de l'estudi de la cerca
-  *            @return   ID de l'estudi a buscar
-  */
-std::string CachePacs::getStudyModalityMask(DcmDataset* mask)
-{
-    const char * mod = NULL;
-    std::string studyModality;
-    
-    DcmTagKey studyModalityTagKey (DCM_ModalitiesInStudy);
-    OFCondition ec;
-    ec = mask->findAndGetString( studyModalityTagKey, mod, OFFalse );
-    
-    if (mod != NULL) studyModality.insert(0,mod);
-    
-    return studyModality;
-}
-
-/** Extreu de la mascara el accession number de l'estudi a buscar
-  *            @param mask [in] accession number de l'estudi de la cerca
-  *            @return   accession number de l'estudi a buscar
-  */
-std::string CachePacs::getAccessionNumber(DcmDataset* mask)
-{
-    const char * aNumber = NULL;
-    std::string accessionNumber;
-    
-    DcmTagKey accessionNumberTagKey (DCM_AccessionNumber);
-    OFCondition ec;
-    ec = mask->findAndGetString( accessionNumberTagKey, aNumber, OFFalse );
-    
-    if (aNumber != NULL) accessionNumber.insert(0,aNumber);
-        
-    return accessionNumber;
-}
-
-
-/** Extreu de la data mínima a partir de la qual hem de començar a buscar els estudis
-  *            @param mask [in] màscara de la cerca
-  *            @return   Data a partir de la qual hem de començar a buscar els estudis
-  */
-std::string CachePacs::getStudyDateMaskMin(DcmDataset* mask)
-{
-    const char * date=NULL;
-    std::string studyDate,minDate;
-    
-    DcmTagKey studyDateTagKey (DCM_StudyDate);
-    OFCondition ec;
-    ec = mask->findAndGetString( studyDateTagKey, date, OFFalse );
-    
-    if (date==NULL) return "";
-    
-    studyDate.insert(0,date);
-    
-    if (studyDate.length()==9 && studyDate.substr(8,1)=="-")
-    {
-        minDate.insert(0,studyDate.substr(0,8)); 
-    }     
-    else if (studyDate.length()==17)
-    {
-        minDate.insert(0,studyDate.substr(0,8));
-    }
-    else
-    {
-        minDate.insert(0,"00000000");
-    }
-    
-    return minDate;
-}
-
-/** Extreu de la data màxima fins la qual busqyem els estudis
-  *            @param mask [in] màscara de la cerca
-  *            @return   Data a fins la qual busquem els estudis
-  */
-std::string CachePacs::getStudyDateMaskMax(DcmDataset* mask)
-{
-    const char * date = NULL;
-    std::string studyDate,maxDate;
-    
-    DcmTagKey studyDateTagKey (DCM_StudyDate);
-    OFCondition ec;
-    ec = mask->findAndGetString( studyDateTagKey, date, OFFalse );;
-    
-    if (date == NULL) return "";
-    
-    studyDate.insert(0,date);
-    
-    if (studyDate.length()==9 && studyDate.substr(0,1)=="-") 
-    {
-        maxDate.insert(0,studyDate.substr(1,9)); 
-    }
-    else if (studyDate.length() == 17)
-    {
-        maxDate.insert(0,studyDate.substr(9,17));
-    }
-    else maxDate.insert(0,"99999999");
-    
-    return maxDate;
-}
-
-/** Extreu de la màsca l'estudi UID
-  *            @param mask [in] màscara de la cerca
-  *            @return   Estudi UID que cerquem
-  */
-std::string CachePacs::getStudyUID(DcmDataset* mask)
-{
-    const char * UID=NULL;
-    std::string studyUID;
-    
-    DcmTagKey studyUIDTagKey (DCM_StudyInstanceUID);
-    OFCondition ec;
-    ec = mask->findAndGetString( studyUIDTagKey, UID, OFFalse );;
-    
-    if (UID != NULL) studyUID.insert(0,UID);
-        
-    return studyUID;
-}
-
-/** Extreu de la màscarael series UID
-  *            @param mask [in] màscara de la cerca
-  *            @return   series UID que cerquem
-  */
-std::string CachePacs::getSeriesUID(DcmDataset* mask)
-{
-    const char * UID = NULL;
-    std::string seriesUID;
-    
-    DcmTagKey seriesUIDTagKey (DCM_SeriesInstanceUID);
-    OFCondition ec;
-    ec = mask->findAndGetString( seriesUIDTagKey, UID, OFFalse );;
-    
-    if (UID != NULL) seriesUID.insert(0,UID);
-        
-    return seriesUID;
-}
-
-
-/** Extreu de la màscarael series UID
-  *            @param mask [in] màscara de la cerca
-  *            @return   series UID que cerquem
-  */
-std::string CachePacs::getImageNumber(DcmDataset* mask)
-{
-    const char * num = NULL;
-    std::string imgNum;
-    
-    DcmTagKey instanceNumberTagKey (DCM_InstanceNumber);
-    OFCondition ec;
-    ec = mask->findAndGetString(instanceNumberTagKey, num, OFFalse );;
-    
-    if (num == NULL)  return "";
-   
-    imgNum.insert(0,num);
-    
-    if (imgNum == "*") return "";
-    else return imgNum;
-        
-    return imgNum;
-}
 /** retorna l'hora del sistema
   *     @return retorna l'hora del sistema en format HHMM
   */
@@ -1409,6 +1134,25 @@ int CachePacs::getDate()
   strftime( cad, 9, "%Y%m%d", tmPtr );
   
   return atoi(cad);
+}
+
+/** Converteix l'asterisc, que conte el tag origen per %, per transformar-lo a la sintaxis de sql
+  *     @param string original
+  *     @retrun retorna l'string original, havent canviat els '*' per '%'
+  */
+std::string CachePacs::replaceAsterisk(std::string original)
+{
+    std::string ret;
+    
+    ret = original;
+    
+    //string::npos es retorna quan no s'ha trobat el "*"
+    while ( ret.find("*") != std::string::npos )
+    {
+        ret.replace( ret.find( "*" ) , 1 , "%" , 1 );
+    }
+    
+    return ret;
 }
 
 /** Destructor de la classe
