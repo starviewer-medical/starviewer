@@ -1004,7 +1004,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
     vtkImageCheckerboard* imageCheckerBoard = vtkImageCheckerboard::New();
     vtkLookupTable* table = vtkLookupTable::New();
     vtkImageMapToColors* mapColors = vtkImageMapToColors::New();
-    vtkImageBlend* blender = vtkImageBlend::New();
+    vtkImageBlend* blender;
     
     vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
     
@@ -1020,26 +1020,12 @@ void Q2DViewer::setOverlayInput( Volume* volume )
     break;
     
     case Blend:
-        // first build the lookup table
-        
-        table->SetValueRange(0,1);
-        table->SetSaturationRange(0,0);
-        table->SetAlphaRange(1,1);
-        table->SetRampToLinear();
-        table->Build();
-        //  set alpha of first value to 0 instead of 1
-        table->SetTableValue(0, 0,0,0,0);
-        // 
-        mapColors->SetLookupTable( table );
-        mapColors->SetInput( m_mainVolume->getVtkData() );
-    
-        // creem el blender
-        blender->SetInput( 0 , m_mainVolume->getVtkData()/*mapColors->GetOutput()*/ );
-        blender->SetInput( 1 , m_overlayVolume->getVtkData() );
-        blender->SetOpacity( 0, 0.5 );
+        blender = vtkImageBlend::New();
+        blender->SetInput(m_mainVolume->getVtkData());
+        blender->AddInput(m_overlayVolume->getVtkData());
         blender->SetOpacity( 1, 0.5 );
-    // actualitzem el viewer
-        m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input
+        blender->SetOpacity( 2, 0.5 );
+        m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input       
     break;
     
     case RectilinearWipe:
