@@ -64,7 +64,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
 
     if ( statvfs(path.toAscii(), &fsd) == 0 )
     {
-        total = static_cast<quint64>( fsd.f_blocks * fsd.f_frsize );
+        total = static_cast<quint64>( fsd.f_blocks ) * static_cast<quint64>( fsd.f_frsize );
         existsError = false;
     }
 
@@ -99,7 +99,7 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
 
     if ( statvfs(path.toAscii(), &fsd) == 0 )
     {
-        total = static_cast<quint64>( fsd.f_bavail * fsd.f_bsize );
+        total = static_cast<quint64>( fsd.f_bavail ) * static_cast<quint64>( fsd.f_bsize );
         existsError = false;
     }
 
