@@ -173,6 +173,14 @@ void QApplicationMainWindow::createActions()
     signalMapper->setMapping( m_mpr3D2DAction , 4 );
     signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
     connect( m_mpr3D2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+
+    m_defaultViewerAction = new QAction( this );
+    m_defaultViewerAction->setText( tr("&Default Viewer") );
+    m_defaultViewerAction->setShortcut( tr("Ctrl+D") );
+    m_defaultViewerAction->setStatusTip( tr("Open the Default Viewer Application") );
+    signalMapper->setMapping( m_defaultViewerAction , 8 );
+    signalMapper->setMapping( m_defaultViewerAction , "Default Viewer Extension" );
+    connect( m_defaultViewerAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
     
     m_exportToJpegAction = new QAction( this );
     m_exportToJpegAction->setText(tr("Export to JPEG"));
@@ -398,6 +406,7 @@ void QApplicationMainWindow::createMenus()
 
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
+    m_visualizationMenu->addAction( m_defaultViewerAction );
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );

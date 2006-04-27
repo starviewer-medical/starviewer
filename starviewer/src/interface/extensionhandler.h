@@ -27,6 +27,7 @@ class QTabAxisViewExtensionCreator;
 class QMPRExtensionCreator;
 class QMPR3DExtensionCreator;
 class QMPR3D2DExtensionCreator;
+class QDefaultViewerExtensionCreator;
 
 // Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
@@ -89,6 +90,7 @@ private:
     QMPRExtensionCreator *m_qMPRExtensionCreator;
     QMPR3DExtensionCreator *m_qMPR3DExtensionCreator;
     QMPR3D2DExtensionCreator *m_qMPR3D2DExtensionCreator;
+    QDefaultViewerExtensionCreator *m_qDefaultViewerExtensionCreator;
     
     /// S'encarrega de fer el registre de totes les extensions amb el factory
     void registerExtensions();

@@ -127,6 +127,7 @@ private:
     QToolBar *m_optionsToolBar;
     
     /// Accions
+    QAction *m_defaultViewerAction;
     QAction *m_basicViewAction;
     QAction *m_mpr2DAction;
     QAction *m_mpr3DAction;
