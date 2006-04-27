@@ -29,6 +29,14 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
+public slots:
+    /// Canvia a la vista axial, sagital o coronal
+    void changeViewToAxial();
+    void changeViewToSagital();
+    void changeViewToCoronal();
+
+    /// Permuta l'ajustament de window level
+    void changeDefaultWindowLevel( int which );
 private:
     /// El volum principal
     Volume *m_mainVolume;
