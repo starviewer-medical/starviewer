@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>626</width>
-    <height>716</height>
+    <width>644</width>
+    <height>529</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -59,154 +59,303 @@
       </layout>
      </item>
      <item>
-      <widget class="QComboBox" name="m_seriesSelectorComboBox" />
+      <widget class="QSpinBox" name="m_pageSelectorSpinBox" >
+       <property name="maximum" >
+        <number>1</number>
+       </property>
+       <property name="minimum" >
+        <number>0</number>
+       </property>
+       <property name="value" >
+        <number>0</number>
+       </property>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>WW/WL</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QComboBox" name="m_windowLevelComboBox" >
+       <item>
+        <property name="text" >
+         <string>Default</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Bone</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Lung</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Soft Tissues, noncontrast</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Liver, noncontrast</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Soft Tissues , Contrast Medium</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Liver , Contrast Medium</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Neck , Constrast Medium</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Angiography</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Osteoporosis</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Emphysema</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Petrous Bone</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Custom...</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="m_stackedWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page" >
+      <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
        <item>
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>WW/WL</string>
-         </property>
-        </widget>
+        <widget class="QComboBox" name="m_seriesSelectorComboBox" />
        </item>
        <item>
-        <spacer>
+        <widget class="udg::Q2DViewer" name="m_2DView" />
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="m_viewText" >
+           <property name="text" >
+            <string>XY : Axial</string>
+           </property>
+           <property name="scaledContents" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="m_slider" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="maximum" >
+            <number>0</number>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="m_spinBox" >
+           <property name="maximum" >
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2" >
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QComboBox" name="m_windowLevelComboBox" >
-            <item>
-                <property name="text" >
-                    <string>Default</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Bone</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Lung</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Soft Tissues, noncontrast</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Liver, noncontrast</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Soft Tissues , Contrast Medium</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Liver , Contrast Medium</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Neck , Constrast Medium</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>CT Angiography</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>Osteoporosis</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>Emphysema</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>Petrous Bone</string>
-                </property>
-            </item>
-            <item>
-                <property name="text" >
-                    <string>Custom...</string>
-                </property>
-         </item>
+         <widget class="QWidget" name="" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QComboBox" name="m_seriesSelectorComboBox_2" />
+           </item>
+           <item>
+            <widget class="udg::Q2DViewer" name="m_2DView2_1" />
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_viewText2_1" >
+               <property name="text" >
+                <string>XY : Axial</string>
+               </property>
+               <property name="scaledContents" >
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="m_slider2_1" >
+               <property name="focusPolicy" >
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="maximum" >
+                <number>0</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_spinBox2_1" >
+               <property name="maximum" >
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QComboBox" name="m_seriesSelectorComboBox_3" />
+           </item>
+           <item>
+            <widget class="udg::Q2DViewer" name="m_2DView2_2" />
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_viewText2_2" >
+               <property name="text" >
+                <string>XY : Axial</string>
+               </property>
+               <property name="scaledContents" >
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="m_slider2_2" >
+               <property name="focusPolicy" >
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="maximum" >
+                <number>0</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_spinBox2_2" >
+               <property name="maximum" >
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="udg::Q2DViewer" name="m_2DView" />
-   </item>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="m_viewText" >
-       <property name="text" >
-        <string>XY : Axial</string>
-       </property>
-       <property name="scaledContents" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSlider" name="m_slider" >
-       <property name="focusPolicy" >
-        <enum>Qt::NoFocus</enum>
-       </property>
-       <property name="maximum" >
-        <number>0</number>
-       </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="m_spinBox" >
-       <property name="maximum" >
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>

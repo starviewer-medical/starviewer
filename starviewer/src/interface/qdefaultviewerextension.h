@@ -38,11 +38,24 @@ public slots:
     /// Permuta l'ajustament de window level
     void changeDefaultWindowLevel( int which );
 private:
+    /// Tipus de vistes que podem tenir
+    enum ViewType{ Axial , Sagital , Coronal };
+
+    /// canvia la vista actual
+    void setView( ViewType view );
+    
+    /// La vista actual amb la que estem treballant
+    ViewType m_currentView;
+    
     /// El volum principal
     Volume *m_mainVolume;
 
     /// Crea les connexions entre signals i slots
     void createConnections();
+
+private slots:
+    /// Actua quan es canvia de pàgina, és a dir es passa d'un determinat layout a un de simple, doble , triple , etc
+    void pageChange( int index );
 };
 
 }
