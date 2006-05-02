@@ -121,7 +121,7 @@ void Q3DViewer::rescale()
     rescale->SetShift(0);
     rescale->SetScale( 256.0 / range[1] );
     rescale->SetOutputScalarType( VTK_UNSIGNED_CHAR );
-    // Fem un casting de les dades ja que el ray cast mapper nomes accepta unsigned char/short
+//     Fem un casting de les dades ja que el ray cast mapper nomes accepta unsigned char/short
     m_imageCaster->SetInput(  rescale->GetOutput() );
     m_imageCaster->SetOutputScalarType( VTK_UNSIGNED_CHAR ); // tbé seria vàlid VTK_UNSIGNED_SHORT
     m_imageCaster->ClampOverflowOn();
@@ -174,14 +174,13 @@ void Q3DViewer::renderMIP3D()
     // assignem una rampa d'opacitat total per valors alts i nula per valors petits
     // després en l'escala de grisos donem un  valor de gris constant ( blanc )
     vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
-//     opacityTransferFunction->AddSegment(   0 , 0.0 , 128 , 1.0 );
-//     opacityTransferFunction->AddSegment( 128 , 1.0 , 255 , 0.0 );
-    opacityTransferFunction->AddSegment(   0 , 0.0 , 255 , 1.0 );
+    opacityTransferFunction->AddPoint( 20 , 0.0 );
+    opacityTransferFunction->AddPoint( 255 , 1.0 );
     
     // Create a transfer function mapping scalar value to color (grey)
     vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-    grayTransferFunction->AddSegment( 0 , 1.0 , 255 , 1.0 );
-    
+    grayTransferFunction->AddSegment( 0 , 0.0 , 255 , 1.0 );
+
     // Create a set of properties for mip
     vtkVolumeProperty *mipProperty;
     
@@ -199,7 +198,7 @@ void Q3DViewer::renderMIP3D()
 
     volumeMapper->SetVolumeRayCastFunction( mipFunction );
     volumeMapper->SetInput( m_imageCaster->GetOutput()  ); 
-    volumeMapper->SetGradientEstimator( gradientEstimator );
+//     volumeMapper->SetGradientEstimator( gradientEstimator );
     // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
     vtkVolume* volume = vtkVolume::New();
     volume->SetMapper( volumeMapper );
