@@ -49,7 +49,10 @@ HEADERS += input.h \
            cacheinstallation.h \
            imagedicominformation.h \
            qexecuteoperationthread.h \
-           cachelayer.h
+           cachelayer.h \
+           patient.h \
+           patientstudy.h \
+           patientserie.h 
 SOURCES += input.cpp \
            output.cpp \
            cachepacs.cpp \
@@ -94,7 +97,10 @@ SOURCES += input.cpp \
            cacheinstallation.cpp \
            imagedicominformation.cpp \
            qexecuteoperationthread.cpp \
-           cachelayer.cpp
+           cachelayer.cpp \
+           patient.cpp \
+           patientstudy.cpp \
+           patientserie.cpp 
 TARGETDEPS += ../tools/libtools.a \
 ../../src/repositories/librepositories.a
 LIBS += ../../src/tools/libtools.a \
