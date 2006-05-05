@@ -1078,6 +1078,14 @@ void Q2DViewer::updateView()
 
     case Coronal:
         m_viewer->SetSliceOrientationToXZ();
+//         vtkCamera *cam;
+//         cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+//         if ( cam )
+//         {
+//             cam->SetFocalPoint(0,0,0);
+//             cam->SetPosition(0,-1,0); // 1 if medical ?
+//             cam->SetViewUp(0,0,1);
+//         }
         //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
         m_size[0] = m_mainVolume->getDimensions()[0];
         m_size[1] = m_mainVolume->getDimensions()[2];
@@ -1140,8 +1148,6 @@ void Q2DViewer::resetWindowLevelToDefault()
         m_viewer->SetColorLevel( m_defaultLevel );
         
         this->getInteractor()->Render();
-
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
     // mostrar avís/error si no hi ha volum?
@@ -1155,7 +1161,6 @@ void Q2DViewer::resetWindowLevelToBone()
         m_viewer->SetColorLevel( 500 );
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1168,7 +1173,6 @@ void Q2DViewer::resetWindowLevelToEmphysema()
         m_viewer->SetColorLevel( -800 );
         
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1181,7 +1185,6 @@ void Q2DViewer::resetWindowLevelToSoftTissuesNonContrast()
         m_viewer->SetColorLevel( 40 );
         
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1194,7 +1197,6 @@ void Q2DViewer::resetWindowLevelToLiverNonContrast()
         m_viewer->SetColorLevel( 40 );
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1207,7 +1209,6 @@ void Q2DViewer::resetWindowLevelToSoftTissuesContrastMedium()
         m_viewer->SetColorLevel( 70 );
         
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1220,7 +1221,6 @@ void Q2DViewer::resetWindowLevelToLiverContrastMedium()
         m_viewer->SetColorLevel( 60 ); // 60-100
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1233,7 +1233,6 @@ void Q2DViewer::resetWindowLevelToNeckContrastMedium()
         m_viewer->SetColorLevel( 50 );
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();
     }
 }
@@ -1246,7 +1245,6 @@ void Q2DViewer::resetWindowLevelToAngiography()
         m_viewer->SetColorLevel( 100 ); // 100-200
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
 }
@@ -1259,7 +1257,6 @@ void Q2DViewer::resetWindowLevelToOsteoporosis()
         m_viewer->SetColorLevel( 300 );
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
 }
@@ -1272,7 +1269,6 @@ void Q2DViewer::resetWindowLevelToPetrousBone()
         m_viewer->SetColorLevel( 700 );
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
 }
@@ -1285,7 +1281,6 @@ void Q2DViewer::resetWindowLevelToLung()
         m_viewer->SetColorLevel( -650 );
 
         this->getInteractor()->Render();
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
         updateWindowLevelAnnotation();   
     }
 }
