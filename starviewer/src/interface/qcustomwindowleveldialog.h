@@ -31,7 +31,7 @@ private:
 private slots:
     /// Comprova el window level quan diem ok, fa les validacions i envia els senyas pertinents
     void confirmWindowLevel();
-    
+
 signals:
     /// envia la senyal del window level escollit
     void windowLevel( double window , double level );

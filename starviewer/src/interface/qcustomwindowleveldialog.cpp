@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qcustomwindowleveldialog.h"
-#include <iostream>
+
 namespace udg {
 
 QCustomWindowLevelDialog::QCustomWindowLevelDialog( QDialog *parent )
@@ -22,6 +22,7 @@ QCustomWindowLevelDialog::~QCustomWindowLevelDialog()
 void QCustomWindowLevelDialog::createConnections()
 {
     connect( m_okButton , SIGNAL( clicked() ) , this , SLOT( confirmWindowLevel() ) );
+    connect( m_cancelButton , SIGNAL( clicked() ) , this , SLOT( close() ) );
 }
 
 void QCustomWindowLevelDialog::confirmWindowLevel()
