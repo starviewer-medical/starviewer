@@ -16,7 +16,8 @@ FORMS += mutualinformationinputparametersformbase.ui \
          qnavigatewindowbase.ui \
          qstudytreewidgetbase.ui \
          qserieslistwidgetbase.ui \
-         qdefaultviewerextensionbase.ui 
+         qdefaultviewerextensionbase.ui \
+         qcustomwindowleveldialogbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -55,7 +56,8 @@ HEADERS += director.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
            qdefaultviewerextension.h \
-           qdefaultviewerextensioncreator.h 
+           qdefaultviewerextensioncreator.h \
+           qcustomwindowleveldialog.h 
 SOURCES += director.cpp \
            mutualinformationdirector.cpp \
            mutualinformationinputparametersform.cpp \
@@ -93,7 +95,8 @@ SOURCES += director.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
            qdefaultviewerextension.cpp \
-           qdefaultviewerextensioncreator.cpp 
+           qdefaultviewerextensioncreator.cpp \
+           qcustomwindowleveldialog.cpp 
 TARGETDEPS += ../repositories/librepositories.a \
 ../registration/libregistration.a \
 ../tools/libtools.a \
