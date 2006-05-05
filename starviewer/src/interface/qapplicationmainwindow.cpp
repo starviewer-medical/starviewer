@@ -392,18 +392,6 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );
 
-    // aquest menú es correspondrà amb la connexió al pacs
-    m_databaseMenu = menuBar()->addMenu( tr("&Database") );
-
-    // accions relacionades amb la segmentació
-    m_segmentationMenu = menuBar()->addMenu( tr("&Segmentation") );
-
-    // accions relacionades amb clustering
-    m_clusteringMenu = menuBar()->addMenu( tr("&Clustering") );
-
-    // accions relacionades amb el registre
-    m_registrationMenu = menuBar()->addMenu( tr("&Registration") );;
-
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
     m_visualizationMenu->addAction( m_defaultViewerAction );
@@ -411,18 +399,6 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
     m_visualizationMenu->addAction( m_basicViewAction );
-
-    // accions relacionades amb tractament de color, funcions de transferència
-    m_colorMenu = menuBar()->addMenu( tr("Co&lor") );
-
-    // accions relacionades amb tools
-    m_toolsMenu = menuBar()->addMenu( tr("&Tools") );
-
-    // menú finestra, controla organització de la workingarea i permet canviar a altres finestres obertes amb els pacients
-    m_windowMenu = menuBar()->addMenu( tr("&Window") );
-
-    // menú d'opcions del programa
-    m_optionsMenu = menuBar()->addMenu( tr("&Options") );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
@@ -436,15 +412,12 @@ void QApplicationMainWindow::createMenus()
 
 void QApplicationMainWindow::createToolBars()
 {
+    this->setIconSize( QSize(32,32) );
     m_fileToolBar = addToolBar( tr("File") );
     m_fileToolBar->addAction( m_newAction );
     m_fileToolBar->addAction( m_openAction );
     m_fileToolBar->addAction( m_openDirAction );
     m_fileToolBar->addAction( m_pacsAction );
-    
-    m_databaseToolBar = addToolBar( tr("Database") );
-    
-    m_optionsToolBar = addToolBar( tr("Options") );
 
     m_extensionsToolBar = addToolBar( tr("Extensions") );
 }
@@ -575,15 +548,20 @@ void QApplicationMainWindow::createStatusBar()
 {
 }
 
+void QApplicationMainWindow::clearExtensionsToolBar()
+{
+    m_extensionsToolBar->clear();
+}
+
 void QApplicationMainWindow::about()
 {
     QMessageBox::about(this, tr("About StarViewer"),
             tr("<h2>StarViewer 2006 þBetaþ</h2>"
-               "<p>Copyright &copy; 2004 Universitat de Girona"
+               "<p>Copyright &copy; 2006 Universitat de Girona"
                "<p>StarViewer is a small application that "
                "lets you view <b>DICOM</b>, <b>MHD's</b>,... "
                "files and manipulate them."
-               "<p>Last Redisign Version : in early development")
+               "<p>Version : 0.1 Beta")
                );
 }
 

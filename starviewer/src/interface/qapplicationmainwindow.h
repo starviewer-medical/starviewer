@@ -118,17 +118,9 @@ private:
 
     /// Menús
     QMenu *m_fileMenu;
-    QMenu *m_databaseMenu;
-    QMenu *m_segmentationMenu;
-    QMenu *m_clusteringMenu;
-    QMenu *m_registrationMenu;
     QMenu *m_visualizationMenu;
-    QMenu *m_colorMenu;
-    QMenu *m_toolsMenu;
-    QMenu *m_optionsMenu;
     QMenu *m_languageMenu;
     QMenu *m_helpMenu;
-    QMenu *m_windowMenu;
     
     /// Sub menús
     QMenu *m_importFilesMenu;
