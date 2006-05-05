@@ -8,6 +8,7 @@
 #include "q3dmprviewer.h"
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
+#include "qcustomwindowleveldialog.h"
 #include <iostream>
 
 // qt
@@ -30,12 +31,14 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
+    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
+
     createConnections();
 
     m_axialViewEnabledButton->setChecked( true );
     m_sagitalViewEnabledButton->setChecked( true );
     m_coronalViewEnabledButton->setChecked( true );
-    
+
     createActors();
     updateActors();
     
@@ -254,6 +257,12 @@ void QMPR3D2DExtension::createConnections()
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( updateActors() ) );
 
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
+
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+        
 }
 
 void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
@@ -346,7 +355,7 @@ void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
     
     case 12:
         // custom
-        QMessageBox::information( m_mpr3DView , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
+        m_customWindowLevelDialog->exec();
     break;
 
     default:

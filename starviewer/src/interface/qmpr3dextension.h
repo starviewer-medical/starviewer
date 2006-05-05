@@ -12,7 +12,10 @@ using namespace Ui; // \TODO això hauria de ser temporal
 
 namespace udg {
 
+// FWD declarations
 class Volume;
+class QCustomWindowLevelDialog;
+
 /**
 Extensió de l'MPR 3D
 
@@ -37,6 +40,9 @@ private:
     /// Estableix les connexions de signals i slots
     void createConnections();
 
+    /// El diàleg per escollir un window level ajustat per l'usuari
+    QCustomWindowLevelDialog *m_customWindowLevelDialog;
+    
 private slots:
     /// Canvia els ajustaments del window level per uns de predeterminats. 
     void changeDefaultWindowLevel( int which );

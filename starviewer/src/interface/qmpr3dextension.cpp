@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "qmpr3dextension.h"
 #include "q3dmprviewer.h"
+#include "qcustomwindowleveldialog.h"
 #include <QToolButton>
 #include <QMessageBox>
 
@@ -15,6 +16,9 @@ QMPR3DExtension::QMPR3DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
+    
+    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
+
     createConnections();
     
     m_axialViewEnabledButton->setChecked( true );
@@ -38,6 +42,7 @@ void QMPR3DExtension::createConnections()
     connect( m_axialOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToAxial() ) );
 
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
 }
 
 void QMPR3DExtension::setInput( Volume *input )
@@ -100,7 +105,7 @@ void QMPR3DExtension::changeDefaultWindowLevel( int which )
 
     case 12:
         // custom
-        QMessageBox::information( m_mpr3DView , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
+        m_customWindowLevelDialog->exec();
     break;
 
     default:
