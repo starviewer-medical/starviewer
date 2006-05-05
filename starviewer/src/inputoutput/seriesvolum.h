@@ -7,8 +7,8 @@
 #ifndef UDGSERIESVOLUM_H
 #define UDGSERIESVOLUM_H
 
-#include <vector.h>
-#include <string.h>
+#include <vector> 
+#include <string>
 
 namespace udg {
 
@@ -26,7 +26,7 @@ private:
     std::string m_seriesModality;
     std::string m_seriesPath;
 
-    vector <std::string> m_vectorSeriesVolum;
+    std::vector <std::string> m_vectorSeriesVolum;
         
 public:
 

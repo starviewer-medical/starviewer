@@ -8,7 +8,7 @@
 #define UDGSTUDYVOLUM_H
 
 #include <vector>
-#include <string.h>
+#include <string> 
 #include "seriesvolum.h"
 
 namespace udg {
@@ -29,8 +29,8 @@ private:
     std::string m_patientAge;
     std::string m_defaultSeriesUID;//conté el UID de la serie que s'ha visualitzar per defecte, ja que quant visualitzem només s'obrira una sèrie de l'estudi
     
-    vector <SeriesVolum> m_vectorStudyVolum;
-    vector <SeriesVolum>::iterator i;
+    std::vector <SeriesVolum> m_vectorStudyVolum;
+    std::vector <SeriesVolum>::iterator i;
 
 public:
     StudyVolum();
