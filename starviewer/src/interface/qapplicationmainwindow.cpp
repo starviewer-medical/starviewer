@@ -475,7 +475,6 @@ void QApplicationMainWindow::close()
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 {
     QWidgetList list( QApplication::topLevelWidgets() );
-    QWidget *widget;
     unsigned int count = 0;
     for ( int i = 0; i < list.size(); ++i )
     {

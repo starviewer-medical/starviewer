@@ -193,7 +193,7 @@ void Q3DViewer::renderMIP3D()
     vtkVolumeRayCastMIPFunction* mipFunction = vtkVolumeRayCastMIPFunction::New();
     mipFunction->SetMaximizeMethodToOpacity();
 
-    vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
+//     vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
     vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
 
     volumeMapper->SetVolumeRayCastFunction( mipFunction );

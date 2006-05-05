@@ -1002,8 +1002,6 @@ void Q2DViewer::setOverlayInput( Volume* volume )
     m_overlayVolume = volume;
     
     vtkImageCheckerboard* imageCheckerBoard = vtkImageCheckerboard::New();
-    vtkLookupTable* table = vtkLookupTable::New();
-    vtkImageMapToColors* mapColors = vtkImageMapToColors::New();
     vtkImageBlend* blender;
     
     vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
@@ -1365,6 +1363,9 @@ void Q2DViewer::saveAll( const char *baseName , FileType extension )
     break;
     
     case PNM:
+    break;
+
+    case BMP:
     break;
     }
 }
