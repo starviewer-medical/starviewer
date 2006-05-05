@@ -93,7 +93,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
 
     // el format del fitxer serà NomDelFitxerXXXX.extensio on XXXX serà el nº de llesca. El nº de llesca serà de com a màxim 4 dígits
     QString seriesFormat;
-    seriesFormat.sprintf( "%s/%s-%%04d.%s" , QFileInfo( filename ).dir().absolutePath().utf16() , QFileInfo( filename ).completeBaseName().utf16() , QFileInfo( filename ).suffix().utf16() );
+    seriesFormat.sprintf( "%s/%s-%%04d.%s" , qPrintable( QFileInfo( filename ).dir().absolutePath() ) , qPrintable( QFileInfo( filename ).completeBaseName() ) , qPrintable( QFileInfo( filename ).suffix() ) );
     
     typedef itk::NumericSeriesFileNames    NameGeneratorType;
     NameGeneratorType::Pointer nameGenerator = NameGeneratorType::New();
