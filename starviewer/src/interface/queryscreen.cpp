@@ -5,25 +5,14 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "queryscreen.h"
-#include <QString>
-#include <qlineedit.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qdatetime.h>
 
-//#include <qlistview.h>
-#include <qmessagebox.h>
-#include <qnamespace.h>
-#include <qcursor.h>
-#include <qtabwidget.h>
-#include <qpushbutton.h>
-//Added by qt3to4:
+#include <QMessageBox>
+#include <QDesktopWidget> 
 #include <QCloseEvent>
-#include <string.h>
+#include <string>
 
 #include "starviewerprocessimage.h"
 #include "processimagesingleton.h"
-
 #include "pacsparameters.h"
 #include "pacsconnection.h"
 #include "multiplequerystudy.h"
@@ -45,8 +34,6 @@
 #include "starviewersettings.h"
 #include "cachepool.h"
 #include "scalestudy.h"
-#include <qdesktopwidget.h>
-#include <qapplication.h>
 #include "qnavigatewindow.h"
 #include "queueoperationlist.h"
 #include "operation.h"

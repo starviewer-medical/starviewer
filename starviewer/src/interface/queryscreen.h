@@ -10,7 +10,6 @@
 #include "ui_queryscreenbase.h"
 
 #include "qretrievescreen.h"
-#include <QCloseEvent>
 #include "multiplequerystudy.h"
 #include "processimagesingleton.h"
 #include "studyvolum.h"
