@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QString>
 #include <QDateTime>
-#include <list>
+#include <QHash>
 #include "patientserie.h"
 
 namespace udg {
@@ -48,6 +48,9 @@ public:
     void setInstitutionName( const char *institutionName );
     QString getInstitutionName() const { return m_institutionName; };
 
+    /// Retorna el camp clau que identificarà l'estudi de cares a la interfície. Es composarà per la data més la descripció \TODO encara per determinar
+    QString getKey();
+    
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
@@ -63,6 +66,15 @@ public:
     QTime getTime();
     QString getTimeAsString();
 
+    /// Afegeix una nova sèrie
+    void addSerie( PatientSerie *patientSerie );
+
+    /// Li treu a l'estudi la sèrie amb la clau 'key'
+    void removeSerie( QString key );
+
+    /// Obté la sèrie amb clau 'key'
+    PatientSerie *getSerie( QString key );
+    
 private:
     /// Identificador Universal de l'estudi
     QString m_studyUID;
@@ -82,8 +94,9 @@ private:
     /// Data i hora de l'adquisició de l'estudi
     QDateTime m_dateTime;
 
-    /// Llista de sèries \TODO això podria ser un map o un hash, per determinar
-    std::list< PatientSerie > m_seriesList;
+    /// Taula de Hash que conté les sèries de l'estudi
+    typedef QHash< QString , PatientSerie* > SeriesHashType;
+    SeriesHashType m_seriesHash;
 };
 
 }

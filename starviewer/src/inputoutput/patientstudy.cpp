@@ -13,7 +13,6 @@ PatientStudy::PatientStudy(QObject *parent)
 {
 }
 
-
 PatientStudy::~PatientStudy()
 {
 }
@@ -43,6 +42,11 @@ void PatientStudy::setInstitutionName( const char *institutionName )
     m_institutionName = QString::fromLatin1( institutionName );
 }
   
+QString PatientStudy::getKey()
+{
+    return this->getDateTimeAsString() + QString(" ") + m_description;
+}
+
 bool PatientStudy::setDateTime( int day , int month , int year , int hour , int minute )
 {
     m_dateTime.setDate( QDate( year , month , day ) );
@@ -111,6 +115,21 @@ QTime PatientStudy::getTime()
 QString PatientStudy::getTimeAsString()
 {
     return m_dateTime.time().toString( "hh:mm" );
+}
+
+void PatientStudy::addSerie( PatientSerie *patientSerie )
+{
+    m_seriesHash[ patientSerie->getKey() ] = patientSerie;
+}
+
+void PatientStudy::removeSerie( QString key )
+{
+    m_seriesHash.remove( key );
+}
+
+PatientSerie *PatientStudy::getSerie( QString key )
+{
+    return m_seriesHash[ key ];
 }
 
 }

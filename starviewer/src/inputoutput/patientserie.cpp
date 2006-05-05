@@ -29,6 +29,7 @@ void PatientSerie::setID( const char *id )
 
 void PatientSerie::setPatientOrientation( const char *orientation )
 {
+    m_patientOrientation = orientation;
 }
 
 void PatientSerie::setModality( const char *modality )
@@ -44,6 +45,16 @@ void PatientSerie::setDescription( const char *description )
 void PatientSerie::setProtocolName( const char *protocolName )
 {
     m_protocolName = QString::fromLatin1( protocolName );
+}
+
+void PatientSerie::setSeriesPath( const char *seriesPath )
+{
+    m_seriesPath = QString::fromLatin1( seriesPath );
+}
+
+QString PatientSerie::getKey()
+{
+    return m_protocolName + QString(" ") + m_description;
 }
 
 bool PatientSerie::setDateTime( int day , int month , int year , int hour , int minute )

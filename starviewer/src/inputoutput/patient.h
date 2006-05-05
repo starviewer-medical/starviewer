@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QString>
 #include <QDate>
-#include <list>
+#include <QHash>
 #include "patientstudy.h"
 
 namespace udg {
@@ -37,6 +37,9 @@ public:
     void setSurname( const char *surname );
     void setSurname( QString surname );
     QString getSurname();
+
+    /// Retorna el camp clau que identificarà al pacient de cares a la interfície. Es composarà pel nom complert més el seu ID de pacient \TODO encara per determinar
+    QString getKey();
     
     /// Assigna/Obté data de naixement
     void setDateOfBirth( int day , int month , int year );
@@ -58,6 +61,15 @@ public:
     /// Assignar/Obtenir l'aclçada del pacient
     void setHeight( double height );
     double getHeight() const { return m_height; };
+
+    /// Afegeix un nou estudi
+    void addStudy( PatientStudy *patientStudy );
+
+    /// Li treu al pacient l'estudi amb la clau 'key'
+    void removeStudy( QString key );
+
+    /// Obté l'estudi amb clau 'key'
+    PatientStudy* getStudy( QString key );
     
 private:
     /// Identificador de pacient \TODO equival al tag DICOM ???? 
@@ -81,8 +93,10 @@ private:
     /// Alçada ( en metres ) del pacient
     double m_height;
 
-    /// Llista d'estudis \TODO això podria ser un map o un hash, per determinar
-    std::list< PatientStudy > m_studiesList;
+    /// Taula de hash que conté els estudis del pacient
+    typedef QHash< QString , PatientStudy* > StudiesHashType;
+    StudiesHashType m_studiesHash;
+    
 };
 
 }

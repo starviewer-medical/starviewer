@@ -15,6 +15,7 @@ Patient::Patient(QObject *parent)
 
 Patient::~Patient()
 {
+    m_studiesHash.clear();
 }
 
 void Patient::setName( const char *name )
@@ -45,6 +46,11 @@ void Patient::setSurname( QString surname )
 QString Patient::getSurname()
 {
     return m_surname;
+}
+
+QString Patient::getKey()
+{
+    return m_surname + QString(" ") + m_name + QString(" ") + m_patientID;
 }
 
 void Patient::setDateOfBirth( int day , int month , int year )
@@ -85,6 +91,21 @@ void Patient::setWeight( double weight )
 void Patient::setHeight( double height )
 {
     m_height = height;
+}
+
+void Patient::addStudy( PatientStudy *patientStudy )
+{
+    m_studiesHash[ patientStudy->getKey() ] = patientStudy;
+}
+
+void Patient::removeStudy( QString key )
+{
+    m_studiesHash.remove( key );
+}
+
+PatientStudy *Patient::getStudy( QString key )
+{
+    return m_studiesHash[ key ];
 }
 
 }

@@ -53,6 +53,13 @@ public:
     void setProtocolName( const char *protocolName );
     QString getProtocolName() const { return m_protocolName; };
 
+    /// Assignar/Obtenir el path de les imatges de la sèrie
+    void setSeriesPath( const char *seriesPath );
+    QString getSeriesPath() const { return m_seriesPath; };
+
+    /// Retorna el camp clau que identificarà la sèrie de cares a la interfície. Es composarà pel protocolName més la descripció \TODO encara per determinar
+    QString getKey();
+    
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
@@ -110,6 +117,9 @@ private:
 
     /// Protocol que 'sha aplicat per obtenir la imatge
     QString m_protocolName;
+
+    /// Directori sota el qual es trobem les imatges
+    QString m_seriesPath;
 
     /// Data i hora en que s'ha adquirit la sèrie
     QDateTime m_dateTime;
