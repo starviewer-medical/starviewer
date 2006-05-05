@@ -7,7 +7,9 @@
 #include "qdefaultviewerextension.h"
 
 #include "volume.h"
-#include <QMessageBox>
+#include "qcustomwindowleveldialog.h"
+#include <QAction>
+#include <QToolBar>
 
 namespace udg {
 
@@ -16,12 +18,73 @@ QDefaultViewerExtension::QDefaultViewerExtension( QWidget *parent )
 {
     setupUi( this );
     m_mainVolume = 0;
+    
+    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
+    
+    createActions();
+    createToolBars();
     createConnections();
 }
 
-
 QDefaultViewerExtension::~QDefaultViewerExtension()
 {
+}
+
+void QDefaultViewerExtension::createActions()
+{
+    m_axialViewAction = new QAction( 0 );
+    m_axialViewAction->setText( tr("&Axial View") );
+    m_axialViewAction->setShortcut( tr("Ctrl+A") );
+    m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
+    m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
+    
+    m_sagitalViewAction = new QAction( 0 );
+    m_sagitalViewAction->setText( tr("&Sagital View") );
+    m_sagitalViewAction->setShortcut( tr("Ctrl+S") );
+    m_sagitalViewAction->setStatusTip( tr("Change Current View To Sagital") );
+    m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
+    
+    m_coronalViewAction = new QAction( 0 );
+    m_coronalViewAction->setText( tr("&Coronal View") );
+    m_coronalViewAction->setShortcut( tr("Ctrl+C") );
+    m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
+    m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
+}
+
+void QDefaultViewerExtension::createToolBars()
+{
+    m_toolsToolBar = new QToolBar(0);
+    m_toolsToolBar->addAction( m_axialViewAction );
+    m_toolsToolBar->addAction( m_sagitalViewAction );
+    m_toolsToolBar->addAction( m_coronalViewAction );
+    
+}
+
+void QDefaultViewerExtension::createConnections()
+{
+    connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
+    connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
+    connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
+
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
+    
+    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
+    connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
+    connect( m_spinBox2_1 , SIGNAL( valueChanged(int) ) , m_2DView2_1 , SLOT( setSlice(int) ) );
+    connect( m_2DView2_1 , SIGNAL( sliceChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
+
+    connect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_spinBox2_2 , SLOT( setValue(int) ) );
+    connect( m_spinBox2_2 , SIGNAL( valueChanged(int) ) , m_2DView2_2 , SLOT( setSlice(int) ) );
+    connect( m_2DView2_2 , SIGNAL( sliceChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
+
+    connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
+    connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
+    connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
+
+    connect( m_windowLevelComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
+
+    connect( m_pageSelectorSpinBox , SIGNAL( valueChanged(int) ) , m_stackedWidget , SLOT( setCurrentIndex(int) ) );
+    connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
 }
 
 void QDefaultViewerExtension::setInput( Volume *input )
@@ -33,6 +96,16 @@ void QDefaultViewerExtension::setInput( Volume *input )
     m_2DView2_2->setInput( m_mainVolume );
     changeViewToAxial();
     
+}
+
+void QDefaultViewerExtension::populateToolBar( QToolBar *toolbar )
+{
+    if( toolbar )
+    {
+        toolbar->addAction( m_axialViewAction );
+        toolbar->addAction( m_sagitalViewAction );
+        toolbar->addAction( m_coronalViewAction );
+    }
 }
 
 void QDefaultViewerExtension::changeViewToAxial()
@@ -142,32 +215,6 @@ void QDefaultViewerExtension::changeViewToCoronal()
     }
 }
 
-void QDefaultViewerExtension::createConnections()
-{
-    connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
-    connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-    connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
-
-    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
-    connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
-    connect( m_spinBox2_1 , SIGNAL( valueChanged(int) ) , m_2DView2_1 , SLOT( setSlice(int) ) );
-    connect( m_2DView2_1 , SIGNAL( sliceChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
-
-    connect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_spinBox2_2 , SLOT( setValue(int) ) );
-    connect( m_spinBox2_2 , SIGNAL( valueChanged(int) ) , m_2DView2_2 , SLOT( setSlice(int) ) );
-    connect( m_2DView2_2 , SIGNAL( sliceChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
-
-    
-    connect( m_axialViewToolButton , SIGNAL( clicked() ) , this , SLOT( changeViewToAxial() ) );
-    connect( m_sagitalViewToolButton , SIGNAL( clicked() ) , this , SLOT( changeViewToSagital() ) );
-    connect( m_coronalViewToolButton , SIGNAL( clicked() ) , this , SLOT( changeViewToCoronal() ) );
-
-    connect( m_windowLevelComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
-
-    connect( m_pageSelectorSpinBox , SIGNAL( valueChanged(int) ) , m_stackedWidget , SLOT( setCurrentIndex(int) ) );
-    connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
-}
-
 void QDefaultViewerExtension::changeDefaultWindowLevel( int which )
 {
     // \TODO ara anem a saco però 'shauria de fer una manera perquè només es cridessin els que cal
@@ -247,7 +294,7 @@ void QDefaultViewerExtension::changeDefaultWindowLevel( int which )
 
     case 12:
         // custom
-        QMessageBox::information( this , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
+        m_customWindowLevelDialog->exec();
     break;
 
     default:

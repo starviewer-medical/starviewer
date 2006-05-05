@@ -55,14 +55,21 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
-    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
     m_queryScreen = new QueryScreen( 0 );
-    connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
+
+    createConnections();
     registerExtensions();
 }
 
 ExtensionHandler::~ExtensionHandler()
 {
+}
+
+void ExtensionHandler::createConnections()
+{
+    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
+    connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
+    connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
 }
 
 void ExtensionHandler::registerExtensions()
@@ -183,6 +190,8 @@ void ExtensionHandler::request( int who )
         defaultViewerExtension = new QDefaultViewerExtension;
         defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("Default Viewer"));
+//         m_mainApp->addToolBar( defaultViewerExtension->getToolsToolBar() );
+        defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
     break;
     
     default:
@@ -296,7 +305,13 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     this->onVolumeLoaded( m_volumeID );
 
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+}
 
+void ExtensionHandler::extensionChanged( int index )
+{
+    // quan canvia una extensió hem de canviar les toolbars, per tan hem de mirar com fer-ho perque no sabem quina extensió ( sí podem obtenir el widget ) en concret és la que tenim. Ho podríem fer mitjançant signals i slots. és a dir, quan es faci el canvi d'extensió s'enviarà alguna senyal que farà que netejem la toolbar d¡extensions i que s'ompli amb els nous botons i eines
+    m_mainApp->clearExtensionsToolBar();
+    m_mainApp->m_extensionWorkspace->setLastIndex( index );
 }
 
 };  // end namespace udg 

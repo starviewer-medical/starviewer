@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QString>
 #include "identifier.h"
+#include "patient.h"
 #include "studyvolum.h"
 
 namespace udg {
@@ -49,21 +50,11 @@ public:
 
     ~ExtensionHandler();
 
-    // :::::::::::::::::::::::::::::::::::::::::
-    // Inicialitzacions
-    // :::::::::::::::::::::::::::::::::::::::::
-    // Aquests mètodes estan destinats a aspectes de inicialitzacions
     /// Presenta les mini-apps a la aplicació principal, posant-les a l'abast. ( el mètode es podria dir també spreadExtensions o algo així)
     void introduceApplications();
     
-    // :::::::::::::::::::::::::::::::::::::::::
-    // Serveis/Aplicacions
-    // :::::::::::::::::::::::::::::::::::::::::
-    
     /// Obre un volum a partir d'un fitxer \TODO ara es fa tot a saco aquí dins però potser seria millor que ho fe suna clase externa especialitzada
     bool open( QString fileName );
-    /// Miniaplicació per visualitzar el model carregat amb el que s'esta treballant
-    void simpleAxisView();
 
     /// \TODO Això és un "apanyo"
     void setVolumeID( Identifier id ){ m_volumeID = id; }
@@ -76,8 +67,9 @@ public slots:
     /// aplicació que s'executa per defecte quan carreguem un volum al repositori
     void onVolumeLoaded( Identifier id );
 
-    /// [apanyo]es crida quan es demana un studi descarregat, es veu la pimera serie
+    /// [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
     void viewStudy( StudyVolum study );
+
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
@@ -91,9 +83,16 @@ private:
     QMPR3DExtensionCreator *m_qMPR3DExtensionCreator;
     QMPR3D2DExtensionCreator *m_qMPR3D2DExtensionCreator;
     QDefaultViewerExtensionCreator *m_qDefaultViewerExtensionCreator;
+
+    /// Entitat pacient que es controlarà des d'aquí
+    Patient m_patient;
     
     /// S'encarrega de fer el registre de totes les extensions amb el factory
     void registerExtensions();
+
+    /// Crea les connexions de signals i slots
+    void createConnections();
+    
     // :::::::::::::::::::::::::::::::::::::::::
     // Recursos
     // :::::::::::::::::::::::::::::::::::::::::
@@ -120,6 +119,11 @@ private:
     
     /// La pantalla d'accés al pacs
     QueryScreen *m_queryScreen;
+
+private slots:
+
+    /// Slot que es crida quan hem canviat d'una extensió a una altre
+    void extensionChanged( int index );
 };
 
 };  //  end  namespace udg 

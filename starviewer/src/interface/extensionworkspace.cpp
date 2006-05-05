@@ -21,12 +21,17 @@ ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, const char *name)
     this->setTabPosition( QTabWidget::South );
     m_closeTabButton = new QPushButton( tr("X") , this );
     this->setCornerWidget( m_closeTabButton , Qt::BottomRightCorner );
-    connect( m_closeTabButton , SIGNAL( clicked() ), this , SLOT( closeCurrentApplication() ) );
+    createConnections();
     m_closeTabButton->hide();
 }
 
 ExtensionWorkspace::~ExtensionWorkspace()
 {
+}
+
+void ExtensionWorkspace::createConnections()
+{
+    connect( m_closeTabButton , SIGNAL( clicked() ), this , SLOT( closeCurrentApplication() ) );
 }
 
 void ExtensionWorkspace::addApplication( QWidget *application , QString caption )
@@ -43,6 +48,7 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     std::cout << "Adding application" << std::endl;        
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
+    m_lastIndex = this->currentIndex();
 }
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
@@ -50,6 +56,7 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
     this->removeTab( this->indexOf( application ) );
     if( this->count() < 1 )
         m_closeTabButton->hide();
+    m_lastIndex = this->currentIndex();
 }
 
 void ExtensionWorkspace::closeCurrentApplication()
