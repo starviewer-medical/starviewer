@@ -83,23 +83,23 @@ private:
     /// Indica si hi ha hagut modificacions \TODO: és gaire útil i/o necessari això? es podria eliminar
     bool m_modified;
 
-    /// Llista d'arxius recents
-    QStringList m_recentFiles;
-    enum { MaxRecentFiles = 5 };
-    QAction *m_recentFileActions[ MaxRecentFiles ];
+//    /// Llista d'arxius recents
+//     QStringList m_recentFiles;
+//     enum { MaxRecentFiles = 5 };
+//     QAction *m_recentFileActions[ MaxRecentFiles ];
 
     /// Arxiu actual que estem visualitzant
     QString m_currentFile;
 
     /// Filtres per als diàlegs d'obrir/exportar arxius
     QString m_openFileFilters;
-    QString m_exportFileFilters;
-    QString m_exportToJpegFilter;
-    QString m_exportToMetaIOFilter;
-    QString m_exportToTiffFilter;
-    QString m_exportToBmpFilter;
-    QString m_exportToPngFilter;
-    QString m_exportToDicomFilter;
+//     QString m_exportFileFilters;
+//     QString m_exportToJpegFilter;
+//     QString m_exportToMetaIOFilter;
+//     QString m_exportToTiffFilter;
+//     QString m_exportToBmpFilter;
+//     QString m_exportToPngFilter;
+//     QString m_exportToDicomFilter;
 
     /// Path actual del directori de treball ( obrir fitxer )
     QString m_workingDirectory;
@@ -123,9 +123,9 @@ private:
     QMenu *m_helpMenu;
     
     /// Sub menús
-    QMenu *m_importFilesMenu;
-    QMenu *m_exportFilesMenu;
-    QMenu *m_recentFilesMenu;
+//     QMenu *m_importFilesMenu;
+//     QMenu *m_exportFilesMenu;
+//     QMenu *m_recentFilesMenu;
     
     /// Barres d'eines
     QToolBar *m_extensionsToolBar;
@@ -133,7 +133,7 @@ private:
     
     /// Accions
     QAction *m_defaultViewerAction;
-    QAction *m_basicViewAction;
+//     QAction *m_basicViewAction;
     QAction *m_mpr2DAction;
     QAction *m_mpr3DAction;
     QAction *m_mpr3D2DAction;
@@ -144,11 +144,11 @@ private:
     QAction *m_closeAction;
     QAction *m_exitAction;
     QAction *m_aboutAction;
-    QAction *m_exportToJpegAction;
-    QAction *m_exportToMetaIOAction;
-    QAction *m_exportToTiffAction;
-    QAction *m_exportToPngAction;
-    QAction *m_exportToBmpAction;
+//     QAction *m_exportToJpegAction;
+//     QAction *m_exportToMetaIOAction;
+//     QAction *m_exportToTiffAction;
+//     QAction *m_exportToPngAction;
+//     QAction *m_exportToBmpAction;
 
     /// Per indicar el procés al obrir-se un fitxer
     QProgressDialog *m_progressDialog;
@@ -191,7 +191,7 @@ private:
     void setCurrentFile( const QString &fileName );
 
     /// actualitza el llistat de noms de fitxers oberts recentment \TODO, s'hauria d'adaptar si cal quqan hi hagi lo del pacs
-    void updateRecentFileActions();
+//     void updateRecentFileActions();
 
     /// Mètode intern per extreure el nom del fitxer tal qual sense el path sencer
     QString strippedName(const QString &fullFileName);
@@ -208,7 +208,7 @@ private slots:
 
     /// obre un dels arxius recents::\TODO passar responsabilitat a la mini-app encarregada de fer això
     void openRecentFile();
-
+/*
     /// Exporta la imatge a un format especificat
     void exportFile( int type );
 
@@ -226,7 +226,7 @@ private slots:
 
     /// Exporta la imatge a BMP
     void exportToBmp();
-    
+*/   
 signals:
     /// senyal emesa que indica si la finestra conté un volum o no
     void containsVolume( bool );
