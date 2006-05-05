@@ -22,6 +22,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
+class QCustomWindowLevelDialog;
 /**
 Extensió encarregada de fer l'MPR 2D
     
@@ -133,6 +134,9 @@ private:
     vtkPlaneSource *m_pickedActorPlaneSource;
     vtkImageReslice *m_pickedActorReslice;
 
+    /// El diàleg per escollir un window level ajustat per l'usuari
+    QCustomWindowLevelDialog *m_customWindowLevelDialog;
+    
 private slots:
     /// S'encarreguen de rotar els eixos dels plans
     void detectAxialViewAxisActor( double x , double y );

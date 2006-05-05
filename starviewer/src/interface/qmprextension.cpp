@@ -9,6 +9,7 @@
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
 #include "q3dviewer.h"
+#include "qcustomwindowleveldialog.h"
 
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
@@ -71,6 +72,8 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
     
+    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
+    
     createConnections();
     createActors();
 
@@ -122,6 +125,8 @@ void QMPRExtension::createConnections()
     connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
     connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
+
+    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
@@ -1215,7 +1220,7 @@ void QMPRExtension::changeDefaultWindowLevel( int which )
 
     case 12:
         // custom
-        QMessageBox::information( this , tr("Information") , tr("Custom Window/Level Functions are not yet available") , QMessageBox::Ok );
+        m_customWindowLevelDialog->exec();
     break;
 
     default:
