@@ -556,12 +556,12 @@ void QApplicationMainWindow::clearExtensionsToolBar()
 void QApplicationMainWindow::about()
 {
     QMessageBox::about(this, tr("About StarViewer"),
-            tr("<h2>StarViewer 2006 þBetaþ</h2>"
+            tr("<h2>StarViewer 2006 </h2>"
                "<p>Copyright &copy; 2006 Universitat de Girona"
-               "<p>StarViewer is a small application that "
-               "lets you view <b>DICOM</b>, <b>MHD's</b>,... "
-               "files and manipulate them."
-               "<p>Version : 0.1 Beta")
+               "<p>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve)."
+               "<p>Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP)." 
+               "<p>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging."
+               "<p>Version : 0.1")
                );
 }
 
