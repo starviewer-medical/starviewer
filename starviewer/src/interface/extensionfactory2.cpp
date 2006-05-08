@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "extensionfactory.h"
+#include "extensionfactory2.h"
 
 
 namespace udg {

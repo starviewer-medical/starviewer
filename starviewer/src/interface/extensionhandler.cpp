@@ -17,7 +17,7 @@
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
 
-#include "extensionfactory.h"
+#include "extensionfactory2.h"
 #include "qmprextensioncreator.h"
 #include "qmpr3dextensioncreator.h"
 #include "qmpr3d2dextensioncreator.h"

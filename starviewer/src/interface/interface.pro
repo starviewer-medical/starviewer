@@ -27,7 +27,7 @@ HEADERS += director.h \
            q3dviewer.h \
            appimportfile.h \
            extensioncreator.h \
-           extensionfactory.h \
+           extensionfactory2.h \
            extensionhandler.h \
            extensionworkspace.h \
            qconfigurationscreen.h \
@@ -58,7 +58,7 @@ SOURCES += director.cpp \
            q3dviewer.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
-           extensionfactory.cpp \
+           extensionfactory2.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
            qconfigurationscreen.cpp \
