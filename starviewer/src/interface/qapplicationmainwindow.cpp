@@ -142,14 +142,6 @@ void QApplicationMainWindow::createActions()
     signalMapper->setMapping( m_pacsAction , "Open Pacs Browser" );
     connect( m_pacsAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
 
-//     m_basicViewAction = new QAction( this );
-//     m_basicViewAction->setText( tr("2D &Basic Viewer") );
-//     m_basicViewAction->setShortcut( tr("Ctrl+B") );
-//     m_basicViewAction->setStatusTip( tr("Open Basic Application Viewer") );
-//     signalMapper->setMapping( m_basicViewAction , 5 );
-//     signalMapper->setMapping( m_basicViewAction , "Basic Viewer" );
-//     connect( m_basicViewAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
-    
     m_mpr2DAction = new QAction( this );
     m_mpr2DAction->setText( tr("2D &MPR Viewer") );
     m_mpr2DAction->setShortcut( tr("Ctrl+M") );
@@ -398,7 +390,6 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
-//     m_visualizationMenu->addAction( m_basicViewAction );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );

@@ -133,7 +133,6 @@ private:
     
     /// Accions
     QAction *m_defaultViewerAction;
-//     QAction *m_basicViewAction;
     QAction *m_mpr2DAction;
     QAction *m_mpr3DAction;
     QAction *m_mpr3D2DAction;
