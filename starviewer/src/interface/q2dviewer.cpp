@@ -8,6 +8,7 @@
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumesourceinformation.h"
+
 // include's qt
 #include <QResizeEvent>
 #include <QSize>
@@ -27,7 +28,6 @@
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h> // per composar les imatges
 #include <vtkImageMapToWindowLevelColors.h>
-#include <vtkLookupTable.h>
 #include <vtkImageRectilinearWipe.h>
 #include <vtkCellPicker.h>
 #include <vtkInteractorStyleUser.h>
@@ -42,10 +42,8 @@
 #include <vtkJPEGWriter.h>
 #include <vtkTIFFWriter.h>
 // interacció
-#include <vtkCell.h>
-#include <vtkPointData.h>
 #include <vtkInteractorStyleImage.h>
-#include <vtkCamera.h>
+
 namespace udg {
 
 class WindowLevelCallback : public vtkCommand
@@ -965,9 +963,8 @@ void Q2DViewer::setInput( Volume* volume )
 {
     if( volume == 0 )
         return;
-    m_mainVolume = volume;    
+    m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
-
     // fem update de les mides dels indicadors de referència
     m_sideOrientationMarker->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sideOrientationMarker->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -1058,48 +1055,55 @@ void Q2DViewer::setView( ViewType view )
 
 void Q2DViewer::updateView()
 {
-    switch( m_lastView )
+    if( m_viewer->GetInput() )
     {
-    case Axial:
-        m_viewer->SetSliceOrientationToXY();
-        m_size[0] = m_mainVolume->getDimensions()[0];
-        m_size[1] = m_mainVolume->getDimensions()[1];
-        m_size[2] = m_mainVolume->getDimensions()[2];
-    break;
+        switch( m_lastView )
+        {
+        case Axial:
+            m_viewer->SetSliceOrientationToXY();
+            m_size[0] = m_mainVolume->getDimensions()[0];
+            m_size[1] = m_mainVolume->getDimensions()[1];
+            m_size[2] = m_mainVolume->getDimensions()[2];
+        break;
+        
+        case Sagittal:
+            m_viewer->SetSliceOrientationToYZ();
+            //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+            m_size[0] = m_mainVolume->getDimensions()[1];
+            m_size[1] = m_mainVolume->getDimensions()[2];
+            m_size[2] = m_mainVolume->getDimensions()[0];
+        break;
     
-    case Sagittal:
-        m_viewer->SetSliceOrientationToYZ();
-        //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-        m_size[0] = m_mainVolume->getDimensions()[1];
-        m_size[1] = m_mainVolume->getDimensions()[2];
-        m_size[2] = m_mainVolume->getDimensions()[0];
-    break;
-
-    case Coronal:
-        m_viewer->SetSliceOrientationToXZ();
-//         vtkCamera *cam;
-//         cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
-//         if ( cam )
-//         {
-//             cam->SetFocalPoint(0,0,0);
-//             cam->SetPosition(0,-1,0); // 1 if medical ?
-//             cam->SetViewUp(0,0,1);
-//         }
-        //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-        m_size[0] = m_mainVolume->getDimensions()[0];
-        m_size[1] = m_mainVolume->getDimensions()[2];
-        m_size[2] = m_mainVolume->getDimensions()[1];
-    break;
-
-    default:
-    // podem posar en Axial o no fer res
-        m_viewer->SetSliceOrientationToXY();
-    break;
+        case Coronal:
+            m_viewer->SetSliceOrientationToXZ();
+    //         vtkCamera *cam;
+    //         cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+    //         if ( cam )
+    //         {
+    //             cam->SetFocalPoint(0,0,0);
+    //             cam->SetPosition(0,-1,0); // 1 if medical ?
+    //             cam->SetViewUp(0,0,1);
+    //         }
+            //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+            m_size[0] = m_mainVolume->getDimensions()[0];
+            m_size[1] = m_mainVolume->getDimensions()[2];
+            m_size[2] = m_mainVolume->getDimensions()[1];
+        break;
+    
+        default:
+        // podem posar en Axial o no fer res
+            m_viewer->SetSliceOrientationToXY();
+        break;
+        }
+        // cada cop que canviem de llesca posarem per defecte la llesca del mig d'aquella vista
+        setSlice( m_viewer->GetSliceRange()[1]/2 );
+        mapOrientationStringToAnnotation();
+        updateWindowSizeAnnotation();
     }
-    // cada cop que canviem de llesca posarem per defecte la llesca del mig d'aquella vista
-    setSlice( m_viewer->GetSliceRange()[1]/2 );
-    mapOrientationStringToAnnotation();
-    updateWindowSizeAnnotation();
+    else
+    {
+        std::cerr << "intentant canviar la vista sense donar input abans..." << std::endl;
+    }
 }
 
 void Q2DViewer::setSlice( int value )
