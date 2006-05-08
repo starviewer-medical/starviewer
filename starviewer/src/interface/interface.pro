@@ -3,12 +3,10 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
 # L'objectiu és una biblioteca:  
 
-FORMS += mutualinformationinputparametersformbase.ui \
-         qconfigurationscreenbase.ui \
+FORMS += qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \
          qmpr3dextensionbase.ui \
          qmprextensionbase.ui \
-         qmutualinformationtab.ui \
          qretrievescreenbase.ui \
          qtabaxisviewbase.ui \
          queryscreenbase.ui \
@@ -22,9 +20,6 @@ TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
 HEADERS += director.h \
-           mutualinformationdirector.h \
-           mutualinformationinputparametersform.h \
-           mutualinformationparameters.h \
            parameters.h \
            qapplicationmainwindow.h \
            qinputparameters.h \
@@ -59,9 +54,6 @@ HEADERS += director.h \
            qdefaultviewerextensioncreator.h \
            qcustomwindowleveldialog.h 
 SOURCES += director.cpp \
-           mutualinformationdirector.cpp \
-           mutualinformationinputparametersform.cpp \
-           mutualinformationparameters.cpp \
            parameters.cpp \
            qapplicationmainwindow.cpp \
            qinputparameters.cpp \
