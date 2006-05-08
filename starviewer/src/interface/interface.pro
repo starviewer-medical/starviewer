@@ -8,7 +8,6 @@ FORMS += qconfigurationscreenbase.ui \
          qmpr3dextensionbase.ui \
          qmprextensionbase.ui \
          qretrievescreenbase.ui \
-         qtabaxisviewbase.ui \
          queryscreenbase.ui \
          qpacslistbase.ui \
          qnavigatewindowbase.ui \
@@ -26,12 +25,9 @@ HEADERS += director.h \
            qviewer.h \
            q2dviewer.h \
            q3dviewer.h \
-           qvolumerepositorycombobox.h \
-           qtabaxisview.h \
            appimportfile.h \
            extensioncreator.h \
            extensionfactory.h \
-           qtabaxisviewextensioncreator.h \
            extensionhandler.h \
            extensionworkspace.h \
            qconfigurationscreen.h \
@@ -60,12 +56,9 @@ SOURCES += director.cpp \
            qviewer.cpp \
            q2dviewer.cpp \
            q3dviewer.cpp \
-           qvolumerepositorycombobox.cpp \
-           qtabaxisview.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
            extensionfactory.cpp \
-           qtabaxisviewextensioncreator.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
            qconfigurationscreen.cpp \

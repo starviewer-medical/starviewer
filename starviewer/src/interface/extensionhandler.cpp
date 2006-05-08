@@ -21,12 +21,10 @@
 #include "qmprextensioncreator.h"
 #include "qmpr3dextensioncreator.h"
 #include "qmpr3d2dextensioncreator.h"
-#include "qtabaxisviewextensioncreator.h"
 #include "qdefaultviewerextensioncreator.h"
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
-#include "qtabaxisview.h" 
 #include "qmprextension.h"
 #include "qmpr3dextension.h"
 #include "qmpr3d2dextension.h"
@@ -75,7 +73,6 @@ void ExtensionHandler::createConnections()
 void ExtensionHandler::registerExtensions()
 {
     // creem totes les instàncies dels creadors d'extensions
-    m_qTabAxisViewExtensionCreator = new QTabAxisViewExtensionCreator(this);    
     m_qMPRExtensionCreator = new QMPRExtensionCreator( this );
     m_qMPR3DExtensionCreator = new QMPR3DExtensionCreator( this );
     m_qMPR3D2DExtensionCreator = new QMPR3D2DExtensionCreator( this );
@@ -83,7 +80,6 @@ void ExtensionHandler::registerExtensions()
     
     // al crear-se el handler inicialitzem el factory amb totes les aplicacions
     m_extensionFactory = new ExtensionFactory(this);
-    m_extensionFactory->registerExtension( "Tab Axis View" , m_qTabAxisViewExtensionCreator );
     m_extensionFactory->registerExtension( "2D MPR Extension" , m_qMPRExtensionCreator );
     m_extensionFactory->registerExtension( "3D MPR Extension" , m_qMPR3DExtensionCreator );
     m_extensionFactory->registerExtension( "3D-2D MPR Extension" , m_qMPR3D2DExtensionCreator );
@@ -96,8 +92,6 @@ void ExtensionHandler::request( int who )
 
 // \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
 //     QueryScreen *queryScreen = new QueryScreen;
-    
-    QTabAxisView *axisView = new QTabAxisView( m_mainApp );
     QMPRExtension *mprExtension = new QMPRExtension( 0 );
     QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
     QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
@@ -162,12 +156,6 @@ void ExtensionHandler::request( int who )
         }
     break;
 
-    /// AXIS VIEW
-    case 5:
-        axisView->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-        m_mainApp->m_extensionWorkspace->addApplication( axisView , tr("Volume Axis View"));
-    break;
-
     case 6:
         if( m_volumeID.isNull() )
         {
@@ -195,8 +183,11 @@ void ExtensionHandler::request( int who )
     break;
     
     default:
-        axisView->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-        m_mainApp->m_extensionWorkspace->addApplication( axisView , tr("Volume Axis View"));
+        defaultViewerExtension = new QDefaultViewerExtension;
+        defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+        m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("Default Viewer"));
+//         m_mainApp->addToolBar( defaultViewerExtension->getToolsToolBar() );
+        defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
     break;
     }
 }

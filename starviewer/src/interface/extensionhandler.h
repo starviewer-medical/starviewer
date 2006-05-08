@@ -24,7 +24,6 @@ class QApplicationMainWindow;
 class ResourceCollection;
 class ExtensionFactory;
 
-class QTabAxisViewExtensionCreator;
 class QMPRExtensionCreator;
 class QMPR3DExtensionCreator;
 class QMPR3D2DExtensionCreator;
@@ -78,7 +77,6 @@ private:
     ExtensionFactory *m_extensionFactory;
     
     /// Creadors d'extensions
-    QTabAxisViewExtensionCreator *m_qTabAxisViewExtensionCreator;
     QMPRExtensionCreator *m_qMPRExtensionCreator;
     QMPR3DExtensionCreator *m_qMPR3DExtensionCreator;
     QMPR3D2DExtensionCreator *m_qMPR3D2DExtensionCreator;
