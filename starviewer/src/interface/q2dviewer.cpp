@@ -1053,6 +1053,7 @@ void Q2DViewer::render()
 void Q2DViewer::setView( ViewType view )
 {    
     m_lastView = view;
+    updateView();
 }
 
 void Q2DViewer::updateView()
