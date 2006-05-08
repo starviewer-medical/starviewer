@@ -10,10 +10,5 @@ staticlib
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui
 MOC_DIR = ../../tmp/moc
-
 include(../vtk.inc)
-
 include(../itk.inc)
-
-SOURCES += mutualinformationviolawells.cpp 
-HEADERS += mutualinformationviolawells.h 
