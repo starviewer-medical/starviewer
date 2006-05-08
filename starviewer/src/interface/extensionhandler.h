@@ -21,7 +21,6 @@ class Input;
 class Output;
 class QApplicationMainWindow;
 
-class ResourceCollection;
 class ExtensionFactory;
 
 class QMPRExtensionCreator;
@@ -95,9 +94,6 @@ private:
     // Recursos
     // :::::::::::::::::::::::::::::::::::::::::
 
-    /// Col·lecció de recursos de l'aplicació
-    ResourceCollection *m_resources;
-    
     /// L'id del volum amb el que estem treballant
     Identifier m_volumeID;    
     /// El repository de volums
