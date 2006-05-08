@@ -118,7 +118,7 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
-    connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
+//     connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
     connect( m_mipPushButton , SIGNAL( clicked() ) , this , SLOT( showMIP() ) );
 
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
@@ -385,7 +385,7 @@ void QMPRExtension::pushAxisActor( double x , double y )
 
 void QMPRExtension::pushAxialActor( double x , double y )
 {
-    m_axial2DView->setSlice( y / m_axialSpacing[2] );
+    m_axial2DView->setSlice( static_cast<int>( y / m_axialSpacing[2] ) );
     updatePlanes();
     updateControls();
 
@@ -413,11 +413,7 @@ void QMPRExtension::setInput( Volume *input )
     {
         axialCam->SetViewUp(0,-1,0);
     }
-    m_sagital2DView->setViewToAxial();
-    m_sagital2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
-    m_coronal2DView->setViewToAxial();
-    m_coronal2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
-    
+
     // refrescar el controls
     m_axialSpinBox->setMinimum( 0 );
     m_axialSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[2] );    
@@ -437,6 +433,11 @@ void QMPRExtension::setInput( Volume *input )
     coronalResliced->setData( m_coronalReslice->GetOutput() );
     coronalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
     m_coronal2DView->setInput( coronalResliced );
+    
+    m_sagital2DView->setViewToAxial();
+    m_sagital2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
+    m_coronal2DView->setViewToAxial();
+    m_coronal2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
     
     m_sagital2DView->render();
     m_coronal2DView->render();
