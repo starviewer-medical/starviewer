@@ -21,71 +21,67 @@
 #include <QHeaderView>
 #include <QContextMenuEvent>
 #include <QMessageBox>
+#include <QShortcut>
 
 #include "qstudytreewidget.h"
 #include "study.h"
+#include "series.h"
 #include "qserieslistwidget.h"
 #include "pacslistdb.h"
-#include "cachepacs.h"
 #include "starviewersettings.h"
-#include <QShortcut>
+#include "studylist.h"
 
 namespace udg {
 
-
-
-/** Constructor de la classe
-  */
-QStudyTreeWidget::QStudyTreeWidget( QWidget *parent)
+QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
     
-    m_studyTreeView->setRootIsDecorated(false);
+    m_studyTreeView->setRootIsDecorated( false );
     
     //la columna de UID AETITLE,type, Image Number i Protocol Name les fem invisibles
-    m_studyTreeView->setColumnHidden(10,true);
-    m_studyTreeView->setColumnHidden(11,true);
-    m_studyTreeView->setColumnHidden(12,true);
-    m_studyTreeView->setColumnHidden(13,true);
+    m_studyTreeView->setColumnHidden( 10, true );
+    m_studyTreeView->setColumnHidden( 11, true );
+    m_studyTreeView->setColumnHidden( 12, true );
+    m_studyTreeView->setColumnHidden( 13, true );
     m_studyTreeView->setColumnHidden( 14 , true );
     
-    m_openFolder = QIcon(":/images/folderopen.png");
-    m_closeFolder = QIcon(":/images/folderclose.png");
-    m_iconSeries = QIcon(":/images/series.png");
+    //carreguem les imatges que es mostren el QStudyTreeWidget, el :/ indica que és un QRecourse, que s'especifica al main.qrc
+    m_openFolder = QIcon( ":/images/folderopen.png" );
+    m_closeFolder = QIcon( ":/images/folderclose.png" );
+    m_iconSeries = QIcon( ":/images/series.png" );
     
     m_parentName = parent->objectName();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
     
-    createPopupMenu();
+    createContextMenu(); //creem el menu contextual
     createConnections();
    
-    setWidthColumns();
-    
+    setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
 }
 
 void QStudyTreeWidget::createConnections()
 {
-    connect(m_studyTreeView, SIGNAL(itemClicked ( QTreeWidgetItem *, int )), this, SLOT(clicked(QTreeWidgetItem *,int)));
-    connect(m_studyTreeView, SIGNAL(itemDoubleClicked ( QTreeWidgetItem *, int )), this, SLOT(doubleClicked(QTreeWidgetItem *,int)));
+    connect( m_studyTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int ) ) , this, SLOT( clicked ( QTreeWidgetItem * , int ) ) );
+    connect( m_studyTreeView , SIGNAL( itemDoubleClicked ( QTreeWidgetItem * , int ) ), this , SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
 }
 
-/** Creem el popup Menu, en funcio de a quin tab pertany activa unes o altres opcions del menu
-  */
-void QStudyTreeWidget::createPopupMenu()
+void QStudyTreeWidget::createContextMenu()
 {
-    
-    QAction *view = m_popUpMenu.addAction(tr("&View"));
-    
-    view->setShortcut(tr("Ctrl+V"));
-    QAction *retrieve = m_popUpMenu.addAction(tr("&Retrieve"));
-    retrieve->setShortcut(tr("Ctrl+R"));
-    m_popUpMenu.addSeparator();
-    QAction *deleteStudy =  m_popUpMenu.addAction(tr("&Delete"));
-    deleteStudy->setShortcut(tr("Ctrl+D"));
+    //acció veure
+    QAction *view = m_contextMenu.addAction( tr("&View") );
+    view->setShortcut( tr("Ctrl+V") );
+    //acció descarregar
+    QAction *retrieve = m_contextMenu.addAction( tr("&Retrieve") );
+    retrieve->setShortcut( tr("Ctrl+R") );
+    //acció esborrar
+    m_contextMenu.addSeparator();
+    QAction *deleteStudy =  m_contextMenu.addAction( tr("&Delete")) ;
+    deleteStudy->setShortcut( tr("Ctrl+D") );
       
-    connect(view, SIGNAL(triggered()), this, SLOT(viewStudy()));
-    connect(retrieve, SIGNAL(triggered()), this, SLOT(retrieveStudy()));
-    connect(deleteStudy, SIGNAL(triggered()), this, SLOT(deleteStudy()));
+    connect( view , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
+    connect( retrieve , SIGNAL( triggered() ) , this , SLOT( retrieveStudy() ) );
+    connect( deleteStudy , SIGNAL(triggered()), this, SLOT(deleteStudy()));
       
     /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
     (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );  
@@ -93,150 +89,137 @@ void QStudyTreeWidget::createPopupMenu()
     (void) new QShortcut( retrieve->shortcut() , this , SLOT( retrieveStudy() ) );
     
     if (m_parentName == "m_tabPacs")
-    { 
+    {   //si el QStudyTreeWidget es el que mostra la llista d'estudis del PACS, la opcio delete desactivada
         deleteStudy->setEnabled(false);       
     }   
    
     if (m_parentName == "m_tabCache")
-    {
+    {   //si el QStudyTreeWidget es el que mostra la llista d'estudis a la caché, la opció retrieve es desactiva
         retrieve->setEnabled(false);
     }
 }
 
-/** Assigna l'ampla a les columnes segons els paràmetres guardats a StarviewerSettings
-  */
 void QStudyTreeWidget::setWidthColumns()
 {    
     StarviewerSettings settings;
-
+    
+    //Renombrem segons quin objecte es tracti, si es el que mostra la llista d'estudis del PACS o de la cache
     if (m_parentName == "m_tabPacs")
     { 
-        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
         {
-            m_studyTreeView->header()->resizeSection(i,settings.getStudyPacsListColumnWidth(i));
+            m_studyTreeView->header()->resizeSection( i , settings.getStudyPacsListColumnWidth( i ) );
         }    
     }   
    
     if (m_parentName == "m_tabCache")
     {
-        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
         {
-            m_studyTreeView->header()->resizeSection(i,settings.getStudyCacheListColumnWidth(i));
+            m_studyTreeView->header()->resizeSection( i ,settings.getStudyCacheListColumnWidth(i) );
         }      
     }
-
 }
-/** Mostra l'estudi pel ListView que se li passa per paràmetre
-  *        @param StudyList a mostrar
-  */
-void QStudyTreeWidget::insertStudyList(StudyList *ls)
-{
 
+void QStudyTreeWidget::insertStudyList( StudyList *studyList )
+{
     m_studyTreeView->clear();
 
-    ls->firstStudy();
+    studyList->firstStudy();
     
-    while (!ls->end())
+    while ( !studyList->end() )
     {    
-         insertStudy(&ls->getStudy());        
-         ls->nextStudy();
+         insertStudy( &studyList->getStudy() );        
+         studyList->nextStudy();
     }
 }
 
-/** Inseriex la informació d'un estudi
-  *                @param Dades de l'estudi
-  */
-void QStudyTreeWidget::insertStudy(Study *stu)
+void QStudyTreeWidget::insertStudy( Study *study)
 {
-
     QString text;
     Status state;
     
-    QTreeWidgetItem* item = new QTreeWidgetItem(m_studyTreeView);
-    text.truncate(0);
-    text.append(tr("Study"));
-    text.append(stu->getStudyId().c_str() );
-    item->setIcon(0,m_closeFolder);
-    item->setText(0,text);
-    item->setText(1,stu->getPatientId().c_str() );
-    item->setText(2,formatName(stu->getPatientName()));
-    item->setText(3,formatAge(stu->getPatientAge()));
-    item->setText(4,stu->getStudyModality().c_str() );
-    item->setText(5,stu->getStudyDescription().c_str() );
-    item->setText(6,formatDate(stu->getStudyDate()));
-    item->setText(7,formatHour(stu->getStudyTime()));
-    if (stu->getInstitutionName() == "") //si la informació ve buida l'anem a buscar a la bdd local
+    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
+    text.truncate( 0 );
+    text.append( tr("Study") );
+    text.append( study->getStudyId().c_str() );
+    item->setIcon( 0 ,m_closeFolder );
+    item->setText( 0 , text );
+    
+    item->setText( 1 , study->getPatientId().c_str() );
+    item->setText( 2 , formatName( study->getPatientName() ) );
+    item->setText( 3 , formatAge( study->getPatientAge() ) );
+    item->setText( 4 , study->getStudyModality().c_str() );
+    item->setText( 5 , study->getStudyDescription().c_str() );
+    item->setText( 6 , formatDate( study->getStudyDate() ) );
+    item->setText( 7 , formatHour( study->getStudyTime() ) );
+    
+    if ( study->getInstitutionName() == "" ) //si la informació ve buida l'anem a buscar a la bdd local
     {
-        if (m_oldPacsAETitle != stu->getPacsAETitle()) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
+        if ( m_oldPacsAETitle != study->getPacsAETitle().c_str() ) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
         {//si es un pacs diferent busquem la informacio
             PacsListDB pacsList;
             PacsParameters pacs;
             
-            state = pacsList.queryPacs(&pacs,stu->getPacsAETitle());
-            if (state.good())
+            state = pacsList.queryPacs( &pacs , study->getPacsAETitle() );
+            if ( state.good() )
             {
-                item->setText(8,pacs.getInstitution().c_str() );
-                m_OldInstitution = pacs.getInstitution();
+                item->setText( 8 , pacs.getInstitution().c_str() );
+                m_OldInstitution = pacs.getInstitution().c_str();
             }
-            m_oldPacsAETitle = stu->getPacsAETitle();
+            m_oldPacsAETitle = study->getPacsAETitle().c_str();
         }
-        else item->setText(8,m_OldInstitution.c_str() );
+        else item->setText( 8 , m_OldInstitution );
     }
-    else item->setText(8,stu->getInstitutionName().c_str() );
-    item->setText(9,stu->getAccessionNumber().c_str() );
-    item->setText(10,stu->getPacsAETitle().c_str() );
-    item->setText(11,stu->getStudyUID().c_str() );
-    item->setText(12,"STUDY");//indiquem de que es tracta d'un estudi
-    item->setText(13,"");
+    else item->setText( 8 , study->getInstitutionName().c_str() );
+    
+    item->setText( 9 , study->getAccessionNumber().c_str() );
+    item->setText( 10 , study->getPacsAETitle().c_str() );
+    item->setText( 11 , study->getStudyUID().c_str() );
+    item->setText( 12 , "STUDY" );//indiquem de que es tracta d'un estudi
+    item->setText( 13 , "" );
+    
     m_studyTreeView->clearSelection();
-
 }
 
-/**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
-  *                    @param informació de la serie
-  */
-void QStudyTreeWidget::insertSeries(Series *serie)
+void QStudyTreeWidget::insertSeries( Series *serie )
 {
-    
     QString text, description;
   
-    QTreeWidgetItem* item = new QTreeWidgetItem(m_studyTreeView->currentItem());
-    text.truncate(0);
-    text.append(tr("Series "));
-    text.append(serie->getSeriesNumber().c_str() );
-    item->setIcon(0,m_iconSeries); 
-    item->setText(0,text);
-    item->setText(4,serie->getSeriesModality().c_str() );
+    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView->currentItem() );
+    text.truncate( 0 );
+    text.append( tr( "Series " ) );
+    text.append( serie->getSeriesNumber().c_str() );
+    item->setIcon( 0 , m_iconSeries ); 
+    item->setText( 0 , text );
+    item->setText( 4 , serie->getSeriesModality().c_str() );
     
     description = serie->getSeriesDescription().c_str();
     item->setText( 5 , description.simplified() );//treiem els espaics en blanc del davant i darrera
     
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
-    if (serie->getSeriesDate().length() != 0)
+    if ( serie->getSeriesDate().length() != 0 )
     {
-        item->setText(6,formatDate(serie->getSeriesDate()));
+        item->setText( 6 , formatDate(serie->getSeriesDate() ) );
     }
         
-    if (serie->getSeriesTime().length()!= 0)
+    if ( serie->getSeriesTime().length()!= 0 )
     {
-        item->setText(7,formatHour(serie->getSeriesTime()));
+        item->setText( 7 , formatHour(serie->getSeriesTime() ) );
     }
     
-    item->setText(11,serie->getSeriesUID().c_str() );   
-    item->setText(12,"SERIES"); //indiquem que es tracta d'una sèrie 
-    text.truncate(0);
-    text.setNum(serie->getImageNumber(),10);
-    item->setText(13,text);
+    item->setText( 11 , serie->getSeriesUID().c_str() );   
+    item->setText( 12 , "SERIES" ); //indiquem que es tracta d'una sèrie 
+    
+    text.truncate( 0 );
+    text.setNum( serie->getImageNumber(), 10 );
+    item->setText( 13 , text );
     item->setText( 14 , serie->getProtocolName().c_str() );
     
-    emit(addSeries(serie));//afegim serie al SeriesIconView
-    
+    emit( addSeries(serie) );//afegim serie al SeriesIconView
 }
 
-/** formata l'edat per mostrar per pantalla
-  *            @param edat
-  */
-QString QStudyTreeWidget::formatAge(const std::string age)
+QString QStudyTreeWidget::formatAge( const std::string age )
 {
     QString text( age.c_str() );
     
@@ -251,10 +234,7 @@ QString QStudyTreeWidget::formatAge(const std::string age)
     return text;
 }
 
-/**Formata el nom
-  *             @param Nom i cognoms del pacient
-  */
-QString QStudyTreeWidget::formatName(const std::string name)
+QString QStudyTreeWidget::formatName( const std::string name )
 {
     QString text( name.c_str() );
     
@@ -263,88 +243,67 @@ QString QStudyTreeWidget::formatName(const std::string name)
     return text;
 }
 
-/**Formata la data
-  *             @param data de l'estudi
-  */
-QString QStudyTreeWidget::formatDate(const std::string date)
+QString QStudyTreeWidget::formatDate( const std::string date )
 {
-    QString text,dateOrig( date.c_str() );
+    QString formateDate , originalDate ( date.c_str() );
     
-    text.insert(0,dateOrig.mid(6,2)); //dd
-    text.append("/");
-    text.append(dateOrig.mid(4,2));
-    text.append("/");
-    text.append(dateOrig.mid(0,4));
+    formateDate.insert( 0 , originalDate.mid( 6 , 2 ) ); //dd
+    formateDate.append( "/" );
+    formateDate.append( originalDate.mid( 4 , 2 ) );
+    formateDate.append( "/" );
+    formateDate.append( originalDate.mid( 0 , 4 ) );
     
-    return text;
+    return formateDate;
 }
 
-/**Formata l'hora
-  *             @param Hora de l'estudi
-  */
-QString QStudyTreeWidget::formatHour(const std::string hour)
+QString QStudyTreeWidget::formatHour( const std::string hour )
 {
-    QString text,hourOrig( hour.c_str() );
+    QString formatedHour,originalHour( hour.c_str() );
     
-    text.insert(0,hourOrig.mid(0,2));
-    text.append(":");
-    text.append(hourOrig.mid(2,2));
+    formatedHour.insert( 0 , originalHour.mid( 0 , 2 ) );
+    formatedHour.append( ":" );
+    formatedHour.append( originalHour.mid( 2 , 2 ) );
     
-    return text;
+    return formatedHour;
 }
 
-/** Neteja el TreeView
-  */
 void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
 }
 
-
-/**Ordena per columna
-  *             @param Indica la columna per la que s'ha d'ordenar
-  */
-void QStudyTreeWidget::setSortColumn(int col)
+void QStudyTreeWidget::setSortColumn( int col )
 {
-    m_studyTreeView->sortItems(col,Qt::AscendingOrder);
+    m_studyTreeView->sortItems( col , Qt::AscendingOrder );
     m_studyTreeView->clearSelection();
 }
 
-
-/** Retorna el UID Study de l'estudi seleccionat
-  *            @return UID de l'estudi seleccionat
-  */
 QString QStudyTreeWidget::getSelectedStudyUID()
 {
     QTreeWidgetItem *item;
 
-    if (m_studyTreeView->currentItem() != NULL) 
+    if ( m_studyTreeView->currentItem() != NULL ) 
     {
-        if (m_studyTreeView->currentItem()->parent() == NULL) //es un estudi
+        if ( m_studyTreeView->currentItem()->parent() == NULL ) //es un estudi
         {
-            return m_studyTreeView->currentItem()->text(11);   
+            return m_studyTreeView->currentItem()->text( 11 );   
         }
         else
         {
             item = m_studyTreeView->currentItem()->parent();
-            return item->text(11);
+            return item->text( 11 );
         }
     }
     else return "";
-    
 }
 
-/** Retorna el UID Study de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
-  *            @return UID de la sèrie seleccionat
-  */
 QString QStudyTreeWidget::getSelectedSeriesUID()
 {
-
-    if (m_studyTreeView->currentItem() != NULL) 
+    if ( m_studyTreeView->currentItem() != NULL ) 
     {
-        if (m_studyTreeView->currentItem()->parent() != NULL) //es un serie
+        if ( m_studyTreeView->currentItem()->parent() != NULL ) //es un serie
         {
-            return m_studyTreeView->currentItem()->text(11);   
+            return m_studyTreeView->currentItem()->text( 11 );   
         }
         else
         {
@@ -352,139 +311,107 @@ QString QStudyTreeWidget::getSelectedSeriesUID()
         }
     }
     else return "";
-    
 }
 
-/** Retorna el AETitle del PACS  l'estudi seleccionat
-  *            @return AETitle del PACS de l'estudi seleccionat
-  */
 QString QStudyTreeWidget::getSelectedStudyPacsAETitle()
 {
    QTreeWidgetItem * item;
    
-   if (m_studyTreeView->currentItem() == NULL) return "";
+   if ( m_studyTreeView->currentItem() == NULL ) return "";
     
-   if (m_studyTreeView->currentItem()->parent() == NULL)
+   if ( m_studyTreeView->currentItem()->parent() == NULL )
    {
-       return m_studyTreeView->currentItem()->text(10);
+       return m_studyTreeView->currentItem()->text( 10 );
    }
    else 
    {  
        item = m_studyTreeView->currentItem()->parent();
-       return item->text(10);
+       return item->text( 10 );
    }
 }
 
 //SLOT CONNECTAT AMB EL SIGNAL D'UN CLICK
-/**al fer un click mostra les sèries d'un estudi,
-  *            @param Item element del treeview
-  */
-void QStudyTreeWidget::expand(QTreeWidgetItem * item)
+void QStudyTreeWidget::expand( QTreeWidgetItem * item )
 {
+    if ( item == NULL ) return;
 
-    if (item==NULL) return;
-
-    if (!m_studyTreeView->isItemExpanded(item))
+    if ( !m_studyTreeView->isItemExpanded( item ) )
     {    
-        if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
+        if ( item->text( 12 ) == "STUDY" ) //nomes s'expandeix si es tracta d'un estudi
         {
-            m_studyTreeView->setItemExpanded(item,true);
-            item->setIcon(0,m_openFolder); 
-            if (item->childCount()==0) //si abans hem consultat le seria ja hi tenim la seva informació, evitem d'haver de consultar el pacs cada vegada
+            m_studyTreeView->setItemExpanded( item , true );
+            item->setIcon( 0 , m_openFolder ); 
+            if ( item->childCount() == 0 ) //si abans hem consultat le seria ja hi tenim la seva informació, evitem d'haver de consultar el pacs cada vegada
             {
-                emit(expand(item->text(11),item->text(10)));
+                emit( expand( item->text(11) , item->text(10) ) );
             }
-            else setSeriesToSeriesListWidget(item); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
+            else setSeriesToSeriesListWidget( item ); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
             m_oldStudyUID = getSelectedStudyUID();
         }
     }
     else 
     {
-        if (item->text(12)=="STUDY") //nomes s'expandeix si es tracta d'un estudi
+        if ( item->text(12)== "STUDY" ) //nomes s'expandeix si es tracta d'un estudi
         {
-            item->setIcon(0,m_closeFolder); 
-            m_studyTreeView->setItemExpanded(item,false);
-            emit(clearSeriesListWidget());
+            item->setIcon( 0 , m_closeFolder ); 
+            m_studyTreeView->setItemExpanded( item , false );
+            emit( clearSeriesListWidget() );
             m_oldStudyUID = getSelectedStudyUID();
         }
     }
-
-       
 }
 
-
-/** Quant es consulten les sèries d'un estudi, es fa un acces al pacs demanant la informació d'aquelles series,si es tornen a consultar una segona vegada
-  * les sèries de l'estudi,no cal tornar a accedir al pacs perquè ja tenim la informació de la sèrie al TreeView, però s'ha d'actualitzar QSeriesListWidget amb 
-  * la informació de les sèries de l'estudi, com no tornem a accedir al pacs, la informació de les sèries li hem de passar d'algun mode, per això el que fem
-  * és invocar aquest mètode que crea reconstrueix l'objecte series, amb la principal informació de les sèries, i que fa un emit, que és capturat pel 
-  * QSeriesInconView, per mostrar la informació de la sèrie (la connexió entre el QStudyTreeWidget i QSeriesListWidget es fa la constrcutor de la QueryScreen)
-  *        @param Apuntador a l'estudi al tree view
-  */
-void QStudyTreeWidget::setSeriesToSeriesListWidget(QTreeWidgetItem *item)
+void QStudyTreeWidget::setSeriesToSeriesListWidget( QTreeWidgetItem *item )
 {
     QTreeWidgetItem *child;
     
     if (item == NULL) return;
     
-    emit(clearSeriesListWidget()); //es neteja el QSeriesListWidget
+    emit( clearSeriesListWidget() ); //es neteja el QSeriesListWidget
     
-    for (int i = 0;i < item->childCount();i++)
+    for ( int i = 0; i < item->childCount(); i++ )
     {
-        child = item->child(i);
-        if (item != NULL)
+        child = item->child( i );
+        if ( item != NULL )
         {
             Series serie;
-            serie.setSeriesUID(child->text(11).toAscii().constData());
-            serie.setImageNumber(child->text(13).toInt(NULL,10));
-            serie.setSeriesModality(child->text(4).toAscii().constData());
-            serie.setSeriesNumber(child->text(0).remove(tr("Series")).toAscii().constData());  
-            serie.setStudyUID(getSelectedStudyUID().toAscii().constData());
+            serie.setSeriesUID( child->text( 11 ).toAscii().constData() );
+            serie.setImageNumber( child->text( 13 ).toInt( NULL , 10 ) );
+            serie.setSeriesModality( child->text( 4 ).toAscii().constData() );
+            serie.setSeriesNumber( child->text( 0 ).remove( tr("Series") ).toAscii().constData() );  
+            serie.setStudyUID( getSelectedStudyUID().toAscii().constData() );
             serie.setProtocolName( child->text( 14 ).toAscii().constData() );
-            emit(addSeries(&serie));
+            emit( addSeries( &serie ) );
         }
     }  
 }
 
-
-/** removes study from the lisk
-  *    @param esbora l'estudi amb StudyUID de la llista
-  */
-void QStudyTreeWidget::removeStudy(QString studyUID)
+void QStudyTreeWidget::removeStudy( QString studyUID )
 {
-
-    QList<QTreeWidgetItem *> qStudyList(m_studyTreeView->findItems("*",Qt::MatchWildcard,0));
+    QList<QTreeWidgetItem *> qStudyList( m_studyTreeView->findItems( "*" , Qt::MatchWildcard , 0 ) );
     QTreeWidgetItem *item;
     
-    for (int i = 0;i < qStudyList.count();i++)
+    for ( int i = 0; i < qStudyList.count(); i++ )
     {
-        item = qStudyList.at(i);
-        if (item->text(11) == studyUID)
+        item = qStudyList.at( i );
+        if ( item->text( 11 ) == studyUID )
         {
             delete item;
         }
     }
-
 }
 
-/** ESborra un estudi de la caché 
-  */
 void QStudyTreeWidget::deleteStudy()
 {
-    
     emit(delStudy()); //aquest signal es recollit per la QueryScreen
-
-
 }
 
-/** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
-  *        @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
-  */
-void QStudyTreeWidget::selectedSeriesIcon(QString seriesUID)
+void QStudyTreeWidget::selectedSeriesIcon( QString seriesUID )
 {
-    QTreeWidgetItem *item,*current;
+    QTreeWidgetItem *item , *current;
     
    //busquem el pare (l'estudi principal),ja que pot estar seleccionada una serie
-   if (m_studyTreeView->currentItem()->parent() == NULL)
+   if ( m_studyTreeView->currentItem()->parent() == NULL )
    {
         current = m_studyTreeView->currentItem();
    }
@@ -494,89 +421,69 @@ void QStudyTreeWidget::selectedSeriesIcon(QString seriesUID)
    }
    
     
-    for (int i = 0;i < current->childCount();i++)
+    for ( int i = 0; i < current->childCount(); i++ )
     {
-        item = current->child(i);
-        if (item != NULL)
+        item = current->child( i );
+        if ( item != NULL )
         {
-            if (item->text(11) == seriesUID)
+            if (item->text( 11 ) == seriesUID )
             {
-                m_studyTreeView->setItemSelected(item,true);
-                m_studyTreeView->setCurrentItem(item);
+                m_studyTreeView->setItemSelected( item , true );
+                m_studyTreeView->setCurrentItem( item );
             }
-            else m_studyTreeView->setItemSelected(item,false);
+            else m_studyTreeView->setItemSelected( item , false );
         }
     }  
-
 }
 
-/** Mostra el menu contextual
-  *     @param Dades de l'event sol·licitat
-  */
-void QStudyTreeWidget::contextMenuEvent(QContextMenuEvent *event)
+void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
 {
-
-    clicked(m_studyTreeView->currentItem(),0);
-    m_popUpMenu.exec(event->globalPos());
+    clicked( m_studyTreeView->currentItem() ,0 );
+    m_contextMenu.exec( event->globalPos() );
 }
 
-
-/**  Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesListWidget per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesListWidget amb les series   
-d'aquell estudi
-  *  també en el QSeriesListWidget
-  *         @param item sobre el que s'ha fet click
-  */
-void QStudyTreeWidget::clicked(QTreeWidgetItem *item,int col)
+void QStudyTreeWidget::clicked( QTreeWidgetItem *item , int col )
 {
-    
-
-    if (item != NULL)
+    if ( item != NULL )
     {
-        if (item->parent() != NULL) //si es tracta d'una serie
+        if ( item->parent() != NULL ) //si es tracta d'una serie
         {   //enviem el UID de la serie
-            if (m_oldStudyUID != getSelectedStudyUID())
+            if ( m_oldStudyUID != getSelectedStudyUID() )
             { //si seleccionem una serie pero d'un altre estudi, hem d'actualizar el qserieslistwidget
                 QTreeWidgetItem *parent  = item->parent();
-                setSeriesToSeriesListWidget(parent);
+                setSeriesToSeriesListWidget( parent );
             }
             //indiquem que el QSeriesListWidget que seleccioni la sèrie amb el UID passa per parametre
-            emit(selectedSeriesList(item->text(11)));
+            emit( selectedSeriesList( item->text(11) ) );
         }
         else
         {
-            if (col == 0)
+            if ( col == 0 )
             {
                 expand( item );
             }
             
             if (m_oldStudyUID != getSelectedStudyUID())
             { //si seleccionem una estudi diferent el seleccionat abans, hem d'actualizar el qserieslistwidget
-                if (m_studyTreeView->isItemExpanded(item))
+                if ( m_studyTreeView->isItemExpanded( item ) )
                 {// ha d'estar expendit per visualitzar les series
-                    setSeriesToSeriesListWidget(item);
+                    setSeriesToSeriesListWidget( item );
                 }
-                else emit(clearSeriesListWidget());
+                else emit( clearSeriesListWidget() );
             }   
                  
         }
         m_oldStudyUID = getSelectedStudyUID();
     }
-    
-    
 }
 
-/**  Si fem doble click a una serie del TreeView es visualitzarà si és una sèrie, o si és un estudi es mostraran les series o s'amagaran si abans es mostraven
-  *         @param item sobre el que s'ha fet click
-  */
-void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item,int)
+void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
 {
-    
-
-    if (item != NULL)
+    if ( item != NULL )
     {
-        if (item->parent() != NULL) //si es tracta d'una serie
+        if ( item->parent() != NULL ) //si es tracta d'una serie
         {   //enviem el UID de la serie
-            emit(view());
+            emit( view() );
         }
         else 
         {
@@ -589,46 +496,37 @@ void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item,int)
     m_oldStudyUID = getSelectedStudyUID();
 }
 
-/** Slot que visualitza l'estudi
-  */
 void QStudyTreeWidget::viewStudy()
 {
     emit(view());
 }
 
-/** Slot que descarrega un estudi
-  */
 void QStudyTreeWidget::retrieveStudy()
 {
-    emit(retrieve());    
+    emit( retrieve() );    
 }
 
-/** guarda de la mida de les columnes
-  */
 void QStudyTreeWidget::saveColumnsWidth()
 {
     StarviewerSettings settings;
 
-    if (m_parentName == "m_tabPacs")
+    if ( m_parentName == "m_tabPacs" )
     { 
-        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
         {
-            settings.setStudyPacsListColumnWidth(i,m_studyTreeView->columnWidth(i)); 
+            settings.setStudyPacsListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
         }    
     }   
    
-    if (m_parentName == "m_tabCache")
+    if ( m_parentName == "m_tabCache" )
     {
-        for (int i = 0;i < m_studyTreeView->columnCount();i++)
+        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
         {
-           settings.setStudyCacheListColumnWidth(i,m_studyTreeView->columnWidth(i)); 
+           settings.setStudyCacheListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
         }      
     }
-
 }
 
-/** Destructor de la classe
-  */
 QStudyTreeWidget::~QStudyTreeWidget()
 {
 }
