@@ -43,11 +43,12 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent)
     
     m_studyTreeView->setRootIsDecorated(false);
     
-    //la columna de UID i AETITLE les fem invisibles, i li indiquem que no poden canvia de tamany automàticament
+    //la columna de UID AETITLE,type, Image Number i Protocol Name les fem invisibles
     m_studyTreeView->setColumnHidden(10,true);
     m_studyTreeView->setColumnHidden(11,true);
     m_studyTreeView->setColumnHidden(12,true);
     m_studyTreeView->setColumnHidden(13,true);
+    m_studyTreeView->setColumnHidden( 14 , true );
     
     m_openFolder = QIcon(":/images/folderopen.png");
     m_closeFolder = QIcon(":/images/folderclose.png");
@@ -226,6 +227,7 @@ void QStudyTreeWidget::insertSeries(Series *serie)
     text.truncate(0);
     text.setNum(serie->getImageNumber(),10);
     item->setText(13,text);
+    item->setText( 14 , serie->getProtocolName().c_str() );
     
     emit(addSeries(serie));//afegim serie al SeriesIconView
     
@@ -437,6 +439,7 @@ void QStudyTreeWidget::setSeriesToSeriesListWidget(QTreeWidgetItem *item)
             serie.setSeriesModality(child->text(4).toAscii().constData());
             serie.setSeriesNumber(child->text(0).remove(tr("Series")).toAscii().constData());  
             serie.setStudyUID(getSelectedStudyUID().toAscii().constData());
+            serie.setProtocolName( child->text( 14 ).toAscii().constData() );
             emit(addSeries(&serie));
         }
     }  
