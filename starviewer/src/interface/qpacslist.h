@@ -20,21 +20,37 @@ class Status;
 @author marc
 */
 
-class QPacsList : public QWidget, private /*Ui::*/QPacsListBase{
+class QPacsList : public QWidget, private /*Ui::*/QPacsListBase
+{
 Q_OBJECT
 public:
+
+    ///Constructor de la classe
     QPacsList(QWidget *parent = 0 );
-    Status getSelectedPacs(PacsList *);
+    
+    /** Retorna els pacs seleccionats per l'usuari per a realitzar la cerca
+     * @param pacslist , parametre de sortida que conte la llista de pacs seleccionats 
+     * @return estat de l'operació
+     */
+    Status getSelectedPacs(PacsList * pacsList);
+    
+    ///Destructor de la classe
     ~QPacsList();
    
 public slots :
     
+    /// Carrega al ListView la Llista de Pacs disponibles
     void refresh();   
    
 private :
     
+    /// Aquesta accio selecciona en el PacsListView els Pacs que tenen a 'S' a Default. Son els pacs que per defecte l'usuari te que es realitzin les cerques
     void setSelectedDefaultPacs();
-    void databaseError(Status *);
+    
+    /** Tracta els errors que s'han produït durant els accessos a la base dades
+     *  @param state Estat de l'acció retrieve
+      */
+    void databaseError(Status *state);
 
 };
 
