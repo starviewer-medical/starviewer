@@ -38,6 +38,7 @@
 #include "queueoperationlist.h"
 #include "operation.h"
 #include "cachelayer.h"
+#include "pacslistdb.h"
 
 namespace udg {
 

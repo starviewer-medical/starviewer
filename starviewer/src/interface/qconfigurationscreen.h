@@ -8,75 +8,131 @@
 #define UDGQCONFIGURATIONSCREEN_H
 
 #include "ui_qconfigurationscreenbase.h"
-#include "pacslistdb.h"
+
 using namespace Ui; // \TODO això s'hauria d'evitar!
 
 namespace udg {
 
+class Status;
 /** Interfície que permet configurar els paràmetres del pacs i de la caché
 @author marc
 */
-class QConfigurationScreen : public QDialog , private QConfigurationScreenBase{
+class QConfigurationScreen : public QDialog , private QConfigurationScreenBase
+{
 Q_OBJECT
 
-
 public:
+    
+    /// Constructor de la classe
     QConfigurationScreen( QWidget *parent = 0 );
 
+    ///Destructor de classe
     ~QConfigurationScreen();
      
 public slots :
 
-    /** Configuració de la llista de Pacs */
+    /// Neteja els line edit de la pantalla
     void clear();
+    
+    /// Slot que dona d'alta el PACS a la la base de dades
     void addPacs();
-    void selectedPacs( QTreeWidgetItem * item, int);
+    
+    /// Slot que s'activa quant seleccionem un Pacs del PacsListView, emplena les caixes de texts amb les dades del Pacs
+    void selectedPacs( QTreeWidgetItem * item , int );
+    
+    /// Slot que updata les dades d'un pacs
     void updatePacs();
+    
+    /// Slot que esborra el pacs seleccionat
     void deletePacs();
+    
+    /// Fa un echo a un pacs seleccionat per saber si aquest està viu
     void test();
     
-    /*Configuració de la caché*/
+    /// Mostra un QDialog per especificar on es troba la base de dades de la caché
     void examinateDataBaseRoot();
+    
+    /// Mostra un QDialog per especificar on s'han de guardar les imatges descarregades
     void examinateCacheImagePath();
 
+    /// Esborra tota la caché
     void deleteStudies();
+    
+    /// Compacta la base de dades de la cache
     void compactCache();
     
-    /*Configuració dels paràmetres del Pacs */
+    /// Aplica els canvis de la configuració
     void applyChanges();
+    
+    /// Guarda els canvis a la configuració dels paràmetres del PACS
     void acceptChanges();
+    
+    /// Tanca la pantalla de configuració, i desprecia els canvis
     void cancelChanges();
 
+    /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons ap
     void configurationChanged( const QString& );
     
+    /// Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
     void cacheImagePathEditingFinish();
        
 signals :
-
+    
+    ///signal que s'emet quan hi ha algun canvi a la llista de PACS, per a que la QPacsList es pugui refrescar
     void pacsListChanged();
+    
+    ///signal que s'emet quan la cache ha estat netejada cap a QueryScreen, pq netegi el QStudyTreeView que mostra els estudis de la cache
     void cacheCleared();
 
 private :
 
-    int m_PacsID;
-    bool m_configurationChanged;
+    int m_PacsID; ///<ID del pacs seleccionat
+    bool m_configurationChanged; ///<Indica si la configuració ha canviat
 
-    void connectSignalAndSlots();
+    ///crea els connects dels signals i slots
+    void createConnections();
+    
+    /** Comprovem que els paràmetres dels PACS siguin correctes. 
+     *  1r Que el AETitle no estigui en blanc,
+     *  2n Que l'adreça del PACS no estigui en blanc,
+     *  3r Que el Port del Pacs sigui entre 0 i 65535
+     *  4t Que l'institució no estigui buida 
+     * @return bool, retorna cert si tots els parametres del pacs son correctes
+     */
     bool validatePacsParameters();
+    
+    /** Valida que els canvis de la configuració siguin correctes
+     *  Port local entre 0 i 65535
+     *  Numero màxim de connexions 25
+     *  Path de la base de dades i directori dicom's existeix
+     *  @return indica si els canvis son correctes
+     */
     bool validateChanges();
+    
+    /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
     void fillPacsListView();
 
-    void databaseError(Status *);
+    /** Tracta els errors que s'han produït a la base de dades en general
+     *           @param state  Estat del mètode
+     */
+    void databaseError(Status * state);
     
+    /// Carrega les dades de configuració de la cache
     void loadCacheDefaults();
+    
+    /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
+    
+    /// calcula les dades del pool
     void loadCachePoolDefaults();
     
+    /// Guarda els canvis a la configuració dels paràmetres del PACS
     void applyChangesPacs();
+    
+    ///  Aplica els canvis fets a la configuració de la cache
     void applyChangesCache();
-
 };
 
-};
+};// end namespace udg
 
 #endif
