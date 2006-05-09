@@ -10,12 +10,17 @@
 // #include "qseriesiconviewbase.h"
 #include "ui_qserieslistwidgetbase.h"
 #include <QWidget>
-#include "series.h"
+
 namespace udg {
 
 /** Aquesta classe és un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sèries d'un estudi. 
 @author marc
 */
+
+class Series;
+
+const int scaledSeriesSizeX = 100;///< Mida de la imatge escalada a l'eix x
+const int scaledSeriesSizeY = 100;///< Mida de la imatge escalada a l'eix y
 
 class QSeriesListWidget : public QWidget , private Ui::QSeriesListWidgetBase
 {

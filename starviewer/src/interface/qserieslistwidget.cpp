@@ -9,6 +9,7 @@
 #include <QString>
 #include <QIcon>
 
+#include "series.h"
 #include "starviewersettings.h"
 
 namespace udg {
@@ -20,8 +21,8 @@ QSeriesListWidget::QSeriesListWidget(QWidget *parent )
     QSize size;    
 
     //Definim la mida de la imatge que mostrem
-    size.setHeight( 100 );
-    size.setWidth( 100 );
+    size.setHeight( scaledSeriesSizeY );
+    size.setWidth( scaledSeriesSizeX );
     m_seriesListWidget->setIconSize( size );
     
     createConnections();
@@ -68,12 +69,7 @@ void QSeriesListWidget::insertSeries( Series *serie )
         pathImage.append( serie->getSeriesUID().c_str() );
         pathImage.append( "/scaled.jpeg" );
     }
-    else
-    {
-        // \TODO lleig!!!!!!!!!!!!!!!!!
-        pathImage = "/home/marc/starviewer-pacs/bin/images3.jpeg" ;
-    }
-    
+
     QIcon   icon(pathImage);
 
     item->setText(text);
