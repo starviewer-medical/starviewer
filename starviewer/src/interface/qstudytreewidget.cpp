@@ -30,6 +30,7 @@
 #include "pacslistdb.h"
 #include "starviewersettings.h"
 #include "studylist.h"
+#include "status.h"
 
 namespace udg {
 
