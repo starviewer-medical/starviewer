@@ -3,7 +3,6 @@
 
 #include <list>
 #include <string>
-#include <iostream>
 
 /** This class sets and gets series fields
  */

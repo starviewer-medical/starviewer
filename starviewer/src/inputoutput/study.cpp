@@ -1,6 +1,4 @@
 #include "study.h"
-#include <iostream>
-#include <list>
 
 namespace udg{
 
