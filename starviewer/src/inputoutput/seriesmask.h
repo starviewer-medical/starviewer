@@ -26,16 +26,14 @@
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h> //provide the OFcondition structure and his members
-#include "status.h"
-
-#ifndef CONST
-#include "const.h"     
-#endif
 
 /** Aquesta classe construiex la màscara de cerca per a les sèries
    *Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri. 
  */
 namespace udg{
+
+class Status;
+
 class SeriesMask
 {
 

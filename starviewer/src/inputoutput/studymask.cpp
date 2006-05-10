@@ -1,4 +1,5 @@
 #include "studymask.h"
+#include "status.h"
 
 namespace udg{
 

@@ -26,15 +26,14 @@
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h> //provide the OFcondition structure and his members
-#include "status.h"
 #include <string>
-#ifndef CONST
-#include "const.h"     
-#endif
 
 /** Aquesta classe permet construir una màscara per a cercar imatges 
  */
 namespace udg{
+
+class Status;
+
 class ImageMask{
 
 public:

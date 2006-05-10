@@ -9,6 +9,7 @@
 #include "imagedicominformation.h"
 #include "series.h"
 #include "starviewersettings.h"
+#include "status.h"
 
 namespace udg {
 

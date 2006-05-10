@@ -6,6 +6,7 @@
  ***************************************************************************/ 
 #include "pacslistdb.h"
 #include <string>
+#include "status.h"
 
 namespace udg {
 
