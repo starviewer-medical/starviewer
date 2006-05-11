@@ -24,6 +24,9 @@
     <file>images/openDicom.png</file>
     <file>images/pacsQuery.png</file>
     <file>images/info.png</file>
+    <file>images/axial.png</file>
+    <file>images/sagital.png</file>
+    <file>images/coronal.png</file>
     <file>cache/database.sql</file>
 </qresource>
 </RCC>
