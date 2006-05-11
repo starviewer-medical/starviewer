@@ -3,9 +3,9 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/main
 # L'objectiu és una aplicaci??:  ../../bin/starviewer
 
+RESOURCES = main.qrc 
 TARGETDEPS += ../interface/libinterface.a \
               ../repositories/librepositories.a \
-              ../core/libcore.a \
               ../inputoutput/libinputoutput.a \
               ../filters/libfilters.a \
               ../colour/libcolour.a \
@@ -15,10 +15,9 @@ TARGETDEPS += ../interface/libinterface.a \
               ../segmentation/libsegmentation.a \
               ../../src/inputoutput/libinputoutput.a 
 LIBS += ../../src/inputoutput/libinputoutput.a \
-        -llog4cpp \
+        -llog4cxx \
         ../interface/libinterface.a \
         ../repositories/librepositories.a \
-        ../core/libcore.a \
         ../inputoutput/libinputoutput.a \
         ../filters/libfilters.a \
         ../colour/libcolour.a \
@@ -26,7 +25,8 @@ LIBS += ../../src/inputoutput/libinputoutput.a \
         ../visualization/libvisualization.a \
         ../registration/libregistration.a \
         ../segmentation/libsegmentation.a 
-INCLUDEPATH += ../main \
+INCLUDEPATH += ../../src/inputoutput \
+               ../main \
                ../filters \
                ../interface \
                ../colour \
@@ -35,7 +35,6 @@ INCLUDEPATH += ../main \
                ../visualization \
                ../registration \
                ../segmentation \
-               ../core \
                ../repositories 
 MOC_DIR = ../../tmp/moc 
 UI_DIR = ../../tmp/ui 
@@ -45,9 +44,6 @@ CONFIG += debug \
           warn_on 
 TEMPLATE = app 
 SOURCES += main.cpp 
-RESOURCES = main.qrc
- 
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
-
