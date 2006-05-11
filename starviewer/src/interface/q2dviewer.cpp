@@ -226,8 +226,8 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("P").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("A").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("A").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("P").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
@@ -262,13 +262,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(0) == "P"  )
@@ -280,13 +280,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(0) == "S"  )
@@ -298,13 +298,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(0) == "I"  )
@@ -316,13 +316,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[0]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
             }
         }
     
@@ -330,36 +330,36 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         {
             if( m_lastView == Axial )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(1) == "R"  )
         {
             if( m_lastView == Axial )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(1) == "A"  )
@@ -371,13 +371,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(1) == "P"  )
@@ -407,13 +407,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
         }
         else if( list.at(1) == "I"  )
@@ -425,13 +425,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             }
             else if( m_lastView == Sagittal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
             else if( m_lastView == Coronal )
             {
-                m_patientOrientationTextActor[1]->SetInput( tr("No se").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("No se").toAscii() );
+                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
+                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
             }
         }
     }
