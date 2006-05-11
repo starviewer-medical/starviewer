@@ -6,12 +6,7 @@
 SUBDIRS += tools \
            repositories \
            core \
-           registration \
-           segmentation \
-           visualization \
            inputoutput \
-           colour \
-           filters \
            interface \
            main 
 TEMPLATE = subdirs 
@@ -23,20 +18,10 @@ MOC_DIR = ../tmp/moc
 LIBS += inputoutput/libinputoutput.a \
         repositories/librepositories.a \
         core/core.a \
-        filters/libfilters.a \
-        colour/libcolour.a \
         tools/libtools.a \
-        interface/libinterface.a \
-        visualization/libvisualization.a \
-        registration/libregistration.a \
-        segmentation/libsegmentation.a 
+        interface/libinterface.a
 TARGETDEPS += ../src/main/../bin/starviewer \
-              ../src/filters/libfilters.a \
-              ../src/colour/libcolour.a \
               ../src/tools/libtools.a \
-              ../src/visualization/libvisualization.a \
-              ../src/registration/libregistration.a \
-              ../src/segmentation/libsegmentation.a \
               ../src/interface/libinterface.a \
               ../src/inputoutput/libinputoutput.a \
               ../src/core/core.a \

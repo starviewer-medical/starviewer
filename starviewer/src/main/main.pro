@@ -7,34 +7,19 @@ RESOURCES = main.qrc
 TARGETDEPS += ../interface/libinterface.a \
               ../repositories/librepositories.a \
               ../inputoutput/libinputoutput.a \
-              ../filters/libfilters.a \
-              ../colour/libcolour.a \
               ../tools/libtools.a \
-              ../visualization/libvisualization.a \
-              ../registration/libregistration.a \
-              ../segmentation/libsegmentation.a \
               ../../src/inputoutput/libinputoutput.a 
 LIBS += ../../src/inputoutput/libinputoutput.a \
         -llog4cxx \
         ../interface/libinterface.a \
         ../repositories/librepositories.a \
         ../inputoutput/libinputoutput.a \
-        ../filters/libfilters.a \
-        ../colour/libcolour.a \
-        ../tools/libtools.a \
-        ../visualization/libvisualization.a \
-        ../registration/libregistration.a \
-        ../segmentation/libsegmentation.a 
+        ../tools/libtools.a
 INCLUDEPATH += ../../src/inputoutput \
                ../main \
-               ../filters \
                ../interface \
-               ../colour \
                ../tools \
                ../inputoutput \
-               ../visualization \
-               ../registration \
-               ../segmentation \
                ../repositories 
 MOC_DIR = ../../tmp/moc 
 UI_DIR = ../../tmp/ui 

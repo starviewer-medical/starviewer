@@ -83,18 +83,15 @@ SOURCES += director.cpp \
            qdefaultviewerextensioncreator.cpp \
            qcustomwindowleveldialog.cpp 
 TARGETDEPS += ../repositories/librepositories.a \
-../registration/libregistration.a \
 ../tools/libtools.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../../src/inputoutput/libinputoutput.a \
 ../repositories/librepositories.a \
 ../inputoutput/libinputoutput.a \
-../registration/libregistration.a \
 ../tools/libtools.a
 INCLUDEPATH += ../../src/inputoutput \
 ../tools \
 ../inputoutput \
-../registration \
 ../repositories
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui
