@@ -13,8 +13,6 @@
 
 namespace udg {
 
-/** Constructor de la classe
-  */
 CachePool::CachePool()
 {
    m_DBConnect = DatabaseConnection::getDatabaseConnection();
@@ -24,10 +22,6 @@ CachePool::~CachePool()
 {
 }
 
-/**  Construeix l'estat en que ha finaltizat l'operació sol·licitada
-  *            @param  [in] Estat de sqlite
-  *            @return retorna l'estat de l'operació
-  */
 Status CachePool::constructState(int numState)
 {
 //A www.sqlite.org/c_interface.html hi ha al codificacio dels estats que retorna el sqlite
@@ -35,27 +29,24 @@ Status CachePool::constructState(int numState)
 
     switch(numState)
     {//aqui tractem els errors que ens poden afectar de manera més directe, i els quals l'usuari pot intentar solucionbar                         
-        case SQLITE_OK :        state.setStatus("Normal",true,0);
+        case SQLITE_OK :        state.setStatus( "Normal" , true , 0 );
                                 break;
-        case SQLITE_ERROR :     state.setStatus("Database missing",false,2001);
+        case SQLITE_ERROR :     state.setStatus( "Database missing" , false , 2001 );
                                 break;
-        case SQLITE_CORRUPT :   state.setStatus("Database corrupted",false,2011);
+        case SQLITE_CORRUPT :   state.setStatus( "Database corrupted" , false , 2011 );
                                 break;
-        case SQLITE_CONSTRAINT: state.setStatus("Constraint Violation",false,2019);
+        case SQLITE_CONSTRAINT: state.setStatus( "Constraint Violation" , false , 2019 );
                                 break;
       //aquests errors en principi no es poden donar, pq l'aplicació no altera cap element de l'estructura, si es produeix algun
       //Error d'aquests en principi serà perquè la bdd està corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
       //a la pàgina de www.sqlite.org podrem saber de quin error es tracta.
-        default :               state.setStatus("SQLITE internal error",false,2000+numState); 
+        default :               state.setStatus( "SQLITE internal error" , false , 2000 + numState ); 
                                 break;
     }
    return state;
 }
 
-/** Esborra un estudi de l'spool de l'aplicació
-  *         @param path absolut de l'estudi
-  */
-void CachePool::removeStudy(std::string absPathStudy)
+void CachePool::removeStudy( std::string absPathStudy )
 {
     QStringList seriesDirList;
     QDir studyDir,seriesDir;
@@ -67,12 +58,12 @@ void CachePool::removeStudy(std::string absPathStudy)
     //busquem els directori de totes les series que conté l'estudi
     for ( QStringList::Iterator it = seriesDirList.begin(); it != seriesDirList.end(); ++it ) 
     {
-        if (*it != "." && *it != "..")
+        if ( *it != "." && *it != ".." )
         {
-            absSeriesPath.truncate(0);
+            absSeriesPath.truncate( 0 );
             absSeriesPath.append( absPathStudy.c_str() );          
-            absSeriesPath.append(*it);
-            absSeriesPath.append("/");
+            absSeriesPath.append( *it );
+            absSeriesPath.append( "/" );
             removeSeries( absSeriesPath.toStdString() );
             seriesDir.rmdir( absSeriesPath ); //esborra el directori de la sèrie
         }
@@ -81,10 +72,7 @@ void CachePool::removeStudy(std::string absPathStudy)
     
 }
 
-/** Esborra una serie de l'spool
-  *        @param path absolut de la sèrie
-  */
-void CachePool::removeSeries(std::string absPathSeries)
+void CachePool::removeSeries( std::string absPathSeries )
 {
     QStringList imageFilesList;
     QDir seriesDir,imageFile;
@@ -95,23 +83,19 @@ void CachePool::removeSeries(std::string absPathSeries)
         
     for ( QStringList::Iterator it = imageFilesList.begin(); it != imageFilesList.end(); ++it ) 
     {
-        if (*it != "." && *it != "..")
+        if ( *it != "." && *it != ".." )
         {
-            absPathImage.truncate(0);
+            absPathImage.truncate( 0 );
             absPathImage.append( absPathSeries.c_str() );
-            absPathImage.append("/");
-            absPathImage.append(*it);
+            absPathImage.append( "/" );
+            absPathImage.append( *it );
             imageFile.remove( absPathImage );
         }           
     }
     
 }
 
-/** Esborra una imatge del disc dur
-  *         @param Path de la imatge a esborrar
-  *         @return estat del mètode
-  */
-bool CachePool::removeImage(std::string absPath)
+bool CachePool::removeImage( std::string absPath )
 {
     QDir file;
     
@@ -119,11 +103,7 @@ bool CachePool::removeImage(std::string absPath)
         
 }
 
-/** Esborra un directori
-  *         @param Path del directori
-  *         @return estat del mètode
-  */
-bool CachePool::removeDir(std::string absDirPath)
+bool CachePool::removeDir( std::string absDirPath )
 {
     QDir dir;
     
@@ -134,39 +114,30 @@ bool CachePool::removeDir(std::string absDirPath)
 //S'HAN DE FER AMB UN TRANSACCIO SINO ENS PODRIEM TROBAR QUE INSERISSIM UNA IMATGE L'APLICACIO ES TANQUES I NO S'HAGUES ACTUALITAT L'ESPAI OCUPAT
 //SI TOT S'ENGLOBA DINS UNA TRANSACCIO NO HI HAURA AQUEST PROBLEMA
  
-/** Actualitza l'espai utilitzat de caché, amb la quantitat de bytes passats per paràmetre
-  *         @param mida a actualitzar
-  *         @return retorna estat del mètode
-  */
-Status CachePool::updatePoolSpace(int size)
+Status CachePool::updatePoolSpace( int size )
 {
 
     int i;
     Status state;
     std::string sql;
     
-    if (!m_DBConnect->connected())
+    if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
+        return constructState( 50 );
     }
     
-    sql.insert(0,"Update Pool Set Space = Space + %i ");
-    sql.append("where Param = 'USED'");
+    sql.insert( 0 , "Update Pool Set Space = Space + %i " );
+    sql.append( "where Param = 'USED'" );
     
     m_DBConnect->getLock();
-    i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0
-                                ,size);
+    i = sqlite_exec_printf( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 , size );
     m_DBConnect->releaseLock();
                                 
-    state = constructState(i);
+    state = constructState( i );
     return state;
 }
 
-/** actualitza l'espai màxim disponible per a la caché
-  *        @param [in] Espai en Mb que pot ocupar la caché
-  *        @return estat el mètode
-  */
-Status CachePool::updatePoolTotalSize(int space)
+Status CachePool::updatePoolTotalSize( int space )
 {
     int i;
     Status state;
@@ -177,127 +148,111 @@ Status CachePool::updatePoolTotalSize(int space)
     //sqlite no permet en un update entra valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem
     //un string i hi afegim 6 zeros per passar Mb a bytes
     
-    if (!m_DBConnect->connected())
+    if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
+        return constructState( 50 );
     }
     
     spaceBytes = space;
     spaceBytes = spaceBytes * 1024 * 1024; //convertim els Mb en bytes, ja que es guarden en bytes les unitats a la base de dades
     
-    sprintf(size,"%Li",spaceBytes); //convertim l'espai en bytes a string %Li significa long integer
-    sql.insert(0,"Update Pool Set Space = ");//convertim l'espai en bytes
-    sql.append(size);
-    sql.append(" where Param = 'POOLSIZE'");
+    sprintf( size , "%Li" , spaceBytes ); //convertim l'espai en bytes a string %Li significa long integer
+    sql.insert( 0 , "Update Pool Set Space = " );//convertim l'espai en bytes
+    sql.append( size );
+    sql.append( " where Param = 'POOLSIZE'" );
     
     m_DBConnect->getLock();
-    i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0,space);
+    i = sqlite_exec_printf( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 , space );
     m_DBConnect->releaseLock();
                                 
-    state = constructState(i);
+    state = constructState( i );
 
     return state;
 }
 
-/** actualitza l'espai utiltizat de la cache a 0 bytes
-  *        @return estat el mètode
-  */
 Status CachePool::resetPoolSpace()
 {
     int i;
     Status state;
     std::string sql;
     
-    
-    if (!m_DBConnect->connected())
+    if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
+        return constructState( 50 );
     }
     
-    sql.insert(0,"Update Pool Set Space = 0 ");
-    sql.append("where Param = 'USED'");
+    sql.insert( 0 , "Update Pool Set Space = 0 " );
+    sql.append( "where Param = 'USED'" );
     
     m_DBConnect->getLock();
-    i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str(),0,0,0);
+    i = sqlite_exec_printf( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
-    state = constructState(i);
+    state = constructState( i );
 
     return state;
 }
 
-/** Retorna l'espai que estem utilitzan de l'spool en Mb
-  *         @param space [in/out] Espai ocupat del Pool (la caché) actualment en Mb
-  *         @return estat el mètode
-  */
-Status CachePool::getPoolUsedSpace(unsigned int &space)
+Status CachePool::getPoolUsedSpace( unsigned int &space )
 {
     Status state;
     std::string sql;
-    char **resposta = NULL,**error = NULL;
-    int col,rows,i;
+    char **resposta = NULL , **error = NULL;
+    int col , rows , i;
     
-    if (!m_DBConnect->connected())
+    if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
+        return constructState( 50 );
     }    
     
-    sql.insert(0,"select round(Space/(1024*1024)) from Pool "); //convertim de bytes a Mb
-    sql.append("where Param = 'USED'");
+    sql.insert( 0 , "select round(Space/(1024*1024)) from Pool " ); //convertim de bytes a Mb
+    sql.append( "where Param = 'USED'" );
     
-    m_DBConnect->getLock();
-    i = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error);
+    m_DBConnect->getLock(); 
+    i = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
     m_DBConnect->releaseLock();
                                 
-    state = constructState(i);
+    state = constructState( i );
 
-    if (!state.good()) return state;
+    if ( !state.good() ) return state;
     
     i = 1;//ignorem les capçaleres
    
-    space = atoi(resposta[i]);
+    space = atoi( resposta[i] );
     
     return state;
 }
 
-/** Retorna l'espai màxim que pot ocupar el Pool(Tamany de la caché)
-  *         @param space [in/out] Espai assignat en Mb que pot ocupar el Pool (la caché)
-  *         @return estat el mètode
-  */
-Status CachePool::getPoolTotalSize(unsigned int &space)
+Status CachePool::getPoolTotalSize( unsigned int &space )
 {
     Status state;
     std::string sql;
-    char **resposta = NULL,**error = NULL;
-    int col,rows,i;
+    char **resposta = NULL , **error = NULL;
+    int col , rows ,i;
     
-    if (!m_DBConnect->connected())
+    if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
+        return constructState( 50 );
     }
     
-    sql.insert(0,"select round(Space/(1024*1024)) from Pool "); //convertim de bytes a Mb
-    sql.append("where Param = 'POOLSIZE'");
+    sql.insert( 0 , "select round(Space/(1024*1024)) from Pool " ); //convertim de bytes a Mb
+    sql.append( "where Param = 'POOLSIZE'" );
     
     m_DBConnect->getLock();
-    i = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error);
+    i = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
     m_DBConnect->releaseLock();
                                 
-    state = constructState(i);
+    state = constructState( i );
 
-    if (!state.good()) return state;
+    if ( !state.good() ) return state;
     
-    i=1;//ignorem les capçaleres
+    i = 1;//ignorem les capçaleres
    
-    space = atoi(resposta[i]);
+    space = atoi( resposta[i] );
     
     return state;
 }
 
-/** Calcula l'espai lliure disponible a la Pool
-  *         @param space  Espai lliure en Mb de la Pool (la caché)
-  *         @return estat el mètode
-  */
 Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
 {
     Status state;

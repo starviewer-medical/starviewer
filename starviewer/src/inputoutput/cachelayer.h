@@ -12,8 +12,8 @@
 
 namespace udg {
 
-/**     Aquesta classe afegeix un nivell d'abstracio sobre la classe CachePacs, permetent realitzar operacions sobre la cache, i utilitzar elements de la interfcie
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+/** Aquesta classe afegeix un nivell d'abstracio sobre la classe CachePacs, permetent realitzar operacions sobre la cache, i utilitzar elements de la interfcie
+ * @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class CacheLayer : public QObject
 {
@@ -21,12 +21,11 @@ class CacheLayer : public QObject
 
 Q_OBJECT
 public:
-    /** Constructor de la classe
-      */
-    CacheLayer(QObject *parent = 0);
     
-    /** Neteja la cache de l'aplicacio, Mostra un QProgressDialog amb el progress de la neteja
-      */
+    /// Constructor de la classe
+    CacheLayer( QObject *parent = 0 );
+    
+    /// Neteja la cache de l'aplicacio, Mostra un QProgressDialog amb el progress de la neteja
     Status clearCache();
     
     /** Esborra els estudis vells que superen el temps maxim que poden estar a la cache especificats per a l'usuari
@@ -38,10 +37,9 @@ public:
       *         @param nombre de Mb d'estudis vells a esborrar
       *         @return estat de l'operacio
       */
-    Status deleteOldStudies(int MbytesToErase);
+    Status deleteOldStudies( int MbytesToErase );
     
-    /**Destructor de la classe
-      */
+    ///Destructor de la classe
     ~CacheLayer();
 
 };

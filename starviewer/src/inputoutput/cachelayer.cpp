@@ -16,8 +16,8 @@
 
 namespace udg {
 
-CacheLayer::CacheLayer(QObject *parent)
- : QObject(parent)
+CacheLayer::CacheLayer( QObject *parent )
+ : QObject( parent )
 {
 }
 
@@ -34,8 +34,8 @@ Status CacheLayer::clearCache()
     
     pool.getPoolUsedSpace( usedSpaceInit );
     QProgressDialog *progress;
-    progress = new QProgressDialog(tr("Clearing cache..."),"", 0, usedSpaceInit);
-    progress->setMinimumDuration(0);
+    progress = new QProgressDialog( tr( "Clearing cache..." ) , "" , 0 , usedSpaceInit );
+    progress->setMinimumDuration( 0 );
 
     state = localCache->queryStudy( studyMask , studyList );
     
@@ -54,7 +54,7 @@ Status CacheLayer::clearCache()
     
     progress->close();
     
-    if (!state.good())
+    if ( !state.good() )
     {
         return state;
     }
@@ -80,12 +80,12 @@ Status CacheLayer::deleteOldStudies()
     lastTimeViewedMinimum = today.addDays( - settings.getMaximumDaysNotViewedStudy().toInt( NULL , 10 ) );
     
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre
-    state = localCache->queryOldStudies( lastTimeViewedMinimum.toString("yyyyMMdd").toAscii().constData() , studyList );
+    state = localCache->queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ).toAscii().constData() , studyList );
     studyList.firstStudy();
     
     QProgressDialog *progress;
-    progress = new QProgressDialog(tr("Clearing old studies..."), "" , 0 , studyList.count() );
-    progress->setMinimumDuration(0);
+    progress = new QProgressDialog( tr( "Clearing old studies..." ) , "" , 0 , studyList.count() );
+    progress->setMinimumDuration( 0 );
     
     while ( state.good() && !studyList.end() )
     {
@@ -106,8 +106,7 @@ Status CacheLayer::deleteOldStudies()
     else return state.setStatus( CORRECT );
 }
 
-
-Status CacheLayer::deleteOldStudies(int MbytesToErase)
+Status CacheLayer::deleteOldStudies( int MbytesToErase )
 {
     QDate maxDate;
     StarviewerSettings settings;
@@ -150,6 +149,5 @@ Status CacheLayer::deleteOldStudies(int MbytesToErase)
 CacheLayer::~CacheLayer()
 {
 }
-
 
 }
