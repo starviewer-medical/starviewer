@@ -3,6 +3,8 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/tools
 # L'objectiu és una biblioteca:  
 
+LIBS += -llog4cxx 
+INCLUDEPATH += /usr/include/log4cxx/ 
 MOC_DIR = ../../tmp/moc 
 UI_DIR = ../../tmp/ui 
 OBJECTS_DIR = ../../tmp/obj 
@@ -17,12 +19,13 @@ HEADERS += itkImageToVTKImageFilter.h \
            itkVTKImageToImageFilter.h \
            mathtools.h \
            itkQtAdaptor.h \
-           distance.h \
            harddiskinformation.h \
-           point.h 
+           distance.h \
+           point.h \
+           logging.h 
 SOURCES += mathtools.cpp \
-           distance.cpp \
            harddiskinformation.cpp \
+           distance.cpp \
            point.cpp 
 include(../itk.inc)
 include(../vtk.inc)
