@@ -66,6 +66,8 @@ ExtensionHandler::~ExtensionHandler()
 void ExtensionHandler::createConnections()
 {
     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
+    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
+    
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
 }
@@ -122,7 +124,6 @@ void ExtensionHandler::request( int who )
 // Aquest és el "nou" MPR
             mprExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
             m_mainApp->m_extensionWorkspace->addApplication( mprExtension , tr("2D MPR") );
-
         }
         else
         {
@@ -294,7 +295,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
 //         }
 //     }
     this->onVolumeLoaded( m_volumeID );
-
+    m_mainApp->onVolumeLoaded( m_volumeID );
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
 }
 

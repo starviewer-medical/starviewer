@@ -146,6 +146,7 @@ void QApplicationMainWindow::createActions()
     m_mpr2DAction->setText( tr("2D &MPR Viewer") );
     m_mpr2DAction->setShortcut( tr("Ctrl+M") );
     m_mpr2DAction->setStatusTip( tr("Open the 2D MPR Application Viewer") );
+    m_mpr2DAction->setEnabled( false );
     signalMapper->setMapping( m_mpr2DAction , 2 );
     signalMapper->setMapping( m_mpr2DAction , "2D MPR" );
     connect( m_mpr2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
@@ -154,6 +155,7 @@ void QApplicationMainWindow::createActions()
     m_mpr3DAction->setText( tr("3D M&PR Viewer") );
     m_mpr3DAction->setShortcut( tr("Ctrl+P") );
     m_mpr3DAction->setStatusTip( tr("Open the 3D MPR Application Viewer") );
+    m_mpr3DAction->setEnabled( false );
     signalMapper->setMapping( m_mpr3DAction , 3 );
     signalMapper->setMapping( m_mpr3DAction , "3D MPR" );
     connect( m_mpr3DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
@@ -162,6 +164,7 @@ void QApplicationMainWindow::createActions()
     m_mpr3D2DAction->setText( tr("3D-2D MP&R Viewer") );
     m_mpr3D2DAction->setShortcut( tr("Ctrl+R") );
     m_mpr3D2DAction->setStatusTip( tr("Open the 3D-2D MPR Application Viewer") );
+    m_mpr3D2DAction->setEnabled( false );
     signalMapper->setMapping( m_mpr3D2DAction , 4 );
     signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
     connect( m_mpr3D2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
@@ -170,6 +173,7 @@ void QApplicationMainWindow::createActions()
     m_defaultViewerAction->setText( tr("&Default Viewer") );
     m_defaultViewerAction->setShortcut( tr("Ctrl+D") );
     m_defaultViewerAction->setStatusTip( tr("Open the Default Viewer Application") );
+    m_defaultViewerAction->setEnabled( false );
     signalMapper->setMapping( m_defaultViewerAction , 8 );
     signalMapper->setMapping( m_defaultViewerAction , "Default Viewer Extension" );
     connect( m_defaultViewerAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
@@ -426,6 +430,14 @@ void QApplicationMainWindow::showProgress( int value )
     {
         m_progressDialog->setValue( value );
     }
+}
+
+void QApplicationMainWindow::onVolumeLoaded( Identifier id )
+{
+    m_defaultViewerAction->setEnabled( true );
+    m_mpr2DAction->setEnabled( true );
+    m_mpr3DAction->setEnabled( true );
+    m_mpr3D2DAction->setEnabled( true );
 }
 
 void QApplicationMainWindow::newFile()

@@ -60,6 +60,9 @@ public slots:
     /// mostra el progrés d'un procés (ara mateix només serà obrir fitxers) amb un diàleg
     void showProgress( int value );
 
+    /// Fa les tasques que cal quan s'ha carregat un volum
+    void onVolumeLoaded( Identifier id );
+    
 protected:
     ///Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
     void closeEvent(QCloseEvent *event);
@@ -127,7 +130,7 @@ private:
 //     QMenu *m_exportFilesMenu;
 //     QMenu *m_recentFilesMenu;
     
-    /// Barres d'eines
+    /// Barres d'eines 
     QToolBar *m_extensionsToolBar;
     QToolBar *m_fileToolBar;
     
