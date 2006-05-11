@@ -10,6 +10,10 @@
 #include "qcustomwindowleveldialog.h"
 #include <QAction>
 #include <QToolBar>
+#include <QMessageBox>
+// VTK
+#include <vtkCamera.h>
+#include <vtkRenderer.h>
 
 namespace udg {
 
@@ -87,6 +91,8 @@ void QDefaultViewerExtension::createConnections()
     connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
 
     connect( m_synchroCheckBox , SIGNAL( clicked(bool) ) , this , SLOT( synchronizeSlices(bool) ) );
+
+    connect( m_chooseSeriePushButton , SIGNAL( clicked() ) , this , SLOT( chooseNewSerie() ) );
 }
 
 void QDefaultViewerExtension::setInput( Volume *input )
@@ -98,6 +104,14 @@ void QDefaultViewerExtension::setInput( Volume *input )
     m_2DView2_2->setInput( m_mainVolume );
     changeViewToAxial();
     
+}
+
+void QDefaultViewerExtension::setSecondInput( Volume *input )
+{
+    m_secondaryVolume = input;
+    // \TODO ara ho fem "a saco" però s'hauria de millorar
+    m_2DView2_2->setInput( m_secondaryVolume );
+    changeViewToAxial();
 }
 
 void QDefaultViewerExtension::populateToolBar( QToolBar *toolbar )
@@ -122,6 +136,11 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_slider->setValue( m_2DView->getSlice() );
         m_viewText->setText( tr("XY : Axial") );
         m_2DView->setViewToAxial();
+        vtkCamera *axialCam = m_2DView->getRenderer() ? m_2DView->getRenderer()->GetActiveCamera() : NULL;
+        if ( axialCam )
+        {
+            axialCam->SetViewUp(0,-1,0);
+        }
         m_2DView->render();
     break;
 
@@ -132,6 +151,11 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_slider2_1->setValue( m_2DView2_1->getSlice() );
         m_viewText2_1->setText( tr("XY : Axial") );
         m_2DView2_1->setViewToAxial();
+        vtkCamera *axialCam2 = m_2DView2_1->getRenderer() ? m_2DView2_1->getRenderer()->GetActiveCamera() : NULL;
+        if ( axialCam2 )
+        {
+            axialCam2->SetViewUp(0,-1,0);
+        }
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
@@ -140,6 +164,11 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("XY : Axial") );
         m_2DView2_2->setViewToAxial();
+        axialCam2 = m_2DView2_2->getRenderer() ? m_2DView2_2->getRenderer()->GetActiveCamera() : NULL;
+        if ( axialCam2 )
+        {
+            axialCam2->SetViewUp(0,-1,0);
+        }
         m_2DView2_2->render();
     break;
     
@@ -349,6 +378,11 @@ void QDefaultViewerExtension::synchronizeSlices( bool ok )
         disconnect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
         disconnect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
     }
+}
+
+void QDefaultViewerExtension::chooseNewSerie()
+{
+    QMessageBox::information( 0 ,"EIO" , "Provandu" );
 }
 
 }
