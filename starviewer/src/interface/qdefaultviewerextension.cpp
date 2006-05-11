@@ -85,6 +85,8 @@ void QDefaultViewerExtension::createConnections()
 
     connect( m_pageSelectorSpinBox , SIGNAL( valueChanged(int) ) , m_stackedWidget , SLOT( setCurrentIndex(int) ) );
     connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
+
+    connect( m_synchroCheckBox , SIGNAL( clicked(bool) ) , this , SLOT( synchronizeSlices(bool) ) );
 }
 
 void QDefaultViewerExtension::setInput( Volume *input )
@@ -332,6 +334,20 @@ void QDefaultViewerExtension::pageChange( int index )
 
     case 1:
     break;
+    }
+}
+
+void QDefaultViewerExtension::synchronizeSlices( bool ok )
+{
+    if( ok )
+    {
+        connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
+        connect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
+    }
+    else
+    {
+        disconnect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
+        disconnect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
     }
 }
 
