@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "extensionworkspace.h"
 
-#include <QPushButton>
+#include <QToolButton>
 
 #include <iostream>
 
@@ -19,7 +19,8 @@ ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, const char *name)
     m_closeTabButton = 0;
     
     this->setTabPosition( QTabWidget::South );
-    m_closeTabButton = new QPushButton( tr("X") , this );
+    m_closeTabButton = new QToolButton( this );
+    m_closeTabButton->setIcon( QIcon(":/images/fileclose.png") );
     this->setCornerWidget( m_closeTabButton , Qt::BottomRightCorner );
     createConnections();
     m_closeTabButton->hide();
@@ -41,7 +42,8 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
         if( m_closeTabButton == 0 )
         {
             std::cout << "Creant per primer cop el botó de tancar :: " <<  std::endl;
-            m_closeTabButton = new QPushButton( tr("X") , this );
+            m_closeTabButton = new QToolButton( this );
+            m_closeTabButton->setIcon( QIcon(":/images/fileclose.png") );
         }
         m_closeTabButton->show();
     }

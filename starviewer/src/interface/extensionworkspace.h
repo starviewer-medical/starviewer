@@ -11,7 +11,7 @@
 
 // Forward declarations
 class QAction;
-class QPushButton;
+class QToolButton;
 
 namespace udg {
 
@@ -44,7 +44,7 @@ public slots:
 private:
     
     /// Botó per tancar la pestanya actual
-    QPushButton *m_closeTabButton;
+    QToolButton *m_closeTabButton;
 
     /// Acció associada al tancar la pestanya
     QAction *m_closeTabAction;
