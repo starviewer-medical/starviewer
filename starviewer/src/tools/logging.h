@@ -5,6 +5,9 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#ifndef _LOGGING_
+#define _LOGGING_
+ 
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
@@ -17,20 +20,13 @@
 
 #define DEBUG
 
-#ifdef DEBUG
-// definim el logger de nivell development
-log4cxx::LoggerPtr m_developmentLogger( log4cxx::Logger::getLogger("development") );
-#endif
-
-// definim el logger de nivell release
-log4cxx::LoggerPtr m_releaseLogger( log4cxx::Logger::getLogger("release") );
-
-// log4cxx::BasicConfigurator::configure(); \
+// log4cxx::BasicConfigurator::configure();
 /// Macro per a inicialitzar els logger
 #define LOGGER_INIT \
 { \
-    std::string file = "log4cxx.properties"; \
+   std::string file = "log4cxx.properties"; \
    log4cxx::PropertyConfigurator::configure( file ); \
+   INFO_LOG("Inicialització de l'aplicació") \
 }
 
 // if ( fileExist( filename ) )
@@ -46,20 +42,21 @@ log4cxx::LoggerPtr m_releaseLogger( log4cxx::Logger::getLogger("release") );
 
 /// Macro per a missatges de debug
 #ifdef DEBUG 
-#define DEBUG_LOG( msg ) LOG4CXX_DEBUG( m_developmentLogger , msg )
+#define DEBUG_LOG( msg ) LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development") , msg )
 #else
 #define DEBUG_LOG( msg )
 #endif
 
 /// Macro per a missatges d'informació general
-#define INFO_LOG( msg ) LOG4CXX_INFO( m_releaseLogger , msg )
+#define INFO_LOG( msg ) LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , msg )
 
 /// Macro per a missatges de warning
-#define WARN_LOG( msg ) LOG4CXX_WARN( m_releaseLogger , msg )
+#define WARN_LOG( msg ) LOG4CXX_WARN( log4cxx::Logger::getLogger("info.release") , msg )
 
 /// Macro per a missatges d'error
-#define ERROR_LOG( msg ) LOG4CXX_ERROR( m_releaseLogger , msg )
+#define ERROR_LOG( msg ) LOG4CXX_ERROR( log4cxx::Logger::getLogger("errors.release") , msg )
 
 /// Macro per a missatges d'error fatals/crítics
-#define FATAL_LOG( msg ) LOG4CXX_FATAL( m_releaseLogger , msg ); 
+#define FATAL_LOG( msg ) LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release") , msg );
 
+#endif

@@ -10,14 +10,16 @@
 #include <QSplashScreen>
 #include <QTranslator>
 //#include <qtextcodec.h>
-
+#include "logging.h"
+  
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
-        
+      
     app.setOrganizationName("GGG");
     app.setOrganizationDomain("ima.udg.es");
-    app.setApplicationName("Starviewer"); 
+    app.setApplicationName("Starviewer");
+    LOGGER_INIT
     // translation
     
     QString qmPath = qApp->applicationDirPath() + "/../src/interface";
