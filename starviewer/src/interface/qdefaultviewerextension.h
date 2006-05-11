@@ -34,6 +34,9 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
+    /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
+    void setSecondInput( Volume *input );
+
     /// Obtenim la ToolBar d'eines de l'extensió \TODO 'pujar' al pare com a mètode comú a Extensions?
     QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
 
@@ -61,6 +64,9 @@ private:
     /// El volum principal
     Volume *m_mainVolume;
 
+    /// Membre temporal
+    Volume *m_secondaryVolume;
+    
     /// La ToolBar de les eines de l'extensió \TODO 'pujar' al pare com a membre comú a Extensions? [hauria de ser protected]
     QToolBar *m_toolsToolBar;
 
@@ -87,6 +93,9 @@ private slots:
 
     /// sincronitza les llesques de les sèries que es visualitzen
     void synchronizeSlices( bool ok );
+
+    /// ens permet escollir una nova sèrie per a comparar
+    void chooseNewSerie();
 };
 
 } // end namespace udg
