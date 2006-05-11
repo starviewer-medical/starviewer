@@ -220,8 +220,12 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     
     if( list.size() > 1 )
     {
-        DEBUG_LOG( qPrintable( QString("Orientació:: ") + orientation ) );
-        DEBUG_LOG( qPrintable( QString("Orientació invertida:: ") +revertedOrientation ) );
+        std::ostringstream message;
+        message << "Orientació:: " << qPrintable( orientation );
+        DEBUG_LOG( message.str() );
+        message.str("");
+        message << "Orientació invertida:: " << qPrintable( revertedOrientation );
+        DEBUG_LOG( message.str() );
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
@@ -912,7 +916,7 @@ void Q2DViewer::updateView()
     }
     else
     {
-        std::cerr << "intentant canviar la vista sense donar input abans..." << std::endl;
+        WARN_LOG( "Trying to change view without given input before..." )
     }
 }
 

@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "output.h"
+#include "logging.h"
 
 // include's ITK
 #include <itkNumericSeriesFileNames.h>
@@ -36,7 +37,7 @@ bool Output::saveFile( const char* filename )
     
     if( !m_volumeData )
     {
-        std::cerr << "There's no dataset to write" << std::endl;
+        WARN_LOG( "There's no dataset to write" )
         ok = false;
         return ok;
     }
@@ -49,7 +50,9 @@ bool Output::saveFile( const char* filename )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::cerr << "Exception in file writer " << std::endl;
+        std::ostringstream errorMessage;
+        errorMessage << "Excepció escrivint l'arxiu [" << filename << "]" ;
+        WARN_LOG( errorMessage.str() )
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
@@ -71,7 +74,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     
     if( !m_volumeData )
     {
-        std::cerr << "There's no dataset to write" << std::endl;
+        WARN_LOG( "There's no dataset to write" );
         ok = false;
         return ok;
     }
@@ -110,7 +113,9 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::cerr << "Exception in file series writer " << std::endl;
+        std::ostringstream errorMessage;
+        errorMessage << "Excepció escrivint l'arxiu [" << filename << "]" ;
+        WARN_LOG( errorMessage.str() )
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);

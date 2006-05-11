@@ -18,6 +18,7 @@
 
 #include "volume.h"
 #include "volumesourceinformation.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -58,9 +59,9 @@ Volume::VtkImageTypePointer Volume::getVtkData(  )
         {
             m_itkToVtkFilter->Update();
         }
-        catch(itk::ExceptionObject & excep)
+        catch( itk::ExceptionObject & excep )
         {
-            std::cerr << "Excepció en el filtre itkToVtk :: Volume::getVtkData " << std::endl;
+            WARN_LOG( "Excepció en el filtre itkToVtk :: Volume::getVtkData " )
             std::cerr << excep << std::endl;
           
         }
@@ -90,7 +91,7 @@ void Volume::setData( VtkImageTypePointer vtkImage )
     }
     catch(itk::ExceptionObject & excep)
     {
-        std::cerr << "Excepció en el filtre vtkToItk :: Volume::setData " << std::endl;
+        WARN_LOG( "Excepció en el filtre vtkToItk :: Volume::setData " )
         std::cerr << excep << std::endl;    
     }
 }

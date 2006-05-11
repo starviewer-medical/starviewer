@@ -6,6 +6,8 @@
  ***************************************************************************/
 
 #include "mathtools.h"
+#include "logging.h"
+#include <sstream> // per printar missatges
 #include <vtkMath.h>
 #include <vtkPlane.h>
 namespace udg{
@@ -15,7 +17,7 @@ namespace udg{
 double MathTools::logTwo(const double x, const bool zero)
 {
     if (x < 0) 
-        std::cerr << "MathTools::logTwo >> Log of negative number" << std::endl;
+        WARN_LOG( "MathTools::logTwo >> Log of negative number" )
 
     if (zero) 
     {
@@ -24,7 +26,7 @@ double MathTools::logTwo(const double x, const bool zero)
     else 
     { 
         if (x == 0) 
-            std::cerr << "MathTools::logTwo >> Log of zero" << std::endl;
+            WARN_LOG( "MathTools::logTwo >> Log of zero" )
             
         return double( log(double(x)) ) * M_LOG2E; 
     }
@@ -34,7 +36,11 @@ double MathTools::logTwo(const double x, const bool zero)
 double MathTools::binaryEntropy(const double p)
 {
     if ( p < 0 || p > 1 )
-        std::cerr << "MathTools::binaryEntropy >> Value [" << p << "] out of range (0..1) -> " << std::endl;
+    {   
+        std::ostringstream message;
+        message << "MathTools::binaryEntropy >> Value [" << p << "] out of range (0..1) -> ";
+        WARN_LOG( message.str() )
+    }
 
     return - p * MathTools::logTwo(p) - (1 - p) * MathTools::logTwo(1 - p) ;
 }
@@ -48,7 +54,7 @@ double MathTools::divReal( const double dividend,  const double divisor, const b
     else 
     {
         if (divisor == 0) 
-            std::cerr <<"MathTools::divReal >> Division by zero" << std::endl;
+            WARN_LOG( "MathTools::divReal >> Division by zero" )
         return dividend / divisor; 
     }
 }
@@ -146,7 +152,9 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
         // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
         if( tt == VTK_DOUBLE_MAX )
         {
-            std::cerr << "No hi ha hagut intersecció! Valor coord paramètrica :" << tt << std::endl;
+            std::ostringstream message;
+            message << "No hi ha hagut intersecció! Valor coord paramètrica: " << tt;
+            DEBUG_LOG( message.str() )
             return -1;
         }
         else

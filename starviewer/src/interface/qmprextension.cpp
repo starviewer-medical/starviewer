@@ -10,7 +10,7 @@
 #include "mathtools.h" // per càlculs d'interseccions
 #include "q3dviewer.h"
 #include "qcustomwindowleveldialog.h"
-
+#include "logging.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -461,7 +461,7 @@ void QMPRExtension::initOrientation()
     m_volume->setData( vtkImageData::SafeDownCast( m_coronalReslice->GetInput()) );
     if ( ! m_volume->getVtkData() )
     {
-        std::cerr << "SetInput() before setting plane orientation." << std::endl;
+        WARN_LOG( "SetInput() before setting plane orientation." );
         return;
     }
 
@@ -949,7 +949,9 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     if (realExtentX > (VTK_INT_MAX >> 1) || realExtentX < 1)
     {
 //         vtkErrorMacro(<<"Invalid X extent.  Perhaps the input data is empty?");
-        std::cerr << "Invalid X extent. [" << realExtentX << "] Perhaps the input data is empty?" << std::endl;
+        std::ostringstream message;
+        message << "Invalid X extent. [" << realExtentX << "] Perhaps the input data is empty?";
+        WARN_LOG( message.str() )
         extentX = 0;
     }
     else
@@ -967,7 +969,9 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     int extentY;
     if (realExtentY > (VTK_INT_MAX >> 1) || realExtentY < 1)
     {
-        std::cerr << "Invalid Y extent. [" << realExtentY << "] Perhaps the input data is empty?" << std::endl;    
+        std::ostringstream message;
+        message << "Invalid Y extent. [" << realExtentY << "] Perhaps the input data is empty?";
+        WARN_LOG( message.str() )
         extentY = 0;
     }
     else

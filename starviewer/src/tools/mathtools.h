@@ -12,7 +12,6 @@
     Aquest arxiu recull tot tipus de funcions matemàtiques útils
 */
 #include <cmath>
-#include <iostream> // cerr
  
 namespace udg{
 

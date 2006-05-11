@@ -4,23 +4,27 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
- 
 #ifndef UDGINPUT_CPP
 #define UDGINPUT_CPP
 
 #include "input.h"
 #include "volumesourceinformation.h"
+#include "logging.h"
 #include <iostream>
+#include <sstream> // per printar missatges
 //ITK
 #include <itkSpatialOrientation.h>
 #include <itkOrientImageFilter.h>
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
+#include <itkChangeInformationImageFilter.h>
 // QT
 #include <QStringList>
 // VTK
 #include <vtkMath.h> // pel cross
 #include <vtkImageChangeInformation.h> // per portar a l'origen
+#include <vtkImageReslice.h>
+#include <vtkMatrix4x4.h>
 
 namespace udg {
 
@@ -64,13 +68,17 @@ bool Input::openFile( const char * fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::cerr << "Exception in file reader " << std::endl;
+        std::ostringstream errorMessage;
+        errorMessage << "Excepció llegint l'arxiu [" << fileName << "]" ;
+        WARN_LOG( errorMessage.str() )
         std::cerr << e << std::endl;
+
         ok = false;
         emit progress(-1); // això podria indicar excepció
     }
     if ( ok )
     {
+
         m_volumeData->setData( m_reader->GetOutput() );
 
         vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
@@ -105,7 +113,9 @@ bool Input::readSeries( const char *dirPath )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::cerr << "Exception in series file reader " << std::endl;
+        std::ostringstream errorMessage;
+        errorMessage << "Excepció llegint els arxius del directori [" << dirPath << "]" ;
+        WARN_LOG( errorMessage.str() )
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1); // això podria indicar excepció
@@ -137,8 +147,9 @@ void Input::printTag( std::string tag , std::string name )
     }
     else
     {
-        std::cerr << "Tag " << tag << " ( " << name << " ) ";
-        std::cerr << " not found in the DICOM header" << std::endl;
+        std::ostringstream message;
+        message << "Tag" << tag << "(" << name << ")" << " not found in the DICOM header";
+        WARN_LOG( message.str() );
     }
 }
 
