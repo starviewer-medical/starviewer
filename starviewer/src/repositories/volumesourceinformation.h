@@ -58,6 +58,9 @@ public:
         return m_patientOrientationString;
     };
 
+    /// Retorna l'string d'orientació del pacient invertit, és a dir L <=> R , P <=> A , S <=> I
+    QString getRevertedPatientOrientationString();
+    
     /// Assigna/Retorna nom del pacient
     void setPatientName( const char * patientName )
     {

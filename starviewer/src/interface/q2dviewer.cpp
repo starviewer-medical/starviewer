@@ -8,6 +8,7 @@
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumesourceinformation.h"
+#include "logging.h"
 
 // include's qt
 #include <QResizeEvent>
@@ -212,227 +213,36 @@ void Q2DViewer::createAnnotations()
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
-    // \TODO sembla que la informació del pacient es perd d'un volum a un altre,,, perquè??? és possible que es degui al reslice... perquè nomès passem les dades itk/vtk en sí i prou...
+    QString revertedOrientation = m_mainVolume->getVolumeSourceInformation()->getRevertedPatientOrientationString() ;
+    
     QStringList list = orientation.split(",");
-    // \TODO tenir en compte que o hi ha 3 parells de lletres o res. Tenir en compte en els if's que a part de les lletre sper separat podríem tenir parells del tipu LP,I,.. si les orientacions tenen "refinaments"
+    QStringList revertedList = revertedOrientation.split(",");
+    
     if( list.size() > 1 )
     {
-        if( list.at(0) == "L" )
+        DEBUG_LOG( qPrintable( QString("Orientació:: ") + orientation ) );
+        DEBUG_LOG( qPrintable( QString("Orientació invertida:: ") +revertedOrientation ) );
+        // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
+        if( m_lastView == Axial )
         {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("R").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("L").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("A").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("P").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("R").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("L").toAscii() );
-            }
+            m_patientOrientationTextActor[0]->SetInput( qPrintable( revertedList.at(0) ) );
+            m_patientOrientationTextActor[2]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[1]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[3]->SetInput( qPrintable( revertedList.at(1) ) );
         }
-        else if( list.at(0) == "R"  )
+        else if( m_lastView == Sagittal )
         {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("L").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("R").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("A").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("P").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("L").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("R").toAscii() );
-            }
+            m_patientOrientationTextActor[0]->SetInput( qPrintable( revertedList.at(1) ) );
+            m_patientOrientationTextActor[2]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[1]->SetInput( qPrintable( revertedList.at(2) ) );
+            m_patientOrientationTextActor[3]->SetInput( qPrintable( list.at(2) ) );
         }
-        else if( list.at(0) == "A"  )
+        else if( m_lastView == Coronal )
         {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("A").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("P").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(0) == "P"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("P").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("A").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(0) == "S"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("S").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("I").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(0) == "I"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("I").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("S").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[0]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[2]->SetInput( tr("??").toAscii() );
-            }
-        }
-    
-        if( list.at(1) == "L" )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(1) == "R"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(1) == "A"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("A").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("P").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(1) == "P"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("P").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("A").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("I").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("S").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("I").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("S").toAscii() );
-            }
-        }
-        else if( list.at(1) == "S"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("S").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("I").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-        }
-        else if( list.at(1) == "I"  )
-        {
-            if( m_lastView == Axial )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("I").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("S").toAscii() );
-            }
-            else if( m_lastView == Sagittal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
-            else if( m_lastView == Coronal )
-            {
-                m_patientOrientationTextActor[1]->SetInput( tr("??").toAscii() );
-                m_patientOrientationTextActor[3]->SetInput( tr("??").toAscii() );
-            }
+            m_patientOrientationTextActor[0]->SetInput( qPrintable( revertedList.at(0) ) );
+            m_patientOrientationTextActor[2]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[1]->SetInput( qPrintable( revertedList.at(2) ) );
+            m_patientOrientationTextActor[3]->SetInput( qPrintable( list.at(2) ) );
         }
     }
     else

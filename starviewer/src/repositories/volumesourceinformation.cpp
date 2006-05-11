@@ -18,4 +18,29 @@ VolumeSourceInformation::~VolumeSourceInformation()
 {
 }
 
+QString VolumeSourceInformation::getRevertedPatientOrientationString()
+{
+    int i = 0;
+    QString reverted;
+    while( i < m_patientOrientationString.size() )
+    {
+        if( m_patientOrientationString.at( i ) == 'L' )
+            reverted += "R";
+        else if( m_patientOrientationString.at( i ) == 'R' )
+            reverted += "L";
+        else if( m_patientOrientationString.at( i ) == 'A' )
+            reverted += "P";
+        else if( m_patientOrientationString.at( i ) == 'P' )
+            reverted += "A";
+        else if( m_patientOrientationString.at( i ) == 'S' )
+            reverted += "I";
+        else if( m_patientOrientationString.at( i ) == 'I' )
+            reverted += "S";
+        else
+            reverted += m_patientOrientationString.at( i );
+        i++;
+    }
+    return reverted;
+}
+
 };  // end namespace udg 
