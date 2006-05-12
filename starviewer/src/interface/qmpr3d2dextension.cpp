@@ -83,19 +83,18 @@ void QMPR3D2DExtension::update2DViews()
 {
     m_axial2DView->setInput( m_mpr3DView->getAxialResliceOutput() );
     m_axial2DView->getRenderer()->Render();
-    m_axial2DView->getInteractor()->Render();
-
     
     m_sagital2DView->setInput( m_mpr3DView->getSagitalResliceOutput() );
     m_sagital2DView->getRenderer()->Render();
-    m_sagital2DView->getInteractor()->Render();
     
     m_coronal2DView->setInput( m_mpr3DView->getCoronalResliceOutput() );
     m_coronal2DView->getRenderer()->Render();
-    m_coronal2DView->getInteractor()->Render();
     
     this->updateActors();
-    
+
+    m_axial2DView->getInteractor()->Render();
+    m_sagital2DView->getInteractor()->Render();
+    m_coronal2DView->getInteractor()->Render();
 }
 
 void QMPR3D2DExtension::createActors()
