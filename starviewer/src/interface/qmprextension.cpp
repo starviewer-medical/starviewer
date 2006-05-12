@@ -28,11 +28,9 @@
 #include <vtkAxisActor2D.h>
 #include <vtkActor2D.h>
 #include <vtkProperty2D.h>
-#include <vtkCellPicker.h>
 #include <vtkPlaneSource.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageReslice.h>
-#include <vtkMatrix4x4.h>
 #include <vtkTransform.h>
 #include <vtkCamera.h>
 #include <vtkLine.h>
@@ -118,7 +116,7 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
     connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
-//     connect( m_saveSelectedImagesPushButton , SIGNAL( clicked() ) , this , SLOT( saveImages() ) );
+
     connect( m_mipPushButton , SIGNAL( clicked() ) , this , SLOT( showMIP() ) );
 
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
@@ -323,32 +321,21 @@ void QMPRExtension::releasePushAxialViewAxisActor( double x , double y )
 void QMPRExtension::detectPushSagitalViewAxisActor( double x , double y )
 {
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
+    // únicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
     double point[3] = { x , y , 0.0 };
     double *r1 , *r2;
-    double distanceToCoronal , distanceToAxial;
+    double distanceToAxial;
     
-    r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
-    r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
-
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
     distanceToAxial = vtkLine::DistanceToLine( point , r1 , r2 );
     
     // donem una "tolerància" mínima 
-    if( distanceToCoronal < 50.0 || distanceToAxial < 50.0 )
+    if(  distanceToAxial < 50.0 )
     {
-        if( distanceToCoronal < distanceToAxial )
-        {
-            m_pickedActorReslice = m_coronalReslice;
-            m_pickedActorPlaneSource = m_coronalPlaneSource;
-            connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
-        }
-        else
-        {
-            m_pickedActorPlaneSource = m_axialPlaneSource;
-            connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxialActor( double , double ) ) );
-        }
+        m_pickedActorPlaneSource = m_axialPlaneSource;
+        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxialActor( double , double ) ) );
+
         m_sagital2DView->setManipulate( true );
         m_initialPickX = x;
         m_initialPickY = y;
