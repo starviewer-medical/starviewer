@@ -13,7 +13,6 @@
 #include <vtkProperty.h>
 #include <vtkImagePlaneWidget.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkImageData.h>
 #include <vtkEventQtSlotConnect.h>
 #include <QVTKWidget.h>
 #include <vtkCamera.h>
@@ -80,6 +79,10 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     m_sagitalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
     m_coronalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
 
+    
+    m_axialPlaneVisible = true;
+    m_sagitalPlaneVisible = true;
+    m_coronalPlaneVisible = true;
     
     m_outlineActor = vtkActor::New();
 
@@ -238,6 +241,7 @@ void Q3DMPRViewer::resetViewToAxial()
 
 void Q3DMPRViewer::setSagitalVisibility(bool enable)
 {
+    m_sagitalPlaneVisible = enable;
     if (enable)
         m_sagitalImagePlaneWidget->On();
     else
@@ -246,6 +250,7 @@ void Q3DMPRViewer::setSagitalVisibility(bool enable)
 
 void Q3DMPRViewer::setCoronalVisibility(bool enable)
 {
+    m_coronalPlaneVisible = enable;
     if (enable)
         m_coronalImagePlaneWidget->On();
     else
@@ -254,6 +259,7 @@ void Q3DMPRViewer::setCoronalVisibility(bool enable)
 
 void Q3DMPRViewer::setAxialVisibility(bool enable)
 {
+    m_axialPlaneVisible = enable;
     if (enable)
         m_axialImagePlaneWidget->On();
     else
@@ -274,10 +280,13 @@ void Q3DMPRViewer::resetPlanes()
         
         m_coronalImagePlaneWidget->SetPlaneOrientationToYAxes();
         m_coronalImagePlaneWidget->SetSliceIndex(size[1]/2);
-        
-        m_axialImagePlaneWidget->On();
-        m_sagitalImagePlaneWidget->On();
-        m_coronalImagePlaneWidget->On();
+
+        if( m_axialPlaneVisible )
+            m_axialImagePlaneWidget->On();
+        if( m_sagitalPlaneVisible )
+            m_sagitalImagePlaneWidget->On();
+        if( m_coronalPlaneVisible )
+            m_coronalImagePlaneWidget->On();
     }
 }
 

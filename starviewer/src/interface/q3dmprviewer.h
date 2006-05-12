@@ -130,6 +130,9 @@ private:
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow , m_defaultLevel;
+
+    /// control de visibilitat dels plans
+    bool m_axialPlaneVisible, m_sagitalPlaneVisible , m_coronalPlaneVisible;
 };
 
 };  //  end  namespace udg 
