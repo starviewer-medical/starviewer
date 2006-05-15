@@ -10,7 +10,6 @@
 #include "qcustomwindowleveldialog.h"
 #include <QAction>
 #include <QToolBar>
-#include <QMessageBox>
 // VTK
 #include <vtkCamera.h>
 #include <vtkRenderer.h>
@@ -382,7 +381,7 @@ void QDefaultViewerExtension::synchronizeSlices( bool ok )
 
 void QDefaultViewerExtension::chooseNewSerie()
 {
-    QMessageBox::information( 0 ,"EIO" , "Provandu" );
+    emit newSerie();
 }
 
 }

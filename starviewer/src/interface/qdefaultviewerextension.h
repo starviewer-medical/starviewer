@@ -34,9 +34,6 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
-    /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
-    void setSecondInput( Volume *input );
-
     /// Obtenim la ToolBar d'eines de l'extensió \TODO 'pujar' al pare com a mètode comú a Extensions?
     QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
 
@@ -51,6 +48,10 @@ public slots:
 
     /// Permuta l'ajustament de window level
     void changeDefaultWindowLevel( int which );
+
+    /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
+    void setSecondInput( Volume *input );
+    
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
@@ -96,6 +97,10 @@ private slots:
 
     /// ens permet escollir una nova sèrie per a comparar
     void chooseNewSerie();
+
+signals:
+    /// Aquest senyal s'emetrà quan es vulgui canviar de sèrie per comparar
+    void newSerie();
 };
 
 } // end namespace udg

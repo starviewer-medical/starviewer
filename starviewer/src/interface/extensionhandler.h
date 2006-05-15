@@ -20,7 +20,7 @@ class VolumeRepository;
 class Input;
 class Output;
 class QApplicationMainWindow;
-
+class Volume;
 class ExtensionFactory;
 
 class QMPRExtensionCreator;
@@ -67,6 +67,9 @@ public slots:
 
     /// [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
     void viewStudy( StudyVolum study );
+
+    /// [apanyo] Slot que afegeix al 2n visor una sèrie escollida per comparar-> és un mètode moooolt temporal. 
+    void viewStudyToCompare( StudyVolum study );
 
 private:
     /// Punter a l'aplicació principal
@@ -118,6 +121,13 @@ private slots:
 
     /// Slot que es crida quan hem canviat d'una extensió a una altre
     void extensionChanged( int index );
+
+    /// [temporal] Obre una sèrie per comparar en el visor per defecte
+    void openSerieToCompare();
+
+signals:
+    /// Emet un senyal amb el segon volum per comparar
+    void secondInput( Volume* );
 };
 
 };  //  end  namespace udg 

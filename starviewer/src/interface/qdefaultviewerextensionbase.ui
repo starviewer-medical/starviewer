@@ -142,7 +142,7 @@
      <item>
       <widget class="QPushButton" name="m_chooseSeriePushButton" >
        <property name="text" >
-        <string>Choose Serie</string>
+        <string>Choose Serie To Compare</string>
        </property>
       </widget>
      </item>
