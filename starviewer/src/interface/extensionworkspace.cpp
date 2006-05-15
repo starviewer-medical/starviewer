@@ -7,8 +7,9 @@
 #include "extensionworkspace.h"
 
 #include <QToolButton>
-
 #include <iostream>
+#include <sstream> // per printar missatges
+#include "logging.h"
 
 namespace udg {
 
@@ -47,7 +48,9 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
         }
         m_closeTabButton->show();
     }
-    std::cout << "Adding application" << std::endl;        
+    std::ostringstream message;
+    message << "Afegint extensió: " << qPrintable( caption );
+    INFO_LOG( message.str() )
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
     m_lastIndex = this->currentIndex();
