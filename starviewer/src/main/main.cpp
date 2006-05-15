@@ -9,22 +9,29 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include <QTranslator>
+#include <QSettings>
+#include <QLocale>
 //#include <qtextcodec.h>
 #include "logging.h"
   
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
-      
+    
     app.setOrganizationName("GGG");
     app.setOrganizationDomain("ima.udg.es");
     app.setApplicationName("Starviewer");
     LOGGER_INIT
     // translation
+
+    QSettings settings("GGG", "StarViewer-Core");
+    settings.beginGroup("StarViewer-Language");
+    QString m_defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
+    settings.endGroup();
     
     QString qmPath = qApp->applicationDirPath() + "/../src/interface";
     QTranslator m_applicationTranslator;
-    m_applicationTranslator.load( "interface_ca_ES"/* + m_locales[ languageID ]*/, qmPath );
+    m_applicationTranslator.load( m_defaultLocale , qmPath );
     app.installTranslator( &m_applicationTranslator );
     
     QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
