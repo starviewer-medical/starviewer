@@ -21,7 +21,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName("GGG");
     app.setOrganizationDomain("ima.udg.es");
     app.setApplicationName("Starviewer");
-    LOGGER_INIT
+     
+    QString logFile = qApp->applicationDirPath() + "/log4cxx.properties";
+    LOGGER_INIT( logFile.toStdString() )
     // translation
 
     QSettings settings("GGG", "StarViewer-Core");
@@ -38,7 +40,7 @@ int main(int argc, char *argv[])
     splash->show();
     
     udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
-
+    INFO_LOG("Creada finestra principal")
     mainWin->show();
     
     QObject::connect( &app, SIGNAL( lastWindowClosed() ),

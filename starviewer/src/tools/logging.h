@@ -19,14 +19,13 @@
 #include <log4cxx/helpers/exception.h>
 
 #define DEBUG
-
+// std::string file = "log4cxx.properties"; \
 // log4cxx::BasicConfigurator::configure();
 /// Macro per a inicialitzar els logger
-#define LOGGER_INIT \
+#define LOGGER_INIT( file ) \
 { \
-   std::string file = "log4cxx.properties"; \
-   log4cxx::PropertyConfigurator::configure( file ); \
-   INFO_LOG("Inicialització de l'aplicació") \
+    log4cxx::PropertyConfigurator::configure( file ); \
+    INFO_LOG("Inicialització de l'aplicació") \
 }
 
 // if ( fileExist( filename ) )
