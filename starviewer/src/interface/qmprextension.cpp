@@ -569,40 +569,7 @@ void QMPRExtension::saveImages()
 
 void QMPRExtension::createActors()
 {
-    /*
-    // creem el quadradet que controla les llesques 
-    vtkPoints *polyPoints = vtkPoints::New();
-    polyPoints->SetNumberOfPoints( 4 );
-    polyPoints->InsertPoint( 0 , 0 , 0 , 0 );
-    polyPoints->InsertPoint( 1 , 10 , 0 , 0 );
-    polyPoints->InsertPoint( 2 , 10 , 10 , 0 );
-    polyPoints->InsertPoint( 3 , 0 , 10 , 0 );
-
-    vtkCellArray *lines = vtkCellArray::New();
-    lines->InsertNextCell(5);
-    lines->InsertCellPoint(0);
-    lines->InsertCellPoint(1);
-    lines->InsertCellPoint(2);
-    lines->InsertCellPoint(3);
-    lines->InsertCellPoint(0);   
-     
-    vtkPolyData *quad = vtkPolyData::New();
-    quad->SetPoints( polyPoints );
-    quad->SetLines( lines );
-    
-    vtkPolyDataMapper2D *polyMapper = vtkPolyDataMapper2D::New();
-    polyMapper->SetInput( quad );
-    
-    m_axialSliceActor = vtkActor2D::New();
-    m_axialSliceActor->SetMapper( polyMapper );
-    m_axialSliceActor->GetProperty()->SetColor( 1 , 1 , 0 );
-    
-    m_coronalSagitalSliceActor = vtkActor2D::New();
-    m_coronalSagitalSliceActor->SetMapper( polyMapper );
-    m_coronalSagitalSliceActor->GetProperty()->SetColor( 1 , 1 , 0 );
-    */
-    
-    // creem els axis actors 
+    // creem els axis actors
     m_sagitalOverAxialAxisActor = vtkAxisActor2D::New(); 
     m_coronalOverAxialIntersectionAxis = vtkAxisActor2D::New(); 
     m_coronalOverSagitalIntersectionAxis = vtkAxisActor2D::New(); 
