@@ -299,7 +299,7 @@ void Q3DMPRViewer::setCameraOrientation(int orientation)
         {
         case AXIAL:
             cam->SetFocalPoint(0,0,0);
-            cam->SetPosition(0,0,1); // -1 if medical ?
+            cam->SetPosition(0,0,-1); // -1 if medical ?
             cam->SetViewUp(0,-1,0);
             break;
     

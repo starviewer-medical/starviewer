@@ -32,7 +32,6 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageReslice.h>
 #include <vtkTransform.h>
-#include <vtkCamera.h>
 #include <vtkLine.h>
 
 namespace udg {
@@ -395,12 +394,6 @@ void QMPRExtension::setInput( Volume *input )
               
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem. 
     m_axial2DView->setViewToAxial();
-    vtkCamera *axialCam = m_axial2DView->getRenderer() ? m_axial2DView->getRenderer()->GetActiveCamera() : NULL;
-    if ( axialCam )
-    {
-        axialCam->SetViewUp(0,-1,0);
-    }
-
     // refrescar el controls
     m_axialSpinBox->setMinimum( 0 );
     m_axialSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[2] );    
@@ -507,6 +500,8 @@ void QMPRExtension::initOrientation()
     // perquè quedi centrat hauriem de desplaçar la meitat de l'espai extra per l'origen i pel punt2
     // posem en la llesca central
     m_sagitalPlaneSource->Push( xbounds[0] + 0.5 * ( xbounds[1] - xbounds[0] ) );
+    double axis[3] = { 0 , 1 , 0 };
+    rotateMiddle( 180 , axis , m_sagitalPlaneSource );
     
     //ZX, y-normal : vista coronal
     // ídem anterior
@@ -522,7 +517,9 @@ void QMPRExtension::initOrientation()
     // posem en la llesca central    
     m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) + ybounds[0] );
     // li donem la volta perquè es vegi des del punt de vista correcte
-    double axis[3] = { 0 , 0 , 1 };
+    axis[0] = 0; axis[1] = 0; axis[2] = 1;
+    rotateMiddle( 180 , axis , m_coronalPlaneSource );
+    axis[0] = 0; axis[1] = 1; axis[2] = 0;
     rotateMiddle( 180 , axis , m_coronalPlaneSource );
     updatePlanes();
 }

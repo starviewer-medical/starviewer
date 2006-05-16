@@ -63,6 +63,9 @@ void QMPR3D2DExtension::setInput( Volume *input )
     if ( axialCam )
     {
         axialCam->SetViewUp(0,-1,0);
+        axialCam->SetFocalPoint(0,0,0);
+        axialCam->SetPosition(0,0,-1);
+        m_axial2DView->getRenderer()->ResetCamera();
     }
     
     m_sagital2DView->setInput( m_mpr3DView->getSagitalResliceOutput() );
@@ -75,7 +78,10 @@ void QMPR3D2DExtension::setInput( Volume *input )
     if ( coronalCam )
     {
         coronalCam->SetViewUp(1,0,0);
-    }   
+        coronalCam->SetPosition(0,0,-1);
+        coronalCam->SetFocalPoint(0,0,0);
+        m_coronal2DView->getRenderer()->ResetCamera();
+    }
     updateActors();
 }
 
