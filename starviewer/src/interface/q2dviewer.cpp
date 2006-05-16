@@ -42,6 +42,7 @@
 #include <vtkPNMWriter.h>
 #include <vtkJPEGWriter.h>
 #include <vtkTIFFWriter.h>
+#include <vtkCamera.h>
 // interacció
 #include <vtkInteractorStyleImage.h>
 
@@ -890,14 +891,14 @@ void Q2DViewer::updateView()
     
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
-    //         vtkCamera *cam;
-    //         cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
-    //         if ( cam )
-    //         {
-    //             cam->SetFocalPoint(0,0,0);
-    //             cam->SetPosition(0,-1,0); // 1 if medical ?
-    //             cam->SetViewUp(0,0,1);
-    //         }
+            vtkCamera *cam;
+            cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+            if ( cam )
+            {
+                cam->SetPosition(0,1,0); // 1 if medical ?
+                cam->SetFocalPoint(0,0,0);
+                this->getRenderer()->ResetCamera();
+            }
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_size[0] = m_mainVolume->getDimensions()[0];
             m_size[1] = m_mainVolume->getDimensions()[2];
