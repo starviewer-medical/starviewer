@@ -20,6 +20,7 @@ QDefaultViewerExtension::QDefaultViewerExtension( QWidget *parent )
 {
     setupUi( this );
     m_mainVolume = 0;
+    m_secondaryVolume = 0;
     
     m_customWindowLevelDialog = new QCustomWindowLevelDialog;
     
@@ -138,6 +139,12 @@ void QDefaultViewerExtension::changeViewToAxial()
     break;
 
     case 1:
+        int slices;
+        if( m_secondaryVolume )
+            slices = m_secondaryVolume->getDimensions()[2];
+        else
+            slices = m_mainVolume->getDimensions()[2];
+
         m_spinBox2_1->setMinimum( 0 );
         m_spinBox2_1->setMaximum( m_mainVolume->getDimensions()[2] );
         m_slider2_1->setMaximum(  m_mainVolume->getDimensions()[2] );
@@ -147,8 +154,8 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
-        m_spinBox2_2->setMaximum( m_mainVolume->getDimensions()[2] );
-        m_slider2_2->setMaximum(  m_mainVolume->getDimensions()[2] );
+        m_spinBox2_2->setMaximum( slices );
+        m_slider2_2->setMaximum(  slices );
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("XY : Axial") );
         m_2DView2_2->setViewToAxial();
@@ -175,6 +182,12 @@ void QDefaultViewerExtension::changeViewToSagital()
     break;
 
     case 1:
+        int slices;
+        if( m_secondaryVolume )
+            slices = m_secondaryVolume->getDimensions()[0];
+        else
+            slices = m_mainVolume->getDimensions()[0];
+            
         m_spinBox2_1->setMinimum( 0 );
         m_spinBox2_1->setMaximum( m_mainVolume->getDimensions()[0] );
         m_slider2_1->setMaximum(  m_mainVolume->getDimensions()[0] );
@@ -184,8 +197,8 @@ void QDefaultViewerExtension::changeViewToSagital()
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
-        m_spinBox2_2->setMaximum( m_mainVolume->getDimensions()[0] );
-        m_slider2_2->setMaximum(  m_mainVolume->getDimensions()[0] );
+        m_spinBox2_2->setMaximum( slices );
+        m_slider2_2->setMaximum(  slices );
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("YZ : Sagital") );
         m_2DView2_2->setViewToSagittal();
@@ -210,6 +223,12 @@ void QDefaultViewerExtension::changeViewToCoronal()
     break;
     
     case 1:
+        int slices;
+        if( m_secondaryVolume )
+            slices = m_secondaryVolume->getDimensions()[1];
+        else
+            slices = m_mainVolume->getDimensions()[1];
+            
         m_spinBox2_1->setMinimum( 0 );
         m_spinBox2_1->setMaximum( m_mainVolume->getDimensions()[1] );
         m_slider2_1->setMaximum(  m_mainVolume->getDimensions()[1] );
@@ -219,8 +238,8 @@ void QDefaultViewerExtension::changeViewToCoronal()
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
-        m_spinBox2_2->setMaximum( m_mainVolume->getDimensions()[1] );
-        m_slider2_2->setMaximum(  m_mainVolume->getDimensions()[1] );
+        m_spinBox2_2->setMaximum( slices );
+        m_slider2_2->setMaximum(  slices );
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("XZ : Coronal") );
         m_2DView2_2->setViewToCoronal();
