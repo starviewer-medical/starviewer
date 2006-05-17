@@ -157,10 +157,6 @@ void QueryScreen::connectSignalsAndSlots()
     connect(m_studyTreeWidgetCache, SIGNAL(delStudy()),this, SLOT(deleteStudyCache()));
     connect(m_studyTreeWidgetCache, SIGNAL(view()), this, SLOT(view()));
     
-    
-    //Aquest connect s'utilitzarà perque els threads puguin avisar que han finalitzat de descarregar les imatges   
-    connect(m_retrieveScreen, SIGNAL(studyRetrieved(QString)), this, SLOT(studyRetrieved(QString)));
-    
     //connectem els signes del SeriesIconView StudyListView
     connect(m_studyTreeWidgetCache,SIGNAL(addSeries(Series * )),m_seriesListWidgetCache,SLOT(addSeries(Series *)));
     connect(m_studyTreeWidgetCache,SIGNAL(clearSeriesListWidget()),m_seriesListWidgetCache,SLOT(clearSeriesListWidget()));    
