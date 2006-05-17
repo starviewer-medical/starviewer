@@ -26,6 +26,8 @@ CREATE TABLE Study
   PacsID        INTEGER NOT NULL
 );
 
+CREATE INDEX IND_STUDY ON Study (StuInsUID);
+
 CREATE TABLE Series
 ( SerInsUID	VARCHAR2(64) PRIMARY KEY,
   SerNum	VARCHAR2(12),
@@ -39,7 +41,8 @@ CREATE TABLE Series
   BodParExa 	VARCHAR2(16)
 );
 
-create INDEX IND_SERIES on Series (StuInsUID,SerInsUID);
+CREATE INDEX IND_SERIES1 ON Series (StuInsUID,SerInsUID);
+CREATE INDEX IND_SERIES2 ON Series (SerInsUID);
 
 CREATE TABLE Image
 (
@@ -52,6 +55,10 @@ CREATE TABLE Image
    ImgSiz	NUMBER(10),
    ImgNam	VARCHAR2(255)	
 );
+
+CREATE INDEX IND_IMAGE1 ON Image (StuInsUID,SerInsUID);
+CREATE INDEX IND_IMAGE2 ON Image (SerInsUID);
+
 
 Create table PacsList
 (
