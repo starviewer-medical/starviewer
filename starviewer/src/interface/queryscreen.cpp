@@ -192,6 +192,9 @@ void QueryScreen::connectSignalsAndSlots()
     
     //connect tracta els errors de connexió al PACS
     connect ( &multipleQueryStudy , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT( errorConnectingPacs( int ) ) );
+
+    //connect tracta els errors de connexió al PACS, al descarregar imatges 
+    connect ( &m_qexecuteOperationThread , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT( errorConnectingPacs( int ) ) );
 }
 
 /** Centra la finestra a la pantalla

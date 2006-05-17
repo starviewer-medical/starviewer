@@ -53,6 +53,11 @@ signals :
     
     void notEnoughFreeSpace();
     void errorFreeingCacheSpace();
+
+    /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
+     * @param  pacsID del pacs amb que s'ha produit error
+     */
+    void errorConnectingPacs( int );
     
 private slots :
 

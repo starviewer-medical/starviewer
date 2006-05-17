@@ -122,7 +122,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
     if (!state.good())
     {   
+	
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+		emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
         localCache->delStudy( studyUID.toAscii().constData()) ;        
         return; 
     }
