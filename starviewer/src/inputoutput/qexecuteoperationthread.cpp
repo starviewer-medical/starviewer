@@ -94,7 +94,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     CachePacs *localCache =  CachePacs::getCachePacs();
     ScaleStudy scaleStudy;
     RetrieveImages retrieve;
-    bool enoughSpace;
+    bool enoughSpace , errorRetrieving ;
     
     studyUID = operation.getStudyMask().getStudyUID().c_str();
         
@@ -143,7 +143,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesRetrievedSlot( QString ) ) );
 
     retState = retrieve.moveSCU();
-    if (!retState.good() || sProcessImg->getErrorRetrieving() )
+    pacsConnection.Disconnect();
+
+	errorRetrieving = sProcessImg->getErrorRetrieving();
+    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
+    piSingleton->delProcessImage( studyUID.toAscii().constData() );
+	delete sProcessImg;    
+
+    if (!retState.good() || errorRetrieving )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
          emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         localCache->delStudy( studyUID.toAscii().constData() );
@@ -154,11 +161,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
         emit( setStudyRetrieved( studyUID.toAscii().constData() ) );// descarregat
         localCache->setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
     }
-    
-    pacsConnection.Disconnect();
-
-    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
-    piSingleton->delProcessImage( studyUID.toAscii().constData() );
     
 }
 

@@ -170,10 +170,7 @@ void QRetrieveScreen::setRetrievedFinished(QString studyUID)
 {
     QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems(studyUID,Qt::MatchExactly,9));
     QTreeWidgetItem *item;
-
-    //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
-    setSeriesRetrieved(studyUID);
-    
+   
     if ( !qRetrieveList.isEmpty())
     {
         item = qRetrieveList.at(0);

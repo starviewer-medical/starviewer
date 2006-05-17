@@ -183,6 +183,13 @@ QString StarviewerProcessImage::createImagePath(Image *image)
 
 StarviewerProcessImage::~StarviewerProcessImage()
 {
+	emit( seriesRetrieved( m_studyUID ) );
+
+    if ( m_downloadedSeries == 0 )
+    {
+    	emit( seriesView( m_studyUID ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
+    }
+
 }
 
 
