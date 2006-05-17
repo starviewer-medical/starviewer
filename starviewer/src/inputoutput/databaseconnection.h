@@ -8,9 +8,10 @@
 #define UDGDATABASECONNECTION_H
 #include <sqlite.h>
 #include <semaphore.h>
-#include <string>
 
 namespace udg {
+
+class string;
 
 /** Com tenim més d'una classe que han d'accedir a la mateixa Base de dades, i amb SQLITE només podem tenir una connexió per la BD creem una classe singleton que s'encarregarà de gestionar la connexió a la Base de Dades. De la mateixa manera només un thread alhora pot accedir a la BD, aquesta classe implementarà mètodes per evitar que dos threads es trobin a la vegada dins la BD
 @author marc

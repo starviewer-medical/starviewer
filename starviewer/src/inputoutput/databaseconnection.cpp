@@ -4,10 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
+
+#include <string>
+
 #include "databaseconnection.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <stream.h>
 #include "starviewersettings.h"
 
 namespace udg {

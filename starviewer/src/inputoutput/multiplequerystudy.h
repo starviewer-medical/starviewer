@@ -7,18 +7,17 @@
 #ifndef UDGMULTQUERYSTUDY_H
 #define UDGMULTQUERYSTUDY_H
 
-#include "status.h"
-#include "pacsparameters.h"
-#include "qquerystudythread.h"
+#include <QObject>
+
 #include "pacslist.h"
 #include "studylistsingleton.h"
-#include "pacsparameters.h"
 #include "studymask.h"
-#include <QObject>
 
 namespace udg {
 
-/**
+class Status;
+class PacsParameters;
+/** Classe que permet fer diverses cerques simultànies, a diversos pacs a la vegada mitjançant la utilitzacio de threads
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class MultipleQueryStudy : public QObject
@@ -53,8 +52,6 @@ public:
 
 signals :
 
-    void finish();
-    
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
      * @param  pacsID del pacs amb que s'ha produit error
      */
@@ -76,10 +73,8 @@ private :
     
     StudyListSingleton* m_studyListSingleton;
     PacsList m_pacsList;
-    int m_maxThreads;
+    int m_maxThreads;//Nombre màxim de threads que es poden executar a la vegada
    
-    void QueryStudies();
-
 };
 
 }

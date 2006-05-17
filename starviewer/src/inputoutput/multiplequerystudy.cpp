@@ -13,6 +13,7 @@
 #include "multiplequerystudy.h"
 #include "starviewersettings.h"
 #include "pacsparameters.h"
+#include "qquerystudythread.h"
 
 
 namespace udg {
@@ -55,7 +56,7 @@ Status MultipleQueryStudy::StartQueries()
     int i = 0,j = 0;
     bool error = false;
     Status state;
-    PacsParameters p;
+    PacsParameters pacsParameters;
     QLineEdit prova;
     
     m_studyListSingleton->clear();
@@ -68,11 +69,11 @@ Status MultipleQueryStudy::StartQueries()
         connect( &m_thread[i] , SIGNAL( finished() ) , this , SLOT( threadFinished() ) , Qt::DirectConnection );
         connect( &m_thread[i] , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
         sem_wait(activeThreads);//Demanem recurs, hi ha un maxim de threads limitat
-        p = m_pacsList.getPacs();
-        cout<<p.getAELocal()<<endl;
-        cout<<p.getAEPacs()<<endl;
-        cout<<p.getPacsAdr()<<endl;
-        cout<<p.getPacsPort()<<endl;
+        pacsParameters = m_pacsList.getPacs();
+        cout<<pacsParameters.getAELocal()<<endl;
+        cout<<pacsParameters.getAEPacs()<<endl;
+        cout<<pacsParameters.getPacsAdr()<<endl;
+        cout<<pacsParameters.getPacsPort()<<endl;
         m_thread[i].queryStudy( m_pacsList.getPacs() , m_searchMask );
 
         m_pacsList.nextPacs();
