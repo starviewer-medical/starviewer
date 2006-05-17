@@ -10,20 +10,26 @@
 
 namespace udg {
 
-/**
+/** Classe singletton de ImageList
 @author marc
 */
 class ImageListSingleton : public ImageList{
 
 public:
 
-     static ImageListSingleton* getImageListSingleton();
+    /** Retorna una instància a la llista d'imatges si existeix, sinó la crea i la retorna
+     * @return instància a la ImageList
+     */
+    static ImageListSingleton* getImageListSingleton();
      
 private:
 
     static ImageListSingleton *pInstance;
 
+    ///constructor de la classe
     ImageListSingleton();
+    
+    ///destructor de la classe
     ~ImageListSingleton();
 
 };

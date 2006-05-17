@@ -14,12 +14,9 @@ ImageListSingleton::ImageListSingleton()
 
 ImageListSingleton* ImageListSingleton::pInstance = 0;
 
-/** retorna una instancia de l'objecte
-  *        @return instancia de l'objecte
-  */
 ImageListSingleton * ImageListSingleton::getImageListSingleton()
 {
-    if (pInstance == 0)
+    if ( pInstance == 0 )
     {
         pInstance = new ImageListSingleton;
     }
@@ -30,6 +27,5 @@ ImageListSingleton * ImageListSingleton::getImageListSingleton()
 ImageListSingleton::~ImageListSingleton()
 {
 }
-
 
 };
