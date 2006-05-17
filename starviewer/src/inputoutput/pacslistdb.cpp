@@ -202,6 +202,56 @@ Status PacsListDB::queryPacs(PacsParameters *pacs,std::string AETitle)
 
     int col,rows = 0,i = 0,estat;
     std::string sql;
+
+    char **resposta = NULL,**error = NULL;
+    Status state;
+
+    if (!m_DBConnect->connected())
+    {//el 50 es l'error de no connectat a la base de dades
+        return constructState(50);
+    }
+
+    sql.insert(0,"select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID ");
+    sql.append("from PacsList ");
+    sql.append(" where AEtitle = '");
+    sql.append(AETitle.c_str());
+    sql.append("'");
+   
+    
+    m_DBConnect->getLock();
+    estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    m_DBConnect->releaseLock();
+    
+    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
+    if (rows == 0 && estat == 0) estat = 99;
+    state=constructState(estat);
+    
+    if (!state.good()) return state;
+    if (rows > 0)
+    {
+        i = 1;//ignorem les capçaleres
+        pacs->setAEPacs(resposta[0 + i*col]);
+        pacs->setPacsAdr(resposta[1 + i*col]);
+        pacs->setPacsPort(resposta[2 + i*col]);
+        pacs->setInstitution(resposta[3 + i*col]);
+        pacs->setLocation(resposta[4 + i*col]);
+        pacs->setDescription(resposta[5 + i*col]);
+        pacs->setDefault(resposta[6 + i*col]);
+        pacs->setPacsID(atoi(resposta[7 + i*col]));    
+    }
+    return state;
+
+}
+
+/**Cerca la informació d'un pacs en concret. 
+  *        @param Conté la informació del pacs cercat
+  *        @param pacs a cercar 
+  *        @return estat de l'operació
+  */
+Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
+{
+    int col,rows = 0,i = 0,estat;
+    std::string sql;
     char id[6];
 
     char **resposta = NULL,**error = NULL;
@@ -214,20 +264,10 @@ Status PacsListDB::queryPacs(PacsParameters *pacs,std::string AETitle)
 
     sql.insert(0,"select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID ");
     sql.append("from PacsList ");
-    if (pacs->getPacsID()>0)
-    {
-        sprintf(id,"%i",pacs->getPacsID());
-        sql.append(" where PacsID = ");
-        sql.append(id);
-    }
-    else 
-    {
-        sql.append(" where AEtitle = '");
-        sql.append(AETitle.c_str());
-        sql.append("'");
-    }
+    sprintf(id,"%i",pacsID);
+    sql.append(" where PacsID = ");
+    sql.append(id);
 
-    
     m_DBConnect->getLock();
     estat = sqlite_get_table(m_DBConnect->getConnection(),sql.c_str(),&resposta,&rows,&col,error); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();

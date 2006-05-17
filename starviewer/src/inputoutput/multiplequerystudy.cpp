@@ -47,6 +47,11 @@ void MultipleQueryStudy::threadFinished()
     sem_post(activeThreads);
 }
 
+void MultipleQueryStudy::slotErrorConnectingPacs( int pacsID )
+{
+    qDebug ("ei arribo\n");
+    emit ( errorConnectingPacs ( pacsID ) );
+}
 /** Una vegada haguem especificat la màscara, i tots els PACS als que volem realitzar la query, aquesta acció iniciara el procés de cerca a tots els PACS
   */
 Status MultipleQueryStudy::StartQueries()
@@ -66,6 +71,7 @@ Status MultipleQueryStudy::StartQueries()
     {
         //aquest signal ha de ser QDirectConnection, pq sera el propi thread qui executara l'slot d'alliberar un recurs del semafor, si fos queued, hauria de ser el pare qui respongues al signal, pero com estaria fent el sem_wait no respondria mai! i tindríem deadlock
         connect(&m_thread[i],SIGNAL(finished()),this,SLOT(threadFinished()),Qt::DirectConnection);
+        connect( &m_thread[i] , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
         sem_wait(activeThreads);//Demanem recurs, hi ha un maxim de threads limitat
         p = m_pacsList.getPacs();
         cout<<p.getAELocal()<<endl;

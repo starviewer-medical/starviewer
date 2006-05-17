@@ -30,6 +30,10 @@ public:
     ~QQueryStudyThread();
  
 
+signals:
+    
+    void errorConnectingPacs( int );
+
 protected :
 
 private :

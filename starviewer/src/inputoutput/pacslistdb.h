@@ -51,6 +51,7 @@ public:
     Status updatePacs(PacsParameters *pacs);
     Status deletePacs(PacsParameters *pacs);
     Status queryPacs(PacsParameters *pacs,std::string AETitle);
+    Status queryPacs( PacsParameters *pacs , int pacsID );
 };
 
 };

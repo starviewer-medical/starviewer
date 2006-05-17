@@ -64,6 +64,8 @@ public slots:
     void notEnoughFreeSpace();
     void errorFreeingCacheSpace();
 
+    void errorConnectingPacs( int );
+
 signals :
     void viewStudy(StudyVolum );
     void clearSeriesListWidget();

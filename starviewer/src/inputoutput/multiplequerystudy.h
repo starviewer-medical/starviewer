@@ -38,11 +38,12 @@ public:
 
 signals :
     void finish();
+    void errorConnectingPacs( int );
 
 public slots :
 
     void threadFinished();
-
+    void slotErrorConnectingPacs( int );
 
 private :
 

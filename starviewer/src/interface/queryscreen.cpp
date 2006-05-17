@@ -189,6 +189,9 @@ void QueryScreen::connectSignalsAndSlots()
     connect( &m_qexecuteOperationThread , SIGNAL( notEnoughFreeSpace() ) , this , SLOT( notEnoughFreeSpace() ) );
     //error alliberant espai de la cache
     connect( &m_qexecuteOperationThread , SIGNAL( errorFreeingCacheSpace() ), this , SLOT( errorFreeingCacheSpace() ));
+    
+    //connect tracta els errors de connexió al PACS
+    connect ( &multipleQueryStudy , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT( errorConnectingPacs( int ) ) );
 }
 
 /** Centra la finestra a la pantalla
@@ -1054,6 +1057,24 @@ void QueryScreen::notEnoughFreeSpace()
 void QueryScreen::errorFreeingCacheSpace()
 {
     QMessageBox::critical( this , tr("StarViewer") , tr("Error Freeing Space. The study couldn't be retrieved") );
+}
+
+void QueryScreen::errorConnectingPacs( int PacsID )
+{
+    PacsListDB pacsListDB;
+    PacsParameters errorPacs;
+    QString errorMessage;
+    
+    pacsListDB.queryPacs( &errorPacs, PacsID );
+    
+    errorMessage.insert( 0 , tr( " Can't connect to PACS " ) );
+    errorMessage.append( errorPacs.getAEPacs().c_str() );
+    errorMessage.append( tr ( " of " ) );
+    errorMessage.append( errorPacs.getInstitution().c_str() );
+    errorMessage.append( '\n' );
+    errorMessage.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) ); 
+    
+    QMessageBox::critical( this , tr("StarViewer") , errorMessage );
 }
 
 /** Construeix la màscara de cerca de la sèrie

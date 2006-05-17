@@ -46,23 +46,28 @@ void QQueryStudyThread::run()
     if (!state.good())
     {
         qDebug("peto\n");
+        emit( errorConnectingPacs( m_param.getPacsID() ) );
+        exit(1);
     }
-    
-    //creem l'objecte fer la query
-    QueryStudy qs(server.getConnection(),m_mask); 
-    
-    //busquem els estudis
-    state = qs.find();
-     
-    if (!state.good()) 
-    {   
+    else
+    {
+        //creem l'objecte fer la query
+        QueryStudy qs(server.getConnection(),m_mask); 
+        
+        //busquem els estudis
+        state = qs.find();
+        
+        if (!state.good()) 
+        {   
+            server.Disconnect();
+            qDebug("peto2\n");
+        }
+        
+        //desconnectem
         server.Disconnect();
-        qDebug("peto2\n");
+        exit(0);
     }
-    
-    //desconnectem
-    server.Disconnect();
-    exit(0);
+     
 }
 
 QQueryStudyThread::~QQueryStudyThread()
