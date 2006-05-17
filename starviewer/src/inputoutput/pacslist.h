@@ -17,18 +17,44 @@ namespace udg {
 /** Aquesta classe implementa una llistat d'objectes PacsParameters.
 @author marc
 */
-class PacsList{
+class PacsList
+{
 public:
     PacsList();
     
-    void insertPacs(PacsParameters);
-    void nextPacs();
-    void firstPacs();
-    bool findPacs(std::string);
-    PacsParameters getPacs();
-    int size();
-    void clear();   
-    bool end();
+	/** Inserta un objecte PacsParameters a la llistat
+     * @param Objecte PacsParameters
+     */
+    void insertPacs( PacsParameters );
+	
+	/// Apunta al següent Objecte PacsParameters
+	void nextPacs();
+
+	/// Posiciona l'iterador de la llistat a la primera posició
+	void firstPacs();
+    
+	/** cerca un pacs a la llista a través del seu AETitle
+     * @param AETitle del pacs a cercar
+     */
+	bool findPacs( std::string );
+
+	/** Retorna l'objecte pacs al que apunta l'iterador de la llista
+     * @return Objecte PacsParameters
+     */
+	PacsParameters getPacs();
+    
+	/** Retorna el número d'elements de la llista
+     * @return Retorna el número d'elements de la llista
+     */    	
+	int size();
+
+	/// Buida la llista    
+	void clear();   
+
+	/** Indica si hem arribal al final de la llista
+     * @return indica si s'ha arribat al final de la llista
+     */
+	bool end();
     
     ~PacsList();
     
@@ -38,7 +64,6 @@ private:
     list<PacsParameters>::iterator i;
 
 };
-
-};
+}; //end name space udg
 
 #endif

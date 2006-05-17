@@ -23,8 +23,15 @@ class PacsConnection{
 
 public :
 
+	/** retorna l'objecte connexió de les dcmtk, perquè altres classes les puguin utilitzar per connectar-se amb el PACS i fer-li les crides, pertitents, com la classe QueryStudy,QuerySeries 
+     * @return retorna una connexió dctmk
+     */
     T_ASC_Association* getPacsConnection();
-    void setPacsConnection(T_ASC_Association *);
+
+	/** Inserim a l'objecte, la connexió dcmtk que utilitzarem per connectar-nos en el pacs
+     * @param estableix la connexio a utilitzar
+     */
+    void setPacsConnection( T_ASC_Association * );
 
 private :
     
