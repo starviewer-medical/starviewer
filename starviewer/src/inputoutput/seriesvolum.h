@@ -49,7 +49,8 @@ public:
     std::string getSeriesPath();
         
     int getNumberOfImages();
-    
+	std::vector <std::string>getVectorSeriesPath();   
+
     ~SeriesVolum();
 
 };

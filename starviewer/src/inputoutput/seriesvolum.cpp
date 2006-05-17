@@ -124,6 +124,11 @@ std::string SeriesVolum::getSeriesPath()
     return m_seriesPath;
 }
 
+std::vector <std::string> SeriesVolum::getVectorSeriesPath()
+{
+	return m_vectorSeriesVolum;
+}
+
 SeriesVolum::~SeriesVolum()
 {
 

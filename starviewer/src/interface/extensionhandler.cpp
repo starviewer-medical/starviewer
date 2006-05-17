@@ -289,8 +289,15 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     
     serie = study.getSeriesVolum();
 
-    input->readSeries( serie.getSeriesPath().c_str() );
-    
+	if ( serie.getNumberOfImages() > 1)
+	{
+    	input->readSeries( serie.getSeriesPath().c_str() );
+    }
+	else if ( serie.getNumberOfImages() == 1)
+	{   //en el cas que nomes tingui una imatge la serie, fem retornar el vector amb el Path i agafem el de la primera imatge
+		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
+	}
+
     udg::Volume *dummyVolume = input->getData();
     m_volumeID = m_volumeRepository->addVolume( dummyVolume );
 //     if( m_volumeID.isNull() )
@@ -331,7 +338,14 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     
     serie = study.getSeriesVolum();
 
-    input->readSeries( serie.getSeriesPath().c_str() );
+	if ( serie.getNumberOfImages() > 1)
+	{
+    	input->readSeries( serie.getSeriesPath().c_str() );
+    }
+	else if ( serie.getNumberOfImages() == 1)
+	{   //en el cas que nomes tingui una imatge la serie, fem retornar el vector amb el Path i agafem el de la primera imatge
+		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
+	}
     
     udg::Volume *dummyVolume = input->getData();
     m_volumeID = m_volumeRepository->addVolume( dummyVolume );
