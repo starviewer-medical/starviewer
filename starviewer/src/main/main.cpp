@@ -30,10 +30,9 @@ int main(int argc, char *argv[])
     settings.beginGroup("StarViewer-Language");
     QString m_defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
     settings.endGroup();
-    
-    QString qmPath = qApp->applicationDirPath() + "/../src/interface";
+
     QTranslator m_applicationTranslator;
-    m_applicationTranslator.load( m_defaultLocale , qmPath );
+    m_applicationTranslator.load( QString(":/translations/") + m_defaultLocale );
     app.installTranslator( &m_applicationTranslator );
     
     QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
