@@ -171,7 +171,6 @@ void Q2DViewer::createAnnotations()
         this->getRenderer()->AddActor2D( m_patientOrientationTextActor[i] );
     }
     // ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
-    // les orientacions que donem ara són per posar algo, aquí \TODO cal posar les referències correctes a partir de la informació dels tags DICOM
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
     m_patientOrientationTextActor[0]->SetPosition( 0.01 , 0.5 );
 
@@ -332,10 +331,6 @@ void Q2DViewer::initInformationText()
     m_textAnnotation->SetImageActor( m_viewer->GetImageActor() );
     m_textAnnotation->SetWindowLevel( m_viewer->GetWindowLevel() );
     m_textAnnotation->ShowSliceAndImageOn();
-
-//  \TODO posar bé le texte que sempre es mostri a una mida raonable i que no faci els canvis "raros"
-//     m_textAnnotation->GetTextProperty()->SetFontSize( 80 );
-//     m_textAnnotation->GetTextProperty()->ItalicOn();
     
     m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
 }
@@ -918,7 +913,7 @@ void Q2DViewer::updateView()
     }
     else
     {
-        WARN_LOG( "Intentant canviar de vista nsese haver donat un input abans..." )
+        WARN_LOG( "Intentant canviar de vista nsese haver donat un input abans..." );
     }
 }
 
