@@ -422,7 +422,7 @@ void QApplicationMainWindow::createLanguageMenu()
     m_catalanAction->setShortcut( 0 );
     m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
     m_catalanAction->setCheckable( true );
-    if( defaultLocale == QString("interface_es_CA") )
+    if( defaultLocale == QString("interface_ca_ES") )
         m_catalanAction->setChecked( true );
     else
         m_catalanAction->setChecked( false );
@@ -447,7 +447,7 @@ void QApplicationMainWindow::createLanguageMenu()
     m_englishAction->setShortcut( 0 );
     m_englishAction->setStatusTip( tr("Switch to English Language") );
     m_englishAction->setCheckable( true );
-    if( defaultLocale == QString("interface_en_EN") )
+    if( defaultLocale == QString("interface_en_GB") )
         m_englishAction->setChecked( true );
     else
         m_englishAction->setChecked( false );
@@ -466,7 +466,7 @@ void QApplicationMainWindow::switchToLanguage( int id )
     switch( id )
     {
     case 0:
-        locale += "es_CA";
+        locale += "ca_ES";
         m_catalanAction->setChecked( true );
         m_spanishAction->setChecked( false );
         m_englishAction->setChecked( false );
@@ -480,7 +480,7 @@ void QApplicationMainWindow::switchToLanguage( int id )
     break;
 
     case 2:
-        locale += "en_EN";
+        locale += "en_GB";
         m_catalanAction->setChecked( false );
         m_spanishAction->setChecked( false );
         m_englishAction->setChecked( true );
