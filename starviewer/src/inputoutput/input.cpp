@@ -28,7 +28,6 @@
 
 namespace udg {
 
-
 Input::Input()
 {
     m_reader = ReaderType::New(); 
@@ -74,11 +73,10 @@ bool Input::openFile( const char * fileName )
         std::cerr << e << std::endl;
 
         ok = false;
-        emit progress(-1); // això podria indicar excepció
+        emit progress( -1 ); // això podria indicar excepció
     }
     if ( ok )
     {
-
         m_volumeData->setData( m_reader->GetOutput() );
 
         vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
@@ -86,7 +84,7 @@ bool Input::openFile( const char * fileName )
         changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
         m_volumeData->setData( changeFilter->GetOutput() );
 
-        emit progress(100);
+        emit progress( 100 );
     }
     return ok;
 }
@@ -105,7 +103,7 @@ bool Input::readSeries( const char *dirPath )
     m_seriesReader->SetImageIO( m_gdcmIO );  
     m_seriesReader->SetFileNames( filenames );
     
-    emit progress(0);
+    emit progress( 0 );
     
     try
     {
@@ -118,7 +116,7 @@ bool Input::readSeries( const char *dirPath )
         WARN_LOG( errorMessage.str() )
         std::cerr << e << std::endl;
         ok = false;
-        emit progress(-1); // això podria indicar excepció
+        emit progress( -1 ); // això podria indicar excepció
     }
     if ( ok )
     {
@@ -130,7 +128,7 @@ bool Input::readSeries( const char *dirPath )
         changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
         m_volumeData->setData( changeFilter->GetOutput() );
 
-        emit progress(100);
+        emit progress( 100 );
         this->setVolumeInformation();
     }
     
@@ -227,7 +225,7 @@ void Input::setVolumeInformation()
     if( queryTagAsString( "0020|0020" , value ) )
     {
         QString str = QString::fromStdString( value );
-        str.replace( QString("\\") , QString(",") );
+        str.replace( QString( "\\" ) , QString( "," ) );
         m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( qPrintable( str ) );
     }
     else
@@ -238,7 +236,7 @@ void Input::setVolumeInformation()
             // passem de l'string als valors double
             double dirCosinesValuesX[3] , dirCosinesValuesY[3] , dirCosinesValuesZ[3];
             QString dirCosines = QString::fromStdString( value );
-            QStringList list = dirCosines.split("\\");
+            QStringList list = dirCosines.split( "\\" );
             if( list.size() == 6 )
             {
                 for ( int i = 0; i < 3; i++ )
@@ -279,7 +277,7 @@ void Input::setVolumeInformation()
     else
     {
         // no tenim aquesta informació \TODO cal posar res?
-        m_volumeData->getVolumeSourceInformation()->setInstitutionName( tr("Unknown").toAscii() );
+        m_volumeData->getVolumeSourceInformation()->setInstitutionName( tr( "Unknown" ).toAscii() );
     }
 
     // nom del pacient
@@ -318,9 +316,9 @@ void Input::setVolumeInformation()
     if( queryTagAsString( "0028|1051" , value ) )
     {
         QString str = QString::fromStdString( value );
-        if( str.contains("\\") )
+        if( str.contains( "\\" ) )
         {
-            str = str.left( str.indexOf("\\") );
+            str = str.left( str.indexOf( "\\" ) );
         }
         double window = str.toDouble();
         
@@ -328,9 +326,9 @@ void Input::setVolumeInformation()
 
         queryTagAsString( "0028|1050" , value );
         str = QString::fromStdString( value );
-        if( str.contains("\\") )
+        if( str.contains( "\\" ) )
         {
-            str = str.left( str.indexOf("\\") );
+            str = str.left( str.indexOf( "\\" ) );
         }
         double level = str.toDouble();
         m_volumeData->getVolumeSourceInformation()->setLevel( level );
