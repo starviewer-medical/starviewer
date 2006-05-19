@@ -41,17 +41,7 @@ public:
         A cada finestra es veurà el tall corresponent per defecte. De bon principi cada visor visualitzarà la llesca central corresponent a cada vista. En les vistes axial i sagital es veuran els respectius plans de tall.
     */
     void setInput( Volume *input );
-    
-    /// Inicialitza de nou els paràmetres de l'aplicació
-    void reset();
-    
-    /// Indica la llesca que volem veure de cadascuna de les diferents vistes. Aquest canvi repercuteix sobre els eixos de control de cada visor
-    void setAxialSlice( int slice );
-    void setCoronalSlice( int slice );
-    void setSagitalSlice( int slice );
-    /// Indica la llesca que volem veure de cadascuna de les diferents vistes. View = 0 : Axial, 1 : Coronal , 2: Sagital
-    void setSlice( int slice , int view = 0 );
-    
+        
     /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans. EL primer pla es el que volem rotar i l'altre sobre el qual estroba l'eix d'intersecció/rotació
     // caldria resoldre què fer quan els plans son coplanars!!!!
     void rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane );

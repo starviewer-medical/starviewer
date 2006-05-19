@@ -699,56 +699,6 @@ void QMPRExtension::updateControls()
     m_coronal2DView->getInteractor()->Render();
 }
 
-void QMPRExtension::reset()
-{
-
-}
-
-void QMPRExtension::setAxialSlice( int slice )
-{
-    m_axial2DView->setSlice( slice );
-    //\TODO update dels eixos
-    
-}
-
-void QMPRExtension::setCoronalSlice( int slice )
-{
-    m_coronal2DView->setSlice( slice );
-    //\TODO update dels eixos
-}
-
-void QMPRExtension::setSagitalSlice( int slice )
-{
-    m_sagital2DView->setSlice( slice );
-    //\TODO update dels eixos
-}
-
-void QMPRExtension::setSlice( int slice , int view )
-{
-    switch( view )
-    {
-    case 0:
-        //Axial
-        setAxialSlice( slice );
-    break;
-    
-    case 1:
-        // Coronal
-        setCoronalSlice( slice );
-    break;
-    
-    case 2:
-        // Sagital
-        setSagitalSlice( slice );
-    break;
-    
-    default:
-        // Axial
-        setAxialSlice( slice );
-    break;
-    }
-}
-
 void QMPRExtension::updateIntersectionPoint()
 {
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_intersectionPoint );
