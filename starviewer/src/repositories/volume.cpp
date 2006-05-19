@@ -74,7 +74,6 @@ Volume::VtkImageTypePointer Volume::getVtkData(  )
 void Volume::setData( ItkImageTypePointer itkImage  )
 {
     m_imageDataITK = itkImage; 
-    // \TODO hauríem de filtrar a vtk ? o fer nomes en getdata
 }
 
 void Volume::setData( VtkImageTypePointer vtkImage )
