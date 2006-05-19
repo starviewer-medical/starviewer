@@ -20,6 +20,7 @@
 #include <QCursor>
 #include <QProgressDialog>
 #include <QApplication>
+#include <QLocale>
 // els nostres widgets/elements de la plataforma
 #include "qapplicationmainwindow.h"
 #include "volumerepository.h"
@@ -29,7 +30,7 @@
 #include "output.h"
 #include "extensionhandler.h"
 #include "extensionworkspace.h"
-
+#include "logging.h"
 // Mini - aplicacions
 #include "cacheinstallation.h"
 
@@ -397,12 +398,106 @@ void QApplicationMainWindow::createMenus()
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
-
+    createLanguageMenu();
+    
     menuBar()->addSeparator();
     
     // menú d'ajuda, ara només hi ha els típic abouts  
     m_helpMenu = menuBar()->addMenu(tr("&Help") );
     m_helpMenu->addAction( m_aboutAction );
+}
+
+void QApplicationMainWindow::createLanguageMenu()
+{
+    QSettings settings("GGG", "StarViewer-Core");
+    settings.beginGroup("StarViewer-Language");
+    QString defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
+    settings.endGroup();
+    
+    QSignalMapper* signalMapper = new QSignalMapper( this );
+    connect( signalMapper, SIGNAL( mapped(int) ), this , SLOT( switchToLanguage(int) ) );
+    
+    m_catalanAction = new QAction( this );
+    m_catalanAction->setText( tr("Catalan") );
+    m_catalanAction->setShortcut( 0 );
+    m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
+    m_catalanAction->setCheckable( true );
+    if( defaultLocale == QString("interface_es_CA") )
+        m_catalanAction->setChecked( true );
+    else
+        m_catalanAction->setChecked( false );
+    
+    signalMapper->setMapping( m_catalanAction , 0 );
+    connect( m_catalanAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+        
+    m_spanishAction = new QAction( this );
+    m_spanishAction->setText( tr("Spanish") );
+    m_spanishAction->setShortcut( 0 );
+    m_spanishAction->setStatusTip( tr("Switch to Spanish Language") );
+    m_spanishAction->setCheckable( true );
+    if( defaultLocale == QString("interface_es_ES") )
+        m_spanishAction->setChecked( true );
+    else
+        m_spanishAction->setChecked( false );
+    signalMapper->setMapping( m_spanishAction , 1 );
+    connect( m_spanishAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+
+    m_englishAction = new QAction( this );
+    m_englishAction->setText( tr("English") );
+    m_englishAction->setShortcut( 0 );
+    m_englishAction->setStatusTip( tr("Switch to English Language") );
+    m_englishAction->setCheckable( true );
+    if( defaultLocale == QString("interface_en_EN") )
+        m_englishAction->setChecked( true );
+    else
+        m_englishAction->setChecked( false );
+    signalMapper->setMapping( m_englishAction , 2 );
+    connect( m_englishAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    
+    m_languageMenu->addAction( m_catalanAction );
+    m_languageMenu->addAction( m_spanishAction );
+    m_languageMenu->addAction( m_englishAction );
+}
+
+void QApplicationMainWindow::switchToLanguage( int id )
+{
+    QString locale = "interface_";
+
+    switch( id )
+    {
+    case 0:
+        locale += "es_CA";
+        m_catalanAction->setChecked( true );
+        m_spanishAction->setChecked( false );
+        m_englishAction->setChecked( false );
+    break;
+
+    case 1:
+        locale += "es_ES";
+        m_catalanAction->setChecked( false );
+        m_spanishAction->setChecked( true );
+        m_englishAction->setChecked( false );
+    break;
+
+    case 2:
+        locale += "en_EN";
+        m_catalanAction->setChecked( false );
+        m_spanishAction->setChecked( false );
+        m_englishAction->setChecked( true );
+    break;
+
+    default:
+    break;
+    }
+
+    if( id < 3 && id > -1 )
+    {
+        QSettings settings("GGG", "StarViewer-Core");
+        settings.beginGroup("StarViewer-Language");
+        settings.setValue( "languageLocale", locale );
+        settings.endGroup();
+    }
+    QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect after restarting the application") );
 }
 
 void QApplicationMainWindow::createToolBars()

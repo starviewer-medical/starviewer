@@ -77,13 +77,13 @@ private:
     /// Tipus de fitxer a exportar
     enum ExportFiles{ JpegExport , MetaIOExport , TiffExport, PngExport , BmpExport };
 
-    /// Punter a sí mateix \TODO, no se si és gaire útil ni necessari, pot desaparèixer facilment
+    /// Punter a sí mateix \TODO no se si és gaire útil ni necessari, pot desaparèixer facilment
     QApplicationMainWindow* m_self;    
 
     /// Indicarà l'id del volum que posseïm
     udg::Identifier m_volumeID; 
 
-    /// Indica si hi ha hagut modificacions \TODO: és gaire útil i/o necessari això? es podria eliminar
+    /// Indica si hi ha hagut modificacions \TODO és gaire útil i/o necessari això? es podria eliminar
     bool m_modified;
 
 //    /// Llista d'arxius recents
@@ -152,6 +152,9 @@ private:
 //     QAction *m_exportToPngAction;
 //     QAction *m_exportToBmpAction;
 
+    QAction *m_catalanAction;
+    QAction *m_spanishAction;
+    QAction *m_englishAction;
     /// Per indicar el procés al obrir-se un fitxer
     QProgressDialog *m_progressDialog;
 
@@ -174,6 +177,9 @@ private:
     /// Crea els menús.
     void createMenus();
 
+    /// Crea el menú per escollir l'idioma de l'aplicació
+    void createLanguageMenu();
+    
     /// Crea la barra d'eines.
     void createToolBars();
 
@@ -192,7 +198,7 @@ private:
     /// Especifica el fitxer acctual que s'està tractant \TODO \deprecated aquest mètode esdevindrà antiquat en breu i no té gaure sentit desar el nom del fitxer, el metode continua existint perquè s'ha arrastrat des del principi
     void setCurrentFile( const QString &fileName );
 
-    /// actualitza el llistat de noms de fitxers oberts recentment \TODO, s'hauria d'adaptar si cal quqan hi hagi lo del pacs
+    /// actualitza el llistat de noms de fitxers oberts recentment \TODO s'hauria d'adaptar, si cal quan hi hagi lo del pacs
 //     void updateRecentFileActions();
 
     /// Mètode intern per extreure el nom del fitxer tal qual sense el path sencer
@@ -208,7 +214,7 @@ private slots:
     /// mostra el formulari d'about
     void about();
 
-    /// obre un dels arxius recents::\TODO passar responsabilitat a la mini-app encarregada de fer això
+    /// obre un dels arxius recents::\TODO això pot esdevenir \deprecated
     void openRecentFile();
 /*
     /// Exporta la imatge a un format especificat
@@ -228,7 +234,11 @@ private slots:
 
     /// Exporta la imatge a BMP
     void exportToBmp();
-*/   
+*/
+
+    /// canvia a l'idioma indicat
+    void switchToLanguage( int id );
+    
 signals:
     /// senyal emesa que indica si la finestra conté un volum o no
     void containsVolume( bool );
