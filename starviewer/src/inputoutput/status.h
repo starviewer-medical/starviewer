@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-
 #ifndef STATUS
 #define STATUS
 #define HAVE_CONFIG_H 1
@@ -17,10 +16,9 @@
 #include "const.h" 
 #endif
 
-
-/** Aquesta classe, està basada seguin el patró Abstract Factory, el que es tracta és de separar el control d'errors del dctmk, de control
- *d'errors que utilitzarem nosaltres en la nostre aplicació, aixi si mai el control d'errors de dcmtk mai canvia, només haurem de modificar 
- *aquesta classe i mai haurem de tocar les classes de la nostra aplicació que utilitzi el tractament d'errors. 
+/** Aquesta classe proporciona el control d'errors, dels mètodes invocats. 
+ *Aquesta classe, està basada seguin el patró Abstract Factory, el que es tracta és de separar el control d'errors del dctmk, de control
+d'errors que utilitzarem nosaltres en la nostre aplicació, aixi si mai el control d'errors de dcmtk mai canvia, només haurem de modificar aquesta classe i mai haurem de tocar les classes de la nostra aplicació que utilitzi el tractament d'errors. 
  * En aquesta classe encapsulem el tractament d'errors.
  *
  *Per englobar el tractament d'errors de tota l'aplicació hi podem tenir dos objectes d'error el OFCondition de dcmtk, i un altre que es propi format per un 
@@ -29,31 +27,50 @@
  *l'objecte status que controla l'error. Independentment si és un error dcmtk o provinent d'altres fonts com la caché. Només podem inserir un dels dos tipus 
  *d'error!
  * 
- *Aquesta Classe també conté una llista d'errors, però només per Errors OFCondition, en tots els casos només tindrà un element la llista, per tant l'haurem de   tractar com si no fos una llista
- *exceptuant en el cas que fem una query a múltiples PACS, en aquest cas com podem tenir un error per cada PACS, aquesta classe si que es converteix
- *en una autèntica llista. Pel reste de casos podem ignorar les accions de llistat com nextStatus, firstStatus, etc..
- *
  */
 namespace udg{
-class Status{
+
+class Status
+{
 
 public :
 
     Status();
+
+	/** Retorna un text descrivint l'error o l'exit del procés
+	 * @return text descriptiu de l'exit o l'error de la crida
+	 */
     std::string text();
-    Status setStatus(const OFCondition);
-    Status setStatus(std::string,bool,int);
+
+	/** per contruir l'objecte status
+ 	 * @param OFCodition resultant d'una crida
+	 * @return retorna l'objecte status
+	 */
+    Status setStatus( const OFCondition );
+
+	/** Crea un objecte Status
+	 * @param descripció de l'status
+	 * @param indica si s'ha finalitzat amb èxit
+	 * @param número d'erro en cas d'haver-ni
+	 * @return retorna l'objecte status  
+ 	 */
+    Status setStatus( std::string , bool , int );
+
+	/** Retorna si l'èxit de l'element cridat
+	 * @return boolea indicant l'exit de la crida
+	 */
     bool good();
+
+	/** Retorna el codi d'estat
+	 * @return codi d'estat 
+  	 */
     int code();
     
 private :
 
-// 	OFCondition m_condition;
-
     std::string m_descText;
     bool m_success;
     int m_numberError;
-    bool m_dcmtkError; // descriu la font de l'error, si prove de les dctmk=True  altres fons com la caché, és false
 };
-};
+}; // end namespace udg
 #endif
