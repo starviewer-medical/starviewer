@@ -216,11 +216,22 @@ void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
     disconnect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
 }
 
+void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
+{
+    if( !plane )
+        return;
+
+    axis[0] = plane->GetPoint2()[0] - plane->GetOrigin()[0];
+    axis[1] = plane->GetPoint2()[1] - plane->GetOrigin()[1];
+    axis[2] = plane->GetPoint2()[2] - plane->GetOrigin()[2];
+}
+
 void QMPRExtension::moveAxialViewAxisActor( double x , double y )
 {
     double vec1[3], vec2[3];
     double axis[3];
-
+    double direction[3];
+    
     vec1[0] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
     vec1[1] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
     vec1[2] = 0.0;
@@ -233,7 +244,15 @@ void QMPRExtension::moveAxialViewAxisActor( double x , double y )
 
     m_initialPickX = x;
     m_initialPickY = y;
-    vtkMath::Cross( vec1 , vec2 , axis );
+
+    vtkMath::Cross( vec1 , vec2 , direction );
+    this->getRotationAxis( m_pickedActorPlaneSource , axis );
+    double dot = vtkMath::Dot( direction , axis );
+    
+    axis[0] *= dot;
+    axis[1] *= dot;
+    axis[2] *= dot;
+    
     vtkMath::Normalize( axis );
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
@@ -244,23 +263,34 @@ void QMPRExtension::rotateAxisActor( double x , double y )
 {
     double vec1[3], vec2[3];
     double axis[3];
-    
+    double direction[3];
+
     vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
     vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
     vec1[0] = 0.0;
-    
+
     vec2[1] = x - m_pickedActorPlaneSource->GetCenter()[0];
     vec2[2] = y - m_pickedActorPlaneSource->GetCenter()[1];
     vec2[0] = 0.0;
-    
+
     double degrees = MathTools::angleInDegrees( vec1 , vec2 );
 
     m_initialPickX = x;
     m_initialPickY = y;
+
+    vtkMath::Cross( vec1 , vec2 , direction );
+    axis[0] = m_pickedActorPlaneSource->GetPoint1()[0] - m_pickedActorPlaneSource->GetOrigin()[0];
+    axis[1] = m_pickedActorPlaneSource->GetPoint1()[1] - m_pickedActorPlaneSource->GetOrigin()[1];
+    axis[2] = m_pickedActorPlaneSource->GetPoint1()[2] - m_pickedActorPlaneSource->GetOrigin()[2];
+
+    double dot = vtkMath::Dot( direction , axis );
     
-    vtkMath::Cross( vec1 , vec2 , axis );
+    axis[0] *= dot;
+    axis[1] *= dot;
+    axis[2] *= dot;
+    
     vtkMath::Normalize( axis );
-    
+
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
     updateControls();
@@ -1004,7 +1034,7 @@ bool QMPRExtension::isParallel( double axis[3] )
 
 void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
-    vtkMath::Normalize( rotationAxis );
+//     vtkMath::Normalize( rotationAxis );
     m_transform->Identity();
     m_transform->Translate( plane->GetCenter()[0], plane->GetCenter()[1], plane->GetCenter()[2] );
     m_transform->RotateWXYZ( degrees , rotationAxis );

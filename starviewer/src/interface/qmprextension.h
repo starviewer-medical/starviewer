@@ -112,6 +112,9 @@ private:
     void planeIntersection( vtkPlaneSource* plane1 , vtkPlaneSource *plane2 , double r[3] , double t[3] );
     /// Calcula el punt d'intersecció de 3 plans a l'espai 
     void planeIntersection( vtkPlaneSource *plane1 , vtkPlaneSource *plane2 , vtkPlaneSource *plane3 , double intersectionPoint[3] );
+
+    /// Ens dóna l'eix de rotació d'un planeSource
+    void getRotationAxis( vtkPlaneSource *plane , double axis[3] );
     
     /// El directori on es desaran les imatges per defecte
     QString m_defaultSaveDir;
