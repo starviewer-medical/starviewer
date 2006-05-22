@@ -999,6 +999,8 @@ void QueryScreen::config()
     
     connect( configScreen , SIGNAL( pacsListChanged() ) , qPacsList , SLOT( refresh()  ) );
     connect( configScreen , SIGNAL( cacheCleared() ) , m_studyTreeWidgetCache , SLOT( clear() ) );
+	connect( configScreen , SIGNAL( cacheCleared() ) , m_seriesListWidgetCache , SLOT( clearSeriesListWidget() ) );	
+
     configScreen->setModal(true);
     configScreen->show();
 }
