@@ -38,6 +38,11 @@ protected :
 
 private :
 
+    /** Crea un string pel log, indicat que el thread s'ha creat, i a quin pacs atacara aquest thread
+     * @return missatge de log
+     */
+    QString infoLogInitialitzedThread();
+
     PacsParameters m_param;
     StudyMask m_mask;
     

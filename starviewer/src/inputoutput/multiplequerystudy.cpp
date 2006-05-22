@@ -15,7 +15,6 @@
 #include "pacsparameters.h"
 #include "qquerystudythread.h"
 
-
 namespace udg {
 
 // Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
@@ -58,6 +57,7 @@ Status MultipleQueryStudy::StartQueries()
     Status state;
     PacsParameters pacsParameters;
     QLineEdit prova;
+    QString missatgeLog;
     
     m_studyListSingleton->clear();
     
@@ -70,10 +70,7 @@ Status MultipleQueryStudy::StartQueries()
         connect( &m_thread[i] , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
         sem_wait(activeThreads);//Demanem recurs, hi ha un maxim de threads limitat
         pacsParameters = m_pacsList.getPacs();
-        cout<<pacsParameters.getAELocal()<<endl;
-        cout<<pacsParameters.getAEPacs()<<endl;
-        cout<<pacsParameters.getPacsAdr()<<endl;
-        cout<<pacsParameters.getPacsPort()<<endl;
+
         m_thread[i].queryStudy( m_pacsList.getPacs() , m_searchMask );
 
         m_pacsList.nextPacs();

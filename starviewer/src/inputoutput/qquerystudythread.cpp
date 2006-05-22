@@ -8,7 +8,7 @@
 #include "pacsserver.h"
 #include "querystudy.h"
 #include "status.h"
-
+#include "logging.h"
 
 namespace udg {
 
@@ -38,14 +38,19 @@ void QQueryStudyThread::queryStudy(PacsParameters param,StudyMask mask)
 void QQueryStudyThread::run()
 {
     Status state;
-    
+    QString missatgeLog;
     //creem la connexió
     PacsServer server(m_param);
+
+    INFO_LOG( infoLogInitialitzedThread().toAscii().constData() );
 
     state = server.Connect(PacsServer::query,PacsServer::studyLevel);
     if (!state.good())
     {
-        qDebug("peto\n");
+        missatgeLog = "Error connectant al PACS ";
+        missatgeLog.append( m_param.getAEPacs().c_str() );
+        
+        ERROR_LOG( missatgeLog.toAscii().constData() );
         emit( errorConnectingPacs( m_param.getPacsID() ) );
         exit(1);
     }
@@ -59,15 +64,43 @@ void QQueryStudyThread::run()
         
         if (!state.good()) 
         {   
-            server.Disconnect();
-            qDebug("peto2\n");
+            missatgeLog = "Error de cerca al PACS ";
+            missatgeLog.append( m_param.getAEPacs().c_str() );
+            missatgeLog.append( ". Thread finalitzant" );
+            ERROR_LOG( missatgeLog.toAscii().constData() );
+        }
+        else
+        {
+            missatgeLog = "Thread del PACS ";
+            missatgeLog.append( m_param.getAEPacs().c_str() );
+            missatgeLog.append( " finalitzant" );
         }
         
         //desconnectem
         server.Disconnect();
-        exit(0);
+        exit( 0 );
     }
      
+}
+
+QString QQueryStudyThread::infoLogInitialitzedThread()
+{
+    QString missatgeLog, pacsLog;
+ 
+    missatgeLog = "thread iniciat per cercar al PACS ";
+    
+    pacsLog.insert( 0 , m_param.getAELocal().c_str() );
+    pacsLog.append( ";" );
+    pacsLog.append( m_param.getAEPacs().c_str() );
+    pacsLog.append( ";" );
+    pacsLog.append( m_param.getPacsAdr().c_str() );
+    pacsLog.append( ";" );
+    pacsLog.append( m_param.getPacsPort().c_str() );
+    pacsLog.append( ";" );
+    
+    missatgeLog += pacsLog;
+    
+    return missatgeLog;
 }
 
 QQueryStudyThread::~QQueryStudyThread()
