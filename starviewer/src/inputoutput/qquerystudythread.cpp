@@ -12,29 +12,20 @@
 
 namespace udg {
 
-/** Constructor de la classe
-  */
 QQueryStudyThread::QQueryStudyThread(QObject *parent)
         : QThread(parent)
 {
 
 }
 
-/** Accio que executa el thread
-  *         @param parametres del pacs a consultar
-  *         @param màscara de cerca
-  */
-void QQueryStudyThread::queryStudy(PacsParameters param,StudyMask mask)
+void QQueryStudyThread::queryStudy( PacsParameters param , StudyMask mask )
 {
     m_param = param;
     m_mask = mask;
 
     start();
-
 }
 
-/** el codi d'aquest mètode es el que s'executa en un nou thread
-  */
 void QQueryStudyThread::run()
 {
     Status state;
@@ -44,8 +35,9 @@ void QQueryStudyThread::run()
 
     INFO_LOG( infoLogInitialitzedThread().toAscii().constData() );
 
-    state = server.Connect(PacsServer::query,PacsServer::studyLevel);
-    if (!state.good())
+    state = server.Connect( PacsServer::query,PacsServer::studyLevel );
+    
+    if ( !state.good() )
     {
         missatgeLog = "Error connectant al PACS ";
         missatgeLog.append( m_param.getAEPacs().c_str() );
@@ -57,12 +49,12 @@ void QQueryStudyThread::run()
     else
     {
         //creem l'objecte fer la query
-        QueryStudy qs(server.getConnection(),m_mask); 
+        QueryStudy qs( server.getConnection() , m_mask ); 
         
         //busquem els estudis
         state = qs.find();
         
-        if (!state.good()) 
+        if (! state.good() ) 
         {   
             missatgeLog = "Error de cerca al PACS ";
             missatgeLog.append( m_param.getAEPacs().c_str() );
@@ -80,7 +72,6 @@ void QQueryStudyThread::run()
         server.Disconnect();
         exit( 0 );
     }
-     
 }
 
 QString QQueryStudyThread::infoLogInitialitzedThread()
@@ -106,6 +97,5 @@ QString QQueryStudyThread::infoLogInitialitzedThread()
 QQueryStudyThread::~QQueryStudyThread()
 {
 }
-
 
 }
