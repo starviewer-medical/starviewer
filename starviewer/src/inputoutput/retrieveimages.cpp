@@ -3,7 +3,6 @@
 #include "struct.h"
 #include "processimagesingleton.h"
 #include "status.h"
-#include "logging.h"
 
 //includes per comprovar si un directori existeix
 #include <sys/types.h>
@@ -272,21 +271,13 @@ OFCondition echoSCP(
               piSingleton->setErrorRetrieving(studyUID);
           }
         }   
-
-		if ( imageNumber == NULL )
-		{
-			DEBUG_LOG("A null, posare numero imatge a 0");	
-			DEBUG_LOG(SoPUID);
-			
-			img.setImageNumber( 0 );
-		}            
-		else   
+      
       //guardem la informacio a l'objecte imatge
       img.setStudyUID(studyUID);
       img.setSeriesUID(seriesUID);
       img.setSoPUID(SoPUID);
       img.setImageName(fileName);
-      
+      img.setImageNumber(atoi(imageNumber));
       img.setImagePath(pathfile.c_str());
       img.setImageSize(imageSize); 
  
