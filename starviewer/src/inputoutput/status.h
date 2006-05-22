@@ -12,12 +12,10 @@
 
 #include <ofcond.h> //provide the OFcondition structure and his members
 #include <string>
-#include <list.h> 
 
 #ifndef CONST
 #include "const.h" 
 #endif
-
 
 
 /** Aquesta classe, està basada seguin el patró Abstract Factory, el que es tracta és de separar el control d'errors del dctmk, de control
@@ -47,17 +45,11 @@ public :
     Status setStatus(std::string,bool,int);
     bool good();
     int code();
-    void firstStatus();
-    void nextStatus();
-    bool end();
     
 private :
 
-    
-    list<OFCondition>m_listStatus;     
-    list<OFCondition>::iterator i;
-    
-    
+// 	OFCondition m_condition;
+
     std::string m_descText;
     bool m_success;
     int m_numberError;
