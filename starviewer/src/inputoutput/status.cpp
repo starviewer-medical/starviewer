@@ -31,11 +31,9 @@ int Status:: code()
 
 Status Status:: setStatus( const OFCondition  status )
 {
-    OFCondition cond( status );
-	
-	m_descText = cond.text();
-	m_success = cond.good();
-	m_numberError = cond.code();	
+	m_descText = status.text();
+	m_success = status.good();
+	m_numberError = status.code();	
  
     return *this;
 }
