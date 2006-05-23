@@ -10,6 +10,7 @@
 #include <QString>
 #include <iostream.h>
 #include <string>
+#include "logging.h"
 
 namespace udg {
 
@@ -26,6 +27,7 @@ Status CachePool::constructState(int numState)
 {
 //A www.sqlite.org/c_interface.html hi ha al codificacio dels estats que retorna el sqlite
     Status state;
+	QString logMessage , codeError;
 
     switch(numState)
     {//aqui tractem els errors que ens poden afectar de manera més directe, i els quals l'usuari pot intentar solucionbar                         
@@ -43,6 +45,13 @@ Status CachePool::constructState(int numState)
         default :               state.setStatus( "SQLITE internal error" , false , 2000 + numState ); 
                                 break;
     }
+
+	if ( numState != SQLITE_OK )
+	{
+		logMessage = "Error a la cache número " + codeError.setNum( numState , 10 );
+		ERROR_LOG( logMessage.toAscii().constData() );
+	}
+
    return state;
 }
 

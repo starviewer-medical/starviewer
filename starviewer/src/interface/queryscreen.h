@@ -129,6 +129,12 @@ struct retrieveParameters
     void centerWindow();
     
     void resizePacsList();
+
+	
+	/** Fa el log, indicant amb quins parametres es cerquen els estudis
+     * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis	
+     */
+	QString logQueryStudy();
 };
 
 };

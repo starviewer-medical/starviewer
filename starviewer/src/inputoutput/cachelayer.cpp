@@ -13,6 +13,7 @@
 #include <QProgressDialog>
 #include "starviewersettings.h"
 #include <QDate>
+#include "logging.h"
 
 namespace udg {
 
@@ -73,7 +74,8 @@ Status CacheLayer::deleteOldStudies()
     Status state;
     Study study;
     int comptador = 0;
-       
+	QString logMessage , numberOfDeletedStudies;    
+   
     today = today.currentDate();
     //calculem fins a quin dia conservarem els estudis
     //de la data del dia restem el paràmetre definit per l'usuari, que estableix quants dies pot estar un estudi sense ser visualitzat
@@ -96,7 +98,9 @@ Status CacheLayer::deleteOldStudies()
         progress->setValue( comptador );
         progress->repaint();
     }
-    
+   
+	logMessage = "S'han esborrat " + numberOfDeletedStudies.setNum( comptador , 10 ) + " estudis vells";
+	INFO_LOG( logMessage.toAscii().constData() );
     progress->close();
     
     if ( !state.good() )
@@ -117,6 +121,7 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
     CachePool pool;
     unsigned int usedSpaceInit = 0 , usedSpace = 0;
     int deletedSpace = 0;
+	QString logMessage , numberOfDeletedStudies;    
          
     maxDate = maxDate.currentDate();
     maxDate = maxDate.addDays( 1 ); //com que la funcio queryOldStudies, retorna els que no ha estat visualitzats en una data inferior a la passada per parametre, per incloure els del mateix dia a la llista que retorna, hi sumem un dia
@@ -138,7 +143,7 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
         deletedSpace = usedSpaceInit - usedSpace;
         studyList.nextStudy();
     }
-    
+
     if ( !state.good() )
     {
         return state;

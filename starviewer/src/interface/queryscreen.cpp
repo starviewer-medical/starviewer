@@ -39,6 +39,7 @@
 #include "operation.h"
 #include "cachelayer.h"
 #include "pacslistdb.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -361,7 +362,7 @@ void QueryScreen::searchYesterday()
   */
 void QueryScreen::search()
 {
-    
+    QString logMessage;
     this->setCursor(QCursor(Qt::WaitCursor));
     
     if (m_tab->currentIndex()==1)
@@ -374,14 +375,25 @@ void QueryScreen::search()
                                         tr("Yes"), tr("No"),
                                         0, 1 ) ) 
             {
-                case 0:  queryStudyPacs();
+				
+                case 0: logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
+						INFO_LOG ( logMessage.toAscii().constData() ); 
+						queryStudyPacs();
+						break;
             }    
         }
-        else queryStudyPacs();
+        else 
+		{	//---> AQUEST ELSE HA D'ANAR FORA, quan es validi que la mascara no estigui buida!
+			logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
+			INFO_LOG ( logMessage.toAscii().constData() ); 
+			queryStudyPacs(); 
+		}
 
     }
     else
     {
+		logMessage = "Cerca d'estudis a la cache amb paràmetres " + logQueryStudy();
+		INFO_LOG ( logMessage.toAscii().constData() ); 
         queryStudyCache();
     }
     
@@ -530,8 +542,10 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     Status state;   
     StarviewerSettings settings;
     int nImages = 0;
-
-    
+	QString logMessage;
+	
+	logMessage = "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle;    
+	INFO_LOG( logMessage.toAscii().constData() );
     state = pacsListDB.queryPacs(&pacs,pacsAETitle.toAscii().constData());//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
     if (!state.good())
     {
@@ -548,6 +562,10 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     
     if (!pacsConnection.Connect(PacsServer::query,PacsServer::seriesLevel).good())
     {//Error al connectar
+		logMessage = "Error al connectar al PACS ";
+		logMessage.append( pacsAETitle );
+		ERROR_LOG( logMessage.toAscii().constData() );		
+
         text.insert(0,tr("Error! connecting to PACS : "));
         text.append(pacsAETitle);
         return;         
@@ -557,6 +575,8 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     
     if (!querySeries.find().good())
     {//Error a la query
+		ERROR_LOG( "Error cercant les sèries de l'estudi ");		
+
         text.insert(0,tr("Error! Can't query studies in PACS : "));
         text.append(pacsAETitle);
         QMessageBox::warning( this, tr("StarViewer"),text);
@@ -597,7 +617,11 @@ void QueryScreen::QuerySeriesCache(QString studyUID)
     CachePacs * localCache = CachePacs::getCachePacs();
     int imagesNumber;
     Status state;
+	QString logMessage;
     
+	logMessage = "Cerca de sèries a la caché de l'estudi " + studyUID;
+	INFO_LOG( logMessage.toAscii().constData() );
+ 
     m_seriesListCache.clear();//preparem la llista de series
     
     //preparem la mascara i cerquem les series a la cache
@@ -852,6 +876,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     QString absSeriesPath;
     StarviewerSettings settings;
     StudyVolum volum;
+	QString logMessage;
         
     if (studyUID == "")
     {
@@ -859,7 +884,10 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
         QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to view "));
         return;
     }    
-        
+    
+	logMessage = "Es visualitza l'estudi " + studyUID;
+	INFO_LOG ( logMessage.toAscii().constData() );
+	
     state = localCache->queryStudy(studyUID.toAscii().constData(),stu); //cerquem la informació de l'estudi
     if (!state.good())
     {   
@@ -945,6 +973,7 @@ void QueryScreen::deleteStudyCache()
     Status state;
     CachePacs * localCache = CachePacs::getCachePacs();
     QString studyUID;
+	QString logMessage;
     
     
     studyUID = m_studyTreeWidgetCache->getSelectedStudyUID();
@@ -961,7 +990,8 @@ void QueryScreen::deleteStudyCache()
 				      0, 1 ) ) 
     {
         case 0:
-            
+            logMessage = "S'esborra de la cache l'estudi " + studyUID;
+			INFO_LOG( logMessage.toAscii().constData() );
             
             state = localCache->delStudy(studyUID.toAscii().constData());   
             if (state.good())
@@ -997,6 +1027,8 @@ void QueryScreen::config()
 {
     udg::QConfigurationScreen *configScreen = new udg::QConfigurationScreen;
     
+	INFO_LOG( "S'obre la finestra de configuració" );
+
     connect( configScreen , SIGNAL( pacsListChanged() ) , qPacsList , SLOT( refresh()  ) );
     connect( configScreen , SIGNAL( cacheCleared() ) , m_studyTreeWidgetCache , SLOT( clear() ) );
 	connect( configScreen , SIGNAL( cacheCleared() ) , m_seriesListWidgetCache , SLOT( clearSeriesListWidget() ) );	
@@ -1247,6 +1279,24 @@ StudyMask QueryScreen::buildMask()
     }
     
     return mask;
+}
+
+QString QueryScreen::logQueryStudy()
+{
+	QString logMessage;
+		
+    logMessage.insert( 0 , m_textPatientID->text() );
+    logMessage.append( ";" );
+	logMessage.append( buildPatientName() );
+    logMessage.append( ";" );
+    logMessage.append( m_textStudyID->text() );
+    logMessage.append( ";" );
+    logMessage.append( buildStudyDates() );
+    logMessage.append( ";" );
+    logMessage.append( m_textAccessionNumber->text() );
+    logMessage.append( ";" );
+
+	return logMessage;
 }
 
 QueryScreen::~QueryScreen()
