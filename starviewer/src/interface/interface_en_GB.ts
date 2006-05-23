@@ -1,66 +1,6 @@
 <!DOCTYPE TS><TS>
 <context>
     <name>MutualInformationInputParametersFormBase</name>
-    <message>
-        <source>Gaussian Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fixed Image Variance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Moving Image Variance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0.4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Optimizer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of Iterations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Learning Rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0.0001</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>50</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Metric</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fixed Image Standard Deviation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Moving Image Standard Deviation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of Samples</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Floating Image</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QApplicationMainWindow</name>
@@ -73,14 +13,6 @@
     <name>QConfigurationScreenBase</name>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Allows to modify Pacs List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Allowd to modify Cache configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -172,14 +104,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Examinate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Examinate disk  to find the database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Delete All Studies</source>
         <translation type="unfinished"></translation>
     </message>
@@ -188,19 +112,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Compact DataBase</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Comptact Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Examinate loca to find the directory to save the retrieved images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -268,14 +184,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Count the number of images (reduce the query speed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Previsualitzate the images of a study (reduces the query speed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>AETitle</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,6 +213,46 @@
     </message>
     <message>
         <source>     Gb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compact Database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Examine disk to find the directory to save the retrieved images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Examine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete studies that has not been viewed in :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Examine disk  to find the database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save changes and close the configuration window </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply the canges</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel changes and close the windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -472,50 +420,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SagitalSlice+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SagitalSlice-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CoronalSlice+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CoronalSlice-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal X+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal X-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sagital Y+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sagital Y-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal Y+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal Y-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MIP</source>
         <translation type="unfinished"></translation>
     </message>
@@ -575,13 +479,13 @@
         <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Thick Slab</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMutualInformationTab</name>
-    <message>
-        <source>Form1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QPacsListBase</name>
@@ -616,6 +520,10 @@
         <source>Chose an image filename</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Choose a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::ExtensionHandler</name>
@@ -632,16 +540,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Volume Axis View</source>
+        <source>Default Viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::ExtensionWorkspace</name>
-    <message>
-        <source>X</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::Q2DViewer</name>
@@ -655,34 +559,6 @@
     </message>
     <message>
         <source>Reset initial parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>L</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No se</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -705,20 +581,12 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Made by Starviewer %1</source>
+        <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::QApplicationMainWindow</name>
-    <message>
-        <source>Loading image data...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
@@ -729,38 +597,6 @@ Acc:%4
     </message>
     <message>
         <source>StarViewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>JPEG Images (*.jpg)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>MetaIO Images (*.mhd)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PNG Images (*.png)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>TIFF Images (*.tiff)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>BMP Images (*.bmp)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DICOM Images (*.dcm)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -777,46 +613,6 @@ Acc:%4
     </message>
     <message>
         <source>Open an existing volume file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to JPEG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export the volume to jpeg format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to MetaIO</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export the volume to MetaIO format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to PNG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export the volume to png format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to TIFF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export the volume to tiff format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export to BMP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export the volume to bmp format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -840,27 +636,7 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Import</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Recent files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -873,26 +649,6 @@ Acc:%4
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;%1 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exception while reading file. Cannot open the specified file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -956,39 +712,7 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choose an image filename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Segmentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Clustering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Registration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Visualization</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Co&amp;lor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -996,23 +720,59 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Starviewer</source>
+        <source>Open &amp;DICOM Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &#xfe;Beta&#xfe;&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2004 Universitat de Girona&lt;p&gt;StarViewer is a small application that lets you view &lt;b&gt;DICOM&lt;/b&gt;, &lt;b&gt;MHD&apos;s&lt;/b&gt;,... files and manipulate them.&lt;p&gt;Last Redisign Version : in early development</source>
+        <source>Ctrl+D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>2D &amp;Basic Viewer</source>
+        <source>Open an existing DICOM folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ctrl+B</source>
+        <source>&amp;Default Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Open Basic Application Viewer</source>
+        <source>Open the Default Viewer Application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to Catalan Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to Spanish Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="unfinished">English</translation>
+    </message>
+    <message>
+        <source>Switch to English Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language Switch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The changes will take effect after restarting the application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1067,10 +827,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database not found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1114,28 +870,189 @@ Acc:%4
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The application has to be restart to apply the changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is looked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To solve this error restart the user session</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QCustomWindowLevelDialogBase</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDefaultViewerExtension</name>
+    <message>
+        <source>&amp;Axial View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Sagital View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Sagital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coronal View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YZ : Sagital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XZ : Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Single View</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDefaultViewerExtensionBase</name>
+    <message>
+        <source>WW/WL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Neck , Constrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Serie To Compare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronize Slices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QMPR3D2DExtension</name>
-    <message>
-        <source>Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom Window/Level Functions are not yet available</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QMPR3DExtension</name>
-    <message>
-        <source>Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom Window/Level Functions are not yet available</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QMPRExtension</name>
@@ -1155,10 +1072,6 @@ Acc:%4
         <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Custom Window/Level Functions are not yet available</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QNavigateWindowBase</name>
@@ -1169,10 +1082,6 @@ Acc:%4
 </context>
 <context>
     <name>udg::QPacsList</name>
-    <message>
-        <source>Database not found.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
@@ -1187,6 +1096,14 @@ Acc:%4
     </message>
     <message>
         <source>Internal Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is looked</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1248,10 +1165,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Status                         </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1267,11 +1180,19 @@ Acc:%4
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QSeriesListWidget</name>
     <message>
         <source>Series </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> images</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1306,6 +1227,18 @@ Acc:%4
     </message>
     <message>
         <source>Series</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1363,25 +1296,13 @@ Acc:%4
         <source>Img Num</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>New Column</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QTabAxisViewBase</name>
-    <message>
-        <source>Axis View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XY : Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YZ : Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XZ : Coronal</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QueryScreen</name>
@@ -1439,27 +1360,11 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error disk space under 1 Gb. Plese free spaces in your disk </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error trying to visualitzate the study</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Please select a study to delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The study has been retrieved.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1479,10 +1384,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show Pacs List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1492,6 +1393,54 @@ Acc:%4
     </message>
     <message>
         <source>Register duplicated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error deleting old studies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The study has been retrieved or is retrieving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to view this Study ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enough space to retrieve studies. Please free space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error Freeing Space. The study couldn&apos;t be retrieved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Can&apos;t connect to PACS </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Be sure that the IP and AETitle of the PACS is correct </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is looked</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

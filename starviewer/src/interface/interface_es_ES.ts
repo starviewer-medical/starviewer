@@ -1,147 +1,69 @@
 <!DOCTYPE TS><TS>
 <context>
-    <name>MutualInformationInputParametersFormBase</name>
-    <message>
-        <source>Gaussian Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fixed Image Variance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Moving Image Variance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0.4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Optimizer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of Iterations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Learning Rate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>0.0001</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>50</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Metric</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fixed Image Standard Deviation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>2.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Moving Image Standard Deviation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Number of Samples</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Floating Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QApplicationMainWindow</name>
-    <message>
-        <source>English</source>
-        <translation type="obsolete">Castellano</translation>
-    </message>
-</context>
-<context>
     <name>QConfigurationScreenBase</name>
     <message>
         <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Allows to modify Pacs List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Allowd to modify Cache configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración</translation>
     </message>
     <message>
         <source>Pacs Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivos PACS</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Por defecto</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir</translation>
     </message>
     <message>
         <source>Add the new Pacs to the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir un nuevo Pacs a la lista</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar</translation>
     </message>
     <message>
         <source>Update the parameters of the selected Pacs</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar los parámetros del Pacs seleccionado</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <source>Delete selected Pacss</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar los Pacs seleccionados</translation>
     </message>
     <message>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Compobar</translation>
     </message>
     <message>
         <source>Test if selected Pacs is alive</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprobar si los Pacs seleccionados están &quot;vivos&quot;</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Borrar</translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <source>Crear the text boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar las cajas de texto</translation>
     </message>
     <message>
         <source>&lt;b&gt;AE Title :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;AE Title :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Address :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Dirección :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Port :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Puerto:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>99999; </source>
@@ -149,59 +71,43 @@
     </message>
     <message>
         <source>Default </source>
-        <translation type="unfinished"></translation>
+        <translation>Defecto</translation>
     </message>
     <message>
         <source>&lt;b&gt;Institution :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Institución :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Location :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Ubicación&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Description :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Descripción :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Cache Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración de la cache</translation>
     </message>
     <message>
         <source>&lt;b&gt;DataBase path :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Examinate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Examinate disk  to find the database</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Ruta a la base de datos :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Delete All Studies</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar todos los estudios</translation>
     </message>
     <message>
         <source>Delete all the studies of the cache</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Compact DataBase</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar todos los estudios de la cache</translation>
     </message>
     <message>
         <source>Comptact Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Compactar la Base de Datos</translation>
     </message>
     <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Examinate loca to find the directory to save the retrieved images</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Directorio de la cache de imágenes: &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Pool Size :&lt;/b&gt;</source>
@@ -213,31 +119,31 @@
     </message>
     <message>
         <source>&lt;b&gt;Gb&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Gb&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Free :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Libre :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Used : &lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Usado :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <source>Apply Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar Cambios</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <source>Pacs Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración del Pacs</translation>
     </message>
     <message>
         <source>&lt;b&gt;AETitle Machine :&lt;/b&gt;</source>
@@ -245,7 +151,7 @@
     </message>
     <message>
         <source>&lt;b&gt;Timeout :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Tiempo de espera: &lt;/b&gt;</translation>
     </message>
     <message>
         <source>99; </source>
@@ -253,7 +159,7 @@
     </message>
     <message>
         <source>&lt;b&gt;seconds&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;segundos&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Incoming Connections Port :&lt;/b&gt;</source>
@@ -268,51 +174,83 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Count the number of images (reduce the query speed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Previsualitzate the images of a study (reduces the query speed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>AETitle</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto</translation>
     </message>
     <message>
         <source>Institution</source>
-        <translation type="unfinished"></translation>
+        <translation>Institución</translation>
     </message>
     <message>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubicación</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripción</translation>
     </message>
     <message>
         <source>     %</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>     Gb</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Compact Database</source>
+        <translation>Caompactar Base de Datos</translation>
+    </message>
+    <message>
+        <source>Examine disk to find the directory to save the retrieved images</source>
+        <translation>Examinar disco para encontrar el directorio para almacenar las imágenes recibidas</translation>
+    </message>
+    <message>
+        <source>Examine</source>
+        <translation>Examinar</translation>
+    </message>
+    <message>
+        <source>Delete studies that has not been viewed in :</source>
+        <translation>Borrar estudios que no se han mirado en:</translation>
+    </message>
+    <message>
+        <source>days</source>
+        <translation>días</translation>
+    </message>
+    <message>
+        <source>Examine disk  to find the database</source>
+        <translation>Examinar el disco para encontrar la base de datos</translation>
+    </message>
+    <message>
+        <source>Save changes and close the configuration window </source>
+        <translation>Guardar cambios y cerrar la ventana de configuración</translation>
+    </message>
+    <message>
+        <source>Apply the canges</source>
+        <translation>Aplicar Cambios</translation>
+    </message>
+    <message>
+        <source>Cancel changes and close the windows</source>
+        <translation>Cancelar cambios y cerrar las ventanas</translation>
+    </message>
+    <message>
+        <source>Apply changes</source>
+        <translation>Aplicar cambios</translation>
     </message>
 </context>
 <context>
     <name>QFileDialog</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir</translation>
     </message>
 </context>
 <context>
@@ -323,15 +261,15 @@
     </message>
     <message>
         <source>Axial</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Sagital</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Coronal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>WW/WL:</source>
@@ -339,47 +277,47 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Defecto</translation>
     </message>
     <message>
         <source>CT Bone</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Óseo</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Pulmonar</translation>
     </message>
     <message>
         <source>CT Soft Tissues , noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, bajo contraste</translation>
     </message>
     <message>
         <source>CT Liver , noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, bajo contraste</translation>
     </message>
     <message>
         <source>CT Soft Tissues , medium contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, contraste medio</translation>
     </message>
     <message>
         <source>CT Liver , medium contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, contraste medio</translation>
     </message>
     <message>
         <source>Neck , medium contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuello, contraste medio</translation>
     </message>
     <message>
         <source>Angiography</source>
-        <translation type="unfinished"></translation>
+        <translation>Angiografía</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
+        <translation>Osteoporosis</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished"></translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <source>Petrous Bone</source>
@@ -387,7 +325,7 @@
     </message>
     <message>
         <source>Custom...</source>
-        <translation type="unfinished"></translation>
+        <translation>A medida...</translation>
     </message>
 </context>
 <context>
@@ -398,15 +336,15 @@
     </message>
     <message>
         <source>Axial</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Sagital</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Coronal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>WW/WL:</source>
@@ -414,47 +352,47 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Por defecto</translation>
     </message>
     <message>
         <source>CT Bone  </source>
-        <translation type="unfinished"></translation>
+        <translation>CT Óseo</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Pulmonar</translation>
     </message>
     <message>
         <source>CT Soft Tissues , noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, bajo contraste</translation>
     </message>
     <message>
         <source>CT Liver , noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, bajo contraste</translation>
     </message>
     <message>
         <source>CT Soft Tissues , medium contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, contraste medio</translation>
     </message>
     <message>
         <source>CT Liver , medium contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, contraste medio</translation>
     </message>
     <message>
         <source>CT Neck , medium contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuello, contraste medio</translation>
     </message>
     <message>
         <source>Angiography</source>
-        <translation type="unfinished"></translation>
+        <translation>Angiografía</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
+        <translation>Osteoporosis</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished"></translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <source>Petrous Bone</source>
@@ -462,7 +400,7 @@
     </message>
     <message>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">A medida...</translation>
     </message>
 </context>
 <context>
@@ -472,52 +410,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>SagitalSlice+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SagitalSlice-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CoronalSlice+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CoronalSlice-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal X+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal X-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sagital Y+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sagital Y-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal Y+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Coronal Y-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save Selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>MIP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>WW/WL:</source>
@@ -525,47 +419,47 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Por defecto</translation>
     </message>
     <message>
         <source>CT Bone</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Óseo</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Pulmonar</translation>
     </message>
     <message>
         <source>CT Soft Tissues, noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, bajo contraste</translation>
     </message>
     <message>
         <source>CT Liver, noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, bajo contraste</translation>
     </message>
     <message>
         <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, contraste medio</translation>
     </message>
     <message>
         <source>CT Liver , Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, contraste medio</translation>
     </message>
     <message>
         <source>CT Neck , Constrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuello, contraste medio</translation>
     </message>
     <message>
         <source>CT Angiography</source>
-        <translation type="unfinished"></translation>
+        <translation>Angiografía</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
+        <translation>Osteoporosis</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished"></translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <source>Petrous Bone</source>
@@ -573,20 +467,10 @@
     </message>
     <message>
         <source>Custom...</source>
-        <translation type="unfinished"></translation>
+        <translation>A medida...</translation>
     </message>
-</context>
-<context>
-    <name>QMainToolBoxPageBase</name>
     <message>
-        <source>&amp;Apply</source>
-        <translation type="obsolete">&amp;Aplicar</translation>
-    </message>
-</context>
-<context>
-    <name>QMutualInformationTab</name>
-    <message>
-        <source>Form1</source>
+        <source>Thick Slab</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -617,98 +501,49 @@
     <name>udg::AppImportFile</name>
     <message>
         <source>MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="unfinished">Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
+        <translation>Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
     </message>
     <message>
         <source>Chose an image filename</source>
-        <translation type="unfinished">Escoger un nombre de archivo de imagen</translation>
+        <translation>Escoger un nombre de archivo de imagen</translation>
+    </message>
+    <message>
+        <source>Choose a directory</source>
+        <translation>Escoger un directorio</translation>
     </message>
 </context>
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
         <source>2D MPR</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR 2D</translation>
     </message>
     <message>
         <source>3D MPR</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR 3D</translation>
     </message>
     <message>
         <source>3D-2D MPR</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR 3D-2D</translation>
     </message>
     <message>
-        <source>Volume Axis View</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::ExtensionWorkspace</name>
-    <message>
-        <source>X</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::InformationTextDisplay</name>
-    <message>
-        <source>Image Size: %d x %d
-View Size: %d x %d
-X: %4g px Y: %4g px Value: %g
-WW: %.1f WL: %.1f </source>
-        <translation type="obsolete">Tamaño de la Imagen: %d x %d\nTamaño de la Vista: %d x %d\nX: %4g px Y: %4g px Valor: %g\nWW: %.1f WL: %.1f </translation>
-    </message>
-    <message>
-        <source>Image Size: %d x %d
-View Size: %d x %d
-Off Image
-WW: %.1f WL: %.1f </source>
-        <translation type="obsolete">Tamaño de la Imagen: %d x %d\nTamaño de la Vista: %d x %d\nFuera de Imagen\nWW: %.1f WL: %.1f </translation>
-    </message>
-    <message>
-        <source>%s</source>
-        <translation type="obsolete">%s</translation>
-    </message>
-    <message>
-        <source>Slice: %d/%d
-Zoom: XXX%%  Angle: XXX
-Thickness: XXX mm Location: XXX </source>
-        <translation type="obsolete">Corte: %d/%d\nAumento: XXX%%  Ángulo: XXX\nGrosor: XXX mm Ubicación: XXX</translation>
-    </message>
-    <message>
-        <source>No Info</source>
-        <translation type="obsolete">Sin Información</translation>
-    </message>
-    <message>
-        <source>No info</source>
-        <translation type="obsolete">Sin Información</translation>
-    </message>
-</context>
-<context>
-    <name>udg::MutualInformationDirector</name>
-    <message>
-        <source>Registered Volume [CheckerBoard View]</source>
-        <translation type="obsolete">Volumen Registrado [Vista de Tablero de Ajedrez]</translation>
-    </message>
-    <message>
-        <source>Registered Volume [Blend View]</source>
-        <translation type="obsolete">Volumen Registrado [Vista &apos;Mezclada&apos;]</translation>
+        <source>Default Viewer</source>
+        <translation>Visor por defecto</translation>
     </message>
 </context>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
         <source>&amp;Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Reiniciar</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <source>Reset initial parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar parámetros iniciales</translation>
     </message>
     <message>
         <source>No Info</source>
@@ -719,42 +554,16 @@ Thickness: XXX mm Location: XXX </source>
         <translation type="obsolete">Sin Información</translation>
     </message>
     <message>
-        <source>L</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No se</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Slice: %1/%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Corte: %1/%2</translation>
     </message>
     <message>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño Imagen: %1 x %2
+Tamaño Vista: %3 x %4
+WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>%1
@@ -763,26 +572,23 @@ WW: %5 WL: %6 </source>
 Acc:%4
 %5
 %6</source>
-        <translation type="unfinished"></translation>
+        <translation>%1
+%2
+%3
+Acc:%4
+%5
+%6</translation>
     </message>
     <message>
-        <source>Made by Starviewer %1</source>
-        <translation type="unfinished"></translation>
+        <source>%1</source>
+        <translation>%1</translation>
     </message>
 </context>
 <context>
     <name>udg::QApplicationMainWindow</name>
     <message>
-        <source>&amp;Mutual Information</source>
-        <translation type="obsolete">Información &amp;Mútua</translation>
-    </message>
-    <message>
-        <source>Loading image data...</source>
-        <translation>Cargando los datos de imagen...</translation>
-    </message>
-    <message>
         <source>Abort</source>
-        <translation>Abortar</translation>
+        <translation type="obsolete">Abortar</translation>
     </message>
     <message>
         <source>Progress</source>
@@ -798,35 +604,35 @@ Acc:%4
     </message>
     <message>
         <source>MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation>Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
+        <translation type="obsolete">Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
     </message>
     <message>
         <source>JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation>Imágenes JPEG (*.jpg);;Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
+        <translation type="obsolete">Imágenes JPEG (*.jpg);;Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
     </message>
     <message>
         <source>JPEG Images (*.jpg)</source>
-        <translation>Imágenes JPEG (*.jpg)</translation>
+        <translation type="obsolete">Imágenes JPEG (*.jpg)</translation>
     </message>
     <message>
         <source>MetaIO Images (*.mhd)</source>
-        <translation>Imágenes MetaIO (*.mhd)</translation>
+        <translation type="obsolete">Imágenes MetaIO (*.mhd)</translation>
     </message>
     <message>
         <source>PNG Images (*.png)</source>
-        <translation>Imágenes PNG (*.png)</translation>
+        <translation type="obsolete">Imágenes PNG (*.png)</translation>
     </message>
     <message>
         <source>TIFF Images (*.tiff)</source>
-        <translation>Imágenes TIFF (*.tiff)</translation>
+        <translation type="obsolete">Imágenes TIFF (*.tiff)</translation>
     </message>
     <message>
         <source>BMP Images (*.bmp)</source>
-        <translation>Imágenes BMP (*.bmp)</translation>
+        <translation type="obsolete">Imágenes BMP (*.bmp)</translation>
     </message>
     <message>
         <source>DICOM Images (*.dcm)</source>
-        <translation>Imágenes DICOM (*.dcm)</translation>
+        <translation type="obsolete">Imágenes DICOM (*.dcm)</translation>
     </message>
     <message>
         <source>&amp;New</source>
@@ -846,7 +652,7 @@ Acc:%4
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="unfinished">Ctrl+A</translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <source>Open an existing volume file</source>
@@ -854,43 +660,35 @@ Acc:%4
     </message>
     <message>
         <source>Export to JPEG</source>
-        <translation>Exportar a JPEG</translation>
+        <translation type="obsolete">Exportar a JPEG</translation>
     </message>
     <message>
         <source>Export the volume to jpeg format</source>
-        <translation>Exportar el volumen a formato JPEG</translation>
+        <translation type="obsolete">Exportar el volumen a formato JPEG</translation>
     </message>
     <message>
         <source>Export to MetaIO</source>
-        <translation>Exportar a MetaIO</translation>
+        <translation type="obsolete">Exportar a MetaIO</translation>
     </message>
     <message>
         <source>Export the volume to MetaIO format</source>
-        <translation>Exportar el volumen a formato MetaIO</translation>
+        <translation type="obsolete">Exportar el volumen a formato MetaIO</translation>
     </message>
     <message>
         <source>Export to PNG</source>
-        <translation>Exportar a PNG</translation>
+        <translation type="obsolete">Exportar a PNG</translation>
     </message>
     <message>
         <source>Export the volume to png format</source>
-        <translation>Exportar el volumen a formato png</translation>
-    </message>
-    <message>
-        <source>Export to TIFF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export the volume to tiff format</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Exportar el volumen a formato png</translation>
     </message>
     <message>
         <source>Export to BMP</source>
-        <translation>Exportar a BMP</translation>
+        <translation type="obsolete">Exportar a BMP</translation>
     </message>
     <message>
         <source>Export the volume to bmp format</source>
-        <translation>Exportar el volumen a formato de mapa de bits</translation>
+        <translation type="obsolete">Exportar el volumen a formato de mapa de bits</translation>
     </message>
     <message>
         <source>&amp;Show ToolBox</source>
@@ -902,11 +700,11 @@ Acc:%4
     </message>
     <message>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sobre</translation>
     </message>
     <message>
         <source>Show the application&apos;s About box</source>
-        <translation type="unfinished"></translation>
+        <translation>Muestra información de la aplicación</translation>
     </message>
     <message>
         <source>&amp;Tile</source>
@@ -938,7 +736,7 @@ Acc:%4
     </message>
     <message>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <source>Close the current window</source>
@@ -954,15 +752,15 @@ Acc:%4
     </message>
     <message>
         <source>&amp;Import</source>
-        <translation>&amp;Importar</translation>
+        <translation type="obsolete">&amp;Importar</translation>
     </message>
     <message>
         <source>&amp;Export</source>
-        <translation>&amp;Exportar</translation>
+        <translation type="obsolete">&amp;Exportar</translation>
     </message>
     <message>
         <source>&amp;Recent files</source>
-        <translation>Archivos &amp;Recientes</translation>
+        <translation type="obsolete">Archivos &amp;Recientes</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -974,11 +772,11 @@ Acc:%4
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Herramientas</translation>
+        <translation type="obsolete">&amp;Herramientas</translation>
     </message>
     <message>
         <source>&amp;Options</source>
-        <translation>&amp;Opciones</translation>
+        <translation type="obsolete">&amp;Opciones</translation>
     </message>
     <message>
         <source>&amp;Windows</source>
@@ -994,7 +792,7 @@ Acc:%4
     </message>
     <message>
         <source>Options</source>
-        <translation>Opciones</translation>
+        <translation type="obsolete">Opciones</translation>
     </message>
     <message>
         <source>Mutual Information</source>
@@ -1002,11 +800,11 @@ Acc:%4
     </message>
     <message>
         <source>Error</source>
-        <translation>Error</translation>
+        <translation type="obsolete">Error</translation>
     </message>
     <message>
         <source>Exception while reading file. Cannot open the specified file.</source>
-        <translation>Excepción durante la lectura del archivo. No se ha podido abrir el archivo especificado.</translation>
+        <translation type="obsolete">Excepción durante la lectura del archivo. No se ha podido abrir el archivo especificado.</translation>
     </message>
     <message>
         <source>Loading image %1</source>
@@ -1021,16 +819,8 @@ Acc:%4
         <translation type="obsolete">Error cargando %1</translation>
     </message>
     <message>
-        <source>%1 - %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>2D Viewer</source>
         <translation type="obsolete">Visor 2D</translation>
-    </message>
-    <message>
-        <source>&amp;%1 %2</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About StarViewer</source>
@@ -1046,114 +836,118 @@ Acc:%4
     </message>
     <message>
         <source>Open a new working window</source>
-        <translation type="unfinished"></translation>
+        <translation>Abre una nueva ventana de trabajo</translation>
     </message>
     <message>
         <source>&amp;PACS...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;PACS...</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+P</translation>
     </message>
     <message>
         <source>Open PACS Query Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Abre el diálogo de consulta del PACS</translation>
     </message>
     <message>
         <source>2D &amp;MPR Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visor &amp;MPR 2D</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>Open the 2D MPR Application Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Abre la aplicación Visor MPR 2D</translation>
     </message>
     <message>
         <source>3D M&amp;PR Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visor M&amp;PR 3D</translation>
     </message>
     <message>
         <source>Open the 3D MPR Application Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Abre la aplicación Visor MPR 3D</translation>
     </message>
     <message>
         <source>3D-2D MP&amp;R Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visor MP&amp;R 3D-2D</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <source>Open the 3D-2D MPR Application Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Abre la aplicación Visor MPR 3D-2D</translation>
     </message>
     <message>
         <source>Close the current volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose an image filename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Segmentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Clustering</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Registration</source>
-        <translation type="unfinished"></translation>
+        <translation>Cierra el volumen actual</translation>
     </message>
     <message>
         <source>&amp;Visualization</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Co&amp;lor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Visualización</translation>
     </message>
     <message>
         <source>Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Extensiones</translation>
     </message>
     <message>
-        <source>Starviewer</source>
-        <translation type="unfinished"></translation>
+        <source>Open &amp;DICOM Directory</source>
+        <translation>Abrir Directorio &amp;Dicom</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &#xfe;Beta&#xfe;&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2004 Universitat de Girona&lt;p&gt;StarViewer is a small application that lets you view &lt;b&gt;DICOM&lt;/b&gt;, &lt;b&gt;MHD&apos;s&lt;/b&gt;,... files and manipulate them.&lt;p&gt;Last Redisign Version : in early development</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+D</source>
+        <translation></translation>
     </message>
     <message>
-        <source>2D &amp;Basic Viewer</source>
-        <translation type="unfinished"></translation>
+        <source>Open an existing DICOM folder</source>
+        <translation>Abrir una carpeta DICOM existente</translation>
     </message>
     <message>
-        <source>Ctrl+B</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Default Viewer</source>
+        <translation>Visor por &amp;Defecto</translation>
     </message>
     <message>
-        <source>Open Basic Application Viewer</source>
+        <source>Open the Default Viewer Application</source>
+        <translation>Abrir la aplicación visor por defecto</translation>
+    </message>
+    <message>
+        <source>Catalan</source>
+        <translation>Catalán</translation>
+    </message>
+    <message>
+        <source>Switch to Catalan Language</source>
+        <translation>Cambiar a lengua catalana</translation>
+    </message>
+    <message>
+        <source>Spanish</source>
+        <translation>Castellano</translation>
+    </message>
+    <message>
+        <source>Switch to Spanish Language</source>
+        <translation>Cambiar a lengua castellana</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation>Inglés</translation>
+    </message>
+    <message>
+        <source>Switch to English Language</source>
+        <translation>Cambiar a lengua inglesa</translation>
+    </message>
+    <message>
+        <source>Language Switch</source>
+        <translation>Cambio de Idioma</translation>
+    </message>
+    <message>
+        <source>The changes will take effect after restarting the application</source>
+        <translation>Los cambios surtirán efecto una vez se haya reiniciado la aplicación</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1208,10 +1002,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database not found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1255,41 +1045,181 @@ Acc:%4
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>udg::QDebugConsoleBase</name>
     <message>
-        <source>Debug console</source>
-        <translation type="obsolete">Consola de depuración</translation>
-    </message>
-    <message>
-        <source>Copy To Clipboard</source>
-        <translation type="obsolete">Copiar al Portapapeles</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Borrar</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QMPR3D2DExtension</name>
-    <message>
-        <source>Information</source>
+        <source>The application has to be restart to apply the changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Custom Window/Level Functions are not yet available</source>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is looked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To solve this error restart the user session</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>udg::QMPR3DExtension</name>
+    <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <source>Information</source>
+        <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Custom Window/Level Functions are not yet available</source>
+        <source>Window Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDefaultViewerExtension</name>
+    <message>
+        <source>&amp;Axial View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Sagital View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Sagital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coronal View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YZ : Sagital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XZ : Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Single View</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDefaultViewerExtensionBase</name>
+    <message>
+        <source>WW/WL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Neck , Constrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Serie To Compare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronize Slices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1301,7 +1231,7 @@ Acc:%4
     </message>
     <message>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información</translation>
     </message>
     <message>
         <source>There are not grabbed views to save</source>
@@ -1309,10 +1239,6 @@ Acc:%4
     </message>
     <message>
         <source>Save file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom Window/Level Functions are not yet available</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1325,10 +1251,6 @@ Acc:%4
 </context>
 <context>
     <name>udg::QPacsList</name>
-    <message>
-        <source>Database not found.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
@@ -1343,6 +1265,14 @@ Acc:%4
     </message>
     <message>
         <source>Internal Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is looked</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1404,10 +1334,6 @@ Acc:%4
         <translation type="unfinished">Borrar</translation>
     </message>
     <message>
-        <source>Status                         </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Direction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1423,11 +1349,19 @@ Acc:%4
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QSeriesListWidget</name>
     <message>
         <source>Series </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> images</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1436,13 +1370,6 @@ Acc:%4
     <message>
         <source>Form1</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::QStudyListView</name>
-    <message>
-        <source>&amp;View</source>
-        <translation type="obsolete">V&amp;ista</translation>
     </message>
 </context>
 <context>
@@ -1469,6 +1396,18 @@ Acc:%4
     </message>
     <message>
         <source>Series</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1526,23 +1465,8 @@ Acc:%4
         <source>Img Num</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>udg::QTabAxisViewBase</name>
     <message>
-        <source>Axis View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XY : Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YZ : Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XZ : Coronal</source>
+        <source>New Column</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1602,27 +1526,11 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error disk space under 1 Gb. Plese free spaces in your disk </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error trying to visualitzate the study</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Please select a study to delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The study has been retrieved.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Database not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1642,10 +1550,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show Pacs List</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1655,6 +1559,54 @@ Acc:%4
     </message>
     <message>
         <source>Register duplicated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error deleting old studies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The study has been retrieved or is retrieving.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to view this Study ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enough space to retrieve studies. Please free space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error Freeing Space. The study couldn&apos;t be retrieved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Can&apos;t connect to PACS </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Be sure that the IP and AETitle of the PACS is correct </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is looked</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
