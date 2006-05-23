@@ -38,8 +38,6 @@ Gestor de mini-aplicacions i serveis de l'aplicació principal
 
 @author Grup de Gràfics de Girona  ( GGG )
 
-\TODO: temporalment seguirem el patró 1 aplicació/servei : 1 mètode públic
-
 */
 class ExtensionHandler : public QObject{
 Q_OBJECT
@@ -47,15 +45,9 @@ public:
     ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent = 0, const char *name = 0);
 
     ~ExtensionHandler();
-
-    /// Presenta les mini-apps a la aplicació principal, posant-les a l'abast. ( el mètode es podria dir també spreadExtensions o algo així)
-    void introduceApplications();
     
     /// Obre un volum a partir d'un fitxer \TODO ara es fa tot a saco aquí dins però potser seria millor que ho fe suna clase externa especialitzada
     bool open( QString fileName );
-
-    /// \TODO Això és un "apanyo"
-    void setVolumeID( Identifier id ){ m_volumeID = id; }
     
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
@@ -102,10 +94,13 @@ private:
 
     /// L'id del volum amb el que estem treballant
     Identifier m_volumeID;    
+
     /// El repository de volums
     VolumeRepository *m_volumeRepository;
+
     /// accés a l'entrada de dades -> això hauria de formar part d'una mini-app, per tant és temporal
     Input *m_inputReader;
+
     /// accés a la sortida/escriptura de dades -> això hauria de formar part d'una mini-app, per tant és temporal
     Output *m_outputWriter;
     

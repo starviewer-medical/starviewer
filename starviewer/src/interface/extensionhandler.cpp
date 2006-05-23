@@ -13,10 +13,10 @@
 #include "volumerepository.h"
 #include "input.h"
 #include "output.h"
-// aplicacions
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
 
+// aplicacions
 #include "extensionfactory2.h"
 #include "qmprextensioncreator.h"
 #include "qmpr3dextensioncreator.h"
@@ -61,8 +61,8 @@ ExtensionHandler::~ExtensionHandler()
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
-    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded() ) );
+//     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
+//     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
     
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
@@ -86,9 +86,7 @@ void ExtensionHandler::registerExtensions()
 
 void ExtensionHandler::request( int who )
 {
-
 // \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
-//     QueryScreen *queryScreen = new QueryScreen;
     QMPRExtension *mprExtension = new QMPRExtension( 0 );
     QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
     QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
@@ -101,7 +99,6 @@ void ExtensionHandler::request( int who )
         if( m_volumeID.isNull() )
         {
         // open!
-        // caldria comprovar si cal obrir una nova MainWindow
             m_importFileApp->open();
             m_importFileApp->finish();
         }
@@ -116,7 +113,6 @@ void ExtensionHandler::request( int who )
     case 2:
         if( !m_volumeID.isNull() )
         {
-// Aquest és el "nou" MPR
             mprExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
             m_mainApp->m_extensionWorkspace->addApplication( mprExtension , tr("2D MPR") );
         }
@@ -212,12 +208,7 @@ void ExtensionHandler::request( const QString &who )
 void ExtensionHandler::onVolumeLoaded( Identifier id )
 {
     m_volumeID = id;
-//     request( 2 );
     request( 8 );
-}
-
-void ExtensionHandler::introduceApplications()
-{
 }
 
 bool ExtensionHandler::open( QString fileName )
@@ -235,7 +226,6 @@ bool ExtensionHandler::open( QString fileName )
                 Volume *dummyVolume = m_inputReader->getData();
                 // afegim el nou volum al repositori
                 m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
-                
                 request(5);
             }
             else
@@ -264,7 +254,6 @@ bool ExtensionHandler::open( QString fileName )
     else
     {
         //Si ja tenim obert un model, obrim una finestra nova ???
-
     } 
     return ok;  
 }
@@ -296,25 +285,27 @@ void ExtensionHandler::viewStudy( StudyVolum study )
 	{
     	input->readSeries( serie.getSeriesPath().c_str() );
     }
-	else if ( serie.getNumberOfImages() == 1)
+	else if ( serie.getNumberOfImages() == 1 )
 	{   //en el cas que nomes tingui una imatge la serie, fem retornar el vector amb el Path i agafem el de la primera imatge
 		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
 	}
 
     Volume *dummyVolume = input->getData();
-    m_volumeID = m_volumeRepository->addVolume( dummyVolume );
-//     if( m_volumeID.isNull() )
-//     {
-//     }
-//     else
-//     {
-//         if( QMessageBox::question( this , tr("Opening new data") , tr("Would you like to open the data in a new window? (Data will be opened on the same window instead)") , QMessageBox::Yes , QMessageBox::No ) == QMessageBox::Yes )
-//         {
-//         // de mentres no fa res...
-//         }
-//     }
-    this->onVolumeLoaded( m_volumeID );
-    m_mainApp->onVolumeLoaded();
+    if( !m_volumeID.isNull() )
+    {
+        Identifier id;
+        id = m_volumeRepository->addVolume( dummyVolume );
+        // obrir nova finestra
+        QString windowName;    
+        QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" , m_mainApp->getCountQApplicationMainWindow() + 1 ) ) );
+        newMainWindow->show();
+        newMainWindow->onVolumeLoaded( id );
+    }
+    else
+    {
+        m_volumeID = m_volumeRepository->addVolume( dummyVolume );
+        m_mainApp->onVolumeLoaded( m_volumeID );
+    }    
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
@@ -341,11 +332,11 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     
     serie = study.getSeriesVolum();
 
-	if ( serie.getNumberOfImages() > 1)
+	if ( serie.getNumberOfImages() > 1 )
 	{
     	input->readSeries( serie.getSeriesPath().c_str() );
     }
-	else if ( serie.getNumberOfImages() == 1)
+	else if ( serie.getNumberOfImages() == 1 )
 	{   //en el cas que nomes tingui una imatge la serie, fem retornar el vector amb el Path i agafem el de la primera imatge
 		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
 	}

@@ -14,7 +14,6 @@
 // qt
 #include <QToolButton>
 #include <QSplitter>
-#include <QTextStream>
 #include <QSettings>
 #include <QMessageBox>
 

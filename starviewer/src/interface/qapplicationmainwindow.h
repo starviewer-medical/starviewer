@@ -12,6 +12,8 @@
 #include <QStringList>
 #include <QMenu>
 
+#include "identifier.h"
+
 // Forward declarations
 class QAction;
 class QToolBar;
@@ -45,9 +47,12 @@ public:
     /// Retorna la barra d'eines d'extensions
     QToolBar *getExtensionsToolBar() const { return m_extensionsToolBar; }
     
+    /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
+    unsigned int getCountQApplicationMainWindow();
+    
 public slots:
     /// Fa les tasques que cal quan s'ha carregat un volum
-    void onVolumeLoaded();
+    void onVolumeLoaded( Identifier id );
     
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
@@ -151,8 +156,6 @@ private:
     /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
     void writeSettings();
 
-    /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
-    unsigned int getCountQApplicationMainWindow();
 /*
     /// Especifica el fitxer acctual que s'està tractant \TODO \deprecated aquest mètode esdevindrà antiquat en breu i no té gaire sentit desar el nom del fitxer, el metode continua existint perquè s'ha arrastrat des del principi
     void setCurrentFile( const QString &fileName );

@@ -436,12 +436,13 @@ void QApplicationMainWindow::about()
                );
 }
 
-void QApplicationMainWindow::onVolumeLoaded()
+void QApplicationMainWindow::onVolumeLoaded( Identifier id )
 {
     m_defaultViewerAction->setEnabled( true );
     m_mpr2DAction->setEnabled( true );
     m_mpr3DAction->setEnabled( true );
     m_mpr3D2DAction->setEnabled( true );
+    m_extensionHandler->onVolumeLoaded( id );
 }
 
 void QApplicationMainWindow::writeSettings()
