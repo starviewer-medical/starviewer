@@ -1017,6 +1017,7 @@ void QueryScreen::showPacsList()
     }
     else
     {
+		m_buttonShowPacsList->setText( tr( "Show Pacs List" ) );
         m_PacsListShow = false;
     }
     
