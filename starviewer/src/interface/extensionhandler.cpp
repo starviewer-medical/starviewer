@@ -61,8 +61,8 @@ ExtensionHandler::~ExtensionHandler()
 
 void ExtensionHandler::createConnections()
 {
-//     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
-//     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
+    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
+    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
     
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
@@ -226,7 +226,7 @@ bool ExtensionHandler::open( QString fileName )
                 Volume *dummyVolume = m_inputReader->getData();
                 // afegim el nou volum al repositori
                 m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
-                request(5);
+                request(8);
             }
             else
             {
@@ -242,7 +242,7 @@ bool ExtensionHandler::open( QString fileName )
                 Volume *dummyVolume = m_inputReader->getData();
                 // afegim el nou volum al repositori
                 m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
-                request(5);
+                request(8);
             }
             else
             {
