@@ -562,12 +562,11 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     
     if (!pacsConnection.Connect(PacsServer::query,PacsServer::seriesLevel).good())
     {//Error al connectar
-		logMessage = "Error al connectar al PACS ";
+		logMessage = "Error al connectar al pacs ";
 		logMessage.append( pacsAETitle );
 		ERROR_LOG( logMessage.toAscii().constData() );		
-
-        text.insert(0,tr("Error! connecting to PACS : "));
-        text.append(pacsAETitle);
+			
+		errorConnectingPacs ( pacs.getPacsID() );
         return;         
     }
     
