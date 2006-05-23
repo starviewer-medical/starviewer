@@ -7,6 +7,7 @@
 #include "qdefaultviewerextension.h"
 
 #include "volume.h"
+#include "logging.h"
 #include "qcustomwindowleveldialog.h"
 #include <QAction>
 #include <QToolBar>
@@ -104,6 +105,7 @@ void QDefaultViewerExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
+    INFO_LOG("QDefaultViewerExtension: Donem l'input principal")
     changeViewToAxial();
     
 }
@@ -113,6 +115,7 @@ void QDefaultViewerExtension::setSecondInput( Volume *input )
     m_secondaryVolume = input;
     // \TODO ara ho fem "a saco" però s'hauria de millorar
     m_2DView2_2->setInput( m_secondaryVolume );
+    INFO_LOG("Afegim un segon volum per comparar")
     changeViewToAxial();
     m_stackedWidget->setCurrentIndex( 1 );
 }
@@ -139,6 +142,7 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_slider->setValue( m_2DView->getSlice() );
         m_viewText->setText( tr("XY : Axial") );
         m_2DView->setViewToAxial();
+        INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
         m_2DView->render();
     break;
 
@@ -155,6 +159,7 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_slider2_1->setValue( m_2DView2_1->getSlice() );
         m_viewText2_1->setText( tr("XY : Axial") );
         m_2DView2_1->setViewToAxial();
+        INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.1)")
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
@@ -163,6 +168,7 @@ void QDefaultViewerExtension::changeViewToAxial()
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("XY : Axial") );
         m_2DView2_2->setViewToAxial();
+        INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.2)")
         m_2DView2_2->render();
     break;
     
@@ -182,6 +188,7 @@ void QDefaultViewerExtension::changeViewToSagital()
         m_slider->setValue( m_mainVolume->getDimensions()[0]/2 );
         m_viewText->setText( tr("YZ : Sagital") );
         m_2DView->setViewToSagittal();
+        INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
         m_2DView->render();
     break;
 
@@ -198,6 +205,7 @@ void QDefaultViewerExtension::changeViewToSagital()
         m_slider2_1->setValue( m_2DView2_1->getSlice() );
         m_viewText2_1->setText( tr("YZ : Sagital") );
         m_2DView2_1->setViewToSagittal();
+        INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.1)")
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
@@ -206,6 +214,7 @@ void QDefaultViewerExtension::changeViewToSagital()
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("YZ : Sagital") );
         m_2DView2_2->setViewToSagittal();
+        INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.2)")
         m_2DView2_2->render();
     break;
     }
@@ -223,6 +232,7 @@ void QDefaultViewerExtension::changeViewToCoronal()
         m_slider->setValue( m_mainVolume->getDimensions()[1]/2 );
         m_viewText->setText( tr("XZ : Coronal") );
         m_2DView->setViewToCoronal();
+        INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
         m_2DView->render();
     break;
     
@@ -239,6 +249,7 @@ void QDefaultViewerExtension::changeViewToCoronal()
         m_slider2_1->setValue( m_2DView2_1->getSlice() );
         m_viewText2_1->setText( tr("XZ : Coronal") );
         m_2DView2_1->setViewToCoronal();
+        INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.1)")
         m_2DView2_1->render();
 
         m_spinBox2_2->setMinimum( 0 );
@@ -247,6 +258,7 @@ void QDefaultViewerExtension::changeViewToCoronal()
         m_slider2_2->setValue( m_2DView2_2->getSlice() );
         m_viewText2_2->setText( tr("XZ : Coronal") );
         m_2DView2_2->setViewToCoronal();
+        INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.2)")
         m_2DView2_2->render();
     break;
     }
@@ -261,83 +273,97 @@ void QDefaultViewerExtension::changeDefaultWindowLevel( int which )
         m_2DView->resetWindowLevelToDefault();
         m_2DView2_1->resetWindowLevelToDefault();
         m_2DView2_2->resetWindowLevelToDefault();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Defecte");
     break;
 
     case 1:
         m_2DView->resetWindowLevelToBone();
         m_2DView2_1->resetWindowLevelToBone();
         m_2DView2_2->resetWindowLevelToBone();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Bone");
     break;
 
     case 2:
         m_2DView->resetWindowLevelToLung();
         m_2DView2_1->resetWindowLevelToLung();
         m_2DView2_2->resetWindowLevelToLung();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Lung");
     break;
 
     case 3:
         m_2DView->resetWindowLevelToSoftTissuesNonContrast();
         m_2DView2_1->resetWindowLevelToSoftTissuesNonContrast();
         m_2DView2_2->resetWindowLevelToSoftTissuesNonContrast();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> SoftTissuesNC");
     break;
 
     case 4:
         m_2DView->resetWindowLevelToLiverNonContrast();
         m_2DView2_1->resetWindowLevelToLiverNonContrast();
         m_2DView2_2->resetWindowLevelToLiverNonContrast();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> LiverNC");
     break;
 
     case 5:
         m_2DView->resetWindowLevelToSoftTissuesContrastMedium();
         m_2DView2_1->resetWindowLevelToSoftTissuesContrastMedium();
         m_2DView2_2->resetWindowLevelToSoftTissuesContrastMedium();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> SoftTissuesCM");
     break;
 
     case 6:
         m_2DView->resetWindowLevelToLiverContrastMedium();
         m_2DView2_1->resetWindowLevelToLiverContrastMedium();
         m_2DView2_2->resetWindowLevelToLiverContrastMedium();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> LiverCM");
     break;
 
     case 7:
         m_2DView->resetWindowLevelToNeckContrastMedium();
         m_2DView2_1->resetWindowLevelToNeckContrastMedium();
         m_2DView2_2->resetWindowLevelToNeckContrastMedium();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> NeckCM");
     break;
 
     case 8:
         m_2DView->resetWindowLevelToAngiography();
         m_2DView2_1->resetWindowLevelToAngiography();
         m_2DView2_2->resetWindowLevelToAngiography();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Angiography");
     break;
 
     case 9:
         m_2DView->resetWindowLevelToOsteoporosis();
         m_2DView2_1->resetWindowLevelToOsteoporosis();
         m_2DView2_2->resetWindowLevelToOsteoporosis();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Osteoporosis");
     break;
 
     case 10:
         m_2DView->resetWindowLevelToEmphysema();
         m_2DView2_1->resetWindowLevelToEmphysema();
         m_2DView2_2->resetWindowLevelToEmphysema();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Emfisema");
     break;
     
     case 11:
         m_2DView->resetWindowLevelToPetrousBone();
         m_2DView2_1->resetWindowLevelToPetrousBone();
         m_2DView2_2->resetWindowLevelToPetrousBone();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Petrous Bone");
     break;
 
     case 12:
         // custom
         m_customWindowLevelDialog->exec();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Custom");
     break;
 
     default:
         m_2DView->resetWindowLevelToDefault();
         m_2DView2_1->resetWindowLevelToDefault();
         m_2DView2_2->resetWindowLevelToDefault();
+        INFO_LOG("Visor per defecte: Canviem Window Level >> Defecte");
     break;
     
     }
@@ -390,11 +416,13 @@ void QDefaultViewerExtension::synchronizeSlices( bool ok )
 {
     if( ok )
     {
+        INFO_LOG("Visor per defecte: Sincronitzem llesques");
         connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
         connect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
     }
     else
     {
+        INFO_LOG("Visor per defecte: Desincronitzem llesques");
         disconnect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
         disconnect( m_slider2_2 , SIGNAL( valueChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
     }
