@@ -4,11 +4,9 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
- 
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "identifier.h"
 // QT
 #include <QMainWindow>
 #include <QStringList>
@@ -22,9 +20,6 @@ class QCloseEvent;
 
 namespace udg{
 // Forward declarations
-class VolumeRepository;
-class Input;
-class Output;
 class ExtensionWorkspace;
 class ExtensionHandler;
 
@@ -36,12 +31,6 @@ public:
     QApplicationMainWindow(QWidget *parent = 0, const char *name = 0);
     
     ~QApplicationMainWindow();
-    
-    /// Ens retorna l'id del volum que ha obert
-    Identifier getVolumeID() const { return m_volumeID; };
-
-    /// [apanyo] Li indiquem quin és el seu id de volum
-    void setVolumeID( Identifier id );
     
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -56,35 +45,20 @@ public:
     /// Retorna la barra d'eines d'extensions
     QToolBar *getExtensionsToolBar() const { return m_extensionsToolBar; }
     
-public slots:   
-    /// mostra el progrés d'un procés (ara mateix només serà obrir fitxers) amb un diàleg
-    void showProgress( int value );
-
+public slots:
     /// Fa les tasques que cal quan s'ha carregat un volum
-    void onVolumeLoaded( Identifier id );
+    void onVolumeLoaded();
     
 protected:
-    ///Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
+    /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
     void closeEvent(QCloseEvent *event);
 
 private:
-    // :::::::::::::::::::::::::::
-    // membres
-    // :::::::::::::::::::::::::::
     /// Gestor de serveis i miniaplicacions
     ExtensionHandler *m_extensionHandler;
     
     /// Tipus de fitxer a exportar
     enum ExportFiles{ JpegExport , MetaIOExport , TiffExport, PngExport , BmpExport };
-
-    /// Punter a sí mateix \TODO no se si és gaire útil ni necessari, pot desaparèixer facilment
-    QApplicationMainWindow* m_self;    
-
-    /// Indicarà l'id del volum que posseïm
-    udg::Identifier m_volumeID; 
-
-    /// Indica si hi ha hagut modificacions \TODO és gaire útil i/o necessari això? es podria eliminar
-    bool m_modified;
 
 //    /// Llista d'arxius recents
 //     QStringList m_recentFiles;
@@ -95,7 +69,6 @@ private:
     QString m_currentFile;
 
     /// Filtres per als diàlegs d'obrir/exportar arxius
-    QString m_openFileFilters;
 //     QString m_exportFileFilters;
 //     QString m_exportToJpegFilter;
 //     QString m_exportToMetaIOFilter;
@@ -112,12 +85,6 @@ private:
 
     /// Aquesta string indica el path del directori que conté els arxius de traducció de l'aplicació
     QString m_qmPath;
-
-    /// Indica l'idioma per defecte amb el que s'inicialitza l'aplicació, tindríem en_GB, en_US, ca_ES i es_ES
-    QString m_defaultLocale;
-
-    /// La llista de idiomes disponibles amb la que omplim el menú d'idiomes
-    QStringList m_locales;
 
     /// Menús
     QMenu *m_fileMenu;
@@ -155,17 +122,9 @@ private:
     QAction *m_catalanAction;
     QAction *m_spanishAction;
     QAction *m_englishAction;
+
     /// Per indicar el procés al obrir-se un fitxer
     QProgressDialog *m_progressDialog;
-
-    /// El repositori de volums
-    udg::VolumeRepository* m_volumeRepository;
-
-    /// Lectura d'arxius
-    udg::Input* m_inputReader;
-
-    /// Escriptura/Exportació de formats d'arxius
-    udg::Output* m_outputWriter;
 
     // :::::::::::::::::::::::::::
     // mètodes
@@ -192,18 +151,15 @@ private:
     /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
     void writeSettings();
 
-    ///Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
+    /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
-
-    /// Especifica el fitxer acctual que s'està tractant \TODO \deprecated aquest mètode esdevindrà antiquat en breu i no té gaure sentit desar el nom del fitxer, el metode continua existint perquè s'ha arrastrat des del principi
+/*
+    /// Especifica el fitxer acctual que s'està tractant \TODO \deprecated aquest mètode esdevindrà antiquat en breu i no té gaire sentit desar el nom del fitxer, el metode continua existint perquè s'ha arrastrat des del principi
     void setCurrentFile( const QString &fileName );
 
     /// actualitza el llistat de noms de fitxers oberts recentment \TODO s'hauria d'adaptar, si cal quan hi hagi lo del pacs
-//     void updateRecentFileActions();
-
-    /// Mètode intern per extreure el nom del fitxer tal qual sense el path sencer
-    QString strippedName(const QString &fullFileName);
-
+    void updateRecentFileActions();
+*/
 private slots:
     /// Obre una nova finestra
     void newFile();
@@ -214,9 +170,13 @@ private slots:
     /// mostra el formulari d'about
     void about();
 
+    /// canvia a l'idioma indicat
+    void switchToLanguage( int id );
+    
+/*
     /// obre un dels arxius recents::\TODO això pot esdevenir \deprecated
     void openRecentFile();
-/*
+
     /// Exporta la imatge a un format especificat
     void exportFile( int type );
 
@@ -235,10 +195,6 @@ private slots:
     /// Exporta la imatge a BMP
     void exportToBmp();
 */
-
-    /// canvia a l'idioma indicat
-    void switchToLanguage( int id );
-    
 signals:
     /// senyal emesa que indica si la finestra conté un volum o no
     void containsVolume( bool );

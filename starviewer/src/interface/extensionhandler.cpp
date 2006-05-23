@@ -36,20 +36,16 @@
 #include "queryscreen.h"
 #include "seriesvolum.h"
 
-
 namespace udg {
 
 ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent, const char *name)
  : QObject(parent )
 {
     this->setObjectName( name );
-    m_volumeRepository = udg::VolumeRepository::getRepository();
-    m_inputReader = new udg::Input;
-    m_outputWriter = new udg::Output;
+    m_volumeRepository = VolumeRepository::getRepository();
+    m_inputReader = new Input;
+    m_outputWriter = new Output;
     m_mainApp = mainApp;    
-    // ::::::::::::::::
-    // Inicialització de mini-aplicacions
-    // ::::::::::::::::
     
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
@@ -66,7 +62,7 @@ ExtensionHandler::~ExtensionHandler()
 void ExtensionHandler::createConnections()
 {
     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , this , SLOT( onVolumeLoaded( Identifier ) ) );
-    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
+    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded() ) );
     
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
@@ -87,7 +83,6 @@ void ExtensionHandler::registerExtensions()
     m_extensionFactory->registerExtension( "3D-2D MPR Extension" , m_qMPR3D2DExtensionCreator );
     m_extensionFactory->registerExtension( "Default Viewer Extension" , m_qDefaultViewerExtensionCreator );
 }
-
 
 void ExtensionHandler::request( int who )
 {
@@ -195,6 +190,14 @@ void ExtensionHandler::request( int who )
     }
 }
 
+void ExtensionHandler::killBill()
+{
+    if( !m_volumeID.isNull() )
+    {
+        m_volumeRepository->removeVolume( m_volumeID );
+    }
+}
+
 void ExtensionHandler::openSerieToCompare()
 {
     QueryScreen *queryScreen = new QueryScreen;
@@ -229,7 +232,7 @@ bool ExtensionHandler::open( QString fileName )
             if( m_inputReader->readSeries( QFileInfo(fileName).dir().absolutePath().toLatin1() ) )
             { 
                 // creem el volum
-                udg::Volume *dummyVolume = m_inputReader->getData();
+                Volume *dummyVolume = m_inputReader->getData();
                 // afegim el nou volum al repositori
                 m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
                 
@@ -246,7 +249,7 @@ bool ExtensionHandler::open( QString fileName )
             if( m_inputReader->openFile( fileName.toLatin1() ) )
             { 
                 // creem el volum
-                udg::Volume *dummyVolume = m_inputReader->getData();
+                Volume *dummyVolume = m_inputReader->getData();
                 // afegim el nou volum al repositori
                 m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
                 request(5);
@@ -298,7 +301,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
 		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
 	}
 
-    udg::Volume *dummyVolume = input->getData();
+    Volume *dummyVolume = input->getData();
     m_volumeID = m_volumeRepository->addVolume( dummyVolume );
 //     if( m_volumeID.isNull() )
 //     {
@@ -311,7 +314,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
 //         }
 //     }
     this->onVolumeLoaded( m_volumeID );
-    m_mainApp->onVolumeLoaded( m_volumeID );
+    m_mainApp->onVolumeLoaded();
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
@@ -347,7 +350,7 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
 		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
 	}
     
-    udg::Volume *dummyVolume = input->getData();
+    Volume *dummyVolume = input->getData();
     m_volumeID = m_volumeRepository->addVolume( dummyVolume );
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
     emit secondInput( dummyVolume );    

@@ -71,6 +71,9 @@ public slots:
     /// [apanyo] Slot que afegeix al 2n visor una sèrie escollida per comparar-> és un mètode moooolt temporal. 
     void viewStudyToCompare( StudyVolum study );
 
+    /// cridat quan l'aplicació mor
+    void killBill();
+    
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
@@ -100,7 +103,7 @@ private:
     /// L'id del volum amb el que estem treballant
     Identifier m_volumeID;    
     /// El repository de volums
-    udg::VolumeRepository* m_volumeRepository;
+    VolumeRepository *m_volumeRepository;
     /// accés a l'entrada de dades -> això hauria de formar part d'una mini-app, per tant és temporal
     Input *m_inputReader;
     /// accés a la sortida/escriptura de dades -> això hauria de formar part d'una mini-app, per tant és temporal
