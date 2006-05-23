@@ -10,6 +10,8 @@
 #include <QMessageBox>
 #include <QFile>
 #include "databaseconnection.h"
+#include "logging.h"
+
 
 namespace udg {
 
@@ -34,7 +36,8 @@ bool CacheInstallation::checkInstallation()
         if ( !createDatabaseFile() ) return false;
         
     }
-    
+
+    INFO_LOG(" Estat de la cache correcte ");    
     return true;
 }
 
@@ -66,20 +69,50 @@ bool CacheInstallation::createCacheImageDir()
 {   
     StarviewerSettings settings;
     QDir cacheImageDir;
-    return cacheImageDir.mkpath( settings.getCacheImagePath() );
+	QString missatgeLog;
+
+    if ( cacheImageDir.mkpath( settings.getCacheImagePath() ) )
+    {
+        missatgeLog = "S'ha creat el directori de la cache d'imatges ";
+        missatgeLog.append( settings.getCacheImagePath() );   
+		INFO_LOG( missatgeLog.toAscii().constData() );      
+        return true;
+    }
+    else
+    {
+        missatgeLog = "No s'ha pogut crear el directori de la cache d'imatges ";
+        missatgeLog.append( settings.getCacheImagePath() ); 
+        ERROR_LOG( missatgeLog.toAscii().constData() );
+        return false;    
+    }
 }
 
 bool CacheInstallation::createDatabaseDir()
 {
     StarviewerSettings settings;
     QDir databaseDir;
-    QString databaseFile,databasePath;
+    QString databaseFile,databasePath , missatgeLog;
     
     //al path de la base de dades, hi ha inclos el nom del fitxer de la base de dades, per crear el directori hem de treure el fitxer de la cadena    
     databaseFile = settings.getDatabasePath();
     databasePath.insert( 0 , databaseFile.left (databaseFile.lastIndexOf( "/" , -1 , Qt::CaseInsensitive ) ) );
     
-    return databaseDir.mkpath( databasePath );
+
+    if ( databaseDir.mkpath( databasePath ) )
+    {
+        missatgeLog = "S'ha creat el directori de la cache d'imatges ";
+        missatgeLog.append( databasePath );         
+		INFO_LOG( missatgeLog.toAscii().constData() );
+        return true;
+    }
+    else
+    {
+        missatgeLog = "No s'ha pogut crear el directori de la cache d'imatges ";
+        missatgeLog.append( databasePath.toAscii().constData() ); 
+        ERROR_LOG( missatgeLog.toAscii().constData() );
+        return false;    
+    }
+
 }
 
 bool CacheInstallation::createDatabaseFile()
@@ -101,9 +134,14 @@ bool CacheInstallation::createDatabaseFile()
     
     if ( estat == 0 )
     {
+		INFO_LOG( "S'ha creat correctament la base de dades" );
         return true;
     }
-    else return false;
+    else
+ 	{
+		ERROR_LOG( "No s'ha pogut crear la base de dades" );
+		return false;
+	}
 }
 
 bool CacheInstallation:: reinstallDatabaseFile()

@@ -28,6 +28,7 @@
 #include "status.h"
 
 #include "cachelayer.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -199,6 +200,7 @@ void QConfigurationScreen::addPacs()
     PacsParameters pacs;
     Status state;
     PacsListDB pacsList;
+	QString logMessage;
     
     if (validatePacsParameters())
     {
@@ -214,6 +216,9 @@ void QConfigurationScreen::addPacs()
         }
         else pacs.setDefault( "N" );
        
+		logMessage = "Afegir pacs ";
+		logMessage.append( m_textAETitle->text() );
+		INFO_LOG ( logMessage.toAscii().constData() );
         
         state =  pacsList.insertPacs( &pacs );
 
@@ -278,6 +283,7 @@ void QConfigurationScreen::updatePacs()
     PacsParameters pacs;
     Status state;
     PacsListDB pacsList;
+	QString logMessage;
     
     if ( m_PacsID == 0 )
     {
@@ -300,6 +306,10 @@ void QConfigurationScreen::updatePacs()
         }
         else pacs.setDefault( "N" );
        
+		logMessage = "Actualitzant dades del pacs ";
+		logMessage.append( m_textAETitle->text() );
+		INFO_LOG ( logMessage.toAscii().constData() );
+
         state = pacsList.updatePacs( &pacs );
          
         if ( !state.good() )
@@ -320,6 +330,7 @@ void QConfigurationScreen::deletePacs()
     Status state;
     PacsParameters pacs;
     PacsListDB pacsList;
+	QString logMessage;
     
     if ( m_PacsID == 0 )
     {
@@ -328,6 +339,10 @@ void QConfigurationScreen::deletePacs()
     }    
     
     pacs.setPacsID( m_PacsID );//per donar de baixa n'hi prou amb el camp clau    
+
+	logMessage = "Esborrant el pacs ";
+	logMessage.append( m_textAETitle->text() );
+	INFO_LOG ( logMessage.toAscii().constData() );
 
     state = pacsList.deletePacs( &pacs );
     
@@ -516,24 +531,41 @@ void QConfigurationScreen::applyChanges()
 void QConfigurationScreen::applyChangesPacs()
 {
     StarviewerSettings settings;
+    QString logMessage;
     
     if ( m_textAETitleMachine->isModified() )
     {
+        logMessage = "Modificació del AETitle de la màquina ";
+        logMessage.append( m_textAETitleMachine->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         settings.setAETitleMachine(m_textAETitleMachine->text());
     }
     
     if ( m_textTimeout->isModified() )
     {
+        logMessage = "Modificació del valor del timeout ";
+        logMessage.append( m_textTimeout->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         settings.setTimeout(m_textTimeout->text());
     }
     
     if ( m_textLocalPort->isModified() )
     {
+        logMessage = "Modificació del Port d'entrada dels estudis";
+        logMessage.append( m_textLocalPort->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         settings.setLocalPort( m_textLocalPort->text() );
     }
     
     if ( m_textMaxConnections->isModified() )
     {
+        logMessage = "Modificació del nombre màxim de connexions ";
+        logMessage.append( m_textMaxConnections->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         settings.setMaxConnections( m_textMaxConnections->text() );
     }
     
@@ -584,6 +616,7 @@ void QConfigurationScreen::applyChangesCache()
     StarviewerSettings settings;
     CachePool pool;
     Status state;
+    QString logMessage;
     
     //Aquest els guardem sempre 
     settings.setCacheImagePath( m_textCacheImagePath->text() );
@@ -591,17 +624,29 @@ void QConfigurationScreen::applyChangesCache()
     
     if ( m_textPoolSize->isModified() )
     {   
+        logMessage = "Es modificarà la mida de la cache ";
+        logMessage.append( m_textPoolSize->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         state = pool.updatePoolTotalSize( m_textPoolSize->text().toInt( NULL , 10 )* 1024 );//Passem l'espai a Mb
         databaseError( &state );
     }
     
     if ( m_textCacheImagePath->isModified() )
     {
+        logMessage = "Es modificarà el directori de la cache d'imatges ";
+        logMessage.append( m_textCacheImagePath->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         settings.setCacheImagePath( m_textCacheImagePath->text() );
     }
     
     if ( m_textMaximumDaysNotViewed->isModified() )
     {
+        logMessage = "Es modificarà el nombre maxim de dies d'un estudi a la cache";
+        logMessage.append( m_textMaximumDaysNotViewed->text() );
+        INFO_LOG( logMessage.toAscii().constData() );
+        
         settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
     }
     
@@ -620,6 +665,9 @@ void QConfigurationScreen::deleteStudies()
 				      0 , 1 ) ) 
     {
     case 0:
+        
+        INFO_LOG ( "Neteja de la cache" );
+    
         this->setCursor( QCursor( Qt::WaitCursor ) );
             
         state =  cacheLayer.clearCache();
@@ -640,6 +688,8 @@ void QConfigurationScreen::compactCache()
 {
     CachePacs * localCache;
     Status state;
+    
+    INFO_LOG( "Compatacio de la cache" );
     
     this->setCursor( QCursor( Qt::WaitCursor ) );    
     localCache = CachePacs::getCachePacs();

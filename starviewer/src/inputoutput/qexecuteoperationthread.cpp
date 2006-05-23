@@ -20,7 +20,7 @@
 #include "starviewersettings.h"
 #include "const.h"
 #include "cachelayer.h"
-
+#include "logging.h"
 
 namespace udg {
 
@@ -54,6 +54,8 @@ void QExecuteOperationThread::queueOperation(Operation operation)
 //s'executa des del thread
 void QExecuteOperationThread::run()
 {
+	INFO_LOG("Iniciant thread que executa operacions");
+	
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
     
     //creem les connexions amb l'objecte QRetrieveScreen, per indicar descarregues
@@ -81,6 +83,7 @@ void QExecuteOperationThread::run()
         m_stop = queueOperationList->isEmpty();
         m_semaphor.release();
     } 
+	INFO_LOG("Finalitzant thread que executa operacions");
 }
 
 //descarrega un estudi
@@ -89,6 +92,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     StarviewerProcessImage *sProcessImg = new StarviewerProcessImage::StarviewerProcessImage();
     QString studyUID;
     Status state,retState;
+	QString logMessage;
+
+	logMessage = "Iniciant la descàrrega de l'estudi ";
+	logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+	logMessage.append( "del pacs " );
+	logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+	
+	INFO_LOG( logMessage.toAscii().constData() );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
     CachePacs *localCache =  CachePacs::getCachePacs();
@@ -101,18 +112,28 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     state = enoughFreeSpace( enoughSpace );    
         
     //s'indica que comença la descarreca de l'estudi al qretrieveScreen
-    emit( setStudyRetrieving( studyUID.toAscii().constData() ) );
-   
+    emit( setStudyRetrieving( studyUID.toAscii().constData() ) );   
    
     if ( !state.good() || !enoughSpace ) 
     {
+		logMessage = "La descàrrega de l'estudi ";
+		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+		logMessage.append( "del pacs " );
+		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+	
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         
         if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
         {
+			logMessage.append (" al no haver suficient espai lliure al disc" );
             emit( notEnoughFreeSpace() );
         }
-        else emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
+        else 
+		{
+			emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
+			logMessage.append( " al intentar alliberar espai al disc " );
+		}
+		ERROR_LOG( logMessage.toAscii().constData() );
         
         localCache->delStudy( studyUID.toAscii().constData());
         return;
@@ -122,7 +143,13 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
     state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
     if (!state.good())
     {   
-	
+		logMessage = "La descàrrega de l'estudi ";
+		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+		logMessage.append( "del pacs " );
+		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+		logMessage.append( " ha fallat, no s'ha pogut connectar correctament amb el PACS ");	
+		ERROR_LOG ( logMessage.toAscii().constData() );
+
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
 		emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
         localCache->delStudy( studyUID.toAscii().constData()) ;        
@@ -152,11 +179,22 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
 
     if (!retState.good() || errorRetrieving )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
-         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+		logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
+		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+		logMessage.append( "del pacs " );
+		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+		ERROR_LOG ( logMessage.toAscii().constData() );
+
+        emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         localCache->delStudy( studyUID.toAscii().constData() );
     }
     else 
     {    
+		logMessage = "Ha finalitzat la descàrrega de l'estudi ";
+		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+		logMessage.append( "del pacs " );
+		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+		INFO_LOG( logMessage.toAscii().constData() );
         scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualització de la caché  
         emit( setStudyRetrieved( studyUID.toAscii().constData() ) );// descarregat
         localCache->setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
@@ -166,7 +204,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
 
 void QExecuteOperationThread::firstSeriesRetrieved( QString studyUID )
 {
-     cout<<"entro\n";
      if ( m_view ) emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
 }
 
@@ -188,7 +225,8 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     unsigned int freePoolSpace, freeSystemSpace;
     Status state;
     CacheLayer cacheLayer;
-    
+	QString logMessage,stringMb;    
+
     freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
     if ( freeSystemSpace == 0 ) 
     {
@@ -201,6 +239,14 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     if ( freeSystemSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired || 
          freePoolSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired )
     {
+		logMessage = "No hi ha suficient espai a la cache. Alliberant espai. Espai lliure cache ";
+		stringMb.setNum( freePoolSpace , 10 );
+		logMessage.append( stringMb );
+		logMessage.append(" Mb. Espai lliure disc ");		
+		stringMb.truncate(0);
+		stringMb.setNum( freeSystemSpace , 10 );
+		logMessage.append(" Mb");
+
         state = cacheLayer.deleteOldStudies( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis 
         
         if ( !state.good() )
@@ -220,6 +266,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
         {
             //si no hi ha suficient espai,significa que no hi ha prou espai al disc, perque de la cache sempre podem alliberar espai
             enoughSpace = false;
+			INFO_LOG( "No hi ha suficient espai lliure al disc dur" );
         }
         else enoughSpace = true;
     }
