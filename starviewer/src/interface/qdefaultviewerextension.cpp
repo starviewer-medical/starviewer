@@ -40,18 +40,21 @@ void QDefaultViewerExtension::createActions()
     m_axialViewAction->setShortcut( tr("Ctrl+A") );
     m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
     m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
+    m_axialViewToolButton->setDefaultAction( m_axialViewAction );
     
     m_sagitalViewAction = new QAction( 0 );
     m_sagitalViewAction->setText( tr("&Sagital View") );
     m_sagitalViewAction->setShortcut( tr("Ctrl+S") );
     m_sagitalViewAction->setStatusTip( tr("Change Current View To Sagital") );
     m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
+    m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
     
     m_coronalViewAction = new QAction( 0 );
     m_coronalViewAction->setText( tr("&Coronal View") );
     m_coronalViewAction->setShortcut( tr("Ctrl+C") );
     m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
     m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
+    m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
 }
 
 void QDefaultViewerExtension::createToolBars()
@@ -86,7 +89,7 @@ void QDefaultViewerExtension::createConnections()
 
     connect( m_windowLevelComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
 
-    connect( m_pageSelectorSpinBox , SIGNAL( valueChanged(int) ) , m_stackedWidget , SLOT( setCurrentIndex(int) ) );
+    connect( m_switchViewToolButton , SIGNAL( clicked() ) , this , SLOT( switchView() ) );
     connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
 
     connect( m_synchroCheckBox , SIGNAL( clicked(bool) ) , this , SLOT( synchronizeSlices(bool) ) );
@@ -111,6 +114,7 @@ void QDefaultViewerExtension::setSecondInput( Volume *input )
     // \TODO ara ho fem "a saco" però s'hauria de millorar
     m_2DView2_2->setInput( m_secondaryVolume );
     changeViewToAxial();
+    m_stackedWidget->setCurrentIndex( 1 );
 }
 
 void QDefaultViewerExtension::populateToolBar( QToolBar *toolbar )
@@ -355,15 +359,29 @@ void QDefaultViewerExtension::setView( ViewType view )
     }
 }
 
+void QDefaultViewerExtension::switchView()
+{
+    if( m_stackedWidget->currentIndex() == 0 )
+    {
+        m_stackedWidget->setCurrentIndex( 1 );
+    }
+    else
+    {
+        m_stackedWidget->setCurrentIndex( 0 );
+    }
+}
+
 void QDefaultViewerExtension::pageChange( int index )
 {
     setView( m_currentView );
     switch( index )
     {
     case 0:
+        m_switchViewToolButton->setText( tr("Switch Double View") );
     break;
 
     case 1:
+        m_switchViewToolButton->setText( tr("Switch Single View") );
     break;
     }
 }

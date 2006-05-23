@@ -51,6 +51,9 @@ public slots:
 
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
+
+    /// Canvia de vista simple a vista doble i viceversa
+    void switchView();
     
 private:
     /// Tipus de vistes que podem tenir
