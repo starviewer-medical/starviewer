@@ -50,6 +50,8 @@ public:
     typedef itk::VTKImageToImageFilter< ItkImageType > VtkToItkFilterType;
     
     Volume();
+    Volume( ItkImageTypePointer itkImage );
+    Volume( VtkImageTypePointer vtkImage );
     ~Volume();
 
     /**

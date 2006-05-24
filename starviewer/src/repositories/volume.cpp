@@ -34,6 +34,32 @@ Volume::Volume()
     m_volumeInformation = new VolumeSourceInformation;
 }
  
+Volume::Volume( ItkImageTypePointer itkImage ) 
+{
+    m_imageDataITK = 0;
+    m_imageDataVTK = 0;
+
+    m_itkToVtkFilter = ItkToVtkFilterType::New();
+    m_vtkToItkFilter = VtkToItkFilterType::New();
+
+    m_volumeInformation = new VolumeSourceInformation;
+    
+    this->setData( itkImage );
+}
+
+Volume::Volume( VtkImageTypePointer vtkImage )
+{
+    m_imageDataITK = 0;
+    m_imageDataVTK = 0;
+    
+    m_itkToVtkFilter = ItkToVtkFilterType::New();
+    m_vtkToItkFilter = VtkToItkFilterType::New();
+
+    m_volumeInformation = new VolumeSourceInformation;
+
+    this->setData( vtkImage );
+}
+
 Volume::~Volume()
 {
 
