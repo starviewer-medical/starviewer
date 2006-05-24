@@ -14,6 +14,7 @@
 #include "volumerepository.h"
 #include "input.h"
 #include "output.h"
+#include "logging.h"
 #include <iostream>
 
 namespace udg {
@@ -41,12 +42,12 @@ void AppImportFile::open()
             
     if ( !fileName.isEmpty() )
     {
-        ///\TODO: on decidim si s'obre una nova finestra o no? és responsabilitat del handler o de la mainwindow
         if( loadFile( fileName ) )  
         {
             // cal informar a l'aplicació de l'id del volum
             // la utilitat
             m_workingDirectory = QFileInfo( fileName ).dir().path();
+            INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName ) );
         }
     }
 }
@@ -59,6 +60,7 @@ void AppImportFile::openDirectory()
         if( loadDirectory( directoryName ) )
         {
             m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
+            INFO_LOG( qPrintable( "S'obre el directori: " + directoryName ) );
         }
     }
 }
@@ -76,6 +78,7 @@ bool AppImportFile::loadFile( QString fileName )
     else
     {
         // no s'ha pogut obrir l'arxiu per algun motiu
+        ERROR_LOG( qPrintable("No s'ha pogut obrir el fitxer: ") + fileName );
         ok = false;
     }
 
@@ -94,6 +97,7 @@ bool AppImportFile::loadDirectory( QString directoryName )
     }
     else
     {
+        ERROR_LOG( qPrintable("No s'ha pogut obrir el directori: ") + directoryName );
         ok = false;
     }
 
