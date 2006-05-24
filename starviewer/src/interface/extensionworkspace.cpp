@@ -8,7 +8,6 @@
 
 #include <QToolButton>
 #include <iostream>
-#include <sstream> // per printar missatges
 #include "logging.h"
 
 namespace udg {
@@ -40,17 +39,9 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
 {
     if( this->count() == 0 )
     {
-        if( m_closeTabButton == 0 )
-        {
-            std::cout << "Creant per primer cop el botó de tancar :: " <<  std::endl;
-            m_closeTabButton = new QToolButton( this );
-            m_closeTabButton->setIcon( QIcon(":/images/fileclose.png") );
-        }
         m_closeTabButton->show();
     }
-    std::ostringstream message;
-    message << "Afegint extensió: " << qPrintable( caption );
-    INFO_LOG( message.str() )
+    INFO_LOG( qPrintable( "Afegint extensió: " + caption ) );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
     m_lastIndex = this->currentIndex();
@@ -58,6 +49,7 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
 {
+    INFO_LOG( qPrintable( "Tancant extensió: " + application->objectName() ) );
     this->removeTab( this->indexOf( application ) );
     if( this->count() < 1 )
         m_closeTabButton->hide();
@@ -69,7 +61,6 @@ void ExtensionWorkspace::closeCurrentApplication()
     QWidget *w = this->currentWidget();
     removeApplication( w );
     delete w;
-
 }
 
 };  // end namespace udg 
