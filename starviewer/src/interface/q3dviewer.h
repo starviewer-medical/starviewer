@@ -85,6 +85,12 @@ private:
     
     /// el caster de les imatges
     vtkImageCast* m_imageCaster;
+
+    /// Orientació que tenim
+    int m_currentOrientation;
+
+    /// reinicia la orientació
+    void resetOrientation();
 };
 
 };  //  end  namespace udg 

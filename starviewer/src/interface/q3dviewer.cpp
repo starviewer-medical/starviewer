@@ -50,6 +50,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_renderFunction = RayCasting; // per defecte
     
     m_imageCaster = vtkImageCast::New();
+    m_currentOrientation = Axial;
 }
 
 
@@ -89,8 +90,6 @@ QString Q3DViewer::getRenderFunctionAsString()
 void Q3DViewer::setInput( Volume* volume )
 {
     m_mainVolume = volume;
-    // \TODO fer que el sistema de càmeres funcioni
-//     this->resetViewToAxial();
 }
 
 void Q3DViewer::render()
@@ -109,13 +108,35 @@ void Q3DViewer::render()
             renderIsoSurface();
         break;
         }
-        
+        this->resetOrientation();
     }
     else
     {
         WARN_LOG("Q3DViewer:: Cridant a render() sense haver donat cap input");
     }
-    //else: mostrar error/avís?
+}
+
+void Q3DViewer::resetOrientation()
+{
+    switch( m_currentOrientation )
+    {
+    case Axial:
+        this->resetViewToAxial();
+    break;
+
+    case Sagital:
+        this->resetViewToSagital();
+    break;
+
+    case Coronal:
+        this->resetViewToCoronal();
+    break;
+
+    default:
+        DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades ( Axial,Sagital,Coronal). Agafem Axial per defecte");
+        this->resetViewToAxial();
+    break;
+    }
 }
 
 void Q3DViewer::rescale()
@@ -283,19 +304,19 @@ void Q3DViewer::renderIsoSurface()
 void Q3DViewer::resetViewToAxial()
 {
     this->setCameraOrientation( Axial );
-    this->getInteractor()->Render();
+    m_currentOrientation = Axial;
 }
 
 void Q3DViewer::resetViewToSagital()
 {
     this->setCameraOrientation( Sagital );
-    this->getInteractor()->Render();
+    m_currentOrientation = Sagital;
 }
 
 void Q3DViewer::resetViewToCoronal()
 {
     this->setCameraOrientation( Coronal );
-    this->getInteractor()->Render();
+    m_currentOrientation = Coronal;
 }
 
 void Q3DViewer::setCameraOrientation(int orientation)
@@ -306,8 +327,8 @@ void Q3DViewer::setCameraOrientation(int orientation)
         switch (orientation)
         {
         case Axial:
-//             cam->SetFocalPoint(0,0,0);
-//             cam->SetPosition(0,0,-1); // -1 if medical ?
+            cam->SetFocalPoint(0,0,0);
+            cam->SetPosition(0,0,-1); // -1 if medical ?
             cam->SetViewUp(0,-1,0);
             break;
     
