@@ -172,7 +172,6 @@ void ExtensionHandler::request( int who )
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("Default Viewer"));
 //         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
         connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
-        connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
     break;
     
     default:
