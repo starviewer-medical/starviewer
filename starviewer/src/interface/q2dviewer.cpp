@@ -220,12 +220,8 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     
     if( list.size() > 1 )
     {
-        std::ostringstream message;
-        message << "Orientació:: " << qPrintable( orientation );
-        DEBUG_LOG( message.str() );
-        message.str("");
-        message << "Orientació invertida:: " << qPrintable( revertedOrientation );
-        DEBUG_LOG( message.str() );
+        DEBUG_LOG( qPrintable( "Orientació: " + orientation ) );
+        DEBUG_LOG( qPrintable( "Orientació invertida:: " + revertedOrientation ) );
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
