@@ -55,6 +55,11 @@ public slots:
     void setRenderFunctionToMIP3D(){ m_renderFunction = MIP3D; };
     void setRenderFunctionToIsoSurface(){ m_renderFunction = IsoSurface; };
     
+    /// Reinicia la vista
+    void resetViewToAxial();
+    void resetViewToSagital();
+    void resetViewToCoronal();
+    
 protected:
     /// el renderer
     vtkRenderer* m_renderer;
@@ -64,12 +69,19 @@ protected:
 private:
     /// fa la visualització per raycasting
     void renderRayCasting();
+
     /// fa la visualització per MIP3D
     void renderMIP3D();
+
     /// fa la visualització per reconstrucció de superfíces
     void renderIsoSurface();
+
     /// rescala les dades en el format adequat per als corresponents algorismes
     void rescale();
+
+    enum { Axial , Sagital , Coronal };
+    /// Canvia la orientació de la càmera
+    void setCameraOrientation( int orientation );
     
     /// el caster de les imatges
     vtkImageCast* m_imageCaster;

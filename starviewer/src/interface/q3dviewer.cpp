@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "q3dviewer.h"
 #include "volume.h"
+#include "logging.h"
 
 // include's qt
 #include <QString>
@@ -13,6 +14,7 @@
 // include's vtk
 #include <QVTKWidget.h>
 #include <vtkRenderer.h>
+#include <vtkCamera.h>
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
 // rendering 3D
@@ -86,7 +88,9 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
-    m_mainVolume = volume;   
+    m_mainVolume = volume;
+    // \TODO fer que el sistema de càmeres funcioni
+//     this->resetViewToAxial();
 }
 
 void Q3DViewer::render()
@@ -106,6 +110,10 @@ void Q3DViewer::render()
         break;
         }
         
+    }
+    else
+    {
+        WARN_LOG("Q3DViewer:: Cridant a render() sense haver donat cap input");
     }
     //else: mostrar error/avís?
 }
@@ -269,8 +277,54 @@ void Q3DViewer::renderIsoSurface()
     volume->SetProperty( prop );
 
     m_renderer->AddViewProp( volume );
-    m_renderer->Render();
-  
+    m_renderer->Render();  
+}
+
+void Q3DViewer::resetViewToAxial()
+{
+    this->setCameraOrientation( Axial );
+    this->getInteractor()->Render();
+}
+
+void Q3DViewer::resetViewToSagital()
+{
+    this->setCameraOrientation( Sagital );
+    this->getInteractor()->Render();
+}
+
+void Q3DViewer::resetViewToCoronal()
+{
+    this->setCameraOrientation( Coronal );
+    this->getInteractor()->Render();
+}
+
+void Q3DViewer::setCameraOrientation(int orientation)
+{
+    vtkCamera *cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+    if (cam)
+    {
+        switch (orientation)
+        {
+        case Axial:
+//             cam->SetFocalPoint(0,0,0);
+//             cam->SetPosition(0,0,-1); // -1 if medical ?
+            cam->SetViewUp(0,-1,0);
+            break;
+    
+        case Coronal:
+            cam->SetFocalPoint(0,0,0);
+            cam->SetPosition(0,-1,0); // 1 if medical ?
+            cam->SetViewUp(0,0,1);
+            break;
+    
+        case Sagital:
+            cam->SetFocalPoint(0,0,0);
+            cam->SetPosition(1,0,0); // -1 if medical ?
+            cam->SetViewUp(0,0,1);
+            break;
+        }
+        this->getRenderer()->ResetCamera();
+    }
 }
 
 };  // end namespace udg {
