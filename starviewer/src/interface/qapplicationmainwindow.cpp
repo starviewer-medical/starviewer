@@ -273,7 +273,7 @@ void QApplicationMainWindow::createLanguageMenu()
     connect( signalMapper, SIGNAL( mapped(int) ), this , SLOT( switchToLanguage(int) ) );
     
     m_catalanAction = new QAction( this );
-    m_catalanAction->setText( tr("Catalan") );
+    m_catalanAction->setText( "Català" );
     m_catalanAction->setShortcut( 0 );
     m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
     m_catalanAction->setCheckable( true );
@@ -286,7 +286,7 @@ void QApplicationMainWindow::createLanguageMenu()
     connect( m_catalanAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
         
     m_spanishAction = new QAction( this );
-    m_spanishAction->setText( tr("Spanish") );
+    m_spanishAction->setText( "Castellano" );
     m_spanishAction->setShortcut( 0 );
     m_spanishAction->setStatusTip( tr("Switch to Spanish Language") );
     m_spanishAction->setCheckable( true );
@@ -298,7 +298,7 @@ void QApplicationMainWindow::createLanguageMenu()
     connect( m_spanishAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
 
     m_englishAction = new QAction( this );
-    m_englishAction->setText( tr("English") );
+    m_englishAction->setText( "English" );
     m_englishAction->setShortcut( 0 );
     m_englishAction->setStatusTip( tr("Switch to English Language") );
     m_englishAction->setCheckable( true );
