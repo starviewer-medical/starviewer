@@ -11,7 +11,6 @@
 #include "volumesourceinformation.h"
 #include "logging.h"
 #include <iostream>
-#include <sstream> // per printar missatges
 //ITK
 #include <itkSpatialOrientation.h>
 #include <itkOrientImageFilter.h>
@@ -67,9 +66,7 @@ bool Input::openFile( const char * fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::ostringstream errorMessage;
-        errorMessage << "Excepció llegint l'arxiu [" << fileName << "]" ;
-        WARN_LOG( errorMessage.str() )
+        WARN_LOG( qPrintable( "Excepció llegint l'arxiu [" + QString::fromLatin1(fileName) + "]" ) )
         std::cerr << e << std::endl;
 
         ok = false;
@@ -111,9 +108,7 @@ bool Input::readSeries( const char *dirPath )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::ostringstream errorMessage;
-        errorMessage << "Excepció llegint els arxius del directori [" << dirPath << "]" ;
-        WARN_LOG( errorMessage.str() )
+        WARN_LOG( qPrintable( "Excepció llegint els arxius del directori [" + QString::fromLatin1(dirPath) + "]" ) )
         std::cerr << e << std::endl;
         ok = false;
         emit progress( -1 ); // això podria indicar excepció
@@ -147,7 +142,7 @@ void Input::printTag( std::string tag , std::string name )
     {
         std::ostringstream message;
         message << "Tag" << tag << "(" << name << ")" << " not found in the DICOM header";
-        WARN_LOG( message.str() );
+        WARN_LOG( qPrintable( "Tag " + QString::fromStdString(tag) + "(" + QString::fromStdString(name) + ")" + " not found in the DICOM header" ) );
     }
 }
 

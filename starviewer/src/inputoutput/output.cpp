@@ -37,7 +37,7 @@ bool Output::saveFile( const char* filename )
     
     if( !m_volumeData )
     {
-        WARN_LOG( "There's no dataset to write" )
+        WARN_LOG( "There's no dataset to write" );
         ok = false;
         return ok;
     }
@@ -50,9 +50,7 @@ bool Output::saveFile( const char* filename )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::ostringstream errorMessage;
-        errorMessage << "Excepció escrivint l'arxiu [" << filename << "]" ;
-        WARN_LOG( errorMessage.str() )
+        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString::fromLatin1(filename) + "]" ) );
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
@@ -113,9 +111,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     }
     catch ( itk::ExceptionObject & e )
     {
-        std::ostringstream errorMessage;
-        errorMessage << "Excepció escrivint l'arxiu [" << filename << "]" ;
-        WARN_LOG( errorMessage.str() )
+        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString::fromLatin1( filename ) +"]" ) );
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
