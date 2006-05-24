@@ -36,6 +36,7 @@
 //includes propis
 #include "volume.h"
 #include "volumesourceinformation.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -420,10 +421,11 @@ void Q3DMPRViewer::setWindowLevel( double window , double level )
     if( m_mainVolume )
     {
         // amb un n'hi ha prou ja que cada vtkImagePlaneWidget comparteix la mateixa LUT
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
-        
-//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
-//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel( window , level );        
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 
@@ -432,8 +434,10 @@ void Q3DMPRViewer::resetWindowLevelToDefault()
     if( m_mainVolume )
     {
         m_axialImagePlaneWidget->SetWindowLevel( m_defaultWindow , m_defaultLevel );
-//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
-//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 
@@ -442,8 +446,10 @@ void Q3DMPRViewer::resetWindowLevelToBone()
     if( m_mainVolume )
     {
         m_axialImagePlaneWidget->SetWindowLevel( 2000 , 500 );
-//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
-//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 
@@ -453,6 +459,10 @@ void Q3DMPRViewer::resetWindowLevelToEmphysema()
     {
         m_axialImagePlaneWidget->SetWindowLevel( 800 , -800 );
     }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
+    }
 }
 
 void Q3DMPRViewer::resetWindowLevelToSoftTissuesNonContrast()
@@ -460,8 +470,10 @@ void Q3DMPRViewer::resetWindowLevelToSoftTissuesNonContrast()
     if( m_mainVolume )
     {
         m_axialImagePlaneWidget->SetWindowLevel( 400 , 40 );
-//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
-//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 
@@ -471,6 +483,10 @@ void Q3DMPRViewer::resetWindowLevelToLiverNonContrast()
     {
         m_axialImagePlaneWidget->SetWindowLevel( 200 , 40 );
     }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
+    }
 }
 
 void Q3DMPRViewer::resetWindowLevelToSoftTissuesContrastMedium()
@@ -479,12 +495,20 @@ void Q3DMPRViewer::resetWindowLevelToSoftTissuesContrastMedium()
     {
         m_axialImagePlaneWidget->SetWindowLevel( 400 , 70 );
     }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
+    }
 }
 void Q3DMPRViewer::resetWindowLevelToLiverContrastMedium()
 {
     if( m_mainVolume )
     {
         m_axialImagePlaneWidget->SetWindowLevel( 300 , 60 ); // 60-100
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 
@@ -494,6 +518,10 @@ void Q3DMPRViewer::resetWindowLevelToNeckContrastMedium()
     {
         m_axialImagePlaneWidget->SetWindowLevel( 300 , 50 );
     }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
+    }
 }
 
 void Q3DMPRViewer::resetWindowLevelToAngiography()
@@ -501,6 +529,10 @@ void Q3DMPRViewer::resetWindowLevelToAngiography()
     if( m_mainVolume )
     {
         m_axialImagePlaneWidget->SetWindowLevel( 500 , 100 ); // 100-200
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 
@@ -510,6 +542,10 @@ void Q3DMPRViewer::resetWindowLevelToOsteoporosis()
     {
         m_axialImagePlaneWidget->SetWindowLevel( 1000 , 300 ); // 1000-1500
     }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
+    }
 }
 
 void Q3DMPRViewer::resetWindowLevelToPetrousBone()
@@ -518,6 +554,10 @@ void Q3DMPRViewer::resetWindowLevelToPetrousBone()
     {
         m_axialImagePlaneWidget->SetWindowLevel( 4000 , 700 );
     }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
+    }
 }
 
 void Q3DMPRViewer::resetWindowLevelToLung()
@@ -525,8 +565,10 @@ void Q3DMPRViewer::resetWindowLevelToLung()
     if( m_mainVolume )
     {
         m_axialImagePlaneWidget->SetWindowLevel( 1500 , -650 );
-//         m_sagitalImagePlaneWidget->SetWindowLevel( window , level );
-//         m_coronalImagePlaneWidget->SetWindowLevel( window , level );
+    }
+    else
+    {
+        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
     }
 }
 

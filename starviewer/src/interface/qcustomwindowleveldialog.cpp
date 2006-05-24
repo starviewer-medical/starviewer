@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qcustomwindowleveldialog.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -31,10 +32,12 @@ void QCustomWindowLevelDialog::confirmWindowLevel()
     if( m_windowSpinBox->value() )
     {
         // \TODO implement me!
+        DEBUG_LOG("Falta validar el valor del window");
     }
     if( m_levelSpinBox->value() )
     {
         // \TODO implement me!
+        DEBUG_LOG("Falta validar el valor del level");
     }
 
     emit windowLevel( m_windowSpinBox->value() , m_levelSpinBox->value() );
