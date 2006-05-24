@@ -434,13 +434,11 @@ void QMPRExtension::setInput( Volume *input )
     initOrientation();
     m_axial2DView->render();
 
-    Volume *sagitalResliced = new Volume;
-    sagitalResliced->setData( m_sagitalReslice->GetOutput() );
+    Volume *sagitalResliced = new Volume( m_sagitalReslice->GetOutput() );
     sagitalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
     m_sagital2DView->setInput( sagitalResliced );
 
-    Volume *coronalResliced = new Volume;
-    coronalResliced->setData( m_coronalReslice->GetOutput() );
+    Volume *coronalResliced = new Volume( m_coronalReslice->GetOutput() );
     coronalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
     m_coronal2DView->setInput( coronalResliced );
     
@@ -557,7 +555,8 @@ void QMPRExtension::initOrientation()
 void QMPRExtension::showMIP()
 {
     Q3DViewer *viewer = new Q3DViewer( 0 );
-    viewer->setInput( m_volume );
+    Volume *temp = new Volume( m_coronalReslice->GetOutput() );
+    viewer->setInput( temp );
     viewer->setRenderFunctionToMIP3D();
     viewer->render();
     viewer->show();
@@ -757,8 +756,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     int i;
 
 //     if ( this->RestrictPlaneToVolume )
-//     {
-    
+//     {    
         double origin[3];
         m_volume->getOrigin( origin );
         int extent[6];
@@ -769,7 +767,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
                         origin[1] + spacing[1]*extent[3], //ymax
                         origin[2] + spacing[2]*extent[4], //zmin
                         origin[2] + spacing[2]*extent[5] };//zmax
-    
+        
         for ( i = 0; i <= 4; i += 2 ) // reverse bounds if necessary
         {
             if ( bounds[i] > bounds[i+1] )
@@ -779,7 +777,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
                 bounds[i] = t;
             }
         }
-    
+
         double abs_normal[3];
         planeSource->GetNormal(abs_normal);
         double planeCenter[3];
@@ -805,7 +803,6 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
         {
             planeCenter[k] = bounds[2*k];
         }
-    
         planeSource->SetCenter(planeCenter);
 //     }
     
