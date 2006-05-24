@@ -129,6 +129,9 @@ private:
 
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
+
+    /// Gruix del thickSlab que servirà per al MIP
+    double m_thickSlab;
     
 private slots:
     /// S'encarreguen de rotar els eixos dels plans
@@ -165,6 +168,8 @@ private slots:
     /// Fa el procés de guardar les imatges capturades
     void saveImages();
 
+    /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
+    void updateThickSlab( double value );
 };
 
 };  //  end  namespace udg 

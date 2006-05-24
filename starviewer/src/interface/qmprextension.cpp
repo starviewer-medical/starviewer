@@ -124,6 +124,8 @@ void QMPRExtension::createConnections()
     connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
 
     connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
+
+    connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
@@ -908,7 +910,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     reslice->SetOutputSpacing( planeSizeX/extentX , planeSizeY/extentY , 1 );
     reslice->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , 0 ); // obtenim una única llesca
+    reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , m_thickSlab ); // obtenim una única llesca
     reslice->Update();
     
 }
@@ -1095,67 +1097,87 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
 
 void QMPRExtension::changeDefaultWindowLevel( int which )
 {
-    // amb una crida n'hi ha prou ja que els wW/WL estan sincronitzats
+    // amb una crida n'hi ha prou ja que els WW/WL estan sincronitzats
     switch( which )
     {
     case 0:
         m_axial2DView->resetWindowLevelToDefault();
+        INFO_LOG( "QMPRExtension:: canviem window level a DEFAULT" );
     break;
 
     case 1:
         m_axial2DView->resetWindowLevelToBone();
+        INFO_LOG( "QMPRExtension:: canviem window level a Bone" );
     break;
 
     case 2:
         m_axial2DView->resetWindowLevelToLung();
+        INFO_LOG( "QMPRExtension:: canviem window level a Lung" );
     break;
 
     case 3:
         m_axial2DView->resetWindowLevelToSoftTissuesNonContrast();
+        INFO_LOG( "QMPRExtension:: canviem window level a SoftTissuesNC" );
     break;
 
     case 4:
         m_axial2DView->resetWindowLevelToLiverNonContrast();
+        INFO_LOG( "QMPRExtension:: canviem window level a LiverNC" );
     break;
 
     case 5:
         m_axial2DView->resetWindowLevelToSoftTissuesContrastMedium();
+        INFO_LOG( "QMPRExtension:: canviem window level a SoftTissuesCM" );
     break;
 
     case 6:
         m_axial2DView->resetWindowLevelToLiverContrastMedium();
+        INFO_LOG( "QMPRExtension:: canviem window level a LiverCM" );
     break;
 
     case 7:
         m_axial2DView->resetWindowLevelToNeckContrastMedium();
+        INFO_LOG( "QMPRExtension:: canviem window level a NeckCM" );
     break;
 
     case 8:
         m_axial2DView->resetWindowLevelToAngiography();
+        INFO_LOG( "QMPRExtension:: canviem window level a Angiography" );
     break;
 
     case 9:
         m_axial2DView->resetWindowLevelToOsteoporosis();
+        INFO_LOG( "QMPRExtension:: canviem window level a Osteoporosis" );
     break;
 
     case 10:
         m_axial2DView->resetWindowLevelToEmphysema();
+        INFO_LOG( "QMPRExtension:: canviem window level a Emphysema" );
     break;
     
     case 11:
         m_axial2DView->resetWindowLevelToPetrousBone();
+        INFO_LOG( "QMPRExtension:: canviem window level a PetrousBone" );
     break;
 
     case 12:
         // custom
         m_customWindowLevelDialog->exec();
+        INFO_LOG( "QMPRExtension:: canviem window level a custom" );
     break;
 
     default:
         m_axial2DView->resetWindowLevelToDefault();
+        INFO_LOG( "QMPRExtension:: canviem window level a DEFAULT" );
     break;
     
     }
+}
+
+void QMPRExtension::updateThickSlab( double value )
+{
+    m_thickSlab = value;
+    updatePlane( m_coronalPlaneSource , m_coronalReslice );
 }
 
 void QMPRExtension::readSettings()
