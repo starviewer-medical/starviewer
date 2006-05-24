@@ -78,7 +78,7 @@ bool AppImportFile::loadFile( QString fileName )
     else
     {
         // no s'ha pogut obrir l'arxiu per algun motiu
-        ERROR_LOG( qPrintable("No s'ha pogut obrir el fitxer: ") + fileName );
+        ERROR_LOG( qPrintable( "No s'ha pogut obrir el fitxer: " + fileName ) );
         ok = false;
     }
 
@@ -97,7 +97,7 @@ bool AppImportFile::loadDirectory( QString directoryName )
     }
     else
     {
-        ERROR_LOG( qPrintable("No s'ha pogut obrir el directori: ") + directoryName );
+        ERROR_LOG( qPrintable( "No s'ha pogut obrir el directori: " + directoryName ) );
         ok = false;
     }
 
