@@ -1,8 +1,5 @@
 <!DOCTYPE TS><TS>
 <context>
-    <name>MutualInformationInputParametersFormBase</name>
-</context>
-<context>
     <name>QApplicationMainWindow</name>
     <message>
         <source>English</source>
@@ -485,9 +482,6 @@
     </message>
 </context>
 <context>
-    <name>QMutualInformationTab</name>
-</context>
-<context>
     <name>QPacsListBase</name>
     <message>
         <source>Form1</source>
@@ -540,12 +534,9 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default Viewer</source>
+        <source>2D Viewer</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>udg::ExtensionWorkspace</name>
 </context>
 <context>
     <name>udg::Q2DViewer</name>
@@ -582,6 +573,144 @@ Acc:%4
     </message>
     <message>
         <source>%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerExtension</name>
+    <message>
+        <source>&amp;Axial View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Sagital View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Sagital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Coronal View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Current View To Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>YZ : Sagital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XZ : Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Single View</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerExtensionBase</name>
+    <message>
+        <source>WW/WL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver, noncontrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver , Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Neck , Constrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Serie To Compare</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Synchronize Slices</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -708,10 +837,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Close the current volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Visualization</source>
         <translation type="unfinished"></translation>
     </message>
@@ -732,23 +857,7 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Default Viewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open the Default Viewer Application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Catalan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Switch to Catalan Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Spanish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -757,7 +866,7 @@ Acc:%4
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">English</translation>
+        <translation type="obsolete">English</translation>
     </message>
     <message>
         <source>Switch to English Language</source>
@@ -773,6 +882,18 @@ Acc:%4
     </message>
     <message>
         <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>2&amp;D Viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the 2D Viewer Application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close the current serie</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -890,10 +1011,6 @@ Acc:%4
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Window Width</source>
         <translation type="unfinished"></translation>
     </message>
@@ -909,150 +1026,10 @@ Acc:%4
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>udg::QDefaultViewerExtension</name>
     <message>
-        <source>&amp;Axial View</source>
+        <source>Custom Window Level Settings</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Current View To Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Sagital View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Current View To Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Coronal View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Current View To Coronal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XY : Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YZ : Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XZ : Coronal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switch Single View</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::QDefaultViewerExtensionBase</name>
-    <message>
-        <source>WW/WL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose Serie To Compare</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Synchronize Slices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XY : Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::QMPR3D2DExtension</name>
-</context>
-<context>
-    <name>udg::QMPR3DExtension</name>
 </context>
 <context>
     <name>udg::QMPRExtension</name>
@@ -1302,9 +1279,6 @@ Acc:%4
     </message>
 </context>
 <context>
-    <name>udg::QTabAxisViewBase</name>
-</context>
-<context>
     <name>udg::QueryScreen</name>
     <message>
         <source>Starviewer</source>
@@ -1336,10 +1310,6 @@ Acc:%4
     </message>
     <message>
         <source>No study match found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error! connecting to PACS : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1441,6 +1411,10 @@ Acc:%4
     </message>
     <message>
         <source>Database is looked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Pacs List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

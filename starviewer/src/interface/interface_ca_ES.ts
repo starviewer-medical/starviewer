@@ -1,4 +1,4 @@
-<!DOCTYPE TS><TS>   
+<!DOCTYPE TS><TS>
 <context>
     <name>QConfigurationScreenBase</name>
     <message>
@@ -290,7 +290,7 @@
     <name>QMPR3D2DExtensionBase</name>
     <message>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Axial</source>
@@ -306,7 +306,7 @@
     </message>
     <message>
         <source>WW/WL:</source>
-        <translation type="unfinished"></translation>
+        <translation>WW/WL:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -365,7 +365,7 @@
     <name>QMPR3DExtensionBase</name>
     <message>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Axial</source>
@@ -381,7 +381,7 @@
     </message>
     <message>
         <source>WW/WL:</source>
-        <translation type="unfinished"></translation>
+        <translation>WW/WL:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -440,59 +440,59 @@
     <name>QMPRExtensionBase</name>
     <message>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>MIP</source>
-        <translation type="unfinished"></translation>
+        <translation>MIP</translation>
     </message>
     <message>
         <source>WW/WL:</source>
-        <translation type="unfinished"></translation>
+        <translation>WW/WL:</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Cercar per defecte</translation>
+        <translation>Defecte</translation>
     </message>
     <message>
         <source>CT Bone</source>
-        <translation type="unfinished">Ós CT</translation>
+        <translation>Ós CT</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished">Pulmó CT</translation>
+        <translation>Pulmó CT</translation>
     </message>
     <message>
         <source>CT Soft Tissues, noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>Teixits Tous CT, baix contrast</translation>
     </message>
     <message>
         <source>CT Liver, noncontrast</source>
-        <translation type="unfinished"></translation>
+        <translation>Fetge CT , baix constrast</translation>
     </message>
     <message>
         <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Teixits Tous CT, contrast mitjà</translation>
     </message>
     <message>
         <source>CT Liver , Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Fetge CT , contrast mitjà</translation>
     </message>
     <message>
         <source>CT Neck , Constrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Coll CT, contrast mitjà</translation>
     </message>
     <message>
         <source>CT Angiography</source>
-        <translation type="unfinished"></translation>
+        <translation>Angiografia</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished">Osteoporosi</translation>
+        <translation>Osteoporosi</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished">Emfisema</translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <source>Petrous Bone</source>
@@ -500,11 +500,11 @@
     </message>
     <message>
         <source>Custom...</source>
-        <translation type="unfinished">A mida...</translation>
+        <translation>A mida...</translation>
     </message>
     <message>
         <source>Thick Slab</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruix de tall</translation>
     </message>
 </context>
 <context>
@@ -534,38 +534,39 @@
     <name>udg::AppImportFile</name>
     <message>
         <source>MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="unfinished">Imatges MetaIO (*.mhd);;Imatges DICOM (*.dcm);;Tots els Arxius (*)</translation>
+        <translation>Imatges MetaIO (*.mhd);;Imatges DICOM (*.dcm);;Tots els Arxius (*)</translation>
     </message>
     <message>
         <source>Chose an image filename</source>
-        <translation type="unfinished">Escull un nom d&apos;arxiu per a la imatge</translation>
+        <translation>Escull un nom d&apos;arxiu per a la imatge</translation>
     </message>
     <message>
         <source>Choose a directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Escull un directori</translation>
     </message>
 </context>
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
         <source>2D MPR</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR 2D</translation>
     </message>
     <message>
         <source>3D MPR</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR 3D</translation>
     </message>
     <message>
         <source>3D-2D MPR</source>
-        <translation type="unfinished"></translation>
+        <translation>MPR 3D-2D</translation>
     </message>
     <message>
         <source>Default Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Visor per defecte</translation>
     </message>
-</context>
-<context>
-    <name>udg::ExtensionWorkspace</name>
+    <message>
+        <source>2D Viewer</source>
+        <translation>Visor 2D</translation>
+    </message>
 </context>
 <context>
     <name>udg::Q2DViewer</name>
@@ -575,7 +576,7 @@
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished">Ctrl+R</translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <source>Reset initial parameters</source>
@@ -598,13 +599,15 @@ WW: %5 WL: %6 </source>
     </message>
     <message>
         <source>Slice: %1/%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tall: %1/%2</translation>
     </message>
     <message>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
-        <translation type="unfinished"></translation>
+        <translation>Mida Imatge: %1 x %2
+Mida Vista: %3 x %4
+WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>%1
@@ -613,11 +616,149 @@ WW: %5 WL: %6 </source>
 Acc:%4
 %5
 %6</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>%1</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerExtension</name>
+    <message>
+        <source>&amp;Axial View</source>
+        <translation>Vista &amp;Axial</translation>
+    </message>
+    <message>
+        <source>Ctrl+A</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Change Current View To Axial</source>
+        <translation>Canviar la Vista Actual a Axial</translation>
+    </message>
+    <message>
+        <source>&amp;Sagital View</source>
+        <translation>Vista &amp;Sagital</translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Change Current View To Sagital</source>
+        <translation>Canviar la Vista Actual a Sagital</translation>
+    </message>
+    <message>
+        <source>&amp;Coronal View</source>
+        <translation>Vista &amp;Coronal</translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Change Current View To Coronal</source>
+        <translation>Canviar la Vista Actual a Coronal</translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>YZ : Sagital</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>XZ : Coronal</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation>Canviar a Vista Doble</translation>
+    </message>
+    <message>
+        <source>Switch Single View</source>
+        <translation>Canviar a Vista Simple</translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerExtensionBase</name>
+    <message>
+        <source>WW/WL</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Defecte</translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation>Ós CT</translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation>Pulmó CT</translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, noncontrast</source>
+        <translation>Teixits Tous CT, baix contrast</translation>
+    </message>
+    <message>
+        <source>CT Liver, noncontrast</source>
+        <translation>Fetge CT , baix constrast</translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues , Contrast Medium</source>
+        <translation>Teixits Tous CT, contrast mitjà</translation>
+    </message>
+    <message>
+        <source>CT Liver , Contrast Medium</source>
+        <translation>Fetge CT , contrast mitjà</translation>
+    </message>
+    <message>
+        <source>CT Neck , Constrast Medium</source>
+        <translation>Coll CT, contrast mitjà</translation>
+    </message>
+    <message>
+        <source>CT Angiography</source>
+        <translation>Angiografia</translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation>Osteoporosi</translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation>Emfisema</translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
+        <translation>A mida...</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch Double View</source>
+        <translation>Canviar a Vista Doble</translation>
+    </message>
+    <message>
+        <source>Choose Serie To Compare</source>
+        <translation>Escollir Sèrie per a Comparar</translation>
+    </message>
+    <message>
+        <source>Synchronize Slices</source>
+        <translation>Sincronitzar talls</translation>
+    </message>
+    <message>
+        <source>XY : Axial</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -696,7 +837,7 @@ Acc:%4
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="unfinished">Ctrl+O</translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <source>Open an existing volume file</source>
@@ -880,119 +1021,115 @@ Acc:%4
     </message>
     <message>
         <source>Open a new working window</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir una nova finestra de treball</translation>
     </message>
     <message>
         <source>&amp;PACS...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;PACS</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Open PACS Query Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir la finestra de consulta del PACS</translation>
     </message>
     <message>
         <source>2D &amp;MPR Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visor &amp;MPR 2D</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Open the 2D MPR Application Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir l&apos;aplicació visor MPR 2D</translation>
     </message>
     <message>
         <source>3D M&amp;PR Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visor M&amp;PR 3D</translation>
     </message>
     <message>
         <source>Open the 3D MPR Application Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir l&apos;aplicació visor MPR 3D</translation>
     </message>
     <message>
         <source>3D-2D MP&amp;R Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visor MP&amp;R 3D-2D</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Open the 3D-2D MPR Application Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir l&apos;aplicació visor MPR 3D-2D</translation>
     </message>
     <message>
         <source>Close the current volume</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Tanca el volum actual</translation>
     </message>
     <message>
         <source>&amp;Visualization</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Visualització</translation>
     </message>
     <message>
         <source>Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>Extensions</translation>
     </message>
     <message>
         <source>Open &amp;DICOM Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir Directori &amp;DICOM</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Open an existing DICOM folder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Default Viewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open the Default Viewer Application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Catalan</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir una carpeta DICOM existent</translation>
     </message>
     <message>
         <source>Switch to Catalan Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a llengua Catalana</translation>
     </message>
     <message>
         <source>Switch to Spanish Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a llengua Castellana</translation>
     </message>
     <message>
         <source>English</source>
-        <translation type="unfinished">Català</translation>
+        <translation type="obsolete">Català</translation>
     </message>
     <message>
         <source>Switch to English Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a llengua Anglesa</translation>
     </message>
     <message>
         <source>Language Switch</source>
-        <translation type="unfinished"></translation>
+        <translation>Canvi d&apos;idioma</translation>
     </message>
     <message>
         <source>The changes will take effect after restarting the application</source>
-        <translation type="unfinished"></translation>
+        <translation>Els canvis tindran efecte un cop s&apos;hagi reiniciat l&apos;aplicacio</translation>
     </message>
     <message>
         <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>2&amp;D Viewer</source>
+        <translation>Visor 2&amp;D</translation>
+    </message>
+    <message>
+        <source>Open the 2D Viewer Application</source>
+        <translation>Obrir l&apos;aplicacio visor 2D</translation>
+    </message>
+    <message>
+        <source>Close the current serie</source>
+        <translation>Tancar la sèrie actual</translation>
     </message>
 </context>
 <context>
@@ -1130,186 +1267,69 @@ Acc:%4
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Diàleg</translation>
     </message>
     <message>
         <source>Window Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Contrast</translation>
     </message>
     <message>
         <source>Window Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Lluentor</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>D&apos;acord</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel·lar</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QDefaultViewerExtension</name>
-    <message>
-        <source>&amp;Axial View</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·lar</translation>
     </message>
     <message>
-        <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Current View To Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Sagital View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Current View To Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;Coronal View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Change Current View To Coronal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XY : Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>YZ : Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XZ : Coronal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switch Single View</source>
-        <translation type="unfinished"></translation>
+        <source>Custom Window Level Settings</source>
+        <translation>Ajustament del contrast a mida</translation>
     </message>
 </context>
 <context>
     <name>udg::QDefaultViewerExtensionBase</name>
     <message>
-        <source>WW/WL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>CT Bone</source>
-        <translation type="unfinished">Ós CT</translation>
+        <translation type="obsolete">Ós CT</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished">Pulmó CT</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Pulmó CT</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished">Osteoporosi</translation>
+        <translation type="obsolete">Osteoporosi</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished">Emfisema</translation>
-    </message>
-    <message>
-        <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Emfisema</translation>
     </message>
     <message>
         <source>Custom...</source>
-        <translation type="unfinished">A mida...</translation>
+        <translation type="obsolete">A mida...</translation>
     </message>
-    <message>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose Serie To Compare</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Synchronize Slices</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>XY : Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::QMPR3D2DExtension</name>
-</context>
-<context>
-    <name>udg::QMPR3DExtension</name>
 </context>
 <context>
     <name>udg::QMPRExtension</name>
     <message>
         <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Imatges PNG (*.png);;Imatges PNM(*.pnm);;Imatges JPEG(*.jpg);;Imatges TIFF (*.tif);;Imatges BMP (*.bmp);;Imatges DICOM (*.dcm)</translation>
     </message>
     <message>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informació</translation>
     </message>
     <message>
         <source>There are not grabbed views to save</source>
-        <translation type="unfinished"></translation>
+        <translation>No hi ha vistes capturades per desar</translation>
     </message>
     <message>
         <source>Save file</source>
-        <translation type="unfinished"></translation>
+        <translation>Desar fitxer</translation>
     </message>
 </context>
 <context>
@@ -1549,9 +1569,6 @@ Acc:%4
     </message>
 </context>
 <context>
-    <name>udg::QTabAxisViewBase</name>
-</context>
-<context>
     <name>udg::QueryScreen</name>
     <message>
         <source>Starviewer</source>
@@ -1588,7 +1605,7 @@ Acc:%4
     </message>
     <message>
         <source>Error! connecting to PACS : </source>
-        <translation>ERROR! Connectant al Pacs :</translation>
+        <translation type="obsolete">ERROR! Connectant al Pacs :</translation>
     </message>
     <message>
         <source>Error! Can&apos;t query studies in PACS : </source>
@@ -1649,7 +1666,7 @@ Acc:%4
     </message>
     <message>
         <source>Show Pacs List</source>
-        <translation type="obsolete">Mostrar llista Pacs</translation>
+        <translation type="unfinished">Mostrar llista Pacs</translation>
     </message>
     <message>
         <source>Select a study to view </source>

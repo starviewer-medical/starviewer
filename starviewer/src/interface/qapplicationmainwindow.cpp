@@ -157,7 +157,7 @@ void QApplicationMainWindow::createActions()
     m_closeAction = new QAction( this );
     m_closeAction->setText( tr("&Close") );
     m_closeAction->setShortcut( tr("Ctrl+W") );
-    m_closeAction->setStatusTip(tr("Close the current volume"));
+    m_closeAction->setStatusTip(tr("Close the current serie"));
     m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
     connect( m_closeAction, SIGNAL( triggered() ), this, SLOT( close() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_closeAction, SLOT( setEnabled(bool) ) );

@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Dialog</string>
+   <string>Custom Window Level Settings</string>
   </property>
   <property name="modal" >
    <bool>true</bool>
