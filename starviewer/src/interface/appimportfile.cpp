@@ -9,7 +9,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QFileInfo>
-
+#include <QProgressDialog>
 // recursos
 #include "volumerepository.h"
 #include "input.h"
@@ -27,7 +27,15 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
     
     m_volumeRepository = udg::VolumeRepository::getRepository();
     m_inputReader = new udg::Input;
-    
+
+    m_progressDialog = new QProgressDialog;
+    m_progressDialog->setRange( 0 , 100 );
+    m_progressDialog->setMinimumDuration( 0 );
+    m_progressDialog->setWindowTitle( tr("Serie loading") );
+    // \TODO això no es veu, perquè?
+    m_progressDialog->setLabelText( tr("Loading, please wait...") );
+    connect( m_inputReader , SIGNAL( progress(int) ) , m_progressDialog , SLOT( setValue(int) ) );
+
     readSettings();
 }
 

@@ -261,7 +261,8 @@ bool ExtensionHandler::open( QString fileName )
 void ExtensionHandler::viewStudy( StudyVolum study )
 {
     Input *input = new Input;
-    QProgressDialog progressDialog;
+    QProgressDialog progressDialog( m_mainApp );
+    progressDialog.setModal( true );
     progressDialog.setRange( 0 , 100 );
     progressDialog.setMinimumDuration( 0 );
     progressDialog.setWindowTitle( tr("Serie loading") );

@@ -12,6 +12,8 @@
 
 #include "identifier.h"
 
+class QProgressDialog;
+
 namespace udg {
 
 // Fordward Declarations
@@ -67,6 +69,9 @@ private:
 
     /// fa la feina 'bruta' d'obrir un directori d'arxius dicom
     bool loadDirectory( QString directoryName );
+
+    /// Mostra el progrés al carregar un arxiu
+    QProgressDialog *m_progressDialog;
     
     // :::::::::::::::::::::::::::::::::::::::::
     // Recursos
@@ -74,8 +79,10 @@ private:
 
     /// L'id del volum amb el que estem treballant
     Identifier m_volumeID;    
+
     /// El repository de volums
     udg::VolumeRepository* m_volumeRepository;
+
     /// accés a l'entrada de dades -> això hauria de formar part d'una mini-app, per tant és temporal
     Input *m_inputReader;
 };
