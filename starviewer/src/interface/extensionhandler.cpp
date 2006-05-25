@@ -9,6 +9,7 @@
 // qt
 #include <QFileInfo>
 #include <QDir>
+#include <QProgressDialog>
 // recursos
 #include "volumerepository.h"
 #include "input.h"
@@ -260,6 +261,13 @@ bool ExtensionHandler::open( QString fileName )
 void ExtensionHandler::viewStudy( StudyVolum study )
 {
     Input *input = new Input;
+    QProgressDialog progressDialog;
+    progressDialog.setRange( 0 , 100 );
+    progressDialog.setMinimumDuration( 0 );
+    progressDialog.setWindowTitle( tr("Serie loading") );
+    // \TODO això no es veu, perquè?
+    progressDialog.setLabelText( tr("Loading, please wait...") );
+    connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
     SeriesVolum serie;
     
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
@@ -311,6 +319,13 @@ void ExtensionHandler::viewStudy( StudyVolum study )
 void ExtensionHandler::viewStudyToCompare( StudyVolum study )
 {
     Input *input = new Input;
+    QProgressDialog progressDialog;
+    progressDialog.setRange( 0 , 100 );
+    progressDialog.setMinimumDuration( 0 );
+    progressDialog.setWindowTitle( tr("Serie loading") );
+    // \TODO això no es veu, perquè?
+    progressDialog.setLabelText( tr("Loading, please wait...") );
+    connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
     SeriesVolum serie;
     
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
