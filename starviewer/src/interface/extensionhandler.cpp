@@ -21,14 +21,14 @@
 #include "qmprextensioncreator.h"
 #include "qmpr3dextensioncreator.h"
 #include "qmpr3d2dextensioncreator.h"
-#include "qdefaultviewerextensioncreator.h"
+#include "q2dviewerextensioncreator.h"
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
 #include "qmprextension.h"
 #include "qmpr3dextension.h"
 #include "qmpr3d2dextension.h"
-#include "qdefaultviewerextension.h"
+#include "q2dviewerextension.h"
 
 // Fi de l'espai reservat pels include de les mini-apps
 
@@ -74,14 +74,14 @@ void ExtensionHandler::registerExtensions()
     m_qMPRExtensionCreator = new QMPRExtensionCreator( this );
     m_qMPR3DExtensionCreator = new QMPR3DExtensionCreator( this );
     m_qMPR3D2DExtensionCreator = new QMPR3D2DExtensionCreator( this );
-    m_qDefaultViewerExtensionCreator = new QDefaultViewerExtensionCreator( this );
+    m_q2DViewerExtensionCreator = new Q2DViewerExtensionCreator( this );
     
     // al crear-se el handler inicialitzem el factory amb totes les aplicacions
     m_extensionFactory = new ExtensionFactory(this);
     m_extensionFactory->registerExtension( "2D MPR Extension" , m_qMPRExtensionCreator );
     m_extensionFactory->registerExtension( "3D MPR Extension" , m_qMPR3DExtensionCreator );
     m_extensionFactory->registerExtension( "3D-2D MPR Extension" , m_qMPR3D2DExtensionCreator );
-    m_extensionFactory->registerExtension( "Default Viewer Extension" , m_qDefaultViewerExtensionCreator );
+    m_extensionFactory->registerExtension( "2D Viewer Extension" , m_q2DViewerExtensionCreator );
 }
 
 void ExtensionHandler::request( int who )
@@ -90,7 +90,7 @@ void ExtensionHandler::request( int who )
     QMPRExtension *mprExtension = new QMPRExtension( 0 );
     QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
     QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
-    QDefaultViewerExtension *defaultViewerExtension;
+    Q2DViewerExtension *defaultViewerExtension;
     /// \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
     switch( who )
     {
@@ -167,7 +167,7 @@ void ExtensionHandler::request( int who )
 
     /// Default viewer
     case 8:
-        defaultViewerExtension = new QDefaultViewerExtension;
+        defaultViewerExtension = new Q2DViewerExtension;
         defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("Default Viewer"));
 //         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
@@ -176,7 +176,7 @@ void ExtensionHandler::request( int who )
     break;
     
     default:
-        defaultViewerExtension = new QDefaultViewerExtension;
+        defaultViewerExtension = new Q2DViewerExtension;
         defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("Default Viewer"));
 //         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );

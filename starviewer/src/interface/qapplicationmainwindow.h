@@ -107,7 +107,7 @@ private:
     QToolBar *m_fileToolBar;
     
     /// Accions
-    QAction *m_defaultViewerAction;
+    QAction *m_2DViewerAction;
     QAction *m_mpr2DAction;
     QAction *m_mpr3DAction;
     QAction *m_mpr3D2DAction;

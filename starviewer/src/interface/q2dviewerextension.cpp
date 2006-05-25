@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "qdefaultviewerextension.h"
+#include "q2dviewerextension.h"
 
 #include "volume.h"
 #include "logging.h"
@@ -16,7 +16,7 @@
 
 namespace udg {
 
-QDefaultViewerExtension::QDefaultViewerExtension( QWidget *parent )
+Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
@@ -30,11 +30,11 @@ QDefaultViewerExtension::QDefaultViewerExtension( QWidget *parent )
     createConnections();
 }
 
-QDefaultViewerExtension::~QDefaultViewerExtension()
+Q2DViewerExtension::~Q2DViewerExtension()
 {
 }
 
-void QDefaultViewerExtension::createActions()
+void Q2DViewerExtension::createActions()
 {
     m_axialViewAction = new QAction( 0 );
     m_axialViewAction->setText( tr("&Axial View") );
@@ -58,7 +58,7 @@ void QDefaultViewerExtension::createActions()
     m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
 }
 
-void QDefaultViewerExtension::createToolBars()
+void Q2DViewerExtension::createToolBars()
 {
     m_toolsToolBar = new QToolBar(0);
     m_toolsToolBar->addAction( m_axialViewAction );
@@ -67,7 +67,7 @@ void QDefaultViewerExtension::createToolBars()
     
 }
 
-void QDefaultViewerExtension::createConnections()
+void Q2DViewerExtension::createConnections()
 {
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
     connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
@@ -110,19 +110,19 @@ void QDefaultViewerExtension::createConnections()
     connect( m_2DView2_2 , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
 }
 
-void QDefaultViewerExtension::setInput( Volume *input )
+void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     // \TODO ara ho fem "a saco" però s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
-    INFO_LOG("QDefaultViewerExtension: Donem l'input principal")
+    INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
     
 }
 
-void QDefaultViewerExtension::setSecondInput( Volume *input )
+void Q2DViewerExtension::setSecondInput( Volume *input )
 {
     m_secondaryVolume = input;
     // \TODO ara ho fem "a saco" però s'hauria de millorar
@@ -132,7 +132,7 @@ void QDefaultViewerExtension::setSecondInput( Volume *input )
     m_stackedWidget->setCurrentIndex( 1 );
 }
 
-void QDefaultViewerExtension::populateToolBar( QToolBar *toolbar )
+void Q2DViewerExtension::populateToolBar( QToolBar *toolbar )
 {
     if( toolbar )
     {
@@ -142,7 +142,7 @@ void QDefaultViewerExtension::populateToolBar( QToolBar *toolbar )
     }
 }
 
-void QDefaultViewerExtension::changeViewToAxial()
+void Q2DViewerExtension::changeViewToAxial()
 {
     m_currentView = Axial;
     switch( m_stackedWidget->currentIndex() )
@@ -188,7 +188,7 @@ void QDefaultViewerExtension::changeViewToAxial()
 
 }
 
-void QDefaultViewerExtension::changeViewToSagital()
+void Q2DViewerExtension::changeViewToSagital()
 {
     m_currentView = Sagital;
     switch( m_stackedWidget->currentIndex() )
@@ -232,7 +232,7 @@ void QDefaultViewerExtension::changeViewToSagital()
     }
 }
 
-void QDefaultViewerExtension::changeViewToCoronal()
+void Q2DViewerExtension::changeViewToCoronal()
 {
     m_currentView = Coronal;
     switch( m_stackedWidget->currentIndex() )
@@ -276,7 +276,7 @@ void QDefaultViewerExtension::changeViewToCoronal()
     }
 }
 
-void QDefaultViewerExtension::changeDefaultWindowLevel( int which )
+void Q2DViewerExtension::changeDefaultWindowLevel( int which )
 {
     // \TODO ara anem a saco però 'shauria de fer una manera perquè només es cridessin els que cal
     switch( which )
@@ -381,7 +381,7 @@ void QDefaultViewerExtension::changeDefaultWindowLevel( int which )
     }
 }
 
-void QDefaultViewerExtension::setView( ViewType view )
+void Q2DViewerExtension::setView( ViewType view )
 {
     switch( view )
     {
@@ -397,7 +397,7 @@ void QDefaultViewerExtension::setView( ViewType view )
     }
 }
 
-void QDefaultViewerExtension::switchView()
+void Q2DViewerExtension::switchView()
 {
     if( m_stackedWidget->currentIndex() == 0 )
     {
@@ -409,7 +409,7 @@ void QDefaultViewerExtension::switchView()
     }
 }
 
-void QDefaultViewerExtension::pageChange( int index )
+void Q2DViewerExtension::pageChange( int index )
 {
     setView( m_currentView );
     switch( index )
@@ -424,7 +424,7 @@ void QDefaultViewerExtension::pageChange( int index )
     }
 }
 
-void QDefaultViewerExtension::synchronizeSlices( bool ok )
+void Q2DViewerExtension::synchronizeSlices( bool ok )
 {
     if( ok )
     {
@@ -440,7 +440,7 @@ void QDefaultViewerExtension::synchronizeSlices( bool ok )
     }
 }
 
-void QDefaultViewerExtension::chooseNewSerie()
+void Q2DViewerExtension::chooseNewSerie()
 {
     emit newSerie();
 }

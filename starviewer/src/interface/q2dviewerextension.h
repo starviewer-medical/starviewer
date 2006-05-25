@@ -4,10 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGQDEFAULTVIEWEREXTENSION_H
-#define UDGQDEFAULTVIEWEREXTENSION_H
+#ifndef UDGQ2DVIEWEREXTENSION_H
+#define UDGQ2DVIEWEREXTENSION_H
 
-#include "ui_qdefaultviewerextensionbase.h"
+#include "ui_q2dviewerextensionbase.h"
 
 // FWD declarations
 class QAction;
@@ -24,12 +24,12 @@ Extensió que s'executarà per defecte a l'obrir un model
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QDefaultViewerExtension : public QWidget , private Ui::QDefaultViewerExtensionBase {
+class Q2DViewerExtension : public QWidget , private Ui::Q2DViewerExtensionBase {
 Q_OBJECT
 public:
-    QDefaultViewerExtension( QWidget *parent = 0 );
+    Q2DViewerExtension( QWidget *parent = 0 );
 
-    ~QDefaultViewerExtension();
+    ~Q2DViewerExtension();
 
     /// Li assigna el volum principal
     void setInput( Volume *input );

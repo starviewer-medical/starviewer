@@ -4,29 +4,29 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "qdefaultviewerextensioncreator.h"
-#include "qdefaultviewerextension.h"
+#include "q2dviewerextensioncreator.h"
+#include "q2dviewerextension.h"
 
 namespace udg {
 
-QDefaultViewerExtensionCreator::QDefaultViewerExtensionCreator(QObject* parent, const char* name)
+Q2DViewerExtensionCreator::Q2DViewerExtensionCreator(QObject* parent, const char* name)
 : ExtensionCreator(parent, name)
 {
 }
 
 
-QDefaultViewerExtensionCreator::~QDefaultViewerExtensionCreator()
+Q2DViewerExtensionCreator::~Q2DViewerExtensionCreator()
 {
 }
 
-QWidget *QDefaultViewerExtensionCreator::createExtension( QWidget *parent , QString name )
+QWidget *Q2DViewerExtensionCreator::createExtension( QWidget *parent , QString name )
 {
-    QDefaultViewerExtension *newWidget = new QDefaultViewerExtension( parent );
+    Q2DViewerExtension *newWidget = new Q2DViewerExtension( parent );
     newWidget->setObjectName( name );
     return newWidget;
 }
 
-bool QDefaultViewerExtensionCreator::initializeExtension( QWidget *extension /* , Resource *resources */ )
+bool Q2DViewerExtensionCreator::initializeExtension( QWidget *extension /* , Resource *resources */ )
 {
     bool ok = true;
     
@@ -36,7 +36,7 @@ bool QDefaultViewerExtensionCreator::initializeExtension( QWidget *extension /* 
     }
     else
     {
-        QDefaultViewerExtension *widget = dynamic_cast< QDefaultViewerExtension * >( extension );
+        Q2DViewerExtension *widget = dynamic_cast< Q2DViewerExtension * >( extension );
         // fer inits
         // widget->setVolumeRepository( resources->getVolumeRepository() );
         // widget->setMainCLUT( resources->getMainCLUT() );

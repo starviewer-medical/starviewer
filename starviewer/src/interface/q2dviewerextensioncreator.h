@@ -4,25 +4,25 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGQDEFAULTVIEWEREXTENSIONCREATOR_H
-#define UDGQDEFAULTVIEWEREXTENSIONCREATOR_H
+#ifndef UDGQ2DVIEWEREXTENSIONCREATOR_H
+#define UDGQ2DVIEWEREXTENSIONCREATOR_H
 
 #include "extensioncreator.h"
 
 namespace udg {
 
 /**
-Creador de l'extensió QDefaultViewerExtension
+Creador de l'extensió Q2dViewerExtension
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QDefaultViewerExtensionCreator : public ExtensionCreator
+class Q2DViewerExtensionCreator : public ExtensionCreator
 {
 Q_OBJECT
 public:
-    QDefaultViewerExtensionCreator( QObject* parent = 0, const char* name = 0 );
+    Q2DViewerExtensionCreator( QObject* parent = 0, const char* name = 0 );
 
-    ~QDefaultViewerExtensionCreator();
+    ~Q2DViewerExtensionCreator();
 
     /// creador d'extensions. és el mètode del facory encarregat de proporcionar l'extensió que demanem
     /// \TODO ara per ara retorna QWidget, però és possible que canviem a una altra classe que faci d'interfície per a les extensions [p.ex. ExtensionBase]

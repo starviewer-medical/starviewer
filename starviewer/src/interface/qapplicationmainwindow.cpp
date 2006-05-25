@@ -138,14 +138,14 @@ void QApplicationMainWindow::createActions()
     signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
     connect( m_mpr3D2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
 
-    m_defaultViewerAction = new QAction( this );
-    m_defaultViewerAction->setText( tr("&Default Viewer") );
-    m_defaultViewerAction->setShortcut( tr("Ctrl+D") );
-    m_defaultViewerAction->setStatusTip( tr("Open the Default Viewer Application") );
-    m_defaultViewerAction->setEnabled( false );
-    signalMapper->setMapping( m_defaultViewerAction , 8 );
-    signalMapper->setMapping( m_defaultViewerAction , "Default Viewer Extension" );
-    connect( m_defaultViewerAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_2DViewerAction = new QAction( this );
+    m_2DViewerAction->setText( tr("2&D Viewer") );
+    m_2DViewerAction->setShortcut( tr("Ctrl+D") );
+    m_2DViewerAction->setStatusTip( tr("Open the 2D Viewer Application") );
+    m_2DViewerAction->setEnabled( false );
+    signalMapper->setMapping( m_2DViewerAction , 8 );
+    signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
+    connect( m_2DViewerAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
     
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
@@ -246,7 +246,7 @@ void QApplicationMainWindow::createMenus()
 
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
-    m_visualizationMenu->addAction( m_defaultViewerAction );
+    m_visualizationMenu->addAction( m_2DViewerAction );
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
@@ -438,7 +438,7 @@ void QApplicationMainWindow::about()
 
 void QApplicationMainWindow::onVolumeLoaded( Identifier id )
 {
-    m_defaultViewerAction->setEnabled( true );
+    m_2DViewerAction->setEnabled( true );
     m_mpr2DAction->setEnabled( true );
     m_mpr3DAction->setEnabled( true );
     m_mpr3D2DAction->setEnabled( true );

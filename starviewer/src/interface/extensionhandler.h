@@ -26,7 +26,7 @@ class ExtensionFactory;
 class QMPRExtensionCreator;
 class QMPR3DExtensionCreator;
 class QMPR3D2DExtensionCreator;
-class QDefaultViewerExtensionCreator;
+class Q2DViewerExtensionCreator;
 
 // Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
@@ -77,7 +77,7 @@ private:
     QMPRExtensionCreator *m_qMPRExtensionCreator;
     QMPR3DExtensionCreator *m_qMPR3DExtensionCreator;
     QMPR3D2DExtensionCreator *m_qMPR3D2DExtensionCreator;
-    QDefaultViewerExtensionCreator *m_qDefaultViewerExtensionCreator;
+    Q2DViewerExtensionCreator *m_q2DViewerExtensionCreator;
 
     /// Entitat pacient que es controlarà des d'aquí
     Patient m_patient;

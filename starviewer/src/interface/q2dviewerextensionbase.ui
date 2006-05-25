@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>udg::QDefaultViewerExtensionBase</class>
- <widget class="QWidget" name="udg::QDefaultViewerExtensionBase" >
+ <class>udg::Q2DViewerExtensionBase</class>
+ <widget class="QWidget" name="udg::Q2DViewerExtensionBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
