@@ -11,7 +11,6 @@
 #include <QTranslator>
 #include <QSettings>
 #include <QLocale>
-//#include <qtextcodec.h>
 #include "logging.h"
   
 int main(int argc, char *argv[])
