@@ -52,6 +52,10 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_coronalPlaneSource->SetXResolution( 1 );
     m_coronalPlaneSource->SetYResolution( 1 );
 
+    m_thickSlabPlaneSource = vtkPlaneSource::New();
+    m_thickSlabPlaneSource->SetXResolution( 1 );
+    m_thickSlabPlaneSource->SetYResolution( 1 );
+
     m_sagitalReslice = vtkImageReslice::New();
     m_sagitalReslice->AutoCropOutputOn(); // perquè l'extent d'output sigui suficient i no es "mengi" dades
     m_sagitalReslice->SetInterpolationModeToCubic();
@@ -89,6 +93,7 @@ QMPRExtension::~QMPRExtension()
     m_axialPlaneSource->Delete();
     m_sagitalPlaneSource->Delete();
     m_coronalPlaneSource->Delete();
+    m_thickSlabPlaneSource->Delete();
     
     m_sagitalReslice->Delete();
     m_coronalReslice->Delete();
@@ -605,7 +610,9 @@ void QMPRExtension::createActors()
     m_sagitalOverAxialAxisActor = vtkAxisActor2D::New(); 
     m_coronalOverAxialIntersectionAxis = vtkAxisActor2D::New(); 
     m_coronalOverSagitalIntersectionAxis = vtkAxisActor2D::New(); 
-    m_axialOverSagitalIntersectionAxis = vtkAxisActor2D::New();  
+    m_axialOverSagitalIntersectionAxis = vtkAxisActor2D::New();
+    m_thickSlabOverAxialActor = vtkAxisActor2D::New();
+    m_thickSlabOverSagitalActor = vtkAxisActor2D::New();
     
     m_sagitalOverAxialAxisActor->AxisVisibilityOn(); 
     m_sagitalOverAxialAxisActor->TickVisibilityOff();
@@ -627,13 +634,29 @@ void QMPRExtension::createActors()
     m_axialOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_axialOverSagitalIntersectionAxis->TickVisibilityOff();
     m_axialOverSagitalIntersectionAxis->LabelVisibilityOff();
-    m_axialOverSagitalIntersectionAxis->TitleVisibilityOff();    
+    m_axialOverSagitalIntersectionAxis->TitleVisibilityOff();
     m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor( 1 , 1 , 0 );
+
+    m_thickSlabOverAxialActor->AxisVisibilityOn();
+    m_thickSlabOverAxialActor->TickVisibilityOff();
+    m_thickSlabOverAxialActor->LabelVisibilityOff();
+    m_thickSlabOverAxialActor->TitleVisibilityOff();
+    m_thickSlabOverAxialActor->GetProperty()->SetColor( 0 , 0 , 1 );
+    m_thickSlabOverAxialActor->GetProperty()->SetLineStipplePattern( 65280 );
+
+    m_thickSlabOverSagitalActor->AxisVisibilityOn();
+    m_thickSlabOverSagitalActor->TickVisibilityOff();
+    m_thickSlabOverSagitalActor->LabelVisibilityOff();
+    m_thickSlabOverSagitalActor->TitleVisibilityOff();
+    m_thickSlabOverSagitalActor->GetProperty()->SetColor( 0 , 0 , 1 );
+    m_thickSlabOverSagitalActor->GetProperty()->SetLineStipplePattern( 65280 );
     
     m_axial2DView->getRenderer()->AddActor2D( m_sagitalOverAxialAxisActor );
     m_axial2DView->getRenderer()->AddActor2D( m_coronalOverAxialIntersectionAxis );
+    m_axial2DView->getRenderer()->AddActor2D( m_thickSlabOverAxialActor );
     m_sagital2DView->getRenderer()->AddActor2D( m_coronalOverSagitalIntersectionAxis );
     m_sagital2DView->getRenderer()->AddActor2D( m_axialOverSagitalIntersectionAxis );
+    m_sagital2DView->getRenderer()->AddActor2D( m_thickSlabOverSagitalActor );
 
 }
 
@@ -660,13 +683,7 @@ void QMPRExtension::updateControls()
 
 // posem la representació dels plans sobre cada vista
     updateIntersectionPoint();
-//     
-// 
-//     PLA SAGITAL : Línia vermella. Aquest sempre serà perpendicular al pla axial, per tant és el més fàcil 
-// de pintar
-// 
-// 
-// 
+
     // Passem a sistema de coordenades de món
     m_sagitalOverAxialAxisActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -679,6 +696,17 @@ void QMPRExtension::updateControls()
     
     m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+
+    m_thickSlabOverAxialActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_thickSlabOverAxialActor->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+
+    m_thickSlabOverSagitalActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_thickSlabOverSagitalActor->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+
+    m_thickSlabPlaneSource->SetOrigin( m_coronalPlaneSource->GetOrigin() );
+    m_thickSlabPlaneSource->SetPoint1( m_coronalPlaneSource->GetPoint1() );
+    m_thickSlabPlaneSource->SetPoint2( m_coronalPlaneSource->GetPoint2() );
+    m_thickSlabPlaneSource->Push( m_thickSlab );
     
     double r[3] , t[3] , position1[3] , position2[3];
     
@@ -713,6 +741,20 @@ void QMPRExtension::updateControls()
     
     m_coronalOverSagitalIntersectionAxis->SetPosition( position1[1] , position1[2] );
     m_coronalOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
+
+    // projecció thick slab sobre sagital
+    MathTools::planeIntersection( m_thickSlabPlaneSource->GetOrigin() , m_thickSlabPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
+
+    position1[0] = r[0] - t[0]*2000;
+    position1[1] = r[1] - t[1]*2000;
+    position1[2] = r[2] - t[2]*2000;
+
+    position2[0] = r[0] + t[0]*2000;
+    position2[1] = r[1] + t[1]*2000;
+    position2[2] = r[2] + t[2]*2000;
+
+    m_thickSlabOverSagitalActor->SetPosition( position1[1] , position1[2] );
+    m_thickSlabOverSagitalActor->SetPosition2( position2[1] , position2[2] );
     
     // projecció coronal sobre axial
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() , r , t );
@@ -727,6 +769,20 @@ void QMPRExtension::updateControls()
     
     m_coronalOverAxialIntersectionAxis->SetPosition(  position1[0] , position1[1] );
     m_coronalOverAxialIntersectionAxis->SetPosition2( position2[0] , position2[1] );  
+
+    // projecció thick slab sobre axial
+    MathTools::planeIntersection( m_thickSlabPlaneSource->GetOrigin() , m_thickSlabPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() , r , t );
+
+    position1[0] = r[0] - t[0]*2000;
+    position1[1] = r[1] - t[1]*2000;
+    position1[2] = r[2] - t[2]*2000;
+
+    position2[0] = r[0] + t[0]*2000;
+    position2[1] = r[1] + t[1]*2000;
+    position2[2] = r[2] + t[2]*2000;
+
+    m_thickSlabOverAxialActor->SetPosition( position1[0] , position1[1] );
+    m_thickSlabOverAxialActor->SetPosition2( position2[0] , position2[1] );
     
 //     Repintem l'escena
     m_axial2DView->getInteractor()->Render();
@@ -1182,6 +1238,7 @@ void QMPRExtension::updateThickSlab( double value )
 {
     m_thickSlab = value;
     updatePlane( m_coronalPlaneSource , m_coronalReslice );
+    updateControls();
 }
 
 void QMPRExtension::readSettings()

@@ -85,8 +85,8 @@ private:
     vtkTransform *m_transform;
     /// El volum al que se li practica l'MPR
     Volume *m_volume;
-    /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) rspectivament.
-    vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis ,  *m_coronalOverSagitalIntersectionAxis;    
+    /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab ( línies puntejades blaves en vista axial i sagital ).
+    vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis , *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor , *m_thickSlabOverSagitalActor;
     
     /// Ens serà molt útil ens molts de càlculs i a més serà una dada constant un cop tenim l'input
     double m_axialSpacing[3];
@@ -105,8 +105,8 @@ private:
     /// crea les connexions entre signals i slots
     void createConnections();
     
-    /// Els plans de tall per cada vista
-    vtkPlaneSource *m_sagitalPlaneSource, *m_coronalPlaneSource , *m_axialPlaneSource;
+    /// Els plans de tall per cada vista ( més el thickSlab )
+    vtkPlaneSource *m_sagitalPlaneSource, *m_coronalPlaneSource , *m_axialPlaneSource , *m_thickSlabPlaneSource;
     
     /// ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector     
     void planeIntersection( vtkPlaneSource* plane1 , vtkPlaneSource *plane2 , double r[3] , double t[3] );
