@@ -9,7 +9,6 @@
 
 // include's ITK
 #include <itkNumericSeriesFileNames.h>
-
 // qt
 #include <QString>
 #include <QDir>

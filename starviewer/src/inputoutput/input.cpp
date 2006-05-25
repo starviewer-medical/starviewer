@@ -10,13 +10,13 @@
 #include "input.h"
 #include "volumesourceinformation.h"
 #include "logging.h"
+// std
 #include <iostream>
 //ITK
 #include <itkSpatialOrientation.h>
 #include <itkOrientImageFilter.h>
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
-#include <itkChangeInformationImageFilter.h>
 // QT
 #include <QStringList>
 // VTK
@@ -41,7 +41,7 @@ Input::Input()
    */ 
      itk::QtSignalAdaptor *m_progressSignalAdaptor = new itk::QtSignalAdaptor;
 //   Connect the adaptor as an observer of a Filter's event
-   m_seriesReader->AddObserver( itk::ProgressEvent(),  m_progressSignalAdaptor->GetCommand() );
+    m_seriesReader->AddObserver( itk::ProgressEvent(),  m_progressSignalAdaptor->GetCommand() );
 // 
 //  Connect the adaptor's Signal to the Qt Widget Slot
    connect( m_progressSignalAdaptor, SIGNAL( Signal() ), this, SLOT( slotProgress() ) );

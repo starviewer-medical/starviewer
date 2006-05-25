@@ -8,28 +8,30 @@
 #define UDGOUTPUT_H
 
 #include "volume.h"
+// itk
 #include <itkImageFileWriter.h>
 #include <itkImageSeriesWriter.h>
 #include <itkRescaleIntensityImageFilter.h>
-
+// qt
 #include <QObject>
 
 namespace udg {
 
 /**
-Operacions d'escriptura
+    Operacions d'escriptura
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class Output : public QObject {
+class Output : public QObject
+{
 Q_OBJECT
 public:
-
     Output();
     ~Output();
 
     /// Desa un volum en un format de fitxer donat
     bool saveFile(const char *fileName);
+
     /// Desa un volum en una sèrie d'arxius ( png, bmp, tiff , jpg ). Si slice == -1, guarda totes les llesques altrament només en guarda la indicada
     bool saveSeries(const char *fileName , int slice = -1 );
     
@@ -39,8 +41,8 @@ public:
 signals:
     /// Indica el progrés en % de la lectura del fitxer
     void progress( int );    
-private:
 
+private:
     typedef Volume::ItkImageType ImageType;
     typedef itk::ImageFileWriter< ImageType >  WriterType;
     typedef WriterType::Pointer    WriterPointerType;
@@ -55,6 +57,7 @@ private:
 
     /// L'escriptor estàndar de volums
     WriterPointerType    m_writer;
+
     /// L'escriptor de sèries 
     ImageSeriesWriterPointerType m_seriesWriter;
     
