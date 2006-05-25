@@ -948,6 +948,15 @@ void Q2DViewer::setWindowLevel( double window , double level )
     }
 }
 
+void Q2DViewer::getWindowLevel( double wl[2] )
+{
+    if( m_viewer && m_mainVolume )
+    {
+        wl[0] = m_viewer->GetColorWindow();
+        wl[1] = m_viewer->GetColorLevel();
+    }
+}
+
 void Q2DViewer::resetWindowLevelToDefault()
 {
 // això ens dóna un level/level "maco" per defecte

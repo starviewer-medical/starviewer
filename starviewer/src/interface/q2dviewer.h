@@ -205,6 +205,9 @@ public slots:
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
 
+    /// Obté el window/level
+    void getWindowLevel( double wl[2] );
+    
     /// Mètodes per donar diversos window level per defecte
     void resetWindowLevelToDefault();
     void resetWindowLevelToBone();

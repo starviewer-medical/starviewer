@@ -67,6 +67,9 @@ public:
 
     /// Retorna la LUT en format vtk
     vtkLookupTable *getVtkLUT();
+
+    /// Retorna el window level
+    void getWindowLevel( double wl[2] );
     
 signals:
     /// senyal que indica que algun dels plans han canviat

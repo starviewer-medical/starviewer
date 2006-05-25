@@ -584,6 +584,11 @@ vtkLookupTable *Q3DMPRViewer::getVtkLUT( )
     return vtkLookupTable::SafeDownCast( m_axialImagePlaneWidget->GetLookupTable() );
 }
 
+void Q3DMPRViewer::getWindowLevel( double wl[2] )
+{
+    m_axialImagePlaneWidget->GetWindowLevel( wl );
+}
+
 void Q3DMPRViewer::planeInteraction()
 {
     emit planesHasChanged();

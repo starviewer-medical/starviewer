@@ -356,6 +356,10 @@ void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
     
     case 12:
         // custom
+        double wl[2];
+        // \TODO ara no estan sincronitzats però agafem com a referència la vista coronal
+        m_coronal2DView->getWindowLevel( wl );
+        m_customWindowLevelDialog->setDefaultWindowLevel( wl[0] , wl[1] );
         m_customWindowLevelDialog->exec();
         INFO_LOG("QMPR3DExtension:: Canviem window level a custom");
     break;

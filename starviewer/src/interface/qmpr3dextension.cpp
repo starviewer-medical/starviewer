@@ -119,6 +119,9 @@ void QMPR3DExtension::changeDefaultWindowLevel( int which )
 
     case 12:
         // custom
+        double wl[2];
+        m_mpr3DView->getWindowLevel( wl );
+        m_customWindowLevelDialog->setDefaultWindowLevel( wl[0] , wl[1] );
         m_customWindowLevelDialog->exec();
         INFO_LOG("QMPR3DExtension:: Canviem window level a custpom");
     break;

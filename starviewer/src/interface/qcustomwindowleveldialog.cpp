@@ -20,6 +20,12 @@ QCustomWindowLevelDialog::~QCustomWindowLevelDialog()
 {
 }
 
+void QCustomWindowLevelDialog::setDefaultWindowLevel( double window , double level )
+{
+    m_windowSpinBox->setValue( window );
+    m_levelSpinBox->setValue( level );
+}
+
 void QCustomWindowLevelDialog::createConnections()
 {
     connect( m_okButton , SIGNAL( clicked() ) , this , SLOT( confirmWindowLevel() ) );
