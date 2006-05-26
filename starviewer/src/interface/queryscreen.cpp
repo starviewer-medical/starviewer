@@ -541,7 +541,6 @@ void QueryScreen::QuerySeriesPacs(QString studyUID,QString pacsAETitle,bool show
     PacsListDB pacsListDB;
     Status state;   
     StarviewerSettings settings;
-    int nImages = 0;
 	QString logMessage;
 	
 	logMessage = "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle;    

@@ -42,6 +42,7 @@
 #include <vtkPNMWriter.h>
 #include <vtkJPEGWriter.h>
 #include <vtkTIFFWriter.h>
+#include <vtkBMPWriter.h>
 #include <vtkCamera.h>
 // interacció
 #include <vtkInteractorStyleImage.h>
@@ -1230,11 +1231,20 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
         pnmWriter->Write();
     break;
 
+    case BMP:
+        vtkImageWriter *bmpWriter = vtkBMPWriter::New();
+        bmpWriter->SetInput( image );
+        bmpWriter->SetFilePattern( "%s-%d.bmp" );
+        bmpWriter->SetFilePrefix( baseName );
+        bmpWriter->Write();
+    break;
+    
     case DICOM:
     break;
 
     case META:
     break;
+
     }
 
 }

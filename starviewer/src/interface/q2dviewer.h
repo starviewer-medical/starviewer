@@ -144,11 +144,6 @@ public slots:
     void setCurrentToolToDistance(){ m_currentTool = Distance; };
     void setCurrentToolToManipulate(){ m_currentTool = Manipulate; };
     
-    /// Fa que una determinada tool quedi des/activada \TODO fer mètode específic per cadascuna
-    bool enableTool( Tools toolName , bool enable = true ){ return true; };
-    // void enableZoomTool(bool enable = true);
-    // etc...
-    
     /// retorna la llesca actual
     int getSlice( void ){ return m_currentSlice; }
 

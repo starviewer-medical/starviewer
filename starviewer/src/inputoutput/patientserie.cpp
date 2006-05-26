@@ -136,7 +136,7 @@ void PatientSerie::setWindowLevel( double window , double level )
 
 double *PatientSerie::getWindowLevel()
 {
-    double wl[2] = { m_window , m_level };
+    static double wl[2] = { m_window , m_level };
     return wl;
 }
 

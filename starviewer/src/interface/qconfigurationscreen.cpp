@@ -655,7 +655,6 @@ void QConfigurationScreen::applyChangesCache()
 
 void QConfigurationScreen::deleteStudies()
 {
-    CachePacs * localCache;
     Status state;
     CacheLayer cacheLayer;
    

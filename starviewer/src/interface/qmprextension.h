@@ -154,10 +154,8 @@ private slots:
     void pushAxisActor( double x , double y );
     void pushAxialActor( double x , double y );
     
-    /// Fan les accions pertinents quan una llesca s'ha actualitzat
+    /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
-    void sagitalSliceUpdated( int slice );
-    void coronalSliceUpdated( int slice );
 
     /// Canvia els ajustaments del window level per uns de predetrminats. 
     void changeDefaultWindowLevel( int which );

@@ -48,8 +48,6 @@ public:
     Q3DMPRViewer *m_viewer;    
     virtual void Execute( vtkObject* caller, unsigned long event, void *vtkNotUsed(callData) )
     {    
-        // Obtenim l'interactor que el crida
-        vtkRenderWindowInteractor* interactor = vtkRenderWindowInteractor::SafeDownCast( caller ); 
         if( m_viewer )
         {
             m_viewer->planeInteraction();
@@ -104,7 +102,6 @@ Q3DMPRViewer::~Q3DMPRViewer()
 void Q3DMPRViewer::setInput( Volume* volume )
 {
     m_mainVolume = volume;    
-    int *size = m_mainVolume->getVtkData()->GetDimensions();
 
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();

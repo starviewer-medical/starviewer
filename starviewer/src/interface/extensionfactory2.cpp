@@ -23,6 +23,7 @@ bool ExtensionFactory::registerExtension( QString name , ExtensionCreator *exten
 {
     // \TODO Comprovar que el nom de l'extensió sigui únic. Què fer si ja existeix?
     m_registerMap[ name ] = extension;
+    return true;
 }
 
 QWidget *ExtensionFactory::createExtension( QString name )

@@ -668,15 +668,6 @@ void QMPRExtension::axialSliceUpdated( int slice )
     updateIntersectionPoint();
     updateControls();
 }
-
-void QMPRExtension::sagitalSliceUpdated( int slice )
-{
-
-}
-
-void QMPRExtension::coronalSliceUpdated( int slice )
-{
-}
     
 void QMPRExtension::updateControls()
 {
@@ -970,7 +961,8 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     reslice->SetOutputSpacing( planeSizeX/extentX , planeSizeY/extentY , 1 );
     reslice->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , m_thickSlab ); // obtenim una única llesca
+    // \TODO li passem thickSlab que és double però això només accepta int's! Buscar si aquesta és la manera adequada. Potsre si volem fer servir doubles ho hauríem de combinar amb l'outputSpacing
+    reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , static_cast<int>( m_thickSlab ) ); // obtenim una única llesca
     reslice->Update();
     
 }
