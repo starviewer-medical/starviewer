@@ -251,6 +251,17 @@ void QMPR3D2DExtension::createConnections()
     connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+
+    // sincronitzar window level
+    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
         
 }
 
