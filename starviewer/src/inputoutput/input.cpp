@@ -254,8 +254,8 @@ void Input::setVolumeInformation()
             }
             else
             {
-                // \TODO controlar més aquest error?
                 // hi ha algun error en l'string ja que han de ser 2 parells de 3 valors
+                DEBUG_LOG( qPrintable( "No s'ha pogut determinar l'orientació del pacient (Tags 0020|0020 , 0020|0037) : " + dirCosines ) );
             }
         }
         else
@@ -278,8 +278,10 @@ void Input::setVolumeInformation()
     // nom del pacient
     if( queryTagAsString( "0010|0010" , value ) )
     {
-        //\TODO fer algun pre-tractament per treure caràcters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
-        m_volumeData->getVolumeSourceInformation()->setPatientName( value.c_str() );
+        // pre-tractament per treure caràcters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
+        QString name = QString::fromStdString( value );
+        name.replace( name.indexOf("^") , 1 , QString(" ") );
+        m_volumeData->getVolumeSourceInformation()->setPatientName( qPrintable( name ) );
     }
     // ID del pacient
     if( queryTagAsString( "0010|0020" , value ) )
