@@ -32,8 +32,9 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
     m_progressDialog->setRange( 0 , 100 );
     m_progressDialog->setMinimumDuration( 0 );
     m_progressDialog->setWindowTitle( tr("Serie loading") );
-    // \TODO això no es veu, perquè?
+    // atenció: el missatge triga una miqueta a aparèixer...
     m_progressDialog->setLabelText( tr("Loading, please wait...") );
+    m_progressDialog->setCancelButton( 0 );
     connect( m_inputReader , SIGNAL( progress(int) ) , m_progressDialog , SLOT( setValue(int) ) );
 
     readSettings();

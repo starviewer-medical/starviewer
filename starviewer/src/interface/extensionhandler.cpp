@@ -91,7 +91,7 @@ void ExtensionHandler::request( int who )
     QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
     QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
     Q2DViewerExtension *defaultViewerExtension;
-    /// \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
+// \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
     switch( who )
     {
     
@@ -266,8 +266,9 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     progressDialog.setRange( 0 , 100 );
     progressDialog.setMinimumDuration( 0 );
     progressDialog.setWindowTitle( tr("Serie loading") );
-    // \TODO això no es veu, perquè?
+    // atenció: el missatge triga una miqueta a aparèixer...
     progressDialog.setLabelText( tr("Loading, please wait...") );
+    progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
     SeriesVolum serie;
     
@@ -324,8 +325,9 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     progressDialog.setRange( 0 , 100 );
     progressDialog.setMinimumDuration( 0 );
     progressDialog.setWindowTitle( tr("Serie loading") );
-    // \TODO això no es veu, perquè?
+    // atenció: el missatge triga una miqueta a aparèixer...
     progressDialog.setLabelText( tr("Loading, please wait...") );
+    progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
     SeriesVolum serie;
     

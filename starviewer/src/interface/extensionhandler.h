@@ -46,7 +46,7 @@ public:
 
     ~ExtensionHandler();
     
-    /// Obre un volum a partir d'un fitxer \TODO ara es fa tot a saco aquí dins però potser seria millor que ho fe suna clase externa especialitzada
+    /// Obre un volum a partir d'un fitxer \TODO ara es fa tot a saco aquí dins però potser seria millor que ho fes una clase externa especialitzada
     bool open( QString fileName );
     
 public slots:
