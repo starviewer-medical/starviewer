@@ -22,12 +22,11 @@ class vtkLookupTable;
 namespace udg {
 
 /**
-Vista de Reconstrucció multiplanar 3D
+    Visor de Reconstrucció multiplanar 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
 class Q3DMPRViewer : public QViewer{
-
 Q_OBJECT
 public:
     Q3DMPRViewer( QWidget *parent = 0 );
@@ -35,7 +34,7 @@ public:
     ~Q3DMPRViewer();
 
     /// Li indiquem el volum a visualitzar
-    virtual void setInput( Volume* inputImage );
+    virtual void setInput( Volume *inputImage );
 
     virtual vtkRenderer *getRenderer();
     virtual vtkRenderWindowInteractor *getInteractor(); 
@@ -63,7 +62,7 @@ public:
     void getCoronalPlaneNormal( double normal[3] );
 
     /// Assigna la LUT en format vtk
-    void setVtkLUT( vtkLookupTable * lut );
+    void setVtkLUT( vtkLookupTable *lut );
 
     /// Retorna la LUT en format vtk
     vtkLookupTable *getVtkLUT();
@@ -110,24 +109,38 @@ public slots:
     void planeInteraction();
     
 private:
+    /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
+
     /// Crea l'actor que mostra una referència de l'orientació dels eixos
     void createOrientationMarker();
-    void setCameraOrientation(int orientation);
-    
+    void setCameraOrientation( int orientation );
+
+    /// inicialitza els valors de window level
+    void initializeWindowLevel();
+
+    /// Inicialitza els plans
+    void initializePlanes();
+
+    /// Afegeix l'outline de la boundingbox del model
+    void addOutline();
     
     enum {SAGITAL, CORONAL, AXIAL};
 
-    vtkRenderer* m_ren;
+    /// El renderer
+    vtkRenderer *m_renderer;
 
-    vtkImagePlaneWidget * m_axialImagePlaneWidget;
-    vtkImagePlaneWidget * m_sagitalImagePlaneWidget;
-    vtkImagePlaneWidget * m_coronalImagePlaneWidget;
+    /// Els plans 
+    vtkImagePlaneWidget *m_axialImagePlaneWidget;
+    vtkImagePlaneWidget *m_sagitalImagePlaneWidget;
+    vtkImagePlaneWidget *m_coronalImagePlaneWidget;
     
     /// La bounding box del volum
     vtkActor *m_outlineActor;
+
     ///
     vtkAnnotatedCubeActor *m_cubeActor;
+
     /// connexions d'events vtk amb slots / signals qt
     vtkEventQtSlotConnect *m_vtkQtConnections; 
 

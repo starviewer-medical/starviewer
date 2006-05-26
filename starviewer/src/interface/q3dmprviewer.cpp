@@ -46,7 +46,7 @@ class PlanesInteractionCallback : public vtkCommand
 public:
     static PlanesInteractionCallback *New(){ return new PlanesInteractionCallback; }
     Q3DMPRViewer *m_viewer;    
-    virtual void Execute( vtkObject* caller, unsigned long event, void *vtkNotUsed(callData) )
+    virtual void Execute( vtkObject *caller, unsigned long event, void *vtkNotUsed(callData) )
     {    
         if( m_viewer )
         {
@@ -61,8 +61,8 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
 {
     
     //Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
-    m_ren = vtkRenderer::New();
-    m_vtkWidget->GetRenderWindow()->AddRenderer( m_ren );
+    m_renderer = vtkRenderer::New();
+    m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
     
     // Creem tres vistes ortogonals utilitzant la classe ImagePlaneWidget
@@ -96,109 +96,131 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
 
 Q3DMPRViewer::~Q3DMPRViewer()
 {
-    m_ren->Delete();
+    m_renderer->Delete();
 }
 
-void Q3DMPRViewer::setInput( Volume* volume )
+void Q3DMPRViewer::setInput( Volume *volume )
 {
     m_mainVolume = volume;    
-
     // ajustem el window Level per defecte
-    m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
-    m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
-    if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
-    {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        m_defaultWindow = fabs(range[1] - range[0]);
-        m_defaultLevel = ( range[1] + range[0] )/ 2.0;
-    }
-    //------------------------------------------------------------------------
-    // VTK pipeline.
-    //------------------------------------------------------------------------
-
-    // Utilitzem un "cell picker" per interactuar amb les vistes ortogonals.
-    vtkCellPicker * picker = vtkCellPicker::New();
-    picker->SetTolerance(0.005);
-
-    //Assignem les propietats per defecte
-    vtkProperty * ipwProp = vtkProperty::New();
-    
-    // Els 3 widgets s'utilizen per visualizar el model
-    // (mostra imatges en 2D amb 3 orientacions diferents)
-    
-//     
-//     Pla AXIAL
-// 
-    m_axialImagePlaneWidget->DisplayTextOn();
-    m_axialImagePlaneWidget->SetPicker( picker );
-    m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
-    m_axialImagePlaneWidget->SetKeyPressActivationValue('z');
-    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 1 , 0 );
-    m_axialImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
-    m_axialImagePlaneWidget->TextureInterpolateOn();
-    m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
-    m_axialImagePlaneWidget->SetInput( m_mainVolume->getVtkData() ); 
-
-    m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
-    m_axialResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
-    
-// 
-//     Pla SAGITAL
-// 
-    m_sagitalImagePlaneWidget->DisplayTextOn();
-    m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-    m_sagitalImagePlaneWidget->SetPicker( picker );
-    m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
-    m_sagitalImagePlaneWidget->SetKeyPressActivationValue('x');
-    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 0 , 0 );
-    m_sagitalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
-    m_sagitalImagePlaneWidget->TextureInterpolateOn();
-    m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
-    m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
-    m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
-    m_sagitalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );    
-// 
-//     Pla CORONAL
-//     
-    m_coronalImagePlaneWidget->DisplayTextOn();
-    m_coronalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-    m_coronalImagePlaneWidget->SetPicker( picker );
-    m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
-    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( 0 , 0 , 1 );
-    m_coronalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
-    m_coronalImagePlaneWidget->TextureInterpolateOn();
-    m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
-    m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
-    m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
-    m_coronalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
-
+    this->initializeWindowLevel();
+    // ajustem els plans
+    this->initializePlanes();
     // interacció
-    
     PlanesInteractionCallback *planesInteractionCallback = PlanesInteractionCallback::New();
     planesInteractionCallback->m_viewer = this;
     m_axialImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
     m_sagitalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
     m_coronalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
-    
-    // \TODO mirar perquè no funciona
-//     this->createOrientationMarker();
+
     //Pq. quedin ben orientats
     this->resetViewToAxial();
-    
-    // Indiquem el color de fons
-    m_ren->SetBackground(0.4392, 0.5020, 0.5647);
-
-    // creem l'outline
-    vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
-    outlineFilter->SetInput( m_mainVolume->getVtkData() );
-    vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
-    outlineMapper->SetInput( outlineFilter->GetOutput() );
-    m_outlineActor->SetMapper( outlineMapper );
-    m_ren->AddActor( m_outlineActor );
-                       
-    // Executem el Renderer perquè mostri les imatges
+    this->addOutline();
     this->resetWindowLevelToDefault();
+    // \TODO mirar perquè no funciona
+    this->createOrientationMarker();
     render();
+}
+
+void Q3DMPRViewer::initializeWindowLevel()
+{
+    if( m_mainVolume )
+    {
+        m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
+        m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+        if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
+        {
+            double *range = m_mainVolume->getVtkData()->GetScalarRange();
+            m_defaultWindow = fabs(range[1] - range[0]);
+            m_defaultLevel = ( range[1] + range[0] )/ 2.0;
+        }
+    }
+    else
+    {
+        DEBUG_LOG( "Intentant inicialitzar el window level sense haver donat input abans" );
+    }
+}
+
+void Q3DMPRViewer::initializePlanes()
+{
+    if( m_mainVolume )
+    {
+        // Utilitzem un "cell picker" per interactuar amb les vistes ortogonals.
+        vtkCellPicker *picker = vtkCellPicker::New();
+        picker->SetTolerance( 0.005 );
+    
+        //Assignem les propietats per defecte
+        vtkProperty *ipwProp = vtkProperty::New();
+    // Els 3 widgets s'utilizen per visualizar el model
+    // (mostra imatges en 2D amb 3 orientacions diferents)
+    //     
+    //     Pla AXIAL
+    // 
+        m_axialImagePlaneWidget->DisplayTextOn();
+        m_axialImagePlaneWidget->SetPicker( picker );
+        m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
+        m_axialImagePlaneWidget->SetKeyPressActivationValue('z');
+        m_axialImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 1 , 0 );
+        m_axialImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
+        m_axialImagePlaneWidget->TextureInterpolateOn();
+        m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
+        m_axialImagePlaneWidget->SetInput( m_mainVolume->getVtkData() ); 
+    
+        m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
+        m_axialResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
+        
+    // 
+    //     Pla SAGITAL
+    // 
+        m_sagitalImagePlaneWidget->DisplayTextOn();
+        m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
+        m_sagitalImagePlaneWidget->SetPicker( picker );
+        m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
+        m_sagitalImagePlaneWidget->SetKeyPressActivationValue('x');
+        m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 0 , 0 );
+        m_sagitalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
+        m_sagitalImagePlaneWidget->TextureInterpolateOn();
+        m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
+        m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
+        m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
+        m_sagitalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );    
+    // 
+    //     Pla CORONAL
+    //     
+        m_coronalImagePlaneWidget->DisplayTextOn();
+        m_coronalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
+        m_coronalImagePlaneWidget->SetPicker( picker );
+        m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
+        m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( 0 , 0 , 1 );
+        m_coronalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
+        m_coronalImagePlaneWidget->TextureInterpolateOn();
+        m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
+        m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
+        m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
+        m_coronalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
+    }
+    else
+    {
+        DEBUG_LOG( "Intentant inicialitzar els plans sense haver donat input abans" );
+    }
+}
+
+void Q3DMPRViewer::addOutline()
+{
+    if( m_mainVolume )
+    {
+        // creem l'outline
+        vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
+        outlineFilter->SetInput( m_mainVolume->getVtkData() );
+        vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
+        outlineMapper->SetInput( outlineFilter->GetOutput() );
+        m_outlineActor->SetMapper( outlineMapper );
+        m_renderer->AddActor( m_outlineActor );
+    }
+    else
+    {
+        DEBUG_LOG( "Intentant afegir outline sense haver donat input abans" );
+    }
 }
 
 vtkRenderWindowInteractor *Q3DMPRViewer::getInteractor()
@@ -208,12 +230,14 @@ vtkRenderWindowInteractor *Q3DMPRViewer::getInteractor()
 
 vtkRenderer *Q3DMPRViewer::getRenderer()
 {
-    return m_ren;
+    return m_renderer;
 }
 
 void Q3DMPRViewer::render()
 {
-    m_ren->Render();
+    // Indiquem el color de fons, blau cel
+    m_renderer->SetBackground( 0.4392, 0.5020, 0.5647 );
+    m_renderer->Render();
 }
 
 void Q3DMPRViewer::resetViewToSagital()
@@ -410,7 +434,7 @@ void Q3DMPRViewer::createOrientationMarker()
     marker->SetOrientationMarker( assembly );
     marker->SetViewport( 0.0 , 0.0 , 0.15 , 0.3 );
  
-    m_ren->AddActor( m_cubeActor );
+    m_renderer->AddActor( m_cubeActor );
 }
 
 void Q3DMPRViewer::setWindowLevel( double window , double level )
