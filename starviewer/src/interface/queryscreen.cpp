@@ -1160,7 +1160,7 @@ QString QueryScreen::buildPatientName()
     {
         patientName.append(m_textLastName->text());
         //posem * per si només posem el primer cognom
-        patientName.append("* ");//posem * per si no posa el nom complet, i espai per separar del nom
+        patientName.append("*");//posem * per si no posa el nom complet, i espai per separar del nom
         if (m_textFirstName->text().length() > 0)
         {
             patientName.append(m_textFirstName->text());
@@ -1169,6 +1169,7 @@ QString QueryScreen::buildPatientName()
         else patientName.append("*");
     }
     
+	DEBUG_LOG( patientName.toAscii().constData() );
     return patientName;
 
 }
