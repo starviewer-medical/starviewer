@@ -271,6 +271,9 @@ OFCondition echoSCP(
               piSingleton->setErrorRetrieving(studyUID);
           }
         }   
+
+	  // si el numero d'imatges es null li posem 999999, per posteriorment nosaltres poder-ho saber
+	  if ( imageNumber == NULL ) imageNumber = "999999";
       
       //guardem la informacio a l'objecte imatge
       img.setStudyUID(studyUID);
