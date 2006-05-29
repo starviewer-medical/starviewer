@@ -22,40 +22,41 @@ class PacsList
 public:
     PacsList();
     
-	/** Inserta un objecte PacsParameters a la llistat
+    /** Inserta un objecte PacsParameters a la llistat
      * @param Objecte PacsParameters
      */
     void insertPacs( PacsParameters );
 	
-	/// Apunta al següent Objecte PacsParameters
-	void nextPacs();
+    /// Apunta al següent Objecte PacsParameters
+    void nextPacs();
 
-	/// Posiciona l'iterador de la llistat a la primera posició
-	void firstPacs();
+    /// Posiciona l'iterador de la llistat a la primera posició
+    void firstPacs();
     
-	/** cerca un pacs a la llista a través del seu AETitle
+    /** cerca un pacs a la llista a través del seu AETitle
      * @param AETitle del pacs a cercar
      */
-	bool findPacs( std::string );
+    bool findPacs( std::string );
 
-	/** Retorna l'objecte pacs al que apunta l'iterador de la llista
+    /** Retorna l'objecte pacs al que apunta l'iterador de la llista
      * @return Objecte PacsParameters
      */
-	PacsParameters getPacs();
+    PacsParameters getPacs();
     
-	/** Retorna el número d'elements de la llista
+    /** Retorna el número d'elements de la llista
      * @return Retorna el número d'elements de la llista
      */    	
-	int size();
+    int size();
 
-	/// Buida la llista    
-	void clear();   
+    /// Buida la llista    
+    void clear();   
 
-	/** Indica si hem arribal al final de la llista
+    /** Indica si hem arribal al final de la llista
      * @return indica si s'ha arribat al final de la llista
      */
-	bool end();
+    bool end();
     
+    ///Destructor de la classe
     ~PacsList();
     
 private:
