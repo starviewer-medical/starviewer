@@ -600,7 +600,6 @@ std::string CachePacs::buildSqlQuerySeries( SeriesMask *seriesMask )
     sql.append( seriesMask->getStudyUID() );
     sql.append("'");
     
-    cout<<sql<<endl;
     return sql;
 }
 

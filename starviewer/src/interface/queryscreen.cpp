@@ -386,7 +386,7 @@ void QueryScreen::search()
         {
             switch( QMessageBox::information( this, tr("Starviewer"),
                                         tr("You have not specified any filter. This query could take a long time. Do you want to continue ?"),
-                                        tr("Yes"), tr("No"),
+                                        tr("&Yes"), tr("&No"),
                                         0, 1 ) ) 
             {
 				
@@ -680,7 +680,7 @@ void QueryScreen::retrieve()
 {
     switch( QMessageBox::information( this, tr("Starviewer"),
 				      tr("Are you sure you want to retrieve this Study ?"),
-				      tr("Yes"), tr("No"),
+				      tr("&Yes"), tr("&No"),
 				      0, 1 ) ) 
     {
     case 0:
@@ -998,7 +998,7 @@ void QueryScreen::deleteStudyCache()
     
     switch( QMessageBox::information( this, tr("Starviewer"),
 				      tr("Are you sure you want to delete this Study ?"),
-				      tr("Yes"), tr("No"),
+				      tr("&Yes"), tr("&No"),
 				      0, 1 ) ) 
     {
         case 0:
