@@ -130,6 +130,8 @@ struct retrieveParameters
     
     void resizePacsList();
 
+	///inicialitza les variables necessaries, es cridat pel constructor
+	void initialize();
 	
 	/** Fa el log, indicant amb quins parametres es cerquen els estudis
      * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis	

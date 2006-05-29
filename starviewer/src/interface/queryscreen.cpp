@@ -10,6 +10,7 @@
 #include <QDesktopWidget> 
 #include <QCloseEvent>
 #include <string>
+#include <QDateTime>
 
 #include "starviewerprocessimage.h"
 #include "processimagesingleton.h"
@@ -58,10 +59,11 @@ QueryScreen::QueryScreen( QWidget *parent )
            
     CachePacs * localCache= CachePacs::getCachePacs();
     m_retrieveScreen = new udg::QRetrieveScreen;
-    
+	
+	initialize();//inicialitzem les variables necessàries
+
     //connectem signals i slots
     connectSignalsAndSlots();
-    setEnabledModalityChecks(true);
     
     state = localCache->delNotRetrievedStudies();//Esborrem els estudis en estat 'PENDING' o 'RETRIEVING'
     if (!state.good()) 
@@ -69,9 +71,6 @@ QueryScreen::QueryScreen( QWidget *parent )
         databaseError(&state);
     } //si no hi ha error a la base de dades, podem esborrar els estudis vells
     else deleteOldStudies();
-    
-    //indiquem que la llista de Pacs no es mostra
-    m_PacsListShow = false;
         
     //carreguem el processImageSingleton    
     m_piSingleton=ProcessImageSingleton::getProcessImageSingleton();
@@ -81,10 +80,25 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
    
-    qPacsList->setMaximumSize(1,1);//amaguem al finestra del QPacsList
     centerWindow(); //centrem la finestra
     
     m_textPatientID->setFocus();
+}
+
+void QueryScreen::initialize()
+{
+	QDate currentDate;
+
+    //indiquem que la llista de Pacs no es mostra
+    m_PacsListShow = false;
+
+	setEnabledModalityChecks(true);
+
+	qPacsList->setMaximumSize(1,1);//amaguem al finestra del QPacsList
+
+	m_textFrom->setDate( currentDate.currentDate() );
+	m_textTo->setDate( currentDate.currentDate() );
+
 }
 
 /** esborra els estudis vells de la cache
