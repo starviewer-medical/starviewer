@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>823</width>
+    <width>934</width>
     <height>359</height>
    </rect>
   </property>
@@ -84,12 +84,17 @@
      </column>
      <column>
       <property name="text" >
-       <string>Image</string>
+       <string>Images</string>
       </property>
      </column>
      <column>
       <property name="text" >
        <string>StudyUID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string/>
       </property>
      </column>
     </widget>

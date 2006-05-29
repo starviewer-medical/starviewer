@@ -60,7 +60,6 @@ void QRetrieveScreen::insertNewRetrieve(Study *study)
     item->setText(7,"0");
     item->setText(8,"0");
     item->setText(9,study->getStudyUID().c_str() );
-    item->setText(10,tr("Started"));
 
 }
 
