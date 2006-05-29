@@ -867,7 +867,6 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     Study stu;
     SeriesMask mask;
     SeriesList seriesList;
-    SeriesVolum seriesVol;
     Series series;
     ImageMask imageMask;
     ImageList imageList;
@@ -921,6 +920,7 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
     
     while (!seriesList.end())
     {
+		SeriesVolum seriesVol;
         series = seriesList.getSeries();
         
         absSeriesPath = settings.getCacheImagePath();
