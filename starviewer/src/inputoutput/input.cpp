@@ -280,7 +280,8 @@ void Input::setVolumeInformation()
     {
         // pre-tractament per treure caràcters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
         QString name = QString::fromStdString( value );
-        name.replace( name.indexOf("^") , 1 , QString(" ") );
+        while( name.indexOf("^") >= 0 )
+            name.replace( name.indexOf("^") , 1 , QString(" ") );
         m_volumeData->getVolumeSourceInformation()->setPatientName( qPrintable( name ) );
     }
     // ID del pacient
