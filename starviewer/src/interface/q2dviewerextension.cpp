@@ -56,6 +56,20 @@ void Q2DViewerExtension::createActions()
     m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
     m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
     m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
+
+    m_singleViewAction = new QAction( 0 );
+    m_singleViewAction->setText( tr("&Single View") );
+    m_singleViewAction->setShortcut( tr("Ctrl+S") );
+    m_singleViewAction->setStatusTip( tr("Change To Single View Mode") );
+    m_singleViewAction->setIcon( QIcon(":/images/singleView.png") );
+    m_singleViewToolButton->setDefaultAction( m_singleViewAction );
+
+    m_doubleViewAction = new QAction( 0 );
+    m_doubleViewAction->setText( tr("&Double View") );
+    m_doubleViewAction->setShortcut( tr("Ctrl+D") );
+    m_doubleViewAction->setStatusTip( tr("Change To Double View Mode") );
+    m_doubleViewAction->setIcon( QIcon(":/images/addViewRight.png") );
+    m_doubleViewToolButton->setDefaultAction( m_doubleViewAction );
 }
 
 void Q2DViewerExtension::createToolBars()
@@ -95,9 +109,11 @@ void Q2DViewerExtension::createConnections()
     connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
     connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
 
+    connect( m_singleViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSingle() ) );
+    connect( m_doubleViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToDouble() ) );
+    
     connect( m_windowLevelComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
 
-    connect( m_switchViewToolButton , SIGNAL( clicked() ) , this , SLOT( switchView() ) );
     connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
 
     connect( m_synchroCheckBox , SIGNAL( clicked(bool) ) , this , SLOT( synchronizeSlices(bool) ) );
@@ -397,31 +413,19 @@ void Q2DViewerExtension::setView( ViewType view )
     }
 }
 
-void Q2DViewerExtension::switchView()
+void Q2DViewerExtension::changeViewToSingle()
 {
-    if( m_stackedWidget->currentIndex() == 0 )
-    {
-        m_stackedWidget->setCurrentIndex( 1 );
-    }
-    else
-    {
-        m_stackedWidget->setCurrentIndex( 0 );
-    }
+    m_stackedWidget->setCurrentIndex( 0 );
+}
+
+void Q2DViewerExtension::changeViewToDouble()
+{
+    m_stackedWidget->setCurrentIndex( 1 );
 }
 
 void Q2DViewerExtension::pageChange( int index )
 {
     setView( m_currentView );
-    switch( index )
-    {
-    case 0:
-        m_switchViewToolButton->setText( tr("Switch Double View") );
-    break;
-
-    case 1:
-        m_switchViewToolButton->setText( tr("Switch Single View") );
-    break;
-    }
 }
 
 void Q2DViewerExtension::synchronizeSlices( bool ok )

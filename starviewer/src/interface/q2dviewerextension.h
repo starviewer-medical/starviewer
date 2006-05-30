@@ -46,14 +46,15 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
+    /// Canvia el layout de visor singular/doble
+    void changeViewToSingle();
+    void changeViewToDouble();
+    
     /// Permuta l'ajustament de window level
     void changeDefaultWindowLevel( int which );
 
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
-
-    /// Canvia de vista simple a vista doble i viceversa
-    void switchView();
     
 private:
     /// Tipus de vistes que podem tenir
@@ -78,6 +79,8 @@ private:
     QAction *m_axialViewAction;
     QAction *m_sagitalViewAction;
     QAction *m_coronalViewAction;
+    QAction *m_singleViewAction;
+    QAction *m_doubleViewAction;
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
