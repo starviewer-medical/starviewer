@@ -598,7 +598,7 @@ std::string CachePacs::buildSqlQuerySeries( SeriesMask *seriesMask )
     sql.append(", SerDat , SerTim ");
     sql.append(" from series where StuInsUID = '");
     sql.append( seriesMask->getStudyUID() );
-    sql.append("'");
+    sql.append("' order by SerDat , SerTim , SerNum");
     
     return sql;
 }
