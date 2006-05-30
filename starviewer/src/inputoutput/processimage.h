@@ -7,31 +7,34 @@
 #ifndef UDGPROCESSIMAGE_H
 #define UDGPROCESSIMAGE_H
 
-
 namespace udg {
 
 class Image;
 
-
-/** Classe que s'encarrega de dur a terme unes accions determinades per cada descarrega d'una imatge. Aquesta classe pot ser reimplementada
-  * El mètodes d'aquesta classe actualment no duen a terme cap acció, si s'ha d'utiltizar, s'ha de crear una classe que heredi d'aquesta i 
-  * reimplementar els mètodes amb les accions que siguin necessàries.
+/** Classe que s'encarrega de dur a terme unes accions determinades per cada descarrega d'una imatge. Aquesta classe és una classe genèrica, per ser reimplementada
 @author marc
 */
-class ProcessImage{
-
+class ProcessImage
+{
 
 public:
-    
+
+	///Constructor de la classe    
     ProcessImage();
 
-    virtual void process(Image* image);//virtual significa que els fills la podran reimplementar a la seva classe, i que es cridara la dels fills de process no la del pare, quant es declara virtual només s'ha de fer al .h  
-    virtual void setErrorRetrieving();
-    virtual bool getErrorRetrieving();
-    virtual ~ProcessImage();
+	/** Processa la imatge
+ 	 * @param imatge a processar
+ 	 */
+    virtual void process(Image* image){};
 
-private:
+	///Indica que s'ha produit algun error descarregant alguna de les imatges de l'estudi
+    virtual void setErrorRetrieving(){};
 
+	///Indica si s'ha produit algun error descarregant alguna de les imatges de l'estudi
+    virtual bool getErrorRetrieving(){};
+
+	///Destructor de la classe
+    virtual ~ProcessImage(){};
     
 };
 
