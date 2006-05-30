@@ -2,22 +2,10 @@
 <qresource>
     <file>images/icon.png</file>
     <file>images/splash.png</file>
-    <file>images/copy.png</file>
-    <file>images/cut.png</file>
     <file>images/new.png</file>
     <file>images/open.png</file>
-    <file>images/paste.png</file>
-    <file>images/save.png</file>
-    <file>images/find.png</file>
     <file>images/fileclose.png</file>
     <file>images/exit.png</file>
-    <file>images/delete.png</file> 
-    <file>images/gotocell.png</file>
-    <file>images/airbrush.png</file>
-    <file>images/debug.png</file>
-    <file>images/view_left_right.png</file>
-    <file>images/view_top_bottom.png</file>
-    <file>images/window_new.png</file>
     <file>images/folderclose.png</file>
     <file>images/folderopen.png</file>
     <file>images/series.png</file>
@@ -27,6 +15,8 @@
     <file>images/axial.png</file>
     <file>images/sagital.png</file>
     <file>images/coronal.png</file>
+    <file>images/singleView.png</file>
+    <file>images/addViewRight.png</file>
     <file>cache/database.sql</file>
     <file>translations/interface_ca_ES.qm</file>
     <file>translations/interface_es_ES.qm</file>
