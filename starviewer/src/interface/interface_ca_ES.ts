@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>Delete selected Pacss</source>
-        <translation>Esborra el Pacs seleccionat</translation>
+        <translation type="obsolete">Esborra el Pacs seleccionat</translation>
     </message>
     <message>
         <source>Test</source>
@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Crear the text boxes</source>
-        <translation>Neteja les caixes de text</translation>
+        <translation type="obsolete">Neteja les caixes de text</translation>
     </message>
     <message>
         <source>&lt;b&gt;AE Title :&lt;/b&gt;</source>
@@ -240,43 +240,51 @@
     </message>
     <message>
         <source>Compact Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Compactar Base de dades</translation>
     </message>
     <message>
         <source>Examine disk to find the directory to save the retrieved images</source>
-        <translation type="unfinished"></translation>
+        <translation>Examina el disc per trobar el directori on guardar les imatges descarregades</translation>
     </message>
     <message>
         <source>Examine</source>
-        <translation type="unfinished"></translation>
+        <translation>Examinar</translation>
     </message>
     <message>
         <source>Delete studies that has not been viewed in :</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar els estudis que no hagin estat visualitzats en :</translation>
     </message>
     <message>
         <source>days</source>
-        <translation type="unfinished"></translation>
+        <translation>dies</translation>
     </message>
     <message>
         <source>Examine disk  to find the database</source>
-        <translation type="unfinished"></translation>
+        <translation>Examinar el dis per trobar la base de dades</translation>
     </message>
     <message>
         <source>Save changes and close the configuration window </source>
-        <translation type="unfinished"></translation>
+        <translation>Guarda els canvis i tanca la finestra de configuració</translation>
     </message>
     <message>
         <source>Apply the canges</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar els canvis</translation>
     </message>
     <message>
         <source>Cancel changes and close the windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·la els canvis i tanca la finestra</translation>
     </message>
     <message>
         <source>Apply changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplica els canvis</translation>
+    </message>
+    <message>
+        <source>Delete selected Pacs</source>
+        <translation>Esborra el Pacs seleccionat</translation>
+    </message>
+    <message>
+        <source>Clear the text boxes</source>
+        <translation>Neteja les caixa de text</translation>
     </message>
 </context>
 <context>
@@ -544,6 +552,14 @@
         <source>Choose a directory</source>
         <translation>Escull un directori</translation>
     </message>
+    <message>
+        <source>Serie loading</source>
+        <translation>Carregant la sèrie</translation>
+    </message>
+    <message>
+        <source>Loading, please wait...</source>
+        <translation type="unfinished">Carregant, si us plau espereu-vos...</translation>
+    </message>
 </context>
 <context>
     <name>udg::ExtensionHandler</name>
@@ -566,6 +582,14 @@
     <message>
         <source>2D Viewer</source>
         <translation>Visor 2D</translation>
+    </message>
+    <message>
+        <source>Serie loading</source>
+        <translation type="unfinished">Carregant la sèrie</translation>
+    </message>
+    <message>
+        <source>Loading, please wait...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1248,19 +1272,19 @@ Acc:%4
     </message>
     <message>
         <source>The application has to be restart to apply the changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Heu de reiniciar l&apos;aplicació per a que els canvis tinguin efecte</translation>
     </message>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades està corrupte o error de sintaxis SQL</translation>
     </message>
     <message>
         <source>Database is looked</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de dades bloquejada</translation>
     </message>
     <message>
         <source>To solve this error restart the user session</source>
-        <translation type="unfinished"></translation>
+        <translation>Per resoldre aquest error, reinicieu la sessió d&apos;usuari</translation>
     </message>
 </context>
 <context>
@@ -1347,54 +1371,54 @@ Acc:%4
     </message>
     <message>
         <source>Error Number : </source>
-        <translation type="unfinished">Error número :</translation>
+        <translation>Error número :</translation>
     </message>
     <message>
         <source>StarViewer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Database is corrupted.</source>
-        <translation type="unfinished">La base dades està corrupte</translation>
+        <translation>La base dades està corrupte.</translation>
     </message>
     <message>
         <source>Internal Database error</source>
-        <translation type="unfinished">Error intern de la base de dades</translation>
+        <translation>Error intern de la base de dades</translation>
     </message>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades està corrupte o error de sintaxis SQL</translation>
     </message>
     <message>
         <source>Database is looked</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de dades bloquejada</translation>
     </message>
 </context>
 <context>
     <name>udg::QRetrieveScreen</name>
     <message>
         <source>PENDING</source>
-        <translation type="unfinished">PENDENT</translation>
+        <translation>PENDENT</translation>
     </message>
     <message>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Local</translation>
     </message>
     <message>
         <source>Started</source>
-        <translation type="unfinished">Començat</translation>
+        <translation type="obsolete">Començat</translation>
     </message>
     <message>
         <source>RETRIEVING</source>
-        <translation type="unfinished"></translation>
+        <translation>DESCARREGANT</translation>
     </message>
     <message>
         <source>ERROR</source>
-        <translation type="unfinished"></translation>
+        <translation>ERROR</translation>
     </message>
     <message>
         <source>RETRIEVED</source>
-        <translation type="unfinished"></translation>
+        <translation>DESCARREGAT</translation>
     </message>
 </context>
 <context>
@@ -1413,11 +1437,11 @@ Acc:%4
     </message>
     <message>
         <source>Series</source>
-        <translation>Series</translation>
+        <translation>Sèries</translation>
     </message>
     <message>
         <source>Image</source>
-        <translation>Imatge</translation>
+        <translation type="obsolete">Imatge</translation>
     </message>
     <message>
         <source>StudyUID</source>
@@ -1449,18 +1473,22 @@ Acc:%4
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Estat</translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation>Imatges</translation>
     </message>
 </context>
 <context>
     <name>udg::QSeriesListWidget</name>
     <message>
         <source>Series </source>
-        <translation>Serie</translation>
+        <translation>Sèrie</translation>
     </message>
     <message>
         <source> images</source>
-        <translation type="unfinished"></translation>
+        <translation> imatges</translation>
     </message>
 </context>
 <context>
@@ -1486,27 +1514,31 @@ Acc:%4
     </message>
     <message>
         <source>Study</source>
-        <translation>Estudi </translation>
+        <translation type="obsolete">Estudi </translation>
     </message>
     <message>
         <source>Series </source>
-        <translation>Serie </translation>
+        <translation>Sèrie </translation>
     </message>
     <message>
         <source>Series</source>
-        <translation>Serie </translation>
+        <translation>Sèrie</translation>
     </message>
     <message>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Study </source>
+        <translation>Estudi </translation>
     </message>
 </context>
 <context>
@@ -1564,15 +1596,15 @@ Acc:%4
         <translation></translation>
     </message>
     <message>
-        <source>New Column</source>
-        <translation type="unfinished"></translation>
+        <source>Protocol Name</source>
+        <translation>Nom del Protocol</translation>
     </message>
 </context>
 <context>
     <name>udg::QueryScreen</name>
     <message>
         <source>Starviewer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
@@ -1580,11 +1612,11 @@ Acc:%4
     </message>
     <message>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation type="obsolete">Si</translation>
     </message>
     <message>
         <source>No</source>
-        <translation>No</translation>
+        <translation type="obsolete">No</translation>
     </message>
     <message>
         <source>StarViewer</source>
@@ -1666,11 +1698,11 @@ Acc:%4
     </message>
     <message>
         <source>Show Pacs List</source>
-        <translation type="unfinished">Mostrar llista Pacs</translation>
+        <translation>Mostrar llista Pacs</translation>
     </message>
     <message>
         <source>Select a study to view </source>
-        <translation type="unfinished">Seleccineu un estudi per visualitzar</translation>
+        <translation>Seleccioneu un estudi per visualitzar</translation>
     </message>
     <message>
         <source>Are you sure you want to delete this Study ?</source>
@@ -1682,51 +1714,51 @@ Acc:%4
     </message>
     <message>
         <source>Error deleting old studies</source>
-        <translation type="unfinished"></translation>
+        <translation>Error esborrant els estudis vells</translation>
     </message>
     <message>
         <source>The study has been retrieved or is retrieving.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;estudi s&apos;està descarregant o ha estat descarregat.</translation>
     </message>
     <message>
         <source>Are you sure you want to view this Study ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Esteu segurs que desitgeu visualitzar aquest estudi ?</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
-        <translation type="unfinished">&amp;Si</translation>
+        <translation>&amp;Si</translation>
     </message>
     <message>
         <source>&amp;No</source>
-        <translation type="unfinished">&amp;No</translation>
+        <translation>&amp;No</translation>
     </message>
     <message>
         <source>Not enough space to retrieve studies. Please free space</source>
-        <translation type="unfinished"></translation>
+        <translation>No hi ha suficiemt espai per descarregar nous estudis. Si us plau allibereu espai</translation>
     </message>
     <message>
         <source>Error Freeing Space. The study couldn&apos;t be retrieved</source>
-        <translation type="unfinished"></translation>
+        <translation>Error alliberant espai. L&apos;estudi no pot ser descarregat</translation>
     </message>
     <message>
         <source> Can&apos;t connect to PACS </source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot connectar al PACS </translation>
     </message>
     <message>
         <source> of </source>
-        <translation type="unfinished"></translation>
+        <translation>de </translation>
     </message>
     <message>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
-        <translation type="unfinished"></translation>
+        <translation>Assegureu-vos que la IP i el AETitle del PACS és correcte</translation>
     </message>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades està corrupte o error de sintaxis SQL</translation>
     </message>
     <message>
         <source>Database is looked</source>
-        <translation type="unfinished"></translation>
+        <translation>Base de dades bloquejada</translation>
     </message>
 </context>
 <context>
@@ -1761,7 +1793,7 @@ Acc:%4
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished">Visualitzar</translation>
+        <translation>Visualitzar</translation>
     </message>
     <message>
         <source>Clear Filter</source>
@@ -1801,7 +1833,7 @@ Acc:%4
     </message>
     <message>
         <source>&lt;b&gt;Accession Number :&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Modality</source>
@@ -1901,7 +1933,7 @@ Acc:%4
     </message>
     <message>
         <source>Show PacsList</source>
-        <translation type="unfinished">Mostrar llista Pacs</translation>
+        <translation>Mostrar llista Pacs</translation>
     </message>
     <message>
         <source>Local Database</source>

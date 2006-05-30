@@ -395,7 +395,7 @@
             <item>
              <widget class="QPushButton" name="m_buttonDeletePacs" >
               <property name="toolTip" >
-               <string>Delete selected Pacss</string>
+               <string>Delete selected Pacs</string>
               </property>
               <property name="text" >
                <string>Delete</string>
@@ -450,7 +450,7 @@
             <item>
              <widget class="QPushButton" name="m_buttonClear" >
               <property name="toolTip" >
-               <string>Crear the text boxes</string>
+               <string>Clear the text boxes</string>
               </property>
               <property name="text" >
                <string>Clear</string>

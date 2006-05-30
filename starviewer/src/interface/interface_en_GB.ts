@@ -41,10 +41,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete selected Pacss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Test</source>
         <translation type="unfinished"></translation>
     </message>
@@ -54,10 +50,6 @@
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Crear the text boxes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -250,6 +242,14 @@
     </message>
     <message>
         <source>Apply changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete selected Pacs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear the text boxes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -518,6 +518,14 @@
         <source>Choose a directory</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Serie loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading, please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::ExtensionHandler</name>
@@ -535,6 +543,14 @@
     </message>
     <message>
         <source>2D Viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Serie loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1095,10 +1111,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Started</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>RETRIEVING</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1130,10 +1142,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>StudyUID</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1159,6 +1167,10 @@ Acc:%4
     </message>
     <message>
         <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1195,10 +1207,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Study</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Series </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1216,6 +1224,10 @@ Acc:%4
     </message>
     <message>
         <source>Ctrl+D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Study </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1274,7 +1286,7 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>New Column</source>
+        <source>Protocol Name</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1286,14 +1298,6 @@ Acc:%4
     </message>
     <message>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

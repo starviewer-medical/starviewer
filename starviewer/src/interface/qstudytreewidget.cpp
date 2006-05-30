@@ -142,7 +142,7 @@ void QStudyTreeWidget::insertStudy( Study *study)
     
     QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
     text.truncate( 0 );
-    text.append( tr("Study") );
+    text.append( tr("Study ") );
     text.append( study->getStudyId().c_str() );
     item->setIcon( 0 ,m_closeFolder );
     item->setText( 0 , text );
