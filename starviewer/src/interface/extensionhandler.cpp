@@ -192,6 +192,10 @@ void ExtensionHandler::killBill()
     {
         m_volumeRepository->removeVolume( m_volumeID );
     }
+    if( !m_compareVolumeID.isNull() )
+    {
+        m_volumeRepository->removeVolume( m_compareVolumeID );
+    }
 }
 
 void ExtensionHandler::openSerieToCompare()
@@ -357,9 +361,13 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
 	{   //en el cas que nomes tingui una imatge la serie, fem retornar el vector amb el Path i agafem el de la primera imatge
 		input->openFile( serie.getVectorSeriesPath()[0].c_str() );
 	}
-    
+
+    if( !m_compareVolumeID.isNull() )
+    {
+        m_volumeRepository->removeVolume( m_compareVolumeID );
+    }
     Volume *dummyVolume = input->getData();
-    m_volumeID = m_volumeRepository->addVolume( dummyVolume );
+    m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
     emit secondInput( dummyVolume );    
 }

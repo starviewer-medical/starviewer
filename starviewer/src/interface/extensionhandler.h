@@ -93,7 +93,10 @@ private:
     // :::::::::::::::::::::::::::::::::::::::::
 
     /// L'id del volum amb el que estem treballant
-    Identifier m_volumeID;    
+    Identifier m_volumeID;
+
+    /// \TODO aquest ha de ser temporal
+    Identifier m_compareVolumeID;
 
     /// El repository de volums
     VolumeRepository *m_volumeRepository;
