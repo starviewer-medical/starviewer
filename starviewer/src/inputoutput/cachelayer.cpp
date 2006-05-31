@@ -37,6 +37,7 @@ Status CacheLayer::clearCache()
     QProgressDialog *progress;
     progress = new QProgressDialog( tr( "Clearing cache..." ) , "" , 0 , usedSpaceInit );
     progress->setMinimumDuration( 0 );
+	progress->setCancelButton( 0 );
 
     state = localCache->queryStudy( studyMask , studyList );
     
@@ -88,6 +89,7 @@ Status CacheLayer::deleteOldStudies()
     QProgressDialog *progress;
     progress = new QProgressDialog( tr( "Clearing old studies..." ) , "" , 0 , studyList.count() );
     progress->setMinimumDuration( 0 );
+	progress->setCancelButton( 0 );
     
     while ( state.good() && !studyList.end() )
     {
