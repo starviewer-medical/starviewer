@@ -17,6 +17,8 @@
     <file>images/coronal.png</file>
     <file>images/singleView.png</file>
     <file>images/addViewRight.png</file>
+    <file>images/view_left_right.png</file>
+    <file>images/view_sidetree.png</file>
     <file>cache/database.sql</file>
     <file>translations/interface_ca_ES.qm</file>
     <file>translations/interface_es_ES.qm</file>
