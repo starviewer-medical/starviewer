@@ -49,6 +49,8 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     m_configurationChanged = false;
     
     createConnections();
+	setIconButtons();
+
 }
 
 void QConfigurationScreen::createConnections()
@@ -103,6 +105,18 @@ void QConfigurationScreen::createConnections()
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clear() ) );
     connect( m_buttonTestPacs , SIGNAL( clicked() ) , this , SLOT( test() ) );
     connect( m_PacsTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int) ) , this , SLOT( selectedPacs( QTreeWidgetItem * , int ) ) );
+}
+
+void QConfigurationScreen::setIconButtons()
+{
+	m_buttonAcceptCache->setIcon( QIcon( ":images/button_ok.png" ) );
+	m_buttonAcceptPacs->setIcon( QIcon( ":images/button_ok.png" ) );
+	
+	m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
+	m_buttonApplyCache->setIcon( QIcon( ":images/apply.png" ) );
+	
+	m_buttonCancelPacs->setIcon( QIcon( ":images/cancel.png" ) );
+	m_buttonCancelCache->setIcon( QIcon( ":images/cancel.png" ) );
 }
 
 void QConfigurationScreen::loadCacheDefaults()

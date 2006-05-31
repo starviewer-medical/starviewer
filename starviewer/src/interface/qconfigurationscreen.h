@@ -131,6 +131,10 @@ private :
     
     ///  Aplica els canvis fets a la configuració de la cache
     void applyChangesCache();
+
+	/// col·loca les icones als buttons d'acceptar, cancel·lar i applicar de l'apartat de Pacs i la Cache
+	void setIconButtons();
+
 };
 
 };// end namespace udg

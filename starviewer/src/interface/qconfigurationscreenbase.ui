@@ -1366,9 +1366,6 @@
               <property name="text" >
                <string>Accept</string>
               </property>
-              <property name="icon" >
-               <iconset>../main/images/button_ok.png</iconset>
-              </property>
              </widget>
             </item>
             <item>
@@ -1401,9 +1398,6 @@
               <property name="text" >
                <string>Apply Changes</string>
               </property>
-              <property name="icon" >
-               <iconset>../main/images/apply.png</iconset>
-              </property>
              </widget>
             </item>
             <item>
@@ -1432,9 +1426,6 @@
               </property>
               <property name="text" >
                <string>Cancel</string>
-              </property>
-              <property name="icon" >
-               <iconset>../main/images/cancel.png</iconset>
               </property>
              </widget>
             </item>
@@ -1937,9 +1928,6 @@
             <property name="text" >
              <string>Accept</string>
             </property>
-            <property name="icon" >
-             <iconset>../main/images/button_ok.png</iconset>
-            </property>
            </widget>
           </item>
           <item>
@@ -1972,9 +1960,6 @@
             <property name="text" >
              <string>Apply Changes</string>
             </property>
-            <property name="icon" >
-             <iconset>../main/images/apply.png</iconset>
-            </property>
            </widget>
           </item>
           <item>
@@ -2000,9 +1985,6 @@
             </property>
             <property name="text" >
              <string>Cancel</string>
-            </property>
-            <property name="icon" >
-             <iconset>../main/images/cancel.png</iconset>
             </property>
            </widget>
           </item>
