@@ -17,6 +17,7 @@ class vtkPlaneSource;
 class vtkImageReslice;
 class vtkTransform;
 class vtkActor2D;
+class QAction;
 
 namespace udg {
 
@@ -48,7 +49,11 @@ public:
     
     /// Rota el pla especificat pel seu centre
     void rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane );
-       
+
+public slots:
+    /// Canvia la distribució horitzontal de les finestres ( el que està a la dreta passa a l'esquerra i viceversa )
+    void switchHorizontalLayout();
+    
 signals:
     /// Notificació del canvi de direcció de cadascun dels eixos que podem manipular. Aquests senyals haurien de ser enviats quan canviem la direcció a través dels controls ( línies blaves i vermella)
     void coronalXAxisChanged( double x1 , double x2 , double x3 );
@@ -58,8 +63,10 @@ signals:
 private:
     /// Ens diu si un eix és paral·lel a un dels aixos de coordenades X Y o Z
     bool isParallel( double axis[3] );
+
     /// Calcula l'angle entre dos vectors. Retorna el valor en radians
     double angleInRadians( double vec1[3] , double vec2[3] );
+
     /// Calcula l'angle entre dos vectors. Retorna el valor en graus
     double angleInDegrees( double vec1[3] , double vec2[3] );
 
@@ -70,21 +77,28 @@ private:
     void getCoronalYVector( double y[3] );
     void getAxialXVector( double x[3] );
     void getAxialYVector( double y[3] );
+
     /// Actualitza valors dels plans i del reslice final \TODO: separar en dos mètodes diferenciats segons quin pla????
     void updatePlanes();
+
     /// Actualitza els valors del pla donat amb el reslice associat
     void updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *reslice );
+
     /// Actualitza el punt d'intersecció dels 3 plans
     void updateIntersectionPoint();
     
     /// inicialitza les orientacions dels plans de tall correctament perquè tinguin un espaiat, dimensions i límits correctes
     void initOrientation();
+
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
+
     /// La tranformació que apliquem
     vtkTransform *m_transform;
+
     /// El volum al que se li practica l'MPR
     Volume *m_volume;
+
     /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab ( línies puntejades blaves en vista axial i sagital ).
     vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis , *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor , *m_thickSlabOverSagitalActor;
     
@@ -93,6 +107,7 @@ private:
     
     /// Punt d'intersecció entre els 3 plans
     double m_intersectionPoint[3];
+
     /// Llegir/Escriure la configuració de l'aplicació
     void readSettings();
     void writeSettings();
@@ -102,6 +117,10 @@ private:
 
     /// Crea els actors i els incicialitza
     void createActors();
+
+    /// Crea les accions 
+    void createActions();
+    
     /// crea les connexions entre signals i slots
     void createConnections();
     
@@ -110,6 +129,7 @@ private:
     
     /// ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector     
     void planeIntersection( vtkPlaneSource* plane1 , vtkPlaneSource *plane2 , double r[3] , double t[3] );
+
     /// Calcula el punt d'intersecció de 3 plans a l'espai 
     void planeIntersection( vtkPlaneSource *plane1 , vtkPlaneSource *plane2 , vtkPlaneSource *plane3 , double intersectionPoint[3] );
 
@@ -132,6 +152,9 @@ private:
 
     /// Gruix del thickSlab que servirà per al MIP
     double m_thickSlab;
+
+    /// Acció per poder controlar el layout horizontal
+    QAction *m_horizontalLayoutAction;
     
 private slots:
     /// S'encarreguen de rotar els eixos dels plans

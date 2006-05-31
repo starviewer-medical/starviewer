@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
+    <width>702</width>
     <height>506</height>
    </rect>
   </property>
@@ -48,90 +48,87 @@
       <widget class="QDoubleSpinBox" name="m_thickSlabSpinBox" />
      </item>
      <item>
-      <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
+      <widget class="QToolButton" name="m_horizontalLayoutToolButton" >
+       <property name="text" >
+        <string>...</string>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>WW/WL:</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="m_windowLevelAdjustmentComboBox" >
        <item>
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>WW/WL:</string>
-         </property>
-        </widget>
+        <property name="text" >
+         <string>Default</string>
+        </property>
        </item>
        <item>
-        <widget class="QComboBox" name="m_windowLevelAdjustmentComboBox" >
-         <item>
-          <property name="text" >
-           <string>Default</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Bone</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Lung</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Soft Tissues, noncontrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Liver, noncontrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Soft Tissues , Contrast Medium</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Liver , Contrast Medium</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Neck , Constrast Medium</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Angiography</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Osteoporosis</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Emphysema</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Petrous Bone</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Custom...</string>
-          </property>
-         </item>
-        </widget>
+        <property name="text" >
+         <string>CT Bone</string>
+        </property>
        </item>
-      </layout>
+       <item>
+        <property name="text" >
+         <string>CT Lung</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Soft Tissues, noncontrast</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Liver, noncontrast</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Soft Tissues , Contrast Medium</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Liver , Contrast Medium</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Neck , Constrast Medium</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CT Angiography</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Osteoporosis</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Emphysema</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Petrous Bone</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Custom...</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>

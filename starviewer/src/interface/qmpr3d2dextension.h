@@ -13,6 +13,7 @@ using namespace Ui; // \TODO tractar de solucionar això bé
 
 //  FWD decs
 class vtkAxisActor2D;
+class QAction;
 
 namespace udg {
 
@@ -37,15 +38,32 @@ public:
     */
     void setInput( Volume *input );
 
+    enum Positions{ BigView , UpperLittleView , MiddleLittleView , BottomLittleView };
+    
+public slots:
+    /// permuta les posicions de les 3 vistes alineades verticalment
+    void switchViews();
+
+    /// Canvia de posició la finestra "gran" d'esquerra a dreta i vicerversa
+    void switchBigView();
+    
 private:
     /// El volum d'entrada
     Volume* m_volume;
+
+    /// Accions sobre els layouts
+    QAction *m_leftRightLayoutAction, *m_viewsLayoutAction;
+
+    /// crea les accions
+    void createActions();
+
     /// Llegir/Escriure la configuració de l'aplicació
     void readSettings();
     void writeSettings();
     
     /// els actors que serveixen de punts de referència sobre els plans 2D
     vtkAxisActor2D *m_sagitalOverAxialIntersectionAxis , *m_coronalOverAxialIntersectionAxis , *m_axialOverSagitalIntersectionAxis , *m_coronalOverSagitalIntersectionAxis;
+
     /// Crea actors adicionals que s'afegiran als respectius visors
     void createActors();
     

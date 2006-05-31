@@ -121,6 +121,20 @@
       </layout>
      </item>
      <item>
+      <widget class="QToolButton" name="m_leftRightLayoutToolButton" >
+       <property name="text" >
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="m_viewsLayoutToolButton" >
+       <property name="text" >
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer>
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
@@ -130,7 +144,7 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>228</width>
+         <width>21</width>
          <height>31</height>
         </size>
        </property>

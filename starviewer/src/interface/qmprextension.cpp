@@ -74,7 +74,8 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
     
     m_customWindowLevelDialog = new QCustomWindowLevelDialog;
-    
+
+    createActions();
     createConnections();
     createActors();
 
@@ -100,6 +101,15 @@ QMPRExtension::~QMPRExtension()
 
     m_transform->Delete();
     
+}
+
+void QMPRExtension::createActions()
+{
+    m_horizontalLayoutAction = new QAction( 0 );
+    m_horizontalLayoutAction->setText( tr("Switch horizontal layout") );
+    m_horizontalLayoutAction->setStatusTip( tr("Switch horizontal layout") );
+    m_horizontalLayoutAction->setIcon( QIcon(":/images/view_left_right.png") );
+    m_horizontalLayoutToolButton->setDefaultAction( m_horizontalLayoutAction );
 }
 
 void QMPRExtension::createConnections()
@@ -135,6 +145,19 @@ void QMPRExtension::createConnections()
     connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
     connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
+
+    // layouts
+    connect( m_horizontalLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchHorizontalLayout() ) );
+}
+
+void QMPRExtension::switchHorizontalLayout()
+{
+    QWidget *leftWidget, *rightWidget;
+    leftWidget = m_horizontalSplitter->widget( 0 );
+    rightWidget = m_horizontalSplitter->widget( 1 );
+
+    m_horizontalSplitter->insertWidget( 0 , rightWidget );
+    m_horizontalSplitter->insertWidget( 1 , leftWidget );
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
