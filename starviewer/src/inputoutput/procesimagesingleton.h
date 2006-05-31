@@ -14,17 +14,16 @@
 
 namespace udg {
 
-/** Classe singleton, que implementa una llista dels Objectes ProcessImage.Aquesta classe és necessaria per poder fer més d'una descarrega alhora
-  * ja que conté els objectes ProcessImage, associats a cada descarrega, que indiquen quines accions s'han de portar a terme amb cada imatge descarregada, per
-  * cada estudi
+/** Classe singleton, que implementa una llista dels Objectes ProcessImage.Aquesta classe és necessaria per poder fer més d'una descarrega alhora ja que conté els objectes ProcessImage, associats a cada descarrega, que indiquen quines accions s'han de portar a terme amb cada imatge descarregada, per cada estudi
 @author marc
 */
 class ProcesImageSingleton{
 public:
+
+    ///Constructor de la classe
     ProcesImageSingleton();
     
-    
-    
+    ///Destructor de la classe
     ~ProcesImageSingleton();
 
 private:

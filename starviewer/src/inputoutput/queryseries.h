@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Copyright (C) 2005 by marc                                            *
  *   marc@localhost.com                                                    *
@@ -31,21 +30,35 @@
 #include "status.h"
 class PacsConnection;
 
-/** This class helps to interactive with the pacs, allow us to find series in the pacs, setting a search mask. Very important!!
-  * a connection and a mask search must be setted before query Series
-  */ 
+/// This class helps to interactive with the pacs, allow us to find series in the pacs, setting a search mask. Very important a connection and a mask search must be setted before query Series!!
+
 namespace udg{
-class QuerySeries {
+class QuerySeries 
+{
 
 public:
  
-   void setConnection( PacsConnection);
+    /** This action sets the connection that we will use to connect to the pacs
+     * @param Open connection to the pacs
+     */
+   QuerySeries( PacsConnection , SeriesMask );
+ 
+    /** Sets and openn connection to search a series
+     * @param pacs Connection
+     */
+   void setConnection( PacsConnection );
 
-   QuerySeries(PacsConnection,SeriesMask);
+   /// This action finds the series in the pacs with the established mask
    Status find();
    
-   void setMask(SeriesMask *);
+    /** This action sets the mask that we will use to search the series in to the pacs. This mask is created by mask class
+     * @param Series maks
+     */
+   void setMask( SeriesMask * );
   
+    /** get the list study with the results of the query
+     * @return  A pointer to the ListSeries with the results of the query
+     */
    SeriesListSingleton* getSeriesList();
        
 private:
@@ -53,7 +66,6 @@ private:
     T_ASC_Association *m_assoc; // request DICOM association;
     SeriesListSingleton* m_seriesListSingleton;
     DcmDataset *m_mask;
-
 
 };
 };

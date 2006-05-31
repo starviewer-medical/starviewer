@@ -6,27 +6,7 @@
  ***************************************************************************/
 #include "scaleimage.h"
 
-/***************************************************************************
- *   Copyright (C) 2005 by marc                                            *
- *   marc@localhost                                                        *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
-
- #define HAVE_CONFIG_H 1
+#define HAVE_CONFIG_H 1
  
 //#define BUILD_DCM2PNM_AS_DCMJ2PNM // compile "dcm2pnm" with dcmjpeg support
 
@@ -65,7 +45,6 @@
 
 #include "const.h"
 
-
 #define OFFIS_OUTFILE_DESCRIPTION "output filename to be written (default: stdout)"
 
 #ifdef BUILD_DCM2PNM_AS_DCMJ2PNM
@@ -90,18 +69,9 @@ ScaleImage::ScaleImage()
 {
 }
 
-// ********************************************
-
-/** Converteix un dicom a un pgm (Imatge que pot ser visualitzada amb qualsevol eina gràfica).
-  *                @param dicomFile [in] path del dicom a convertir a png
-  *                @param lpgmFile [in] path del fitxer pgm desti
-  *                @param pixelSize [in] mida de pixels de l'imatge
-  */
 int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixelsSize)
 {
-
 //valors per defecte trets de dcm2pnm.cc
-
     int                 opt_readAsDataset = 0;            /* default: fileformat or dataset */
     E_TransferSyntax    opt_transferSyntax = EXS_Unknown; /* default: xfer syntax recognition */
 
@@ -112,34 +82,29 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
     int                 opt_useAspectRatio = 1;           /* default: use aspect ratio for scaling */
     OFCmdUnsignedInt    opt_useInterpolation = 1;         /* default: use interpolation method '1' for scaling */
 
-
     OFCmdUnsignedInt    opt_scale_size_x = 1;
     OFCmdUnsignedInt    opt_scale_size_y = 1;
 
-
-
     /* make sure data dictionary is loaded */
-    if (!dcmDataDict.isDictionaryLoaded())
+    if ( !dcmDataDict.isDictionaryLoaded ())
     {
         return errorDictionaryNoLoaded;
     }
 
-
    //obrim el fitxer dicom
     DcmFileFormat *dfile = new DcmFileFormat();
-    OFCondition cond = dfile->loadFile(dicomFile, opt_transferSyntax, EGL_withoutGL,
-        DCM_MaxReadLength, opt_readAsDataset);
+    OFCondition cond = dfile->loadFile( dicomFile , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readAsDataset );
 
-    if (cond.bad()) return errorDicomFileNotFound;
+    if ( cond.bad() ) return errorDicomFileNotFound;
    
     E_TransferSyntax xfer = dfile->getDataset()->getOriginalXfer();
 
     //carreguem el fitxer dicom a escalar
-    DicomImage *di = new DicomImage(dfile, xfer, opt_compatibilityMode, opt_frame - 1, opt_frameCount);
+    DicomImage *di = new DicomImage( dfile , xfer , opt_compatibilityMode , opt_frame - 1 , opt_frameCount );
     
-    if (di == NULL) return errorOutofMemory;
+    if ( di == NULL ) return errorOutofMemory;
 
-    if (di->getStatus() != EIS_Normal) return errorOpeningDicomFile;
+    if ( di->getStatus() != EIS_Normal ) return errorOpeningDicomFile;
 
 
     di->hideAllOverlays();
@@ -148,7 +113,7 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
     
         
     //Escalem pel cantó més gran
-    if (di->getWidth() < di->getHeight())
+    if ( di->getWidth() < di->getHeight() )
     {
         opt_scale_size_x = 0;
         opt_scale_size_y = pixelsSize;
@@ -159,15 +124,15 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
         opt_scale_size_y = 0;  
      }
     
-    di->setMinMaxWindow(1); //Establim el VOI LUT, aquí indiquem que aquesta imatge és per visualitzar per una finestra, aplica filtres perquè es vegi correctament
+    di->setMinMaxWindow( 1 ); //Establim el VOI LUT, aquí indiquem que aquesta imatge és per visualitzar per una finestra, aplica filtres perquè es vegi correctament
     
-    newimage = di->createScaledImage(opt_scale_size_x, opt_scale_size_y, (int)opt_useInterpolation, opt_useAspectRatio);
+    newimage = di->createScaledImage( opt_scale_size_x , opt_scale_size_y , ( int ) opt_useInterpolation , opt_useAspectRatio );
            
-    if (newimage==NULL) 
+    if ( newimage==NULL ) 
     {
         return errorScalingImage;
     }
-    else if (newimage->getStatus() != EIS_Normal)
+    else if ( newimage->getStatus() != EIS_Normal )
     {
         return errorScalingImage;
     }
@@ -176,26 +141,24 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
         delete di;
         di = newimage;
     }
-        
-        
 
     //escribim la imatge escalada al nout fitxer
     int result = 0;
     FILE *ofile = NULL;
-    unsigned int fcount = (unsigned int)(((opt_frameCount > 0) && (opt_frameCount <= di->getFrameCount())) ? opt_frameCount : di->getFrameCount());
+    unsigned int fcount = ( unsigned int )( ( ( opt_frameCount > 0 ) && ( opt_frameCount <= di->getFrameCount() ) ) ? opt_frameCount : di->getFrameCount() );
 
-
-    for (unsigned int frame = 0; frame < fcount; frame++)
+    for ( unsigned int frame = 0; frame < fcount; frame++ )
     {        
-        ofile = fopen(lpgmFile, "wb");
-        if (ofile == NULL)
+        ofile = fopen( lpgmFile, "wb" );
+        if ( ofile == NULL )
         {
             return errorOpeningNewImage;
         }
             /* finally create PGM BMP file */
-       result = di->writeRawPPM(ofile, 8, frame);
-       fclose(ofile);
-        if (!result) return errorWritingNewImage;
+       result = di->writeRawPPM( ofile , 8 , frame );
+       fclose( ofile );
+       
+       if ( !result ) return errorWritingNewImage;
    }
     
     delete di;
@@ -204,14 +167,11 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
     DcmRLEDecoderRegistration::cleanup();
 
     return 0;
-    }
-
-
+}
 
 ScaleImage::~ScaleImage()
 {
 }
-
 
 };
 ;

@@ -33,22 +33,37 @@ class PacsConnection;
 #include "studymask.h"
 #include "status.h"
 
-/** This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class
-a connection and a mask search must be setted befoer query Studie
- */
+/// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 namespace udg{
-class QueryStudy {
+class QueryStudy 
+{
 
 public:
  
-   void setConnection( PacsConnection connection);
+    /** This action sets the connection that we will use to connect to the pacs
+     * @param connection Openned connection to the pacs
+     * @param study Mask
+     */
+   QueryStudy( PacsConnection , StudyMask );
 
-   QueryStudy(PacsConnection,StudyMask);
-   Status Echo();//This function makes an echo to the PACS
+    /** Sets the connection to the PACS
+     * @param PACS's connection
+     */
+   void setConnection( PacsConnection connection );
+
+    /** Query studies to the pacs
+     * @param status
+     */
    Status find();
    
-   void setMask(StudyMask);
+    /** This action sets the mask that we will use to search the studies in to the pacs. This mask is created by mask class
+     * @param search Mask
+     */
+   void setMask( StudyMask );
     
+    /** get the list study with the results of the query
+     * @return A pointer to the ListStudy with the results of the query
+     */
    StudyListSingleton* getStudyList();
        
 private:

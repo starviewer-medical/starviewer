@@ -36,23 +36,40 @@
 #include "imagemask.h"
 class PacsConnection;
 
-/** Classe que per una màscara d'una sèrie compte les imatges que conté aquesta sèrie
- */
+/// Classe que per una màscara d'una sèrie compte les imatges que conté aquesta sèrie. Aquesta classe no és reentrant
 // Aquesta classe no es pot fer amb més d'un thread a la vegada degut a la variable global imageNumberGlobal 
 
 namespace udg{
-class QueryImageNumber{
 
+class QueryImageNumber
+{
 
 public:
-   QueryImageNumber(PacsConnection,ImageMask); 
    
-   void setConnection( PacsConnection);
+    /** Constructor Class
+     * @param Connection to use to query the image's number
+     * @param Mask to search 
+     */
+   QueryImageNumber( PacsConnection , ImageMask ); 
+   
+    /** Sets the connection to us, to query the image number
+     * @param Pacs connection
+     */
+   void setConnection( PacsConnection );
 
-   void setMask(ImageMask *);
+    /** This action sets the mask that we will use to count image in to the pacs. 
+     * @param  Image's mask
+     */
+   void setMask( ImageMask * );
 
+    /** This action count the number of images, that complies the criterium of the Image Mask
+     * @return The status of the action
+     */
    Status count();
    
+    /** Return the number of images.
+     * @return the number of images
+     */
    int getImageNumber();
        
 private:
