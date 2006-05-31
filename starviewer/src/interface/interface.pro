@@ -10,7 +10,6 @@ FORMS += qconfigurationscreenbase.ui \
          qretrievescreenbase.ui \
          queryscreenbase.ui \
          qpacslistbase.ui \
-         qnavigatewindowbase.ui \
          qstudytreewidgetbase.ui \
          qserieslistwidgetbase.ui \
          q2dviewerextensionbase.ui \
@@ -43,7 +42,6 @@ HEADERS += director.h \
            qmpr3d2dextension.h \
            distancetool.h \
            tool.h \
-           qnavigatewindow.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
            q2dviewerextension.h \
@@ -76,7 +74,6 @@ SOURCES += director.cpp \
            qmpr3d2dextension.cpp \
            distancetool.cpp \
            tool.cpp \
-           qnavigatewindow.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
            q2dviewerextension.cpp \

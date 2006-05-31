@@ -35,7 +35,6 @@
 #include "starviewersettings.h"
 #include "cachepool.h"
 #include "scalestudy.h"
-#include "qnavigatewindow.h"
 #include "queueoperationlist.h"
 #include "operation.h"
 #include "cachelayer.h"
