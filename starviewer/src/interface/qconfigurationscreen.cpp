@@ -681,10 +681,12 @@ void QConfigurationScreen::deleteStudies()
         
         INFO_LOG ( "Neteja de la cache" );
     
-        this->setCursor( QCursor( Qt::WaitCursor ) );
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             
         state =  cacheLayer.clearCache();
-        
+       
+		QApplication::restoreOverrideCursor();
+ 
         if ( !state.good() )
         {
             databaseError( &state );
@@ -692,8 +694,8 @@ void QConfigurationScreen::deleteStudies()
         
         loadCachePoolDefaults();
         emit( cacheCleared() );
-        this->setCursor( QCursor( Qt::ArrowCursor ) );
-	break;
+       
+		break;
     }
 }
 
@@ -704,16 +706,19 @@ void QConfigurationScreen::compactCache()
     
     INFO_LOG( "Compatacio de la cache" );
     
-    this->setCursor( QCursor( Qt::WaitCursor ) );    
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
     localCache = CachePacs::getCachePacs();
     
     state = localCache->compactCachePacs();
+
+	QApplication::restoreOverrideCursor();
     
     if ( !state.good() )
     {
         databaseError( &state );
     }
-    this->setCursor( QCursor( Qt::ArrowCursor ) );    
+	
 }
 
 void QConfigurationScreen::cacheImagePathEditingFinish()

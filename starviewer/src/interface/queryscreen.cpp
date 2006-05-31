@@ -377,7 +377,8 @@ void QueryScreen::searchYesterday()
 void QueryScreen::search()
 {
     QString logMessage;
-    this->setCursor(QCursor(Qt::WaitCursor));
+    
+	
     
     if (m_tab->currentIndex()==1)
     {
@@ -389,9 +390,11 @@ void QueryScreen::search()
                                         0, 1 ) ) 
             {
 				
-                case 0: logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
+                case 0: 
+						logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
 						INFO_LOG ( logMessage.toAscii().constData() ); 
 						queryStudyPacs();
+						QApplication::restoreOverrideCursor();
 						break;
             }    
         }
@@ -410,7 +413,7 @@ void QueryScreen::search()
         queryStudyCache();
     }
     
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    
 
 }
 
@@ -447,6 +450,8 @@ void QueryScreen::queryStudyPacs()
     QString result;
     StarviewerSettings settings;
     
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+	
     pacsList.clear(); //netejem el pacsLIST
     qPacsList->getSelectedPacs(&pacsList); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
     
@@ -464,6 +469,7 @@ void QueryScreen::queryStudyPacs()
     if(!multipleQueryStudy.StartQueries().good())  //fem la query
     {
         m_studyTreeWidgetPacs->clear();
+		QApplication::restoreOverrideCursor();
         QMessageBox::information( this, tr("StarViewer"),tr("ERROR QUERING!."));
         return;  
     }
@@ -473,12 +479,14 @@ void QueryScreen::queryStudyPacs()
     if (m_studyListSingleton->end())
     {
         m_studyTreeWidgetPacs->clear();        
+		QApplication::restoreOverrideCursor();
         QMessageBox::information( this, tr("StarViewer"),tr("No study match found."));
         return;
     }
     m_studyTreeWidgetPacs->insertStudyList(m_studyListSingleton); //fem que es visualitzi l'studyView seleccionat
     m_studyTreeWidgetPacs->setSortColumn(2);//ordenem pel nom
     
+	QApplication::restoreOverrideCursor();
     
 }
 
@@ -489,6 +497,8 @@ void QueryScreen::queryStudyCache()
     CachePacs * localCache;
     Status state;
     
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
     localCache = CachePacs::getCachePacs();
 
     m_seriesListWidgetCache->clear();
@@ -500,6 +510,7 @@ void QueryScreen::queryStudyCache()
     if (!state.good()) 
     {
         m_studyTreeWidgetCache->clear();
+		QApplication::restoreOverrideCursor();
         databaseError(&state);
         return;
     }
@@ -509,6 +520,7 @@ void QueryScreen::queryStudyCache()
     if (m_studyListCache.end()) //no hi ha estudis
     {
         m_studyTreeWidgetCache->clear();
+		QApplication::restoreOverrideCursor();
         QMessageBox::information( this, tr("StarViewer"),tr("No study match found."));
         return;
     }
@@ -516,6 +528,8 @@ void QueryScreen::queryStudyCache()
     m_studyTreeWidgetCache->insertStudyList(&m_studyListCache);//es mostra la llista d'estudis
     
     m_studyTreeWidgetCache->setSortColumn(2); //ordenem pel nom
+
+	QApplication::restoreOverrideCursor();
 }
 
 /**Busca la informació d'una sèrie
@@ -526,7 +540,7 @@ void QueryScreen::queryStudyCache()
 void QueryScreen::searchSeries(QString studyUID,QString pacsAETitle)
 {   
   
-    this->setCursor(QCursor(Qt::WaitCursor));
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     
     if (m_tab->currentIndex() == 1) //si estem la pestanya del PACS fem query al Pacs
     {
@@ -537,7 +551,7 @@ void QueryScreen::searchSeries(QString studyUID,QString pacsAETitle)
         QuerySeriesCache(studyUID);
     }
 
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    QApplication::restoreOverrideCursor();
 }
 
 /**Busca la informació d'una sèrie en el PACS i la mostra en la interfície
@@ -706,10 +720,11 @@ void QueryScreen::retrievePacs(bool view)
     StarviewerSettings settings;
     CachePool pool;
     
-    this->setCursor(QCursor(Qt::WaitCursor));
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
     if (m_studyTreeWidgetPacs->getSelectedStudyUID() == "")
     {
-        this->setCursor(QCursor(Qt::ArrowCursor));
+        QApplication::restoreOverrideCursor();
         if (view)
         {
             QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to view "));
@@ -722,7 +737,7 @@ void QueryScreen::retrievePacs(bool view)
     //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
     if (!m_studyListSingleton->findStudy(studyUID.toAscii().constData()))
     {
-        this->setCursor(QCursor(Qt::ArrowCursor));
+        QApplication::restoreOverrideCursor();
         QMessageBox::warning( this, tr("StarViewer"),tr("Internal Error : "));
         return;
     }
@@ -733,6 +748,7 @@ void QueryScreen::retrievePacs(bool view)
     
     if ( !state.good() )
     {   
+		QApplication::restoreOverrideCursor();
         if ( state.code() == 2019 ) //l'estudi ja existeix
         {   
             if ( view )  //si es vol visualitzar no donem missatge de que ja esta descarregat, obrim l'estudi
@@ -742,7 +758,7 @@ void QueryScreen::retrievePacs(bool view)
             else QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study has been retrieved or is retrieving." ) );
         }
         else databaseError( &state );
-        this->setCursor( QCursor( Qt::ArrowCursor ) );
+        
         return;
     }   
     
@@ -752,7 +768,7 @@ void QueryScreen::retrievePacs(bool view)
     state = pacsListDB.queryPacs(&pacs,m_studyTreeWidgetPacs->getSelectedStudyPacsAETitle().toAscii().constData());
     if (!state.good())
     {
-        this->setCursor(QCursor(Qt::ArrowCursor));
+        QApplication::restoreOverrideCursor();
         databaseError(&state);
         return;
     }
@@ -776,7 +792,7 @@ void QueryScreen::retrievePacs(bool view)
     
     m_qexecuteOperationThread.queueOperation(operation);
 
-    this->setCursor(QCursor(Qt::ArrowCursor));
+	QApplication::restoreOverrideCursor();
 }
 
 /** Insereix un estudi a descarregar a la cache
@@ -890,7 +906,6 @@ void QueryScreen::retrieveCache(QString studyUID,QString seriesUID)
         
     if (studyUID == "")
     {
-        this->setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::warning( this, tr("StarViewer"),tr("Select a study to view "));
         return;
     }    
