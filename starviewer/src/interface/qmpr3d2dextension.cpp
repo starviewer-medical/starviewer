@@ -17,7 +17,7 @@
 #include <QSplitter>
 #include <QSettings>
 #include <QMessageBox>
-
+#include <QAction>
 // vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
@@ -33,6 +33,7 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     setupUi( this );
     m_customWindowLevelDialog = new QCustomWindowLevelDialog;
 
+    createActions();
     createConnections();
 
     m_axialViewEnabledButton->setChecked( true );
@@ -82,7 +83,46 @@ void QMPR3D2DExtension::setInput( Volume *input )
         coronalCam->SetFocalPoint(0,0,0);
         m_coronal2DView->getRenderer()->ResetCamera();
     }
+    // posem la vista a coronal 
+    m_mpr3DView->resetViewToCoronal();
     updateActors();
+}
+
+void QMPR3D2DExtension::createActions()
+{
+    m_leftRightLayoutAction = new QAction( 0 );
+    m_leftRightLayoutAction->setText( tr("Switch horizontal layout") );
+    m_leftRightLayoutAction->setStatusTip( tr("Switch horizontal layout") );
+    m_leftRightLayoutAction->setIcon( QIcon(":/images/view_left_right.png") );
+    m_leftRightLayoutToolButton->setDefaultAction( m_leftRightLayoutAction );
+    
+    m_viewsLayoutAction = new QAction( 0 );
+    m_viewsLayoutAction->setText( tr("Change views layout") );
+    m_viewsLayoutAction->setStatusTip( tr("Change views layout") );
+    m_viewsLayoutAction->setIcon( QIcon(":/images/view_sidetree.png") );
+    m_viewsLayoutToolButton->setDefaultAction( m_viewsLayoutAction );
+}
+
+void QMPR3D2DExtension::switchBigView()
+{
+    QWidget *leftWidget, *rightWidget;
+    leftWidget = m_horizontalSplitter->widget( 0 );
+    rightWidget = m_horizontalSplitter->widget( 1 );
+
+    m_horizontalSplitter->insertWidget( 0 , rightWidget );
+    m_horizontalSplitter->insertWidget( 1 , leftWidget );
+}
+
+void QMPR3D2DExtension::switchViews()
+{
+    QWidget *first, *second, *third;
+    first = m_verticalSplitter->widget( 0 );
+    second = m_verticalSplitter->widget( 1 );
+    third = m_verticalSplitter->widget( 2 );
+
+    m_verticalSplitter->insertWidget( 0 , second );
+    m_verticalSplitter->insertWidget( 1 , third );
+    m_verticalSplitter->insertWidget( 2 , first );
 }
 
 void QMPR3D2DExtension::update2DViews()
@@ -262,7 +302,10 @@ void QMPR3D2DExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
-        
+
+    // layouts
+    connect( m_leftRightLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchBigView() ) );
+    connect( m_viewsLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchViews() ) );
 }
 
 void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
