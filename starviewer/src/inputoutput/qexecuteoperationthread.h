@@ -86,9 +86,8 @@ private :
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar 
       * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie
       *     @param operation a executar
-      *     @param indica si l'estudi s'ha de visualitzar
       */
-    void retrieveStudy(Operation operation,bool view);
+    void retrieveStudy(Operation operation);
     
     /** Indica si hi ha com a minim 1Gb d'espai lliure tant a la cache com al disc per descarregar el nou estudi. 
       * Si detecta,que no hi ha suficient a la cache o al disc, intenterà alliberar 2000 Mb, esborrant estudis vells, si no retornara que no hi ha suficient espai al disc

@@ -70,11 +70,11 @@ void QExecuteOperationThread::run()
         {
             case operationRetrieve : 
                  m_view = false;
-                 retrieveStudy(operation,m_view);
+                 retrieveStudy(operation);
                  break;
             case operationView : 
                  m_view = true;
-                 retrieveStudy(operation,m_view);
+                 retrieveStudy(operation);
                  break;
         }
         
@@ -87,7 +87,7 @@ void QExecuteOperationThread::run()
 }
 
 //descarrega un estudi
-void QExecuteOperationThread::retrieveStudy(Operation operation,bool view)
+void QExecuteOperationThread::retrieveStudy(Operation operation)
 {
     StarviewerProcessImage *sProcessImg = new StarviewerProcessImage::StarviewerProcessImage();
     QString studyUID;

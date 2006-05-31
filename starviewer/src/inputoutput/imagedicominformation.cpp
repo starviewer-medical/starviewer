@@ -26,7 +26,6 @@ Status ImageDicomInformation:: openDicomFile(std::string imagePath)
     int opt_readAsDataset = 0;
     E_TransferSyntax    opt_transferSyntax = EXS_Unknown;
     DcmTagKey studyInstanceUIDTagKey( DCM_StudyInstanceUID );
-    const char *SoPUID = NULL;
     
     m_dicomFile = new DcmFileFormat();
     
