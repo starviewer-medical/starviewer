@@ -381,8 +381,7 @@ void QueryScreen::search()
     
     if (m_tab->currentIndex()==1)
     {
-        //if (!validateNoEmptyMask())
-        if (1==2)
+        if (!validateNoEmptyMask())
         {
             switch( QMessageBox::information( this, tr("Starviewer"),
                                         tr("You have not specified any filter. This query could take a long time. Do you want to continue ?"),
@@ -397,7 +396,7 @@ void QueryScreen::search()
             }    
         }
         else 
-		{	//---> AQUEST ELSE HA D'ANAR FORA, quan es validi que la mascara no estigui buida!
+		{	
 			logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
 			INFO_LOG ( logMessage.toAscii().constData() ); 
 			queryStudyPacs(); 
@@ -1169,7 +1168,6 @@ QString QueryScreen::buildPatientName()
         else patientName.append("*");
     }
     
-	DEBUG_LOG( patientName.toAscii().constData() );
     return patientName;
 
 }
