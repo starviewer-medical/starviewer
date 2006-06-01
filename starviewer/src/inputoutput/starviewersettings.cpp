@@ -66,7 +66,7 @@ QString StarviewerSettings::getCacheImagePath()
 
 QString StarviewerSettings::getMaximumDaysNotViewedStudy()
 {
-    return m_starviewerSettings.value( MaximumDaysNotViewedStudy  ,  "15" ).toString();
+    return m_starviewerSettings.value( MaximumDaysNotViewedStudy  ,  "10" ).toString();
 }
 
 /************************ CONFIGURACIO PACS************************************************/

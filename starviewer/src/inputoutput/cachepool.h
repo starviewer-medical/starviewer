@@ -23,7 +23,7 @@ class CachePool
 {
 public:
     
-    static const unsigned int MinimumMBytesOfDiskSpaceRequired = 1000;///<Espai mínim lliure requerit al disc dur
+    static const unsigned int MinimumMBytesOfDiskSpaceRequired = 1500;///<Espai mínim lliure requerit al disc dur
     static const unsigned int MBytesToEraseWhenDiskOrCacheFull = 2000;///<Si la cache esta plena, s'allibera aquesta quanttiat de Mb en estudis vells
 
     /// Constructor de la classe
