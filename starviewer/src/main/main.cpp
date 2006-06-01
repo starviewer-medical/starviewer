@@ -11,6 +11,7 @@
 #include <QTranslator>
 #include <QSettings>
 #include <QLocale>
+#include <QDir>
 #include "logging.h"
   
 int main(int argc, char *argv[])
@@ -21,8 +22,14 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("ima.udg.es");
     app.setApplicationName("Starviewer");
      
-    QString logFile = qApp->applicationDirPath() + "/log4cxx.properties";
-    LOGGER_INIT( logFile.toStdString() )
+    QString configurationFile = qApp->applicationDirPath() + "/log4cxx.properties";
+    QDir logFile( QDir::homePath() + "/.starviewer/log" );
+
+    if (!logFile.exists())
+    {
+        logFile.mkpath( QDir::homePath() + "/.starviewer/log" );
+    }
+    LOGGER_INIT( configurationFile.toStdString() )
     // translation
 
     QSettings settings("GGG", "StarViewer-Core");
