@@ -1,5 +1,6 @@
 #include "imagemask.h"
 #include "status.h"
+#include <string>
 
 namespace udg{
 

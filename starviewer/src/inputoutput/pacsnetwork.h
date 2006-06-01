@@ -9,7 +9,7 @@
 
 #define HAVE_CONFIG_H 1
 #include <assoc.h>
-#include "status.h"
+
 
 /** Gestiona els diferents networks que necessitarem per conectar als diferents PACS, el network, só objectes que configuren la nostra xarxa, indiquem per quin port esperem rebre la informació, si serà d'entrada/sortida, etc.. Pel nostre cas tindrem dos tipus de network, un per a fer querys al pacs i un altre pels retrieves d'imatges
  *
@@ -18,9 +18,7 @@
 
 namespace udg {
 
-/**
-@author marc
-*/
+class Status;
 class PacsNetwork{
 public:
 

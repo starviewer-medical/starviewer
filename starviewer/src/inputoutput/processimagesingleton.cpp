@@ -4,6 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
+#include <string> 
+
 #include "processimagesingleton.h"
 #include "processimage.h"
 #include "image.h"

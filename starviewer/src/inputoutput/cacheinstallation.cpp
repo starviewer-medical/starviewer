@@ -7,7 +7,6 @@
 #include "cacheinstallation.h"
 #include "starviewersettings.h"
 #include <QDir>
-#include <QMessageBox>
 #include <QFile>
 #include "databaseconnection.h"
 #include "logging.h"

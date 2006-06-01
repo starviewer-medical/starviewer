@@ -6,6 +6,7 @@
  ***************************************************************************/ 
 #ifndef UDGDATABASECONNECTION_H
 #define UDGDATABASECONNECTION_H
+
 #include <sqlite.h>
 #include <semaphore.h>
 

@@ -26,7 +26,8 @@
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h> //provide the OFcondition structure and his members
-#include <string>
+
+class string;
 
 /** Aquesta classe permet construir una màscara per a cercar imatges 
  */

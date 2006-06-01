@@ -10,9 +10,6 @@
 #define HAVE_CONFIG_H 1
 #include <cond.h>
 #include <list>
-// #include "processimage.h"
-//#include "starviewerprocessimage.h"
-#include <string> 
 #include <semaphore.h>
 
 namespace udg {

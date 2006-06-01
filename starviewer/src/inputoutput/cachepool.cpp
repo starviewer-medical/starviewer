@@ -4,12 +4,11 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#include <QDir>
+#include <string>
+
 #include "cachepool.h"
 #include "status.h"
-#include <qdir.h>
-#include <QString>
-#include <iostream.h>
-#include <string>
 #include "logging.h"
 
 namespace udg {

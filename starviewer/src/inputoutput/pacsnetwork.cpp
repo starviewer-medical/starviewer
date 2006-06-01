@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "pacsnetwork.h"
+#include "status.h"
 
 namespace udg {
 

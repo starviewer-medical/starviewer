@@ -4,9 +4,11 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#include "pacslistdb.h"
 #include <string>
+
+#include "pacslistdb.h"
 #include "status.h"
+#include "pacsparameters.h"
 
 namespace udg {
 

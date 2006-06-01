@@ -8,26 +8,27 @@
 #define UDGCACHEPACS_H
 
 #include <sqlite.h>
-#include "study.h"
-#include "studymask.h"
-#include "seriesmask.h"
-#include "series.h"
-#include "imagemask.h"
-#include "image.h"
 #include "studylist.h"
 #include "serieslist.h"
 #include "imagelist.h"
 #include "databaseconnection.h"
 
-#include <string.h>
-
-class Status;
+class string;
 
 namespace udg {
 
 /** Classe que gestiona la caché de l'aplicació, i fa els inserts,queries i deletre
 @author marc
 */
+
+class Study;
+class Series;
+class Image;
+class StudyMask;
+class SeriesMask;
+class ImageMask;
+class Status;
+
 class CachePacs{
 
 private:

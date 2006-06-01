@@ -7,7 +7,7 @@
 #ifndef UDGIMAGEDICOMINFORMATION_H
 #define UDGIMAGEDICOMINFORMATION_H
 
-#include <string>
+
 #include <dcfilefo.h> //obre un fitxer dicom
 
 namespace udg {
@@ -17,6 +17,7 @@ namespace udg {
 */
 
 class Status;
+class string;
 
 class ImageDicomInformation{
 public:

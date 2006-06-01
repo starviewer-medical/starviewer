@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 #include "imagelist.h"
-#include <list>
+#include <string>
 
 namespace udg {
 /* AQUESTA CLASSE NOMES SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'HAN IMPLEMENTAT SEMAFORS

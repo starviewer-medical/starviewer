@@ -7,7 +7,6 @@
 
 #include <QLineEdit>
 #include <semaphore.h>
-#include <qmessagebox.h>
 
 #include "status.h"
 #include "multiplequerystudy.h"

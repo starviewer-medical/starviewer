@@ -7,11 +7,10 @@
 
 #define HAVE_CONFIG_H 1
 
+#include <string>
+#include <dcdeftag.h> //conte els Tags DICOM
 #include "imagedicominformation.h"
 #include "status.h"
-#include <string>
-#include <dcdeftag.h>
-
 
 namespace udg {
 

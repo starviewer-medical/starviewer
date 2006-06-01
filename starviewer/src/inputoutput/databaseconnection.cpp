@@ -12,6 +12,8 @@
 
 namespace udg {
 
+class string;
+
 DatabaseConnection::DatabaseConnection()
 {
    StarviewerSettings settings;

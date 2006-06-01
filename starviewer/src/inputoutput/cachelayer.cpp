@@ -4,15 +4,16 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+#include <QProgressDialog>
+#include <QDate>
+
 #include "cachelayer.h"
 #include "cachepacs.h"
 #include "status.h"
 #include "studymask.h"
-#include <iostream.h>
-#include <cachepool.h>
-#include <QProgressDialog>
+#include "cachepool.h"
 #include "starviewersettings.h"
-#include <QDate>
 #include "logging.h"
 
 namespace udg {

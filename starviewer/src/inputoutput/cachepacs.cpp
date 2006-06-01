@@ -4,18 +4,22 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#include "cachepacs.h"
-#include "series.h"
-#include "studylist.h"
-#include "serieslist.h"
-#include "status.h"
-#include "image.h"
-#include <time.h>
-#include "cachepool.h"
+
 #include <QString>
-#include "seriesmask.h"
+#include <time.h>
+#include <string>
+
+#include "status.h"
+#include "cachepacs.h"
+#include "cachepool.h"
+#include "study.h"
+#include "series.h"
+#include "image.h"
 #include "studymask.h"
+#include "seriesmask.h"
+#include "imagemask.h"
 #include "logging.h"
+
 
 namespace udg {
 

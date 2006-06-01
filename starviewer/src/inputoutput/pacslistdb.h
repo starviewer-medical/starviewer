@@ -8,29 +8,20 @@
 #define UDGPACSLISTDB_H
 
 #include <sqlite.h>
-#include "study.h"
-#include <string> 
-#include "studymask.h"
-#include "seriesmask.h"
-#include "series.h"
-#include "imagemask.h"
-#include "image.h"
-#include "studylist.h"
-#include "serieslist.h"
-#include "imagelist.h"
 #include "databaseconnection.h"
-#include "pacsparameters.h"
 #include "pacslist.h"
 
-#include <string>
-
-class Status;
+class string;
+class PacsParameters;
 
 namespace udg {
 
 /** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres dels PACS  que tenim disponible a l'aplicació, guardats a la base de dades local
 @author marc
 */
+
+class Status;
+
 class PacsListDB{
 
 public:

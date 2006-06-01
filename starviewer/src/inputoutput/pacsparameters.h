@@ -3,9 +3,7 @@
 
 #define HAVE_CONFIG_H 1
 #include <cond.h>
-#include "study.h"
 #include <list>
-#include <string.h>
 
 /** Aquesta classe ens permet configurar els paràmetres necessaris que l'usuari ens ha d'entrar per connectar-nos en el pacs. A més d'altres dades d'interés
  * Aquests paràmetres són :
@@ -20,6 +18,8 @@
  */
 namespace udg{
 
+class string;
+class Study;
 class PacsParameters
 {
 

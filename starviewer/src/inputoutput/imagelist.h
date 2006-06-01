@@ -9,9 +9,11 @@
 #define HAVE_CONFIG_H 1
 
 #include <cond.h>
-#include "image.h"
-#include <string>
 #include <list>
+
+#include "image.h"
+
+class string;
 
 /* AQUESTA CLASSE NOMES SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'HAN IMPLEMENTAT SEMAFORS
   */

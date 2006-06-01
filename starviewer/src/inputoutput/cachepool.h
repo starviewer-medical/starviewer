@@ -6,6 +6,7 @@
  ***************************************************************************/
 #ifndef UDGCACHEPOOL_H
 #define UDGCACHEPOOL_H
+
 #include <QString>
 #include "databaseconnection.h"
 
