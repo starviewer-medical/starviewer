@@ -18,7 +18,6 @@ HEADERS += input.h \
            pacsnetwork.h \
            pacsparameters.h \
            pacsserver.h \
-           procesimagesingleton.h \
            processimage.h \
            processimagesingleton.h \
            queryimagenumber.h \
@@ -67,7 +66,6 @@ SOURCES += input.cpp \
            pacsnetwork.cpp \
            pacsparameters.cpp \
            pacsserver.cpp \
-           procesimagesingleton.cpp \
            processimage.cpp \
            processimagesingleton.cpp \
            queryimagenumber.cpp \
