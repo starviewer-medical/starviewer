@@ -13,7 +13,7 @@
 
 namespace udg {
 
-StarviewerProcessImage::StarviewerProcessImage()
+StarviewerProcessImage::StarviewerProcessImage() : ProcessImage()
 {
         m_downloadedImages=0;
         m_localCache = CachePacs::getCachePacs();
