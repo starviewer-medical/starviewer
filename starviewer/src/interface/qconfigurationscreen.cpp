@@ -462,6 +462,8 @@ bool QConfigurationScreen::validatePacsParameters()
 bool QConfigurationScreen::validateChanges()
 {
     QDir dir;
+	unsigned int usedSpace;
+	CachePool pool;
 
     if ( m_textLocalPort->isModified() )
     {
@@ -506,6 +508,18 @@ bool QConfigurationScreen::validateChanges()
             }
         }
     }    
+
+	if ( m_textPoolSize->isModified() )
+	{
+		//hem de comprova que si canviem el tamany de la cache, si el reduim que no sigui mes petit que l'espia usat
+		pool.getPoolUsedSpace( usedSpace );
+
+		if ( m_textPoolSize->text().toUInt( NULL , 10 )* 1024 < usedSpace )
+		{
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Pool space can't be less than used space" ) );		
+			return false;
+		}
+	}
 
     return true;
 }
