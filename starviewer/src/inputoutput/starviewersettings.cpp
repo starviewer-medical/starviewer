@@ -42,8 +42,7 @@ QString StarviewerSettings::getDatabasePath()
     QString defaultDir;
     
     //construim directori per defecte
-    defaultDir = QApplication::applicationDirPath(); //directori actual
-    defaultDir.append( "/pacscache/database/dicom.sdb" );
+    defaultDir.append( "/var/cache/starviewer/pacs/database/dicom.sdb" );
     
     return m_starviewerSettings.value( databaseRootKey , defaultDir ).toString();
 }
@@ -58,8 +57,7 @@ QString StarviewerSettings::getCacheImagePath()
     QString defaultDir;
     
     //construim directori per defecte
-    defaultDir = QApplication::applicationDirPath(); //directori actual
-    defaultDir.append( "/pacscache/dicom/" );
+    defaultDir.append( "/var/cache/starviewer/pacs/dicom/" );
     
     return m_starviewerSettings.value( cacheImagePathKey , defaultDir ).toString();
 }
