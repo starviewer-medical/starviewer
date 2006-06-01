@@ -34,7 +34,7 @@ public:
     virtual bool getErrorRetrieving() = 0;
 
 	///Destructor de la classe
-    virtual ~ProcessImage() = 0;
+    virtual ~ProcessImage() {};
     
 };
 
