@@ -335,6 +335,10 @@
         <source>Custom...</source>
         <translation>A medida...</translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
 </context>
 <context>
     <name>QMPR3DExtensionBase</name>
@@ -481,6 +485,10 @@
         <source>Thick Slab</source>
         <translation>Grosor de corte</translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
 </context>
 <context>
     <name>QPacsListBase</name>
@@ -525,7 +533,7 @@
     </message>
     <message>
         <source>Loading, please wait...</source>
-        <translation type="unfinished">Cargando, espere por favor</translation>
+        <translation type="unfinished">Cargando, espere por favor...</translation>
     </message>
 </context>
 <context>
@@ -664,11 +672,31 @@ Acc:%4
     </message>
     <message>
         <source>Switch Double View</source>
-        <translation type="unfinished">Cambiar a Vista Doble</translation>
+        <translation type="obsolete">Cambiar a Vista Doble</translation>
     </message>
     <message>
         <source>Switch Single View</source>
-        <translation type="unfinished">Cambiar a Vista Simple</translation>
+        <translation type="obsolete">Cambiar a Vista Simple</translation>
+    </message>
+    <message>
+        <source>&amp;Single View</source>
+        <translation type="unfinished">Vista &amp;Simple</translation>
+    </message>
+    <message>
+        <source>Change To Single View Mode</source>
+        <translation type="unfinished">Canviar a vista simple</translation>
+    </message>
+    <message>
+        <source>&amp;Double View</source>
+        <translation type="unfinished">Vista &amp;Doble</translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change To Double View Mode</source>
+        <translation type="unfinished">Canviar a Vista Doble</translation>
     </message>
 </context>
 <context>
@@ -735,7 +763,7 @@ Acc:%4
     </message>
     <message>
         <source>Switch Double View</source>
-        <translation type="unfinished">Cambiar a Vista Doble</translation>
+        <translation type="obsolete">Cambiar a Vista Doble</translation>
     </message>
     <message>
         <source>Choose Serie To Compare</source>
@@ -1239,6 +1267,10 @@ Acc:%4
         <source>To solve this error restart the user session</source>
         <translation>Para resolver este error, reinicie la sesión de usuario</translation>
     </message>
+    <message>
+        <source>Pool space can&apos;t be less than used space</source>
+        <translation type="unfinished">El espacio de la pool no puede ser menor que el espacio utilitzado actualmente</translation>
+    </message>
 </context>
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
@@ -1264,6 +1296,17 @@ Acc:%4
     </message>
 </context>
 <context>
+    <name>udg::QMPR3D2DExtension</name>
+    <message>
+        <source>Switch horizontal layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change views layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::QMPRExtension</name>
     <message>
         <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
@@ -1281,11 +1324,8 @@ Acc:%4
         <source>Save file</source>
         <translation>Guardar archivo</translation>
     </message>
-</context>
-<context>
-    <name>udg::QNavigateWindowBase</name>
     <message>
-        <source>Form</source>
+        <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -368,6 +368,10 @@
         <source>Custom...</source>
         <translation>A mida...</translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMPR3DExtensionBase</name>
@@ -514,6 +518,10 @@
         <source>Thick Slab</source>
         <translation>Gruix de tall</translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QPacsListBase</name>
@@ -589,7 +597,7 @@
     </message>
     <message>
         <source>Loading, please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Carregant, si us plau espereu...</translation>
     </message>
 </context>
 <context>
@@ -699,11 +707,31 @@ Acc:%4
     </message>
     <message>
         <source>Switch Double View</source>
-        <translation>Canviar a Vista Doble</translation>
+        <translation type="obsolete">Canviar a Vista Doble</translation>
     </message>
     <message>
         <source>Switch Single View</source>
-        <translation>Canviar a Vista Simple</translation>
+        <translation type="obsolete">Canviar a Vista Simple</translation>
+    </message>
+    <message>
+        <source>&amp;Single View</source>
+        <translation>Vista &amp;Simple</translation>
+    </message>
+    <message>
+        <source>Change To Single View Mode</source>
+        <translation type="unfinished">Canviar a vista simple</translation>
+    </message>
+    <message>
+        <source>&amp;Double View</source>
+        <translation type="unfinished">Vista &amp;Doble</translation>
+    </message>
+    <message>
+        <source>Ctrl+D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change To Double View Mode</source>
+        <translation type="unfinished">Canviar a vista doble</translation>
     </message>
 </context>
 <context>
@@ -770,7 +798,7 @@ Acc:%4
     </message>
     <message>
         <source>Switch Double View</source>
-        <translation>Canviar a Vista Doble</translation>
+        <translation type="obsolete">Canviar a Vista Doble</translation>
     </message>
     <message>
         <source>Choose Serie To Compare</source>
@@ -1286,6 +1314,10 @@ Acc:%4
         <source>To solve this error restart the user session</source>
         <translation>Per resoldre aquest error, reinicieu la sessió d&apos;usuari</translation>
     </message>
+    <message>
+        <source>Pool space can&apos;t be less than used space</source>
+        <translation>L&apos;espai de la pool no pot ser menor a l&apos;espai utilitzat actualment</translation>
+    </message>
 </context>
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
@@ -1338,6 +1370,17 @@ Acc:%4
     </message>
 </context>
 <context>
+    <name>udg::QMPR3D2DExtension</name>
+    <message>
+        <source>Switch horizontal layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change views layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::QMPRExtension</name>
     <message>
         <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
@@ -1355,11 +1398,8 @@ Acc:%4
         <source>Save file</source>
         <translation>Desar fitxer</translation>
     </message>
-</context>
-<context>
-    <name>udg::QNavigateWindowBase</name>
     <message>
-        <source>Form</source>
+        <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
