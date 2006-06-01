@@ -150,7 +150,7 @@ Status CachePool::updatePoolTotalSize( int space )
     int i;
     Status state;
     std::string sql;
-    char *size;
+    char size[25];
     unsigned long long spaceBytes;
     
     //sqlite no permet en un update entra valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem
