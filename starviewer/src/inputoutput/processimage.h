@@ -25,16 +25,16 @@ public:
 	/** Processa la imatge
  	 * @param imatge a processar
  	 */
-    virtual void process(Image* image){};
+    virtual void process(Image* image) = 0;
 
 	///Indica que s'ha produit algun error descarregant alguna de les imatges de l'estudi
-    virtual void setErrorRetrieving(){};
+    virtual void setErrorRetrieving() = 0;
 
 	///Indica si s'ha produit algun error descarregant alguna de les imatges de l'estudi
-    virtual bool getErrorRetrieving(){};
+    virtual bool getErrorRetrieving() = 0;
 
 	///Destructor de la classe
-    virtual ~ProcessImage(){};
+    virtual ~ProcessImage() = 0;
     
 };
 
