@@ -13,7 +13,20 @@
 #include <QLocale>
 #include <QDir>
 #include "logging.h"
-  
+
+void configureLogging()
+{
+    // \TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric; està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
+    QString configurationFile = "/etc/starviewer/log.conf";
+    QDir logFile( QDir::homePath() + "/.starviewer/log" );
+
+    if (!logFile.exists())
+    {
+        logFile.mkpath( QDir::homePath() + "/.starviewer/log" );
+    }
+    LOGGER_INIT( configurationFile.toStdString() );
+}
+
 int main(int argc, char *argv[])
 { 
     QApplication app(argc, argv);
@@ -22,16 +35,8 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("ima.udg.es");
     app.setApplicationName("Starviewer");
      
-    QString configurationFile = qApp->applicationDirPath() + "/log4cxx.properties";
-    QDir logFile( QDir::homePath() + "/.starviewer/log" );
-
-    if (!logFile.exists())
-    {
-        logFile.mkpath( QDir::homePath() + "/.starviewer/log" );
-    }
-    LOGGER_INIT( configurationFile.toStdString() )
+    configureLogging();
     // translation
-
     QSettings settings("GGG", "StarViewer-Core");
     settings.beginGroup("StarViewer-Language");
     QString m_defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
