@@ -42,8 +42,7 @@ public:
        */
      bool isEmpty();
     
-    /** Desctructor de la classe
-      */
+    /// Desctructor de la classe
     ~QueueOperationList();
 
 private :
@@ -51,8 +50,7 @@ private :
     static QueueOperationList *pInstance;
     QList <Operation> m_queueOperationList;
     
-    /** Constructor de la classe
-      */
+    /// Constructor de la classe
     QueueOperationList(QObject *parent = 0);
 
 };

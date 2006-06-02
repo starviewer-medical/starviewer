@@ -41,16 +41,42 @@ public:
     ~QExecuteOperationThread();
 
 signals :
+    
+    /** signal que s'emet cap a QueryScreen quant s'ha descarregat la primera serie d'un estudi per a que pugui ser visualitzat
+     * @param studyUID UID de l'estudi a visualitzar
+     */
     void viewStudy( QString studyUID );
     
+    /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'està descarregant
+     * @param studyUID UID de l'estudi que s'està descarregant
+     */    
     void setStudyRetrieving( QString studyUID );
+
+    /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'ha descarregat
+     * @param studyUID UID de l'estudi descarregat
+     */    
     void setStudyRetrieved( QString studyUID );
+
+    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
+     * @param studyUID UID de l'estudi que ha produït l'error
+     */    
     void setErrorRetrieving( QString studyUID );
-    
+
+    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova imatge de l'estudi
+     * @param studyUID UID de l'estudi que s'esta descarregat
+     * @param número d'imatge descarrega
+     */        
     void imageRetrieved( QString studyUID , int );
+
+    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova sèroe de l'estudi
+     * @param studyUID UID de l'estudi que s'esta descarregat
+     */       
     void seriesRetrieved( QString );
     
+    ///Signal que s'emet cap a QueryScreen per indicar que no hi ha prou espai lliure per a descarregar nous estudis    
     void notEnoughFreeSpace();
+
+    ///Signal que s'emet quant s'ha produït un error alliberant espai de la cache
     void errorFreeingCacheSpace();
 
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs

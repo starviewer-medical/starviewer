@@ -27,23 +27,41 @@ Q_OBJECT
 
 public:
 
+    ///Constructor de la classe
     StarviewerProcessImage();
 
-    void process(Image* image);//virtual significa que els fills la podran reimplementar a la seva classe, i que es cridara la dels fills de process no la del pare, quant es declara virtual només s'ha de fer al .h
-    //void setQlistViewItem(QListViewItem *);
+    /** Processa la informacio de la imatge a descarregar, la guarda a la cache, si la imatge pertany a una nova sèrie també guarda la informació de la sèrie
+     * @param imatge a processar 
+     */
+    void process( Image* image );
     
-    void setErrorRetrieving();
+    /// Retorna si s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     bool getErrorRetrieving();
-    
-    void setListViewItem();
-        
+
+    ///Destructor de la classe    
     ~StarviewerProcessImage();
-    void studyRetrieved();
-    
+
 signals :
-    void imageRetrieved(QString studyUID,int);
-    void seriesRetrieved(QString studyUID);
+
+    /** signal que s'emet a QExcuteOperationThread per indica que s'ha descarregat una image
+      *@param uid de l'estudi
+      *@param número d'imatge
+      */
+    void imageRetrieved( QString studyUID , int );
+
+    /** signal que s'emet a QExcuteOperationThread per indica que s'ha descarregat una sèroe
+      *@param número d'imatge
+      */
+    void seriesRetrieved( QString studyUID );
+
+    /** signal que s'emet a QExcuteOperationThread per indica que s'ha inicia la descàrrega d'un estudi
+      *@param número d'imatge
+      */
     void startRetrieving( QString );
+
+    /** signal que s'emet a QExcuteOperationThread per indicar que hi ha una sèrie a punt per ser visualitzada
+      *@para UID de l'estudi
+      */
     void seriesView ( QString );
     
 private :
@@ -53,11 +71,18 @@ private :
     QString m_oldSeriesUID,m_studyUID;
     bool m_error;
     
+    /** Crea el path de la imatge d'on obtenir la informació de les series
+     * @param imatge de la que s'ha d'obtenir el path
+     */
     QString createImagePath( Image* image );
     
-    Status getSeriesInformation( QString imagePath,Series &serie );
-    
-//
+    /** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
+     * @param path de la imatge d'on obtenir la informació de la sèrie
+     */
+    Status getSeriesInformation( QString imagePath , Series &serie );
+
+    /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
+    void setErrorRetrieving();
 };
 
 };

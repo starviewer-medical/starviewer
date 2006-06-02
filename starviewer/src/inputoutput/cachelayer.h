@@ -18,7 +18,6 @@ namespace udg {
 class CacheLayer : public QObject
 {
 
-
 Q_OBJECT
 public:
     

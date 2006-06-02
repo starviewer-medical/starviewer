@@ -19,11 +19,19 @@ class SeriesListSingleton: public SeriesList{
 public :
 
      //this make this class a singleton class, return a static pointer to this class
+    /** Retorna una instancia de l'objecte
+     * @return instancia de l'objecte
+     */
      static SeriesListSingleton* getSeriesListSingleton();
-      ~SeriesListSingleton();
+    
+    ///Desctructor de la classe 
+    ~SeriesListSingleton();
      
 private:
+
+    ///Constructor de la classe
     SeriesListSingleton();
+
     static SeriesListSingleton *pInstance;
 };
 

@@ -18,13 +18,19 @@ namespace udg {
 class StudyListSingleton: public StudyList{
     
 public:
-     //this make this class a singleton class, return a static pointer to this class
+    
+    /** Retorna una instancia de l'objecte
+     * @return instancia de l'objecte
+     */
     static StudyListSingleton* getStudyListSingleton();
+    
+    ///Destructor de la classe
     ~StudyListSingleton();
     
 private :
     static StudyListSingleton *pInstance;
     
+    ///Constructor de la classe
     StudyListSingleton();
 
 

@@ -15,9 +15,6 @@ SeriesListSingleton::SeriesListSingleton()
 
 SeriesListSingleton* SeriesListSingleton::pInstance = 0;
 
-/** Retorna una instancia de l'objecte
-  *        @return instancia de l'objecte
-  */
 SeriesListSingleton * SeriesListSingleton::getSeriesListSingleton()
 {
     if (pInstance == 0)

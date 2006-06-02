@@ -14,9 +14,6 @@ StudyListSingleton::StudyListSingleton()
 
 StudyListSingleton* StudyListSingleton::pInstance = 0;
 
-/** Retorna una instancia de l'objecte
-  *        @return instancia de l'objecte
-  */
 StudyListSingleton * StudyListSingleton::getStudyListSingleton()
 {
     if (pInstance == 0)
