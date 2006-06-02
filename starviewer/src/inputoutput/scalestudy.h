@@ -7,7 +7,7 @@
 #ifndef UDGSCALESTUDY_H
 #define UDGSCALESTUDY_H
 
-#include <string>
+class string;
 
 namespace udg {
 

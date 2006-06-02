@@ -9,12 +9,12 @@
 
 #include "ui_qpacslistbase.h"
 #include <QWidget>
+#include "status.h"
 using namespace Ui;
 
 namespace udg {
 
 class PacsList;
-class Status;
 
 /** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
 @author marc

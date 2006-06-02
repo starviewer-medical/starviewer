@@ -7,8 +7,9 @@
 #ifndef UDGSTARVIEWERSETTINGS_H
 #define UDGSTARVIEWERSETTINGS_H
 
-#include <qsettings.h>
+#include <QSettings>
 #include <QString>
+
 namespace udg {
 
 /** Aquesta classe permet accedir i guardar els parametres de configuracio de l'starviewer

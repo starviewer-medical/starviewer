@@ -8,8 +8,9 @@
 #define UDGSTUDYVOLUM_H
 
 #include <vector>
-#include <string> 
 #include "seriesvolum.h"
+
+class string;
 
 namespace udg {
 

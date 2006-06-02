@@ -3,6 +3,7 @@
 #include "serieslist.h"
 #include "pacsconnection.h"
 #include <string.h>
+#include "series.h"
 
 namespace udg{
 

@@ -23,7 +23,6 @@
 
 #include <assoc.h>
 #include <ofcond.h>
-#include "series.h"
 #include "serieslistsingleton.h"
 #include "pacsserver.h"
 #include "seriesmask.h"
@@ -35,6 +34,8 @@ class PacsConnection;
 namespace udg{
 class QuerySeries 
 {
+
+class Series;
 
 public:
  

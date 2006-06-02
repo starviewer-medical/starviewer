@@ -4,8 +4,7 @@
 #define HAVE_CONFIG_H 1
 
 #include "series.h"
-#include <string>
-#include <iostream>
+class string;
 
 /* ATENCIO AQUESTA CLASSE NO SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'IMPLEMENTEN SEMAFORS
  */

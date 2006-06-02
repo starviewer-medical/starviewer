@@ -4,6 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#include <string>
+
 #include "scalestudy.h"
 #include "serieslist.h"
 #include "seriesmask.h"
@@ -14,6 +16,8 @@
 #include "imagelist.h"
 #include "starviewersettings.h"
 #include "scaleimage.h"
+
+
 
 namespace udg {
 

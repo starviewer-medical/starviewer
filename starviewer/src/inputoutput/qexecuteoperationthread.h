@@ -8,8 +8,6 @@
 #define UDGQEXECUTEOPERATIONTHREAD_H
 
 #include <QThread>
-#include "status.h"
-
 
 namespace udg {
 
@@ -18,6 +16,7 @@ namespace udg {
 */
 
 class Operation;
+class Status;
 
 class QExecuteOperationThread :public QThread
 {

@@ -25,21 +25,18 @@
 
 #include "diutil.h"
 #include "dcfilefo.h"
-#include "dcuid.h"
 #include "dcdict.h"
-#include "cmdlnarg.h"
 #include "ofconapp.h"
 #include "dcuid.h"    /* for dcmtk version name */
-#include "dcxfer.h"
 #include "studymask.h"
 
 #include "pacsconnection.h"
 #include "imagelistsingleton.h"
-#include "status.h"
 
 /** This class helps to interactive with the pacs, retrieve images that match with the mask
  */
- class string;
+class string;
+class status;
 namespace udg{
 
 class RetrieveImages

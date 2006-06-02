@@ -24,22 +24,18 @@
 
 
 #include <assoc.h>
-// #include <dimse.h>
-// #include <dul.h>
-// #include <diutil.h>
-// #include <dcdict.h>
-// #include <dcuid.h>
+
 #include <ofcond.h>
-// #include <cond.h>
 #include "pacsserver.h"
-#include "status.h"
-#include "imagemask.h"
-class PacsConnection;
 
 /// Classe que per una màscara d'una sèrie compte les imatges que conté aquesta sèrie. Aquesta classe no és reentrant
 // Aquesta classe no es pot fer amb més d'un thread a la vegada degut a la variable global imageNumberGlobal 
 
 namespace udg{
+
+class PacsConnection;
+class ImageMask;
+class Status;
 
 class QueryImageNumber
 {

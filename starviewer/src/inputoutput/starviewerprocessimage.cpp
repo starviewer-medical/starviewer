@@ -4,12 +4,15 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#include "starviewerprocessimage.h"
+
 #include <string.h>
+
+#include "starviewerprocessimage.h"
 #include "imagedicominformation.h"
 #include "series.h"
 #include "starviewersettings.h"
 #include "status.h"
+#include "image.h"
 
 namespace udg {
 

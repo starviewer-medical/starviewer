@@ -4,10 +4,11 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#include "starviewersettings.h"
-#include <stream.h>
+
 #include <QDir>
 #include <QApplication>
+
+#include "starviewersettings.h"
 
 namespace udg {
 

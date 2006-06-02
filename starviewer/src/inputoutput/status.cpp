@@ -4,6 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#include <string>
  
 #include "status.h"
 

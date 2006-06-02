@@ -4,6 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
+#include <string>
+
 #include "studyvolum.h"
 
 namespace udg {

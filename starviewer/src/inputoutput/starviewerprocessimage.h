@@ -9,10 +9,10 @@
 
 #include <qobject.h>
 #include <qwidget.h>
+#include <QString>
+
 #include "processimage.h"
 #include "cachepacs.h"
-#include "image.h"
-#include <QString>
 
 namespace udg {
 

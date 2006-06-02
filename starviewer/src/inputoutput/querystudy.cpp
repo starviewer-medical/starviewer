@@ -2,6 +2,9 @@
 #include <dcdeftag.h> //provide the information for the tags
 #include "studylist.h"
 #include "pacsconnection.h"
+#include "study.h"
+#include "status.h"
+
 #ifndef CONST
 #include "const.h"    
 #endif

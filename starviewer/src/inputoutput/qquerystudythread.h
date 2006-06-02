@@ -13,8 +13,6 @@
 
 namespace udg {
 
-class StudyMask;
-class PacsParameters;
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou thread
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */

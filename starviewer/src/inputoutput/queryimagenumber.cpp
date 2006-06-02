@@ -2,6 +2,8 @@
 #include <dcdeftag.h> //provide the information for the tags
 #include "serieslist.h"
 #include "pacsconnection.h"
+#include "imagemask.h"
+#include "status.h"
 
 namespace udg{
 

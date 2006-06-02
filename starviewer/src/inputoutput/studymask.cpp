@@ -1,3 +1,5 @@
+#include <string>
+
 #include "studymask.h"
 #include "status.h"
 

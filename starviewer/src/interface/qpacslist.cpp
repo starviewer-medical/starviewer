@@ -13,7 +13,6 @@
 #include "pacslistdb.h"
 #include "pacslist.h"
 #include "pacsparameters.h"
-#include "status.h"
 #include "starviewersettings.h"
 
 namespace udg {

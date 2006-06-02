@@ -8,7 +8,8 @@
 #define UDGSERIESVOLUM_H
 
 #include <vector> 
-#include <string>
+
+class string;
 
 namespace udg {
 

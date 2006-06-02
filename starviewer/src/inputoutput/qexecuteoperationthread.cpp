@@ -4,6 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+#include <QSemaphore>
 #include "qexecuteoperationthread.h"
 #include "studymask.h"
 #include "pacsserver.h"
@@ -15,12 +17,12 @@
 #include "cachepacs.h"
 #include "harddiskinformation.h"
 #include "scalestudy.h"
-#include <QSemaphore>
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "const.h"
 #include "cachelayer.h"
 #include "logging.h"
+#include "status.h"
 
 namespace udg {
 

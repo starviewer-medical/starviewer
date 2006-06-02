@@ -1,8 +1,6 @@
-#include "studylist.h"
 #include <list>
-#include <unistd.h>
-#include <stdio.h>
-#include <iostream>
+
+#include "studylist.h"
 
 namespace udg
 {
