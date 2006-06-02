@@ -24,7 +24,11 @@
 #define LOGGER_INIT( file ) \
 { \
     log4cxx::PropertyConfigurator::configure( file ); \
-    INFO_LOG("Inicialització de l'aplicació") \
+    INFO_LOG("__________________________________") \
+    INFO_LOG("::::::::::::::::::::::::::::::::::") \
+    INFO_LOG("* Inicialització de l'aplicació *") \
+    INFO_LOG("::::::::::::::::::::::::::::::::::") \
+    INFO_LOG("") \
 }
 
 /// Macro per a missatges de debug
