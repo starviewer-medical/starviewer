@@ -64,7 +64,6 @@ SOURCES += director.cpp \
            qretrievescreen.cpp \
            queryscreen.cpp \
            queryscreenerror.cpp \
-           queryscreenmove.cpp \
            q3dmprviewer.cpp \
            qmprextension.cpp \
            qmprextensioncreator.cpp \
