@@ -953,8 +953,8 @@ void Q2DViewer::getWindowLevel( double wl[2] )
 {
     if( m_viewer && m_mainVolume )
     {
-        wl[0] = m_viewer->GetColorWindow();
-        wl[1] = m_viewer->GetColorLevel();
+        wl[0] = m_defaultWindow;
+        wl[1] = m_defaultLevel;
     }
 }
 
