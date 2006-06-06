@@ -27,6 +27,7 @@ public:
 public slots:
     /// dóna el window level que mostrarà per defecte quan s'obri
     void setDefaultWindowLevel( double window , double level );
+    
 private:
     /// Crea les connexions 
     void createConnections();
