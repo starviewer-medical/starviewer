@@ -46,7 +46,8 @@ HEADERS += director.h \
            qserieslistwidget.h \
            q2dviewerextension.h \
            q2dviewerextensioncreator.h \
-           qcustomwindowleveldialog.h 
+           qcustomwindowleveldialog.h \
+           qwindowlevelcombobox.h 
 SOURCES += director.cpp \
            parameters.cpp \
            qapplicationmainwindow.cpp \
@@ -77,7 +78,8 @@ SOURCES += director.cpp \
            qserieslistwidget.cpp \
            q2dviewerextension.cpp \
            q2dviewerextensioncreator.cpp \
-           qcustomwindowleveldialog.cpp 
+           qcustomwindowleveldialog.cpp \
+           qwindowlevelcombobox.cpp 
 TARGETDEPS += ../repositories/librepositories.a \
 ../tools/libtools.a \
 ../../src/inputoutput/libinputoutput.a
