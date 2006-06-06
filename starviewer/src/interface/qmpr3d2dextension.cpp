@@ -8,8 +8,8 @@
 #include "q3dmprviewer.h"
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
-#include "qcustomwindowleveldialog.h"
 #include "logging.h"
+#include "qwindowlevelcombobox.h"
 #include <iostream>
 
 // qt
@@ -31,7 +31,6 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
-    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
 
     createActions();
     createConnections();
@@ -68,6 +67,9 @@ void QMPR3D2DExtension::setInput( Volume *input )
         axialCam->SetPosition(0,0,-1);
         m_axial2DView->getRenderer()->ResetCamera();
     }
+    double wl[2];
+    m_axial2DView->getWindowLevel( wl );
+    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     
     m_sagital2DView->setInput( m_mpr3DView->getSagitalResliceOutput() );
     m_sagital2DView->render();
@@ -285,12 +287,10 @@ void QMPR3D2DExtension::createConnections()
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( update2DViews() ) );
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( updateActors() ) );
 
-    connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
-
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_mpr3DView , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_axial2DView , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_sagital2DView , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_coronal2DView , SLOT( setWindowLevel(double,double) ) );
 
     // sincronitzar window level
     connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
@@ -306,127 +306,6 @@ void QMPR3D2DExtension::createConnections()
     // layouts
     connect( m_leftRightLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchBigView() ) );
     connect( m_viewsLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchViews() ) );
-}
-
-void QMPR3D2DExtension::changeDefaultWindowLevel( int which )
-{
-    switch( which )
-    {
-    case 0:
-        m_mpr3DView->resetWindowLevelToDefault();
-        m_axial2DView->resetWindowLevelToDefault();
-        m_sagital2DView->resetWindowLevelToDefault();
-        m_coronal2DView->resetWindowLevelToDefault();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a DEFAULT");
-    break;
-
-    case 1:
-        m_mpr3DView->resetWindowLevelToBone();
-        m_axial2DView->resetWindowLevelToBone();
-        m_sagital2DView->resetWindowLevelToBone();
-        m_coronal2DView->resetWindowLevelToBone();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a Bone");
-    break;
-
-    case 2:
-        m_mpr3DView->resetWindowLevelToLung();
-        m_axial2DView->resetWindowLevelToLung();
-        m_sagital2DView->resetWindowLevelToLung();
-        m_coronal2DView->resetWindowLevelToLung();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a Lung");
-    break;
-
-    case 3:
-        m_mpr3DView->resetWindowLevelToSoftTissuesNonContrast();
-        m_axial2DView->resetWindowLevelToSoftTissuesNonContrast();
-        m_sagital2DView->resetWindowLevelToSoftTissuesNonContrast();
-        m_coronal2DView->resetWindowLevelToSoftTissuesNonContrast();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a SoftTissuesNC");
-    break;
-
-    case 4:
-        m_mpr3DView->resetWindowLevelToLiverNonContrast();
-        m_axial2DView->resetWindowLevelToLiverNonContrast();
-        m_sagital2DView->resetWindowLevelToLiverNonContrast();
-        m_coronal2DView->resetWindowLevelToLiverNonContrast();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a LiverNC");
-    break;
-
-    case 5:
-        m_mpr3DView->resetWindowLevelToSoftTissuesContrastMedium();
-        m_axial2DView->resetWindowLevelToSoftTissuesContrastMedium();
-        m_sagital2DView->resetWindowLevelToSoftTissuesContrastMedium();
-        m_coronal2DView->resetWindowLevelToSoftTissuesContrastMedium();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a SoftTissuesCM");
-    break;
-
-    case 6:
-        m_mpr3DView->resetWindowLevelToLiverContrastMedium();
-        m_axial2DView->resetWindowLevelToLiverContrastMedium();
-        m_sagital2DView->resetWindowLevelToLiverContrastMedium();
-        m_coronal2DView->resetWindowLevelToLiverContrastMedium();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a LiverCM");
-    break;
-
-    case 7:
-        m_mpr3DView->resetWindowLevelToNeckContrastMedium();
-        m_axial2DView->resetWindowLevelToNeckContrastMedium();
-        m_sagital2DView->resetWindowLevelToNeckContrastMedium();
-        m_coronal2DView->resetWindowLevelToNeckContrastMedium();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a NeckCM");
-    break;
-
-    case 8:
-        m_mpr3DView->resetWindowLevelToAngiography();
-        m_axial2DView->resetWindowLevelToAngiography();
-        m_sagital2DView->resetWindowLevelToAngiography();
-        m_coronal2DView->resetWindowLevelToAngiography();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a Angiography");
-    break;
-
-    case 9:
-        m_mpr3DView->resetWindowLevelToOsteoporosis();
-        m_axial2DView->resetWindowLevelToOsteoporosis();
-        m_sagital2DView->resetWindowLevelToOsteoporosis();
-        m_coronal2DView->resetWindowLevelToOsteoporosis();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a Osteoporosis");
-    break;
-
-    case 10:
-        m_mpr3DView->resetWindowLevelToEmphysema();
-        m_axial2DView->resetWindowLevelToEmphysema();
-        m_sagital2DView->resetWindowLevelToEmphysema();
-        m_coronal2DView->resetWindowLevelToEmphysema();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a Emphysema");
-    break;
-
-    case 11:
-        m_mpr3DView->resetWindowLevelToPetrousBone();
-        m_axial2DView->resetWindowLevelToPetrousBone();
-        m_sagital2DView->resetWindowLevelToPetrousBone();
-        m_coronal2DView->resetWindowLevelToPetrousBone();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a Petrous Bone");
-    break;
-    
-    case 12:
-        // custom
-        double wl[2];
-        // \TODO ara no estan sincronitzats però agafem com a referència la vista coronal
-        m_coronal2DView->getWindowLevel( wl );
-        m_customWindowLevelDialog->setDefaultWindowLevel( wl[0] , wl[1] );
-        m_customWindowLevelDialog->exec();
-        INFO_LOG("QMPR3DExtension:: Canviem window level a custom");
-    break;
-
-    default:
-        m_mpr3DView->resetWindowLevelToDefault();
-        m_axial2DView->resetWindowLevelToDefault();
-        m_sagital2DView->resetWindowLevelToDefault();
-        m_coronal2DView->resetWindowLevelToDefault();
-        INFO_LOG("QMPR3D2DExtension:: Canviem el window level a DEFAULT");
-    break;
-    
-    }
 }
 
 void QMPR3D2DExtension::readSettings()

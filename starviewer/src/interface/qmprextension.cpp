@@ -72,8 +72,6 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_transform = vtkTransform::New();
     
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
-    
-    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
 
     createActions();
     createConnections();
@@ -129,8 +127,6 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
-    connect( m_windowLevelAdjustmentComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
-
     connect( m_mipPushButton , SIGNAL( clicked() ) , this , SLOT( showMIP() ) );
 
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
@@ -138,14 +134,13 @@ void QMPRExtension::createConnections()
     connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
 
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
-
     connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
 
-    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
-    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
-    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
-
+    // window level
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_axial2DView , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_sagital2DView , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_coronal2DView , SLOT( setWindowLevel(double,double) ) );
+    
     // layouts
     connect( m_horizontalLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchHorizontalLayout() ) );
 }
@@ -455,7 +450,10 @@ void QMPRExtension::setInput( Volume *input )
     
     // faltaria refrescar l'input dels 3 mpr     
     m_axial2DView->setInput( m_volume );
-              
+    double wl[2];
+    m_axial2DView->getWindowLevel( wl );
+    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
+    
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem. 
     m_axial2DView->setViewToAxial();
     // refrescar el controls
@@ -1168,85 +1166,6 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
     plane->SetOrigin( newPoint );
     
     plane->Update();
-}
-
-void QMPRExtension::changeDefaultWindowLevel( int which )
-{
-    // amb una crida n'hi ha prou ja que els WW/WL estan sincronitzats
-    switch( which )
-    {
-    case 0:
-        m_axial2DView->resetWindowLevelToDefault();
-        INFO_LOG( "QMPRExtension:: canviem window level a DEFAULT" );
-    break;
-
-    case 1:
-        m_axial2DView->resetWindowLevelToBone();
-        INFO_LOG( "QMPRExtension:: canviem window level a Bone" );
-    break;
-
-    case 2:
-        m_axial2DView->resetWindowLevelToLung();
-        INFO_LOG( "QMPRExtension:: canviem window level a Lung" );
-    break;
-
-    case 3:
-        m_axial2DView->resetWindowLevelToSoftTissuesNonContrast();
-        INFO_LOG( "QMPRExtension:: canviem window level a SoftTissuesNC" );
-    break;
-
-    case 4:
-        m_axial2DView->resetWindowLevelToLiverNonContrast();
-        INFO_LOG( "QMPRExtension:: canviem window level a LiverNC" );
-    break;
-
-    case 5:
-        m_axial2DView->resetWindowLevelToSoftTissuesContrastMedium();
-        INFO_LOG( "QMPRExtension:: canviem window level a SoftTissuesCM" );
-    break;
-
-    case 6:
-        m_axial2DView->resetWindowLevelToLiverContrastMedium();
-        INFO_LOG( "QMPRExtension:: canviem window level a LiverCM" );
-    break;
-
-    case 7:
-        m_axial2DView->resetWindowLevelToNeckContrastMedium();
-        INFO_LOG( "QMPRExtension:: canviem window level a NeckCM" );
-    break;
-
-    case 8:
-        m_axial2DView->resetWindowLevelToAngiography();
-        INFO_LOG( "QMPRExtension:: canviem window level a Angiography" );
-    break;
-
-    case 9:
-        m_axial2DView->resetWindowLevelToOsteoporosis();
-        INFO_LOG( "QMPRExtension:: canviem window level a Osteoporosis" );
-    break;
-
-    case 10:
-        m_axial2DView->resetWindowLevelToEmphysema();
-        INFO_LOG( "QMPRExtension:: canviem window level a Emphysema" );
-    break;
-    
-    case 11:
-        m_axial2DView->resetWindowLevelToPetrousBone();
-        INFO_LOG( "QMPRExtension:: canviem window level a PetrousBone" );
-    break;
-
-    case 12:
-        // custom
-        m_customWindowLevelDialog->exec();
-        INFO_LOG( "QMPRExtension:: canviem window level a custom" );
-    break;
-
-    default:
-        m_axial2DView->resetWindowLevelToDefault();
-        INFO_LOG( "QMPRExtension:: canviem window level a DEFAULT" );
-    break;
-    
-    }
 }
 
 void QMPRExtension::updateThickSlab( double value )

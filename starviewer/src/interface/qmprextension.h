@@ -23,7 +23,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class QCustomWindowLevelDialog;
 /**
 Extensió encarregada de fer l'MPR 2D
     
@@ -147,9 +146,6 @@ private:
     vtkPlaneSource *m_pickedActorPlaneSource;
     vtkImageReslice *m_pickedActorReslice;
 
-    /// El diàleg per escollir un window level ajustat per l'usuari
-    QCustomWindowLevelDialog *m_customWindowLevelDialog;
-
     /// Gruix del thickSlab que servirà per al MIP
     double m_thickSlab;
 
@@ -179,9 +175,6 @@ private slots:
     
     /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
-
-    /// Canvia els ajustaments del window level per uns de predetrminats. 
-    void changeDefaultWindowLevel( int which );
 
     /// [TMP] Fa "saltar" una finestra MIP
     void showMIP();

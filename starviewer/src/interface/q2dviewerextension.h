@@ -17,7 +17,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class QCustomWindowLevelDialog;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -49,9 +48,6 @@ public slots:
     /// Canvia el layout de visor singular/doble
     void changeViewToSingle();
     void changeViewToDouble();
-    
-    /// Permuta l'ajustament de window level
-    void changeDefaultWindowLevel( int which );
 
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );

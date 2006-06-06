@@ -166,72 +166,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="m_windowLevelAdjustmentComboBox" >
-         <item>
-          <property name="text" >
-           <string>Default</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Bone</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Lung</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Soft Tissues , noncontrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Liver , noncontrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Soft Tissues , medium contrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>CT Liver , medium contrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Neck , medium contrast</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Angiography</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Osteoporosis</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Emphysema</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Petrous Bone</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Custom...</string>
-          </property>
-         </item>
+        <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox" >
         </widget>
        </item>
       </layout>
@@ -312,6 +247,13 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
+   <class>udg::Q3DMPRViewer</class>
+   <extends>QFrame</extends>
+   <header>q3dmprviewer.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
@@ -319,9 +261,9 @@
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>udg::Q3DMPRViewer</class>
-   <extends>QFrame</extends>
-   <header>q3dmprviewer.h</header>
+   <class>udg::QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

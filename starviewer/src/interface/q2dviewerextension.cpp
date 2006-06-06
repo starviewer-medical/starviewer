@@ -8,7 +8,7 @@
 
 #include "volume.h"
 #include "logging.h"
-#include "qcustomwindowleveldialog.h"
+#include "qwindowlevelcombobox.h"
 #include <QAction>
 #include <QToolBar>
 // VTK
@@ -22,8 +22,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     setupUi( this );
     m_mainVolume = 0;
     m_secondaryVolume = 0;
-    
-    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
     
     createActions();
     createToolBars();
@@ -86,8 +84,6 @@ void Q2DViewerExtension::createConnections()
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
     connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
-
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel( double,double) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
     
     // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
     connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
@@ -111,8 +107,6 @@ void Q2DViewerExtension::createConnections()
 
     connect( m_singleViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSingle() ) );
     connect( m_doubleViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToDouble() ) );
-    
-    connect( m_windowLevelComboBox , SIGNAL( activated(int) ) , this , SLOT( changeDefaultWindowLevel( int ) ) );
 
     connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
 
@@ -120,10 +114,14 @@ void Q2DViewerExtension::createConnections()
 
     connect( m_chooseSeriePushButton , SIGNAL( clicked() ) , this , SLOT( chooseNewSerie() ) );
 
-    // custom window level dialog
-    connect( m_2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
-    connect( m_2DView2_1 , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
-    connect( m_2DView2_2 , SIGNAL( windowLevelChanged( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
+    // window level combo box
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView2_1 , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView2_2 , SLOT( setWindowLevel(double,double) ) );
+
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView2_1 , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView2_2 , SLOT( resetWindowLevelToDefault() ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -133,6 +131,9 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
+    double wl[2];
+    m_2DView->getWindowLevel( wl );
+    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
     
@@ -289,111 +290,6 @@ void Q2DViewerExtension::changeViewToCoronal()
         INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.2)")
         m_2DView2_2->render();
     break;
-    }
-}
-
-void Q2DViewerExtension::changeDefaultWindowLevel( int which )
-{
-    // \TODO ara anem a saco però 'shauria de fer una manera perquè només es cridessin els que cal
-    switch( which )
-    {
-    case 0:
-        m_2DView->resetWindowLevelToDefault();
-        m_2DView2_1->resetWindowLevelToDefault();
-        m_2DView2_2->resetWindowLevelToDefault();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Defecte");
-    break;
-
-    case 1:
-        m_2DView->resetWindowLevelToBone();
-        m_2DView2_1->resetWindowLevelToBone();
-        m_2DView2_2->resetWindowLevelToBone();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Bone");
-    break;
-
-    case 2:
-        m_2DView->resetWindowLevelToLung();
-        m_2DView2_1->resetWindowLevelToLung();
-        m_2DView2_2->resetWindowLevelToLung();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Lung");
-    break;
-
-    case 3:
-        m_2DView->resetWindowLevelToSoftTissuesNonContrast();
-        m_2DView2_1->resetWindowLevelToSoftTissuesNonContrast();
-        m_2DView2_2->resetWindowLevelToSoftTissuesNonContrast();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> SoftTissuesNC");
-    break;
-
-    case 4:
-        m_2DView->resetWindowLevelToLiverNonContrast();
-        m_2DView2_1->resetWindowLevelToLiverNonContrast();
-        m_2DView2_2->resetWindowLevelToLiverNonContrast();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> LiverNC");
-    break;
-
-    case 5:
-        m_2DView->resetWindowLevelToSoftTissuesContrastMedium();
-        m_2DView2_1->resetWindowLevelToSoftTissuesContrastMedium();
-        m_2DView2_2->resetWindowLevelToSoftTissuesContrastMedium();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> SoftTissuesCM");
-    break;
-
-    case 6:
-        m_2DView->resetWindowLevelToLiverContrastMedium();
-        m_2DView2_1->resetWindowLevelToLiverContrastMedium();
-        m_2DView2_2->resetWindowLevelToLiverContrastMedium();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> LiverCM");
-    break;
-
-    case 7:
-        m_2DView->resetWindowLevelToNeckContrastMedium();
-        m_2DView2_1->resetWindowLevelToNeckContrastMedium();
-        m_2DView2_2->resetWindowLevelToNeckContrastMedium();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> NeckCM");
-    break;
-
-    case 8:
-        m_2DView->resetWindowLevelToAngiography();
-        m_2DView2_1->resetWindowLevelToAngiography();
-        m_2DView2_2->resetWindowLevelToAngiography();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Angiography");
-    break;
-
-    case 9:
-        m_2DView->resetWindowLevelToOsteoporosis();
-        m_2DView2_1->resetWindowLevelToOsteoporosis();
-        m_2DView2_2->resetWindowLevelToOsteoporosis();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Osteoporosis");
-    break;
-
-    case 10:
-        m_2DView->resetWindowLevelToEmphysema();
-        m_2DView2_1->resetWindowLevelToEmphysema();
-        m_2DView2_2->resetWindowLevelToEmphysema();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Emfisema");
-    break;
-    
-    case 11:
-        m_2DView->resetWindowLevelToPetrousBone();
-        m_2DView2_1->resetWindowLevelToPetrousBone();
-        m_2DView2_2->resetWindowLevelToPetrousBone();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Petrous Bone");
-    break;
-
-    case 12:
-        // custom
-        m_customWindowLevelDialog->exec();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Custom");
-    break;
-
-    default:
-        m_2DView->resetWindowLevelToDefault();
-        m_2DView2_1->resetWindowLevelToDefault();
-        m_2DView2_2->resetWindowLevelToDefault();
-        INFO_LOG("Visor per defecte: Canviem Window Level >> Defecte");
-    break;
-    
     }
 }
 

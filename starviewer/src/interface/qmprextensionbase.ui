@@ -62,72 +62,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="m_windowLevelAdjustmentComboBox" >
-       <item>
-        <property name="text" >
-         <string>Default</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Bone</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Lung</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Soft Tissues, noncontrast</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Liver, noncontrast</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Soft Tissues , Contrast Medium</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Liver , Contrast Medium</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Neck , Constrast Medium</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Angiography</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Osteoporosis</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Emphysema</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Petrous Bone</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Custom...</string>
-        </property>
-       </item>
+      <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox" >
       </widget>
      </item>
     </layout>
@@ -242,6 +177,13 @@
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>udg::QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

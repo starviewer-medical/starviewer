@@ -35,108 +35,92 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="m_windowLevelComboBox" >
-       <item>
-        <property name="text" >
-         <string>Default</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Bone</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Lung</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Soft Tissues, noncontrast</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Liver, noncontrast</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Soft Tissues , Contrast Medium</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Liver , Contrast Medium</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Neck , Constrast Medium</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>CT Angiography</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Osteoporosis</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Emphysema</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Petrous Bone</string>
-        </property>
-       </item>
-       <item>
-        <property name="text" >
-         <string>Custom...</string>
-        </property>
-       </item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox" >
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="m_axialViewToolButton" >
-       <property name="text" >
-        <string>...</string>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="m_sagitalViewToolButton" >
-       <property name="text" >
-        <string>...</string>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
        </property>
-      </widget>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="m_axialViewToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_sagitalViewToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_coronalViewToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_singleViewToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_doubleViewToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
-      <widget class="QToolButton" name="m_coronalViewToolButton" >
-       <property name="text" >
-        <string>...</string>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="m_singleViewToolButton" >
-       <property name="text" >
-        <string>...</string>
+       <property name="sizeHint" >
+        <size>
+         <width>21</width>
+         <height>20</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="m_doubleViewToolButton" >
-       <property name="text" >
-        <string>...</string>
-       </property>
-      </widget>
+      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="m_chooseSeriePushButton" >
@@ -343,8 +327,15 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
+   <class>QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
    <class>udg::Q2DViewer</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>q2dviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>

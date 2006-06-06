@@ -7,7 +7,6 @@
 #ifndef UDGQMPR3D2DEXTENSION_H
 #define UDGQMPR3D2DEXTENSION_H
 
-// #include "qmpr3d2dextensionbase.h"
 #include "ui_qmpr3d2dextensionbase.h"
 using namespace Ui; // \TODO tractar de solucionar això bé
 
@@ -19,7 +18,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class QCustomWindowLevelDialog;
 
 /**
 Extensió de l'MPR 3D
@@ -69,9 +67,6 @@ private:
     
     /// Estableix les connexions de signals i slots
     void createConnections();
-
-    /// El diàleg per escollir un window level ajustat per l'usuari
-    QCustomWindowLevelDialog *m_customWindowLevelDialog;
     
 private slots:
     /// Actualitza les vistes 2D conforme el que es veu a la vista MPR 3D
@@ -79,9 +74,6 @@ private slots:
 
     /// Refresca la posició dels actors d'acord amb l'interacció
     void updateActors();
-
-    /// Canvia els ajustaments del window level per uns de predeterminats. 
-    void changeDefaultWindowLevel( int which );
 
 };
 
