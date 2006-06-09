@@ -53,7 +53,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     // arxius oberts etc amb QSettings
     readSettings();
     // icona de l'aplicació
-    this->setWindowIcon( QPixmap(":/images/icon.png") );
+    this->setWindowIcon( QPixmap(":/images/starviewer.png") );
     this->setWindowTitle( tr("StarViewer") );
 //     m_exportFileFilters = tr("JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
 //     m_exportToJpegFilter = tr("JPEG Images (*.jpg)");
