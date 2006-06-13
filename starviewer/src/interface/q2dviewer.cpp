@@ -185,28 +185,28 @@ void Q2DViewer::createAnnotations()
     m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
     
 //     mapOrientationStringToAnnotation();
-    
+
     // Marcadors
-    m_sideOrientationMarker = vtkAxisActor2D::New();
-    m_bottomOrientationMarker = vtkAxisActor2D::New();
+    m_sideRuler = vtkAxisActor2D::New();
+    m_bottomRuler = vtkAxisActor2D::New();
 
-    m_sideOrientationMarker->AxisVisibilityOn(); 
-    m_sideOrientationMarker->TickVisibilityOn();
-    m_sideOrientationMarker->LabelVisibilityOff();
-    m_sideOrientationMarker->TitleVisibilityOff();
-    m_sideOrientationMarker->SetTickLength( 50 );
-    m_sideOrientationMarker->GetProperty()->SetColor( 0 , 1 , 0 );
+    m_sideRuler->AxisVisibilityOn();
+    m_sideRuler->TickVisibilityOn();
+    m_sideRuler->LabelVisibilityOff();
+    m_sideRuler->TitleVisibilityOff();
+    m_sideRuler->SetTickLength( 50 );
+    m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
 
-//     this->getRenderer()->AddActor2D( m_sideOrientationMarker );
+//     this->getRenderer()->AddActor2D( m_sideRuler );
 
-    m_bottomOrientationMarker->AxisVisibilityOn();
-    m_bottomOrientationMarker->TickVisibilityOn();
-    m_bottomOrientationMarker->LabelVisibilityOff();
-    m_bottomOrientationMarker->TitleVisibilityOff();
-    m_bottomOrientationMarker->SetTickLength( 50 );
-    m_bottomOrientationMarker->GetProperty()->SetColor( 0 , 1 , 0 );
+    m_bottomRuler->AxisVisibilityOn();
+    m_bottomRuler->TickVisibilityOn();
+    m_bottomRuler->LabelVisibilityOff();
+    m_bottomRuler->TitleVisibilityOff();
+    m_bottomRuler->SetTickLength( 50 );
+    m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
 
-//     this->getRenderer()->AddActor2D( m_bottomOrientationMarker );
+//     this->getRenderer()->AddActor2D( m_bottomRuler );
 
     updateAnnotations();
 }
@@ -221,8 +221,6 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     
     if( list.size() > 1 )
     {
-        DEBUG_LOG( qPrintable( "Orientació: " + orientation ) );
-        DEBUG_LOG( qPrintable( "Orientació invertida:: " + revertedOrientation ) );
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
@@ -256,8 +254,6 @@ void Q2DViewer::updateAnnotations()
 {
     if( m_enabledAnnotations & Q2DViewer::ReferenceAnnotation )
     {
-        m_bottomOrientationMarker->VisibilityOn();
-        m_sideOrientationMarker->VisibilityOn();
         m_patientOrientationTextActor[0]->VisibilityOn();
         m_patientOrientationTextActor[1]->VisibilityOn();
         m_patientOrientationTextActor[2]->VisibilityOn();
@@ -265,14 +261,23 @@ void Q2DViewer::updateAnnotations()
     }
     else
     {
-        m_bottomOrientationMarker->VisibilityOff();
-        m_sideOrientationMarker->VisibilityOff();
         m_patientOrientationTextActor[0]->VisibilityOff();
         m_patientOrientationTextActor[1]->VisibilityOff();
         m_patientOrientationTextActor[2]->VisibilityOff();
         m_patientOrientationTextActor[3]->VisibilityOff();
     }
 
+    if( m_enabledAnnotations & Q2DViewer::RuleAnnotation )
+    {
+        m_bottomRuler->VisibilityOn();
+        m_sideRuler->VisibilityOn();
+    }
+    else
+    {
+        m_bottomRuler->VisibilityOff();
+        m_sideRuler->VisibilityOff();
+    }
+    
     if( m_enabledAnnotations & Q2DViewer::WindowLevelAnnotation )
     {
         m_textAnnotation->VisibilityOn();
@@ -602,14 +607,11 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
 {
     // el primer que s'hauria de fer és executar l'acció que es faci en aquell estat indistintament de la tool com és el mostrar en la pantalla el valor del pixel actual
    anyEvent();
-//     std::cout << vtkCommand::GetStringFromEventId( event ) << std::endl;
     // fer el que calgui per cada tipus d'event
     switch( event )
     {
     case vtkCommand::MouseMoveEvent:    
         onMouseMove();
-        //  \TODO això és una cutrada però s'hauria de veure com connectar l'event de vtk perk ens indiqui quan canvia realment el window level
-//     emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
     break;
 
     case vtkCommand::LeftButtonPressEvent:
@@ -766,6 +768,21 @@ void Q2DViewer::setupInteraction()
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
 }
 
+void Q2DViewer::initializeRulers()
+{
+    m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToNormalizedDisplay();
+    m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedDisplay();
+    m_sideRuler->SetPosition(  0.9 , 0.7 );
+    m_sideRuler->SetPosition2( 0.9 , 0.2 );
+    m_sideRuler->SetRange( 200 , 5000 );
+
+    m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
+    m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
+    m_bottomRuler->SetPosition(  0.1 , 0.1 );
+    m_bottomRuler->SetPosition2( 0.9 , 0.1 );
+    m_bottomRuler->SetRange( 200 , 5000 );
+}
+
 void Q2DViewer::setInput( Volume* volume )
 {
     if( volume == 0 )
@@ -773,18 +790,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
     // fem update de les mides dels indicadors de referència
-    m_sideOrientationMarker->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_sideOrientationMarker->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    m_sideOrientationMarker->SetPosition(  0.9 , 0.7 );
-    m_sideOrientationMarker->SetPosition2( 0.9 , 0.2 );
-    m_sideOrientationMarker->SetRange( 200 , 5000 );
-
-    m_bottomOrientationMarker->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_bottomOrientationMarker->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    m_bottomOrientationMarker->SetPosition(  0.9 , 0.7 );
-    m_bottomOrientationMarker->SetPosition2( 0.9 , 0.2 );
-    m_bottomOrientationMarker->SetRange( 200 , 5000 );
-
+    initializeRulers();
     initInformationText();
     
     m_mainVolume->getDimensions( m_size );
@@ -799,6 +805,7 @@ void Q2DViewer::setInput( Volume* volume )
     }
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
+
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )

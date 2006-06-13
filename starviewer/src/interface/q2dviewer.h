@@ -36,7 +36,7 @@ class DistanceTool;
 Classe base per als visualitzadors 2D.
 El mode d'operació habitual serà el de visualitar un sol volum.
 Normalment per poder visualitzar un volum farem el següent
-
+\code
 Q2DViewer* visor = new Q2DViewer();
 visor->setInput( volum );
 visor->setView( Q2DViewer::Axial );
@@ -75,7 +75,7 @@ public:
     enum Actions{ CursorAction , SliceMotionAction , WindowLevelAction };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x2 , ReferenceAnnotation = 0x4 , AllAnnotation = 0x6 };
+    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x2 , ReferenceAnnotation = 0x4 , RuleAnnotation = 0x8 , AllAnnotation = 0xE };
     
     /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
     enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool , Manipulate };
@@ -125,8 +125,8 @@ public:
     /// [apanyo] mentre estiguem manipulant els plans serà true
     bool isManipulateOn(){ return m_manipulating; };
     void setManipulate( bool manip ){ m_manipulating = manip; }
-public slots:  
 
+public slots:  
     /// Temporal per proves, veurem quins events es criden
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
     
@@ -216,7 +216,7 @@ public slots:
     void resetWindowLevelToOsteoporosis();
     void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
-    
+
 protected:
     /// asscociació de botons amb accions
     int m_leftButtonAction , m_middleButtonAction , m_rightButtonAction;
@@ -315,6 +315,9 @@ private:
     /// S'encarrega de fer la feina per defecte que cal fer cada cop que s'invoca qualsevol event, com per exemple registrar el punt sobre el qual es troba el mouse
     void anyEvent();
 
+    /// Inicialitza els marcadors de mides
+    void initializeRulers();
+    
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
@@ -324,14 +327,13 @@ private:
     /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
     
-    /// Marcadors que indicaran on està l'esquerra/dreta, abaix/amunt en referència al model
-    vtkAxisActor2D *m_sideOrientationMarker , *m_bottomOrientationMarker;
+    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
+    vtkAxisActor2D *m_sideRuler , *m_bottomRuler;
     
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
 
     /// Actualització d'anotacions vàries
-//     void updateWindowLevelAnnotation();
     void updateSliceAnnotation();
     void updateWindowSizeAnnotation();
 
@@ -340,7 +342,6 @@ private:
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
-
     
 signals:
     /// envia la nova llesca en la que ens trobem
