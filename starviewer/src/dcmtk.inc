@@ -4,7 +4,8 @@ INCLUDEPATH += /usr/include/dcmtk/ \
 	/usr/include/dcmtk/dcmnet/ \
 	/usr/include/dcmtk/dcmsign/ \
 	/usr/include/dcmtk/ofstd/ \
-	/usr/include/dcmtk/dcmimage/
+	/usr/include/dcmtk/dcmimage/ \
+	/usr/include/dcmtk/config
 
 LIBS += -L/usr/lib/dcmtk/ \
 	-lsqlite \

@@ -10,7 +10,7 @@
  
 //#define BUILD_DCM2PNM_AS_DCMJ2PNM // compile "dcm2pnm" with dcmjpeg support
 
-#include "osconfig.h"    /* make sure OS specific configuration is included first */
+#include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
 
 #define INCLUDE_CSTDIO
 #define INCLUDE_CSTRING
@@ -21,7 +21,6 @@
 #endif
 
 #include "dctk.h"          /* for various dcmdata headers */
-#include "dcutils.h"       /* for getSingleValue */
 #include "dcdebug.h"       /* for SetDebugLevel */
 #include "cmdlnarg.h"      /* for prepareCmdLineArgs */
 #include "dcuid.h"         /* for dcmtk version name */
@@ -72,7 +71,7 @@ ScaleImage::ScaleImage()
 int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixelsSize)
 {
 //valors per defecte trets de dcm2pnm.cc
-    int                 opt_readAsDataset = 0;            /* default: fileformat or dataset */
+    E_FileReadMode      opt_readMode = ERM_autoDetect;    /* default: fileformat or dataset */
     E_TransferSyntax    opt_transferSyntax = EXS_Unknown; /* default: xfer syntax recognition */
 
     unsigned long       opt_compatibilityMode = CIF_MayDetachPixelData | CIF_TakeOverExternalDataset;
@@ -93,7 +92,7 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
 
    //obrim el fitxer dicom
     DcmFileFormat *dfile = new DcmFileFormat();
-    OFCondition cond = dfile->loadFile( dicomFile , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readAsDataset );
+    OFCondition cond = dfile->loadFile( dicomFile , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
 
     if ( cond.bad() ) return errorDicomFileNotFound;
    

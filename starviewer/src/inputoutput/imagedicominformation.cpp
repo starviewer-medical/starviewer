@@ -22,13 +22,13 @@ ImageDicomInformation::ImageDicomInformation()
 Status ImageDicomInformation:: openDicomFile(std::string imagePath)
 {
     Status state;
-    int opt_readAsDataset = 0;
+    E_FileReadMode      opt_readMode = ERM_autoDetect;
     E_TransferSyntax    opt_transferSyntax = EXS_Unknown;
     DcmTagKey studyInstanceUIDTagKey( DCM_StudyInstanceUID );
     
     m_dicomFile = new DcmFileFormat();
     
-    OFCondition cond = m_dicomFile->loadFile( imagePath.c_str() , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readAsDataset );
+    OFCondition cond = m_dicomFile->loadFile( imagePath.c_str() , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
         
     if ( !cond.good() ) return state.setStatus( cond );    
     

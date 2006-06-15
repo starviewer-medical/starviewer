@@ -71,7 +71,7 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
             /* the array of Storage SOP Class UIDs comes from dcuid.h */
             cond = ASC_acceptContextsWithPreferredTransferSyntaxes(
                 (*assoc)->params ,
-                dcmStorageSOPClassUIDs , numberOfDcmStorageSOPClassUIDs ,
+                dcmAllStorageSOPClassUIDs , numberOfAllDcmStorageSOPClassUIDs ,
                 transferSyntaxes , numTransferSyntaxes );
         }
     }
