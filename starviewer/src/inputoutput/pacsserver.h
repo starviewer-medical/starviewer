@@ -24,7 +24,7 @@ public:
     enum modalityConnection { query , retrieveImages , echoPacs };
     
     //any it's only can be used with echoPacs modality
-    enum levelConnection { patientLevel , studyLevel , seriesLevel,any , imageLevel };
+    enum levelConnection { patientLevel , studyLevel , seriesLevel , any , imageLevel };
    
     /** Constuctor de la classe. Se li ha de passar un objecte PacsParameters, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
@@ -39,12 +39,12 @@ public:
      * @param l Especifica a quin nivell durem a terme l'objectiu especificat al paràmetre anterior. A nivell de  Pacient,estudi o sèrie. Per comprendre millor els nivells  consultar la documentació del dicom Càpitol 4. C.6
      * @return retorna l'estat de la connexió
      */
-    Status Connect( modalityConnection , levelConnection );
+    Status connect( modalityConnection , levelConnection );
        
     /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexió bé sigui busca informació o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS està viu  
      * @return retorna l'estatus del echo
      */   
-    Status Echo();//This function makes an echo to the PACS
+    Status echo();//This function makes an echo to the PACS
     
     /** Estableix un pacs per a la connexió
      * @param Pacs amb els paràmetres per a la connexió
@@ -62,7 +62,7 @@ public:
     T_ASC_Network * getNetwork();
     
     /// This action close the session with PACS's machine and release all the resources
-    void Disconnect();
+    void disconnect();
 
 private:
     

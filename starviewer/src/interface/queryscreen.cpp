@@ -511,7 +511,7 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
       
     PacsServer pacsConnection( pacs );
     
-    if ( !pacsConnection.Connect(PacsServer::query,PacsServer::seriesLevel).good() )
+    if ( !pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel).good() )
     {//Error al connectar
         logMessage = "Error al connectar al pacs ";    
 	logMessage.append(  pacsAETitle );
@@ -553,7 +553,7 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
         }
         m_seriesListSingleton->nextSeries();
     }
-    pacsConnection.Disconnect();
+    pacsConnection.disconnect();
 }
 
 void QueryScreen::QuerySeriesCache( QString studyUID )

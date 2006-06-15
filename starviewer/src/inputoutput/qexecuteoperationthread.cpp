@@ -142,7 +142,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     }
     
     PacsServer pacsConnection(operation.getPacsParameters());//connemtem al pacs
-    state = pacsConnection.Connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
+    state = pacsConnection.connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
     if (!state.good())
     {   
 		logMessage = "La descàrrega de l'estudi ";
@@ -172,7 +172,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesRetrievedSlot( QString ) ) );
 
     retState = retrieve.moveSCU();
-    pacsConnection.Disconnect();
+    pacsConnection.disconnect();
 
 	errorRetrieving = sProcessImg->getErrorRetrieving();
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada

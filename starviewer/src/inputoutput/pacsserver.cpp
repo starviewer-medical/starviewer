@@ -25,7 +25,7 @@ PacsServer::PacsServer()
     m_pacsNetwork = PacsNetwork::getPacsNetwork();
 }
 
-Status PacsServer::Echo()
+Status PacsServer::echo()
 {
     OFCondition status_echo;
     Status state;
@@ -204,7 +204,7 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params ,
     return ASC_addPresentationContext( m_params , pid , abstractSyntax , transferSyntaxes , numTransferSyntaxes );
 }
 
-Status PacsServer::Connect( modalityConnection modality , levelConnection level )
+Status PacsServer::connect( modalityConnection modality , levelConnection level )
 {
     OFCondition status;
     char adrLocal[255];
@@ -255,7 +255,8 @@ Status PacsServer::Connect( modalityConnection modality , levelConnection level 
         state = m_pacsNetwork->createNetworkRetrieve( atoi( m_pacs.getLocalPort().c_str() ) , m_pacs.getTimeOut() );
         if ( !state.good() ) return state;
         
-        m_net = m_pacsNetwork->getNetworkRetrieve();                
+        m_net = m_pacsNetwork->getNetworkRetrieve();
+              
     }
        
     //try to connect
@@ -274,7 +275,7 @@ Status PacsServer::Connect( modalityConnection modality , levelConnection level 
    return state.setStatus( CORRECT );
 }
 
-void PacsServer::Disconnect()
+void PacsServer::disconnect()
 {
     ASC_releaseAssociation( m_assoc ); // release association
     ASC_destroyAssociation( &m_assoc ); // delete assoc structure

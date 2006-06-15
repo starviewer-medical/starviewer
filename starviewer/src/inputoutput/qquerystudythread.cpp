@@ -35,7 +35,7 @@ void QQueryStudyThread::run()
 
     INFO_LOG( infoLogInitialitzedThread().toAscii().constData() );
 
-    state = server.Connect( PacsServer::query,PacsServer::studyLevel );
+    state = server.connect( PacsServer::query,PacsServer::studyLevel );
     
     if ( !state.good() )
     {
@@ -69,7 +69,7 @@ void QQueryStudyThread::run()
         }
         
         //desconnectem
-        server.Disconnect();
+        server.disconnect();
         exit( 0 );
     }
 }
