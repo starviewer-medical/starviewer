@@ -57,6 +57,11 @@ signals :
      */
     void errorConnectingPacs( int );
 
+    /** signal que s'envia per indicar que hi hagut un error cercant al PACS
+     * @param ID del pacs que ha produit l'error 
+     */    
+    void errorQueringStudiesPacs( int pacsID );
+
 public slots :
 
     /// Slot que s'activa pel signal de QQuerStudyThread, quan un thread acaba allibera un recurs del semàfor, perquè es pugui iniciar una altre thread per continuar amb la cerca
@@ -66,6 +71,12 @@ public slots :
      * @param pacsID del pacs que ha produït l'error
      */   
     void slotErrorConnectingPacs( int );
+
+    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produït algun error al fer la query amb el PACS
+     * @param pacsID del pacs que ha produït l'error
+     */   
+    void slotErrorQueringStudiesPacs( int );
+
 
 private :
 

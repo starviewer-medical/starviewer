@@ -41,7 +41,12 @@ signals:
     /** signal que s'envia per indicar que hi hagut un error connectant al PACS
      * @param ID del pacs que ha produit l'error 
      */
-    void errorConnectingPacs( int );
+    void errorConnectingPacs( int pacsID );
+
+    /** signal que s'envia per indicar que hi hagut un error cercant al PACS
+     * @param ID del pacs que ha produit l'error 
+     */    
+    void errorQueringStudiesPacs( int pacsID );
 
 protected :
 

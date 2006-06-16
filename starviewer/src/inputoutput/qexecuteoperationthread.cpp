@@ -145,11 +145,10 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     state = pacsConnection.connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
     if (!state.good())
     {   
-		logMessage = "La descàrrega de l'estudi ";
-		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-		logMessage.append( "del pacs " );
+		logMessage = "Error al connectar al pacs ";
 		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
-		logMessage.append( " ha fallat, no s'ha pogut connectar correctament amb el PACS ");	
+		logMessage.append( ". PACS ERROR : ");
+        logMessage.append( state.text().c_str() );	
 		ERROR_LOG ( logMessage.toAscii().constData() );
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
@@ -183,8 +182,10 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
 		logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
 		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-		logMessage.append( "del pacs " );
+		logMessage.append( " del pacs " );
 		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+        logMessage.append( ". PACS ERROR : " );
+        logMessage.append( retState.text().c_str() );
 		ERROR_LOG ( logMessage.toAscii().constData() );
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );

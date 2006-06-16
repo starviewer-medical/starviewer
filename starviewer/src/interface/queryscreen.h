@@ -107,10 +107,15 @@ public slots:
     /// Slot que s'activa pel signal notEnoughFreeSpace de QExecuteOperationThread, que s'emiteix quan no hi ha prou espai al disc per descarregar nous estudis
     void notEnoughFreeSpace();
     
-    /** Slot que s'activa pel signal errorFreeingCacheSpace de QExecuteOperationThread, que s'emiteix quant no hi ha prou espai al disc o a la cache per descarregar nous estudis, i al intentar esborrar-ne per alliberar espai es produeix un error.
+    /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
      * @param id del PACS
      */
     void errorConnectingPacs( int );
+
+    /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
+     * @param id del PACS
+     */
+    void errorQueringStudiesPacs( int );
     
     ///Slot que s'activa quant s'ha produit un error alliberant espai al disc
     void errorFreeingCacheSpace();

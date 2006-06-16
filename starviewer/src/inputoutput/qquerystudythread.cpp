@@ -39,8 +39,10 @@ void QQueryStudyThread::run()
     
     if ( !state.good() )
     {
-        missatgeLog = "Error connectant al PACS ";
+        missatgeLog = "Error al connectar al PACS ";
         missatgeLog.append( m_param.getAEPacs().c_str() );
+        missatgeLog.append( ". PACS ERROR : " );
+        missatgeLog.append( state.text().c_str() );
         
         ERROR_LOG( missatgeLog.toAscii().constData() );
         emit( errorConnectingPacs( m_param.getPacsID() ) );
@@ -56,17 +58,18 @@ void QQueryStudyThread::run()
         
         if (! state.good() ) 
         {   
-            missatgeLog = "Error de cerca al PACS ";
+            missatgeLog = "Error cercant al PACS ";
             missatgeLog.append( m_param.getAEPacs().c_str() );
-            missatgeLog.append( ". Thread finalitzant" );
+            missatgeLog.append( ". PACS ERROR : " );
+            missatgeLog.append( state.text().c_str() );
             ERROR_LOG( missatgeLog.toAscii().constData() );
+            emit( errorQueringStudiesPacs( m_param.getPacsID() ) );
         }
-        else
-        {
-            missatgeLog = "Thread del PACS ";
-            missatgeLog.append( m_param.getAEPacs().c_str() );
-            missatgeLog.append( " finalitzant" );
-        }
+        
+        missatgeLog = "Thread del PACS ";
+        missatgeLog.append( m_param.getAEPacs().c_str() );
+        missatgeLog.append( " finalitzant" );       
+        INFO_LOG ( missatgeLog.toAscii().constData() );
         
         //desconnectem
         server.disconnect();

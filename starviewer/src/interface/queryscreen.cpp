@@ -194,6 +194,9 @@ void QueryScreen::connectSignalsAndSlots()
     //connect tracta els errors de connexió al PACS
     connect ( &multipleQueryStudy , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
 
+    connect ( &multipleQueryStudy , SIGNAL ( errorQueringStudiesPacs( int ) ) , this , SLOT(  errorQueringStudiesPacs( int ) ) );
+
+
     //connect tracta els errors de connexió al PACS, al descarregar imatges 
     connect ( &m_qexecuteOperationThread , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
 }
@@ -511,10 +514,13 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
       
     PacsServer pacsConnection( pacs );
     
-    if ( !pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel).good() )
+    state = pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel);
+    if ( !state.good() )
     {//Error al connectar
         logMessage = "Error al connectar al pacs ";    
-	logMessage.append(  pacsAETitle );
+        logMessage.append( pacsAETitle );
+        logMessage.append( ". PACS ERROR : " );
+        logMessage.append( state.text().c_str() );
         ERROR_LOG( logMessage.toAscii().constData() );		
 			
         errorConnectingPacs ( pacs.getPacsID() );
@@ -523,9 +529,14 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
     
     QuerySeries querySeries( pacsConnection.getConnection() , buildSeriesMask( studyUID ) );
     
-    if ( !querySeries.find().good() )
+    state = querySeries.find();
+    if ( !state.good() )
     {//Error a la query
-        ERROR_LOG( "Error cercant les sèries de l'estudi " );		
+        logMessage = "QueryScreen::QuerySeriesPacs : Error cercant les sèries al PACS ";
+        logMessage.append( pacsAETitle );
+        logMessage.append( ". PACS ERROR : " );
+        logMessage.append( state.text().c_str() );
+        ERROR_LOG( logMessage.toAscii().constData() );		
 
         text.insert( 0 , tr( "Error! Can't query studies in PACS : " ) );
         text.append( pacsAETitle);
@@ -1000,6 +1011,24 @@ void QueryScreen::errorConnectingPacs( int PacsID )
     pacsListDB.queryPacs( &errorPacs, PacsID );
     
     errorMessage.insert( 0 , tr( " Can't connect to PACS " ) );
+    errorMessage.append( errorPacs.getAEPacs().c_str() );
+    errorMessage.append( tr ( " of " ) );
+    errorMessage.append( errorPacs.getInstitution().c_str() );
+    errorMessage.append( '\n' );
+    errorMessage.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) ); 
+    
+    QMessageBox::critical( this , tr( "StarViewer" ) , errorMessage );
+}
+
+void QueryScreen::errorQueringStudiesPacs( int PacsID )
+{
+    PacsListDB pacsListDB;
+    PacsParameters errorPacs;
+    QString errorMessage;
+    
+    pacsListDB.queryPacs( &errorPacs, PacsID );
+    
+    errorMessage.insert( 0 , tr( " Can't query studies to PACS " ) );
     errorMessage.append( errorPacs.getAEPacs().c_str() );
     errorMessage.append( tr ( " of " ) );
     errorMessage.append( errorPacs.getInstitution().c_str() );
