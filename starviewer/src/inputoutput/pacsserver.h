@@ -76,19 +76,19 @@ private:
     /** Aquesta funció és privada. És utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell és un echo. Per defecte en qualsevol modalitat de connexió podrem fer un echo
      * @return retorna l'estat de la configuració
      */
-   OFCondition ConfigureEcho(); 
+   OFCondition configureEcho(); 
    
     /** Aquesta funció privada, configura els paràmetres de la connexió per especificar, que el motiu de la nostre connexió és buscar informació.
      * @param Especifiquem a quin nivell volem buscar la informació, de pacient, d'estudi o de sèrie
      * @return retorna l'estat de la configuració
      */
-   OFCondition ConfigureFind( levelConnection );
+   OFCondition configureFind( levelConnection );
    
     /** Aquesta funció privada permet configurar la connexió per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar la funció setLocalhostPort
      * @param Especifiquem a quin nivell volem descarregar les imatges, de pacient, d'estudi o de sèrie
      * @return retorna l'estat de la configuració
      */
-   OFCondition ConfigureMove( levelConnection );
+   OFCondition configureMove( levelConnection );
    
     /** Aquesta funció privada, configura els paràmetres pel tipus de connexió per descarregat imatges segons la màquina que tinguem
      * @param paràmetres de la connexió
@@ -102,7 +102,7 @@ private:
      * @param adreça del servidor
      * @param port del servidor
      */
-   std::string ConstructAdrServer( std::string , std::string ); //construct PACS address
+   std::string constructAdrServer( std::string , std::string ); //construct PACS address
     
 };
 };

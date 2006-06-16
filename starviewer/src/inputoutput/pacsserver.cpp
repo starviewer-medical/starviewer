@@ -41,20 +41,20 @@ Status PacsServer::echo()
     return state.setStatus( status_echo );
 }  
 
-OFCondition PacsServer::ConfigureEcho()
+OFCondition PacsServer::configureEcho()
 {
     int pid;
     // list of transfer syntaxes, only a single entry here
-    const char* ts[] = { UID_LittleEndianImplicitTransferSyntax };
+    const char* transferSyntaxes[] = { UID_LittleEndianImplicitTransferSyntax };
     
     // add presentation pid to association request
     
     pid=1;//pid always has to be odd
         
-    return ASC_addPresentationContext( m_params , pid , UID_VerificationSOPClass , ts , 1 );
+    return ASC_addPresentationContext( m_params , pid , UID_VerificationSOPClass , transferSyntaxes , DIM_OF( transferSyntaxes ) );
 }
 
-OFCondition PacsServer::ConfigureFind( levelConnection level )
+OFCondition PacsServer::configureFind( levelConnection level )
 {
     int pid;
     
@@ -100,7 +100,7 @@ OFCondition PacsServer::ConfigureFind( levelConnection level )
     return ASC_addPresentationContext( m_params , pid , opt_abstractSyntax , transferSyntaxes , DIM_OF(transferSyntaxes) );
 } 
 
-OFCondition PacsServer::ConfigureMove( levelConnection level )
+OFCondition PacsServer::configureMove( levelConnection level )
 {
     int pid;
     OFCondition status;
@@ -220,7 +220,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     //el c_str, converteix l'string que ens retornen les funcions get a un char
     ASC_setAPTitles( m_params , m_pacs.getAELocal().c_str() , m_pacs.getAEPacs().c_str() , NULL );
     
-    AdrServer= ConstructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
+    AdrServer= constructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
     
     //get localhost name
     
@@ -231,34 +231,38 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     if ( !status.good() ) return state.setStatus( status );
 
     //default, always configure the echo
-    status = ConfigureEcho();
+    status = configureEcho();
     if ( !status.good() ) return state.setStatus( status );
-    
-    //configure the find paramaters depending on modality connection
-    if ( modality == query )
-    {
-        status = ConfigureFind( level );
-        if ( !status.good() ) return state.setStatus( status );
-        
-        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
-        if ( !state.good() ) return state;
-        
-        m_net = m_pacsNetwork->getNetworkQuery();
-    }
-    
-    //configure the move paramaters depending on modality connection
-    if ( modality == retrieveImages )
-    {
-        status=ConfigureMove( level );
-        if ( !status.good() ) return state.setStatus( status );   
 
-        state = m_pacsNetwork->createNetworkRetrieve( atoi( m_pacs.getLocalPort().c_str() ) , m_pacs.getTimeOut() );
-        if ( !state.good() ) return state;
+
+    switch ( modality )
+    {
+        case echoPacs : //configure the pacs parameters
+                        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
+                        if ( !state.good() ) return state;
+
+                        m_net = m_pacsNetwork->getNetworkQuery();
+                        break;
+        case query :    //configure the find paramaters depending on modality connection
+                        status = configureFind( level );
+                        if ( !status.good() ) return state.setStatus( status );
         
-        m_net = m_pacsNetwork->getNetworkRetrieve();
-              
-    }
-       
+                        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
+                        if ( !state.good() ) return state;
+        
+                        m_net = m_pacsNetwork->getNetworkQuery();
+                        break;
+        case retrieveImages : //configure the move paramaters depending on modality connection
+                        status=configureMove( level );
+                        if ( !status.good() ) return state.setStatus( status );   
+                
+                        state = m_pacsNetwork->createNetworkRetrieve( atoi( m_pacs.getLocalPort().c_str() ) , m_pacs.getTimeOut() );
+                        if ( !state.good() ) return state;
+                        
+                        m_net = m_pacsNetwork->getNetworkRetrieve();
+                        break;
+    }    
+    
     //try to connect
     status = ASC_requestAssociation( m_net , m_params , &m_assoc );
 
@@ -268,7 +272,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
         {
             return state.setStatus( error_NoConnect );
         }
-        // Echo();
     }
     else return state.setStatus( status );
     
@@ -282,7 +285,7 @@ void PacsServer::disconnect()
     
 }
 
-std::string PacsServer:: ConstructAdrServer( std::string host , std::string port )
+std::string PacsServer:: constructAdrServer( std::string host , std::string port )
 {
 //The format is "server:port"
     std::string adrServer;

@@ -46,7 +46,7 @@ public slots :
     /// Slot que esborra el pacs seleccionat
     void deletePacs();
     
-    /// Fa un echo a un pacs seleccionat per saber si aquest està viu
+    /// Fa un echo a les dades del PACS que estan als textbox
     void test();
     
     /// Mostra un QDialog per especificar on es troba la base de dades de la caché
@@ -86,8 +86,8 @@ signals :
 
 private :
 
-    int m_PacsID; ///<ID del pacs seleccionat
-    bool m_configurationChanged; ///<Indica si la configuració ha canviat
+    int m_PacsID; /// Conté el D del pacs seleccionat en aquell moment
+    bool m_configurationChanged; ///Indica si la configuració ha canviat
 
     ///crea els connects dels signals i slots
     void createConnections();
