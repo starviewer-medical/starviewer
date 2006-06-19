@@ -1115,7 +1115,7 @@ StudyMask QueryScreen::buildMask()
     QString modalityMask;
     
     mask.setPatientId(m_textPatientID->text().toStdString() );
-    //mask.setPatientName(buildPatientName().toStdString() );
+    mask.setPatientName(buildPatientName().toStdString() );
     mask.setStudyId(m_textStudyID->text().toStdString() );
     mask.setStudyDate(buildStudyDates().toStdString() );
     mask.setStudyDescription( "" );

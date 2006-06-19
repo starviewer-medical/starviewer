@@ -98,11 +98,7 @@ void progressCallbackStudy(
     
     //set PACS AE Title Called
     responseIdentifiers->findAndGetString( DCM_RetrieveAETitle , text , false );
-    if ( text != NULL ) 
-    {
-        study.setPacsAETitle( text );  
-    }
-    else study.setPacsAETitle( "PACSPUNXA" );
+    if ( text != NULL ) study.setPacsAETitle( text );  
 
     //gets the pointer to the study list and inserts the new study    
     studyList = StudyListSingleton::getStudyListSingleton();
