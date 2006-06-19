@@ -13,6 +13,7 @@
 namespace udg {
 
 class string;
+class Status;
 
 /** Com tenim més d'una classe que han d'accedir a la mateixa Base de dades, i amb SQLITE només podem tenir una connexió per la BD creem una classe singleton que s'encarregarà de gestionar la connexió a la Base de Dades. De la mateixa manera només un thread alhora pot accedir a la BD, aquesta classe implementarà mètodes per evitar que dos threads es trobin a la vegada dins la BD
 @author marc
@@ -48,7 +49,10 @@ public:
     
     /// Allibera al candau per a que altres processos puguin accedir a la base de dades
     void releaseLock();
-        
+    
+    ///Construeix l'estat de la base de dades en funció del valor que ha retornat la operació
+    Status databaseStatus( int state );
+    
 private :
     
     /// Constructor de la classe

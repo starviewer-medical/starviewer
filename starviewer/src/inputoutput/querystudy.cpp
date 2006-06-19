@@ -102,6 +102,7 @@ void progressCallbackStudy(
     {
         study.setPacsAETitle( text );  
     }
+    else study.setPacsAETitle( "PACSPUNXA" );
 
     //gets the pointer to the study list and inserts the new study    
     studyList = StudyListSingleton::getStudyListSingleton();

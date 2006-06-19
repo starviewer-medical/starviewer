@@ -23,6 +23,7 @@
 #include "cachelayer.h"
 #include "logging.h"
 #include "status.h"
+#include "cachestudydal.h"
 
 namespace udg {
 
@@ -95,6 +96,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     QString studyUID;
     Status state,retState;
     QString logMessage;
+    CacheStudyDAL cacheStudyDAL;
 
     logMessage = "Iniciant la descàrrega de l'estudi ";
     logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
@@ -200,7 +202,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         INFO_LOG( logMessage.toAscii().constData() );
         scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualització de la caché  
         emit( setStudyRetrieved( studyUID.toAscii().constData() ) );// descarregat
-        localCache->setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
+        cacheStudyDAL.setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
     }
     
 }

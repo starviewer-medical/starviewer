@@ -9,15 +9,14 @@
 #include "scalestudy.h"
 #include "serieslist.h"
 #include "seriesmask.h"
-#include "cachepacs.h"
 #include "status.h"
 #include "imagemask.h"
 #include "image.h"
 #include "imagelist.h"
 #include "starviewersettings.h"
 #include "scaleimage.h"
-
-
+#include "cacheseriesdal.h"
+#include "cacheimagedal.h"
 
 namespace udg {
 
@@ -81,18 +80,18 @@ void ScaleStudy::scale( std::string studyUID )
 Status ScaleStudy::getSeriesOfStudy( std::string studyUID , SeriesList &seriesList )
 {
     SeriesMask mask;
-    CachePacs *localCache = CachePacs::getCachePacs();
+    CacheSeriesDAL cacheSeriesDAL;
     
     mask.setStudyUID( studyUID.c_str() );
     
-    return localCache->querySeries( mask , seriesList );
+    return cacheSeriesDAL.querySeries( mask , seriesList );
 }
 
 Status ScaleStudy::countImageNumber( ImageMask mask, int &number )
 {
-    CachePacs *localCache = CachePacs::getCachePacs(); 
+    CacheImageDAL cacheImageDAL;
     
-    return localCache->countImageNumber( mask , number );
+    return cacheImageDAL.countImageNumber( mask , number );
 }
 
 Status ScaleStudy::imageRelativePath( ImageMask mask , std::string &relPath )
@@ -101,9 +100,9 @@ Status ScaleStudy::imageRelativePath( ImageMask mask , std::string &relPath )
     Image image;
     Status state;
     
-    CachePacs *localCache = CachePacs::getCachePacs();
+    CacheImageDAL cacheImageDAL;
 
-    state = localCache->queryImages( mask , imageList );
+    state = cacheImageDAL.queryImages( mask , imageList );
     
     imageList.firstImage();
     if ( !imageList.end() )

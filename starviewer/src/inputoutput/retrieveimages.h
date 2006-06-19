@@ -21,7 +21,7 @@
 #define RETRIEVEIMAGES
 
 #define HAVE_CONFIG_H 1
-#include "osconfig.h" /* make sure OS specific configuration is included first */
+#include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
 
 #include "diutil.h"
 #include "dcfilefo.h"

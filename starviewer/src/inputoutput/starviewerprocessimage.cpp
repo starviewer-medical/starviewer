@@ -13,6 +13,9 @@
 #include "starviewersettings.h"
 #include "status.h"
 #include "image.h"
+#include "cachestudydal.h"
+#include "cacheseriesdal.h"
+#include "cacheimagedal.h"
 
 namespace udg {
 
@@ -27,6 +30,9 @@ StarviewerProcessImage::StarviewerProcessImage() : ProcessImage()
 void StarviewerProcessImage::process( Image *image )
 {
     Status state;
+    CacheStudyDAL cacheStudyDAL;
+    CacheSeriesDAL cacheSeriesDAL;
+    CacheImageDAL cacheImageDAL;
 
     /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera
     serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
@@ -38,7 +44,7 @@ void StarviewerProcessImage::process( Image *image )
         emit( startRetrieving( image->getStudyUID().c_str() ) );
         
         //canviem l'estat de l'estudi de PENDING A RETRIEVING
-        state = m_localCache->setStudyRetrieving( image->getStudyUID().c_str() );
+        state = cacheStudyDAL.setStudyRetrieving( image->getStudyUID().c_str() );
         if ( !state.good() ) m_error = true;
         
         //inserim serie
@@ -46,12 +52,12 @@ void StarviewerProcessImage::process( Image *image )
         
         if ( state.good() )
         {
-            state = m_localCache->insertSeries( &serie );
+            state = cacheSeriesDAL.insertSeries( &serie );
         }
         //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
         if ( !state.good() ) m_error = true;
         
-        state = m_localCache->setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
+        state = cacheStudyDAL.setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
         
         //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
         if ( !state.good() ) 
@@ -73,7 +79,7 @@ void StarviewerProcessImage::process( Image *image )
         
         if ( state.good() )
         {
-            state = m_localCache->insertSeries( &serie );
+            state = cacheSeriesDAL.insertSeries( &serie );
         }
         //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
         //l'error 2019 no el tractem, perquè indica serie duplicada, alguns pacs envien les imatges desornades per tant pot ser que les imatges d'una mateixa serie arribin separades, i intentem inserir altre vegada la serie

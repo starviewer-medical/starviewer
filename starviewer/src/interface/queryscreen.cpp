@@ -41,6 +41,9 @@
 #include "pacslistdb.h"
 #include "logging.h"
 #include "status.h"
+#include "cachestudydal.h"
+#include "cacheseriesdal.h"
+#include "cacheimagedal.h"
 
 namespace udg {
 
@@ -431,18 +434,16 @@ void QueryScreen::queryStudyPacs()
 
 void QueryScreen::queryStudyCache()
 {
-    CachePacs * localCache;
+    CacheStudyDAL cacheStudyDAL;
     Status state;
     
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
-    localCache = CachePacs::getCachePacs();
 
     m_seriesListWidgetCache->clear();
     
     m_studyListCache.clear();
     
-    state=localCache->queryStudy( buildMask() , m_studyListCache ); //busquem els estudis a la cache
+    state= cacheStudyDAL.queryStudy( buildMask() , m_studyListCache ); //busquem els estudis a la cache
 
     if ( !state.good() ) 
     {
@@ -571,7 +572,8 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
 {
     Series serie;
     ImageMask imageMask;
-    CachePacs * localCache = CachePacs::getCachePacs();
+    CacheSeriesDAL cacheSeriesDAL;
+    CacheImageDAL cacheImageDAL;
     int imagesNumber;
     Status state;
     QString logMessage;
@@ -582,7 +584,7 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
     m_seriesListCache.clear();//preparem la llista de series
     
     //preparem la mascara i cerquem les series a la cache
-    state=localCache->querySeries( buildSeriesMask( studyUID ) , m_seriesListCache );
+    state=cacheSeriesDAL.querySeries( buildSeriesMask( studyUID ) , m_seriesListCache );
     
     if ( !state.good() )
     {
@@ -608,7 +610,7 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
         imageMask.setStudyUID( serie.getStudyUID() );
         imageMask.setSeriesUID( serie.getSeriesUID() );
         
-        state = localCache->countImageNumber( imageMask , imagesNumber );
+        state = cacheImageDAL.countImageNumber( imageMask , imagesNumber );
         serie.setImageNumber( imagesNumber );
         if ( !state.good() )
         {
@@ -641,7 +643,6 @@ void QueryScreen::retrievePacs( bool view )
     PacsParameters pacs;      
     PacsListDB pacsListDB; 
     StarviewerSettings settings;
-    CachePool pool;
     
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
 
@@ -720,11 +721,11 @@ void QueryScreen::retrievePacs( bool view )
 
 Status QueryScreen::insertStudyCache( Study stu )
 {
-    CachePacs *localCache = CachePacs::getCachePacs();
     std::string absPath;
     Status state;
     Study study = stu;
     StarviewerSettings settings;
+    CacheStudyDAL cacheStudyDAL;
        
     //creem el path absolut de l'estudi
     absPath.insert( 0 , settings.getCacheImagePath().toAscii().constData() );
@@ -732,7 +733,7 @@ Status QueryScreen::insertStudyCache( Study stu )
     absPath.append( "/" );
     study.setAbsPath(absPath);
     //inserim l'estudi a la caché
-    state = localCache->insertStudy( &study ); 
+    state = cacheStudyDAL.insertStudy( &study ); 
    
     return state;
 }
@@ -787,8 +788,9 @@ void QueryScreen::view()
 
 void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
 {
-
-    CachePacs * localCache = CachePacs::getCachePacs(); 
+    CacheStudyDAL cacheStudyDAL;
+    CacheSeriesDAL cacheSeriesDAL;
+    CacheImageDAL cacheImageDAL;
     Status state;
     StudyList stuList;
     Study stu;
@@ -811,7 +813,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
     logMessage = "Es visualitza l'estudi " + studyUID;
     INFO_LOG ( logMessage.toAscii().constData() );
 	
-    state = localCache->queryStudy( studyUID.toAscii().constData() , stu ); //cerquem la informació de l'estudi
+    state = cacheStudyDAL.queryStudy( studyUID.toAscii().constData() , stu ); //cerquem la informació de l'estudi
     if ( !state.good() )
     {   
         databaseError( &state );
@@ -828,7 +830,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
 
     mask.setStudyUID( stu.getStudyUID().c_str() );
 
-    localCache->querySeries( mask ,seriesList );
+    cacheSeriesDAL.querySeries( mask ,seriesList );
     if ( !state.good() )
     {
         databaseError( &state );
@@ -860,7 +862,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
         imageMask.setStudyUID( stu.getStudyUID().c_str() );
         
         imageList.clear();
-        state= localCache->queryImages(imageMask , imageList);
+        state= cacheImageDAL.queryImages(imageMask , imageList);
 
         if ( !state.good() )
         {
@@ -880,7 +882,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
         seriesList.nextSeries();
     }
     
-    localCache->updateStudyAccTime( studyUID.toStdString() );
+    cacheStudyDAL.updateStudyAccTime( studyUID.toStdString() );
     
     this->close();//s'amaga per poder visualitzar la serie
     if ( m_retrieveScreen->isVisible() )
@@ -1113,7 +1115,7 @@ StudyMask QueryScreen::buildMask()
     QString modalityMask;
     
     mask.setPatientId(m_textPatientID->text().toStdString() );
-    mask.setPatientName(buildPatientName().toStdString() );
+    //mask.setPatientName(buildPatientName().toStdString() );
     mask.setStudyId(m_textStudyID->text().toStdString() );
     mask.setStudyDate(buildStudyDates().toStdString() );
     mask.setStudyDescription( "" );

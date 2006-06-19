@@ -15,6 +15,7 @@
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "logging.h"
+#include "cachestudydal.h"
 
 namespace udg {
 
@@ -25,6 +26,7 @@ CacheLayer::CacheLayer( QObject *parent )
 
 Status CacheLayer::clearCache()
 {
+    CacheStudyDAL cacheStudyDAL;
     CachePacs *localCache = CachePacs::getCachePacs();
     StudyMask studyMask;
     StudyList studyList;
@@ -40,7 +42,7 @@ Status CacheLayer::clearCache()
     progress->setMinimumDuration( 0 );
 	progress->setCancelButton( 0 );
 
-    state = localCache->queryStudy( studyMask , studyList );
+    state = cacheStudyDAL.queryStudy( studyMask , studyList );
     
     studyList.firstStudy();
     while ( !studyList.end() && state.good() )
