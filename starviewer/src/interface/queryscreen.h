@@ -120,6 +120,11 @@ public slots:
     ///Slot que s'activa quant s'ha produit un error alliberant espai al disc
     void errorFreeingCacheSpace();
 
+    /** Slot que s'activa quant s'ha descarregat un estudi, prove de la classe QExecuteOperationThread
+     * @param studyUID UID de l'estudi descarregat
+     */
+    void studyRetrieveFinished( QString studyUID );
+
 signals :
      
     /** Signal que s'emet quan es vol visualtizar un estudi cap a ExtensionHandler

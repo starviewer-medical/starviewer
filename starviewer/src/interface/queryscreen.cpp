@@ -202,6 +202,9 @@ void QueryScreen::connectSignalsAndSlots()
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges 
     connect ( &m_qexecuteOperationThread , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
+
+    connect( &m_qexecuteOperationThread , SIGNAL(  setStudyRetrieved( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
+
 }
 
 void QueryScreen::centerWindow()
@@ -929,6 +932,23 @@ void QueryScreen::deleteStudyCache()
             }
     }
 }
+
+void QueryScreen::studyRetrieveFinished( QString studyUID ) 
+{
+    Study study;
+    CacheStudyDAL cacheStudyDAL;
+    Status state;
+    
+    state = cacheStudyDAL.queryStudy( studyUID.toAscii().constData() , study );
+
+    if ( state.good() )
+    {
+        m_studyTreeWidgetCache->insertStudy( &study );
+        m_studyTreeWidgetCache->sort();
+    }
+    else databaseError( &state );
+
+} 
 
 void QueryScreen::closeEvent( QCloseEvent* ce )
 {

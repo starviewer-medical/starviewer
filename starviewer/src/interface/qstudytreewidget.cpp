@@ -437,6 +437,12 @@ void QStudyTreeWidget::selectedSeriesIcon( QString seriesUID )
     }  
 }
 
+void QStudyTreeWidget::sort()
+{
+    //Ordenem per la columna seleccionada
+    m_studyTreeView->sortItems( m_studyTreeView->sortColumn() , Qt::AscendingOrder ); 
+}
+
 void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
 {
     clicked( m_studyTreeView->currentItem() ,0 );

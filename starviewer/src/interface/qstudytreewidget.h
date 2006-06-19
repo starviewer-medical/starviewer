@@ -48,6 +48,11 @@ public:
      */
     void insertStudyList( StudyList * studyList );
     
+    /** Inseriex la informació d'un estudi
+     * @param Dades de l'estudi
+     */
+    void insertStudy( Study * );
+
     /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
      *                    @param informació de la serie
      */
@@ -81,6 +86,10 @@ public:
     /// guarda de la mida de les columnes
     void saveColumnsWidth();
     
+    ///ordena descendentment per la columna seleccionada
+    void sort();
+
+
     /// Destructor de la classe
     ~QStudyTreeWidget();
     
@@ -156,11 +165,6 @@ private :
     
     /// Creem el menu contextual, en funcio de a quin tab pertany activa unes o altres opcions del menu
     void createContextMenu( );
-    
-    /** Inseriex la informació d'un estudi
-     * @param Dades de l'estudi
-     */
-    void insertStudy( Study * );
     
     /** Quant es consulten les sèries d'un estudi, es fa un acces al pacs demanant la informació d'aquelles series,si es tornen a consultar una segona vegada les sèries de l'estudi,no cal tornar a accedir al pacs perquè ja tenim la informació de la sèrie al TreeView, però s'ha d'actualitzar QSeriesListWidget amb  la informació de les sèries de l'estudi, com no tornem a accedir al pacs, la informació de les sèries li hem de passar d'algun mode, per això el que fem és invocar aquest mètode que crea reconstrueix l'objecte series, amb la principal informació de les sèries, i que fa un emit, que és capturat pel QSeriesInconView, per mostrar la informació de la sèrie (la connexió entre el QStudyTreeWidget i QSeriesListWidget es fa la constrcutor de la QueryScreen)
      * @param Apuntador a l'estudi al tree view
