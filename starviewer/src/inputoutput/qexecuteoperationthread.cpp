@@ -56,7 +56,7 @@ void QExecuteOperationThread::queueOperation(Operation operation)
 //s'executa des del thread
 void QExecuteOperationThread::run()
 {
-	INFO_LOG("Iniciant thread que executa operacions");
+    INFO_LOG("Iniciant thread que executa operacions");
 	
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
     
@@ -94,14 +94,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     StarviewerProcessImage *sProcessImg = new StarviewerProcessImage::StarviewerProcessImage();
     QString studyUID;
     Status state,retState;
-	QString logMessage;
+    QString logMessage;
 
-	logMessage = "Iniciant la descàrrega de l'estudi ";
-	logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-	logMessage.append( "del pacs " );
-	logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+    logMessage = "Iniciant la descàrrega de l'estudi ";
+    logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+    logMessage.append( "del pacs " );
+    logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
 	
-	INFO_LOG( logMessage.toAscii().constData() );
+    INFO_LOG( logMessage.toAscii().constData() );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
     CachePacs *localCache =  CachePacs::getCachePacs();
@@ -118,24 +118,24 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
    
     if ( !state.good() || !enoughSpace ) 
     {
-		logMessage = "La descàrrega de l'estudi ";
-		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-		logMessage.append( "del pacs " );
-		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+        logMessage = "La descàrrega de l'estudi ";
+        logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+        logMessage.append( "del pacs " );
+        logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
 	
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         
         if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
         {
-			logMessage.append (" al no haver suficient espai lliure al disc" );
+            logMessage.append (" al no haver suficient espai lliure al disc" );
             emit( notEnoughFreeSpace() );
         }
         else 
-		{
-			emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
-			logMessage.append( " al intentar alliberar espai al disc " );
-		}
-		ERROR_LOG( logMessage.toAscii().constData() );
+        {
+            emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
+            logMessage.append( " al intentar alliberar espai al disc " );
+        }
+        ERROR_LOG( logMessage.toAscii().constData() );
         
         localCache->delStudy( studyUID.toAscii().constData());
         return;
@@ -145,14 +145,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     state = pacsConnection.connect(PacsServer::retrieveImages,PacsServer::studyLevel);    
     if (!state.good())
     {   
-		logMessage = "Error al connectar al pacs ";
-		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
-		logMessage.append( ". PACS ERROR : ");
+        logMessage = "Error al connectar al pacs ";
+        logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+        logMessage.append( ". PACS ERROR : ");
         logMessage.append( state.text().c_str() );	
-		ERROR_LOG ( logMessage.toAscii().constData() );
+        ERROR_LOG ( logMessage.toAscii().constData() );
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
-		emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
+        emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
         localCache->delStudy( studyUID.toAscii().constData()) ;        
         return; 
     }
@@ -173,31 +173,31 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     retState = retrieve.moveSCU();
     pacsConnection.disconnect();
 
-	errorRetrieving = sProcessImg->getErrorRetrieving();
+    errorRetrieving = sProcessImg->getErrorRetrieving();
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID.toAscii().constData() );
-	delete sProcessImg;    
+    delete sProcessImg;    
 
     if (!retState.good() || errorRetrieving )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
-		logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
-		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-		logMessage.append( " del pacs " );
-		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+        logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
+        logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+        logMessage.append( " del pacs " );
+        logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
         logMessage.append( ". PACS ERROR : " );
         logMessage.append( retState.text().c_str() );
-		ERROR_LOG ( logMessage.toAscii().constData() );
+        ERROR_LOG ( logMessage.toAscii().constData() );
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         localCache->delStudy( studyUID.toAscii().constData() );
     }
     else 
     {    
-		logMessage = "Ha finalitzat la descàrrega de l'estudi ";
-		logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-		logMessage.append( "del pacs " );
-		logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
-		INFO_LOG( logMessage.toAscii().constData() );
+        logMessage = "Ha finalitzat la descàrrega de l'estudi ";
+        logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+        logMessage.append( "del pacs " );
+        logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+        INFO_LOG( logMessage.toAscii().constData() );
         scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualització de la caché  
         emit( setStudyRetrieved( studyUID.toAscii().constData() ) );// descarregat
         localCache->setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
@@ -228,7 +228,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     unsigned int freePoolSpace, freeSystemSpace;
     Status state;
     CacheLayer cacheLayer;
-	QString logMessage,stringMb;    
+    QString logMessage,stringMb;    
 
     freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
     if ( freeSystemSpace == 0 ) 
@@ -242,13 +242,13 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     if ( freeSystemSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired || 
          freePoolSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired )
     {
-		logMessage = "No hi ha suficient espai a la cache. Alliberant espai. Espai lliure cache ";
-		stringMb.setNum( freePoolSpace , 10 );
-		logMessage.append( stringMb );
-		logMessage.append(" Mb. Espai lliure disc ");		
-		stringMb.truncate(0);
-		stringMb.setNum( freeSystemSpace , 10 );
-		logMessage.append(" Mb");
+        logMessage = "No hi ha suficient espai a la cache. Alliberant espai. Espai lliure cache "; 
+        stringMb.setNum( freePoolSpace , 10 );
+        logMessage.append( stringMb );
+        logMessage.append(" Mb. Espai lliure disc ");		
+        stringMb.truncate(0);
+        stringMb.setNum( freeSystemSpace , 10 );
+        logMessage.append(" Mb");
 
         state = cacheLayer.deleteOldStudies( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis 
         
@@ -269,7 +269,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
         {
             //si no hi ha suficient espai,significa que no hi ha prou espai al disc, perque de la cache sempre podem alliberar espai
             enoughSpace = false;
-			INFO_LOG( "No hi ha suficient espai lliure al disc dur" );
+            INFO_LOG( "No hi ha suficient espai lliure al disc dur" );
         }
         else enoughSpace = true;
     }
@@ -281,6 +281,5 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
 QExecuteOperationThread::~QExecuteOperationThread()
 {
 }
-
 
 }

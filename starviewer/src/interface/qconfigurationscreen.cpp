@@ -111,14 +111,14 @@ void QConfigurationScreen::createConnections()
 
 void QConfigurationScreen::setIconButtons()
 {
-	m_buttonAcceptCache->setIcon( QIcon( ":images/button_ok.png" ) );
-	m_buttonAcceptPacs->setIcon( QIcon( ":images/button_ok.png" ) );
+    m_buttonAcceptCache->setIcon( QIcon( ":images/button_ok.png" ) );
+    m_buttonAcceptPacs->setIcon( QIcon( ":images/button_ok.png" ) );
 	
-	m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
-	m_buttonApplyCache->setIcon( QIcon( ":images/apply.png" ) );
+    m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
+    m_buttonApplyCache->setIcon( QIcon( ":images/apply.png" ) );
 	
-	m_buttonCancelPacs->setIcon( QIcon( ":images/cancel.png" ) );
-	m_buttonCancelCache->setIcon( QIcon( ":images/cancel.png" ) );
+    m_buttonCancelPacs->setIcon( QIcon( ":images/cancel.png" ) );
+    m_buttonCancelCache->setIcon( QIcon( ":images/cancel.png" ) );
 }
 
 void QConfigurationScreen::loadCacheDefaults()
@@ -323,9 +323,9 @@ void QConfigurationScreen::updatePacs()
         }
         else pacs.setDefault( "N" );
        
-		logMessage = "Actualitzant dades del pacs ";
-		logMessage.append( m_textAETitle->text() );
-		INFO_LOG ( logMessage.toAscii().constData() );
+        logMessage = "Actualitzant dades del pacs ";
+        logMessage.append( m_textAETitle->text() );
+        INFO_LOG ( logMessage.toAscii().constData() );
 
         state = pacsList.updatePacs( &pacs );
          
@@ -347,7 +347,7 @@ void QConfigurationScreen::deletePacs()
     Status state;
     PacsParameters pacs;
     PacsListDB pacsList;
-	QString logMessage;
+    QString logMessage;
     
     if ( m_PacsID == 0 )
     {
@@ -357,9 +357,9 @@ void QConfigurationScreen::deletePacs()
     
     pacs.setPacsID( m_PacsID );//per donar de baixa n'hi prou amb el camp clau    
 
-	logMessage = "Esborrant el pacs ";
-	logMessage.append( m_textAETitle->text() );
-	INFO_LOG ( logMessage.toAscii().constData() );
+    logMessage = "Esborrant el pacs ";
+    logMessage.append( m_textAETitle->text() );
+    INFO_LOG ( logMessage.toAscii().constData() );
 
     state = pacsList.deletePacs( &pacs );
     
@@ -759,7 +759,7 @@ void QConfigurationScreen::deleteStudies()
             
         state =  cacheLayer.clearCache();
        
-		QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
  
         if ( !state.good() )
         {
@@ -769,7 +769,7 @@ void QConfigurationScreen::deleteStudies()
         loadCachePoolDefaults();
         emit( cacheCleared() );
        
-		break;
+        break;
     }
 }
 
@@ -786,7 +786,7 @@ void QConfigurationScreen::compactCache()
     
     state = localCache->compactCachePacs();
 
-	QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
     
     if ( !state.good() )
     {
@@ -855,7 +855,6 @@ void QConfigurationScreen::databaseError(Status *state)
     }    
 }
 
-/** destructor de la classe*/
 QConfigurationScreen::~QConfigurationScreen()
 {
 }
