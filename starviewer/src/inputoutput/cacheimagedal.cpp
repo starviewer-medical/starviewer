@@ -155,9 +155,14 @@ std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
     
     sql.insert( 0 , "select count(*) from image where StuInsUID = '" );
     sql.append( imageMask->getStudyUID() );
-    sql.append( "' and SerInsUID = '" );
-    sql.append( imageMask->getSeriesUID() );
-    sql.append( "'" );
+
+    if ( imageMask->getSeriesUID().length() > 0 )
+    {
+        sql.append( "' and SerInsUID = '" );
+        sql.append( imageMask->getSeriesUID() );
+        sql.append( "'" );
+    }
+    else sql.append( "'" );
 
     return sql;
 }

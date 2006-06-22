@@ -9,13 +9,14 @@
 
 #include "imagelist.h"
 
-class Status;
-class Image;
 class string;
-class ImageMask;
+
 
 namespace udg {
 
+class ImageMask;
+class Status;
+class Image;
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -38,7 +39,7 @@ public:
     Status queryImages( ImageMask mask , ImageList &list );
 
     /** compta les imatges d'una sèrie 
-     * @param imageMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i de la sèrie, els altres valors son ignorats
+     * @param imageMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie 
      * @param imageNumber conte el nombre d'imatges
      * @return retorna estat del mètode  
      */
