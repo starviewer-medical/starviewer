@@ -108,6 +108,13 @@ void QMPRExtension::createActions()
     m_horizontalLayoutAction->setStatusTip( tr("Switch horizontal layout") );
     m_horizontalLayoutAction->setIcon( QIcon(":/images/view_left_right.png") );
     m_horizontalLayoutToolButton->setDefaultAction( m_horizontalLayoutAction );
+
+    m_mipAction = new QAction( 0 );
+    m_mipAction->setText( tr("&MIP") );
+    m_mipAction->setShortcut( tr("Ctrl+M") );
+    m_mipAction->setStatusTip( tr("Maximum Intensity Projection") );
+    m_mipAction->setIcon( QIcon(":/images/mip.png") );
+    m_mipToolButton->setDefaultAction( m_mipAction );
 }
 
 void QMPRExtension::createConnections()
@@ -127,13 +134,13 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
-    connect( m_mipPushButton , SIGNAL( clicked() ) , this , SLOT( showMIP() ) );
+    connect( m_mipAction , SIGNAL( triggered() ) , this , SLOT( showMIP() ) );
 
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
     connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
-
+    
     connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
 
     // window level

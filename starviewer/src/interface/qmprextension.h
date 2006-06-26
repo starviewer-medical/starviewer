@@ -151,6 +151,7 @@ private:
 
     /// Acció per poder controlar el layout horizontal
     QAction *m_horizontalLayoutAction;
+    QAction *m_mipAction;
     
 private slots:
     /// S'encarreguen de rotar els eixos dels plans

@@ -124,6 +124,7 @@ void QApplicationMainWindow::createActions()
     m_mpr3DAction->setText( tr("3D M&PR Viewer") );
     m_mpr3DAction->setShortcut( tr("Ctrl+P") );
     m_mpr3DAction->setStatusTip( tr("Open the 3D MPR Application Viewer") );
+    m_mpr3DAction->setIcon( QIcon(":/images/mpr3D.png") );
     m_mpr3DAction->setEnabled( false );
     signalMapper->setMapping( m_mpr3DAction , 3 );
     signalMapper->setMapping( m_mpr3DAction , "3D MPR" );
