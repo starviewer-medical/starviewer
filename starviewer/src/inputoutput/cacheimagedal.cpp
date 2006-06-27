@@ -23,21 +23,30 @@ CacheImageDAL::CacheImageDAL()
 Status CacheImageDAL::insertImage( Image *image )
 {
     //no guardem el path de la imatge perque la el podem saber amb Study.AbsPath/SeriesUID/SopInsUID
-    int stateDatabase;
-    std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    
-    databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
+    int stateDatabase;
+    Status state;
+    std::string sql;
     
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
     
-    sql.insert( 0 , "Insert into Image ( SopInsUID , StuInsUID , SerInsUID , ");
-    sql.append( " ImgNum , ImgTim , ImgDat , ImgSiz, ImgNam) " );
-    sql.append( "values ( %Q , %Q , %Q , %i , %Q , %Q , %i , %Q ) " );
+    sql.insert( 0 , "Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) " );
+    sql.append( "values (%Q,%Q,%Q,%i,%Q,%Q,%i,%Q)" );
     
+    databaseConnection->getLock();
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacció
+
+    state = databaseConnection->databaseStatus( stateDatabase );
+    
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
     stateDatabase = sqlite_exec_printf( databaseConnection->getConnection(),sql.c_str() , 0 , 0 , 0 
                                 ,image->getSoPUID().c_str()
                                 ,image->getStudyUID().c_str()
@@ -47,12 +56,38 @@ Status CacheImageDAL::insertImage( Image *image )
                                 ,"0" //Image Date
                                 ,image->getImageSize()
                                 ,image->getImageName().c_str() );   //IMage size
+                                
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+                                    
+    sql.clear();  
+    sql.insert( 0 , "Update Pool Set Space = Space + %i " );
+    sql.append( "where Param = 'USED'" );
+    
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , sql.c_str() , 0 , 0 , 0 
+                                ,image->getImageSize() );
+    
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+    
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
     
     databaseConnection->releaseLock();
+                                
+    state = databaseConnection->databaseStatus( stateDatabase );
     
-    return  databaseConnection->databaseStatus( stateDatabase );
+    return state;
 }
-
 Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;

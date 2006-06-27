@@ -14,6 +14,7 @@
 #include "study.h"
 #include "studylist.h"
 #include "studymask.h"
+#include "cachepool.h"
 
 namespace udg {
 
@@ -36,7 +37,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
     // Hi ha noms del pacients que depenent de la màquina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
     patientName = study->getPatientName();
     
-    while ( patientName.find('^') != std::string::npos )
+    while ( patientName.find( '^' ) != std::string::npos )
     {
         patientName.replace( patientName.find( '^' ) , 1 , " " , 1 );
     }
@@ -83,7 +84,6 @@ Status CacheStudyDAL::insertStudy( Study *study )
                                 ,study->getPatientAge().c_str()
                                 );
     databaseConnection->releaseLock();
-                                
                                 
     state = databaseConnection->databaseStatus( stateDatabase );
                                 
@@ -190,7 +190,7 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
     sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AETitle, AbsPath, Modali " );
     sql.append( " from Patient,Study,PacsList " );
     sql.append( " where Study.PatID=Patient.PatId " );
-    sql.append( " and Status in ('RETRIEVED','RETRIEVING') " );
+    sql.append( " and Status in ( 'RETRIEVED' , 'RETRIEVING' ) " );
     sql.append( " and PacsList.PacsID=Study.PacsID" ); //busquem el nom del pacs
     sql.append( " and StuInsUID = '" );
     sql.append( studyUID );
@@ -227,6 +227,217 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
     { 
         stateDatabase = 99; //no trobat
         state = databaseConnection->databaseStatus( stateDatabase );
+    }
+    
+    return state;
+}
+
+Status CacheStudyDAL::delStudy( std::string studyUID )
+{
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    Status state;
+    int stateDatabase;
+    char **resposta = NULL , **error = NULL;
+    int columns , rows , studySize , i;
+    std::string sql , absPathStudy;
+    CachePool cachePool;
+
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus( 50 );
+    }
+
+    /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna sentencia sql fer un rollback, i així deixa la taula en estat estable, no deixem anar el candau fins al final */ 
+    databaseConnection->getLock();
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "BEGIN TRANSACTION " , 0 , 0 , 0 ); //comencem la transacció
+
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+
+    //sql per saber el directori on es guarda l'estudi
+    sql.clear();
+    sql.insert( 0 , "select AbsPath from study where StuInsUID = '" );
+    sql.append( studyUID );
+    sql.append( "'" );
+      
+    stateDatabase = sqlite_get_table(databaseConnection->getConnection(),sql.c_str() , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de columnss.
+     
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }       
+    else if (  rows == 0 )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return databaseConnection->databaseStatus( 99 );//error 99 registre no trobat           
+    }
+    else
+    {
+        absPathStudy = resposta[1];
+    }
+    
+    //sql per saber quants estudis te el pacient
+    sql.clear();
+    sql.insert( 0 , "select count(*) from study where PatID in (select PatID from study where StuInsUID = '" );
+    sql.append( studyUID );
+    sql.append( "')" );
+
+    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de columnss.
+     
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }   
+    else if (  rows == 0 )
+    {    
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return databaseConnection->databaseStatus( 99 );//error 99 registre no trobat   
+    }
+    
+    //ignorem el resposta [0], perque hi ha la capçalera
+    if ( atoi( resposta [1] ) == 1 )
+    {//si aquell pacient nomes te un estudi l'esborrem de la taula Patient
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "delete from Patient where PatID in (select PatID from study where StuInsUID = %Q)" , 0 , 0 , 0 
+                                , studyUID.c_str() );
+                                
+        state = databaseConnection->databaseStatus( stateDatabase );
+        if ( !state.good() )
+        {
+            stateDatabase=sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+            databaseConnection->releaseLock();
+            return state;
+        }    
+    }
+    
+    //esborrem de la taula estudi    
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "delete from study where StuInsUID= %Q" , 0 , 0 , 0 , studyUID.c_str() );
+    
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+
+    //esborrem de la taula series
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "delete from series where StuInsUID= %Q" , 0 , 0 , 0 , studyUID.c_str() );
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+    
+    //calculem el que ocupava l'estudi per actualitzar l'espai actualitzat
+    sql.clear();
+    sql.insert( 0 , "select sum(ImgSiz) from image where StuInsUID= '" );
+    sql.append(studyUID);
+    sql.append( "'" );
+    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error );
+    
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+    i = 1;//ignorem les capçaleres
+    studySize = atoi( resposta [i] );
+
+    //esborrem de la taula image
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "delete from image where StuInsUID= %Q" , 0 , 0 , 0 , studyUID.c_str() );
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+
+    sql.clear();    
+    sql.insert( 0 , "Update Pool Set Space = Space - %i " );
+    sql.append( "where Param = 'USED'" );
+    
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection(),sql.c_str() , 0 , 0 , 0 
+                                , studySize );
+                                
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseConnection->releaseLock();
+        return state;
+    }
+        
+    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "COMMIT TRANSACTION" , 0 , 0 , 0 ); //fem commit
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        return state;
+    }
+    
+    databaseConnection->releaseLock();        
+    
+    //una vegada hem esborrat les dades de la bd, podem esborrar les imatges, això s'ha de fer al final, perqué si hi ha un error i esborrem les
+    //imatges al principi, no les podrem recuperar i la informació a la base de dades hi continuarà estant
+    cachePool.removeStudy( absPathStudy );
+    
+    return state;  
+}
+
+Status CacheStudyDAL::delNotRetrievedStudies()
+{
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    Status state;
+    int stateDatabase;
+    char **resposta = NULL , **error = NULL;
+    int columns,rows,i;
+    std::string sql , studyUID;
+
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus( 50 );
+    }
+    
+    //cerquem els estudis pendents de finalitzar la descarrega
+    sql.insert( 0 , "select StuInsUID from Study where Status in ( 'PENDING' , 'RETRIEVING' )" );
+   
+    databaseConnection->getLock();
+    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    databaseConnection->releaseLock();
+    
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() ) return state;
+   
+    //ignorem el resposta [0], perque hi ha la capçalera
+    i = 1;
+    
+    while ( i <= rows )
+    {   
+        studyUID.erase();
+        studyUID.insert( 0 , resposta[i] );
+         state = delStudy( studyUID );
+        if ( !state.good() )
+        {
+            break;
+        }
+        i++;
     }
     
     return state;
@@ -291,7 +502,6 @@ Status CacheStudyDAL::setStudyModality( std::string studyUID , std::string modal
     state = databaseConnection->databaseStatus( stateDatabase );
 
     return state;
-                                
 }
 
 Status CacheStudyDAL::updateStudyAccTime( std::string studyUID )
@@ -301,9 +511,6 @@ Status CacheStudyDAL::updateStudyAccTime( std::string studyUID )
     Status state;
     std::string sql;
     
-    //sqlite no permet en un update entra valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem
-    //un string i hi afegim 6 zeros per passar Mb a bytes
-
     sql.insert( 0 , "Update Study Set AccDat = %i, " );//convertim l'espai en bytes
     sql.append( "AccTim = %i " );
     sql.append( "where StuInsUID = %Q" );

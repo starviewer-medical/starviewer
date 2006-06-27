@@ -106,7 +106,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     INFO_LOG( logMessage.toAscii().constData() );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    CachePacs *localCache =  CachePacs::getCachePacs();
     ScaleStudy scaleStudy;
     RetrieveImages retrieve;
     bool enoughSpace , errorRetrieving ;
@@ -139,7 +138,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         }
         ERROR_LOG( logMessage.toAscii().constData() );
         
-        localCache->delStudy( studyUID.toAscii().constData());
+        cacheStudyDAL.delStudy( studyUID.toAscii().constData());
         return;
     }
     
@@ -155,7 +154,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
-        localCache->delStudy( studyUID.toAscii().constData()) ;        
+        cacheStudyDAL.delStudy( studyUID.toAscii().constData()) ;        
         return; 
     }
     
@@ -191,7 +190,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         ERROR_LOG ( logMessage.toAscii().constData() );
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
-        localCache->delStudy( studyUID.toAscii().constData() );
+        cacheStudyDAL.delStudy( studyUID.toAscii().constData() );
     }
     else 
     {    

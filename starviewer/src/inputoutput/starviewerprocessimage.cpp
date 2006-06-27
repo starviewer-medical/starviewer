@@ -103,7 +103,7 @@ void StarviewerProcessImage::process( Image *image )
     }
     
     //inserim imatge
-    state = m_localCache->insertImage( image );
+    state = cacheImageDAL.insertImage( image );
     //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
     if ( !state.good() ) m_error = true;
    

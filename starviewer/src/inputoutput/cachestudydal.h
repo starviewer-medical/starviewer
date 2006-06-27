@@ -16,7 +16,7 @@ class Status;
 class StudyList;
 class StudyMask;
 
-/**
+/** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class CacheStudyDAL
@@ -68,6 +68,17 @@ public:
      */
     Status queryOldStudies( std::string OldStudiesDate, StudyList &list );
     
+    /** Esborra un estudi de la cache, l'esborra la taula estudi,series, i image, i si el pacient d'aquell estudi, no té cap altre estudi a la cache local tambe esborrem el pacient. Aquesta operació és dur a terme en una transacció, si falla el mètode, es tirara endarrera, fins a l'estat estable de la base de dades
+     * @param std::string UID de l'estudi
+     * @return estat de l'operació
+     */
+    Status delStudy( std::string );
+    
+    /** Aquesta acció es per mantenir la integritat de la base de dades, si ens trobem estudis al iniciar l'aplicació que tenen l'estat pendent o descarregant vol dir que l'aplicació en l'anterior execussió ha finalitzat anòmalament, per tant aquest estudis en estat pendents, les seves sèrie i imatges han de ser borrades perquè es puguin tornar a descarregar. Aquesta acció és simplement per seguretat!
+     * @return estat de l'operació
+     */
+    Status delNotRetrievedStudies();    
+
     /** actualitza l'última vegada que un estudi ha estat visualitzat, d'aquesta manera quant haguem d'esborrar estudis
      * automàticament per falta d'espai, esborarrem els que fa més temps que no s'han visualitzat
      * @param UID de l'estudi
@@ -75,26 +86,27 @@ public:
      * @param data visualització de l'estudi format 'yyyymmdd'
      * @return estat el mètode
      */
-    Status updateStudyAccTime(std::string studyUID);
-    
-    /** Updata un estudi a Retrieved
-     * @param Uid de l'estudi a actualitzar
-     * @return retorna estat del mètode
-     */
-    Status setStudyRetrieved(std::string studyUID);
-    
+    Status updateStudyAccTime( std::string studyUID );
+        
     /** Updata la modalitat d'un estudi
      * @param Uid de l'estudi a actualitzar
      * @param Modalitat de l'estudi
      * @return retorna estat del mètode
      */
-    Status setStudyModality(std::string studyUID,std::string modality);
+    Status setStudyModality( std::string studyUID , std::string modality );
     
     /** Updata un estudi PENDING a RETRIEVING, per indicar que l'estudi s'esta descarregant
      * @param Uid de l'estudi a actualitzar
      * @return retorna estat del mètode
      */
-    Status setStudyRetrieving(std::string studyUID);
+    Status setStudyRetrieving( std::string studyUID );
+    
+    /** Updata un estudi a l'estat RETRIEVED, per indicar que s'ha descarregat
+     * @param Uid de l'estudi a actualitzar
+     * @return retorna estat del mètode
+     */
+    Status setStudyRetrieved( std::string studyUID );
+    
     
     ~CacheStudyDAL();
 
@@ -117,13 +129,12 @@ private :
      */
     int getTime();
     
-	/** retorna la data del sistema
+    /** retorna la data del sistema
      *    @return retorna la data del sistema en format yyyymmdd
      */
     int getDate();
 
 };
-
 }
 
 #endif

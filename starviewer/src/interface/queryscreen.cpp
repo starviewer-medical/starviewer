@@ -55,6 +55,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     Status state;
     QString path;
     StarviewerSettings settings;
+    CacheStudyDAL cacheStudyDal;
            
     CachePacs * localCache= CachePacs::getCachePacs();
     m_retrieveScreen = new udg::QRetrieveScreen;
@@ -64,7 +65,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     //connectem signals i slots
     connectSignalsAndSlots();
     
-    state = localCache->delNotRetrievedStudies();//Esborrem els estudis en estat 'PENDING' o 'RETRIEVING'
+    state = cacheStudyDal.delNotRetrievedStudies();//Esborrem els estudis en estat 'PENDING' o 'RETRIEVING'
     if ( !state.good() ) 
     {
         databaseError( &state );
@@ -898,7 +899,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
 void QueryScreen::deleteStudyCache()
 {
     Status state;
-    CachePacs * localCache = CachePacs::getCachePacs();
+    CacheStudyDAL cacheStudyDAL;
     QString studyUID;
     QString logMessage;
     
@@ -919,7 +920,7 @@ void QueryScreen::deleteStudyCache()
             logMessage = "S'esborra de la cache l'estudi " + studyUID;
             INFO_LOG( logMessage.toAscii().constData() );
             
-            state = localCache->delStudy( studyUID.toAscii().constData() );   
+            state = cacheStudyDAL.delStudy( studyUID.toAscii().constData() );   
             
             if ( state.good() )
             {

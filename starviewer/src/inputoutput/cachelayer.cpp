@@ -27,7 +27,6 @@ CacheLayer::CacheLayer( QObject *parent )
 Status CacheLayer::clearCache()
 {
     CacheStudyDAL cacheStudyDAL;
-    CachePacs *localCache = CachePacs::getCachePacs();
     StudyMask studyMask;
     StudyList studyList;
     Study study;
@@ -40,7 +39,7 @@ Status CacheLayer::clearCache()
     QProgressDialog *progress;
     progress = new QProgressDialog( tr( "Clearing cache..." ) , "" , 0 , usedSpaceInit );
     progress->setMinimumDuration( 0 );
-	progress->setCancelButton( 0 );
+    progress->setCancelButton( 0 );
 
     state = cacheStudyDAL.queryStudy( studyMask , studyList );
     
@@ -48,7 +47,7 @@ Status CacheLayer::clearCache()
     while ( !studyList.end() && state.good() )
     {
         study = studyList.getStudy();
-        state = localCache->delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
+        state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
         
         if ( !state.good() ) state = pool.getPoolUsedSpace( usedSpace ); 
         deletedSpace = usedSpaceInit - usedSpace;//calculem l'espai esborrat
@@ -73,12 +72,12 @@ Status CacheLayer::deleteOldStudies()
 {
     QDate today,lastTimeViewedMinimum;
     StarviewerSettings settings;
-    CachePacs *localCache = CachePacs::getCachePacs();
     StudyList studyList;
     Status state;
     Study study;
     int comptador = 0;
-	QString logMessage , numberOfDeletedStudies;    
+    QString logMessage , numberOfDeletedStudies;    
+    CacheStudyDAL cacheStudyDAL;
    
     today = today.currentDate();
     //calculem fins a quin dia conservarem els estudis
@@ -86,7 +85,7 @@ Status CacheLayer::deleteOldStudies()
     lastTimeViewedMinimum = today.addDays( - settings.getMaximumDaysNotViewedStudy().toInt( NULL , 10 ) );
     
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre
-    state = localCache->queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ).toAscii().constData() , studyList );
+    state = cacheStudyDAL.queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ).toAscii().constData() , studyList );
     studyList.firstStudy();
     
     QProgressDialog *progress;
@@ -97,7 +96,7 @@ Status CacheLayer::deleteOldStudies()
     while ( state.good() && !studyList.end() )
     {
         study = studyList.getStudy();
-        state = localCache->delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar   
+        state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar   
         studyList.nextStudy();
         comptador++;
         progress->setValue( comptador );
@@ -119,14 +118,14 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
 {
     QDate maxDate;
     StarviewerSettings settings;
-    CachePacs *localCache = CachePacs::getCachePacs();
     StudyList studyList;
     Status state;
     Study study;
     CachePool pool;
     unsigned int usedSpaceInit = 0 , usedSpace = 0;
     int deletedSpace = 0;
-	QString logMessage , numberOfDeletedStudies;    
+    QString logMessage , numberOfDeletedStudies;  
+    CacheStudyDAL cacheStudyDAL;  
          
     maxDate = maxDate.currentDate();
     maxDate = maxDate.addDays( 1 ); //com que la funcio queryOldStudies, retorna els que no ha estat visualitzats en una data inferior a la passada per parametre, per incloure els del mateix dia a la llista que retorna, hi sumem un dia
@@ -136,14 +135,14 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
     if ( !state.good() ) return state;
     
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre, retorna la llista ordenada per data i hora de l'ultima visualitzacio, ordenada ascendentment 
-    state = localCache->queryOldStudies( maxDate.toString("yyyyMMdd").toAscii().constData() , studyList );
+    state = cacheStudyDAL.queryOldStudies( maxDate.toString("yyyyMMdd").toAscii().constData() , studyList );
     studyList.firstStudy();
     
     //esborrem estudis fins que la llista estigui buida o haguem alliberat l'espai en Mb passat per parametre
     while ( state.good() && !studyList.end() && MbytesToErase >= deletedSpace )
     {
         study = studyList.getStudy();
-        state = localCache->delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar   
+        state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar   
         pool.getPoolUsedSpace( usedSpace );//calculem l'espai esborrat
         deletedSpace = usedSpaceInit - usedSpace;
         studyList.nextStudy();
