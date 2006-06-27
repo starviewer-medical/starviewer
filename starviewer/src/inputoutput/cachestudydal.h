@@ -68,19 +68,18 @@ public:
      */
     Status queryOldStudies( std::string OldStudiesDate, StudyList &list );
     
-    /** Esborra un estudi de la cache, l'esborra la taula estudi,series, i image, i si el pacient d'aquell estudi, no té cap altre estudi a la cache local tambe esborrem el pacient. Aquesta operació és dur a terme en una transacció, si falla el mètode, es tirara endarrera, fins a l'estat estable de la base de dades
+    /** Esborra un estudi de la cache, l'esborra la taula estudi,series, i image, i si el pacient d'aquell estudi, no té cap altre estudi a la cache local tambe esborrem el pacient. Aquesta operació és dur a terme en una transacció, si falla el mètode, es tirara endarrera, fins a l'estat estable de la base de dades. En aquest mètode es fa accessos a altres taules de la caché com imatge, sèrie, etc.. això és degut a que les operacions d'esborrar un estudi com que afecta a altres taules, s'han de fer una transacció, per això s'ha de tenir juntes en un mateix mètode. Ja que si durant la invocació als diferents mètodes, n'entressin altres mètodes ajens a la operació esborrar estudi, quedarien dins la transacció quan no hi pertanyen. Degut aquest motiu tots es realitzen dins el mateix mètode
      * @param std::string UID de l'estudi
      * @return estat de l'operació
      */
     Status delStudy( std::string );
     
-    /** Aquesta acció es per mantenir la integritat de la base de dades, si ens trobem estudis al iniciar l'aplicació que tenen l'estat pendent o descarregant vol dir que l'aplicació en l'anterior execussió ha finalitzat anòmalament, per tant aquest estudis en estat pendents, les seves sèrie i imatges han de ser borrades perquè es puguin tornar a descarregar. Aquesta acció és simplement per seguretat!
-     * @return estat de l'operació
+    /** Aquesta acció es per mantenir la integritat de la base de dades, si ens trobem estudis al iniciar l'aplicació que tenen l'estat pendent o descarregant vol dir que l'aplicació en l'anterior execussió ha finalitzat anòmalament, per tant aquest estudis en estat pendents, les seves sèrie i imatges han de ser borrades perquè es puguin tornar a descarregar.      * @return estat de l'operació
      */
     Status delNotRetrievedStudies();    
 
     /** actualitza l'última vegada que un estudi ha estat visualitzat, d'aquesta manera quant haguem d'esborrar estudis
-     * automàticament per falta d'espai, esborarrem els que fa més temps que no s'han visualitzat
+     * automàticament per falta d'espai, esborarrem els que fa més temps que no s'han visualitzat.
      * @param UID de l'estudi
      * @param hora de visualització de l'estudi format 'hhmm'
      * @param data visualització de l'estudi format 'yyyymmdd'

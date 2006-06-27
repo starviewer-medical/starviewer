@@ -88,6 +88,7 @@ Status CacheImageDAL::insertImage( Image *image )
     
     return state;
 }
+
 Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;

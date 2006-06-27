@@ -16,7 +16,6 @@
 
 #include "databaseconnection.h"
 
-
 namespace udg {
 
 CacheSeriesDAL::CacheSeriesDAL()
@@ -136,6 +135,5 @@ std::string CacheSeriesDAL::buildSqlQuerySeries( SeriesMask *seriesMask )
 CacheSeriesDAL::~CacheSeriesDAL()
 {
 }
-
 
 }

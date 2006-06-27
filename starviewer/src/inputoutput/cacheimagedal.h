@@ -10,22 +10,25 @@
 #include "imagelist.h"
 
 class string;
-
-
+    
 namespace udg {
 
 class ImageMask;
 class Status;
 class Image;
-/**
+
+/** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+
 class CacheImageDAL
 {
 public:
+
     CacheImageDAL();
 
-    /** Insereix la informació d'una imatge a la caché. I actualitza l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacions es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat
+    /** Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacions es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat. Per això tot i que accedim a dos taules, al haver-se de fer dins el marc d'una transacció, necessitem fer-les
+    dins el mateix mètode. Ja que sinó ens podríem trobar que altres operacions entressin entre insertar la imatge i updatar la pool i quedessin incloses dins la tx
      * @param dades de la imatge 
      * @return retorna estat del mètode
      */
@@ -54,7 +57,6 @@ public:
 
 private :
 
-
     /** Construeix la sentència per buscar les imatges d'un estudi
      * @param mask màscara de cerca
      * @return sentència sql
@@ -66,7 +68,6 @@ private :
      * @return retorna la sentència Sql
      */
     std::string buildSqlCountImageNumber( ImageMask *imageMask );    
-
 
 };
 
