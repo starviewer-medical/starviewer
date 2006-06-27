@@ -66,27 +66,6 @@ Status CachePacs::constructState( int numState )
 /*********************************************************************************************************                                                MANTENIMENT DE LA CACHE                                     
  *********************************************************************************************************/
 
-Status CachePacs::compactCachePacs()
-{
-    int i;
-    Status state;
-    std::string sql;
-    
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
-    }
-    
-    sql.insert( 0 , "vacuum" );//amb l'acció vacuum es compacta la base de dades
-    
-    m_DBConnect->getLock();
-    i = sqlite_exec_printf( m_DBConnect->getConnection(),sql.c_str() , 0 , 0 , 0 );
-    m_DBConnect->releaseLock();
-                                
-    state = constructState( i );
-
-    return state;
-}
 
 CachePacs::~CachePacs()
 {

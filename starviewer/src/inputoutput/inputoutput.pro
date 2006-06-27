@@ -54,7 +54,8 @@ HEADERS += input.h \
            patientserie.h \
            cacheimagedal.h \
            cacheseriesdal.h \
-           cachestudydal.h 
+           cachestudydal.h \
+           cachetools.h 
 SOURCES += input.cpp \
            output.cpp \
            cachepacs.cpp \
@@ -104,7 +105,8 @@ SOURCES += input.cpp \
            patientserie.cpp \
            cacheimagedal.cpp \
            cacheseriesdal.cpp \
-           cachestudydal.cpp 
+           cachestudydal.cpp \
+           cachetools.cpp 
 TARGETDEPS += ../tools/libtools.a \
 ../../src/repositories/librepositories.a
 LIBS += ../../src/tools/libtools.a \

@@ -31,6 +31,7 @@
 #include "logging.h"
 #include "pacsserver.h"
 #include "pacsnetwork.h"
+#include "cachetools.h"
 
 namespace udg {
 
@@ -775,16 +776,14 @@ void QConfigurationScreen::deleteStudies()
 
 void QConfigurationScreen::compactCache()
 {
-    CachePacs * localCache;
+    CacheTools cacheTools;
     Status state;
     
     INFO_LOG( "Compatacio de la cache" );
     
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    localCache = CachePacs::getCachePacs();
-    
-    state = localCache->compactCachePacs();
+    state = cacheTools.compactCachePacs();
 
     QApplication::restoreOverrideCursor();
     
