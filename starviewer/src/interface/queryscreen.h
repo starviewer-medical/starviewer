@@ -20,6 +20,7 @@ namespace udg {
 
 class SeriesList;
 class Status;
+class SeriesMask;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc

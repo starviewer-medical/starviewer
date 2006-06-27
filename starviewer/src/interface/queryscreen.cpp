@@ -28,7 +28,6 @@
 #include "queryimagenumber.h"
 #include "qserieslistwidget.h"
 #include "retrieveimages.h"
-#include "cachepacs.h"
 #include "qconfigurationscreen.h"
 #include "pacslist.h"
 #include "qpacslist.h"
@@ -44,6 +43,7 @@
 #include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
+#include "seriesmask.h"
 
 namespace udg {
 
@@ -57,10 +57,9 @@ QueryScreen::QueryScreen( QWidget *parent )
     StarviewerSettings settings;
     CacheStudyDAL cacheStudyDal;
            
-    CachePacs * localCache= CachePacs::getCachePacs();
     m_retrieveScreen = new udg::QRetrieveScreen;
 	
-	initialize();//inicialitzem les variables necessàries
+    initialize();//inicialitzem les variables necessàries
 
     //connectem signals i slots
     connectSignalsAndSlots();

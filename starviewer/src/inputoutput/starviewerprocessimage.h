@@ -12,11 +12,12 @@
 #include <QString>
 
 #include "processimage.h"
-#include "cachepacs.h"
 
 namespace udg {
 
+class Status;
 class Image;
+class Series;
 
 /**
 @author marc
@@ -66,9 +67,8 @@ signals :
     
 private :
 
-    CachePacs *m_localCache;
     int m_downloadedImages , m_downloadedSeries;
-    QString m_oldSeriesUID,m_studyUID;
+    QString m_oldSeriesUID , m_studyUID;
     bool m_error;
     
     /** Crea el path de la imatge d'on obtenir la informació de les series

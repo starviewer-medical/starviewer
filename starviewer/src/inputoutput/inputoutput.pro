@@ -5,7 +5,6 @@
 
 HEADERS += input.h \
            output.h \
-           cachepacs.h \
            const.h \
            databaseconnection.h \
            image.h \
@@ -58,7 +57,6 @@ HEADERS += input.h \
            cachetools.h 
 SOURCES += input.cpp \
            output.cpp \
-           cachepacs.cpp \
            databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \

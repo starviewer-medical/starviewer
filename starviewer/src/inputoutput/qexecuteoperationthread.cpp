@@ -14,7 +14,6 @@
 #include "queueoperationlist.h"
 #include "processimagesingleton.h"
 #include "starviewerprocessimage.h"
-#include "cachepacs.h"
 #include "harddiskinformation.h"
 #include "scalestudy.h"
 #include "cachepool.h"

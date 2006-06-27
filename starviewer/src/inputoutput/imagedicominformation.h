@@ -7,7 +7,7 @@
 #ifndef UDGIMAGEDICOMINFORMATION_H
 #define UDGIMAGEDICOMINFORMATION_H
 
-
+#define HAVE_CONFIG_H 1
 #include <dcfilefo.h> //obre un fitxer dicom
 
 namespace udg {

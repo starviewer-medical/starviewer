@@ -12,6 +12,8 @@
 
 namespace udg {
 
+class StudyList;
+
 /** Aquesta classe afegeix un nivell d'abstracio sobre la classe CachePacs, permetent realitzar operacions sobre la cache, i utilitzar elements de la interfcie
  * @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */

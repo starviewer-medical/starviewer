@@ -9,13 +9,13 @@
 #include <QDate>
 
 #include "cachelayer.h"
-#include "cachepacs.h"
 #include "status.h"
 #include "studymask.h"
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "logging.h"
 #include "cachestudydal.h"
+#include "studylist.h"
 
 namespace udg {
 
