@@ -15,6 +15,7 @@
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
 #include "qexecuteoperationthread.h"
+#include "converttodicomdir.h"
 
 namespace udg {
 
@@ -126,6 +127,11 @@ public slots:
      */
     void studyRetrieveFinished( QString studyUID );
 
+    /** Converteix l'estudi a un DicomDir
+     * @param studyUID UID de l'estudi a covnertir a Dicomdir
+     */
+    void convertToDicomDir( QString studyUID );
+
 signals :
      
     /** Signal que s'emet quan es vol visualtizar un estudi cap a ExtensionHandler
@@ -162,9 +168,10 @@ struct retrieveParameters
     QRetrieveScreen *m_retrieveScreen;
     MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
     QExecuteOperationThread m_qexecuteOperationThread;
-    
+    ConvertToDicomDir m_convert;    
     //StudyVolum m_volum;
     bool m_PacsListShow;
+
     
     /** Activa o desactiva els checkbox per buscar per modalitat, en funcio del paràmetre passat
      * @param boolea que indica si s'ha d'activar els checkbox de modalitat o desactivar

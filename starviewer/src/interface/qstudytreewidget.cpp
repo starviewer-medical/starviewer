@@ -79,10 +79,15 @@ void QStudyTreeWidget::createContextMenu()
     m_contextMenu.addSeparator();
     QAction *deleteStudy =  m_contextMenu.addAction( tr("&Delete")) ;
     deleteStudy->setShortcut( tr("Ctrl+D") );
-      
+    //accio crear Directori DicomDIR
+    m_contextMenu.addSeparator();
+    QAction *createDicomDir = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
+    createDicomDir->setShortcut( tr( "Ctrl+M" ) );
+
     connect( view , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
     connect( retrieve , SIGNAL( triggered() ) , this , SLOT( retrieveStudy() ) );
     connect( deleteStudy , SIGNAL(triggered()), this, SLOT(deleteStudy()));
+    connect( createDicomDir , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
       
     /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
     (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );  
@@ -91,7 +96,8 @@ void QStudyTreeWidget::createContextMenu()
     
     if (m_parentName == "m_tabPacs")
     {   //si el QStudyTreeWidget es el que mostra la llista d'estudis del PACS, la opcio delete desactivada
-        deleteStudy->setEnabled(false);       
+        deleteStudy->setEnabled(false);
+        createDicomDir->setEnabled( false );       
     }   
    
     if (m_parentName == "m_tabCache")
@@ -511,6 +517,11 @@ void QStudyTreeWidget::viewStudy()
 void QStudyTreeWidget::retrieveStudy()
 {
     emit( retrieve() );    
+}
+
+void QStudyTreeWidget::createDicomDir()
+{
+    emit ( convertToDicomDir( getSelectedStudyUID() ) );
 }
 
 void QStudyTreeWidget::saveColumnsWidth()

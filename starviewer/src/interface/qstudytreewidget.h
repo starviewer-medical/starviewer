@@ -122,6 +122,9 @@ signals :
     ///signal que s'emet quan seleccionem una serie, cap al QSeriesListWidget, per a que seleccioni la mateixa serie que nosaltres tenim seleccionada
     void selectedSeriesList( QString ); 
 
+    //signal que s'emet quan es vol convertir un estudi al format DicomDir
+    void convertToDicomDir( QString studyUID );
+
 public slots:
     
     /** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
@@ -150,6 +153,9 @@ public slots:
     
     /// Slot que visualitza l'estudi
     void viewStudy( );
+
+    ///Slot que converteix un estudi 
+    void createDicomDir();
 
 private :
 

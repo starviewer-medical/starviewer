@@ -205,6 +205,8 @@ void QueryScreen::connectSignalsAndSlots()
 
     connect( &m_qexecuteOperationThread , SIGNAL(  setStudyRetrieved( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
 
+    connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomDir( QString ) ) );
+
 }
 
 void QueryScreen::centerWindow()
@@ -1012,6 +1014,11 @@ void QueryScreen::resizePacsList()
     }
     
    this->resize( this->width() + mida, this->height() );
+}
+
+void QueryScreen::convertToDicomDir( QString studyUID )
+{
+    m_convert.convert( studyUID );
 }
 
 void QueryScreen::notEnoughFreeSpace()

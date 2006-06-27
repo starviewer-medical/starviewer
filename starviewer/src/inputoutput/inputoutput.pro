@@ -54,6 +54,9 @@ HEADERS += input.h \
            cacheimagedal.h \
            cacheseriesdal.h \
            cachestudydal.h \
+           converttodicomdir.h \
+           convertdicomtolittleendian.h \
+           createdicomdir.h \ 
            cachetools.h 
 SOURCES += input.cpp \
            output.cpp \
@@ -104,6 +107,9 @@ SOURCES += input.cpp \
            cacheimagedal.cpp \
            cacheseriesdal.cpp \
            cachestudydal.cpp \
+           converttodicomdir.cpp \
+           convertdicomtolittleendian.cpp \
+           createdicomdir.cpp \ 
            cachetools.cpp 
 TARGETDEPS += ../tools/libtools.a \
 ../../src/repositories/librepositories.a

@@ -5,7 +5,8 @@ INCLUDEPATH += /usr/include/dcmtk/ \
 	/usr/include/dcmtk/dcmsign/ \
 	/usr/include/dcmtk/ofstd/ \
 	/usr/include/dcmtk/dcmimage/ \
-	/usr/include/dcmtk/config
+	/usr/include/dcmtk/config \
+	/usr/include/dcmtk/dcmjpeg
 
 LIBS += -L/usr/lib/dcmtk/ \
 	-lsqlite \
@@ -13,5 +14,6 @@ LIBS += -L/usr/lib/dcmtk/ \
 	-ldcmdata \
 	-ldcmimage \
 	-ldcmimgle \
-	-lofstd 
+	-lofstd \
+	-ldcmjpeg
     
