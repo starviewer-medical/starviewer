@@ -23,11 +23,11 @@
 
 namespace udg {
 
-CreateDicomDir::CreateDicomDir()
+CreateDicomdir::CreateDicomdir()
 {
 }
 
-Status CreateDicomDir::create( std::string dicomdirPath )
+Status CreateDicomdir::create( std::string dicomdirPath )
 {
     std::string errorMessage , outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
     OFList<OFString> fileNames;/* create list of input files */
@@ -94,7 +94,7 @@ Status CreateDicomDir::create( std::string dicomdirPath )
     return state.setStatus( result );
 }
 
-CreateDicomDir::~CreateDicomDir()
+CreateDicomdir::~CreateDicomdir()
 {
 }
 
