@@ -10,6 +10,7 @@
 #include <QObject>
 
 class QString;
+class QStringList;
 
 namespace udg {
 
@@ -20,11 +21,17 @@ class Image;
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ConvertToDicomDir : public QObject 
+class ConvertToDicomdir : public QObject 
 {
 public:
 
-    ConvertToDicomDir( );
+    ConvertToDicomdir( );
+
+    
+    /** Afegeix un estudi a la llista per convertir-se a dicomsdir
+     * @param studyUID UID de l'estudi a convertir a dicomdir
+     */
+    void addStudy ( QString studyUID );
 
     /** Converteix l'estudi amb el UID passat per paràmetre a dicomDir
      * @param studyUID UID de l'estudi a convertir a DicomDir
@@ -32,10 +39,12 @@ public:
      */
     Status convert( QString studyUID );
 
-    ~ConvertToDicomDir();
+    ~ConvertToDicomdir();
 
 private :
     QProgressDialog *m_progress;
+
+    QStringList m_studiesToConvert;
 
     QString m_dicomDirPath;
     QString m_dicomDirStudyPath;

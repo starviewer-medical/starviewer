@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include <QString>
 #include <QProgressDialog>
+#include <QStringList>
 
 #include "converttodicomdir.h"
 #include <QDir>
@@ -27,7 +28,7 @@
 
 namespace udg {
 
-ConvertToDicomDir::ConvertToDicomDir()
+ConvertToDicomdir::ConvertToDicomdir()
 {
     QDir dicomDir;
 
@@ -41,8 +42,12 @@ ConvertToDicomDir::ConvertToDicomDir()
     dicomDir.mkdir( m_dicomDirPath );
 }
 
+void ConvertToDicomdir::addStudy( QString studyUID )
+{
+    m_studiesToConvert.push_back( studyUID );
+}
 
-Status ConvertToDicomDir::convert( QString studyUID )
+Status ConvertToDicomdir::convert( QString studyUID )
 {
     QDir studyDir;
     QChar fillChar = '0';    
@@ -103,7 +108,7 @@ Status ConvertToDicomDir::convert( QString studyUID )
     return state;
 }
 
-Status ConvertToDicomDir::convertSeries( Series series )
+Status ConvertToDicomdir::convertSeries( Series series )
 {
     QDir seriesDir;
     QChar fillChar = '0';    
@@ -144,7 +149,7 @@ Status ConvertToDicomDir::convertSeries( Series series )
     return state;
 }
 
-Status ConvertToDicomDir::convertImage( Image image )
+Status ConvertToDicomdir::convertImage( Image image )
 {
     QChar fillChar = '0';    
     //creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
@@ -174,7 +179,7 @@ Status ConvertToDicomDir::convertImage( Image image )
 
 }
 
-ConvertToDicomDir::~ConvertToDicomDir()
+ConvertToDicomdir::~ConvertToDicomdir()
 {
 }
 
