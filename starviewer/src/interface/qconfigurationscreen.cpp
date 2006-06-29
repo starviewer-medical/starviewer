@@ -562,9 +562,16 @@ bool QConfigurationScreen::validateChanges()
                     tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
             {
                 case 0:
-                    return dir.mkpath( m_textCacheImagePath->text() );
+                    if ( !dir.mkpath( m_textCacheImagePath->text() ) )
+                    {
+                        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the directory. Please check users permission" ) );
+                        return false;
+                    }
+                    else return true;
+                    break;
                 case 1: 
                     return false;
+                    break;
             }
         }
     }    
