@@ -8,14 +8,13 @@
 #define UDGQUERYSCREEN_H
 
 #include "ui_queryscreenbase.h"
-
-#include "qretrievescreen.h"
 #include "multiplequerystudy.h"
 #include "processimagesingleton.h"
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
 #include "qexecuteoperationthread.h"
-#include "converttodicomdir.h"
+#include "qretrievescreen.h"
+#include "qcreatedicomdir.h"
 
 namespace udg {
 
@@ -72,6 +71,9 @@ public slots:
     /// Slot que mostra la interfície QRetrieveScreen
     void showRetrieveScreen();
     
+    ///Slot que mostra la interfície QCreateDicomdir
+    void showCreateDicomdirScreen();
+
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
     void view();
     
@@ -165,13 +167,15 @@ struct retrieveParameters
     SeriesListSingleton *m_seriesListSingleton;
     SeriesList m_seriesListCache;
     ProcessImageSingleton *m_piSingleton;
-    QRetrieveScreen *m_retrieveScreen;
+    
     MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
-    QExecuteOperationThread m_qexecuteOperationThread;
-    ConvertToDicomDir m_convert;    
+    
     //StudyVolum m_volum;
     bool m_PacsListShow;
-
+    
+    QRetrieveScreen *m_retrieveScreen;
+    QCreateDicomdir *m_qcreateDicomdir;
+    QExecuteOperationThread m_qexecuteOperationThread;   
     
     /** Activa o desactiva els checkbox per buscar per modalitat, en funcio del paràmetre passat
      * @param boolea que indica si s'ha d'activar els checkbox de modalitat o desactivar

@@ -4,11 +4,11 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#include "converttodicomdir.h"
+
 #include <QString>
 #include <QProgressDialog>
 #include <QStringList>
-
-#include "converttodicomdir.h"
 #include <QDir>
 #include <QChar>
 
@@ -20,6 +20,7 @@
 #include "imagemask.h"
 #include "serieslist.h"
 #include "imagelist.h"
+#include "study.h"
 #include "series.h"
 #include "image.h"
 #include "convertdicomtolittleendian.h"
@@ -35,11 +36,6 @@ ConvertToDicomdir::ConvertToDicomdir()
     m_study = 0;
     m_series = 0;
     m_image = 0;
-
-    //Creem el dicomdir temporal al tmp del l'usuari
-    m_dicomDirPath = dicomDir.tempPath();
-    m_dicomDirPath.append( "/dicom" );
-    dicomDir.mkdir( m_dicomDirPath );
 }
 
 void ConvertToDicomdir::addStudy( QString studyUID )
@@ -47,34 +43,63 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     m_studiesToConvert.push_back( studyUID );
 }
 
-Status ConvertToDicomdir::convert( QString studyUID )
+Status ConvertToDicomdir::convert( QString dicomdirPath )
 {
-    QDir studyDir;
-    QChar fillChar = '0';    
-    CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     //creem el nom del directori de l'estudi el format és STUXXXXX, on XXXXX és el numero d'estudi dins el dicomdir
+    ImageMask imageMask;
+    Status state;
+    int imageNumberStudy , imageNumberTotal = 0 , i = 0 ;
+    CreateDicomdir createDicomdir;
+    QString studyUID;
+    
+    m_dicomDirPath = dicomdirPath;
+
+    //comptem el numero d'imatges pel progress de la barra
+    while ( i < m_studiesToConvert.count() )
+    {   
+        imageMask.setStudyUID( m_studiesToConvert.value(i).toAscii().constData() );
+        state = cacheImageDAL.countImageNumber( imageMask , imageNumberStudy );
+        if ( !state.good() ) break;
+            
+        imageNumberTotal = imageNumberStudy + imageNumberTotal;
+        i++;
+    }
+
+    if ( !state.good() ) return state;
+
+    //sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca createDicomdir.Create()
+    m_progress = new QProgressDialog( tr( "Creating Dicomdir..." ) , "" , 0 , imageNumberTotal + 1 );
+    m_progress->setMinimumDuration( 0 );
+    m_progress->setCancelButton( 0 );
+
+    while ( !m_studiesToConvert.isEmpty() )
+    {   
+        studyUID = m_studiesToConvert.takeFirst();
+        state = convertStudy( studyUID );        
+
+        if ( !state.good() ) break; 
+    }
+    
+    state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );
+    
+    m_progress->close();
+    
+    return state;
+}
+
+Status ConvertToDicomdir::convertStudy( QString studyUID )
+{
+    CacheSeriesDAL cacheSeriesDAL;
+    QDir studyDir;
+    QChar fillChar = '0';    
     QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
     SeriesList seriesList;
     SeriesMask seriesMask;
     Series series;
-    ImageMask imageMask;
-    Status state;
-    int imageNumber;
-    CreateDicomDir createDicomDir;
-
-    //comptem el numero d'imatges pel progress de la barra
-    imageMask.setStudyUID( studyUID.toAscii().constData() );
-    state = cacheImageDAL.countImageNumber( imageMask , imageNumber );
-
-    if ( !state.good() ) return state;
-
-    m_progress = new QProgressDialog( tr( "Converting Images..." ) , "" , 0 , imageNumber );
-    m_progress->setMinimumDuration( 0 );
-    m_progress->setCancelButton( 0 );
-
     m_study++;
     m_series = 0;
+    Status state;
     
     //Creem el directori on es guardar l'estudi en format DicomDir
     m_dicomDirStudyPath = m_dicomDirPath + studyName;
@@ -82,7 +107,7 @@ Status ConvertToDicomdir::convert( QString studyUID )
 
     seriesMask.setStudyUID( studyUID.toAscii().constData() );
     
-    state = cacheSeriesDAL.querySeries( seriesMask , seriesList );
+    state = cacheSeriesDAL.querySeries( seriesMask , seriesList ); //cerquem sèries de l'estudi
 
     if ( !state.good() ) return state;
     
@@ -99,12 +124,6 @@ Status ConvertToDicomdir::convert( QString studyUID )
         else seriesList.nextSeries();
     }
 
-    state = createDicomDir.create ( m_dicomDirPath.toAscii().constData() );
-    
-    DEBUG_LOG( state.text().c_str() );
-
-    m_progress->close();
-    
     return state;
 }
 
@@ -129,7 +148,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
     imageMask.setSeriesUID( series.getSeriesUID() );
     imageMask.setStudyUID( series.getStudyUID() );
 
-    state = cacheImageDAL.queryImages( imageMask , imageList );
+    state = cacheImageDAL.queryImages( imageMask , imageList ); // cerquem imatges de la sèrie
 
     if ( !state.good() ) return state;
     
@@ -161,6 +180,7 @@ Status ConvertToDicomdir::convertImage( Image image )
     
     m_image++;
 
+    //Creem el path de la imatge
     imageInputPath.insert( 0 , settings.getCacheImagePath() );
     imageInputPath.append( image.getStudyUID().c_str() );
     imageInputPath.append( "/" );
@@ -170,13 +190,13 @@ Status ConvertToDicomdir::convertImage( Image image )
 
     imageOutputPath = m_dicomDirSeriesPath + imageName;
 
+    //convertim la imatge a littleEndiant
     state = convertDicom.convert( imageInputPath.toAscii().constData() , imageOutputPath.toAscii().constData() );
 
-     m_progress->setValue( m_progress->value() + 1 );
+     m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
      m_progress->repaint();
     
     return state;
-
 }
 
 ConvertToDicomdir::~ConvertToDicomdir()

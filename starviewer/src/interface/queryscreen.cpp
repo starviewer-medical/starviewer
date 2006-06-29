@@ -58,7 +58,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     CacheStudyDAL cacheStudyDal;
            
     m_retrieveScreen = new udg::QRetrieveScreen;
-	
+    m_qcreateDicomdir = new udg::QCreateDicomdir;	
+
     initialize();//inicialitzem les variables necessàries
 
     //connectem signals i slots
@@ -125,6 +126,7 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_buttonRetrieveList , SIGNAL( clicked() ) , this , SLOT( showRetrieveScreen() ) );
     connect( m_buttonShowPacsList , SIGNAL( clicked() ) , this , SLOT( showPacsList() ) );
     connect( m_buttonView , SIGNAL( clicked() ) , this , SLOT( view() ) );
+    connect( m_buttonCreateDicomdir , SIGNAL ( clicked() ) , this , SLOT( showCreateDicomdirScreen() ) );
     
     //connectem Slots dels StudyList amb la interficie
     connect( m_studyTreeWidgetPacs , SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
@@ -967,6 +969,12 @@ void QueryScreen::showRetrieveScreen()
     m_retrieveScreen->setVisible( true );
 }
 
+void QueryScreen::showCreateDicomdirScreen()
+{
+    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra
+    m_qcreateDicomdir->setVisible( false );
+    m_qcreateDicomdir->setVisible( true );
+}
 
 void QueryScreen::config()
 {
@@ -1018,7 +1026,14 @@ void QueryScreen::resizePacsList()
 
 void QueryScreen::convertToDicomDir( QString studyUID )
 {
-    m_convert.convert( studyUID );
+    CacheStudyDAL cacheStudyDAL;
+    Study study;
+    
+    //busquem la informació de l'estudi
+    cacheStudyDAL.queryStudy( studyUID.toAscii().constData() , study );
+
+    //afegim l'estudi a la llista d'estudis pendents per crear el Dicomdir
+    m_qcreateDicomdir->addStudy( study );
 }
 
 void QueryScreen::notEnoughFreeSpace()

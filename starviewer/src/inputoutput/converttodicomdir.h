@@ -15,6 +15,7 @@ class QStringList;
 namespace udg {
 
 class Status;
+class Study;
 class Series;
 class Image;
 
@@ -26,18 +27,17 @@ class ConvertToDicomdir : public QObject
 public:
 
     ConvertToDicomdir( );
-
     
     /** Afegeix un estudi a la llista per convertir-se a dicomsdir
      * @param studyUID UID de l'estudi a convertir a dicomdir
      */
     void addStudy ( QString studyUID );
 
-    /** Converteix l'estudi amb el UID passat per paràmetre a dicomDir
-     * @param studyUID UID de l'estudi a convertir a DicomDir
-     * @return estat del mètode
+    /** Crear un dicomdir en el path especificat per paràmetre amb els estudis que hi ha a la llista
+     * @param dicomdirPath directori on es guardarà el dicomdir
+     * @return Indica l'estat en què finalitza el mètode
      */
-    Status convert( QString studyUID );
+    Status convert( QString dicomdirPath );
 
     ~ConvertToDicomdir();
 
@@ -54,7 +54,22 @@ private :
     int m_series;
     int m_image;
 
+    /** Converteix un estudi al format littleendian
+     * @param studyUID Uid de l'estudi a convertir
+     * @return Indica l'estat en què finalitza el mètode
+     */
+    Status convertStudy ( QString studyUID );
+
+    /** Converteix una sèrie al format littleendian
+     * @param series 
+     * @return Indica l'estat en què finalitza el mètode
+     */
     Status convertSeries( Series series );
+
+    /** Converteix una imatge al format littleendian
+     * @param image 
+     * @return Indica l'estat en què finalitza el mètode
+     */
     Status convertImage( Image image );    
 };
 

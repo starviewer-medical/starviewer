@@ -13,7 +13,8 @@ FORMS += qconfigurationscreenbase.ui \
          qstudytreewidgetbase.ui \
          qserieslistwidgetbase.ui \
          q2dviewerextensionbase.ui \
-         qcustomwindowleveldialogbase.ui 
+         qcustomwindowleveldialogbase.ui \
+         qcreatedicomdirbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -47,7 +48,8 @@ HEADERS += director.h \
            q2dviewerextension.h \
            q2dviewerextensioncreator.h \
            qcustomwindowleveldialog.h \
-           qwindowlevelcombobox.h 
+           qwindowlevelcombobox.h \
+           qcreatedicomdir.h 
 SOURCES += director.cpp \
            parameters.cpp \
            qapplicationmainwindow.cpp \
@@ -79,7 +81,8 @@ SOURCES += director.cpp \
            q2dviewerextension.cpp \
            q2dviewerextensioncreator.cpp \
            qcustomwindowleveldialog.cpp \
-           qwindowlevelcombobox.cpp 
+           qwindowlevelcombobox.cpp \
+           qcreatedicomdir.cpp 
 TARGETDEPS += ../repositories/librepositories.a \
 ../tools/libtools.a \
 ../../src/inputoutput/libinputoutput.a

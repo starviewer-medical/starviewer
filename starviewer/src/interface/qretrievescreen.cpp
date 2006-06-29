@@ -11,6 +11,7 @@
 #include <qdatetime.h>
 #include "processimagesingleton.h"
 
+
 namespace udg {
 
 QRetrieveScreen::QRetrieveScreen( QWidget *parent )
