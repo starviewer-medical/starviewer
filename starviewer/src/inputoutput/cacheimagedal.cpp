@@ -165,6 +165,33 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
    return state;
 }
 
+Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
+{
+    int columns , rows , i = 0 , stateDatabase;
+    char **resposta = NULL , **error = NULL;
+    Status state;
+    std::string sql;
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus ( 50 );
+    }
+    
+    databaseConnection->getLock();
+    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , buildSqlSizeImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    databaseConnection->releaseLock();
+    
+    state = databaseConnection->databaseStatus ( stateDatabase );
+    
+    if ( !state.good() ) return state;
+    
+    i = 1;//ignorem les capçaleres
+   
+    size = atol( resposta [i] );
+   
+   return state;  
+}
 Status CacheImageDAL::deleteImages( std::string studyUID )
 {
     std::string sql;
@@ -187,18 +214,112 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
 
 std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
 {
-    std::string sql;
+    std::string sql, whereClause = "";
     
-    sql.insert( 0 , "select count(*) from image where StuInsUID = '" );
-    sql.append( imageMask->getStudyUID() );
+    sql.insert( 0 , "select count(*) from image " );
 
+    //si hi ha UID study
+    if ( imageMask->getStudyUID().length() > 0 )
+    {
+        whereClause.insert( 0 , " where StuInsUID = '" );
+        whereClause.append( imageMask->getStudyUID() );
+        whereClause.append( "'" );
+    }
+
+    //si hi ha UID de la sèrie
     if ( imageMask->getSeriesUID().length() > 0 )
     {
-        sql.append( "' and SerInsUID = '" );
-        sql.append( imageMask->getSeriesUID() );
-        sql.append( "'" );
+        if ( whereClause.length() > 0 )
+        {
+            whereClause.append( " and SerInsUID = '" );
+            whereClause.append( imageMask->getSeriesUID() );
+            whereClause.append( "'" );
+        }
+        else
+        {
+            whereClause.insert( 0 , " where SerInsUID = '" );
+            whereClause.append( imageMask->getSeriesUID() );
+            whereClause.append( "'" );
+        }
     }
-    else sql.append( "'" );
+
+    //si hi ha número d'imatge
+    if ( imageMask->getImageNumber().length() > 0 )
+    {
+        if ( whereClause.length() > 0 )
+        {
+            whereClause.append( " and ImgNum = '" );
+            whereClause.append( imageMask->getImageNumber() );
+            whereClause.append( "'" );
+        }
+        else
+        {
+            whereClause.insert( 0 , " where ImgNum = '" );
+            whereClause.append( imageMask->getImageNumber() );
+            whereClause.append( "'" );
+        }
+    }
+    
+    if ( whereClause.length() > 0 )
+    {
+        sql.append( whereClause );
+    }
+
+    return sql;
+}
+
+std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
+{
+    std::string sql, whereClause ="";
+
+    sql.insert( 0 , "select sum(ImgSiz) from image " );
+
+    //si hi ha UID study
+    if ( imageMask->getStudyUID().length() > 0 )
+    {
+        whereClause.insert( 0 , " where StuInsUID = '" );
+        whereClause.append( imageMask->getStudyUID() );
+        whereClause.append( "'" );
+    }
+
+    //si hi ha UID de la sèrie
+    if ( imageMask->getSeriesUID().length() > 0 )
+    {
+        if ( whereClause.length() > 0 )
+        {
+            whereClause.append( " and SerInsUID = '" );
+            whereClause.append( imageMask->getSeriesUID() );
+            whereClause.append( "'" );
+        }
+        else
+        {
+            whereClause.insert( 0 , " where SerInsUID = '" );
+            whereClause.append( imageMask->getSeriesUID() );
+            whereClause.append( "'" );
+        }
+    }
+
+    //si hi ha número d'imatge
+    if ( imageMask->getImageNumber().length() > 0 )
+    {
+        if ( whereClause.length() > 0 )
+        {
+            whereClause.append( " and ImgNum = '" );
+            whereClause.append( imageMask->getImageNumber() );
+            whereClause.append( "'" );
+        }
+        else
+        {
+            whereClause.insert( 0 , " where ImgNum = '" );
+            whereClause.append( imageMask->getImageNumber() );
+            whereClause.append( "'" );
+        }
+    }
+
+    if ( whereClause.length() > 0 )
+    {
+        sql.append( whereClause );
+    }
 
     return sql;
 }

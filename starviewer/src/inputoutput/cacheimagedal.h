@@ -47,6 +47,14 @@ public:
      * @return retorna estat del mètode  
      */
     Status countImageNumber( ImageMask mask , int &imageNumber );
+
+    /** compta lo que ocupen les imatges que compleixen la màscara de cerca
+     * @param imageMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie 
+     * @param size Mida de les imatges que compleixen la màscara en bytes
+     * @return retorna estat del mètode  
+     */
+    Status imageSize( ImageMask mask , unsigned long &size );
+
     
     /** Esborra les imatges que tinguin el studyUID passat per paràmetre
       * @param studyUID StudyUID de les imatges a esborrar
@@ -64,10 +72,17 @@ private :
     std::string buildSqlQueryImages( ImageMask *imageMask );
     
     /** Construiex la sentència sql per comptar el nombre d'imatges de la sèrie d'un estudi
-     * @param mask 
+     * @param mask màscara per construir la sentència sql
      * @return retorna la sentència Sql
      */
     std::string buildSqlCountImageNumber( ImageMask *imageMask );    
+
+    /** Construiex la sentència sql per comptar el tamany ocupat per les imatges que compleixen la màscara
+     * @param mask màscara per construir la sentència sql
+     * @return retorna la sentència Sql
+     */
+    std::string buildSqlSizeImage( ImageMask *imageMask );    
+
 
 };
 
