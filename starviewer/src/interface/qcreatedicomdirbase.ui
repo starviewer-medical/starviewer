@@ -278,6 +278,43 @@
      </item>
     </layout>
    </widget>
+   <widget class="QGroupBox" name="groupBox_4" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>470</y>
+      <width>251</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string/>
+    </property>
+    <widget class="QLabel" name="m_labelSizeOfDicomdir" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>231</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font" >
+      <font>
+       <family>Sans Serif</family>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Mida Dicomdir :</string>
+     </property>
+    </widget>
+   </widget>
    <widget class="QPushButton" name="m_buttonCreateDicomdir" >
     <property name="geometry" >
      <rect>

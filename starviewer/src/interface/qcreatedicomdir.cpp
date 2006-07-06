@@ -17,6 +17,10 @@
 #include "converttodicomdir.h"
 #include "status.h"
 #include "logging.h"
+#include "status.h"
+#include "cacheimagedal.h"
+#include "imagemask.h"
+#include "harddiskinformation.h"
 
 namespace udg {
 
@@ -25,9 +29,15 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 {
     setupUi( this );
     
+    QString sizeOfDicomdirText;
+    
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi  
     
     createConnections();
+
+    m_dicomdirSize = 0;
+
+    setTextDicomdirSize();
 }
 
 void QCreateDicomdir::createConnections()
@@ -38,18 +48,57 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
 }
 
+void QCreateDicomdir::setTextDicomdirSize()
+{
+    QString sizeOfDicomdirText, sizeText;
+    float sizeInMb;
+
+    sizeInMb = m_dicomdirSize / ( 1024 * 1024 );//passem a Mb
+
+    sizeOfDicomdirText.insert( 0 , tr( "The size of Dicomdir is " ) );
+    sizeText.setNum( sizeInMb , 'f' , 2 );
+    sizeOfDicomdirText.append( sizeText );
+    sizeOfDicomdirText.append( " Mb" );
+    m_labelSizeOfDicomdir->setText( sizeOfDicomdirText );
+}
+
 void QCreateDicomdir::addStudy( Study study )
 {
     QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
-    
-    item->setText( 0 , study.getStudyId().c_str() );
-    item->setText( 1 , study.getPatientId().c_str() );
-    item->setText( 2 , study.getPatientName().c_str() );
-    item->setText( 3 , study.getStudyModality().c_str() );
-    item->setText( 4 , formatDate( study.getStudyDate().c_str() ) );
-    item->setText( 5 , formatHour( study.getStudyTime().c_str() ) );
-    item->setText( 6 , study.getStudyDescription().c_str() );
-    item->setText( 7 , study.getStudyUID().c_str() );
+    CacheImageDAL cacheImageDAL;
+    ImageMask imageMask;
+    unsigned long studySize;
+    Status state;
+
+    if ( !existsStudy( study.getStudyUID().c_str() ) )
+    {
+        //consultem la mida de l'estudi
+        imageMask.setStudyUID( study.getStudyUID() );
+        
+        state = cacheImageDAL.imageSize( imageMask , studySize );        
+
+        if ( !state.good() )
+        {
+            databaseError ( &state );
+            return;
+        }        
+
+        m_dicomdirSize = m_dicomdirSize + studySize;
+        setTextDicomdirSize();
+
+        item->setText( 0 , study.getStudyId().c_str() );
+        item->setText( 1 , study.getPatientId().c_str() );
+        item->setText( 2 , study.getPatientName().c_str() );
+        item->setText( 3 , study.getStudyModality().c_str() );
+        item->setText( 4 , formatDate( study.getStudyDate().c_str() ) );
+        item->setText( 5 , formatHour( study.getStudyTime().c_str() ) );
+        item->setText( 6 , study.getStudyDescription().c_str() );
+        item->setText( 7 , study.getStudyUID().c_str() );
+    }
+    else
+    {
+        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study exists in the Dicomdir list" ) );
+    }
 }
 
 void QCreateDicomdir::createDicomdir()
@@ -58,8 +107,24 @@ void QCreateDicomdir::createDicomdir()
     Status state;
     QString logMessage;
 
-    if ( isCorrectDicomdirPath() ) //comprovem que el path on es vol guardar el dicom dir existeixi
+    if ( isCorrectDicomdirPath()  ) //comprovem que el path on es vol guardar el dicom dir existeixi
     {
+
+        logMessage = "S'inicia la creació del dicomdir al directori";
+        logMessage.append( m_lineEditDicomdirPath->text() );     
+    
+        INFO_LOG ( logMessage.toAscii().constData() );    
+
+        if ( !enoughFreeSpace( m_lineEditDicomdirPath->text() ) )
+        {
+            QMessageBox::information( this , tr( "StarViewer" ) , tr( "Not enough free space to create dicom dir. Please free space" ) );
+            
+            logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
+            logMessage.append( state.text().c_str() );        
+            ERROR_LOG ( logMessage.toAscii().constData() );
+            return;
+        }         
+
         QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
         QTreeWidgetItem *item;
         
@@ -68,11 +133,6 @@ void QCreateDicomdir::createDicomdir()
             QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please, first select the studies which you want to create a dicomdir" ) );
             return;
         }
-
-        logMessage = "S'inicia la creació del dicomdir al directori";
-        logMessage.append( m_lineEditDicomdirPath->text() );     
-    
-        INFO_LOG ( logMessage.toAscii().constData() );    
     
         for ( int i = 0; i < dicomdirStudiesList.count();i++ )
         {
@@ -89,7 +149,7 @@ void QCreateDicomdir::createDicomdir()
         
         if ( !state.good() )
         {
-            QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir" ) );
+            QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() );
             logMessage = "Error al crear el Dicomdir ERROR : ";
             logMessage.append( state.text().c_str() );        
             ERROR_LOG ( logMessage.toAscii().constData() );
@@ -115,16 +175,41 @@ void QCreateDicomdir::examineDicomdirPath()
 
 void QCreateDicomdir::removeAllStudies()
 {
+    m_dicomdirSize = 0;
+    setTextDicomdirSize();
+
     m_dicomdirStudiesList->clear();
 }
 
 void QCreateDicomdir::removeSelectedStudy()
 {
+    ImageMask imageMask;
+    CacheImageDAL cacheImageDAL;
+    Status state;
+    unsigned long studySize;
+    
     if ( m_dicomdirStudiesList->currentItem() == NULL)
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please Select a study to remove" ) );
     }
-    else delete m_dicomdirStudiesList->currentItem();
+    else
+    {
+        //consultem la mida de l'estudi
+        imageMask.setStudyUID( m_dicomdirStudiesList->currentItem()->text(7).toAscii().constData() );
+        
+        state = cacheImageDAL.imageSize( imageMask , studySize );        
+
+        if ( !state.good() )
+        {
+            databaseError ( &state );
+            return;
+        }        
+
+        m_dicomdirSize = m_dicomdirSize - studySize;
+        setTextDicomdirSize();
+
+        delete m_dicomdirStudiesList->currentItem();
+    }
 }
 
 bool QCreateDicomdir::isCorrectDicomdirPath()
@@ -156,6 +241,29 @@ bool QCreateDicomdir::isCorrectDicomdirPath()
     
 }
 
+bool QCreateDicomdir::existsStudy( QString studyUID )
+{
+    QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( studyUID , Qt::MatchExactly, 7 ) );
+    
+    if ( dicomdirStudiesList.count() > 0 )
+    {
+        return true;
+    }
+    else return false;
+    
+}
+
+bool QCreateDicomdir::enoughFreeSpace( QString path)
+{
+    HardDiskInformation hardDisk;
+
+    if ( hardDisk.getTotalNumberOfBytes( path.toAscii().constData() ) < m_dicomdirSize )
+    {
+        return false;
+    }
+    else return true;
+}
+
 QString QCreateDicomdir::formatDate( const std::string date )
 {
     QString formateDate , originalDate ( date.c_str() );
@@ -178,6 +286,56 @@ QString QCreateDicomdir::formatHour( const std::string hour )
     formatedHour.append( originalHour.mid( 2 , 2 ) );
     
     return formatedHour;
+}
+
+void QCreateDicomdir::databaseError(Status *state)
+{
+    QString text,code;
+
+    if (!state->good())
+    {
+        switch(state->code())
+        {  case 2001 : text.insert(0,tr("Database is corrupted or SQL syntax error"));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2005 : text.insert(0,tr("Database is looked"));
+                        text.append("\n");
+                        text.append("To solve this error restart the user session");
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2011 : text.insert(0,tr("Database is corrupted."));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2019 : text.insert(0,tr("Register duplicated."));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2050 : text.insert(0,"Not Connected to database");
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;            
+            default :   text.insert(0,tr("Internal Database error"));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+        }
+        QMessageBox::critical( this, tr("StarViewer"),text);
+    }    
+
 }
 
 QCreateDicomdir::~QCreateDicomdir()

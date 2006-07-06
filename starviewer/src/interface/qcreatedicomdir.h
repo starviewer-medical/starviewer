@@ -12,6 +12,7 @@
 namespace udg {
 
 class Study;
+class Status;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -59,6 +60,26 @@ private:
      */
     bool isCorrectDicomdirPath();
 
+    /** Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a Dicomdir
+     * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
+     * @return indica si existeix l'estudi a la llista d'estudis pendents de passa a DicomDir
+     */
+    bool existsStudy( QString studyUID );
+    
+    ///Dona valor a l'etiqueta que indica l'espai que ocupa el Dicomdir
+    void setTextDicomdirSize();
+
+    /**comprova si hi ha suficient espai lliure al disc dur per crear el dicomdir, comprova que l'espai lliure sigui superior a l'espai que ocuparà el nou directori dicomdir
+     * @return indica si hi ha prou espai lliure al disc per crear el dicomdir
+     */
+    bool enoughFreeSpace( QString path );
+
+    /** Tracta els errors que s'han produït a la base de dades en general
+     * @param state  Estat del mètode
+     */
+    void databaseError( Status *state );
+
+    unsigned long m_dicomdirSize;
 };
 
 }
