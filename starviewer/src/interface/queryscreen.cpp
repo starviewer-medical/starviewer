@@ -11,6 +11,7 @@
 #include <QCloseEvent>
 #include <string>
 #include <QDateTime>
+#include <QFileDialog>
 
 #include "starviewerprocessimage.h"
 #include "processimagesingleton.h"
@@ -56,6 +57,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     QString path;
     StarviewerSettings settings;
     CacheStudyDAL cacheStudyDal;
+    ReadDicomdir read;
            
     m_retrieveScreen = new udg::QRetrieveScreen;
     m_qcreateDicomdir = new udg::QCreateDicomdir;	
@@ -131,6 +133,7 @@ void QueryScreen::connectSignalsAndSlots()
     //connectem Slots dels StudyList amb la interficie
     connect( m_studyTreeWidgetPacs , SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
     connect( m_studyTreeWidgetCache,  SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir,  SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
     
     //es canvia de pestanya del TAB
     connect( m_tab , SIGNAL( currentChanged( int ) ) , this , SLOT( tabChanged( int ) ) );
@@ -207,7 +210,11 @@ void QueryScreen::connectSignalsAndSlots()
 
     connect( &m_qexecuteOperationThread , SIGNAL(  setStudyRetrieved( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
 
-    connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomDir( QString ) ) );
+    //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
+    connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomdir( QString ) ) );
+
+    //connecta amb el mètode que obre un dicomdir
+    connect( m_buttonOpenDicomdir , SIGNAL( clicked() ) , this , SLOT( openDicomdir() ) );
 
 }
 
@@ -418,7 +425,7 @@ void QueryScreen::queryStudyPacs()
     if ( !multipleQueryStudy.StartQueries().good() )  //fem la query
     {
         m_studyTreeWidgetPacs->clear();
-	QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "ERROR QUERING!." ) );
         return;  
     }
@@ -428,7 +435,7 @@ void QueryScreen::queryStudyPacs()
     if ( m_studyListSingleton->end() )
     {
         m_studyTreeWidgetPacs->clear();        
-	QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
         return;
     }
@@ -455,7 +462,7 @@ void QueryScreen::queryStudyCache()
     if ( !state.good() ) 
     {
         m_studyTreeWidgetCache->clear();
-	QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         databaseError( &state );
         return;
     }
@@ -465,7 +472,7 @@ void QueryScreen::queryStudyCache()
     if ( m_studyListCache.end() ) //no hi ha estudis
     {
         m_studyTreeWidgetCache->clear();
-	QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
         return;
     }
@@ -477,18 +484,45 @@ void QueryScreen::queryStudyCache()
     QApplication::restoreOverrideCursor();
 }
 
+void QueryScreen::queryStudyDicomdir()
+{
+    Status state;
+    StudyList dicomdirStudyList;
+
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
+    m_readDicomdir.readStudies( dicomdirStudyList );
+
+    if ( m_studyListSingleton->end() )
+    {
+        m_studyTreeWidgetPacs->clear();        
+        QApplication::restoreOverrideCursor();
+        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
+        return;
+    }
+
+    m_studyTreeWidgetDicomdir->clear();
+    m_studyTreeWidgetDicomdir->insertStudyList( &dicomdirStudyList );
+
+    QApplication::restoreOverrideCursor();
+}
+
 /* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
 void QueryScreen::searchSeries( QString studyUID , QString pacsAETitle )
 {   
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     
-    if ( m_tab->currentIndex() == 1 ) //si estem la pestanya del PACS fem query al Pacs
+    switch ( m_tab->currentIndex() )
     {
-        QuerySeriesPacs( studyUID , pacsAETitle , true );
-    }
-    else if ( m_tab->currentIndex() == 0 ) // si estem a la pestanya de la cache
-    {
-        QuerySeriesCache( studyUID );
+        case 0 : // si estem a la pestanya de la cache
+            QuerySeriesCache( studyUID );
+            break;
+        case 1 :  //si estem la pestanya del PACS fem query al Pacs
+            QuerySeriesPacs( studyUID , pacsAETitle , true );
+            break;
+        case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
+            querySeriesDicomdir( studyUID );        
+            break;
     }
 
     QApplication::restoreOverrideCursor();
@@ -627,6 +661,26 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
         m_studyTreeWidgetCache->insertSeries( &serie );//inserim la informació de les imatges al formulari
         m_seriesListCache.nextSeries();
     }   
+}
+
+void QueryScreen::querySeriesDicomdir( QString studyUID )
+{
+    SeriesList seriesList;
+
+    m_readDicomdir.readSeries( studyUID.toAscii().constData() , seriesList );
+
+    seriesList.firstSeries();
+    if ( seriesList.end() )
+    {
+        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No series match for this study.\n" ) );
+        return;
+    }
+     
+    while ( !seriesList.end() )
+    {
+        m_studyTreeWidgetDicomdir->insertSeries( &seriesList.getSeries() );//inserim la informació de la sèrie al llistat
+        seriesList.nextSeries();
+    }
 }
 
 void QueryScreen::retrieve()
@@ -1024,7 +1078,7 @@ void QueryScreen::resizePacsList()
    this->resize( this->width() + mida, this->height() );
 }
 
-void QueryScreen::convertToDicomDir( QString studyUID )
+void QueryScreen::convertToDicomdir( QString studyUID )
 {
     CacheStudyDAL cacheStudyDAL;
     Study study;
@@ -1034,6 +1088,26 @@ void QueryScreen::convertToDicomDir( QString studyUID )
 
     //afegim l'estudi a la llista d'estudis pendents per crear el Dicomdir
     m_qcreateDicomdir->addStudy( study );
+}
+
+void QueryScreen::openDicomdir()
+{
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Dicomdir" ) );
+    QString path, dicomdirPath;
+    
+    dlg->setFileMode( QFileDialog::DirectoryOnly );
+    
+    if ( dlg->exec() == QDialog::Accepted )
+    {
+        if ( !dlg->selectedFiles().empty() ) dicomdirPath.insert( 0 , dlg->selectedFiles().takeFirst() );
+
+        dicomdirPath.append("/DICOMDIR");//afegim el nom del fitxer que conté la informació del Dicomdir
+    
+        m_readDicomdir.open ( dicomdirPath.toAscii().constData() );
+        queryStudyDicomdir();
+    }    
+   
+    delete dlg;
 }
 
 void QueryScreen::notEnoughFreeSpace()

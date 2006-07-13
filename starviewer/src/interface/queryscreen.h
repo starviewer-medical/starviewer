@@ -15,12 +15,14 @@
 #include "qexecuteoperationthread.h"
 #include "qretrievescreen.h"
 #include "qcreatedicomdir.h"
+#include "readdicomdir.h"
 
 namespace udg {
 
 class SeriesList;
 class Status;
 class SeriesMask;
+class ReadDicomdir;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -129,10 +131,14 @@ public slots:
      */
     void studyRetrieveFinished( QString studyUID );
 
-    /** Converteix l'estudi a un DicomDir
+    /** Afegeix l'estudi a la llista d'estudis per convertir a Dicomdir
      * @param studyUID UID de l'estudi a covnertir a Dicomdir
      */
-    void convertToDicomDir( QString studyUID );
+    void convertToDicomdir( QString studyUID );
+
+    /** Obre un dicomdir
+     */
+    void openDicomdir(); 
 
 signals :
      
@@ -170,6 +176,8 @@ struct retrieveParameters
     
     MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads  
     
+    ReadDicomdir m_readDicomdir;// conté la informació del dicomdir obert en aquests instants
+
     //StudyVolum m_volum;
     bool m_PacsListShow;
     
@@ -239,6 +247,9 @@ struct retrieveParameters
     /// Busca un estudi a la cache local
     void queryStudyCache();
     
+    ///Cerca un estudi en el dicomdir obert en aquells moment
+    void queryStudyDicomdir();
+
     /** Busca la informació d'una sèrie en el PACS i la mostra en la interfície
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie    
@@ -250,6 +261,11 @@ struct retrieveParameters
      * @param StudyUID UID de l'estudi a cercar
      */
     void QuerySeriesCache( QString );
+
+    /** Cerca les sèries d'un estudi al Dicomdir
+     * @param StudyUID UID de l'estudi a cercar
+     */
+    void querySeriesDicomdir( QString studyUID);
     
     /// esborra els estudis vells de la cache
     void deleteOldStudies();

@@ -56,8 +56,9 @@ HEADERS += input.h \
            cachestudydal.h \
            converttodicomdir.h \
            convertdicomtolittleendian.h \
-           createdicomdir.h \ 
-           cachetools.h 
+           createdicomdir.h \
+           cachetools.h \
+           readdicomdir.h 
 SOURCES += input.cpp \
            output.cpp \
            databaseconnection.cpp \
@@ -109,8 +110,9 @@ SOURCES += input.cpp \
            cachestudydal.cpp \
            converttodicomdir.cpp \
            convertdicomtolittleendian.cpp \
-           createdicomdir.cpp \ 
-           cachetools.cpp 
+           createdicomdir.cpp \
+           cachetools.cpp \
+           readdicomdir.cpp 
 TARGETDEPS += ../tools/libtools.a \
 ../../src/repositories/librepositories.a
 LIBS += ../../src/tools/libtools.a \

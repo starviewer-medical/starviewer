@@ -64,6 +64,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
             
         imageNumberTotal = imageNumberStudy + imageNumberTotal;
         i++;
+        cout<<"entro2\n";
     }
 
     if ( !state.good() ) return state;
