@@ -492,8 +492,9 @@ void QueryScreen::queryStudyDicomdir()
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     m_readDicomdir.readStudies( dicomdirStudyList );
+    dicomdirStudyList.firstStudy();
 
-    if ( m_studyListSingleton->end() )
+    if ( dicomdirStudyList.end() )
     {
         m_studyTreeWidgetPacs->clear();        
         QApplication::restoreOverrideCursor();
