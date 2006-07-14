@@ -212,7 +212,7 @@ struct retrieveParameters
     /** Construeix la màscara d'entrada pels estudis
      * @return retorna la màscara d'un estudi
      */
-    StudyMask buildMask();
+    StudyMask buildStudyMask();
     
     /** Contrueix el nom del pacient per a crear la màscara, el format del la màscara de pacient ha de ser "*" o "congoms* Nom*"
      * @return retorna la màscara amb el nom del pacient

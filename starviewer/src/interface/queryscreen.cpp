@@ -421,7 +421,7 @@ void QueryScreen::queryStudyPacs()
     }
     
     multipleQueryStudy.setPacsList( pacsList ); //indiquem a quins Pacs Cercar
-    multipleQueryStudy.setMask( buildMask() ); //construim la mascara
+    multipleQueryStudy.setMask( buildStudyMask() ); //construim la mascara
     if ( !multipleQueryStudy.StartQueries().good() )  //fem la query
     {
         m_studyTreeWidgetPacs->clear();
@@ -457,7 +457,7 @@ void QueryScreen::queryStudyCache()
     
     m_studyListCache.clear();
     
-    state= cacheStudyDAL.queryStudy( buildMask() , m_studyListCache ); //busquem els estudis a la cache
+    state= cacheStudyDAL.queryStudy( buildStudyMask() , m_studyListCache ); //busquem els estudis a la cache
 
     if ( !state.good() ) 
     {
@@ -1222,7 +1222,7 @@ QString QueryScreen::buildStudyDates()
     return date;
 }
 
-StudyMask QueryScreen::buildMask()
+StudyMask QueryScreen::buildStudyMask()
 {
     /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
     /*Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/    
