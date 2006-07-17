@@ -17,7 +17,6 @@
 #include <QAction>
 
 // Tools
-#include "distancetool.h"
 
 // include's vtk
 #include <QVTKWidget.h>
@@ -75,11 +74,10 @@ public:
                 m_viewer->updateWindowLevelAnnotation();
             }
         break;
-        
+
         case vtkCommand::EndWindowLevelEvent:
         break;
         }
-        
     }
 };
 
@@ -151,7 +149,6 @@ void Q2DViewer::createActions()
 
 void Q2DViewer::createTools()
 {
-    m_distanceTool = new DistanceTool( this );
 }
 
 void Q2DViewer::createAnnotations()
@@ -188,25 +185,22 @@ void Q2DViewer::createAnnotations()
 
     // Marcadors
     m_sideRuler = vtkAxisActor2D::New();
-    m_bottomRuler = vtkAxisActor2D::New();
-
     m_sideRuler->AxisVisibilityOn();
     m_sideRuler->TickVisibilityOn();
     m_sideRuler->LabelVisibilityOff();
     m_sideRuler->TitleVisibilityOff();
-    m_sideRuler->SetTickLength( 50 );
+    m_sideRuler->SetTickLength( 10 );
     m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
+    this->getRenderer()->AddActor2D( m_sideRuler );
 
-//     this->getRenderer()->AddActor2D( m_sideRuler );
-
+    m_bottomRuler = vtkAxisActor2D::New();
     m_bottomRuler->AxisVisibilityOn();
     m_bottomRuler->TickVisibilityOn();
     m_bottomRuler->LabelVisibilityOff();
     m_bottomRuler->TitleVisibilityOff();
-    m_bottomRuler->SetTickLength( 50 );
+    m_bottomRuler->SetTickLength( 10 );
     m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
-
-//     this->getRenderer()->AddActor2D( m_bottomRuler );
+    this->getRenderer()->AddActor2D( m_bottomRuler );
 
     updateAnnotations();
 }
@@ -431,20 +425,6 @@ void Q2DViewer::onLeftButtonDown()
     default:
     break;
     }
-//     switch( m_leftButtonAction )
-//     {
-//     case Q2DViewer::CursorAction:
-//         startCursor();
-//     break;
-//     
-//     case Q2DViewer::SliceMotionAction:
-//         startSliceMotion();
-//     break;
-// 
-//     case Q2DViewer::WindowLevelAction:
-//         startWindowLevel();
-//     break;
-//     }
 }
 
 void Q2DViewer::onLeftButtonUp()
@@ -461,56 +441,6 @@ void Q2DViewer::onLeftButtonUp()
     break;
 
     default:
-    break;
-    }
-//     switch( m_leftButtonAction )
-//     {
-//     case Q2DViewer::CursorAction:
-//         stopCursor();
-//     break;
-//     
-//     case Q2DViewer::SliceMotionAction:
-//         stopSliceMotion();
-//     break;
-// 
-//     case Q2DViewer::WindowLevelAction:
-//         stopWindowLevel();
-//     break;
-//     }
-}
-
-void Q2DViewer::onMiddleButtonDown()
-{
-    switch( m_middleButtonAction )
-    {
-    case Q2DViewer::CursorAction:
-        startCursor();
-    break;
-    
-    case Q2DViewer::SliceMotionAction:
-        startSliceMotion();
-    break;
-
-    case Q2DViewer::WindowLevelAction:
-        startWindowLevel();
-    break;
-    }
-}
-
-void Q2DViewer::onMiddleButtonUp()
-{
-    switch( m_middleButtonAction )
-    {
-    case Q2DViewer::CursorAction:
-        stopCursor();
-    break;
-    
-    case Q2DViewer::SliceMotionAction:
-        stopSliceMotion();
-    break;
-
-    case Q2DViewer::WindowLevelAction:
-        stopWindowLevel();
     break;
     }
 }
@@ -531,20 +461,6 @@ void Q2DViewer::onRightButtonDown()
     default:
     break;
     }
-//     switch( m_rightButtonAction )
-//     {
-//     case Q2DViewer::CursorAction:
-//         startCursor();
-//     break;
-//     
-//     case Q2DViewer::SliceMotionAction:
-//         startSliceMotion();
-//     break;
-// 
-//     case Q2DViewer::WindowLevelAction:
-//         startWindowLevel();
-//     break;
-//     }
 }
 
 void Q2DViewer::onRightButtonUp()
@@ -563,50 +479,45 @@ void Q2DViewer::onRightButtonUp()
     default:
     break;
     }
-//     switch( m_rightButtonAction )
-//     {
-//     case Q2DViewer::CursorAction:
-//         stopCursor();
-//     break;
-//     
-//     case Q2DViewer::SliceMotionAction:
-//         stopSliceMotion();
-//     break;
-// 
-//     case Q2DViewer::WindowLevelAction:
-//         stopWindowLevel();
-//     break;
-//     }
-}
-
-void Q2DViewer::startCursor()
-{
-}
-
-void Q2DViewer::startSliceMotion()
-{
-}
-
-void Q2DViewer::startWindowLevel()
-{
-}
-
-void Q2DViewer::stopCursor()
-{
-}
-
-void Q2DViewer::stopSliceMotion()
-{
-}
-
-void Q2DViewer::stopWindowLevel()
-{
 }
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
-    // el primer que s'hauria de fer és executar l'acció que es faci en aquell estat indistintament de la tool com és el mostrar en la pantalla el valor del pixel actual
-   anyEvent();
+    anyEvent();
+//     static double factor = this->getRenderer()->GetActiveCamera()->GetParallelScale();
+//     double fac = this->getRenderer()->GetActiveCamera()->GetParallelScale() - factor;
+//     if( fac != 0.0 )
+//     {
+//         factor = this->getRenderer()->GetActiveCamera()->GetParallelScale();
+        double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
+        switch( m_lastView )
+        {
+        case Axial:
+            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 200.0 , 0.0 );
+            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 0.0 );
+
+            m_bottomRuler->GetPositionCoordinate()->SetValue( 200.0 , anchoredCoordinates[1]  , 0.0 );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 0.0  );
+        break;
+
+        case Sagittal:        
+            m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 0.0 );
+            m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 200.0 );
+    
+            m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , 200.0 , anchoredCoordinates[2] );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , 0.0 , anchoredCoordinates[2] );
+        break;
+
+        case Coronal:
+            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 0.0 );
+            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 200.0 );
+
+            m_bottomRuler->GetPositionCoordinate()->SetValue( 200.0 , 0.0 , anchoredCoordinates[2] );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , 0.0 , anchoredCoordinates[2] );
+        break;
+        }
+
+//     }
     // fer el que calgui per cada tipus d'event
     switch( event )
     {
@@ -623,16 +534,6 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
         m_lastButtonPressed = Q2DViewer::LeftButton;
         onLeftButtonUp();
     break;
-
-    case vtkCommand::MiddleButtonPressEvent:
-        m_lastButtonPressed = Q2DViewer::MiddleButton;
-        onMiddleButtonDown();
-    break;
-
-    case vtkCommand::MiddleButtonReleaseEvent:
-        m_lastButtonPressed = Q2DViewer::MiddleButton;
-        onMiddleButtonUp();
-    break;
     
     case vtkCommand::RightButtonPressEvent:
         m_lastButtonPressed = Q2DViewer::RightButton;
@@ -644,68 +545,6 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
         onRightButtonUp();
     break;
 
-//     case vtkCommand::WindowLevelEvent:
-//         emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
-    break;
-
-    default:
-    break;
-    }
-    
-    // ara de mentres serà així segons la tool activa analitzarem uns events o uns altres
-    switch( m_currentTool )
-    {
-    // ----------------------------------------------------
-    // ZOOM
-    // ----------------------------------------------------
-    case Zoom:
-    break;
-    
-    // ----------------------------------------------------
-    // PICK
-    // ----------------------------------------------------
-    case Pick:
-        //
-        // estats?
-        // Si l'event és botó esquerre pressionat -> escollir seed candidata : mostrar valor en pantalla
-        // ""                            ""        + MouseMove : mostrar valor en pantalla
-        // ""                          released -> confirmar seed -> posar-la a la llista , afegir punt en pantalla
-    break;
-    
-    // ----------------------------------------------------
-    // DISTANCE
-    // ----------------------------------------------------
-    case Distance:   
-        m_distanceTool->dispatchEvent( DistanceTool::vtkCommandEventToToolEvent( event ) );
-    break;
-    
-    // ----------------------------------------------------
-    // CURSOR : mostra cursor sobre la imatge
-    // ----------------------------------------------------
-    case Cursor:
-        // estats?
-        // si mouseMove , mostrar cursor sobre el punt en el que estem
-    break;
-
-    // ----------------------------------------------------
-    // MANIPULATE
-    // ----------------------------------------------------
-    case Manipulate:
-        // aquesta tool el que fa és es que podem manipular els elements adicionals de l'escena, per tant hi ha dos passos
-        // 1) Escollir/Agafar l'actor. Quan es cliqui el mouse farem un assembly path. Si hi ha algun actor llavors es podrà manipular
-        // 2) En cas que hi hagi actor/s mentre el botó continui pitjat farem la manipulació que toqui (desplaçar, spin, rotar, etc)
-        if( event == vtkCommand::LeftButtonPressEvent && m_manipulateState == Q2DViewer::Ready )
-        {
-            // trobar si hi ha algun objecte allà on hem clicat
-        }
-        if( event == vtkCommand::MouseMoveEvent && m_manipulateState == Q2DViewer::Picked )
-        
-        if( event == vtkCommand::LeftButtonReleaseEvent )
-        
-    break;
-    // ----------------------------------------------------
-    // DEFAULT
-    // ----------------------------------------------------
     default:
     break;
     }
@@ -756,31 +595,40 @@ void Q2DViewer::setupInteraction()
 
     WindowLevelCallback * wlcbk = WindowLevelCallback::New();
     wlcbk->m_viewer = this;
-    // anulem el window levelling manual
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
-    // aquests observers estan de prova
+//     // anulem el window levelling manual
+// //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
+// //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
+// //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
+//     // aquests observers estan de prova
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
-
+// 
+// //     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
+// 
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
+
 }
 
 void Q2DViewer::initializeRulers()
 {
-    m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToNormalizedDisplay();
-    m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedDisplay();
-    m_sideRuler->SetPosition(  0.9 , 0.7 );
-    m_sideRuler->SetPosition2( 0.9 , 0.2 );
-    m_sideRuler->SetRange( 200 , 5000 );
+    m_anchoredRulerCoordinates = vtkCoordinate::New();
+    m_anchoredRulerCoordinates->SetCoordinateSystemToView();
+    m_anchoredRulerCoordinates->SetValue( -0.95 , -0.95 , -0.95 );
+    double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
 
-    m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
-    m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
-    m_bottomRuler->SetPosition(  0.1 , 0.1 );
-    m_bottomRuler->SetPosition2( 0.9 , 0.1 );
-    m_bottomRuler->SetRange( 200 , 5000 );
+    m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+    m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 200.0 , 0.0 );
+    m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 0.0 );
+
+    m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+//     m_bottomRuler->SetPosition(  200.0 , anchoredCoordinates[1] );
+//     m_bottomRuler->SetPosition2( 0.0 , anchoredCoordinates[1] );
+    m_bottomRuler->GetPositionCoordinate()->SetValue( 200.0 , anchoredCoordinates[1] , 0.0 );
+    m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 0.0 );
+
 }
 
 void Q2DViewer::setInput( Volume* volume )
@@ -792,7 +640,7 @@ void Q2DViewer::setInput( Volume* volume )
     // fem update de les mides dels indicadors de referència
     initializeRulers();
     initInformationText();
-    
+
     m_mainVolume->getDimensions( m_size );
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();

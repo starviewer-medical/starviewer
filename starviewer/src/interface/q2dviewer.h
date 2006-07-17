@@ -25,11 +25,9 @@ class vtkRenderWindowInteractor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
+class vtkCoordinate;
 
 namespace udg {
-
-// Forward delcarations
-class DistanceTool;
 
 /**
 
@@ -216,7 +214,7 @@ public slots:
     void resetWindowLevelToOsteoporosis();
     void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
-
+    
 protected:
     /// asscociació de botons amb accions
     int m_leftButtonAction , m_middleButtonAction , m_rightButtonAction;
@@ -224,7 +222,9 @@ protected:
     /// últim botó que s'ha clicat
     int m_lastButtonPressed;
 
+    /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
+
     /// Aquest mètode es fa servir perquè es mostri un menú contextual
     //virtual void contextMenuEvent( QContextMenuEvent *event );
     
@@ -278,22 +278,9 @@ private:
     void onMouseMove();
     void onLeftButtonUp();
     void onLeftButtonDown();
-    void onMiddleButtonUp();
-    void onMiddleButtonDown();
     void onRightButtonUp();
     void onRightButtonDown();
-
-    /// Accions
-    void startCursor();
-    void startSliceMotion();
-    void startWindowLevel();
-    void stopCursor();
-    void stopSliceMotion();
-    void stopWindowLevel();
     
-    /// La tool de distància
-    DistanceTool *m_distanceTool;
-
     /// Indica la Tool que s'està fent servir en aquell moment
     Tools m_currentTool;
 
@@ -329,6 +316,9 @@ private:
     
     /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler , *m_bottomRuler;
+
+    /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
+    vtkCoordinate *m_anchoredRulerCoordinates;
     
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
@@ -342,7 +332,7 @@ private:
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
-    
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
