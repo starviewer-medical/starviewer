@@ -201,19 +201,8 @@ public slots:
     /// Obté el window/level
     void getWindowLevel( double wl[2] );
     
-    /// Mètodes per donar diversos window level per defecte
+    /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
-    void resetWindowLevelToBone();
-    void resetWindowLevelToEmphysema();
-    void resetWindowLevelToSoftTissuesNonContrast();
-    void resetWindowLevelToLiverNonContrast();
-    void resetWindowLevelToSoftTissuesContrastMedium();
-    void resetWindowLevelToLiverContrastMedium();
-    void resetWindowLevelToNeckContrastMedium();
-    void resetWindowLevelToAngiography();
-    void resetWindowLevelToOsteoporosis();
-    void resetWindowLevelToPetrousBone();
-    void resetWindowLevelToLung();
     
 protected:
     /// asscociació de botons amb accions
@@ -298,12 +287,12 @@ private:
 
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
-    
-    /// S'encarrega de fer la feina per defecte que cal fer cada cop que s'invoca qualsevol event, com per exemple registrar el punt sobre el qual es troba el mouse
-    void anyEvent();
 
     /// Inicialitza els marcadors de mides
     void initializeRulers();
+        
+    /// Actualitza els rulers
+    void updateRulers();
     
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
@@ -313,7 +302,7 @@ private:
 
     /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
-    
+
     /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler , *m_bottomRuler;
 

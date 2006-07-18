@@ -156,7 +156,7 @@ void Q2DViewer::createAnnotations()
     // anotacions textuals
     m_textAnnotation = vtkCornerAnnotation::New();
     // informació de referència de la orientació del pacient
-    for( int i = 0; i<4; i++ )
+    for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
         m_patientOrientationTextActor[i]->ScaledTextOff();
@@ -180,8 +180,6 @@ void Q2DViewer::createAnnotations()
 
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
-    
-//     mapOrientationStringToAnnotation();
 
     // Marcadors
     m_sideRuler = vtkAxisActor2D::New();
@@ -345,10 +343,6 @@ void Q2DViewer::displayInformationText( bool display )
     }
 }
 
-void Q2DViewer::anyEvent()
-{
-}
-
 void Q2DViewer::onMouseMove()
 {/*
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
@@ -406,7 +400,6 @@ void Q2DViewer::onMouseMove()
     default:
     break;
     }
-//     updateWindowLevelAnnotation();
 }
 
 void Q2DViewer::onLeftButtonDown()
@@ -483,41 +476,13 @@ void Q2DViewer::onRightButtonUp()
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
-    anyEvent();
 //     static double factor = this->getRenderer()->GetActiveCamera()->GetParallelScale();
 //     double fac = this->getRenderer()->GetActiveCamera()->GetParallelScale() - factor;
 //     if( fac != 0.0 )
 //     {
 //         factor = this->getRenderer()->GetActiveCamera()->GetParallelScale();
-        double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
-        switch( m_lastView )
-        {
-        case Axial:
-            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
-            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[2] , 0.0 );
-
-            m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
-            m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
-        break;
-
-        case Sagittal:        
-            m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
-            m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
-    
-            m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[1] , anchoredCoordinates[2] );
-            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[0] , anchoredCoordinates[2] );
-        break;
-
-        case Coronal:
-            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[4] );
-            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[5] );
-
-            m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , 0.0 , anchoredCoordinates[2] );
-            m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , 0.0 , anchoredCoordinates[2] );
-        break;
-        }
-
 //     }
+    updateRulers();
     // fer el que calgui per cada tipus d'event
     switch( event )
     {
@@ -579,8 +544,6 @@ void Q2DViewer::setupInteraction()
     // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat \TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-
-//     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_cellPicker );
     
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
 
@@ -595,38 +558,72 @@ void Q2DViewer::setupInteraction()
 
     WindowLevelCallback * wlcbk = WindowLevelCallback::New();
     wlcbk->m_viewer = this;
+    
+    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
+    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
+    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
+    
 //     // anulem el window levelling manual
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
 //     // aquests observers estan de prova
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
+
 // 
 // //     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
 // 
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
 
+//     ZoomTool *zoom = new ZoomTool( m_viewer->GetInteractorStyle() );
+//     WindowLevelTool *wl = new WindowLevelTool( m_viewer->GetInteractorStyle() );
+//     WindowLevelTool *wl = new WindowLevelTool();
+//     wl->setup( m_viewer->GetInteractorStyle() , this );
 }
 
 void Q2DViewer::initializeRulers()
 {
     m_anchoredRulerCoordinates = vtkCoordinate::New();
     m_anchoredRulerCoordinates->SetCoordinateSystemToView();
-    m_anchoredRulerCoordinates->SetValue( -0.95 , -0.95 , -0.95 );
-    double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
+    m_anchoredRulerCoordinates->SetValue( -0.95 , -0.9 , -0.95 );
 
     m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
-    m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] ,m_rulerExtent[2] , 0.0 );
 
     m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
-    m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
+    
+    updateRulers();
+}
 
+void Q2DViewer::updateRulers()
+{
+    double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
+    switch( m_lastView )
+    {
+    case Axial:
+        m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
+        m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[2] , 0.0 );
+
+        m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
+    break;
+
+    case Sagittal:
+        m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
+        m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
+
+        m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[1] , anchoredCoordinates[2] );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[0] , anchoredCoordinates[2] );
+    break;
+
+    case Coronal:
+        m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[4] );
+        m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[5] );
+
+        m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , 0.0 , anchoredCoordinates[2] );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , 0.0 , anchoredCoordinates[2] );
+    break;
+    }
 }
 
 void Q2DViewer::setInput( Volume* volume )
@@ -635,20 +632,17 @@ void Q2DViewer::setInput( Volume* volume )
         return;
     m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
-    // fem update de les mides dels indicadors de referència
-    initializeRulers();
-    initInformationText();
-
-    m_mainVolume->getDimensions( m_size );
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
     if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
     {
         double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        m_defaultWindow = fabs(range[1] - range[0]);
+        m_defaultWindow = fabs( range[1] - range[0] );
         m_defaultLevel = ( range[1] + range[0] )/ 2.0;
     }
+    
+    m_mainVolume->getDimensions( m_size );
     double origin[3], spacing[3];
     m_mainVolume->getOrigin( origin );
     m_mainVolume->getSpacing( spacing );
@@ -659,17 +653,19 @@ void Q2DViewer::setInput( Volume* volume )
     m_rulerExtent[4] = origin[2];
     m_rulerExtent[5] = origin[2] + m_size[2]*spacing[2];
     
+    initializeRulers();
+    initInformationText();
+
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
-
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
 {
     m_overlayVolume = volume;
     
-    vtkImageCheckerboard* imageCheckerBoard = vtkImageCheckerboard::New();
-    vtkImageBlend* blender;
+    vtkImageCheckerboard *imageCheckerBoard = vtkImageCheckerboard::New();
+    vtkImageBlend *blender;
     
     vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
     
@@ -682,6 +678,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         imageCheckerBoard->SetNumberOfDivisions( m_divisions );
         // actualitzem el viewer
         m_viewer->SetInputConnection( imageCheckerBoard->GetOutputPort() ); // li donem el m_imageCheckerboard com a input
+        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
     
     case Blend:
@@ -690,7 +687,8 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         blender->AddInput(m_overlayVolume->getVtkData());
         blender->SetOpacity( 1, 0.5 );
         blender->SetOpacity( 2, 0.5 );
-        m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input       
+        m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input
+        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
     
     case RectilinearWipe:
@@ -699,6 +697,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         wipe->SetPosition(20,20);
         wipe->SetWipeToUpperLeft();        
         m_viewer->SetInput( wipe->GetOutput() );
+        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;    
     }
 }
@@ -708,8 +707,8 @@ void Q2DViewer::render()
     // si tenim dades
     if( m_mainVolume )
     {        
-        // li donem el window/level correcte
-        resetWindowLevelToDefault();
+        // li donem el window/level correcte \TODO no creiem convenient que aquesta crida es faci aquí
+//         resetWindowLevelToDefault();
         // Això és necessari perquè la imatge es rescali a les mides de la finestreta
         m_viewer->GetRenderer()->ResetCamera();
         updateView();
@@ -770,10 +769,12 @@ void Q2DViewer::updateView()
         setSlice( m_viewer->GetSliceRange()[1]/2 );
         mapOrientationStringToAnnotation();
         updateWindowSizeAnnotation();
+        updateRulers();
+        this->getInteractor()->Render();
     }
     else
     {
-        WARN_LOG( "Intentant canviar de vista nsese haver donat un input abans..." );
+        WARN_LOG( "Intentant canviar de vista sense haver donat un input abans..." );
     }
 }
 
@@ -829,143 +830,11 @@ void Q2DViewer::resetWindowLevelToDefault()
     {
         m_viewer->SetColorWindow( m_defaultWindow );
         m_viewer->SetColorLevel( m_defaultLevel );
-        
+
         this->getInteractor()->Render();
         updateWindowLevelAnnotation();
     }
     // mostrar avís/error si no hi ha volum?
-}
-
-void Q2DViewer::resetWindowLevelToBone()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 2000 );
-        m_viewer->SetColorLevel( 500 );
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToEmphysema()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 800 );
-        m_viewer->SetColorLevel( -800 );
-        
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToSoftTissuesNonContrast()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 400 );
-        m_viewer->SetColorLevel( 40 );
-        
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToLiverNonContrast()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 200 );
-        m_viewer->SetColorLevel( 40 );
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToSoftTissuesContrastMedium()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 400 );
-        m_viewer->SetColorLevel( 70 );
-        
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToLiverContrastMedium()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 300 );
-        m_viewer->SetColorLevel( 60 ); // 60-100
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToNeckContrastMedium()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 300 );
-        m_viewer->SetColorLevel( 50 );
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();
-    }
-}
-
-void Q2DViewer::resetWindowLevelToAngiography()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 500 );
-        m_viewer->SetColorLevel( 100 ); // 100-200
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();   
-    }
-}
-
-void Q2DViewer::resetWindowLevelToOsteoporosis()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 1000 ); // 1000-1500
-        m_viewer->SetColorLevel( 300 );
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();   
-    }
-}
-
-void Q2DViewer::resetWindowLevelToPetrousBone()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 4000 );
-        m_viewer->SetColorLevel( 700 );
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();   
-    }
-}
-
-void Q2DViewer::resetWindowLevelToLung()
-{
-    if( m_mainVolume )
-    {
-        m_viewer->SetColorWindow( 1500 );
-        m_viewer->SetColorLevel( -650 );
-
-        this->getInteractor()->Render();
-        updateWindowLevelAnnotation();   
-    }
 }
 
 void Q2DViewer::updateWindowLevelAnnotation()
