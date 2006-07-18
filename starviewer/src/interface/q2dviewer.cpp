@@ -493,27 +493,27 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
         switch( m_lastView )
         {
         case Axial:
-            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 200.0 , 0.0 );
-            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 0.0 );
+            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
+            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[2] , 0.0 );
 
-            m_bottomRuler->GetPositionCoordinate()->SetValue( 200.0 , anchoredCoordinates[1]  , 0.0 );
-            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 0.0  );
+            m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
         break;
 
         case Sagittal:        
-            m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 0.0 );
-            m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 200.0 );
+            m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
+            m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
     
-            m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , 200.0 , anchoredCoordinates[2] );
-            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , 0.0 , anchoredCoordinates[2] );
+            m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[1] , anchoredCoordinates[2] );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[0] , anchoredCoordinates[2] );
         break;
 
         case Coronal:
-            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 0.0 );
-            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 200.0 );
+            m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[4] );
+            m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[5] );
 
-            m_bottomRuler->GetPositionCoordinate()->SetValue( 200.0 , 0.0 , anchoredCoordinates[2] );
-            m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , 0.0 , anchoredCoordinates[2] );
+            m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , 0.0 , anchoredCoordinates[2] );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , 0.0 , anchoredCoordinates[2] );
         break;
         }
 
@@ -619,15 +619,13 @@ void Q2DViewer::initializeRulers()
 
     m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 200.0 , 0.0 );
-    m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , 0.0 );
+    m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
+    m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] ,m_rulerExtent[2] , 0.0 );
 
     m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-//     m_bottomRuler->SetPosition(  200.0 , anchoredCoordinates[1] );
-//     m_bottomRuler->SetPosition2( 0.0 , anchoredCoordinates[1] );
-    m_bottomRuler->GetPositionCoordinate()->SetValue( 200.0 , anchoredCoordinates[1] , 0.0 );
-    m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , 0.0 );
+    m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
+    m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
 
 }
 
@@ -651,6 +649,16 @@ void Q2DViewer::setInput( Volume* volume )
         m_defaultWindow = fabs(range[1] - range[0]);
         m_defaultLevel = ( range[1] + range[0] )/ 2.0;
     }
+    double origin[3], spacing[3];
+    m_mainVolume->getOrigin( origin );
+    m_mainVolume->getSpacing( spacing );
+    m_rulerExtent[0] = origin[0];
+    m_rulerExtent[1] = origin[0] + m_size[0]*spacing[0];
+    m_rulerExtent[2] = origin[1];
+    m_rulerExtent[3] = origin[1] + m_size[1]*spacing[1];
+    m_rulerExtent[4] = origin[2];
+    m_rulerExtent[5] = origin[2] + m_size[2]*spacing[2];
+    
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
 

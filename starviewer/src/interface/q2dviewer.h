@@ -319,6 +319,9 @@ private:
 
     /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
     vtkCoordinate *m_anchoredRulerCoordinates;
+
+    /// coordenades dels extrems per cada dimensió del ruler
+    double m_rulerExtent[6];
     
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
