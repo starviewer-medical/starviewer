@@ -46,13 +46,13 @@ public slots:
     void clearTexts();
     
     /// Fa una cerca dels estudis fets avui
-    void searchToday();
+    void searchTodayStudy();
     
     /// Fa una cerca dels estudis d'ahir
-    void searchYesterday();
+    void searchYesterdayStudy();
     
     /// Escull a on fer la cerca, si a nivell local o PACS
-    void search();
+    void searchStudy();
     
     /** Busca la informació d'una sèrie
      * @param studyUID UID de l'estidi

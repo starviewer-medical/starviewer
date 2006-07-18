@@ -120,9 +120,9 @@ void QueryScreen::connectSignalsAndSlots()
 {
     //connectem els butons
     connect( m_buttonConfig , SIGNAL( clicked() ) , this , SLOT( config() ) );
-    connect( m_buttonSearch , SIGNAL( clicked() ) , this , SLOT( search() ) );
-    connect( m_buttonToday , SIGNAL( clicked() ) , this , SLOT( searchToday() ) );
-    connect( m_buttonYesterday , SIGNAL( clicked() ) , this , SLOT( searchYesterday() ) );
+    connect( m_buttonSearch , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
+    connect( m_buttonToday , SIGNAL( clicked() ) , this , SLOT( searchTodayStudy() ) );
+    connect( m_buttonYesterday , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
     connect( m_buttonRetrieve , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
     connect( m_buttonRetrieveList , SIGNAL( clicked() ) , this , SLOT( showRetrieveScreen() ) );
@@ -143,11 +143,11 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_checkTo, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
     
     //lineedit al fer entrer que cerquin    
-    connect( m_textPatientID , SIGNAL( returnPressed() ) , this , SLOT( search() ) );
-    connect( m_textLastName , SIGNAL( returnPressed() ) , this , SLOT( search() ) );
-    connect( m_textFirstName , SIGNAL( returnPressed() ) , this , SLOT( search() ) );
-    connect( m_textStudyID , SIGNAL( returnPressed() ) , this , SLOT( search() ) );
-    connect( m_textAccessionNumber , SIGNAL( returnPressed() ) , this , SLOT( search() ) );
+    connect( m_textPatientID , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
+    connect( m_textLastName , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
+    connect( m_textFirstName , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
+    connect( m_textStudyID , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
+    connect( m_textAccessionNumber , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
     
     //checkbox
     connect( m_checkAll, SIGNAL( clicked() ) , this , SLOT( clearCheckedModality() ) );
@@ -324,7 +324,7 @@ void QueryScreen::setEnabledDates( bool enabled )
     m_checkTo->setChecked( enabled );
 }
 
-void QueryScreen::searchToday()
+void QueryScreen::searchTodayStudy()
 {
     QDate today;
 
@@ -332,10 +332,10 @@ void QueryScreen::searchToday()
         
     m_textTo->setDate(today.currentDate() );
     m_textFrom->setDate(today.currentDate() );
-    search();
+    searchStudy();
 }
 
-void QueryScreen::searchYesterday()
+void QueryScreen::searchYesterdayStudy()
 {
     QDate today;
     QDate yesterday( today.currentDate() );
@@ -345,10 +345,10 @@ void QueryScreen::searchYesterday()
     
     m_textFrom->setDate( yesterday );
     m_textTo->setDate( yesterday );
-    search();
+    searchStudy();
 }
 
-void QueryScreen::search()
+void QueryScreen::searchStudy()
 {
     QString logMessage;
     
@@ -1178,7 +1178,7 @@ QString QueryScreen::buildPatientName()
      
     if ( m_textFirstName->text().length() == 0 && m_textLastName->text().length() == 0)
     {
-        patientName.append( "*" );
+        patientName.append( "" );
     }    
     else
     {
