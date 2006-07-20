@@ -463,11 +463,12 @@ void QMPRExtension::setInput( Volume *input )
     
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem. 
     m_axial2DView->setViewToAxial();
+    int extent[6];
+    m_volume->getWholeExtent( extent );
     // refrescar el controls
-    m_axialSpinBox->setMinimum( 0 );
-    m_axialSpinBox->setMaximum( m_volume->getVtkData()->GetDimensions()[2] );    
-    m_axialSlider->setMaximum(  m_volume->getVtkData()->GetDimensions()[2] );
-    m_axialSlider->setValue( m_axial2DView->getSlice() );    
+    m_axialSpinBox->setMinimum( extent[4] );
+    m_axialSpinBox->setMaximum( extent[5] );
+    m_axialSlider->setMaximum(  extent[5] );
 
     // posta a punt dels planeSource
     initOrientation();
