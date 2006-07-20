@@ -352,37 +352,36 @@ void QueryScreen::searchStudy()
 {
     QString logMessage;
     
-    if ( m_tab->currentIndex() == 1 )
+
+    switch ( m_tab->currentIndex() )
     {
-        if ( !validateNoEmptyMask() )
-        {
-            switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-                                        tr( "You have not specified any filter. This query could take a long time. Do you want to continue ?" ) ,
-                                        tr( "&Yes" ) , tr( "&No" ) ,
-                                        0 , 1 ) ) 
+        case 0:
+            queryStudyCache();
+            break;
+        case 1:
+            if ( !validateNoEmptyMask() )
             {
-				
-                case 0: 
-                        logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
-                        INFO_LOG ( logMessage.toAscii().constData() ); 
-                        queryStudyPacs();
-                        QApplication::restoreOverrideCursor();
-                        break;
-            }    
-        }
-        else 
-        {	
-            logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
-            INFO_LOG ( logMessage.toAscii().constData() ); 
-            queryStudyPacs(); 
-        }
+                switch( QMessageBox::information( this , tr( "Starviewer" ) ,
+                                            tr( "You have not specified any filter. This query could take a long time. Do you want to continue ?" ) ,
+                                            tr( "&Yes" ) , tr( "&No" ) ,
+                                            0 , 1 ) ) 
+                {
+                    case 0: 
+                            queryStudyPacs();
+                            QApplication::restoreOverrideCursor();
+                            break;
+                }    
+            }
+            else 
+            {   
+                queryStudyPacs(); 
+            }            
+            break;
+        case 2:
+            queryStudyDicomdir();
+            break;
     }
-    else
-    {
-        logMessage = "Cerca d'estudis a la cache amb paràmetres " + logQueryStudy();
-        INFO_LOG ( logMessage.toAscii().constData() ); 
-        queryStudyCache();
-    }
+
 }
 
 bool QueryScreen::validateNoEmptyMask()
@@ -406,9 +405,13 @@ void QueryScreen::queryStudyPacs()
     PacsParameters pa;
     QString result;
     StarviewerSettings settings;
+    QString logMessage;
     
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 	
+    logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
+    INFO_LOG ( logMessage.toAscii().constData() ); 
+
     pacsList.clear(); //netejem el pacsLIST
     qPacsList->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
     
@@ -450,8 +453,12 @@ void QueryScreen::queryStudyCache()
 {
     CacheStudyDAL cacheStudyDAL;
     Status state;
-    
+    QString logMessage;
+
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
+    logMessage = "Cerca d'estudis a la cache amb paràmetres " + logQueryStudy();
+    INFO_LOG ( logMessage.toAscii().constData() ); 
 
     m_seriesListWidgetCache->clear();
     
@@ -488,15 +495,28 @@ void QueryScreen::queryStudyDicomdir()
 {
     Status state;
     StudyList dicomdirStudyList;
+    QString logMessage;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    m_readDicomdir.readStudies( dicomdirStudyList );
+    logMessage = "Cerca d'estudis al Dicomdir amb paràmetres " + logQueryStudy();
+    INFO_LOG ( logMessage.toAscii().constData() ); 
+
+    state = m_readDicomdir.readStudies( dicomdirStudyList , buildStudyMask() );
+    
+    if ( !state.good() )
+    {
+        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error quering in dicomdir" ) );
+        logMessage = "Error cercant estudis al dicomdir ";
+        logMessage.append ( state.text().c_str() );
+        ERROR_LOG( logMessage.toAscii().constData() );
+    }
+
     dicomdirStudyList.firstStudy();
 
     if ( dicomdirStudyList.end() )
     {
-        m_studyTreeWidgetPacs->clear();        
+        m_studyTreeWidgetDicomdir->clear();        
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
         return;
@@ -667,8 +687,12 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
 void QueryScreen::querySeriesDicomdir( QString studyUID )
 {
     SeriesList seriesList;
+    QString logMessage;
 
     m_readDicomdir.readSeries( studyUID.toAscii().constData() , seriesList );
+
+    logMessage = "Cerca de sèries a la caché de l'estudi " + studyUID;
+    INFO_LOG( logMessage.toAscii().constData() );
 
     seriesList.firstSeries();
     if ( seriesList.end() )
@@ -809,22 +833,30 @@ void QueryScreen::studyRetrievedView( QString studyUID )
 
 void QueryScreen::tabChanged( int index )
 {
-    if ( index != 0 )
+    switch ( index )
     {
-        setEnabledModalityChecks( false );//desactivem el grup button de modalitat
-        m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
-        m_buttonView->setEnabled( true );
-        m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
-    }
-    else 
-    {
-        setEnabledModalityChecks( true );//activem el grup button de motalitat
-        m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
-        m_buttonView->setEnabled( true );
-        m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
-    }
-    
-    if (  m_PacsListShow ) resizePacsList();
+        case 0: //Database
+                setEnabledModalityChecks( true );//activem el grup button de motalitat
+                m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
+                m_buttonView->setEnabled( true );//botó de visualitzar estudi
+                m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
+                if (  m_PacsListShow ) resizePacsList();
+                break;
+        case 1: //Pacs
+                setEnabledModalityChecks( false );//desactivem el grup button de modalitat
+                m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
+                m_buttonView->setEnabled( true );//botó de visualitzar estudi
+                m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                if (  m_PacsListShow ) resizePacsList();
+                break;
+        case 2: //Dicomdir
+                setEnabledModalityChecks( false );//desactivem el grup button de modalitat
+                m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
+                m_buttonView->setEnabled( true );//botó de visualitzar estudi
+                m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
+                if (  m_PacsListShow ) resizePacsList();
+                break;
+        }
 }
 
 void QueryScreen::view()
@@ -1094,17 +1126,33 @@ void QueryScreen::convertToDicomdir( QString studyUID )
 void QueryScreen::openDicomdir()
 {
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Dicomdir" ) );
-    QString path, dicomdirPath;
+    QString path, dicomdirPath , logMessage;
     
     dlg->setFileMode( QFileDialog::DirectoryOnly );
-    
+    Status state;    
+
     if ( dlg->exec() == QDialog::Accepted )
     {
         if ( !dlg->selectedFiles().empty() ) dicomdirPath.insert( 0 , dlg->selectedFiles().takeFirst() );
 
         dicomdirPath.append("/DICOMDIR");//afegim el nom del fitxer que conté la informació del Dicomdir
     
-        m_readDicomdir.open ( dicomdirPath.toAscii().constData() );
+        state = m_readDicomdir.open ( dicomdirPath.toAscii().constData() );
+
+        if ( !state.good() )
+        {
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error openning dicomdir" ) );
+            logMessage = "Error al obrir el dicomdir " + dicomdirPath;
+            logMessage.append ( state.text().c_str() );
+            ERROR_LOG( logMessage.toAscii().constData() );
+        }
+        else 
+        {
+            logMessage = "Obert el dicomdir " + dicomdirPath;
+            INFO_LOG( logMessage.toAscii().constData() );       
+        }
+
+        clearTexts();//Netegem el filtre de cerca al obrir el dicomdir
         queryStudyDicomdir();
     }    
    
@@ -1190,7 +1238,6 @@ QString QueryScreen::buildPatientName()
             patientName.append( m_textFirstName->text() );
             patientName.append( "*" );//per si no posa el nom complet
         }
-        else patientName.append( "*" );
     }
     
     return patientName;

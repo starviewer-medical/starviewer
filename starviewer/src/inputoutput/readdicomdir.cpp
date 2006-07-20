@@ -16,7 +16,7 @@
 #include "studylist.h"
 #include "series.h"
 #include "serieslist.h"
-
+#include "studymask.h"
 
 namespace udg {
 
@@ -38,8 +38,8 @@ Status ReadDicomdir::open( std::string dicomdirPath )
     return state.setStatus( dicomdir->error() );
 }
 
-//El dicomdir segueix una estructura d'abre on tenim n pacients, que tene n estudis, que conté n series, i que conté n imatges, per llegir la informació hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre els estudis del pacient, i anar fent així fins arribar al nivell de baix de tot les imatges,
-Status ReadDicomdir::readStudies( StudyList &studyList )
+//El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que conté n series, i que conté n imatges, per llegir la informació hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent així fins arribar al nivell de baix de tot, les imatges,
+Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
 {
     Status state;
     
@@ -47,6 +47,8 @@ Status ReadDicomdir::readStudies( StudyList &studyList )
     DcmDirectoryRecord *patientRecord = root->getSub( 0 );//accedim al primer pacient
     OFString text;
     Study study;
+    
+    if ( dicomdir == NULL ) return state.setStatus( "Error: Not open dicomfile" , false , 1302 ); //FER RETORNAR STATUS AMB ERROR
 
     //En aquest primer while accedim al patient Record a nivell de dades de pacient
     while ( patientRecord != NULL )
@@ -63,6 +65,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList )
         //en aquest while accedim a les dades de l'estudi
         while ( studyRecord != NULL )
         {
+            
             //Id estudi
             studyRecord->findAndGetOFStringArray( DCM_StudyID , text );
             study.setStudyId( text.c_str() );
@@ -87,7 +90,10 @@ Status ReadDicomdir::readStudies( StudyList &studyList )
             studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
             study.setStudyUID( text.c_str() );
 
-            studyList.insert( study );        
+            if ( matchStudyMask( study , studyMask ) ) //comprovem si l'estudi compleix la màscara de cerca que ens han passat
+            {
+                studyList.insert( study );   
+            }
             
             studyRecord = patientRecord->nextSub( studyRecord ); //accedim al següent estudi del pacient
         }
@@ -155,6 +161,151 @@ Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
     }   
     
     return state.setStatus( dicomdir->error() );
+}
+
+//Per fer el match seguirem els criteris del PACS
+bool ReadDicomdir::matchStudyMask( Study study , StudyMask studyMask )
+{
+    if ( !matchStudyMaskStudyId( studyMask.getStudyId() , study.getStudyId() ) ) return false;
+
+    if ( !matchStudyMaskPatientId( studyMask.getPatientId() , study.getPatientId() ) ) return false;
+
+    if ( !matchStudyMaskDate( studyMask.getStudyDate() , study.getStudyDate() ) ) return false;
+
+    if ( !matchStudyMaskPatientName( studyMask.getPatientName() , study.getPatientName() ) ) return false;
+    
+    return true;
+}
+
+bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId )
+{
+    if ( studyMaskStudyId.length() > 0 )
+    { //si hi ha màscara d'estudi Id
+      //en el cas del StudiId seguim criteri del pacs, només faran match els ID que concordin amb el de la màscara, no podem fer wildcard
+        if ( studyStudyId == studyMaskStudyId )
+        {   
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId )
+{
+    if ( studyMaskPatientId.length() > 0 )
+    { //si hi ha màscara Patient Id
+      //en el cas del PatienId seguim criteri del pacs, només faran match els ID que concordin amb el de la màscara, no podem fer wildcard
+        studyMaskPatientId = upperString( studyMaskPatientId );
+        
+        if ( studyPatientId == studyMaskPatientId )
+        {   
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string studyDate )
+{
+
+    if ( studyMaskDate.length() > 0 ) 
+    { //Si hi ha màscara de data
+      //la màscara de la data per DICOM segueix els formats :
+      // -  "YYYYMMDD-YYYYMMDD", per indicar un rang de dades
+      // - "-YYYYMMDD" per buscar estudis amb la data més petita o igual
+      // - "YYYYMMDD-" per buscar estudis amb la data més gran o igual
+      // - "YYYYMMDD" per buscar estudis d'aquella data
+      // Hurem de mirar quin d'aquest formats és la nostre màscara
+    
+        if (  studyMaskDate.length() == 8 ) // cas YYYYMMDDD
+        {
+            if ( studyMaskDate == studyDate )
+            {
+                return true;
+            }   
+            else return false;
+        }
+        else if (  studyMaskDate.length() == 9 ) 
+        {
+            if (  studyMaskDate.at( 0 ) == '-' ) // cas -YYYYMMDD
+            {
+                if ( studyMaskDate.substr( 1 , 8 ) >= studyDate )
+                {
+                    return true;
+                }
+                else return false;
+            }
+            else if ( studyMaskDate.at( 8 ) == '-' ) // cas YYYYMMDD-
+            {
+                if ( studyMaskDate.substr( 0 , 8 ) <= studyDate )
+                {
+                    return true;
+                }
+                else return false;
+            }
+        }
+        else if ( studyMaskDate.length() == 17 ) // cas YYYYMMDD-YYYYMMDD
+        {
+            if ( studyMaskDate.substr( 0 , 8 ) <= studyDate && 
+                 studyMaskDate.substr( 9 , 8 ) >= studyDate )
+            {
+                return true;
+            }
+            else return false;
+        }
+        return false;
+    }
+
+    return true;
+}
+
+bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName , std::string studyPatientName )
+{
+    std:: string lastPatientName , firstPatientName;
+
+    if ( studyMaskPatientName.length() > 0 )
+    { //En Pacs la màscara del nom té el següent format Cognoms*Nom*
+      //Seguint els criteris del PACS la cerca es fa en wildcard, és a dir no cal que els dos string sigui igual mentre que la màscara del nom del pacient estigui continguda dins studyPatientName n'hi ha suficient
+        studyMaskPatientName = upperString( studyMaskPatientName );
+        lastPatientName = studyMaskPatientName.substr( 0 , studyMaskPatientName.find_first_of ( "*" ) );   
+
+        if ( lastPatientName.length() > 0)
+        {
+            if ( studyPatientName.find ( lastPatientName ) == std::string::npos ) return false; //comprovem si el nom del pacient conte el cognom
+        }
+    
+        if ( studyMaskPatientName.find_first_of( "*" ) < studyMaskPatientName.length() ) //si la màscara també contem el nom del pacient
+        {
+            firstPatientName = studyMaskPatientName.substr( studyMaskPatientName.find_first_of ( "*" ) + 1 , studyMaskPatientName.length() - studyMaskPatientName.find_first_of ( "*" ) -2 );  //ignorem el * de final del Nom
+            
+            if ( studyPatientName.find ( firstPatientName ) == std::string::npos ) return false;
+        }
+        
+        return true;
+    }
+
+    return true;
+
+}
+
+std::string ReadDicomdir::upperString( std:: string original )
+{
+    for ( unsigned int i = 0; i < original.length(); i++ )
+    {
+        original[i] = toupper( original[i] );
+    }
+
+    return original;
 }
 
 ReadDicomdir::~ReadDicomdir()
