@@ -15,7 +15,7 @@ class QEvent;
 class QAction;
 // vtk
 class vtkImageViewer2;
-class vtkCellPicker;
+class vtkPropPicker;
 class vtkTextActor;
 class vtkEventQtSlotConnect;
 class vtkObject;
@@ -26,6 +26,7 @@ class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkCoordinate;
+class vtkCaptionActor2D;
 
 namespace udg {
 
@@ -203,6 +204,9 @@ public slots:
     
     /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
+
+    /// Actualitza la informació del voxel que hi ha per sota del cursor
+    void updateVoxelInformation();
     
 protected:
     /// asscociació de botons amb accions
@@ -236,7 +240,7 @@ protected:
     int m_divisions[3];
 
     /// El picker per anotar punts de la imatge
-    vtkCellPicker *m_cellPicker;
+    vtkPropPicker *m_picker;
 
     /// actor que agafem de l'escena
     vtkAxisActor2D *m_pickedAxisActor;
@@ -325,6 +329,9 @@ private:
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
+    /// Llegenda que segueix el cursor amb el valor del voxel
+    vtkCaptionActor2D *m_voxelInformationCaption;
+    
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
