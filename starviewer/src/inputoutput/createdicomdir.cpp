@@ -46,7 +46,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     DicomDirInterface::E_ApplicationProfile opt_profile = DicomDirInterface::AP_GeneralPurpose;
     Status state;
 
-    //busquem el fitxers
+    //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
     OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , opt_directory );
          
     //comprovem que el directori no estigui buit

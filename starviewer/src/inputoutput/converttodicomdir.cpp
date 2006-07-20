@@ -64,7 +64,6 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
             
         imageNumberTotal = imageNumberStudy + imageNumberTotal;
         i++;
-        cout<<"entro2\n";
     }
 
     if ( !state.good() ) return state;
@@ -74,7 +73,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     m_progress->setMinimumDuration( 0 );
     m_progress->setCancelButton( 0 );
 
-    while ( !m_studiesToConvert.isEmpty() )
+    while ( !m_studiesToConvert.isEmpty() ) //per cada estudi a convertir
     {   
         studyUID = m_studiesToConvert.takeFirst();
         state = convertStudy( studyUID );        
@@ -82,7 +81,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
         if ( !state.good() ) break; 
     }
     
-    state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );
+    state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     
     m_progress->close();
     
@@ -114,7 +113,7 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
     
     seriesList.firstSeries();
 
-    while ( !seriesList.end() )
+    while ( !seriesList.end() ) //per cada sèrie de l'estudi
     {
         state = convertSeries( seriesList.getSeries() );
         
@@ -155,7 +154,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
     
     imageList.firstImage();
 
-    while ( !imageList.end() )
+    while ( !imageList.end() ) //per cada imatge de la sèrie
     {
         state = convertImage( imageList.getImage() );
         
@@ -191,7 +190,7 @@ Status ConvertToDicomdir::convertImage( Image image )
 
     imageOutputPath = m_dicomDirSeriesPath + imageName;
 
-    //convertim la imatge a littleEndiant
+    //convertim la imatge a littleEndian, demanat per la normativa DICOM
     state = convertDicom.convert( imageInputPath.toAscii().constData() , imageOutputPath.toAscii().constData() );
 
      m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
@@ -203,6 +202,5 @@ Status ConvertToDicomdir::convertImage( Image image )
 ConvertToDicomdir::~ConvertToDicomdir()
 {
 }
-
 
 }
