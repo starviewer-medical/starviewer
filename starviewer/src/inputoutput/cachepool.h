@@ -7,7 +7,6 @@
 #ifndef UDGCACHEPOOL_H
 #define UDGCACHEPOOL_H
 
-#include <QString>
 #include "databaseconnection.h"
 
 namespace udg {
@@ -82,22 +81,6 @@ private:
      */
     Status constructState( int numState );
     
-    /** Esborra una serie de l'spool
-     *        @param path absolut de la sèrie
-     */
-    void removeSeries( std::string absPath );
-    
-    /** Esborra una imatge del disc dur
-     *         @param Path de la imatge a esborrar
-     *         @return estat del mètode
-     */
-    bool removeImage( std::string absPath );    
-    
-    /** Esborra un directori
-     *         @param Path del directori
-     *         @return estat del mètode
-     */
-    bool removeDir( std::string absDirPath );
 };
 };
 

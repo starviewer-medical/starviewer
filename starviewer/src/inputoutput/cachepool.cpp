@@ -10,6 +10,7 @@
 #include "cachepool.h"
 #include "status.h"
 #include "logging.h"
+#include "deletedirectory.h"
 
 namespace udg {
 
@@ -56,67 +57,11 @@ Status CachePool::constructState(int numState)
 
 void CachePool::removeStudy( std::string absPathStudy )
 {
-    QStringList seriesDirList;
-    QDir studyDir,seriesDir;
-    QString absSeriesPath;
-    
-    studyDir.setPath( absPathStudy.c_str() );
-    seriesDirList =  studyDir.entryList();
-        
-    //busquem els directori de totes les series que conté l'estudi
-    for ( QStringList::Iterator it = seriesDirList.begin(); it != seriesDirList.end(); ++it ) 
-    {
-        if ( *it != "." && *it != ".." )
-        {
-            absSeriesPath.truncate( 0 );
-            absSeriesPath.append( absPathStudy.c_str() );          
-            absSeriesPath.append( *it );
-            absSeriesPath.append( "/" );
-            removeSeries( absSeriesPath.toStdString() );
-            seriesDir.rmdir( absSeriesPath ); //esborra el directori de la sèrie
-        }
-    }
-    studyDir.rmdir( absPathStudy.c_str() ); //esborra el directori de l'estudi
-    
+    DeleteDirectory deleteDirectory;
+
+    deleteDirectory.deleteDirectory( absPathStudy.c_str() );
 }
 
-void CachePool::removeSeries( std::string absPathSeries )
-{
-    QStringList imageFilesList;
-    QDir seriesDir,imageFile;
-    QString absPathImage;
-    
-    seriesDir.setPath( absPathSeries.c_str() );
-    imageFilesList =  seriesDir.entryList();
-        
-    for ( QStringList::Iterator it = imageFilesList.begin(); it != imageFilesList.end(); ++it ) 
-    {
-        if ( *it != "." && *it != ".." )
-        {
-            absPathImage.truncate( 0 );
-            absPathImage.append( absPathSeries.c_str() );
-            absPathImage.append( "/" );
-            absPathImage.append( *it );
-            imageFile.remove( absPathImage );
-        }           
-    }
-    
-}
-
-bool CachePool::removeImage( std::string absPath )
-{
-    QDir file;
-    
-    return file.remove( absPath.c_str() );
-        
-}
-
-bool CachePool::removeDir( std::string absDirPath )
-{
-    QDir dir;
-    
-    return dir.rmdir( absDirPath.c_str() );
-}
 
 //AQUESTA FUNCIO NO S'UTILITZA, JA QUE SEMPRE QUE ACTUALITZEM L'ESPAI ES QUANT INSERIM O ESBORREM UN ESTUDI I AQUESTES ACCIONS
 //S'HAN DE FER AMB UN TRANSACCIO SINO ENS PODRIEM TROBAR QUE INSERISSIM UNA IMATGE L'APLICACIO ES TANQUES I NO S'HAGUES ACTUALITAT L'ESPAI OCUPAT
