@@ -96,6 +96,12 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_overlay = CheckerBoard; // per defecte
     m_overlayVolume = 0;
 
+    m_voxelInformationCaption = 0;
+    m_textAnnotation = 0;
+    for( int i = 0; i < 4; i++ )
+    {
+        m_patientOrientationTextActor[i] = 0;
+    }
 // paràmetres específics
     
     // CheckerBoard
@@ -117,30 +123,15 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     createTools();
     
     updateCursor( -1, -1, -1, -1 );
-    m_voxelInformationCaption = vtkCaptionActor2D::New();
-    m_voxelInformationCaption->GetAttachmentPointCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->SetAttachmentPoint( m_currentCursorPosition );
-    m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->BorderOff();
-    m_voxelInformationCaption->LeaderOn();
-    m_voxelInformationCaption->ThreeDimensionalLeaderOff();
-    m_voxelInformationCaption->GetProperty()->SetColor( 1.0 , 0 , 0 );
-    m_voxelInformationCaption->SetPadding( 1 );
-    m_voxelInformationCaption->SetPosition( -1.0 , -1.0 );
-    m_voxelInformationCaption->SetHeight( 0.05 );
-    m_voxelInformationCaption->SetWidth( 0.3 );
     
-    
-    m_voxelInformationCaption->GetCaptionTextProperty()->SetColor( 1. , 0.7 , 0.0 );
-    m_voxelInformationCaption->GetCaptionTextProperty()->ShadowOn();
-    m_voxelInformationCaption->GetCaptionTextProperty()->ItalicOff();
-    m_voxelInformationCaption->GetCaptionTextProperty()->BoldOff();
-    this->getRenderer()->AddActor( m_voxelInformationCaption );
     
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
     m_manipulateState = Q2DViewer::Ready;
     m_manipulating = false;
+
+    addActors();
+    
 }
 
 Q2DViewer::~Q2DViewer()
@@ -175,7 +166,40 @@ void Q2DViewer::createTools()
 
 void Q2DViewer::createAnnotations()
 {
-    // anotacions textuals
+    // anotacions de l'orientació del pacient
+    createOrientationAnnotations();
+    // Llegenda amb informació del voxel
+    createVoxelInformationCaption();
+    // Marcadors d'escala
+    createRulers();
+    
+    updateAnnotations();
+}
+
+void Q2DViewer::createVoxelInformationCaption()
+{
+    m_voxelInformationCaption = vtkCaptionActor2D::New();
+    m_voxelInformationCaption->GetAttachmentPointCoordinate()->SetCoordinateSystemToWorld();
+    m_voxelInformationCaption->SetAttachmentPoint( m_currentCursorPosition );
+    m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_voxelInformationCaption->BorderOff();
+    m_voxelInformationCaption->LeaderOn();
+    m_voxelInformationCaption->ThreeDimensionalLeaderOff();
+    m_voxelInformationCaption->GetProperty()->SetColor( 1.0 , 0 , 0 );
+    m_voxelInformationCaption->SetPadding( 1 );
+    m_voxelInformationCaption->SetPosition( -1.0 , -1.0 );
+    m_voxelInformationCaption->SetHeight( 0.05 );
+    m_voxelInformationCaption->SetWidth( 0.3 );
+    // propietats del texte
+    m_voxelInformationCaption->GetCaptionTextProperty()->SetColor( 1. , 0.7 , 0.0 );
+    m_voxelInformationCaption->GetCaptionTextProperty()->ShadowOn();
+    m_voxelInformationCaption->GetCaptionTextProperty()->ItalicOff();
+    m_voxelInformationCaption->GetCaptionTextProperty()->BoldOff();
+
+}
+
+void Q2DViewer::createOrientationAnnotations()
+{
     m_textAnnotation = vtkCornerAnnotation::New();
     // informació de referència de la orientació del pacient
     for( int i = 0; i < 4; i++ )
@@ -188,7 +212,7 @@ void Q2DViewer::createAnnotations()
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
 
-        this->getRenderer()->AddActor2D( m_patientOrientationTextActor[i] );
+//         this->getRenderer()->AddActor2D( m_patientOrientationTextActor[i] );
     }
     // ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
@@ -202,41 +226,6 @@ void Q2DViewer::createAnnotations()
 
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
-
-    // Marcadors
-    m_sideRuler = vtkAxisActor2D::New();
-    m_sideRuler->AxisVisibilityOn();
-    m_sideRuler->TickVisibilityOn();
-    m_sideRuler->LabelVisibilityOn();
-    m_sideRuler->AdjustLabelsOff();
-    m_sideRuler->SetLabelFormat("%.2f");
-    m_sideRuler->SetLabelFactor( 0.35 );
-    m_sideRuler->GetLabelTextProperty()->ItalicOff();
-    m_sideRuler->GetLabelTextProperty()->BoldOff();
-    m_sideRuler->GetLabelTextProperty()->ShadowOff();
-    m_sideRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
-    m_sideRuler->TitleVisibilityOff();
-    m_sideRuler->SetTickLength( 10 );
-    m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
-    this->getRenderer()->AddActor2D( m_sideRuler );
-
-    m_bottomRuler = vtkAxisActor2D::New();
-    m_bottomRuler->AxisVisibilityOn();
-    m_bottomRuler->TickVisibilityOn();
-    m_bottomRuler->LabelVisibilityOn();
-    m_bottomRuler->AdjustLabelsOff();
-    m_bottomRuler->SetLabelFormat("%.2f");
-    m_bottomRuler->SetLabelFactor( 0.35 );
-    m_bottomRuler->GetLabelTextProperty()->ItalicOff();
-    m_bottomRuler->GetLabelTextProperty()->BoldOff();
-    m_bottomRuler->GetLabelTextProperty()->ShadowOff();
-    m_bottomRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
-    m_bottomRuler->TitleVisibilityOff();
-    m_bottomRuler->SetTickLength( 10 );
-    m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
-    this->getRenderer()->AddActor2D( m_bottomRuler );
-
-    updateAnnotations();
 }
 
 void Q2DViewer::mapOrientationStringToAnnotation()
@@ -316,6 +305,45 @@ void Q2DViewer::updateAnnotations()
     }
 }
 
+void Q2DViewer::addActors()
+{
+    if( m_voxelInformationCaption )
+        this->getRenderer()->AddActor( m_voxelInformationCaption );
+    else
+    {
+        DEBUG_LOG( "No s'ha creat l'actor d'informació de voxel; no es pot afegir a l'escena" );
+    }
+    if( m_textAnnotation )
+        this->getRenderer()->AddActor( m_textAnnotation );
+    else
+    {
+        DEBUG_LOG( "No s'ha creat l'actor d'informació devolum; no es pot afegir a l'escena" );
+    }
+    if( m_patientOrientationTextActor[0] )
+    {
+        this->getRenderer()->AddActor( m_patientOrientationTextActor[0] );
+        this->getRenderer()->AddActor( m_patientOrientationTextActor[1] );
+        this->getRenderer()->AddActor( m_patientOrientationTextActor[2] );
+        this->getRenderer()->AddActor( m_patientOrientationTextActor[3] );
+    }
+    else
+    {
+        DEBUG_LOG( "No s'han creat els actors textuals d'informació d'orientació del pacient; no es poden afegir a l'escena" );
+    }
+    if( m_sideRuler )
+        this->getRenderer()->AddActor2D( m_sideRuler );
+    else
+    {
+        DEBUG_LOG( "No s'ha creat l'actor d'indicador d'escala lateral; no es pot afegir a l'escena" );
+    }
+    if( m_bottomRuler )
+        this->getRenderer()->AddActor2D( m_bottomRuler );
+    else
+    {
+        DEBUG_LOG( "No s'ha creat l'actor d'indicador d'escala inferior; no es pot afegir a l'escena" );
+    }
+}
+
 void Q2DViewer::initInformationText()
 {
     m_lowerLeftText = tr("Slice: %1/%2")
@@ -362,7 +390,7 @@ void Q2DViewer::initInformationText()
     m_textAnnotation->SetWindowLevel( m_viewer->GetWindowLevel() );
     m_textAnnotation->ShowSliceAndImageOn();
     
-    m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
+//     m_viewer->GetRenderer()->AddActor2D( m_textAnnotation );
 }
 
 void Q2DViewer::displayInformationText( bool display )
@@ -627,19 +655,45 @@ void Q2DViewer::setupInteraction()
 //     wl->setup( m_viewer->GetInteractorStyle() , this );
 }
 
-void Q2DViewer::initializeRulers()
+void Q2DViewer::createRulers()
 {
+    m_sideRuler = vtkAxisActor2D::New();
+    m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+    m_sideRuler->AxisVisibilityOn();
+    m_sideRuler->TickVisibilityOn();
+    m_sideRuler->LabelVisibilityOn();
+    m_sideRuler->AdjustLabelsOff();
+    m_sideRuler->SetLabelFormat("%.2f");
+    m_sideRuler->SetLabelFactor( 0.35 );
+    m_sideRuler->GetLabelTextProperty()->ItalicOff();
+    m_sideRuler->GetLabelTextProperty()->BoldOff();
+    m_sideRuler->GetLabelTextProperty()->ShadowOff();
+    m_sideRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
+    m_sideRuler->TitleVisibilityOff();
+    m_sideRuler->SetTickLength( 10 );
+    m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
+    
+    m_bottomRuler = vtkAxisActor2D::New();
+    m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+    m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
+    m_bottomRuler->AxisVisibilityOn();
+    m_bottomRuler->TickVisibilityOn();
+    m_bottomRuler->LabelVisibilityOn();
+    m_bottomRuler->AdjustLabelsOff();
+    m_bottomRuler->SetLabelFormat("%.2f");
+    m_bottomRuler->SetLabelFactor( 0.35 );
+    m_bottomRuler->GetLabelTextProperty()->ItalicOff();
+    m_bottomRuler->GetLabelTextProperty()->BoldOff();
+    m_bottomRuler->GetLabelTextProperty()->ShadowOff();
+    m_bottomRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
+    m_bottomRuler->TitleVisibilityOff();
+    m_bottomRuler->SetTickLength( 10 );
+    m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
+
     m_anchoredRulerCoordinates = vtkCoordinate::New();
     m_anchoredRulerCoordinates->SetCoordinateSystemToView();
     m_anchoredRulerCoordinates->SetValue( -0.95 , -0.9 , -0.95 );
-
-    m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    
-    m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    
-    updateRulers();
 }
 
 void Q2DViewer::updateRulers()
@@ -707,7 +761,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_rulerExtent[3] = origin[1] + extent[3]*spacing[1];
     m_rulerExtent[4] = origin[2];
     m_rulerExtent[5] = origin[2] + extent[5]*spacing[2];
-    initializeRulers();
+    updateRulers();
     initInformationText();
 
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
