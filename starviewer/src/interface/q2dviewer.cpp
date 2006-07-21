@@ -473,6 +473,82 @@ void Q2DViewer::displayInformationText( bool display )
     }
 }
 
+void Q2DViewer::displaySliceOn()
+{
+    m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
+}
+
+void Q2DViewer::displaySliceOff()
+{
+    m_textAnnotation->SetText( 0 , "" );
+}
+
+void Q2DViewer::displayProtocolNameOn()
+{
+    m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
+}
+
+void Q2DViewer::displayProtocolNameOff()
+{
+    m_textAnnotation->SetText( 1 , "" );
+}
+
+void Q2DViewer::displayWindowInformationOn()
+{
+    m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
+}
+
+void Q2DViewer::displayWindowInformationOff()
+{
+    m_textAnnotation->SetText( 2 , "" );
+}
+
+void Q2DViewer::displaySerieInformationOn()
+{
+    m_textAnnotation->SetText( 3 , m_upperRightText.toAscii() );
+}
+
+void Q2DViewer::displaySerieInformationOff()
+{
+    m_textAnnotation->SetText( 3 , "" );
+}
+
+void Q2DViewer::displayRulersOn()
+{
+    m_sideRuler->VisibilityOn();
+    m_bottomRuler->VisibilityOn();
+}
+
+void Q2DViewer::displayRulersOff()
+{
+    m_sideRuler->VisibilityOff();
+    m_bottomRuler->VisibilityOff();
+}
+
+void Q2DViewer::displayRulersLabelsOn()
+{
+    m_sideRuler->LabelVisibilityOn();
+    m_bottomRuler->LabelVisibilityOn();
+}
+
+void Q2DViewer::displayRulersLabelsOff()
+{
+    m_sideRuler->LabelVisibilityOff();
+    m_bottomRuler->LabelVisibilityOff();
+}
+
+void Q2DViewer::displayPatientOrientationOn()
+{
+    for( int i = 0; i < 4; i++ )
+        m_patientOrientationTextActor[i]->VisibilityOn();
+}
+
+void Q2DViewer::displayPatientOrientationOff()
+{
+    for( int i = 0; i < 4; i++ )
+        m_patientOrientationTextActor[i]->VisibilityOff();
+}
+
 void Q2DViewer::updateVoxelInformation()
 {   
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();

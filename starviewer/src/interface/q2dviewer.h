@@ -128,6 +128,22 @@ public slots:
     
     /// Indiquem si volem veure la informació del volum per pantalla
     void displayInformationText( bool display );
+
+    /// Mètodes varis per mostrar o no certa informació en pantalla
+    void displaySliceOn();
+    void displaySliceOff();
+    void displayProtocolNameOn();
+    void displayProtocolNameOff();
+    void displayWindowInformationOn();
+    void displayWindowInformationOff();
+    void displaySerieInformationOn();
+    void displaySerieInformationOff();
+    void displayRulersOn();
+    void displayRulersOff();
+    void displayRulersLabelsOn();
+    void displayRulersLabelsOff();
+    void displayPatientOrientationOn();
+    void displayPatientOrientationOff();
     
     /// Li indica la tool que es fa servir en aquell moment
     bool setCurrentTool( Tools toolName ){ m_currentTool = toolName; return true; };
