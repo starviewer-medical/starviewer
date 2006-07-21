@@ -123,11 +123,13 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_voxelInformationCaption->BorderOff();
     m_voxelInformationCaption->LeaderOn();
-    m_voxelInformationCaption->ThreeDimensionalLeaderOn();
+    m_voxelInformationCaption->ThreeDimensionalLeaderOff();
+    m_voxelInformationCaption->GetProperty()->SetColor( 1.0 , 0 , 0 );
     m_voxelInformationCaption->SetPadding( 1 );
     m_voxelInformationCaption->SetPosition( -1.0 , -1.0 );
     m_voxelInformationCaption->SetHeight( 0.05 );
     m_voxelInformationCaption->SetWidth( 0.3 );
+    
     
     m_voxelInformationCaption->GetCaptionTextProperty()->SetColor( 1. , 0.7 , 0.0 );
     m_voxelInformationCaption->GetCaptionTextProperty()->ShadowOn();
@@ -205,7 +207,14 @@ void Q2DViewer::createAnnotations()
     m_sideRuler = vtkAxisActor2D::New();
     m_sideRuler->AxisVisibilityOn();
     m_sideRuler->TickVisibilityOn();
-    m_sideRuler->LabelVisibilityOff();
+    m_sideRuler->LabelVisibilityOn();
+    m_sideRuler->AdjustLabelsOff();
+    m_sideRuler->SetLabelFormat("%.2f");
+    m_sideRuler->SetLabelFactor( 0.35 );
+    m_sideRuler->GetLabelTextProperty()->ItalicOff();
+    m_sideRuler->GetLabelTextProperty()->BoldOff();
+    m_sideRuler->GetLabelTextProperty()->ShadowOff();
+    m_sideRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
     m_sideRuler->TitleVisibilityOff();
     m_sideRuler->SetTickLength( 10 );
     m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
@@ -214,7 +223,14 @@ void Q2DViewer::createAnnotations()
     m_bottomRuler = vtkAxisActor2D::New();
     m_bottomRuler->AxisVisibilityOn();
     m_bottomRuler->TickVisibilityOn();
-    m_bottomRuler->LabelVisibilityOff();
+    m_bottomRuler->LabelVisibilityOn();
+    m_bottomRuler->AdjustLabelsOff();
+    m_bottomRuler->SetLabelFormat("%.2f");
+    m_bottomRuler->SetLabelFactor( 0.35 );
+    m_bottomRuler->GetLabelTextProperty()->ItalicOff();
+    m_bottomRuler->GetLabelTextProperty()->BoldOff();
+    m_bottomRuler->GetLabelTextProperty()->ShadowOff();
+    m_bottomRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
     m_bottomRuler->TitleVisibilityOff();
     m_bottomRuler->SetTickLength( 10 );
     m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
@@ -619,7 +635,7 @@ void Q2DViewer::initializeRulers()
 
     m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-
+    
     m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
     
@@ -634,25 +650,31 @@ void Q2DViewer::updateRulers()
     case Axial:
         m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
         m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[2] , 0.0 );
+        m_sideRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
 
         m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
         m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
+        m_bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );
     break;
 
     case Sagittal:
         m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
         m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
-
-        m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[1] , anchoredCoordinates[2] );
-        m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[0] , anchoredCoordinates[2] );
+        m_sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
+        
+        m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[3] , anchoredCoordinates[2] );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[2] , anchoredCoordinates[2] );
+        m_bottomRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
     break;
 
     case Coronal:
         m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[4] );
         m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[5] );
+        m_sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
 
         m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , 0.0 , anchoredCoordinates[2] );
         m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , 0.0 , anchoredCoordinates[2] );
+        m_bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );
     break;
     }
 }
@@ -674,16 +696,17 @@ void Q2DViewer::setInput( Volume* volume )
     }
     
     m_mainVolume->getDimensions( m_size );
+    int extent[6];
     double origin[3], spacing[3];
     m_mainVolume->getOrigin( origin );
     m_mainVolume->getSpacing( spacing );
+    m_mainVolume->getWholeExtent( extent );
     m_rulerExtent[0] = origin[0];
-    m_rulerExtent[1] = origin[0] + m_size[0]*spacing[0];
+    m_rulerExtent[1] = origin[0] + extent[1]*spacing[0];
     m_rulerExtent[2] = origin[1];
-    m_rulerExtent[3] = origin[1] + m_size[1]*spacing[1];
+    m_rulerExtent[3] = origin[1] + extent[3]*spacing[1];
     m_rulerExtent[4] = origin[2];
-    m_rulerExtent[5] = origin[2] + m_size[2]*spacing[2];
-    
+    m_rulerExtent[5] = origin[2] + extent[5]*spacing[2];
     initializeRulers();
     initInformationText();
 
