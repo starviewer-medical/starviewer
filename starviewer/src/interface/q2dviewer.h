@@ -57,10 +57,7 @@ class Volume;
 
 class Q2DViewer  : public QViewer{
 Q_OBJECT
-public:
-    /// Actualització d'anotacions vàries
-    void updateWindowLevelAnnotation();
-    
+public:    
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
     enum ViewType{ Axial, Coronal, Sagittal , None };
 
@@ -69,9 +66,6 @@ public:
 
     /// Botons del mouse
     enum Buttons{ LeftButton , MiddleButton , RightButton };
-
-    /// tipus d'accions associables als botons
-    enum Actions{ CursorAction , SliceMotionAction , WindowLevelAction };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
     enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x2 , ReferenceAnnotation = 0x4 , RuleAnnotation = 0x8 , AllAnnotation = 0xE };
@@ -84,22 +78,25 @@ public:
 
     Q2DViewer( QWidget *parent = 0 , unsigned int annotations = Q2DViewer::AllAnnotation );
     ~Q2DViewer();
-    
+
+    virtual vtkRenderer *getRenderer();
+    virtual vtkRenderWindowInteractor *getInteractor();            
+    virtual void setInput( Volume* volume );
+
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
     void setView( ViewType view );
     void setViewToAxial(){ setView( Q2DViewer::Axial ); }
     void setViewToCoronal(){ setView( Q2DViewer::Coronal ); }
     void setViewToSagittal(){ setView( Q2DViewer::Sagittal ); }
     
+    /// Actualització d'anotacions vàries
+    void updateWindowLevelAnnotation();
+
     /// ens retorna la vista que tenim en aquells moments del volum
     ViewType getView() const { return m_lastView; }
 
     /// Ens retorna l'ImageViewer
     vtkImageViewer2* getImageViewer(){ return m_viewer; }
-    
-    virtual vtkRenderer *getRenderer();
-    virtual vtkRenderWindowInteractor *getInteractor();            
-    virtual void setInput( Volume* volume );
     
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );    
@@ -209,9 +206,6 @@ public slots:
     void updateVoxelInformation();
     
 protected:
-    /// asscociació de botons amb accions
-    int m_leftButtonAction , m_middleButtonAction , m_rightButtonAction;
-
     /// últim botó que s'ha clicat
     int m_lastButtonPressed;
 
@@ -292,11 +286,20 @@ private:
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
 
-    /// Inicialitza els marcadors de mides
-    void initializeRulers();
+    /// crea els indicadors d'escala
+    void createRulers();
         
     /// Actualitza els rulers
     void updateRulers();
+
+    /// crea els actors necessaris per mostrar la llegenda flotant amb la informació de voxel
+    void createVoxelInformationCaption();
+
+    /// crea les anotacions de l'orientació del pacient
+    void createOrientationAnnotations();
+    
+    /// Afegeix tots els actors a l'escena
+    void addActors();
     
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
