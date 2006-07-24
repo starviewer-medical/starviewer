@@ -64,6 +64,9 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_coronalReslice->AutoCropOutputOn();
     m_coronalReslice->SetInterpolationModeToCubic();
 
+    m_axial2DView->displayScalarBarOff();
+    m_sagital2DView->displayScalarBarOff();
+    m_coronal2DView->displayScalarBarOff();
     /// per defecte isomètric
     m_axialSpacing[0] = 1.;
     m_axialSpacing[1] = 1.;

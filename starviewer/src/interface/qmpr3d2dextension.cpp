@@ -42,6 +42,10 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     createActors();
     updateActors();
     
+    m_axial2DView->displayScalarBarOff();
+    m_sagital2DView->displayScalarBarOff();
+    m_coronal2DView->displayScalarBarOff();
+    
     readSettings();
 }
 
