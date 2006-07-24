@@ -27,6 +27,7 @@ class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkCoordinate;
 class vtkCaptionActor2D;
+class vtkScalarBarActor;
 
 namespace udg {
 
@@ -144,6 +145,8 @@ public slots:
     void displayRulersLabelsOff();
     void displayPatientOrientationOn();
     void displayPatientOrientationOff();
+    void displayScalarBarOn();
+    void displayScalarBarOff();
     
     /// Li indica la tool que es fa servir en aquell moment
     bool setCurrentTool( Tools toolName ){ m_currentTool = toolName; return true; };
@@ -308,6 +311,12 @@ private:
     /// Actualitza els rulers
     void updateRulers();
 
+    /// Crea la barra de valors
+    void createScalarBar();
+
+    /// Actualitza la barra de valors
+    void updateScalarBar();
+    
     /// crea els actors necessaris per mostrar la llegenda flotant amb la informació de voxel
     void createVoxelInformationCaption();
 
@@ -350,6 +359,9 @@ private:
 
     /// Llegenda que segueix el cursor amb el valor del voxel
     vtkCaptionActor2D *m_voxelInformationCaption;
+
+    /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
+    vtkScalarBarActor *m_scalarBar;
     
 signals:
     /// envia la nova llesca en la que ens trobem

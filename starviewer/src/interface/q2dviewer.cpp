@@ -36,6 +36,8 @@
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
 #include <vtkProperty2D.h>
+#include <vtkScalarBarActor.h>
+#include <vtkLookupTable.h>
 // desar imatges
 #include <vtkWindowToImageFilter.h>
 #include <vtkPNGWriter.h>
@@ -98,6 +100,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
 
     m_voxelInformationCaption = 0;
     m_textAnnotation = 0;
+    m_scalarBar = 0;
     for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = 0;
@@ -159,6 +162,8 @@ void Q2DViewer::createTools()
 
 void Q2DViewer::createAnnotations()
 {
+    // escala de colors
+    createScalarBar();
     // anotacions de l'orientació del pacient
     createOrientationAnnotations();
     // Llegenda amb informació del voxel
@@ -299,6 +304,36 @@ void Q2DViewer::updateRulers()
     }
 }
 
+void Q2DViewer::createScalarBar()
+{
+    m_scalarBar = vtkScalarBarActor::New();
+    m_scalarBar->SetOrientationToVertical();
+    m_scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
+    m_scalarBar->SetPosition( 0.8 , -0.8 );
+    m_scalarBar->SetWidth( 0.1 );
+    m_scalarBar->SetHeight( 0.6 );
+    m_scalarBar->SetLabelFormat( "%.2f" );
+    m_scalarBar->SetNumberOfLabels( 2 );
+    m_scalarBar->GetLabelTextProperty()->ItalicOff();
+    m_scalarBar->GetLabelTextProperty()->BoldOff();
+}
+
+void Q2DViewer::updateScalarBar()
+{
+    if( m_mainVolume )
+    {
+        vtkLookupTable *lookup = vtkLookupTable::New();
+        lookup->SetTableRange( m_mainVolume->getVtkData()->GetScalarRange() );
+        lookup->SetSaturationRange( 0 , 0 );
+        lookup->SetHueRange( 0 , 0 );
+        lookup->SetValueRange( 0 , 1 );
+        lookup->Build();
+        m_scalarBar->SetLookupTable( lookup );
+    }
+    else
+        DEBUG_LOG( "No hi ha cap volum assignat. No podem donar LUT a l'escala de colors" );
+}
+
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
@@ -412,6 +447,12 @@ void Q2DViewer::addActors()
     else
     {
         DEBUG_LOG( "No s'ha creat l'actor d'indicador d'escala inferior; no es pot afegir a l'escena" );
+    }
+    if( m_scalarBar )
+        this->getRenderer()->AddActor2D( m_scalarBar );
+    else
+    {
+        DEBUG_LOG( "No s'ha creat l'actor d'escala de colors; no es pot afegir a l'escena" );
     }
 }
 
@@ -547,6 +588,16 @@ void Q2DViewer::displayPatientOrientationOff()
 {
     for( int i = 0; i < 4; i++ )
         m_patientOrientationTextActor[i]->VisibilityOff();
+}
+
+void Q2DViewer::displayScalarBarOn()
+{
+    m_scalarBar->VisibilityOn();
+}
+
+void Q2DViewer::displayScalarBarOff()
+{
+    m_scalarBar->VisibilityOff();
 }
 
 void Q2DViewer::updateVoxelInformation()
@@ -826,6 +877,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_rulerExtent[4] = origin[2];
     m_rulerExtent[5] = origin[2] + extent[5]*spacing[2];
     updateRulers();
+    updateScalarBar();
     initInformationText();
 
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
