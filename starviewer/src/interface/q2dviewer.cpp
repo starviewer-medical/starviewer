@@ -646,7 +646,7 @@ void Q2DViewer::updateVoxelInformation()
         updateCursor( q[0], q[1], q[2], imageValue );
         m_voxelInformationCaption->VisibilityOn();
         m_voxelInformationCaption->SetAttachmentPoint( q );
-        m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(m_currentCursorPosition[0]).arg(m_currentCursorPosition[1]).arg(m_currentCursorPosition[2]).arg(m_currentImageValue) ) );
+        m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(m_currentCursorPosition[0],0,'f',2).arg(m_currentCursorPosition[1],0,'f',2).arg(m_currentCursorPosition[2],0,'f',2).arg(m_currentImageValue) ) );
     }
     this->getInteractor()->Render();
 }
@@ -839,8 +839,8 @@ void Q2DViewer::setupInteraction()
 
 // 
 // //     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
-// 
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
+// Amb això fem que els events que estaven associats al premer el boto dret no es disparin
+    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
 
 //     ZoomTool *zoom = new ZoomTool( m_viewer->GetInteractorStyle() );
 //     WindowLevelTool *wl = new WindowLevelTool( m_viewer->GetInteractorStyle() );
