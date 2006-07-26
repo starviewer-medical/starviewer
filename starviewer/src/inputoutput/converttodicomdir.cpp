@@ -26,6 +26,7 @@
 #include "convertdicomtolittleendian.h"
 #include "starviewersettings.h"
 #include "createdicomdir.h"
+#include "deletedirectory.h"
 
 namespace udg {
 
@@ -52,6 +53,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     int imageNumberStudy , imageNumberTotal = 0 , i = 0 ;
     CreateDicomdir createDicomdir;
     QString studyUID;
+    DeleteDirectory deleteDirectory;
     
     m_dicomDirPath = dicomdirPath;
 
@@ -66,7 +68,11 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
         i++;
     }
 
-    if ( !state.good() ) return state;
+    if ( !state.good() )
+    {
+        deleteDirectory.deleteDirectory( dicomdirPath );
+        return state;
+    }
 
     //sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca createDicomdir.Create()
     m_progress = new QProgressDialog( tr( "Creating Dicomdir..." ) , "" , 0 , imageNumberTotal + 1 );
@@ -80,11 +86,22 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
 
         if ( !state.good() ) break; 
     }
-    
+ 
+    if ( !state.good() )
+    {
+        deleteDirectory.deleteDirectory( dicomdirPath );
+        retunr state;
+    }
+   
     state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     
     m_progress->close();
     
+    if ( !state.good() )
+    {
+        deleteDirectory.deleteDirectory( dicomdirPath );
+    }
+
     return state;
 }
 
