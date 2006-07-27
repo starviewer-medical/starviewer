@@ -170,7 +170,7 @@ void Q2DViewer::createAnnotations()
     createVoxelInformationCaption();
     // Marcadors d'escala
     createRulers();
-    
+    // actualització dels valors de les anotacions
     updateAnnotations();
 }
 
@@ -193,7 +193,6 @@ void Q2DViewer::createVoxelInformationCaption()
     m_voxelInformationCaption->GetCaptionTextProperty()->ShadowOn();
     m_voxelInformationCaption->GetCaptionTextProperty()->ItalicOff();
     m_voxelInformationCaption->GetCaptionTextProperty()->BoldOff();
-
 }
 
 void Q2DViewer::createOrientationAnnotations()
@@ -228,6 +227,7 @@ void Q2DViewer::createOrientationAnnotations()
 
 void Q2DViewer::createRulers()
 {
+    // ruler lateral
     m_sideRuler = vtkAxisActor2D::New();
     m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -244,7 +244,8 @@ void Q2DViewer::createRulers()
     m_sideRuler->TitleVisibilityOff();
     m_sideRuler->SetTickLength( 10 );
     m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
-    
+
+    // ruler inferior
     m_bottomRuler = vtkAxisActor2D::New();
     m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -262,6 +263,7 @@ void Q2DViewer::createRulers()
     m_bottomRuler->SetTickLength( 10 );
     m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
 
+    // coordenades fixes per ancorar els rulers al lateral i a la part inferior
     m_anchoredRulerCoordinates = vtkCoordinate::New();
     m_anchoredRulerCoordinates->SetCoordinateSystemToView();
     m_anchoredRulerCoordinates->SetValue( -0.95 , -0.9 , -0.95 );
@@ -458,10 +460,12 @@ void Q2DViewer::addActors()
 
 void Q2DViewer::initInformationText()
 {
+    // informació de llesca
     m_lowerLeftText = tr("Slice: %1/%2")
-                .arg( m_currentSlice )
-                .arg( m_viewer->GetSliceMax() );
-                
+                .arg( m_currentSlice + 1 )
+                .arg( m_viewer->GetSliceMax() + 1 );
+
+    // informació de la imatge: mides i window level
     m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
                 .arg( m_size[0] )
                 .arg( m_size[1] )
@@ -470,6 +474,7 @@ void Q2DViewer::initInformationText()
                 .arg( m_viewer->GetColorWindow() )
                 .arg( m_viewer->GetColorLevel() );
 
+    // formatat de la data i hora de l'estudi
     QString studyDate = m_mainVolume->getVolumeSourceInformation()->getStudyDate();
     QString year = studyDate.mid( 0 , 4 );
     QString month = studyDate.mid( 4 , 2 );
@@ -481,7 +486,8 @@ void Q2DViewer::initInformationText()
     QString minute = studyTime.mid( 2 , 2 );
     QString second = studyTime.mid( 4 , 2 );
     studyTime = hour + QString( ":" ) + minute + QString( ":" ) + second;
-    
+
+    // informació de la sèrie
     m_upperRightText = tr("%1\n%2\n%3\nAcc:%4\n%5\n%6")
                 .arg( m_mainVolume->getVolumeSourceInformation()->getInstitutionName() )
                 .arg( m_mainVolume->getVolumeSourceInformation()->getPatientName() )
@@ -489,7 +495,8 @@ void Q2DViewer::initInformationText()
                 .arg( m_mainVolume->getVolumeSourceInformation()->getAccessionNumber() )
                 .arg( studyDate )
                 .arg( studyTime );
-                
+
+    // nom del protocol
     m_lowerRightText = tr("%1")
                     .arg( m_mainVolume->getVolumeSourceInformation()->getProtocolName() );
     
@@ -497,7 +504,6 @@ void Q2DViewer::initInformationText()
     m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
     m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
     m_textAnnotation->SetText( 3 , m_upperRightText.toAscii() );
-    
 }
 
 void Q2DViewer::displayInformationText( bool display )
@@ -743,12 +749,6 @@ void Q2DViewer::onRightButtonUp()
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
-//     static double factor = this->getRenderer()->GetActiveCamera()->GetParallelScale();
-//     double fac = this->getRenderer()->GetActiveCamera()->GetParallelScale() - factor;
-//     if( fac != 0.0 )
-//     {
-//         factor = this->getRenderer()->GetActiveCamera()->GetParallelScale();
-//     }
     updateRulers();
     // fer el que calgui per cada tipus d'event
     switch( event )
@@ -815,7 +815,7 @@ void Q2DViewer::setupInteraction()
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
 
-// menú contextual
+// menú contextual TODO el farem servir???
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
 //                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
 //                        this,
@@ -830,17 +830,14 @@ void Q2DViewer::setupInteraction()
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
-    
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
+// Amb això fem que els events que estaven associats al premer el boto dret no es disparin
+    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
+
 //     // anulem el window levelling manual
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
-//     // aquests observers estan de prova
-
-// 
-// //     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
-// Amb això fem que els events que estaven associats al premer el boto dret no es disparin
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
 
 //     ZoomTool *zoom = new ZoomTool( m_viewer->GetInteractorStyle() );
 //     WindowLevelTool *wl = new WindowLevelTool( m_viewer->GetInteractorStyle() );
@@ -854,6 +851,7 @@ void Q2DViewer::setInput( Volume* volume )
         return;
     m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
+    
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
@@ -863,8 +861,7 @@ void Q2DViewer::setInput( Volume* volume )
         m_defaultWindow = fabs( range[1] - range[0] );
         m_defaultLevel = ( range[1] + range[0] )/ 2.0;
     }
-    
-    m_mainVolume->getDimensions( m_size );
+
     int extent[6];
     double origin[3], spacing[3];
     m_mainVolume->getOrigin( origin );
@@ -931,13 +928,14 @@ void Q2DViewer::render()
     // si tenim dades
     if( m_mainVolume )
     {        
-        // li donem el window/level correcte \TODO no creiem convenient que aquesta crida es faci aquí
-//         resetWindowLevelToDefault();
-        // Això és necessari perquè la imatge es rescali a les mides de la finestreta
+       // Això és necessari perquè la imatge es rescali a les mides de la finestreta
         m_viewer->GetRenderer()->ResetCamera();
         updateView();
     }
-    // mostrar error/avís si no hi ha dades per visualitzar?
+    else
+    {
+        DEBUG_LOG( "::render() : No hi ha cap volum per visualitzar" );
+    }
 }
 
 void Q2DViewer::setView( ViewType view )
@@ -1035,6 +1033,10 @@ void Q2DViewer::setWindowLevel( double window , double level )
         m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
         getInteractor()->Render();
     }
+    else
+    {
+        DEBUG_LOG( "::setWindowLevel() : No tenim input i/o visor inicialitzat" );
+    }
 }
 
 void Q2DViewer::getWindowLevel( double wl[2] )
@@ -1044,12 +1046,16 @@ void Q2DViewer::getWindowLevel( double wl[2] )
         wl[0] = m_defaultWindow;
         wl[1] = m_defaultLevel;
     }
+    else
+    {
+        DEBUG_LOG( "::getWindowLevel() : No tenim input i/o visor inicialitzat" );
+    }
 }
 
 void Q2DViewer::resetWindowLevelToDefault()
 {
-// això ens dóna un level/level "maco" per defecte
-// situem el level al mig i donem un window complet de tot el rang
+    // això ens dóna un level/level "maco" per defecte
+    // situem el level al mig i donem un window complet de tot el rang
     if( m_mainVolume )
     {
         m_viewer->SetColorWindow( m_defaultWindow );
@@ -1058,7 +1064,10 @@ void Q2DViewer::resetWindowLevelToDefault()
         this->getInteractor()->Render();
         updateWindowLevelAnnotation();
     }
-    // mostrar avís/error si no hi ha volum?
+    else
+    {
+        DEBUG_LOG( "::resetWindowLevelToDefault() : No tenim input" );
+    }
 }
 
 void Q2DViewer::updateWindowLevelAnnotation()
@@ -1077,8 +1086,8 @@ void Q2DViewer::updateWindowLevelAnnotation()
 void Q2DViewer::updateSliceAnnotation()
 {
     m_lowerLeftText = tr("Slice: %1/%2")
-                .arg( m_currentSlice )
-                .arg( m_viewer->GetSliceMax() );
+                .arg( m_currentSlice + 1 )
+                .arg( m_viewer->GetSliceMax() + 1 );
     m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
     this->getInteractor()->Render();
 }
@@ -1202,7 +1211,6 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
     break;
 
     }
-
 }
 
 };  // end namespace udg 

@@ -127,7 +127,7 @@ public slots:
     /// Temporal per proves, veurem quins events es criden
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
     
-    /// Indiquem si volem veure la informació del volum per pantalla
+    /// Indiquem si volem veure la informació del volum per pantalla \TODO realment es farà servir aquest mètode?
     void displayInformationText( bool display );
 
     /// Mètodes varis per mostrar o no certa informació en pantalla
