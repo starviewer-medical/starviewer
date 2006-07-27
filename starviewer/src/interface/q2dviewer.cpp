@@ -91,13 +91,19 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
  : QViewer( parent )
 {
     m_enabledAnnotations = annotations;
-    m_lastView = None; 
-    m_viewer = vtkImageViewer2::New();
-    
+    m_lastView = None;
     m_currentSlice = 0;
+    m_imageSizeInformation[0] = 0;
+    m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
+    updateCursor( -1, -1, -1, -1 );
+    
+    // inicialitzacions d'objectes
+    // visor
+    m_viewer = vtkImageViewer2::New();
+    // preparem el picker
+    m_picker = vtkPropPicker::New();
     m_overlayVolume = 0;
-
     m_voxelInformationCaption = 0;
     m_textAnnotation = 0;
     m_scalarBar = 0;
@@ -112,16 +118,11 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
     
-    // preparem el picker
-    m_picker = vtkPropPicker::New();
-    // ANOTACIONS
+    // anotacions
     createAnnotations();
-    
     m_currentTool = Manipulate;
-        
     createActions();    
     createTools();
-    updateCursor( -1, -1, -1, -1 );
     addActors();
     
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
@@ -461,49 +462,76 @@ void Q2DViewer::addActors()
 void Q2DViewer::initInformationText()
 {
     // informació de llesca
+    updateSliceAnnotation();
+    // informació de la imatge: mides i window level
+    updateWindowInformationAnnotation();
+    // informació de la sèrie
+    updateSerieInformationAnnotation();
+    // nom del protocol
+    updateProtocolNameAnnotation();
+}
+
+void Q2DViewer::updateSliceAnnotation()
+{
     m_lowerLeftText = tr("Slice: %1/%2")
                 .arg( m_currentSlice + 1 )
                 .arg( m_viewer->GetSliceMax() + 1 );
+    m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
+}
 
-    // informació de la imatge: mides i window level
+void Q2DViewer::updateWindowInformationAnnotation()
+{
     m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                .arg( m_size[0] )
-                .arg( m_size[1] )
+                .arg( m_imageSizeInformation[0] )
+                .arg( m_imageSizeInformation[1] )
                 .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
                 .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
                 .arg( m_viewer->GetColorWindow() )
                 .arg( m_viewer->GetColorLevel() );
-
-    // formatat de la data i hora de l'estudi
-    QString studyDate = m_mainVolume->getVolumeSourceInformation()->getStudyDate();
-    QString year = studyDate.mid( 0 , 4 );
-    QString month = studyDate.mid( 4 , 2 );
-    QString day = studyDate.mid( 6 , 2 );
-    studyDate = day + QString( "/" ) + month + QString( "/" ) + year;
-
-    QString studyTime = m_mainVolume->getVolumeSourceInformation()->getStudyTime();
-    QString hour = studyTime.mid( 0 , 2 );
-    QString minute = studyTime.mid( 2 , 2 );
-    QString second = studyTime.mid( 4 , 2 );
-    studyTime = hour + QString( ":" ) + minute + QString( ":" ) + second;
-
-    // informació de la sèrie
-    m_upperRightText = tr("%1\n%2\n%3\nAcc:%4\n%5\n%6")
-                .arg( m_mainVolume->getVolumeSourceInformation()->getInstitutionName() )
-                .arg( m_mainVolume->getVolumeSourceInformation()->getPatientName() )
-                .arg( m_mainVolume->getVolumeSourceInformation()->getPatientID() )
-                .arg( m_mainVolume->getVolumeSourceInformation()->getAccessionNumber() )
-                .arg( studyDate )
-                .arg( studyTime );
-
-    // nom del protocol
-    m_lowerRightText = tr("%1")
-                    .arg( m_mainVolume->getVolumeSourceInformation()->getProtocolName() );
-    
-    m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
-    m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
     m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
-    m_textAnnotation->SetText( 3 , m_upperRightText.toAscii() );
+}
+    
+void Q2DViewer::updateSerieInformationAnnotation()
+{
+    if( m_mainVolume )
+    {
+        // formatat de la data i hora de l'estudi
+        QString studyDate = m_mainVolume->getVolumeSourceInformation()->getStudyDate();
+        QString year = studyDate.mid( 0 , 4 );
+        QString month = studyDate.mid( 4 , 2 );
+        QString day = studyDate.mid( 6 , 2 );
+        studyDate = day + QString( "/" ) + month + QString( "/" ) + year;
+    
+        QString studyTime = m_mainVolume->getVolumeSourceInformation()->getStudyTime();
+        QString hour = studyTime.mid( 0 , 2 );
+        QString minute = studyTime.mid( 2 , 2 );
+        QString second = studyTime.mid( 4 , 2 );
+        studyTime = hour + QString( ":" ) + minute + QString( ":" ) + second;
+        
+        m_upperRightText = tr("%1\n%2\n%3\nAcc:%4\n%5\n%6")
+                    .arg( m_mainVolume->getVolumeSourceInformation()->getInstitutionName() )
+                    .arg( m_mainVolume->getVolumeSourceInformation()->getPatientName() )
+                    .arg( m_mainVolume->getVolumeSourceInformation()->getPatientID() )
+                    .arg( m_mainVolume->getVolumeSourceInformation()->getAccessionNumber() )
+                    .arg( studyDate )
+                    .arg( studyTime );
+        m_textAnnotation->SetText( 3 , m_upperRightText.toAscii() );
+    }
+    else
+        DEBUG_LOG( "::updateSerieInformationAnnotation() : No s'ha donat cap input, no hi ha informació disponible" );
+}
+
+void Q2DViewer::updateProtocolNameAnnotation()
+{
+    if( m_mainVolume )
+    {
+        m_lowerRightText = tr("%1")
+                        .arg( m_mainVolume->getVolumeSourceInformation()->getProtocolName() );
+    
+        m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
+    }
+    else
+        DEBUG_LOG( "::updateProtocolNameAnnotation() : No s'ha donat cap input, no hi ha informació disponible" );
 }
 
 void Q2DViewer::displayInformationText( bool display )
@@ -961,25 +989,22 @@ void Q2DViewer::updateView()
                 cam->SetPosition(0,0,-1);
                 this->getRenderer()->ResetCamera();
             }
-            m_size[0] = m_mainVolume->getDimensions()[0];
-            m_size[1] = m_mainVolume->getDimensions()[1];
-            m_size[2] = m_mainVolume->getDimensions()[2];
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
         
         case Sagittal:
             m_viewer->SetSliceOrientationToYZ();
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-            m_size[0] = m_mainVolume->getDimensions()[1];
-            m_size[1] = m_mainVolume->getDimensions()[2];
-            m_size[2] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
     
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-            m_size[0] = m_mainVolume->getDimensions()[0];
-            m_size[1] = m_mainVolume->getDimensions()[2];
-            m_size[2] = m_mainVolume->getDimensions()[1];
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
     
         default:
@@ -990,7 +1015,7 @@ void Q2DViewer::updateView()
         // cada cop que canviem de llesca posarem per defecte la llesca del mig d'aquella vista
         setSlice( m_viewer->GetSliceRange()[1]/2 );
         mapOrientationStringToAnnotation();
-        updateWindowSizeAnnotation();
+        updateWindowInformationAnnotation();
         updateRulers();
         this->getInteractor()->Render();
     }
@@ -1010,45 +1035,39 @@ void Q2DViewer::setSlice( int value )
         m_viewer->SetSlice( m_currentSlice );
     }
     updateSliceAnnotation();
+    this->getInteractor()->Render();
 }
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
-    updateWindowSizeAnnotation();
+    updateWindowInformationAnnotation();
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
 {
-    if( m_viewer && m_mainVolume )
+    if( m_mainVolume )
     {
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
-        m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                .arg( m_size[0] )
-                .arg( m_size[1] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
-                .arg( m_viewer->GetColorWindow() )
-                .arg( m_viewer->GetColorLevel() );
-        m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
+        updateWindowInformationAnnotation();
         getInteractor()->Render();
     }
     else
     {
-        DEBUG_LOG( "::setWindowLevel() : No tenim input i/o visor inicialitzat" );
+        DEBUG_LOG( "::setWindowLevel() : No tenim input " );
     }
 }
 
 void Q2DViewer::getWindowLevel( double wl[2] )
 {
-    if( m_viewer && m_mainVolume )
+    if( m_mainVolume )
     {
         wl[0] = m_defaultWindow;
         wl[1] = m_defaultLevel;
     }
     else
     {
-        DEBUG_LOG( "::getWindowLevel() : No tenim input i/o visor inicialitzat" );
+        DEBUG_LOG( "::getWindowLevel() : No tenim input " );
     }
 }
 
@@ -1072,38 +1091,10 @@ void Q2DViewer::resetWindowLevelToDefault()
 
 void Q2DViewer::updateWindowLevelAnnotation()
 {
-    m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                .arg( m_size[0] )
-                .arg( m_size[1] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
-                .arg( m_viewer->GetColorWindow() )
-                .arg( m_viewer->GetColorLevel() );
-    m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
+    updateWindowInformationAnnotation();
     emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
 }
 
-void Q2DViewer::updateSliceAnnotation()
-{
-    m_lowerLeftText = tr("Slice: %1/%2")
-                .arg( m_currentSlice + 1 )
-                .arg( m_viewer->GetSliceMax() + 1 );
-    m_textAnnotation->SetText( 0 , m_lowerLeftText.toAscii() );
-    this->getInteractor()->Render();
-}
-
-void Q2DViewer::updateWindowSizeAnnotation()
-{
-    m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                .arg( m_size[0] )
-                .arg( m_size[1] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[0] )
-                .arg( m_viewer->GetRenderWindow()->GetSize()[1] )
-                .arg( m_viewer->GetColorWindow() )
-                .arg( m_viewer->GetColorLevel() );
-    m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
-}
-    
 void Q2DViewer::setDivisions( int x , int y , int z )
 {
     m_divisions[0] = x;
