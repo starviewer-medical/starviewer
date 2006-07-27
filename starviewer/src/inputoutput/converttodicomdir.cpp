@@ -90,7 +90,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     if ( !state.good() )
     {
         deleteDirectory.deleteDirectory( dicomdirPath );
-        retunr state;
+        return state;
     }
    
     state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
