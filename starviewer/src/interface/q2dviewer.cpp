@@ -316,9 +316,10 @@ void Q2DViewer::createScalarBar()
     m_scalarBar->SetWidth( 0.1 );
     m_scalarBar->SetHeight( 0.6 );
     m_scalarBar->SetLabelFormat( "%.2f" );
-    m_scalarBar->SetNumberOfLabels( 2 );
+    m_scalarBar->SetNumberOfLabels( 3 );
     m_scalarBar->GetLabelTextProperty()->ItalicOff();
     m_scalarBar->GetLabelTextProperty()->BoldOff();
+    m_scalarBar->GetLabelTextProperty()->SetJustificationToRight();
 }
 
 void Q2DViewer::updateScalarBar()
@@ -326,7 +327,10 @@ void Q2DViewer::updateScalarBar()
     if( m_mainVolume )
     {
         vtkLookupTable *lookup = vtkLookupTable::New();
-        lookup->SetTableRange( m_mainVolume->getVtkData()->GetScalarRange() );
+        double range[2];
+        range[0] = m_viewer->GetColorLevel() - m_viewer->GetColorWindow()/2;
+        range[1] = m_viewer->GetColorLevel() + m_viewer->GetColorWindow()/2;
+        lookup->SetTableRange( range );
         lookup->SetSaturationRange( 0 , 0 );
         lookup->SetHueRange( 0 , 0 );
         lookup->SetValueRange( 0 , 1 );
@@ -1050,6 +1054,7 @@ void Q2DViewer::setWindowLevel( double window , double level )
         m_viewer->SetColorLevel( level );
         m_viewer->SetColorWindow( window );
         updateWindowInformationAnnotation();
+        updateScalarBar();
         getInteractor()->Render();
     }
     else
@@ -1079,7 +1084,6 @@ void Q2DViewer::resetWindowLevelToDefault()
     {
         m_viewer->SetColorWindow( m_defaultWindow );
         m_viewer->SetColorLevel( m_defaultLevel );
-
         this->getInteractor()->Render();
         updateWindowLevelAnnotation();
     }
@@ -1093,6 +1097,7 @@ void Q2DViewer::updateWindowLevelAnnotation()
 {
     updateWindowInformationAnnotation();
     emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+    updateScalarBar();
 }
 
 void Q2DViewer::setDivisions( int x , int y , int z )
