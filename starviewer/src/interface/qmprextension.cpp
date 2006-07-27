@@ -486,9 +486,9 @@ void QMPRExtension::setInput( Volume *input )
     m_coronal2DView->setInput( coronalResliced );
     
     m_sagital2DView->setViewToAxial();
-    m_sagital2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
+    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation );
     m_coronal2DView->setViewToAxial();
-    m_coronal2DView->removeAnnotation( Q2DViewer::ReferenceAnnotation );
+    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation );
     
     m_sagital2DView->render();
     m_coronal2DView->render();

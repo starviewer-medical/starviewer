@@ -382,39 +382,31 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 
 void Q2DViewer::updateAnnotations()
 {
-    if( m_enabledAnnotations & Q2DViewer::ReferenceAnnotation )
+    if( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
     {
-        m_patientOrientationTextActor[0]->VisibilityOn();
-        m_patientOrientationTextActor[1]->VisibilityOn();
-        m_patientOrientationTextActor[2]->VisibilityOn();
-        m_patientOrientationTextActor[3]->VisibilityOn();
+        displayPatientOrientationOn();
     }
     else
     {
-        m_patientOrientationTextActor[0]->VisibilityOff();
-        m_patientOrientationTextActor[1]->VisibilityOff();
-        m_patientOrientationTextActor[2]->VisibilityOff();
-        m_patientOrientationTextActor[3]->VisibilityOff();
+        displayPatientOrientationOff();
     }
 
-    if( m_enabledAnnotations & Q2DViewer::RuleAnnotation )
+    if( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
     {
-        m_bottomRuler->VisibilityOn();
-        m_sideRuler->VisibilityOn();
+        displayRulersOn();
     }
     else
     {
-        m_bottomRuler->VisibilityOff();
-        m_sideRuler->VisibilityOff();
+        displayRulersOff();
     }
     
-    if( m_enabledAnnotations & Q2DViewer::WindowLevelAnnotation )
+    if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
     {
-        m_textAnnotation->VisibilityOn();
+        displayWindowInformationOn();
     }
     else
     {
-        m_textAnnotation->VisibilityOff();
+        displayWindowInformationOff();
     }
 }
 

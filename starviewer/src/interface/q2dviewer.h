@@ -69,7 +69,7 @@ public:
     enum Buttons{ LeftButton , MiddleButton , RightButton };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowLevelAnnotation = 0x2 , ReferenceAnnotation = 0x4 , RuleAnnotation = 0x8 , AllAnnotation = 0xE };
+    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x2 , PatientOrientationAnnotation = 0x4 , RulersAnnotation = 0x8 , AllAnnotation = 0xE };
     
     /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
     enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool , Manipulate };
@@ -349,10 +349,12 @@ private:
 
     /// Actualització d'anotacions vàries
     void updateSliceAnnotation();
-    void updateWindowSizeAnnotation();
+    void updateWindowInformationAnnotation();
+    void updateSerieInformationAnnotation();
+    void updateProtocolNameAnnotation();
 
-    /// Mida de voxels en cada direcció
-    int m_size[3];
+    /// Mides (x,y) de la imatge que mostrarem com informació adicional
+    int m_imageSizeInformation[2];
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
