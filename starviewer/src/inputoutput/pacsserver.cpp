@@ -142,7 +142,7 @@ OFCondition PacsServer::configureMove( levelConnection level )
         opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
     }
-    else if ( level == seriesLevel )
+    else if ( level == imageLevel )
     {
         opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
