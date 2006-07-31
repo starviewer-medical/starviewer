@@ -13,6 +13,7 @@
 #include <QLocale>
 #include <QDir>
 #include "logging.h"
+#include "extensions.h"
 
 void configureLogging()
 {

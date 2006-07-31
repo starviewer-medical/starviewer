@@ -9,24 +9,24 @@
 
 namespace udg {
 
-ExtensionFactory::ExtensionFactory(QObject *parent, const char *name)
+ExtensionFactory2::ExtensionFactory2(QObject *parent, const char *name)
  : QObject(parent )
 {
     this->setObjectName( name );
 }
 
-ExtensionFactory::~ExtensionFactory()
+ExtensionFactory2::~ExtensionFactory2()
 {
 }
 
-bool ExtensionFactory::registerExtension( QString name , ExtensionCreator *extension )
+bool ExtensionFactory2::registerExtension( QString name , ExtensionCreator *extension )
 {
     // \TODO Comprovar que el nom de l'extensió sigui únic. Què fer si ja existeix?
     m_registerMap[ name ] = extension;
     return true;
 }
 
-QWidget *ExtensionFactory::createExtension( QString name )
+QWidget *ExtensionFactory2::createExtension( QString name )
 {
     RegisterMapType::const_iterator iterator = m_registerMap.find( name );
     if( iterator != m_registerMap.end() )

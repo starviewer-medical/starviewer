@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "qapplicationmainwindow.h"
 // Qt
 #include <QAction>
 #include <QSignalMapper>
@@ -22,12 +21,17 @@
 #include <QApplication>
 #include <QLocale>
 // els nostres widgets/elements de la plataforma
+#include "qapplicationmainwindow.h"
 #include "extensionhandler.h"
 #include "extensionworkspace.h"
 #include "logging.h"
 
 // Mini - aplicacions
 #include "cacheinstallation.h"
+
+#include "extensionfactory.h"
+#include "extensionmediatorfactory.h"
+#include <QDebug>
 
 namespace udg{
 
@@ -62,7 +66,26 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
 //     m_exportToTiffFilter = tr("TIFF Images (*.tiff)");
 //     m_exportToBmpFilter = tr("BMP Images (*.bmp)");
 //     m_exportToDicomFilter = tr("DICOM Images (*.dcm)");
-    
+
+    // Proves de les extensions
+    QWidget * extension = ExtensionFactory::instance()->create("TestingExtension");
+    ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("TestingExtension");
+
+    QList<QString> extensionsNames = ExtensionFactory::instance()->getFactoryNamesList();
+    qDebug() << "Extensions:";
+    foreach(QString name, extensionsNames)
+    {
+        qDebug() << name;
+    }
+
+    QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
+    qDebug() << "Mediators:";
+    foreach(QString name, extensionsMediatorNames)
+    {
+        qDebug() << name;
+    }
+    // Fi Proves de les extensions
+
     emit containsVolume( FALSE );
 }
 

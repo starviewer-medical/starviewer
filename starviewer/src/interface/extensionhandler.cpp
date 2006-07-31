@@ -77,7 +77,7 @@ void ExtensionHandler::registerExtensions()
     m_q2DViewerExtensionCreator = new Q2DViewerExtensionCreator( this );
     
     // al crear-se el handler inicialitzem el factory amb totes les aplicacions
-    m_extensionFactory = new ExtensionFactory(this);
+    m_extensionFactory = new ExtensionFactory2(this);
     m_extensionFactory->registerExtension( "2D MPR Extension" , m_qMPRExtensionCreator );
     m_extensionFactory->registerExtension( "3D MPR Extension" , m_qMPR3DExtensionCreator );
     m_extensionFactory->registerExtension( "3D-2D MPR Extension" , m_qMPR3D2DExtensionCreator );

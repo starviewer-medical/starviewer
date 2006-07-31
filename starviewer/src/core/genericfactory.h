@@ -9,6 +9,7 @@
 
 #include <map>
 #include <QObject>
+#include <QList>
 
 namespace udg {
 
@@ -54,10 +55,10 @@ namespace udg {
     @see ExtensionFactory
 */
 
-template <class BaseClass, typename ClassIdentifier>
+template <class BaseClass, typename ClassIdentifier, class ParentType = QObject>
 class GenericFactory
 {
-    typedef BaseClass* (*BaseClassCreateFunction)(QObject*);
+    typedef BaseClass* (*BaseClassCreateFunction)(ParentType*);
     typedef std::map<ClassIdentifier, BaseClassCreateFunction> FunctionRegistry;
 
 public:
@@ -82,7 +83,7 @@ public:
      * @param parent QObject pare de l'objecte que es crearà.
      * @return Retorna l'objecte convertit a la classe base BaseClass. En cas que no trobi l'objecte o error retornarà NULL.
      */
-    BaseClass* create(const ClassIdentifier &className, QObject* parent = 0) const
+    BaseClass* create(const ClassIdentifier &className, ParentType* parent = 0) const
     {
         BaseClass* theObject = NULL;
         
@@ -100,6 +101,18 @@ public:
             }
         }
         return theObject;
+    }
+
+    QList<ClassIdentifier> getFactoryNamesList() const
+    {
+        QList<ClassIdentifier> list;
+        
+        typename FunctionRegistry::const_iterator item;
+        for(item = m_registry.begin();  item != m_registry.end(); ++item)
+        {
+            list.append( item->first );
+        }
+        return list;
     }
 
 private:

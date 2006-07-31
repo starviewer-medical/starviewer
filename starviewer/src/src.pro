@@ -6,6 +6,7 @@
 SUBDIRS += tools \
            repositories \
            core \
+           extensions \
            inputoutput \
            interface \
            main 

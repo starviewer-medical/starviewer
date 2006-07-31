@@ -4,24 +4,27 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGEXTENSIONFACTORY_H
-#define UDGEXTENSIONFACTORY_H
+#ifndef UDGEXTENSIONMANAGER_H
+#define UDGEXTENSIONMANAGER_H
 
-#include "genericfactory.h"
-#include "singleton.h"
-
-#include <QString>
-#include <QWidget>
+#include <QObject>
 
 namespace udg {
 
-/** \fn typedef Singleton<GenericFactory<QWidget, QString> > ExtensionFactory
-    Typedef per la classe que serveix per crear una extensió en temps d'execució. Aquesta és d'ús intern a l'hora de registrar una extensió.
+/**
+Classe que es crea a la finestra principal per gestionar les extensions.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+class ExtensionManager : public QObject
+{
+Q_OBJECT
+public:
+    ExtensionManager(QObject *parent = 0);
 
-typedef Singleton<GenericFactory<QWidget, QString, QWidget> > ExtensionFactory;
+    ~ExtensionManager();
+
+};
 
 }
 

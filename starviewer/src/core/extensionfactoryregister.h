@@ -7,7 +7,13 @@
 #ifndef UDGEXTENSIONFACTORYREGISTER_H
 #define UDGEXTENSIONFACTORYREGISTER_H
 
+#include <QWidget>
+#include <QString>
+
+#include "genericsingletonfactoryregister.h"
 #include "extensionfactory.h"
+
+#include <QDebug>
 
 namespace udg {
 
@@ -18,18 +24,19 @@ namespace udg {
     @code
     ExtensionFactoryRegister<ExtensionName> registerAs("Extension Identifier");
     @endcode
-    Amb aquesta simple línia de codi ja tenim registrada la nostra extensió.
+    Amb aquesta simple línia de codi ja tenim registrada la nostra extensió en el factory.
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 template <class FactoryType>
-class ExtensionFactoryRegister: public GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory>
+class ExtensionFactoryRegister: public GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>
 {
 public:
     ///Mètode
     ExtensionFactoryRegister(QString identifier)
-        :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory>( identifier )
+        :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>( identifier )
     {
+        qDebug() << "ExtensionFactoryRegister" << identifier;
     }
 };
 

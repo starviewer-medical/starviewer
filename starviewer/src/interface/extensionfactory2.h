@@ -23,14 +23,14 @@ Factory de les extensions
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class ExtensionFactory : public QObject{
+class ExtensionFactory2 : public QObject{
 Q_OBJECT
 public:
     typedef std::map< QString , ExtensionCreator* > RegisterMapType;
     
-    ExtensionFactory(QObject *parent = 0, const char *name = 0);
+    ExtensionFactory2(QObject *parent = 0, const char *name = 0);
 
-    ~ExtensionFactory();
+    ~ExtensionFactory2();
     
     /// registra l'extensió al factory. \TODO podríem tenir certes extensions ja registrades aquí per defecte i que aquest mètode es faci servir per les noves extensions que es vagin fent.( estil vtkImageReaderFactory )
     bool registerExtension( QString name , ExtensionCreator *extension );

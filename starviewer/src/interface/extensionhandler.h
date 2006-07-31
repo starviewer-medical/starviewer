@@ -21,7 +21,7 @@ class Input;
 class Output;
 class QApplicationMainWindow;
 class Volume;
-class ExtensionFactory;
+class ExtensionFactory2;
 
 class QMPRExtensionCreator;
 class QMPR3DExtensionCreator;
@@ -71,7 +71,7 @@ private:
     QApplicationMainWindow *m_mainApp;
     
     /// Factoria d'extensions
-    ExtensionFactory *m_extensionFactory;
+    ExtensionFactory2 *m_extensionFactory;
     
     /// Creadors d'extensions
     QMPRExtensionCreator *m_qMPRExtensionCreator;

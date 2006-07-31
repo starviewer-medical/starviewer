@@ -7,6 +7,8 @@
 #ifndef UDGGENERICSINGLETONFACTORYREGISTER_H
 #define UDGGENERICSINGLETONFACTORYREGISTER_H
 
+#include <QObject>
+
 namespace udg {
 
 /**
@@ -22,7 +24,7 @@ namespace udg {
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-template <class AncestorType, class BaseClass, typename ClassIdentifier, class SingletonRegistry>
+template <class AncestorType, class BaseClass, typename ClassIdentifier, class SingletonRegistry, class ParentType = QObject>
 class GenericSingletonFactoryRegister
 {
 public:
@@ -37,8 +39,8 @@ public:
         SingletonRegistry::instance()->registerCreateFunction(id, createInstance);
     }
 
-    ///Mètode auxiliar i que no s'hauria d'utilitzar 
-    static AncestorType* createInstance(QObject* parent)
+    ///Mètode auxiliar i que no s'hauria d'utilitzar directament
+    static AncestorType* createInstance(ParentType* parent)
     {
         return dynamic_cast<AncestorType*>( new BaseClass(parent) );
     }
