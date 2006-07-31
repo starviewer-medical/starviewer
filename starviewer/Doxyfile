@@ -7,7 +7,7 @@ PROJECT_NAME           = starviewer.kdevelop
 PROJECT_NUMBER         = 0.1
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = NO
-OUTPUT_LANGUAGE        = English
+OUTPUT_LANGUAGE        = Catalan
 USE_WINDOWS_ENCODING   = NO
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
@@ -28,7 +28,7 @@ FULL_PATH_NAMES        = NO
 STRIP_FROM_PATH        = /
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
-JAVADOC_AUTOBRIEF      = NO
+JAVADOC_AUTOBRIEF      = YES
 MULTILINE_CPP_IS_BRIEF = NO
 DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
@@ -80,7 +80,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = /home/spick/trueta/starviewer
+INPUT                  = /home/quim/trueta/starviewer
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
