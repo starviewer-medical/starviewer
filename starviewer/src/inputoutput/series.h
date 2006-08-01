@@ -72,12 +72,12 @@ class Series
      */
     void setBodyPartExaminated( std::string );
     
-    /** This action set series paths in de local data base 
+    /** Estableix el path relatiu de la sèrie
      * @param  Series path
      */
     void setSeriesPath( std::string );
 
-    /** Estableix el número d'imatges que conté la serie
+    /** Estableix el número d'imatges que conté la serie, respecte el directori on es troben els estudis
      * @param Número d'imatges
      */    
     void setImageNumber( int );
@@ -132,7 +132,7 @@ class Series
      */
     std::string getBodyPartExaminated();
     
-    /** This function get the series path in the local data base
+    /** Retorna el path relatiu de la sèrie, respecte el directori on es troben els estudis
      * @return  path 
      */
     std::string getSeriesPath();
@@ -154,7 +154,7 @@ class Series
     std::string m_protocolName;
     std::string m_operatorName;
     std::string m_bodyPartExaminated;
-    std::string m_seriesPath;
+    std::string m_seriesPath; //path relatiu, dins el directori on es guarden els estudis, no ha de ser path abosut, per exemple /STU00000/SER00001
     int         m_imageNumber;
 };
 };
