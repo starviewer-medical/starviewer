@@ -12,20 +12,16 @@ for(dir, EXTENSIONS) {
 
 RESOURCES = main.qrc 
 TARGETDEPS += ../interface/libinterface.a \
-              ../repositories/librepositories.a \
               ../core/libcore.a \
               ../inputoutput/libinputoutput.a
 LIBS += -llog4cxx \
         ../interface/libinterface.a \
-        ../repositories/librepositories.a \
         ../inputoutput/libinputoutput.a \
         ../core/libcore.a
 INCLUDEPATH += ../main \
                ../interface \
                ../core \
-               ../inputoutput \
-               ../repositories 
-
+               ../inputoutput
 
 MOC_DIR = ../../tmp/moc 
 UI_DIR = ../../tmp/ui 

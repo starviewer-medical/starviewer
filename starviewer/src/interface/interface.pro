@@ -83,17 +83,14 @@ SOURCES += director.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp 
-TARGETDEPS += ../repositories/librepositories.a \
-../core/libcore.a \
+TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../../src/inputoutput/libinputoutput.a \
-../repositories/librepositories.a \
 ../inputoutput/libinputoutput.a \
 ../core/libcore.a
 INCLUDEPATH += ../../src/inputoutput \
 ../inputoutput \
-../core \
-../repositories
+../core
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui
 OBJECTS_DIR = ../../tmp/obj

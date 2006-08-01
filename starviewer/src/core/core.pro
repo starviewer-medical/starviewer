@@ -22,7 +22,14 @@ HEADERS += extensionfactory.h \
            distance.h \
            point.h \
            logging.h \
-           deletedirectory.h 
+           deletedirectory.h \
+           volume.h \
+           volumerepository.h \
+           identifier.h \
+           repositorybase.h \
+           repository.h \
+           volumesourceinformation.h 
+
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -30,7 +37,14 @@ SOURCES += extensionmediator.cpp \
            harddiskinformation.cpp \
            distance.cpp \
            point.cpp \
-           deletedirectory.cpp 
+           deletedirectory.cpp \
+           volume.cpp \
+           volumerepository.cpp \
+           identifier.cpp \
+           repositorybase.cpp \
+           repository.cpp \
+           volumesourceinformation.cpp 
+
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \

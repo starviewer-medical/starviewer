@@ -4,7 +4,6 @@
 # L'objectiu és un subdirectori del projecte 
 
 SUBDIRS += core \
-           repositories \
            extensions \
            inputoutput \
            interface \
@@ -17,10 +16,8 @@ UI_DIR = ../tmp/ui
 MOC_DIR = ../tmp/moc 
 LIBS += core/core.a \
         inputoutput/libinputoutput.a \
-        repositories/librepositories.a \
         interface/libinterface.a
 TARGETDEPS += ../src/main/../bin/starviewer \
               ../src/interface/libinterface.a \
               ../src/inputoutput/libinputoutput.a \
-              ../src/repositories/librepositories.a \
               ../src/core/core.a
