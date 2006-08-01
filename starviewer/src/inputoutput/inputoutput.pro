@@ -113,12 +113,12 @@ SOURCES += input.cpp \
            createdicomdir.cpp \
            cachetools.cpp \
            readdicomdir.cpp 
-TARGETDEPS += ../tools/libtools.a \
-../../src/repositories/librepositories.a
-LIBS += ../../src/tools/libtools.a \
-../../src/repositories/librepositories.a
+TARGETDEPS += ../../src/repositories/librepositories.a \
+../core/libcore.a
+LIBS += ../../src/repositories/librepositories.a \
+../../src/core/libcore.a
 INCLUDEPATH += ../../src/repositories \
-../../src/tools
+../../src/core
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui
 OBJECTS_DIR = ../../tmp/obj

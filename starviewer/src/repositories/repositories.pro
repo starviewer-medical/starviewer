@@ -26,8 +26,8 @@ QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui
 MOC_DIR = ../../tmp/moc
-INCLUDEPATH += ../../src/tools
-LIBS += ../tools/libtools.a
+INCLUDEPATH += ../../src/core
+LIBS += ../core/libcore.a
 include(../itk.inc)
 include(../vtk.inc)
-TARGETDEPS += ../tools/libtools.a
+TARGETDEPS += ../core/libcore.a

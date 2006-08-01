@@ -14,21 +14,15 @@ RESOURCES = main.qrc
 TARGETDEPS += ../interface/libinterface.a \
               ../repositories/librepositories.a \
               ../core/libcore.a \
-              ../inputoutput/libinputoutput.a \
-              ../tools/libtools.a \
-              ../../src/inputoutput/libinputoutput.a 
-LIBS += ../../src/inputoutput/libinputoutput.a \
-        -llog4cxx \
+              ../inputoutput/libinputoutput.a
+LIBS += -llog4cxx \
         ../interface/libinterface.a \
-        ../core/libcore.a \
         ../repositories/librepositories.a \
         ../inputoutput/libinputoutput.a \
-        ../tools/libtools.a
-INCLUDEPATH += ../../src/inputoutput \
-               ../main \
+        ../core/libcore.a
+INCLUDEPATH += ../main \
                ../interface \
                ../core \
-               ../tools \
                ../inputoutput \
                ../repositories 
 

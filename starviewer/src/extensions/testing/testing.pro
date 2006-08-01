@@ -9,13 +9,10 @@ HEADERS += testingextension.h \
 SOURCES += testingextension.cpp \
            testingextensionmediator.cpp 
 TARGETDEPS += ../../repositories/librepositories.a \
-../../tools/libtools.a \
 ../../core/libcore.a
 LIBS += ../../repositories/librepositories.a \
-../../tools/libtools.a \
 ../../core/libcore.a
-INCLUDEPATH += ../../tools \
-../../core \
+INCLUDEPATH += ../../core \
 ../../repositories
 MOC_DIR = ../../../tmp/moc
 UI_DIR = ../../../tmp/ui
