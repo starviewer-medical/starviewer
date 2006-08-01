@@ -85,11 +85,9 @@ SOURCES += director.cpp \
            qcreatedicomdir.cpp 
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
-LIBS += ../../src/inputoutput/libinputoutput.a \
-../inputoutput/libinputoutput.a \
+LIBS += ../inputoutput/libinputoutput.a \
 ../core/libcore.a
-INCLUDEPATH += ../../src/inputoutput \
-../inputoutput \
+INCLUDEPATH += ../inputoutput \
 ../core
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui
