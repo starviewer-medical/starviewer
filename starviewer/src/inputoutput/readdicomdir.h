@@ -18,6 +18,7 @@ namespace udg {
 class Status;
 class StudyList;
 class SeriesList;
+class ImageList;
 class StudyMask;
 class Study;
 
@@ -50,11 +51,24 @@ public:
      */
     Status readSeries ( std::string studyUID , SeriesList  &serieList );
 
+    /** Retorna la llista d'imatges que conté un estudi
+     * @param seriesUID UID de la serie que volem obtenir les imatges
+     * @param imageList Llistat de les imatges que conté
+     * @return estat del mètode
+     */
+    Status readImages( std::string seriesUID , ImageList &imageList );
+
+    /** Retorna el path del dicomdir
+     * @return path del dicomdir
+     */
+    std::string getDicomdirPath();
+
     ~ReadDicomdir();
 
 private :
 
-    DcmDicomDir *dicomdir;
+    DcmDicomDir *m_dicomdir;
+    std::string m_dicomdirAbsolutePath;
 
     /** Comprova si un estudi compleix la màscara, pels camps PatientId, StudyID, StudyDate, PatientName i AccessionNumber
      * @param study dades de l'estudi
@@ -70,13 +84,19 @@ private :
      */
     bool matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId );
 
+    /** Comprova que els dos StudyUID el de la màscara i el de l'estudi siguin iguals. Si l'estudi UID de la màscara està buit, per defecte retorna cert
+     * @param studyMaskStudyUID studyUID de la màscara
+     * @param studyStudyUID studyUID de l'estudi trobat al dicomdir
+     * @return retorna cert si els dos studyUID son iguals o studyMaskStudyUID està buit
+     */
+    bool matchStudyMaskStudyUID( std::string studyMaskStudyUID , std:: string studyStudyUID );
+
     /** Comprova que els dos PatientId el de la màscara i el de l'estudi siguin iguals. Si el Patient Id de la màscara està buit, per defecte retorna cert
      * @param studyMaskPatientId 
      * @param studyPatientId 
      * @return retorna cert si els dos patientId són iguals o studyMaskPatientId està buit
      */
     bool matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId );
-
 
     /** Comprova que la data de la màscara i la de l'estudi facin matching. Si la studyMaskDate és buida retorna cert per defecte
      * @param studyMaskDate Màscara de dates 
@@ -98,6 +118,12 @@ private :
      * @return cadena en majúscules
      */
     std::string upperString( std:: string original );
+    
+    /** canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas de linux les hem de passar a '/'
+     * @param original path original
+     * @return path amb '/'
+     */
+    std::string replaceBarra( std::string original );
 };
 
 }

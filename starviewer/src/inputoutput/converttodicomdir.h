@@ -21,7 +21,7 @@ class Image;
 
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries.
   * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes són :
-  * El nom dels directoris i imatges no pot ser de mes de 8 caràcters
+  * El nom dels directoris i imatges no pot ser de mes de 8 caràcters, i ha d'estar en majúscules
   * Les imatges no poden tenir extensió
   * S'ha de seguir l'estructura jeràrquica de directoris de Estudi/Series/Imatges
   * La imatge ha d'estar en format littleEndian

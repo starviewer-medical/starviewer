@@ -234,6 +234,13 @@ struct retrieveParameters
      * @param UID de la serie que s'ha de visualitzar per defecte, si es buit, es posara per defecte la primera serie de l'estudi
     */
     void retrieveCache( QString StudyUID , QString SeriesUID );
+
+
+    /** Carrega un estudi d'un dicomdir perque pugui ser visualitzat a la classe Volum i emet una senyal perque sigui visualitzat
+     * @param UID de l'estudi
+     * @param UID de la serie que s'ha de visualitzar per defecte, si es buit, es posara per defecte la primera serie de l'estudi
+    */
+    void retrieveDicomdir( QString StudyUID , QString SeriesUID );
     
     /** Insereix un estudi a descarregar a la cache
      * @param estudi a insertat

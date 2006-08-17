@@ -180,19 +180,6 @@
    <property name="title" >
     <string/>
    </property>
-   <widget class="QCheckBox" name="checkBox" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Burn in a CD</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBox_2" >
     <property name="geometry" >
      <rect>
@@ -206,7 +193,73 @@
      <string/>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3" >
+   <widget class="QGroupBox" name="groupBox_4" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>470</y>
+      <width>251</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title" >
+     <string/>
+    </property>
+    <widget class="QLabel" name="m_labelSizeOfDicomdir" >
+     <property name="geometry" >
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>231</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font" >
+      <font>
+       <family>Sans Serif</family>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string>Mida Dicomdir :</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="m_buttonCreateDicomdir" >
+    <property name="geometry" >
+     <rect>
+      <x>90</x>
+      <y>420</y>
+      <width>87</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="toolTip" >
+     <string>Creates the Dicomdir with the selected studies</string>
+    </property>
+    <property name="text" >
+     <string>Create Dicomdir</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Burn in a CD</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBoxCreateDicomdirAt" >
     <property name="geometry" >
      <rect>
       <x>10</x>
@@ -277,59 +330,6 @@
       </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_4" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>470</y>
-      <width>251</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="title" >
-     <string/>
-    </property>
-    <widget class="QLabel" name="m_labelSizeOfDicomdir" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>231</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>9</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Mida Dicomdir :</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="m_buttonCreateDicomdir" >
-    <property name="geometry" >
-     <rect>
-      <x>90</x>
-      <y>420</y>
-      <width>87</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="toolTip" >
-     <string>Creates the Dicomdir with the selected studies</string>
-    </property>
-    <property name="text" >
-     <string>Create Dicomdir</string>
-    </property>
    </widget>
   </widget>
  </widget>

@@ -7,6 +7,8 @@
 #ifndef UDGCREATEDICOMDIR_H
 #define UDGCREATEDICOMDIR_H
 
+#include "dcddirif.h"     /* for class DicomDirInterface */
+
 class string;
 
 namespace udg {
@@ -20,15 +22,26 @@ class CreateDicomdir
 {
 public:
 
+    enum Device { harddisk , cdDvd , usb };
+
     CreateDicomdir();
+
+    /** Especifica a quin dispositiu crearem el dicomdir. És important especificar el dispositiu correctament, sinó ens podem trobar, que no ens crei correctament el dicomdir
+     * @param deviceToCreateDicomdir Dispositiu on crearem el dicomdir (harddisk,cdDvd,usb)
+     */
+    void setDevice( Device deviceToCreateDicomdir );
         
     /** Crea el fitxer DicomDir amb l'estructura dels estudis del directori passat per paràmetre
      * @param dicomdirPath directori a convertir a dicomdir
      * @return estat de finalització del mètode
      */
     Status create( std::string dicomdirPath );
-    
+
     ~CreateDicomdir();
+
+private:
+
+    DicomDirInterface::E_ApplicationProfile m_optProfile;
 
 };
 

@@ -42,7 +42,7 @@ Status PacsNetwork::createNetworkRetrieve( int port , int timeout )
         }
     }
     
-    return state.setStatus(CORRECT );
+    return state.setStatus( CORRECT );
 }
 
 Status PacsNetwork::createNetworkQuery( int timeout )
@@ -60,7 +60,7 @@ Status PacsNetwork::createNetworkQuery( int timeout )
         }
     }
     
-    return state.setStatus(CORRECT );
+    return state.setStatus( CORRECT );
 }
 
 T_ASC_Network * PacsNetwork::getNetworkQuery()
@@ -76,7 +76,7 @@ T_ASC_Network * PacsNetwork::getNetworkRetrieve()
 void PacsNetwork::disconnect()
 {
     //esborem la configuració de la xarxa per queries
-    if ( m_networkQuery != NULL )  ASC_dropNetwork(&m_networkQuery ); // delete net structure
+    if ( m_networkQuery != NULL )  ASC_dropNetwork( &m_networkQuery ); // delete net structure
 
     //esborrem la configuració de la xarxa per retrieves
     
@@ -89,6 +89,5 @@ PacsNetwork::~PacsNetwork()
 {
     disconnect();
 }
-
 
 };

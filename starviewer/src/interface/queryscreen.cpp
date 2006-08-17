@@ -506,10 +506,22 @@ void QueryScreen::queryStudyDicomdir()
     
     if ( !state.good() )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error quering in dicomdir" ) );
-        logMessage = "Error cercant estudis al dicomdir ";
-        logMessage.append ( state.text().c_str() );
+        if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
+        {
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error, not opened Dicomdir" ) );
+            logMessage = "No s'ha obert cap directori dicomdir ";
+            logMessage.append ( state.text().c_str() );
+        }
+        else
+        {
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error quering in dicomdir" ) );
+            logMessage = "Error cercant estudis al dicomdir ";
+            logMessage.append ( state.text().c_str() );
+        }   
         ERROR_LOG( logMessage.toAscii().constData() );
+        QApplication::restoreOverrideCursor();
+        
+        return;
     }
 
     dicomdirStudyList.firstStudy();
@@ -861,21 +873,38 @@ void QueryScreen::tabChanged( int index )
 
 void QueryScreen::view()
 {
+    
+    switch ( m_tab->currentIndex() )
+    {
+        case 0 :
+            retrieveCache( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() );
+            break;
+        case 1 : 
+            switch( QMessageBox::information( this , tr( "Starviewer" ) ,
+                        tr( "Are you sure you want to view this Study ?" ) ,
+                        tr( "&Yes" ) , tr( "&No" ) ,
+                        0 , 1 ) ) 
+            {
+                case 0:
+                    retrievePacs( true );
+                    break;
+            } 
+           break;
+        case 2 :
+            retrieveDicomdir( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() );
+            break;
+        default :
+            break;
+    
+    }
     if ( m_tab->currentIndex() == 1)
     {
-        switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-				      tr( "Are you sure you want to view this Study ?" ) ,
-				      tr( "&Yes" ) , tr( "&No" ) ,
-				      0 , 1 ) ) 
-        {
-        case 0:
-            retrievePacs( true );
-        }
+
     }
     else if ( m_tab->currentIndex() == 0)
     {
         
-        retrieveCache( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() );
+
     }
 }
 
@@ -983,6 +1012,113 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
     {
         m_retrieveScreen->close();//s'amaga per poder visualitzar la serie
     }
+    emit( viewStudy(volum) );
+}
+
+void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
+{
+    ImageList imageList;
+    Status state;
+    StudyList stuList;
+    StudyMask studyMask;
+    Study stu;
+    SeriesList seriesList;
+    Series series;
+    QString absSeriesPath , logMessage;
+    StudyVolum volum;
+        
+    if ( studyUID == "" )
+    {
+        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a study to view " ) );
+        return;
+    }    
+    
+    logMessage = "Es visualitza l'estudi  " + studyUID + " guardat en el dicomdir";
+    INFO_LOG ( logMessage.toAscii().constData() );
+    
+    //busquem informacio de l'estudi
+    studyMask.setStudyUID( studyUID.toAscii().constData() );
+    state = m_readDicomdir.readStudies( stuList , studyMask );
+    if ( !state.good() )
+    {
+        logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
+        logMessage.append( state.text().c_str() );
+        ERROR_LOG( logMessage.toAscii().constData() );  
+        return;
+    }
+
+    stuList.firstStudy();//tenim la informació de l'estudi
+    stu = stuList.getStudy();
+        
+    volum.setPatientId( stu.getPatientId() );//Carreguem la informacio de l'estudi al volum
+    volum.setPatientName( stu.getPatientName() );
+    volum.setStudyDate( stu.getStudyDate() );
+    volum.setStudyId( stu.getStudyId() );
+    volum.setStudyUID( stu.getStudyUID() );    
+
+    //busquem les series
+    state = m_readDicomdir.readSeries( studyUID.toAscii().constData() , seriesList );
+    if ( !state.good() )
+    {
+        logMessage = "Error al cercar l'estudi al dicomdir ERROR : ";
+        logMessage.append( state.text().c_str() );
+        ERROR_LOG( logMessage.toAscii().constData() );
+        return;
+    }
+    seriesList.firstSeries();
+    
+    //si es buit indiquem que per defecte es visualitza la primera serie
+    if ( seriesUID == "" )
+    {
+        volum.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
+    }
+    else volum.setDefaultSeriesUID( seriesUID.toStdString() );
+    
+    while ( !seriesList.end() )
+    {
+        SeriesVolum seriesVol;
+        series = seriesList.getSeries();
+    
+        //com que el path de les series és relatiu, hi hem d'afegir el del dicomdir per fer-lo absoluts();
+        absSeriesPath = m_readDicomdir.getDicomdirPath().c_str();//obtenim el path del dicomdir
+        absSeriesPath.append( "/" );
+        absSeriesPath.append( series.getSeriesPath().c_str() ); //afegim el path relatiu de les series
+        seriesVol.setSeriesUID( series.getSeriesUID() );
+        seriesVol.setStudyId( stu.getStudyId() );
+        seriesVol.setStudyUID( stu.getStudyUID() );
+        seriesVol.setSeriesPath( absSeriesPath.toAscii().constData() );
+        
+        imageList.clear();
+        state = m_readDicomdir.readImages( series.getSeriesUID() , imageList );//accedim a llegir la informació de les imatges per cada serie
+        if ( !state.good() )
+        {
+            logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
+            logMessage.append( state.text().c_str() );
+            ERROR_LOG( logMessage.toAscii().constData() );
+            return;
+        }
+          
+        imageList.firstImage();
+        
+        while ( !imageList.end() )
+        {
+            seriesVol.addImage( imageList.getImage().getImagePath().c_str() );
+            imageList.nextImage();
+        }
+        
+        volum.addSeriesVolum( seriesVol );
+        seriesList.nextSeries();
+    }
+    
+    this->close();//s'amaga per poder visualitzar la serie
+    if ( m_retrieveScreen->isVisible() )
+    {
+        m_retrieveScreen->close();//s'amaga per poder visualitzar la serie
+    }
+
+    logMessage = "Ha finalitzat la càrrega de l'estudi des del dicomdir";
+    INFO_LOG ( logMessage.toAscii().constData() );
+    
     emit( viewStudy(volum) );
 }
 
@@ -1135,9 +1271,7 @@ void QueryScreen::openDicomdir()
     {
         if ( !dlg->selectedFiles().empty() ) dicomdirPath.insert( 0 , dlg->selectedFiles().takeFirst() );
 
-        dicomdirPath.append("/DICOMDIR");//afegim el nom del fitxer que conté la informació del Dicomdir
-    
-        state = m_readDicomdir.open ( dicomdirPath.toAscii().constData() );
+        state = m_readDicomdir.open ( dicomdirPath.toAscii().constData() );//Obrim el dicomdir
 
         if ( !state.good() )
         {
@@ -1153,7 +1287,7 @@ void QueryScreen::openDicomdir()
         }
 
         clearTexts();//Netegem el filtre de cerca al obrir el dicomdir
-        queryStudyDicomdir();
+        queryStudyDicomdir();//cerquem els estudis al dicomdir per a que es mostrin
     }    
    
     delete dlg;

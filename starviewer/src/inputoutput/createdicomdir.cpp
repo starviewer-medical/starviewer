@@ -25,6 +25,27 @@ namespace udg {
 
 CreateDicomdir::CreateDicomdir()
 {
+    m_optProfile = DicomDirInterface::AP_GeneralPurpose;//PErmet gravar al discdur i tb usb's
+}
+
+void CreateDicomdir::setDevice( Device deviceToCreateDicomdir )
+{
+    //indiquem que el propòsit d'aquest dicomdir
+    switch ( deviceToCreateDicomdir ) 
+    {
+        case harddisk :
+            m_optProfile = DicomDirInterface::AP_GeneralPurpose;
+            break;
+        case cdDvd :
+            m_optProfile = DicomDirInterface::AP_GeneralPurposeDVD;
+            break;
+        case usb :
+            m_optProfile = DicomDirInterface::AP_USBandFlash;
+            break;
+        default : 
+            m_optProfile = DicomDirInterface::AP_GeneralPurpose;
+            break;
+    }
 }
 
 Status CreateDicomdir::create( std::string dicomdirPath )
@@ -42,15 +63,13 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     E_EncodingType opt_enctype = EET_ExplicitLength;
     E_GrpLenEncoding opt_glenc = EGL_withoutGL;
     
-    //indiquem que el propòsit d'aquest dicomdir, és general
-    DicomDirInterface::E_ApplicationProfile opt_profile = DicomDirInterface::AP_GeneralPurpose;
     Status state;
-
+    
     //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
     OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , opt_directory );
          
     //comprovem que el directori no estigui buit
-    if (fileNames.empty()) 
+    if ( fileNames.empty() ) 
     {     
         ERROR_LOG ( "El directori origen està buit" );
         state.setStatus( " no input files: the directory is empty " , false , 1301 );
@@ -58,7 +77,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     }
 
     //creem el dicomdir
-    result = ddir.createNewDicomDir(opt_profile, opt_output, opt_fileset);
+    result = ddir.createNewDicomDir( m_optProfile , opt_output , opt_fileset );
     
     if ( !result.good() )
     {
@@ -70,14 +89,14 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     }
 
     /* set fileset descriptor and character set */
-    result = ddir.setFilesetDescriptor(opt_descriptor, opt_charset);
-    if (result.good())
+    result = ddir.setFilesetDescriptor( opt_descriptor , opt_charset);
+    if ( result.good() )
     {
-        OFListIterator(OFString) iter = fileNames.begin();
-        OFListIterator(OFString) last = fileNames.end();
+        OFListIterator( OFString ) iter = fileNames.begin();
+        OFListIterator( OFString ) last = fileNames.end();
 
         //iterem sobre la llista de fitxer i els afegim al dicomdir
-        while ((iter != last) && result.good())
+        while ( ( iter != last ) && result.good() )
         {
             //afegim els fitxers al dicomdir
             result = ddir.addDicomFile( (*iter).c_str() , opt_directory );
@@ -88,7 +107,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         {
             result = EC_IllegalCall;
         }
-        else result = ddir.writeDicomDir(opt_enctype, opt_glenc); //escribim el dicomDir
+        else result = ddir.writeDicomDir (opt_enctype , opt_glenc ); //escribim el dicomDir
     }
 
     return state.setStatus( result );
@@ -97,6 +116,5 @@ Status CreateDicomdir::create( std::string dicomdirPath )
 CreateDicomdir::~CreateDicomdir()
 {
 }
-
 
 }

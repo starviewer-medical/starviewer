@@ -30,7 +30,8 @@ void QueryStudy:: setMask( StudyMask study )
 }
 
 /*It's a callback function, can't own to the class, It's can be called if its belongs to the class, for this
-  reason, it hasn't been declared in the class pacsfind  */
+  reason, it hasn't been declared in 
+the class pacsfind  */
 /// This action is called for every patient that returns the find action. This is a callback action and inserts the found studies in the list study
 void progressCallbackStudy(
         void * /*callbackData*/ ,
