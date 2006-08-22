@@ -349,7 +349,7 @@ QString QCreateDicomdir::formatHour( const std::string hour )
     return formatedHour;
 }
 
-void QCreateDicomdir::databaseError( status *state )
+void QCreateDicomdir::databaseError( Status *state )
 {
     QString text,code;
 
