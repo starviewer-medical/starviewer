@@ -20,7 +20,6 @@
 #define PATTERN_MATCHING_AVAILABLE
 #endif
 
-
 namespace udg {
 
 CreateDicomdir::CreateDicomdir()
@@ -89,7 +88,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     }
 
     /* set fileset descriptor and character set */
-    result = ddir.setFilesetDescriptor( opt_descriptor , opt_charset);
+    result = ddir.setFilesetDescriptor( opt_descriptor , opt_charset );
     if ( result.good() )
     {
         OFListIterator( OFString ) iter = fileNames.begin();
@@ -107,7 +106,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         {
             result = EC_IllegalCall;
         }
-        else result = ddir.writeDicomDir (opt_enctype , opt_glenc ); //escribim el dicomDir
+        else result = ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
     }
 
     return state.setStatus( result );

@@ -60,7 +60,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     //comptem el numero d'imatges pel progress de la barra
     while ( i < m_studiesToConvert.count() )
     {   
-        imageMask.setStudyUID( m_studiesToConvert.value(i).toAscii().constData() );
+        imageMask.setStudyUID( m_studiesToConvert.value( i ).toAscii().constData() );
         state = cacheImageDAL.countImageNumber( imageMask , imageNumberStudy );
         if ( !state.good() ) break;
             

@@ -20,9 +20,9 @@ class Status;
 class QCreateDicomdir : public QWidget , private Ui::QCreateDicomdirBase{
 Q_OBJECT
 public:
-    QCreateDicomdir(QWidget *parent = 0);
+    QCreateDicomdir( QWidget *parent = 0 );
 
-    void addStudy( Study study);
+    void addStudy( Study study );
 
     ~QCreateDicomdir();
 
@@ -45,7 +45,7 @@ public slots:
     /** Activa o desactiva els group box per poder gravar en un cd o en el disc dur
      * @param state estat del checkbox m_checkBoxBurnCd
      */
-    void setEnableBurnCd( int state);
+    void setEnableBurnCd( int state );
 
 private:
 
@@ -84,7 +84,7 @@ private:
     /** Crea el dicomdir amb els estudis seleccionats, en el directori on se li passa per paràmetre
      * @param dicomdirPath directori on s'ha de crear el dicomdir
      */
-    void startCreateDicomdir(QString dicomdirPath);
+    void startCreateDicomdir( QString dicomdirPath );
 
     /** Crear el dicomdir en un cd o dvd 
      */

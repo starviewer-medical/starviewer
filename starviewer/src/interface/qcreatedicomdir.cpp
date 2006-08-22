@@ -121,7 +121,6 @@ void QCreateDicomdir::createDicomdir()
     {
         createDicomdirOnHard();
     }
-
 }
 
 void QCreateDicomdir::createDicomdirOnCdOrDvd()
@@ -130,7 +129,7 @@ void QCreateDicomdir::createDicomdirOnCdOrDvd()
     QString dicomdirPath, logMessage;
     
     dicomdirPath = temporaryDirPath.tempPath();
-    dicomdirPath.append("/DICOMDIR");
+    dicomdirPath.append( "/DICOMDIR" );
     
     INFO_LOG ( logMessage.toAscii().constData() );
     
@@ -146,16 +145,16 @@ void QCreateDicomdir::createDicomdirOnCdOrDvd()
 
 void QCreateDicomdir::createDicomdirOnHard()
 {
-    QString dicomdirPath = m_lineEditDicomdirPath->text(), logMessage;
+    QString dicomdirPath = m_lineEditDicomdirPath->text() , logMessage;
     DeleteDirectory delDirectory;
-    QDir directoryDicomdirPath(dicomdirPath);
+    QDir directoryDicomdirPath( dicomdirPath );
 
     //Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
         switch ( QMessageBox::question( this ,
                 tr( "Create Dicomdir" ) ,
-                tr( "The directory contains a dicomdir, do you want to overwrite ?") ,
+                tr( "The directory contains a dicomdir, do you want to overwrite ?" ) ,
                 tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
             case 0: // si vol sobreescriure, esborrem el directori i el seu contingut i tornem a crear-lo
@@ -195,7 +194,7 @@ void QCreateDicomdir::createDicomdirOnHard()
     startCreateDicomdir( dicomdirPath );
 }
 
-void QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
+void QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 {
     ConvertToDicomdir convertToDicomdir;
     Status state;
@@ -225,10 +224,10 @@ void QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
     for ( int i = 0; i < dicomdirStudiesList.count();i++ )
     {
         item = dicomdirStudiesList.at( i );
-        convertToDicomdir.addStudy( item->text(7) );
+        convertToDicomdir.addStudy( item->text( 7 ) );
 
         logMessage = "L'estudi ";
-        logMessage.append( item->text(7) );
+        logMessage.append( item->text( 7 ) );
         logMessage.append( " s'afegirà al dicomdir " );
         INFO_LOG ( logMessage.toAscii().constData() );
     }
@@ -279,7 +278,7 @@ void QCreateDicomdir::removeSelectedStudy()
     Status state;
     unsigned long studySize;
     
-    if ( m_dicomdirStudiesList->currentItem() == NULL)
+    if ( m_dicomdirStudiesList->currentItem() == NULL )
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please Select a study to remove" ) );
     }
@@ -350,52 +349,52 @@ QString QCreateDicomdir::formatHour( const std::string hour )
     return formatedHour;
 }
 
-void QCreateDicomdir::databaseError(Status *state)
+void QCreateDicomdir::databaseError( status *state )
 {
     QString text,code;
 
-    if (!state->good())
+    if (!state->good() )
     {
-        switch(state->code())
-        {  case 2001 : text.insert(0,tr("Database is corrupted or SQL syntax error"));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+        switch( state->code() )
+        {  case 2001 : text.insert( 0, tr( "Database is corrupted or SQL syntax error" ) );
+                        text.append( "\n" );
+                        text.append( tr( "Error Number : " ) );
+                        code.setNum( state->code() ,10 );
+                        text.append( code );
                         break;
-            case 2005 : text.insert(0,tr("Database is looked"));
-                        text.append("\n");
-                        text.append("To solve this error restart the user session");
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+            case 2005 : text.insert( 0, tr( "Database is looked" ) );
+                        text.append( "\n" );
+                        text.append( "To solve this error restart the user session" );
+                        text.append( "\n" );
+                        text.append( tr( "Error Number : " ) );
+                        code.setNum( state->code() , 10 );
+                        text.append( code );
                         break;
-            case 2011 : text.insert(0,tr("Database is corrupted."));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+            case 2011 : text.insert( 0, tr( "Database is corrupted." ) );
+                        text.append( "\n" );
+                        text.append( tr( "Error Number : " ) );
+                        code.setNum( state->code() , 10);
+                        text.append( code );
                         break;
-            case 2019 : text.insert(0,tr("Register duplicated."));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+            case 2019 : text.insert( 0, tr( "Register duplicated." ) );
+                        text.append( "\n" );
+                        text.append( tr( "Error Number : " ) );
+                        code.setNum( state->code() , 10 );
+                        text.append( code );
                         break;
-            case 2050 : text.insert(0,"Not Connected to database");
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+            case 2050 : text.insert( 0, "Not Connected to database" );
+                        text.append( "\n" );
+                        text.append( tr( "Error Number : " ) );
+                        code.setNum( state->code() , 10 );
+                        text.append( code );
                         break;            
-            default :   text.insert(0,tr("Internal Database error"));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+            default :   text.insert( 0, tr( "Internal Database error" ) );
+                        text.append( "\n" );
+                        text.append( tr( "Error Number : " ) );
+                        code.setNum( state->code() , 10 );
+                        text.append( code );
         }
-        QMessageBox::critical( this, tr("StarViewer"),text);
+        QMessageBox::critical( this , tr( "StarViewer" ) , text );
     }    
 
 }
@@ -405,8 +404,6 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )
     QFile dicomdirFile;
     
     return dicomdirFile.exists( dicomdirPath + "/DICOMDIR" );
-    
-
 }
 
 QCreateDicomdir::~QCreateDicomdir()
