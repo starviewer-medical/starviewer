@@ -40,6 +40,13 @@ public slots:
     ///Slot que s'activa quan es fa click al botó create Dicomdir, i comença el procés de crear el dicomdir
     void createDicomdir();
 
+public slots:
+    
+    /** Activa o desactiva els group box per poder gravar en un cd o en el disc dur
+     * @param state estat del checkbox m_checkBoxBurnCd
+     */
+    void setEnableBurnCd( int state);
+
 private:
 
     ///Crea les connexions de signals i slots de la interfície    
@@ -54,11 +61,6 @@ private:
      * @param Hora de l'estudi
      */
     QString formatHour( const std::string );
-
-    /** Comprova si el path on es vol crear el dicomdir existeix, si no existeix l'intenta crear
-     * @return indica si el directori existeix
-     */
-    bool isCorrectDicomdirPath();
 
     /** Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a Dicomdir
      * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
@@ -78,6 +80,24 @@ private:
      * @param state  Estat del mètode
      */
     void databaseError( Status *state );
+
+    /** Crea el dicomdir amb els estudis seleccionats, en el directori on se li passa per paràmetre
+     * @param dicomdirPath directori on s'ha de crear el dicomdir
+     */
+    void startCreateDicomdir(QString dicomdirPath);
+
+    /** Crear el dicomdir en un cd o dvd 
+     */
+    void createDicomdirOnCdOrDvd();
+
+    /** Crea el dicomdir al disc dur o en un pendrive
+     */
+    void createDicomdirOnHard();
+
+    /** Comprova si aquest directori ja és un dicomdir
+     * dicomdir a comprova sir és un directori
+     */
+    bool dicomdirPathIsADicomdir( QString dicomdirPath );
 
     unsigned long m_dicomdirSize;
 };

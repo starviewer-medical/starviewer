@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QString>
 #include <QDir>
+#include <QFile>
 
 #include "study.h"
 #include "converttodicomdir.h"
@@ -21,6 +22,7 @@
 #include "cacheimagedal.h"
 #include "imagemask.h"
 #include "harddiskinformation.h"
+#include "deletedirectory.h"
 
 namespace udg {
 
@@ -46,6 +48,14 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( removeAllStudies() ) );
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
+    
+    //El checkbox de gravar en un cd
+    connect( m_checkBoxBurnCd, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledBurnCd( int ) ) );
+}
+
+void QCreateDicomdir::setEnableBurnCd( int state )
+{
+    groupBoxCreateDicomdirAt->setEnabled( state );
 }
 
 void QCreateDicomdir::setTextDicomdirSize()
@@ -103,62 +113,139 @@ void QCreateDicomdir::addStudy( Study study )
 
 void QCreateDicomdir::createDicomdir()
 {
+    if ( m_checkBoxBurnCd->isChecked() )
+    {
+        createDicomdirOnCdOrDvd();
+    }
+    else
+    {
+        createDicomdirOnHard();
+    }
+
+}
+
+void QCreateDicomdir::createDicomdirOnCdOrDvd()
+{
+    QDir temporaryDirPath;
+    QString dicomdirPath, logMessage;
+    
+    dicomdirPath = temporaryDirPath.tempPath();
+    dicomdirPath.append("/DICOMDIR");
+    
+    INFO_LOG ( logMessage.toAscii().constData() );
+    
+    if ( !temporaryDirPath.mkpath( dicomdirPath ) )
+    {
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the temporary directory. Please check users permission" ) );
+        logMessage = "Error al crear directori ";
+        logMessage.append( dicomdirPath );
+        DEBUG_LOG( logMessage.toAscii().constData() );
+    }
+    else startCreateDicomdir( dicomdirPath );
+}
+
+void QCreateDicomdir::createDicomdirOnHard()
+{
+    QString dicomdirPath = m_lineEditDicomdirPath->text(), logMessage;
+    DeleteDirectory delDirectory;
+    QDir directoryDicomdirPath(dicomdirPath);
+
+    //Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
+    if ( dicomdirPathIsADicomdir( dicomdirPath ) )
+    {
+        switch ( QMessageBox::question( this ,
+                tr( "Create Dicomdir" ) ,
+                tr( "The directory contains a dicomdir, do you want to overwrite ?") ,
+                tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
+        {
+            case 0: // si vol sobreescriure, esborrem el directori i el seu contingut i tornem a crear-lo
+                delDirectory.deleteDirectory( dicomdirPath );
+                directoryDicomdirPath.mkdir( dicomdirPath ); 
+                break;
+            case 1:
+                return; //no fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
+                break;
+        }
+    }
+    else
+    {   //el directori no és un dicomdir
+        if ( !directoryDicomdirPath.exists() )//si el directori no existiex, preguntem si el vol crear
+        {
+                switch ( QMessageBox::question( this ,
+                        tr( "Create directory ?" ) ,
+                        tr( "The Dicomdir directory doesn't exists. Do you want to create it ?" ) ,
+                        tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
+                {
+                    case 0:
+                        if ( !directoryDicomdirPath.mkpath( dicomdirPath ) )
+                        {
+                            QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the directory. Please check users permission" ) );
+                            logMessage = "Error al crear directori ";
+                            logMessage.append( dicomdirPath );
+                            DEBUG_LOG( logMessage.toAscii().constData() );
+                        }
+                        break;
+                    case 1: 
+                        return; //cancel·lem
+                        break;
+                }
+        }    
+    }
+        
+    startCreateDicomdir( dicomdirPath );
+}
+
+void QCreateDicomdir::startCreateDicomdir(QString dicomdirPath)
+{
     ConvertToDicomdir convertToDicomdir;
     Status state;
     QString logMessage;
 
-    if ( isCorrectDicomdirPath()  ) //comprovem que el path on es vol guardar el dicom dir existeixi
+    INFO_LOG ( logMessage.toAscii().constData() );    
+
+    if ( !enoughFreeSpace( dicomdirPath ) )
     {
-
-        logMessage = "S'inicia la creació del dicomdir al directori";
-        logMessage.append( m_lineEditDicomdirPath->text() );     
-    
-        INFO_LOG ( logMessage.toAscii().constData() );    
-
-        if ( !enoughFreeSpace( m_lineEditDicomdirPath->text() ) )
-        {
-            QMessageBox::information( this , tr( "StarViewer" ) , tr( "Not enough free space to create dicom dir. Please free space" ) );
-            
-            logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
-            logMessage.append( state.text().c_str() );        
-            ERROR_LOG ( logMessage.toAscii().constData() );
-            return;
-        }         
-
-        QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
-        QTreeWidgetItem *item;
+        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Not enough free space to create dicom dir. Please free space" ) );
         
-        if ( dicomdirStudiesList.count() == 0) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
-        {
-            QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please, first select the studies which you want to create a dicomdir" ) );
-            return;
-        }
+        logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
+        logMessage.append( state.text().c_str() );        
+        ERROR_LOG ( logMessage.toAscii().constData() );
+        return;
+    }         
+
+    QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
+    QTreeWidgetItem *item;
     
-        for ( int i = 0; i < dicomdirStudiesList.count();i++ )
-        {
-            item = dicomdirStudiesList.at( i );
-            convertToDicomdir.addStudy( item->text(7) );
+    if ( dicomdirStudiesList.count() == 0) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
+    {
+        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please, first select the studies which you want to create a dicomdir" ) );
+        return;
+    }
+
+    for ( int i = 0; i < dicomdirStudiesList.count();i++ )
+    {
+        item = dicomdirStudiesList.at( i );
+        convertToDicomdir.addStudy( item->text(7) );
+
+        logMessage = "L'estudi ";
+        logMessage.append( item->text(7) );
+        logMessage.append( " s'afegirà al dicomdir " );
+        INFO_LOG ( logMessage.toAscii().constData() );
+    }
+
+    state = convertToDicomdir.convert( dicomdirPath );
     
-            logMessage = "L'estudi ";
-            logMessage.append( item->text(7) );
-            logMessage.append( " s'afegirà al dicomdir " );
-            INFO_LOG ( logMessage.toAscii().constData() );
-        }
-    
-        state = convertToDicomdir.convert( m_lineEditDicomdirPath->text() );
-        
-        if ( !state.good() )
-        {
-            QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() );
-            logMessage = "Error al crear el Dicomdir ERROR : ";
-            logMessage.append( state.text().c_str() );        
-            ERROR_LOG ( logMessage.toAscii().constData() );
-        }
-        else 
-        {
-            INFO_LOG( "Finalitzada la creació del Dicomdir" );
-            m_dicomdirStudiesList->clear();
-        }
+    if ( !state.good() )
+    {
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() );
+        logMessage = "Error al crear el Dicomdir ERROR : ";
+        logMessage.append( state.text().c_str() );        
+        ERROR_LOG ( logMessage.toAscii().constData() );
+    }
+    else 
+    {
+        INFO_LOG( "Finalitzada la creació del Dicomdir" );
+        m_dicomdirStudiesList->clear();
     }
 }
 
@@ -214,35 +301,6 @@ void QCreateDicomdir::removeSelectedStudy()
 
         delete m_dicomdirStudiesList->currentItem();
     }
-}
-
-bool QCreateDicomdir::isCorrectDicomdirPath()
-{
-    QDir dicomdirPath( m_lineEditDicomdirPath->text() );
-
-    if ( !dicomdirPath.exists() )
-    {
-            switch ( QMessageBox::question( this ,
-                    tr( "Create directory ?" ) ,
-                    tr( "The Dicomdir directory doesn't exists. Do you want to create it ?" ) ,
-                    tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
-            {
-                case 0:
-                    if ( !dicomdirPath.mkpath( m_lineEditDicomdirPath->text() ) )
-                    {
-                        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the directory. Please check users permission" ) );
-                        return false;
-                    }
-                    else return true;
-                    break;
-                case 1: 
-                    return false;
-                    break;
-            }
-    }
-    else return true;
-
-    
 }
 
 bool QCreateDicomdir::existsStudy( QString studyUID )
@@ -339,6 +397,15 @@ void QCreateDicomdir::databaseError(Status *state)
         }
         QMessageBox::critical( this, tr("StarViewer"),text);
     }    
+
+}
+
+bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )
+{
+    QFile dicomdirFile;
+    
+    return dicomdirFile.exists( dicomdirPath + "/DICOMDIR" );
+    
 
 }
 

@@ -230,35 +230,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="m_buttonCreateDicomdir" >
-    <property name="geometry" >
-     <rect>
-      <x>90</x>
-      <y>420</y>
-      <width>87</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="toolTip" >
-     <string>Creates the Dicomdir with the selected studies</string>
-    </property>
-    <property name="text" >
-     <string>Create Dicomdir</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Burn in a CD</string>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBoxCreateDicomdirAt" >
     <property name="geometry" >
      <rect>
@@ -330,6 +301,35 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="m_buttonCreateDicomdir" >
+    <property name="geometry" >
+     <rect>
+      <x>90</x>
+      <y>420</y>
+      <width>87</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="toolTip" >
+     <string>Creates the Dicomdir with the selected studies</string>
+    </property>
+    <property name="text" >
+     <string>Create Dicomdir</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="m_checkBoxBurnCd" >
+    <property name="geometry" >
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text" >
+     <string>Burn in a CD</string>
+    </property>
    </widget>
   </widget>
  </widget>
