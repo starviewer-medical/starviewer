@@ -165,10 +165,12 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_checkUS, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
     connect( m_checkXA, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
     
-    //conectem els sinals dels TreeView
+    //conectem els signals dels TreeView
     
     connect( m_studyTreeWidgetCache , SIGNAL( delStudy() ) , this , SLOT( deleteStudyCache() ) );
     connect( m_studyTreeWidgetCache , SIGNAL( view() ) , this , SLOT( view() ) );
+    
+    connect( m_studyTreeWidgetDicomdir , SIGNAL( view() ) , this , SLOT( view() ) );//quan fem doble click sobre un estudi o sèrie de la llista d'estudis
     
     //connectem els signes del SeriesIconView StudyListView
     connect( m_studyTreeWidgetCache , SIGNAL( addSeries(Series * ) ) , m_seriesListWidgetCache , SLOT( addSeries(Series *) ) );

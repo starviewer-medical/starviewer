@@ -154,7 +154,11 @@ void QCreateDicomdir::createDicomdir()
             logMessage.append( state.text().c_str() );        
             ERROR_LOG ( logMessage.toAscii().constData() );
         }
-        else INFO_LOG( "Finalitzada la creació del Dicomdir" );
+        else 
+        {
+            INFO_LOG( "Finalitzada la creació del Dicomdir" );
+            m_dicomdirStudiesList->clear();
+        }
     }
 }
 
