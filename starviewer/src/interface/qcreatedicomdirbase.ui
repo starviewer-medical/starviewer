@@ -8,330 +8,399 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
-    <height>641</height>
+    <width>695</width>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Create DicomDir</string>
   </property>
-  <widget class="QGroupBox" name="GroupBox1" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>20</y>
-     <width>491</width>
-     <height>591</height>
-    </rect>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
    </property>
-   <property name="title" >
-    <string/>
+   <property name="spacing" >
+    <number>6</number>
    </property>
-   <layout class="QVBoxLayout" >
-    <property name="margin" >
-     <number>9</number>
-    </property>
-    <property name="spacing" >
-     <number>6</number>
-    </property>
-    <item>
-     <widget class="QTreeWidget" name="m_dicomdirStudiesList" >
-      <column>
-       <property name="text" >
-        <string>Study</string>
+   <item row="0" column="1" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QGroupBox" name="groupBox" >
+       <property name="title" >
+        <string/>
        </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Patient ID</string>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <widget class="QGroupBox" name="groupBox_2" >
+          <property name="title" >
+           <string/>
+          </property>
+          <layout class="QGridLayout" >
+           <property name="margin" >
+            <number>9</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item row="1" column="0" >
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="5" column="1" >
+            <widget class="QLabel" name="m_labelMbCdDvdOcupat" >
+             <property name="autoFillBackground" >
+              <bool>false</bool>
+             </property>
+             <property name="text" >
+              <string>650 Mb</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" >
+            <widget class="QProgressBar" name="m_progressBarOcupat" >
+             <property name="maximum" >
+              <number>100</number>
+             </property>
+             <property name="value" >
+              <number>0</number>
+             </property>
+             <property name="textVisible" >
+              <bool>false</bool>
+             </property>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="textDirection" >
+              <enum>QProgressBar::TopToBottom</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0" colspan="2" >
+            <widget class="QLabel" name="m_labelSizeOfDicomdir" >
+             <property name="font" >
+              <font>
+               <family>Sans Serif</family>
+               <pointsize>9</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+               <underline>false</underline>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="text" >
+              <string>Mida Dicomdir :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="2" >
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="m_lineEditDicomdirPath" />
+             </item>
+             <item>
+              <widget class="QPushButton" name="m_buttonExamineDisk" >
+               <property name="text" >
+                <string/>
+               </property>
+               <property name="icon" >
+                <iconset resource="../main/main.qrc" >:/images/folderclose.png</iconset>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0" colspan="2" >
+            <widget class="QLabel" name="m_labelCreateDicomdir" >
+             <property name="font" >
+              <font>
+               <family>Sans Serif</family>
+               <pointsize>9</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+               <underline>false</underline>
+               <strikeout>false</strikeout>
+              </font>
+             </property>
+             <property name="text" >
+              <string>Create Dicomdir at :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="2" >
+            <widget class="QComboBox" name="m_comboBoxAction" >
+             <item>
+              <property name="text" >
+               <string>Copy to disk or external device</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Burn in a Cd</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Burn in a Dvd</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_buttonCreateDicomdir" >
+            <property name="toolTip" >
+             <string>Creates the Dicomdir with the selected studies</string>
+            </property>
+            <property name="text" >
+             <string>Create Dicomdir</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
        </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Patient Name</string>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>381</height>
+        </size>
        </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Modality</string>
-       </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Study Date</string>
-       </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Study Time</string>
-       </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>Description</string>
-       </property>
-      </column>
-      <column>
-       <property name="text" >
-        <string>studyUID</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item>
-     <spacer>
-      <property name="orientation" >
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType" >
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" >
-       <size>
-        <width>20</width>
-        <height>21</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" >
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="GroupBox1" >
+     <property name="title" >
+      <string/>
+     </property>
+     <layout class="QVBoxLayout" >
       <property name="margin" >
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="spacing" >
        <number>6</number>
       </property>
       <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
+       <widget class="QTreeWidget" name="m_dicomdirStudiesList" >
+        <property name="minimumSize" >
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>403</width>
+          <height>0</height>
          </size>
         </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="m_buttonRemove" >
-        <property name="toolTip" >
-         <string>Remove selected study of the list</string>
-        </property>
-        <property name="text" >
-         <string>Remove</string>
-        </property>
+        <column>
+         <property name="text" >
+          <string>Study</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Patient ID</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Patient Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Modality</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Study Date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Study Time</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Description</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>studyUID</string>
+         </property>
+        </column>
        </widget>
       </item>
       <item>
        <spacer>
         <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeType" >
          <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" >
          <size>
-          <width>31</width>
-          <height>20</height>
+          <width>20</width>
+          <height>21</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="m_buttonRemoveAll" >
-        <property name="toolTip" >
-         <string>Removel all the studies of the list</string>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
         </property>
-        <property name="text" >
-         <string>Remove All</string>
+        <property name="spacing" >
+         <number>6</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonRemove" >
+          <property name="toolTip" >
+           <string>Remove selected study of the list</string>
+          </property>
+          <property name="text" >
+           <string>Remove</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>31</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonRemoveAll" >
+          <property name="toolTip" >
+           <string>Removel all the studies of the list</string>
+          </property>
+          <property name="text" >
+           <string>Remove All</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
      </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QGroupBox" name="groupBox" >
-   <property name="geometry" >
-    <rect>
-     <x>520</x>
-     <y>20</y>
-     <width>271</width>
-     <height>591</height>
-    </rect>
-   </property>
-   <property name="title" >
-    <string/>
-   </property>
-   <widget class="QGroupBox" name="groupBox_2" >
-    <property name="geometry" >
-     <rect>
-      <x>11</x>
-      <y>71</y>
-      <width>251</width>
-      <height>147</height>
-     </rect>
-    </property>
-    <property name="title" >
-     <string/>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_4" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>470</y>
-      <width>251</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="title" >
-     <string/>
-    </property>
-    <widget class="QLabel" name="m_labelSizeOfDicomdir" >
-     <property name="geometry" >
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>231</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="font" >
-      <font>
-       <family>Sans Serif</family>
-       <pointsize>9</pointsize>
-       <weight>75</weight>
-       <italic>false</italic>
-       <bold>true</bold>
-       <underline>false</underline>
-       <strikeout>false</strikeout>
-      </font>
-     </property>
-     <property name="text" >
-      <string>Mida Dicomdir :</string>
-     </property>
     </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBoxCreateDicomdirAt" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>305</y>
-      <width>251</width>
-      <height>76</height>
-     </rect>
-    </property>
-    <property name="title" >
-     <string/>
-    </property>
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>9</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label" >
-         <property name="font" >
-          <font>
-           <family>Sans Serif</family>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <italic>false</italic>
-           <bold>true</bold>
-           <underline>false</underline>
-           <strikeout>false</strikeout>
-          </font>
-         </property>
-         <property name="text" >
-          <string>Create Dicomdir at :</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QLineEdit" name="m_lineEditDicomdirPath" />
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_buttonExamineDisk" >
-           <property name="text" >
-            <string/>
-           </property>
-           <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/folderclose.png</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="m_buttonCreateDicomdir" >
-    <property name="geometry" >
-     <rect>
-      <x>90</x>
-      <y>420</y>
-      <width>87</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="toolTip" >
-     <string>Creates the Dicomdir with the selected studies</string>
-    </property>
-    <property name="text" >
-     <string>Create Dicomdir</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="m_checkBoxBurnCd" >
-    <property name="geometry" >
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>91</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text" >
-     <string>Burn in a CD</string>
-    </property>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
  <resources>

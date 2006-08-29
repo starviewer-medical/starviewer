@@ -19,6 +19,9 @@ class Status;
 */
 class QCreateDicomdir : public QWidget , private Ui::QCreateDicomdirBase{
 Q_OBJECT
+
+    enum recordDevice { cd , dvd };
+    
 public:
     QCreateDicomdir( QWidget *parent = 0 );
 
@@ -41,12 +44,12 @@ public slots:
     void createDicomdir();
 
 public slots:
-    
-    /** Activa o desactiva els group box per poder gravar en un cd o en el disc dur
-     * @param state estat del checkbox m_checkBoxBurnCd
+        
+    /** Slot que s'activa quan canviem l'operació seleccionada a combobox
+     * @param index del combobox
      */
-    void setEnableBurnCd( int state );
-
+    void changedAction( int index );
+    
 private:
 
     ///Crea les connexions de signals i slots de la interfície    
@@ -69,7 +72,7 @@ private:
     bool existsStudy( QString studyUID );
     
     ///Dona valor a l'etiqueta que indica l'espai que ocupa el Dicomdir
-    void setTextDicomdirSize();
+    void setDicomdirSize();
 
     /**comprova si hi ha suficient espai lliure al disc dur per crear el dicomdir, comprova que l'espai lliure sigui superior a l'espai que ocuparà el nou directori dicomdir
      * @return indica si hi ha prou espai lliure al disc per crear el dicomdir
@@ -99,7 +102,13 @@ private:
      */
     bool dicomdirPathIsADicomdir( QString dicomdirPath );
 
+    /** executa el k3b per gravar en un cd o dvd depenent de l'opció escollida
+     * @param device dispositiu al que es grava, pot ser cd o dvd
+     */
+    void QCreateDicomdir::executek3b( recordDevice device );
+
     unsigned long m_dicomdirSize;
+    unsigned long m_DiskSpace;
 };
 
 }
