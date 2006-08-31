@@ -81,8 +81,8 @@ Status CacheStudyDAL::insertStudy( Study *study )
                                 ,study->getStudyModality().c_str()   //Modality
                                 ,""                        //Operator Name
                                 ,""                        //Location
-                                ,0//getDate()                 //Access Date
-                                ,0//getTime()                 //Access Time
+                                ,getDate()                 //Access Date
+                                ,getTime()                 //Access Time
                                 ,study->getAbsPath().c_str()
                                 ,"PENDING"                 //stateDatabase pendent perquè la descarrega de l'estudi encara no està completa               
                                 ,study->getPacsAETitle().c_str()
