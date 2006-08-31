@@ -34,19 +34,19 @@ void DatabaseConnection::setDatabasePath( std::string path )
 
 void DatabaseConnection::connectDB()
 {
-  m_db = sqlite_open( m_databasePath.c_str() , 0 , NULL );
+    sqlite3_open( m_databasePath.c_str() , &m_databaseConnection );
 }
 
-sqlite* DatabaseConnection::getConnection()
+sqlite3* DatabaseConnection::getConnection()
 {
     if ( !connected() ) connectDB();
     
-    return m_db;
+    return m_databaseConnection;
 }
 
 bool DatabaseConnection::connected()
 {
-    return m_db != NULL;
+    return m_databaseConnection != NULL;
 }
 
 void DatabaseConnection::getLock()
@@ -63,7 +63,7 @@ void DatabaseConnection::closeDB()
 {
     if ( connected() )
     {
-        sqlite_close( m_db );
+        sqlite3_close( m_databaseConnection );
     }
 }
 

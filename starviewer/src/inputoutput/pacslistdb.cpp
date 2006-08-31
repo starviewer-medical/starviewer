@@ -52,6 +52,7 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
     Status state , stateQuery;
     int i;
     std::string sql;
+    char *sqlSentence;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -67,18 +68,20 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
         sql.append( "(AETitle,Server,Port,Inst,Loc,Desc,Def,PacsID,Del) " );
         sql.append( "Values (%Q,%Q,%Q,%Q,%Q,%Q,%Q,(select max(PacsID) from PacsList)+1,'N')" );
     
-        m_DBConnect->getLock();
-        i=sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str() , 0 , 0 , 0 ,
-                        pacs->getAEPacs().c_str() ,
-                        pacs->getPacsAdr().c_str() ,
-                        pacs->getPacsPort().c_str() ,
-                        pacs->getInstitution().c_str() ,
-                        pacs->getLocation().c_str() ,
-                        pacs->getDescription().c_str() ,
-                        pacs->getDefault().c_str() );
-
+    
+        sqlSentence = sqlite3_mprintf( sql.c_str(),
+                                        pacs->getAEPacs().c_str() ,
+                                        pacs->getPacsAdr().c_str() ,
+                                        pacs->getPacsPort().c_str() ,
+                                        pacs->getInstitution().c_str() ,
+                                        pacs->getLocation().c_str() ,
+                                        pacs->getDescription().c_str() ,
+                                        pacs->getDefault().c_str() );
+        m_DBConnect->getLock(); 
+        i=sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;
         m_DBConnect->releaseLock();
-        state = constructState( i );
+        
+        state = m_DBConnect->databaseStatus( i );
     }
     else if ( stateQuery.code() == 0 )
     {//existeix un PAcs amb el mateix AEtitle, actualitzem les dades i el donem d'alta
@@ -95,6 +98,7 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
     Status state;
     int i;
     std::string sql;
+    char *sqlSentence;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -112,18 +116,19 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
     sql.append( "Del = %Q " );
     sql.append ( " where PacsID = %i" );
     
+    sqlSentence = sqlite3_mprintf(sql.c_str() ,
+                                    pacs->getAEPacs().c_str() ,
+                                    pacs->getPacsAdr().c_str() ,
+                                    pacs->getPacsPort().c_str() ,
+                                    pacs->getInstitution().c_str() ,
+                                    pacs->getLocation().c_str() ,
+                                    pacs->getDescription().c_str() ,
+                                    pacs->getDefault().c_str() ,
+                                    "N" ,
+                                    pacs->getPacsID() );
+    
     m_DBConnect->getLock();
-    i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str() , 0 , 0 , 0 ,
-                    pacs->getAEPacs().c_str() ,
-                    pacs->getPacsAdr().c_str() ,
-                    pacs->getPacsPort().c_str() ,
-                    pacs->getInstitution().c_str() ,
-                    pacs->getLocation().c_str() ,
-                    pacs->getDescription().c_str() ,
-                    pacs->getDefault().c_str() ,
-                    "N" ,
-                    pacs->getPacsID() );
-                   
+    i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
     
     state = constructState( i );
@@ -151,7 +156,7 @@ Status PacsListDB::queryPacsList( PacsList &list )
     sql.append( "order by AETitle" );
     
     m_DBConnect->getLock();
-    estat = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     state=constructState( estat );
     
@@ -160,7 +165,7 @@ Status PacsListDB::queryPacsList( PacsList &list )
     i = 1;//ignorem les capçaleres
     while (i <= rows)
     {   
-        pacs.setAEPacs(resposta[ 0 + i*col ] );
+        pacs.setAEPacs( resposta[ 0 + i*col ] );
         pacs.setPacsAdr( resposta[ 1 + i*col ] );
         pacs.setPacsPort( resposta[ 2 + i*col ] );
         pacs.setInstitution( resposta[ 3 + i*col ] );
@@ -197,7 +202,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
    
     
     m_DBConnect->getLock();
-    estat = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
@@ -241,7 +246,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
     sql.append( id );
 
     m_DBConnect->getLock();
-    estat = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
@@ -271,18 +276,20 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
     Status state;
     int i;
     std::string sql;
+    char *sqlSentence;
    
-    sql.insert( 0 , "update PacsList  set Del = 'S'" );
+    sql.insert( 0 , "update PacsList set Del = 'S'" );
     sql.append ( " where PacsID = %i" );
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return constructState( 50 );
     }
+        
+    sqlSentence = sqlite3_mprintf( sql.c_str() , pacs->getPacsID() );
     
     m_DBConnect->getLock();
-    i = sqlite_exec_printf(m_DBConnect->getConnection(),sql.c_str() , 0 , 0 , 0 ,
-                    pacs->getPacsID() );
+    i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 );
           
     m_DBConnect->releaseLock();
         
@@ -309,7 +316,7 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
     }
     
     m_DBConnect->getLock();
-    estat=sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat=sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!

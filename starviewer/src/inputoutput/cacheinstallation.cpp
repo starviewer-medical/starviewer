@@ -101,7 +101,7 @@ bool CacheInstallation::createDatabaseDir()
     {
         missatgeLog = "S'ha creat el directori de la cache d'imatges ";
         missatgeLog.append( databasePath );         
-		INFO_LOG( missatgeLog.toAscii().constData() );
+	INFO_LOG( missatgeLog.toAscii().constData() );
         return true;
     }
     else
@@ -127,7 +127,7 @@ bool CacheInstallation::createDatabaseFile()
 
     if ( !DBConnect->connected() ) return false;
     
-    estat = sqlite_exec_printf( DBConnect->getConnection() , sqlTablesScript.constData() , 0 , 0 , 0 ); //creem les taules i els registres
+    estat = sqlite3_exec( DBConnect->getConnection() , sqlTablesScript.constData() , 0 , 0 , 0 ); //creem les taules i els registres
     
     sqlTablesScriptFile.close(); //tanquem el fitxer
     

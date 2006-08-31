@@ -7,7 +7,7 @@
 #ifndef UDGPACSLISTDB_H
 #define UDGPACSLISTDB_H
 
-#include <sqlite.h>
+#include <sqlite3.h>
 #include "databaseconnection.h"
 #include "pacslist.h"
 

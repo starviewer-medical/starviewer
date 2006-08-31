@@ -73,6 +73,7 @@ Status CachePool::updatePoolSpace( int size )
     int i;
     Status state;
     std::string sql;
+    char *sqlSentence;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -82,8 +83,10 @@ Status CachePool::updatePoolSpace( int size )
     sql.insert( 0 , "Update Pool Set Space = Space + %i " );
     sql.append( "where Param = 'USED'" );
     
+    sqlSentence = sqlite3_mprintf( sql.c_str() , size );
+    
     m_DBConnect->getLock();
-    i = sqlite_exec_printf( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 , size );
+    i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
     state = constructState( i );
@@ -98,8 +101,7 @@ Status CachePool::updatePoolTotalSize( int space )
     char size[25];
     unsigned long long spaceBytes;
     
-    //sqlite no permet en un update entra valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem
-    //un string i hi afegim 6 zeros per passar Mb a bytes
+    //sqlite no permet en un update entre valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem un string i hi afegim multiplicar l'espai per 1024*1024, per passar a bytes
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -110,12 +112,12 @@ Status CachePool::updatePoolTotalSize( int space )
     spaceBytes = spaceBytes * 1024 * 1024; //convertim els Mb en bytes, ja que es guarden en bytes les unitats a la base de dades
     
     sprintf( size , "%Li" , spaceBytes ); //convertim l'espai en bytes a string %Li significa long integer
-    sql.insert( 0 , "Update Pool Set Space = " );//convertim l'espai en bytes
+    sql.insert( 0 , "Update Pool Set Space = " );
     sql.append( size );
     sql.append( " where Param = 'POOLSIZE'" );
     
     m_DBConnect->getLock();
-    i = sqlite_exec_printf( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 , space );
+    i = sqlite3_exec( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
     state = constructState( i );
@@ -138,7 +140,7 @@ Status CachePool::resetPoolSpace()
     sql.append( "where Param = 'USED'" );
     
     m_DBConnect->getLock();
-    i = sqlite_exec_printf( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 );
+    i = sqlite3_exec( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
     state = constructState( i );
@@ -162,7 +164,7 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
     sql.append( "where Param = 'USED'" );
     
     m_DBConnect->getLock(); 
-    i = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
+    i = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
     m_DBConnect->releaseLock();
                                 
     state = constructState( i );
@@ -192,7 +194,7 @@ Status CachePool::getPoolTotalSize( unsigned int &space )
     sql.append( "where Param = 'POOLSIZE'" );
     
     m_DBConnect->getLock();
-    i = sqlite_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
+    i = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
     m_DBConnect->releaseLock();
                                 
     state = constructState( i );

@@ -7,7 +7,7 @@
 #ifndef UDGDATABASECONNECTION_H
 #define UDGDATABASECONNECTION_H
 
-#include <sqlite.h>
+#include <sqlite3.h>
 #include <semaphore.h>
 
 namespace udg {
@@ -37,7 +37,7 @@ public:
     /** Retorna la connexió a la base de dades
      * @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
      */
-     sqlite * getConnection();
+     sqlite3 * getConnection();
      
     /** Indica s'esta connectat a la base de dades
      * @return indica si s'esta connectat a la base de dades
@@ -58,7 +58,7 @@ private :
     /// Constructor de la classe
     DatabaseConnection();
 
-    sqlite *m_db;
+    sqlite3 *m_databaseConnection;
     sem_t *m_databaseLock;
     
     std::string m_databasePath;

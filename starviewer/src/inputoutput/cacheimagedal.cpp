@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 #include <string>
-#include <sqlite.h>
+#include <sqlite3.h>
 #include "image.h"
 #include "status.h"
 #include "databaseconnection.h"
@@ -27,6 +27,7 @@ Status CacheImageDAL::insertImage( Image *image )
     int stateDatabase;
     Status state;
     std::string sql;
+    char *sqlSentence;
     
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -37,17 +38,19 @@ Status CacheImageDAL::insertImage( Image *image )
     sql.append( "values (%Q,%Q,%Q,%i,%Q,%Q,%i,%Q)" );
     
     databaseConnection->getLock();
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacció
+
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacció
 
     state = databaseConnection->databaseStatus( stateDatabase );
     
     if ( !state.good() )
     {
-        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         return state;
     }
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection(),sql.c_str() , 0 , 0 , 0 
+    
+    sqlSentence = sqlite3_mprintf( sql.c_str() 
                                 ,image->getSoPUID().c_str()
                                 ,image->getStudyUID().c_str()
                                 ,image->getSeriesUID().c_str()
@@ -55,32 +58,36 @@ Status CacheImageDAL::insertImage( Image *image )
                                 ,"0" //Image time
                                 ,"0" //Image Date
                                 ,image->getImageSize()
-                                ,image->getImageName().c_str() );   //IMage size
-                                
+                                ,image->getImageName().c_str() );   //Image size
+                                                
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence, 0, 0, 0);
+
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         return state;
     }
                                     
+    //Actualitzem l'espai ocupat de la cache, per la nova imatge descarregada                                
     sql.clear();  
     sql.insert( 0 , "Update Pool Set Space = Space + %i " );
     sql.append( "where Param = 'USED'" );
     
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , sql.c_str() , 0 , 0 , 0 
-                                ,image->getImageSize() );
+    sqlSentence = sqlite3_mprintf( sql.c_str() , image->getImageSize() );
+    
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence, 0, 0, 0);
     
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
+        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
         databaseConnection->releaseLock();
         return state;
     }
     
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
     
     databaseConnection->releaseLock();
                                 
@@ -104,9 +111,10 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
     }    
         
     databaseConnection->getLock();
-    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , 
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , 
                                       buildSqlQueryImages( &imageMask ).c_str() , 
-                                      &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+                                    &resposta , &rows , &columns , error ); 
+                                    //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus( stateDatabase );
@@ -151,7 +159,7 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
     }
     
     databaseConnection->getLock();
-    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , buildSqlCountImageNumber( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlCountImageNumber( &imageMask ).c_str() , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus ( stateDatabase );
@@ -179,7 +187,7 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
     }
     
     databaseConnection->getLock();
-    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , buildSqlSizeImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlSizeImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus ( stateDatabase );
@@ -197,15 +205,20 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
     std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;
-    
-    databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
+    char *sqlSentence;
     
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
+   
+    sql.insert( 0 , "delete from image where StuInsUID = %Q" );
     
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "delete from image where StuInsUID = %Q" , 0 , 0 , 0 , studyUID.c_str() );
+    sqlSentence = sqlite3_mprintf( sql.c_str() , studyUID.c_str() );
+    
+    databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
+        
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence, 0, 0, 0);
     
     databaseConnection->releaseLock();
     

@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 #include <string>
-#include <sqlite.h>
+#include <sqlite3.h>
 
 #include "seriesmask.h"
 #include "status.h"
@@ -28,6 +28,7 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
     Status state;
     std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    char *sqlSentence;
     
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -38,8 +39,7 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
     sql.append( " ( SerInsUID , SerNum , StuInsUID , SerMod , ProNam , SerDes , SerPath , BodParExa , SerDat , SerTim ) " );
     sql.append( " values ( %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q ) " );
     
-    databaseConnection->getLock();
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection(),sql.c_str() , 0 , 0 , 0
+    sqlSentence = sqlite3_mprintf( sql.c_str() 
                                 ,serie->getSeriesUID().c_str()
                                 ,serie->getSeriesNumber().c_str()
                                 ,serie->getStudyUID().c_str()
@@ -50,6 +50,9 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
                                 ,serie->getBodyPartExaminated().c_str()
                                 ,serie->getSeriesDate().c_str()
                                 ,serie->getSeriesTime().c_str() );
+                                
+    databaseConnection->getLock();                                    
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;          
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus( stateDatabase );
@@ -73,7 +76,7 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
     mask = seriesMask.getSeriesMask();
                      
     databaseConnection->getLock();
-    stateDatabase = sqlite_get_table( databaseConnection->getConnection() , buildSqlQuerySeries( &seriesMask ).c_str() , &resposta , &rows, &columns , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de columnss.
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlQuerySeries( &seriesMask ).c_str() , &resposta , &rows, &columns , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de columnss.
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus( stateDatabase );
@@ -104,6 +107,7 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
     std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;
+    char *sqlSentence;
     
     databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
     
@@ -112,11 +116,17 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
     
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , "delete from series where StuInsUID = %Q" , 0 , 0 , 0 , studyUID.c_str() );
+    sql.insert( 0 , "delete from series where StuInsUID = %Q" );
     
+    
+    sqlSentence = sqlite3_mprintf( sql.c_str() 
+                                    ,studyUID.c_str() );
+                                
+    databaseConnection->getLock();                                    
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;          
     databaseConnection->releaseLock();
-    
-    return  databaseConnection->databaseStatus( stateDatabase );
+ 
+    return databaseConnection->databaseStatus( stateDatabase );
 }
 
 std::string CacheSeriesDAL::buildSqlQuerySeries( SeriesMask *seriesMask )

@@ -9,7 +9,7 @@ INCLUDEPATH += /usr/include/dcmtk/ \
 	/usr/include/dcmtk/dcmjpeg
 
 LIBS += -L/usr/lib/dcmtk/ \
-	-lsqlite \
+	-lsqlite3 \
 	-ldcmnet \
 	-ldcmdata \
 	-ldcmimage \

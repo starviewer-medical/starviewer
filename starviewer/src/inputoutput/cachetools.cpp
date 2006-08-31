@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 #include <string>
-#include <sqlite.h>
+#include <sqlite3.h>
 
 #include "cachetools.h"
 #include "databaseconnection.h"
@@ -33,7 +33,7 @@ Status CacheTools::compactCachePacs()
     sql.insert( 0 , "vacuum" );//amb l'acció vacuum es compacta la base de dades
     
     databaseConnection->getLock();
-    stateDatabase = sqlite_exec_printf( databaseConnection->getConnection() , sql.c_str() , 0 , 0 , 0 );
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sql.c_str() , 0 , 0 , 0 );
     databaseConnection->releaseLock();
                                 
     state = databaseConnection->databaseStatus ( stateDatabase );
