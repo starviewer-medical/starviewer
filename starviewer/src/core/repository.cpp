@@ -13,6 +13,12 @@
 namespace udg {
 
 template< typename ItemType >
+Repository< ItemType >::~Repository( )
+{
+    this->cleanUp();
+}
+
+template< typename ItemType >
 Identifier Repository< ItemType >::addItem( ItemType* item )
 {
     Identifier id( m_nextIdentifierNumber++ );
@@ -88,6 +94,16 @@ Identifier *Repository< ItemType >::getIdentifierList()
     
     return idList;
     
+}
+
+template< typename ItemType >
+void Repository< ItemType >::cleanUp()
+{
+    int items = this->getNumberOfItems();
+    Identifier idList[ items ];
+    
+    for( int i = 0; i < items; i++ )
+        this->removeItem( idList[i] );
 }
 
 };  // end namespace udg {

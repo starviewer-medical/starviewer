@@ -26,8 +26,8 @@ public:
         m_nextIdentifierNumber = 0;
     }
     
-    /// El destructor allibera l'espai ocupat pels items
-    ~Repository(){}
+    /// El destructor allibera l'espai ocupat pels items, si és que en queden i no s'han alliberat
+    ~Repository();
     
     /**
         Afegeix un item al repositori.
@@ -46,6 +46,9 @@ public:
 
     /// Retorna una llista amb tots els id del repositori
     Identifier* getIdentifierList();
+
+    /// Elimina tots els elements que hi hagi al repositori
+    void cleanUp();
     
 private:
     
