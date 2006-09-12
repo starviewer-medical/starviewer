@@ -25,6 +25,7 @@ public:
     {
         m_nextIdentifierNumber = 0;
     }
+    
     /// El destructor allibera l'espai ocupat pels items
     ~Repository(){}
     
@@ -36,8 +37,10 @@ public:
 
     /// Ens retorna un item del repositori amb l'identificador que especifiquem.
     ItemType *getItem( const Identifier id );
+
     /// Elimina un item del repositori
     void removeItem( const Identifier id );
+
     /// Retorna el nombre d'items que hi ha al repositori
     int getNumberOfItems();
 
