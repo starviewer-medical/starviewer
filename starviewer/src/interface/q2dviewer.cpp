@@ -103,6 +103,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_viewer = vtkImageViewer2::New();
     // preparem el picker
     m_picker = vtkPropPicker::New();
+    m_pickedAxisActor = 0;
     m_overlayVolume = 0;
     m_voxelInformationCaption = 0;
     m_textAnnotation = 0;
@@ -133,6 +134,20 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
 
 Q2DViewer::~Q2DViewer()
 {
+    m_scalarBar->Delete();
+    m_voxelInformationCaption->Delete();
+    m_patientOrientationTextActor[0]->Delete();
+    m_patientOrientationTextActor[1]->Delete();
+    m_patientOrientationTextActor[2]->Delete();
+    m_patientOrientationTextActor[3]->Delete();
+    m_sideRuler->Delete();
+    m_bottomRuler->Delete();
+    if( m_pickedAxisActor )
+        m_pickedAxisActor->Delete();
+    m_textAnnotation->Delete();
+    m_picker->Delete();
+    m_viewer->Delete();
+    m_vtkQtConnections->Delete();
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
