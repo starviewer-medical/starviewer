@@ -296,6 +296,11 @@ void QMPR3D2DExtension::createConnections()
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_sagital2DView , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_coronal2DView , SLOT( setWindowLevel(double,double) ) );
 
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_mpr3DView , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_axial2DView , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_sagital2DView , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_coronal2DView , SLOT( resetWindowLevelToDefault() ) );
+    
     // sincronitzar window level
     connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
