@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
+#include <vtkMetaImageWriter.h>
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumesourceinformation.h"
@@ -834,11 +834,11 @@ void Q2DViewer::setupInteraction()
     // configurem l'Image Viewer i el qvtkWidget
     // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat \TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
+    m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
     
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
-
+    
 // menú contextual TODO el farem servir???
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
 //                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
@@ -1196,6 +1196,10 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
     break;
 
     case META:
+        vtkMetaImageWriter *metaWriter = vtkMetaImageWriter::New();
+        metaWriter->SetInput( m_mainVolume->getVtkData() );
+        metaWriter->SetFileName( baseName );
+        metaWriter->Write();
     break;
 
     }
