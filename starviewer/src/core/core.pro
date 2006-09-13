@@ -28,8 +28,11 @@ HEADERS += extensionfactory.h \
            identifier.h \
            repositorybase.h \
            repository.h \
-           volumesourceinformation.h 
-
+           volumesourceinformation.h \
+           q2dviewer.h \
+           q3dmprviewer.h \
+           q3dviewer.h \
+           qviewer.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -43,8 +46,11 @@ SOURCES += extensionmediator.cpp \
            identifier.cpp \
            repositorybase.cpp \
            repository.cpp \
-           volumesourceinformation.cpp 
-
+           volumesourceinformation.cpp \
+           q2dviewer.cpp \
+           q3dmprviewer.cpp \
+           q3dviewer.cpp \
+           qviewer.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
@@ -59,6 +65,5 @@ QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
 QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
 LIBS += -llog4cxx
 INCLUDEPATH += /usr/include/log4cxx/
-
 include(../itk.inc)
 include(../vtk.inc)
