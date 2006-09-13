@@ -97,6 +97,12 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
 Q3DMPRViewer::~Q3DMPRViewer()
 {
     m_renderer->Delete();
+    m_vtkQtConnections->Delete();
+    m_axialImagePlaneWidget->Delete();
+    m_sagitalImagePlaneWidget->Delete();
+    m_coronalImagePlaneWidget->Delete();
+    m_outlineActor->Delete();
+    m_cubeActor->Delete();
 }
 
 void Q3DMPRViewer::setInput( Volume *volume )
