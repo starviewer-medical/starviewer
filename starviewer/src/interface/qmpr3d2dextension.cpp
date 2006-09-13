@@ -52,6 +52,11 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
 QMPR3D2DExtension::~QMPR3D2DExtension()
 {
     writeSettings();
+    
+    m_sagitalOverAxialIntersectionAxis->Delete();
+    m_coronalOverAxialIntersectionAxis->Delete();
+    m_axialOverSagitalIntersectionAxis->Delete();
+    m_coronalOverSagitalIntersectionAxis->Delete();
 }
 
 void QMPR3D2DExtension::setInput( Volume *input )
