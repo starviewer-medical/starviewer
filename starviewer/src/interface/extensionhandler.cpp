@@ -58,6 +58,12 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
 
 ExtensionHandler::~ExtensionHandler()
 {
+    delete m_qMPRExtensionCreator;
+    delete m_qMPR3DExtensionCreator;
+    delete m_qMPR3D2DExtensionCreator;
+    delete m_q2DViewerExtensionCreator;
+    delete m_extensionFactory;
+    delete m_queryScreen;
 }
 
 void ExtensionHandler::createConnections()
@@ -87,10 +93,6 @@ void ExtensionHandler::registerExtensions()
 void ExtensionHandler::request( int who )
 {
 // \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
-    QMPRExtension *mprExtension = new QMPRExtension( 0 );
-    QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
-    QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
-    Q2DViewerExtension *defaultViewerExtension;
 // \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
     switch( who )
     {
@@ -113,6 +115,7 @@ void ExtensionHandler::request( int who )
     case 2:
         if( !m_volumeID.isNull() )
         {
+            QMPRExtension *mprExtension = new QMPRExtension( 0 );
             mprExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
             m_mainApp->m_extensionWorkspace->addApplication( mprExtension , tr("2D MPR") );
         }
@@ -126,6 +129,7 @@ void ExtensionHandler::request( int who )
     case 3:
         if( !m_volumeID.isNull() )
         {
+            QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
             mpr3DExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
             m_mainApp->m_extensionWorkspace->addApplication( mpr3DExtension , tr("3D MPR") );
         }
@@ -139,6 +143,7 @@ void ExtensionHandler::request( int who )
     case 4:
         if( !m_volumeID.isNull() )
         {
+            QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
             mpr3D2DExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
             m_mainApp->m_extensionWorkspace->addApplication( mpr3D2DExtension , tr("3D-2D MPR") );
         }
@@ -167,7 +172,7 @@ void ExtensionHandler::request( int who )
 
     /// Default viewer: 2D Viewer
     case 8:
-        defaultViewerExtension = new Q2DViewerExtension;
+        Q2DViewerExtension *defaultViewerExtension = new Q2DViewerExtension;
         defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("2D Viewer"));
 //         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
@@ -176,12 +181,12 @@ void ExtensionHandler::request( int who )
     break;
     
     default:
-        defaultViewerExtension = new Q2DViewerExtension;
-        defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-        m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("2D Viewer"));
-//         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
-        connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
-        connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
+        Q2DViewerExtension *defaultViewerExtension2 = new Q2DViewerExtension;
+        defaultViewerExtension2->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+        m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension2 , tr("2D Viewer"));
+//         defaultViewerExtension2->populateToolBar( m_mainApp->getExtensionsToolBar() );
+        connect( defaultViewerExtension2 , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
+        connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension2 , SLOT( setSecondInput(Volume*) ) );
     break;
     }
 }
