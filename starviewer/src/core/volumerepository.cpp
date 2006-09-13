@@ -32,13 +32,12 @@ Identifier VolumeRepository::addVolume( Volume* model)
 
 Volume* VolumeRepository::getVolume( Identifier id )
 {
-    return this->getItem( id );
-    
+    return this->getItem( id );    
 }
 
 void VolumeRepository::removeVolume( Identifier id )
 {
-    this->removeItem( id );
+    this->removeItem( id );    
     emit itemRemoved( id );
     INFO_LOG( qPrintable( "S'ha esborrat del repositori el volum amb id: " + QString::number( id.getValue() ) ) );
 }
