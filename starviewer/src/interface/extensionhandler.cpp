@@ -16,6 +16,7 @@
 #include "output.h"
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
+#include "volumesourceinformation.h"
 
 // aplicacions
 #include "extensionfactory2.h"
@@ -323,6 +324,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     {
         m_volumeID = m_volumeRepository->addVolume( dummyVolume );
         m_mainApp->onVolumeLoaded( m_volumeID );
+        m_mainApp->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
     }    
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
 }
