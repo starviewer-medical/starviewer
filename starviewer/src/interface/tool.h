@@ -9,10 +9,11 @@
 
 #include <QObject>
 
-namespace udg {
+// FWD declarations
+class vtkInteractorStyle;
+class QVTKWidget;
 
-// Forward declarations
-class QViewer;
+namespace udg {
 
 /**
 Classe base per a totes les classes de tools
@@ -23,21 +24,24 @@ Classe base per a totes les classes de tools
 class Tool : public QObject{
 Q_OBJECT
 public:
-    Tool( QViewer *viewer, QObject *parent = 0, const char *name = 0);
+    Tool( QObject *parent = 0, const char *name = 0 );
+    Tool( vtkInteractorStyle *interactor , QObject *parent = 0, const char *name = 0 );
+    Tool( QVTKWidget *qvtkWidget , QObject *parent = 0, const char *name = 0 );
     ~Tool();
-    /// Aquí definim tots els tipus d'events que podem rebre
-    enum EventIdType{ None , LeftButtonDown , LeftButtonUp , RightButtonDown , RightButtonUp , MiddleButtonDown , MiddleButtonUp , WheelForward , WheelBackward , KeyDown , KeyUp , MouseMove };
+
+    /// Assigna l'interactor style de vtk que manipularem
+    virtual void setVtkInteractorStyle( vtkInteractorStyle *interactor );
+
+    ///
+    void setQVTKWidget( QVTKWidget *qvtkWidget );
     
-    /// Fa la feina predeterminada segons l'estat en el que es trobi i l'event rebut
-    virtual void dispatchEvent( EventIdType event ) = 0;
-    /// Fa la feina predeterminada segons l'estat en el que es trobi i l'event rebut
-    //virtual void dispatchEvent( unsigned long event ){ dispatchEvent( vtkCommandEventToToolEvent(event)); };
-    
-    /// Passa un vtkCommand a EventIdType
-    static EventIdType vtkCommandEventToToolEvent( unsigned long event );
 protected:
-    /// El visor sobre el qual actua
-    QViewer *m_viewer;
+    /// Serivirà per gestionar els events
+    vtkInteractorStyle *m_interactor;
+
+    ///
+    QVTKWidget *m_vtkWidget;
+
 }; 
 
 };  //  end  namespace udg 

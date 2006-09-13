@@ -5,69 +5,47 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "tool.h"
+#include "logging.h"
 
-#include "qviewer.h"
-#include "q2dviewer.h"
-#include "q3dviewer.h"
-
-#include <vtkCommand.h>
+#include <vtkInteractorStyle.h>
+#include <QVTKWidget.h>
 
 namespace udg {
 
-Tool::Tool(  QViewer *viewer, QObject *parent, const char *name)
+Tool::Tool( QObject *parent, const char *name)
  : QObject( parent )
 {
     this->setObjectName( name );
-    m_viewer = viewer;
+    m_interactor = 0;
+    m_vtkWidget =  0;
+}
+
+Tool::Tool( vtkInteractorStyle *interactor , QObject *parent, const char *name ) 
+ : QObject( parent ) 
+{
+    Tool( parent , name );
+    setVtkInteractorStyle( interactor );
+}
+
+Tool::Tool( QVTKWidget *qvtkWidget , QObject *parent, const char *name )
+ : QObject( parent ) 
+{
+    Tool( parent , name );
+    setQVTKWidget( qvtkWidget );
 }
 
 Tool::~Tool()
 {
-
 }
 
-Tool::EventIdType Tool::vtkCommandEventToToolEvent( unsigned long event )
+void Tool::setVtkInteractorStyle( vtkInteractorStyle *interactor )
 {
-    EventIdType result = None;
-    switch( event )
-    {
-    case vtkCommand::LeftButtonPressEvent:
-        result = LeftButtonDown;
-    break;
-    case vtkCommand::LeftButtonReleaseEvent:
-        result = LeftButtonUp;
-    break;
-    case vtkCommand::RightButtonPressEvent:
-        result = RightButtonDown;
-    break;
-    case vtkCommand::RightButtonReleaseEvent:
-        result = RightButtonUp;
-    break;
-    case vtkCommand::MiddleButtonPressEvent:
-        result = MiddleButtonDown;
-    break;
-    case vtkCommand::MiddleButtonReleaseEvent:
-        result = MiddleButtonUp;
-    break;
-    case vtkCommand::MouseMoveEvent:
-        result = MouseMove;
-    break;
-    case vtkCommand::MouseWheelForwardEvent:
-        result = WheelForward;
-    break;
-    case vtkCommand::MouseWheelBackwardEvent:
-        result = WheelBackward;
-    break;
-    case vtkCommand::KeyPressEvent:
-        result = KeyDown;
-    break;
-    case vtkCommand::KeyReleaseEvent:
-        result = KeyUp;
-    break;
-    default:
-    break;
-    }
-    return result;
+    DEBUG_LOG("NO MOLA!!!!");
+}
+
+void Tool::setQVTKWidget( QVTKWidget *qvtkWidget )
+{
+    m_vtkWidget = qvtkWidget;
 }
 
 };  // end namespace udg 
