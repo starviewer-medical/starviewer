@@ -92,13 +92,14 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
 QApplicationMainWindow::~QApplicationMainWindow()
 {
     m_extensionHandler->killBill();
+    delete m_extensionWorkspace;
 }
 
 void QApplicationMainWindow::createActions()
 {
-    QSignalMapper* signalMapper = new QSignalMapper( this );
-    connect( signalMapper, SIGNAL( mapped(int) ), m_extensionHandler , SLOT( request(int) ) );
-    connect( signalMapper, SIGNAL( mapped( const QString) ), m_extensionHandler , SLOT( request(const QString) ) );
+    m_signalMapper = new QSignalMapper( this );
+    connect( m_signalMapper, SIGNAL( mapped(int) ), m_extensionHandler , SLOT( request(int) ) );
+    connect( m_signalMapper, SIGNAL( mapped( const QString) ), m_extensionHandler , SLOT( request(const QString) ) );
     
     m_newAction = new QAction( this );
     m_newAction->setText( tr("&New") );
@@ -112,36 +113,36 @@ void QApplicationMainWindow::createActions()
     m_openAction->setShortcut( tr("Ctrl+O") );
     m_openAction->setStatusTip(tr("Open an existing volume file"));
     m_openAction->setIcon( QIcon(":/images/open.png") );   
-    signalMapper->setMapping( m_openAction , 1 );
-    signalMapper->setMapping( m_openAction , "Open File" );
-    connect( m_openAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_openAction , 1 );
+    m_signalMapper->setMapping( m_openAction , "Open File" );
+    connect( m_openAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_openDirAction = new QAction( this );
     m_openDirAction->setText( tr("Open &DICOM Directory") );
     m_openDirAction->setShortcut( tr("Ctrl+D") );
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
-    signalMapper->setMapping( m_openDirAction , 6 );
-    signalMapper->setMapping( m_openDirAction , "Open Dicom Dir" );
-    connect( m_openDirAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_openDirAction , 6 );
+    m_signalMapper->setMapping( m_openDirAction , "Open Dicom Dir" );
+    connect( m_openDirAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
     
     m_pacsAction = new QAction( this );
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
     m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") );
-    signalMapper->setMapping( m_pacsAction , 7 );
-    signalMapper->setMapping( m_pacsAction , "Open Pacs Browser" );
-    connect( m_pacsAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_pacsAction , 7 );
+    m_signalMapper->setMapping( m_pacsAction , "Open Pacs Browser" );
+    connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_mpr2DAction = new QAction( this );
     m_mpr2DAction->setText( tr("2D &MPR Viewer") );
     m_mpr2DAction->setShortcut( tr("Ctrl+M") );
     m_mpr2DAction->setStatusTip( tr("Open the 2D MPR Application Viewer") );
     m_mpr2DAction->setEnabled( false );
-    signalMapper->setMapping( m_mpr2DAction , 2 );
-    signalMapper->setMapping( m_mpr2DAction , "2D MPR" );
-    connect( m_mpr2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_mpr2DAction , 2 );
+    m_signalMapper->setMapping( m_mpr2DAction , "2D MPR" );
+    connect( m_mpr2DAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_mpr3DAction = new QAction( this );
     m_mpr3DAction->setText( tr("3D M&PR Viewer") );
@@ -149,27 +150,27 @@ void QApplicationMainWindow::createActions()
     m_mpr3DAction->setStatusTip( tr("Open the 3D MPR Application Viewer") );
     m_mpr3DAction->setIcon( QIcon(":/images/mpr3D.png") );
     m_mpr3DAction->setEnabled( false );
-    signalMapper->setMapping( m_mpr3DAction , 3 );
-    signalMapper->setMapping( m_mpr3DAction , "3D MPR" );
-    connect( m_mpr3DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_mpr3DAction , 3 );
+    m_signalMapper->setMapping( m_mpr3DAction , "3D MPR" );
+    connect( m_mpr3DAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_mpr3D2DAction = new QAction( this );
     m_mpr3D2DAction->setText( tr("3D-2D MP&R Viewer") );
     m_mpr3D2DAction->setShortcut( tr("Ctrl+R") );
     m_mpr3D2DAction->setStatusTip( tr("Open the 3D-2D MPR Application Viewer") );
     m_mpr3D2DAction->setEnabled( false );
-    signalMapper->setMapping( m_mpr3D2DAction , 4 );
-    signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
-    connect( m_mpr3D2DAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_mpr3D2DAction , 4 );
+    m_signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
+    connect( m_mpr3D2DAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_2DViewerAction = new QAction( this );
     m_2DViewerAction->setText( tr("2&D Viewer") );
     m_2DViewerAction->setShortcut( tr("Ctrl+D") );
     m_2DViewerAction->setStatusTip( tr("Open the 2D Viewer Application") );
     m_2DViewerAction->setEnabled( false );
-    signalMapper->setMapping( m_2DViewerAction , 8 );
-    signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
-    connect( m_2DViewerAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    m_signalMapper->setMapping( m_2DViewerAction , 8 );
+    m_signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
+    connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
     
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );

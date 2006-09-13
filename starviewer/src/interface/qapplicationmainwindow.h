@@ -19,6 +19,7 @@ class QAction;
 class QToolBar;
 class QProgressDialog;
 class QCloseEvent;
+class QSignalMapper;
 
 namespace udg{
 // Forward declarations
@@ -131,6 +132,9 @@ private:
     /// Per indicar el procés al obrir-se un fitxer
     QProgressDialog *m_progressDialog;
 
+    /// Mapeig de signals
+    QSignalMapper *m_signalMapper;
+    
     // :::::::::::::::::::::::::::
     // mètodes
     // :::::::::::::::::::::::::::
