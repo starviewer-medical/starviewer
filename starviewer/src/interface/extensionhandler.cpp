@@ -319,6 +319,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
         QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" , m_mainApp->getCountQApplicationMainWindow() + 1 ) ) );
         newMainWindow->show();
         newMainWindow->onVolumeLoaded( id );
+        newMainWindow->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
     }
     else
     {
