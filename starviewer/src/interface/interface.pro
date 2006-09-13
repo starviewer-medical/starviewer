@@ -22,9 +22,6 @@ HEADERS += director.h \
            parameters.h \
            qapplicationmainwindow.h \
            qinputparameters.h \
-           qviewer.h \
-           q2dviewer.h \
-           q3dviewer.h \
            appimportfile.h \
            extensioncreator.h \
            extensionfactory2.h \
@@ -34,14 +31,12 @@ HEADERS += director.h \
            qpacslist.h \
            qretrievescreen.h \
            queryscreen.h \
-           q3dmprviewer.h \
            qmprextension.h \
            qmprextensioncreator.h \
            qmpr3dextensioncreator.h \
            qmpr3dextension.h \
            qmpr3d2dextensioncreator.h \
            qmpr3d2dextension.h \
-           distancetool.h \
            tool.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
@@ -54,9 +49,6 @@ SOURCES += director.cpp \
            parameters.cpp \
            qapplicationmainwindow.cpp \
            qinputparameters.cpp \
-           qviewer.cpp \
-           q2dviewer.cpp \
-           q3dviewer.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
            extensionfactory2.cpp \
@@ -67,14 +59,12 @@ SOURCES += director.cpp \
            qretrievescreen.cpp \
            queryscreen.cpp \
            queryscreenerror.cpp \
-           q3dmprviewer.cpp \
            qmprextension.cpp \
            qmprextensioncreator.cpp \
            qmpr3dextensioncreator.cpp \
            qmpr3dextension.cpp \
            qmpr3d2dextensioncreator.cpp \
            qmpr3d2dextension.cpp \
-           distancetool.cpp \
            tool.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
