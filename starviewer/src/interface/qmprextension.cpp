@@ -73,6 +73,9 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_axialSpacing[2] = 1.;
     
     m_transform = vtkTransform::New();
+
+    m_pickedActorPlaneSource = 0;
+    m_pickedActorReslice = 0;
     
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
 
@@ -86,22 +89,29 @@ QMPRExtension::QMPRExtension( QWidget *parent )
 QMPRExtension::~QMPRExtension()
 {
     writeSettings();
-    
+    // fent això o no sembla que s'allibera la mateixa memòria gràcies als smart pointers    
+    m_sagitalReslice->Delete();
+    m_coronalReslice->Delete();
+
+    m_transform->Delete();
+
     m_sagitalOverAxialAxisActor->Delete();
     m_axialOverSagitalIntersectionAxis->Delete();
     m_coronalOverAxialIntersectionAxis->Delete();
     m_coronalOverSagitalIntersectionAxis->Delete();
+    m_thickSlabOverAxialActor->Delete();
+    m_thickSlabOverSagitalActor->Delete();
 
     m_axialPlaneSource->Delete();
     m_sagitalPlaneSource->Delete();
     m_coronalPlaneSource->Delete();
     m_thickSlabPlaneSource->Delete();
-    
-    m_sagitalReslice->Delete();
-    m_coronalReslice->Delete();
 
-    m_transform->Delete();
-    
+    if( m_pickedActorPlaneSource )
+        m_pickedActorPlaneSource->Delete();
+    if( m_pickedActorReslice )
+        m_pickedActorReslice->Delete();
+
 }
 
 void QMPRExtension::createActions()
