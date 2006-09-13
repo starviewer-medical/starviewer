@@ -48,9 +48,6 @@ HEADERS += input.h \
            imagedicominformation.h \
            qexecuteoperationthread.h \
            cachelayer.h \
-           patient.h \
-           patientstudy.h \
-           patientserie.h \
            cacheimagedal.h \
            cacheseriesdal.h \
            cachestudydal.h \
@@ -102,9 +99,6 @@ SOURCES += input.cpp \
            imagedicominformation.cpp \
            qexecuteoperationthread.cpp \
            cachelayer.cpp \
-           patient.cpp \
-           patientstudy.cpp \
-           patientserie.cpp \
            cacheimagedal.cpp \
            cacheseriesdal.cpp \
            cachestudydal.cpp \

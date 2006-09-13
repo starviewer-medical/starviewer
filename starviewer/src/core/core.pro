@@ -32,7 +32,10 @@ HEADERS += extensionfactory.h \
            q2dviewer.h \
            q3dmprviewer.h \
            q3dviewer.h \
-           qviewer.h 
+           qviewer.h \
+           patient.h \
+           patientserie.h \
+           patientstudy.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -50,7 +53,10 @@ SOURCES += extensionmediator.cpp \
            q2dviewer.cpp \
            q3dmprviewer.cpp \
            q3dviewer.cpp \
-           qviewer.cpp 
+           qviewer.cpp \
+           patient.cpp \
+           patientserie.cpp \
+           patientstudy.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
