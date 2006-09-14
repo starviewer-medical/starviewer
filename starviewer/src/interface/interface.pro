@@ -18,10 +18,7 @@ FORMS += qconfigurationscreenbase.ui \
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
-HEADERS += director.h \
-           parameters.h \
-           qapplicationmainwindow.h \
-           qinputparameters.h \
+HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
            extensioncreator.h \
            extensionfactory2.h \
@@ -37,7 +34,6 @@ HEADERS += director.h \
            qmpr3dextension.h \
            qmpr3d2dextensioncreator.h \
            qmpr3d2dextension.h \
-           tool.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
            q2dviewerextension.h \
@@ -45,10 +41,7 @@ HEADERS += director.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            qcreatedicomdir.h 
-SOURCES += director.cpp \
-           parameters.cpp \
-           qapplicationmainwindow.cpp \
-           qinputparameters.cpp \
+SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
            extensionfactory2.cpp \
@@ -65,7 +58,6 @@ SOURCES += director.cpp \
            qmpr3dextension.cpp \
            qmpr3d2dextensioncreator.cpp \
            qmpr3d2dextension.cpp \
-           tool.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
            q2dviewerextension.cpp \

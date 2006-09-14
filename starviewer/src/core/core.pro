@@ -35,7 +35,10 @@ HEADERS += extensionfactory.h \
            qviewer.h \
            patient.h \
            patientserie.h \
-           patientstudy.h 
+           patientstudy.h \
+           parameters.h \
+           qinputparameters.h \
+           tool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -56,7 +59,10 @@ SOURCES += extensionmediator.cpp \
            qviewer.cpp \
            patient.cpp \
            patientserie.cpp \
-           patientstudy.cpp 
+           patientstudy.cpp \
+           parameters.cpp \
+           qinputparameters.cpp \
+           tool.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
