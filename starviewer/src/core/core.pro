@@ -38,7 +38,9 @@ HEADERS += extensionfactory.h \
            patientstudy.h \
            parameters.h \
            qinputparameters.h \
-           tool.h 
+           tool.h \
+           input.h \
+           output.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -62,7 +64,9 @@ SOURCES += extensionmediator.cpp \
            patientstudy.cpp \
            parameters.cpp \
            qinputparameters.cpp \
-           tool.cpp 
+           tool.cpp \
+           input.cpp \
+           output.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \

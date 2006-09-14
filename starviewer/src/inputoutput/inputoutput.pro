@@ -3,9 +3,7 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/inputoutput
 # L'objectiu és una biblioteca:  
 
-HEADERS += input.h \
-           output.h \
-           const.h \
+HEADERS += const.h \
            databaseconnection.h \
            image.h \
            imagelist.h \
@@ -56,9 +54,7 @@ HEADERS += input.h \
            createdicomdir.h \
            cachetools.h \
            readdicomdir.h 
-SOURCES += input.cpp \
-           output.cpp \
-           databaseconnection.cpp \
+SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
            imagelistsingleton.cpp \
