@@ -25,30 +25,23 @@ namespace udg {
 
 Volume::Volume()
 {
-    m_imageDataITK = 0;
-    m_imageDataVTK = 0;
-    
-    m_itkToVtkFilter = ItkToVtkFilterType::New();
-    m_vtkToItkFilter = VtkToItkFilterType::New();
-
-    m_volumeInformation = new VolumeSourceInformation;
+    init();
 }
  
 Volume::Volume( ItkImageTypePointer itkImage ) 
 {
-    m_imageDataITK = 0;
-    m_imageDataVTK = 0;
-
-    m_itkToVtkFilter = ItkToVtkFilterType::New();
-    m_vtkToItkFilter = VtkToItkFilterType::New();
-
-    m_volumeInformation = new VolumeSourceInformation;
-    
+    init();
     this->setData( itkImage );
 }
 
 Volume::Volume( VtkImageTypePointer vtkImage )
 {
+    init();
+    this->setData( vtkImage );
+}
+
+void Volume::init()
+{
     m_imageDataITK = 0;
     m_imageDataVTK = 0;
     
@@ -56,18 +49,14 @@ Volume::Volume( VtkImageTypePointer vtkImage )
     m_vtkToItkFilter = VtkToItkFilterType::New();
 
     m_volumeInformation = new VolumeSourceInformation;
-
-    this->setData( vtkImage );
 }
 
 Volume::~Volume()
 {
-
    if( m_imageDataITK  )
        m_imageDataITK->Delete(); // necessari???
    if( m_imageDataVTK )
        m_imageDataVTK->Delete();
-
 }
 
 Volume::ItkImageTypePointer Volume::getItkData(  )
@@ -89,12 +78,9 @@ Volume::VtkImageTypePointer Volume::getVtkData(  )
         {
             WARN_LOG( "Excepció en el filtre itkToVtk :: Volume::getVtkData " )
             std::cerr << excep << std::endl;
-          
         }
     }
     return m_imageDataVTK;
-    
-
 }
 
 void Volume::setData( ItkImageTypePointer itkImage  )

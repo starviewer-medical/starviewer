@@ -42,10 +42,10 @@ public:
     typedef ItkImageType::SizeType     SizeType;
     typedef ItkImageType::IndexType    IndexType;
     
-    // tipus de punter de dades vtk
+    /// tipus de punter de dades vtk
     typedef vtkImageData* VtkImageTypePointer;
 
-    // Filtres per importar/exportar
+    /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter< ItkImageType > ItkToVtkFilterType;
     typedef itk::VTKImageToImageFilter< ItkImageType > VtkToItkFilterType;
     
@@ -109,6 +109,9 @@ public:
     
 private:
     
+    /// Mètode d'inicialització d'objectes comuns per als constructors
+    void init();
+    
     ItkImageTypePointer m_imageDataITK;
     VtkImageTypePointer m_imageDataVTK;
     
@@ -120,7 +123,5 @@ private:
 };
 
 };  // end namespace udg
-
-
 
 #endif
