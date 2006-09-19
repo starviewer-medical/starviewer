@@ -76,6 +76,7 @@ QMPRExtension::QMPRExtension( QWidget *parent )
 
     m_pickedActorPlaneSource = 0;
     m_pickedActorReslice = 0;
+    m_mipViewer = 0;
     
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
 
@@ -112,6 +113,11 @@ QMPRExtension::~QMPRExtension()
     if( m_pickedActorReslice )
         m_pickedActorReslice->Delete();
 
+    if( m_mipViewer )
+    {
+        delete m_mipViewer;
+    }
+    delete m_coronal2DView;
 }
 
 void QMPRExtension::createActions()
@@ -127,6 +133,7 @@ void QMPRExtension::createActions()
     m_mipAction->setShortcut( tr("Ctrl+M") );
     m_mipAction->setStatusTip( tr("Maximum Intensity Projection") );
     m_mipAction->setIcon( QIcon(":/images/mip.png") );
+    m_mipAction->setCheckable( true );
     m_mipToolButton->setDefaultAction( m_mipAction );
 }
 
@@ -147,8 +154,6 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
-    connect( m_mipAction , SIGNAL( triggered() ) , this , SLOT( showMIP() ) );
-
     connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
     connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
     connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
@@ -163,6 +168,7 @@ void QMPRExtension::createConnections()
     
     // layouts
     connect( m_horizontalLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchHorizontalLayout() ) );
+    connect( m_mipAction , SIGNAL( triggered(bool) ) , this , SLOT( switchToMIPLayout(bool) ) );
 }
 
 void QMPRExtension::switchHorizontalLayout()
@@ -173,6 +179,35 @@ void QMPRExtension::switchHorizontalLayout()
 
     m_horizontalSplitter->insertWidget( 0 , rightWidget );
     m_horizontalSplitter->insertWidget( 1 , leftWidget );
+}
+
+void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
+{
+    int indexOfMPRWidget = m_horizontalSplitter->indexOf( m_coronal2DView );
+    if( isMIPChecked )
+    {
+        if( !m_mipViewer )
+        {
+            m_mipViewer = new Q3DViewer;
+            m_mipViewer->setRenderFunctionToMIP3D();
+        }
+        // \TODO: aquesta manera de declarar el volum farà que es malgasti memòria o ja s'allibera sol?
+        m_mipViewer->setInput( new Volume( m_coronalReslice->GetOutput() ) );
+        m_mipViewer->render();
+        m_mipViewer->show();
+        // disposem la distribució de widgets
+        m_horizontalSplitter->insertWidget( indexOfMPRWidget , m_coronal2DView );
+        indexOfMPRWidget ? m_horizontalSplitter->insertWidget( 0 , m_mipViewer ) : m_horizontalSplitter->insertWidget( 1 , m_mipViewer );
+        m_verticalSplitter->hide();
+    }
+    else
+    {
+        // retornem a la distribució per defecte sense la vista de MIP
+        m_horizontalSplitter->insertWidget( indexOfMPRWidget , m_coronal2DView );
+        indexOfMPRWidget ? m_horizontalSplitter->insertWidget( 0 , m_verticalSplitter ) : m_horizontalSplitter->insertWidget( 1 , m_verticalSplitter );
+        m_verticalSplitter->show();
+        m_mipViewer->hide();
+    }
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
@@ -603,16 +638,6 @@ void QMPRExtension::initOrientation()
     axis[0] = 0; axis[1] = 1; axis[2] = 0;
     rotateMiddle( 180 , axis , m_coronalPlaneSource );
     updatePlanes();
-}
-
-void QMPRExtension::showMIP()
-{
-    Q3DViewer *viewer = new Q3DViewer( 0 );
-    Volume *temp = new Volume( m_coronalReslice->GetOutput() );
-    viewer->setInput( temp );
-    viewer->setRenderFunctionToMIP3D();
-    viewer->render();
-    viewer->show();
 }
 
 void QMPRExtension::saveImages()

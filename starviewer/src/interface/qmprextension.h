@@ -23,6 +23,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
+class Q3DViewer;
 /**
 Extensió encarregada de fer l'MPR 2D
     
@@ -52,6 +53,9 @@ public:
 public slots:
     /// Canvia la distribució horitzontal de les finestres ( el que està a la dreta passa a l'esquerra i viceversa )
     void switchHorizontalLayout();
+
+    /// Activa o desactiva la distribució de finestres al mode MIP
+    void switchToMIPLayout( bool isMIPChecked );
     
 signals:
     /// Notificació del canvi de direcció de cadascun dels eixos que podem manipular. Aquests senyals haurien de ser enviats quan canviem la direcció a través dels controls ( línies blaves i vermella)
@@ -152,6 +156,9 @@ private:
     /// Acció per poder controlar el layout horizontal
     QAction *m_horizontalLayoutAction;
     QAction *m_mipAction;
+
+    /// Visor de MIP
+    Q3DViewer *m_mipViewer;
     
 private slots:
     /// S'encarreguen de rotar els eixos dels plans
@@ -176,9 +183,6 @@ private slots:
     
     /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
-
-    /// [TMP] Fa "saltar" una finestra MIP
-    void showMIP();
 
     /// Fa el procés de guardar les imatges capturades
     void saveImages();
