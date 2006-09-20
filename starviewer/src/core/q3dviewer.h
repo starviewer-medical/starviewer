@@ -76,8 +76,8 @@ private:
     /// fa la visualització per reconstrucció de superfíces
     void renderIsoSurface();
 
-    /// rescala les dades en el format adequat per als corresponents algorismes
-    void rescale();
+    /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
+    bool rescale();
 
     enum { Axial , Sagital , Coronal };
     /// Canvia la orientació de la càmera
