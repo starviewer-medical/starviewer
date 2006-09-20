@@ -176,7 +176,7 @@ void QMPRExtension::switchHorizontalLayout()
     QWidget *leftWidget, *rightWidget;
     leftWidget = m_horizontalSplitter->widget( 0 );
     rightWidget = m_horizontalSplitter->widget( 1 );
-
+    
     m_horizontalSplitter->insertWidget( 0 , rightWidget );
     m_horizontalSplitter->insertWidget( 1 , leftWidget );
 }
@@ -184,6 +184,8 @@ void QMPRExtension::switchHorizontalLayout()
 void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
 {
     int indexOfMPRWidget = m_horizontalSplitter->indexOf( m_coronal2DView );
+    // desem la mida abans de canviar els widgets
+    QList<int> splitterSize = m_horizontalSplitter->sizes();
     if( isMIPChecked )
     {
         if( !m_mipViewer )
@@ -193,21 +195,22 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
         }
         // \TODO: aquesta manera de declarar el volum farà que es malgasti memòria o ja s'allibera sol?
         m_mipViewer->setInput( new Volume( m_coronalReslice->GetOutput() ) );
-        m_mipViewer->render();
+        m_mipViewer->render();        
         m_mipViewer->show();
         // disposem la distribució de widgets
-        m_horizontalSplitter->insertWidget( indexOfMPRWidget , m_coronal2DView );
-        indexOfMPRWidget ? m_horizontalSplitter->insertWidget( 0 , m_mipViewer ) : m_horizontalSplitter->insertWidget( 1 , m_mipViewer );
+        m_horizontalSplitter->insertWidget( m_horizontalSplitter->indexOf( m_verticalSplitter ) , m_mipViewer );
         m_verticalSplitter->hide();
+        m_horizontalSplitter->insertWidget( 2 , m_verticalSplitter );
     }
     else
     {
-        // retornem a la distribució per defecte sense la vista de MIP
-        m_horizontalSplitter->insertWidget( indexOfMPRWidget , m_coronal2DView );
-        indexOfMPRWidget ? m_horizontalSplitter->insertWidget( 0 , m_verticalSplitter ) : m_horizontalSplitter->insertWidget( 1 , m_verticalSplitter );
+        m_horizontalSplitter->insertWidget( m_horizontalSplitter->indexOf( m_mipViewer ) , m_verticalSplitter );
         m_verticalSplitter->show();
         m_mipViewer->hide();
+        m_horizontalSplitter->insertWidget( 2 , m_mipViewer );
     }
+    // recuperem les mides 
+    m_horizontalSplitter->setSizes( splitterSize );
 }
 
 void QMPRExtension::detectAxialViewAxisActor( double x , double y )
