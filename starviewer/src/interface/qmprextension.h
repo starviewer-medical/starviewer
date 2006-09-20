@@ -192,6 +192,7 @@ private slots:
 
     /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
     void updateThickSlab( double value );
+    void updateThickSlab( int value );
 };
 
 };  //  end  namespace udg 

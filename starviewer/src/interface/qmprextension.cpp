@@ -163,6 +163,7 @@ void QMPRExtension::createConnections()
     connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
     
     connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
+    connect( m_thickSlabSlider , SIGNAL( valueChanged(int) ) , this , SLOT( updateThickSlab(int) ) );
 
     // window level
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_axial2DView , SLOT( setWindowLevel(double,double) ) );
@@ -524,6 +525,10 @@ void QMPRExtension::setInput( Volume *input )
     m_axialSpinBox->setMaximum( extent[5] );
     m_axialSlider->setMaximum(  extent[5] );
 
+    double maxThickSlab = sqrt( (m_axialSpacing[0]*extent[1]) * (m_axialSpacing[0]*extent[1]) + (m_axialSpacing[1]*extent[3]) * (m_axialSpacing[1]*extent[3]) + (m_axialSpacing[2]*extent[5]) * (m_axialSpacing[2]*extent[5]) );
+    m_thickSlabSlider->setMaximum( (int) maxThickSlab );
+    m_thickSlabSpinBox->setMaximum( maxThickSlab );
+    
     // posta a punt dels planeSource
     initOrientation();
     m_axial2DView->render();
@@ -1223,6 +1228,15 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
 void QMPRExtension::updateThickSlab( double value )
 {
     m_thickSlab = value;
+    m_thickSlabSlider->setValue( (int) value );
+    updatePlane( m_coronalPlaneSource , m_coronalReslice );
+    updateControls();
+}
+
+void QMPRExtension::updateThickSlab( int value )
+{
+    m_thickSlab = (double) value;
+    m_thickSlabSpinBox->setValue( m_thickSlab );
     updatePlane( m_coronalPlaneSource , m_coronalReslice );
     updateControls();
 }
