@@ -139,6 +139,9 @@ private:
     /// Ens dóna l'eix de rotació d'un planeSource
     void getRotationAxis( vtkPlaneSource *plane , double axis[3] );
     
+    /// Inicialitzador d'objectes pel constructor
+    void init();
+    
     /// El directori on es desaran les imatges per defecte
     QString m_defaultSaveDir;
 

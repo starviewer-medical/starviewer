@@ -40,6 +40,48 @@ QMPRExtension::QMPRExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
+    init();
+    createActions();
+    createConnections();
+    createActors();
+    readSettings();
+}
+
+QMPRExtension::~QMPRExtension()
+{
+    writeSettings();
+    // fent això o no sembla que s'allibera la mateixa memòria gràcies als smart pointers    
+    m_sagitalReslice->Delete();
+    m_coronalReslice->Delete();
+
+    m_transform->Delete();
+
+    m_sagitalOverAxialAxisActor->Delete();
+    m_axialOverSagitalIntersectionAxis->Delete();
+    m_coronalOverAxialIntersectionAxis->Delete();
+    m_coronalOverSagitalIntersectionAxis->Delete();
+    m_thickSlabOverAxialActor->Delete();
+    m_thickSlabOverSagitalActor->Delete();
+
+    m_axialPlaneSource->Delete();
+    m_sagitalPlaneSource->Delete();
+    m_coronalPlaneSource->Delete();
+    m_thickSlabPlaneSource->Delete();
+
+    if( m_pickedActorPlaneSource )
+        m_pickedActorPlaneSource->Delete();
+    if( m_pickedActorReslice )
+        m_pickedActorReslice->Delete();
+
+    if( m_mipViewer )
+    {
+        delete m_mipViewer;
+    }
+    delete m_coronal2DView;
+}
+
+void QMPRExtension::init()
+{
     m_axialPlaneSource = vtkPlaneSource::New();
     m_axialPlaneSource->SetXResolution( 1 ); // així estan configurats a vtkImagePlaneWidget
     m_axialPlaneSource->SetYResolution( 1 );
@@ -79,45 +121,6 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_mipViewer = 0;
     
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
-
-    createActions();
-    createConnections();
-    createActors();
-
-    readSettings();
-}
-
-QMPRExtension::~QMPRExtension()
-{
-    writeSettings();
-    // fent això o no sembla que s'allibera la mateixa memòria gràcies als smart pointers    
-    m_sagitalReslice->Delete();
-    m_coronalReslice->Delete();
-
-    m_transform->Delete();
-
-    m_sagitalOverAxialAxisActor->Delete();
-    m_axialOverSagitalIntersectionAxis->Delete();
-    m_coronalOverAxialIntersectionAxis->Delete();
-    m_coronalOverSagitalIntersectionAxis->Delete();
-    m_thickSlabOverAxialActor->Delete();
-    m_thickSlabOverSagitalActor->Delete();
-
-    m_axialPlaneSource->Delete();
-    m_sagitalPlaneSource->Delete();
-    m_coronalPlaneSource->Delete();
-    m_thickSlabPlaneSource->Delete();
-
-    if( m_pickedActorPlaneSource )
-        m_pickedActorPlaneSource->Delete();
-    if( m_pickedActorReslice )
-        m_pickedActorReslice->Delete();
-
-    if( m_mipViewer )
-    {
-        delete m_mipViewer;
-    }
-    delete m_coronal2DView;
 }
 
 void QMPRExtension::createActions()
