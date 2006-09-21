@@ -13,7 +13,7 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkImagePlaneWidget;
 class vtkActor;
-class vtkAnnotatedCubeActor;
+class vtkOrientationMarkerWidget;
 class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
@@ -104,6 +104,16 @@ public slots:
     void resetWindowLevelToOsteoporosis();
     void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
+
+    /// mètodes per controlar la visibilitat de l'outline
+    void enableOutline( bool enable );
+    void outlineOn();
+    void outlineOff();
+
+    /// mètodes per controlar la visibilitat de l'orientation marker widget
+    void enableOrientationMarker( bool enable );
+    void orientationMarkerOn();
+    void orientationMarkerOff();
     
     /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
     void planeInteraction();
@@ -122,8 +132,17 @@ private:
     /// Inicialitza els plans
     void initializePlanes();
 
+    /// Actualitza les dades sobre les que tracten els plans
+    void updatePlanesData();
+
     /// Afegeix l'outline de la boundingbox del model
-    void addOutline();
+    void createOutline();
+    
+    /// Crea tots els actors que intervenen en l'escena
+    void createActors();
+
+    /// Afegeix els actors a l'escena
+    void addActors();
     
     enum {SAGITAL, CORONAL, AXIAL};
 
@@ -138,9 +157,9 @@ private:
     /// La bounding box del volum
     vtkActor *m_outlineActor;
 
-    ///
-    vtkAnnotatedCubeActor *m_cubeActor;
-
+    /// Widget per veure la orientació en 3D
+    vtkOrientationMarkerWidget *m_markerWidget;
+    
     /// connexions d'events vtk amb slots / signals qt
     vtkEventQtSlotConnect *m_vtkQtConnections; 
 
@@ -149,6 +168,9 @@ private:
 
     /// control de visibilitat dels plans
     bool m_axialPlaneVisible, m_sagitalPlaneVisible , m_coronalPlaneVisible;
+
+    /// control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
+    bool m_isOutlineEnabled, m_isOrientationMarkerEnabled;
 };
 
 };  //  end  namespace udg 
