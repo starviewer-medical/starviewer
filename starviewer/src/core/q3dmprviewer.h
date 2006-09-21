@@ -20,12 +20,15 @@ class vtkLookupTable;
 
 namespace udg {
 
-class Q3DOrientationMarker;
 /**
     Visor de Reconstrucció multiplanar 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
+
+// FWD declarations
+class Q3DOrientationMarker;
+
 class Q3DMPRViewer : public QViewer{
 Q_OBJECT
 public:
@@ -169,7 +172,7 @@ private:
     bool m_axialPlaneVisible, m_sagitalPlaneVisible , m_coronalPlaneVisible;
 
     /// control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
-    bool m_isOutlineEnabled, m_isOrientationMarkerEnabled;
+    bool m_isOutlineEnabled;
 };
 
 };  //  end  namespace udg 

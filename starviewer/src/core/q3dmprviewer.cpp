@@ -544,8 +544,7 @@ void Q3DMPRViewer::outlineOff()
 
 void Q3DMPRViewer::enableOrientationMarker( bool enable )
 {
-    m_isOrientationMarkerEnabled = enable;
-    m_orientationMarker->setEnabled( m_isOrientationMarkerEnabled );
+    m_orientationMarker->setEnabled( enable );
 }
 
 void Q3DMPRViewer::orientationMarkerOn()
