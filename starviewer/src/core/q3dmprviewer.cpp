@@ -403,9 +403,9 @@ void Q3DMPRViewer::createOrientationMarker()
     
     vtkAxesActor *axes = vtkAxesActor::New();
     axes->SetShaftTypeToCylinder();
-    axes->SetXAxisLabelText("x");
-    axes->SetYAxisLabelText("y");
-    axes->SetZAxisLabelText("z");
+    axes->SetXAxisLabelText( qPrintable( tr("r") ) );
+    axes->SetYAxisLabelText( qPrintable( tr("a") ) );
+    axes->SetZAxisLabelText( qPrintable( tr("i") ) );
     axes->SetTotalLength( 1.5 , 1.5 ,  1.5 );
     
     vtkTextProperty *textProp = vtkTextProperty::New();
@@ -439,7 +439,8 @@ void Q3DMPRViewer::createOrientationMarker()
     marker->SetOutlineColor( 0.93 , 0.57 , 0.13 );
     marker->SetOrientationMarker( assembly );
     marker->SetViewport( 0.0 , 0.0 , 0.15 , 0.3 );
- 
+    marker->SetEnabled(1);
+    marker->InteractiveOff();
     m_renderer->AddActor( m_cubeActor );
 }
 
