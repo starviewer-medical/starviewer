@@ -7,6 +7,7 @@
 #include "q3dviewer.h"
 #include "volume.h"
 #include "logging.h"
+#include "q3dorientationmarker.h"
 
 // include's qt
 #include <QString>
@@ -51,6 +52,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     
     m_imageCaster = vtkImageCast::New();
     m_currentOrientation = Axial;
+    m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
 }
 
 
@@ -334,6 +336,21 @@ void Q3DViewer::resetViewToCoronal()
 {
     this->setCameraOrientation( Coronal );
     m_currentOrientation = Coronal;
+}
+
+void Q3DViewer::enableOrientationMarker( bool enable )
+{
+    m_orientationMarker->setEnabled( enable );
+}
+
+void Q3DViewer::orientationMarkerOn()
+{
+    this->enableOrientationMarker( true );
+}
+
+void Q3DViewer::orientationMarkerOff()
+{
+    this->enableOrientationMarker( false );
 }
 
 void Q3DViewer::setCameraOrientation(int orientation)

@@ -24,6 +24,7 @@ Classe base per als visualitzadors 3D
 
 // FWD declarations
 class Volume;
+class Q3DOrientationMarker;
 
 class Q3DViewer : public QViewer{
 Q_OBJECT
@@ -59,6 +60,11 @@ public slots:
     void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
+
+    /// mètodes per controlar la visibilitat de l'orientation marker widget
+    void enableOrientationMarker( bool enable );
+    void orientationMarkerOn();
+    void orientationMarkerOff();
     
 protected:
     /// el renderer
@@ -89,6 +95,9 @@ private:
     /// Orientació que tenim
     int m_currentOrientation;
 
+    /// Widget per veure la orientació en 3D
+    Q3DOrientationMarker *m_orientationMarker;
+    
     /// reinicia la orientació
     void resetOrientation();
 };
