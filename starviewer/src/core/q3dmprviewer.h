@@ -13,7 +13,6 @@ class vtkRenderer;
 class vtkRenderWindowInteractor;
 class vtkImagePlaneWidget;
 class vtkActor;
-class vtkOrientationMarkerWidget;
 class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
@@ -21,6 +20,7 @@ class vtkLookupTable;
 
 namespace udg {
 
+class Q3DOrientationMarker;
 /**
     Visor de Reconstrucció multiplanar 3D
 
@@ -123,7 +123,6 @@ private:
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
 
     /// Crea l'actor que mostra una referència de l'orientació dels eixos
-    void createOrientationMarker();
     void setCameraOrientation( int orientation );
 
     /// inicialitza els valors de window level
@@ -158,7 +157,7 @@ private:
     vtkActor *m_outlineActor;
 
     /// Widget per veure la orientació en 3D
-    vtkOrientationMarkerWidget *m_markerWidget;
+    Q3DOrientationMarker *m_orientationMarker;
     
     /// connexions d'events vtk amb slots / signals qt
     vtkEventQtSlotConnect *m_vtkQtConnections; 

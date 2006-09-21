@@ -40,7 +40,8 @@ HEADERS += extensionfactory.h \
            qinputparameters.h \
            tool.h \
            input.h \
-           output.h 
+           output.h \
+           q3dorientationmarker.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -66,7 +67,8 @@ SOURCES += extensionmediator.cpp \
            qinputparameters.cpp \
            tool.cpp \
            input.cpp \
-           output.cpp 
+           output.cpp \
+           q3dorientationmarker.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
