@@ -29,6 +29,9 @@
 #include <vtkFiniteDifferenceGradientEstimator.h>
 // IsoSurface
 #include <vtkVolumeRayCastIsosurfaceFunction.h>
+// Texture2D i Texture3D
+#include <vtkVolumeTextureMapper2D.h>
+#include <vtkVolumeTextureMapper3D.h>
 // LUT's
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
@@ -85,6 +88,12 @@ QString Q3DViewer::getRenderFunctionAsString()
     case IsoSurface:
         result = "IsoSurface";
     break;
+    case Texture2D:
+        result = "Texture2D";
+    break;
+    case Texture3D:
+        result = "Texture3D";
+    break;
     }
     return result;
 }
@@ -108,6 +117,12 @@ void Q3DViewer::render()
         break;
         case IsoSurface:
             renderIsoSurface();
+        break;
+        case Texture2D:
+            renderTexture2D();
+        break;
+        case Texture3D:
+            renderTexture3D();
         break;
         }
         this->resetOrientation();
@@ -318,6 +333,80 @@ void Q3DViewer::renderIsoSurface()
     }
     else
         DEBUG_LOG( "No es pot fer render per IsoSurface, no s'ha proporcionat cap volum d'entrada" );
+}
+
+void Q3DViewer::renderTexture2D()
+{
+    if( rescale() )
+    {
+        // Creem la funció de transferència de l'opacitat
+        vtkPiecewiseFunction* opacityTransferFunction = vtkPiecewiseFunction::New();
+        opacityTransferFunction->AddPoint( 20, 0.0 );
+        opacityTransferFunction->AddPoint( 255, 0.2 );
+        
+        // Creem la funció de transferència de colors
+        vtkColorTransferFunction* colorTransferFunction = vtkColorTransferFunction::New();
+        colorTransferFunction->AddRGBPoint( 0.0, 0.0, 0.0, 0.0 );
+        colorTransferFunction->AddRGBPoint( 64.0, 1.0, 0.0, 0.0 );
+        colorTransferFunction->AddRGBPoint( 128.0, 0.0, 0.0, 1.0 );
+        colorTransferFunction->AddRGBPoint( 192.0, 0.0, 1.0, 0.0 );
+        colorTransferFunction->AddRGBPoint( 255.0, 0.0, 0.2, 0.0 );
+        
+        // La propietat descriurà com es veuran les dades
+        vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
+        volumeProperty->SetColor( colorTransferFunction );
+        volumeProperty->SetScalarOpacity( opacityTransferFunction );
+        
+        vtkVolumeTextureMapper2D* volumeMapper = vtkVolumeTextureMapper2D::New();
+        volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+        
+        // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
+        vtkVolume* volume = vtkVolume::New();
+        volume->SetMapper( volumeMapper );
+        volume->SetProperty( volumeProperty );
+
+        m_renderer->AddViewProp( volume );
+        m_renderer->Render();
+    }
+    else
+        DEBUG_LOG( "No es pot fer render per textures 2D, no s'ha proporcionat cap volum d'entrada" );
+}
+
+void Q3DViewer::renderTexture3D()
+{
+    if( rescale() )
+    {
+        // Creem la funció de transferència de l'opacitat
+        vtkPiecewiseFunction* opacityTransferFunction = vtkPiecewiseFunction::New();
+        opacityTransferFunction->AddPoint( 20, 0.0 );
+        opacityTransferFunction->AddPoint( 255, 0.2 );
+        
+        // Creem la funció de transferència de colors
+        vtkColorTransferFunction* colorTransferFunction = vtkColorTransferFunction::New();
+        colorTransferFunction->AddRGBPoint( 0.0, 0.0, 0.0, 0.0 );
+        colorTransferFunction->AddRGBPoint( 64.0, 1.0, 0.0, 0.0 );
+        colorTransferFunction->AddRGBPoint( 128.0, 0.0, 0.0, 1.0 );
+        colorTransferFunction->AddRGBPoint( 192.0, 0.0, 1.0, 0.0 );
+        colorTransferFunction->AddRGBPoint( 255.0, 0.0, 0.2, 0.0 );
+        
+        // La propietat descriurà com es veuran les dades
+        vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
+        volumeProperty->SetColor( colorTransferFunction );
+        volumeProperty->SetScalarOpacity( opacityTransferFunction );
+        
+        vtkVolumeTextureMapper3D* volumeMapper = vtkVolumeTextureMapper3D::New();
+        volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+        
+        // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
+        vtkVolume* volume = vtkVolume::New();
+        volume->SetMapper( volumeMapper );
+        volume->SetProperty( volumeProperty );
+
+        m_renderer->AddViewProp( volume );
+        m_renderer->Render();
+    }
+    else
+        DEBUG_LOG( "No es pot fer render per textures 3D, no s'ha proporcionat cap volum d'entrada" );
 }
 
 void Q3DViewer::resetViewToAxial()

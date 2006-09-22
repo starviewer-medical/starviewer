@@ -29,7 +29,7 @@ class Q3DOrientationMarker;
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting , MIP3D, IsoSurface };
+    enum RenderFunction{ RayCasting , MIP3D, IsoSurface , Texture2D , Texture3D };
     
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
@@ -55,6 +55,8 @@ public slots:
     void setRenderFunctionToRayCasting(){ m_renderFunction = RayCasting; };
     void setRenderFunctionToMIP3D(){ m_renderFunction = MIP3D; };
     void setRenderFunctionToIsoSurface(){ m_renderFunction = IsoSurface; };
+    void setRenderFunctionToTexture2D(){ m_renderFunction = Texture2D; };
+    void setRenderFunctionToTexture3D(){ m_renderFunction = Texture3D; };
     
     /// Reinicia la vista
     void resetViewToAxial();
@@ -82,6 +84,12 @@ private:
     /// fa la visualització per reconstrucció de superfíces
     void renderIsoSurface();
 
+    /// fa la visualització per textures 2D \TODO afegir comprovació de si el hard o suporta o no
+    void renderTexture2D();
+    
+    /// fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
+    void renderTexture3D();
+    
     /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
     bool rescale();
 
