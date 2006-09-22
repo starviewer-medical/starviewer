@@ -9,6 +9,7 @@
 #include "pacslistdb.h"
 #include "status.h"
 #include "pacsparameters.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -17,46 +18,17 @@ PacsListDB::PacsListDB()
     m_DBConnect = DatabaseConnection::getDatabaseConnection();
 }
 
-Status PacsListDB::constructState( int numState )
-{
-//A www.sqlite.org/c_interface.html hi ha al codificacio dels estats que retorna el sqlite
-    Status state;
-    
-    switch( numState )
-    {//aqui tractem els errors que ens poden afectar de manera més directe, i els quals l'usuari pot intentar solucionbar                         
-        case SQLITE_OK :        state.setStatus( "Normal" , true , 0 );
-                                break;
-        case SQLITE_ERROR :     state.setStatus( "Database not found" , false , 2001 );
-                                break;
-        case SQLITE_CORRUPT :   state.setStatus( "Database corrupted" , false , 2011 );
-                                break;
-        case SQLITE_CONSTRAINT: state.setStatus( "Constraint Violation" , false , 2019 );
-                                break;
-        case 50 :               state.setStatus( "Not connected to database" , false , 2050 );
-                                break;
-        case 99 :               state.setStatus( "Data Not Found" , false , 2099 );
-                                break;
-      //aquests errors en principi no es poden donar, pq l'aplicació no altera cap element de l'estructura, si es produeix algun
-      //Error d'aquests en principi serà perquè la bdd està corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
-      //a la pàgina de www.sqlite.org podrem saber de quin error es tracta.
-        default :               state.setStatus( "SQLITE internal error" , false , 2000+numState ); 
-                                break;
-    }
-   
-   return state;
-}
-
 
 Status PacsListDB::insertPacs( PacsParameters *pacs )
 {
     Status state , stateQuery;
     int i;
-    std::string sql;
-    char *sqlSentence;
+    char *sqlSentence, errorNumber[5];
+    std::string logMessage , sql;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     //hem de comprovar que el pacs no existis ja abans! i ara estigui donat de baixa
     stateQuery = queryPacsDeleted(pacs);
@@ -90,6 +62,14 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
     }
     else return stateQuery;
 
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }    
+
     return state;                    
 }
 
@@ -97,12 +77,12 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
 {
     Status state;
     int i;
-    std::string sql;
-    char *sqlSentence;
+    char *sqlSentence, errorNumber[5];
+    std::string logMessage , sql;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     sql.insert( 0 , "Update PacsList " );
@@ -131,7 +111,15 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
     i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
     
-    state = constructState( i );
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }        
     
     return state;                    
 }
@@ -140,14 +128,13 @@ Status PacsListDB::queryPacsList( PacsList &list )
 {
     int col , rows , i = 0 , estat;
     PacsParameters pacs;
-    std::string sql;
-
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL, errorNumber[5];
+    std::string logMessage , sql;
     Status state;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState(50);
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     sql.insert( 0 , "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID " );
@@ -156,11 +143,18 @@ Status PacsListDB::queryPacsList( PacsList &list )
     sql.append( "order by AETitle" );
     
     m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
-    state=constructState( estat );
+    state = m_DBConnect->databaseStatus( estat );
     
-    if ( !state.good() ) return state;
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     
     i = 1;//ignorem les capçaleres
     while (i <= rows)
@@ -184,14 +178,13 @@ Status PacsListDB::queryPacsList( PacsList &list )
 Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
 {
     int col , rows = 0 , i = 0 , estat;
-    std::string sql;
-
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL, errorNumber[5];
+    std::string logMessage , sql;
     Status state;
 
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
 
     sql.insert( 0 , "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID " );
@@ -202,14 +195,22 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
    
     
     m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
     if ( rows == 0 && estat == 0 ) estat = 99;
     
-    state=constructState( estat );
-    if ( !state.good() ) return state;
+    state = m_DBConnect->databaseStatus( estat );
+    
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     
     if ( rows > 0 )
     {
@@ -230,13 +231,13 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
 Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
 {
     int col , rows = 0 , i = 0 , estat;
-    std::string sql;
-    char **resposta = NULL , **error = NULL , id[6];
+    char **resposta = NULL , **error = NULL , id[6], errorNumber[5];
+    std::string logMessage , sql;
     Status state;
 
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
 
     sql.insert( 0 , "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID " );
@@ -246,14 +247,21 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
     sql.append( id );
 
     m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
     if ( rows == 0 && estat == 0 ) estat = 99;
     
-    state=constructState( estat );
-    if ( !state.good() ) return state;
+    state = m_DBConnect->databaseStatus( estat );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     
     if ( rows > 0 )
     {
@@ -275,15 +283,15 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
 {
     Status state;
     int i;
-    std::string sql;
-    char *sqlSentence;
+    char *sqlSentence, errorNumber[5];
+    std::string logMessage , sql;
    
     sql.insert( 0 , "update PacsList set Del = 'S'" );
     sql.append ( " where PacsID = %i" );
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
         
     sqlSentence = sqlite3_mprintf( sql.c_str() , pacs->getPacsID() );
@@ -293,15 +301,23 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
           
     m_DBConnect->releaseLock();
         
-    state = constructState( i );
-    return state;              
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }                 
+    return state;
+
 }
 
 Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
 {
     int col , rows = 0 , estat;
-    std::string sql;
-    char **resposta = NULL ,**error = NULL;
+    char **resposta = NULL ,**error = NULL, errorNumber[5];
+    std::string logMessage , sql;
     Status state;
 
     sql.insert( 0 , "select PacsID " );
@@ -312,19 +328,26 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     m_DBConnect->getLock();
-    estat=sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+    estat=sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
     if ( rows == 0 && estat == 0 ) estat = 99;
     
     if ( rows > 0 ) pacs->setPacsID( atoi( resposta[1]) );
-    state = constructState( estat );
+    state = m_DBConnect->databaseStatus( estat );
     
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }   
     return state;
 }
 

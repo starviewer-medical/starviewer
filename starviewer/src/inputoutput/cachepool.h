@@ -75,12 +75,6 @@ private:
     
     DatabaseConnection *m_DBConnect;
     
-    /** Construeix l'estat en que ha finaltizat l'operació sol·licitada
-     * @param  Estat de sqlite
-     * @return retorna l'estat de l'operació
-     */
-    Status constructState( int numState );
-    
 };
 };
 

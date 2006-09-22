@@ -23,38 +23,6 @@ CachePool::~CachePool()
 {
 }
 
-Status CachePool::constructState(int numState)
-{
-//A www.sqlite.org/c_interface.html hi ha al codificacio dels estats que retorna el sqlite
-    Status state;
-	QString logMessage , codeError;
-
-    switch(numState)
-    {//aqui tractem els errors que ens poden afectar de manera més directe, i els quals l'usuari pot intentar solucionbar                         
-        case SQLITE_OK :        state.setStatus( "Normal" , true , 0 );
-                                break;
-        case SQLITE_ERROR :     state.setStatus( "Database missing" , false , 2001 );
-                                break;
-        case SQLITE_CORRUPT :   state.setStatus( "Database corrupted" , false , 2011 );
-                                break;
-        case SQLITE_CONSTRAINT: state.setStatus( "Constraint Violation" , false , 2019 );
-                                break;
-      //aquests errors en principi no es poden donar, pq l'aplicació no altera cap element de l'estructura, si es produeix algun
-      //Error d'aquests en principi serà perquè la bdd està corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
-      //a la pàgina de www.sqlite.org podrem saber de quin error es tracta.
-        default :               state.setStatus( "SQLITE internal error" , false , 2000 + numState ); 
-                                break;
-    }
-
-	if ( numState != SQLITE_OK )
-	{
-		logMessage = "Error a la cache número " + codeError.setNum( numState , 10 );
-		ERROR_LOG( logMessage.toAscii().constData() );
-	}
-
-   return state;
-}
-
 void CachePool::removeStudy( std::string absPathStudy )
 {
     DeleteDirectory deleteDirectory;
@@ -62,22 +30,20 @@ void CachePool::removeStudy( std::string absPathStudy )
     deleteDirectory.deleteDirectory( absPathStudy.c_str() );
 }
 
-
 //AQUESTA FUNCIO NO S'UTILITZA, JA QUE SEMPRE QUE ACTUALITZEM L'ESPAI ES QUANT INSERIM O ESBORREM UN ESTUDI I AQUESTES ACCIONS
 //S'HAN DE FER AMB UN TRANSACCIO SINO ENS PODRIEM TROBAR QUE INSERISSIM UNA IMATGE L'APLICACIO ES TANQUES I NO S'HAGUES ACTUALITAT L'ESPAI OCUPAT
 //SI TOT S'ENGLOBA DINS UNA TRANSACCIO NO HI HAURA AQUEST PROBLEMA
  
 Status CachePool::updatePoolSpace( int size )
 {
-
     int i;
     Status state;
-    std::string sql;
-    char *sqlSentence;
+    char *sqlSentence , errorNumber[5];
+    std::string logMessage , sql;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     sql.insert( 0 , "Update Pool Set Space = Space + %i " );
@@ -89,7 +55,15 @@ Status CachePool::updatePoolSpace( int size )
     i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
-    state = constructState( i );
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }
+    
     return state;
 }
 
@@ -97,15 +71,15 @@ Status CachePool::updatePoolTotalSize( int space )
 {
     int i;
     Status state;
-    std::string sql;
-    char size[25];
+    char size[25] , errorNumber[5];
+    std::string logMessage , sql;
     unsigned long long spaceBytes;
     
     //sqlite no permet en un update entre valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem un string i hi afegim multiplicar l'espai per 1024*1024, per passar a bytes
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     spaceBytes = space;
@@ -120,8 +94,15 @@ Status CachePool::updatePoolTotalSize( int space )
     i = sqlite3_exec( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
-    state = constructState( i );
-
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }
+    
     return state;
 }
 
@@ -129,11 +110,12 @@ Status CachePool::resetPoolSpace()
 {
     int i;
     Status state;
-    std::string sql;
+    char errorNumber[5];
+    std::string logMessage , sql;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     sql.insert( 0 , "Update Pool Set Space = 0 " );
@@ -143,7 +125,14 @@ Status CachePool::resetPoolSpace()
     i = sqlite3_exec( m_DBConnect->getConnection() , sql.c_str() , 0 , 0 , 0 );
     m_DBConnect->releaseLock();
                                 
-    state = constructState( i );
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }
 
     return state;
 }
@@ -151,13 +140,13 @@ Status CachePool::resetPoolSpace()
 Status CachePool::getPoolUsedSpace( unsigned int &space )
 {
     Status state;
-    std::string sql;
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
+    std::string logMessage , sql;
     int col , rows , i;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }    
     
     sql.insert( 0 , "select round(Space/(1024*1024)) from Pool " ); //convertim de bytes a Mb
@@ -167,10 +156,15 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
     i = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
     m_DBConnect->releaseLock();
                                 
-    state = constructState( i );
-
-    if ( !state.good() ) return state;
-    
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     i = 1;//ignorem les capçaleres
    
     space = atoi( resposta[i] );
@@ -181,13 +175,13 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
 Status CachePool::getPoolTotalSize( unsigned int &space )
 {
     Status state;
-    std::string sql;
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
+    std::string logMessage , sql;
     int col , rows ,i;
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
-        return constructState( 50 );
+        return m_DBConnect->databaseStatus( 50 );
     }
     
     sql.insert( 0 , "select round(Space/(1024*1024)) from Pool " ); //convertim de bytes a Mb
@@ -197,10 +191,15 @@ Status CachePool::getPoolTotalSize( unsigned int &space )
     i = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error );
     m_DBConnect->releaseLock();
                                 
-    state = constructState( i );
-
-    if ( !state.good() ) return state;
-    
+    state = m_DBConnect->databaseStatus( i );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     i = 1;//ignorem les capçaleres
    
     space = atoi( resposta[i] );
@@ -212,12 +211,30 @@ Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
 {
     Status state;
     unsigned int usedSpace , totalSpace;
+    char errorNumber[5];
+    std::string logMessage;
     
     state = getPoolTotalSize( totalSpace );
     
-    if ( !state.good() ) return state;
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     
     state = getPoolUsedSpace( usedSpace );
+    
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }
     
     freeSpace = totalSpace - usedSpace;
     

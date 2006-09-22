@@ -74,12 +74,6 @@ private:
     
     DatabaseConnection *m_DBConnect;    
         
-    /** Construeix l'estat en que ha finaltizat l'operació sol·licitada
-     * @param Estat de sqlite
-     * @return retorna l'estat de l'operació
-     */
-    Status constructState( int );
-    
     /** Comprova si el pacs existeix en estat de baixa, comprovem si el AETitle està en estat donat de baixa
      * @param Pacs a Trobar 
      * @return estat de l'operació

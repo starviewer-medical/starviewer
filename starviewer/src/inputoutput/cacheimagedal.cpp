@@ -11,6 +11,7 @@
 #include "status.h"
 #include "databaseconnection.h"
 #include "imagemask.h"
+#include "logging.h"
 
 #include "cacheimagedal.h"
 
@@ -26,8 +27,8 @@ Status CacheImageDAL::insertImage( Image *image )
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;
     Status state;
-    std::string sql;
-    char *sqlSentence;
+    char *sqlSentence , errorNumber[5];
+    std::string logMessage , sql;
     
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -47,6 +48,10 @@ Status CacheImageDAL::insertImage( Image *image )
     {
          stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
         return state;
     }
     
@@ -60,30 +65,38 @@ Status CacheImageDAL::insertImage( Image *image )
                                 ,image->getImageSize()
                                 ,image->getImageName().c_str() );   //Image size
                                                 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence, 0, 0, 0);
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
 
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
         return state;
     }
                                     
-    //Actualitzem l'espai ocupat de la cache, per la nova imatge descarregada                                
+    //Actualitzem l'espai ocupat de la cache , per la nova imatge descarregada                                
     sql.clear();  
     sql.insert( 0 , "Update Pool Set Space = Space + %i " );
     sql.append( "where Param = 'USED'" );
     
     sqlSentence = sqlite3_mprintf( sql.c_str() , image->getImageSize() );
     
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence, 0, 0, 0);
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
     
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
         databaseConnection->releaseLock();
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
         return state;
     }
     
@@ -92,6 +105,13 @@ Status CacheImageDAL::insertImage( Image *image )
     databaseConnection->releaseLock();
                                 
     state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }    
     
     return state;
 }
@@ -100,9 +120,9 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;
     Image image;
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
+    std::string logMessage , absPath;
     Status state;
-    std::string absPath;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
         
     if ( !databaseConnection->connected() )
@@ -114,11 +134,18 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , 
                                       buildSqlQueryImages( &imageMask ).c_str() , 
                                     &resposta , &rows , &columns , error ); 
-                                    //connexio a la bdd,sentencia sql,resposta, numero de files,numero de cols.
+                                    //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus( stateDatabase );
-    if ( !state.good() ) return state;
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     
     i = 1;//ignorem les capçaleres
     while (i <= rows )
@@ -148,9 +175,9 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
 Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
 {
     int columns , rows , i = 0 , stateDatabase;
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
     Status state;
-    std::string sql;
+    std::string sql , logMessage;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     
     if ( !databaseConnection->connected() )
@@ -163,9 +190,14 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
     databaseConnection->releaseLock();
     
     state = databaseConnection->databaseStatus ( stateDatabase );
-    
-    if ( !state.good() ) return state;
-    
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     i = 1;//ignorem les capçaleres
    
     imageNumber = atoi( resposta [i] );
@@ -176,9 +208,9 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
 Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
 {
     int columns , rows , i = 0 , stateDatabase;
-    char **resposta = NULL , **error = NULL;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
+    std::string logMessage , sql;
     Status state;
-    std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     
     if ( !databaseConnection->connected() )
@@ -192,7 +224,14 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
     
     state = databaseConnection->databaseStatus ( stateDatabase );
     
-    if ( !state.good() ) return state;
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        return state;
+    }    
     
     i = 1;//ignorem les capçaleres
    
@@ -205,7 +244,9 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
     std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;
-    char *sqlSentence;
+    char *sqlSentence , errorNumber[5];
+    std::string logMessage;
+    Status state;
     
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -218,16 +259,26 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
     
     databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
         
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence, 0, 0, 0);
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
     
     databaseConnection->releaseLock();
     
-    return  databaseConnection->databaseStatus( stateDatabase );
+    state =  databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+    }    
+
+    return state;
+
 }
 
 std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
 {
-    std::string sql, whereClause = "";
+    std::string sql , whereClause = "";
     
     sql.insert( 0 , "select count(*) from image " );
 
@@ -283,7 +334,7 @@ std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
 
 std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
 {
-    std::string sql, whereClause ="";
+    std::string sql , whereClause ="";
 
     sql.insert( 0 , "select sum(ImgSiz) from image " );
 

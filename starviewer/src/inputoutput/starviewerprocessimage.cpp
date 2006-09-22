@@ -16,6 +16,7 @@
 #include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -114,11 +115,21 @@ void StarviewerProcessImage::process( Image *image )
   */
 void StarviewerProcessImage::setErrorRetrieving()
 {
+    std::string logMessage;
     m_error = true;
+    logMessage = "Error descarregant l'estudi";
+    ERROR_LOG( logMessage.c_str() );  
 }
 
 bool StarviewerProcessImage::getErrorRetrieving()
 {
+    std::string logMessage;
+    
+    if ( m_downloadedImages == 0)
+    {
+        logMessage = "Error s'han descarregat 0 imatges de l'estudi";
+        ERROR_LOG( logMessage.c_str() );          
+    }
     return m_error || m_downloadedImages == 0;
 } 
 
@@ -126,6 +137,8 @@ Status StarviewerProcessImage::getSeriesInformation( QString imagePath , Series 
 {
     Status state;
     QString path;
+    std::string logMessage;
+    char errorNumber[5];
     
     ImageDicomInformation dInfo;
     
@@ -149,6 +162,16 @@ Status StarviewerProcessImage::getSeriesInformation( QString imagePath , Series 
     
     serie.setSeriesPath( path.toAscii().constData());
     
+        
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error obtenint informació de la sèrie. Número d'error";
+        logMessage.append( errorNumber );
+        logMessage.append( " ERROR : " );
+        logMessage.append( state.text() );
+        ERROR_LOG( logMessage.c_str() );  
+    }    
     return state; 
 }
 

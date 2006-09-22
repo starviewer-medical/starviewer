@@ -180,13 +180,25 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     if (!retState.good() || errorRetrieving )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
-        logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
-        logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
-        logMessage.append( " del pacs " );
-        logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
-        logMessage.append( ". PACS ERROR : " );
-        logMessage.append( retState.text().c_str() );
-        ERROR_LOG ( logMessage.toAscii().constData() );
+        if ( !retState.good() )
+        {        
+            logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
+            logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+            logMessage.append( " del pacs " );
+            logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+            logMessage.append( ". PACS ERROR : " );
+            logMessage.append( retState.text().c_str() );
+            ERROR_LOG ( logMessage.toAscii().constData() );
+        }
+        
+        if ( errorRetrieving )
+        {
+            logMessage = "S'ha produit algun error durant el processat de les imatges descarregades ( Classe StarviewerProcessImage) per l'estudi ";
+            logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+            logMessage.append( " del pacs " );
+            logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+            ERROR_LOG ( logMessage.toAscii().constData() );
+        }
 
         emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
         cacheStudyDAL.delStudy( studyUID.toAscii().constData() );

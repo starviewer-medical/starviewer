@@ -94,12 +94,6 @@ Status DatabaseConnection::databaseStatus( int numState )
                                 break;
     }
 
-	if (  numState != SQLITE_OK )
-	{
-		logMessage = "Error a la cache número " + codeError.setNum( numState , 10 );
-		ERROR_LOG( logMessage.toAscii().constData() );
-	}
-
    return state;
 }
 
