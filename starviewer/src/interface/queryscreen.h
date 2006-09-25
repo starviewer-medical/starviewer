@@ -224,6 +224,16 @@ struct retrieveParameters
      */
     QString buildStudyDates();
     
+    /** construeix la màscara per cerca el Id de pacient en mode WildCard
+      * @return màscara del PatientId
+      */
+    QString buildPatientId();
+    
+    /** construeix la màscara per cerca el Id d'estudi en mode WildCard
+      * @return màscara del StudyId
+      */
+    QString buildStudyId();
+    
     /** Descarrega una estudi del pacs
      * @param indica si l'estudi s'ha de visualitzar
      */

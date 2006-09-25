@@ -111,14 +111,14 @@ void QCreateDicomdir::setDicomdirSize()
     
     m_progressBarOcupat->setValue( m_progressBarOcupat->value() + (int) sizeInMb );
     
+    cout<<m_progressBarOcupat->value();
+    
     sizeText.setNum( sizeInMb , 'f', 0);
     sizeOfDicomdirText.clear();
     sizeOfDicomdirText.insert(0 , sizeText );
     sizeOfDicomdirText.append( " Mb" );
     
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
-    
-    
 }
 
 void QCreateDicomdir::addStudy( Study study )

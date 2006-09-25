@@ -1406,6 +1406,24 @@ QString QueryScreen::buildStudyDates()
     return date;
 }
 
+QString QueryScreen::buildPatientId()
+{
+    QString patientIdMask;
+    
+    patientIdMask = "*" + m_textPatientID->text() + "*";
+   
+    return patientIdMask;
+}
+
+QString QueryScreen::buildStudyId()
+{
+    QString studyIdMask;
+    
+    studyIdMask = "*" + m_textStudyID->text() + "*";
+   
+    return studyIdMask;
+}
+
 StudyMask QueryScreen::buildStudyMask()
 {
     /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
@@ -1414,9 +1432,9 @@ StudyMask QueryScreen::buildStudyMask()
     StudyMask mask;
     QString modalityMask;
     
-    mask.setPatientId(m_textPatientID->text().toStdString() );
-    mask.setPatientName(buildPatientName().toStdString() );
-    mask.setStudyId(m_textStudyID->text().toStdString() );
+    mask.setPatientId( buildPatientId().toStdString() );
+    mask.setPatientName( buildPatientName().toStdString() );
+    mask.setStudyId( buildStudyId().toStdString()  );
     mask.setStudyDate(buildStudyDates().toStdString() );
     mask.setStudyDescription( "" );
     mask.setStudyTime( "" );

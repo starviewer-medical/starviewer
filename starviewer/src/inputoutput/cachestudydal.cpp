@@ -753,8 +753,8 @@ std::string CacheStudyDAL::buildSqlQueryStudy(StudyMask* studyMask)
     //Id del pacient
     if ( patID != "*" && patID.length() > 0 )
     {
-        sql.append( " and Study.PatID = '" );
-        sql.append( patID );
+        sql.append( " and Study.PatID like '" );
+        sql.append( replaceAsterisk( patID ) );
         sql.append( "' " );
     }
     
@@ -792,8 +792,8 @@ std::string CacheStudyDAL::buildSqlQueryStudy(StudyMask* studyMask)
     //id estudi
     if ( stuID != "*" && stuID.length() > 0 )
     {
-        sql.append( " and StuID = '" );
-        sql.append( stuID );
+        sql.append( " and StuID like '" );
+        sql.append( replaceAsterisk( stuID ) );
         sql.append( "' " );
     }
     
