@@ -1410,8 +1410,11 @@ QString QueryScreen::buildPatientId()
 {
     QString patientIdMask;
     
-    patientIdMask = "*" + m_textPatientID->text() + "*";
-   
+    if ( m_textPatientID->text().length() > 0 )
+    {
+        patientIdMask = "*" + m_textPatientID->text() + "*";
+    }
+     
     return patientIdMask;
 }
 
@@ -1419,8 +1422,11 @@ QString QueryScreen::buildStudyId()
 {
     QString studyIdMask;
     
-    studyIdMask = "*" + m_textStudyID->text() + "*";
-   
+    if ( m_textStudyID->text().length() > 0 )
+    {
+        studyIdMask = "*" + m_textStudyID->text() + "*";
+    }
+    
     return studyIdMask;
 }
 
