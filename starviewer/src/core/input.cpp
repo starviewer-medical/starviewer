@@ -250,7 +250,9 @@ void Input::setVolumeInformation()
                 patientOrientationString += ",";
                 patientOrientationString += this->getOrientation( dirCosinesValuesZ );
                 m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( qPrintable( patientOrientationString ) );
-
+                m_volumeData->getVolumeSourceInformation()->setXDirectionCosines( dirCosinesValuesX );
+                m_volumeData->getVolumeSourceInformation()->setYDirectionCosines( dirCosinesValuesY );
+                m_volumeData->getVolumeSourceInformation()->setZDirectionCosines( dirCosinesValuesZ );
             }
             else
             {

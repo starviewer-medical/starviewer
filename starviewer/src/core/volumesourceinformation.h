@@ -171,6 +171,21 @@ public:
     {
         return m_protocolName;
     };
+
+    /// Assigna/Retorna els cosinus dels vectors de direccions dels eixos. Així sabem quina és la orientació en la que s'ha agafat el pacient
+    void setDirectionCosines( double directionCosines[9] );
+    void setDirectionCosines( double xCosines[3], double yCosines[3], double zCosines[3] );
+    void setXDirectionCosines( double xCosines[3] );
+    void setXDirectionCosines( double x1Cosines, double x2Cosines, double x3Cosines );
+    void setYDirectionCosines( double yCosines[3] );
+    void setYDirectionCosines( double y1Cosines, double y2Cosines, double y3Cosines );
+    void setZDirectionCosines( double zCosines[3] );
+    void setZDirectionCosines( double z1Cosines, double z2Cosines, double z3Cosines );
+    void getDirectionCosines( double directionCosines[9] );
+    void getDirectionCosines( double xCosines[3], double yCosines[3], double zCosines[3] );
+    void getXDirectionCosines( double xCosines[3] );
+    void getYDirectionCosines( double yCosines[3] );
+    void getZDirectionCosines( double zCosines[3] );
     
 private:
 
@@ -183,6 +198,7 @@ private:
     QString m_studyTime;
     QString m_protocolName;
     double m_windowLevel[2];
+    double m_directionCosines[9];
 
 };
 
