@@ -1,7 +1,7 @@
 
 TEMPLATE = subdirs 
 
-SUBDIRS = testing testing2
+SUBDIRS = testing
 
 for(dir, SUBDIRS) {
     !exists($$dir) {
