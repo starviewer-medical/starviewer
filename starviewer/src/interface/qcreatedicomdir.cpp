@@ -60,6 +60,7 @@ void QCreateDicomdir::createConnections()
 
 void QCreateDicomdir::changedAction( int index )
 {
+    float sizeInMB = (m_dicomdirSize / ( 1024 * 1024 ) );
 
     switch( index )
     {
@@ -79,7 +80,7 @@ void QCreateDicomdir::changedAction( int index )
                  m_lineEditDicomdirPath->setVisible( false );
                  m_buttonExamineDisk->setVisible( false );
                  m_labelCreateDicomdir->setText( tr( "Cd occupied"  ) );
-                 m_progressBarOcupat->setMaximum( m_dicomdirSize / ( 1024 * 1024 ) );
+                 m_progressBarOcupat->setMaximum( 700 );
                  m_DiskSpace = (unsigned long) 700 * (unsigned long) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
                  break;
         case 2 : //dvd
@@ -90,9 +91,18 @@ void QCreateDicomdir::changedAction( int index )
                  m_buttonExamineDisk->setVisible( false );
                  m_labelCreateDicomdir->setText( tr( "Dvd Ocuppied"  ) );
                  m_progressBarOcupat->setMaximum( 4400 );
-                 m_progressBarOcupat->setValue( m_dicomdirSize / ( 1024 * 1024 ) );
                  m_DiskSpace = (unsigned long) 4400 * (unsigned long) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
                  break;
+    }
+    
+    //Si la mida del dicomdir excedeix el maxim de la barra de progrés, com a valor a la barra de progrés li assignem el seu màxim
+    if ( index > 0 )
+    {
+        if ( sizeInMB < m_progressBarOcupat->maximum() ) 
+        {
+            m_progressBarOcupat->setValue( ( sizeInMB ) );
+        }
+        else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
     }
 }
 
@@ -109,9 +119,13 @@ void QCreateDicomdir::setDicomdirSize()
     sizeOfDicomdirText.append( " Mb" );
     m_labelSizeOfDicomdir->setText( sizeOfDicomdirText );
     
-    m_progressBarOcupat->setValue( m_progressBarOcupat->value() + (int) sizeInMb );
+    if ( sizeInMb < m_progressBarOcupat->maximum() ) 
+    {
+        m_progressBarOcupat->setValue( sizeInMb );
+    }
+    else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
     
-    cout<<m_progressBarOcupat->value();
+    cout<<"Barra ocupada "<<m_progressBarOcupat->value()<<endl;
     
     sizeText.setNum( sizeInMb , 'f', 0);
     sizeOfDicomdirText.clear();
@@ -141,18 +155,25 @@ void QCreateDicomdir::addStudy( Study study )
             databaseError ( &state );
             return;
         }        
-
-        m_dicomdirSize = m_dicomdirSize + studySize;
-        setDicomdirSize();
-
-        item->setText( 0 , study.getStudyId().c_str() );
-        item->setText( 1 , study.getPatientId().c_str() );
-        item->setText( 2 , study.getPatientName().c_str() );
-        item->setText( 3 , study.getStudyModality().c_str() );
-        item->setText( 4 , formatDate( study.getStudyDate().c_str() ) );
-        item->setText( 5 , formatHour( study.getStudyTime().c_str() ) );
-        item->setText( 6 , study.getStudyDescription().c_str() );
-        item->setText( 7 , study.getStudyUID().c_str() );
+        
+        if ( studySize + m_dicomdirSize > m_DiskSpace )
+        {
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "With this study the Dicomdir exceeds the size of the device. Please change the device or create the dicomdir" ) );
+        }
+        else
+        {
+            m_dicomdirSize = m_dicomdirSize + studySize;
+            setDicomdirSize();
+    
+            item->setText( 0 , study.getStudyId().c_str() );
+            item->setText( 1 , study.getPatientId().c_str() );
+            item->setText( 2 , study.getPatientName().c_str() );
+            item->setText( 3 , study.getStudyModality().c_str() );
+            item->setText( 4 , formatDate( study.getStudyDate().c_str() ) );
+            item->setText( 5 , formatHour( study.getStudyTime().c_str() ) );
+            item->setText( 6 , study.getStudyDescription().c_str() );
+            item->setText( 7 , study.getStudyUID().c_str() );
+        }
     }
     else
     {
@@ -206,6 +227,13 @@ void QCreateDicomdir::createDicomdirOnHard()
     QDir directoryDicomdirPath( dicomdirPath );
 
     //Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
+    
+    if ( m_lineEditDicomdirPath->text().length() == 0 )
+    {
+        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please enter a diretory to create de dicomdir" ) );
+        return;
+    }
+    
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
         switch ( QMessageBox::question( this ,
@@ -300,8 +328,16 @@ void QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     else 
     {
         INFO_LOG( "Finalitzada la creació del Dicomdir" );
-        m_dicomdirStudiesList->clear();
+        clearQCreateDicomdirScreen();
     }
+}
+
+void QCreateDicomdir::clearQCreateDicomdirScreen()
+{
+    m_dicomdirStudiesList->clear();
+    m_lineEditDicomdirPath->setText("");
+    
+    m_labelSizeOfDicomdir->setText( tr( "The size of Dicomdir is 0 Mb" ) );
 }
 
 void QCreateDicomdir::examineDicomdirPath()

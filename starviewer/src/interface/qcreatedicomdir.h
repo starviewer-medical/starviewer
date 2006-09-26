@@ -107,6 +107,11 @@ private:
      */
     void QCreateDicomdir::executek3b( recordDevice device );
 
+    
+    /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit
+     */
+    void clearQCreateDicomdirScreen();
+
     unsigned long m_dicomdirSize;
     unsigned long m_DiskSpace;
 };
