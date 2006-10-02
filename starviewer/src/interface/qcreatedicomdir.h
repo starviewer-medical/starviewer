@@ -27,6 +27,8 @@ public:
 
     void addStudy( Study study );
 
+    void clearTemporaryDir();
+
     ~QCreateDicomdir();
 
 public slots:

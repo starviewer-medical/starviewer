@@ -1184,7 +1184,8 @@ void QueryScreen::closeEvent( QCloseEvent* ce )
 	//ce->ignore();
 	m_studyTreeWidgetPacs->saveColumnsWidth();
 	m_studyTreeWidgetCache->saveColumnsWidth();
-        ce->accept();        
+    ce->accept();        
+    m_qcreateDicomdir->clearTemporaryDir();
 }
 
 void QueryScreen::showRetrieveScreen()
