@@ -88,12 +88,13 @@ private:
 
     /** Crea el dicomdir amb els estudis seleccionats, en el directori on se li passa per paràmetre
      * @param dicomdirPath directori on s'ha de crear el dicomdir
+     * @return retorna l'estat del mètode
      */
-    void startCreateDicomdir( QString dicomdirPath );
+    Status startCreateDicomdir( QString dicomdirPath );
 
     /** Crear el dicomdir en un cd o dvd 
      */
-    void createDicomdirOnCdOrDvd();
+    Status createDicomdirOnCdOrDvd();
 
     /** Crea el dicomdir al disc dur o en un pendrive
      */

@@ -212,22 +212,22 @@ void QCreateDicomdir::createDicomdir()
                  createDicomdirOnHard();
                  break;
         case 1 : //cd
-                 createDicomdirOnCdOrDvd();
-                 executek3b( cd );
+                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( cd );
                  break;
         case 2 : //dvd
                  createDicomdirOnCdOrDvd();
-                 executek3b( dvd );
+                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( dvd );
                  break;
     }
     
     QApplication::restoreOverrideCursor();
 }
 
-void QCreateDicomdir::createDicomdirOnCdOrDvd()
+Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 {
     QDir temporaryDirPath;
     QString dicomdirPath, logMessage;
+    Status state;   
        
     dicomdirPath.insert( 0 , temporaryDirPath.tempPath() );
     dicomdirPath.append( "/DICOMDIR" );
@@ -247,10 +247,11 @@ void QCreateDicomdir::createDicomdirOnCdOrDvd()
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
         DEBUG_LOG( logMessage.toAscii().constData() );
+        return state.setStatus( "Can't create temporary dicomdir", false , 3002);
     }
     else
     {        
-        startCreateDicomdir( dicomdirPath );
+        return startCreateDicomdir( dicomdirPath );
     }
 }
 
@@ -314,7 +315,7 @@ void QCreateDicomdir::createDicomdirOnHard()
     startCreateDicomdir( dicomdirPath );
 }
 
-void QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
+Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 {
     ConvertToDicomdir convertToDicomdir;
     Status state;
@@ -329,7 +330,7 @@ void QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
         logMessage.append( state.text().c_str() );        
         ERROR_LOG ( logMessage.toAscii().constData() );
-        return;
+        return state.setStatus( "Nor enough space to create dicomdir", false , 3000);;
     }         
 
     QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
@@ -338,7 +339,7 @@ void QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     if ( dicomdirStudiesList.count() == 0) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please, first select the studies which you want to create a dicomdir" ) );
-        return;
+        return state.setStatus( "No study selected to create dicomdir", false , 3001);;
     }
 
     for ( int i = 0; i < dicomdirStudiesList.count();i++ )
@@ -366,6 +367,8 @@ void QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG( "Finalitzada la creació del Dicomdir" );
         clearQCreateDicomdirScreen();
     }
+    
+    return state;
 }
 
 void QCreateDicomdir::clearQCreateDicomdirScreen()
@@ -454,6 +457,7 @@ void QCreateDicomdir::executek3b( recordDevice device )
     QDir temporaryDirPath;    
     QString paramater;
     
+        k3bParamatersList.push_back( "--nosplash" );
     switch( device )
     {
         case cd :   k3bParamatersList.push_back( "--datacd" );
