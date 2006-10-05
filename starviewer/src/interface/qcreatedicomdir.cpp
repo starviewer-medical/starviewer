@@ -203,9 +203,6 @@ void QCreateDicomdir::addStudy( Study study )
 
 void QCreateDicomdir::createDicomdir()
 {
-
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-    
     switch( m_comboBoxAction->currentIndex() )
     {
         case 0 : //disc dur o dispositiu extrable
@@ -219,8 +216,6 @@ void QCreateDicomdir::createDicomdir()
                  if ( createDicomdirOnCdOrDvd().good() ) executek3b( dvd );
                  break;
     }
-    
-    QApplication::restoreOverrideCursor();
 }
 
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
@@ -236,7 +231,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
         DeleteDirectory delDirectory;
-        delDirectory.deleteDirectory( dicomdirPath );
+        delDirectory.deleteDirectory( dicomdirPath , true );
     }
         
     INFO_LOG ( "Iniciant la creació del dicomdir en cd-dvd" );
@@ -278,9 +273,8 @@ void QCreateDicomdir::createDicomdirOnHard()
                 tr( "The directory contains a dicomdir, do you want to overwrite ?" ) ,
                 tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
-            case 0: // si vol sobreescriure, esborrem el directori i el seu contingut i tornem a crear-lo
-                delDirectory.deleteDirectory( dicomdirPath );
-                directoryDicomdirPath.mkdir( dicomdirPath ); 
+            case 0: // si vol sobreescriure, esborrem el contingut del directori 
+                delDirectory.deleteDirectory( dicomdirPath , false );
                 break;
             case 1:
                 return; //no fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
@@ -357,7 +351,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     
     if ( !state.good() )
     {
-        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() );
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and the directory is empty " );
         logMessage = "Error al crear el Dicomdir ERROR : ";
         logMessage.append( state.text().c_str() );        
         ERROR_LOG ( logMessage.toAscii().constData() );
@@ -520,7 +514,7 @@ void QCreateDicomdir::clearTemporaryDir()
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
         DeleteDirectory delDirectory;
-        delDirectory.deleteDirectory( dicomdirPath );
+        delDirectory.deleteDirectory( dicomdirPath , true);
     }
 }
 

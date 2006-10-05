@@ -11,9 +11,11 @@
 #include <QStringList>
 #include <QDir>
 #include <QChar>
+#include <QApplication>
 
 #include "logging.h"
 #include "status.h"
+#include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
 #include "seriesmask.h"
@@ -37,11 +39,38 @@ ConvertToDicomdir::ConvertToDicomdir()
     m_study = 0;
     m_series = 0;
     m_image = 0;
+    m_patient = 0;
 }
 
 void ConvertToDicomdir::addStudy( QString studyUID )
 {
-    m_studiesToConvert.push_back( studyUID );
+    /*Els estudis s'han d'agrupar per pacient, el que fem és afegir-los a llista d'estudis per convertir a 
+     dicomdir ja ordenats per pacient*/
+    StudyToConvert studyToConvert;
+    CacheStudyDAL cacheStudyDAL;
+    Study study;
+    int index = 0;
+    bool stop = false;
+    
+    cacheStudyDAL.queryStudy( studyUID.toAscii().constData() , study ); //busquem patientID
+    
+    studyToConvert.studyUID = studyUID;
+    studyToConvert.patientId = study.getPatientId().c_str();
+    
+    while ( index < m_studiesToConvert.count() && !stop ) 
+    {
+        if ( studyToConvert.patientId < m_studiesToConvert.at( index ).patientId ) //comparem amb els altres estudis de la llista
+        {
+            stop = true;
+        }
+        else index++;
+    }
+    
+    if ( stop ) //una vegada hem trobat la posició on ha d'anar l'inserim
+    {
+        m_studiesToConvert.insert( index , studyToConvert );    
+    }
+    else m_studiesToConvert.push_back( studyToConvert );//en aquest cas val al final
 }
 
 Status ConvertToDicomdir::convert( QString dicomdirPath )
@@ -53,14 +82,13 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     int imageNumberStudy , imageNumberTotal = 0 , i = 0 ;
     CreateDicomdir createDicomdir;
     QString studyUID;
-    DeleteDirectory deleteDirectory;
     
     m_dicomDirPath = dicomdirPath;
-
+    
     //comptem el numero d'imatges pel progress de la barra
     while ( i < m_studiesToConvert.count() )
     {   
-        imageMask.setStudyUID( m_studiesToConvert.value( i ).toAscii().constData() );
+        imageMask.setStudyUID( m_studiesToConvert.value( i ).studyUID.toAscii().constData() );
         state = cacheImageDAL.countImageNumber( imageMask , imageNumberStudy );
         if ( !state.good() ) break;
             
@@ -70,7 +98,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
 
     if ( !state.good() )
     {
-        deleteDirectory.deleteDirectory( dicomdirPath );
+        deleteStudies();
         return state;
     }
 
@@ -79,17 +107,11 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     m_progress->setMinimumDuration( 0 );
     m_progress->setCancelButton( 0 );
 
-    while ( !m_studiesToConvert.isEmpty() ) //per cada estudi a convertir
-    {   
-        studyUID = m_studiesToConvert.takeFirst();
-        state = convertStudy( studyUID );        
-
-        if ( !state.good() ) break; 
-    }
+    state = startConversionToDicomdir();
  
     if ( !state.good() )
     {
-        deleteDirectory.deleteDirectory( dicomdirPath );
+        deleteStudies();
         return state;
     }
    
@@ -99,11 +121,54 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     
     if ( !state.good() )
     {
-        deleteDirectory.deleteDirectory( dicomdirPath );
+        deleteStudies();
     }
 
     return state;
 }
+
+/**
+ * 
+ * @return 
+ */
+Status ConvertToDicomdir::startConversionToDicomdir()
+{
+    StudyToConvert studyToConvert;
+    QString m_OldPatientId;
+    QString patientNameDir;
+    QDir patientDir;
+    Status state;
+    QChar fillChar = '0'; 
+    
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    
+    m_patient = 0;
+
+    while ( !m_studiesToConvert.isEmpty() )
+    {
+        studyToConvert = m_studiesToConvert.takeFirst();
+        
+        //si el pacient es diferent creem un nou directori PAtient
+        if ( m_OldPatientId != studyToConvert.patientId )
+        {
+            patientNameDir = QString( "/PAT%1" ).arg( m_patient , 5 , 10 , fillChar );
+            m_dicomdirPatientPath = m_dicomDirPath + patientNameDir;
+            patientDir.mkdir( m_dicomdirPatientPath );
+            m_patient++;
+            m_study = 0;
+            m_patientDirectories.push_back( m_dicomdirPatientPath );//creem una llista amb els directoris creats, per si es produeix algun error esborrar-los
+        }
+        
+        state = convertStudy( studyToConvert.studyUID );
+        if ( !state.good() ) break;
+        m_OldPatientId = studyToConvert.patientId;
+    }
+    
+    QApplication::restoreOverrideCursor();
+
+    return state;
+}
+
 
 Status ConvertToDicomdir::convertStudy( QString studyUID )
 {
@@ -114,12 +179,13 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
     SeriesList seriesList;
     SeriesMask seriesMask;
     Series series;
-    m_study++;
-    m_series = 0;
     Status state;
     
+    m_study++;
+    m_series = 0;
+    
     //Creem el directori on es guardar l'estudi en format DicomDir
-    m_dicomDirStudyPath = m_dicomDirPath + studyName;
+    m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
     studyDir.mkdir( m_dicomDirStudyPath );
 
     seriesMask.setStudyUID( studyUID.toAscii().constData() );
@@ -214,6 +280,16 @@ Status ConvertToDicomdir::convertImage( Image image )
      m_progress->repaint();
     
     return state;
+}
+
+void ConvertToDicomdir::deleteStudies()
+{
+    DeleteDirectory deleteDirectory;
+    
+    while ( !m_patientDirectories.isEmpty() )
+    {
+        deleteDirectory.deleteDirectory( m_patientDirectories.takeFirst() , true );
+    }
 }
 
 ConvertToDicomdir::~ConvertToDicomdir()

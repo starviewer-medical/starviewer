@@ -23,7 +23,7 @@ class Image;
   * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes són :
   * El nom dels directoris i imatges no pot ser de mes de 8 caràcters, i ha d'estar en majúscules
   * Les imatges no poden tenir extensió
-  * S'ha de seguir l'estructura jeràrquica de directoris de Estudi/Series/Imatges
+  * S'ha de seguir l'estructura jeràrquica de directoris de Pacient/Estudi/Series/Imatges
   * La imatge ha d'estar en format littleEndian
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -33,7 +33,7 @@ public:
 
     ConvertToDicomdir( );
     
-    /** Afegeix un estudi a la llista per convertir-se a dicomsdir
+    /** Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
      * @param studyUID UID de l'estudi a convertir a dicomdir
      */
     void addStudy ( QString studyUID );
@@ -47,17 +47,36 @@ public:
     ~ConvertToDicomdir();
 
 private :
-    QProgressDialog *m_progress;
 
-    QStringList m_studiesToConvert;
+    /*This struct is used in pacsmove.cpp, it can't be included in the pacsmove class declaration because
+    it's used from a callback action of function*/
+    struct StudyToConvert
+        {
+            QString patientId;
+            QString studyUID;
+        };
+       
+    QList<StudyToConvert> m_studiesToConvert; 
+    QProgressDialog *m_progress;
 
     QString m_dicomDirPath;
     QString m_dicomDirStudyPath;
     QString m_dicomDirSeriesPath;
+    QString m_oldPatientId;
+    QString m_dicomdirPatientPath;
+    
+    QStringList m_patientDirectories;
 
+    int m_patient;
     int m_study;
     int m_series;
     int m_image;
+
+
+    /** 
+     *
+     */
+    Status startConversionToDicomdir();
 
     /** Converteix un estudi al format littleendian
      * @param studyUID Uid de l'estudi a convertir
@@ -76,6 +95,11 @@ private :
      * @return Indica l'estat en què finalitza el mètode
      */
     Status convertImage( Image image );    
+    
+    /** esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
+     * 
+     */
+    void deleteStudies();
 };
 
 }

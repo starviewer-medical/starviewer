@@ -23,7 +23,7 @@ DeleteDirectory::DeleteDirectory()
  * @param directoryPath 
  * @return 
  */
-bool DeleteDirectory::deleteDirectory(QString directoryPath)
+bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDirectory)
 {
     QStringList filesList, directoryList;
     QString absoluteFilePath , absoluteDirectoryPath;    
@@ -63,15 +63,18 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath)
             absoluteDirectoryPath.append( directoryPath );          
             absoluteDirectoryPath.append( "/" );
             absoluteDirectoryPath.append( *it );
-            if ( !deleteDirectory( absoluteDirectoryPath ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
+            if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
         }
     }
 
-    if ( !directoryToDelete.rmdir( directoryPath ) ) //esborra el directori pare
+    if ( deleteRootDirectory )
     {
-        return false;
+        if ( !directoryToDelete.rmdir( directoryPath ) ) //esborra el directori arrel
+        {
+            return false;
+        }
     }
-    else return true;
+    return true;
 }
 
 DeleteDirectory::~DeleteDirectory()

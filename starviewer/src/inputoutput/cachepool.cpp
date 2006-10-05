@@ -27,7 +27,7 @@ void CachePool::removeStudy( std::string absPathStudy )
 {
     DeleteDirectory deleteDirectory;
 
-    deleteDirectory.deleteDirectory( absPathStudy.c_str() );
+    deleteDirectory.deleteDirectory( absPathStudy.c_str() , true );
 }
 
 //AQUESTA FUNCIO NO S'UTILITZA, JA QUE SEMPRE QUE ACTUALITZEM L'ESPAI ES QUANT INSERIM O ESBORREM UN ESTUDI I AQUESTES ACCIONS

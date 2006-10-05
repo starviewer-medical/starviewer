@@ -21,9 +21,10 @@ public:
     
     /** Esborrar el contingut del directori i el directori passat per paràmetres
      * @param directoryPath path del directori a esborrar 
+     * @param deleteRootDirectory indica si s'ha d'esborrar només el contingu del directori o també el directori arrel passat per paràmetre. Si fals només s'esborra el contingut, si és cert s'esborra el contingut i el directori passat per paràmetre
      * @return indica si l'operacio s'ha realitzat amb èxit
      */
-    bool deleteDirectory( QString directoryPath );
+    bool deleteDirectory( QString directoryPath , bool deleteRootDirectory );
 
     ~DeleteDirectory();
 
