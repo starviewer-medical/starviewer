@@ -21,12 +21,6 @@ class Input;
 class Output;
 class QApplicationMainWindow;
 class Volume;
-class ExtensionFactory2;
-
-class QMPRExtensionCreator;
-class QMPR3DExtensionCreator;
-class QMPR3D2DExtensionCreator;
-class Q2DViewerExtensionCreator;
 
 // Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
@@ -69,15 +63,6 @@ public slots:
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
-    
-    /// Factoria d'extensions
-    ExtensionFactory2 *m_extensionFactory;
-    
-    /// Creadors d'extensions
-    QMPRExtensionCreator *m_qMPRExtensionCreator;
-    QMPR3DExtensionCreator *m_qMPR3DExtensionCreator;
-    QMPR3D2DExtensionCreator *m_qMPR3D2DExtensionCreator;
-    Q2DViewerExtensionCreator *m_q2DViewerExtensionCreator;
 
     /// Entitat pacient que es controlarà des d'aquí
     Patient m_patient;

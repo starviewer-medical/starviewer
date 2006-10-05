@@ -18,13 +18,6 @@
 #include "qapplicationmainwindow.h"
 #include "volumesourceinformation.h"
 
-// aplicacions
-#include "extensionfactory2.h"
-#include "qmprextensioncreator.h"
-#include "qmpr3dextensioncreator.h"
-#include "qmpr3d2dextensioncreator.h"
-#include "q2dviewerextensioncreator.h"
-
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
 #include "qmprextension.h"
@@ -59,12 +52,6 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
 
 ExtensionHandler::~ExtensionHandler()
 {
-    delete m_qMPRExtensionCreator;
-    delete m_qMPR3DExtensionCreator;
-    delete m_qMPR3D2DExtensionCreator;
-    delete m_q2DViewerExtensionCreator;
-    delete m_extensionFactory;
-    delete m_queryScreen;
 }
 
 void ExtensionHandler::createConnections()
@@ -77,18 +64,6 @@ void ExtensionHandler::createConnections()
 
 void ExtensionHandler::registerExtensions()
 {
-    // creem totes les instàncies dels creadors d'extensions
-    m_qMPRExtensionCreator = new QMPRExtensionCreator( this );
-    m_qMPR3DExtensionCreator = new QMPR3DExtensionCreator( this );
-    m_qMPR3D2DExtensionCreator = new QMPR3D2DExtensionCreator( this );
-    m_q2DViewerExtensionCreator = new Q2DViewerExtensionCreator( this );
-    
-    // al crear-se el handler inicialitzem el factory amb totes les aplicacions
-    m_extensionFactory = new ExtensionFactory2(this);
-    m_extensionFactory->registerExtension( "2D MPR Extension" , m_qMPRExtensionCreator );
-    m_extensionFactory->registerExtension( "3D MPR Extension" , m_qMPR3DExtensionCreator );
-    m_extensionFactory->registerExtension( "3D-2D MPR Extension" , m_qMPR3D2DExtensionCreator );
-    m_extensionFactory->registerExtension( "2D Viewer Extension" , m_q2DViewerExtensionCreator );
 }
 
 void ExtensionHandler::request( int who )
