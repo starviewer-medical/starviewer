@@ -41,7 +41,13 @@ HEADERS += extensionfactory.h \
            tool.h \
            input.h \
            output.h \
-           q3dorientationmarker.h 
+           q3dorientationmarker.h \
+           slicing2dtool.h \
+           toolmanager.h \
+           q2dviewertoolmanager.h \
+           windowleveltool.h \
+           zoom2dtool.h \
+           move2dtool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -68,7 +74,13 @@ SOURCES += extensionmediator.cpp \
            tool.cpp \
            input.cpp \
            output.cpp \
-           q3dorientationmarker.cpp 
+           q3dorientationmarker.cpp \
+           slicing2dtool.cpp \
+           toolmanager.cpp \
+           q2dviewertoolmanager.cpp \
+           windowleveltool.cpp \
+           zoom2dtool.cpp \
+           move2dtool.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \

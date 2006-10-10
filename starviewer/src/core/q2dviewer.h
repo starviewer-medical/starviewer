@@ -28,6 +28,7 @@ class vtkWindowToImageFilter;
 class vtkCoordinate;
 class vtkCaptionActor2D;
 class vtkScalarBarActor;
+class vtkInteractorStyleImage;
 
 namespace udg {
 
@@ -55,6 +56,7 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vis
 
 // Fordward declarations
 class Volume;
+class Q2DViewerToolManager;
 
 class Q2DViewer  : public QViewer{
 Q_OBJECT
@@ -84,6 +86,9 @@ public:
     virtual vtkRenderWindowInteractor *getInteractor();            
     virtual void setInput( Volume* volume );
 
+    /// Retorna l'interactor style
+    vtkInteractorStyleImage *getInteractorStyle();
+    
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
     void setView( ViewType view );
     void setViewToAxial(){ setView( Q2DViewer::Axial ); }
@@ -123,6 +128,10 @@ public:
     bool isManipulateOn(){ return m_manipulating; };
     void setManipulate( bool manip ){ m_manipulating = manip; }
 
+    /// Obté el window level actual de la imatge
+    double getCurrentColorWindow();
+    double getCurrentColorLevel();
+    
 public slots:  
     /// Temporal per proves, veurem quins events es criden
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
@@ -215,14 +224,20 @@ public slots:
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
 
-    /// Obté el window/level
-    void getWindowLevel( double wl[2] );
+    /// Obté el window/level original
+    void getDefaultWindowLevel( double wl[2] );
+
+    /// Obté el window level actual de la imatge
+    void getCurrentWindowLevel( double wl[2] );
     
     /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
 
     /// Actualitza la informació del voxel que hi ha per sota del cursor
     void updateVoxelInformation();
+
+    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui
+    void setTool( QString toolName );
     
 protected:
     /// últim botó que s'ha clicat
@@ -364,6 +379,9 @@ private:
 
     /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
     vtkScalarBarActor *m_scalarBar;
+
+    /// El manager de les tools
+    Q2DViewerToolManager *m_toolManager;
     
 signals:
     /// envia la nova llesca en la que ens trobem
@@ -386,7 +404,9 @@ signals:
 
     /// informem del punt que hem deixat de clicar amb el botó dret, coordenades de món
     void rightButtonUp( double x , double y );
-    
+
+    /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
+    void eventReceived( unsigned long eventID );
 };
 
 };  //  end  namespace udg 

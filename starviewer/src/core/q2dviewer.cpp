@@ -4,6 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+// #include "slicing2dtool.h"
 #include <vtkMetaImageWriter.h>
 #include "q2dviewer.h"
 #include "volume.h"
@@ -17,6 +19,7 @@
 #include <QAction>
 
 // Tools
+#include "q2dviewertoolmanager.h"
 
 // include's bàsics vtk
 #include <QVTKWidget.h>
@@ -54,38 +57,38 @@
 
 namespace udg {
 
-class WindowLevelCallback : public vtkCommand
-{
-public:
-    Q2DViewer* m_viewer;
-    static WindowLevelCallback *New()
-    {
-       return new WindowLevelCallback;
-    }
-    virtual void Execute( vtkObject *caller, unsigned long event, void* )
-    {
-        vtkInteractorStyleImage *interactor = vtkInteractorStyleImage::SafeDownCast( caller );
-        switch( event )
-        {
-        case vtkCommand::StartWindowLevelEvent:
-        break;
-
-        case vtkCommand::WindowLevelEvent:
-            if( m_viewer->isManipulateOn() )
-            {
-                interactor->EndWindowLevel();
-            }
-            else
-            {
-                m_viewer->updateWindowLevelAnnotation();
-            }
-        break;
-
-        case vtkCommand::EndWindowLevelEvent:
-        break;
-        }
-    }
-};
+// class WindowLevelCallback : public vtkCommand
+// {
+// public:
+//     Q2DViewer* m_viewer;
+//     static WindowLevelCallback *New()
+//     {
+//        return new WindowLevelCallback;
+//     }
+//     virtual void Execute( vtkObject *caller, unsigned long event, void* )
+//     {
+//         vtkInteractorStyleImage *interactor = vtkInteractorStyleImage::SafeDownCast( caller );
+//         switch( event )
+//         {
+//         case vtkCommand::StartWindowLevelEvent:
+//         break;
+// 
+//         case vtkCommand::WindowLevelEvent:
+//             if( m_viewer->isManipulateOn() )
+//             {
+//                 interactor->EndWindowLevel();
+//             }
+//             else
+//             {
+//                 m_viewer->updateWindowLevelAnnotation();
+//             }
+//         break;
+// 
+//         case vtkCommand::EndWindowLevelEvent:
+//         break;
+//         }
+//     }
+// };
 
 Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
  : QViewer( parent )
@@ -130,6 +133,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
 
     m_manipulateState = Q2DViewer::Ready;
     m_manipulating = false;
+
 }
 
 Q2DViewer::~Q2DViewer()
@@ -174,6 +178,8 @@ void Q2DViewer::createActions()
 
 void Q2DViewer::createTools()
 {
+    m_toolManager = new Q2DViewerToolManager( this );
+    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 void Q2DViewer::createAnnotations()
@@ -696,6 +702,20 @@ void Q2DViewer::updateVoxelInformation()
     this->getInteractor()->Render();
 }
 
+void Q2DViewer::setTool( QString toolName )
+{
+    if( m_toolManager->setCurrentTool( toolName ) )
+    {
+        ///\Todo per implementar
+        DEBUG_LOG( qPrintable( QString("OK, hem activat la tool: ") + toolName ) );
+    }
+    else
+    {
+        ///\Todo per implementar
+        DEBUG_LOG( qPrintable( QString(":/ no s'ha pogut activar la tool: ") + toolName ) );
+    }
+}
+
 void Q2DViewer::onMouseMove()
 {
     updateVoxelInformation();
@@ -790,6 +810,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
 {
     updateRulers();
     // fer el que calgui per cada tipus d'event
+    emit eventReceived( event );
     switch( event )
     {
     case vtkCommand::MouseMoveEvent:    
@@ -863,25 +884,28 @@ void Q2DViewer::setupInteraction()
     // despatxa qualsevol event-> tools                       
     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*,unsigned long,void *, vtkCommand *) ) );
 
-    WindowLevelCallback * wlcbk = WindowLevelCallback::New();
-    wlcbk->m_viewer = this;
-    
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
-// Amb això fem que els events que estaven associats al premer el boto dret no es disparin
-    m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::EndWindowLevelEvent );
+//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
 
+// Amb això fem que els events que estaven associats al premer el boto dret no es disparin
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
+
+//     WindowLevelCallback * wlcbk = WindowLevelCallback::New();
+//     wlcbk->m_viewer = this;
+//     
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
+//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
 //     // anulem el window levelling manual
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
 // //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
 
-//     ZoomTool *zoom = new ZoomTool( m_viewer->GetInteractorStyle() );
-//     WindowLevelTool *wl = new WindowLevelTool( m_viewer->GetInteractorStyle() );
-//     WindowLevelTool *wl = new WindowLevelTool();
-//     wl->setup( m_viewer->GetInteractorStyle() , this );
 }
 
 void Q2DViewer::setInput( Volume* volume )
@@ -918,6 +942,14 @@ void Q2DViewer::setInput( Volume* volume )
 
     // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
     setupInteraction();
+}
+
+vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
+{
+    if( m_viewer )
+        return m_viewer->GetInteractorStyle();
+    else
+        return 0;
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
@@ -1038,15 +1070,14 @@ void Q2DViewer::updateView()
 
 void Q2DViewer::setSlice( int value )
 {
-    m_currentSlice = value;
-    emit sliceChanged( m_currentSlice );
-
-    if( m_currentSlice <= m_viewer->GetSliceRange()[1] && m_currentSlice >= m_viewer->GetSliceRange()[0] )
+    if( value <= m_viewer->GetSliceRange()[1] && value >= m_viewer->GetSliceRange()[0] )
     {
         m_viewer->SetSlice( m_currentSlice );
+        m_currentSlice = value;
+        emit sliceChanged( m_currentSlice );
+        updateSliceAnnotation();
+        this->getInteractor()->Render();
     }
-    updateSliceAnnotation();
-    this->getInteractor()->Render();
 }
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
@@ -1070,7 +1101,7 @@ void Q2DViewer::setWindowLevel( double window , double level )
     }
 }
 
-void Q2DViewer::getWindowLevel( double wl[2] )
+void Q2DViewer::getDefaultWindowLevel( double wl[2] )
 {
     if( m_mainVolume )
     {
@@ -1079,7 +1110,46 @@ void Q2DViewer::getWindowLevel( double wl[2] )
     }
     else
     {
-        DEBUG_LOG( "::getWindowLevel() : No tenim input " );
+        DEBUG_LOG( "::getDefaultWindowLevel() : No tenim input " );
+    }
+}
+
+void Q2DViewer::getCurrentWindowLevel( double wl[2] )
+{
+    if( m_mainVolume )
+    {
+        wl[0] = m_viewer->GetColorWindow();
+        wl[1] = m_viewer->GetColorLevel();
+    }
+    else
+    {
+        DEBUG_LOG( "::getCurrentWindowLevel() : No tenim input " );
+    }
+}
+
+double Q2DViewer::getCurrentColorWindow()
+{
+    if( m_mainVolume )
+    {
+        return m_viewer->GetColorWindow();
+    }
+    else
+    {
+        DEBUG_LOG( "::getCurrentColorWindow() : No tenim input " );
+        return 0;
+    }
+}
+
+double Q2DViewer::getCurrentColorLevel()
+{
+    if( m_mainVolume )
+    {
+        return m_viewer->GetColorLevel();
+    }
+    else
+    {
+        DEBUG_LOG( "::getCurrentColorLevel() : No tenim input " );
+        return 0;
     }
 }
 
