@@ -57,9 +57,9 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     studyToConvert.studyUID = studyUID;
     studyToConvert.patientId = study.getPatientId().c_str();
     
-    while ( index < m_studiesToConvert.count() && !stop ) 
+    while ( index < m_studiesToConvert.count() && !stop )  //busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
     {
-        if ( studyToConvert.patientId < m_studiesToConvert.at( index ).patientId ) //comparem amb els altres estudis de la llista
+        if ( studyToConvert.patientId < m_studiesToConvert.at( index ).patientId ) //comparem amb els altres estudis de la llista, fins trobar el seu llloc corresponentm 
         {
             stop = true;
         }
@@ -75,8 +75,8 @@ void ConvertToDicomdir::addStudy( QString studyUID )
 
 Status ConvertToDicomdir::convert( QString dicomdirPath )
 {
+    /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     CacheImageDAL cacheImageDAL;
-    //creem el nom del directori de l'estudi el format és STUXXXXX, on XXXXX és el numero d'estudi dins el dicomdir
     ImageMask imageMask;
     Status state;
     int imageNumberStudy , imageNumberTotal = 0 , i = 0;
@@ -107,6 +107,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     m_progress->setMinimumDuration( 0 );
     m_progress->setCancelButton( 0 );
 
+    //copiem les imatges dels estudis seleccionats al directori desti
     state = startConversionToDicomdir();
  
     if ( !state.good() )
@@ -140,6 +141,7 @@ Status ConvertToDicomdir::startConversionToDicomdir()
     
     m_patient = 0;
 
+    //agrupem estudis1 per pacient, com que tenim la llista ordenada per patientId
     while ( !m_studiesToConvert.isEmpty() )
     {
         studyToConvert = m_studiesToConvert.takeFirst();
@@ -168,6 +170,7 @@ Status ConvertToDicomdir::startConversionToDicomdir()
 
 Status ConvertToDicomdir::convertStudy( QString studyUID )
 {
+    /*Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir*/
     CacheSeriesDAL cacheSeriesDAL;
     QDir studyDir;
     QChar fillChar = '0';    
@@ -192,7 +195,7 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
     
     seriesList.firstSeries();
 
-    while ( !seriesList.end() ) //per cada sèrie de l'estudi
+    while ( !seriesList.end() ) //per cada sèrie de l'estudi, creem el directori de la sèrie
     {
         state = convertSeries( seriesList.getSeries() );
         
@@ -233,7 +236,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
     
     imageList.firstImage();
 
-    while ( !imageList.end() ) //per cada imatge de la sèrie
+    while ( !imageList.end() ) //per cada imatge de la sèrie, la convertim a foramt littleEndian, i la copiem al directori desti
     {
         state = convertImage( imageList.getImage() );
         
@@ -269,7 +272,7 @@ Status ConvertToDicomdir::convertImage( Image image )
 
     imageOutputPath = m_dicomDirSeriesPath + imageName;
 
-    //convertim la imatge a littleEndian, demanat per la normativa DICOM
+    //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
     state = convertDicom.convert( imageInputPath.toAscii().constData() , imageOutputPath.toAscii().constData() );
 
      m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança

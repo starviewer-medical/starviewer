@@ -26,8 +26,12 @@ public:
 
     QCreateDicomdir( QWidget *parent = 0 );
 
+    /** Afegeix un estudi per convertir a dicomdir
+     * @param study estudi per convertir a dicomdir
+     */
     void addStudy( Study study );
 
+    ///Neteja el directori temporal utilitzat crear els dicomdir que es gravaran en cd o dvd
     void clearTemporaryDir();
 
     ~QCreateDicomdir();
@@ -48,7 +52,7 @@ public slots:
 
 public slots:
         
-    /** Slot que s'activa quan canviem l'operació seleccionada a combobox
+    /** Slot que s'activa quan canviem els dispositiu d'emmagatzemament seleccionat al combobox
      * @param index del combobox
      */
     void changedAction( int index );

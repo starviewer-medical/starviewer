@@ -48,8 +48,7 @@ public:
 
 private :
 
-    /*This struct is used in pacsmove.cpp, it can't be included in the pacsmove class declaration because
-    it's used from a callback action of function*/
+    /*Estructura que conté la informació d'un estudi a convertir a dicomdir, és necessari guardar el Patient ID perquè segons la normativa del IHE, els estudis s'han d'agrupar per id de pacient*/
     struct StudyToConvert
         {
             QString patientId;
@@ -72,9 +71,7 @@ private :
     int m_series;
     int m_image;
 
-    /** 
-     *
-     */
+    /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
     Status startConversionToDicomdir();
 
     /** Converteix un estudi al format littleendian
@@ -95,9 +92,7 @@ private :
      */
     Status convertImage( Image image );    
     
-    /** esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
-     * 
-     */
+    /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
 };
 

@@ -58,7 +58,6 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
     connect( m_comboBoxAction , SIGNAL( currentIndexChanged( int ) ) , this , SLOT( changedAction( int ) ) );
-    
 }
 
 void QCreateDicomdir::changedAction( int index )
@@ -180,7 +179,7 @@ void QCreateDicomdir::addStudy( Study study )
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "With this study the Dicomdir exceeds the size of the device. Please change the device or create the dicomdir" ) );
         }
         else
-        {
+        {   //afegim la informació de l'estudi a la llista
             QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
             m_dicomdirSize = m_dicomdirSize + studySize;
             setDicomdirSize();
@@ -236,7 +235,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
         
     INFO_LOG ( "Iniciant la creació del dicomdir en cd-dvd" );
     
-    if ( !temporaryDirPath.mkpath( dicomdirPath ) )
+    if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
         QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the temporary directory. Please check users permission" ) );
         logMessage = "Error al crear directori ";
@@ -317,7 +316,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     INFO_LOG ( logMessage.toAscii().constData() );    
 
-    if ( !enoughFreeSpace( dicomdirPath ) )
+    if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Not enough free space to create dicom dir. Please free space" ) );
         
@@ -336,10 +335,10 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         return state.setStatus( "No study selected to create dicomdir", false , 3001 );
     }
 
-    for ( int i = 0; i < dicomdirStudiesList.count(); i++ )
+    for ( int i = 0; i < dicomdirStudiesList.count(); i++ ) 
     {
         item = dicomdirStudiesList.at( i );
-        convertToDicomdir.addStudy( item->text( 7 ) );
+        convertToDicomdir.addStudy( item->text( 7 ) ); // indiquem a la classe convertToDicomdir, quins estudis s'ha de convertir a dicomdir, passant el UID de l'estudi
 
         logMessage = "L'estudi ";
         logMessage.append( item->text( 7 ) );
@@ -347,7 +346,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG ( logMessage.toAscii().constData() );
     }
 
-    state = convertToDicomdir.convert( dicomdirPath );
+    state = convertToDicomdir.convert( dicomdirPath );//s'inicia la conversió
     
     if ( !state.good() )
     {
