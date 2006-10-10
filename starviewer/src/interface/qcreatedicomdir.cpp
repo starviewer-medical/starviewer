@@ -211,7 +211,6 @@ void QCreateDicomdir::createDicomdir()
                  if ( createDicomdirOnCdOrDvd().good() ) executek3b( cd );
                  break;
         case 2 : //dvd
-                 createDicomdirOnCdOrDvd();
                  if ( createDicomdirOnCdOrDvd().good() ) executek3b( dvd );
                  break;
     }
