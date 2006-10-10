@@ -513,7 +513,7 @@ void QMPRExtension::setInput( Volume *input )
     // faltaria refrescar l'input dels 3 mpr     
     m_axial2DView->setInput( m_volume );
     double wl[2];
-    m_axial2DView->getWindowLevel( wl );
+    m_axial2DView->getDefaultWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem. 

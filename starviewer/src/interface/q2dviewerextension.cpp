@@ -11,6 +11,7 @@
 #include "qwindowlevelcombobox.h"
 #include <QAction>
 #include <QToolBar>
+#include <QSignalMapper>
 // VTK
 #include <vtkRenderer.h>
 
@@ -34,6 +35,8 @@ Q2DViewerExtension::~Q2DViewerExtension()
 
 void Q2DViewerExtension::createActions()
 {
+    m_signalMapper = new QSignalMapper( this );
+    
     m_axialViewAction = new QAction( 0 );
     m_axialViewAction->setText( tr("&Axial View") );
     m_axialViewAction->setShortcut( tr("Ctrl+A") );
@@ -68,6 +71,42 @@ void Q2DViewerExtension::createActions()
     m_doubleViewAction->setStatusTip( tr("Change To Double View Mode") );
     m_doubleViewAction->setIcon( QIcon(":/images/addViewRight.png") );
     m_doubleViewToolButton->setDefaultAction( m_doubleViewAction );
+
+    // Tools
+    // \TODO aquestes accions ens les hauria de donar cada tool, o el tool manager dels visualitzadors
+    m_slicingAction = new QAction( 0 );
+    m_slicingAction->setText( tr("Slicer") );
+    m_slicingAction->setStatusTip( tr("Enable/Disable slicing tool") );
+    m_slicingAction->setIcon( QIcon(":/images/slicing.png") );
+    m_signalMapper->setMapping( m_slicingAction , "Slicing2DTool" );
+    connect( m_slicingAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_slicingToolButton->setDefaultAction( m_slicingAction );
+
+    m_windowLevelAction = new QAction( 0 );
+    m_windowLevelAction->setText( tr("Window Level") );
+    m_windowLevelAction->setStatusTip( tr("Enable/Disable Window Level tool") );
+    m_windowLevelAction->setIcon( QIcon(":/images/windowLevel.png") );
+    m_signalMapper->setMapping( m_windowLevelAction , "WindowLevelTool" );
+    connect( m_windowLevelAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
+
+    m_zoomAction = new QAction( 0 );
+    m_zoomAction->setText( tr("Zoom") );
+    m_zoomAction->setStatusTip( tr("Enable/Disable Zoom tool") );
+    m_zoomAction->setIcon( QIcon(":/images/zoom.png") );
+    m_signalMapper->setMapping( m_zoomAction , "ZoomTool" );
+    connect( m_zoomAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_zoomToolButton->setDefaultAction( m_zoomAction );
+
+    m_moveAction = new QAction( 0 );
+    m_moveAction->setText( tr("Move") );
+    m_moveAction->setStatusTip( tr("Enable/Disable Move tool") );
+    m_moveAction->setIcon( QIcon(":/images/move.png") );
+    m_signalMapper->setMapping( m_moveAction , "MoveTool" );
+    connect( m_moveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_moveToolButton->setDefaultAction( m_moveAction );
+    
+    connect( m_signalMapper, SIGNAL( mapped(QString) ), m_2DView , SLOT( setTool(QString) ) );
 }
 
 void Q2DViewerExtension::createToolBars()
@@ -132,7 +171,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
     double wl[2];
-    m_2DView->getWindowLevel( wl );
+    m_2DView->getDefaultWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();

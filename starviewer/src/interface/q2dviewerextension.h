@@ -12,6 +12,7 @@
 // FWD declarations
 class QAction;
 class QToolBar;
+class QSignalMapper;
 
 namespace udg {
 
@@ -77,6 +78,11 @@ private:
     QAction *m_coronalViewAction;
     QAction *m_singleViewAction;
     QAction *m_doubleViewAction;
+    QAction *m_slicingAction;
+    QAction *m_windowLevelAction;
+    QAction *m_zoomAction;
+    QAction *m_moveAction;
+    QSignalMapper *m_signalMapper;
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
