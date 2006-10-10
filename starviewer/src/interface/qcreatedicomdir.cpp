@@ -270,7 +270,7 @@ void QCreateDicomdir::createDicomdirOnHard()
     {
         switch ( QMessageBox::question( this ,
                 tr( "Create Dicomdir" ) ,
-                tr( "The directory contains a dicomdir, do you want to overwrite ?" ) ,
+                tr( "The directory contains a dicomdir, do you want to overwrite and delete all the files in the directory ?" ) ,
                 tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
             case 0: // si vol sobreescriure, esborrem el contingut del directori 

@@ -143,6 +143,17 @@ void StarviewerSettings::setStudyCacheListColumnWidth( int col , int width )
     m_starviewerSettings.setValue( key , width );
 }
 
+void StarviewerSettings::setStudyDicomdirListColumnWidth( int col , int width )
+{
+    QString key , strCol;
+    
+    strCol.setNum( col , 10 );
+    key.insert( 0  , dicomdirColumnWidthKey );
+    key.append( strCol );
+    
+    m_starviewerSettings.setValue( key , width );
+}
+
 int StarviewerSettings::getStudyPacsListColumnWidth( int col )
 {   
     QString key , strCol;
@@ -160,6 +171,17 @@ int StarviewerSettings::getStudyCacheListColumnWidth( int col )
     
     strCol.setNum( col , 10 );
     key.insert( 0 , cacheColumnWidthKey );
+    key.append( strCol );
+    
+    return m_starviewerSettings.value( key , 100 ).toInt();
+}
+
+int StarviewerSettings::getStudyDicomdirListColumnWidth( int col )
+{   
+    QString key , strCol;
+    
+    strCol.setNum( col , 10 );
+    key.insert( 0 , dicomdirColumnWidthKey );
     key.append( strCol );
     
     return m_starviewerSettings.value( key , 100 ).toInt();

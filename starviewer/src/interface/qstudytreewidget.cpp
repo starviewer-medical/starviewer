@@ -110,22 +110,27 @@ void QStudyTreeWidget::setWidthColumns()
 {    
     StarviewerSettings settings;
     
-    //Renombrem segons quin objecte es tracti, si es el que mostra la llista d'estudis del PACS o de la cache
-    if (m_parentName == "m_tabPacs")
-    { 
-        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
-        {
-            m_studyTreeView->header()->resizeSection( i , settings.getStudyPacsListColumnWidth( i ) );
-        }    
-    }   
-   
-    if (m_parentName == "m_tabCache")
+    for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
     {
-        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
+        if (m_parentName == "m_tabCache")
         {
             m_studyTreeView->header()->resizeSection( i ,settings.getStudyCacheListColumnWidth(i) );
-        }      
-    }
+        }
+    
+        //Renombrem segons quin objecte es tracti, si es el que mostra la llista d'estudis del PACS o de la cache
+        if (m_parentName == "m_tabPacs")
+        { 
+            m_studyTreeView->header()->resizeSection( i , settings.getStudyPacsListColumnWidth( i ) );
+        }   
+        
+        if (m_parentName == "m_tabDicomdir")
+        { 
+            m_studyTreeView->header()->resizeSection( i , settings.getStudyDicomdirListColumnWidth( i ) );
+        }   
+
+    }          
+    
+   
 }
 
 void QStudyTreeWidget::insertStudyList( StudyList *studyList )
@@ -528,21 +533,27 @@ void QStudyTreeWidget::saveColumnsWidth()
 {
     StarviewerSettings settings;
 
-    if ( m_parentName == "m_tabPacs" )
-    { 
-        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
-        {
-            settings.setStudyPacsListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
-        }    
-    }   
-   
-    if ( m_parentName == "m_tabCache" )
+    
+    for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
     {
-        for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
+    
+        if ( m_parentName == "m_tabPacs" )
+        { 
+            settings.setStudyPacsListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
+        }   
+    
+        if ( m_parentName == "m_tabCache" )
         {
-           settings.setStudyCacheListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
-        }      
+            settings.setStudyCacheListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
+        }
+
+        if ( m_parentName == "m_tabDicomdir" )
+        {
+            settings.setStudyDicomdirListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
+        }
     }
+    
+   
 }
 
 QStudyTreeWidget::~QStudyTreeWidget()

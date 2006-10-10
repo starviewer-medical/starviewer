@@ -304,7 +304,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab" >
+     <widget class="QWidget" name="m_tabDicomdir" >
       <attribute name="title" >
        <string>Dicomdir</string>
       </attribute>

@@ -26,6 +26,7 @@ const QString maxConnectionsKey("pacs/pacsparam/MaxConnects" );
 const QString selectLanguageKey("pacs/language" );
 const QString pacsColumnWidthKey("pacs/interfase/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString cacheColumnWidthKey("pacs/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString dicomdirColumnWidthKey("pacs/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString MaximumDaysNotViewedStudy("pacs/cache/MaximumDaysNotViewedStudy" );
 
 class StarviewerSettings{
@@ -142,6 +143,12 @@ public:
 	 * @param amplada de la columna
 	 */
     void setStudyCacheListColumnWidth( int col , int width );      
+    
+    /** guarda la mida de la columna que se li passa per paràmetre del QStudyListView ,  encarregat de mostrar les dades d'un dicomdir
+     * @param número de columna
+     * @param amplada de la columna
+     */
+    void setStudyDicomdirListColumnWidth( int col , int width ); 
       
 	/** retorna l'amplada del número de columna de la llista d'estudis del PACS ,  passat per paràmetre
 	 * @return amplada de la columna
@@ -153,6 +160,11 @@ public:
 	 */
    	int getStudyCacheListColumnWidth( int column );
       
+    /** retorna l'amplada del número de columna de la llista d'estudis de Dicomdir,  passat per paràmetre
+     * @return amplada de la columna
+     */
+    int getStudyDicomdirListColumnWidth( int column );
+
 private :
 
     QSettings m_starviewerSettings;

@@ -1184,6 +1184,8 @@ void QueryScreen::closeEvent( QCloseEvent* ce )
 	//ce->ignore();
 	m_studyTreeWidgetPacs->saveColumnsWidth();
 	m_studyTreeWidgetCache->saveColumnsWidth();
+    m_studyTreeWidgetDicomdir->saveColumnsWidth();
+       
     ce->accept();        
     m_qcreateDicomdir->clearTemporaryDir();
 }
@@ -1287,6 +1289,7 @@ void QueryScreen::openDicomdir()
         {
             logMessage = "Obert el dicomdir " + dicomdirPath;
             INFO_LOG( logMessage.toAscii().constData() );       
+            m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
         }
 
         clearTexts();//Netegem el filtre de cerca al obrir el dicomdir
