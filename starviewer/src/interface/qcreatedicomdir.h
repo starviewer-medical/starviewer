@@ -23,6 +23,7 @@ Q_OBJECT
     enum recordDevice { cd , dvd };
     
 public:
+
     QCreateDicomdir( QWidget *parent = 0 );
 
     void addStudy( Study study );
@@ -53,6 +54,9 @@ public slots:
     void changedAction( int index );
     
 private:
+
+    unsigned long m_dicomdirSize;
+    unsigned long m_DiskSpace;
 
     ///Crea les connexions de signals i slots de la interfície    
     void createConnections();
@@ -115,8 +119,6 @@ private:
      */
     void clearQCreateDicomdirScreen();
 
-    unsigned long m_dicomdirSize;
-    unsigned long m_DiskSpace;
 };
 
 }

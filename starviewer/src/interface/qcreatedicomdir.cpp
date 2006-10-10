@@ -47,7 +47,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     m_progressBarOcupat->setVisible( false );
     
     //per defecte gravem al disc dur per tant, l'espai és il·limitat
-    m_DiskSpace = (unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
+    m_DiskSpace = ( unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
     
 }
 
@@ -74,19 +74,19 @@ void QCreateDicomdir::changedAction( int index )
                  m_lineEditDicomdirPath->setVisible( true );
                  m_buttonExamineDisk->setVisible( true );
                  m_labelCreateDicomdir->setText( tr( "Create dicomdir at"  ) );
-                 m_DiskSpace = (unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );//per gravar al disc no hi ha màxim
+                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha màxim
                  break;
         case 1 : //cd
-                 if ( sizeInMB < 700)
+                 if ( sizeInMB < 700 )
                  {
                     m_labelMbCdDvdOcupat->setVisible( true );
                     m_progressBarOcupat->setVisible( true );
                     m_labelSizeOfDicomdir->setVisible( false );
                     m_lineEditDicomdirPath->setVisible( false );
                     m_buttonExamineDisk->setVisible( false );
-                    m_labelCreateDicomdir->setText( tr( "Cd occupied"  ) );
+                    m_labelCreateDicomdir->setText( tr( "Cd occupied" ) );
                     m_progressBarOcupat->setMaximum( 700 );
-                    m_DiskSpace = (unsigned long) 700 * (unsigned long) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
+                    m_DiskSpace = ( unsigned long ) 700 * ( unsigned long ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
                     m_progressBarOcupat->repaint();
                  }
                  else
@@ -103,9 +103,9 @@ void QCreateDicomdir::changedAction( int index )
                     m_labelSizeOfDicomdir->setVisible( false );
                     m_lineEditDicomdirPath->setVisible( false );
                     m_buttonExamineDisk->setVisible( false );
-                    m_labelCreateDicomdir->setText( tr( "Dvd Ocuppied"  ) );
+                    m_labelCreateDicomdir->setText( tr( "Dvd Ocuppied" ) );
                     m_progressBarOcupat->setMaximum( 4400 );
-                    m_DiskSpace = (unsigned long) 4400 * (unsigned long) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
+                    m_DiskSpace = ( unsigned long ) 4400 * ( unsigned long ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
                     m_progressBarOcupat->repaint();
                  }
                  else
@@ -146,9 +146,9 @@ void QCreateDicomdir::setDicomdirSize()
     }
     else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
     
-    sizeText.setNum( sizeInMb , 'f', 0);
+    sizeText.setNum( sizeInMb , 'f' , 0 );
     sizeOfDicomdirText.clear();
-    sizeOfDicomdirText.insert(0 , sizeText );
+    sizeOfDicomdirText.insert( 0 , sizeText );
     sizeOfDicomdirText.append( " Mb" );
     
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
@@ -242,7 +242,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
         DEBUG_LOG( logMessage.toAscii().constData() );
-        return state.setStatus( "Can't create temporary dicomdir", false , 3002);
+        return state.setStatus( "Can't create temporary dicomdir", false , 3002 );
     }
     else
     {        
@@ -324,19 +324,19 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
         logMessage.append( state.text().c_str() );        
         ERROR_LOG ( logMessage.toAscii().constData() );
-        return state.setStatus( "Nor enough space to create dicomdir", false , 3000);;
+        return state.setStatus( "Not enough space to create dicomdir", false , 3000 );
     }         
 
     QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
     QTreeWidgetItem *item;
     
-    if ( dicomdirStudiesList.count() == 0) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
+    if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please, first select the studies which you want to create a dicomdir" ) );
-        return state.setStatus( "No study selected to create dicomdir", false , 3001);;
+        return state.setStatus( "No study selected to create dicomdir", false , 3001 );
     }
 
-    for ( int i = 0; i < dicomdirStudiesList.count();i++ )
+    for ( int i = 0; i < dicomdirStudiesList.count(); i++ )
     {
         item = dicomdirStudiesList.at( i );
         convertToDicomdir.addStudy( item->text( 7 ) );
@@ -368,7 +368,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 void QCreateDicomdir::clearQCreateDicomdirScreen()
 {
     m_dicomdirStudiesList->clear();
-    m_lineEditDicomdirPath->setText("");
+    m_lineEditDicomdirPath->setText( "" );
     
     m_labelSizeOfDicomdir->setText( tr( "The size of Dicomdir is 0 Mb" ) );
     
@@ -415,7 +415,7 @@ void QCreateDicomdir::removeSelectedStudy()
     else
     {
         //consultem la mida de l'estudi
-        imageMask.setStudyUID( m_dicomdirStudiesList->currentItem()->text(7).toAscii().constData() );
+        imageMask.setStudyUID( m_dicomdirStudiesList->currentItem()->text( 7 ).toAscii().constData() );
         
         state = cacheImageDAL.imageSize( imageMask , studySize );        
 
@@ -441,7 +441,6 @@ bool QCreateDicomdir::existsStudy( QString studyUID )
         return true;
     }
     else return false;
-    
 }
 
 void QCreateDicomdir::executek3b( recordDevice device )
@@ -451,7 +450,8 @@ void QCreateDicomdir::executek3b( recordDevice device )
     QDir temporaryDirPath;    
     QString paramater;
     
-        k3bParamatersList.push_back( "--nosplash" );
+    k3bParamatersList.push_back( "--nosplash" );
+    
     switch( device )
     {
         case cd :   k3bParamatersList.push_back( "--datacd" );
@@ -468,7 +468,7 @@ void QCreateDicomdir::executek3b( recordDevice device )
     }
 }
 
-bool QCreateDicomdir::enoughFreeSpace( QString path)
+bool QCreateDicomdir::enoughFreeSpace( QString path )
 {
     HardDiskInformation hardDisk;
 
@@ -522,16 +522,16 @@ void QCreateDicomdir::databaseError( Status *state )
 {
     QString text,code;
 
-    if (!state->good() )
+    if ( !state->good() )
     {
         switch( state->code() )
-        {  case 2001 : text.insert( 0, tr( "Database is corrupted or SQL syntax error" ) );
+        {  case 2001 :  text.insert( 0, tr( "Database is corrupted or SQL syntax error" ) );
                         text.append( "\n" );
                         text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() ,10 );
+                        code.setNum( state->code() , 10 );
                         text.append( code );
                         break;
-            case 2005 : text.insert( 0, tr( "Database is looked" ) );
+            case 2005 : text.insert( 0, tr( "Database is locked" ) );
                         text.append( "\n" );
                         text.append( "To solve this error restart the user session" );
                         text.append( "\n" );
@@ -565,7 +565,6 @@ void QCreateDicomdir::databaseError( Status *state )
         }
         QMessageBox::critical( this , tr( "StarViewer" ) , text );
     }    
-
 }
 
 bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )

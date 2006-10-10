@@ -72,7 +72,6 @@ private :
     int m_series;
     int m_image;
 
-
     /** 
      *
      */

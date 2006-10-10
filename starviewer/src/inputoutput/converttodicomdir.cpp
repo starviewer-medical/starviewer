@@ -79,7 +79,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     //creem el nom del directori de l'estudi el format és STUXXXXX, on XXXXX és el numero d'estudi dins el dicomdir
     ImageMask imageMask;
     Status state;
-    int imageNumberStudy , imageNumberTotal = 0 , i = 0 ;
+    int imageNumberStudy , imageNumberTotal = 0 , i = 0;
     CreateDicomdir createDicomdir;
     QString studyUID;
     
@@ -127,10 +127,6 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
     return state;
 }
 
-/**
- * 
- * @return 
- */
 Status ConvertToDicomdir::startConversionToDicomdir()
 {
     StudyToConvert studyToConvert;

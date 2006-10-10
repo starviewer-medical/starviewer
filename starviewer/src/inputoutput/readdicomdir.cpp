@@ -40,7 +40,7 @@ Status ReadDicomdir::open( std::string dicomdirPath )
     
     //per defecte la informació dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
     dicomdirFilePath = dicomdirPath;
-    dicomdirFilePath.append("/DICOMDIR");
+    dicomdirFilePath.append( "/DICOMDIR" );
     m_dicomdir = new DcmDicomDir( dicomdirFilePath.c_str() );
          
     return state.setStatus( m_dicomdir->error() );
