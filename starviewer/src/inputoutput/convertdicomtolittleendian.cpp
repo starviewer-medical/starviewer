@@ -31,7 +31,6 @@ namespace udg {
 
 ConvertDicomToLittleEndian::ConvertDicomToLittleEndian()
 {
-
 }
 
 Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string outputFile )
@@ -53,10 +52,7 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
 
     error = fileformat.loadFile( inputFile.c_str() , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
 
-    if ( error.bad() )
-    {
-        return state.setStatus( error );
-    }
+    if ( error.bad() ) return state.setStatus( error );
 
     dataset->loadAllDataIntoMemory();
 
@@ -64,10 +60,7 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
 
     dataset->chooseRepresentation( opt_oxfer , NULL );
 
-    if ( dataset->canWriteXfer( opt_oxfer ) )
-    {
-        
-    } else 
+    if ( !dataset->canWriteXfer( opt_oxfer ) )
     {
         descriptionError =  "Error: no conversion to transfer syntax ";
         descriptionError.append ( opt_oxferSyn.getXferName() );
@@ -77,11 +70,9 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
         return state;
     }
 
-    error = fileformat.saveFile(outputFile.c_str() , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc ,
-        OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
+    error = fileformat.saveFile( outputFile.c_str() , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
 
     return state.setStatus( error );
-
 }
 
 ConvertDicomToLittleEndian::~ConvertDicomToLittleEndian()
