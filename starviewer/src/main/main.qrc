@@ -1,32 +1,36 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource>
-    <file>images/icon.png</file>
-    <file>images/splash.png</file>
-    <file>images/new.png</file>
-    <file>images/open.png</file>
-    <file>images/fileclose.png</file>
-    <file>images/exit.png</file>
-    <file>images/folderclose.png</file>
-    <file>images/folderopen.png</file>
-    <file>images/series.png</file>
-    <file>images/openDicom.png</file>
-    <file>images/pacsQuery.png</file>
-    <file>images/info.png</file>
-    <file>images/axial.png</file>
-    <file>images/sagital.png</file>
-    <file>images/coronal.png</file>
-    <file>images/mpr3D.png</file>
-    <file>images/mip.png</file>
-    <file>images/singleView.png</file>
-    <file>images/addViewRight.png</file>
-    <file>images/view_left_right.png</file>
-    <file>images/view_sidetree.png</file>
-    <file>images/apply.png</file>
-    <file>images/button_ok.png</file>
-    <file>images/cancel.png</file>
-    <file>cache/database.sql</file>
-    <file>translations/interface_ca_ES.qm</file>
-    <file>translations/interface_es_ES.qm</file>
-    <file>translations/interface_en_GB.qm</file>
-</qresource>
+<RCC>
+    <qresource prefix="/" >
+        <file>cache/database.sql</file>
+        <file>images/addViewRight.png</file>
+        <file>images/apply.png</file>
+        <file>images/axial.png</file>
+        <file>images/button_ok.png</file>
+        <file>images/cancel.png</file>
+        <file>images/coronal.png</file>
+        <file>images/exit.png</file>
+        <file>images/fileclose.png</file>
+        <file>images/folderclose.png</file>
+        <file>images/folderopen.png</file>
+        <file>images/icon.png</file>
+        <file>images/info.png</file>
+        <file>images/mip.png</file>
+        <file>images/move.png</file>
+        <file>images/mpr3D.png</file>
+        <file>images/new.png</file>
+        <file>images/open.png</file>
+        <file>images/openDicom.png</file>
+        <file>images/pacsQuery.png</file>
+        <file>images/sagital.png</file>
+        <file>images/series.png</file>
+        <file>images/singleView.png</file>
+        <file>images/slicing.png</file>
+        <file>images/splash.png</file>
+        <file>images/view_left_right.png</file>
+        <file>images/view_sidetree.png</file>
+        <file>images/windowLevel.png</file>
+        <file>images/zoom.png</file>
+        <file>translations/interface_ca_ES.qm</file>
+        <file>translations/interface_en_GB.qm</file>
+        <file>translations/interface_es_ES.qm</file>
+    </qresource>
 </RCC>
