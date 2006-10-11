@@ -57,39 +57,6 @@
 
 namespace udg {
 
-// class WindowLevelCallback : public vtkCommand
-// {
-// public:
-//     Q2DViewer* m_viewer;
-//     static WindowLevelCallback *New()
-//     {
-//        return new WindowLevelCallback;
-//     }
-//     virtual void Execute( vtkObject *caller, unsigned long event, void* )
-//     {
-//         vtkInteractorStyleImage *interactor = vtkInteractorStyleImage::SafeDownCast( caller );
-//         switch( event )
-//         {
-//         case vtkCommand::StartWindowLevelEvent:
-//         break;
-// 
-//         case vtkCommand::WindowLevelEvent:
-//             if( m_viewer->isManipulateOn() )
-//             {
-//                 interactor->EndWindowLevel();
-//             }
-//             else
-//             {
-//                 m_viewer->updateWindowLevelAnnotation();
-//             }
-//         break;
-// 
-//         case vtkCommand::EndWindowLevelEvent:
-//         break;
-//         }
-//     }
-// };
-
 Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
  : QViewer( parent )
 {
@@ -868,44 +835,25 @@ void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, voi
 void Q2DViewer::setupInteraction()
 {   
     // configurem l'Image Viewer i el qvtkWidget
-    // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat \TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
+    // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat
+    //\TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
     
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
+    // despatxa qualsevol event-> tools                       
+    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*,unsigned long,void *, vtkCommand *) ) );
+
+    // \TODO fer això aquí? o fer-ho en el tool manager?
+    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
     
 // menú contextual TODO el farem servir???
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
 //                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
 //                        this,
 //                        SLOT( contextMenuRelease(vtkObject*,unsigned long,void*, vtkCommand *) ) );
-
-    // despatxa qualsevol event-> tools                       
-    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*,unsigned long,void *, vtkCommand *) ) );
-
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::EndWindowLevelEvent );
-//     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-
-// Amb això fem que els events que estaven associats al premer el boto dret no es disparin
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::RightButtonPressEvent , wlcbk , 0 );
-
-//     WindowLevelCallback * wlcbk = WindowLevelCallback::New();
-//     wlcbk->m_viewer = this;
-//     
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::StartWindowLevelEvent , wlcbk );
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::WindowLevelEvent , wlcbk );
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::EndWindowLevelEvent , wlcbk );
-//     m_viewer->GetInteractorStyle()->AddObserver( vtkCommand::LeftButtonPressEvent , wlcbk );
-//     // anulem el window levelling manual
-// //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::StartWindowLevelEvent );
-// //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::WindowLevelEvent );
-// //     m_viewer->GetInteractorStyle()->RemoveObservers( vtkCommand::ResetWindowLevelEvent );
-
 }
 
 void Q2DViewer::setInput( Volume* volume )
