@@ -358,7 +358,6 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
 void ExtensionHandler::extensionChanged( int index )
 {
     // quan canvia una extensió hem de canviar les toolbars, per tan hem de mirar com fer-ho perque no sabem quina extensió ( sí podem obtenir el widget ) en concret és la que tenim. Ho podríem fer mitjançant signals i slots. és a dir, quan es faci el canvi d'extensió s'enviarà alguna senyal que farà que netejem la toolbar d¡extensions i que s'ompli amb els nous botons i eines
-    m_mainApp->clearExtensionsToolBar();
     m_mainApp->m_extensionWorkspace->setLastIndex( index );
 }
 

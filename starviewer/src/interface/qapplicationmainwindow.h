@@ -42,12 +42,6 @@ public:
     void newAndOpen();
     void newAndOpenDir();
     
-    /// Neteja la barra d'eines d'extensions
-    void clearExtensionsToolBar();
-
-    /// Retorna la barra d'eines d'extensions
-    QToolBar *getExtensionsToolBar() const { return m_extensionsToolBar; }
-    
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
     
@@ -103,8 +97,7 @@ private:
 //     QMenu *m_exportFilesMenu;
 //     QMenu *m_recentFilesMenu;
     
-    /// Barres d'eines 
-    QToolBar *m_extensionsToolBar;
+    /// Barres d'eines \TODO és possible que les fem desaparèixer
     QToolBar *m_fileToolBar;
     
     /// Accions

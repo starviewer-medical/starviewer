@@ -50,7 +50,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
         
     createActions();    
     createMenus();
-    createToolBars();
+    // \TODO es possible que prescindim de les toolbars i que aquesta desaparegui
+//     createToolBars();
     createStatusBar();
     
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio, últims
@@ -388,17 +389,10 @@ void QApplicationMainWindow::createToolBars()
     m_fileToolBar->addAction( m_openAction );
     m_fileToolBar->addAction( m_openDirAction );
     m_fileToolBar->addAction( m_pacsAction );
-
-    m_extensionsToolBar = addToolBar( tr("Extensions") );
 }
 
 void QApplicationMainWindow::createStatusBar()
 {
-}
-
-void QApplicationMainWindow::clearExtensionsToolBar()
-{
-    m_extensionsToolBar->clear();
 }
 
 void QApplicationMainWindow::newFile()
