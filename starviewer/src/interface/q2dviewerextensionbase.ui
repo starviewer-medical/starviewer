@@ -14,7 +14,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>2</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -41,7 +41,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -66,7 +66,7 @@
           <string>window level</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -88,7 +88,7 @@
           <string>zoom</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -110,7 +110,7 @@
           <string>move</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -409,7 +409,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="widget" >
+         <widget class="QWidget" name="widget2" >
           <layout class="QVBoxLayout" >
            <property name="margin" >
             <number>0</number>
@@ -474,16 +474,16 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>QWindowLevelComboBox</class>
-   <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>udg::Q2DViewer</class>
-   <extends>QWidget</extends>
-   <header>q2dviewer.h</header>
+   <class>QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

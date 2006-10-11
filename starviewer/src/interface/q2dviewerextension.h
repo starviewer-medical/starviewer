@@ -11,13 +11,12 @@
 
 // FWD declarations
 class QAction;
-class QToolBar;
-class QSignalMapper;
 
 namespace udg {
 
 // FWD declarations
 class Volume;
+class ToolsActionFactory;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -33,12 +32,6 @@ public:
 
     /// Li assigna el volum principal
     void setInput( Volume *input );
-
-    /// Obtenim la ToolBar d'eines de l'extensió \TODO 'pujar' al pare com a mètode comú a Extensions?
-    QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
-
-    /// Omple la ToolBar amb les eines de l'extensió \TODO 'pujar' al pare com a mètode comú a Extensions?
-    void populateToolBar( QToolBar *toolbar );
     
 public slots:
     /// Canvia a la vista axial, sagital o coronal
@@ -68,9 +61,6 @@ private:
 
     /// Membre temporal
     Volume *m_secondaryVolume;
-    
-    /// La ToolBar de les eines de l'extensió \TODO 'pujar' al pare com a membre comú a Extensions? [hauria de ser protected]
-    QToolBar *m_toolsToolBar;
 
     /// Accions
     QAction *m_axialViewAction;
@@ -82,13 +72,10 @@ private:
     QAction *m_windowLevelAction;
     QAction *m_zoomAction;
     QAction *m_moveAction;
-    QSignalMapper *m_signalMapper;
+    ToolsActionFactory *m_actionFactory;
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
-    
-    /// Crea la ToolBar d'eines i altres si n'hi ha \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
-    void createToolBars();
     
     /// Crea les connexions entre signals i slots
     void createConnections();

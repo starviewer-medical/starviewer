@@ -101,7 +101,7 @@ void Q2DViewerToolManager::initToolRegistration()
 {
     // \TODO canviar els números per enums decents que ho identifiquen millor
     m_availableTools.clear();
-    m_availableTools["Slicing2DTool"] = 0;
+    m_availableTools["SlicingTool"] = 0;
     m_availableTools["WindowLevelTool"] = 1;
     m_availableTools["ZoomTool"] = 2;
     m_availableTools["MoveTool"] = 3;

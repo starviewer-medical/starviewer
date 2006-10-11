@@ -24,6 +24,8 @@ namespace udg {
 // FWD declarations
 class Volume;
 class Q3DViewer;
+class ToolsActionFactory;
+
 /**
 Extensió encarregada de fer l'MPR 2D
     
@@ -158,32 +160,47 @@ private:
 
     /// Acció per poder controlar el layout horizontal
     QAction *m_horizontalLayoutAction;
+    /// Acció per activar el mip
     QAction *m_mipAction;
+    /// Accions associades a tools
+    QAction *m_slicingAction;
+    QAction *m_windowLevelAction;
+    QAction *m_zoomAction;
+    QAction *m_moveAction;
+    ToolsActionFactory *m_actionFactory;
 
     /// Visor de MIP
     Q3DViewer *m_mipViewer;
+
+    /// Estat en el que es troba la manipulació de plans
+    enum { NONE , ROTATING , PUSHING };
+    int m_state;
     
 private slots:
-    /// S'encarreguen de rotar els eixos dels plans
-    void detectAxialViewAxisActor( double x , double y );
-    void releaseAxialViewAxisActor( double x , double y );
-    
-    void detectSagitalViewAxisActor( double x , double y );
-    void releaseSagitalViewAxisActor( double x , double y );
-
-    void moveAxialViewAxisActor( double x , double y );
-    void rotateAxisActor( double x , double y );
+    /// gestiona els events de cada finestra per controlar els eixos de manipulació
+    void handleAxialViewEvents( unsigned long eventID );
+    void handleSagitalViewEvents( unsigned long eventID );
 
     /// s'encarreguen de moure les llesques dels plans
-    void detectPushAxialViewAxisActor( double x , double y );
-    void releasePushAxialViewAxisActor( double x , double y );
-
-    void detectPushSagitalViewAxisActor( double x , double y );
-    void releasePushSagitalViewAxisActor( double x , double y );
-
-    void pushAxisActor( double x , double y );
-    void pushAxialActor( double x , double y );
+    void detectAxialViewAxisActor();
+    void releaseAxialViewAxisActor();
     
+    void detectSagitalViewAxisActor();
+    void releaseSagitalViewAxisActor();
+
+    void rotateAxialViewAxisActor(); // void moveAxialViewAxisActor( double x , double y );
+    void rotateSagitalViewAxisActor(); // void rotateAxisActor( double x , double y );
+    
+    /// s'encarreguen de moure les llesques dels plans
+    void detectPushAxialViewAxisActor();
+    void releasePushAxialViewAxisActor();
+
+    void detectPushSagitalViewAxisActor();
+    void releasePushSagitalViewAxisActor();
+
+    void pushAxialViewAxisActor(); // void pushAxisActor( double x , double y );
+    void pushSagitalViewAxisActor(); // void pushAxialActor( double x , double y );
+        
     /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
 

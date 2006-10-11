@@ -67,17 +67,8 @@ public:
     /// tipus de fusió dels models
     enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
 
-    /// Botons del mouse
-    enum Buttons{ LeftButton , MiddleButton , RightButton };
-
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
     enum AnnotationFlags{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x2 , PatientOrientationAnnotation = 0x4 , RulersAnnotation = 0x8 , AllAnnotation = 0xE };
-    
-    /// Tools que proporciona... NotSuported és una Tool fictica que indica que la tool en ús a 'aplicació no és aplicable a aquest visor, per tant podríem mostrar un cursor amb signe de prohibició que indiqui que no podem fer res amb aquella tool
-    enum Tools{ Zoom , Rotate , Move , Pick , Distance , Cursor , Custom , NotSuported , NoTool , Manipulate };
-
-    enum ManipulateState{ Ready , Picked };
-    ManipulateState m_manipulateState;
 
     Q2DViewer( QWidget *parent = 0 , unsigned int annotations = Q2DViewer::AllAnnotation );
     ~Q2DViewer();
@@ -114,19 +105,12 @@ public:
 
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int data[3] );
-    
-    /// Retorna la tool que s'està fent servir en aquell moment
-    Tools getCurrentTool(){ return m_currentTool; };
 
     /// Desa totes les llesques que es veuen al visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
     void saveAll( const char *baseName , FileType extension );
 
     /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
     void saveCurrent( const char *baseName , FileType extension );
-
-    /// [apanyo] mentre estiguem manipulant els plans serà true
-    bool isManipulateOn(){ return m_manipulating; };
-    void setManipulate( bool manip ){ m_manipulating = manip; }
 
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
@@ -156,17 +140,6 @@ public slots:
     void displayPatientOrientationOff();
     void displayScalarBarOn();
     void displayScalarBarOff();
-    
-    /// Li indica la tool que es fa servir en aquell moment
-    bool setCurrentTool( Tools toolName ){ m_currentTool = toolName; return true; };
-    ///Mètodes alternatius per activar Tools
-    void setCurrentToolToZoom(){ m_currentTool = Zoom; };
-    void setCurrentToolToRotate(){ m_currentTool = Rotate; };
-    void setCurrentToolToMove(){ m_currentTool = Move; };
-    void setCurrentToolToCustom(){ m_currentTool = Custom; };
-    void setCurrentToolToPick(){ m_currentTool = Pick; };
-    void setCurrentToolToDistance(){ m_currentTool = Distance; };
-    void setCurrentToolToManipulate(){ m_currentTool = Manipulate; };
     
     /// retorna la llesca actual
     int getSlice( void ){ return m_currentSlice; }
@@ -240,9 +213,6 @@ public slots:
     void setTool( QString toolName );
     
 protected:
-    /// últim botó que s'ha clicat
-    int m_lastButtonPressed;
-
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
 
@@ -294,17 +264,7 @@ private:
     
     /// inicialitza els strings d'informació que es mostraran a la pantalla
     void initInformationText();
-
-    /// accions associades a interacció amb el ratolí
-    void onMouseMove();
-    void onLeftButtonUp();
-    void onLeftButtonDown();
-    void onRightButtonUp();
-    void onRightButtonDown();
     
-    /// Indica la Tool que s'està fent servir en aquell moment
-    Tools m_currentTool;
-
     /// Tipu de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
     
@@ -389,21 +349,6 @@ signals:
 
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
-
-    /// informem del punt que hem clicat amb el botó esquerre, coordenades de món
-    void leftButtonDown( double x , double y );
-
-    /// informem del punt sobre el que movem el mouse, coordenades de món
-    void mouseMove( double x, double y );
-
-    /// informem del punt que hem deixat de clicar amb el botó esquerre, coordenades de món
-    void leftButtonUp( double x , double y );
-
-    /// informem del punt que hem clicat amb el botó dret, coordenades de món
-    void rightButtonDown( double x , double y );
-
-    /// informem del punt que hem deixat de clicar amb el botó dret, coordenades de món
-    void rightButtonUp( double x , double y );
 
     /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
     void eventReceived( unsigned long eventID );

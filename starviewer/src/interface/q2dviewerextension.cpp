@@ -9,9 +9,8 @@
 #include "volume.h"
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
+#include "toolsactionfactory.h"
 #include <QAction>
-#include <QToolBar>
-#include <QSignalMapper>
 // VTK
 #include <vtkRenderer.h>
 
@@ -25,7 +24,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_secondaryVolume = 0;
     
     createActions();
-    createToolBars();
     createConnections();
 }
 
@@ -35,8 +33,6 @@ Q2DViewerExtension::~Q2DViewerExtension()
 
 void Q2DViewerExtension::createActions()
 {
-    m_signalMapper = new QSignalMapper( this );
-    
     m_axialViewAction = new QAction( 0 );
     m_axialViewAction->setText( tr("&Axial View") );
     m_axialViewAction->setShortcut( tr("Ctrl+A") );
@@ -73,49 +69,20 @@ void Q2DViewerExtension::createActions()
     m_doubleViewToolButton->setDefaultAction( m_doubleViewAction );
 
     // Tools
-    // \TODO aquestes accions ens les hauria de donar cada tool, o el tool manager dels visualitzadors
-    m_slicingAction = new QAction( 0 );
-    m_slicingAction->setText( tr("Slicer") );
-    m_slicingAction->setStatusTip( tr("Enable/Disable slicing tool") );
-    m_slicingAction->setIcon( QIcon(":/images/slicing.png") );
-    m_signalMapper->setMapping( m_slicingAction , "Slicing2DTool" );
-    connect( m_slicingAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_actionFactory = new ToolsActionFactory( 0 ); 
+    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
     m_slicingToolButton->setDefaultAction( m_slicingAction );
 
-    m_windowLevelAction = new QAction( 0 );
-    m_windowLevelAction->setText( tr("Window Level") );
-    m_windowLevelAction->setStatusTip( tr("Enable/Disable Window Level tool") );
-    m_windowLevelAction->setIcon( QIcon(":/images/windowLevel.png") );
-    m_signalMapper->setMapping( m_windowLevelAction , "WindowLevelTool" );
-    connect( m_windowLevelAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
     m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
 
-    m_zoomAction = new QAction( 0 );
-    m_zoomAction->setText( tr("Zoom") );
-    m_zoomAction->setStatusTip( tr("Enable/Disable Zoom tool") );
-    m_zoomAction->setIcon( QIcon(":/images/zoom.png") );
-    m_signalMapper->setMapping( m_zoomAction , "ZoomTool" );
-    connect( m_zoomAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
     m_zoomToolButton->setDefaultAction( m_zoomAction );
 
-    m_moveAction = new QAction( 0 );
-    m_moveAction->setText( tr("Move") );
-    m_moveAction->setStatusTip( tr("Enable/Disable Move tool") );
-    m_moveAction->setIcon( QIcon(":/images/move.png") );
-    m_signalMapper->setMapping( m_moveAction , "MoveTool" );
-    connect( m_moveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_moveAction = m_actionFactory->getActionFrom( "MoveTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
-    
-    connect( m_signalMapper, SIGNAL( mapped(QString) ), m_2DView , SLOT( setTool(QString) ) );
-}
 
-void Q2DViewerExtension::createToolBars()
-{
-    m_toolsToolBar = new QToolBar(0);
-    m_toolsToolBar->addAction( m_axialViewAction );
-    m_toolsToolBar->addAction( m_sagitalViewAction );
-    m_toolsToolBar->addAction( m_coronalViewAction );
-    
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView , SLOT( setTool(QString) ) );
 }
 
 void Q2DViewerExtension::createConnections()
@@ -186,16 +153,6 @@ void Q2DViewerExtension::setSecondInput( Volume *input )
     INFO_LOG("Afegim un segon volum per comparar")
     changeViewToAxial();
     m_stackedWidget->setCurrentIndex( 1 );
-}
-
-void Q2DViewerExtension::populateToolBar( QToolBar *toolbar )
-{
-    if( toolbar )
-    {
-        toolbar->addAction( m_axialViewAction );
-        toolbar->addAction( m_sagitalViewAction );
-        toolbar->addAction( m_coronalViewAction );
-    }
 }
 
 void Q2DViewerExtension::changeViewToAxial()

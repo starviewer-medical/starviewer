@@ -11,6 +11,7 @@
 #include "q3dviewer.h"
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
+#include "toolsactionfactory.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -33,7 +34,8 @@
 #include <vtkImageReslice.h>
 #include <vtkTransform.h>
 #include <vtkLine.h>
-
+// pels events
+#include <vtkCommand.h>
 namespace udg {
 
 QMPRExtension::QMPRExtension( QWidget *parent )
@@ -114,6 +116,8 @@ void QMPRExtension::init()
     m_axialSpacing[1] = 1.;
     m_axialSpacing[2] = 1.;
     
+    m_state = NONE;
+    
     m_transform = vtkTransform::New();
 
     m_pickedActorPlaneSource = 0;
@@ -138,6 +142,23 @@ void QMPRExtension::createActions()
     m_mipAction->setIcon( QIcon(":/images/mip.png") );
     m_mipAction->setCheckable( true );
     m_mipToolButton->setDefaultAction( m_mipAction );
+
+    // Tools
+    m_actionFactory = new ToolsActionFactory( 0 ); 
+    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
+    m_slicingToolButton->setDefaultAction( m_slicingAction );
+    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
+    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
+
+    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
+    m_zoomToolButton->setDefaultAction( m_zoomAction );
+
+    m_moveAction = m_actionFactory->getActionFrom( "MoveTool" );
+    m_moveToolButton->setDefaultAction( m_moveAction );
+    
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_sagital2DView , SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_coronal2DView , SLOT( setTool(QString) ) );
 }
 
 void QMPRExtension::createConnections()
@@ -157,10 +178,9 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
-    connect( m_axial2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectAxialViewAxisActor(double,double) ) );
-    connect( m_sagital2DView , SIGNAL( leftButtonDown(double,double) ) , this , SLOT( detectSagitalViewAxisActor(double,double) ) );
-    connect( m_axial2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushAxialViewAxisActor(double,double) ) );
-    connect( m_sagital2DView , SIGNAL( rightButtonDown(double,double) ) , this , SLOT( detectPushSagitalViewAxisActor(double,double) ) );
+    // gestionen els events de les finestres per poder manipular els plans
+    connect( m_axial2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleAxialViewEvents( unsigned long ) ) );
+    connect( m_sagital2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleSagitalViewEvents( unsigned long ) ) );
     
     connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
     connect( m_thickSlabSlider , SIGNAL( valueChanged(int) ) , this , SLOT( updateThickSlab(int) ) );
@@ -217,10 +237,81 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
     m_horizontalSplitter->setSizes( splitterSize );
 }
 
-void QMPRExtension::detectAxialViewAxisActor( double x , double y )
+void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
 {
+    switch( eventID )
+    {
+    case vtkCommand::LeftButtonPressEvent:
+        detectAxialViewAxisActor();
+    break;
+    
+    case vtkCommand::LeftButtonReleaseEvent:
+        releaseAxialViewAxisActor();
+    break;
+
+    case vtkCommand::MouseMoveEvent:
+        if( m_state == ROTATING )
+            rotateAxialViewAxisActor();
+        else if( m_state == PUSHING )
+            pushAxialViewAxisActor();
+    break;
+
+    case vtkCommand::RightButtonPressEvent:
+        detectPushAxialViewAxisActor();
+    break;
+    
+    case vtkCommand::RightButtonReleaseEvent:
+        releasePushAxialViewAxisActor();
+    break;
+
+    default:
+    break;
+    }
+}
+
+void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
+{
+    switch( eventID )
+    {
+    case vtkCommand::LeftButtonPressEvent:
+        detectSagitalViewAxisActor();
+    break;
+    
+    case vtkCommand::LeftButtonReleaseEvent:
+        releaseSagitalViewAxisActor();
+    break;
+
+    case vtkCommand::MouseMoveEvent:
+        if( m_state == ROTATING )
+            rotateSagitalViewAxisActor();
+        else if( m_state == PUSHING )
+            pushSagitalViewAxisActor();
+    break;
+
+    case vtkCommand::RightButtonPressEvent:
+        detectPushSagitalViewAxisActor();
+    break;
+    
+    case vtkCommand::RightButtonReleaseEvent:
+        releasePushSagitalViewAxisActor();
+    break;
+
+    default:
+    break;
+    }
+}
+
+void QMPRExtension::detectAxialViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat \TODO unificar aquesta operació en un sol mètode privat o fer un mètode d'accès directament del propi viewer per obtenir les coordenades de món actuals on es troba el cursor
+    int x, y;
+    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
+    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
+        
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
-    double point[3] = { x , y , 0.0 };
+    double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToCoronal , distanceToSagital;
     
@@ -246,79 +337,24 @@ void QMPRExtension::detectAxialViewAxisActor( double x , double y )
             m_pickedActorReslice = m_sagitalReslice;
         }
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
-        m_axial2DView->setManipulate( true );
-        m_initialPickX = x;
-        m_initialPickY = y;
-        connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
-        connect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
+        // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//         m_axial2DView->setManipulate( true );
+        m_initialPickX = toWorld[0];
+        m_initialPickY = toWorld[1];
+        m_state = ROTATING;
     }
 
 }
+
+void QMPRExtension::rotateAxialViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
+    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x , y , 0 , toWorld );
     
-void QMPRExtension::releaseAxialViewAxisActor( double x , double y )
-{
-    m_pickedActorReslice->SetInterpolationModeToCubic();
-    if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
-    {
-        m_sagital2DView->getInteractor()->Render();
-    }
-    else
-    {
-        m_coronal2DView->getInteractor()->Render();
-    }
-
-    m_axial2DView->setManipulate( false );
-    disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( moveAxialViewAxisActor( double , double ) ) );
-    disconnect( m_axial2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseAxialViewAxisActor(double,double) ) );
-}
-
-void QMPRExtension::detectSagitalViewAxisActor( double x , double y )
-{
-    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
-    double point[3] = { x , y , 0.0 };
-    double *r1 , *r2;
-    double distanceToCoronal;
-    
-    r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
-    r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
-    
-    // donem una "tolerància" mínima 
-    if( distanceToCoronal < 50.0 )
-    {
-        m_pickedActorReslice = m_coronalReslice;
-        m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
-        m_pickedActorPlaneSource = m_coronalPlaneSource;
-        
-        m_sagital2DView->setManipulate( true );
-        m_initialPickX = x;
-        m_initialPickY = y;
-        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
-        connect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
-    }
-}
-    
-void QMPRExtension::releaseSagitalViewAxisActor( double x , double y )
-{
-    m_pickedActorReslice->SetInterpolationModeToCubic();
-    m_coronal2DView->getInteractor()->Render();
-    m_sagital2DView->setManipulate( false );
-    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( rotateAxisActor( double , double ) ) );
-    disconnect( m_sagital2DView , SIGNAL( leftButtonUp(double,double) ) , this , SLOT( releaseSagitalViewAxisActor(double,double) ) );
-}
-
-void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
-{
-    if( !plane )
-        return;
-
-    axis[0] = plane->GetPoint2()[0] - plane->GetOrigin()[0];
-    axis[1] = plane->GetPoint2()[1] - plane->GetOrigin()[1];
-    axis[2] = plane->GetPoint2()[2] - plane->GetOrigin()[2];
-}
-
-void QMPRExtension::moveAxialViewAxisActor( double x , double y )
-{
     double vec1[3], vec2[3];
     double axis[3];
     double direction[3];
@@ -327,14 +363,14 @@ void QMPRExtension::moveAxialViewAxisActor( double x , double y )
     vec1[1] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
     vec1[2] = 0.0;
 
-    vec2[0] = x - m_pickedActorPlaneSource->GetCenter()[0];
-    vec2[1] = y - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[0] = toWorld[0] - m_pickedActorPlaneSource->GetCenter()[0];
+    vec2[1] = toWorld[1] - m_pickedActorPlaneSource->GetCenter()[1];
     vec2[2] = 0.0;
 
     double degrees = MathTools::angleInDegrees( vec1 , vec2 );
 
-    m_initialPickX = x;
-    m_initialPickY = y;
+    m_initialPickX = toWorld[0];
+    m_initialPickY = toWorld[1];
 
     vtkMath::Cross( vec1 , vec2 , direction );
     this->getRotationAxis( m_pickedActorPlaneSource , axis );
@@ -350,8 +386,64 @@ void QMPRExtension::moveAxialViewAxisActor( double x , double y )
     updateControls();
 }
 
-void QMPRExtension::rotateAxisActor( double x , double y )
+void QMPRExtension::releaseAxialViewAxisActor()
 {
+    m_pickedActorReslice->SetInterpolationModeToCubic();
+    if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
+    {
+        m_sagital2DView->getInteractor()->Render();
+    }
+    else
+    {
+        m_coronal2DView->getInteractor()->Render();
+    }
+// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//     m_axial2DView->setManipulate( false );
+    m_state = NONE;
+}
+
+void QMPRExtension::detectSagitalViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
+    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    
+    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
+    double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
+    double *r1 , *r2;
+    double distanceToCoronal;
+    
+    r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
+    r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
+    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+    
+    // donem una "tolerància" mínima 
+    if( distanceToCoronal < 50.0 )
+    {
+        m_pickedActorReslice = m_coronalReslice;
+        m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
+        m_pickedActorPlaneSource = m_coronalPlaneSource;
+// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta  
+//         m_sagital2DView->setManipulate( true );
+        m_initialPickX = toWorld[0];
+        m_initialPickY = toWorld[1];
+        m_state = ROTATING;
+    }
+}
+
+void QMPRExtension::rotateSagitalViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
+    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+
+    //
     double vec1[3], vec2[3];
     double axis[3];
     double direction[3];
@@ -360,14 +452,14 @@ void QMPRExtension::rotateAxisActor( double x , double y )
     vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
     vec1[0] = 0.0;
 
-    vec2[1] = x - m_pickedActorPlaneSource->GetCenter()[0];
-    vec2[2] = y - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[1] = toWorld[0] - m_pickedActorPlaneSource->GetCenter()[0];
+    vec2[2] = toWorld[1] - m_pickedActorPlaneSource->GetCenter()[1];
     vec2[0] = 0.0;
 
     double degrees = MathTools::angleInDegrees( vec1 , vec2 );
 
-    m_initialPickX = x;
-    m_initialPickY = y;
+    m_initialPickX = toWorld[0];
+    m_initialPickY = toWorld[1];
 
     vtkMath::Cross( vec1 , vec2 , direction );
     axis[0] = m_pickedActorPlaneSource->GetPoint1()[0] - m_pickedActorPlaneSource->GetOrigin()[0];
@@ -387,10 +479,36 @@ void QMPRExtension::rotateAxisActor( double x , double y )
     updateControls();
 }
 
-void QMPRExtension::detectPushAxialViewAxisActor( double x , double y )
+void QMPRExtension::releaseSagitalViewAxisActor()
 {
+    m_pickedActorReslice->SetInterpolationModeToCubic();
+    m_coronal2DView->getInteractor()->Render();
+    m_state = NONE;
+// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//     m_sagital2DView->setManipulate( false );
+}
+
+void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
+{
+    if( !plane )
+        return;
+
+    axis[0] = plane->GetPoint2()[0] - plane->GetOrigin()[0];
+    axis[1] = plane->GetPoint2()[1] - plane->GetOrigin()[1];
+    axis[2] = plane->GetPoint2()[2] - plane->GetOrigin()[2];
+}
+
+void QMPRExtension::detectPushAxialViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
+    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
+    
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
-    double point[3] = { x , y , 0.0 };
+    double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToCoronal , distanceToSagital;
     
@@ -415,15 +533,39 @@ void QMPRExtension::detectPushAxialViewAxisActor( double x , double y )
             m_pickedActorPlaneSource = m_sagitalPlaneSource;
             m_pickedActorReslice = m_sagitalReslice;
         }
-        m_axial2DView->setManipulate( true );
-        m_initialPickX = x;
-        m_initialPickY = y;
-        connect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
-        connect( m_axial2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushAxialViewAxisActor(double,double) ) );
+        // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//         m_axial2DView->setManipulate( true );
+        m_state = PUSHING;
+        m_initialPickX = toWorld[0];
+        m_initialPickY = toWorld[1];
     }
 }
 
-void QMPRExtension::releasePushAxialViewAxisActor( double x , double y )
+void QMPRExtension::pushAxialViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
+    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
+    
+    // Get the motion vector
+    //
+    double v[3];
+    v[0] = toWorld[0] - m_initialPickX;
+    v[1] = toWorld[1] - m_initialPickY;
+    v[2] = 0.0;
+    
+    m_pickedActorPlaneSource->Push( vtkMath::Dot( v, m_pickedActorPlaneSource->GetNormal() ) );
+    updatePlanes();
+    updateControls();
+
+    m_initialPickX = toWorld[0];
+    m_initialPickY = toWorld[1];
+}
+
+void QMPRExtension::releasePushAxialViewAxisActor()
 {
     if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
     {
@@ -433,16 +575,24 @@ void QMPRExtension::releasePushAxialViewAxisActor( double x , double y )
     {
         m_coronal2DView->getInteractor()->Render();
     }
-    m_axial2DView->setManipulate( false );
-    disconnect( m_axial2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
-    disconnect( m_axial2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushAxialViewAxisActor(double,double) ) );
-}
+    m_state = NONE;
     
-void QMPRExtension::detectPushSagitalViewAxisActor( double x , double y )
+    // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//     m_axial2DView->setManipulate( false );
+}
+
+void QMPRExtension::detectPushSagitalViewAxisActor()
 {
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
+    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     // únicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
-    double point[3] = { x , y , 0.0 };
+    double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToAxial;
     
@@ -454,50 +604,37 @@ void QMPRExtension::detectPushSagitalViewAxisActor( double x , double y )
     if(  distanceToAxial < 50.0 )
     {
         m_pickedActorPlaneSource = m_axialPlaneSource;
-        connect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxialActor( double , double ) ) );
-
-        m_sagital2DView->setManipulate( true );
-        m_initialPickX = x;
-        m_initialPickY = y;
-        
-        connect( m_sagital2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushSagitalViewAxisActor(double,double) ) );
+// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//         m_sagital2DView->setManipulate( true );
+        m_initialPickX = toWorld[0];
+        m_initialPickY = toWorld[1];
+        m_state = PUSHING;
     }
 }
 
-void QMPRExtension::releasePushSagitalViewAxisActor( double x , double y )
+void QMPRExtension::pushSagitalViewAxisActor()
+{
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
+    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    double toWorld[3];
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    
+    m_axial2DView->setSlice( static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
+    updatePlanes();
+    updateControls();
+
+    m_initialPickX = toWorld[0];
+    m_initialPickY = toWorld[1];
+}
+
+void QMPRExtension::releasePushSagitalViewAxisActor()
 {
     m_coronal2DView->getInteractor()->Render();
-    m_sagital2DView->setManipulate( false );
-    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxisActor( double , double ) ) );
-    disconnect( m_sagital2DView , SIGNAL( mouseMove(double,double) ) , this , SLOT( pushAxialActor( double , double ) ) );
-    disconnect( m_sagital2DView , SIGNAL( rightButtonUp(double,double) ) , this , SLOT( releasePushSagitalViewAxisActor(double,double) ) );
-}
-
-void QMPRExtension::pushAxisActor( double x , double y )
-{
-    // Get the motion vector
-    //
-    double v[3];
-    v[0] = x - m_initialPickX;
-    v[1] = y - m_initialPickY;
-    v[2] = 0.0;
-    
-    m_pickedActorPlaneSource->Push( vtkMath::Dot( v, m_pickedActorPlaneSource->GetNormal() ) );
-    updatePlanes();
-    updateControls();
-
-    m_initialPickX = x;
-    m_initialPickY = y;
-}
-
-void QMPRExtension::pushAxialActor( double x , double y )
-{
-    m_axial2DView->setSlice( static_cast<int>( y / m_axialSpacing[2] ) );
-    updatePlanes();
-    updateControls();
-
-    m_initialPickX = x;
-    m_initialPickY = y;
+    m_state = NONE;
+    // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+//     m_sagital2DView->setManipulate( false );
 }
 
 void QMPRExtension::setInput( Volume *input )

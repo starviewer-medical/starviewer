@@ -91,16 +91,11 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     
     // anotacions
     createAnnotations();
-    m_currentTool = Manipulate;
     createActions();    
     createTools();
     addActors();
     
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-
-    m_manipulateState = Q2DViewer::Ready;
-    m_manipulating = false;
-
 }
 
 Q2DViewer::~Q2DViewer()
@@ -683,96 +678,6 @@ void Q2DViewer::setTool( QString toolName )
     }
 }
 
-void Q2DViewer::onMouseMove()
-{
-    updateVoxelInformation();
-    switch( m_currentTool )
-    {
-    case Q2DViewer::Manipulate:
-        int x = this->getInteractor()->GetEventPosition()[0];
-        int y = this->getInteractor()->GetEventPosition()[1];
-        double toWorld[3];
-        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
-        emit mouseMove( toWorld[0] , toWorld[1] );
-    break;
-
-    default:
-    break;
-    }
-}
-
-void Q2DViewer::onLeftButtonDown()
-{
-    switch( m_currentTool )
-    {
-    case Q2DViewer::Manipulate:
-        int x, y;
-        x = this->getInteractor()->GetEventPosition()[0];
-        y = this->getInteractor()->GetEventPosition()[1];
-        double toWorld[3];
-        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
-        emit leftButtonDown( toWorld[0] , toWorld[1] );
-    break;
-
-    default:
-    break;
-    }
-}
-
-void Q2DViewer::onLeftButtonUp()
-{
-    switch( m_currentTool )
-    {
-    case Q2DViewer::Manipulate:
-        int x, y;
-        x = this->getInteractor()->GetEventPosition()[0];
-        y = this->getInteractor()->GetEventPosition()[1];
-        double toWorld[3];
-        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
-        emit leftButtonUp( toWorld[0] , toWorld[1] );
-    break;
-
-    default:
-    break;
-    }
-}
-
-void Q2DViewer::onRightButtonDown()
-{
-    switch( m_currentTool )
-    {
-    case Q2DViewer::Manipulate:
-        int x, y;
-        x = this->getInteractor()->GetEventPosition()[0];
-        y = this->getInteractor()->GetEventPosition()[1];
-        double toWorld[3];
-        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
-        emit rightButtonDown( toWorld[0] , toWorld[1] );
-    break;
-
-    default:
-    break;
-    }
-}
-
-void Q2DViewer::onRightButtonUp()
-{
-    switch( m_currentTool )
-    {
-    case Q2DViewer::Manipulate:
-        int x, y;
-        x = this->getInteractor()->GetEventPosition()[0];
-        y = this->getInteractor()->GetEventPosition()[1];
-        double toWorld[3];
-        this->computeDisplayToWorld( this->getRenderer() , x, y , 0 , toWorld );
-        emit rightButtonUp( toWorld[0] , toWorld[1] );
-    break;
-
-    default:
-    break;
-    }
-}
-
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
     updateRulers();
@@ -781,27 +686,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     switch( event )
     {
     case vtkCommand::MouseMoveEvent:    
-        onMouseMove();
-    break;
-
-    case vtkCommand::LeftButtonPressEvent:
-        m_lastButtonPressed = Q2DViewer::LeftButton;
-        onLeftButtonDown();
-    break;
-
-    case vtkCommand::LeftButtonReleaseEvent:
-        m_lastButtonPressed = Q2DViewer::LeftButton;
-        onLeftButtonUp();
-    break;
-    
-    case vtkCommand::RightButtonPressEvent:
-        m_lastButtonPressed = Q2DViewer::RightButton;
-        onRightButtonDown();
-    break;
-
-    case vtkCommand::RightButtonReleaseEvent:
-        m_lastButtonPressed = Q2DViewer::RightButton;
-        onRightButtonUp();
+        updateVoxelInformation();
     break;
 
     default:

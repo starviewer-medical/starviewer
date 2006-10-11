@@ -17,10 +17,10 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>2</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
    <item>
     <layout class="QHBoxLayout" >
@@ -28,7 +28,7 @@
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>6</number>
+      <number>0</number>
      </property>
      <item>
       <layout class="QHBoxLayout" >
@@ -40,6 +40,9 @@
        </property>
        <item>
         <widget class="QToolButton" name="m_axialViewEnabledButton" >
+         <property name="toolTip" >
+          <string>Enable axial plane</string>
+         </property>
          <property name="text" >
           <string>Axial</string>
          </property>
@@ -50,6 +53,9 @@
        </item>
        <item>
         <widget class="QToolButton" name="m_sagitalViewEnabledButton" >
+         <property name="toolTip" >
+          <string>Enable sagital plane</string>
+         </property>
          <property name="text" >
           <string>Sagital</string>
          </property>
@@ -60,6 +66,9 @@
        </item>
        <item>
         <widget class="QToolButton" name="m_coronalViewEnabledButton" >
+         <property name="toolTip" >
+          <string>Enable coronal plane</string>
+         </property>
          <property name="text" >
           <string>Coronal</string>
          </property>
@@ -88,8 +97,20 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip" >
+          <string>Switch to axial view</string>
+         </property>
          <property name="text" >
-          <string>Axial</string>
+          <string>Axial view</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -103,15 +124,39 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip" >
+          <string>Switch to sagital view</string>
+         </property>
          <property name="text" >
-          <string>Sagital</string>
+          <string>Sagital view</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../main/main.qrc" >:/images/sagital.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QToolButton" name="m_coronalOrientationButton" >
+         <property name="toolTip" >
+          <string>Switch to coronal view</string>
+         </property>
          <property name="text" >
-          <string>Coronal</string>
+          <string>Coronal view</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../main/main.qrc" >:/images/coronal.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
          </property>
          <property name="checkable" >
           <bool>false</bool>
@@ -152,8 +197,7 @@
         </widget>
        </item>
        <item>
-        <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox" >
-        </widget>
+        <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox" />
        </item>
       </layout>
      </item>
@@ -183,20 +227,22 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>udg::Q3DMPRViewer</class>
-   <extends>QFrame</extends>
-   <header>q3dmprviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>udg::QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
+  <customwidget>
+   <class>udg::Q3DMPRViewer</class>
+   <extends>QFrame</extends>
+   <header>q3dmprviewer.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
  <connections/>
 </ui>
