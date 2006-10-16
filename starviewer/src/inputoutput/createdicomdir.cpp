@@ -99,11 +99,14 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         {
             //afegim els fitxers al dicomdir
             result = ddir.addDicomFile( (*iter).c_str() , opt_directory );
-            iter++;
+            if ( result.good() ) iter++;
         }
 
         if ( !result.good() ) 
         {
+			errorMessage = "Error al convertir a DICOMDIR el fitxer : ";
+			errorMessage.append((*iter).c_str());
+        	ERROR_LOG ( errorMessage.c_str() );
             result = EC_IllegalCall;
         }
         else result = ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
