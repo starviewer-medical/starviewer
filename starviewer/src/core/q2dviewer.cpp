@@ -696,7 +696,7 @@ void Q2DViewer::disableTools()
     disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
-void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
+void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
     updateRulers();
     // fer el que calgui per cada tipus d'event
@@ -712,7 +712,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     }
 }
 
-void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, void *client_data, vtkCommand *command )
+void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
     // Extret dels exemples de vtkEventQtSlotConnect
     // get interactor
@@ -746,8 +746,11 @@ void Q2DViewer::setupInteraction()
     
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools                       
-    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*,unsigned long,void *, vtkCommand *) ) );
-
+    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), 
+                                 vtkCommand::AnyEvent, 
+                                 this, 
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) ) 
+                                 );
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
@@ -1088,56 +1091,70 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
     vtkImageData *image = m_windowToImageFilter->GetOutput();
     switch( extension )
     {
-    case PNG:
-        vtkImageWriter *pngWriter = vtkPNGWriter::New();
-        pngWriter->SetInput( image );
-        pngWriter->SetFilePattern( "%s-%d.png" );
-        pngWriter->SetFilePrefix( baseName );
-        pngWriter->Write();
-    break;
-    
-    case JPEG:
-        vtkImageWriter *jpegWriter = vtkJPEGWriter::New();
-        jpegWriter->SetInput( image );
-        jpegWriter->SetFilePattern( "%s-%d.jpg" );
-        jpegWriter->SetFilePrefix( baseName );
-        jpegWriter->Write();
-    break;
-// \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
-    case TIFF:
-        vtkImageWriter *tiffWriter = vtkTIFFWriter::New();
-        tiffWriter->SetInput( image );
-        tiffWriter->SetFilePattern( "%s-%d.tif" );
-        tiffWriter->SetFilePrefix( baseName );
-        tiffWriter->Write();
-    break;
+        case PNG:
+        {
+            vtkImageWriter *pngWriter = vtkPNGWriter::New();
+            pngWriter->SetInput( image );
+            pngWriter->SetFilePattern( "%s-%d.png" );
+            pngWriter->SetFilePrefix( baseName );
+            pngWriter->Write();
+            
+            break;
+        }
+        case JPEG:
+        {
+            vtkImageWriter *jpegWriter = vtkJPEGWriter::New();
+            jpegWriter->SetInput( image );
+            jpegWriter->SetFilePattern( "%s-%d.jpg" );
+            jpegWriter->SetFilePrefix( baseName );
+            jpegWriter->Write();
+            
+            break;
+        }
+        // \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
+        case TIFF:
+        {
+            vtkImageWriter *tiffWriter = vtkTIFFWriter::New();
+            tiffWriter->SetInput( image );
+            tiffWriter->SetFilePattern( "%s-%d.tif" );
+            tiffWriter->SetFilePrefix( baseName );
+            tiffWriter->Write();
 
-    case PNM:
-        vtkImageWriter *pnmWriter = vtkPNMWriter::New();
-        pnmWriter->SetInput( image );
-        pnmWriter->SetFilePattern( "%s-%d.pnm" );
-        pnmWriter->SetFilePrefix( baseName );
-        pnmWriter->Write();
-    break;
-
-    case BMP:
-        vtkImageWriter *bmpWriter = vtkBMPWriter::New();
-        bmpWriter->SetInput( image );
-        bmpWriter->SetFilePattern( "%s-%d.bmp" );
-        bmpWriter->SetFilePrefix( baseName );
-        bmpWriter->Write();
-    break;
-    
-    case DICOM:
-    break;
-
-    case META:
-        vtkMetaImageWriter *metaWriter = vtkMetaImageWriter::New();
-        metaWriter->SetInput( m_mainVolume->getVtkData() );
-        metaWriter->SetFileName( baseName );
-        metaWriter->Write();
-    break;
-
+            break;
+        }
+        case PNM:
+        {
+            vtkImageWriter *pnmWriter = vtkPNMWriter::New();
+            pnmWriter->SetInput( image );
+            pnmWriter->SetFilePattern( "%s-%d.pnm" );
+            pnmWriter->SetFilePrefix( baseName );
+            pnmWriter->Write();
+            
+            break;
+        }
+        case BMP:
+        {
+            vtkImageWriter *bmpWriter = vtkBMPWriter::New();
+            bmpWriter->SetInput( image );
+            bmpWriter->SetFilePattern( "%s-%d.bmp" );
+            bmpWriter->SetFilePrefix( baseName );
+            bmpWriter->Write();
+            
+            break;
+        }   
+        case DICOM:
+        {
+            break;
+        }
+        case META:
+        {
+            vtkMetaImageWriter *metaWriter = vtkMetaImageWriter::New();
+            metaWriter->SetInput( m_mainVolume->getVtkData() );
+            metaWriter->SetFileName( baseName );
+            metaWriter->Write();
+        
+            break;
+        }
     }
 }
 

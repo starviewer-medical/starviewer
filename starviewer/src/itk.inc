@@ -12,6 +12,7 @@ INCLUDEPATH += $(ITKINCLUDEDIR) \
               $(ITKINCLUDEDIR)/Utilities \
               $(ITKINCLUDEDIR)/Utilities/vxl/vcl \
               $(ITKINCLUDEDIR)/Utilities/vxl/core \
+              $(ITKINCLUDEDIR)/gdcm/src \
               $(ITKINCLUDEDIR)/Utilities/NrrdIO
 
 LIBS += -L$(ITKLIBDIR) \

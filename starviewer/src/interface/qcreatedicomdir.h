@@ -116,7 +116,7 @@ private:
     /** executa el k3b per gravar en un cd o dvd depenent de l'opció escollida
      * @param device dispositiu al que es grava, pot ser cd o dvd
      */
-    void QCreateDicomdir::executek3b( recordDevice device );
+    void executek3b( recordDevice device );
 
     
     /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit

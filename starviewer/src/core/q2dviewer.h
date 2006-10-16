@@ -118,7 +118,7 @@ public:
     
 public slots:  
     /// Temporal per proves, veurem quins events es criden
-    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
+    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
     
     /// Indiquem si volem veure la informació del volum per pantalla \TODO realment es farà servir aquest mètode?
     void displayInformationText( bool display );
@@ -175,7 +175,7 @@ public slots:
         updateView();
     }
 
-    void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, vtkCommand * command);
+    void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, void *call_data, vtkCommand * command);
     
     /// Afegir o treure la visibilitat d'una anotació textual
     void addAnnotation( AnnotationFlags annotation )

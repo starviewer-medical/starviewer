@@ -148,22 +148,27 @@ void ExtensionHandler::request( int who )
 
     /// Default viewer: 2D Viewer
     case 8:
+    {
         Q2DViewerExtension *defaultViewerExtension = new Q2DViewerExtension;
         defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("2D Viewer"));
 //         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
         connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
         connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
-    break;
     
+        break;
+    }
     default:
+    {
         Q2DViewerExtension *defaultViewerExtension2 = new Q2DViewerExtension;
         defaultViewerExtension2->setInput( m_volumeRepository->getVolume( m_volumeID ) );
         m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension2 , tr("2D Viewer"));
 //         defaultViewerExtension2->populateToolBar( m_mainApp->getExtensionsToolBar() );
         connect( defaultViewerExtension2 , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
         connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension2 , SLOT( setSecondInput(Volume*) ) );
-    break;
+    
+        break;
+    }
     }
 }
 
