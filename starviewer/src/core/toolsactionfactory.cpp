@@ -19,6 +19,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_slicingAction->setText( tr("Slicer") );
     m_slicingAction->setStatusTip( tr("Enable/Disable slicing tool") );
     m_slicingAction->setIcon( QIcon(":/images/slicing.png") );
+    m_slicingAction->setCheckable( true );
     m_signalMapper->setMapping( m_slicingAction , "SlicingTool" );
     connect( m_slicingAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
@@ -26,6 +27,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_windowLevelAction->setText( tr("Window Level") );
     m_windowLevelAction->setStatusTip( tr("Enable/Disable Window Level tool") );
     m_windowLevelAction->setIcon( QIcon(":/images/windowLevel.png") );
+    m_windowLevelAction->setCheckable( true );
     m_signalMapper->setMapping( m_windowLevelAction , "WindowLevelTool" );
     connect( m_windowLevelAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
@@ -33,6 +35,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_zoomAction->setText( tr("Zoom") );
     m_zoomAction->setStatusTip( tr("Enable/Disable Zoom tool") );
     m_zoomAction->setIcon( QIcon(":/images/zoom.png") );
+    m_zoomAction->setCheckable( true );
     m_signalMapper->setMapping( m_zoomAction , "ZoomTool" );
     connect( m_zoomAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
@@ -40,6 +43,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_moveAction->setText( tr("Move") );
     m_moveAction->setStatusTip( tr("Enable/Disable Move tool") );
     m_moveAction->setIcon( QIcon(":/images/move.png") );
+    m_moveAction->setCheckable( true );
     m_signalMapper->setMapping( m_moveAction , "MoveTool" );
     connect( m_moveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
