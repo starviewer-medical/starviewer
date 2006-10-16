@@ -246,7 +246,8 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     break;
     
     case vtkCommand::LeftButtonReleaseEvent:
-        releaseAxialViewAxisActor();
+        if( m_state != NONE )
+            releaseAxialViewAxisActor();
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -261,7 +262,8 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     break;
     
     case vtkCommand::RightButtonReleaseEvent:
-        releasePushAxialViewAxisActor();
+        if( m_state != NONE )
+            releasePushAxialViewAxisActor();
     break;
 
     default:
@@ -278,7 +280,8 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     break;
     
     case vtkCommand::LeftButtonReleaseEvent:
-        releaseSagitalViewAxisActor();
+        if( m_state != NONE )
+            releaseSagitalViewAxisActor();
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -293,7 +296,8 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     break;
     
     case vtkCommand::RightButtonReleaseEvent:
-        releasePushSagitalViewAxisActor();
+        if( m_state != NONE )
+            releasePushSagitalViewAxisActor();
     break;
 
     default:
@@ -388,18 +392,22 @@ void QMPRExtension::rotateAxialViewAxisActor()
 
 void QMPRExtension::releaseAxialViewAxisActor()
 {
-    m_pickedActorReslice->SetInterpolationModeToCubic();
-    if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
+    if( m_pickedActorReslice )
     {
-        m_sagital2DView->getInteractor()->Render();
+        m_pickedActorReslice->SetInterpolationModeToCubic();
+        if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
+        {
+            m_sagital2DView->getInteractor()->Render();
+        }
+        else
+        {
+            m_coronal2DView->getInteractor()->Render();
+        }
+    // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+    //     m_axial2DView->setManipulate( false );
+        m_state = NONE;
+        m_pickedActorReslice = 0;
     }
-    else
-    {
-        m_coronal2DView->getInteractor()->Render();
-    }
-// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
-//     m_axial2DView->setManipulate( false );
-    m_state = NONE;
 }
 
 void QMPRExtension::detectSagitalViewAxisActor()
@@ -481,11 +489,15 @@ void QMPRExtension::rotateSagitalViewAxisActor()
 
 void QMPRExtension::releaseSagitalViewAxisActor()
 {
-    m_pickedActorReslice->SetInterpolationModeToCubic();
-    m_coronal2DView->getInteractor()->Render();
-    m_state = NONE;
-// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
-//     m_sagital2DView->setManipulate( false );
+    if( m_pickedActorReslice )
+    {
+        m_pickedActorReslice->SetInterpolationModeToCubic();
+        m_coronal2DView->getInteractor()->Render();
+        m_state = NONE;
+        m_pickedActorReslice = 0;
+    // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
+    //     m_sagital2DView->setManipulate( false );
+    }
 }
 
 void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
@@ -567,15 +579,19 @@ void QMPRExtension::pushAxialViewAxisActor()
 
 void QMPRExtension::releasePushAxialViewAxisActor()
 {
-    if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
+    if( m_pickedActorPlaneSource )
     {
-        m_sagital2DView->getInteractor()->Render();
+        if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
+        {
+            m_sagital2DView->getInteractor()->Render();
+        }
+        else
+        {
+            m_coronal2DView->getInteractor()->Render();
+        }
+        m_state = NONE;
+        m_pickedActorPlaneSource = 0;
     }
-    else
-    {
-        m_coronal2DView->getInteractor()->Render();
-    }
-    m_state = NONE;
     
     // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
 //     m_axial2DView->setManipulate( false );
