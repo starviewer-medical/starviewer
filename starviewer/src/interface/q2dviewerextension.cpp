@@ -25,6 +25,14 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     
     createActions();
     createConnections();
+
+    // posem a punt els botons per accedir a les tools
+    m_toolsButtonGroup = new QButtonGroup( 0 );
+    buttonGroup->setExclusive( true );
+    buttonGroup->addButton( m_slicingToolButton );
+    buttonGroup->addButton( m_windowLevelToolButton );
+    buttonGroup->addButton( m_zoomToolButton );
+    buttonGroup->addButton( m_moveToolButton );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
