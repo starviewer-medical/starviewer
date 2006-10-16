@@ -28,11 +28,11 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     // posem a punt els botons per accedir a les tools
     m_toolsButtonGroup = new QButtonGroup( 0 );
-    buttonGroup->setExclusive( true );
-    buttonGroup->addButton( m_slicingToolButton );
-    buttonGroup->addButton( m_windowLevelToolButton );
-    buttonGroup->addButton( m_zoomToolButton );
-    buttonGroup->addButton( m_moveToolButton );
+    m_toolsButtonGroup->setExclusive( true );
+    m_toolsButtonGroup->addButton( m_slicingToolButton );
+    m_toolsButtonGroup->addButton( m_windowLevelToolButton );
+    m_toolsButtonGroup->addButton( m_zoomToolButton );
+    m_toolsButtonGroup->addButton( m_moveToolButton );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
