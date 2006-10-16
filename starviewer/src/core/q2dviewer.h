@@ -211,6 +211,11 @@ public slots:
 
     /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui
     void setTool( QString toolName );
+
+    /// Activa o desactiva que el manager escolti els events per processar tools.
+    void setEnableTools( bool enable );
+    void enableTools();
+    void disableTools();
     
 protected:
     /// Connector d'events vtk i slots qt
