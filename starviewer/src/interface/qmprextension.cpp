@@ -341,11 +341,12 @@ void QMPRExtension::detectAxialViewAxisActor()
             m_pickedActorReslice = m_sagitalReslice;
         }
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
-        // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
-//         m_axial2DView->setManipulate( true );
+        // desactivem les tools que puguin estar actives
+        m_axial2DView->disableTools();
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
+        
     }
 
 }
@@ -403,8 +404,8 @@ void QMPRExtension::releaseAxialViewAxisActor()
         {
             m_coronal2DView->getInteractor()->Render();
         }
-    // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
-    //     m_axial2DView->setManipulate( false );
+        // reactivem les tools
+        m_axial2DView->enableTools();
         m_state = NONE;
         m_pickedActorReslice = 0;
     }
@@ -434,8 +435,8 @@ void QMPRExtension::detectSagitalViewAxisActor()
         m_pickedActorReslice = m_coronalReslice;
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         m_pickedActorPlaneSource = m_coronalPlaneSource;
-// \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta  
-//         m_sagital2DView->setManipulate( true );
+        // desactivem les tools que puguin estar actives
+        m_sagital2DView->disableTools();
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
@@ -495,8 +496,8 @@ void QMPRExtension::releaseSagitalViewAxisActor()
         m_coronal2DView->getInteractor()->Render();
         m_state = NONE;
         m_pickedActorReslice = 0;
-    // \TODO això s'hauria de substituir per una crida que anulés el comportament d'altres tools durant l'execució d'aquesta
-    //     m_sagital2DView->setManipulate( false );
+        // reactivem les tools
+        m_sagital2DView->enableTools();
     }
 }
 
