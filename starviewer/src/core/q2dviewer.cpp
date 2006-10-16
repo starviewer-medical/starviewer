@@ -141,7 +141,7 @@ void Q2DViewer::createActions()
 void Q2DViewer::createTools()
 {
     m_toolManager = new Q2DViewerToolManager( this );
-    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+    this->enableTools();
 }
 
 void Q2DViewer::createAnnotations()
@@ -676,6 +676,24 @@ void Q2DViewer::setTool( QString toolName )
         ///\Todo per implementar
         DEBUG_LOG( qPrintable( QString(":/ no s'ha pogut activar la tool: ") + toolName ) );
     }
+}
+
+void Q2DViewer::setEnableTools( bool enable )
+{
+    if( enable )
+        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+    else
+        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+}
+
+void Q2DViewer::enableTools()
+{
+    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+}
+
+void Q2DViewer::disableTools()
+{
+    disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
