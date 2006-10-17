@@ -169,6 +169,9 @@ private:
     QAction *m_moveAction;
     ToolsActionFactory *m_actionFactory;
 
+    /// Grup de botons en format exclusiu
+    QButtonGroup *m_toolsButtonGroup;
+    
     /// Visor de MIP
     Q3DViewer *m_mipViewer;
 

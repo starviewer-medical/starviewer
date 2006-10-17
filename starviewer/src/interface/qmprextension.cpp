@@ -47,6 +47,14 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createConnections();
     createActors();
     readSettings();
+    
+    // posem a punt els botons per accedir a les tools
+    m_toolsButtonGroup = new QButtonGroup( 0 );
+    m_toolsButtonGroup->setExclusive( true );
+    m_toolsButtonGroup->addButton( m_slicingToolButton );
+    m_toolsButtonGroup->addButton( m_windowLevelToolButton );
+    m_toolsButtonGroup->addButton( m_zoomToolButton );
+    m_toolsButtonGroup->addButton( m_moveToolButton );
 }
 
 QMPRExtension::~QMPRExtension()
