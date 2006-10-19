@@ -20,6 +20,7 @@
 #include <vtkJPEGWriter.h>
 #include <vtkTIFFWriter.h>
 #include <vtkWindowToImageFilter.h>
+#include <vtkEventQtSlotConnect.h>
 
 namespace udg {
 
@@ -53,12 +54,24 @@ QViewer::QViewer( QWidget *parent )
 
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     this->setMouseTracking( true );
+
+    m_vtkQtConnections = 0;
 }
 
 QViewer::~QViewer()
 {
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
+}
+
+vtkRenderWindowInteractor *QViewer::getInteractor()
+{
+    return m_vtkWidget->GetRenderWindow()->GetInteractor();
+}
+
+void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
+{
+    emit eventReceived( event );
 }
 
 void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[3] ) 

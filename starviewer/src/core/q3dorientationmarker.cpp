@@ -12,8 +12,10 @@
 #include <vtkAxesActor.h>
 #include <vtkTextProperty.h>
 #include <vtkPropAssembly.h>
+#include <vtkAssembly.h>
 #include <vtkOrientationMarkerWidget.h>
 #include <vtkCaptionActor2D.h>
+#include <vtkTransform.h>
 
 namespace udg {
 
@@ -23,7 +25,8 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
   // Extret de http://public.kitware.com/cgi-bin/viewcvs.cgi/*checkout*/Examples/GUI/Tcl/ProbeWithSplineWidget.tcl?root=VTK&content-type=text/plain
 //  Create a composite orientation marker using
 //  vtkAnnotatedCubeActor and vtkAxesActor.
-// 
+//
+    // \TODO se suposa que aquesta orientació és correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar les etiquetes correctament
     vtkAnnotatedCubeActor *cubeActor = vtkAnnotatedCubeActor::New();
     cubeActor->SetXPlusFaceText("L");
     cubeActor->SetXMinusFaceText("R");
@@ -31,7 +34,7 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
     cubeActor->SetYMinusFaceText("A");
     cubeActor->SetZPlusFaceText("S");
     cubeActor->SetZMinusFaceText("I");
-    cubeActor->SetXFaceTextRotation( 180 );
+    cubeActor->SetXFaceTextRotation( 90 );
     cubeActor->SetYFaceTextRotation( 180 );
     cubeActor->SetZFaceTextRotation( -90 );
     cubeActor->SetFaceTextScale( 0.65 );
@@ -95,16 +98,20 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
     
 //     Combine the two actors into one with vtkPropAssembly ...
 //     
-    vtkPropAssembly *assembly = vtkPropAssembly::New();
+//     vtkPropAssembly *assembly = vtkPropAssembly::New();
+    vtkAssembly *assembly = vtkAssembly::New();
     assembly->AddPart ( axes );
     assembly->AddPart ( cubeActor );
-    
+//     vtkTransform *t = vtkTransform::New();
+//     t->Scale( 0.1 , 0.1 , 0.1 );
+//     assembly->SetUserTransform( t );
 //     Add the composite marker to the widget.  The widget
 //     should be kept in non-interactive mode and the aspect
 //     ratio of the render window taken into account explicitly, 
 //     since the widget currently does not take this into 
 //     account in a multi-renderer environment.
      
+    
     m_markerWidget = vtkOrientationMarkerWidget::New();
     m_markerWidget->SetInteractor( interactor );
     m_markerWidget->SetOutlineColor( 0.93 , 0.57 , 0.13 );

@@ -17,11 +17,10 @@ class QAction;
 class vtkImageViewer2;
 class vtkPropPicker;
 class vtkTextActor;
-class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
 class vtkRenderer;
-class vtkRenderWindowInteractor;
+// class vtkRenderWindowInteractor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
@@ -74,7 +73,6 @@ public:
     ~Q2DViewer();
 
     virtual vtkRenderer *getRenderer();
-    virtual vtkRenderWindowInteractor *getInteractor();            
     virtual void setInput( Volume* volume );
 
     /// Retorna l'interactor style
@@ -117,7 +115,6 @@ public:
     double getCurrentColorLevel();
     
 public slots:  
-    /// Temporal per proves, veurem quins events es criden
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
     
     /// Indiquem si volem veure la informació del volum per pantalla \TODO realment es farà servir aquest mètode?
@@ -212,7 +209,6 @@ public slots:
     /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui
     void setTool( QString toolName );
 
-    /// Activa o desactiva que el manager escolti els events per processar tools.
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
@@ -354,9 +350,6 @@ signals:
 
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
-
-    /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
-    void eventReceived( unsigned long eventID );
 };
 
 };  //  end  namespace udg 

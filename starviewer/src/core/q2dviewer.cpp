@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-// #include "slicing2dtool.h"
 #include <vtkMetaImageWriter.h>
 #include "q2dviewer.h"
 #include "volume.h"
@@ -122,11 +121,6 @@ vtkRenderer *Q2DViewer::getRenderer()
         return m_viewer->GetRenderer();
     else
         return NULL;
-}
-
-vtkRenderWindowInteractor *Q2DViewer::getInteractor()
-{
-    return m_vtkWidget->GetRenderWindow()->GetInteractor();
 }
 
 void Q2DViewer::createActions()

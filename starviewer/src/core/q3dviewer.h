@@ -13,6 +13,7 @@
 class vtkRenderer;
 class vtkImageCast;
 class vtkRenderWindowInteractor;
+class vtkInteractorStyle;
 
 namespace udg {
 
@@ -25,6 +26,7 @@ Classe base per als visualitzadors 3D
 // FWD declarations
 class Volume;
 class Q3DOrientationMarker;
+class Q3DViewerToolManager;
 
 class Q3DViewer : public QViewer{
 Q_OBJECT
@@ -33,10 +35,7 @@ public:
     
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
-
-    ///\TODO implemenar bé el mètode
-    virtual vtkRenderWindowInteractor *getInteractor();
-
+    
     /// retorna el tipu de visualització que es té assignat
     RenderFunction getRenderFunction() const { return m_renderFunction; }
 
@@ -46,6 +45,9 @@ public:
     virtual void setInput( Volume* volume );
 
     virtual vtkRenderer *getRenderer();
+
+    /// Retorna el vtkInteractorStyle que té associat
+    vtkInteractorStyle *getInteractorStyle();
     
 public slots:
 
@@ -67,6 +69,13 @@ public slots:
     void enableOrientationMarker( bool enable );
     void orientationMarkerOn();
     void orientationMarkerOff();
+
+    void setEnableTools( bool enable );
+    void enableTools();
+    void disableTools();
+    
+    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui
+    void setTool( QString toolName );
     
 protected:
     /// el renderer
@@ -108,6 +117,9 @@ private:
     
     /// reinicia la orientació
     void resetOrientation();
+
+    /// El manager de les tools
+    Q3DViewerToolManager *m_toolManager;
 };
 
 };  //  end  namespace udg 

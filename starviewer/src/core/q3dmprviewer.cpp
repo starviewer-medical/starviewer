@@ -252,11 +252,6 @@ void Q3DMPRViewer::createOutline()
     }
 }
 
-vtkRenderWindowInteractor *Q3DMPRViewer::getInteractor()
-{
-    return m_vtkWidget->GetRenderWindow()->GetInteractor();
-}
-
 vtkRenderer *Q3DMPRViewer::getRenderer()
 {
     return m_renderer;

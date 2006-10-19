@@ -18,6 +18,7 @@ class QVTKWidget;
 class vtkRenderer; 
 class vtkRenderWindowInteractor;
 class vtkWindowToImageFilter;
+class vtkEventQtSlotConnect;
 
 namespace udg {
 
@@ -40,7 +41,7 @@ public:
     enum FileType{ PNG , JPEG , TIFF , DICOM , PNM , META , BMP };
     
     /// Retorna l'interactor renderer
-    virtual vtkRenderWindowInteractor *getInteractor() = 0;
+    virtual vtkRenderWindowInteractor *getInteractor();
 
     /// Retorna el renderer
     virtual vtkRenderer *getRenderer() = 0;
@@ -79,15 +80,25 @@ public:
     int grabbedViewsCount(){ return m_grabList.size(); }
     
 public slots:
-
+    /// Gestiona els events que rep de la finestra
+    virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
+    
     /// Força l'execució de la visualització
     virtual void render() = 0;
     
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews(){ m_grabList.clear(); };
+
+    /// Activa o desactiva que el manager escolti els events per processar tools.
+    virtual void setEnableTools( bool enable ) = 0;
+    virtual void enableTools() = 0;
+    virtual void disableTools() = 0;
+    
+signals:
+    /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
+    void eventReceived( unsigned long eventID );
     
 protected:
-    
     /// El volum a visualitzar
     Volume* m_mainVolume;
 
@@ -113,6 +124,9 @@ protected:
 
     /// Filtre per connectar el que es visualitza pel renderer en un pipeline, epr guardar les imatges en un arxiu, per exemple
     vtkWindowToImageFilter *m_windowToImageFilter;
+
+    /// Connector d'events vtk i slots qt
+    vtkEventQtSlotConnect *m_vtkQtConnections;
 };
 
 };  //  end  namespace udg {

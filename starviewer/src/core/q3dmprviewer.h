@@ -40,7 +40,6 @@ public:
     virtual void setInput( Volume *inputImage );
 
     virtual vtkRenderer *getRenderer();
-    virtual vtkRenderWindowInteractor *getInteractor(); 
     virtual void render();
     
     /// Retorna el volum transformat segons el reslice de cada vista

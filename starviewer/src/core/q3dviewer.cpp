@@ -8,12 +8,14 @@
 #include "volume.h"
 #include "logging.h"
 #include "q3dorientationmarker.h"
+#include "q3dviewertoolmanager.h"
 
 // include's qt
 #include <QString>
 
 // include's vtk
 #include <QVTKWidget.h>
+#include <vtkEventQtSlotConnect.h>
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
 #include <vtkRenderWindow.h>
@@ -39,6 +41,10 @@
 #include <vtkImageCast.h> 
 #include <vtkImageShiftScale.h>
 
+// interacció
+#include <vtkInteractorStyle.h>
+#include <vtkInteractorObserver.h>
+
 #include <vtkImageViewer.h>
 
 namespace udg {
@@ -56,22 +62,53 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_imageCaster = vtkImageCast::New();
     m_currentOrientation = Axial;
     m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
-}
 
+    m_vtkQtConnections = vtkEventQtSlotConnect::New();
+    // despatxa qualsevol event-> tools                       
+    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), 
+                                 vtkCommand::AnyEvent, 
+                                 this, 
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) ) 
+                                 );
+    // \TODO fer això aquí? o fer-ho en el tool manager?
+    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
+    // tool manager init
+    m_toolManager = new Q3DViewerToolManager( this );
+    this->enableTools();
+}
 
 Q3DViewer::~Q3DViewer()
 {
     m_renderer->Delete();
 }
 
-vtkRenderWindowInteractor *Q3DViewer::getInteractor()
+void Q3DViewer::setEnableTools( bool enable )
 {
-    return m_vtkWidget->GetRenderWindow()->GetInteractor();
+    if( enable )
+        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+    else
+        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+}
+
+void Q3DViewer::enableTools()
+{
+    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+}
+
+void Q3DViewer::disableTools()
+{
+    disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 vtkRenderer *Q3DViewer::getRenderer()
 {
     return m_renderer;       
+}
+
+vtkInteractorStyle *Q3DViewer::getInteractorStyle()
+{
+    return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
 }
 
 QString Q3DViewer::getRenderFunctionAsString()
@@ -225,6 +262,8 @@ void Q3DViewer::renderMIP3D()
 {
     if( rescale() )
     {
+        // quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
+//         m_orientationMarker->disable();
         //================================================================================================
         // Create a transfer function mapping scalar value to opacity
         // assignem una rampa d'opacitat total per valors alts i nula per valors petits
@@ -440,6 +479,20 @@ void Q3DViewer::orientationMarkerOn()
 void Q3DViewer::orientationMarkerOff()
 {
     this->enableOrientationMarker( false );
+}
+
+void Q3DViewer::setTool( QString toolName )
+{
+    if( m_toolManager->setCurrentTool( toolName ) )
+    {
+        ///\Todo per implementar
+        DEBUG_LOG( qPrintable( QString("OK, hem activat la tool: ") + toolName ) );
+    }
+    else
+    {
+        ///\Todo per implementar
+        DEBUG_LOG( qPrintable( QString(":/ no s'ha pogut activar la tool: ") + toolName ) );
+    }
 }
 
 void Q3DViewer::setCameraOrientation(int orientation)
