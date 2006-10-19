@@ -8,7 +8,7 @@
 #include "tool.h"
 #include "slicing2dtool.h"
 #include "windowleveltool.h"
-#include "zoom2dtool.h"
+#include "zoomtool.h"
 #include "move2dtool.h"
 
 namespace udg {
@@ -82,7 +82,7 @@ Tool *Q2DViewerToolManager::createTool( QString toolName )
             break;
 
             case 2:
-                return new Zoom2DTool( m_viewer );
+                return new ZoomTool( m_viewer );
             break;
 
             case 3:
