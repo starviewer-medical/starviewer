@@ -9,7 +9,7 @@
 
 #include "tool.h"
 
-class vtkInteractorStyle/*TrackballCamera*/;
+class vtkInteractorStyle;
 
 namespace udg {
 
@@ -30,14 +30,13 @@ public:
     ZoomTool( Q3DViewer *viewer , QObject *parent = 0, const char *name = 0 );
     ZoomTool( Q3DMPRViewer *viewer , QObject *parent = 0, const char *name = 0 );
     
-
     ~ZoomTool();
     
     void handleEvent( unsigned long eventID );
 
 private:
     /// interactor style que omplirem en el constructor depenent del visor
-    vtkInteractorStyle/*TrackballCamera*/ *m_interactorStyle;
+    vtkInteractorStyle *m_interactorStyle;
     
 /// \TODO potser aquests mètodes slots passen a ser públics
 private slots: 

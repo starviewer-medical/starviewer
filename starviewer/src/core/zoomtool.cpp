@@ -8,7 +8,6 @@
 #include "q2dviewer.h"
 #include "q3dviewer.h"
 #include "q3dmprviewer.h"
-// #include <vtkInteractorStyleTrackballCamera.h> // per controlar el zoom
 #include <vtkInteractorStyleImage.h>
 #include <vtkInteractorStyle.h>
 #include <vtkCommand.h>
@@ -33,6 +32,7 @@ ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
 //  : Tool(parent)
 {
     m_state = NONE;
+    // \TODO implement me
 //     m_interactorStyle = viewer->getInteractorStyle();
 }
 
@@ -64,7 +64,6 @@ void ZoomTool::handleEvent( unsigned long eventID )
 void ZoomTool::startZoom()
 {
     m_state = ZOOMING;
-    // \TODO en comptes de fer això podríem crear crides específiques del propi visor que indirectament fan servir el vtkInteractorStyleImage
     m_interactorStyle->StartDolly();
 }
 

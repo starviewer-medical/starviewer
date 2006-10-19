@@ -161,7 +161,7 @@ void QMPRExtension::createActions()
     m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
     m_zoomToolButton->setDefaultAction( m_zoomAction );
 
-    m_moveAction = m_actionFactory->getActionFrom( "MoveTool" );
+    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
     
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );

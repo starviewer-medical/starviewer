@@ -7,7 +7,7 @@
 #include "q3dviewertoolmanager.h"
 #include "tool.h"
 #include "zoomtool.h"
-#include "move2dtool.h"
+#include "translatetool.h"
 
 namespace udg {
 
@@ -75,9 +75,9 @@ Tool *Q3DViewerToolManager::createTool( QString toolName )
                 return new ZoomTool( m_viewer );
             break;
 
-//             case 1:
-//                 return new Move2DTool( m_viewer );
-//             break;
+            case 1:
+                return new TranslateTool( m_viewer );
+            break;
 
             default:
             break;
@@ -92,7 +92,7 @@ void Q3DViewerToolManager::initToolRegistration()
     // \TODO canviar els números per enums decents que ho identifiquen millor
     m_availableTools.clear();
     m_availableTools["ZoomTool"] = 0;
-    m_availableTools["MoveTool"] = 1;
+    m_availableTools["TranslateTool"] = 1;
 }
 
 }

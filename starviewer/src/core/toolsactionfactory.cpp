@@ -44,7 +44,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_moveAction->setStatusTip( tr("Enable/Disable Move tool") );
     m_moveAction->setIcon( QIcon(":/images/move.png") );
     m_moveAction->setCheckable( true );
-    m_signalMapper->setMapping( m_moveAction , "MoveTool" );
+    m_signalMapper->setMapping( m_moveAction , "TranslateTool" );
     connect( m_moveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
@@ -54,7 +54,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["SlicingTool"] = 0;
     m_availableToolActions["WindowLevelTool"] = 1;
     m_availableToolActions["ZoomTool"] = 2;
-    m_availableToolActions["MoveTool"] = 3;
+    m_availableToolActions["TranslateTool"] = 3;
 }
 
 ToolsActionFactory::~ToolsActionFactory()

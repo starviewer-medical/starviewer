@@ -46,10 +46,10 @@ HEADERS += extensionfactory.h \
            toolmanager.h \
            q2dviewertoolmanager.h \
            windowleveltool.h \
-           move2dtool.h \
            toolsactionfactory.h \
            zoomtool.h \
-           q3dviewertoolmanager.h 
+           q3dviewertoolmanager.h \
+           translatetool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -81,10 +81,10 @@ SOURCES += extensionmediator.cpp \
            toolmanager.cpp \
            q2dviewertoolmanager.cpp \
            windowleveltool.cpp \
-           move2dtool.cpp \
            toolsactionfactory.cpp \
            zoomtool.cpp \
-           q3dviewertoolmanager.cpp 
+           q3dviewertoolmanager.cpp \
+           translatetool.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \

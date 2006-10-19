@@ -9,7 +9,7 @@
 #include "slicing2dtool.h"
 #include "windowleveltool.h"
 #include "zoomtool.h"
-#include "move2dtool.h"
+#include "translatetool.h"
 
 namespace udg {
 
@@ -86,7 +86,7 @@ Tool *Q2DViewerToolManager::createTool( QString toolName )
             break;
 
             case 3:
-                return new Move2DTool( m_viewer );
+                return new TranslateTool( m_viewer );
             break;
 
             default:
@@ -104,7 +104,7 @@ void Q2DViewerToolManager::initToolRegistration()
     m_availableTools["SlicingTool"] = 0;
     m_availableTools["WindowLevelTool"] = 1;
     m_availableTools["ZoomTool"] = 2;
-    m_availableTools["MoveTool"] = 3;
+    m_availableTools["TranslateTool"] = 3;
 }
 
 }
