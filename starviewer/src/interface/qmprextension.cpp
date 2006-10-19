@@ -223,6 +223,7 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
         if( !m_mipViewer )
         {
             m_mipViewer = new Q3DViewer;
+            connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mipViewer , SLOT( setTool(QString) ) );
             m_mipViewer->setRenderFunctionToMIP3D();
         }
         // \TODO: aquesta manera de declarar el volum farà que es malgasti memòria o ja s'allibera sol?
