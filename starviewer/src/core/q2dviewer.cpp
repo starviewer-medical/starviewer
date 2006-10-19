@@ -699,8 +699,6 @@ void Q2DViewer::disableTools()
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
     updateRulers();
-    // fer el que calgui per cada tipus d'event
-    emit eventReceived( event );
     switch( event )
     {
     case vtkCommand::MouseMoveEvent:    
@@ -710,6 +708,8 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     default:
     break;
     }
+    // fer el que calgui per cada tipus d'event
+    emit eventReceived( event );
 }
 
 void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, void *client_data, void *call_data, vtkCommand *command )
