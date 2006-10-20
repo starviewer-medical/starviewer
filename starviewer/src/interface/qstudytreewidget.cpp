@@ -456,7 +456,6 @@ void QStudyTreeWidget::sort()
 
 void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
 {
-    clicked( m_studyTreeView->currentItem() ,0 );
     m_contextMenu.exec( event->globalPos() );
 }
 
