@@ -574,6 +574,24 @@ void Q3DMPRViewer::planeInteraction()
     emit planesHasChanged();
 }
 
+void Q3DMPRViewer::setEnableTools( bool enable )
+{
+    if( enable )
+        this->enableTools();
+    else
+        this->disableTools();
+}
+
+void Q3DMPRViewer::enableTools()
+{
+    //\TODO implement me
+}
+
+void Q3DMPRViewer::disableTools()
+{
+    //\TODO implement me
+}
+
 Volume *Q3DMPRViewer::getAxialResliceOutput()
 {
     return m_axialResliced;
