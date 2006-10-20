@@ -219,11 +219,15 @@ void QCreateDicomdir::createDicomdir()
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 {
     QDir temporaryDirPath;
-    QString dicomdirPath, logMessage;
+    QString dicomdirPath, logMessage, readmetxtPath;
     Status state;   
+    ConvertToDicomdir convertToDicomdir;
        
     dicomdirPath.insert( 0 , temporaryDirPath.tempPath() );
-    dicomdirPath.append( "/DICOMDIR" );
+    dicomdirPath.append( "/DICOMDIR/DICOMDIR" ); // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
+        
+    readmetxtPath.insert( 0 , temporaryDirPath.tempPath() );
+    readmetxtPath.append( "/DICOMDIR" );//indiquem el path on s'ha de crear el fitxer README.TXT amb informacio de qui ha creat el DICOMDIR, només es genera quan es grava en cd o dvd
         
     //si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
@@ -244,6 +248,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     }
     else
     {        
+        convertToDicomdir.createReadmeTxt( readmetxtPath );
         return startCreateDicomdir( dicomdirPath );
     }
 }
@@ -349,7 +354,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     
     if ( !state.good() )
     {
-        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and the directory is empty " );
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
         logMessage = "Error al crear el Dicomdir ERROR : ";
         logMessage.append( state.text().c_str() );        
         ERROR_LOG ( logMessage.toAscii().constData() );

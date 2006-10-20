@@ -44,6 +44,13 @@ public:
      */
     Status convert( QString dicomdirPath );
 
+    /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
+      * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
+      * @param readmeTxtPath path a on s'ha de crear el TXT
+      */
+    void createReadmeTxt( QString readmeTxtPath );
+
+
     ~ConvertToDicomdir();
 
 private :
@@ -90,8 +97,8 @@ private :
      * @param image 
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convertImage( Image image );    
-    
+    Status convertImage( Image image );  
+   
     /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
 };

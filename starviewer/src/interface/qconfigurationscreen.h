@@ -123,6 +123,9 @@ private :
     /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
     
+    /// Carrega la informació de la institució
+    void loadInstitutionInformation();
+    
     /// calcula les dades del pool
     void loadCachePoolDefaults();
     
@@ -131,6 +134,9 @@ private :
     
     ///  Aplica els canvis fets a la configuració de la cache
     void applyChangesCache();
+
+    /// Aplica els canvis fets a la informació de la institució
+    void applyChangesInstitution();
 
 	/// col·loca les icones als buttons d'acceptar, cancel·lar i applicar de l'apartat de Pacs i la Cache
 	void setIconButtons();

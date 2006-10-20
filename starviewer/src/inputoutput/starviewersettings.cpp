@@ -187,6 +187,78 @@ int StarviewerSettings::getStudyDicomdirListColumnWidth( int col )
     return m_starviewerSettings.value( key , 100 ).toInt();
 }
 
+/*** Dades de la institució*/
+
+void StarviewerSettings::setInstitutionName( QString institutionNameString )
+{
+    m_starviewerSettings.setValue( InstitutionName , institutionNameString );
+}
+
+void StarviewerSettings::setInstitutionAddress ( QString institutionAddressString )
+{
+    m_starviewerSettings.setValue( InstitutionAddress , institutionAddressString );
+}
+
+void StarviewerSettings::setInstitutionTown( QString institutionTownString )
+{
+    m_starviewerSettings.setValue( InstitutionTown , institutionTownString );
+}
+
+void StarviewerSettings::setInstitutionZipCode( QString institutionZipCodeString )
+{
+    m_starviewerSettings.setValue( InstitutionZipCode , institutionZipCodeString );
+}
+
+void StarviewerSettings::setInstitutionCountry( QString institutionCountryString )
+{
+    m_starviewerSettings.setValue( InstitutionCountry , institutionCountryString );
+}
+
+void StarviewerSettings::setInstitutionPhoneNumber( QString institutionPhoneNumberString )
+{
+    m_starviewerSettings.setValue( InstitutionPhoneNumber , institutionPhoneNumberString );
+}
+
+void StarviewerSettings::setInstitutionEmail( QString institutionEmailString )
+{
+    m_starviewerSettings.setValue( InstitutionEmail , institutionEmailString );
+}
+
+QString StarviewerSettings::getInstitutionName()
+{
+    return m_starviewerSettings.value( InstitutionName , "" ).toString();
+}
+
+QString StarviewerSettings::getInstitutionAddress()
+{
+    return m_starviewerSettings.value( InstitutionAddress , "" ).toString();
+}
+
+QString StarviewerSettings::getInstitutionTown()
+{
+    return m_starviewerSettings.value( InstitutionTown , "" ).toString();
+}
+
+QString StarviewerSettings::getInstitutionCountry()
+{
+    return m_starviewerSettings.value( InstitutionCountry , "" ).toString();
+}
+
+QString StarviewerSettings::getInstitutionZipCode()
+{
+    return m_starviewerSettings.value( InstitutionZipCode , "" ).toString();
+}
+
+QString StarviewerSettings::getInstitutionPhoneNumber()
+{
+    return m_starviewerSettings.value( InstitutionPhoneNumber , "" ).toString();
+}
+
+QString StarviewerSettings::getInstitutionEmail()
+{
+    return m_starviewerSettings.value( InstitutionEmail , "" ).toString();
+}
+
 StarviewerSettings::~StarviewerSettings()
 {
 }

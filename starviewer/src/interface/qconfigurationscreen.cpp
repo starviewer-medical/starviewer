@@ -45,6 +45,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     
     loadCacheDefaults();
     loadPacsDefaults();
+    loadInstitutionInformation();
     m_buttonApplyCache->setEnabled(false);
     m_buttonApplyPacs->setEnabled(false);
     
@@ -81,6 +82,15 @@ void QConfigurationScreen::createConnections()
     //connecta el boto aplicar del Pacs amb l'slot apply
     connect( m_buttonApplyPacs , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
     
+    //connecta el boto acceptar de l'informació de l'institució amb l'slot accept
+    connect( m_buttonAcceptInstitution , SIGNAL( clicked() ), this ,  SLOT( acceptChanges() ) );
+    
+    //connecta el boto cancelar de l'informació de l'institució amb l'slot cancel
+    connect( m_buttonCancelInstitution , SIGNAL( clicked() ) , this ,  SLOT( cancelChanges() ) );
+    
+    //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
+    connect( m_buttonApplyInstitution , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
+    
     //activen el boto apply quant canvia el seu valor
     connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textCacheImagePath , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
@@ -91,7 +101,14 @@ void QConfigurationScreen::createConnections()
     connect( m_textLocalPort , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textMaxConnections , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_comboLanguage , SIGNAL( editTextChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textMaximumDaysNotViewed , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionName , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionAddress , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionTown , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionZipCode , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionCountry , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionPhoneNumber , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textInstitutionEmail , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    
     
     //mateniment base de dades
     connect( m_buttonDeleteStudies , SIGNAL( clicked() ) , this , SLOT( deleteStudies() ) );
@@ -113,12 +130,15 @@ void QConfigurationScreen::setIconButtons()
 {
     m_buttonAcceptCache->setIcon( QIcon( ":images/button_ok.png" ) );
     m_buttonAcceptPacs->setIcon( QIcon( ":images/button_ok.png" ) );
+    m_buttonAcceptInstitution->setIcon( QIcon( ":images/button_ok.png" ) );
 	
     m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
     m_buttonApplyCache->setIcon( QIcon( ":images/apply.png" ) );
-	
+    m_buttonApplyInstitution->setIcon( QIcon( ":images/apply.png" ) );	
+    
     m_buttonCancelPacs->setIcon( QIcon( ":images/cancel.png" ) );
     m_buttonCancelCache->setIcon( QIcon( ":images/cancel.png" ) );
+    m_buttonCancelInstitution->setIcon( QIcon( ":images/cancel.png" ) );
 }
 
 void QConfigurationScreen::loadCacheDefaults()
@@ -193,6 +213,19 @@ void QConfigurationScreen::loadPacsDefaults()
     m_textLocalPort->setText( settings.getLocalPort() );
     m_textTimeout->setText( settings.getTimeout() );
     m_textMaxConnections->setText( settings.getMaxConnections() );
+}
+
+void QConfigurationScreen::loadInstitutionInformation()
+{
+    StarviewerSettings settings;
+    
+    m_textInstitutionName->setText( settings.getInstitutionName() );
+    m_textInstitutionAddress->setText( settings.getInstitutionAddress() );
+    m_textInstitutionTown->setText( settings.getInstitutionTown() );
+    m_textInstitutionZipCode->setText( settings.getInstitutionZipCode() );
+    m_textInstitutionCountry->setText( settings.getInstitutionCountry() );
+    m_textInstitutionPhoneNumber->setText( settings.getInstitutionPhoneNumber() );
+    m_textInstitutionEmail->setText( settings.getInstitutionEmail() );
 }
 
 /************************************************************************************************************************/
@@ -599,6 +632,7 @@ void QConfigurationScreen::acceptChanges()
         {   
             applyChangesPacs();
             applyChangesCache();
+            applyChangesInstitution();
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
             this->hide();
         }
@@ -618,6 +652,7 @@ void QConfigurationScreen::applyChanges()
         applyChangesPacs();
         applyChangesCache();
         loadCachePoolDefaults();
+        applyChangesInstitution();
         QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
         m_configurationChanged = false;
     }
@@ -671,6 +706,7 @@ void QConfigurationScreen::configurationChanged ( const QString& )
 {
     m_buttonApplyPacs->setEnabled( true );
     m_buttonApplyCache->setEnabled( true );
+    m_buttonApplyInstitution->setEnabled( true );    
     m_configurationChanged = true;
 }
 
@@ -785,7 +821,7 @@ void QConfigurationScreen::compactCache()
     CacheTools cacheTools;
     Status state;
     
-    INFO_LOG( "Compatacio de la cache" );
+    INFO_LOG( "Compactacio de la cache" );
     
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -811,6 +847,28 @@ void QConfigurationScreen::cacheImagePathEditingFinish()
         m_textCacheImagePath->setText( path );
     }
 }
+
+void QConfigurationScreen::applyChangesInstitution()
+{
+    StarviewerSettings settings;
+
+    if ( m_textInstitutionName->isModified() ) settings.setInstitutionName( m_textInstitutionName->text() );
+    
+    if ( m_textInstitutionAddress->isModified() ) settings.setInstitutionAddress( m_textInstitutionAddress->text() );
+    
+    if ( m_textInstitutionTown->isModified() ) settings.setInstitutionTown( m_textInstitutionTown->text() );
+    
+    if ( m_textInstitutionZipCode->isModified() ) settings.setInstitutionZipCode( m_textInstitutionZipCode->text() );
+    
+    if ( m_textInstitutionCountry->isModified() ) settings.setInstitutionCountry( m_textInstitutionCountry->text() );
+    
+    if ( m_textInstitutionPhoneNumber->isModified() ) settings.setInstitutionPhoneNumber( m_textInstitutionPhoneNumber->text() );
+    
+    if ( m_textInstitutionEmail->isModified() ) settings.setInstitutionEmail( m_textInstitutionEmail->text() );
+    
+    m_buttonApplyInstitution->setEnabled( false );
+}
+
 
 void QConfigurationScreen::databaseError(Status *state)
 {

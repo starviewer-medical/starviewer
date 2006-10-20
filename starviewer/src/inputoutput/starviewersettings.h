@@ -28,6 +28,13 @@ const QString pacsColumnWidthKey("pacs/interfase/studyPacsList/columnWidth" );//
 const QString cacheColumnWidthKey("pacs/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString dicomdirColumnWidthKey("pacs/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString MaximumDaysNotViewedStudy("pacs/cache/MaximumDaysNotViewedStudy" );
+const QString InstitutionName("pacs/institution/name");
+const QString InstitutionAddress("pacs/institution/address");
+const QString InstitutionTown("pacs/institution/town");
+const QString InstitutionZipCode("pacs/institution/zipCode");
+const QString InstitutionCountry("pacs/institution/country");
+const QString InstitutionEmail("pacs/institution/Email");
+const QString InstitutionPhoneNumber("pacs/institution/phoneNumber");
 
 class StarviewerSettings{
 public:
@@ -165,6 +172,79 @@ public:
      */
     int getStudyDicomdirListColumnWidth( int column );
 
+    //informació de l'institució
+    
+    /** Guarda el nom de la institució
+     * @param institutionName nom de l'institució
+     */
+    void setInstitutionName( QString institutionName );
+    
+    /** Guarda l'adreça de la institució
+     * @param institutionAddress adreça de la institució
+     */
+    void setInstitutionAddress( QString institutionNameString );
+    
+    /** Guarda la poblacio de la institució
+     * @param institutionTown població de la institució
+     */
+    void setInstitutionTown( QString institutionTownString );
+    
+    /** Guarda el codi postal de la institució
+     * @param institutionZipCode codi postal del a institució
+     */
+    void setInstitutionZipCode( QString institutionZipCodeString );
+
+    /** Guarda el país de la institució
+     * @param institutionCountry 
+     */
+    void setInstitutionCountry( QString institutionCountryString );
+
+    /** Guarda el correu electrònic de la institució
+     * @param institutionEmail correu electrònic
+     */
+    void setInstitutionEmail( QString institutionEmailString );
+
+    /** Guarda el telefon de la institució
+     * @param institutionPhoneNumber telèfon 
+     */
+    void setInstitutionPhoneNumber( QString institutionPhoneNumberString );
+       
+    /** retorna el nom de la institució
+     * @return nom de la institució
+     */
+    QString getInstitutionName();
+    
+    /** retorna el adreça de la institució
+     * @return adreça de la institució
+     */
+    QString getInstitutionAddress();
+    
+    /** retorna la ciutat de la institució
+     * @return ciutat de la institució
+     */
+    QString getInstitutionTown();
+    
+    /** retorna el codi postal de la institució
+     * @return codi postal de la institució
+     */
+    QString getInstitutionZipCode();
+    
+    /** retorna el país de la institució
+     * @return país de la institució
+     */
+    QString getInstitutionCountry();
+    
+    /** retorna el correu electrònic de la institució
+     * @return correu electrònic de la institució
+     */
+    QString getInstitutionEmail();
+    
+    /** retorna el telèfon de la institució
+     * @return telèfon de la institució
+     */
+    QString getInstitutionPhoneNumber();
+    
+    
 private :
 
     QSettings m_starviewerSettings;
