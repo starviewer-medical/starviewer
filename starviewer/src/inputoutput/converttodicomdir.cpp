@@ -300,9 +300,9 @@ void ConvertToDicomdir::createReadmeTxt( QString readmeTxtPath )
     QFile file( readmeFilePath );
     StarviewerSettings settings;
     
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) return;
 
-    QTextStream out(&file);
+    QTextStream out( &file );
     
     if ( settings.getInstitutionName().length() > 0)
     {

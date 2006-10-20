@@ -508,6 +508,7 @@ void QueryScreen::queryStudyDicomdir()
     
     if ( !state.good() )
     {
+        QApplication::restoreOverrideCursor();
         if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
         {
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error, not opened Dicomdir" ) );
@@ -521,8 +522,6 @@ void QueryScreen::queryStudyDicomdir()
             logMessage.append ( state.text().c_str() );
         }   
         ERROR_LOG( logMessage.toAscii().constData() );
-        QApplication::restoreOverrideCursor();
-        
         return;
     }
 
@@ -852,21 +851,18 @@ void QueryScreen::tabChanged( int index )
         case 0: //Database
                 setEnabledModalityChecks( true );//activem el grup button de motalitat
                 m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
-                m_buttonView->setEnabled( true );//botó de visualitzar estudi
                 m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
                 if (  m_PacsListShow ) resizePacsList();
                 break;
         case 1: //Pacs
                 setEnabledModalityChecks( false );//desactivem el grup button de modalitat
                 m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
-                m_buttonView->setEnabled( true );//botó de visualitzar estudi
                 m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
                 if (  m_PacsListShow ) resizePacsList();
                 break;
         case 2: //Dicomdir
                 setEnabledModalityChecks( false );//desactivem el grup button de modalitat
-                m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
-                m_buttonView->setEnabled( true );//botó de visualitzar estudi
+                m_buttonRetrieve->setEnabled( false );//activem el boto retrieve
                 m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
                 if (  m_PacsListShow ) resizePacsList();
                 break;
