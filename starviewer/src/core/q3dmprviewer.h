@@ -28,6 +28,7 @@ namespace udg {
 
 // FWD declarations
 class Q3DOrientationMarker;
+class Q3DMPRViewerToolManager;
 
 class Q3DMPRViewer : public QViewer{
 Q_OBJECT
@@ -176,6 +177,9 @@ private:
 
     /// control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
     bool m_isOutlineEnabled;
+
+    /// Tool Manager del visor
+    Q3DMPRViewerToolManager *m_toolManager;
 };
 
 };  //  end  namespace udg 

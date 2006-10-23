@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q3dmprviewer.h"
+#include "q3dmprviewertoolmanager.h"
 
 //includes vtk
 #include <vtkRenderer.h>
@@ -70,6 +71,9 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     m_sagitalResliced = 0;
     m_coronalResliced = 0;
 
+    m_toolManager = new Q3DMPRViewerToolManager( this );
+    this->enableTools();
+    
     this->createActors();
     this->addActors();
 }
@@ -584,12 +588,12 @@ void Q3DMPRViewer::setEnableTools( bool enable )
 
 void Q3DMPRViewer::enableTools()
 {
-    //\TODO implement me
+    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 void Q3DMPRViewer::disableTools()
 {
-    //\TODO implement me
+    disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 Volume *Q3DMPRViewer::getAxialResliceOutput()
