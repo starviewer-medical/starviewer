@@ -675,9 +675,9 @@ void Q2DViewer::setTool( QString toolName )
 void Q2DViewer::setEnableTools( bool enable )
 {
     if( enable )
-        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+        this->enableTools();
     else
-        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+        this->disableTools();
 }
 
 void Q2DViewer::enableTools()

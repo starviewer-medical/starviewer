@@ -86,9 +86,9 @@ Q3DViewer::~Q3DViewer()
 void Q3DViewer::setEnableTools( bool enable )
 {
     if( enable )
-        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+        this->enableTools();
     else
-        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+        this->disableTools();
 }
 
 void Q3DViewer::enableTools()
