@@ -81,28 +81,36 @@ void QStudyTreeWidget::createContextMenu()
     deleteStudy->setShortcut( tr("Ctrl+D") );
     //accio crear Directori DicomDIR
     m_contextMenu.addSeparator();
-    QAction *createDicomDir = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
-    createDicomDir->setShortcut( tr( "Ctrl+M" ) );
+    QAction *createDicomdir = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
+    createDicomdir->setShortcut( tr( "Ctrl+M" ) );
 
     connect( view , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
     connect( retrieve , SIGNAL( triggered() ) , this , SLOT( retrieveStudy() ) );
     connect( deleteStudy , SIGNAL(triggered()), this, SLOT(deleteStudy()));
-    connect( createDicomDir , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
+    connect( createDicomdir , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
       
     /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
     (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );  
     (void) new QShortcut( view->shortcut() , this , SLOT( viewStudy() ) );
     (void) new QShortcut( retrieve->shortcut() , this , SLOT( retrieveStudy() ) );
+    (void) new QShortcut( createDicomdir->shortcut() , this , SLOT( createDicomDir() ) );
     
     if (m_parentName == "m_tabPacs")
     {   //si el QStudyTreeWidget es el que mostra la llista d'estudis del PACS, la opcio delete desactivada
         deleteStudy->setEnabled(false);
-        createDicomDir->setEnabled( false );       
+        createDicomdir->setEnabled( false );       
     }   
    
     if (m_parentName == "m_tabCache")
     {   //si el QStudyTreeWidget es el que mostra la llista d'estudis a la caché, la opció retrieve es desactiva
         retrieve->setEnabled(false);
+    }
+    
+    if ( m_parentName == "m_tabDicomdir")
+    {
+        retrieve->setEnabled(false);
+        deleteStudy->setEnabled(false);
+        createDicomdir->setEnabled(false);
     }
 }
 

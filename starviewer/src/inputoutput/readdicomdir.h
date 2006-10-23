@@ -84,14 +84,14 @@ private :
      */
     bool matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId );
 
-    /** Comprova que els dos StudyUID el de la màscara i el de l'estudi siguin iguals. Si l'estudi UID de la màscara està buit, per defecte retorna cert
+    /** Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching 
      * @param studyMaskStudyUID studyUID de la màscara
      * @param studyStudyUID studyUID de l'estudi trobat al dicomdir
      * @return retorna cert si els dos studyUID son iguals o studyMaskStudyUID està buit
      */
     bool matchStudyMaskStudyUID( std::string studyMaskStudyUID , std:: string studyStudyUID );
 
-    /** Comprova que els dos PatientId el de la màscara i el de l'estudi siguin iguals. Si el Patient Id de la màscara està buit, per defecte retorna cert
+    /** Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching 
      * @param studyMaskPatientId 
      * @param studyPatientId 
      * @return retorna cert si els dos patientId són iguals o studyMaskPatientId està buit
@@ -111,6 +111,13 @@ private :
      * @return retorna cert si es fa matching amb el nom del pacient de la màscara o studyMaskPatient és buit
      */
     bool matchStudyMaskPatientName( std::string studyMaskPatientName , std::string studyPatientName );
+
+    /** Comprova que el AccessionNumber de la màscara i el de l'estudi facin matching. Si la studyMaskAccessionNumber és buida retorna cert per defecte. En aquest cas fem wildcard matching 
+     * @param studyMaskPatienName Màscara de AccessionNumber
+     * @param studyPatientName AccessionNumber de l'estudi
+     * @return retorna cert si es fa matching amb studyAccessionNumber de la màscara o studyMaskAccessionNumber és buit
+     */
+    bool matchStudyMaskAccessionNumber( std::string studyMaskAccessionNumber , std::string studyAccessionNumber );
 
     /** Converteix un string a majúscules,
      *  Com el string distingeix entre majúscules i minúscules, per fer els match, primer convertirem l'string a majúscules, ja que el DICOM guardar la informació en majúscules

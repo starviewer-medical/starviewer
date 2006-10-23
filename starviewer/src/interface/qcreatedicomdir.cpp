@@ -14,6 +14,8 @@
 #include <QDir>
 #include <QFile>
 #include <QProcess>
+#include <QContextMenuEvent>
+#include <QShortcut>
 
 #include "study.h"
 #include "converttodicomdir.h"
@@ -48,7 +50,6 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     
     //per defecte gravem al disc dur per tant, l'espai és il·limitat
     m_DiskSpace = ( unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
-    
 }
 
 void QCreateDicomdir::createConnections()
@@ -410,28 +411,35 @@ void QCreateDicomdir::removeSelectedStudy()
     CacheImageDAL cacheImageDAL;
     Status state;
     unsigned long studySize;
+    QList<QTreeWidgetItem *> selectedStudies;
+     
+    selectedStudies = m_dicomdirStudiesList->selectedItems();
     
-    if ( m_dicomdirStudiesList->currentItem() == NULL )
+    
+    if ( selectedStudies.count() == 0 )
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please Select a study to remove" ) );
     }
     else
     {
-        //consultem la mida de l'estudi
-        imageMask.setStudyUID( m_dicomdirStudiesList->currentItem()->text( 7 ).toAscii().constData() );
-        
-        state = cacheImageDAL.imageSize( imageMask , studySize );        
-
-        if ( !state.good() )
+        for ( int i = 0; i < selectedStudies.count(); i++)
         {
-            databaseError ( &state );
-            return;
-        }        
-
-        m_dicomdirSize = m_dicomdirSize - studySize;
-        setDicomdirSize();
-
-        delete m_dicomdirStudiesList->currentItem();
+            //consultem la mida de l'estudi
+            imageMask.setStudyUID( selectedStudies.at( i )->text( 7 ).toAscii().constData() );
+            
+            state = cacheImageDAL.imageSize( imageMask , studySize );        
+    
+            if ( !state.good() )
+            {
+                databaseError ( &state );
+                return;
+            }        
+    
+            m_dicomdirSize = m_dicomdirSize - studySize;
+            setDicomdirSize();
+    
+            delete selectedStudies.at( i );;
+        }
     }
 }
 

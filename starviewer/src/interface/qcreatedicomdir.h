@@ -7,6 +7,7 @@
 #ifndef UDGQCREATEDICOMDIR_H
 #define UDGQCREATEDICOMDIR_H
 
+#include <QMenu>
 #include <ui_qcreatedicomdirbase.h>
 
 namespace udg {
@@ -61,9 +62,13 @@ private:
 
     unsigned long m_dicomdirSize;
     unsigned long m_DiskSpace;
+    QMenu m_contextMenu;///<Menu contextual
 
     ///Crea les connexions de signals i slots de la interfície    
     void createConnections();
+
+    ///crea el menu contextual
+    void createContextMenu();
 
     /**Formata la data
      * @param data de l'estudi

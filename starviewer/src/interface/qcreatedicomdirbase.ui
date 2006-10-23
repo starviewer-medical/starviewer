@@ -267,6 +267,12 @@
           <height>0</height>
          </size>
         </property>
+        <property name="selectionMode" >
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="sortingEnabled" >
+         <bool>true</bool>
+        </property>
         <column>
          <property name="text" >
           <string>Study</string>

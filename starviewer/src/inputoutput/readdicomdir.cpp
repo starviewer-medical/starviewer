@@ -276,6 +276,8 @@ bool ReadDicomdir::matchStudyMask( Study study , StudyMask studyMask )
     if ( !matchStudyMaskPatientName( studyMask.getPatientName() , study.getPatientName() ) ) return false;
     
     if ( !matchStudyMaskStudyUID( studyMask.getStudyUID() , study.getStudyUID() ) ) return false;
+    
+    if ( !matchStudyMaskAccessionNumber( studyMask.getAccessionNumber() , study.getAccessionNumber() ) ) return false;
 
     return true;
 }
@@ -284,14 +286,16 @@ bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: s
 {
     if ( studyMaskStudyId.length() > 0 )
     { //si hi ha màscara d'estudi Id
-      //en el cas del StudiId seguim criteri del pacs, només faran match els ID que concordin amb el de la màscara, no podem fer wildcard
-        if ( studyStudyId == studyMaskStudyId )
+      //el id de l'estudi, des de la classe query screen el guardem a la màscara es amb format '*StudyID*'. Els '*' s'han de treure           
+        studyMaskStudyId = upperString( studyMaskStudyId.substr( 1 , studyMaskStudyId.length() - 2 ) );
+        
+        if ( studyStudyId.find( studyMaskStudyId ) ==  std::string::npos )
         {   
-            return true;
+            return false;
         }
         else 
         {
-            return false;
+            return true;
         }
     }
     
@@ -316,21 +320,21 @@ bool ReadDicomdir::matchStudyMaskStudyUID( std::string studyMaskStudyUID , std::
     return true;
 }
 
-
 bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId )
 {
     if ( studyMaskPatientId.length() > 0 )
     { //si hi ha màscara Patient Id
-      //en el cas del PatienId seguim criteri del pacs, només faran match els ID que concordin amb el de la màscara, no podem fer wildcard
-        studyMaskPatientId = upperString( studyMaskPatientId );
+      //el id del pacient, des de la classe query screen el guardem a la màscara es amb format '*PatientID*'. Els '*' s'han de treure           
         
-        if ( studyPatientId == studyMaskPatientId )
+        studyMaskPatientId = upperString( studyMaskPatientId.substr( 1 , studyMaskPatientId.length() - 2 ) );
+        
+        if ( studyPatientId.find( studyMaskPatientId ) ==  std::string::npos )
         {   
-            return true;
+            return false;
         }
         else 
         {
-            return false;
+            return true;
         }
     }
     
@@ -417,6 +421,24 @@ bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName ,
 
     return true;
 
+}
+
+bool ReadDicomdir::matchStudyMaskAccessionNumber( std::string studyMaskAccessionNumber , std:: string studyAccessionNumber )
+{
+    if ( studyMaskAccessionNumber.length() > 0 )
+    { //si hi ha màscara AccessioNumber
+        
+        if ( studyAccessionNumber == studyMaskAccessionNumber )
+        {   
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 std::string ReadDicomdir::upperString( std:: string original )
