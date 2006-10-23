@@ -49,7 +49,8 @@ HEADERS += extensionfactory.h \
            toolsactionfactory.h \
            zoomtool.h \
            q3dviewertoolmanager.h \
-           translatetool.h 
+           translatetool.h \
+           q3dmprviewertoolmanager.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -84,7 +85,8 @@ SOURCES += extensionmediator.cpp \
            toolsactionfactory.cpp \
            zoomtool.cpp \
            q3dviewertoolmanager.cpp \
-           translatetool.cpp 
+           translatetool.cpp \
+           q3dmprviewertoolmanager.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
