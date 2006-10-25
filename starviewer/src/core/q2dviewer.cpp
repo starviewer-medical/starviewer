@@ -920,8 +920,8 @@ void Q2DViewer::setSlice( int value )
 {
     if( value <= m_viewer->GetSliceRange()[1] && value >= m_viewer->GetSliceRange()[0] )
     {
-        m_viewer->SetSlice( m_currentSlice );
         m_currentSlice = value;
+        m_viewer->SetSlice( m_currentSlice );
         emit sliceChanged( m_currentSlice );
         updateSliceAnnotation();
         this->getInteractor()->Render();
