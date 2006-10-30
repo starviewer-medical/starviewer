@@ -2487,11 +2487,12 @@
  <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>tabConfiguration</tabstop>
+  <tabstop>m_PacsTreeView</tabstop>
   <tabstop>m_textAETitle</tabstop>
-  <tabstop>m_textInstitutionAddress</tabstop>
+  <tabstop>m_textAddress</tabstop>
   <tabstop>m_textPort</tabstop>
   <tabstop>m_checkDefault</tabstop>
-  <tabstop>m_textInstitutionName</tabstop>
+  <tabstop>m_textInstitution</tabstop>
   <tabstop>m_textLocation</tabstop>
   <tabstop>m_textDescription</tabstop>
   <tabstop>m_buttonAddPacs</tabstop>
@@ -2499,7 +2500,6 @@
   <tabstop>m_buttonDeletePacs</tabstop>
   <tabstop>m_buttonTestPacs</tabstop>
   <tabstop>m_buttonClear</tabstop>
-  <tabstop>m_PacsTreeView</tabstop>
   <tabstop>m_textDatabaseRoot</tabstop>
   <tabstop>m_buttonExaminateDataBase</tabstop>
   <tabstop>m_textMaximumDaysNotViewed</tabstop>
@@ -2519,6 +2519,16 @@
   <tabstop>m_buttonAcceptPacs</tabstop>
   <tabstop>m_buttonApplyPacs</tabstop>
   <tabstop>m_buttonCancelPacs</tabstop>
+  <tabstop>m_textInstitutionName</tabstop>
+  <tabstop>m_textInstitutionAddress</tabstop>
+  <tabstop>m_textInstitutionTown</tabstop>
+  <tabstop>m_textInstitutionZipCode</tabstop>
+  <tabstop>m_textInstitutionCountry</tabstop>
+  <tabstop>m_textInstitutionEmail</tabstop>
+  <tabstop>m_textInstitutionPhoneNumber</tabstop>
+  <tabstop>m_buttonAcceptInstitution</tabstop>
+  <tabstop>m_buttonApplyInstitution</tabstop>
+  <tabstop>m_buttonCancelInstitution</tabstop>
  </tabstops>
  <resources/>
  <connections/>

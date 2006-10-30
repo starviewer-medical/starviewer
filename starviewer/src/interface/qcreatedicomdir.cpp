@@ -220,15 +220,13 @@ void QCreateDicomdir::createDicomdir()
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 {
     QDir temporaryDirPath;
-    QString dicomdirPath, logMessage, readmetxtPath;
+    QString dicomdirPath, logMessage;
     Status state;   
     ConvertToDicomdir convertToDicomdir;
        
     dicomdirPath.insert( 0 , temporaryDirPath.tempPath() );
-    dicomdirPath.append( "/DICOMDIR/DICOMDIR" ); // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
+    dicomdirPath.append( "/DICOMDIR" ); // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
         
-    readmetxtPath.insert( 0 , temporaryDirPath.tempPath() );
-    readmetxtPath.append( "/DICOMDIR" );//indiquem el path on s'ha de crear el fitxer README.TXT amb informacio de qui ha creat el DICOMDIR, només es genera quan es grava en cd o dvd
         
     //si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
@@ -249,7 +247,6 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     }
     else
     {        
-        convertToDicomdir.createReadmeTxt( readmetxtPath );
         return startCreateDicomdir( dicomdirPath );
     }
 }
@@ -362,6 +359,12 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     }
     else 
     {
+        //Cas que sigui un cd o dvd li copiem el README.TXT
+        if ( m_comboBoxAction->currentIndex() == 1 || m_comboBoxAction->currentIndex() == 2)
+        {
+            convertToDicomdir.createReadmeTxt();
+        }
+    
         INFO_LOG( "Finalitzada la creació del Dicomdir" );
         clearQCreateDicomdirScreen();
     }
@@ -414,8 +417,7 @@ void QCreateDicomdir::removeSelectedStudy()
     QList<QTreeWidgetItem *> selectedStudies;
      
     selectedStudies = m_dicomdirStudiesList->selectedItems();
-    
-    
+        
     if ( selectedStudies.count() == 0 )
     {
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please Select a study to remove" ) );

@@ -101,7 +101,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
 
     if ( !state.good() )
     {
-        deleteStudies();
+        //deleteStudies();
         return state;
     }
 
@@ -115,6 +115,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
  
     if ( !state.good() )
     {
+        m_progress->close();
         deleteStudies();
         return state;
     }
@@ -153,8 +154,8 @@ Status ConvertToDicomdir::startConversionToDicomdir()
         if ( m_OldPatientId != studyToConvert.patientId )
         {
             patientNameDir = QString( "/PAT%1" ).arg( m_patient , 5 , 10 , fillChar );
-            m_dicomdirPatientPath = m_dicomDirPath + patientNameDir;
-            patientDir.mkdir( m_dicomdirPatientPath );
+            m_dicomdirPatientPath = m_dicomDirPath + "/DICOM/" + patientNameDir;
+            patientDir.mkpath( m_dicomdirPatientPath );
             m_patient++;
             m_study = 0;
             m_patientDirectories.push_back( m_dicomdirPatientPath );//creem una llista amb els directoris creats, per si es produeix algun error esborrar-los
@@ -294,9 +295,9 @@ void ConvertToDicomdir::deleteStudies()
     }
 }
 
-void ConvertToDicomdir::createReadmeTxt( QString readmeTxtPath )
+void ConvertToDicomdir::createReadmeTxt()
 {
-    QString readmeFilePath = readmeTxtPath + "/README.TXT";
+    QString readmeFilePath = m_dicomDirPath + "/README.TXT";
     QFile file( readmeFilePath );
     StarviewerSettings settings;
     
