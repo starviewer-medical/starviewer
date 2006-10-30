@@ -22,7 +22,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     setupUi( this );
     m_mainVolume = 0;
     m_secondaryVolume = 0;
-    
+
     createActions();
     createConnections();
 
@@ -47,14 +47,14 @@ void Q2DViewerExtension::createActions()
     m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
     m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
     m_axialViewToolButton->setDefaultAction( m_axialViewAction );
-    
+
     m_sagitalViewAction = new QAction( 0 );
     m_sagitalViewAction->setText( tr("&Sagital View") );
     m_sagitalViewAction->setShortcut( tr("Ctrl+S") );
     m_sagitalViewAction->setStatusTip( tr("Change Current View To Sagital") );
     m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
     m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
-    
+
     m_coronalViewAction = new QAction( 0 );
     m_coronalViewAction->setText( tr("&Coronal View") );
     m_coronalViewAction->setShortcut( tr("Ctrl+C") );
@@ -77,7 +77,7 @@ void Q2DViewerExtension::createActions()
     m_doubleViewToolButton->setDefaultAction( m_doubleViewAction );
 
     // Tools
-    m_actionFactory = new ToolsActionFactory( 0 ); 
+    m_actionFactory = new ToolsActionFactory( 0 );
     m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
     m_slicingToolButton->setDefaultAction( m_slicingAction );
 
@@ -90,7 +90,10 @@ void Q2DViewerExtension::createActions()
     m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView , SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
+
 }
 
 void Q2DViewerExtension::createConnections()
@@ -98,7 +101,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
     connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
-    
+
     // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
     connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
     connect( m_spinBox2_1 , SIGNAL( valueChanged(int) ) , m_2DView2_1 , SLOT( setSlice(int) ) );
@@ -114,7 +117,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_2DView2_1 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_2DView2_2 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView2_1 , SLOT( setWindowLevel( double , double ) ) );
     connect( m_2DView2_2 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
-    
+
     connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
     connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
     connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
@@ -150,7 +153,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
-    
+
 }
 
 void Q2DViewerExtension::setSecondInput( Volume *input )
@@ -203,7 +206,7 @@ void Q2DViewerExtension::changeViewToAxial()
         INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.2)")
         m_2DView2_2->render();
     break;
-    
+
     }
 
 }
@@ -231,7 +234,7 @@ void Q2DViewerExtension::changeViewToSagital()
             m_secondaryVolume->getWholeExtent( secondExtent );
         else
             m_mainVolume->getWholeExtent( secondExtent );
-            
+
         m_spinBox2_1->setMinimum( extent[0] );
         m_spinBox2_1->setMaximum( extent[1] );
         m_slider2_1->setMaximum( extent[1] );
@@ -267,14 +270,14 @@ void Q2DViewerExtension::changeViewToCoronal()
         INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
         m_2DView->render();
     break;
-    
+
     case 1:
         int secondExtent[6];
         if( m_secondaryVolume )
             m_secondaryVolume->getWholeExtent( secondExtent );
         else
             m_mainVolume->getWholeExtent( secondExtent );
-            
+
         m_spinBox2_1->setMinimum( extent[2] );
         m_spinBox2_1->setMaximum( extent[3] );
         m_slider2_1->setMaximum( extent[3] );
