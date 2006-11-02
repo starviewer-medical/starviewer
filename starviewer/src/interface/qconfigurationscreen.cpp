@@ -656,7 +656,7 @@ bool QConfigurationScreen::applyChanges()
         {
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
         }
-
+        
         m_configurationChanged = false;
         
         return true;
@@ -733,7 +733,11 @@ void QConfigurationScreen::examinateDataBaseRoot()
     
     if ( dlg->exec() == QDialog::Accepted ) 
     {
-        if ( !dlg->selectedFiles().empty() ) m_textDatabaseRoot->setText( dlg->selectedFiles().takeFirst() );
+        if ( !dlg->selectedFiles().empty() )
+        {
+            m_textDatabaseRoot->setText( dlg->selectedFiles().takeFirst() );
+            m_textDatabaseRoot->setModified( true );// indiquem que m_textDatabaseRoot ha modificat el seu valor
+        }
     }
     
     delete dlg;
