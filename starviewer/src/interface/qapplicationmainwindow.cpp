@@ -44,7 +44,9 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     this->setCentralWidget( m_extensionWorkspace );
 
     CacheInstallation cacheInstallation;
-    cacheInstallation.checkInstallation();
+    
+    cacheInstallation.checkInstallationCacheImagePath();
+    cacheInstallation.checkInstallationCacheDatabase();
     
     m_extensionHandler = new ExtensionHandler( this );
         

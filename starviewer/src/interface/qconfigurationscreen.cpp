@@ -50,6 +50,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     m_buttonApplyPacs->setEnabled(false);
     
     m_configurationChanged = false;
+    m_createDatabase = false;
     
     createConnections();
 	setIconButtons();
@@ -91,13 +92,16 @@ void QConfigurationScreen::createConnections()
     //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
     connect( m_buttonApplyInstitution , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
     
+    //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
+    connect( m_buttonCreateDatabase , SIGNAL( clicked() ) , this ,  SLOT( createDatabase() ) );
+    
     //activen el boto apply quant canvia el seu valor
     connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textCacheImagePath , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textPoolSize , SIGNAL( textChanged(const QString &) ) , this, SLOT( configurationChanged( const QString& ) ) );
     connect( m_textAETitleMachine , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textTimeout , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT ( configurationChanged( const QString& ) ) );
+    connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT ( configurationChangedDatabaseRoot( const QString& ) ) );
     connect( m_textLocalPort , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textMaxConnections , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_comboLanguage , SIGNAL( editTextChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
@@ -108,7 +112,7 @@ void QConfigurationScreen::createConnections()
     connect( m_textInstitutionCountry , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textInstitutionPhoneNumber , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textInstitutionEmail , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    
+    connect( m_textMaximumDaysNotViewed , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );    
     
     //mateniment base de dades
     connect( m_buttonDeleteStudies , SIGNAL( clicked() ) , this , SLOT( deleteStudies() ) );
@@ -578,7 +582,7 @@ bool QConfigurationScreen::validateChanges()
     
     if ( m_textDatabaseRoot->isModified() )
     {
-        if ( !dir.exists(m_textDatabaseRoot->text() ) )
+        if ( !dir.exists(m_textDatabaseRoot->text() ) && m_createDatabase == false ) // si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
         {
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Invalid database path" ) );
             return false;             
@@ -628,14 +632,7 @@ void QConfigurationScreen::acceptChanges()
 {
     if ( m_configurationChanged )        
     {
-        if (validateChanges())
-        {   
-            applyChangesPacs();
-            applyChangesCache();
-            applyChangesInstitution();
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
-            this->hide();
-        }
+        if ( applyChanges() ) this->hide();
     }
     else this->hide();
 }
@@ -645,17 +642,26 @@ void QConfigurationScreen::cancelChanges()
     this->hide();
 }
 
-void QConfigurationScreen::applyChanges()
+bool QConfigurationScreen::applyChanges()
 {
+
     if (validateChanges())
     {
         applyChangesPacs();
         applyChangesCache();
         loadCachePoolDefaults();
         applyChangesInstitution();
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
+        
+        if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
+        {
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
+        }
+
         m_configurationChanged = false;
+        
+        return true;
     }
+    else return false;
 }
 
 void QConfigurationScreen::applyChangesPacs()
@@ -709,6 +715,13 @@ void QConfigurationScreen::configurationChanged ( const QString& )
     m_buttonApplyInstitution->setEnabled( true );    
     m_configurationChanged = true;
 }
+
+void QConfigurationScreen::configurationChangedDatabaseRoot ( const QString& )
+{
+    m_createDatabase= false; //indiquem no s'ha demanat que es creï la base de dades indicada a m_textDatabaseRoot
+    configurationChanged( "" );
+}
+
 
 void QConfigurationScreen::examinateDataBaseRoot()
 {
@@ -869,6 +882,30 @@ void QConfigurationScreen::applyChangesInstitution()
     m_buttonApplyInstitution->setEnabled( false );
 }
 
+void QConfigurationScreen::createDatabase()
+{
+    StarviewerSettings settings;
+    QFile databaseFile;
+    QString stringDatabasePath;
+    
+    if ( m_textDatabaseRoot->text().right(4) != ".sdb" )
+    {
+        QMessageBox::warning( this , tr( "StarViewer" ) , "The extension of the database has to be '.sdb'" );        
+    }
+    else
+    {
+        if ( databaseFile.exists( m_textDatabaseRoot->text() ) )
+        {
+            QMessageBox::warning( this , tr( "StarViewer" ) , "Starviewer can't create the database because, a database with the same name exists in the directory" );                  
+        }
+        else
+        {
+            settings.setDatabasePath( m_textDatabaseRoot->text() );
+            QMessageBox::warning( this , tr( "StarViewer" ) , "The application has to be restart to apply the changes" );        
+            m_createDatabase = true;
+        }
+    }
+}
 
 void QConfigurationScreen::databaseError(Status *state)
 {
@@ -882,7 +919,7 @@ void QConfigurationScreen::databaseError(Status *state)
                         code.setNum( state->code() , 10 );
                         text.append( code );
                         break;
-            case 2005 : text.insert( 0 , tr("Database is looked") );
+            case 2005 : text.insert( 0 , tr("Database is locked") );
                         text.append( "\n" );
                         text.append( tr( "To solve this error restart the user session" ) );
                         text.append( "\n" );

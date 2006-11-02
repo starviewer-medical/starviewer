@@ -18,25 +18,57 @@ CacheInstallation::CacheInstallation()
 {
 }
 
-bool CacheInstallation::checkInstallation()
+bool CacheInstallation::checkInstallationCacheImagePath()
 {
+    QString missatgeLog;
+    StarviewerSettings settings;
+
     if ( !existsCacheImagePath() )
     {
-        if ( !createCacheImageDir() ) return false;
+        if ( !createCacheImageDir() ) 
+        {
+            missatgeLog = "Error el path de la cache d'imatges no s'ha pogut crear ";
+            missatgeLog.append( settings.getCacheImagePath() );            
+            
+            ERROR_LOG ( missatgeLog.toAscii().constData() );
+            return false;
+        }
     }
+    
+    INFO_LOG(" Estat de la cache d'imatges correcte ");    
+    return true;
+}
+
+bool CacheInstallation::checkInstallationCacheDatabase()
+{
+    StarviewerSettings settings;
+    QString missatgeLog;
 
     if ( !existsDatabasePath() )
     {
-        if ( !createDatabaseDir() ) return false;
+        if ( !createDatabaseDir() )
+        {
+            missatgeLog = "Error el path de la base de dades no s'ha pogut crear ";
+            missatgeLog.append( settings.getDatabasePath() );
+            ERROR_LOG( missatgeLog.toAscii().constData() );
+            
+            return false;
+        }
     }
     
     if ( !existsDatabaseFile() )
     {
-        if ( !createDatabaseFile() ) return false;
-        
+        if ( !createDatabaseFile() )
+        {
+            missatgeLog = "Error no s'ha pogut crear la base de dades a ";
+            missatgeLog.append( settings.getDatabasePath() );
+            ERROR_LOG( missatgeLog.toAscii().constData() );
+            
+            return false;
+        }
     }
-
-    INFO_LOG(" Estat de la cache correcte ");    
+    
+    INFO_LOG( "Estat de la base de dades correcte " );    
     return true;
 }
 
@@ -169,6 +201,5 @@ CacheInstallation::~CacheInstallation()
 {
 
 }
-
 
 }

@@ -62,7 +62,7 @@ public slots :
     void compactCache();
     
     /// Aplica els canvis de la configuració
-    void applyChanges();
+    bool applyChanges();
     
     /// Guarda els canvis a la configuració dels paràmetres del PACS
     void acceptChanges();
@@ -70,11 +70,17 @@ public slots :
     /// Tanca la pantalla de configuració, i desprecia els canvis
     void cancelChanges();
 
-    /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons ap
+    /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void configurationChanged( const QString& );
+    
+    /// Slot que s'utilitza quant es fa algun canvia el path de la base de dades, per activar els buttons apply
+    void configurationChangedDatabaseRoot( const QString& );
     
     /// Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
     void cacheImagePathEditingFinish();
+    
+    /// crear base de dades
+    void createDatabase();
        
 signals :
     
@@ -88,6 +94,7 @@ private :
 
     int m_PacsID; /// Conté el D del pacs seleccionat en aquell moment
     bool m_configurationChanged; ///Indica si la configuració ha canviat
+    bool m_createDatabase; /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
 
     ///crea els connects dels signals i slots
     void createConnections();

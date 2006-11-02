@@ -19,13 +19,16 @@ public:
     /// Constructor de la classe
     CacheInstallation();
     
-    /** Comprova que la cache estigui correctament instal·lada. Comprova :
-     *             Comprova que existeixi el directori de la base de dades, sino existeix el crea
-     *             Comprova que existeixi la base de dades,sino existeix la crea
-     *             Comprova que existeixi el directori on es guarden les imatges a la cache
+    /** Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
+     * @return indicat si el directori existeix o no
      */
-    bool checkInstallation();
-    
+    bool checkInstallationCacheImagePath();
+   
+    /** Comprova que el directori on es guarda la base dades i la base de dades existeixin sinó l'intenta crear
+     * @return indica si la base de dades existeix
+     */
+    bool checkInstallationCacheDatabase();
+   
     /** Comprova si existeix el directori de la base de dades
      * @return indica si el directori existeix
      */
