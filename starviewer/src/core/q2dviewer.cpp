@@ -159,10 +159,10 @@ void Q2DViewer::createVoxelInformationCaption()
     m_voxelInformationCaption->SetAttachmentPoint( m_currentCursorPosition );
     m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_voxelInformationCaption->BorderOff();
-    m_voxelInformationCaption->LeaderOn();
+    m_voxelInformationCaption->LeaderOff();
     m_voxelInformationCaption->ThreeDimensionalLeaderOff();
     m_voxelInformationCaption->GetProperty()->SetColor( 1.0 , 0 , 0 );
-    m_voxelInformationCaption->SetPadding( 1 );
+    m_voxelInformationCaption->SetPadding( 0 );
     m_voxelInformationCaption->SetPosition( -1.0 , -1.0 );
     m_voxelInformationCaption->SetHeight( 0.05 );
     m_voxelInformationCaption->SetWidth( 0.3 );
