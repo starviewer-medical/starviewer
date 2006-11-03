@@ -56,7 +56,19 @@ void Slicing2DTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         this->endSlicing();
     break;
-    
+
+    case vtkCommand::MouseWheelForwardEvent:
+        m_2DViewer->setSlice( m_2DViewer->getSlice() + 1 );
+        //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
+        m_2DViewer->updateVoxelInformation();
+    break;
+
+    case vtkCommand::MouseWheelBackwardEvent:
+        m_2DViewer->setSlice( m_2DViewer->getSlice() - 1 );
+        //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
+        m_2DViewer->updateVoxelInformation();
+    break;
+
     default:
     break;
     }
@@ -86,10 +98,10 @@ void Slicing2DTool::doSlicing()
             value = dy/abs(dy);
         else
             value = dx/abs(dx);
-                       
+
         if( value < 0 )
             increment = -1;
-        else if( value > 0 )        
+        else if( value > 0 )
             increment = 1;
 
         m_2DViewer->setSlice( m_2DViewer->getSlice() + increment );
