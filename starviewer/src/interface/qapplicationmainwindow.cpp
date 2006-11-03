@@ -15,7 +15,7 @@
 #include <QStatusBar>
 #include <QCloseEvent>
 #include <QMessageBox>
-#include <QFileInfo> 
+#include <QFileInfo>
 #include <QCursor>
 #include <QProgressDialog>
 #include <QApplication>
@@ -44,18 +44,18 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     this->setCentralWidget( m_extensionWorkspace );
 
     CacheInstallation cacheInstallation;
-    
+
     cacheInstallation.checkInstallationCacheImagePath();
     cacheInstallation.checkInstallationCacheDatabase();
-    
+
     m_extensionHandler = new ExtensionHandler( this );
-        
-    createActions();    
+
+    createActions();
     createMenus();
     // \TODO es possible que prescindim de les toolbars i que aquesta desaparegui
 //     createToolBars();
     createStatusBar();
-    
+
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio, últims
     // arxius oberts etc amb QSettings
     readSettings();
@@ -103,7 +103,7 @@ void QApplicationMainWindow::createActions()
     m_signalMapper = new QSignalMapper( this );
     connect( m_signalMapper, SIGNAL( mapped(int) ), m_extensionHandler , SLOT( request(int) ) );
     connect( m_signalMapper, SIGNAL( mapped( const QString) ), m_extensionHandler , SLOT( request(const QString) ) );
-    
+
     m_newAction = new QAction( this );
     m_newAction->setText( tr("&New") );
     m_newAction->setShortcut( tr("Ctrl+N") );
@@ -115,7 +115,7 @@ void QApplicationMainWindow::createActions()
     m_openAction->setText( tr("&Open...") );
     m_openAction->setShortcut( tr("Ctrl+O") );
     m_openAction->setStatusTip(tr("Open an existing volume file"));
-    m_openAction->setIcon( QIcon(":/images/open.png") );   
+    m_openAction->setIcon( QIcon(":/images/open.png") );
     m_signalMapper->setMapping( m_openAction , 1 );
     m_signalMapper->setMapping( m_openAction , "Open File" );
     connect( m_openAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
@@ -128,7 +128,7 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_openDirAction , 6 );
     m_signalMapper->setMapping( m_openDirAction , "Open Dicom Dir" );
     connect( m_openDirAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-    
+
     m_pacsAction = new QAction( this );
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
@@ -140,7 +140,6 @@ void QApplicationMainWindow::createActions()
 
     m_mpr2DAction = new QAction( this );
     m_mpr2DAction->setText( tr("2D &MPR Viewer") );
-    m_mpr2DAction->setShortcut( tr("Ctrl+M") );
     m_mpr2DAction->setStatusTip( tr("Open the 2D MPR Application Viewer") );
     m_mpr2DAction->setEnabled( false );
     m_signalMapper->setMapping( m_mpr2DAction , 2 );
@@ -149,7 +148,6 @@ void QApplicationMainWindow::createActions()
 
     m_mpr3DAction = new QAction( this );
     m_mpr3DAction->setText( tr("3D M&PR Viewer") );
-    m_mpr3DAction->setShortcut( tr("Ctrl+P") );
     m_mpr3DAction->setStatusTip( tr("Open the 3D MPR Application Viewer") );
     m_mpr3DAction->setIcon( QIcon(":/images/mpr3D.png") );
     m_mpr3DAction->setEnabled( false );
@@ -159,7 +157,6 @@ void QApplicationMainWindow::createActions()
 
     m_mpr3D2DAction = new QAction( this );
     m_mpr3D2DAction->setText( tr("3D-2D MP&R Viewer") );
-    m_mpr3D2DAction->setShortcut( tr("Ctrl+R") );
     m_mpr3D2DAction->setStatusTip( tr("Open the 3D-2D MPR Application Viewer") );
     m_mpr3D2DAction->setEnabled( false );
     m_signalMapper->setMapping( m_mpr3D2DAction , 4 );
@@ -168,13 +165,12 @@ void QApplicationMainWindow::createActions()
 
     m_2DViewerAction = new QAction( this );
     m_2DViewerAction->setText( tr("2&D Viewer") );
-    m_2DViewerAction->setShortcut( tr("Ctrl+D") );
     m_2DViewerAction->setStatusTip( tr("Open the 2D Viewer Application") );
     m_2DViewerAction->setEnabled( false );
     m_signalMapper->setMapping( m_2DViewerAction , 8 );
     m_signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
     connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-    
+
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
     m_aboutAction->setShortcut( 0 );
@@ -185,11 +181,11 @@ void QApplicationMainWindow::createActions()
     m_closeAction = new QAction( this );
     m_closeAction->setText( tr("&Close") );
     m_closeAction->setShortcut( tr("Ctrl+W") );
-    m_closeAction->setStatusTip(tr("Close the current serie"));
+    m_closeAction->setStatusTip(tr("Close the current extension page"));
     m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
-    connect( m_closeAction, SIGNAL( triggered() ), this, SLOT( close() ) );
+    connect( m_closeAction, SIGNAL( triggered() ), m_extensionWorkspace , SLOT( closeCurrentApplication() ) );
     connect( this , SIGNAL( containsVolume(bool) ), m_closeAction, SLOT( setEnabled(bool) ) );
-    
+
     m_exitAction = new QAction( this );
     m_exitAction->setText( tr("E&xit") );
     m_exitAction->setShortcut(tr("Ctrl+Q") );
@@ -203,28 +199,28 @@ void QApplicationMainWindow::createActions()
 //     m_exportToJpegAction->setStatusTip( tr("Export the volume to jpeg format") );
 //     connect( m_exportToJpegAction , SIGNAL( triggered() ) , this , SLOT( exportToJpeg() ) );
 //     connect( this , SIGNAL( containsVolume(bool) ), m_exportToJpegAction, SLOT( setEnabled(bool) ) );
-//     
+//
 //     m_exportToMetaIOAction = new QAction( this );
 //     m_exportToMetaIOAction->setText(tr("Export to MetaIO"));
 //     m_exportToMetaIOAction->setShortcut( 0 );
 //     m_exportToMetaIOAction->setStatusTip( tr("Export the volume to MetaIO format") );
 //     connect( m_exportToMetaIOAction , SIGNAL( triggered() ) , this , SLOT( exportToMetaIO() ) );
 //     connect( this , SIGNAL( containsVolume(bool) ), m_exportToMetaIOAction, SLOT( setEnabled(bool) ) );
-//     
+//
 //     m_exportToPngAction = new QAction( this );
 //     m_exportToPngAction->setText(tr("Export to PNG"));
 //     m_exportToPngAction->setShortcut( 0 );
 //     m_exportToPngAction->setStatusTip( tr("Export the volume to png format") );
 //     connect( m_exportToPngAction , SIGNAL( triggered() ) , this , SLOT( exportToPng() ) );
 //     connect( this , SIGNAL( containsVolume(bool) ), m_exportToPngAction, SLOT( setEnabled(bool) ) );
-//     
+//
 //     m_exportToTiffAction = new QAction( this );
 //     m_exportToTiffAction->setText(tr("Export to TIFF"));
 //     m_exportToTiffAction->setShortcut( 0 );
 //     m_exportToTiffAction->setStatusTip( tr("Export the volume to tiff format") );
 //     connect( m_exportToTiffAction , SIGNAL( triggered() ) , this , SLOT( exportToTiff() ) );
 //     connect( this , SIGNAL( containsVolume(bool) ), m_exportToTiffAction, SLOT( setEnabled(bool) ) );
-//     
+//
 //     m_exportToBmpAction = new QAction( this );
 //     m_exportToBmpAction->setText(tr("Export to BMP"));
 //     m_exportToBmpAction->setShortcut( 0 );
@@ -248,13 +244,13 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction( m_openAction );
     m_fileMenu->addAction( m_openDirAction );
     m_fileMenu->addAction( m_pacsAction );
-    
+
     m_fileMenu->addSeparator();
-    
+
 //     m_importFilesMenu = m_fileMenu->addMenu( tr("&Import") );
 
 //     m_exportFilesMenu = m_fileMenu->addMenu( tr("&Export"));
-    
+
 //     m_exportFilesMenu->addAction( m_exportToJpegAction );
 //     m_exportFilesMenu->addAction( m_exportToMetaIOAction );
 //     m_exportFilesMenu->addAction( m_exportToPngAction );
@@ -263,11 +259,11 @@ void QApplicationMainWindow::createMenus()
 //     m_exportFilesMenu->addAction( m_exportToTiffAction );
 
 //     m_fileMenu->addSeparator();
-    
+
 //     m_recentFilesMenu = m_fileMenu->addMenu( tr("&Recent files") );
 //     for (int i = 0; i < MaxRecentFiles; ++i)
 //         m_recentFilesMenu->addAction( m_recentFileActions[i]);
-        
+
 //     m_fileMenu->addSeparator();
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );
@@ -282,10 +278,10 @@ void QApplicationMainWindow::createMenus()
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
     createLanguageMenu();
-    
+
     menuBar()->addSeparator();
-    
-    // menú d'ajuda, ara només hi ha els típic abouts  
+
+    // menú d'ajuda, ara només hi ha els típic abouts
     m_helpMenu = menuBar()->addMenu(tr("&Help") );
     m_helpMenu->addAction( m_aboutAction );
 }
@@ -296,10 +292,10 @@ void QApplicationMainWindow::createLanguageMenu()
     settings.beginGroup("StarViewer-Language");
     QString defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
     settings.endGroup();
-    
+
     QSignalMapper* signalMapper = new QSignalMapper( this );
     connect( signalMapper, SIGNAL( mapped(int) ), this , SLOT( switchToLanguage(int) ) );
-    
+
     m_catalanAction = new QAction( this );
     m_catalanAction->setText( "Català" );
     m_catalanAction->setShortcut( 0 );
@@ -309,10 +305,10 @@ void QApplicationMainWindow::createLanguageMenu()
         m_catalanAction->setChecked( true );
     else
         m_catalanAction->setChecked( false );
-    
+
     signalMapper->setMapping( m_catalanAction , 0 );
     connect( m_catalanAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
-        
+
     m_spanishAction = new QAction( this );
     m_spanishAction->setText( "Castellano" );
     m_spanishAction->setShortcut( 0 );
@@ -336,7 +332,7 @@ void QApplicationMainWindow::createLanguageMenu()
         m_englishAction->setChecked( false );
     signalMapper->setMapping( m_englishAction , 2 );
     connect( m_englishAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
-    
+
     m_languageMenu->addAction( m_catalanAction );
     m_languageMenu->addAction( m_spanishAction );
     m_languageMenu->addAction( m_englishAction );
@@ -399,14 +395,14 @@ void QApplicationMainWindow::createStatusBar()
 
 void QApplicationMainWindow::newFile()
 {
-    QString windowName;    
+    QString windowName;
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
     newMainWindow->show();
 }
 
 void QApplicationMainWindow::newAndOpen()
 {
-    QString windowName;    
+    QString windowName;
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
     newMainWindow->show();
     newMainWindow->m_openAction->trigger();
@@ -414,7 +410,7 @@ void QApplicationMainWindow::newAndOpen()
 
 void QApplicationMainWindow::newAndOpenDir()
 {
-    QString windowName;    
+    QString windowName;
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
     newMainWindow->show();
     newMainWindow->m_openDirAction->trigger();
@@ -451,7 +447,7 @@ void QApplicationMainWindow::about()
             tr("<h2>StarViewer 2006 </h2>"
                "<p>Copyright &copy; 2006 Universitat de Girona"
                "<p>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve)."
-               "<p>Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP)." 
+               "<p>Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP)."
                "<p>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging."
                "<p>Version : 0.1")
                );
@@ -477,7 +473,7 @@ void QApplicationMainWindow::writeSettings()
 //     settings.setValue( "recentFiles" , m_recentFiles );
     settings.setValue( "workingDirectory" , m_workingDirectory );
     settings.setValue( "exportWorkingDirectory" , m_exportWorkingDirectory );
-    
+
     settings.endGroup();
 }
 
@@ -488,13 +484,13 @@ void QApplicationMainWindow::readSettings()
 
     move( settings.value("position", QPoint(200, 200)).toPoint());
     resize( settings.value("size", QSize(400, 400)).toSize());
-    
+
 //     m_recentFiles = settings.value("recentFiles").toStringList();
 //     updateRecentFileActions();
 
     m_workingDirectory = settings.value("workingDirectory", ".").toString();
     m_exportWorkingDirectory = settings.value("exportWorkingDirectory", ".").toString();
-    
+
     settings.endGroup();
 }
 
@@ -519,7 +515,7 @@ void QApplicationMainWindow::readSettings()
 //     break;
 //     }
 // }
-// 
+//
 // void QApplicationMainWindow::exportToJpeg( )
 // {
 //     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToJpegFilter );
@@ -529,16 +525,16 @@ void QApplicationMainWindow::readSettings()
 //         {
 //             fileName += ".jpg";
 //         }
-//         
+//
 //         Output *out = new Output();
 //         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
 //         out->saveSeries( fileName.toLatin1() );
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
 //     }
-// 
+//
 // }
-// 
+//
 // void QApplicationMainWindow::exportToPng( )
 // {
 //     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToPngFilter );
@@ -547,7 +543,7 @@ void QApplicationMainWindow::readSettings()
 //         if( QFileInfo( fileName ).suffix() != "png" )
 //         {
 //             fileName += ".png";
-//         }      
+//         }
 //         Output *out = new Output();
 //         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
@@ -555,18 +551,18 @@ void QApplicationMainWindow::readSettings()
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
 //     }
 // }
-// 
+//
 // void QApplicationMainWindow::exportToTiff( )
 // {
 //     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToTiffFilter );
-//     
+//
 //     if ( !fileName.isEmpty() )
 //     {
 //         if( QFileInfo( fileName ).suffix() != "tiff" )
 //         {
 //             fileName += ".tiff";
 //         }
-//         
+//
 //         Output *out = new Output();
 //         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
@@ -574,18 +570,18 @@ void QApplicationMainWindow::readSettings()
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
 //     }
 // }
-// 
+//
 // void QApplicationMainWindow::exportToBmp( )
 // {
 //     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToBmpFilter );
-//             
+//
 //     if ( !fileName.isEmpty() )
 //     {
 //         if( QFileInfo( fileName ).suffix() != "bmp" )
 //         {
 //             fileName += ".bmp";
 //         }
-//         
+//
 //         Output *out = new Output();
 //         // aquí caldria recòrrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
@@ -593,11 +589,11 @@ void QApplicationMainWindow::readSettings()
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
 //     }
 // }
-// 
+//
 // void QApplicationMainWindow::exportToMetaIO( )
 // {
 //     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToMetaIOFilter );
-//             
+//
 //     if (!fileName.isEmpty())
 //     {
 //         if( QFileInfo( fileName ).suffix() != "mhd" )
@@ -623,7 +619,7 @@ void QApplicationMainWindow::readSettings()
 //     m_recentFiles.prepend(fileName);
 //     while ( m_recentFiles.size() > MaxRecentFiles )
 //         m_recentFiles.removeLast();
-// 
+//
 //     foreach ( QWidget *widget, QApplication::topLevelWidgets() )
 //     {
 //         QApplicationMainWindow *mainWin = qobject_cast<QApplicationMainWindow *>(widget);
@@ -635,7 +631,7 @@ void QApplicationMainWindow::readSettings()
 // void QApplicationMainWindow::updateRecentFileActions()
 // {
 //     int numRecentFiles = qMin(m_recentFiles.size(), (int)MaxRecentFiles);
-// 
+//
 //     for (int i = 0; i < numRecentFiles; ++i)
 //     {
 //         QString text = tr("&%1 %2").arg(i + 1).arg( QFileInfo(m_recentFiles[i]).fileName() );
@@ -645,7 +641,7 @@ void QApplicationMainWindow::readSettings()
 //     }
 //     for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
 //         m_recentFileActions[j]->setVisible(false);
-// 
+//
 // }
 
 // void QApplicationMainWindow::openRecentFile()
