@@ -17,10 +17,12 @@ ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, const char *name)
 {
     this->setObjectName( name );
     m_closeTabButton = 0;
-    
+
     this->setTabPosition( QTabWidget::South );
     m_closeTabButton = new QToolButton( this );
-    m_closeTabButton->setIcon( QIcon(":/images/fileclose.png") );
+    m_closeTabButton->setIcon( QIcon(":/images/tabRemove.png") );
+    m_closeTabButton->setAutoRaise( true );
+    m_closeTabButton->setIconSize( QSize(24,24) );
     this->setCornerWidget( m_closeTabButton , Qt::BottomRightCorner );
     createConnections();
     m_closeTabButton->hide();
@@ -63,4 +65,4 @@ void ExtensionWorkspace::closeCurrentApplication()
     delete w;
 }
 
-};  // end namespace udg 
+};  // end namespace udg
