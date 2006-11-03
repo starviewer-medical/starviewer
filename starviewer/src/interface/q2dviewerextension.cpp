@@ -94,6 +94,8 @@ void Q2DViewerExtension::createActions()
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
 
+    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
+    m_slicingAction->trigger();
 }
 
 void Q2DViewerExtension::createConnections()
@@ -153,7 +155,6 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
-
 }
 
 void Q2DViewerExtension::setSecondInput( Volume *input )
