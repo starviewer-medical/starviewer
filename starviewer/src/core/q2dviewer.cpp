@@ -30,7 +30,7 @@
 #include <vtkImageViewer2.h>
 // composició d'imatges
 #include <vtkImageCheckerboard.h>
-#include <vtkImageBlend.h> 
+#include <vtkImageBlend.h>
 #include <vtkImageRectilinearWipe.h>
 // anotacions
 #include <vtkCornerAnnotation.h>
@@ -66,7 +66,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
     updateCursor( -1, -1, -1, -1 );
-    
+
     // inicialitzacions d'objectes
     // visor
     m_viewer = vtkImageViewer2::New();
@@ -83,17 +83,17 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     }
     m_sideRuler = 0;
     m_bottomRuler = 0;
-    
+
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
-    
+
     // anotacions
     createAnnotations();
-    createActions();    
+    createActions();
     createTools();
     addActors();
-    
+
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 }
 
@@ -195,7 +195,7 @@ void Q2DViewer::createOrientationAnnotations()
 
     m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[1]->SetPosition( 0.5 , 0.01 );
-    
+
     m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
     m_patientOrientationTextActor[2]->SetPosition( 0.99 , 0.5 );
 
@@ -266,7 +266,7 @@ void Q2DViewer::updateRulers()
         m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
         m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
         m_sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
-        
+
         m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[3] , anchoredCoordinates[2] );
         m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[2] , anchoredCoordinates[2] );
         m_bottomRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
@@ -322,10 +322,10 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 {
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
     QString revertedOrientation = m_mainVolume->getVolumeSourceInformation()->getRevertedPatientOrientationString() ;
-    
+
     QStringList list = orientation.split(",");
     QStringList revertedList = revertedOrientation.split(",");
-    
+
     if( list.size() > 1 )
     {
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
@@ -376,7 +376,7 @@ void Q2DViewer::updateAnnotations()
     {
         displayRulersOff();
     }
-    
+
     if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
     {
         displayWindowInformationOn();
@@ -463,7 +463,7 @@ void Q2DViewer::updateWindowInformationAnnotation()
                 .arg( m_viewer->GetColorLevel() );
     m_textAnnotation->SetText( 2 , m_upperLeftText.toAscii() );
 }
-    
+
 void Q2DViewer::updateSerieInformationAnnotation()
 {
     if( m_mainVolume )
@@ -474,13 +474,13 @@ void Q2DViewer::updateSerieInformationAnnotation()
         QString month = studyDate.mid( 4 , 2 );
         QString day = studyDate.mid( 6 , 2 );
         studyDate = day + QString( "/" ) + month + QString( "/" ) + year;
-    
+
         QString studyTime = m_mainVolume->getVolumeSourceInformation()->getStudyTime();
         QString hour = studyTime.mid( 0 , 2 );
         QString minute = studyTime.mid( 2 , 2 );
         QString second = studyTime.mid( 4 , 2 );
         studyTime = hour + QString( ":" ) + minute + QString( ":" ) + second;
-        
+
         m_upperRightText = tr("%1\n%2\n%3\nAcc:%4\n%5\n%6")
                     .arg( m_mainVolume->getVolumeSourceInformation()->getInstitutionName() )
                     .arg( m_mainVolume->getVolumeSourceInformation()->getPatientName() )
@@ -500,7 +500,7 @@ void Q2DViewer::updateProtocolNameAnnotation()
     {
         m_lowerRightText = tr("%1")
                         .arg( m_mainVolume->getVolumeSourceInformation()->getProtocolName() );
-    
+
         m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
     }
     else
@@ -608,12 +608,12 @@ void Q2DViewer::displayScalarBarOff()
 }
 
 void Q2DViewer::updateVoxelInformation()
-{   
+{
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
     m_picker->PickProp( interactor->GetEventPosition()[0], interactor->GetEventPosition()[1], m_viewer->GetRenderer() );
     // calculem el pixel trobat
-    double q[3], imageValue;    
+    double q[3], imageValue;
     m_picker->GetPickPosition( q );
     //     this->m_modelPointFromCursor.setValues( q );
     int found = 0;
@@ -623,15 +623,15 @@ void Q2DViewer::updateVoxelInformation()
         double tolerance;
         int subCellId;
         double parametricCoordinates[3], interpolationWeights[8];
-        
+
         vtkPointData *pointData = m_mainVolume->getVtkData()->GetPointData();
         vtkPointData* outPointData = vtkPointData::New();
         outPointData->InterpolateAllocate( pointData , 1 , 1 );
-    
+
         // Use tolerance as a function of size of source data
         tolerance = m_mainVolume->getVtkData()->GetLength();
         tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-    
+
         // Find the cell that contains q and get it
         vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( q , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
         if ( cell )
@@ -695,7 +695,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     updateRulers();
     switch( event )
     {
-    case vtkCommand::MouseMoveEvent:    
+    case vtkCommand::MouseMoveEvent:
         updateVoxelInformation();
     break;
 
@@ -723,32 +723,34 @@ void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, voi
     // aquesta posició no és del tot bona ja que no són les coordenades globals, sin o de finestra
     QMenu contextMenu( this );
     contextMenu.addAction( m_resetAction );
-    
+
     // map to global
     QPoint global_pt = contextMenu.parentWidget()->mapToGlobal( pt );
     contextMenu.exec( global_pt );
 }
 
 void Q2DViewer::setupInteraction()
-{   
+{
     // configurem l'Image Viewer i el qvtkWidget
     // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat
     //\TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-    
+
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    // despatxa qualsevol event-> tools                       
-    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(), 
-                                 vtkCommand::AnyEvent, 
-                                 this, 
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) ) 
+    // despatxa qualsevol event-> tools
+    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
+                                 vtkCommand::AnyEvent,
+                                 this,
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
                                  );
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-    
+    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
+
 // menú contextual TODO el farem servir???
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
 //                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
@@ -762,7 +764,7 @@ void Q2DViewer::setInput( Volume* volume )
         return;
     m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
-    
+
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
@@ -803,16 +805,16 @@ vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
 void Q2DViewer::setOverlayInput( Volume* volume )
 {
     m_overlayVolume = volume;
-    
+
     vtkImageCheckerboard *imageCheckerBoard = vtkImageCheckerboard::New();
     vtkImageBlend *blender;
-    
+
     vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
-    
+
     switch( m_overlay )
     {
     case CheckerBoard:
-        
+
         imageCheckerBoard->SetInput1( m_mainVolume->getVtkData() );
         imageCheckerBoard->SetInput2( m_overlayVolume->getVtkData() );
         imageCheckerBoard->SetNumberOfDivisions( m_divisions );
@@ -820,7 +822,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         m_viewer->SetInputConnection( imageCheckerBoard->GetOutputPort() ); // li donem el m_imageCheckerboard com a input
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
-    
+
     case Blend:
         blender = vtkImageBlend::New();
         blender->SetInput(m_mainVolume->getVtkData());
@@ -830,15 +832,15 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
-    
+
     case RectilinearWipe:
         wipe->SetInput( 0 , m_mainVolume->getVtkData() );
         wipe->SetInput( 1 , m_overlayVolume->getVtkData() );
         wipe->SetPosition(20,20);
-        wipe->SetWipeToUpperLeft();        
+        wipe->SetWipeToUpperLeft();
         m_viewer->SetInput( wipe->GetOutput() );
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
-    break;    
+    break;
     }
 }
 
@@ -846,7 +848,7 @@ void Q2DViewer::render()
 {
     // si tenim dades
     if( m_mainVolume )
-    {        
+    {
        // Això és necessari perquè la imatge es rescali a les mides de la finestreta
         m_viewer->GetRenderer()->ResetCamera();
         updateView();
@@ -858,7 +860,7 @@ void Q2DViewer::render()
 }
 
 void Q2DViewer::setView( ViewType view )
-{    
+{
     m_lastView = view;
     updateView();
 }
@@ -883,21 +885,21 @@ void Q2DViewer::updateView()
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
-        
+
         case Sagittal:
             m_viewer->SetSliceOrientationToYZ();
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
-    
+
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
-    
+
         default:
         // podem posar en Axial o no fer res
             m_viewer->SetSliceOrientationToXY();
@@ -1057,19 +1059,19 @@ void Q2DViewer::saveAll( const char *baseName , FileType extension )
     {
     case PNG:
     break;
-    
+
     case JPEG:
     break;
 
     case TIFF:
     break;
-     
+
     case DICOM:
     break;
 
     case META:
     break;
-    
+
     case PNM:
     break;
 
@@ -1092,7 +1094,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             pngWriter->SetFilePattern( "%s-%d.png" );
             pngWriter->SetFilePrefix( baseName );
             pngWriter->Write();
-            
+
             break;
         }
         case JPEG:
@@ -1102,7 +1104,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             jpegWriter->SetFilePattern( "%s-%d.jpg" );
             jpegWriter->SetFilePrefix( baseName );
             jpegWriter->Write();
-            
+
             break;
         }
         // \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
@@ -1123,7 +1125,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             pnmWriter->SetFilePattern( "%s-%d.pnm" );
             pnmWriter->SetFilePrefix( baseName );
             pnmWriter->Write();
-            
+
             break;
         }
         case BMP:
@@ -1133,9 +1135,9 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             bmpWriter->SetFilePattern( "%s-%d.bmp" );
             bmpWriter->SetFilePrefix( baseName );
             bmpWriter->Write();
-            
+
             break;
-        }   
+        }
         case DICOM:
         {
             break;
@@ -1146,11 +1148,11 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             metaWriter->SetInput( m_mainVolume->getVtkData() );
             metaWriter->SetFileName( baseName );
             metaWriter->Write();
-        
+
             break;
         }
     }
 }
 
-};  // end namespace udg 
+};  // end namespace udg
 
