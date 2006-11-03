@@ -44,7 +44,7 @@ visor->render();
 
 En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat mab el mètode setOverlayInput().
 Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe, en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
-\TODO acabar la doc sobre solapament 
+\TODO acabar la doc sobre solapament
 
 Per defecte el visualitzador mostra la llesca central de la vista seleccionada, si volem canviar al llesca farem servir el mètode setSlice().
 
@@ -59,7 +59,7 @@ class Q2DViewerToolManager;
 
 class Q2DViewer  : public QViewer{
 Q_OBJECT
-public:    
+public:
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
     enum ViewType{ Axial, Coronal, Sagittal , None };
 
@@ -77,13 +77,13 @@ public:
 
     /// Retorna l'interactor style
     vtkInteractorStyleImage *getInteractorStyle();
-    
+
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
     void setView( ViewType view );
     void setViewToAxial(){ setView( Q2DViewer::Axial ); }
     void setViewToCoronal(){ setView( Q2DViewer::Coronal ); }
     void setViewToSagittal(){ setView( Q2DViewer::Sagittal ); }
-    
+
     /// Actualització d'anotacions vàries
     void updateWindowLevelAnnotation();
 
@@ -92,10 +92,10 @@ public:
 
     /// Ens retorna l'ImageViewer
     vtkImageViewer2* getImageViewer(){ return m_viewer; }
-    
+
     /// Afegim el volum solapat
-    void setOverlayInput( Volume* volume );    
-    
+    void setOverlayInput( Volume* volume );
+
     // Mètodes específics checkerboard
     /// Obtenim el nombre de divisions
     int * getDivisions();
@@ -113,10 +113,10 @@ public:
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
     double getCurrentColorLevel();
-    
-public slots:  
+
+public slots:
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
-    
+
     /// Indiquem si volem veure la informació del volum per pantalla \TODO realment es farà servir aquest mètode?
     void displayInformationText( bool display );
 
@@ -137,7 +137,11 @@ public slots:
     void displayPatientOrientationOff();
     void displayScalarBarOn();
     void displayScalarBarOff();
-    
+
+    /// Habilita/deshabilita que es vegi la info de voxel
+    void enableVoxelInformationCaption();
+    void disableVoxelInformationCaption();
+
     /// retorna la llesca actual
     int getSlice( void ){ return m_currentSlice; }
 
@@ -149,7 +153,7 @@ public slots:
     void setOverlayToBlend(){ setOverlay( Q2DViewer::Blend ); };
     void setOverlayToCheckerBoard(){ setOverlay( Q2DViewer::CheckerBoard ); };
     void setOverlayToRectilinearWipe(){ setOverlay( Q2DViewer::RectilinearWipe ); };
-    
+
     /// Actualitza els valors on apunta el cursor
     void updateCursor( double x, double y , double z , double value )
     {
@@ -159,21 +163,21 @@ public slots:
 
         m_currentImageValue = value;
     }
-    
+
     virtual void render();
-    
+
     // Mètodes específics checkerboard
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int x , int y , int z );
 
     /// Fa reset dels paràmetres inicials \TODO:  no es del tot complet el reset
     void reset()
-    {    
+    {
         updateView();
     }
 
     void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, void *call_data, vtkCommand * command);
-    
+
     /// Afegir o treure la visibilitat d'una anotació textual
     void addAnnotation( AnnotationFlags annotation )
     {
@@ -188,7 +192,7 @@ public slots:
             m_enabledAnnotations -= annotation;
             updateAnnotations();
         }
-        
+
     }
 
     /// Ajusta el window/level
@@ -199,7 +203,7 @@ public slots:
 
     /// Obté el window level actual de la imatge
     void getCurrentWindowLevel( double wl[2] );
-    
+
     /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
 
@@ -212,14 +216,14 @@ public slots:
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
-    
+
 protected:
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
 
     /// Aquest mètode es fa servir perquè es mostri un menú contextual
     //virtual void contextMenuEvent( QContextMenuEvent *event );
-    
+
     /// Acció temporal de proves. Simplement fa un reset mostrant la llesca central de nou
     QAction *m_resetAction;
 
@@ -227,7 +231,7 @@ protected:
     vtkImageViewer2 *m_viewer;
 
     /// conserva la vista actual
-    ViewType m_lastView;    
+    ViewType m_lastView;
 
     /// La llesca actual que estem visualitzant
     int m_currentSlice;
@@ -246,7 +250,7 @@ protected:
 
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
-    
+
     /// Actualitza la vista en el rendering
     void updateView();
 
@@ -256,22 +260,22 @@ protected:
 private:
     /// [apanyo] per saber si estem manipulant els plans
     bool m_manipulating;
-    
+
     /// flag que ens indica quines anotacions es veuran per la finestra
     unsigned int m_enabledAnnotations;
 
     /// Refresca les anotacions que s'han de veure i les que no
     void updateAnnotations();
-    
+
     /// inicialitza els strings d'informació que es mostraran a la pantalla
     void initInformationText();
-    
+
     /// Tipu de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
-    
+
     /// configuració de la interacció amb l'usuari
     void setupInteraction();
-    
+
     /// Crea i inicialitza totes les accions d'aquest widget
     void createActions();
 
@@ -283,7 +287,7 @@ private:
 
     /// crea els indicadors d'escala
     void createRulers();
-        
+
     /// Actualitza els rulers
     void updateRulers();
 
@@ -292,16 +296,16 @@ private:
 
     /// Actualitza la barra de valors
     void updateScalarBar();
-    
+
     /// crea els actors necessaris per mostrar la llegenda flotant amb la informació de voxel
     void createVoxelInformationCaption();
 
     /// crea les anotacions de l'orientació del pacient
     void createOrientationAnnotations();
-    
+
     /// Afegeix tots els actors a l'escena
     void addActors();
-    
+
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
@@ -319,7 +323,7 @@ private:
 
     /// coordenades dels extrems per cada dimensió del ruler
     double m_rulerExtent[6];
-    
+
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
 
@@ -343,7 +347,7 @@ private:
 
     /// El manager de les tools
     Q2DViewerToolManager *m_toolManager;
-    
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
@@ -352,6 +356,6 @@ signals:
     void windowLevelChanged( double window , double level );
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

@@ -607,6 +607,16 @@ void Q2DViewer::displayScalarBarOff()
     m_scalarBar->VisibilityOff();
 }
 
+void Q2DViewer::enableVoxelInformationCaption()
+{
+    m_voxelInformationCaption->VisibilityOn();
+}
+
+void Q2DViewer::disableVoxelInformationCaption()
+{
+    m_voxelInformationCaption->VisibilityOff();
+}
+
 void Q2DViewer::updateVoxelInformation()
 {
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
@@ -646,12 +656,12 @@ void Q2DViewer::updateVoxelInformation()
     if( !found )
     {
         updateCursor( -1, -1, -1, -1 );
-        m_voxelInformationCaption->VisibilityOff();
+        disableVoxelInformationCaption();
     }
     else
     {
         updateCursor( q[0], q[1], q[2], imageValue );
-        m_voxelInformationCaption->VisibilityOn();
+        enableVoxelInformationCaption();
         m_voxelInformationCaption->SetAttachmentPoint( q );
         m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(m_currentCursorPosition[0],0,'f',2).arg(m_currentCursorPosition[1],0,'f',2).arg(m_currentCursorPosition[2],0,'f',2).arg(m_currentImageValue) ) );
     }
@@ -697,6 +707,15 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     {
     case vtkCommand::MouseMoveEvent:
         updateVoxelInformation();
+    break;
+
+    case vtkCommand::EnterEvent:
+        enableVoxelInformationCaption();
+    break;
+
+    case vtkCommand::LeaveEvent:
+        disableVoxelInformationCaption();
+        this->getInteractor()->Render();
     break;
 
     default:
