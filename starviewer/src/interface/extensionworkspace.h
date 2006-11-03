@@ -18,10 +18,10 @@ namespace udg {
 /**
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class ExtensionWorkspace  : public QTabWidget{
+class ExtensionWorkspace : public QTabWidget{
 Q_OBJECT
 public:
-    
+
     ExtensionWorkspace(QWidget *parent = 0, const char *name = 0);
 
     ~ExtensionWorkspace();
@@ -35,14 +35,14 @@ public:
     /// Obté/Assigna l'índex de la pàgina actual
     int getLastIndex() const { return m_lastIndex; }
     void setLastIndex( int index ){ m_lastIndex = index; }
-    
+
 public slots:
 
     /// Per tancar l'aplicació que està oberta en aquell moment
     void closeCurrentApplication();
 
 private:
-    
+
     /// Botó per tancar la pestanya actual
     QToolButton *m_closeTabButton;
 
@@ -51,12 +51,12 @@ private:
 
     /// Índex de la página actual que tractem
     int m_lastIndex;
-    
+
     /// Crea les connexions de signals i slots
     void createConnections();
 
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif
