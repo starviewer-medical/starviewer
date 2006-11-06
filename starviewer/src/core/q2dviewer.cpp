@@ -88,6 +88,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
 
+    setupInteraction();
     // anotacions
     createAnnotations();
     createActions();
@@ -808,9 +809,6 @@ void Q2DViewer::setInput( Volume* volume )
     updateRulers();
     updateScalarBar();
     initInformationText();
-
-    // \TODO s'ha de cridar cada cop que posem dades noves o nomès el primer cop?
-    setupInteraction();
 }
 
 vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
