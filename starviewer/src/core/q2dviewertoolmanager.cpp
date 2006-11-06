@@ -10,6 +10,7 @@
 #include "windowleveltool.h"
 #include "zoomtool.h"
 #include "translatetool.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -29,82 +30,25 @@ Q2DViewerToolManager::Q2DViewerToolManager( Q2DViewer *viewer , QObject *parent 
 
 Q2DViewerToolManager::~Q2DViewerToolManager()
 {
-    m_availableTools.clear();
+    m_toolList.clear();
 }
 
 void Q2DViewerToolManager::setViewer( Q2DViewer *viewer )
 {
     m_viewer = viewer;
-}
-
-void Q2DViewerToolManager::forwardEvent( unsigned long eventID )
-{
-    if( m_currentTool )
-        m_currentTool->handleEvent( eventID );
-}
-
-bool Q2DViewerToolManager::setCurrentTool( QString toolName )
-{
-    // no resetejem la tool si estem indiquem la mateixa
-    if( m_currentTool )
-    {    
-        if( toolName != m_currentTool->getToolName() )
-        {
-            m_currentTool = this->createTool( toolName );
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else
-    {
-        m_currentTool = this->createTool( toolName );
-    }
-    return true;
-}
-
-Tool *Q2DViewerToolManager::createTool( QString toolName )
-{
-    ToolMapType::iterator current = m_availableTools.find( toolName );
-    // si existeix llavors
-    if( current != m_availableTools.end() )
-    {
-        switch( m_availableTools[toolName] )
-        {
-            // \TODO canviar els números per enums decents que ho identifiquen millor
-            case 0:
-                return new Slicing2DTool( m_viewer );
-            break;
-            
-            case 1:
-                return new WindowLevelTool( m_viewer );
-            break;
-
-            case 2:
-                return new ZoomTool( m_viewer );
-            break;
-
-            case 3:
-                return new TranslateTool( m_viewer );
-            break;
-
-            default:
-            break;
-        }
-    }
-    else
-        return 0;
+    // \TODO caldria refrescar els viewers de cada tool!?
 }
 
 void Q2DViewerToolManager::initToolRegistration()
 {
-    // \TODO canviar els números per enums decents que ho identifiquen millor
-    m_availableTools.clear();
-    m_availableTools["SlicingTool"] = 0;
-    m_availableTools["WindowLevelTool"] = 1;
-    m_availableTools["ZoomTool"] = 2;
-    m_availableTools["TranslateTool"] = 3;
+    if( !m_viewer )
+        DEBUG_LOG("ERROR:Inicialitzant tools amb un viewer NUL");
+
+    m_toolList.clear();
+    m_toolList["SlicingTool"] = new Slicing2DTool( m_viewer );
+    m_toolList["WindowLevelTool"] = new WindowLevelTool( m_viewer );
+    m_toolList["ZoomTool"] = new ZoomTool( m_viewer );
+    m_toolList["TranslateTool"] = new TranslateTool( m_viewer );
 }
 
 }

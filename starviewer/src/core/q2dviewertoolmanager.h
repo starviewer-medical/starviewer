@@ -23,20 +23,12 @@ class Q2DViewerToolManager : public ToolManager
 Q_OBJECT
 public:
     Q2DViewerToolManager(QObject *parent = 0);
-    Q2DViewerToolManager( Q2DViewer *viewer, QObject *parent = 0);
+    Q2DViewerToolManager( Q2DViewer *viewer, QObject *parent = 0 );
 
     ~Q2DViewerToolManager();
 
-    /// Li assignem el visor
+    /// Li assignem el visor \TODO aquest mètode podria quedar \deprecated obligant a proporcionar el visor en el moment de la construcció i prou, eliminant el constructor per defecte
     void setViewer( Q2DViewer *viewer );
-    
-    /// Factory method heretat. Crearà la tool demanada si existeix, 0 altrament.
-    Tool *createTool( QString toolName );
-    
-public slots:
-    virtual void forwardEvent( unsigned long eventID );
-
-    virtual bool setCurrentTool( QString toolName );
 
 private:
     /// Instància del visor sobre el qual estem treballant

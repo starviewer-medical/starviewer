@@ -24,20 +24,11 @@ Q_OBJECT
 public:
     Q3DMPRViewerToolManager( QObject *parent = 0 );
     Q3DMPRViewerToolManager( Q3DMPRViewer *viewer, QObject *parent = 0);
-    
+
     ~Q3DMPRViewerToolManager();
 
-    /// Li assignem el visor
+    /// Li assignem el visor \TODO aquest mètode podria quedar \deprecated obligant a proporcionar el visor en el moment de la construcció i prou, eliminant el constructor per defecte
     void setViewer( Q3DMPRViewer *viewer );
-
-public slots:
-    virtual void forwardEvent( unsigned long eventID );
-
-    virtual bool setCurrentTool( QString toolName );
-
-protected:
-    /// Factory method heretat. Crearà la tool demanada si existeix, 0 altrament.
-    Tool *createTool( QString toolName );
 
 private:
     /// Instància del visor sobre el qual estem treballant

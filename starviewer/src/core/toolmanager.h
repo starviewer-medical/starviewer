@@ -27,26 +27,24 @@ public:
 
     ~ToolManager();
 
-    /// "Factory method". Crearà la instància de la tool que es demana si la tool demanada existeix per la classe manager filla
-    virtual Tool *createTool( QString toolName ) = 0;
-
 public slots:
     /// Re-envia l'event cap a la tool que necessita l'event
-    virtual void forwardEvent( unsigned long eventID ){};
+    void forwardEvent( unsigned long eventID );
 
     /// Activa la tool indicada. Si el nom donat és correcte retorna cert, altrament fals. Serà re-implementada per cada ToolManager específic de cada visor
-    virtual bool setCurrentTool( QString toolName ){ return false; };
-    
+    bool setCurrentTool( QString toolName );
+
 protected:
     /// Inicialitza el registre de tools disponibles que proporcioni el manager
     virtual void initToolRegistration() = 0;
-    
-    /// Tool actual que s'estarà fent servir. Es farà servir polimorfisme per poder accedir a les característiques pròpies de cada tool;
-    Tool *m_currentTool;
 
     /// Mapa de tools disponibles. Cada subclasse omplirà aquest conjunt amb les tools que proporciona
-    typedef std::map<QString,int> ToolMapType;
-    ToolMapType m_availableTools;
+    typedef std::map<QString,Tool*> ToolObjectMapType;
+    ToolObjectMapType m_toolList;
+
+    /// Nom de la tool actual que s'està fent servir
+    QString m_currentToolName;
+
 };
 
 }

@@ -13,11 +13,29 @@ namespace udg {
 ToolManager::ToolManager(QObject *parent)
  : QObject(parent)
 {
-    m_currentTool = 0;
 }
 
 ToolManager::~ToolManager()
 {
+}
+
+bool ToolManager::setCurrentTool( QString toolName )
+{
+    if( m_toolList.find( toolName ) != m_toolList.end() )
+    {
+        m_currentToolName = toolName;
+        return true;
+    }
+    else
+        return false;
+}
+
+void ToolManager::forwardEvent( unsigned long eventID )
+{
+    if( m_toolList.find( m_currentToolName ) != m_toolList.end() )
+    {
+        m_toolList[m_currentToolName]->handleEvent( eventID );
+    }
 }
 
 }
