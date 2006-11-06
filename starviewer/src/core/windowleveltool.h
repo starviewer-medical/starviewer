@@ -23,24 +23,22 @@ Q_OBJECT
 public:
     /// estats de la tool
     enum { NONE , WINDOWLEVELING };
-    
+
     WindowLevelTool( Q2DViewer *viewer , QObject *parent = 0 , const char *name = 0 );
 
     ~WindowLevelTool();
-    
+
     void handleEvent( unsigned long eventID );
 
 private:
-    void createAction(){};
-    
     Q2DViewer *m_2DViewer;
 
     /// valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
     int m_windowLevelStartPosition[2], m_windowLevelCurrentPosition[2];
-    
+
 /// \TODO potser aquests mètodes slots passen a ser públics
-private slots: 
+private slots:
     /// Comença el window level
     void startWindowLevel();
 

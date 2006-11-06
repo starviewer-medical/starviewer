@@ -15,21 +15,18 @@
 namespace udg {
 
 ZoomTool::ZoomTool( Q2DViewer *viewer , QObject *parent, const char *name )
-//  : Tool(parent)
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
 }
 
 ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
-//  : Tool(parent)
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
 }
 
 ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
-//  : Tool(parent)
 {
     m_state = NONE;
     // \TODO implement me
@@ -55,7 +52,17 @@ void ZoomTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         this->endZoom();
     break;
-    
+
+    case vtkCommand::MouseWheelForwardEvent:
+//         m_interactorStyle->StartDolly();
+//         m_interactorStyle->Dolly( pow(1.1, 2.0) );
+//         m_interactorStyle->EndDolly();
+    break;
+
+    case vtkCommand::MouseWheelBackwardEvent:
+        m_interactorStyle->Zoom();
+    break;
+
     default:
     break;
     }

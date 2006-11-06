@@ -18,21 +18,18 @@
 namespace udg {
 
 TranslateTool::TranslateTool( Q2DViewer *viewer , QObject *parent, const char *name )
-//  : Tool(parent)
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
 }
 
 TranslateTool::TranslateTool( Q3DViewer *viewer , QObject *parent, const char *name )
-//  : Tool(parent)
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
 }
 
 TranslateTool::TranslateTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
-//  : Tool(parent)
 {
     m_state = NONE;
     // \TODO implement me
@@ -58,7 +55,7 @@ void TranslateTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         this->endTranslate();
     break;
-    
+
     default:
     break;
     }

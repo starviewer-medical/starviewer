@@ -16,7 +16,6 @@
 namespace udg {
 
 Slicing2DTool::Slicing2DTool( Q2DViewer *viewer , QObject *parent, const char *name )
-//  : Tool( parent , name )
 {
     m_state = NONE;
     m_startPosition[0] = 0;
@@ -28,17 +27,6 @@ Slicing2DTool::Slicing2DTool( Q2DViewer *viewer , QObject *parent, const char *n
 
 Slicing2DTool::~Slicing2DTool()
 {
-}
-
-void Slicing2DTool::createAction()
-{
-    if( m_action )
-    {
-        m_action = new QAction( this );
-        m_action->setText( tr("Slicing Tool") );
-        m_action->setStatusTip(tr("Slicing Tool") );
-        m_action->setIcon( QIcon(":/images/series.png") );
-    }
 }
 
 void Slicing2DTool::handleEvent( unsigned long eventID )
