@@ -683,6 +683,11 @@ void Q2DViewer::setTool( QString toolName )
     }
 }
 
+Tool *Q2DViewer::getTool( QString toolName )
+{
+    return m_toolManager->getTool( toolName );
+}
+
 void Q2DViewer::setEnableTools( bool enable )
 {
     if( enable )
