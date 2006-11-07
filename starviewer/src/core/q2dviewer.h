@@ -56,6 +56,7 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vis
 // Fordward declarations
 class Volume;
 class Q2DViewerToolManager;
+class Tool;
 
 class Q2DViewer  : public QViewer{
 Q_OBJECT
