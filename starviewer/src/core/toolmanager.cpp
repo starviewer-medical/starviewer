@@ -30,6 +30,14 @@ bool ToolManager::setCurrentTool( QString toolName )
         return false;
 }
 
+bool ToolManager::getTool( QString toolName )
+{
+    if( m_toolList.find( toolName ) != m_toolList.end() )
+        return m_toolList[toolName];
+    else
+        return 0;
+}
+
 void ToolManager::forwardEvent( unsigned long eventID )
 {
     if( m_toolList.find( m_currentToolName ) != m_toolList.end() )
