@@ -249,9 +249,6 @@ protected:
     /// El picker per anotar punts de la imatge
     vtkPropPicker *m_picker;
 
-    /// actor que agafem de l'escena
-    vtkAxisActor2D *m_pickedAxisActor;
-
     /// Textes informatius de l'image actor , ens estalviarà molta feina
     vtkCornerAnnotation *m_textAnnotation;
 
