@@ -140,6 +140,7 @@ public slots:
     void displayScalarBarOff();
 
     /// Habilita/deshabilita que es vegi la info de voxel
+    void setVoxelInformationCaptionEnabled( bool enable );
     void enableVoxelInformationCaption();
     void disableVoxelInformationCaption();
 
@@ -259,9 +260,6 @@ protected:
     virtual void resizeEvent( QResizeEvent* resize );
 
 private:
-    /// [apanyo] per saber si estem manipulant els plans
-    bool m_manipulating;
-
     /// flag que ens indica quines anotacions es veuran per la finestra
     unsigned int m_enabledAnnotations;
 
@@ -348,6 +346,9 @@ private:
 
     /// El manager de les tools
     Q2DViewerToolManager *m_toolManager;
+
+    /// per controlar si la info de voxel està habilitada o no
+    bool m_voxelInformationEnabled;
 
 signals:
     /// envia la nova llesca en la que ens trobem

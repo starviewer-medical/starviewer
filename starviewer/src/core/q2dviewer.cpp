@@ -95,6 +95,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     addActors();
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
+    disableVoxelInformationCaption();
 }
 
 Q2DViewer::~Q2DViewer()
@@ -605,13 +606,19 @@ void Q2DViewer::displayScalarBarOff()
     m_scalarBar->VisibilityOff();
 }
 
+void Q2DViewer::setVoxelInformationCaptionEnabled( bool enable )
+{
+    enable ?  enableVoxelInformationCaption() : disableVoxelInformationCaption();
+}
+
 void Q2DViewer::enableVoxelInformationCaption()
 {
-    m_voxelInformationCaption->VisibilityOn();
+    m_voxelInformationEnabled = true;
 }
 
 void Q2DViewer::disableVoxelInformationCaption()
 {
+    m_voxelInformationEnabled = false;
     m_voxelInformationCaption->VisibilityOff();
 }
 
@@ -653,12 +660,13 @@ void Q2DViewer::updateVoxelInformation()
     if( !found )
     {
         updateCursor( -1, -1, -1, -1 );
-        disableVoxelInformationCaption();
+        m_voxelInformationCaption->VisibilityOff();
     }
     else
     {
         updateCursor( q[0], q[1], q[2], imageValue );
-        enableVoxelInformationCaption();
+        if( m_voxelInformationEnabled )
+            m_voxelInformationCaption->VisibilityOn();
         m_voxelInformationCaption->SetAttachmentPoint( q );
         m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(m_currentCursorPosition[0],0,'f',2).arg(m_currentCursorPosition[1],0,'f',2).arg(m_currentCursorPosition[2],0,'f',2).arg(m_currentImageValue) ) );
     }
@@ -712,11 +720,10 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     break;
 
     case vtkCommand::EnterEvent:
-        enableVoxelInformationCaption();
     break;
 
     case vtkCommand::LeaveEvent:
-        disableVoxelInformationCaption();
+        m_voxelInformationCaption->VisibilityOff();
         this->getInteractor()->Render();
     break;
 
