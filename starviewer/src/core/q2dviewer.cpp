@@ -760,9 +760,6 @@ void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, voi
 void Q2DViewer::setupInteraction()
 {
     // configurem l'Image Viewer i el qvtkWidget
-    // aquesta crida obliga a que hi hagi un input abans, sinó el pipeline del vtkImageViewer ens dóna error perquè no té cap actor creat
-    //\TODO aquesta crida hauria d'anar aquí o només després del primer setInput?
-    m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
 
@@ -792,7 +789,7 @@ void Q2DViewer::setInput( Volume* volume )
         return;
     m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
-
+    m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
