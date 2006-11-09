@@ -32,7 +32,7 @@ public:
 
     /// Li assigna el volum principal
     void setInput( Volume *input );
-    
+
 public slots:
     /// Canvia a la vista axial, sagital o coronal
     void changeViewToAxial();
@@ -45,17 +45,17 @@ public slots:
 
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
-    
+
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
 
     /// canvia la vista actual
     void setView( ViewType view );
-    
+
     /// La vista actual amb la que estem treballant
     ViewType m_currentView;
-    
+
     /// El volum principal
     Volume *m_mainVolume;
 
@@ -72,20 +72,21 @@ private:
     QAction *m_windowLevelAction;
     QAction *m_zoomAction;
     QAction *m_moveAction;
+    QAction *m_voxelInformationAction;
     ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
     QButtonGroup *m_toolsButtonGroup;
-    
+
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
-    
+
     /// Crea les connexions entre signals i slots
     void createConnections();
 
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
-    
+
 private slots:
     /// Actua quan es canvia de pàgina, és a dir es passa d'un determinat layout a un de simple, doble , triple , etc
     void pageChange( int index );

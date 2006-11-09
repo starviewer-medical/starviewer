@@ -13,6 +13,7 @@
 #include <QAction>
 // VTK
 #include <vtkRenderer.h>
+#include "slicing2dtool.h"
 
 namespace udg {
 
@@ -76,6 +77,18 @@ void Q2DViewerExtension::createActions()
     m_doubleViewAction->setIcon( QIcon(":/images/addViewRight.png") );
     m_doubleViewToolButton->setDefaultAction( m_doubleViewAction );
 
+    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
+    m_voxelInformationAction = new QAction( 0 );
+    m_voxelInformationAction->setText( tr("Voxel Information") );
+    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
+    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
+    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
+    m_voxelInformationAction->setCheckable( true );
+    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
+
+    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView2_1 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView2_2 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
     m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
