@@ -29,13 +29,13 @@ void configureLogging()
 }
 
 int main(int argc, char *argv[])
-{ 
+{
     QApplication app(argc, argv);
-    
+
     app.setOrganizationName("GGG");
     app.setOrganizationDomain("ima.udg.es");
     app.setApplicationName("Starviewer");
-     
+
     configureLogging();
     // translation
     QSettings settings("GGG", "StarViewer-Core");
@@ -46,18 +46,18 @@ int main(int argc, char *argv[])
     QTranslator m_applicationTranslator;
     m_applicationTranslator.load( QString(":/translations/") + m_defaultLocale );
     app.installTranslator( &m_applicationTranslator );
-    
+
     QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
     splash->show();
-    
+
     udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
     INFO_LOG("Creada finestra principal")
     mainWin->show();
-    
+
     QObject::connect( &app, SIGNAL( lastWindowClosed() ),
-                      &app, SLOT( quit() )); 
+                      &app, SLOT( quit() ));
     splash->finish( mainWin );
     delete splash;
-    
+
     return app.exec();
 }
