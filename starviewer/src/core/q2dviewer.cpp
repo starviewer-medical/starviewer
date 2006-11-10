@@ -76,12 +76,16 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_voxelInformationCaption = 0;
     m_textAnnotation = 0;
     m_scalarBar = 0;
+    m_toolManager = 0;
     for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = 0;
     }
     m_sideRuler = 0;
     m_bottomRuler = 0;
+
+    m_toolManager = new Q2DViewerToolManager( this );
+    this->enableTools();
 
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -91,7 +95,6 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     // anotacions
     createAnnotations();
     createActions();
-    createTools();
     addActors();
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
@@ -129,12 +132,6 @@ void Q2DViewer::createActions()
     m_resetAction->setShortcut( tr("Ctrl+R") );
     m_resetAction->setStatusTip(tr("Reset initial parameters"));
     connect( m_resetAction, SIGNAL( triggered() ), this, SLOT( reset() ) );
-}
-
-void Q2DViewer::createTools()
-{
-    m_toolManager = new Q2DViewerToolManager( this );
-    this->enableTools();
 }
 
 void Q2DViewer::createAnnotations()
@@ -762,7 +759,8 @@ void Q2DViewer::setupInteraction()
     // configurem l'Image Viewer i el qvtkWidget
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-
+    //\TODO això dóna un error de vtk perquè el viewer no té input, però no afecta a la execució de l'apicació
+    m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
@@ -789,7 +787,6 @@ void Q2DViewer::setInput( Volume* volume )
         return;
     m_mainVolume = volume;
     m_viewer->SetInput( m_mainVolume->getVtkData() );
-    m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     // ajustem el window Level per defecte
     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
@@ -811,6 +808,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_rulerExtent[3] = origin[1] + extent[3]*spacing[1];
     m_rulerExtent[4] = origin[2];
     m_rulerExtent[5] = origin[2] + extent[5]*spacing[2];
+
     updateRulers();
     updateScalarBar();
     initInformationText();

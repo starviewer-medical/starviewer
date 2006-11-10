@@ -278,9 +278,6 @@ private:
     /// Crea i inicialitza totes les accions d'aquest widget
     void createActions();
 
-    /// Crea i inicialitza totes les tools d'aquest widget
-    void createTools();
-
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
 
