@@ -112,6 +112,9 @@
            <height>32</height>
           </size>
          </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -139,6 +142,9 @@
            <height>32</height>
           </size>
          </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -160,6 +166,9 @@
          </property>
          <property name="checkable" >
           <bool>false</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -227,16 +236,16 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>udg::QWindowLevelComboBox</class>
-   <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
+   <class>udg::Q3DMPRViewer</class>
+   <extends>QFrame</extends>
+   <header>q3dmprviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>udg::Q3DMPRViewer</class>
-   <extends>QFrame</extends>
-   <header>q3dmprviewer.h</header>
+   <class>udg::QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
