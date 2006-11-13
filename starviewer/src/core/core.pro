@@ -3,6 +3,7 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/core
 # L'objectiu és una biblioteca:  
 
+FORMS += qlogviewerbase.ui 
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
@@ -50,7 +51,8 @@ HEADERS += extensionfactory.h \
            zoomtool.h \
            q3dviewertoolmanager.h \
            translatetool.h \
-           q3dmprviewertoolmanager.h 
+           q3dmprviewertoolmanager.h \
+           qlogviewer.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -86,7 +88,8 @@ SOURCES += extensionmediator.cpp \
            zoomtool.cpp \
            q3dviewertoolmanager.cpp \
            translatetool.cpp \
-           q3dmprviewertoolmanager.cpp 
+           q3dmprviewertoolmanager.cpp \
+           qlogviewer.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
