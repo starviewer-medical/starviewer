@@ -32,26 +32,24 @@ class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
     enum RenderFunction{ RayCasting , MIP3D, IsoSurface , Texture2D , Texture3D };
-    
+
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
-    
+
     /// retorna el tipu de visualització que es té assignat
     RenderFunction getRenderFunction() const { return m_renderFunction; }
 
     /// retorna el tipu de visualització que es té assignat com a un string
     QString getRenderFunctionAsString();
-    
+
     virtual void setInput( Volume* volume );
 
     virtual vtkRenderer *getRenderer();
 
     /// Retorna el vtkInteractorStyle que té associat
     vtkInteractorStyle *getInteractorStyle();
-    
-public slots:
 
-    virtual void render();
+public slots:
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function){ m_renderFunction = function; };
     void setRenderFunctionToRayCasting(){ m_renderFunction = RayCasting; };
@@ -59,7 +57,7 @@ public slots:
     void setRenderFunctionToIsoSurface(){ m_renderFunction = IsoSurface; };
     void setRenderFunctionToTexture2D(){ m_renderFunction = Texture2D; };
     void setRenderFunctionToTexture3D(){ m_renderFunction = Texture3D; };
-    
+
     /// Reinicia la vista
     void resetViewToAxial();
     void resetViewToSagital();
@@ -73,10 +71,13 @@ public slots:
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
-    
+
     /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui
     void setTool( QString toolName );
-    
+
+    virtual void render();
+    void reset();
+
 protected:
     /// el renderer
     vtkRenderer* m_renderer;
@@ -95,17 +96,17 @@ private:
 
     /// fa la visualització per textures 2D \TODO afegir comprovació de si el hard o suporta o no
     void renderTexture2D();
-    
+
     /// fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
     void renderTexture3D();
-    
+
     /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
     bool rescale();
 
     enum { Axial , Sagital , Coronal };
     /// Canvia la orientació de la càmera
     void setCameraOrientation( int orientation );
-    
+
     /// el caster de les imatges
     vtkImageCast* m_imageCaster;
 
@@ -114,7 +115,7 @@ private:
 
     /// Widget per veure la orientació en 3D
     Q3DOrientationMarker *m_orientationMarker;
-    
+
     /// reinicia la orientació
     void resetOrientation();
 
@@ -122,6 +123,6 @@ private:
     Q3DViewerToolManager *m_toolManager;
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

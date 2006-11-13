@@ -41,24 +41,23 @@ public:
     virtual void setInput( Volume *inputImage );
 
     virtual vtkRenderer *getRenderer();
-    virtual void render();
-    
+
     /// Retorna el volum transformat segons el reslice de cada vista
     Volume *getAxialResliceOutput();
     Volume *getSagitalResliceOutput();
     Volume *getCoronalResliceOutput();
-    
+
     /// Mètodes per obtenir les coordenades que defineixen els plans
     double *getAxialPlaneOrigin();
     double *getAxialPlaneNormal();
     void getAxialPlaneOrigin( double origin[3] );
     void getAxialPlaneNormal( double normal[3] );
-    
+
     double *getSagitalPlaneOrigin();
     double *getSagitalPlaneNormal();
     void getSagitalPlaneOrigin( double origin[3] );
     void getSagitalPlaneNormal( double normal[3] );
-    
+
     double *getCoronalPlaneOrigin();
     double *getCoronalPlaneNormal();
     void getCoronalPlaneOrigin( double origin[3] );
@@ -72,11 +71,11 @@ public:
 
     /// Retorna el window level
     void getWindowLevel( double wl[2] );
-    
+
 signals:
     /// senyal que indica que algun dels plans han canviat
     void planesHasChanged( void );
-    
+
 public slots:
     /// Inicialitza la vista de la càmara per veure el model des d'una orientació per defecte determinada ( acial , sagital o coronal )
     void resetViewToSagital();
@@ -117,13 +116,16 @@ public slots:
     void enableOrientationMarker( bool enable );
     void orientationMarkerOn();
     void orientationMarkerOff();
-    
+
     /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
     void planeInteraction();
-    
+
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
+
+    virtual void render();
+    void reset();
 
 private:
     /// Els respectius volums sobre cada pla de reslice
@@ -143,31 +145,31 @@ private:
 
     /// Afegeix l'outline de la boundingbox del model
     void createOutline();
-    
+
     /// Crea tots els actors que intervenen en l'escena
     void createActors();
 
     /// Afegeix els actors a l'escena
     void addActors();
-    
+
     enum {SAGITAL, CORONAL, AXIAL};
 
     /// El renderer
     vtkRenderer *m_renderer;
 
-    /// Els plans 
+    /// Els plans
     vtkImagePlaneWidget *m_axialImagePlaneWidget;
     vtkImagePlaneWidget *m_sagitalImagePlaneWidget;
     vtkImagePlaneWidget *m_coronalImagePlaneWidget;
-    
+
     /// La bounding box del volum
     vtkActor *m_outlineActor;
 
     /// Widget per veure la orientació en 3D
     Q3DOrientationMarker *m_orientationMarker;
-    
+
     /// connexions d'events vtk amb slots / signals qt
-    vtkEventQtSlotConnect *m_vtkQtConnections; 
+    vtkEventQtSlotConnect *m_vtkQtConnections;
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow , m_defaultLevel;
@@ -182,6 +184,6 @@ private:
     Q3DMPRViewerToolManager *m_toolManager;
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

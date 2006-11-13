@@ -162,21 +162,16 @@ public slots:
         m_currentCursorPosition[0] = x;
         m_currentCursorPosition[1] = y;
         m_currentCursorPosition[2] = z;
-
         m_currentImageValue = value;
     }
 
     virtual void render();
 
+    void reset();
+
     // Mètodes específics checkerboard
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int x , int y , int z );
-
-    /// Fa reset dels paràmetres inicials \TODO:  no es del tot complet el reset
-    void reset()
-    {
-        updateView();
-    }
 
     void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, void *call_data, vtkCommand * command);
 

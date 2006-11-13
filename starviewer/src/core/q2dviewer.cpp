@@ -1047,6 +1047,12 @@ void Q2DViewer::updateWindowLevelAnnotation()
     updateScalarBar();
 }
 
+void Q2DViewer::reset()
+{
+    //\TODO: completar, encara és incomplert
+    updateView();
+}
+
 void Q2DViewer::setDivisions( int x , int y , int z )
 {
     m_divisions[0] = x;
