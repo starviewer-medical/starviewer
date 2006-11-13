@@ -9,6 +9,7 @@
 #include <QTextStream>
 #include <QDir>
 #include <QTextCodec>
+#include <QFileDialog>
 #include "logging.h"
 
 namespace udg {
@@ -45,6 +46,23 @@ QLogViewer::~QLogViewer()
 void QLogViewer::createConnections()
 {
     connect( m_closeButton , SIGNAL( clicked() ) , this , SLOT( close() ) );
+    connect( m_saveButton , SIGNAL( clicked() ) , this , SLOT( saveLogFileAs() ) );
+}
+
+void QLogViewer::saveLogFileAs()
+{
+    QString fileName = QFileDialog::getSaveFileName( this, tr("Save as..."),                                             QString(), tr("Log Files (*.log)") );
+
+    if ( fileName.isEmpty() )
+        return;
+
+    QFile file( fileName );
+    if ( !file.open( QFile::WriteOnly ) )
+        return;
+
+    QTextStream logStream( &file );
+    logStream.setCodec( QTextCodec::codecForName("UTF-8") );
+    logStream << m_logBrowser->document()->toPlainText();
 }
 
 }

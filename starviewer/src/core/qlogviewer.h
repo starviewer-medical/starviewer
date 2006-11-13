@@ -22,6 +22,10 @@ public:
 
     ~QLogViewer();
 
+public slots:
+    /// Obre un diàleg per guardar el fitxer de log en una altre ubicació
+    void saveLogFileAs();
+
 private slots:
     /// Crea les connexions entre signals i slots
     void createConnections();
