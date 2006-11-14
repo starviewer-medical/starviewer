@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <vtkMetaImageWriter.h>
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumesourceinformation.h"
@@ -28,6 +27,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleImage.h>
 #include <vtkImageViewer2.h>
+#include <vtkCamera.h>
 // composició d'imatges
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h>
@@ -47,7 +47,7 @@
 #include <vtkJPEGWriter.h>
 #include <vtkTIFFWriter.h>
 #include <vtkBMPWriter.h>
-#include <vtkCamera.h>
+#include <vtkMetaImageWriter.h>
 // voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
