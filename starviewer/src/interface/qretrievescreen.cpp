@@ -10,7 +10,8 @@
 #include <iostream.h>
 #include <qdatetime.h>
 #include "processimagesingleton.h"
-
+#include "operation.h"
+#include "const.h"
 
 namespace udg {
 
@@ -19,6 +20,7 @@ QRetrieveScreen::QRetrieveScreen( QWidget *parent )
 {
     setupUi( this );
     m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte l'UID de l'estudi
+    m_treeRetrieveStudy->setColumnHidden( 10 , true );//Indica quin tipus d'operació és
     
     createConnections();
 }
@@ -28,28 +30,37 @@ void QRetrieveScreen::createConnections()
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearList() ) );
 }
 
-void QRetrieveScreen::insertNewRetrieve( Study *study )
+void QRetrieveScreen::insertNewOperation( Operation *operation )
 {
     QTreeWidgetItem* item = new QTreeWidgetItem( m_treeRetrieveStudy );
     QTime time = QTime::currentTime();
-    QString name;
+    QString name, operationNumber;
     QDate date = QDate::currentDate();
     
-    deleteStudy( study->getStudyUID().c_str() ); //si l'estudi ja existeix a la llista l'esborrem
-    name.insert( 0 , study->getPatientName().c_str() );
-    name.replace( "^" ,"  ");
+    deleteStudy( operation->getStudyUID() ); //si l'estudi ja existeix a la llista l'esborrem
+    name.insert( 0 , operation->getPatientName() );
+    name.replace( "^" ,", ");
     
     item->setText( 0 , tr( "PENDING" ) );
-    item->setText( 1 , tr( "Local" ) );
-    item->setText( 2 , study->getPacsAETitle().c_str() );
-    item->setText( 3 , study->getPatientId().c_str() );
+    
+    if ( operation->getOperation() == operationRetrieve || operation->getOperation() == operationView )
+    {
+        item->setText( 1 , tr( "Local" ) );
+    }
+    else item->setText( 1 , tr("Server") );
+    
+    item->setText( 2 , operation->getPacsParameters().getAEPacs().c_str() );
+    item->setText( 3 , operation->getPatientID() );
     item->setText( 4 , name );
     item->setText( 5 , date.toString("dd/MM/yyyy") );
     item->setText( 6 , time.toString("hh:mm") );
-    item->setText( 7 , "0" );
-    item->setText( 8 , "0");
-    item->setText( 9 , study->getStudyUID().c_str() );
+    item->setText( 7 , "0" ); // series
+    item->setText( 8 , "0"); //imatges
+    item->setText( 9 , operation->getStudyUID() );
+    operationNumber.setNum( operation->getOperation() , 10 );
+    item->setText( 10 , operationNumber ); // indica el tipus d'operació
 }
+
 
 void QRetrieveScreen::clearList()
 {
@@ -84,7 +95,7 @@ void QRetrieveScreen::deleteStudy( QString studyUID )
     }
 }
 
-void QRetrieveScreen::imageRetrieved( QString studyUID , int downloadedImages )
+void QRetrieveScreen::imageCommit( QString studyUID , int downloadedImages )
 {
     QString Images;
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
@@ -98,9 +109,8 @@ void QRetrieveScreen::imageRetrieved( QString studyUID , int downloadedImages )
     }    
 }
 
-void QRetrieveScreen::setSeriesRetrieved( QString studyUID )
+void QRetrieveScreen::seriesCommit( QString studyUID )
 {
-    
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
     QString series;
@@ -116,7 +126,7 @@ void QRetrieveScreen::setSeriesRetrieved( QString studyUID )
     }    
 }
 
-void QRetrieveScreen::setRetrieving( QString studyUID )
+void QRetrieveScreen::setOperating( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -124,11 +134,15 @@ void QRetrieveScreen::setRetrieving( QString studyUID )
     if ( !qRetrieveList.isEmpty() )
     {
         item = qRetrieveList.at( 0 );
-        item->setText( 0 , tr( "RETRIEVING" ) ); 
+        if ( item->text( 10 ).toInt( NULL , 10 ) == operationView || item->text( 10 ).toInt( NULL , 10 ) == operationRetrieve )
+        {
+            item->setText( 0 , tr( "RETRIEVING" ) ); 
+        }
+        else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr(" STORING ") );
     }
 }
 
-void QRetrieveScreen::setRetrievedFinished( QString studyUID )
+void QRetrieveScreen::setOperationFinished( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -136,22 +150,30 @@ void QRetrieveScreen::setRetrievedFinished( QString studyUID )
     if ( !qRetrieveList.isEmpty() )
     {
         item = qRetrieveList.at( 0 );
-        if ( item->text( 8 ) == "0" ) //si el número d'imatges descarregat és 0! error!
+        if ( item->text( 8 ) == "0" ) //si el número d'imatges processat és 0 error
         {
             item->setText( 0 , tr( "ERROR" ) );
         }
-        else  item->setText( 0 , tr( "RETRIEVED" ) ); 
+        else
+        { 
+            if ( item->text( 10 ).toInt( NULL , 10 ) == operationView || item->text( 10 ).toInt( NULL , 10 ) == operationRetrieve )
+            {
+                item->setText( 0 , tr( "RETRIEVED" ) ); 
+            }
+            else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr(" STORED ") );
+        }
     }
+    
     m_treeRetrieveStudy->repaint(); 
 }
 
-void QRetrieveScreen::setErrorRetrieving( QString studyUID )
+void QRetrieveScreen::setErrorOperation( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
 
     //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
-    setSeriesRetrieved( studyUID );
+    seriesCommit( studyUID );
     
     if ( !qRetrieveList.isEmpty() )
     {

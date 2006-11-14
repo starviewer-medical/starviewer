@@ -19,6 +19,7 @@
 namespace udg {
 
 class Status;
+class Operation;
 
 class QRetrieveScreen : public QDialog , private Ui::QRetrieveScreenBase{
 Q_OBJECT
@@ -30,41 +31,41 @@ public:
      */
     QRetrieveScreen( QWidget *parent = 0 );
 
-    /** Insereix un nou estudi per descarregar
-     * @param study informació de l'estudi a descarregar
-     */
-    void insertNewRetrieve( Study * );
-
 	/// destructor de la classe
     ~QRetrieveScreen();
     
 public slots :
     
-    /** slot que s'invoca quant un StarviewerProcessImage emet un signal imageRetrieved
-     * @param uid de l'estudi descarregat de l'imatge
-     * @param número d'imatges descarregades
+    /** Insereixu una nova operació
+     *  @param operation operació a inserir
      */
-    void imageRetrieved( QString studyUID , int downloadedImages );
+    void insertNewOperation( Operation *operation );
+
+    /** slot que s'invoca quant un StarviewerProcessImage emet un signal imageRetrieved
+     * @param uid de l'estudi que ha finalitzat una operació d'una imatge
+     * @param número d'imatges descarregades
+     */    
+    void imageCommit( QString stidyUID , int numberOfImages );
 
     /** Augmenta en un el nombre de series descarregades
      * @param UID de l'estudi que s'ha descarregat una sèrie
      */
-    void setSeriesRetrieved( QString studyUID );
+    void seriesCommit( QString studyUID );
 
-    /** S'invoca quant s'ha acabat de baixa un estudi. S'indica a la llista que la descarrega de l'estudi ha finalitzat
+    /** S'invoca quant s'ha acabat una operació. S'indica a la llista que l'operació relacionada amb l'estudi ha finalitzat
      * @param  UID de l'estudi descarregat
      */
-    void setRetrievedFinished( QString studyUID );
+    void setOperationFinished( QString studyUID );
     
-    /** S'invoca quant es produeix algun error al descarregar un estudi
+    /** S'invoca quant es produeix algun error durant el processament de l'operació
      * @param studyUID UID de l'estudi descarregat
      */
-	void setErrorRetrieving( QString studyUID );
+	void setErrorOperation( QString studyUID );
     
-    /** S'invoca quan es comença a descarregar un estudi, per indicar-ho a la llista que aquell estudi ha començat la descarrega
-     * @param  UID de l'estudi que es comença a descarregar
+    /** S'invoca quan es comença l'operació d'un estudi, per indicar-ho a la llista que aquell estudi ha començat l'operació
+     * @param  UID de l'estudi que es comença l'operació
      */
-	void setRetrieving( QString );
+	void setOperating( QString );
     
     /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments 
     void clearList();

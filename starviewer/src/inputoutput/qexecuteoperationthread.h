@@ -50,28 +50,28 @@ signals :
     /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'està descarregant
      * @param studyUID UID de l'estudi que s'està descarregant
      */    
-    void setStudyRetrieving( QString studyUID );
+    void setOperating( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'ha descarregat
      * @param studyUID UID de l'estudi descarregat
      */    
-    void setStudyRetrieved( QString studyUID );
+    void setOperationFinished( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
      * @param studyUID UID de l'estudi que ha produït l'error
      */    
-    void setErrorRetrieving( QString studyUID );
+    void setErrorOperation( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova imatge de l'estudi
      * @param studyUID UID de l'estudi que s'esta descarregat
      * @param número d'imatge descarrega
      */        
-    void imageRetrieved( QString studyUID , int );
+    void imageCommit( QString studyUID , int );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova sèroe de l'estudi
      * @param studyUID UID de l'estudi que s'esta descarregat
      */       
-    void seriesRetrieved( QString );
+    void seriesCommit( QString );
     
     ///Signal que s'emet cap a QueryScreen per indicar que no hi ha prou espai lliure per a descarregar nous estudis    
     void notEnoughFreeSpace();
@@ -84,6 +84,11 @@ signals :
      */
     void errorConnectingPacs( int );
     
+    /** signal que s'emet quan s'enqua una nova operació
+     * @param newOperation operació encuada
+     */
+    void newOperation( Operation *newOperation );
+    
 private slots :
 
     /** Si la operacio es un view, emet un signal per indicar que ja es pot obrir la primera serie de l'estudi
@@ -95,12 +100,12 @@ private slots :
       *     @param UID de l'estudi
       *     @param número d'imatge
       */
-    void imageRetrievedSlot( QString , int );
+    void imageCommitSlot( QString , int );
     
     /** Emet un singal per indicar que s'ha descarregat una sèrie
       *     @param studyUID de l'estudi a descarregar
       */
-    void seriesRetrievedSlot( QString );
+    void seriesCommitSlot( QString );
     
 
 private :

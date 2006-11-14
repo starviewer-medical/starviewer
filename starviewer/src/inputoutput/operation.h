@@ -69,9 +69,49 @@ public:
     
     /// Operador per ordernar per prioritats
     bool operator < ( Operation ) const;
+    
+    /** defineix el nom del pacient pel qual es portarà a terme l'operacio
+     * @param patientName nom del pacient
+     */
+    void setPatientName( QString patientName );
 
+    /** defieneix el patient ID pel qual es potarà a terma l'operació
+     * @param patientID id del pacient
+     */
+    void setPatientID( QString patientID );
+
+    /** defineix el uid de l'estudi amb el qual es portarà a terme l'operació
+     * @param studyUID uid de l'estudi
+     */
+    void setStudyUID( QString studyUID );
+    
+    /** defineix el id de l'estudi amb el qual es dur a terme l'operació
+     * @param studyID id de l'estudi
+     */
+    void setStudyID( QString studyID );
+    
 	///Destructor de la classe
     ~Operation();
+    
+    /** retorna el nom del pacient de l'estudi pel que es dur a terme l'operació
+     * @return nom del pacient
+     */
+    QString getPatientName();
+    
+    /** retorna el id del paicent de l'estudi pel que es dur a terme l'operació
+     * @return id del pacient
+     */
+    QString getPatientID();
+    
+    /** retorna el id de l'estudi pel que es dur a terme l'operació
+     * @return id de l'estudi
+     */
+    QString getStudyID();
+    
+    /** retorna el UID  de l'estudi pel que es dur a terme l'operació
+     * @return UID de l'estudi
+     */
+    QString getStudyUID();
 
 private :
 
@@ -79,7 +119,10 @@ private :
     int m_priority;
     int m_operation;
     PacsParameters m_pacsParameters;
-    QString m_text;    
+    
+    // AQUESTA INFORMACIO ES NECESSARIA, JA QUE ES LA QUE PASSA A LA QRETRIEVESCREEN, pantalla que mostra l'estat de les operacions
+    QString m_patientName, m_patientID, m_studyUID, m_studyID;    
+    
 };
 
 }

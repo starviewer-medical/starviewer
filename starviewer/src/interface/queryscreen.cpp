@@ -190,11 +190,13 @@ void QueryScreen::connectSignalsAndSlots()
      QObject::connect( &m_qexecuteOperationThread , SIGNAL( viewStudy( QString) ) , this , SLOT( studyRetrievedView( QString) ) , Qt::QueuedConnection );
     
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorRetrieving( QString ) ) , m_retrieveScreen, SLOT(  setErrorRetrieving( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  setStudyRetrieved( QString ) ) , m_retrieveScreen, SLOT(  setRetrievedFinished( QString ) ) ); 
-    connect( &m_qexecuteOperationThread , SIGNAL(  setStudyRetrieving( QString ) ) , m_retrieveScreen, SLOT(  setRetrieving( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  imageRetrieved( QString , int) ) , m_retrieveScreen , SLOT(  imageRetrieved( QString , int ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  seriesRetrieved( QString ) ) ,  m_retrieveScreen , SLOT(  setSeriesRetrieved( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_retrieveScreen, SLOT(  setErrorOperation( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_retrieveScreen, SLOT(  setOperationFinished( QString ) ) ); 
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_retrieveScreen, SLOT(  setOperating( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_retrieveScreen , SLOT(  imageCommit( QString , int ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_retrieveScreen , SLOT(  seriesCommit( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_retrieveScreen , SLOT(  insertNewOperation( Operation *) ) );
+
     
     //connecta el signal de que no hi ha suficient espai de disc
     connect( &m_qexecuteOperationThread , SIGNAL(  notEnoughFreeSpace() ) , this , SLOT(  notEnoughFreeSpace() ) );
@@ -210,7 +212,7 @@ void QueryScreen::connectSignalsAndSlots()
     //connect tracta els errors de connexió al PACS, al descarregar imatges 
     connect ( &m_qexecuteOperationThread , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
 
-    connect( &m_qexecuteOperationThread , SIGNAL(  setStudyRetrieved( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
 
     //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
     connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomdir( QString ) ) );
@@ -797,7 +799,7 @@ void QueryScreen::retrievePacs( bool view )
     }
 
     //inserim a la pantalla de retrieve que iniciem la descarrega
-    m_retrieveScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );      
+    //m_retrieveScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );      
 
     //emplanem els parametres amb dades del starviewersettings
     pacs.setAELocal( settings.getAETitleMachine().toAscii().constData() );
@@ -812,6 +814,12 @@ void QueryScreen::retrievePacs( bool view )
         operation.setOperation( operationView );
     }
     else operation.setOperation( operationRetrieve );
+    
+    //emplenem les dades de l'operació
+    operation.setPatientName( m_studyListSingleton->getStudy().getPatientName().c_str() );
+    operation.setPatientID( m_studyListSingleton->getStudy().getPatientId().c_str() );
+    operation.setStudyID( m_studyListSingleton->getStudy().getStudyId().c_str() );
+    operation.setStudyUID( m_studyListSingleton->getStudy().getStudyUID().c_str() );
     
     m_qexecuteOperationThread.queueOperation( operation );
     

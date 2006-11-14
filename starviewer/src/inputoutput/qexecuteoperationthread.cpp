@@ -39,6 +39,7 @@ void QExecuteOperationThread::queueOperation(Operation operation)
 {
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
     
+    emit( newOperation( &operation ) );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operació, i la mostri per pantalla
     
     m_semaphor.acquire();
     
@@ -114,7 +115,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     state = enoughFreeSpace( enoughSpace );    
         
     //s'indica que comença la descarreca de l'estudi al qretrieveScreen
-    emit( setStudyRetrieving( studyUID.toAscii().constData() ) );   
+    emit( setOperating( studyUID.toAscii().constData() ) );   
    
     if ( !state.good() || !enoughSpace ) 
     {
@@ -123,7 +124,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         logMessage.append( "del pacs " );
         logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
 	
-        emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+        emit( setErrorOperation( studyUID.toAscii().constData() ) );
         
         if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
         {
@@ -151,7 +152,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         logMessage.append( state.text().c_str() );	
         ERROR_LOG ( logMessage.toAscii().constData() );
 
-        emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+        emit( setErrorOperation( studyUID.toAscii().constData() ) );
         emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
         cacheStudyDAL.delStudy( studyUID.toAscii().constData()) ;        
         return; 
@@ -167,8 +168,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
    
     //connectem els signals del starviewerProcessImage
     connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( firstSeriesRetrieved( QString ) ) );
-    connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageRetrievedSlot( QString , int ) ) );
-    connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesRetrievedSlot( QString ) ) );
+    connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
+    connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
 
     retState = retrieve.moveSCU();
     pacsConnection.disconnect();
@@ -200,7 +201,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             ERROR_LOG ( logMessage.toAscii().constData() );
         }
 
-        emit( setErrorRetrieving( studyUID.toAscii().constData() ) );
+        emit( setErrorOperation( studyUID.toAscii().constData() ) );
         cacheStudyDAL.delStudy( studyUID.toAscii().constData() );
     }
     else 
@@ -211,7 +212,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
         INFO_LOG( logMessage.toAscii().constData() );
         scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualització de la caché  
-        emit( setStudyRetrieved( studyUID.toAscii().constData() ) );// descarregat
+        emit( setOperationFinished( studyUID.toAscii().constData() ) );// descarregat
         cacheStudyDAL.setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
     }
     
@@ -222,14 +223,14 @@ void QExecuteOperationThread::firstSeriesRetrieved( QString studyUID )
      if ( m_view ) emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
 }
 
-void QExecuteOperationThread::imageRetrievedSlot( QString studyUID , int imageNumber)
+void QExecuteOperationThread::imageCommitSlot( QString studyUID , int imageNumber)
 {
-    emit( imageRetrieved( studyUID , imageNumber ) ) ;
+    emit( imageCommit( studyUID , imageNumber ) ) ;
 }
 
-void QExecuteOperationThread::seriesRetrievedSlot( QString studyUID)
+void QExecuteOperationThread::seriesCommitSlot( QString studyUID)
 {
-    emit( seriesRetrieved( studyUID ));
+    emit( seriesCommit( studyUID ) );
 }
 
 Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)

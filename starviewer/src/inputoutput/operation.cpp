@@ -86,6 +86,46 @@ PacsParameters Operation::getPacsParameters()
     return m_pacsParameters;
 }
 
+void Operation::setPatientName( QString patientName )
+{
+    m_patientName = patientName;
+}
+
+void Operation::setPatientID( QString patientID )
+{
+    m_patientID = patientID;
+}
+
+void Operation::setStudyID( QString studyID )
+{
+    m_studyID = studyID;
+}
+
+void Operation::setStudyUID( QString studyUID )
+{
+    m_studyUID = studyUID;
+}
+
+QString Operation::getPatientName()
+{
+    return m_patientName;
+}
+
+QString Operation::getPatientID()
+{
+    return m_patientID;
+}
+
+QString Operation::getStudyUID()
+{
+    return m_studyUID;
+}
+
+QString Operation::getStudyID()
+{
+    return m_studyID;
+}
+
 Operation::~Operation()
 {
 }
