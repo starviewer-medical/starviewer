@@ -68,6 +68,7 @@ void Q2DViewerExtension::createActions()
     m_singleViewAction->setShortcut( tr("Ctrl+S") );
     m_singleViewAction->setStatusTip( tr("Change To Single View Mode") );
     m_singleViewAction->setIcon( QIcon(":/images/singleView.png") );
+    m_singleViewAction->setCheckable( true );
     m_singleViewToolButton->setDefaultAction( m_singleViewAction );
 
     m_doubleViewAction = new QAction( 0 );
@@ -75,7 +76,15 @@ void Q2DViewerExtension::createActions()
     m_doubleViewAction->setShortcut( tr("Ctrl+D") );
     m_doubleViewAction->setStatusTip( tr("Change To Double View Mode") );
     m_doubleViewAction->setIcon( QIcon(":/images/addViewRight.png") );
+    m_doubleViewAction->setCheckable( true );
     m_doubleViewToolButton->setDefaultAction( m_doubleViewAction );
+
+    //afegim un action group pel switcher de # de vistes
+    QActionGroup *viewActionGroup = new QActionGroup( 0 );
+    viewActionGroup->setExclusive( true );
+    viewActionGroup->addAction( m_singleViewAction );
+    viewActionGroup->addAction( m_doubleViewAction );
+    m_singleViewAction->setChecked( true );
 
     // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
     m_voxelInformationAction = new QAction( 0 );
