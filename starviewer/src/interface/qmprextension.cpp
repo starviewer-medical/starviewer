@@ -78,8 +78,6 @@ QMPRExtension::~QMPRExtension()
     m_coronalPlaneSource->Delete();
     m_thickSlabPlaneSource->Delete();
 
-    if( m_pickedActorPlaneSource )
-        m_pickedActorPlaneSource->Delete();
     if( m_pickedActorReslice )
         m_pickedActorReslice->Delete();
 
@@ -220,7 +218,6 @@ void QMPRExtension::switchHorizontalLayout()
 
 void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
 {
-    int indexOfMPRWidget = m_horizontalSplitter->indexOf( m_coronal2DView );
     // desem la mida abans de canviar els widgets
     QList<int> splitterSize = m_horizontalSplitter->sizes();
     if( isMIPChecked )
@@ -422,6 +419,7 @@ void QMPRExtension::releaseAxialViewAxisActor()
         m_axial2DView->enableTools();
         m_state = NONE;
         m_pickedActorReslice = 0;
+        m_pickedActorPlaneSource = 0;
     }
 }
 
@@ -510,6 +508,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
         m_coronal2DView->getInteractor()->Render();
         m_state = NONE;
         m_pickedActorReslice = 0;
+        m_pickedActorPlaneSource = 0;
         // reactivem les tools
         m_sagital2DView->enableTools();
     }
@@ -604,6 +603,7 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         }
         m_state = NONE;
         m_pickedActorPlaneSource = 0;
+        m_pickedActorReslice = 0;
     }
 }
 
@@ -656,6 +656,8 @@ void QMPRExtension::pushSagitalViewAxisActor()
 void QMPRExtension::releasePushSagitalViewAxisActor()
 {
     m_coronal2DView->getInteractor()->Render();
+    m_pickedActorPlaneSource = 0;
+    m_pickedActorReslice = 0;
     m_state = NONE;
 }
 
