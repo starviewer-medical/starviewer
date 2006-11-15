@@ -66,6 +66,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
     updateCursor( -1, -1, -1, -1 );
+    m_rotateFactor = 0; // per defecte no hi ha cap rotació adicional
 
     // inicialitzacions d'objectes
     // visor
@@ -84,14 +85,13 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_sideRuler = 0;
     m_bottomRuler = 0;
 
-    m_toolManager = new Q2DViewerToolManager( this );
-    this->enableTools();
-
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
 
     setupInteraction();
+    m_toolManager = new Q2DViewerToolManager( this );
+    this->enableTools();
     // anotacions
     createAnnotations();
     createActions();
@@ -314,6 +314,60 @@ void Q2DViewer::updateScalarBar()
         DEBUG_LOG( "No hi ha cap volum assignat. No podem donar LUT a l'escala de colors" );
 }
 
+void Q2DViewer::updateCameraRotation()
+{
+    if( m_viewer->GetInput() )
+    {
+        vtkCamera *cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+        switch( m_lastView )
+        {
+        case Axial:
+        //\TODO corretgir l'error en el primer cop que li donem una rotació
+            if( cam )
+                cam->SetRoll( -m_rotateFactor*90. + 180. );
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
+        break;
+
+        case Sagittal:
+            if( cam )
+                cam->SetRoll( -m_rotateFactor*90. -90. );
+            //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
+        break;
+
+        case Coronal:
+            if( cam )
+                cam->SetRoll( -m_rotateFactor*90. );
+            //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
+        break;
+        }
+        mapOrientationStringToAnnotation();
+        updateWindowInformationAnnotation();
+        updateRulers();
+        this->getInteractor()->Render();
+    }
+    else
+    {
+        WARN_LOG( "Intentant actualitzar rotació de càmera sense haver donat un input abans..." );
+    }
+}
+
+void Q2DViewer::rotateClockWise()
+{
+    m_rotateFactor = (m_rotateFactor+1) % 4 ;
+    updateCameraRotation();
+}
+
+void Q2DViewer::rotateCounterClockWise()
+{
+    m_rotateFactor = (m_rotateFactor+3) % 4 ;
+    updateCameraRotation();
+}
+
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
@@ -327,24 +381,24 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
-            m_patientOrientationTextActor[0]->SetInput( qPrintable( revertedList.at(0) ) );
-            m_patientOrientationTextActor[2]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[1]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[3]->SetInput( qPrintable( revertedList.at(1) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(0) ) );
+            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(1) ) );
         }
         else if( m_lastView == Sagittal )
         {
-            m_patientOrientationTextActor[0]->SetInput( qPrintable( revertedList.at(1) ) );
-            m_patientOrientationTextActor[2]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[1]->SetInput( qPrintable( revertedList.at(2) ) );
-            m_patientOrientationTextActor[3]->SetInput( qPrintable( list.at(2) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(1) ) );
+            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(2) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         else if( m_lastView == Coronal )
         {
-            m_patientOrientationTextActor[0]->SetInput( qPrintable( revertedList.at(0) ) );
-            m_patientOrientationTextActor[2]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[1]->SetInput( qPrintable( revertedList.at(2) ) );
-            m_patientOrientationTextActor[3]->SetInput( qPrintable( list.at(2) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(0) ) );
+            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(2) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
     }
     else
@@ -870,7 +924,8 @@ void Q2DViewer::render()
     if( m_mainVolume )
     {
        // Això és necessari perquè la imatge es rescali a les mides de la finestreta
-        m_viewer->GetRenderer()->ResetCamera();
+       // Automatically set up the camera based on the visible actors. The camera will reposition itself to view the center point of the actors, and move along its initial view plane normal (i.e., vector defined from camera position to focal point) so that all of the actors can be seen.
+        this->getRenderer()->ResetCamera();
         updateView();
     }
     else
@@ -882,6 +937,7 @@ void Q2DViewer::render()
 void Q2DViewer::setView( ViewType view )
 {
     m_lastView = view;
+    m_rotateFactor = 0;
     updateView();
 }
 
@@ -889,12 +945,11 @@ void Q2DViewer::updateView()
 {
     if( m_viewer->GetInput() )
     {
+        vtkCamera *cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
         switch( m_lastView )
         {
         case Axial:
             m_viewer->SetSliceOrientationToXY();
-            vtkCamera *cam;
-            cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
             if ( cam )
             {
                 cam->SetFocalPoint(0,0,0);
@@ -908,6 +963,7 @@ void Q2DViewer::updateView()
 
         case Sagittal:
             m_viewer->SetSliceOrientationToYZ();
+            cam->SetRoll( -m_rotateFactor*90. -90. );
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
@@ -915,6 +971,7 @@ void Q2DViewer::updateView()
 
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
+            cam->SetRoll( -m_rotateFactor*90. );
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
@@ -922,7 +979,7 @@ void Q2DViewer::updateView()
 
         default:
         // podem posar en Axial o no fer res
-            m_viewer->SetSliceOrientationToXY();
+            this->setView( Axial );
         break;
         }
         // cada cop que canviem de llesca posarem per defecte la llesca del mig d'aquella vista

@@ -217,6 +217,12 @@ public slots:
     void enableTools();
     void disableTools();
 
+    /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
+    void rotateClockWise();
+
+    /// Aplica una rotació de 90 graus en el sentit contrari a les agulles del rellotge
+    void rotateCounterClockWise();
+
 protected:
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
@@ -341,6 +347,13 @@ private:
 
     /// per controlar si la info de voxel està habilitada o no
     bool m_voxelInformationEnabled;
+
+    /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
+    int m_rotateFactor;
+
+private slots:
+    /// Actualitza la rotació de la càmera \sa rotateClockWise() i rotateCounterClockWise()
+    void updateCameraRotation();
 
 signals:
     /// envia la nova llesca en la que ens trobem
