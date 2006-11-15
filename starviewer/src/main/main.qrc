@@ -32,6 +32,8 @@
 	<file>images/tabRemove.png</file>
 	<file>images/voxelInformation.png</file>
 	<file>images/logs.png</file>
+	<file>images/rotateClockWise.png</file>
+	<file>images/rotateCounterClockWise.png</file>
         <file>translations/interface_ca_ES.qm</file>
         <file>translations/interface_en_GB.qm</file>
         <file>translations/interface_es_ES.qm</file>

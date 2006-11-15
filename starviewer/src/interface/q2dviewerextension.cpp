@@ -89,6 +89,29 @@ void Q2DViewerExtension::createActions()
     connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
     connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView2_1 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
     connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView2_2 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+
+    m_rotateClockWiseAction = new QAction( 0 );
+    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
+    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
+    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
+    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
+    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
+
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( rotateClockWise() ) );
+
+    m_rotateCounterClockWiseAction = new QAction( 0 );
+    m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
+    m_rotateCounterClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
+    m_rotateCounterClockWiseAction->setStatusTip( tr("Rotate the image in counter clockwise direction") );
+    m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
+    m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
+
+    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
+    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( rotateCounterClockWise() ) );
+    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( rotateCounterClockWise() ) );
+
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
     m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
