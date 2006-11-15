@@ -23,6 +23,8 @@ Slicing2DTool::Slicing2DTool( Q2DViewer *viewer , QObject *parent, const char *n
     m_currentPosition[0] = 0;
     m_currentPosition[1] = 0;
     m_2DViewer = viewer;
+    if( !m_2DViewer )
+        DEBUG_LOG( "El 2DViewer és nul!" );
 }
 
 Slicing2DTool::~Slicing2DTool()
@@ -64,41 +66,54 @@ void Slicing2DTool::handleEvent( unsigned long eventID )
 
 void Slicing2DTool::startSlicing()
 {
-    m_state = SLICING;
-    m_startPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
-    m_startPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+    if( m_2DViewer )
+    {
+        m_state = SLICING;
+        m_startPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
+        m_startPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+    }
+    else
+        DEBUG_LOG( "::startSlicing(): El 2DViewer és NUL!" );
 }
 
 void Slicing2DTool::doSlicing()
 {
-    if( m_state == SLICING )
+    if( m_2DViewer )
     {
-        m_currentPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
-        m_currentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
-        int dx = m_currentPosition[0] - m_startPosition[0];
-        int dy = m_startPosition[1] - m_currentPosition[1];
+        if( m_state == SLICING )
+        {
+            m_currentPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
+            m_currentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+            int dx = m_currentPosition[0] - m_startPosition[0];
+            int dy = m_startPosition[1] - m_currentPosition[1];
 
-        m_startPosition[0] = m_currentPosition[0];
-        m_startPosition[1] = m_currentPosition[1];
+            m_startPosition[0] = m_currentPosition[0];
+            m_startPosition[1] = m_currentPosition[1];
 
-        int value, increment;
-        if( dy )
-            value = dy/abs(dy);
-        else
-            value = dx/abs(dx);
+            int value, increment;
+            if( dy )
+                value = dy/abs(dy);
+            else
+                value = dx/abs(dx);
 
-        if( value < 0 )
-            increment = -1;
-        else if( value > 0 )
-            increment = 1;
+            if( value < 0 )
+                increment = -1;
+            else if( value > 0 )
+                increment = 1;
 
-        m_2DViewer->setSlice( m_2DViewer->getSlice() + increment );
+            m_2DViewer->setSlice( m_2DViewer->getSlice() + increment );
+        }
     }
+    else
+        DEBUG_LOG( "::doSlicing(): El 2DViewer és NUL!" );
 }
 
 void Slicing2DTool::endSlicing()
 {
-    m_state = NONE;
+    if( m_2DViewer )
+        m_state = NONE;
+    else
+        DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
 }
 
 }

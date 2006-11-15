@@ -8,6 +8,7 @@
 #include "q2dviewer.h"
 #include "q3dviewer.h"
 #include "q3dmprviewer.h"
+#include "logging.h"
 #include <vtkInteractorStyleImage.h>
 #include <vtkInteractorStyle.h>
 #include <vtkCommand.h>
@@ -18,12 +19,16 @@ ZoomTool::ZoomTool( Q2DViewer *viewer , QObject *parent, const char *name )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
+    if( !m_interactorStyle )
+        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
+    if( !m_interactorStyle )
+        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
@@ -60,7 +65,10 @@ void ZoomTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
-        m_interactorStyle->Zoom();
+        if( m_interactorStyle )
+            m_interactorStyle->Zoom();
+        else
+            DEBUG_LOG( "::MouseWheelBackwardZoom(): L'interactor Style és buit!" );
     break;
 
     default:
@@ -70,20 +78,35 @@ void ZoomTool::handleEvent( unsigned long eventID )
 
 void ZoomTool::startZoom()
 {
-    m_state = ZOOMING;
-    m_interactorStyle->StartDolly();
+    if( m_interactorStyle )
+    {
+        m_state = ZOOMING;
+        m_interactorStyle->StartDolly();
+    }
+    else
+        DEBUG_LOG( "::startZoom(): L'interactor Style és buit!" );
 }
 
 void ZoomTool::doZoom()
 {
-    if( m_state == ZOOMING )
-        m_interactorStyle->Dolly();
+    if( m_interactorStyle )
+    {
+        if( m_state == ZOOMING )
+            m_interactorStyle->Dolly();
+    }
+    else
+        DEBUG_LOG( "::doZoom(): L'interactor Style és buit!" );
 }
 
 void ZoomTool::endZoom()
 {
-    m_state = NONE;
-    m_interactorStyle->EndDolly();
+    if( m_interactorStyle )
+    {
+        m_state = NONE;
+        m_interactorStyle->EndDolly();
+    }
+    else
+        DEBUG_LOG( "::endZoom(): L'interactor Style és buit!" );
 }
 
 }

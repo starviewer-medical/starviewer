@@ -21,12 +21,16 @@ TranslateTool::TranslateTool( Q2DViewer *viewer , QObject *parent, const char *n
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
+    if( !m_interactorStyle )
+        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 TranslateTool::TranslateTool( Q3DViewer *viewer , QObject *parent, const char *name )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
+    if( !m_interactorStyle )
+        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 TranslateTool::TranslateTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
@@ -63,22 +67,36 @@ void TranslateTool::handleEvent( unsigned long eventID )
 
 void TranslateTool::startTranslate()
 {
-    m_state = TRANSLATING;
-    m_interactorStyle->StartPan();
+    if( m_interactorStyle )
+    {
+        m_state = TRANSLATING;
+        m_interactorStyle->StartPan();
+    }
+    else
+        DEBUG_LOG( "::startTranslate(): L'interactor Style és buit!" );
 }
 
 void TranslateTool::doTranslate()
 {
-    if( m_state == TRANSLATING )
+    if( m_interactorStyle )
     {
-        m_interactorStyle->Pan();
+        if( m_state == TRANSLATING )
+            m_interactorStyle->Pan();
     }
+    else
+        DEBUG_LOG( "::doTranslate(): L'interactor Style és buit!" );
+
 }
 
 void TranslateTool::endTranslate()
 {
-    m_state = NONE;
-    m_interactorStyle->EndPan();
+    if( m_interactorStyle )
+    {
+        m_state = NONE;
+        m_interactorStyle->EndPan();
+    }
+    else
+        DEBUG_LOG( "::endTranslate(): L'interactor Style és buit!" );
 }
 
 }
