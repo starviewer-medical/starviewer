@@ -55,6 +55,8 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_toolsButtonGroup->addButton( m_windowLevelToolButton );
     m_toolsButtonGroup->addButton( m_zoomToolButton );
     m_toolsButtonGroup->addButton( m_moveToolButton );
+
+    m_thickSlab = 0.0;
 }
 
 QMPRExtension::~QMPRExtension()
