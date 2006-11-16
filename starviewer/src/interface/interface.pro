@@ -7,17 +7,18 @@ FORMS += qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \
          qmpr3dextensionbase.ui \
          qmprextensionbase.ui \
-         qretrievescreenbase.ui \
          queryscreenbase.ui \
          qpacslistbase.ui \
          qstudytreewidgetbase.ui \
          qserieslistwidgetbase.ui \
          q2dviewerextensionbase.ui \
          qcustomwindowleveldialogbase.ui \
-         qcreatedicomdirbase.ui 
+         qcreatedicomdirbase.ui \
+         qoperationstatescreenbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
+IDLS += qoperationstatescreenbase.ui 
 HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
            extensioncreator.h \
@@ -26,7 +27,6 @@ HEADERS += qapplicationmainwindow.h \
            extensionworkspace.h \
            qconfigurationscreen.h \
            qpacslist.h \
-           qretrievescreen.h \
            queryscreen.h \
            qmprextension.h \
            qmprextensioncreator.h \
@@ -40,7 +40,8 @@ HEADERS += qapplicationmainwindow.h \
            q2dviewerextensioncreator.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
-           qcreatedicomdir.h 
+           qcreatedicomdir.h \
+           qoperationstatescreen.h 
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
@@ -49,7 +50,6 @@ SOURCES += qapplicationmainwindow.cpp \
            extensionworkspace.cpp \
            qconfigurationscreen.cpp \
            qpacslist.cpp \
-           qretrievescreen.cpp \
            queryscreen.cpp \
            queryscreenerror.cpp \
            qmprextension.cpp \
@@ -64,7 +64,8 @@ SOURCES += qapplicationmainwindow.cpp \
            q2dviewerextensioncreator.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
-           qcreatedicomdir.cpp 
+           qcreatedicomdir.cpp \
+           qoperationstatescreen.cpp 
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../inputoutput/libinputoutput.a \

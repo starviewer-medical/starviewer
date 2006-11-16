@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>udg::QRetrieveScreenBase</class>
- <widget class="QDialog" name="udg::QRetrieveScreenBase" >
+ <class>udg::QOperationStateScreenBase</class>
+ <widget class="QDialog" name="udg::QOperationStateScreenBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

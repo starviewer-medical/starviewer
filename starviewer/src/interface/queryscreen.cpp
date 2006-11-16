@@ -59,7 +59,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     CacheStudyDAL cacheStudyDal;
     ReadDicomdir read;
            
-    m_retrieveScreen = new udg::QRetrieveScreen;
+    m_OperationStateScreen = new udg::QOperationStateScreen;
     m_qcreateDicomdir = new udg::QCreateDicomdir;	
 
     initialize();//inicialitzem les variables necessàries
@@ -190,12 +190,12 @@ void QueryScreen::connectSignalsAndSlots()
      QObject::connect( &m_qexecuteOperationThread , SIGNAL( viewStudy( QString) ) , this , SLOT( studyRetrievedView( QString) ) , Qt::QueuedConnection );
     
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_retrieveScreen, SLOT(  setErrorOperation( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_retrieveScreen, SLOT(  setOperationFinished( QString ) ) ); 
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_retrieveScreen, SLOT(  setOperating( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_retrieveScreen , SLOT(  imageCommit( QString , int ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_retrieveScreen , SLOT(  seriesCommit( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_retrieveScreen , SLOT(  insertNewOperation( Operation *) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_OperationStateScreen, SLOT(  setErrorOperation( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_OperationStateScreen, SLOT(  setOperationFinished( QString ) ) ); 
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_OperationStateScreen, SLOT(  setOperating( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_OperationStateScreen , SLOT(  imageCommit( QString , int ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_OperationStateScreen , SLOT(  seriesCommit( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_OperationStateScreen , SLOT(  insertNewOperation( Operation *) ) );
 
     
     //connecta el signal de que no hi ha suficient espai de disc
@@ -799,7 +799,7 @@ void QueryScreen::retrievePacs( bool view )
     }
 
     //inserim a la pantalla de retrieve que iniciem la descarrega
-    //m_retrieveScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );      
+    //m_OperationStateScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );      
 
     //emplanem els parametres amb dades del starviewersettings
     pacs.setAELocal( settings.getAETitleMachine().toAscii().constData() );
@@ -1014,9 +1014,9 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
     cacheStudyDAL.updateStudyAccTime( studyUID.toStdString() );
     
     this->close();//s'amaga per poder visualitzar la serie
-    if ( m_retrieveScreen->isVisible() )
+    if ( m_OperationStateScreen->isVisible() )
     {
-        m_retrieveScreen->close();//s'amaga per poder visualitzar la serie
+        m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
     emit( viewStudy(volum) );
 }
@@ -1117,9 +1117,9 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
     }
     
     this->close();//s'amaga per poder visualitzar la serie
-    if ( m_retrieveScreen->isVisible() )
+    if ( m_OperationStateScreen->isVisible() )
     {
-        m_retrieveScreen->close();//s'amaga per poder visualitzar la serie
+        m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
     logMessage = "Ha finalitzat la càrrega de l'estudi des del dicomdir";
@@ -1197,8 +1197,8 @@ void QueryScreen::closeEvent( QCloseEvent* ce )
 void QueryScreen::showRetrieveScreen()
 {
     //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra
-    m_retrieveScreen->setVisible( false );
-    m_retrieveScreen->setVisible( true );
+    m_OperationStateScreen->setVisible( false );
+    m_OperationStateScreen->setVisible( true );
 }
 
 void QueryScreen::showCreateDicomdirScreen()

@@ -13,7 +13,7 @@
 #include "studyvolum.h"
 #include "serieslistsingleton.h"
 #include "qexecuteoperationthread.h"
-#include "qretrievescreen.h"
+#include "qoperationstatescreen.h"
 #include "qcreatedicomdir.h"
 #include "readdicomdir.h"
 
@@ -181,7 +181,7 @@ struct retrieveParameters
     //StudyVolum m_volum;
     bool m_PacsListShow;
     
-    QRetrieveScreen *m_retrieveScreen;
+    QOperationStateScreen *m_OperationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;   
     

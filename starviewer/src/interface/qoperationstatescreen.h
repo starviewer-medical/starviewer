@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#ifndef UDGQRETRIEVESCREEN_H
-#define UDGQRETRIEVESCREEN_H
+#ifndef UDGQOPERATIONSTATESCREEN_H
+#define UDGQOPERATIONSTATESCREEN_H
 
 #include <QString>
 #include <semaphore.h>
@@ -13,7 +13,7 @@
 #include "study.h"
 #include "image.h"
 #include "starviewerprocessimage.h"
-#include "ui_qretrievescreenbase.h"
+#include "ui_qoperationstatescreenbase.h"
 
 /// Interfície que implementa la llista d'operacions realitzades cap a un PACS 
 namespace udg {
@@ -21,7 +21,7 @@ namespace udg {
 class Status;
 class Operation;
 
-class QRetrieveScreen : public QDialog , private Ui::QRetrieveScreenBase{
+class QOperationStateScreen : public QDialog , private Ui::QOperationStateScreenBase{
 Q_OBJECT
 public:
 
@@ -29,10 +29,10 @@ public:
      * @param parent 
      * @return 
      */
-    QRetrieveScreen( QWidget *parent = 0 );
+    QOperationStateScreen( QWidget *parent = 0 );
 
 	/// destructor de la classe
-    ~QRetrieveScreen();
+    ~QOperationStateScreen();
     
 public slots :
     

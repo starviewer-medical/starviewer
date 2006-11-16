@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
 
-#include "qretrievescreen.h"
+#include "qoperationstatescreen.h"
 #include <QString>
 #include <iostream.h>
 #include <qdatetime.h>
@@ -15,7 +15,7 @@
 
 namespace udg {
 
-QRetrieveScreen::QRetrieveScreen( QWidget *parent )
+QOperationStateScreen::QOperationStateScreen( QWidget *parent )
  : QDialog( parent )
 {
     setupUi( this );
@@ -25,12 +25,12 @@ QRetrieveScreen::QRetrieveScreen( QWidget *parent )
     createConnections();
 }
 
-void QRetrieveScreen::createConnections()
+void QOperationStateScreen::createConnections()
 {
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearList() ) );
 }
 
-void QRetrieveScreen::insertNewOperation( Operation *operation )
+void QOperationStateScreen::insertNewOperation( Operation *operation )
 {
     QTreeWidgetItem* item = new QTreeWidgetItem( m_treeRetrieveStudy );
     QTime time = QTime::currentTime();
@@ -62,7 +62,7 @@ void QRetrieveScreen::insertNewOperation( Operation *operation )
 }
 
 
-void QRetrieveScreen::clearList()
+void QOperationStateScreen::clearList()
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( "*" , Qt::MatchWildcard, 0 ) );
     QTreeWidgetItem *item;
@@ -77,7 +77,7 @@ void QRetrieveScreen::clearList()
     }
 }
 
-void QRetrieveScreen::deleteStudy( QString studyUID )
+void QOperationStateScreen::deleteStudy( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -95,7 +95,7 @@ void QRetrieveScreen::deleteStudy( QString studyUID )
     }
 }
 
-void QRetrieveScreen::imageCommit( QString studyUID , int downloadedImages )
+void QOperationStateScreen::imageCommit( QString studyUID , int downloadedImages )
 {
     QString Images;
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
@@ -109,7 +109,7 @@ void QRetrieveScreen::imageCommit( QString studyUID , int downloadedImages )
     }    
 }
 
-void QRetrieveScreen::seriesCommit( QString studyUID )
+void QOperationStateScreen::seriesCommit( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -126,7 +126,7 @@ void QRetrieveScreen::seriesCommit( QString studyUID )
     }    
 }
 
-void QRetrieveScreen::setOperating( QString studyUID )
+void QOperationStateScreen::setOperating( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -142,7 +142,7 @@ void QRetrieveScreen::setOperating( QString studyUID )
     }
 }
 
-void QRetrieveScreen::setOperationFinished( QString studyUID )
+void QOperationStateScreen::setOperationFinished( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -167,7 +167,7 @@ void QRetrieveScreen::setOperationFinished( QString studyUID )
     m_treeRetrieveStudy->repaint(); 
 }
 
-void QRetrieveScreen::setErrorOperation( QString studyUID )
+void QOperationStateScreen::setErrorOperation( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
@@ -184,7 +184,7 @@ void QRetrieveScreen::setErrorOperation( QString studyUID )
     m_treeRetrieveStudy->repaint();
 }
 
-QRetrieveScreen::~QRetrieveScreen()
+QOperationStateScreen::~QOperationStateScreen()
 {
 }
 
