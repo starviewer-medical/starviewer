@@ -454,7 +454,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
     //calculem el que ocupava l'estudi per actualitzar l'espai actualitzat
     sql.clear();
     sql.insert( 0 , "select sum(ImgSiz) from image where StuInsUID= '" );
-    sql.append(studyUID);
+    sql.append( studyUID );
     sql.append( "'" );
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error );
     
@@ -470,8 +470,11 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         return state;
     }
     i = 1;//ignorem les capçaleres
+ 
+    //TODO aqui pot haver un possible error, relaciona amb el ticket 132, en que la posicio 1 de resposta feia un segmentation fault. encara que no trobi cap imatge a la consulta, per defecte torna el tamany 0, per tant a la posició resposta[1] sempre hi haurà d'haver valor. Ara per ara es donarà el ticket per tancat, però quan es torni a reproduir l'error es mirarà que el causa.
     studySize = atoi( resposta [i] );
 
+    cout<<resposta[i] << "rows " << rows << " col " << columns<<endl;
     //esborrem de la taula image
     
     sql.clear();
