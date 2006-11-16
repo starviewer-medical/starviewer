@@ -90,10 +90,10 @@ void Slicing2DTool::doSlicing()
             m_startPosition[0] = m_currentPosition[0];
             m_startPosition[1] = m_currentPosition[1];
 
-            int value, increment;
+            int value = 0, increment = 0;
             if( dy )
                 value = dy/abs(dy);
-            else
+            else if ( dx )
                 value = dx/abs(dx);
 
             if( value < 0 )
