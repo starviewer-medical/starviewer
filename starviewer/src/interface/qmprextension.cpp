@@ -191,9 +191,14 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
+    // això es fa per evitar que la senyal es connecti primer al toolmanager. Necessitem que primer el signal sigui tractat per l'extensió i després pel tool manager \TODO això no deixa de ser un parxe, caldria pensar en un sistema de tractament de prioritats amb els events
+    m_axial2DView->disableTools();
+    m_sagital2DView->disableTools();
     // gestionen els events de les finestres per poder manipular els plans
     connect( m_axial2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleAxialViewEvents( unsigned long ) ) );
     connect( m_sagital2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleSagitalViewEvents( unsigned long ) ) );
+    m_axial2DView->enableTools();
+    m_sagital2DView->enableTools();
 
     connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
     connect( m_thickSlabSlider , SIGNAL( valueChanged(int) ) , this , SLOT( updateThickSlab(int) ) );
