@@ -3,7 +3,7 @@
  <comment></comment>
  <exportmacro></exportmacro>
  <class>udg::QueryScreenBase</class>
- <widget class="QWidget" name="udg::QueryScreenBase" >
+ <widget class="QDialog" name="udg::QueryScreenBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

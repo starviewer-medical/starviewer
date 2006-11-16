@@ -44,7 +44,7 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
-    m_queryScreen = new QueryScreen( 0 );
+    m_queryScreen = new QueryScreen( m_mainApp );
 
     createConnections();
     registerExtensions();
@@ -186,7 +186,7 @@ void ExtensionHandler::killBill()
 
 void ExtensionHandler::openSerieToCompare()
 {
-    QueryScreen *queryScreen = new QueryScreen;
+    QueryScreen *queryScreen = new QueryScreen( m_mainApp );
     connect( queryScreen , SIGNAL( viewStudy(StudyVolum) ) , this , SLOT( viewStudyToCompare(StudyVolum) ) );
     queryScreen->show();
 }

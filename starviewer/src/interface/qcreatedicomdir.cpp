@@ -30,7 +30,7 @@
 namespace udg {
 
 QCreateDicomdir::QCreateDicomdir(QWidget *parent)
- : QWidget(parent)
+ : QDialog(parent)
 {
     setupUi( this );
     

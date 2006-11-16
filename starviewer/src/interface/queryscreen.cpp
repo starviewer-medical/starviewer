@@ -49,7 +49,7 @@
 namespace udg {
 
 QueryScreen::QueryScreen( QWidget *parent )
- : QWidget(parent )
+ : QDialog(parent )
 {
     setupUi( this );
 
@@ -60,7 +60,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     ReadDicomdir read;
            
     m_OperationStateScreen = new udg::QOperationStateScreen;
-    m_qcreateDicomdir = new udg::QCreateDicomdir;	
+    m_qcreateDicomdir = new udg::QCreateDicomdir( this );	
 
     initialize();//inicialitzem les variables necessàries
 

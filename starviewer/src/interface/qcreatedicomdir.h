@@ -18,7 +18,7 @@ class Status;
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QCreateDicomdir : public QWidget , private Ui::QCreateDicomdirBase{
+class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
 Q_OBJECT
 
     enum recordDevice { cd , dvd };

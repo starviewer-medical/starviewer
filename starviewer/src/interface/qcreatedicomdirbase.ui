@@ -3,7 +3,7 @@
  <comment></comment>
  <exportmacro></exportmacro>
  <class>udg::QCreateDicomdirBase</class>
- <widget class="QWidget" name="udg::QCreateDicomdirBase" >
+ <widget class="QDialog" name="udg::QCreateDicomdirBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -27,7 +27,7 @@ class ReadDicomdir;
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
 */
-class QueryScreen : public QWidget , private Ui::QueryScreenBase{
+class QueryScreen : public QDialog , private Ui::QueryScreenBase{
 Q_OBJECT
 public:
     
