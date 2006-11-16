@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -11,9 +11,9 @@
 #include <assoc.h>
 
 
-/** Gestiona els diferents networks que necessitarem per conectar als diferents PACS, el network, sÛ objectes que configuren la nostra xarxa, indiquem per quin port esperem rebre la informaciÛ, si ser‡ d'entrada/sortida, etc.. Pel nostre cas tindrem dos tipus de network, un per a fer querys al pacs i un altre pels retrieves d'imatges
+/** Gestiona els diferents networks que necessitarem per conectar als diferents PACS, el network, s√≥ objectes que configuren la nostra xarxa, indiquem per quin port esperem rebre la informaci√≥, si ser√† d'entrada/sortida, etc.. Pel nostre cas tindrem dos tipus de network, un per a fer querys al pacs i un altre pels retrieves d'imatges
  *
- * Aquesta classe es un siglenton, ja que totes les connexions sempre ha d'utitlitzar el mateix network, no podem tenir diferents networks per al mateix  propÚsit
+ * Aquesta classe es un siglenton, ja que totes les connexions sempre ha d'utitlitzar el mateix network, no podem tenir diferents networks per al mateix  prop√≤sit
  */
 
 namespace udg {
@@ -27,23 +27,23 @@ public:
      */
     static PacsNetwork* getPacsNetwork();   
  
-    /** Preparar un network per a fer l'acciÛ de query, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
+    /** Preparar un network per a fer l'acci√≥ de query, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
      *            @param timeout dels query
      */
     Status createNetworkQuery(int time);
     
-    /** Prepara un network per a fer l'acciÛ de retrieve imatges, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
+    /** Prepara un network per a fer l'acci√≥ de retrieve imatges, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
      * @param port a utilitzar per rebre les images
      * @param timeout de l'accio retrieve
      */
     Status createNetworkRetrieve(int port,int timeout);
    
-    /** retorna la configuraciÛ network de per fer queries
+    /** retorna la configuraci√≥ network de per fer queries
      * @return Retorna el network per fer queries
      */
     T_ASC_Network * getNetworkQuery();
     
-    /** retorna la configuraciÛ network de per fer els retrieves
+    /** retorna la configuraci√≥ network de per fer els retrieves
      * @return Retorna el network per fer els retrieves
      */
     T_ASC_Network * getNetworkRetrieve();

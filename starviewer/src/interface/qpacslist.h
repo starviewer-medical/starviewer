@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,7 +16,7 @@ namespace udg {
 
 class PacsList;
 
-/** InterfÌcie que mostra els PACS els quals es pot connectar l'aplicaciÛ, permet seleccionar quins es vol connectar l'usuari
+/** Interf√≠cie que mostra els PACS els quals es pot connectar l'aplicaci√≥, permet seleccionar quins es vol connectar l'usuari
 @author marc
 */
 
@@ -30,7 +30,7 @@ public:
     
     /** Retorna els pacs seleccionats per l'usuari per a realitzar la cerca
      * @param pacslist , parametre de sortida que conte la llista de pacs seleccionats 
-     * @return estat de l'operaciÛ
+     * @return estat de l'operaci√≥
      */
     Status getSelectedPacs(PacsList * pacsList);
     
@@ -47,8 +47,8 @@ private :
     /// Aquesta accio selecciona en el PacsListView els Pacs que tenen a 'S' a Default. Son els pacs que per defecte l'usuari te que es realitzin les cerques
     void setSelectedDefaultPacs();
     
-    /** Tracta els errors que s'han produÔt durant els accessos a la base dades
-     *  @param state Estat de l'acciÛ retrieve
+    /** Tracta els errors que s'han produ√Øt durant els accessos a la base dades
+     *  @param state Estat de l'acci√≥ retrieve
       */
     void databaseError(Status *state);
 

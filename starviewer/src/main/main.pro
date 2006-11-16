@@ -27,7 +27,7 @@ MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui 
 OBJECTS_DIR = ../../tmp/obj 
 TARGET = ../../bin/starviewer 
-CONFIG += debug \
+CONFIG += release \
           warn_on 
 TEMPLATE = app 
 SOURCES += main.cpp 

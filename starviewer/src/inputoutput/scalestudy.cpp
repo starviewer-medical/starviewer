@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
 7 *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -34,26 +34,26 @@ void ScaleStudy::scale( std::string studyUID )
     std::string absPath , relPath , absPathScal ;
     StarviewerSettings settings;
     ScaleImage scaleImg;
-    state = getSeriesOfStudy( studyUID,seriesList ); //busquem les sèries de l'estudi
+    state = getSeriesOfStudy( studyUID,seriesList ); //busquem les sÃ¨ries de l'estudi
     
     seriesList.firstSeries();
     
-    while ( !seriesList.end() ) //escalem una imatge per cada sèrie
+    while ( !seriesList.end() ) //escalem una imatge per cada sÃ¨rie
     {  
-        //preparem la màscara per buscar la imatge del mig de l'estudi
+        //preparem la mÃ scara per buscar la imatge del mig de l'estudi
         mask.setSeriesUID( seriesList.getSeries().getSeriesUID().c_str() );
         mask.setStudyUID( studyUID.c_str() );    
-        state = countImageNumber( mask , number );//comptem el número d'imatges, per saber quina és la imatge del mig
+        state = countImageNumber( mask , number );//comptem el nÃºmero d'imatges, per saber quina Ã©s la imatge del mig
         
         sprintf( imgNumX , "%i" , number / 2 + 1 );
-        mask.setImageNumber( imgNumX );//indiquem per quin número d' imatge hem de buscar el path
+        mask.setImageNumber( imgNumX );//indiquem per quin nÃºmero d' imatge hem de buscar el path
         
         relPath.clear();
         imageRelativePath( mask ,relPath );//busquem el path de la imatge del mig
         
         if (  relPath.length() == 0 )
-        {/*hi ha algunes màquines per error tenen el número d'imatge 1 sempre, encara que l'estudi tingui 10 imatges
-          *En aquest cas no funciona buscar la imatge del mig, i el que es fa és mostrar la primera imatge que trobem
+        {/*hi ha algunes mÃ quines per error tenen el nÃºmero d'imatge 1 sempre, encara que l'estudi tingui 10 imatges
+          *En aquest cas no funciona buscar la imatge del mig, i el que es fa Ã©s mostrar la primera imatge que trobem
           */
             mask.setImageNumber( "" );
             imageRelativePath( mask ,relPath );

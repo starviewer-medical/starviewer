@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -22,7 +22,7 @@ QPacsList::QPacsList( QWidget *parent )
 {
     setupUi( this );
 
-    m_PacsTreeView->setColumnHidden( 3 , true ); //La columna default est‡ amagada
+    m_PacsTreeView->setColumnHidden( 3 , true ); //La columna default est√† amagada
 
     refresh();
 }
@@ -89,7 +89,7 @@ Status QPacsList::getSelectedPacs( PacsList *pacsList )
         item = qPacsList.at( i );
         PacsParameters pacs;
         
-        state = pacsListDB.queryPacs( &pacs , item->text( 0 ).toStdString() ); //fem el query per cercar la informaciÛ del PACS
+        state = pacsListDB.queryPacs( &pacs , item->text( 0 ).toStdString() ); //fem el query per cercar la informaci√≥ del PACS
             
         if ( state.good() )
         {

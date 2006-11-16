@@ -125,8 +125,8 @@ OFCondition PacsServer::configureMove( levelConnection level )
    static const char *     opt_abstractSyntaxFind;
    static const char *     opt_abstractSyntaxMove;  
    
-   //Alhora de moure les imatges, el PACS primer ha de verificar que existexi unes imatges que compleixin la m‡scara que se li ha passat
-   //per aixÚ primer ha de fer un "find", degut aquest fet aquÌ hem d'especificar dos funcions a fer la de buscar "UID_FIND" i descarregar "UID_MOVE"
+   //Alhora de moure les imatges, el PACS primer ha de verificar que existexi unes imatges que compleixin la m√†scara que se li ha passat
+   //per aix√≤ primer ha de fer un "find", degut aquest fet aqu√≠ hem d'especificar dos funcions a fer la de buscar "UID_FIND" i descarregar "UID_MOVE"
     if ( level == studyLevel )
     {
         opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;        

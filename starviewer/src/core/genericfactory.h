@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -15,25 +15,25 @@ namespace udg {
 
 /**
     Classe que serveix com a base per implementar el pattern Factory.
-    L'˙s d'aquesta classe Ès intern a la plataforma i no s'hauria d'utilitzar excepte si s'est‡ desenvolupant per el core.
-    La seva utilitat, juntament amb GenericFactoryRegister, Ès la de proveÔr una implementaciÛ genËrica del pattern Factory.
+    L'√∫s d'aquesta classe √©s intern a la plataforma i no s'hauria d'utilitzar excepte si s'est√† desenvolupant per el core.
+    La seva utilitat, juntament amb GenericFactoryRegister, √©s la de prove√Ør una implementaci√≥ gen√®rica del pattern Factory.
 
-    Aquesta classe ens Ès ˙til a l'hora de generar classes d'una mateixa jerarquia de classes. Per exemple, si tinguessim
+    Aquesta classe ens √©s √∫til a l'hora de generar classes d'una mateixa jerarquia de classes. Per exemple, si tinguessim
     la classe Vehicle com a classe abstracta i les classes Camio, Cotxe, Motocicleta com a classes que hereden de Vehicle,
-    podrÌem utilitzar la GenericFactory per instanciar objectes del tipus Camio, Cotxe o Motocicleta perÚ que fossin retornats
+    podr√≠em utilitzar la GenericFactory per instanciar objectes del tipus Camio, Cotxe o Motocicleta per√≤ que fossin retornats
     com a Vehicles.
 
-    L'implementaciÛ actual pressuposa que tots els objectes que es voldran crear heredaran de QObject i, per tant, el seu constructor
-    tÈ un par‡metre que Ès el parent d'aquest.
+    L'implementaci√≥ actual pressuposa que tots els objectes que es voldran crear heredaran de QObject i, per tant, el seu constructor
+    t√© un par√†metre que √©s el parent d'aquest.
 
-    Exemple d'utilitzaciÛ:
+    Exemple d'utilitzaci√≥:
     @code
-     //Creem una Factory de Vehicles que seran identificats per una string. Vehicles i els seus fills sÛn subclasses de QObject
+     //Creem una Factory de Vehicles que seran identificats per una string. Vehicles i els seus fills s√≥n subclasses de QObject
      typedef GenericFactory<Vehicle, std::string> VehicleFactory;
 
      VehicleFactory vehicles;
      
-     //.. AquÌ haurÌem de registrar les diferents classes amb el Factory.
+     //.. Aqu√≠ haur√≠em de registrar les diferents classes amb el Factory.
      //   Veure GenericFactoryRegister per tenir una manera de fer-ho senzillament
      
      Vehicle* vehicle = vehicles->create("cotxe");
@@ -41,16 +41,16 @@ namespace udg {
 
      std::cout<< "Total de rodes = " << vehicle->getNumeroRodes() + vehicle2->getNumeroRodes() << std::endl;
 
-     //.. AixÚ imprimiria "Total de rodes = 6" suposant que cotxe retornes 4 i motocicleta 2.
+     //.. Aix√≤ imprimiria "Total de rodes = 6" suposant que cotxe retornes 4 i motocicleta 2.
     @endcode
-    Tot i que en l'exemple no es faci, caldria mirar si l'objecte retornat Ès NULL o no ho Ès.
+    Tot i que en l'exemple no es faci, caldria mirar si l'objecte retornat √©s NULL o no ho √©s.
     
-    Aquesta classe s'utilitzar‡, la majoria de les vegades, amb un singleton per facilitar-ne el registre i l'accÈs perÚ no tÈ perquË.
+    Aquesta classe s'utilitzar√†, la majoria de les vegades, amb un singleton per facilitar-ne el registre i l'acc√©s per√≤ no t√© perqu√®.
     
-    @TODO Si s'utilitza aquesta classe conjuntament amb un singleton nomÈs es podr‡ tenir un objecte de cada tipus.
-    @TODO En cas que fos necessari s'hauria de fer l'implementaciÛ mÈs genËrica per permetre de 0 a n par‡metres en el constructor i no
+    @TODO Si s'utilitza aquesta classe conjuntament amb un singleton nom√©s es podr√† tenir un objecte de cada tipus.
+    @TODO En cas que fos necessari s'hauria de fer l'implementaci√≥ m√©s gen√®rica per permetre de 0 a n par√†metres en el constructor i no
           no obligar a que els objectes creat heretin de QObject.
-    @author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
     @see GenericSingletonFactoryRegister
     @see ExtensionFactory
 */
@@ -66,11 +66,11 @@ public:
     GenericFactory(){}
 
     /**
-     * MËtode que serveix per registrar una funciÛ de creaciÛ d'una classe.
-     * Aquest mËtode Ès el que s'ha de fer servir per tal de poder registrar una determinada classe en el factory.
+     * M√®tode que serveix per registrar una funci√≥ de creaci√≥ d'una classe.
+     * Aquest m√®tode √©s el que s'ha de fer servir per tal de poder registrar una determinada classe en el factory.
      * @param className Nom de la classe que es vol registrar.
-     * @param function FunciÛ del tipus BaseClassCreateFunction que ens retorna un objecte de la classe className.
-     *                 Aquest mËtode el dona, autom‡ticament, la classe GenericFactoryRegister.
+     * @param function Funci√≥ del tipus BaseClassCreateFunction que ens retorna un objecte de la classe className.
+     *                 Aquest m√®tode el dona, autom√†ticament, la classe GenericFactoryRegister.
      */
     void registerCreateFunction(const ClassIdentifier &className, BaseClassCreateFunction function)
     {
@@ -78,10 +78,10 @@ public:
     }
 
     /**
-     * MËtode que ens crea l'objecte que vingui definit per l'identificador. El retorna del tipus BaseClass.
+     * M√®tode que ens crea l'objecte que vingui definit per l'identificador. El retorna del tipus BaseClass.
      * @param className Nom de la classe que volem que faci l'objecte
-     * @param parent QObject pare de l'objecte que es crear‡.
-     * @return Retorna l'objecte convertit a la classe base BaseClass. En cas que no trobi l'objecte o error retornar‡ NULL.
+     * @param parent QObject pare de l'objecte que es crear√†.
+     * @return Retorna l'objecte convertit a la classe base BaseClass. En cas que no trobi l'objecte o error retornar√† NULL.
      */
     BaseClass* create(const ClassIdentifier &className, ParentType* parent = 0) const
     {

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -49,7 +49,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
     bool existsError = true;
 
 #ifdef _WIN32
-#error MËtode no comprovat en win32. Cal descomentar i comprovar-ho.
+#error M√®tode no comprovat en win32. Cal descomentar i comprovar-ho.
     /*
     ULARGE_INTEGER totalBytes;
     
@@ -84,7 +84,7 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
     bool existsError = true;
 
 #ifdef _WIN32
-#error MËtode no comprovat en win32. Cal descomentar i comprovar-ho.
+#error M√®tode no comprovat en win32. Cal descomentar i comprovar-ho.
     /*
     ULARGE_INTEGER freeBytes;
     

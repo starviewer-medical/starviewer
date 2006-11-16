@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,7 +14,7 @@ class string;
 
 namespace udg {
 
-/** Aquesta classe és permet organitzar els estudis per a que l'starviewer els pugui visualitzar
+/** Aquesta classe Ã©s permet organitzar els estudis per a que l'starviewer els pugui visualitzar
 @author marc
 */
 class StudyVolum
@@ -23,12 +23,12 @@ class StudyVolum
 public:
     StudyVolum();
     
-    /** Permet afegir una sèrie a aquest estudi. S'utilitza per especificar quines sèries te un estudi
+    /** Permet afegir una sÃ¨rie a aquest estudi. S'utilitza per especificar quines sÃ¨ries te un estudi
      * @param SeriesVolum SeriesVolum a afegir
      */
     void addSeriesVolum(SeriesVolum);
 
-    /** Retorna el número de series que conte l'estudi
+    /** Retorna el nÃºmero de series que conte l'estudi
      * @return retorna el numero de series de l'estudi
      */
     int getNumberOfSeries();
@@ -110,7 +110,7 @@ public:
     std::string getPatientAge();
 
     /** retorna la serie que s'ha d'obrir de l'estudi en el visualitzador per defecte
-     * @return UID de la sèrie a visualitzar
+     * @return UID de la sÃ¨rie a visualitzar
      */
     std::string getDefaultSeriesUID();
     
@@ -142,7 +142,7 @@ private:
     std::string m_patientName;
     std::string m_patientId;
     std::string m_patientAge;
-    std::string m_defaultSeriesUID;//conté el UID de la serie que s'ha visualitzar per defecte, ja que quant visualitzem només s'obrira una sèrie de l'estudi
+    std::string m_defaultSeriesUID;//contÃ© el UID de la serie que s'ha visualitzar per defecte, ja que quant visualitzem nomÃ©s s'obrira una sÃ¨rie de l'estudi
     
     std::vector <SeriesVolum> m_vectorStudyVolum;
     std::vector <SeriesVolum>::iterator i;

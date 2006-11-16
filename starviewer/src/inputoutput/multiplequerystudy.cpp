@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,7 +16,7 @@
 
 namespace udg {
 
-// Per raons d'optimitzaciÛ nomes es podran tenir un lÌmit threads alhora executant la query, per aconseguir aixÚ utilitzem un sem‡for
+// Per raons d'optimitzaci√≥ nomes es podran tenir un l√≠mit threads alhora executant la query, per aconseguir aix√≤ utilitzem un sem√†for
 sem_t *activeThreads;
 
 MultipleQueryStudy::MultipleQueryStudy( QObject *parent )
@@ -70,7 +70,7 @@ Status MultipleQueryStudy::StartQueries()
            
     while ( !m_pacsList.end() ) //Anem creant threads per cercar
     {
-        //aquest signal ha de ser QDirectConnection, pq sera el propi thread qui executara l'slot d'alliberar un recurs del semafor, si fos queued, hauria de ser el pare qui respongues al signal, pero com estaria fent el sem_wait no respondria mai! i tindrÌem deadlock
+        //aquest signal ha de ser QDirectConnection, pq sera el propi thread qui executara l'slot d'alliberar un recurs del semafor, si fos queued, hauria de ser el pare qui respongues al signal, pero com estaria fent el sem_wait no respondria mai! i tindr√≠em deadlock
         connect( &m_thread[i] , SIGNAL( finished() ) , this , SLOT( threadFinished() ) , Qt::DirectConnection );
         connect( &m_thread[i] , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
         connect( &m_thread[i] , SIGNAL( errorQueringStudiesPacs( int ) ) , this , SLOT ( slotErrorQueringStudiesPacs( int  ) ) );

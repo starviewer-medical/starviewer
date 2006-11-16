@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -9,7 +9,7 @@
 #define UDGMATHTOOLS_H
  
 /**
-    Aquest arxiu recull tot tipus de funcions matemàtiques útils
+    Aquest arxiu recull tot tipus de funcions matemÃ tiques Ãºtils
 */
 #include <cmath>
  
@@ -25,10 +25,10 @@ static double Epsilon() { return 1E-9; };
 /// Logaritme en base 2
 static double logTwo(const double x, const bool zero = true);
 
-/// Càlcul de l'entropia binària
+/// CÃ lcul de l'entropia binÃ ria
 static double binaryEntropy(const double p);
 
-/// Divisió reals
+/// DivisiÃ³ reals
 static double divReal( const double dividend, const double divisor, const bool zero = true, const double value = 0);
 
 /// Definim un rang pel que un nombre pot considerar-se 0
@@ -42,12 +42,12 @@ static double angleInRadians( double vec1[3] , double vec2[3] );
 /// Calcula l'angle entre dos vectors. Retorna el valor en graus
 static double angleInDegrees( double vec1[3] , double vec2[3] );
    
-/// Calcula la intersecció de dos plans definits per un punt i una normal (p,n) i (q,m) respectivament
-/// Retorna 0 si els plans no intersecten perquè són paral·lels , altrament >0
+/// Calcula la intersecciÃ³ de dos plans definits per un punt i una normal (p,n) i (q,m) respectivament
+/// Retorna 0 si els plans no intersecten perquÃ¨ sÃ³n paralÂ·lels , altrament >0
 static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] ); 
 
-/// Calcula la intersecció de tres plans definits per un punt i una normal (p,n) , (q,m) , (r,t) respectivament
-/// Retorna 0 si ... -1 si ... perquè són paral·lels , altrament >0
+/// Calcula la intersecciÃ³ de tres plans definits per un punt i una normal (p,n) , (q,m) , (r,t) respectivament
+/// Retorna 0 si ... -1 si ... perquÃ¨ sÃ³n paralÂ·lels , altrament >0
 static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] );    
 };
 

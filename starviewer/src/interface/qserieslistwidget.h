@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -13,7 +13,7 @@
 
 namespace udg {
 
-/** Aquesta classe Ès un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sËries d'un estudi. 
+/** Aquesta classe √©s un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les s√®ries d'un estudi. 
 @author marc
 */
 
@@ -31,12 +31,12 @@ public:
     ///constructor de la classe
     QSeriesListWidget( QWidget *parent = 0 );
 
-    /** Insereix l'informaciÛ d'una sËrie al ListICon
-     * @param descripciÛ de la sËrie
+    /** Insereix l'informaci√≥ d'una s√®rie al ListICon
+     * @param descripci√≥ de la s√®rie
      */
     void insertSeries( Series *serie );
     
-    ///Neteja el ListWidget de sËries
+    ///Neteja el ListWidget de s√®ries
     void clear();
     
     /// Destructor de la classe
@@ -47,17 +47,17 @@ public slots:
     /// Slot, que al rebre la senya del QStudyTreeWidget neteja el ListWidget
     void clearSeriesListWidget();
     
-    /** Slot, que al rebre la senyal addSeries del del QStudyTreeWidget afegeix una sËrie al IconView
+    /** Slot, que al rebre la senyal addSeries del del QStudyTreeWidget afegeix una s√®rie al IconView
      *  @param serie 
      */
     void addSeries( Series *serie );
 
-    /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquË selecciona la mateixa serie que el QSeriesListWidget
+    /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perqu√® selecciona la mateixa serie que el QSeriesListWidget
      *  @param serie Seleccionada
      */
     void clicked( QListWidgetItem *item );
     
-    /** Slot que s'activa quant es selecciona una sËrie des del StudyTreeWidget,selecciona la serie del QStudyTreeWidget en el QSeriesListWidget
+    /** Slot que s'activa quant es selecciona una s√®rie des del StudyTreeWidget,selecciona la serie del QStudyTreeWidget en el QSeriesListWidget
      * @param  UID de la serie seleccionada
      */
     void selectedSeriesList( QString key );
@@ -69,10 +69,10 @@ public slots:
 
 signals :
     
-    ///quan seleccionem una sËrie emeiteix una signal per a que el QStudyTreeWidget, tingui seleccionada la mateixa sËrie
+    ///quan seleccionem una s√®rie emeiteix una signal per a que el QStudyTreeWidget, tingui seleccionada la mateixa s√®rie
     void selectedSeriesIcon( QString );
     
-    /// Quan es fa doble click emiteix un signal, perquË la sËrie sigui visualitzada
+    /// Quan es fa doble click emiteix un signal, perqu√® la s√®rie sigui visualitzada
     void viewSeriesIcon();
     
 private :

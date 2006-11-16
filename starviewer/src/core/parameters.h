@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -12,12 +12,12 @@
 #include <QObject>
 
 /**
-    Classe base Parameters. Aquesta classe s'encarrega d'encapsular els par‡metres d'un mËtode
-    en concret. Aquesta proporciona la interfÌcie comuna per a totes les que heredin d'aquesta.
+    Classe base Parameters. Aquesta classe s'encarrega d'encapsular els par√†metres d'un m√®tode
+    en concret. Aquesta proporciona la interf√≠cie comuna per a totes les que heredin d'aquesta.
     
-    Proporciona un signal changed(int) el qual indicar‡ quin par‡metre s'ha actualitzat. El par‡metre 
-    d'aquest signal ser‡ un Ìndex que identifica quin par‡metre ha canviat. Les sub-classes tindran
-    un tipus enumerat que far‡ d'Ìndex per cada par‡metre
+    Proporciona un signal changed(int) el qual indicar√† quin par√†metre s'ha actualitzat. El par√†metre 
+    d'aquest signal ser√† un √≠ndex que identifica quin par√†metre ha canviat. Les sub-classes tindran
+    un tipus enumerat que far√† d'√≠ndex per cada par√†metre
 */
 
 namespace udg{
@@ -30,8 +30,8 @@ public:
     virtual ~Parameters();
 
 signals:
-    /// indica a les interfÌcies que un dels seus par‡metres s'ha actualitzat
-    /// El par‡metre Ès un enter que identifica el par‡metre
+    /// indica a les interf√≠cies que un dels seus par√†metres s'ha actualitzat
+    /// El par√†metre √©s un enter que identifica el par√†metre
     void changed( int ); 
 
 };

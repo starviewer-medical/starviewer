@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -49,7 +49,7 @@ bool Output::saveFile( const char* filename )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "ExcepciÛ escrivint l'arxiu [" + QString::fromLatin1(filename) + "]" ) );
+        WARN_LOG( qPrintable( "Excepci√≥ escrivint l'arxiu [" + QString::fromLatin1(filename) + "]" ) );
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
@@ -63,7 +63,7 @@ bool Output::saveFile( const char* filename )
 bool Output::saveSeries( const char* filename , int slice )
 {
 /*
-TIFF i PNG nomÈs suporten unsigned chars i unsigned shorts, BMP nomes uchars, per tant per aquests 3 formats fem rescale a uchar ( 0-255 )
+TIFF i PNG nom√©s suporten unsigned chars i unsigned shorts, BMP nomes uchars, per tant per aquests 3 formats fem rescale a uchar ( 0-255 )
 
 Sempre s'ha de fer un casting ( i un rescale image? )
 */
@@ -81,8 +81,8 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     }
     else
     {    
-        // escriure la indicada, comprovar que no sobrepassa el lÌmit, perÚ aixÚ ja tindria que venir bÈ
-        // segurament el que caldria fer Ès canviar l'input ( fer un "reslice" i extrure les llesques requerides)
+        // escriure la indicada, comprovar que no sobrepassa el l√≠mit, per√≤ aix√≤ ja tindria que venir b√©
+        // segurament el que caldria fer √©s canviar l'input ( fer un "reslice" i extrure les llesques requerides)
     }
     
     RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
@@ -91,7 +91,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     rescaler->SetOutputMaximum( 255 );
     m_seriesWriter->SetInput( rescaler->GetOutput() );    
 
-    // el format del fitxer ser‡ NomDelFitxerXXXX.extensio on XXXX ser‡ el n∫ de llesca. El n∫ de llesca ser‡ de com a m‡xim 4 dÌgits
+    // el format del fitxer ser√† NomDelFitxerXXXX.extensio on XXXX ser√† el n¬∫ de llesca. El n¬∫ de llesca ser√† de com a m√†xim 4 d√≠gits
     QString seriesFormat;
     seriesFormat.sprintf( "%s/%s-%%04d.%s" , qPrintable( QFileInfo( filename ).dir().absolutePath() ) , qPrintable( QFileInfo( filename ).completeBaseName() ) , qPrintable( QFileInfo( filename ).suffix() ) );
     
@@ -110,7 +110,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "ExcepciÛ escrivint l'arxiu [" + QString::fromLatin1( filename ) +"]" ) );
+        WARN_LOG( qPrintable( "Excepci√≥ escrivint l'arxiu [" + QString::fromLatin1( filename ) +"]" ) );
         std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
@@ -122,7 +122,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
 void Output::setInput(Volume* data)
 { 
     m_volumeData = data; 
-    // podrÌem decidir entre fer aixÚ abans o
+    // podr√≠em decidir entre fer aix√≤ abans o
     m_writer->SetInput( m_volumeData->getItkData() );
     
 };

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,19 +14,19 @@
 namespace udg {
 
 /** Defineix les possibles operacions que es poden dur a terme amb el PACS, descarregar imatges i visualitzar images (la cerca es tracta en d'altres classes )
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Operation{
 
 public:
     Operation();
     
-    /** Especifica la m‡scara de l'estudi per aquella operacio,
-     * @param m‡scara de l'estudi
+    /** Especifica la m√†scara de l'estudi per aquella operacio,
+     * @param m√†scara de l'estudi
      */
     void setStudyMask( StudyMask mask );
     
-    /** Estableix la prioritat de l'aplicaciÛ si no s'especifica, el setOperation automaticament l'assigna en funciÛ del tipus d'operacio
+    /** Estableix la prioritat de l'aplicaci√≥ si no s'especifica, el setOperation automaticament l'assigna en funci√≥ del tipus d'operacio
      * @param prioritat
      * High = 0
      * Normal = 50
@@ -34,7 +34,7 @@ public:
      */
     void setPriority( int priority );
     
-    /** Especifica quina operacio es portara a terma en aquesta operacio, si no s'ha assignat prioritat, aquest mËtode l'assigna en funciÛ de l'operaciÛ
+    /** Especifica quina operacio es portara a terma en aquesta operacio, si no s'ha assignat prioritat, aquest m√®tode l'assigna en funci√≥ de l'operaci√≥
      * @param operacio a realitzar
      * Retrieve = 1
      * Print = 2
@@ -47,13 +47,13 @@ public:
      */
     void setPacsParameters( PacsParameters parameters );
 
-   /** Retorna la m‡scara de l'estudi
-    * @return m‡scara de l'estudi
+   /** Retorna la m√†scara de l'estudi
+    * @return m√†scara de l'estudi
     */        
     StudyMask getStudyMask();
     
-    /** Retorna la prioritat de l'operaciÛ
-     * @return prioritat de l'operaciÛ
+    /** Retorna la prioritat de l'operaci√≥
+     * @return prioritat de l'operaci√≥
      */    
     int getPriority();
     
@@ -70,22 +70,22 @@ public:
     /// Operador per ordernar per prioritats
     bool operator < ( Operation ) const;
     
-    /** defineix el nom del pacient pel qual es portar‡ a terme l'operacio
+    /** defineix el nom del pacient pel qual es portar√† a terme l'operacio
      * @param patientName nom del pacient
      */
     void setPatientName( QString patientName );
 
-    /** defieneix el patient ID pel qual es potar‡ a terma l'operaciÛ
+    /** defieneix el patient ID pel qual es potar√† a terma l'operaci√≥
      * @param patientID id del pacient
      */
     void setPatientID( QString patientID );
 
-    /** defineix el uid de l'estudi amb el qual es portar‡ a terme l'operaciÛ
+    /** defineix el uid de l'estudi amb el qual es portar√† a terme l'operaci√≥
      * @param studyUID uid de l'estudi
      */
     void setStudyUID( QString studyUID );
     
-    /** defineix el id de l'estudi amb el qual es dur a terme l'operaciÛ
+    /** defineix el id de l'estudi amb el qual es dur a terme l'operaci√≥
      * @param studyID id de l'estudi
      */
     void setStudyID( QString studyID );
@@ -93,22 +93,22 @@ public:
 	///Destructor de la classe
     ~Operation();
     
-    /** retorna el nom del pacient de l'estudi pel que es dur a terme l'operaciÛ
+    /** retorna el nom del pacient de l'estudi pel que es dur a terme l'operaci√≥
      * @return nom del pacient
      */
     QString getPatientName();
     
-    /** retorna el id del paicent de l'estudi pel que es dur a terme l'operaciÛ
+    /** retorna el id del paicent de l'estudi pel que es dur a terme l'operaci√≥
      * @return id del pacient
      */
     QString getPatientID();
     
-    /** retorna el id de l'estudi pel que es dur a terme l'operaciÛ
+    /** retorna el id de l'estudi pel que es dur a terme l'operaci√≥
      * @return id de l'estudi
      */
     QString getStudyID();
     
-    /** retorna el UID  de l'estudi pel que es dur a terme l'operaciÛ
+    /** retorna el UID  de l'estudi pel que es dur a terme l'operaci√≥
      * @return UID de l'estudi
      */
     QString getStudyUID();

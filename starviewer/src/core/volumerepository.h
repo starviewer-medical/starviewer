@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,12 +17,12 @@ namespace udg {
 
 
 /**
-    Aquesta classe Ès el repositori de volums. En aquesta classe es guarden tots els volums que hi ha oberts durant
-    l'execuciÛ del programa. NomÈs hi haura una sola inst‡ncia en tota la vida del programa d'aquesta classe. 
-    Per fer-ho s'aplica el patrÛ Singleton.
+    Aquesta classe √©s el repositori de volums. En aquesta classe es guarden tots els volums que hi ha oberts durant
+    l'execuci√≥ del programa. Nom√©s hi haura una sola inst√†ncia en tota la vida del programa d'aquesta classe. 
+    Per fer-ho s'aplica el patr√≥ Singleton.
     
-    Per poder obtenir una inst‡ncia del repositori hem de fer un include del fitxer volumerepository.h i fer una crida 
-    al mËtode VolumeRepository::getRepository(). Aquest ens retornar‡ un punter al repositori de volums.
+    Per poder obtenir una inst√†ncia del repositori hem de fer un include del fitxer volumerepository.h i fer una crida 
+    al m√®tode VolumeRepository::getRepository(). Aquest ens retornar√† un punter al repositori de volums.
     
     Exemple:
     
@@ -45,7 +45,7 @@ public:
 
     /**
         Afegeix un volum al repositori.
-        Ens retorna l'id del volum afegit per poder-lo obtenir mÈs endavant.
+        Ens retorna l'id del volum afegit per poder-lo obtenir m√©s endavant.
     */    
     Identifier addVolume( Volume *model ); 
     
@@ -58,7 +58,7 @@ public:
     /// Retorna el nombre de volums que hi ha al repositori
     int getNumberOfVolumes();
     
-    /// Ens retorna l'˙nica inst‡ncia del repositori.
+    /// Ens retorna l'√∫nica inst√†ncia del repositori.
     static VolumeRepository* getRepository()
     {   
         static VolumeRepository repository;
@@ -73,7 +73,7 @@ signals:
     void itemRemoved( Identifier id );
             
 private:
-    /// ha de quedar amagat perquË no poguem crear inst‡ncies
+    /// ha de quedar amagat perqu√® no poguem crear inst√†ncies
     VolumeRepository();                 
 };
 

@@ -54,7 +54,7 @@ class StudyList
     /// neteja la llista d'estudis
     void clear();
     
-    ///compta quants elements té la llista
+    ///compta quants elements tÃ© la llista
     int count();
     
  private :

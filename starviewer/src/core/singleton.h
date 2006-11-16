@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -10,9 +10,9 @@
 namespace udg {
 
 /**
-    Classe que implementa el pattern singleton. La implementaciÛ no Ès thread-safe, per tant, no s'hauria d'utilitzar des de diferents
-    threads. Qualsevol classe que es vulgui convertir a Singleton haur‡ de tenir un constructor sense par‡metres.
-    La manera d'utilitzar-la seria la seg¸ent:
+    Classe que implementa el pattern singleton. La implementaci√≥ no √©s thread-safe, per tant, no s'hauria d'utilitzar des de diferents
+    threads. Qualsevol classe que es vulgui convertir a Singleton haur√† de tenir un constructor sense par√†metres.
+    La manera d'utilitzar-la seria la seg√ºent:
     \code
     typedef Singleton<TestingClass> TestingClassSingleton;
     ...
@@ -20,29 +20,29 @@ namespace udg {
     instance->metode();
     ...
     \endcode
-    Com es pot veure, Ès molt recomenable utilizar un typedef per tal de que no disminueixi la llegibilitat del codi. Aquesta manera
-    d'utilitzar el singleton Ès perillosa si es vol que no hi pugui haver cap altra inst‡ncia de la classe TestingClass. D'aquesta manera
-    el que s'est‡ fent Ès garantir que del tipus TestingClassSingleton tindrem una inst‡ncia globalment accessible. PerÚ res ens impedeix
+    Com es pot veure, √©s molt recomenable utilizar un typedef per tal de que no disminueixi la llegibilitat del codi. Aquesta manera
+    d'utilitzar el singleton √©s perillosa si es vol que no hi pugui haver cap altra inst√†ncia de la classe TestingClass. D'aquesta manera
+    el que s'est√† fent √©s garantir que del tipus TestingClassSingleton tindrem una inst√†ncia globalment accessible. Per√≤ res ens impedeix
     crear classes del tipus TestingClass a part.
-    Una altra manera de declarar una classe com a singleton seria la seg¸ent:
+    Una altra manera de declarar una classe com a singleton seria la seg√ºent:
     \code
     class OnlyOne : public Singleton<OnlyOne>
     {
         //..resta del codi
     };
     \endcode
-    D'aquesta forma sÌ que estem assegurant que de la classe OnlyOne, en tota la vida del programa, nomÈs n'hi haur‡ una i ser‡ la
-    mateixa per tota l'execuciÛ.
+    D'aquesta forma s√≠ que estem assegurant que de la classe OnlyOne, en tota la vida del programa, nom√©s n'hi haur√† una i ser√† la
+    mateixa per tota l'execuci√≥.
     \todo Fer-la thread-safe.
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 template <typename T>
 class Singleton{
 
 public:
 
-    /// Ens serveix per accedir a l'˙nica inst‡ncia de la classe T
+    /// Ens serveix per accedir a l'√∫nica inst√†ncia de la classe T
     static T* instance()
     {
         static T theSingleInstance;

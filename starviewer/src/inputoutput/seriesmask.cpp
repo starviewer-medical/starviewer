@@ -54,7 +54,7 @@ Status SeriesMask:: setSeriesDate( std::string date )
 
     DcmElement *elem = newDicomElement( DCM_SeriesDate );
     
-    //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters) 
+    //pot venir la data amb format de 8 caracters, despres amb guio (9 cÃ ractes), o cerca entra dates (17 carÃ cters) 
     if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( error_MaskLengthDate );
     
     elem->putString( date.c_str() );

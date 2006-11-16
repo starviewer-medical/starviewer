@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -13,9 +13,9 @@
 namespace udg {
 
 /**
-    Encapsula un identificador numËric.
+    Encapsula un identificador num√®ric.
     
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 
 class Identifier
@@ -25,14 +25,14 @@ public:
     Identifier();
     Identifier( int id );
     
-    /// Constructor de cÚpia
+    /// Constructor de c√≤pia
     Identifier( const Identifier &id );
 
     ~Identifier();
 
     /// Li assigna un nou valor a l'identificador
     void setValue( int newId );
-    /// Ens indica si l'dentificador tÈ un valor v‡lid o no
+    /// Ens indica si l'dentificador t√© un valor v√†lid o no
     bool isNull();
     
     int getValue() const { return m_id; }

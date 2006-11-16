@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -29,7 +29,7 @@ CreateDicomdir::CreateDicomdir()
 
 void CreateDicomdir::setDevice( Device deviceToCreateDicomdir )
 {
-    //indiquem que el propÚsit d'aquest dicomdir
+    //indiquem que el prop√≤sit d'aquest dicomdir
     switch ( deviceToCreateDicomdir ) 
     {
         case harddisk :
@@ -64,13 +64,13 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     
     Status state;
     
-    //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destÌ
+    //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir dest√≠
     OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , opt_directory );
          
     //comprovem que el directori no estigui buit
     if ( fileNames.empty() ) 
     {     
-        ERROR_LOG ( "El directori origen est‡ buit" );
+        ERROR_LOG ( "El directori origen est√† buit" );
         state.setStatus( " no input files: the directory is empty " , false , 1301 );
         return state;
     }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -10,7 +10,7 @@
 namespace udg {
 
 /** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que l'aplicacio pugui funcionar correctament
- *	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+ *	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
  */
 class CacheInstallation
 {
@@ -24,7 +24,7 @@ public:
      */
     bool checkInstallationCacheImagePath();
    
-    /** Comprova que el directori on es guarda la base dades i la base de dades existeixin sinÛ l'intenta crear
+    /** Comprova que el directori on es guarda la base dades i la base de dades existeixin sin√≥ l'intenta crear
      * @return indica si la base de dades existeix
      */
     bool checkInstallationCacheDatabase();
@@ -44,7 +44,7 @@ public:
      */
     bool existsDatabaseFile();
     
-    /// reinstal∑lar la base de dades
+    /// reinstal¬∑lar la base de dades
     bool reinstallDatabaseFile();
     
     ///destructor de la classe

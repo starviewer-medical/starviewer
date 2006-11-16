@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -19,9 +19,9 @@ class Volume;
 class ToolsActionFactory;
 
 /**
-ExtensiÛ que s'executar‡ per defecte a l'obrir un model
+Extensi√≥ que s'executar√† per defecte a l'obrir un model
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Q2DViewerExtension : public QWidget , private Ui::Q2DViewerExtensionBase {
 Q_OBJECT
@@ -43,7 +43,7 @@ public slots:
     void changeViewToSingle();
     void changeViewToDouble();
 
-    /// Li assigna el volum secundari. Aquest mËtode nomÈs Ès de conveniËncia i Ès temporal
+    /// Li assigna el volum secundari. Aquest m√®tode nom√©s √©s de conveni√®ncia i √©s temporal
     void setSecondInput( Volume *input );
 
 private:
@@ -80,27 +80,27 @@ private:
     /// Grup de botons en format exclusiu
     QButtonGroup *m_toolsButtonGroup;
 
-    /// crea les accions \TODO 'pujar' al pare com a mËtode virtual com˙ a Extensions? [hauria de ser protected]
+    /// crea les accions \TODO 'pujar' al pare com a m√®tode virtual com√∫ a Extensions? [hauria de ser protected]
     void createActions();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-    /// El di‡leg per escollir un window level ajustat per l'usuari
+    /// El di√†leg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
 private slots:
-    /// Actua quan es canvia de p‡gina, Ès a dir es passa d'un determinat layout a un de simple, doble , triple , etc
+    /// Actua quan es canvia de p√†gina, √©s a dir es passa d'un determinat layout a un de simple, doble , triple , etc
     void pageChange( int index );
 
-    /// sincronitza les llesques de les sËries que es visualitzen
+    /// sincronitza les llesques de les s√®ries que es visualitzen
     void synchronizeSlices( bool ok );
 
-    /// ens permet escollir una nova sËrie per a comparar
+    /// ens permet escollir una nova s√®rie per a comparar
     void chooseNewSerie();
 
 signals:
-    /// Aquest senyal s'emetr‡ quan es vulgui canviar de sËrie per comparar
+    /// Aquest senyal s'emetr√† quan es vulgui canviar de s√®rie per comparar
     void newSerie();
 };
 

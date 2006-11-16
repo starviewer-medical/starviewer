@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -22,7 +22,7 @@ DatabaseConnection::DatabaseConnection()
    
    m_databasePath = settings.getDatabasePath().toAscii().constData();
    m_databaseLock = ( sem_t* ) malloc( sizeof( sem_t ) );
-   sem_init( m_databaseLock , 0 , 1 );//semafor que controlar‡ que nomes un thread a la vegada excedeixi a la cache
+   sem_init( m_databaseLock , 0 , 1 );//semafor que controlar√† que nomes un thread a la vegada excedeixi a la cache
    connectDB();
    
 }
@@ -74,7 +74,7 @@ Status DatabaseConnection::databaseStatus( int numState )
 	QString logMessage, codeError;
 
     switch(numState)
-    {//aqui tractem els errors que ens poden afectar de manera mÈs directe, i els quals l'usuari pot intentar solucionbar                         
+    {//aqui tractem els errors que ens poden afectar de manera m√©s directe, i els quals l'usuari pot intentar solucionbar                         
         case SQLITE_OK :        state.setStatus( "Normal" , true , 0 );
                                 break;
         case SQLITE_ERROR :     state.setStatus( "Database is corrupted or SQL error syntax " , false , 2001 );
@@ -87,9 +87,9 @@ Status DatabaseConnection::databaseStatus( int numState )
                                 break;
         case 50 :               state.setStatus( "Not connected to database" , false , 2050 );
                                 break;
-      //aquests errors en principi no es poden donar, pq l'aplicaciÛ no altera cap element de l'estructura, si es produeix algun
-      //Error d'aquests en principi ser‡ perquË la bdd est‡ corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
-      //a la p‡gina de www.sqlite.org podrem saber de quin error es tracta.
+      //aquests errors en principi no es poden donar, pq l'aplicaci√≥ no altera cap element de l'estructura, si es produeix algun
+      //Error d'aquests en principi ser√† perqu√® la bdd est√† corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
+      //a la p√†gina de www.sqlite.org podrem saber de quin error es tracta.
         default :               state.setStatus( "SQLITE internal error" , false , 2000 + numState ); 
                                 break;
     }

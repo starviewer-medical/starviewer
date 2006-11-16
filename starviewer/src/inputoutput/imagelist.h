@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -36,10 +36,10 @@ public:
      */
     void insert(Image);
         
-     ///Aquesta accio situa l'iterador de la llista al primer element de la llista abans de començar a llegir s'ha d'invocar aquest mètode
+     ///Aquesta accio situa l'iterador de la llista al primer element de la llista abans de comenÃ§ar a llegir s'ha d'invocar aquest mÃ¨tode
     void firstImage();
     
-    /// l'iterador passa a apuntar al següent element
+    /// l'iterador passa a apuntar al segÃ¼ent element
     void nextImage();
     
     /** Indica si s'ha arribat al final de la llista
@@ -47,8 +47,8 @@ public:
      */
     bool end();    
 
-    /** retorna el número d'imatges de la llista
-     * @return  número d'imatges de la llista
+    /** retorna el nÃºmero d'imatges de la llista
+     * @return  nÃºmero d'imatges de la llista
      */
     int count();
   
@@ -57,7 +57,7 @@ public:
      */
     Image getImage();
     
-    /// Aquest mètode buida la llista
+    /// Aquest mÃ¨tode buida la llista
     void clear();
          
  private :

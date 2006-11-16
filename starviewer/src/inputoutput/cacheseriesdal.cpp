@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -59,7 +59,7 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -92,13 +92,13 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
     
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
     while (i <= rows )
     {   
         series.setSeriesUID( resposta [ 0 + i * columns ] );
@@ -149,7 +149,7 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }

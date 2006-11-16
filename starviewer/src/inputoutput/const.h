@@ -7,7 +7,7 @@
 
 /**      Codi d'errors
                 0         - Exit
-                1100-1199 - S'utilitza per descriure errors en la m‡scara de cerca
+                1100-1199 - S'utilitza per descriure errors en la m√†scara de cerca
                 1200-1299 - Errors relacionats amb la connexio
                 1300-1399 - Errors relacionats amb l'operacio find
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -27,13 +27,13 @@ public:
      */
     void insertPacs( PacsParameters );
 	
-    /// Apunta al següent Objecte PacsParameters
+    /// Apunta al segÃ¼ent Objecte PacsParameters
     void nextPacs();
 
-    /// Posiciona l'iterador de la llistat a la primera posició
+    /// Posiciona l'iterador de la llistat a la primera posiciÃ³
     void firstPacs();
     
-    /** cerca un pacs a la llista a través del seu AETitle
+    /** cerca un pacs a la llista a travÃ©s del seu AETitle
      * @param AETitle del pacs a cercar
      */
     bool findPacs( std::string );
@@ -43,8 +43,8 @@ public:
      */
     PacsParameters getPacs();
     
-    /** Retorna el número d'elements de la llista
-     * @return Retorna el número d'elements de la llista
+    /** Retorna el nÃºmero d'elements de la llista
+     * @return Retorna el nÃºmero d'elements de la llista
      */    	
     int size();
 

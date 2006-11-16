@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,7 +17,7 @@ namespace udg {
 class ProcessImage;
 class Image;
 class string;
-/** Aquesta Ès una classe singleton que contÈ una col.leciÛ d'objectes ProcessImage. La classe Ès necessaria per poder descarregar estudis simult‡niament ja que per cada estudi que Ès descarrega, a travÈs del seu studyUID tÈ associat un ProcessImage, que Ès que s'encarrega de dur a terme les accions pertinents desprÈs de la descËrrega de cada imatge.
+/** Aquesta √©s una classe singleton que cont√© una col.leci√≥ d'objectes ProcessImage. La classe √©s necessaria per poder descarregar estudis simult√†niament ja que per cada estudi que √©s descarrega, a trav√©s del seu studyUID t√© associat un ProcessImage, que √©s que s'encarrega de dur a terme les accions pertinents despr√©s de la desc√®rrega de cada imatge.
  *
 @author marc
  */
@@ -29,9 +29,9 @@ public:
      */
     static ProcessImageSingleton* getProcessImageSingleton();
  
-    /** Afegeix un nou objecte ProcessImage, que s'encarregarr‡ de processar la informaciÛ de cada imatge descarregada
+    /** Afegeix un nou objecte ProcessImage, que s'encarregarr√† de processar la informaci√≥ de cada imatge descarregada
      * @param UID de l'estudi
-     * @param Objecte processimage que tractar‡ la descarrega d'imatges
+     * @param Objecte processimage que tractar√† la descarrega d'imatges
      */
     void addNewProcessImage( std::string , ProcessImage * );
 
@@ -51,12 +51,12 @@ public:
      */
     bool delProcessImage( std::string );    
 
-    /** Estableix el path on s'han de guardar les imatges de la cachÈ
+    /** Estableix el path on s'han de guardar les imatges de la cach√©
      * @param path de la cache on es guarden les imatges
      */
     void setPath( std::string );
 
-    /** retorna el path de la cachÈ on s'han de guardar les imatges
+    /** retorna el path de la cach√© on s'han de guardar les imatges
      * @return path de la cache
      */
     std::string getPath();

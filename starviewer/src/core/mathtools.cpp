@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -32,7 +32,7 @@ double MathTools::logTwo(const double x, const bool zero)
     }
 }
 
-/// Càlcul de l'entropia binària
+/// CÃ lcul de l'entropia binÃ ria
 double MathTools::binaryEntropy(const double p)
 {
     if ( p < 0 || p > 1 )
@@ -77,14 +77,14 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
         return 0;
     }
     //
-    // solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 64
+    // soluciÃ³ extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pÃ g. 64
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen; n: normal
     // pla2 definit per (q,m); q: punt del pla, p.ex. origen; m: normal
-    // línia d'intersecció (r,t); r: punt de la recta que pertany a tots dos plans; t: vector director
+    // lÃ­nia d'intersecciÃ³ (r,t); r: punt de la recta que pertany a tots dos plans; t: vector director
     // u: vector perpendicular a n i t;
     // Cross: producte vectorial
     // Dot: producte escalar
-    // * : multiplicació de vectors
+    // * : multiplicaciÃ³ de vectors
     // + : suma de vectors
     //
     // ******* FORMULETA *************
@@ -120,24 +120,24 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
 int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] )
 {
     //
-    // solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
+    // soluciÃ³ extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pÃ g. 65
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen, n: normal del pla
     // pla2 definit per (q,m); 
     // pla3 definit per (r,t);
-    // la intersecció serà un punt w
-    // si w = p + a·n + b·m + c·t
+    // la intersecciÃ³ serÃ  un punt w
+    // si w = p + aÂ·n + bÂ·m + cÂ·t
     // llavors caldria resoldre el sistema lineal
-    // pw · n  = 0 , qw · m = 0 , rw · t = 0
+    // pw Â· n  = 0 , qw Â· m = 0 , rw Â· t = 0
     // per a, b i c 
     //
-    // o bé calcular la línia d'intersecció entre dos plans i el punt d'intersecció de la línia amb el pla restant
+    // o bÃ© calcular la lÃ­nia d'intersecciÃ³ entre dos plans i el punt d'intersecciÃ³ de la lÃ­nia amb el pla restant
     //
-    // Sembla més fàcil la segona opció
+    // Sembla mÃ©s fÃ cil la segona opciÃ³
     double point[3] , vector[3];
     planeIntersection( p , n , q , m , point , vector );
-    //càlcul intersecció línia pla
-    // Línia representada per punt i vector(p,t), pla per punt(origen) i normal (r,n), q és la intersecció
-    // q = p + (pr·n)t / (t·n)
+    //cÃ lcul intersecciÃ³ lÃ­nia pla
+    // LÃ­nia representada per punt i vector(p,t), pla per punt(origen) i normal (r,n), q Ã©s la intersecciÃ³
+    // q = p + (prÂ·n)t / (tÂ·n)
     
     double tt , point2[3];
     point2[0] = point[0] + vector[0];
@@ -145,15 +145,15 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     point2[2] = point[2] + vector[2];
     
     
-    // li donem una recta definida per dos punts , i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
+    // li donem una recta definida per dos punts , i el pla definit per la normal i un punt. T Ã©s la coordenada paramÃ¨trica al llarg de la recta i el punt de la intersecciÃ³ queda a intersectPoint
     
     if( vtkPlane::IntersectWithLine( point , point2 , t , r ,  tt , intersectionPoint ) == 0 )
     {
-        // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
+        // si retorna 0 Ã©s que o bÃ© lÃ­nia i pla no intersecten o sÃ³n paralels entre sÃ­
         if( tt == VTK_DOUBLE_MAX )
         {
             std::ostringstream message;
-            message << "No hi ha hagut intersecció! Valor coord paramètrica: " << tt;
+            message << "No hi ha hagut intersecciÃ³! Valor coord paramÃ¨trica: " << tt;
             DEBUG_LOG( message.str() )
             return -1;
         }

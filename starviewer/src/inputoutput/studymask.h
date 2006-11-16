@@ -26,8 +26,8 @@
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h> //provide the OFcondition structure and his members
 
-/** Aquesta classe construeix una m‡scara per la cerca d'estudis. 
-   *Cada camp que volem que la cerca ens retorni li hem de fer el set, sinÛ retornar‡ valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscar‡ tots els valors d'aquell camp, o passar-li un valor en concret, on nomÈs retornar‡ els compleixin aquell criteri.
+/** Aquesta classe construeix una m√†scara per la cerca d'estudis. 
+   *Cada camp que volem que la cerca ens retorni li hem de fer el set, sin√≥ retornar√† valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscar√† tots els valors d'aquell camp, o passar-li un valor en concret, on nom√©s retornar√† els compleixin aquell criteri.
  */
 namespace udg{
 
@@ -47,12 +47,12 @@ public:
      */
     Status setPatientName(std::string);
     
-    /** Aquest mËtode especifica la data de naixement del pacient amb la que s'han de cercar els estudis. El format Ès DDMMYYYY
-     * Si el par‡metre no tÈ valor, busca per totes les dates
-     * Si passem una data sola, per exemple 20040505 nomÈs buscara sËries d'aquell dia
-     * Si passem una data amb un guio a davant, per exemple -20040505 , buscar‡ sËries fetes aquell dia o abans
-     * Si passem una data amb un guio a darrera, per exemple 20040505- , buscar‡ series fetes aquell dia, o dies posteriors
-     * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscar‡ sËries fetes entre aquelles dos dates
+    /** Aquest m√®tode especifica la data de naixement del pacient amb la que s'han de cercar els estudis. El format √©s DDMMYYYY
+     * Si el par√†metre no t√© valor, busca per totes les dates
+     * Si passem una data sola, per exemple 20040505 nom√©s buscara s√®ries d'aquell dia
+     * Si passem una data amb un guio a davant, per exemple -20040505 , buscar√† s√®ries fetes aquell dia o abans
+     * Si passem una data amb un guio a darrera, per exemple 20040505- , buscar√† series fetes aquell dia, o dies posteriors
+     * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscar√† s√®ries fetes entre aquelles dos dates
      * @param  Study's Data de naixement del pacient
      * @return state of the method 
      */
@@ -82,12 +82,12 @@ public:
      */
     Status setStudyId(std::string);
     
-    /** Aquest mËtode especifica la data amb la que s'han de cercar els estudis. El format Ès DDMMYYYY
-     * Si el par‡metre no tÈ valor, busca per totes les dates
-     * Si passem una data sola, per exemple 20040505 nomÈs buscara sËries d'aquell dia
-     * Si passem una data amb un guio a davant, per exemple -20040505 , buscar‡ sËries fetes aquell dia o abans
-     * Si passem una data amb un guio a darrera, per exemple 20040505- , buscar‡ series fetes aquell dia, o dies posteriors
-     * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscar‡ sËries fetes entre aquelles dos dates
+    /** Aquest m√®tode especifica la data amb la que s'han de cercar els estudis. El format √©s DDMMYYYY
+     * Si el par√†metre no t√© valor, busca per totes les dates
+     * Si passem una data sola, per exemple 20040505 nom√©s buscara s√®ries d'aquell dia
+     * Si passem una data amb un guio a davant, per exemple -20040505 , buscar√† s√®ries fetes aquell dia o abans
+     * Si passem una data amb un guio a darrera, per exemple 20040505- , buscar√† series fetes aquell dia, o dies posteriors
+     * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscar√† s√®ries fetes entre aquelles dos dates
      * @param  Study's date of the study to search.
      * @return state of the method 
      */
@@ -107,12 +107,12 @@ public:
     
     /** Especifica l'hora de l'estudi a buscar, les hores es passen en format HHMM
      *         Si es buit busca per qualsevol hora.
-     *         Si se li passa una hora com 1753, buscar‡ series d'aquella hora
-     *         Si se li passa una hora amb guiÛ a davant, com -1753 , buscar‡ sËries d'aquella hora o fetes abans
-     *         Si se li passa una hora amb guiÛ a darrera, com 1753- , buscar‡ series fetes a partir d'aquella hora
-     *         Si se li passa dos hores separades per un guiÛ, com 1223-1753 , buscar‡ series fetes entre aquelles hores 
+     *         Si se li passa una hora com 1753, buscar√† series d'aquella hora
+     *         Si se li passa una hora amb gui√≥ a davant, com -1753 , buscar√† s√®ries d'aquella hora o fetes abans
+     *         Si se li passa una hora amb gui√≥ a darrera, com 1753- , buscar√† series fetes a partir d'aquella hora
+     *         Si se li passa dos hores separades per un gui√≥, com 1223-1753 , buscar√† series fetes entre aquelles hores 
      * @param  Hora de l'estudi
-     * @retun estat del mËtode
+     * @retun estat del m√®tode
      */
     Status setStudyTime(std::string);
     
@@ -134,8 +134,8 @@ public:
      */
     Status setAccessionNumber(std::string);
         
-    /** Retorna de la m‡scara l'estudi UID
-     * @param mask [in] m‡scara de la cerca
+    /** Retorna de la m√†scara l'estudi UID
+     * @param mask [in] m√†scara de la cerca
      * @return   Estudi UID que cerquem
      */
     std::string getStudyUID();
@@ -175,8 +175,8 @@ public:
      */
     std::string getStudyDate();
     
-    /** Retorna la descripciÛ de l'estudi
-     * @return   descripciÛ de l'estudi
+    /** Retorna la descripci√≥ de l'estudi
+     * @return   descripci√≥ de l'estudi
      */
     std::string getStudyDescription();
     
@@ -195,7 +195,7 @@ public:
      */
     std::string getAccessionNumber();
     
-    /** Retorna el nom de l'instituciÛ on s'ha realitzat l'estudi 
+    /** Retorna el nom de l'instituci√≥ on s'ha realitzat l'estudi 
      * @return   Nom de l'institucio
      */
     std::string getInstitutionName();

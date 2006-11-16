@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -20,7 +20,7 @@ namespace udg {
 /**
 Classe base per als visualitzadors 3D
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 
 // FWD declarations
@@ -36,21 +36,21 @@ public:
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
 
-    /// retorna el tipu de visualitzaciÛ que es tÈ assignat
+    /// retorna el tipu de visualitzaci√≥ que es t√© assignat
     RenderFunction getRenderFunction() const { return m_renderFunction; }
 
-    /// retorna el tipu de visualitzaciÛ que es tÈ assignat com a un string
+    /// retorna el tipu de visualitzaci√≥ que es t√© assignat com a un string
     QString getRenderFunctionAsString();
 
     virtual void setInput( Volume* volume );
 
     virtual vtkRenderer *getRenderer();
 
-    /// Retorna el vtkInteractorStyle que tÈ associat
+    /// Retorna el vtkInteractorStyle que t√© associat
     vtkInteractorStyle *getInteractorStyle();
 
 public slots:
-    /// assignem el tipus de visualitzaciÛ 3D que volem. RayCasting, MIP, reconstrucciÛ de superfÌcies...
+    /// assignem el tipus de visualitzaci√≥ 3D que volem. RayCasting, MIP, reconstrucci√≥ de superf√≠cies...
     void setRenderFunction(RenderFunction function){ m_renderFunction = function; };
     void setRenderFunctionToRayCasting(){ m_renderFunction = RayCasting; };
     void setRenderFunctionToMIP3D(){ m_renderFunction = MIP3D; };
@@ -63,7 +63,7 @@ public slots:
     void resetViewToSagital();
     void resetViewToCoronal();
 
-    /// mËtodes per controlar la visibilitat de l'orientation marker widget
+    /// m√®todes per controlar la visibilitat de l'orientation marker widget
     void enableOrientationMarker( bool enable );
     void orientationMarkerOn();
     void orientationMarkerOff();
@@ -72,7 +72,7 @@ public slots:
     void enableTools();
     void disableTools();
 
-    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool est‡ disponible o no el viewer far‡ el que calgui
+    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool est√† disponible o no el viewer far√† el que calgui
     void setTool( QString toolName );
 
     virtual void render();
@@ -81,42 +81,42 @@ public slots:
 protected:
     /// el renderer
     vtkRenderer* m_renderer;
-    /// la funciÛ que es fa servir pel rendering
+    /// la funci√≥ que es fa servir pel rendering
     RenderFunction m_renderFunction;
 
 private:
-    /// fa la visualitzaciÛ per raycasting
+    /// fa la visualitzaci√≥ per raycasting
     void renderRayCasting();
 
-    /// fa la visualitzaciÛ per MIP3D
+    /// fa la visualitzaci√≥ per MIP3D
     void renderMIP3D();
 
-    /// fa la visualitzaciÛ per reconstrucciÛ de superfÌces
+    /// fa la visualitzaci√≥ per reconstrucci√≥ de superf√≠ces
     void renderIsoSurface();
 
-    /// fa la visualitzaciÛ per textures 2D \TODO afegir comprovaciÛ de si el hard o suporta o no
+    /// fa la visualitzaci√≥ per textures 2D \TODO afegir comprovaci√≥ de si el hard o suporta o no
     void renderTexture2D();
 
-    /// fa la visualitzaciÛ per textures 3D \TODO afegir comprovaciÛ de si el hard o suporta o no
+    /// fa la visualitzaci√≥ per textures 3D \TODO afegir comprovaci√≥ de si el hard o suporta o no
     void renderTexture3D();
 
     /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
     bool rescale();
 
     enum { Axial , Sagital , Coronal };
-    /// Canvia la orientaciÛ de la c‡mera
+    /// Canvia la orientaci√≥ de la c√†mera
     void setCameraOrientation( int orientation );
 
     /// el caster de les imatges
     vtkImageCast* m_imageCaster;
 
-    /// OrientaciÛ que tenim
+    /// Orientaci√≥ que tenim
     int m_currentOrientation;
 
-    /// Widget per veure la orientaciÛ en 3D
+    /// Widget per veure la orientaci√≥ en 3D
     Q3DOrientationMarker *m_orientationMarker;
 
-    /// reinicia la orientaciÛ
+    /// reinicia la orientaci√≥
     void resetOrientation();
 
     /// El manager de les tools

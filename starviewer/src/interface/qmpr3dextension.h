@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -8,7 +8,7 @@
 #define UDGQMPR3DEXTENSION_H
 
 #include "ui_qmpr3dextensionbase.h"
-using namespace Ui; // \TODO aixÚ hauria de ser temporal
+using namespace Ui; // \TODO aix√≤ hauria de ser temporal
 
 namespace udg {
 
@@ -16,9 +16,9 @@ namespace udg {
 class Volume;
 
 /**
-ExtensiÛ de l'MPR 3D
+Extensi√≥ de l'MPR 3D
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class QMPR3DExtension : public QWidget , private QMPR3DExtensionBase{
 Q_OBJECT

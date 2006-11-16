@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -187,7 +187,7 @@ int StarviewerSettings::getStudyDicomdirListColumnWidth( int col )
     return m_starviewerSettings.value( key , 100 ).toInt();
 }
 
-/*** Dades de la instituciÛ*/
+/*** Dades de la instituci√≥*/
 
 void StarviewerSettings::setInstitutionName( QString institutionNameString )
 {

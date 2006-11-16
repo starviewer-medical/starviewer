@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -66,11 +66,11 @@ bool Input::openFile( const char * fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "ExcepciÛ llegint l'arxiu [" + QString::fromLatin1(fileName) + "]" ) )
+        WARN_LOG( qPrintable( "Excepci√≥ llegint l'arxiu [" + QString::fromLatin1(fileName) + "]" ) )
         std::cerr << e << std::endl;
 
         ok = false;
-        emit progress( -1 ); // aixÚ podria indicar excepciÛ
+        emit progress( -1 ); // aix√≤ podria indicar excepci√≥
     }
     if ( ok )
     {
@@ -96,7 +96,7 @@ bool Input::readSeries( const char *dirPath )
     m_namesGenerator->SetInputDirectory( dirPath );
     
     const SeriesReaderType::FileNamesContainer &filenames = m_namesGenerator->GetInputFileNames();
-    // aixÚ Ès necessari per desprÈs poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
+    // aix√≤ √©s necessari per despr√©s poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
     m_seriesReader->SetImageIO( m_gdcmIO );  
     m_seriesReader->SetFileNames( filenames );
     
@@ -108,10 +108,10 @@ bool Input::readSeries( const char *dirPath )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "ExcepciÛ llegint els arxius del directori [" + QString::fromLatin1(dirPath) + "]" ) )
+        WARN_LOG( qPrintable( "Excepci√≥ llegint els arxius del directori [" + QString::fromLatin1(dirPath) + "]" ) )
         std::cerr << e << std::endl;
         ok = false;
-        emit progress( -1 ); // aixÚ podria indicar excepciÛ
+        emit progress( -1 ); // aix√≤ podria indicar excepci√≥
     }
     if ( ok )
     {
@@ -215,7 +215,7 @@ char *Input::getOrientation( double vector[3] )
 
 void Input::setVolumeInformation()
 {
-    // creem l'string de l'orientaciÛ del pacient
+    // creem l'string de l'orientaci√≥ del pacient
     std::string value;
     if( queryTagAsString( "0020|0020" , value ) )
     {
@@ -225,7 +225,7 @@ void Input::setVolumeInformation()
     }
     else
     {
-        // si no tenim la informaciÛ directament l'haurem de deduir a partir dels dir cosines
+        // si no tenim la informaci√≥ directament l'haurem de deduir a partir dels dir cosines
         if( queryTagAsString( "0020|0037", value ) )
         {
             // passem de l'string als valors double
@@ -241,7 +241,7 @@ void Input::setVolumeInformation()
                 }
     
                 vtkMath::Cross( dirCosinesValuesX , dirCosinesValuesY , dirCosinesValuesZ );
-                // I ara ens disposem a crear l'string amb l'orientaciÛ del pacient
+                // I ara ens disposem a crear l'string amb l'orientaci√≥ del pacient
                 QString patientOrientationString;
                 
                 patientOrientationString = this->getOrientation( dirCosinesValuesX );
@@ -257,30 +257,30 @@ void Input::setVolumeInformation()
             else
             {
                 // hi ha algun error en l'string ja que han de ser 2 parells de 3 valors
-                DEBUG_LOG( qPrintable( "No s'ha pogut determinar l'orientaciÛ del pacient (Tags 0020|0020 , 0020|0037) : " + dirCosines ) );
+                DEBUG_LOG( qPrintable( "No s'ha pogut determinar l'orientaci√≥ del pacient (Tags 0020|0020 , 0020|0037) : " + dirCosines ) );
             }
         }
         else
         {
-            // no podem obtenir l'string d'orientaciÛ del pacient
+            // no podem obtenir l'string d'orientaci√≥ del pacient
         }
     }
 
-    // nom de la instituciÛ on s'ha fet l'estudi
+    // nom de la instituci√≥ on s'ha fet l'estudi
     if( queryTagAsString( "0008|0080" , value ) )
     {
         m_volumeData->getVolumeSourceInformation()->setInstitutionName( value.c_str() );
     }
     else
     {
-        // no tenim aquesta informaciÛ \TODO cal posar res?
+        // no tenim aquesta informaci√≥ \TODO cal posar res?
         m_volumeData->getVolumeSourceInformation()->setInstitutionName( tr( "Unknown" ).toAscii() );
     }
 
     // nom del pacient
     if( queryTagAsString( "0010|0010" , value ) )
     {
-        // pre-tractament per treure car‡cters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
+        // pre-tractament per treure car√†cters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
         QString name = QString::fromStdString( value );
         while( name.indexOf("^") >= 0 )
             name.replace( name.indexOf("^") , 1 , QString(" ") );
@@ -295,14 +295,14 @@ void Input::setVolumeInformation()
     // data de l'estudi
     if( queryTagAsString( "0008|0020" , value ) )
     {
-        // la data est‡ en format YYYYMMDD
+        // la data est√† en format YYYYMMDD
         m_volumeData->getVolumeSourceInformation()->setStudyDate( value.c_str() );
     }
 
     // hora de l'estudi
     if( queryTagAsString( "0008|0030" , value ) )
     {
-        // l'hora est‡ en format HHMMSS
+        // l'hora est√† en format HHMMSS
         m_volumeData->getVolumeSourceInformation()->setStudyTime( value.c_str() );
     }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -21,7 +21,7 @@ ExtensionFactory2::~ExtensionFactory2()
 
 bool ExtensionFactory2::registerExtension( QString name , ExtensionCreator *extension )
 {
-    // \TODO Comprovar que el nom de l'extensió sigui únic. Què fer si ja existeix?
+    // \TODO Comprovar que el nom de l'extensiÃ³ sigui Ãºnic. QuÃ¨ fer si ja existeix?
     m_registerMap[ name ] = extension;
     return true;
 }

@@ -8,8 +8,8 @@ namespace udg
 {
 
 
-/** Tracta els errors que s'han produït a la base de dades en general
-  *           @param state [in] Estat del mètode
+/** Tracta els errors que s'han produÃ¯t a la base de dades en general
+  *           @param state [in] Estat del mÃ¨tode
   */
 void QueryScreen::databaseError(Status *state)
 {

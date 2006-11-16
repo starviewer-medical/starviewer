@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -11,7 +11,7 @@
 
 namespace udg {
 
-/** Classe image encarregada de guardar la informació d'una imatge
+/** Classe image encarregada de guardar la informaciÃ³ d'una imatge
 @author marc
 */
 class Image{
@@ -28,8 +28,8 @@ public:
      */  
     void setSoPUID (std::string );
     
-    /** Inserta el UID de la sèrie al qual pertany la imatge
-     * @param  UID de la sèrie a la que pertany la imatge
+    /** Inserta el UID de la sÃ¨rie al qual pertany la imatge
+     * @param  UID de la sÃ¨rie a la que pertany la imatge
      */
     void setSeriesUID (std::string );
     
@@ -48,12 +48,12 @@ public:
      */
     void setImageName (std::string );
     
-    /** Inserta el número d'imatge
-     * @param Número que ocupa la imatge dins la sèrie
+    /** Inserta el nÃºmero d'imatge
+     * @param NÃºmero que ocupa la imatge dins la sÃ¨rie
      */
     void setImageNumber (int);
     
-    /** Inserta el número de bytes que ocupa la imatge
+    /** Inserta el nÃºmero de bytes que ocupa la imatge
      * @param  bytes de la imatge
      */
     void setImageSize (int);
@@ -63,8 +63,8 @@ public:
      */
     std::string getSoPUID();
     
-    /** Retorna el UID de la sèrie al qual pertany la imatge
-     * @return UID de la sèrie a la que pertany la imatge
+    /** Retorna el UID de la sÃ¨rie al qual pertany la imatge
+     * @return UID de la sÃ¨rie a la que pertany la imatge
      */
     std::string getSeriesUID();
     
@@ -83,18 +83,18 @@ public:
      */
     std::string getImageName();
     
-    /** retorna el número d'imatge
-     * @return Retorna el número que ocupa la imatge dins la sèrie
+    /** retorna el nÃºmero d'imatge
+     * @return Retorna el nÃºmero que ocupa la imatge dins la sÃ¨rie
      */
     int getImageNumber();
     
-    /** retorna el número de bytes que ocupa la imatge
-     * @return retorna el número de bytes de la imatge
+    /** retorna el nÃºmero de bytes que ocupa la imatge
+     * @return retorna el nÃºmero de bytes de la imatge
      */
     int getImageSize();
        
 private:
-    //variables que guarden la informació de la imatge
+    //variables que guarden la informaciÃ³ de la imatge
     std::string m_SoPUID;
     std::string m_seriesUID;
     std::string m_imagePath;

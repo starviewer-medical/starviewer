@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,9 +17,9 @@ class QSignalMapper;
 namespace udg {
 
 /**
-Crea les QAction per cada tipu de tool. En aquesta classe unifiquem la creaciÛ de les QAction de cada tool
+Crea les QAction per cada tipu de tool. En aquesta classe unifiquem la creaci√≥ de les QAction de cada tool
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ToolsActionFactory : public QObject {
 Q_OBJECT
@@ -35,7 +35,7 @@ signals:
     void triggeredTool( QString toolName );
     
 private:
-    ///\TODO ara fem que nomÈs hi hagi una sola qaction per cada tool. No sabem si en in futur, per segons quina extensiÛ sigui necessari tenir-ne 2 o mÈs
+    ///\TODO ara fem que nom√©s hi hagi una sola qaction per cada tool. No sabem si en in futur, per segons quina extensi√≥ sigui necessari tenir-ne 2 o m√©s
     QAction *m_slicingAction;
     QAction *m_zoomAction;
     QAction *m_moveAction;

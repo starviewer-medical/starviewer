@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -18,7 +18,7 @@ namespace udg {
 /**
 Classe que encapsula l'estudi d'un pacient
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientStudy : public QObject
 {
@@ -40,18 +40,18 @@ public:
     void setAccessionNumber( const char *accessionNumber );
     QString getAccesssionNumber() const { return m_accessionNumber; };
 
-    /// Assignar/Obtenir la descripciÛ de l'estudi
+    /// Assignar/Obtenir la descripci√≥ de l'estudi
     void setDescription( const char *description );
     QString getDescription() const { return m_description; };
 
-    /// Assignar/Obtenir la instituciÛ on s'ha realitzat l'estudi
+    /// Assignar/Obtenir la instituci√≥ on s'ha realitzat l'estudi
     void setInstitutionName( const char *institutionName );
     QString getInstitutionName() const { return m_institutionName; };
 
-    /// Retorna el camp clau que identificar‡ l'estudi de cares a la interfÌcie. Es composar‡ per la data mÈs la descripciÛ \TODO encara per determinar
+    /// Retorna el camp clau que identificar√† l'estudi de cares a la interf√≠cie. Es composar√† per la data m√©s la descripci√≥ \TODO encara per determinar
     QString getKey();
     
-    /// Assignar/Obtenir la data i hora d'adquisiciÛ de la sËrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
+    /// Assignar/Obtenir la data i hora d'adquisici√≥ de la s√®rie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
     bool setDateTime( QString dateTime );
@@ -66,13 +66,13 @@ public:
     QTime getTime();
     QString getTimeAsString();
 
-    /// Afegeix una nova sËrie
+    /// Afegeix una nova s√®rie
     void addSerie( PatientSerie *patientSerie );
 
-    /// Li treu a l'estudi la sËrie amb la clau 'key'
+    /// Li treu a l'estudi la s√®rie amb la clau 'key'
     void removeSerie( QString key );
 
-    /// ObtÈ la sËrie amb clau 'key'
+    /// Obt√© la s√®rie amb clau 'key'
     PatientSerie *getSerie( QString key );
     
 private:
@@ -85,16 +85,16 @@ private:
     /// Accession Number
     QString m_accessionNumber;
 
-    /// DescripciÛ de l'estudi
+    /// Descripci√≥ de l'estudi
     QString m_description;
 
-    /// Nom de l'instituciÛ en la que s'ha fet
+    /// Nom de l'instituci√≥ en la que s'ha fet
     QString m_institutionName;
     
-    /// Data i hora de l'adquisiciÛ de l'estudi
+    /// Data i hora de l'adquisici√≥ de l'estudi
     QDateTime m_dateTime;
 
-    /// Taula de Hash que contÈ les sËries de l'estudi
+    /// Taula de Hash que cont√© les s√®ries de l'estudi
     typedef QHash< QString , PatientSerie* > SeriesHashType;
     SeriesHashType m_seriesHash;
 };

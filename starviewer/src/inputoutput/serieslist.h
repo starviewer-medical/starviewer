@@ -49,7 +49,7 @@ class SeriesList
      */
     Series getSeries();
       
-    /// Aquests mètode buida la llista
+    /// Aquests mÃ¨tode buida la llista
     void clear();
          
  private :

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -21,7 +21,7 @@ WindowLevelTool::WindowLevelTool( Q2DViewer *viewer , QObject *parent, const cha
     m_state = NONE;
     m_2DViewer = viewer;
     if( !m_2DViewer )
-        DEBUG_LOG( "El 2DViewer és nul!" );
+        DEBUG_LOG( "El 2DViewer Ã©s nul!" );
 }
 
 WindowLevelTool::~WindowLevelTool()
@@ -61,7 +61,7 @@ void WindowLevelTool::startWindowLevel()
         m_windowLevelStartPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
     }
     else
-        DEBUG_LOG( "::startWindowLevel(): El 2DViewer és NUL!" );
+        DEBUG_LOG( "::startWindowLevel(): El 2DViewer Ã©s NUL!" );
 }
 
 void WindowLevelTool::doWindowLevel()
@@ -125,7 +125,7 @@ void WindowLevelTool::doWindowLevel()
         m_2DViewer->setWindowLevel( newWindow , newLevel );
     }
     else
-        DEBUG_LOG( "::doWindowLevel(): El 2DViewer és NUL!" );
+        DEBUG_LOG( "::doWindowLevel(): El 2DViewer Ã©s NUL!" );
 }
 
 void WindowLevelTool::endWindowLevel()
@@ -133,7 +133,7 @@ void WindowLevelTool::endWindowLevel()
     if( m_2DViewer )
         m_state = NONE;
     else
-        DEBUG_LOG( "::endWindowLevel(): El 2DViewer és NUL!" );
+        DEBUG_LOG( "::endWindowLevel(): El 2DViewer Ã©s NUL!" );
 }
 
 }

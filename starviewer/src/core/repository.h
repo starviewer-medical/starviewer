@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,7 +14,7 @@
 namespace udg {
 
 /**
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 template< typename ItemType >
 class Repository  : public RepositoryBase{
@@ -26,12 +26,12 @@ public:
         m_nextIdentifierNumber = 0;
     }
     
-    /// El destructor allibera l'espai ocupat pels items, si Ès que en queden i no s'han alliberat
+    /// El destructor allibera l'espai ocupat pels items, si √©s que en queden i no s'han alliberat
     ~Repository();
     
     /**
         Afegeix un item al repositori.
-        Ens retorna l'id de l'item afegit per poder-lo obtenir mÈs endavant.
+        Ens retorna l'id de l'item afegit per poder-lo obtenir m√©s endavant.
     */    
     Identifier addItem( ItemType *item ); 
 
@@ -55,7 +55,7 @@ private:
     typedef std::map< Identifier, ItemType*  > ItemListType;
     typedef typename ItemListType::const_iterator ItemListIteratorType;
     
-    /// La llista que contÈ els items amb un ID
+    /// La llista que cont√© els items amb un ID
     ItemListType m_itemList;        
     
     /// Comptador d'ids. S'incrementa per cada nou item afegit

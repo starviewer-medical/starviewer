@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -47,7 +47,7 @@ ConvertToDicomdir::ConvertToDicomdir()
 
 void ConvertToDicomdir::addStudy( QString studyUID )
 {
-    /*Els estudis s'han d'agrupar per pacient, el que fem Ès afegir-los a llista d'estudis per convertir a 
+    /*Els estudis s'han d'agrupar per pacient, el que fem √©s afegir-los a llista d'estudis per convertir a 
      dicomdir ja ordenats per pacient*/
     StudyToConvert studyToConvert;
     CacheStudyDAL cacheStudyDAL;
@@ -60,7 +60,7 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     studyToConvert.studyUID = studyUID;
     studyToConvert.patientId = study.getPatientId().c_str();
     
-    while ( index < m_studiesToConvert.count() && !stop )  //busquem la posiciÛ on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
+    while ( index < m_studiesToConvert.count() && !stop )  //busquem la posici√≥ on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
     {
         if ( studyToConvert.patientId < m_studiesToConvert.at( index ).patientId ) //comparem amb els altres estudis de la llista, fins trobar el seu llloc corresponentm 
         {
@@ -69,7 +69,7 @@ void ConvertToDicomdir::addStudy( QString studyUID )
         else index++;
     }
     
-    if ( stop ) //una vegada hem trobat la posiciÛ on ha d'anar l'inserim
+    if ( stop ) //una vegada hem trobat la posici√≥ on ha d'anar l'inserim
     {
         m_studiesToConvert.insert( index , studyToConvert );    
     }
@@ -105,7 +105,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
         return state;
     }
 
-    //sumem una imatge mÈs per evitar que arribi el 100 % la progress bar, i aixÌ s'esperi a que es crei el dicomdir, que es fa quan s'invoca createDicomdir.Create()
+    //sumem una imatge m√©s per evitar que arribi el 100 % la progress bar, i aix√≠ s'esperi a que es crei el dicomdir, que es fa quan s'invoca createDicomdir.Create()
     m_progress = new QProgressDialog( tr( "Creating Dicomdir..." ) , "" , 0 , imageNumberTotal + 1 );
     m_progress->setMinimumDuration( 0 );
     m_progress->setCancelButton( 0 );
@@ -120,7 +120,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
         return state;
     }
    
-    state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el mËtode per convertir el directori destÌ Dicomdir on ja s'han copiat les imatges en un dicomdir
+    state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el m√®tode per convertir el directori dest√≠ Dicomdir on ja s'han copiat les imatges en un dicomdir
     
     m_progress->close();
     
@@ -174,7 +174,7 @@ Status ConvertToDicomdir::startConversionToDicomdir()
 
 Status ConvertToDicomdir::convertStudy( QString studyUID )
 {
-    /*Creem el directori de l'estudi on es mour‡ un estudi seleccionat per convertir a dicomdir*/
+    /*Creem el directori de l'estudi on es mour√† un estudi seleccionat per convertir a dicomdir*/
     CacheSeriesDAL cacheSeriesDAL;
     QDir studyDir;
     QChar fillChar = '0';    
@@ -193,13 +193,13 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
 
     seriesMask.setStudyUID( studyUID.toAscii().constData() );
     
-    state = cacheSeriesDAL.querySeries( seriesMask , seriesList ); //cerquem sËries de l'estudi
+    state = cacheSeriesDAL.querySeries( seriesMask , seriesList ); //cerquem s√®ries de l'estudi
 
     if ( !state.good() ) return state;
     
     seriesList.firstSeries();
 
-    while ( !seriesList.end() ) //per cada sËrie de l'estudi, creem el directori de la sËrie
+    while ( !seriesList.end() ) //per cada s√®rie de l'estudi, creem el directori de la s√®rie
     {
         state = convertSeries( seriesList.getSeries() );
         
@@ -218,7 +218,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
     QDir seriesDir;
     QChar fillChar = '0';    
     CacheImageDAL cacheImageDAL;
-    //creem el nom del directori de la sËrie, el format Ès SERXXXXX, on XXXXX Ès el numero de sËrie dins l'estudi
+    //creem el nom del directori de la s√®rie, el format √©s SERXXXXX, on XXXXX √©s el numero de s√®rie dins l'estudi
     QString seriesName = QString( "/SER%1" ).arg( m_series , 5 , 10 , fillChar ); 
     Image image;
     ImageMask imageMask;
@@ -227,20 +227,20 @@ Status ConvertToDicomdir::convertSeries( Series series )
 
     m_series++;
     m_image = 0;
-    //Creem el directori on es guardar‡ la sËrie en format DicomDir
+    //Creem el directori on es guardar√† la s√®rie en format DicomDir
     m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
     seriesDir.mkdir( m_dicomDirSeriesPath );
 
     imageMask.setSeriesUID( series.getSeriesUID() );
     imageMask.setStudyUID( series.getStudyUID() );
 
-    state = cacheImageDAL.queryImages( imageMask , imageList ); // cerquem imatges de la sËrie
+    state = cacheImageDAL.queryImages( imageMask , imageList ); // cerquem imatges de la s√®rie
 
     if ( !state.good() ) return state;
     
     imageList.firstImage();
 
-    while ( !imageList.end() ) //per cada imatge de la sËrie, la convertim a foramt littleEndian, i la copiem al directori desti
+    while ( !imageList.end() ) //per cada imatge de la s√®rie, la convertim a foramt littleEndian, i la copiem al directori desti
     {
         state = convertImage( imageList.getImage() );
         
@@ -257,7 +257,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
 Status ConvertToDicomdir::convertImage( Image image )
 {
     QChar fillChar = '0';    
-    //creem el nom del fitxer de l'imatge, el format Ès IMGXXXXX, on XXXXX Ès el numero d'imatge dins la sËrie
+    //creem el nom del fitxer de l'imatge, el format √©s IMGXXXXX, on XXXXX √©s el numero d'imatge dins la s√®rie
     QString  imageName = QString( "/IMG%1" ).arg( m_image , 5 , 10 , fillChar ) , imageInputPath , imageOutputPath; 
     ConvertDicomToLittleEndian convertDicom;
     StarviewerSettings settings;
@@ -279,7 +279,7 @@ Status ConvertToDicomdir::convertImage( Image image )
     //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
     state = convertDicom.convert( imageInputPath.toAscii().constData() , imageOutputPath.toAscii().constData() );
 
-     m_progress->setValue( m_progress->value() + 1 ); // la barra de progrÈs avanÁa
+     m_progress->setValue( m_progress->value() + 1 ); // la barra de progr√©s avan√ßa
      m_progress->repaint();
     
     return state;

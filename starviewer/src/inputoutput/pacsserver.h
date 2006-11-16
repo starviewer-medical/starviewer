@@ -11,8 +11,8 @@
 class string;
 class Status;
 
-/** Aquest classe Ès la que ens ajuda interectuar amb el pacs.
- * La classe contÈ les principals funcions i accions per connectar-nos en el pacs amb l'objectiu, de fer un echo, buscar informaciÛ o descarregar imatges. Alhora de connectar-nos al constructor passem els par‡metres mÌnim per connectar-nos. …s molt important llegir molt bÈ la documentaciÛ d'aquesta classe per saber quins par‡metres utiltizar, si no voleu tenir problemes alhora de buscar informaciÛ,descarrega imatges
+/** Aquest classe √©s la que ens ajuda interectuar amb el pacs.
+ * La classe cont√© les principals funcions i accions per connectar-nos en el pacs amb l'objectiu, de fer un echo, buscar informaci√≥ o descarregar imatges. Alhora de connectar-nos al constructor passem els par√†metres m√≠nim per connectar-nos. √âs molt important llegir molt b√© la documentaci√≥ d'aquesta classe per saber quins par√†metres utiltizar, si no voleu tenir problemes alhora de buscar informaci√≥,descarrega imatges
  */
 namespace udg{
 
@@ -26,7 +26,7 @@ public:
     //any it's only can be used with echoPacs modality
     enum levelConnection { patientLevel , studyLevel , seriesLevel , any , imageLevel };
    
-    /** Constuctor de la classe. Se li ha de passar un objecte PacsParameters, amb els par‡metres del pacs correctament especificats
+    /** Constuctor de la classe. Se li ha de passar un objecte PacsParameters, amb els par√†metres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
      */
     PacsServer( PacsParameters );
@@ -34,30 +34,30 @@ public:
     /// Constructor buit de la classe
     PacsServer();
     
-    /** Aquesta funciÛ ens intenta connectar al PACS
-     * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informaciÛ o descarregar imatges
-     * @param l Especifica a quin nivell durem a terme l'objectiu especificat al par‡metre anterior. A nivell de  Pacient,estudi o sËrie. Per comprendre millor els nivells  consultar la documentaciÛ del dicom C‡pitol 4. C.6
-     * @return retorna l'estat de la connexiÛ
+    /** Aquesta funci√≥ ens intenta connectar al PACS
+     * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informaci√≥ o descarregar imatges
+     * @param l Especifica a quin nivell durem a terme l'objectiu especificat al par√†metre anterior. A nivell de  Pacient,estudi o s√®rie. Per comprendre millor els nivells  consultar la documentaci√≥ del dicom C√†pitol 4. C.6
+     * @return retorna l'estat de la connexi√≥
      */
     Status connect( modalityConnection , levelConnection );
        
-    /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexiÛ bÈ sigui busca informaciÛ o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS est‡ viu  
+    /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexi√≥ b√© sigui busca informaci√≥ o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS est√† viu  
      * @return retorna l'estatus del echo
      */   
     Status echo();//This function makes an echo to the PACS
     
-    /** Estableix un pacs per a la connexiÛ
-     * @param Pacs amb els par‡metres per a la connexiÛ
+    /** Estableix un pacs per a la connexi√≥
+     * @param Pacs amb els par√†metres per a la connexi√≥
      */
     void setPacs( PacsParameters );
     
-    /** Retorna una connexiÛ per a poder buscar informaciÛ, o descarregar imatges
-     * @return retorna una connexiÛ de PACS
+    /** Retorna una connexi√≥ per a poder buscar informaci√≥, o descarregar imatges
+     * @return retorna una connexi√≥ de PACS
      */
     PacsConnection getConnection();
     
-    /** Retorna una configuraciÛ de xarxa. NomÈs Ès necess‡ria quan l'objectiu de la connexiÛ sigui el de descarregar imatges
-     * @return retorna la configuraciÛ de la xarxa          
+    /** Retorna una configuraci√≥ de xarxa. Nom√©s √©s necess√†ria quan l'objectiu de la connexi√≥ sigui el de descarregar imatges
+     * @return retorna la configuraci√≥ de la xarxa          
      */
     T_ASC_Network * getNetwork();
     
@@ -73,33 +73,33 @@ private:
     
    PacsParameters m_pacs;
    
-    /** Aquesta funciÛ Ès privada. …s utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell Ès un echo. Per defecte en qualsevol modalitat de connexiÛ podrem fer un echo
-     * @return retorna l'estat de la configuraciÛ
+    /** Aquesta funci√≥ √©s privada. √âs utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell √©s un echo. Per defecte en qualsevol modalitat de connexi√≥ podrem fer un echo
+     * @return retorna l'estat de la configuraci√≥
      */
    OFCondition configureEcho(); 
    
-    /** Aquesta funciÛ privada, configura els par‡metres de la connexiÛ per especificar, que el motiu de la nostre connexiÛ Ès buscar informaciÛ.
-     * @param Especifiquem a quin nivell volem buscar la informaciÛ, de pacient, d'estudi o de sËrie
-     * @return retorna l'estat de la configuraciÛ
+    /** Aquesta funci√≥ privada, configura els par√†metres de la connexi√≥ per especificar, que el motiu de la nostre connexi√≥ √©s buscar informaci√≥.
+     * @param Especifiquem a quin nivell volem buscar la informaci√≥, de pacient, d'estudi o de s√®rie
+     * @return retorna l'estat de la configuraci√≥
      */
    OFCondition configureFind( levelConnection );
    
-    /** Aquesta funciÛ privada permet configurar la connexiÛ per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar la funciÛ setLocalhostPort
-     * @param Especifiquem a quin nivell volem descarregar les imatges, de pacient, d'estudi o de sËrie
-     * @return retorna l'estat de la configuraciÛ
+    /** Aquesta funci√≥ privada permet configurar la connexi√≥ per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar la funci√≥ setLocalhostPort
+     * @param Especifiquem a quin nivell volem descarregar les imatges, de pacient, d'estudi o de s√®rie
+     * @return retorna l'estat de la configuraci√≥
      */
    OFCondition configureMove( levelConnection );
    
-    /** Aquesta funciÛ privada, configura els par‡metres pel tipus de connexiÛ per descarregat imatges segons la m‡quina que tinguem
-     * @param par‡metres de la connexiÛ
+    /** Aquesta funci√≥ privada, configura els par√†metres pel tipus de connexi√≥ per descarregat imatges segons la m√†quina que tinguem
+     * @param par√†metres de la connexi√≥
      * @param Identificador de funcio
      * @param Objectiu de la funcio
-     * @return retorna l'estat de la funciÛ
+     * @return retorna l'estat de la funci√≥
      */
    OFCondition addPresentationContextMove( T_ASC_Parameters * , T_ASC_PresentationContextID , const char* );
         
-    /** Construeix l'adreÁa del servidor en format ip:port, per connectar-se al PACS
-     * @param adreÁa del servidor
+    /** Construeix l'adre√ßa del servidor en format ip:port, per connectar-se al PACS
+     * @param adre√ßa del servidor
      * @param port del servidor
      */
    std::string constructAdrServer( std::string , std::string ); //construct PACS address

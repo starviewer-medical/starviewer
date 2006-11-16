@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -49,7 +49,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
     
-    // \TODO canviar els números per enums decents que ho identifiquen millor
+    // \TODO canviar els nÃºmeros per enums decents que ho identifiquen millor
     m_availableToolActions.clear();
     m_availableToolActions["SlicingTool"] = 0;
     m_availableToolActions["WindowLevelTool"] = 1;
@@ -67,7 +67,7 @@ QAction *ToolsActionFactory::getActionFrom( QString toolName )
     {
         switch( m_availableToolActions[toolName] )
         {
-            // \TODO canviar els números per enums decents que ho identifiquen millor
+            // \TODO canviar els nÃºmeros per enums decents que ho identifiquen millor
             case 0:
                 return m_slicingAction;
             break;

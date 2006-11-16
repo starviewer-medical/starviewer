@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -83,16 +83,16 @@ void QConfigurationScreen::createConnections()
     //connecta el boto aplicar del Pacs amb l'slot apply
     connect( m_buttonApplyPacs , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
     
-    //connecta el boto acceptar de l'informació de l'institució amb l'slot accept
+    //connecta el boto acceptar de l'informaciÃ³ de l'instituciÃ³ amb l'slot accept
     connect( m_buttonAcceptInstitution , SIGNAL( clicked() ), this ,  SLOT( acceptChanges() ) );
     
-    //connecta el boto cancelar de l'informació de l'institució amb l'slot cancel
+    //connecta el boto cancelar de l'informaciÃ³ de l'instituciÃ³ amb l'slot cancel
     connect( m_buttonCancelInstitution , SIGNAL( clicked() ) , this ,  SLOT( cancelChanges() ) );
     
-    //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
+    //connecta el boto aplicar de l'informaciÃ³ de l'instituciÃ³ amb l'slot apply
     connect( m_buttonApplyInstitution , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
     
-    //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
+    //connecta el boto aplicar de l'informaciÃ³ de l'instituciÃ³ amb l'slot apply
     connect( m_buttonCreateDatabase , SIGNAL( clicked() ) , this ,  SLOT( createDatabase() ) );
     
     //activen el boto apply quant canvia el seu valor
@@ -164,7 +164,7 @@ void QConfigurationScreen::loadCachePoolDefaults()
     QString text;
     CachePool pool;
     
-    //accemdim a la caché a agafar les dades del Pool
+    //accemdim a la cachÃ© a agafar les dades del Pool
     state = pool.getPoolTotalSize( space );   
     if ( !state.good() )
     {
@@ -521,7 +521,7 @@ bool QConfigurationScreen::validatePacsParameters()
 {
     QString text;
     
-    //Per força tot els pacs han de tenir algun AETitle
+    //Per forÃ§a tot els pacs han de tenir algun AETitle
     text = m_textAETitle->text();
     if ( text.length() == 0 )
     {
@@ -529,7 +529,7 @@ bool QConfigurationScreen::validatePacsParameters()
         return false;
     }
     
-    //adreça del pacs no pot estar en blanc
+    //adreÃ§a del pacs no pot estar en blanc
     text = m_textAddress->text();
     if ( text.length() == 0 )
     {
@@ -545,7 +545,7 @@ bool QConfigurationScreen::validatePacsParameters()
         return false;    
     }
     
-    //la institució no pot estar en blanc
+    //la instituciÃ³ no pot estar en blanc
     text = m_textInstitution->text();
     if ( text.length() == 0 )
     {
@@ -582,7 +582,7 @@ bool QConfigurationScreen::validateChanges()
     
     if ( m_textDatabaseRoot->isModified() )
     {
-        if ( !dir.exists(m_textDatabaseRoot->text() ) && m_createDatabase == false ) // si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
+        if ( !dir.exists(m_textDatabaseRoot->text() ) && m_createDatabase == false ) // si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path Ã©s invÃ lid
         {
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Invalid database path" ) );
             return false;             
@@ -652,7 +652,7 @@ bool QConfigurationScreen::applyChanges()
         loadCachePoolDefaults();
         applyChangesInstitution();
         
-        if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
+        if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // nomÃ©s s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botÃ³ crear base de dades, ja se li haurÃ  informat que s'havia de reiniciar l'aplicaciÃ³
         {
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
         }
@@ -671,7 +671,7 @@ void QConfigurationScreen::applyChangesPacs()
     
     if ( m_textAETitleMachine->isModified() )
     {
-        logMessage = "Modificació del AETitle de la màquina ";
+        logMessage = "ModificaciÃ³ del AETitle de la mÃ quina ";
         logMessage.append( m_textAETitleMachine->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         
@@ -680,7 +680,7 @@ void QConfigurationScreen::applyChangesPacs()
     
     if ( m_textTimeout->isModified() )
     {
-        logMessage = "Modificació del valor del timeout ";
+        logMessage = "ModificaciÃ³ del valor del timeout ";
         logMessage.append( m_textTimeout->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         
@@ -689,7 +689,7 @@ void QConfigurationScreen::applyChangesPacs()
     
     if ( m_textLocalPort->isModified() )
     {
-        logMessage = "Modificació del Port d'entrada dels estudis";
+        logMessage = "ModificaciÃ³ del Port d'entrada dels estudis";
         logMessage.append( m_textLocalPort->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         
@@ -698,7 +698,7 @@ void QConfigurationScreen::applyChangesPacs()
     
     if ( m_textMaxConnections->isModified() )
     {
-        logMessage = "Modificació del nombre màxim de connexions ";
+        logMessage = "ModificaciÃ³ del nombre mÃ xim de connexions ";
         logMessage.append( m_textMaxConnections->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         
@@ -718,14 +718,14 @@ void QConfigurationScreen::configurationChanged ( const QString& )
 
 void QConfigurationScreen::configurationChangedDatabaseRoot ( const QString& )
 {
-    m_createDatabase= false; //indiquem no s'ha demanat que es creï la base de dades indicada a m_textDatabaseRoot
+    m_createDatabase= false; //indiquem no s'ha demanat que es creÃ¯ la base de dades indicada a m_textDatabaseRoot
     configurationChanged( "" );
 }
 
 
 void QConfigurationScreen::examinateDataBaseRoot()
 {
-      //a la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
+      //a la pÃ gina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mÃ¨tode que te retornin directament el fitxer selccionat
       
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , "Starviewer Database (*.sdb)" );
 
@@ -772,7 +772,7 @@ void QConfigurationScreen::applyChangesCache()
     
     if ( m_textPoolSize->isModified() )
     {   
-        logMessage = "Es modificarà la mida de la cache ";
+        logMessage = "Es modificarÃ  la mida de la cache ";
         logMessage.append( m_textPoolSize->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         
@@ -782,7 +782,7 @@ void QConfigurationScreen::applyChangesCache()
     
     if ( m_textCacheImagePath->isModified() )
     {
-        logMessage = "Es modificarà el directori de la cache d'imatges ";
+        logMessage = "Es modificarÃ  el directori de la cache d'imatges ";
         logMessage.append( m_textCacheImagePath->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         
@@ -791,7 +791,7 @@ void QConfigurationScreen::applyChangesCache()
     
     if ( m_textMaximumDaysNotViewed->isModified() )
     {
-        logMessage = "Es modificarà el nombre maxim de dies d'un estudi a la cache";
+        logMessage = "Es modificarÃ  el nombre maxim de dies d'un estudi a la cache";
         logMessage.append( m_textMaximumDaysNotViewed->text() );
         INFO_LOG( logMessage.toAscii().constData() );
         

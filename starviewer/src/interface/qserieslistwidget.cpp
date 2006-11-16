@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -45,7 +45,7 @@ void QSeriesListWidget::insertSeries( Series *serie )
     text.append( serie->getSeriesNumber().c_str() );
     
     if ( serie->getProtocolName().length() > 0 )
-    {//si hi ha descripció la inserim
+    {//si hi ha descripciÃ³ la inserim
         text.append( " " );
         text.append (serie->getProtocolName().c_str() );
         text.append( '\n' );
@@ -76,7 +76,7 @@ void QSeriesListWidget::insertSeries( Series *serie )
     item->setIcon(icon);
     
     /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
-   enlloc per amagar-lo, ho utilitzo per identificar la sèrie */
+   enlloc per amagar-lo, ho utilitzo per identificar la sÃ¨rie */
     item->setStatusTip(serie->getSeriesUID().c_str()); 
 }
 

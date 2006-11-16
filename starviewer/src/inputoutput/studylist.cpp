@@ -4,14 +4,14 @@
 
 namespace udg
 {
-/*Tenint en compte que es podran realitzar multiples cerques en diferents pacs alhora, això implica que tindrem diferents threads executant-se
-   que hauran d'inserir studis a la llista d'estudis, això fa necessari que la part d'inserir un nou estudi a la llista s'hagi de fer en execlusió
+/*Tenint en compte que es podran realitzar multiples cerques en diferents pacs alhora, aixÃ² implica que tindrem diferents threads executant-se
+   que hauran d'inserir studis a la llista d'estudis, aixÃ² fa necessari que la part d'inserir un nou estudi a la llista s'hagi de fer en execlusiÃ³
    mutua, ja que com es pot consultatr a 
  */
  
 StudyList::StudyList()
 {
-    int init_value = 1;//Només un thread alhora pot gravar a la llista
+    int init_value = 1;//NomÃ©s un thread alhora pot gravar a la llista
     
     m_semafor = (sem_t*) malloc( sizeof( sem_t ) );
     sem_init( m_semafor , 0 , init_value );

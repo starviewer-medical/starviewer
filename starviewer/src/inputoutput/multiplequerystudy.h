@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,8 +17,8 @@ namespace udg {
 
 class Status;
 class PacsParameters;
-/** Classe que permet fer diverses cerques simult‡nies, a diversos pacs a la vegada mitjanÁant la utilitzacio de threads
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+/** Classe que permet fer diverses cerques simult√†nies, a diversos pacs a la vegada mitjan√ßant la utilitzacio de threads
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class MultipleQueryStudy : public QObject
 {
@@ -30,23 +30,23 @@ public:
     ///destructor de la classe
     ~MultipleQueryStudy();
    
-    /** Ens permet indicar quina m‡scara utilitzarem per fer la query als PACS
-     * @param StudyMask M‡scara del estudis a cercar
+    /** Ens permet indicar quina m√†scara utilitzarem per fer la query als PACS
+     * @param StudyMask M√†scara del estudis a cercar
      */
     void setMask( StudyMask );
     
-    /** Estableix la llista de PACS als quals es far‡ la cerca
-     * @param PacsList amb els pacs als quals es cercar‡
+    /** Estableix la llista de PACS als quals es far√† la cerca
+     * @param PacsList amb els pacs als quals es cercar√†
      */
     void setPacsList( PacsList );
     
-    /** Una vegada haguem especificat la m‡scara, i tots els PACS als que volem realitzar la query, aquesta acciÛ iniciara el procÈs de cerca a tots els PACS
-     * @return Estat del mËtode 
+    /** Una vegada haguem especificat la m√†scara, i tots els PACS als que volem realitzar la query, aquesta acci√≥ iniciara el proc√©s de cerca a tots els PACS
+     * @return Estat del m√®tode 
      */
     Status StartQueries();
     
     /** retorna un apuntador a la llist amb els estudis
-     * @return  Llista amb els estudis trobats que complien amb la m‡scara.
+     * @return  Llista amb els estudis trobats que complien amb la m√†scara.
      */
     StudyListSingleton* getStudyList();
 
@@ -64,16 +64,16 @@ signals :
 
 public slots :
 
-    /// Slot que s'activa pel signal de QQuerStudyThread, quan un thread acaba allibera un recurs del sem‡for, perquË es pugui iniciar una altre thread per continuar amb la cerca
+    /// Slot que s'activa pel signal de QQuerStudyThread, quan un thread acaba allibera un recurs del sem√†for, perqu√® es pugui iniciar una altre thread per continuar amb la cerca
     void threadFinished();
     
-    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produÔt algun error al connectar amb el PACS
-     * @param pacsID del pacs que ha produÔt l'error
+    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produ√Øt algun error al connectar amb el PACS
+     * @param pacsID del pacs que ha produ√Øt l'error
      */   
     void slotErrorConnectingPacs( int );
 
-    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produÔt algun error al fer la query amb el PACS
-     * @param pacsID del pacs que ha produÔt l'error
+    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produ√Øt algun error al fer la query amb el PACS
+     * @param pacsID del pacs que ha produ√Øt l'error
      */   
     void slotErrorQueringStudiesPacs( int );
 
@@ -84,7 +84,7 @@ private :
     
     StudyListSingleton* m_studyListSingleton;
     PacsList m_pacsList;
-    int m_maxThreads;//Nombre m‡xim de threads que es poden executar a la vegada
+    int m_maxThreads;//Nombre m√†xim de threads que es poden executar a la vegada
    
 };
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -32,7 +32,7 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
     m_progressDialog->setRange( 0 , 100 );
     m_progressDialog->setMinimumDuration( 0 );
     m_progressDialog->setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
+    // atenciÃ³: el missatge triga una miqueta a aparÃ¨ixer...
     m_progressDialog->setLabelText( tr("Loading, please wait...") );
     m_progressDialog->setCancelButton( 0 );
     connect( m_inputReader , SIGNAL( progress(int) ) , m_progressDialog , SLOT( setValue(int) ) );
@@ -53,7 +53,7 @@ void AppImportFile::open()
     {
         if( loadFile( fileName ) )  
         {
-            // cal informar a l'aplicació de l'id del volum
+            // cal informar a l'aplicaciÃ³ de l'id del volum
             // la utilitat
             m_workingDirectory = QFileInfo( fileName ).dir().path();
             INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName ) );

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -20,7 +20,7 @@ namespace udg {
 /**
     Operacions d'escriptura
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class Output : public QObject
 {
@@ -32,14 +32,14 @@ public:
     /// Desa un volum en un format de fitxer donat
     bool saveFile(const char *fileName);
 
-    /// Desa un volum en una sËrie d'arxius ( png, bmp, tiff , jpg ). Si slice == -1, guarda totes les llesques altrament nomÈs en guarda la indicada
+    /// Desa un volum en una s√®rie d'arxius ( png, bmp, tiff , jpg ). Si slice == -1, guarda totes les llesques altrament nom√©s en guarda la indicada
     bool saveSeries(const char *fileName , int slice = -1 );
     
     /// Assigna el volum a escriure
     void setInput(Volume* data);  
 
 signals:
-    /// Indica el progrÈs en % de la lectura del fitxer
+    /// Indica el progr√©s en % de la lectura del fitxer
     void progress( int );    
 
 private:
@@ -49,16 +49,16 @@ private:
     
     typedef itk::Image< unsigned char , 3 > RescaleImageType;
     typedef itk::RescaleIntensityImageFilter< ImageType , RescaleImageType >    RescaleFilterType;
-    // declaraciÛ dels tipus per als escriptors de sËries de fitxers
+    // declaraci√≥ dels tipus per als escriptors de s√®ries de fitxers
     typedef ImageType::PixelType ImageSeriesPixelType;
     typedef itk::Image< unsigned char , 2 > ImageSeriesOutputType;
     typedef itk::ImageSeriesWriter< RescaleImageType, ImageSeriesOutputType > ImageSeriesWriterType;
     typedef ImageSeriesWriterType::Pointer ImageSeriesWriterPointerType;
 
-    /// L'escriptor est‡ndar de volums
+    /// L'escriptor est√†ndar de volums
     WriterPointerType    m_writer;
 
-    /// L'escriptor de sËries 
+    /// L'escriptor de s√®ries 
     ImageSeriesWriterPointerType m_seriesWriter;
     
     /// Les dades a escriure

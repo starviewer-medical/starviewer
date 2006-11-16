@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src
-# L'objectiu és un subdirectori del projecte 
+# L'objectiu Ã©s un subdirectori del projecte 
 
 SUBDIRS += core \
            extensions \

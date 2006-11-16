@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -10,7 +10,7 @@
 namespace udg {
 
 /**
-Classe que engloba un punt geomËtric,\TODO fer template o fer que sempre per defecte sigui 3D-> fer 3D i ja est‡
+Classe que engloba un punt geom√®tric,\TODO fer template o fer que sempre per defecte sigui 3D-> fer 3D i ja est√†
 \TODO fer servir vtkCoordinate, ens proporciona diverses tranformacions per als punts segons si referenciem global, viewport, etc...
 vtkCoordinate
 The coordinate systems in vtk are as follows:
@@ -23,9 +23,9 @@ The coordinate systems in vtk are as follows:
   WORLD -               x-y-z global coordinate values
   USERDEFINED -         x-y-z in User defined space
 
-etc etc, per mÈs mirar documentaciÛ de la classe...
+etc etc, per m√©s mirar documentaci√≥ de la classe...
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class Point 
 {

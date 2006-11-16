@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -40,7 +40,7 @@ Status CacheImageDAL::insertImage( Image *image )
     
     databaseConnection->getLock();
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacció
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacciÃ³
 
     state = databaseConnection->databaseStatus( stateDatabase );
     
@@ -49,7 +49,7 @@ Status CacheImageDAL::insertImage( Image *image )
          stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -73,7 +73,7 @@ Status CacheImageDAL::insertImage( Image *image )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -94,7 +94,7 @@ Status CacheImageDAL::insertImage( Image *image )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -108,7 +108,7 @@ Status CacheImageDAL::insertImage( Image *image )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }    
@@ -141,13 +141,13 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }    
     
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
     while (i <= rows )
     {   
         image.setImageNumber(atoi( resposta [ 0 + i * columns ] ) );
@@ -193,12 +193,12 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }    
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
    
     imageNumber = atoi( resposta [i] );
    
@@ -227,13 +227,13 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }    
     
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
    
     size = atol( resposta [i] );
    
@@ -267,7 +267,7 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }    
@@ -290,7 +290,7 @@ std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
         whereClause.append( "'" );
     }
 
-    //si hi ha UID de la sèrie
+    //si hi ha UID de la sÃ¨rie
     if ( imageMask->getSeriesUID().length() > 0 )
     {
         if ( whereClause.length() > 0 )
@@ -307,7 +307,7 @@ std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
         }
     }
 
-    //si hi ha número d'imatge
+    //si hi ha nÃºmero d'imatge
     if ( imageMask->getImageNumber().length() > 0 )
     {
         if ( whereClause.length() > 0 )
@@ -346,7 +346,7 @@ std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
         whereClause.append( "'" );
     }
 
-    //si hi ha UID de la sèrie
+    //si hi ha UID de la sÃ¨rie
     if ( imageMask->getSeriesUID().length() > 0 )
     {
         if ( whereClause.length() > 0 )
@@ -363,7 +363,7 @@ std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
         }
     }
 
-    //si hi ha número d'imatge
+    //si hi ha nÃºmero d'imatge
     if ( imageMask->getImageNumber().length() > 0 )
     {
         if ( whereClause.length() > 0 )

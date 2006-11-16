@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -76,7 +76,7 @@ Volume::VtkImageTypePointer Volume::getVtkData(  )
         }
         catch( itk::ExceptionObject & excep )
         {
-            WARN_LOG( "ExcepciÛ en el filtre itkToVtk :: Volume::getVtkData " )
+            WARN_LOG( "Excepci√≥ en el filtre itkToVtk :: Volume::getVtkData " )
             std::cerr << excep << std::endl;
         }
     }
@@ -90,7 +90,7 @@ void Volume::setData( ItkImageTypePointer itkImage  )
 
 void Volume::setData( VtkImageTypePointer vtkImage )
 {
-    // \TODO fer cÚpia local, no nomÈs punter-> com fer-ho?
+    // \TODO fer c√≤pia local, no nom√©s punter-> com fer-ho?
     m_imageDataVTK = vtkImage;
     
     m_vtkToItkFilter->SetInput( m_imageDataVTK );
@@ -102,7 +102,7 @@ void Volume::setData( VtkImageTypePointer vtkImage )
     }
     catch(itk::ExceptionObject & excep)
     {
-        WARN_LOG( "ExcepciÛ en el filtre vtkToItk :: Volume::setData " )
+        WARN_LOG( "Excepci√≥ en el filtre vtkToItk :: Volume::setData " )
         std::cerr << excep << std::endl;    
     }
 }

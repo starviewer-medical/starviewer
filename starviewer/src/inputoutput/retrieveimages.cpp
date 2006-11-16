@@ -29,7 +29,7 @@ void RetrieveImages:: setMask( StudyMask Study )
     m_mask = Study.getMask();
 }
 
-/// En aquesta funciÛ acceptem la connexiÛ que se'ns sol∑licita per transmetre'ns imatges
+/// En aquesta funci√≥ acceptem la connexi√≥ que se'ns sol¬∑licita per transmetre'ns imatges
 OFCondition
 acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
 {
@@ -110,7 +110,7 @@ OFCondition echoSCP(
   return cond;
 }
 
-/// Aquesta funciÛ s'encarrega de guardar cada paquet que rebem
+/// Aquesta funci√≥ s'encarrega de guardar cada paquet que rebem
 /*It's a callback function, can't own to the class */
  void storeSCPCallback(
     /* in */
@@ -148,7 +148,7 @@ OFCondition echoSCP(
           break;
       }
 
-    if ( progress->state == DIMSE_StoreEnd ) //si el paquest Ès de finalitzaciÛ d'una imatge hem de guardar-le
+    if ( progress->state == DIMSE_StoreEnd ) //si el paquest √©s de finalitzaci√≥ d'una imatge hem de guardar-le
     {
         *statusDetail = NULL;    /* no status detail */
     
@@ -164,7 +164,7 @@ OFCondition echoSCP(
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
             ProcessImageSingleton* piSingleton; 
         
-            //proces que far‡ el tractament de la imatge descarregada de la nostre aplicaciÛ, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
+            //proces que far√† el tractament de la imatge descarregada de la nostre aplicaci√≥, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
             piSingleton=ProcessImageSingleton::getProcessImageSingleton();  
             
             const char* fileName = cbdata->imageFileName;
@@ -179,7 +179,7 @@ OFCondition echoSCP(
             DcmTagKey studyInstanceUIDTagKey( DCM_StudyInstanceUID ); //studyUID
             DcmTagKey seriesInstanceUIDTagKey( DCM_SeriesInstanceUID );//seriesUID
             DcmTagKey SOPInstanceUIDTagKey ( DCM_SOPInstanceUID );
-            DcmTagKey imageNumberTagKey (DCM_InstanceNumber );    //n˙mero d'imatge    
+            DcmTagKey imageNumberTagKey (DCM_InstanceNumber );    //n√∫mero d'imatge    
             
             pathfile.insert( 0 , piSingleton->getPath() );//agafem el path del directori on es guarden les imatges
             
@@ -194,7 +194,7 @@ OFCondition echoSCP(
             
             pathfile.append( studyDir );
   
-            //comprovem, si el directori de l'estudi ja est‡ creat
+            //comprovem, si el directori de l'estudi ja est√† creat
             pdir = opendir( pathfile.c_str() );
             if ( !pdir )
             {
@@ -202,7 +202,7 @@ OFCondition echoSCP(
             }
             else closedir( pdir );
             
-            //obtenim a quina sËrie pertany la imatage per saber el directori on l'hem de guardar 
+            //obtenim a quina s√®rie pertany la imatage per saber el directori on l'hem de guardar 
             ( *imageDataSet )->findAndGetString( seriesInstanceUIDTagKey , seriesUID , OFFalse );
         
             seriesDir = seriesUID;
@@ -210,7 +210,7 @@ OFCondition echoSCP(
             pathfile.append( "/" );
             pathfile.append( seriesDir );
             
-            //comprovem, si el directori de la sËrie ja est‡ creat
+            //comprovem, si el directori de la s√®rie ja est√† creat
             pdir = opendir( pathfile.c_str()) ;
             if ( !pdir )
             {
@@ -310,7 +310,7 @@ OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_Pr
     return cond;
 }
 
-/// Accepta la connexiÛ que ens fa el PACS, per convertir-nos en un scp
+/// Accepta la connexi√≥ que ens fa el PACS, per convertir-nos en un scp
 OFCondition subOpSCP( T_ASC_Association **subAssoc )
 {
     //ens convertim com en un servidor el PACS ens envai comandes que nosaltres hem de fer en aquest

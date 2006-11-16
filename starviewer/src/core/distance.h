@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -12,9 +12,9 @@
 namespace udg {
 
 /**
-Classe que engloba una dist‡ncia
+Classe que engloba una dist√†ncia
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class Distance 
 {
@@ -34,10 +34,10 @@ public:
     Point getSecondPoint(){ return m_second; };
     void getPoints( Point points[2] ){ points[0] = m_first; points[2] = m_second; };
 
-    /// Retorna la dist‡ncia euclidiana
+    /// Retorna la dist√†ncia euclidiana
     double getDistance();
 private:
-    /// Coordenades geomËtriques de la mesura;
+    /// Coordenades geom√®triques de la mesura;
     Point m_first, m_second;
 };
 

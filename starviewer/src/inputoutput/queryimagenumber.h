@@ -28,8 +28,8 @@
 #include <ofcond.h>
 #include "pacsserver.h"
 
-/// Classe que per una màscara d'una sèrie compte les imatges que conté aquesta sèrie. Aquesta classe no és reentrant
-// Aquesta classe no es pot fer amb més d'un thread a la vegada degut a la variable global imageNumberGlobal 
+/// Classe que per una mÃ scara d'una sÃ¨rie compte les imatges que contÃ© aquesta sÃ¨rie. Aquesta classe no Ã©s reentrant
+// Aquesta classe no es pot fer amb mÃ©s d'un thread a la vegada degut a la variable global imageNumberGlobal 
 
 namespace udg{
 

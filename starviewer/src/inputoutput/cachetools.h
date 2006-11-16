@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,14 +14,14 @@ namespace udg {
 class Status;
 
 /**
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class CacheTools{
 public:
     CacheTools();
 
     /** Compacta la base de dades de la cache, per estalviar espai
-     * @return estat del mËtode  
+     * @return estat del m√®tode  
      */
     Status compactCachePacs();
     

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -12,9 +12,9 @@
 namespace udg {
 
 /**
-ContÈ informaciÛ relacionada amb el volum, com per exemple dades del pacient.
+Cont√© informaci√≥ relacionada amb el volum, com per exemple dades del pacient.
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class VolumeSourceInformation 
 {
@@ -24,26 +24,26 @@ public:
     ~VolumeSourceInformation();
 
 
-    /** Indiquem l'string que defineix la orientaciÛ del pacient respecte el seu sistema de coordenades
+    /** Indiquem l'string que defineix la orientaci√≥ del pacient respecte el seu sistema de coordenades
         Per determinar la dreta o esquerra del pacient farem servir L, per LEFT i R per RIGHT.
         Per determinar la part davantera o del darrera farem servir A, per ANTERIOR , i P, per POSTERIOR.
         Per deteminar amunt i avall farem servir H/S, per HEAD/SUPERIOR, i F/I, per FEET/INFERIOR)
 
-        En un scan tÌpic de cervell tindrÌem un string LPS, ja que l'eix X avanÁa cap a l'esquerra del pacient, l'eix Y cap al darrera del pacient i les Z en direcciÛ cap al cap del pacient. AixÌ doncs en les respectives visualitzacions tindrÌem, comenÁant pel cantÛ esquerra les seg¸ents referËncies i en sentit anti-horari:
+        En un scan t√≠pic de cervell tindr√≠em un string LPS, ja que l'eix X avan√ßa cap a l'esquerra del pacient, l'eix Y cap al darrera del pacient i les Z en direcci√≥ cap al cap del pacient. Aix√≠ doncs en les respectives visualitzacions tindr√≠em, comen√ßant pel cant√≥ esquerra les seg√ºents refer√®ncies i en sentit anti-horari:
         Axial: Left , Anterior , Right , Posterior
         Sagital: Posterior , Inferior , Anterior , Superior
         Coronal: Right , Inferior , Left , Superior
 
-        En un scan tipu "radiografia" frontal ( com si ens fessin una foto de cares ) l'string seria LIP, ja que l'eix X avanÁa cap a l'esquerra del pacient, l'eix Y avanÁa cap als peus (part inferior) del pacient i l'eix Z avanÁa cap a l'esquena del pacient
+        En un scan tipu "radiografia" frontal ( com si ens fessin una foto de cares ) l'string seria LIP, ja que l'eix X avan√ßa cap a l'esquerra del pacient, l'eix Y avan√ßa cap als peus (part inferior) del pacient i l'eix Z avan√ßa cap a l'esquena del pacient
 
-        MÈs informaciÛ a l'standard DICOM capÌtols C.7.6.2.1.1 , C.7.6.1.1.1
+        M√©s informaci√≥ a l'standard DICOM cap√≠tols C.7.6.2.1.1 , C.7.6.1.1.1
         
         (
-        especifica els "direction cosines" de la primera fila i de la primera columna respecte al pacient. Aquests atributs vindran en parells. El valor de la fila pels eixos x, y, i z respectivament seguits pels valors de la Columna per els eixos x, y, i z respectivament. La direcciÛ dels eixos est‡ definida completament per l'orientaciÛ del pacient.
+        especifica els "direction cosines" de la primera fila i de la primera columna respecte al pacient. Aquests atributs vindran en parells. El valor de la fila pels eixos x, y, i z respectivament seguits pels valors de la Columna per els eixos x, y, i z respectivament. La direcci√≥ dels eixos est√† definida completament per l'orientaci√≥ del pacient.
          L'eix de les X incrementa cap a l'esquerra del pacient.
          L'eix de les Y incrementa cap a la cara posterior del pacient.
          L'eix de les Z incrementa cap al cap del pacient.
-      El sistema de coordenades del pacient Ès un sistema de m‡ dreta, Èa dir, el producte vectorial de un vector unitari a travÈs de l'eix positiu de les X i el vector unitari sobre l'eix positiu de les Y Ès = al vector unitari sobre l'eix positiu de les Z
+      El sistema de coordenades del pacient √©s un sistema de m√† dreta, √©a dir, el producte vectorial de un vector unitari a trav√©s de l'eix positiu de les X i el vector unitari sobre l'eix positiu de les Y √©s = al vector unitari sobre l'eix positiu de les Z
       )
 
     */
@@ -52,13 +52,13 @@ public:
         m_patientOrientationString = QString::fromLatin1( patientOrientationString );
     };
 
-    /// Retorna l'string d'orientaciÛ del pacient
+    /// Retorna l'string d'orientaci√≥ del pacient
     QString getPatientOrientationString( )
     {
         return m_patientOrientationString;
     };
 
-    /// Retorna l'string d'orientaciÛ del pacient invertit, Ès a dir L <=> R , P <=> A , S <=> I
+    /// Retorna l'string d'orientaci√≥ del pacient invertit, √©s a dir L <=> R , P <=> A , S <=> I
     QString getRevertedPatientOrientationString();
     
     /// Assigna/Retorna nom del pacient
@@ -81,7 +81,7 @@ public:
         return m_patientID;
     };
 
-    /// Assigna/Retorna nom de la instituciÛ
+    /// Assigna/Retorna nom de la instituci√≥
     void setInstitutionName( const char * institution )
     {
         m_institution = QString::fromLatin1( institution );
@@ -172,7 +172,7 @@ public:
         return m_protocolName;
     };
 
-    /// Assigna/Retorna els cosinus dels vectors de direccions dels eixos. AixÌ sabem quina Ès la orientaciÛ en la que s'ha agafat el pacient
+    /// Assigna/Retorna els cosinus dels vectors de direccions dels eixos. Aix√≠ sabem quina √©s la orientaci√≥ en la que s'ha agafat el pacient
     void setDirectionCosines( double directionCosines[9] );
     void setDirectionCosines( double xCosines[3], double yCosines[3], double zCosines[3] );
     void setXDirectionCosines( double xCosines[3] );

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -13,7 +13,7 @@ namespace udg {
 
 ProcessImageSingleton::ProcessImageSingleton()
 {
-    int init_value = 1;//NomÈs un thread alhora pot gravar a la llista
+    int init_value = 1;//Nom√©s un thread alhora pot gravar a la llista
     m_semafor = ( sem_t* ) malloc( sizeof( sem_t ) );
     sem_init( m_semafor , 0 , init_value );    
 }

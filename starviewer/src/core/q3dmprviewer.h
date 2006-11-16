@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -21,9 +21,9 @@ class vtkLookupTable;
 namespace udg {
 
 /**
-    Visor de ReconstrucciÛ multiplanar 3D
+    Visor de Reconstrucci√≥ multiplanar 3D
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 
 // FWD declarations
@@ -47,7 +47,7 @@ public:
     Volume *getSagitalResliceOutput();
     Volume *getCoronalResliceOutput();
 
-    /// MËtodes per obtenir les coordenades que defineixen els plans
+    /// M√®todes per obtenir les coordenades que defineixen els plans
     double *getAxialPlaneOrigin();
     double *getAxialPlaneNormal();
     void getAxialPlaneOrigin( double origin[3] );
@@ -77,7 +77,7 @@ signals:
     void planesHasChanged( void );
 
 public slots:
-    /// Inicialitza la vista de la c‡mara per veure el model des d'una orientaciÛ per defecte determinada ( acial , sagital o coronal )
+    /// Inicialitza la vista de la c√†mara per veure el model des d'una orientaci√≥ per defecte determinada ( acial , sagital o coronal )
     void resetViewToSagital();
     void resetViewToCoronal();
     void resetViewToAxial();
@@ -93,7 +93,7 @@ public slots:
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
 
-    /// MËtodes per donar diversos window level per defecte
+    /// M√®todes per donar diversos window level per defecte
     void resetWindowLevelToDefault();
     void resetWindowLevelToBone();
     void resetWindowLevelToEmphysema();
@@ -107,17 +107,17 @@ public slots:
     void resetWindowLevelToPetrousBone();
     void resetWindowLevelToLung();
 
-    /// mËtodes per controlar la visibilitat de l'outline
+    /// m√®todes per controlar la visibilitat de l'outline
     void enableOutline( bool enable );
     void outlineOn();
     void outlineOff();
 
-    /// mËtodes per controlar la visibilitat de l'orientation marker widget
+    /// m√®todes per controlar la visibilitat de l'orientation marker widget
     void enableOrientationMarker( bool enable );
     void orientationMarkerOn();
     void orientationMarkerOff();
 
-    /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mËtode en comptes de fer aixÚ
+    /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un m√®tode en comptes de fer aix√≤
     void planeInteraction();
 
     void setEnableTools( bool enable );
@@ -131,7 +131,7 @@ private:
     /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
 
-    /// Crea l'actor que mostra una referËncia de l'orientaciÛ dels eixos
+    /// Crea l'actor que mostra una refer√®ncia de l'orientaci√≥ dels eixos
     void setCameraOrientation( int orientation );
 
     /// inicialitza els valors de window level
@@ -165,19 +165,19 @@ private:
     /// La bounding box del volum
     vtkActor *m_outlineActor;
 
-    /// Widget per veure la orientaciÛ en 3D
+    /// Widget per veure la orientaci√≥ en 3D
     Q3DOrientationMarker *m_orientationMarker;
 
     /// connexions d'events vtk amb slots / signals qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
 
-    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor est‡ndar de constrast
+    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor est√†ndar de constrast
     double m_defaultWindow , m_defaultLevel;
 
     /// control de visibilitat dels plans
     bool m_axialPlaneVisible, m_sagitalPlaneVisible , m_coronalPlaneVisible;
 
-    /// control de visibilitat de l'outline i l'orientation marker widget \TODO Ès possible que aquests membres acabin sent superflus i innecessaris
+    /// control de visibilitat de l'outline i l'orientation marker widget \TODO √©s possible que aquests membres acabin sent superflus i innecessaris
     bool m_isOutlineEnabled;
 
     /// Tool Manager del visor

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,7 +14,7 @@
 namespace udg {
 
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou thread
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QQueryStudyThread :public QThread
 {
@@ -26,11 +26,11 @@ public:
     
     /** Accio que executa el thread
      * @param parametres del pacs a consultar
-     * @param m‡scara de cerca
+     * @param m√†scara de cerca
      */
     void queryStudy( PacsParameters parameters , StudyMask mask );
     
-    /// el codi d'aquest mËtode es el que s'executa en un nou thread
+    /// el codi d'aquest m√®tode es el que s'executa en un nou thread
     void run();
     
     ///Destructor de la classe

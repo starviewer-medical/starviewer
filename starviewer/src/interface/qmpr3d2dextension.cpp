@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -7,7 +7,7 @@
 #include "qmpr3d2dextension.h"
 #include "q3dmprviewer.h"
 #include "q2dviewer.h"
-#include "mathtools.h" // per c‡lculs d'interseccions
+#include "mathtools.h" // per c√†lculs d'interseccions
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include <iostream>
@@ -67,7 +67,7 @@ void QMPR3D2DExtension::setInput( Volume *input )
 
     m_axial2DView->setInput( m_mpr3DView->getAxialResliceOutput() );
     m_axial2DView->render();
-    // posem bÈ la c‡mara
+    // posem b√© la c√†mara
     vtkCamera *axialCam = m_axial2DView->getRenderer() ? m_axial2DView->getRenderer()->GetActiveCamera() : NULL;
     if ( axialCam )
     {
@@ -85,7 +85,7 @@ void QMPR3D2DExtension::setInput( Volume *input )
     
     m_coronal2DView->setInput( m_mpr3DView->getCoronalResliceOutput() );
     m_coronal2DView->render();
-    // posem bÈ la c‡mara
+    // posem b√© la c√†mara
     vtkCamera *coronalCam = m_coronal2DView->getRenderer() ? m_coronal2DView->getRenderer()->GetActiveCamera() : NULL;
     if ( coronalCam )
     {
@@ -156,7 +156,7 @@ void QMPR3D2DExtension::update2DViews()
 
 void QMPR3D2DExtension::createActors()
 {
-    // Creem les inst‡ncies dels actors
+    // Creem les inst√†ncies dels actors
     m_sagitalOverAxialIntersectionAxis = vtkAxisActor2D::New();
     m_coronalOverAxialIntersectionAxis = vtkAxisActor2D::New();
     m_axialOverSagitalIntersectionAxis = vtkAxisActor2D::New();
@@ -203,7 +203,7 @@ void QMPR3D2DExtension::createActors()
 
 void QMPR3D2DExtension::updateActors()
 {
-    // Passem a sistema de coordenades de mÛn
+    // Passem a sistema de coordenades de m√≥n
     m_sagitalOverAxialIntersectionAxis->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sagitalOverAxialIntersectionAxis->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
     
@@ -225,7 +225,7 @@ void QMPR3D2DExtension::updateActors()
 // 
     double r[3] , t[3] , position1[3] , position2[3];
     
-    // projecciÛ sagital sobre axial i viceversa
+    // projecci√≥ sagital sobre axial i viceversa
     MathTools::planeIntersection( m_mpr3DView->getAxialPlaneOrigin() , m_mpr3DView->getAxialPlaneNormal() ,  m_mpr3DView->getSagitalPlaneOrigin() , m_mpr3DView->getSagitalPlaneNormal() , r , t );
     
     position1[0] = r[0] - t[0]*2000;
@@ -242,7 +242,7 @@ void QMPR3D2DExtension::updateActors()
     m_axialOverSagitalIntersectionAxis->SetPosition(  position1[1] , position1[2] );
     m_axialOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
     
-    // projecciÛ coronal sobre axial
+    // projecci√≥ coronal sobre axial
     MathTools::planeIntersection( m_mpr3DView->getAxialPlaneOrigin() , m_mpr3DView->getAxialPlaneNormal() ,  m_mpr3DView->getCoronalPlaneOrigin() , m_mpr3DView->getCoronalPlaneNormal() , r , t );
     
     position1[0] = r[0] - t[0]*2000;
@@ -261,7 +261,7 @@ void QMPR3D2DExtension::updateActors()
 // Projeccions sobre SAGITAL
 // 
 //  
-    // projecciÛ coronal sobre sagital
+    // projecci√≥ coronal sobre sagital
     MathTools::planeIntersection( m_mpr3DView->getSagitalPlaneOrigin() , m_mpr3DView->getSagitalPlaneNormal() ,  m_mpr3DView->getCoronalPlaneOrigin() , m_mpr3DView->getCoronalPlaneNormal() , r , t );
     
     position1[0] = r[0] - t[0]*2000;

@@ -26,8 +26,8 @@
 
 namespace udg {
 
-/** Aquesta classe  mostrar estudis i sËries d'una manera organitzada i f‡cilment.
-  * Aquesta classe Ès una modificaciÛ de la QTreeWidget que s'ha adaptat per poder visualitzar la informaciÛ de la cerca d'estudis, permetent consultar les series d'aquell estudi. Aquesta classe es sincronitzar amb la informaciÛ mostrada a QSeriesListWidget
+/** Aquesta classe  mostrar estudis i s√®ries d'una manera organitzada i f√†cilment.
+  * Aquesta classe √©s una modificaci√≥ de la QTreeWidget que s'ha adaptat per poder visualitzar la informaci√≥ de la cerca d'estudis, permetent consultar les series d'aquell estudi. Aquesta classe es sincronitzar amb la informaci√≥ mostrada a QSeriesListWidget
 @author marc
 */
 
@@ -43,18 +43,18 @@ public:
     /// Constructor de la classe
     QStudyTreeWidget( QWidget *parent = 0 );
 
-    /** Mostra l'estudi pel ListWidget que se li passa per par‡metre
+    /** Mostra l'estudi pel ListWidget que se li passa per par√†metre
      *  @param StudyList a mostrar
      */
     void insertStudyList( StudyList * studyList );
     
-    /** Inseriex la informaciÛ d'un estudi
+    /** Inseriex la informaci√≥ d'un estudi
      * @param Dades de l'estudi
      */
     void insertStudy( Study * );
 
-    /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi tambÈ la informaciÛ de la sËrie
-     *                    @param informaciÛ de la serie
+    /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi tamb√© la informaci√≥ de la s√®rie
+     *                    @param informaci√≥ de la serie
      */
     void insertSeries( Series *serie );
     
@@ -78,8 +78,8 @@ public:
      */
     QString getSelectedStudyUID();
     
-    /** Retorna el UID Study de la sËrie seleccionada, si en aquell moment no hi ha cap sËrie seleccionada, retorna un QString buit
-     *  @return UID de la sËrie seleccionat
+    /** Retorna el UID Study de la s√®rie seleccionada, si en aquell moment no hi ha cap s√®rie seleccionada, retorna un QString buit
+     *  @return UID de la s√®rie seleccionat
      */
     QString getSelectedSeriesUID();
 
@@ -96,7 +96,7 @@ public:
 protected:
 
     /** Mostra el menu contextual
-     *  @param Dades de l'event sol∑licitat
+     *  @param Dades de l'event sol¬∑licitat
      */
     void contextMenuEvent(QContextMenuEvent *event);
 
@@ -132,12 +132,12 @@ public slots:
      */
     void selectedSeriesIcon( QString );
     
-    /** Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesListWidget per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesListWidget amb les series d'aquell estudi tambÈ en el QSeriesListWidget
+    /** Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesListWidget per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesListWidget amb les series d'aquell estudi tamb√© en el QSeriesListWidget
      * @param item sobre el que s'ha fet click
      */
     void clicked( QTreeWidgetItem * , int );
     
-    /**  Si fem doble click a una serie del TreeView es visualitzar‡ si Ès una sËrie, o si Ès un estudi es mostraran les series o s'amagaran si abans es mostraven
+    /**  Si fem doble click a una serie del TreeView es visualitzar√† si √©s una s√®rie, o si √©s un estudi es mostraran les series o s'amagaran si abans es mostraven
      * @param item sobre el que s'ha fet click
      */
     void doubleClicked( QTreeWidgetItem * , int );
@@ -148,7 +148,7 @@ public slots:
     /// Slot que descarrega un estudi
     void retrieveStudy( );
 
-    /// ESborra un estudi de la cachÈ     
+    /// ESborra un estudi de la cach√©     
     void deleteStudy( );
     
     /// Slot que visualitza l'estudi
@@ -166,13 +166,13 @@ private :
     /// crea les connexions dels signals i slots
     void createConnections( );
     
-    /// Assigna l'ampla a les columnes segons els par‡metres guardats a StarviewerSettings
+    /// Assigna l'ampla a les columnes segons els par√†metres guardats a StarviewerSettings
     void setWidthColumns( );
     
     /// Creem el menu contextual, en funcio de a quin tab pertany activa unes o altres opcions del menu
     void createContextMenu( );
     
-    /** Quant es consulten les sËries d'un estudi, es fa un acces al pacs demanant la informaciÛ d'aquelles series,si es tornen a consultar una segona vegada les sËries de l'estudi,no cal tornar a accedir al pacs perquË ja tenim la informaciÛ de la sËrie al TreeView, perÚ s'ha d'actualitzar QSeriesListWidget amb  la informaciÛ de les sËries de l'estudi, com no tornem a accedir al pacs, la informaciÛ de les sËries li hem de passar d'algun mode, per aixÚ el que fem Ès invocar aquest mËtode que crea reconstrueix l'objecte series, amb la principal informaciÛ de les sËries, i que fa un emit, que Ès capturat pel QSeriesInconView, per mostrar la informaciÛ de la sËrie (la connexiÛ entre el QStudyTreeWidget i QSeriesListWidget es fa la constrcutor de la QueryScreen)
+    /** Quant es consulten les s√®ries d'un estudi, es fa un acces al pacs demanant la informaci√≥ d'aquelles series,si es tornen a consultar una segona vegada les s√®ries de l'estudi,no cal tornar a accedir al pacs perqu√® ja tenim la informaci√≥ de la s√®rie al TreeView, per√≤ s'ha d'actualitzar QSeriesListWidget amb  la informaci√≥ de les s√®ries de l'estudi, com no tornem a accedir al pacs, la informaci√≥ de les s√®ries li hem de passar d'algun mode, per aix√≤ el que fem √©s invocar aquest m√®tode que crea reconstrueix l'objecte series, amb la principal informaci√≥ de les s√®ries, i que fa un emit, que √©s capturat pel QSeriesInconView, per mostrar la informaci√≥ de la s√®rie (la connexi√≥ entre el QStudyTreeWidget i QSeriesListWidget es fa la constrcutor de la QueryScreen)
      * @param Apuntador a l'estudi al tree view
      */
     void setSeriesToSeriesListWidget( QTreeWidgetItem *item );

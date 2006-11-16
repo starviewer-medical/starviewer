@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -30,7 +30,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
     QDir directory, directoryToDelete;
     QFile fileToDelete;    
 
-    //si ens envien un directori amb la '/' al final la trËiem
+    //si ens envien un directori amb la '/' al final la tr√®iem
     if ( directoryPath.at( directoryPath.length() - 1) == '/' )
     {
         directoryPath = directoryPath.remove ( directoryPath.length() - 1 , 1 );
@@ -63,7 +63,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
             absoluteDirectoryPath.append( directoryPath );          
             absoluteDirectoryPath.append( "/" );
             absoluteDirectoryPath.append( *it );
-            if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix mËtode per a que esborri el subdirectori ( recursivitat )
+            if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix m√®tode per a que esborri el subdirectori ( recursivitat )
         }
     }
 

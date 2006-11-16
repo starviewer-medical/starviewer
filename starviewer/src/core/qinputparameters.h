@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,14 +14,14 @@
 namespace udg {
 
 /**
-    Classe base per als widgets destinats a introduÔr par‡metres.
-    Els par‡metres es poden introduÔr ja de forma simple i cl‡ssica com pot ser amb 
-    caixes de text i similar o de formes mÈs complexes com amb histogrames o d'altres.
+    Classe base per als widgets destinats a introdu√Ør par√†metres.
+    Els par√†metres es poden introdu√Ør ja de forma simple i cl√†ssica com pot ser amb 
+    caixes de text i similar o de formes m√©s complexes com amb histogrames o d'altres.
     
-    Aquesta ofereix la interfÌcie comuna i b‡sica de signals o slots perquË les dades
-    es mantinguin en sincronisme amb la resta de la interfÌcie.
+    Aquesta ofereix la interf√≠cie comuna i b√†sica de signals o slots perqu√® les dades
+    es mantinguin en sincronisme amb la resta de la interf√≠cie.
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 
 class QInputParameters : public QWidget{
@@ -32,7 +32,7 @@ public:
     virtual ~QInputParameters();
 
     /**
-        Activa/desactiva l'emissiÛ de la senyal "parameterChanged(int)"
+        Activa/desactiva l'emissi√≥ de la senyal "parameterChanged(int)"
     */
     void disableIndividualSincronization();
     void enableIndividualSincronization();
@@ -40,18 +40,18 @@ public:
     
 public slots:
     /**
-        Slot que ens serveix per indicar que hem d'actualitzar el parametre que ens diguin mitjanÁant 
-        un identificador (que, en realitat, ser‡ un enum). Serveix per canviar els valors a partir 
+        Slot que ens serveix per indicar que hem d'actualitzar el parametre que ens diguin mitjan√ßant 
+        un identificador (que, en realitat, ser√† un enum). Serveix per canviar els valors a partir 
         d'una classe Parameters
     */
     virtual void readParameter(int index) /*= 0*/{}; 
     /**
-        Escriu tots els valors de par‡metres que tÈ actualment al Parameters associat
+        Escriu tots els valors de par√†metres que t√© actualment al Parameters associat
     */
     virtual void writeAllParameters() /*= 0*/{};
 
 private:
-    /// indicar‡ si els par‡metres s'actualitzen 'en viu' o d'una tacada
+    /// indicar√† si els par√†metres s'actualitzen 'en viu' o d'una tacada
     bool m_individualSincronization;
 };
 

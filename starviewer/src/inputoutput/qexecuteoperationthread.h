@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -11,8 +11,8 @@
 
 namespace udg {
 
-/** Aquest classe, s'encarrega d'anar executant objectes Operation. (operacions que s'han de dur a terme). Aquesta classe crea un thread quan hi ha alguna operacio i les executa. A mÈs tambÈ utilitza una cua, on es van guardant totes les operation pendents d'executar 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+/** Aquest classe, s'encarrega d'anar executant objectes Operation. (operacions que s'han de dur a terme). Aquesta classe crea un thread quan hi ha alguna operacio i les executa. A m√©s tamb√© utilitza una cua, on es van guardant totes les operation pendents d'executar 
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Operation;
@@ -27,7 +27,7 @@ public:
       */
     QExecuteOperationThread( QObject *parent = 0 );
 
-    /** afegeix una operacio a la cua, si la cua esta buida l'afegeix i crea el thread que l'executar‡ 
+    /** afegeix una operacio a la cua, si la cua esta buida l'afegeix i crea el thread que l'executar√† 
       *         @param Operation a executar
       */
     void queueOperation( Operation operation );
@@ -47,8 +47,8 @@ signals :
      */
     void viewStudy( QString studyUID );
     
-    /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'est‡ descarregant
-     * @param studyUID UID de l'estudi que s'est‡ descarregant
+    /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'est√† descarregant
+     * @param studyUID UID de l'estudi que s'est√† descarregant
      */    
     void setOperating( QString studyUID );
 
@@ -57,18 +57,18 @@ signals :
      */    
     void setOperationFinished( QString studyUID );
 
-    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produÔt un error en la desc‡rrega de l'estudi
-     * @param studyUID UID de l'estudi que ha produÔt l'error
+    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produ√Øt un error en la desc√†rrega de l'estudi
+     * @param studyUID UID de l'estudi que ha produ√Øt l'error
      */    
     void setErrorOperation( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova imatge de l'estudi
      * @param studyUID UID de l'estudi que s'esta descarregat
-     * @param n˙mero d'imatge descarrega
+     * @param n√∫mero d'imatge descarrega
      */        
     void imageCommit( QString studyUID , int );
 
-    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova sËroe de l'estudi
+    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova s√®roe de l'estudi
      * @param studyUID UID de l'estudi que s'esta descarregat
      */       
     void seriesCommit( QString );
@@ -76,7 +76,7 @@ signals :
     ///Signal que s'emet cap a QueryScreen per indicar que no hi ha prou espai lliure per a descarregar nous estudis    
     void notEnoughFreeSpace();
 
-    ///Signal que s'emet quant s'ha produÔt un error alliberant espai de la cache
+    ///Signal que s'emet quant s'ha produ√Øt un error alliberant espai de la cache
     void errorFreeingCacheSpace();
 
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
@@ -84,8 +84,8 @@ signals :
      */
     void errorConnectingPacs( int );
     
-    /** signal que s'emet quan s'enqua una nova operaciÛ
-     * @param newOperation operaciÛ encuada
+    /** signal que s'emet quan s'enqua una nova operaci√≥
+     * @param newOperation operaci√≥ encuada
      */
     void newOperation( Operation *newOperation );
     
@@ -98,11 +98,11 @@ private slots :
 
     /** Emet un singnal cap al queryscreen per indicar que s'ha descarregat una imatge
       *     @param UID de l'estudi
-      *     @param n˙mero d'imatge
+      *     @param n√∫mero d'imatge
       */
     void imageCommitSlot( QString , int );
     
-    /** Emet un singal per indicar que s'ha descarregat una sËrie
+    /** Emet un singal per indicar que s'ha descarregat una s√®rie
       *     @param studyUID de l'estudi a descarregar
       */
     void seriesCommitSlot( QString );
@@ -111,16 +111,16 @@ private slots :
 private :
     
     bool m_stop;//indica si el thread esta parat
-    bool m_view;//indica si la operacio que s'esta realitzant Ès la descarrega d'un estudi per visualitzar-lo    
+    bool m_view;//indica si la operacio que s'esta realitzant √©s la descarrega d'un estudi per visualitzar-lo    
         
-    /** Descarrega un estudi, segons els par‡metres a operation, si l'estudi s'ha de visualitzar 
+    /** Descarrega un estudi, segons els par√†metres a operation, si l'estudi s'ha de visualitzar 
       * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie
       *     @param operation a executar
       */
     void retrieveStudy(Operation operation);
     
     /** Indica si hi ha com a minim 1Gb d'espai lliure tant a la cache com al disc per descarregar el nou estudi. 
-      * Si detecta,que no hi ha suficient a la cache o al disc, intenter‡ alliberar 2000 Mb, esborrant estudis vells, si no retornara que no hi ha suficient espai al disc
+      * Si detecta,que no hi ha suficient a la cache o al disc, intenter√† alliberar 2000 Mb, esborrant estudis vells, si no retornara que no hi ha suficient espai al disc
       *     @param retorna si hi ha suficient espai per descarregar l'estudi
       *     @return retorna l'estat de l'operacio
       */

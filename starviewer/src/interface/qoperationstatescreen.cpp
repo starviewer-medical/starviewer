@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -20,7 +20,7 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
 {
     setupUi( this );
     m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte l'UID de l'estudi
-    m_treeRetrieveStudy->setColumnHidden( 10 , true );//Indica quin tipus d'operació és
+    m_treeRetrieveStudy->setColumnHidden( 10 , true );//Indica quin tipus d'operaciÃ³ Ã©s
     
     createConnections();
 }
@@ -58,7 +58,7 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
     item->setText( 8 , "0"); //imatges
     item->setText( 9 , operation->getStudyUID() );
     operationNumber.setNum( operation->getOperation() , 10 );
-    item->setText( 10 , operationNumber ); // indica el tipus d'operació
+    item->setText( 10 , operationNumber ); // indica el tipus d'operaciÃ³
 }
 
 
@@ -150,7 +150,7 @@ void QOperationStateScreen::setOperationFinished( QString studyUID )
     if ( !qRetrieveList.isEmpty() )
     {
         item = qRetrieveList.at( 0 );
-        if ( item->text( 8 ) == "0" ) //si el número d'imatges processat és 0 error
+        if ( item->text( 8 ) == "0" ) //si el nÃºmero d'imatges processat Ã©s 0 error
         {
             item->setText( 0 , tr( "ERROR" ) );
         }
@@ -172,7 +172,7 @@ void QOperationStateScreen::setErrorOperation( QString studyUID )
     QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
 
-    //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
+    //hem de cridar al seriesRetrieved, perquÃ¨ hem d'indicar que s'ha acabat la descarrega de l'Ãºltima sÃ¨rie, ja que el starviewerprocess no sap quant acaba la descarregar de l'Ãºltima sÃ¨rie
     seriesCommit( studyUID );
     
     if ( !qRetrieveList.isEmpty() )

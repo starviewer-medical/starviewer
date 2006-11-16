@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -35,7 +35,7 @@ QViewer::QViewer( QWidget *parent )
     viewerLayout->setMargin( 0 );
     viewerLayout->addWidget( m_vtkWidget );
     
-    // això ho fem perquè la finestra buida quedi en negre en un principi
+    // aixÃ² ho fem perquÃ¨ la finestra buida quedi en negre en un principi
     m_vtkWidget->GetRenderWindow()->Render();
       
     // inicialitzem el punter del volum
@@ -119,7 +119,7 @@ bool QViewer::saveGrabbedViews( const char *baseName , FileType extension )
             strcat( pattern , "jpg" );
         break;
 
-        // \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
+        // \TODO el format tiff fa petar al desar, mirar si Ã©s problema de compatibilitat del sistema o de les prÃ²pies vtk
         case TIFF:
             writer = vtkTIFFWriter::New();
             strcat( pattern , "tif" );

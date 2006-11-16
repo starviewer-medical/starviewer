@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -22,7 +22,7 @@ TranslateTool::TranslateTool( Q2DViewer *viewer , QObject *parent, const char *n
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
-        DEBUG_LOG( "L'interactor Style és buit!" );
+        DEBUG_LOG( "L'interactor Style Ã©s buit!" );
 }
 
 TranslateTool::TranslateTool( Q3DViewer *viewer , QObject *parent, const char *name )
@@ -30,7 +30,7 @@ TranslateTool::TranslateTool( Q3DViewer *viewer , QObject *parent, const char *n
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
-        DEBUG_LOG( "L'interactor Style és buit!" );
+        DEBUG_LOG( "L'interactor Style Ã©s buit!" );
 }
 
 TranslateTool::TranslateTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
@@ -73,7 +73,7 @@ void TranslateTool::startTranslate()
         m_interactorStyle->StartPan();
     }
     else
-        DEBUG_LOG( "::startTranslate(): L'interactor Style és buit!" );
+        DEBUG_LOG( "::startTranslate(): L'interactor Style Ã©s buit!" );
 }
 
 void TranslateTool::doTranslate()
@@ -84,7 +84,7 @@ void TranslateTool::doTranslate()
             m_interactorStyle->Pan();
     }
     else
-        DEBUG_LOG( "::doTranslate(): L'interactor Style és buit!" );
+        DEBUG_LOG( "::doTranslate(): L'interactor Style Ã©s buit!" );
 
 }
 
@@ -96,7 +96,7 @@ void TranslateTool::endTranslate()
         m_interactorStyle->EndPan();
     }
     else
-        DEBUG_LOG( "::endTranslate(): L'interactor Style és buit!" );
+        DEBUG_LOG( "::endTranslate(): L'interactor Style Ã©s buit!" );
 }
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,7 +14,7 @@ class vtkInteractorStyle;
 namespace udg {
 
 /**
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Q2DViewer;
@@ -38,9 +38,9 @@ private:
     /// interactor style que omplirem en el constructor depenent del visor
     vtkInteractorStyle *m_interactorStyle;
     
-/// \TODO potser aquests mËtodes slots passen a ser p˙blics
+/// \TODO potser aquests m√®todes slots passen a ser p√∫blics
 private slots: 
-    /// ComenÁa el translate
+    /// Comen√ßa el translate
     void startTranslate();
 
     /// Calcula el nou translate

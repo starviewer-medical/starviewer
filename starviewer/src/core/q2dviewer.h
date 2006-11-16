@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -34,23 +34,23 @@ namespace udg {
 /**
 
 Classe base per als visualitzadors 2D.
-El mode d'operaciÛ habitual ser‡ el de visualitar un sol volum.
-Normalment per poder visualitzar un volum farem el seg¸ent
+El mode d'operaci√≥ habitual ser√† el de visualitar un sol volum.
+Normalment per poder visualitzar un volum farem el seg√ºent
 \code
 Q2DViewer* visor = new Q2DViewer();
 visor->setInput( volum );
 visor->setView( Q2DViewer::Axial );
 visor->render();
 
-En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat mab el mËtode setOverlayInput().
-Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patrÛ de checkerboard, aplicant un blending o un rectilinearWipe, en aquest cas haurÌem de fer servir el mËtode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
+En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat mab el m√®tode setOverlayInput().
+Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patr√≥ de checkerboard, aplicant un blending o un rectilinearWipe, en aquest cas haur√≠em de fer servir el m√®tode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
 \TODO acabar la doc sobre solapament
 
-Per defecte el visualitzador mostra la llesca central de la vista seleccionada, si volem canviar al llesca farem servir el mËtode setSlice().
+Per defecte el visualitzador mostra la llesca central de la vista seleccionada, si volem canviar al llesca farem servir el m√®tode setSlice().
 
-Podem escollir quines annotacions textuals i de referËncia apareixeran en la vista 2D a travÈs dels flags "AnnotationFlags" definits com enums. Aquests flags es poden passar en el constructor o els podem modificar a travÈs dels mËtodes \c addAnnotation() o \c removeAnnotation() que faran visible o invisible l'anotaciÛ indicada. Per defecte el flag Ès \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
+Podem escollir quines annotacions textuals i de refer√®ncia apareixeran en la vista 2D a trav√©s dels flags "AnnotationFlags" definits com enums. Aquests flags es poden passar en el constructor o els podem modificar a trav√©s dels m√®todes \c addAnnotation() o \c removeAnnotation() que faran visible o invisible l'anotaci√≥ indicada. Per defecte el flag √©s \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 
 // Fordward declarations
@@ -64,7 +64,7 @@ public:
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
     enum ViewType{ Axial, Coronal, Sagittal , None };
 
-    /// tipus de fusiÛ dels models
+    /// tipus de fusi√≥ dels models
     enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
@@ -85,7 +85,7 @@ public:
     void setViewToCoronal(){ setView( Q2DViewer::Coronal ); }
     void setViewToSagittal(){ setView( Q2DViewer::Sagittal ); }
 
-    /// ActualitzaciÛ d'anotacions v‡ries
+    /// Actualitzaci√≥ d'anotacions v√†ries
     void updateWindowLevelAnnotation();
 
     /// ens retorna la vista que tenim en aquells moments del volum
@@ -97,7 +97,7 @@ public:
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );
 
-    // MËtodes especÌfics checkerboard
+    // M√®todes espec√≠fics checkerboard
     /// Obtenim el nombre de divisions
     int * getDivisions();
     void getDivisions( int data[3] );
@@ -111,17 +111,17 @@ public:
     /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
     void saveCurrent( const char *baseName , FileType extension );
 
-    /// ObtÈ el window level actual de la imatge
+    /// Obt√© el window level actual de la imatge
     double getCurrentColorWindow();
     double getCurrentColorLevel();
 
 public slots:
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
 
-    /// Indiquem si volem veure la informaciÛ del volum per pantalla \TODO realment es far‡ servir aquest mËtode?
+    /// Indiquem si volem veure la informaci√≥ del volum per pantalla \TODO realment es far√† servir aquest m√®tode?
     void displayInformationText( bool display );
 
-    /// MËtodes varis per mostrar o no certa informaciÛ en pantalla
+    /// M√®todes varis per mostrar o no certa informaci√≥ en pantalla
     void displaySliceOn();
     void displaySliceOff();
     void displayProtocolNameOn();
@@ -169,13 +169,13 @@ public slots:
 
     void reset();
 
-    // MËtodes especÌfics checkerboard
+    // M√®todes espec√≠fics checkerboard
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int x , int y , int z );
 
     void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, void *call_data, vtkCommand * command);
 
-    /// Afegir o treure la visibilitat d'una anotaciÛ textual
+    /// Afegir o treure la visibilitat d'una anotaci√≥ textual
     void addAnnotation( AnnotationFlags annotation )
     {
         m_enabledAnnotations = m_enabledAnnotations | annotation;
@@ -183,7 +183,7 @@ public slots:
     }
     void removeAnnotation( AnnotationFlags annotation )
     {
-        // si existeix, llavors la "restem", sinÛ no cal fer res
+        // si existeix, llavors la "restem", sin√≥ no cal fer res
         if( m_enabledAnnotations & annotation )
         {
             m_enabledAnnotations -= annotation;
@@ -195,42 +195,42 @@ public slots:
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
 
-    /// ObtÈ el window/level original
+    /// Obt√© el window/level original
     void getDefaultWindowLevel( double wl[2] );
 
-    /// ObtÈ el window level actual de la imatge
+    /// Obt√© el window level actual de la imatge
     void getCurrentWindowLevel( double wl[2] );
 
     /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
 
-    /// Actualitza la informaciÛ del voxel que hi ha per sota del cursor
+    /// Actualitza la informaci√≥ del voxel que hi ha per sota del cursor
     void updateVoxelInformation();
 
-    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool est‡ disponible o no el viewer far‡ el que calgui
+    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool est√† disponible o no el viewer far√† el que calgui
     void setTool( QString toolName );
 
-    /// ObtÈ la tool que li demanem. \TODO MËtode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i nomÈs la SeedTool tÈ el mËtode especÌfic per accedir a aquestes dades
+    /// Obt√© la tool que li demanem. \TODO M√®tode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i nom√©s la SeedTool t√© el m√®tode espec√≠fic per accedir a aquestes dades
     Tool *getTool( QString toolName );
 
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
 
-    /// Aplica una rotaciÛ de 90 graus en el sentit de les agulles del rellotge
+    /// Aplica una rotaci√≥ de 90 graus en el sentit de les agulles del rellotge
     void rotateClockWise();
 
-    /// Aplica una rotaciÛ de 90 graus en el sentit contrari a les agulles del rellotge
+    /// Aplica una rotaci√≥ de 90 graus en el sentit contrari a les agulles del rellotge
     void rotateCounterClockWise();
 
 protected:
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
 
-    /// Aquest mËtode es fa servir perquË es mostri un men˙ contextual
+    /// Aquest m√®tode es fa servir perqu√® es mostri un men√∫ contextual
     //virtual void contextMenuEvent( QContextMenuEvent *event );
 
-    /// AcciÛ temporal de proves. Simplement fa un reset mostrant la llesca central de nou
+    /// Acci√≥ temporal de proves. Simplement fa un reset mostrant la llesca central de nou
     QAction *m_resetAction;
 
     /// per a les vistes 2D farem servir el vtkImageViewer2
@@ -242,16 +242,16 @@ protected:
     /// La llesca actual que estem visualitzant
     int m_currentSlice;
 
-    /// Aquest Ès el segon volum afegit a solapar
+    /// Aquest √©s el segon volum afegit a solapar
     Volume* m_overlayVolume;
 
-    /// El nombre de divisions per cada dimensiÛ
+    /// El nombre de divisions per cada dimensi√≥
     int m_divisions[3];
 
     /// El picker per anotar punts de la imatge
     vtkPropPicker *m_picker;
 
-    /// Textes informatius de l'image actor , ens estalviar‡ molta feina
+    /// Textes informatius de l'image actor , ens estalviar√† molta feina
     vtkCornerAnnotation *m_textAnnotation;
 
     /// Actualitza la vista en el rendering
@@ -267,13 +267,13 @@ private:
     /// Refresca les anotacions que s'han de veure i les que no
     void updateAnnotations();
 
-    /// inicialitza els strings d'informaciÛ que es mostraran a la pantalla
+    /// inicialitza els strings d'informaci√≥ que es mostraran a la pantalla
     void initInformationText();
 
-    /// Tipu de solapament dels volums en cas que en tinguem mÈs d'un
+    /// Tipu de solapament dels volums en cas que en tinguem m√©s d'un
     OverlayType m_overlay;
 
-    /// configuraciÛ de la interacciÛ amb l'usuari
+    /// configuraci√≥ de la interacci√≥ amb l'usuari
     void setupInteraction();
 
     /// Crea i inicialitza totes les accions d'aquest widget
@@ -294,10 +294,10 @@ private:
     /// Actualitza la barra de valors
     void updateScalarBar();
 
-    /// crea els actors necessaris per mostrar la llegenda flotant amb la informaciÛ de voxel
+    /// crea els actors necessaris per mostrar la llegenda flotant amb la informaci√≥ de voxel
     void createVoxelInformationCaption();
 
-    /// crea les anotacions de l'orientaciÛ del pacient
+    /// crea les anotacions de l'orientaci√≥ del pacient
     void createOrientationAnnotations();
 
     /// Afegeix tots els actors a l'escena
@@ -306,34 +306,34 @@ private:
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
-    /// Aquest string indica les anotacions que ens donen les referËncies del pacient ( Right,Left,Posterior,Anterior,Inferior,Superior)
+    /// Aquest string indica les anotacions que ens donen les refer√®ncies del pacient ( Right,Left,Posterior,Anterior,Inferior,Superior)
     QString m_patientOrientationText[4];
 
-    /// A partir de l'string d'orientaciÛ del pacient mapeja les anotacions correctes segons com estem mirant el model. A aixÚ li afecta tambÈ si la vista Ès axial, sagital o coronal
+    /// A partir de l'string d'orientaci√≥ del pacient mapeja les anotacions correctes segons com estem mirant el model. A aix√≤ li afecta tamb√© si la vista √©s axial, sagital o coronal
     void mapOrientationStringToAnnotation();
 
-    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alÁada i profunditat ). Al ser visor 2D en veurem nomÈs dues. Aquestes variaran en funciÛ de la vista en la que ens trobem.
+    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , al√ßada i profunditat ). Al ser visor 2D en veurem nom√©s dues. Aquestes variaran en funci√≥ de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler , *m_bottomRuler;
 
     /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
     vtkCoordinate *m_anchoredRulerCoordinates;
 
-    /// coordenades dels extrems per cada dimensiÛ del ruler
+    /// coordenades dels extrems per cada dimensi√≥ del ruler
     double m_rulerExtent[6];
 
-    /// Textes adicionals d'anotoaciÛ
+    /// Textes adicionals d'anotoaci√≥
     vtkTextActor *m_patientOrientationTextActor[4];
 
-    /// ActualitzaciÛ d'anotacions v‡ries
+    /// Actualitzaci√≥ d'anotacions v√†ries
     void updateSliceAnnotation();
     void updateWindowInformationAnnotation();
     void updateSerieInformationAnnotation();
     void updateProtocolNameAnnotation();
 
-    /// Mides (x,y) de la imatge que mostrarem com informaciÛ adicional
+    /// Mides (x,y) de la imatge que mostrarem com informaci√≥ adicional
     int m_imageSizeInformation[2];
 
-    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor est‡ndar de constrast
+    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor est√†ndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
     /// Llegenda que segueix el cursor amb el valor del voxel
@@ -345,14 +345,14 @@ private:
     /// El manager de les tools
     Q2DViewerToolManager *m_toolManager;
 
-    /// per controlar si la info de voxel est‡ habilitada o no
+    /// per controlar si la info de voxel est√† habilitada o no
     bool m_voxelInformationEnabled;
 
-    /// Factor de rotaciÛ. En sentit de les agulles del rellotge 0: 0∫, 1: 90∫, 2: 180∫, 3: 270∫.
+    /// Factor de rotaci√≥. En sentit de les agulles del rellotge 0: 0¬∫, 1: 90¬∫, 2: 180¬∫, 3: 270¬∫.
     int m_rotateFactor;
 
 private slots:
-    /// Actualitza la rotaciÛ de la c‡mera \sa rotateClockWise() i rotateCounterClockWise()
+    /// Actualitza la rotaci√≥ de la c√†mera \sa rotateClockWise() i rotateCounterClockWise()
     void updateCameraRotation();
 
 signals:

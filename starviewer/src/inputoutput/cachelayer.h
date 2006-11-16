@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -15,7 +15,7 @@ namespace udg {
 class StudyList;
 
 /** Aquesta classe afegeix un nivell d'abstracio sobre la classe CachePacs, permetent realitzar operacions sobre la cache, i utilitzar elements de la interfcie
- * @author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+ * @author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class CacheLayer : public QObject
 {

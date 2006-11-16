@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,7 +16,7 @@ class Q2DViewer;
 /**
 Tool que serveix per fer slicing en un visor 2D
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Slicing2DTool : public Tool
 {
@@ -36,9 +36,9 @@ private:
     /// Coordenades per calcular el moviment del mouse que determina com incrmentar o decrementar l'slicing
     int m_startPosition[2], m_currentPosition[2];
 
-/// \TODO potser aquests mËtodes slots passen a ser p˙blics
+/// \TODO potser aquests m√®todes slots passen a ser p√∫blics
 private slots:
-    /// ComenÁa l'slicing
+    /// Comen√ßa l'slicing
     void startSlicing();
 
     /// Calcula la llesca que s'ha de moure

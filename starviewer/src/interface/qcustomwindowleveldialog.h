@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -12,9 +12,9 @@
 namespace udg {
 
 /**
-Di‡leg per escollir manualment els ajustaments pel window level
+Di√†leg per escollir manualment els ajustaments pel window level
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QCustomWindowLevelDialog : public QDialog , private Ui::QCustomWindowLevelDialogBase
 {
@@ -25,7 +25,7 @@ public:
     ~QCustomWindowLevelDialog();
 
 public slots:
-    /// dÛna el window level que mostrar‡ per defecte quan s'obri
+    /// d√≥na el window level que mostrar√† per defecte quan s'obri
     void setDefaultWindowLevel( double window , double level );
     
 private:

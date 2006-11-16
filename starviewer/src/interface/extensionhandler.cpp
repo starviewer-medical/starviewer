@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -42,7 +42,7 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     m_outputWriter = new Output;
     m_mainApp = mainApp;    
     
-    // Aquí en principi només farem l'inicialització
+    // AquÃ­ en principi nomÃ©s farem l'inicialitzaciÃ³
     m_importFileApp = new AppImportFile;
     m_queryScreen = new QueryScreen( m_mainApp );
 
@@ -68,8 +68,8 @@ void ExtensionHandler::registerExtensions()
 
 void ExtensionHandler::request( int who )
 {
-// \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
-// \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
+// \TODO: crear l'extensiÃ³ amb el factory ::createExtension, no com estÃ  ara
+// \TODO la numeraciÃ³ Ã©s completament temporal!!! s'haurÃ  de canviar aquest sistema
     switch( who )
     {
     
@@ -82,7 +82,7 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            // ara com li diem que en la nova finestra volem que s'executi la peticiÃ³ d'importar arxiu?
             m_mainApp->newAndOpen();
         }
     break;
@@ -97,7 +97,7 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            // ara com li diem que en la nova finestra volem que s'executi la peticiÃ³ d'importar arxiu?
         }
     break;
     
@@ -111,7 +111,7 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            // ara com li diem que en la nova finestra volem que s'executi la peticiÃ³ d'importar arxiu?
         }
     break;
     
@@ -125,7 +125,7 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
+            // ara com li diem que en la nova finestra volem que s'executi la peticiÃ³ d'importar arxiu?
         }
     break;
 
@@ -256,7 +256,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     progressDialog.setRange( 0 , 100 );
     progressDialog.setMinimumDuration( 0 );
     progressDialog.setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
+    // atenciÃ³: el missatge triga una miqueta a aparÃ¨ixer...
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
@@ -317,7 +317,7 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     progressDialog.setRange( 0 , 100 );
     progressDialog.setMinimumDuration( 0 );
     progressDialog.setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
+    // atenciÃ³: el missatge triga una miqueta a aparÃ¨ixer...
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
@@ -362,7 +362,7 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
 
 void ExtensionHandler::extensionChanged( int index )
 {
-    // quan canvia una extensió hem de canviar les toolbars, per tan hem de mirar com fer-ho perque no sabem quina extensió ( sí podem obtenir el widget ) en concret és la que tenim. Ho podríem fer mitjançant signals i slots. és a dir, quan es faci el canvi d'extensió s'enviarà alguna senyal que farà que netejem la toolbar d¡extensions i que s'ompli amb els nous botons i eines
+    // quan canvia una extensiÃ³ hem de canviar les toolbars, per tan hem de mirar com fer-ho perque no sabem quina extensiÃ³ ( sÃ­ podem obtenir el widget ) en concret Ã©s la que tenim. Ho podrÃ­em fer mitjanÃ§ant signals i slots. Ã©s a dir, quan es faci el canvi d'extensiÃ³ s'enviarÃ  alguna senyal que farÃ  que netejem la toolbar dÂ¡extensions i que s'ompli amb els nous botons i eines
     m_mainApp->m_extensionWorkspace->setLastIndex( index );
 }
 

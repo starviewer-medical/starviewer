@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,7 +17,7 @@
 
 void configureLogging()
 {
-    // \TODO donem per fet que l'arxiu es diu aixÌ i es troba a la localitzaciÛ que indiquem. S'hauria de fer una mica mÈs flexible o genËric; est‡ aixÌ perquË de moment volem anar per feina i no entretenir-nos perÚ s'ha de fer bÈ.
+    // \TODO donem per fet que l'arxiu es diu aix√≠ i es troba a la localitzaci√≥ que indiquem. S'hauria de fer una mica m√©s flexible o gen√®ric; est√† aix√≠ perqu√® de moment volem anar per feina i no entretenir-nos per√≤ s'ha de fer b√©.
     QString configurationFile = "/etc/starviewer/log.conf";
     QDir logFile( QDir::homePath() + "/.starviewer/log" );
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -37,7 +37,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
         return databaseConnection->databaseStatus( 50 );
     }
     
-    // Hi ha noms del pacients que depenent de la màquina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
+    // Hi ha noms del pacients que depenent de la mÃ quina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
     patientName = study->getPatientName();
     
     while ( patientName.find( '^' ) != std::string::npos )
@@ -59,12 +59,12 @@ Status CacheStudyDAL::insertStudy( Study *study )
 
     state = databaseConnection->databaseStatus( stateDatabase );
     
-    //si l'stateDatabase de l'operació és fals, però l'error és el 2019, significa que el pacient, ja existia a la bdd, per tant 
+    //si l'stateDatabase de l'operaciÃ³ Ã©s fals, perÃ² l'error Ã©s el 2019, significa que el pacient, ja existia a la bdd, per tant 
     //continuem inserint l'estudi, si es provoca qualsevol altre error parem
     if ( !state.good() && state.code() != 2019 )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -93,7 +93,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
                                 ,getDate()                 //Access Date
                                 ,getTime()                 //Access Time
                                 ,study->getAbsPath().c_str()
-                                ,"PENDING"                 //stateDatabase pendent perquè la descarrega de l'estudi encara no està completa               
+                                ,"PENDING"                 //stateDatabase pendent perquÃ¨ la descarrega de l'estudi encara no estÃ  completa               
                                 ,study->getPacsAETitle().c_str()
                                 ,study->getPatientAge().c_str()
                                 );
@@ -107,7 +107,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -138,13 +138,13 @@ Status CacheStudyDAL::queryStudy( StudyMask studyMask , StudyList &ls )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
     
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
     while ( i <= rows )
     {   
         stu.setPatientId( resposta [ 0 + i * columns ] );
@@ -196,13 +196,13 @@ Status CacheStudyDAL::queryOldStudies( std::string OldStudiesDate , StudyList &l
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
         
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
     while ( i <= rows )
     {   
         stu.setPatientId( resposta [ 0 + i * columns ] );
@@ -251,13 +251,13 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
         
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
     if ( rows > 0 ) 
     {
         study.setPatientId( resposta [ 0 + i * columns ] );
@@ -279,7 +279,7 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
         if ( !state.good() )
         {
             sprintf( errorNumber , "%i" , state.code() );
-            logMessage = "Error a la cache número ";
+            logMessage = "Error a la cache nÃºmero ";
             logMessage.append( errorNumber );
             ERROR_LOG( logMessage.c_str() );
         }
@@ -304,10 +304,10 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna sentencia sql fer un rollback, i així deixa la taula en estat estable, no deixem anar el candau fins al final */ 
+    /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna sentencia sql fer un rollback, i aixÃ­ deixa la taula en estat estable, no deixem anar el candau fins al final */ 
     databaseConnection->getLock();
     stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );
-     //comencem la transacció
+     //comencem la transacciÃ³
 
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
@@ -315,7 +315,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -335,7 +335,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -347,7 +347,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         
         state = databaseConnection->databaseStatus( 99 );//error 99 registre no trobat           
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -371,7 +371,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -382,13 +382,13 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         databaseConnection->releaseLock();
         state = databaseConnection->databaseStatus( 99 );//error 99 registre no trobat   
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
     
-    //ignorem el resposta [0], perque hi ha la capçalera
+    //ignorem el resposta [0], perque hi ha la capÃ§alera
     if ( atoi( resposta [1] ) == 1 )
     {//si aquell pacient nomes te un estudi l'esborrem de la taula Patient
 
@@ -405,7 +405,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
             stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
             databaseConnection->releaseLock();
             sprintf( errorNumber , "%i" , state.code() );
-            logMessage = "Error a la cache número ";
+            logMessage = "Error a la cache nÃºmero ";
             logMessage.append( errorNumber );
             ERROR_LOG( logMessage.c_str() );
             return state;
@@ -426,7 +426,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -445,7 +445,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -464,14 +464,14 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
  
-    //TODO aqui pot haver un possible error, relaciona amb el ticket 132, en que la posicio 1 de resposta feia un segmentation fault. encara que no trobi cap imatge a la consulta, per defecte torna el tamany 0, per tant a la posició resposta[1] sempre hi haurà d'haver valor. Ara per ara es donarà el ticket per tancat, però quan es torni a reproduir l'error es mirarà que el causa.
+    //TODO aqui pot haver un possible error, relaciona amb el ticket 132, en que la posicio 1 de resposta feia un segmentation fault. encara que no trobi cap imatge a la consulta, per defecte torna el tamany 0, per tant a la posiciÃ³ resposta[1] sempre hi haurÃ  d'haver valor. Ara per ara es donarÃ  el ticket per tancat, perÃ² quan es torni a reproduir l'error es mirarÃ  que el causa.
     studySize = atoi( resposta [i] );
 
     cout<<resposta[i] << "rows " << rows << " col " << columns<<endl;
@@ -490,7 +490,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -511,7 +511,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -523,7 +523,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -531,8 +531,8 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
     
     databaseConnection->releaseLock();        
     
-    //una vegada hem esborrat les dades de la bd, podem esborrar les imatges, això s'ha de fer al final, perqué si hi ha un error i esborrem les
-    //imatges al principi, no les podrem recuperar i la informació a la base de dades hi continuarà estant
+    //una vegada hem esborrat les dades de la bd, podem esborrar les imatges, aixÃ² s'ha de fer al final, perquÃ© si hi ha un error i esborrem les
+    //imatges al principi, no les podrem recuperar i la informaciÃ³ a la base de dades hi continuarÃ  estant
     cachePool.removeStudy( absPathStudy );
     
     return state;  
@@ -563,13 +563,13 @@ Status CacheStudyDAL::delNotRetrievedStudies()
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
    
-    //ignorem el resposta [0], perque hi ha la capçalera
+    //ignorem el resposta [0], perque hi ha la capÃ§alera
     i = 1;
     
     while ( i <= rows )
@@ -614,7 +614,7 @@ Status CacheStudyDAL::setStudyRetrieved( std::string studyUID )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -649,7 +649,7 @@ Status CacheStudyDAL::setStudyRetrieving( std::string studyUID )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -684,7 +684,7 @@ Status CacheStudyDAL::setStudyModality( std::string studyUID , std::string modal
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -718,7 +718,7 @@ Status CacheStudyDAL::updateStudyAccTime( std::string studyUID )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -736,7 +736,7 @@ std::string CacheStudyDAL::buildSqlQueryStudy(StudyMask* studyMask)
     sql.append( " and Status = 'RETRIEVED' " );
     sql.append( " and PacsList.PacsID=Study.PacsID" ); //busquem el nom del pacs
     
-    //llegim la informació de la màscara
+    //llegim la informaciÃ³ de la mÃ scara
     patientName = replaceAsterisk( studyMask->getPatientName() );
     patID = studyMask->getPatientId();
     studyDate = studyMask->getStudyDate();

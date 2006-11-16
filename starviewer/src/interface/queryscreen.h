@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -24,7 +24,7 @@ class Status;
 class SeriesMask;
 class ReadDicomdir;
 
-/** Aquesta classe crea la interfÌcie princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
+/** Aquesta classe crea la interf√≠cie princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
 */
 class QueryScreen : public QDialog , private Ui::QueryScreenBase{
@@ -54,26 +54,26 @@ public slots:
     /// Escull a on fer la cerca, si a nivell local o PACS
     void searchStudy();
     
-    /** Busca la informaciÛ d'una sËrie
+    /** Busca la informaci√≥ d'una s√®rie
      * @param studyUID UID de l'estidi
-     * @param pacsAETItle AEtitle del pacs a buscar la sËrie          
+     * @param pacsAETItle AEtitle del pacs a buscar la s√®rie          
      */
     void searchSeries( QString , QString );
     
-    /** Al canviar de p‡gina del tab hem de canviar alguns par‡metres, com activar el boto Retrieve, etec..
+    /** Al canviar de p√†gina del tab hem de canviar alguns par√†metres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat
      */
     void tabChanged( int index );
     
-    /** Aquest mËtode s'encarrega de comenÁar la descarrega d'un estudi, estableix la m‡scara, insereix l'estudi i la sËria a la cachÈ, ademÈs de crear el thread per continuar amb la desc‡rrega de l'estdui
-     * @param view boolea que indica si desprÈs de la descarrega s'ha de visualitzar l'estudi
+    /** Aquest m√®tode s'encarrega de comen√ßar la descarrega d'un estudi, estableix la m√†scara, insereix l'estudi i la s√®ria a la cach√©, adem√©s de crear el thread per continuar amb la desc√†rrega de l'estdui
+     * @param view boolea que indica si despr√©s de la descarrega s'ha de visualitzar l'estudi
      */
     void retrieve();
 
-    /// Slot que mostra la interfÌcie QRetrieveScreen
+    /// Slot que mostra la interf√≠cie QRetrieveScreen
     void showRetrieveScreen();
     
-    ///Slot que mostra la interfÌcie QCreateDicomdir
+    ///Slot que mostra la interf√≠cie QCreateDicomdir
     void showCreateDicomdirScreen();
 
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
@@ -85,18 +85,18 @@ public slots:
     ///Mostra la llista de Pacs, o l'amaga
     void showPacsList();
     
-    ///slot que s'activa al esborrar estudi de la cachÈ
+    ///slot que s'activa al esborrar estudi de la cach√©
     void deleteStudyCache();
     
-    /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si l'usuari aixÌ ho ha indicat
+    /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si l'usuari aix√≠ ho ha indicat
      * @param UID de l'estudi descarregat
      */
     void studyRetrievedView( QString );   
     
-    /// Slot que activa o desactiva el m_checkAll en funciÛ de si hi ha alguna modalitat d'estudi seleccionada
+    /// Slot que activa o desactiva el m_checkAll en funci√≥ de si hi ha alguna modalitat d'estudi seleccionada
     void setCheckAll();
     
-    /** Quant la data from canvia, amb aquest slot tambÈ es canvia la data del TO, per a que vagin sincronitzats
+    /** Quant la data from canvia, amb aquest slot tamb√© es canvia la data del TO, per a que vagin sincronitzats
      * @param data 
      */
     void dateFromChanged( const QDate & );
@@ -147,7 +147,7 @@ signals :
      */
     void viewStudy( StudyVolum );
     
-    /// Signal cap a QSeriesListWidget, que neteja la llista de sËries del Widget
+    /// Signal cap a QSeriesListWidget, que neteja la llista de s√®ries del Widget
     void clearSeriesListWidget();
 
 protected :
@@ -160,7 +160,7 @@ protected :
 private:
 
 
-//estructura necess‡ria per passar els par‡metres al thread que descarregarr‡ les imatges
+//estructura necess√†ria per passar els par√†metres al thread que descarregarr√† les imatges
 struct retrieveParameters
      {
         std::string studyUID;
@@ -174,9 +174,9 @@ struct retrieveParameters
     SeriesList m_seriesListCache;
     ProcessImageSingleton *m_piSingleton;
     
-    MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no tÈ temps d'atendre els signals dels threads  
+    MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no t√© temps d'atendre els signals dels threads  
     
-    ReadDicomdir m_readDicomdir;// contÈ la informaciÛ del dicomdir obert en aquests instants
+    ReadDicomdir m_readDicomdir;// cont√© la informaci√≥ del dicomdir obert en aquests instants
 
     //StudyVolum m_volum;
     bool m_PacsListShow;
@@ -185,7 +185,7 @@ struct retrieveParameters
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;   
     
-    /** Activa o desactiva els checkbox per buscar per modalitat, en funcio del par‡metre passat
+    /** Activa o desactiva els checkbox per buscar per modalitat, en funcio del par√†metre passat
      * @param boolea que indica si s'ha d'activar els checkbox de modalitat o desactivar
      */
     void setEnabledModalityChecks( bool );
@@ -198,39 +198,39 @@ struct retrieveParameters
      */
     void setEnabledDates(bool);
 
-    /** Construeix la m‡scara de cerca de la sËrie
+    /** Construeix la m√†scara de cerca de la s√®rie
      * @param UID de l'estudi
-     * @return m‡scara
+     * @return m√†scara
      */
     SeriesMask buildSeriesMask(QString);
     
-    /** valida que la m‡scara de cerca no estigui buida, en el cas que ho sigui s'haur‡ d'avisar al usuari, perquË fer una cerca al Pacs sense filtrar potser molt lenta, al haver de mostrar totes les dades
-     * @return indica si el filtre de cerca est‡ buit
+    /** valida que la m√†scara de cerca no estigui buida, en el cas que ho sigui s'haur√† d'avisar al usuari, perqu√® fer una cerca al Pacs sense filtrar potser molt lenta, al haver de mostrar totes les dades
+     * @return indica si el filtre de cerca est√† buit
      */
     bool validateNoEmptyMask();
         
-    /** Construeix la m‡scara d'entrada pels estudis
-     * @return retorna la m‡scara d'un estudi
+    /** Construeix la m√†scara d'entrada pels estudis
+     * @return retorna la m√†scara d'un estudi
      */
     StudyMask buildStudyMask();
     
-    /** Contrueix el nom del pacient per a crear la m‡scara, el format del la m‡scara de pacient ha de ser "*" o "congoms* Nom*"
-     * @return retorna la m‡scara amb el nom del pacient
+    /** Contrueix el nom del pacient per a crear la m√†scara, el format del la m√†scara de pacient ha de ser "*" o "congoms* Nom*"
+     * @return retorna la m√†scara amb el nom del pacient
      */
     QString buildPatientName();
     
-    /** construeix la m‡scara de les dates
-     * @return retorna la m‡scara de les dates
+    /** construeix la m√†scara de les dates
+     * @return retorna la m√†scara de les dates
      */
     QString buildStudyDates();
     
-    /** construeix la m‡scara per cerca el Id de pacient en mode WildCard
-      * @return m‡scara del PatientId
+    /** construeix la m√†scara per cerca el Id de pacient en mode WildCard
+      * @return m√†scara del PatientId
       */
     QString buildPatientId();
     
-    /** construeix la m‡scara per cerca el Id d'estudi en mode WildCard
-      * @return m‡scara del StudyId
+    /** construeix la m√†scara per cerca el Id d'estudi en mode WildCard
+      * @return m√†scara del StudyId
       */
     QString buildStudyId();
     
@@ -254,7 +254,7 @@ struct retrieveParameters
     
     /** Insereix un estudi a descarregar a la cache
      * @param estudi a insertat
-     * @return retorna si la operacio s'ha realitzat amb Ëxit
+     * @return retorna si la operacio s'ha realitzat amb √®xit
      */
     Status insertStudyCache( Study );
     
@@ -267,19 +267,19 @@ struct retrieveParameters
     ///Cerca un estudi en el dicomdir obert en aquells moment
     void queryStudyDicomdir();
 
-    /** Busca la informaciÛ d'una sËrie en el PACS i la mostra en la interfÌcie
+    /** Busca la informaci√≥ d'una s√®rie en el PACS i la mostra en la interf√≠cie
      * @param studyUID UID de l'estidi
-     * @param pacsAETItle AEtitle del pacs a buscar la sËrie    
-     * @param show Si es verdader mostra les dades de la sËrie per pantalla, pot ser que no les volguem mostrar, per exemple el cas que volem la informaciÛ per guardar-la en la cachÈ al descarragar-nos una imatge
+     * @param pacsAETItle AEtitle del pacs a buscar la s√®rie    
+     * @param show Si es verdader mostra les dades de la s√®rie per pantalla, pot ser que no les volguem mostrar, per exemple el cas que volem la informaci√≥ per guardar-la en la cach√© al descarragar-nos una imatge
      */
     void QuerySeriesPacs( QString , QString , bool );
     
-    /** Cerca les sËries d'un estudi a la Cache local
+    /** Cerca les s√®ries d'un estudi a la Cache local
      * @param StudyUID UID de l'estudi a cercar
      */
     void QuerySeriesCache( QString );
 
-    /** Cerca les sËries d'un estudi al Dicomdir
+    /** Cerca les s√®ries d'un estudi al Dicomdir
      * @param StudyUID UID de l'estudi a cercar
      */
     void querySeriesDicomdir( QString studyUID);
@@ -288,7 +288,7 @@ struct retrieveParameters
     void deleteOldStudies();
     
     /** Tracta els errors de la base de dades
-     * @param Estat del mËtode de la base de dades
+     * @param Estat del m√®tode de la base de dades
      */
     void databaseError( Status *state );
     
@@ -302,7 +302,7 @@ struct retrieveParameters
     void initialize();
 	
     /** Fa el log, indicant amb quins parametres es cerquen els estudis
-     * @return retorna un QString indicant amb quins par‡metres es fa la cerca d'estudis	
+     * @return retorna un QString indicant amb quins par√†metres es fa la cerca d'estudis	
      */
     QString logQueryStudy();
 };

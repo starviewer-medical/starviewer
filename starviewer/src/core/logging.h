@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -9,7 +9,7 @@
 #define _LOGGING_
  
 /*!
-    Aquest arxiu contÈ totes les macros per a fer logs en l'aplicaciÛ.
+    Aquest arxiu cont√© totes les macros per a fer logs en l'aplicaci√≥.
 */
 
 // include log4cxx header files.
@@ -26,7 +26,7 @@
     log4cxx::PropertyConfigurator::configure( file ); \
     INFO_LOG("__________________________________") \
     INFO_LOG("::::::::::::::::::::::::::::::::::") \
-    INFO_LOG("* InicialitzaciÛ de l'aplicaciÛ *") \
+    INFO_LOG("* Inicialitzaci√≥ de l'aplicaci√≥ *") \
     INFO_LOG("::::::::::::::::::::::::::::::::::") \
     INFO_LOG("") \
 }
@@ -38,7 +38,7 @@
 #define DEBUG_LOG( msg )
 #endif
 
-/// Macro per a missatges d'informaciÛ general
+/// Macro per a missatges d'informaci√≥ general
 #define INFO_LOG( msg ) LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , msg )
 
 /// Macro per a missatges de warning
@@ -47,7 +47,7 @@
 /// Macro per a missatges d'error
 #define ERROR_LOG( msg ) LOG4CXX_ERROR( log4cxx::Logger::getLogger("errors.release") , msg )
 
-/// Macro per a missatges d'error fatals/crÌtics
+/// Macro per a missatges d'error fatals/cr√≠tics
 #define FATAL_LOG( msg ) LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release") , msg );
 
 #endif

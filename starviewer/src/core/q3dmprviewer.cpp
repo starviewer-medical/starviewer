@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -25,7 +25,7 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
 
-// Per el marcador d'orientaciÛ
+// Per el marcador d'orientaci√≥
 #include "q3dorientationmarker.h"
 
 //includes propis
@@ -58,7 +58,7 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
     this->initializePlanes();
-    // interacciÛ
+    // interacci√≥
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
 
     m_axialPlaneVisible = true;
@@ -96,7 +96,7 @@ void Q3DMPRViewer::setInput( Volume *volume )
     this->updatePlanesData();
     // ajustem els valors del window Level per defecte
     this->initializeWindowLevel();
-    //li donem la orientaciÛ per defecte
+    //li donem la orientaci√≥ per defecte
     this->resetViewToAxial();
     render();
 }
@@ -189,7 +189,7 @@ void Q3DMPRViewer::initializePlanes()
     m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
     m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
     //
-    //     INTERACCI”
+    //     INTERACCI√ì
     //
     m_axialImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
     m_sagitalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
@@ -263,7 +263,7 @@ vtkRenderer *Q3DMPRViewer::getRenderer()
 
 void Q3DMPRViewer::render()
 {
-    // Indiquem el color de fons, blau cel, \TODO aixÚ podria anar al inicialitzar-se i prou
+    // Indiquem el color de fons, blau cel, \TODO aix√≤ podria anar al inicialitzar-se i prou
     m_renderer->SetBackground( 0.4392, 0.5020, 0.5647 );
     m_renderer->Render();
 }

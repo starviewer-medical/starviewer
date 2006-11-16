@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -18,7 +18,7 @@ namespace udg {
 /**
 Creador d'extensions
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class ExtensionCreator : public QObject {
 Q_OBJECT
@@ -27,11 +27,11 @@ public:
 
     ~ExtensionCreator();
     
-    /// creador d'extensions. Ès el mËtode del factory encarregat de proporcionar l'extensiÛ que demanem
-    /// \TODO ara per ara retorna QWidget, perÚ Ès possible que canviem a una altra classe que faci d'interfÌcie per a les extensions [p.ex. ExtensionBase]
+    /// creador d'extensions. √©s el m√®tode del factory encarregat de proporcionar l'extensi√≥ que demanem
+    /// \TODO ara per ara retorna QWidget, per√≤ √©s possible que canviem a una altra classe que faci d'interf√≠cie per a les extensions [p.ex. ExtensionBase]
     virtual QWidget *createExtension( QWidget *parent , QString name ) = 0;
     /// inicialitzador d'extensions
-    /// \TODO Ìdem anterior amb QWidget
+    /// \TODO √≠dem anterior amb QWidget
     virtual bool initializeExtension( QWidget *extension  /* , Resource *rsrc */) = 0;
     
 

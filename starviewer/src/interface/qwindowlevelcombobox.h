@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,7 +17,7 @@ class QCustomWindowLevelDialog;
 /**
 Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QWindowLevelComboBox : public QComboBox
 {
@@ -39,7 +39,7 @@ public slots:
     void updateWindowLevel( double window , double level );
     
 private:
-    /// Di‡leg per escollir un window level personalitzat
+    /// Di√†leg per escollir un window level personalitzat
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
     /// Omple el combo
@@ -52,7 +52,7 @@ private:
     double m_window , m_level;
     
 private slots:
-    /// Li passarem l'Ìndex de l'Ìtem del combo que s'hagi seleccionat per a fer el que calgui amb la selecciÛ
+    /// Li passarem l'√≠ndex de l'√≠tem del combo que s'hagi seleccionat per a fer el que calgui amb la selecci√≥
     void processSelected( int value );
     
 };

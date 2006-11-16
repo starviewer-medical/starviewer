@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -9,12 +9,12 @@
 
 #include "ui_qconfigurationscreenbase.h"
 
-using namespace Ui; // \TODO aixÚ s'hauria d'evitar!
+using namespace Ui; // \TODO aix√≤ s'hauria d'evitar!
 
 namespace udg {
 
 class Status;
-/** InterfÌcie que permet configurar els par‡metres del pacs i de la cachÈ
+/** Interf√≠cie que permet configurar els par√†metres del pacs i de la cach√©
 @author marc
 */
 class QConfigurationScreen : public QDialog , private QConfigurationScreenBase
@@ -49,28 +49,28 @@ public slots :
     /// Fa un echo a les dades del PACS que estan als textbox
     void test();
     
-    /// Mostra un QDialog per especificar on es troba la base de dades de la cachÈ
+    /// Mostra un QDialog per especificar on es troba la base de dades de la cach√©
     void examinateDataBaseRoot();
     
     /// Mostra un QDialog per especificar on s'han de guardar les imatges descarregades
     void examinateCacheImagePath();
 
-    /// Esborra tota la cachÈ
+    /// Esborra tota la cach√©
     void deleteStudies();
     
     /// Compacta la base de dades de la cache
     void compactCache();
     
-    /// Aplica els canvis de la configuraciÛ
+    /// Aplica els canvis de la configuraci√≥
     bool applyChanges();
     
-    /// Guarda els canvis a la configuraciÛ dels par‡metres del PACS
+    /// Guarda els canvis a la configuraci√≥ dels par√†metres del PACS
     void acceptChanges();
     
-    /// Tanca la pantalla de configuraciÛ, i desprecia els canvis
+    /// Tanca la pantalla de configuraci√≥, i desprecia els canvis
     void cancelChanges();
 
-    /// Slot que s'utilitza quant es fa algun canvi a la configuraciÛ, per activar els buttons apply
+    /// Slot que s'utilitza quant es fa algun canvi a la configuraci√≥, per activar els buttons apply
     void configurationChanged( const QString& );
     
     /// Slot que s'utilitza quant es fa algun canvia el path de la base de dades, per activar els buttons apply
@@ -92,25 +92,25 @@ signals :
 
 private :
 
-    int m_PacsID; /// ContÈ el D del pacs seleccionat en aquell moment
-    bool m_configurationChanged; ///Indica si la configuraciÛ ha canviat
-    bool m_createDatabase; /// Indica si s'ha comprovat demanat que es creÔ la base de dades indicada a m_textDatabaseRoot
+    int m_PacsID; /// Cont√© el D del pacs seleccionat en aquell moment
+    bool m_configurationChanged; ///Indica si la configuraci√≥ ha canviat
+    bool m_createDatabase; /// Indica si s'ha comprovat demanat que es cre√Ø la base de dades indicada a m_textDatabaseRoot
 
     ///crea els connects dels signals i slots
     void createConnections();
     
-    /** Comprovem que els par‡metres dels PACS siguin correctes. 
+    /** Comprovem que els par√†metres dels PACS siguin correctes. 
      *  1r Que el AETitle no estigui en blanc,
-     *  2n Que l'adreÁa del PACS no estigui en blanc,
+     *  2n Que l'adre√ßa del PACS no estigui en blanc,
      *  3r Que el Port del Pacs sigui entre 0 i 65535
-     *  4t Que l'instituciÛ no estigui buida 
+     *  4t Que l'instituci√≥ no estigui buida 
      * @return bool, retorna cert si tots els parametres del pacs son correctes
      */
     bool validatePacsParameters();
     
-    /** Valida que els canvis de la configuraciÛ siguin correctes
+    /** Valida que els canvis de la configuraci√≥ siguin correctes
      *  Port local entre 0 i 65535
-     *  Numero m‡xim de connexions 25
+     *  Numero m√†xim de connexions 25
      *  Path de la base de dades i directori dicom's existeix
      *  @return indica si els canvis son correctes
      */
@@ -119,33 +119,33 @@ private :
     /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
     void fillPacsListView();
 
-    /** Tracta els errors que s'han produÔt a la base de dades en general
-     *           @param state  Estat del mËtode
+    /** Tracta els errors que s'han produ√Øt a la base de dades en general
+     *           @param state  Estat del m√®tode
      */
     void databaseError(Status * state);
     
-    /// Carrega les dades de configuraciÛ de la cache
+    /// Carrega les dades de configuraci√≥ de la cache
     void loadCacheDefaults();
     
     /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
     
-    /// Carrega la informaciÛ de la instituciÛ
+    /// Carrega la informaci√≥ de la instituci√≥
     void loadInstitutionInformation();
     
     /// calcula les dades del pool
     void loadCachePoolDefaults();
     
-    /// Guarda els canvis a la configuraciÛ dels par‡metres del PACS
+    /// Guarda els canvis a la configuraci√≥ dels par√†metres del PACS
     void applyChangesPacs();
     
-    ///  Aplica els canvis fets a la configuraciÛ de la cache
+    ///  Aplica els canvis fets a la configuraci√≥ de la cache
     void applyChangesCache();
 
-    /// Aplica els canvis fets a la informaciÛ de la instituciÛ
+    /// Aplica els canvis fets a la informaci√≥ de la instituci√≥
     void applyChangesInstitution();
 
-	/// col∑loca les icones als buttons d'acceptar, cancel∑lar i applicar de l'apartat de Pacs i la Cache
+	/// col¬∑loca les icones als buttons d'acceptar, cancel¬∑lar i applicar de l'apartat de Pacs i la Cache
 	void setIconButtons();
 
 };

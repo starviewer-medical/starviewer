@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -43,7 +43,7 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     {
         m_closeTabButton->show();
     }
-    INFO_LOG( qPrintable( "Afegint extensió: " + caption ) );
+    INFO_LOG( qPrintable( "Afegint extensiÃ³: " + caption ) );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
     m_lastIndex = this->currentIndex();
@@ -51,7 +51,7 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
 {
-    INFO_LOG( qPrintable( "Tancant extensió: " + application->objectName() ) );
+    INFO_LOG( qPrintable( "Tancant extensiÃ³: " + application->objectName() ) );
     this->removeTab( this->indexOf( application ) );
     if( this->count() < 1 )
         m_closeTabButton->hide();

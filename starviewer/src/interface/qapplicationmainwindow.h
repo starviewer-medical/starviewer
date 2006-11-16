@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -30,15 +30,15 @@ class QApplicationMainWindow : public QMainWindow
 {
 Q_OBJECT
 public:
-    ///El constructor del Mainwindow. Aquí es crea tot l'esquelet de l'interfície: Menús, Barres d'eines, toolbox, working area, etc..
+    ///El constructor del Mainwindow. AquÃ­ es crea tot l'esquelet de l'interfÃ­cie: MenÃºs, Barres d'eines, toolbox, working area, etc..
     QApplicationMainWindow(QWidget *parent = 0, const char *name = 0);
     
     ~QApplicationMainWindow();
     
-    /// L'àrea de mini-aplicacions
+    /// L'Ã rea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
 
-    /// Mètode de conveniència per sortir del pas de mentres. Es crida quan tenim ja un model obert i volem obri-ne un de nou
+    /// MÃ¨tode de conveniÃ¨ncia per sortir del pas de mentres. Es crida quan tenim ja un model obert i volem obri-ne un de nou
     void newAndOpen();
     void newAndOpenDir();
     
@@ -50,7 +50,7 @@ public slots:
     void onVolumeLoaded( Identifier id );
     
 protected:
-    /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
+    /// Aquest event ocurreix quanes tanca la finestra. Ã‰s el moment en que es realitzen algunes tasques com desar la configuraciÃ³
     void closeEvent(QCloseEvent *event);
 
 private:
@@ -68,7 +68,7 @@ private:
     /// Arxiu actual que estem visualitzant
     QString m_currentFile;
 
-    /// Filtres per als diàlegs d'obrir/exportar arxius
+    /// Filtres per als diÃ legs d'obrir/exportar arxius
 //     QString m_exportFileFilters;
 //     QString m_exportToJpegFilter;
 //     QString m_exportToMetaIOFilter;
@@ -80,24 +80,24 @@ private:
     /// Path actual del directori de treball ( obrir fitxer )
     QString m_workingDirectory;
 
-    ///Path del directori de treball ( exportació a altres formats )
+    ///Path del directori de treball ( exportaciÃ³ a altres formats )
     QString m_exportWorkingDirectory;
 
-    /// Aquesta string indica el path del directori que conté els arxius de traducció de l'aplicació
+    /// Aquesta string indica el path del directori que contÃ© els arxius de traducciÃ³ de l'aplicaciÃ³
     QString m_qmPath;
 
-    /// Menús
+    /// MenÃºs
     QMenu *m_fileMenu;
     QMenu *m_visualizationMenu;
     QMenu *m_languageMenu;
     QMenu *m_helpMenu;
     
-    /// Sub menús
+    /// Sub menÃºs
 //     QMenu *m_importFilesMenu;
 //     QMenu *m_exportFilesMenu;
 //     QMenu *m_recentFilesMenu;
     
-    /// Barres d'eines \TODO és possible que les fem desaparèixer
+    /// Barres d'eines \TODO Ã©s possible que les fem desaparÃ¨ixer
     QToolBar *m_fileToolBar;
     
     /// Accions
@@ -122,39 +122,39 @@ private:
     QAction *m_spanishAction;
     QAction *m_englishAction;
 
-    /// Per indicar el procés al obrir-se un fitxer
+    /// Per indicar el procÃ©s al obrir-se un fitxer
     QProgressDialog *m_progressDialog;
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
     
     // :::::::::::::::::::::::::::
-    // mètodes
+    // mÃ¨todes
     // :::::::::::::::::::::::::::
     
-    ///Crea i inicialitza les accions de l'aplicació
+    ///Crea i inicialitza les accions de l'aplicaciÃ³
     void createActions();
 
-    /// Crea els menús.
+    /// Crea els menÃºs.
     void createMenus();
 
-    /// Crea el menú per escollir l'idioma de l'aplicació
+    /// Crea el menÃº per escollir l'idioma de l'aplicaciÃ³
     void createLanguageMenu();
     
     /// Crea la barra d'eines.
     void createToolBars();
 
-    /// Crea la barra d'estat de l'aplicació
+    /// Crea la barra d'estat de l'aplicaciÃ³
     void createStatusBar();
 
-    /// Llegeix la configuració inicial amb la que engega el programa
+    /// Llegeix la configuraciÃ³ inicial amb la que engega el programa
     void readSettings();
 
-    /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
+    /// Escriu la configuraciÃ³ amb la que s'engegarÃ  el programa el prÃ²xim cop. \TODO: s'hauria de cridar tambÃ© quan obrim una finestra nova?
     void writeSettings();
 
 /*
-    /// Especifica el fitxer acctual que s'està tractant \TODO \deprecated aquest mètode esdevindrà antiquat en breu i no té gaire sentit desar el nom del fitxer, el metode continua existint perquè s'ha arrastrat des del principi
+    /// Especifica el fitxer acctual que s'estÃ  tractant \TODO \deprecated aquest mÃ¨tode esdevindrÃ  antiquat en breu i no tÃ© gaire sentit desar el nom del fitxer, el metode continua existint perquÃ¨ s'ha arrastrat des del principi
     void setCurrentFile( const QString &fileName );
 
     /// actualitza el llistat de noms de fitxers oberts recentment \TODO s'hauria d'adaptar, si cal quan hi hagi lo del pacs
@@ -174,7 +174,7 @@ private slots:
     void switchToLanguage( int id );
     
 /*
-    /// obre un dels arxius recents::\TODO això pot esdevenir \deprecated
+    /// obre un dels arxius recents::\TODO aixÃ² pot esdevenir \deprecated
     void openRecentFile();
 
     /// Exporta la imatge a un format especificat
@@ -196,7 +196,7 @@ private slots:
     void exportToBmp();
 */
 signals:
-    /// senyal emesa que indica si la finestra conté un volum o no
+    /// senyal emesa que indica si la finestra contÃ© un volum o no
     void containsVolume( bool );
 };
 

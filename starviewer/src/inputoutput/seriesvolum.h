@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -13,7 +13,7 @@ class string;
 
 namespace udg {
 
-/** Permet definir una sèrie d'un estudi, i indicar el path on es troben les imatges en el disc local
+/** Permet definir una sÃ¨rie d'un estudi, i indicar el path on es troben les imatges en el disc local
 @author marc
 */
 class SeriesVolum
@@ -24,7 +24,7 @@ public:
     ///Constructor de la classe
     SeriesVolum();
 
-    /** Afegeix el Path d'una imatge a la sèrie
+    /** Afegeix el Path d'una imatge a la sÃ¨rie
      * @param string path de la imatge
      */
     void addImage( std::string );
@@ -34,8 +34,8 @@ public:
      */
     void setStudyUID( std::string );
 
-    /** Estableix el UID de la sèrie al que pertany la serie
-     * @param string UID de la sèrie
+    /** Estableix el UID de la sÃ¨rie al que pertany la serie
+     * @param string UID de la sÃ¨rie
      */
     void setSeriesUID( std::string );
 
@@ -89,13 +89,13 @@ public:
      */
     std::string getSeriesPath();
         
-    /** retorna el nombre d'imatges de la sèrie
-     * @return número d'imatges de les series
+    /** retorna el nombre d'imatges de la sÃ¨rie
+     * @return nÃºmero d'imatges de les series
      */
     int getNumberOfImages();
 
-    /** retorna un vector amb el path de totes les imatges que conte la sèrie
-      * @return vector amb el path de totes les imatges de la sèrie
+    /** retorna un vector amb el path de totes les imatges que conte la sÃ¨rie
+      * @return vector amb el path de totes les imatges de la sÃ¨rie
       */
 	std::vector <std::string>getVectorSeriesPath();   
 

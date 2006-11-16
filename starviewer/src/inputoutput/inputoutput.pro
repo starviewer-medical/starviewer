@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/inputoutput
-# L'objectiu és una biblioteca:  
+# L'objectiu Ã©s una biblioteca:  
 
 HEADERS += const.h \
            databaseconnection.h \

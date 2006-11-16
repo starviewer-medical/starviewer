@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -81,10 +81,10 @@ Status CacheLayer::deleteOldStudies()
    
     today = today.currentDate();
     //calculem fins a quin dia conservarem els estudis
-    //de la data del dia restem el par‡metre definit per l'usuari, que estableix quants dies pot estar un estudi sense ser visualitzat
+    //de la data del dia restem el par√†metre definit per l'usuari, que estableix quants dies pot estar un estudi sense ser visualitzat
     lastTimeViewedMinimum = today.addDays( - settings.getMaximumDaysNotViewedStudy().toInt( NULL , 10 ) );
     
-    //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per par‡metre
+    //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per par√†metre
     state = cacheStudyDAL.queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ).toAscii().constData() , studyList );
     studyList.firstStudy();
     
@@ -134,7 +134,7 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
     
     if ( !state.good() ) return state;
     
-    //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per par‡metre, retorna la llista ordenada per data i hora de l'ultima visualitzacio, ordenada ascendentment 
+    //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per par√†metre, retorna la llista ordenada per data i hora de l'ultima visualitzacio, ordenada ascendentment 
     state = cacheStudyDAL.queryOldStudies( maxDate.toString("yyyyMMdd").toAscii().constData() , studyList );
     studyList.firstStudy();
     

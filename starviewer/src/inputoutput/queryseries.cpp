@@ -40,7 +40,7 @@ void progressCallbackSeries(
     SeriesListSingleton* seriesListSingleton; 
     std::string path;
     
-    //el path el construirem nosaltres, estarà format per UIDStudy/UIDSeries, aquest sempre sera el path on s'hauran de guardar les series
+    //el path el construirem nosaltres, estarÃ  format per UIDStudy/UIDSeries, aquest sempre sera el path on s'hauran de guardar les series
     
     //set the series number
     responseIdentifiers->findAndGetString( DCM_SeriesNumber , text , false );

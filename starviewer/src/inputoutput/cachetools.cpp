@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -30,7 +30,7 @@ Status CacheTools::compactCachePacs()
         return databaseConnection->databaseStatus( 50 );
     }
     
-    sql.insert( 0 , "vacuum" );//amb l'acció vacuum es compacta la base de dades
+    sql.insert( 0 , "vacuum" );//amb l'acciÃ³ vacuum es compacta la base de dades
     
     databaseConnection->getLock();
     stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sql.c_str() , 0 , 0 , 0 );

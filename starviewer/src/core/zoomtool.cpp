@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -20,7 +20,7 @@ ZoomTool::ZoomTool( Q2DViewer *viewer , QObject *parent, const char *name )
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
-        DEBUG_LOG( "L'interactor Style és buit!" );
+        DEBUG_LOG( "L'interactor Style Ã©s buit!" );
 }
 
 ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
@@ -28,7 +28,7 @@ ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
-        DEBUG_LOG( "L'interactor Style és buit!" );
+        DEBUG_LOG( "L'interactor Style Ã©s buit!" );
 }
 
 ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
@@ -68,7 +68,7 @@ void ZoomTool::handleEvent( unsigned long eventID )
         if( m_interactorStyle )
             m_interactorStyle->Zoom();
         else
-            DEBUG_LOG( "::MouseWheelBackwardZoom(): L'interactor Style és buit!" );
+            DEBUG_LOG( "::MouseWheelBackwardZoom(): L'interactor Style Ã©s buit!" );
     break;
 
     default:
@@ -84,7 +84,7 @@ void ZoomTool::startZoom()
         m_interactorStyle->StartDolly();
     }
     else
-        DEBUG_LOG( "::startZoom(): L'interactor Style és buit!" );
+        DEBUG_LOG( "::startZoom(): L'interactor Style Ã©s buit!" );
 }
 
 void ZoomTool::doZoom()
@@ -95,7 +95,7 @@ void ZoomTool::doZoom()
             m_interactorStyle->Dolly();
     }
     else
-        DEBUG_LOG( "::doZoom(): L'interactor Style és buit!" );
+        DEBUG_LOG( "::doZoom(): L'interactor Style Ã©s buit!" );
 }
 
 void ZoomTool::endZoom()
@@ -106,7 +106,7 @@ void ZoomTool::endZoom()
         m_interactorStyle->EndDolly();
     }
     else
-        DEBUG_LOG( "::endZoom(): L'interactor Style és buit!" );
+        DEBUG_LOG( "::endZoom(): L'interactor Style Ã©s buit!" );
 }
 
 }

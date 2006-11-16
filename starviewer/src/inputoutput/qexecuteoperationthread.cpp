@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -39,11 +39,11 @@ void QExecuteOperationThread::queueOperation(Operation operation)
 {
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
     
-    emit( newOperation( &operation ) );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operaciÛ, i la mostri per pantalla
+    emit( newOperation( &operation ) );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operaci√≥, i la mostri per pantalla
     
     m_semaphor.acquire();
     
-    //la variable m_stop controla si el thread est‡ engegat o parat!
+    //la variable m_stop controla si el thread est√† engegat o parat!
     queueOperationList->insertOperation(operation); 
     if(m_stop = true)
     {   //si parat l'engeguem
@@ -98,7 +98,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     QString logMessage;
     CacheStudyDAL cacheStudyDAL;
 
-    logMessage = "Iniciant la desc‡rrega de l'estudi ";
+    logMessage = "Iniciant la desc√†rrega de l'estudi ";
     logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
     logMessage.append( "del pacs " );
     logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
@@ -114,12 +114,12 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         
     state = enoughFreeSpace( enoughSpace );    
         
-    //s'indica que comenÁa la descarreca de l'estudi al qretrieveScreen
+    //s'indica que comen√ßa la descarreca de l'estudi al qretrieveScreen
     emit( setOperating( studyUID.toAscii().constData() ) );   
    
     if ( !state.good() || !enoughSpace ) 
     {
-        logMessage = "La desc‡rrega de l'estudi ";
+        logMessage = "La desc√†rrega de l'estudi ";
         logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
         logMessage.append( "del pacs " );
         logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
@@ -163,7 +163,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     retrieve.setMask( operation.getStudyMask() ); 
     retrieve.setNetwork( pacsConnection.getNetwork() );
     
-    //afegim a la ProcssesImageSingletton quin objecte s'encarregarr‡ de processar les imatges descarregades
+    //afegim a la ProcssesImageSingletton quin objecte s'encarregarr√† de processar les imatges descarregades
     piSingleton->addNewProcessImage( studyUID.toAscii().constData(),sProcessImg) ;
    
     //connectem els signals del starviewerProcessImage
@@ -175,7 +175,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     pacsConnection.disconnect();
 
     errorRetrieving = sProcessImg->getErrorRetrieving();
-    //esborrem el processImage de la llista de processImage encarregat de processar la informaciÛ per cada imatge descarregada
+    //esborrem el processImage de la llista de processImage encarregat de processar la informaci√≥ per cada imatge descarregada
     piSingleton->delProcessImage( studyUID.toAscii().constData() );
     delete sProcessImg;    
 
@@ -183,7 +183,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi 
         if ( !retState.good() )
         {        
-            logMessage = "S'ha produit algun error durant la desc‡rrega de l'estudi ";
+            logMessage = "S'ha produit algun error durant la desc√†rrega de l'estudi ";
             logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
             logMessage.append( " del pacs " );
             logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
@@ -206,12 +206,12 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     }
     else 
     {    
-        logMessage = "Ha finalitzat la desc‡rrega de l'estudi ";
+        logMessage = "Ha finalitzat la desc√†rrega de l'estudi ";
         logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
         logMessage.append( "del pacs " );
         logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
         INFO_LOG( logMessage.toAscii().constData() );
-        scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualitzaciÛ de la cachÈ  
+        scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualitzaci√≥ de la cach√©  
         emit( setOperationFinished( studyUID.toAscii().constData() ) );// descarregat
         cacheStudyDAL.setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
     }

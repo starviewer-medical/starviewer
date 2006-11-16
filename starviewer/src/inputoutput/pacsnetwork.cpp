@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -75,10 +75,10 @@ T_ASC_Network * PacsNetwork::getNetworkRetrieve()
 
 void PacsNetwork::disconnect()
 {
-    //esborem la configuraciÛ de la xarxa per queries
+    //esborem la configuraci√≥ de la xarxa per queries
     if ( m_networkQuery != NULL )  ASC_dropNetwork( &m_networkQuery ); // delete net structure
 
-    //esborrem la configuraciÛ de la xarxa per retrieves
+    //esborrem la configuraci√≥ de la xarxa per retrieves
     
     if ( m_networkRetrieve != NULL ) ASC_dropNetwork( &m_networkRetrieve );
 }

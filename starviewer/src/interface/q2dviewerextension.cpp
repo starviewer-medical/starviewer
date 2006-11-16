@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -86,7 +86,7 @@ void Q2DViewerExtension::createActions()
     viewActionGroup->addAction( m_doubleViewAction );
     m_singleViewAction->setChecked( true );
 
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
+    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, perÃ² potser que mÃ©s endavant sÃ­
     m_voxelInformationAction = new QAction( 0 );
     m_voxelInformationAction->setText( tr("Voxel Information") );
     m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
@@ -139,7 +139,7 @@ void Q2DViewerExtension::createActions()
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
 
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
+    //activem per defecte una tool. \TODO podrÃ­em posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
 }
 
@@ -149,7 +149,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
 
-    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
+    // adicionals, \TODO ara es fa "a saco" perÃ² s'ha de millorar
     connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
     connect( m_spinBox2_1 , SIGNAL( valueChanged(int) ) , m_2DView2_1 , SLOT( setSlice(int) ) );
     connect( m_2DView2_1 , SIGNAL( sliceChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
@@ -158,7 +158,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_spinBox2_2 , SIGNAL( valueChanged(int) ) , m_2DView2_2 , SLOT( setSlice(int) ) );
     connect( m_2DView2_2 , SIGNAL( sliceChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
 
-    // sincronisme window level \TODO veure perquè no hi ha sincronisme entre una pàgina i l'altre
+    // sincronisme window level \TODO veure perquÃ¨ no hi ha sincronisme entre una pÃ gina i l'altre
     connect( m_2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView2_1 , SLOT( setWindowLevel( double , double ) ) );
     connect( m_2DView2_1 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView2_2 , SLOT( setWindowLevel( double , double ) ) );
     connect( m_2DView2_1 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
@@ -191,7 +191,7 @@ void Q2DViewerExtension::createConnections()
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    // \TODO ara ho fem "a saco" però s'hauria de millorar
+    // \TODO ara ho fem "a saco" perÃ² s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
@@ -205,7 +205,7 @@ void Q2DViewerExtension::setInput( Volume *input )
 void Q2DViewerExtension::setSecondInput( Volume *input )
 {
     m_secondaryVolume = input;
-    // \TODO ara ho fem "a saco" però s'hauria de millorar
+    // \TODO ara ho fem "a saco" perÃ² s'hauria de millorar
     m_2DView2_2->setInput( m_secondaryVolume );
     INFO_LOG("Afegim un segon volum per comparar")
     changeViewToAxial();

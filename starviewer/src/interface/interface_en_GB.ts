@@ -252,6 +252,46 @@
         <source>Clear the text boxes</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Create database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution information contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adress :      </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Town :         </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ZIP Code :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contact e-mail :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Phone Number :</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QFileDialog</name>
@@ -283,58 +323,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver , noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , medium contrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver , medium contrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Neck , medium contrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Angiography</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -362,55 +350,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default</source>
+        <source>Enable axial plane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Bone  </source>
+        <source>Enable sagital plane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Lung</source>
+        <source>Enable coronal plane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Soft Tissues , noncontrast</source>
+        <source>Switch to axial view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Liver , noncontrast</source>
+        <source>Axial view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Soft Tissues , medium contrast</source>
+        <source>Switch to sagital view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Liver , medium contrast</source>
+        <source>Sagital view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>CT Neck , medium contrast</source>
+        <source>Switch to coronal view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Angiography</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom</source>
+        <source>Coronal view</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -421,63 +393,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>MIP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>WW/WL:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -486,6 +402,22 @@
     </message>
     <message>
         <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slicing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -564,41 +496,6 @@
 </context>
 <context>
     <name>udg::Q2DViewer</name>
-    <message>
-        <source>&amp;Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Reset initial parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Slice: %1/%2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Image Size: %1 x %2
-View Size: %3 x %4
-WW: %5 WL: %6 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1
-%2
-%3
-Acc:%4
-%5
-%6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::Q2DViewerExtension</name>
@@ -670,63 +567,39 @@ Acc:%4
         <source>Change To Double View Mode</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Voxel Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable voxel information over cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate Clockwise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate the image in clockwise direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate Counter Clockwise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rotate the image in counter clockwise direction</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::Q2DViewerExtensionBase</name>
     <message>
         <source>WW/WL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -743,6 +616,22 @@ Acc:%4
     </message>
     <message>
         <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>window level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>voxel information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -841,10 +730,6 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Open the 2D MPR Application Viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -861,19 +746,11 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Open the 3D-2D MPR Application Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Visualization</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extensions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -925,7 +802,7 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Close the current serie</source>
+        <source>Close the current extension page</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1032,15 +909,253 @@ Acc:%4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Database is looked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>To solve this error restart the user session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pool space can&apos;t be less than used space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Pacs </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> doesn&apos;t responds </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Be sure that the IP and AETitle of the PACS is correct </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Test of Pacs </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is correct </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> doesn&apos;t responds correctly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t create the directory. Please check users permission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QCreateDicomdir</name>
+    <message>
+        <source>Create dicomdir at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cd occupied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StarViewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dvd Ocuppied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The size of Dicomdir is </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>With this study the Dicomdir exceeds the size of the device. Please change the device or create the dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The study exists in the Dicomdir list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t create the temporary directory. Please check users permission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a diretory to create de dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The directory contains a dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create directory ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Dicomdir directory doesn&apos;t exists. Do you want to create it ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Can&apos;t create the directory. Please check users permission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enough free space to create dicom dir. Please free space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please, first select the studies which you want to create a dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating Dicomdir. Be sure you have user permissions in </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The size of Dicomdir is 0 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dicomdir Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please Select a study to remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted or SQL syntax error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error Number : </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database is corrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Register duplicated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Internal Database error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QCreateDicomdirBase</name>
+    <message>
+        <source>Create DicomDir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>650 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mida Dicomdir :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Dicomdir at :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy to disk or external device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Burn in a Cd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Burn in a Dvd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creates the Dicomdir with the selected studies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Study</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Study Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Study Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>studyUID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove selected study of the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Removel all the studies of the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1100,9 +1215,104 @@ Acc:%4
         <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;MIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+M</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum Intensity Projection</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
-    <name>udg::QNavigateWindowBase</name>
+    <name>udg::QOperationStateScreen</name>
+    <message>
+        <source>PENDING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Local</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RETRIEVING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> STORING </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RETRIEVED</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> STORED </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QOperationStateScreenBase</name>
+    <message>
+        <source>Retrieve list studies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From/To</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Series</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StudyUID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QPacsList</name>
@@ -1133,77 +1343,9 @@ Acc:%4
 </context>
 <context>
     <name>udg::QRetrieveScreen</name>
-    <message>
-        <source>PENDING</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Local</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RETRIEVING</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ERROR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RETRIEVED</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QRetrieveScreenBase</name>
-    <message>
-        <source>Retrieve list studies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Series</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>StudyUID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Direction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From/To</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Patient Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Images</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QSeriesListWidget</name>
@@ -1259,6 +1401,14 @@ Acc:%4
     </message>
     <message>
         <source>Study </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert to DicomDir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1318,6 +1468,61 @@ Acc:%4
     </message>
     <message>
         <source>Protocol Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QWindowLevelComboBox</name>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Lung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, Non Contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver, Non Contrast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Soft Tissues, Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Liver, Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CT Neck, Contrast Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Angiography</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Osteoporosis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Emphysema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Petrous Bone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1450,6 +1655,26 @@ Acc:%4
     </message>
     <message>
         <source>Show Pacs List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error, not opened Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error quering in dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error openning dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> Can&apos;t query studies to PACS </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1637,6 +1862,18 @@ Acc:%4
     </message>
     <message>
         <source>PacsServer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,21 +16,21 @@ class QApplicationMainWindow;
 }
 
 /**
-    Classe base Director. La seva funció serà coordinar les accions que l'usuari realitzi a través de la interfície amb els paràmetres interns de cada mètode, interactuant amb la interfície.
-    Aquesta classe fa de pont entre la interfície d'usuari i la implementació pura
-    d'un mètode.
-    Aquesta és una classe abstracta de la qual s'heredarà una sub-classe per cada mètode implementat
-    que proporciona la interfície comuna per a totes.
+    Classe base Director. La seva funciÃ³ serÃ  coordinar les accions que l'usuari realitzi a travÃ©s de la interfÃ­cie amb els parÃ metres interns de cada mÃ¨tode, interactuant amb la interfÃ­cie.
+    Aquesta classe fa de pont entre la interfÃ­cie d'usuari i la implementaciÃ³ pura
+    d'un mÃ¨tode.
+    Aquesta Ã©s una classe abstracta de la qual s'heredarÃ  una sub-classe per cada mÃ¨tode implementat
+    que proporciona la interfÃ­cie comuna per a totes.
     
-    Aquesta classe s'encarregarà per exemple d'actualitzar els paràmetres d'un mètode de segmentació que
-    un usuari està manipul·lant a través d'un usuari, de dirigir la seva execució i validació dels 
-    paràmetres, l'apertura de noves finestres, mostrant resultats, vistes, etc.
+    Aquesta classe s'encarregarÃ  per exemple d'actualitzar els parÃ metres d'un mÃ¨tode de segmentaciÃ³ que
+    un usuari estÃ  manipulÂ·lant a travÃ©s d'un usuari, de dirigir la seva execuciÃ³ i validaciÃ³ dels 
+    parÃ metres, l'apertura de noves finestres, mostrant resultats, vistes, etc.
     
-    En el constructor li proporcionem un punter a la finestra principal perquè pugui interactuar amb 
+    En el constructor li proporcionem un punter a la finestra principal perquÃ¨ pugui interactuar amb 
     ella.
     
-    L'slot execute és el que s'encarrega de l'exeucució d'un cert algorisme, mostrar finestres, etc.
-    aquí és purament virtual, ja que cada sub-classe l'haurà d'implementar de diferent manera.
+    L'slot execute Ã©s el que s'encarrega de l'exeucuciÃ³ d'un cert algorisme, mostrar finestres, etc.
+    aquÃ­ Ã©s purament virtual, ja que cada sub-classe l'haurÃ  d'implementar de diferent manera.
 */
 
 namespace udg{
@@ -46,9 +46,9 @@ public:
     
 public slots:
     /** 
-        Aquest slot s'encarrega d'executar totes les tasques del mètode un cop tenim els paràmetres
-        a punt. Entre aquestes tasques tindrem l'execució de l'algorisme i la mostra de resultats.
-        Aquest slot és purament virtual i haurà de ser reimplementat en cadascuna de les subclasses
+        Aquest slot s'encarrega d'executar totes les tasques del mÃ¨tode un cop tenim els parÃ metres
+        a punt. Entre aquestes tasques tindrem l'execuciÃ³ de l'algorisme i la mostra de resultats.
+        Aquest slot Ã©s purament virtual i haurÃ  de ser reimplementat en cadascuna de les subclasses
     */
     virtual void execute() = 0;
 

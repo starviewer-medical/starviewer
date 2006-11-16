@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -62,9 +62,9 @@ void DistanceTool::dispatchEvent( EventIdType event )
 // ""                       + MouseMove : moure punt candidat, mostrar en pantalla
 // ""       ""Released -> 1r punt confirmat, passar 2n estat (1punt agafat)
 // estat 1punt agafat
-// si MouseMove -> pintar línia desde 1r punt i mostrar anotació distància
-// si leftButtonPressed {&& Mouse move }  ídem anterior
-// si leftButtonReleased -> 2n punt confirmat , anotar distància , passar estat inicial
+// si MouseMove -> pintar lÃ­nia desde 1r punt i mostrar anotaciÃ³ distÃ ncia
+// si leftButtonPressed {&& Mouse move }  Ã­dem anterior
+// si leftButtonReleased -> 2n punt confirmat , anotar distÃ ncia , passar estat inicial
 
     switch( m_state )
     {
@@ -103,7 +103,7 @@ void DistanceTool::dispatchEvent( EventIdType event )
         switch( event )
         {
         case LeftButtonDown:
-            // posem automàtcament el valor del següent que és allà on està el mouse
+            // posem automÃ tcament el valor del segÃ¼ent que Ã©s allÃ  on estÃ  el mouse
             m_distance.setSecondPoint( m_viewer->getModelPointFromCursor() );
             m_state = SecondPointCandidate;
             
@@ -128,7 +128,7 @@ void DistanceTool::dispatchEvent( EventIdType event )
         break;
         
         case MouseMove:
-            // mentre es mogui el mouse, el punt anirà variant
+            // mentre es mogui el mouse, el punt anirÃ  variant
             m_distance.setSecondPoint( m_viewer->getModelPointFromCursor() );
         break;
         
@@ -144,8 +144,8 @@ void DistanceTool::dispatchEvent( EventIdType event )
 
 void DistanceTool::drawDistance()
 {
-// de moment només guardem una distància, però hauria d'estar preparat per totes les distàncies
-// aquesta característica ara està en un mètode però podria quedar separat en una altre classe independent
+// de moment nomÃ©s guardem una distÃ ncia, perÃ² hauria d'estar preparat per totes les distÃ ncies
+// aquesta caracterÃ­stica ara estÃ  en un mÃ¨tode perÃ² podria quedar separat en una altre classe independent
     switch( m_state )
     {
     case Begin:

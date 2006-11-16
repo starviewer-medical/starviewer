@@ -18,7 +18,7 @@ class Study
     
     /** Operador de la classe
      * @param  Estudi amb el que sl'ha de comprar
-     * @return cert si és menor
+     * @return cert si Ã©s menor
      */
     bool operator<(Study);
     

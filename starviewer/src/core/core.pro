@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu és una biblioteca:  
+# L'objectiu Ã©s una biblioteca:  
 
 FORMS += qlogviewerbase.ui 
 HEADERS += extensionfactory.h \

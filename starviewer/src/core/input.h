@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -24,7 +24,7 @@
 
 namespace udg {
 /**
-    Classe auxiliar per monitorejar el progrÈs de la lectura del fitxer
+    Classe auxiliar per monitorejar el progr√©s de la lectura del fitxer
 */
 class ProgressCommand : public itk::Command 
 {
@@ -62,7 +62,7 @@ public:
 };
 
 /*!
-    Classe auxiliar per monitorejar el progrÈs de la lectura d'una sËrie de fitxers
+    Classe auxiliar per monitorejar el progr√©s de la lectura d'una s√®rie de fitxers
 */
 class SeriesProgressCommand : public itk::Command 
 {
@@ -102,7 +102,7 @@ public:
 /**
     Aquesta classe s'ocupa de les tasques d'obrir tot tipus de fitxer
 
-@author Grup de Gr‡fics de Girona ( GGG )
+@author Grup de Gr√†fics de Girona ( GGG )
 */
 class Input : public QObject
 {
@@ -115,23 +115,23 @@ public:
     /// Carrega un volum a partir del nom de fitxer que se li passi
     bool openFile(const char *fileName);
     
-    /// Lector de sËries dicom donat un directori que les contÈ
+    /// Lector de s√®ries dicom donat un directori que les cont√©
     bool readSeries( const char *dirPath );
     
     /// Retorna un Volum
     Volume* getData() const { return m_volumeData; }; 
 
-    // AixÚ fa petar aplicaciÛ
+    // Aix√≤ fa petar aplicaci√≥
     //itk::QtSignalAdaptor *m_progressSignalAdaptor;
 public slots:
-    /// emet el progrÈs de lectura d'una sËrie d'arxius
+    /// emet el progr√©s de lectura d'una s√®rie d'arxius
     void slotProgress()
     {
         emit progress( (int)( m_seriesReader->GetProgress() * 100 ) );
     }
     
 signals:
-    /// Indica el progrÈs en % de la lectura del fitxer
+    /// Indica el progr√©s en % de la lectura del fitxer
     void progress( int );
     
 private:
@@ -143,10 +143,10 @@ private:
     typedef itk::GDCMImageIO                        ImageIOType;
     typedef itk::GDCMSeriesFileNames                NamesGeneratorType;    
 
-    /// El lector de sËries dicom
+    /// El lector de s√®ries dicom
     SeriesReaderType::Pointer m_seriesReader;
 
-    /// El lector est‡ndar de fitxers singulars, normalment servir‡ per llegir *.mhd's
+    /// El lector est√†ndar de fitxers singulars, normalment servir√† per llegir *.mhd's
     ReaderTypePointer    m_reader;
 
     /// Les dades llegides en format de volum
@@ -158,16 +158,16 @@ private:
     /// el generador dels noms dels fitxers DICOM d'un directori
     NamesGeneratorType::Pointer m_namesGenerator;
 
-    /// mËtode temporal per printar tags dicom
+    /// m√®tode temporal per printar tags dicom
     void printTag( std::string tag , std::string name );
 
-    /// Demana per un tag DICOM que ser‡ retornat en format string. Retorna true si es troba el tag al header DICOM
+    /// Demana per un tag DICOM que ser√† retornat en format string. Retorna true si es troba el tag al header DICOM
     bool queryTagAsString( std::string tag , std::string &result );
     
-    /// Es dedica a proporcionar al volum la informaciÛ que ens dÛna el DICOM
+    /// Es dedica a proporcionar al volum la informaci√≥ que ens d√≥na el DICOM
     void setVolumeInformation();
 
-    /// a partir dels direction cosines d'un eix ens dÛna l'orientaciÛ referent al pacient en string
+    /// a partir dels direction cosines d'un eix ens d√≥na l'orientaci√≥ referent al pacient en string
     char *getOrientation( double vector[3] );
 };
 

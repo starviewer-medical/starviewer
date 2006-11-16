@@ -15,7 +15,7 @@ ImageMask::ImageMask()
     
 }
 
-//Per cada cerca a la m‡scara s'ha d'espeficiar el nivell al que anirem a buscar les dades, en aquest cas s'especifica image
+//Per cada cerca a la m√†scara s'ha d'espeficiar el nivell al que anirem a buscar les dades, en aquest cas s'especifica image
 void ImageMask:: retrieveLevel()
 {
     char val[15];

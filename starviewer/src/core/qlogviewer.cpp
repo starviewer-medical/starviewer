@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                 *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                 *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -28,7 +28,7 @@ QLogViewer::QLogViewer(QWidget *parent)
     }
     else
     {
-        INFO_LOG( "S'ha obert amb èxit l'arxiu de logs" );
+        INFO_LOG( "S'ha obert amb Ã¨xit l'arxiu de logs" );
         QByteArray data = logFile.readAll();
         QTextCodec *codec = Qt::codecForHtml( data );
         QString str = codec->toUnicode( data );

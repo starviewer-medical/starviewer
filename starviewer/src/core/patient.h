@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,9 +16,9 @@
 namespace udg {
 
 /**
-Classe que representa la unitat central de treball de l'aplicaciÛ: el Pacient. Guardar‡ tota la informaciÛ relacionada amb aquests ( Estudis, SËries , etc )
+Classe que representa la unitat central de treball de l'aplicaci√≥: el Pacient. Guardar√† tota la informaci√≥ relacionada amb aquests ( Estudis, S√®ries , etc )
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Patient : public QObject
 {
@@ -28,37 +28,37 @@ public:
 
     ~Patient();
 
-    /// Assigna/ObtÈ nom del pacient
+    /// Assigna/Obt√© nom del pacient
     void setName( const char *name );
     void setName( QString name );
     QString getName();
 
-    /// Assigna/ObtÈ cognom del pacient
+    /// Assigna/Obt√© cognom del pacient
     void setSurname( const char *surname );
     void setSurname( QString surname );
     QString getSurname();
 
-    /// Retorna el camp clau que identificar‡ al pacient de cares a la interfÌcie. Es composar‡ pel nom complert mÈs el seu ID de pacient \TODO encara per determinar
+    /// Retorna el camp clau que identificar√† al pacient de cares a la interf√≠cie. Es composar√† pel nom complert m√©s el seu ID de pacient \TODO encara per determinar
     QString getKey();
     
-    /// Assigna/ObtÈ data de naixement
+    /// Assigna/Obt√© data de naixement
     void setDateOfBirth( int day , int month , int year );
     QString getDateOfBirth();
     int getDayOfBirth();
     int getMonthOfBirth();
     int getYearOfBirth();
 
-    /// ObtÈ edat del pacient
+    /// Obt√© edat del pacient
     int getAge();
 
-    /// Assigna/ObtÈ sexe del pacient
+    /// Assigna/Obt√© sexe del pacient
     inline char getSex() const { return m_sex; };
     
     /// Assignar/Obtenir el pes del pacient
     void setWeight( double weight );
     double getWeight() const { return m_weight; };
 
-    /// Assignar/Obtenir l'aclÁada del pacient
+    /// Assignar/Obtenir l'acl√ßada del pacient
     void setHeight( double height );
     double getHeight() const { return m_height; };
 
@@ -68,7 +68,7 @@ public:
     /// Li treu al pacient l'estudi amb la clau 'key'
     void removeStudy( QString key );
 
-    /// ObtÈ l'estudi amb clau 'key'
+    /// Obt√© l'estudi amb clau 'key'
     PatientStudy* getStudy( QString key );
     
 private:
@@ -90,10 +90,10 @@ private:
     /// Pes ( en Kg. ) del pacient
     double m_weight;
 
-    /// AlÁada ( en metres ) del pacient
+    /// Al√ßada ( en metres ) del pacient
     double m_height;
 
-    /// Taula de hash que contÈ els estudis del pacient
+    /// Taula de hash que cont√© els estudis del pacient
     typedef QHash< QString , PatientStudy* > StudiesHashType;
     StudiesHashType m_studiesHash;
     

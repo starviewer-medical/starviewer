@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -33,12 +33,12 @@ Status ReadDicomdir::open( std::string dicomdirPath )
     Status state;
     std::string dicomdirFilePath;
 
-    //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'˙nica manera d'obrir un nou dicomdir, Ès a travÈs del construtor de DcmDicomDir, passant el path per par‡metre, per aixÚ si ja existia un Dicomdir ober, fem un delete, per tancar-lo
+    //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'√∫nica manera d'obrir un nou dicomdir, √©s a trav√©s del construtor de DcmDicomDir, passant el path per par√†metre, per aix√≤ si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if ( m_dicomdir != NULL) delete m_dicomdir;
 
     m_dicomdirAbsolutePath = dicomdirPath;
     
-    //per defecte la informaciÛ dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
+    //per defecte la informaci√≥ dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
     dicomdirFilePath = dicomdirPath;
     dicomdirFilePath.append( "/DICOMDIR" );
     m_dicomdir = new DcmDicomDir( dicomdirFilePath.c_str() );
@@ -46,7 +46,7 @@ Status ReadDicomdir::open( std::string dicomdirPath )
     return state.setStatus( m_dicomdir->error() );
 }
 
-//El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que contÈ n series, i que contÈ n imatges, per llegir la informaciÛ hem d'accedir a travÈs d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent aixÌ fins arribar al nivell de baix de tot, les imatges,
+//El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que cont√© n series, i que cont√© n imatges, per llegir la informaci√≥ hem d'accedir a trav√©s d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent aix√≠ fins arribar al nivell de baix de tot, les imatges,
 Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
 {
     Status state;
@@ -85,7 +85,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
             studyRecord->findAndGetOFStringArray( DCM_StudyDate , text );
             study.setStudyDate( text.c_str() );
 
-            //DescripciÛ estudi
+            //Descripci√≥ estudi
             studyRecord->findAndGetOFStringArray( DCM_StudyDescription , text );
             study.setStudyDescription( text.c_str() );
 
@@ -97,21 +97,21 @@ Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
             studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
             study.setStudyUID( text.c_str() );
 
-            if ( matchStudyMask( study , studyMask ) ) //comprovem si l'estudi compleix la m‡scara de cerca que ens han passat
+            if ( matchStudyMask( study , studyMask ) ) //comprovem si l'estudi compleix la m√†scara de cerca que ens han passat
             {
                 studyList.insert( study );   
             }
             
-            studyRecord = patientRecord->nextSub( studyRecord ); //accedim al seg¸ent estudi del pacient
+            studyRecord = patientRecord->nextSub( studyRecord ); //accedim al seg√ºent estudi del pacient
         }
 
-        patientRecord = root->nextSub( patientRecord ); //accedim al seg¸ent pacient del dicomdir 
+        patientRecord = root->nextSub( patientRecord ); //accedim al seg√ºent pacient del dicomdir 
     }
     
     return state.setStatus( m_dicomdir->error() );
 } 
 
-//Per trobar les sËries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol∑licitat una vegada trobat, podrem accedir a la seva informacio de la sËrie
+//Per trobar les s√®ries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol¬∑licitat una vegada trobat, podrem accedir a la seva informacio de la s√®rie
 Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
 {
     Status state;
@@ -144,15 +144,15 @@ Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
             else studyRecord = patientRecord->nextSub( studyRecord );//si no trobem accedim al seguent estudi del pacient
         }
 
-        if ( !trobat ) patientRecord = root->nextSub( patientRecord ); //accedim al seg¸ent pacient
+        if ( !trobat ) patientRecord = root->nextSub( patientRecord ); //accedim al seg√ºent pacient
     }
 
-    if ( trobat )//si hem trobat l'estudi amb el UID que cerc‡vem
+    if ( trobat )//si hem trobat l'estudi amb el UID que cerc√†vem
     {
-        DcmDirectoryRecord *seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que contÈ el studyUID que cerc‡vem
+        DcmDirectoryRecord *seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que cont√© el studyUID que cerc√†vem
         while ( seriesRecord != NULL )
         {
-            //N˙mero de sËrie
+            //N√∫mero de s√®rie
             seriesRecord->findAndGetOFStringArray( DCM_SeriesNumber , text );
             series.setSeriesNumber( text.c_str() );
 
@@ -160,11 +160,11 @@ Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
             seriesRecord->findAndGetOFStringArray( DCM_SeriesInstanceUID , text );
             series.setSeriesUID( text.c_str() );
 
-            //Modalitat sËrie            
+            //Modalitat s√®rie            
             seriesRecord->findAndGetOFStringArray( DCM_Modality , text );
             series.setSeriesModality( text.c_str() );            
 
-            //Per obtenir el directori de les series, no hi ha cap mÈs manera que accedir. a la primera imatge de la serie i consultar-ne el directori
+            //Per obtenir el directori de les series, no hi ha cap m√©s manera que accedir. a la primera imatge de la serie i consultar-ne el directori
 
             DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 );
 
@@ -173,12 +173,12 @@ Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
             seriesPath.clear();
             seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
             seriesPath = replaceBarra( seriesPath ); 
-            seriesPath = seriesPath.substr( 0 , seriesPath.rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sËrie
+            seriesPath = seriesPath.substr( 0 , seriesPath.rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la s√®rie
             series.setSeriesPath( seriesPath.c_str() );            
             
-            seriesList.insert( series );//inserim a la llista de sËrie
+            seriesList.insert( series );//inserim a la llista de s√®rie
             
-            seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la seg¸ent sËrie de l'estudi
+            seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la seg√ºent s√®rie de l'estudi
         } 
     }   
     
@@ -207,7 +207,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , ImageList &imageList )
 
         while (  studyRecord != NULL && !trobat )//accedim a niell estudi
         {
-            seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que contÈ el studyUID que cerc‡vem
+            seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que cont√© el studyUID que cerc√†vem
             while ( seriesRecord != NULL && !trobat )//accedim a nivell
             {
                 //UID Serie
@@ -215,31 +215,31 @@ Status ReadDicomdir::readImages( std::string seriesUID , ImageList &imageList )
                 seriesUIDRecord.clear();
                 seriesRecord->findAndGetOFStringArray( DCM_SeriesInstanceUID , text );
                 seriesUIDRecord.insert( 0 , text.c_str() );
-                if ( seriesUIDRecord == seriesUID ) //busquem la sËrie amb les imatges
+                if ( seriesUIDRecord == seriesUID ) //busquem la s√®rie amb les imatges
                 {   
                     trobat = true;
                     image.setSeriesUID( seriesUIDRecord.c_str() );//indiquem el seriesUID
                     studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
                     image.setStudyUID( text.c_str() );//Indiquem el studyUID de la imatge
                 }
-                else seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la seg¸ent sËrie de l'estudi
+                else seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la seg√ºent s√®rie de l'estudi
             }  
             studyRecord = patientRecord->nextSub( studyRecord );//si no trobem accedim al seguent estudi del pacient
         }
 
-        if ( !trobat ) patientRecord = root->nextSub( patientRecord ); //accedim al seg¸ent pacient
+        if ( !trobat ) patientRecord = root->nextSub( patientRecord ); //accedim al seg√ºent pacient
     }
 
-    if ( trobat )//si hem trobat la sËrie amb el UID que cerc‡vem
+    if ( trobat )//si hem trobat la s√®rie amb el UID que cerc√†vem
     {
-        DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 ); //seleccionem la serie de l'estudi que contÈ el studyUID que cerc‡vem
+        DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 ); //seleccionem la serie de l'estudi que cont√© el studyUID que cerc√†vem
         while ( imageRecord != NULL )
         {
             //SopUid Image
             imageRecord->findAndGetOFStringArray( DCM_ReferencedSOPInstanceUID , text );
             image.setSoPUID( text.c_str() );
 
-            //Instance Number (N˙mero d'imatge
+            //Instance Number (N√∫mero d'imatge
             imageRecord->findAndGetOFStringArray( DCM_InstanceNumber , text );            
             image.setImageNumber( atoi( text.c_str() ) );       
 
@@ -252,7 +252,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , ImageList &imageList )
 
             imageList.insert( image );//inserim a la llista la imatge*/
             
-            imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la seg¸ent imatge de la sËrie
+            imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la seg√ºent imatge de la s√®rie
         }         
     }   
     
@@ -285,8 +285,8 @@ bool ReadDicomdir::matchStudyMask( Study study , StudyMask studyMask )
 bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId )
 {
     if ( studyMaskStudyId.length() > 0 )
-    { //si hi ha m‡scara d'estudi Id
-      //el id de l'estudi, des de la classe query screen el guardem a la m‡scara es amb format '*StudyID*'. Els '*' s'han de treure           
+    { //si hi ha m√†scara d'estudi Id
+      //el id de l'estudi, des de la classe query screen el guardem a la m√†scara es amb format '*StudyID*'. Els '*' s'han de treure           
         studyMaskStudyId = upperString( studyMaskStudyId.substr( 1 , studyMaskStudyId.length() - 2 ) );
         
         if ( studyStudyId.find( studyMaskStudyId ) ==  std::string::npos )
@@ -305,8 +305,8 @@ bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: s
 bool ReadDicomdir::matchStudyMaskStudyUID( std::string studyMaskStudyUID , std:: string studyStudyUID )
 {
     if ( studyMaskStudyUID.length() > 0 )
-    { //si hi ha m‡scara d'estudi UID
-      //en el cas del StudiUID seguim criteri del pacs, nomÈs faran match els UID que concordin amb el de la m‡scara, no podem fer wildcard
+    { //si hi ha m√†scara d'estudi UID
+      //en el cas del StudiUID seguim criteri del pacs, nom√©s faran match els UID que concordin amb el de la m√†scara, no podem fer wildcard
         if ( studyStudyUID == studyMaskStudyUID )
         {   
             return true;
@@ -323,8 +323,8 @@ bool ReadDicomdir::matchStudyMaskStudyUID( std::string studyMaskStudyUID , std::
 bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId )
 {
     if ( studyMaskPatientId.length() > 0 )
-    { //si hi ha m‡scara Patient Id
-      //el id del pacient, des de la classe query screen el guardem a la m‡scara es amb format '*PatientID*'. Els '*' s'han de treure           
+    { //si hi ha m√†scara Patient Id
+      //el id del pacient, des de la classe query screen el guardem a la m√†scara es amb format '*PatientID*'. Els '*' s'han de treure           
         
         studyMaskPatientId = upperString( studyMaskPatientId.substr( 1 , studyMaskPatientId.length() - 2 ) );
         
@@ -344,13 +344,13 @@ bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std
 bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string studyDate )
 {
     if ( studyMaskDate.length() > 0 ) 
-    { //Si hi ha m‡scara de data
-      //la m‡scara de la data per DICOM segueix els formats :
+    { //Si hi ha m√†scara de data
+      //la m√†scara de la data per DICOM segueix els formats :
       // -  "YYYYMMDD-YYYYMMDD", per indicar un rang de dades
-      // - "-YYYYMMDD" per buscar estudis amb la data mÈs petita o igual
-      // - "YYYYMMDD-" per buscar estudis amb la data mÈs gran o igual
+      // - "-YYYYMMDD" per buscar estudis amb la data m√©s petita o igual
+      // - "YYYYMMDD-" per buscar estudis amb la data m√©s gran o igual
       // - "YYYYMMDD" per buscar estudis d'aquella data
-      // Hurem de mirar quin d'aquest formats Ès la nostre m‡scara
+      // Hurem de mirar quin d'aquest formats √©s la nostre m√†scara
     
         if (  studyMaskDate.length() == 8 ) // cas YYYYMMDDD
         {
@@ -399,8 +399,8 @@ bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName ,
     std:: string lastPatientName , firstPatientName;
 
     if ( studyMaskPatientName.length() > 0 )
-    { //En Pacs la m‡scara del nom tÈ el seg¸ent format Cognoms*Nom*
-      //Seguint els criteris del PACS la cerca es fa en wildcard, Ès a dir no cal que els dos string sigui igual mentre que la m‡scara del nom del pacient estigui continguda dins studyPatientName n'hi ha suficient
+    { //En Pacs la m√†scara del nom t√© el seg√ºent format Cognoms*Nom*
+      //Seguint els criteris del PACS la cerca es fa en wildcard, √©s a dir no cal que els dos string sigui igual mentre que la m√†scara del nom del pacient estigui continguda dins studyPatientName n'hi ha suficient
         studyMaskPatientName = upperString( studyMaskPatientName );
         lastPatientName = studyMaskPatientName.substr( 0 , studyMaskPatientName.find_first_of ( "*" ) );   
 
@@ -409,7 +409,7 @@ bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName ,
             if ( studyPatientName.find ( lastPatientName ) == std::string::npos ) return false; //comprovem si el nom del pacient conte el cognom
         }
     
-        if ( studyMaskPatientName.find_first_of( "*" ) < studyMaskPatientName.length() ) //si la m‡scara tambÈ contem el nom del pacient
+        if ( studyMaskPatientName.find_first_of( "*" ) < studyMaskPatientName.length() ) //si la m√†scara tamb√© contem el nom del pacient
         {
             firstPatientName = studyMaskPatientName.substr( studyMaskPatientName.find_first_of ( "*" ) + 1 , studyMaskPatientName.length() - studyMaskPatientName.find_first_of ( "*" ) -2 );  //ignorem el * de final del Nom
             
@@ -426,7 +426,7 @@ bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName ,
 bool ReadDicomdir::matchStudyMaskAccessionNumber( std::string studyMaskAccessionNumber , std:: string studyAccessionNumber )
 {
     if ( studyMaskAccessionNumber.length() > 0 )
-    { //si hi ha m‡scara AccessioNumber
+    { //si hi ha m√†scara AccessioNumber
         
         if ( studyAccessionNumber == studyMaskAccessionNumber )
         {   

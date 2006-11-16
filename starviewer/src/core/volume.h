@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -21,10 +21,10 @@ namespace udg {
 
 class VolumeSourceInformation;
 /**
-    Aquesta classe respresenta un volum de dades. Aquesta ser‡ la classe on es guardaran les dades que voldrem tractar. Ens donar‡ mËtodes
+    Aquesta classe respresenta un volum de dades. Aquesta ser√† la classe on es guardaran les dades que voldrem tractar. Ens donar√† m√®todes
     per poder interrogar-la i obtenir les dades en el format que volguem: ITK, VTK, etc.
     
-    @author Grup de Gr‡fics de Girona  ( GGG )
+    @author Grup de Gr√†fics de Girona  ( GGG )
 */
 
 class Volume
@@ -78,18 +78,18 @@ public:
     */
     ItkImageTypePointer getItkData();
 
-    /// Actualitza la informaciÛ del volum
+    /// Actualitza la informaci√≥ del volum
     void updateInformation();
     
-    /// ObtÈ l'origen del volum
+    /// Obt√© l'origen del volum
     void getOrigin( double  xyz[3] );
     double *getOrigin();
 
-    /// ObtÈ l'espaiat del model al llarg dels eixos
+    /// Obt√© l'espaiat del model al llarg dels eixos
     void getSpacing( double xyz[3] );
     double *getSpacing();
 
-    /// Retorna la øbounding box?
+    /// Retorna la ¬øbounding box?
     void getWholeExtent( int extent[6] );
     int *getWholeExtent();
     
@@ -97,7 +97,7 @@ public:
     int *getDimensions();
     void getDimensions( int dims[3] );
     
-    /// Assigna/Retorna la classe que contÈ tota la informaciÛ del volum
+    /// Assigna/Retorna la classe que cont√© tota la informaci√≥ del volum
     void setVolumeSourceInformation( VolumeSourceInformation* information )
     {
         m_volumeInformation = information;
@@ -109,7 +109,7 @@ public:
     
 private:
     
-    /// MËtode d'inicialitzaciÛ d'objectes comuns per als constructors
+    /// M√®tode d'inicialitzaci√≥ d'objectes comuns per als constructors
     void init();
     
     ItkImageTypePointer m_imageDataITK;

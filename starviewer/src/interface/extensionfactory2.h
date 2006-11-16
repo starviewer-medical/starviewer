@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -21,7 +21,7 @@ namespace udg {
 /**
 Factory de les extensions
 
-@author Grup de Gr‡fics de Girona  ( GGG )
+@author Grup de Gr√†fics de Girona  ( GGG )
 */
 class ExtensionFactory2 : public QObject{
 Q_OBJECT
@@ -32,10 +32,10 @@ public:
 
     ~ExtensionFactory2();
     
-    /// registra l'extensiÛ al factory. \TODO podrÌem tenir certes extensions ja registrades aquÌ per defecte i que aquest mËtode es faci servir per les noves extensions que es vagin fent.( estil vtkImageReaderFactory )
+    /// registra l'extensi√≥ al factory. \TODO podr√≠em tenir certes extensions ja registrades aqu√≠ per defecte i que aquest m√®tode es faci servir per les noves extensions que es vagin fent.( estil vtkImageReaderFactory )
     bool registerExtension( QString name , ExtensionCreator *extension );
-    /// Ens crea l'extensiÛ, Ès a dir, ens retorna l'extensiÛ registrada amb el nom que li demanem
-    /// \TODO QWidget podria quedar substituit per una classe + genËrica com ExtensionBase
+    /// Ens crea l'extensi√≥, √©s a dir, ens retorna l'extensi√≥ registrada amb el nom que li demanem
+    /// \TODO QWidget podria quedar substituit per una classe + gen√®rica com ExtensionBase
     QWidget *createExtension( QString name );
 
 private:

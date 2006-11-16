@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -13,10 +13,10 @@
 namespace udg {
 
 /**
-Identificador que es fa servir en llocs on es necessita un identificador que l'usuari podr‡ veure per pantalla. Aquest tÈ una part fixa, invariable, que Ès la que realment es fa servir com a identificador, internament. TambÈ tÈ una part que serveix per poder-la mostrar a l'interfÌcie i que es pugui traduir. Per exemple, els noms de les Extensions.
+Identificador que es fa servir en llocs on es necessita un identificador que l'usuari podr√† veure per pantalla. Aquest t√© una part fixa, invariable, que √©s la que realment es fa servir com a identificador, internament. Tamb√© t√© una part que serveix per poder-la mostrar a l'interf√≠cie i que es pugui traduir. Per exemple, els noms de les Extensions.
 
-No tÈ "setters" expressament.
-Exemple d'assignacions i creaciÛ d'id's nuls:
+No t√© "setters" expressament.
+Exemple d'assignacions i creaci√≥ d'id's nuls:
 @code
 DisplayableID id(QString::null);
 
@@ -27,7 +27,7 @@ id = DisplayableID("nouValor",tr("nouValor"));
 id = id2;
 @endcode
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class DisplayableID {

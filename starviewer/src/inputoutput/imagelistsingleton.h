@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,8 +17,8 @@ class ImageListSingleton : public ImageList{
 
 public:
 
-    /** Retorna una inst‡ncia a la llista d'imatges si existeix, sinÛ la crea i la retorna
-     * @return inst‡ncia a la ImageList
+    /** Retorna una inst√†ncia a la llista d'imatges si existeix, sin√≥ la crea i la retorna
+     * @return inst√†ncia a la ImageList
      */
     static ImageListSingleton* getImageListSingleton();
      

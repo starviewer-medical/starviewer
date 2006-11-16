@@ -5,16 +5,16 @@
 #include <cond.h>
 #include <list>
 
-/** Aquesta classe ens permet configurar els par‡metres necessaris que l'usuari ens ha d'entrar per connectar-nos en el pacs. A mÈs d'altres dades d'interÈs
- * Aquests par‡metres sÛn :
+/** Aquesta classe ens permet configurar els par√†metres necessaris que l'usuari ens ha d'entrar per connectar-nos en el pacs. A m√©s d'altres dades d'inter√©s
+ * Aquests par√†metres s√≥n :
  *            -IP o Adr. del Host
- *            - Port de connexiÛ
- *            - AE title de la m‡quina local
+ *            - Port de connexi√≥
+ *            - AE title de la m√†quina local
  *            - AE title del PACS al que es vol connectar l'usuari
- *            - InstituciÛ al que pertany al PACS
- *            - DescripciÛ del Pacs
+ *            - Instituci√≥ al que pertany al PACS
+ *            - Descripci√≥ del Pacs
  *            - Localitzacio del Pacs
- *            - Default, estableix si aquest PACS Ès el predeterminat per realitzar les cerques 
+ *            - Default, estableix si aquest PACS √©s el predeterminat per realitzar les cerques 
  */
 namespace udg{
 
@@ -25,30 +25,30 @@ class PacsParameters
 
 public :
     
-    /** Constructor r‡pid de la classe. Aquest constructor inclou tots els par‡mentres mÌnim requerits per connectar-nos amb el PACS.
-     *  IMPORTANT!!!! si l'objectiu de la connexiÛ Ès descarregar imatges s'ha d'invocar la funciÛ setLocalPort
-     * @param   adr AdreÁa de pacs al qual ens volem connectar
+    /** Constructor r√†pid de la classe. Aquest constructor inclou tots els par√†mentres m√≠nim requerits per connectar-nos amb el PACS.
+     *  IMPORTANT!!!! si l'objectiu de la connexi√≥ √©s descarregar imatges s'ha d'invocar la funci√≥ setLocalPort
+     * @param   adr Adre√ßa de pacs al qual ens volem connectar
      * @param   port Port en el qual el pacs esta escoltant les peticions          
      * @param   aet AETitle del PACS al qual ens volem connectar
-     * @param   aec AETitle de la nostra m‡quina. Cada m‡quina ha de tenir un AETitle ˙nic. El PACS comprova al connectar-nos si la nostra IP correspont al nostre AETitle que li enviem
+     * @param   aec AETitle de la nostra m√†quina. Cada m√†quina ha de tenir un AETitle √∫nic. El PACS comprova al connectar-nos si la nostra IP correspont al nostre AETitle que li enviem
     */
     PacsParameters( std::string ,  std::string ,  std::string  , std::string  );
     
     /// Constructor buit de la classe
     PacsParameters();
     
-    /** assigna l'adreÁa al pacs al qual ens volem connectar
-     * @param  AdreÁa del PACS 
+    /** assigna l'adre√ßa al pacs al qual ens volem connectar
+     * @param  Adre√ßa del PACS 
      */
     void setPacsAdr( std::string );
 
     /** assigna el port del pacs al qual ens volem connectar
-     * @param port de connexiÛ del pacs
+     * @param port de connexi√≥ del pacs
      */
     void setPacsPort( std::string );
 
-    /** assigna l'aet title de la nostre m‡quina local       
-     * @param AE Title de la m‡quina local
+    /** assigna l'aet title de la nostre m√†quina local       
+     * @param AE Title de la m√†quina local
      */
     void setAELocal( std::string );
     
@@ -62,8 +62,8 @@ public :
      */
     void setLocalPort( std::string );
     
-    /** assigna la descripciÛ del PACS 
-     * @param descripciÛ del PACS
+    /** assigna la descripci√≥ del PACS 
+     * @param descripci√≥ del PACS
      */
     void setDescription( std::string );
     
@@ -72,13 +72,13 @@ public :
      */
     void setInstitution( std::string );
     
-    /** assigna la localitzaciÛ del PACS 
-     * @param LocalitzaciÛ del PACS
+    /** assigna la localitzaci√≥ del PACS 
+     * @param Localitzaci√≥ del PACS
      */
     void setLocation( std::string );
         
-    /** assigna al Pacs si Ès el Predeterminat
-     * @param indica si el PACS Ès el predeterminat per defecte
+    /** assigna al Pacs si √©s el Predeterminat
+     * @param indica si el PACS √©s el predeterminat per defecte
      */
     void setDefault( std::string );
     
@@ -87,13 +87,13 @@ public :
      */
     void setTimeOut( int );
     
-    /** assigna l'id del PACS, aquest Ès un camp clau de la base de dades per diferenciar els PACS
+    /** assigna l'id del PACS, aquest √©s un camp clau de la base de dades per diferenciar els PACS
      * @param id el pacs
      */
     void setPacsID( int );
     
-    /** retorna l'adreÁa del pacs 
-     * @return AdreÁa del pacs 
+    /** retorna l'adre√ßa del pacs 
+     * @return Adre√ßa del pacs 
      */
      std::string  getPacsAdr();
     
@@ -108,7 +108,7 @@ public :
      std::string  getAELocal();
     
     /** retorna l'AE del pacs 
-     * @return AdreÁa del pacs 
+     * @return Adre√ßa del pacs 
      */
      std::string  getAEPacs();
     
@@ -117,23 +117,23 @@ public :
      */
      std::string  getLocalPort();
     
-    /** retorna la descripciÛ del PACS
-     * @return descripciÛ
+    /** retorna la descripci√≥ del PACS
+     * @return descripci√≥
      */
      std::string  getDescription();
     
-    /** retorna la instituciÛ a la que pertany el PACS
+    /** retorna la instituci√≥ a la que pertany el PACS
      * @return institucio
      */
      std::string  getInstitution();
     
-    /** retorna la localitzaciÛ del PACS
-     * @return localitzaciÛ
+    /** retorna la localitzaci√≥ del PACS
+     * @return localitzaci√≥
      */
      std::string  getLocation(); 
         
-    /** retorna si Ès el pacs predeterminat
-     * @return si val 'S' voldr‡ di que Ès el pacs predeterminat per realitzar les cerques
+    /** retorna si √©s el pacs predeterminat
+     * @return si val 'S' voldr√† di que √©s el pacs predeterminat per realitzar les cerques
      */
      std::string  getDefault();
     
@@ -158,7 +158,7 @@ private :
     std::string  m_Inst;
     std::string  m_Location;
     std::string  m_Default;
-    int          m_PacsID; //camp clau de la taula PacsList, serveix per identificar els PACS, Ès invisible per a l'usuari, aquest camp l'assigna l'aplicacio
+    int          m_PacsID; //camp clau de la taula PacsList, serveix per identificar els PACS, √©s invisible per a l'usuari, aquest camp l'assigna l'aplicacio
     int m_TimeOut;
 
 };

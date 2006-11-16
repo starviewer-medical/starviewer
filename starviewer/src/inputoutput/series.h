@@ -72,13 +72,13 @@ class Series
      */
     void setBodyPartExaminated( std::string );
     
-    /** Estableix el path relatiu de la sèrie
+    /** Estableix el path relatiu de la sÃ¨rie
      * @param  Series path
      */
     void setSeriesPath( std::string );
 
-    /** Estableix el número d'imatges que conté la serie, respecte el directori on es troben els estudis
-     * @param Número d'imatges
+    /** Estableix el nÃºmero d'imatges que contÃ© la serie, respecte el directori on es troben els estudis
+     * @param NÃºmero d'imatges
      */    
     void setImageNumber( int );
     
@@ -132,13 +132,13 @@ class Series
      */
     std::string getBodyPartExaminated();
     
-    /** Retorna el path relatiu de la sèrie, respecte el directori on es troben els estudis
+    /** Retorna el path relatiu de la sÃ¨rie, respecte el directori on es troben els estudis
      * @return  path 
      */
     std::string getSeriesPath();
     
-    /** retorna el número d'imatges que conté la serie
-     * @return Número d'imatges
+    /** retorna el nÃºmero d'imatges que contÃ© la serie
+     * @return NÃºmero d'imatges
      */
     int         getImageNumber();
 

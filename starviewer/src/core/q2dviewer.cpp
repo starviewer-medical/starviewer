@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -19,7 +19,7 @@
 // Tools
 #include "q2dviewertoolmanager.h"
 
-// include's b‡sics vtk
+// include's b√†sics vtk
 #include <QVTKWidget.h>
 #include <vtkEventQtSlotConnect.h>
 #include <vtkRenderer.h>
@@ -28,7 +28,7 @@
 #include <vtkInteractorStyleImage.h>
 #include <vtkImageViewer2.h>
 #include <vtkCamera.h>
-// composiciÛ d'imatges
+// composici√≥ d'imatges
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h>
 #include <vtkImageRectilinearWipe.h>
@@ -66,7 +66,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
     updateCursor( -1, -1, -1, -1 );
-    m_rotateFactor = 0; // per defecte no hi ha cap rotaciÛ adicional
+    m_rotateFactor = 0; // per defecte no hi ha cap rotaci√≥ adicional
 
     // inicialitzacions d'objectes
     // visor
@@ -86,7 +86,7 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_bottomRuler = 0;
 
     // CheckerBoard
-    // el nombre de divisions per defecte, ser‡ de 2, per simplificar
+    // el nombre de divisions per defecte, ser√† de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
 
     setupInteraction();
@@ -138,13 +138,13 @@ void Q2DViewer::createAnnotations()
 {
     // escala de colors
     createScalarBar();
-    // anotacions de l'orientaciÛ del pacient
+    // anotacions de l'orientaci√≥ del pacient
     createOrientationAnnotations();
-    // Llegenda amb informaciÛ del voxel
+    // Llegenda amb informaci√≥ del voxel
     createVoxelInformationCaption();
     // Marcadors d'escala
     createRulers();
-    // actualitzaciÛ dels valors de les anotacions
+    // actualitzaci√≥ dels valors de les anotacions
     updateAnnotations();
 }
 
@@ -171,10 +171,10 @@ void Q2DViewer::createVoxelInformationCaption()
 
 void Q2DViewer::createOrientationAnnotations()
 {
-    // \TODO separar el textAnnotation en un altre mËtode?
+    // \TODO separar el textAnnotation en un altre m√®tode?
     // anotacions de texte que van als racons de la finestra
     m_textAnnotation = vtkCornerAnnotation::New();
-    // informaciÛ de referËncia de la orientaciÛ del pacient
+    // informaci√≥ de refer√®ncia de la orientaci√≥ del pacient
     for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
@@ -185,7 +185,7 @@ void Q2DViewer::createOrientationAnnotations()
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
     }
-    // ara posem la informaciÛ concreta de cadascuna de les referËncia d'orientaciÛ. 0-4 en sentit anti-horari, comenÁant per 0 = esquerra de la pantalla
+    // ara posem la informaci√≥ concreta de cadascuna de les refer√®ncia d'orientaci√≥. 0-4 en sentit anti-horari, comen√ßant per 0 = esquerra de la pantalla
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
     m_patientOrientationTextActor[0]->SetPosition( 0.01 , 0.5 );
 
@@ -322,7 +322,7 @@ void Q2DViewer::updateCameraRotation()
         switch( m_lastView )
         {
         case Axial:
-        //\TODO corretgir l'error en el primer cop que li donem una rotaciÛ
+        //\TODO corretgir l'error en el primer cop que li donem una rotaci√≥
             if( cam )
                 cam->SetRoll( -m_rotateFactor*90. + 180. );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
@@ -352,7 +352,7 @@ void Q2DViewer::updateCameraRotation()
     }
     else
     {
-        WARN_LOG( "Intentant actualitzar rotaciÛ de c‡mera sense haver donat un input abans..." );
+        WARN_LOG( "Intentant actualitzar rotaci√≥ de c√†mera sense haver donat un input abans..." );
     }
 }
 
@@ -443,13 +443,13 @@ void Q2DViewer::addActors()
         this->getRenderer()->AddActor( m_voxelInformationCaption );
     else
     {
-        DEBUG_LOG( "No s'ha creat l'actor d'informaciÛ de voxel; no es pot afegir a l'escena" );
+        DEBUG_LOG( "No s'ha creat l'actor d'informaci√≥ de voxel; no es pot afegir a l'escena" );
     }
     if( m_textAnnotation )
         this->getRenderer()->AddActor( m_textAnnotation );
     else
     {
-        DEBUG_LOG( "No s'ha creat l'actor d'informaciÛ devolum; no es pot afegir a l'escena" );
+        DEBUG_LOG( "No s'ha creat l'actor d'informaci√≥ devolum; no es pot afegir a l'escena" );
     }
     if( m_patientOrientationTextActor[0] )
     {
@@ -460,7 +460,7 @@ void Q2DViewer::addActors()
     }
     else
     {
-        DEBUG_LOG( "No s'han creat els actors textuals d'informaciÛ d'orientaciÛ del pacient; no es poden afegir a l'escena" );
+        DEBUG_LOG( "No s'han creat els actors textuals d'informaci√≥ d'orientaci√≥ del pacient; no es poden afegir a l'escena" );
     }
     if( m_sideRuler )
         this->getRenderer()->AddActor2D( m_sideRuler );
@@ -484,11 +484,11 @@ void Q2DViewer::addActors()
 
 void Q2DViewer::initInformationText()
 {
-    // informaciÛ de llesca
+    // informaci√≥ de llesca
     updateSliceAnnotation();
-    // informaciÛ de la imatge: mides i window level
+    // informaci√≥ de la imatge: mides i window level
     updateWindowInformationAnnotation();
-    // informaciÛ de la sËrie
+    // informaci√≥ de la s√®rie
     updateSerieInformationAnnotation();
     // nom del protocol
     updateProtocolNameAnnotation();
@@ -541,7 +541,7 @@ void Q2DViewer::updateSerieInformationAnnotation()
         m_textAnnotation->SetText( 3 , m_upperRightText.toAscii() );
     }
     else
-        DEBUG_LOG( "::updateSerieInformationAnnotation() : No s'ha donat cap input, no hi ha informaciÛ disponible" );
+        DEBUG_LOG( "::updateSerieInformationAnnotation() : No s'ha donat cap input, no hi ha informaci√≥ disponible" );
 }
 
 void Q2DViewer::updateProtocolNameAnnotation()
@@ -554,7 +554,7 @@ void Q2DViewer::updateProtocolNameAnnotation()
         m_textAnnotation->SetText( 1 , m_lowerRightText.toAscii() );
     }
     else
-        DEBUG_LOG( "::updateProtocolNameAnnotation() : No s'ha donat cap input, no hi ha informaciÛ disponible" );
+        DEBUG_LOG( "::updateProtocolNameAnnotation() : No s'ha donat cap input, no hi ha informaci√≥ disponible" );
 }
 
 void Q2DViewer::displayInformationText( bool display )
@@ -676,13 +676,13 @@ void Q2DViewer::disableVoxelInformationCaption()
 void Q2DViewer::updateVoxelInformation()
 {
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
-    // agafem el punt que est‡ apuntant el ratolÌ en aquell moment \TODO podrÌem passar-li el 4t parËmatre opcional (vtkPropCollection) per indicar que nomÈs agafi de l'ImageActor, perÚ no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
+    // agafem el punt que est√† apuntant el ratol√≠ en aquell moment \TODO podr√≠em passar-li el 4t par√®matre opcional (vtkPropCollection) per indicar que nom√©s agafi de l'ImageActor, per√≤ no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
     m_picker->PickProp( interactor->GetEventPosition()[0], interactor->GetEventPosition()[1], m_viewer->GetRenderer() );
     // calculem el pixel trobat
     double q[3], imageValue;
     m_picker->GetPickPosition( q );
     int found = 0;
-    // quan dona una posiciÛ de (0,0,0) Ès que estem fora de l'actor
+    // quan dona una posici√≥ de (0,0,0) √©s que estem fora de l'actor
     if( !( q[0] == 0 && q[1] == 0 && q[2] == 0) )
     {
         double tolerance;
@@ -792,14 +792,14 @@ void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, voi
     vtkRenderWindowInteractor* iren = vtkRenderWindowInteractor::SafeDownCast(object);
     // consume event so the interactor style doesn't get it
     command->AbortFlagOn();
-    // Obtenim la posiciÛ de l'event (moure el mouse, en aquest cas)
+    // Obtenim la posici√≥ de l'event (moure el mouse, en aquest cas)
     int eventPosition[2];
     iren->GetEventPosition( eventPosition );
     int* size = iren->GetSize();
     // remember to flip y
     QPoint pt = QPoint( eventPosition[0], size[1]-eventPosition[1]);
 
-    // aquesta posiciÛ no Ès del tot bona ja que no sÛn les coordenades globals, sin o de finestra
+    // aquesta posici√≥ no √©s del tot bona ja que no s√≥n les coordenades globals, sin o de finestra
     QMenu contextMenu( this );
     contextMenu.addAction( m_resetAction );
 
@@ -813,7 +813,7 @@ void Q2DViewer::setupInteraction()
     // configurem l'Image Viewer i el qvtkWidget
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-    //\TODO aixÚ dÛna un error de vtk perquË el viewer no tÈ input, perÚ no afecta a la execuciÛ de l'apicaciÛ
+    //\TODO aix√≤ d√≥na un error de vtk perqu√® el viewer no t√© input, per√≤ no afecta a la execuci√≥ de l'apicaci√≥
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
@@ -822,13 +822,13 @@ void Q2DViewer::setupInteraction()
                                  this,
                                  SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
                                  );
-    // \TODO fer aixÚ aquÌ? o fer-ho en el tool manager?
+    // \TODO fer aix√≤ aqu√≠? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
 
-// men˙ contextual TODO el farem servir???
+// men√∫ contextual TODO el farem servir???
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
 //                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
 //                        this,
@@ -894,7 +894,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         imageCheckerBoard->SetNumberOfDivisions( m_divisions );
         // actualitzem el viewer
         m_viewer->SetInputConnection( imageCheckerBoard->GetOutputPort() ); // li donem el m_imageCheckerboard com a input
-        // \TODO haurÌem d'actualitzar valors que es calculen al setInput!
+        // \TODO haur√≠em d'actualitzar valors que es calculen al setInput!
     break;
 
     case Blend:
@@ -904,7 +904,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         blender->SetOpacity( 1, 0.5 );
         blender->SetOpacity( 2, 0.5 );
         m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input
-        // \TODO haurÌem d'actualitzar valors que es calculen al setInput!
+        // \TODO haur√≠em d'actualitzar valors que es calculen al setInput!
     break;
 
     case RectilinearWipe:
@@ -913,7 +913,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         wipe->SetPosition(20,20);
         wipe->SetWipeToUpperLeft();
         m_viewer->SetInput( wipe->GetOutput() );
-        // \TODO haurÌem d'actualitzar valors que es calculen al setInput!
+        // \TODO haur√≠em d'actualitzar valors que es calculen al setInput!
     break;
     }
 }
@@ -923,7 +923,7 @@ void Q2DViewer::render()
     // si tenim dades
     if( m_mainVolume )
     {
-       // AixÚ Ès necessari perquË la imatge es rescali a les mides de la finestreta
+       // Aix√≤ √©s necessari perqu√® la imatge es rescali a les mides de la finestreta
        // Automatically set up the camera based on the visible actors. The camera will reposition itself to view the center point of the actors, and move along its initial view plane normal (i.e., vector defined from camera position to focal point) so that all of the actors can be seen.
         this->getRenderer()->ResetCamera();
         updateView();
@@ -1082,7 +1082,7 @@ double Q2DViewer::getCurrentColorLevel()
 
 void Q2DViewer::resetWindowLevelToDefault()
 {
-    // aixÚ ens dÛna un level/level "maco" per defecte
+    // aix√≤ ens d√≥na un level/level "maco" per defecte
     // situem el level al mig i donem un window complet de tot el rang
     if( m_mainVolume )
     {
@@ -1106,7 +1106,7 @@ void Q2DViewer::updateWindowLevelAnnotation()
 
 void Q2DViewer::reset()
 {
-    //\TODO: completar, encara Ès incomplert
+    //\TODO: completar, encara √©s incomplert
     updateView();
 }
 
@@ -1190,7 +1190,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
 
             break;
         }
-        // \TODO el format tiff fa petar al desar, mirar si Ès problema de compatibilitat del sistema o de les prÚpies vtk
+        // \TODO el format tiff fa petar al desar, mirar si √©s problema de compatibilitat del sistema o de les pr√≤pies vtk
         case TIFF:
         {
             vtkImageWriter *tiffWriter = vtkTIFFWriter::New();

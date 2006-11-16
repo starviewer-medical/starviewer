@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,9 +16,9 @@
 namespace udg {
 
 /** \fn typedef Singleton<GenericFactory<QWidget, QString> > ExtensionFactory
-    Typedef per la classe que serveix per crear una extensió en temps d'execució. Aquesta és d'ús intern a l'hora de registrar una extensió.
+    Typedef per la classe que serveix per crear una extensiÃ³ en temps d'execuciÃ³. Aquesta Ã©s d'Ãºs intern a l'hora de registrar una extensiÃ³.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de GrÃ fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 typedef Singleton<GenericFactory<QWidget, QString, QWidget> > ExtensionFactory;

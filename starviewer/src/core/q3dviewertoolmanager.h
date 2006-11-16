@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,7 +16,7 @@ class Q3DViewer;
 /**
 Tool Manager pel visor Q3DViewer
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Q3DViewerToolManager : public ToolManager
 {
@@ -27,11 +27,11 @@ public:
 
     ~Q3DViewerToolManager();
 
-    /// Li assignem el visor \TODO aquest mËtode podria quedar \deprecated obligant a proporcionar el visor en el moment de la construcciÛ i prou, eliminant el constructor per defecte
+    /// Li assignem el visor \TODO aquest m√®tode podria quedar \deprecated obligant a proporcionar el visor en el moment de la construcci√≥ i prou, eliminant el constructor per defecte
     void setViewer( Q3DViewer *viewer );
 
 private:
-    /// Inst‡ncia del visor sobre el qual estem treballant
+    /// Inst√†ncia del visor sobre el qual estem treballant
     Q3DViewer *m_viewer;
 
     void initToolRegistration();

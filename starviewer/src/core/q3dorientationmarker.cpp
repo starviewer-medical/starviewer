@@ -1,12 +1,12 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q3dorientationmarker.h"
 
-// Per el maracdor d'orientaciÛ
+// Per el maracdor d'orientaci√≥
 #include <vtkAnnotatedCubeActor.h>
 #include <vtkProperty.h>
 #include <vtkAxesActor.h>
@@ -26,7 +26,7 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
 //  Create a composite orientation marker using
 //  vtkAnnotatedCubeActor and vtkAxesActor.
 //
-    // \TODO se suposa que aquesta orientaciÛ Ès correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, autom‡ticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mËtodes d'aquesta classe per posar les etiquetes correctament
+    // \TODO se suposa que aquesta orientaci√≥ √©s correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, autom√†ticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar m√®todes d'aquesta classe per posar les etiquetes correctament
     vtkAnnotatedCubeActor *cubeActor = vtkAnnotatedCubeActor::New();
     cubeActor->SetXPlusFaceText("L");
     cubeActor->SetXMinusFaceText("R");
@@ -76,7 +76,7 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
     
     vtkAxesActor *axes = vtkAxesActor::New();
     axes->SetShaftTypeToCylinder();
-    // \TODO podrÌem aplicar una rotaciÛ als eixos perquË les anotacions es veiessin en un sistema de m‡-esquerra (rai) en comptes de m‡-dreta (lps)
+    // \TODO podr√≠em aplicar una rotaci√≥ als eixos perqu√® les anotacions es veiessin en un sistema de m√†-esquerra (rai) en comptes de m√†-dreta (lps)
     axes->SetXAxisLabelText( qPrintable( tr("l") ) );
     axes->SetYAxisLabelText( qPrintable( tr("p") ) );
     axes->SetZAxisLabelText( qPrintable( tr("s") ) );

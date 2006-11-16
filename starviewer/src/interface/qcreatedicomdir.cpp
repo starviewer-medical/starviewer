@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -44,11 +44,11 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     setDicomdirSize();
     
-    //com per defecte carreguem del combo l'opcio copia a disc o dispositiu extern, amaguem aquests dos objectes que nomÈs s'utilitzen per quan gravem en cd o dvd
+    //com per defecte carreguem del combo l'opcio copia a disc o dispositiu extern, amaguem aquests dos objectes que nom√©s s'utilitzen per quan gravem en cd o dvd
     m_labelMbCdDvdOcupat->setVisible( false );
     m_progressBarOcupat->setVisible( false );
     
-    //per defecte gravem al disc dur per tant, l'espai Ès il∑limitat
+    //per defecte gravem al disc dur per tant, l'espai √©s il¬∑limitat
     m_DiskSpace = ( unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
 }
 
@@ -74,7 +74,7 @@ void QCreateDicomdir::changedAction( int index )
                  m_lineEditDicomdirPath->setVisible( true );
                  m_buttonExamineDisk->setVisible( true );
                  m_labelCreateDicomdir->setText( tr( "Create dicomdir at"  ) );
-                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha m‡xim
+                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha m√†xim
                  break;
         case 1 : //cd
                  if ( sizeInMB < 700 )
@@ -116,7 +116,7 @@ void QCreateDicomdir::changedAction( int index )
                  break;
     }
     
-    //Si la mida del dicomdir excedeix el maxim de la barra de progrÈs, com a valor a la barra de progrÈs li assignem el seu m‡xim
+    //Si la mida del dicomdir excedeix el maxim de la barra de progr√©s, com a valor a la barra de progr√©s li assignem el seu m√†xim
     if ( index > 0 )
     {
         if ( sizeInMB < m_progressBarOcupat->maximum() ) 
@@ -174,13 +174,13 @@ void QCreateDicomdir::addStudy( Study study )
             return;
         }        
         
-        //nomÈs comprovem l'espai si gravem a un cd o dvd
+        //nom√©s comprovem l'espai si gravem a un cd o dvd
         if ( studySize + m_dicomdirSize > m_DiskSpace && m_comboBoxAction->currentIndex() != 0 )
         {
             QMessageBox::warning( this , tr( "StarViewer" ) , tr( "With this study the Dicomdir exceeds the size of the device. Please change the device or create the dicomdir" ) );
         }
         else
-        {   //afegim la informaciÛ de l'estudi a la llista
+        {   //afegim la informaci√≥ de l'estudi a la llista
             QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
             m_dicomdirSize = m_dicomdirSize + studySize;
             setDicomdirSize();
@@ -235,7 +235,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
         delDirectory.deleteDirectory( dicomdirPath , true );
     }
         
-    INFO_LOG ( "Iniciant la creaciÛ del dicomdir en cd-dvd" );
+    INFO_LOG ( "Iniciant la creaci√≥ del dicomdir en cd-dvd" );
     
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
@@ -257,9 +257,9 @@ void QCreateDicomdir::createDicomdirOnHard()
     DeleteDirectory delDirectory;
     QDir directoryDicomdirPath( dicomdirPath );
 
-    //Comprovem si el directori ja es un dicomdir, si Ès el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
+    //Comprovem si el directori ja es un dicomdir, si √©s el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
     
-    INFO_LOG ( "Iniciant la creaciÛ del dicomdir en el disc dur o dispositiu extern" );
+    INFO_LOG ( "Iniciant la creaci√≥ del dicomdir en el disc dur o dispositiu extern" );
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
@@ -278,12 +278,12 @@ void QCreateDicomdir::createDicomdirOnHard()
                 delDirectory.deleteDirectory( dicomdirPath , false );
                 break;
             case 1:
-                return; //no fem res, l'usuari no vol sobreescriure el directori, cancel∑lem l'operacio i tornem el control a l'usuari
+                return; //no fem res, l'usuari no vol sobreescriure el directori, cancel¬∑lem l'operacio i tornem el control a l'usuari
                 break;
         }
     }
     else
-    {   //el directori no Ès un dicomdir
+    {   //el directori no √©s un dicomdir
         if ( !directoryDicomdirPath.exists() )//si el directori no existiex, preguntem si el vol crear
         {
                 switch ( QMessageBox::question( this ,
@@ -301,7 +301,7 @@ void QCreateDicomdir::createDicomdirOnHard()
                         }
                         break;
                     case 1: 
-                        return; //cancel∑lem
+                        return; //cancel¬∑lem
                         break;
                 }
         }    
@@ -344,11 +344,11 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
         logMessage = "L'estudi ";
         logMessage.append( item->text( 7 ) );
-        logMessage.append( " s'afegir‡ al dicomdir " );
+        logMessage.append( " s'afegir√† al dicomdir " );
         INFO_LOG ( logMessage.toAscii().constData() );
     }
 
-    state = convertToDicomdir.convert( dicomdirPath );//s'inicia la conversiÛ
+    state = convertToDicomdir.convert( dicomdirPath );//s'inicia la conversi√≥
     
     if ( !state.good() )
     {
@@ -365,7 +365,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
             convertToDicomdir.createReadmeTxt();
         }
     
-        INFO_LOG( "Finalitzada la creaciÛ del Dicomdir" );
+        INFO_LOG( "Finalitzada la creaci√≥ del Dicomdir" );
         clearQCreateDicomdirScreen();
     }
     
@@ -380,7 +380,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
     m_labelSizeOfDicomdir->setText( tr( "The size of Dicomdir is 0 Mb" ) );
     
     m_dicomdirSize = 0;
-    setDicomdirSize();//Reiniciem la barra de progrÈs
+    setDicomdirSize();//Reiniciem la barra de progr√©s
 }
 
 void QCreateDicomdir::examineDicomdirPath()

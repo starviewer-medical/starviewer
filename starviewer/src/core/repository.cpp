@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -34,7 +34,7 @@ ItemType* Repository< ItemType >::getItem( const Identifier id )
     
     ItemListIteratorType itr;
     itr = m_itemList.begin();
-    listID = (*itr).first; // s'ha de fer aixÌ perquË sinÛ dÛna un error guarro
+    listID = (*itr).first; // s'ha de fer aix√≠ perqu√® sin√≥ d√≥na un error guarro
     while( itr != m_itemList.end() && listID != id )
     { 
         itr++;
@@ -45,7 +45,7 @@ ItemType* Repository< ItemType >::getItem( const Identifier id )
     {
         return itr->second;
     }
-    else // \TODO aquÌ es podria generar una excepciÛ
+    else // \TODO aqu√≠ es podria generar una excepci√≥
     {
         ItemType* dummy;
         return dummy;
@@ -68,7 +68,7 @@ int Repository< ItemType >::getNumberOfItems()
 template< typename ItemType >
 Identifier *Repository< ItemType >::getIdentifierList() 
 {
-    // declarem la llista d'id's que tindr‡ tants elements com el map
+    // declarem la llista d'id's que tindr√† tants elements com el map
     Identifier *idList;
     int listSize = m_itemList.size();
     if( listSize == 0 )

@@ -11,7 +11,7 @@ PacsParameters::PacsParameters( std::string adr , std::string port , std::string
     m_Port = port;
     m_aeTitle = aet;
     m_aeCalled = aec;
-    m_TimeOut = 15000; //establim que per defecte el timeout és de 15000 ms
+    m_TimeOut = 15000; //establim que per defecte el timeout Ã©s de 15000 ms
     m_PacsID = 0;
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -45,7 +45,7 @@ QString VolumeSourceInformation::getRevertedPatientOrientationString()
 
 void VolumeSourceInformation::setDirectionCosines( double directionCosines[9] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<9; i++ )
         m_directionCosines[i] = directionCosines[i];
 }
@@ -59,7 +59,7 @@ void VolumeSourceInformation::setDirectionCosines( double xCosines[3], double yC
 
 void VolumeSourceInformation::setXDirectionCosines( double xCosines[3] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<3; i++ )
         m_directionCosines[i] = xCosines[i];
 }
@@ -73,7 +73,7 @@ void VolumeSourceInformation::setXDirectionCosines( double x1Cosines, double x2C
 
 void VolumeSourceInformation::setYDirectionCosines( double yCosines[3] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<3; i++ )
         m_directionCosines[i+3] = yCosines[i];
 }
@@ -87,7 +87,7 @@ void VolumeSourceInformation::setYDirectionCosines( double y1Cosines, double y2C
 
 void VolumeSourceInformation::setZDirectionCosines( double zCosines[3] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<3; i++ )
         m_directionCosines[i+6] = zCosines[i];
 }
@@ -101,7 +101,7 @@ void VolumeSourceInformation::setZDirectionCosines( double z1Cosines, double z2C
 
 void VolumeSourceInformation::getDirectionCosines( double directionCosines[9] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<9; i++ )
         directionCosines[i] = m_directionCosines[i];
 }
@@ -115,21 +115,21 @@ void VolumeSourceInformation::getDirectionCosines( double xCosines[3], double yC
 
 void VolumeSourceInformation::getXDirectionCosines( double xCosines[3] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<3; i++ )
         xCosines[i] = m_directionCosines[i];
 }
 
 void VolumeSourceInformation::getYDirectionCosines( double yCosines[3] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<3; i++ )
         yCosines[i] = m_directionCosines[i+3];
 }
 
 void VolumeSourceInformation::getZDirectionCosines( double zCosines[3] )
 {
-    // \TODO Ès mÈs eficient amb un memcpy?
+    // \TODO √©s m√©s eficient amb un memcpy?
     for( int i = 0; i<3; i++ )
         zCosines[i] = m_directionCosines[i+6];
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -23,9 +23,9 @@ class vtkEventQtSlotConnect;
 namespace udg {
 
 /**
-Classe base per a totes les finestres de visualització
+Classe base per a totes les finestres de visualitzaciÃ³
 
-@author Grup de Gràfics de Girona  ( GGG )
+@author Grup de GrÃ fics de Girona  ( GGG )
 */
 
 // Fordward declarations
@@ -52,10 +52,10 @@ public:
     /// Ens retorna el volum d'entrada
     virtual Volume* getInput( void ) { return m_mainVolume; }
 
-    /// Ens retorna el punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
+    /// Ens retorna el punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'Ãºltim event
     Point getModelPointFromCursor() const { return m_modelPointFromCursor; }
 
-    /// Retorna la posició sobre la que es troba el cursor ( coordenades de mon )
+    /// Retorna la posiciÃ³ sobre la que es troba el cursor ( coordenades de mon )
     void getCurrentCursorPosition( double xyz[3] )
     {
         xyz[0] = m_currentCursorPosition[0];
@@ -66,7 +66,7 @@ public:
     /// Retorna el valor de la imatge que hi ha sota el cursor
     double getCurrentImageValue() const { return m_currentImageValue; }
 
-    /// Passa coordenades de display a coordenades de món i viceversa \TODO aquest metode haurioa de ser virtual al pare
+    /// Passa coordenades de display a coordenades de mÃ³n i viceversa \TODO aquest metode haurioa de ser virtual al pare
     static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[3] );
     static void computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] );
 
@@ -83,7 +83,7 @@ public slots:
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
 
-    /// Força l'execució de la visualització
+    /// ForÃ§a l'execuciÃ³ de la visualitzaciÃ³
     virtual void render() = 0;
 
     /// Elimina totes les captures de pantalla
@@ -98,7 +98,7 @@ public slots:
     virtual void reset() = 0;
 
 signals:
-    /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
+    /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, perÃ² podria (o hauria de) canviar per un mapeig nostre
     void eventReceived( unsigned long eventID );
 
 protected:
@@ -108,13 +108,13 @@ protected:
     /// El widget per poder mostrar una finestra vtk amb qt
     QVTKWidget* m_vtkWidget;
 
-    /// El punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
+    /// El punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'Ãºltim event
     Point m_modelPointFromCursor;
 
-    /// Posició sobre la que es troba el ratolí
+    /// PosiciÃ³ sobre la que es troba el ratolÃ­
     double m_currentCursorPosition[3];
 
-    /// Valor de la imatge corresponent a la posició on es troba el ratolí. Quan la posició està fora del model li assignarem un valor "d'invalidesa" \TODO definir aquest valor, de moment fem servir -1 ( erròniament )
+    /// Valor de la imatge corresponent a la posiciÃ³ on es troba el ratolÃ­. Quan la posiciÃ³ estÃ  fora del model li assignarem un valor "d'invalidesa" \TODO definir aquest valor, de moment fem servir -1 ( errÃ²niament )
     double m_currentImageValue;
 
     typedef std::list< vtkImageData * > GrabListType;

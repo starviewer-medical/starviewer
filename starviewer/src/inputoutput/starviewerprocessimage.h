@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -31,7 +31,7 @@ public:
     ///Constructor de la classe
     StarviewerProcessImage();
 
-    /** Processa la informacio de la imatge a descarregar, la guarda a la cache, si la imatge pertany a una nova sèrie també guarda la informació de la sèrie
+    /** Processa la informacio de la imatge a descarregar, la guarda a la cache, si la imatge pertany a una nova sÃ¨rie tambÃ© guarda la informaciÃ³ de la sÃ¨rie
      * @param imatge a processar 
      */
     void process( Image* image );
@@ -46,21 +46,21 @@ signals :
 
     /** signal que s'emet a QExcuteOperationThread per indica que s'ha descarregat una image
       *@param uid de l'estudi
-      *@param número d'imatge
+      *@param nÃºmero d'imatge
       */
     void imageRetrieved( QString studyUID , int );
 
-    /** signal que s'emet a QExcuteOperationThread per indica que s'ha descarregat una sèroe
-      *@param número d'imatge
+    /** signal que s'emet a QExcuteOperationThread per indica que s'ha descarregat una sÃ¨roe
+      *@param nÃºmero d'imatge
       */
     void seriesRetrieved( QString studyUID );
 
-    /** signal que s'emet a QExcuteOperationThread per indica que s'ha inicia la descàrrega d'un estudi
-      *@param número d'imatge
+    /** signal que s'emet a QExcuteOperationThread per indica que s'ha inicia la descÃ rrega d'un estudi
+      *@param nÃºmero d'imatge
       */
     void startRetrieving( QString );
 
-    /** signal que s'emet a QExcuteOperationThread per indicar que hi ha una sèrie a punt per ser visualitzada
+    /** signal que s'emet a QExcuteOperationThread per indicar que hi ha una sÃ¨rie a punt per ser visualitzada
       *@para UID de l'estudi
       */
     void seriesView ( QString );
@@ -71,13 +71,13 @@ private :
     QString m_oldSeriesUID , m_studyUID;
     bool m_error;
     
-    /** Crea el path de la imatge d'on obtenir la informació de les series
+    /** Crea el path de la imatge d'on obtenir la informaciÃ³ de les series
      * @param imatge de la que s'ha d'obtenir el path
      */
     QString createImagePath( Image* image );
     
-    /** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
-     * @param path de la imatge d'on obtenir la informació de la sèrie
+    /** Retorna la informaciÃ³ de la sÃ¨rie de la imatge que es troba al path del parÃ metre
+     * @param path de la imatge d'on obtenir la informaciÃ³ de la sÃ¨rie
      */
     Status getSeriesInformation( QString imagePath , Series &serie );
 

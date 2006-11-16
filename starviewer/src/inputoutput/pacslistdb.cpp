@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -34,7 +34,7 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
     stateQuery = queryPacsDeleted(pacs);
     
     if ( stateQuery.code() == 2099 )
-    {//El pacs no estava en està estat de baixa
+    {//El pacs no estava en estÃ  estat de baixa
         //El PACSid s'autoincrementa sol amb max(PACSID)+1
         sql.insert( 0 , "Insert into PacsList " );
         sql.append( "(AETitle,Server,Port,Inst,Loc,Desc,Def,PacsID,Del) " );
@@ -65,7 +65,7 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }    
@@ -115,7 +115,7 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -150,13 +150,13 @@ Status PacsListDB::queryPacsList( PacsList &list )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }    
     
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
     while (i <= rows)
     {   
         pacs.setAEPacs( resposta[ 0 + i*col ] );
@@ -198,7 +198,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
     estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
-    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
+    //sqlite no tÃ© estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
     if ( rows == 0 && estat == 0 ) estat = 99;
     
     state = m_DBConnect->databaseStatus( estat );
@@ -206,7 +206,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -214,7 +214,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
     
     if ( rows > 0 )
     {
-        i = 1;//ignorem les capçaleres
+        i = 1;//ignorem les capÃ§aleres
         pacs->setAEPacs( resposta[0 + i*col ] );
         pacs->setPacsAdr( resposta[1 + i*col ] );
         pacs->setPacsPort( resposta[2 + i*col ] );
@@ -250,14 +250,14 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
     estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
-    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
+    //sqlite no tÃ© estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
     if ( rows == 0 && estat == 0 ) estat = 99;
     
     state = m_DBConnect->databaseStatus( estat );
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -265,7 +265,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
     
     if ( rows > 0 )
     {
-        i = 1;//ignorem les capçaleres
+        i = 1;//ignorem les capÃ§aleres
         pacs->setAEPacs( resposta[0 + i*col ] );
         pacs->setPacsAdr( resposta[1 + i*col ] );
         pacs->setPacsPort( resposta[2 + i*col ] );
@@ -305,7 +305,7 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }                 
@@ -335,7 +335,7 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
     estat=sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     
-    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
+    //sqlite no tÃ© estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
     if ( rows == 0 && estat == 0 ) estat = 99;
     
     if ( rows > 0 ) pacs->setPacsID( atoi( resposta[1]) );
@@ -344,7 +344,7 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }   

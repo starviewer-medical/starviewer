@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de GrÃ fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -24,7 +24,7 @@ Slicing2DTool::Slicing2DTool( Q2DViewer *viewer , QObject *parent, const char *n
     m_currentPosition[1] = 0;
     m_2DViewer = viewer;
     if( !m_2DViewer )
-        DEBUG_LOG( "El 2DViewer és nul!" );
+        DEBUG_LOG( "El 2DViewer Ã©s nul!" );
 }
 
 Slicing2DTool::~Slicing2DTool()
@@ -49,13 +49,13 @@ void Slicing2DTool::handleEvent( unsigned long eventID )
 
     case vtkCommand::MouseWheelForwardEvent:
         m_2DViewer->setSlice( m_2DViewer->getSlice() + 1 );
-        //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
+        //\TODO mirar si podem fer una manera mÃ©s atomÃ tica per actualitzar la informaciÃ³ de voxel
         m_2DViewer->updateVoxelInformation();
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
         m_2DViewer->setSlice( m_2DViewer->getSlice() - 1 );
-        //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
+        //\TODO mirar si podem fer una manera mÃ©s atomÃ tica per actualitzar la informaciÃ³ de voxel
         m_2DViewer->updateVoxelInformation();
     break;
 
@@ -73,7 +73,7 @@ void Slicing2DTool::startSlicing()
         m_startPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
     }
     else
-        DEBUG_LOG( "::startSlicing(): El 2DViewer és NUL!" );
+        DEBUG_LOG( "::startSlicing(): El 2DViewer Ã©s NUL!" );
 }
 
 void Slicing2DTool::doSlicing()
@@ -105,7 +105,7 @@ void Slicing2DTool::doSlicing()
         }
     }
     else
-        DEBUG_LOG( "::doSlicing(): El 2DViewer és NUL!" );
+        DEBUG_LOG( "::doSlicing(): El 2DViewer Ã©s NUL!" );
 }
 
 void Slicing2DTool::endSlicing()
@@ -113,7 +113,7 @@ void Slicing2DTool::endSlicing()
     if( m_2DViewer )
         m_state = NONE;
     else
-        DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
+        DEBUG_LOG( "::endSlicing(): El 2DViewer Ã©s NUL!" );
 }
 
 }

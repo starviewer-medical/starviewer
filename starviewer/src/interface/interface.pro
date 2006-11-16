@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
-# L'objectiu és una biblioteca:  
+# L'objectiu Ã©s una biblioteca:  
 
 FORMS += qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \

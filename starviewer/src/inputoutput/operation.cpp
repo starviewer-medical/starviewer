@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,7 +17,7 @@ Operation::Operation()
 
 bool Operation::operator < ( Operation ope ) const 
 {
-    //ordena al reves, perque la prioritat mÈs gran Ès la 0    
+    //ordena al reves, perque la prioritat m√©s gran √©s la 0    
     if ( ope.getPriority() < m_priority )
     {
         return true;
@@ -50,7 +50,7 @@ void Operation::setOperation( int operation )
     }
     else m_operation = operation;
     
-    // si no s'especifica la prioritat, el setOperation automaticament l'assigna en funciÛ del tipus d'operacio
+    // si no s'especifica la prioritat, el setOperation automaticament l'assigna en funci√≥ del tipus d'operacio
     if  ( m_priority > operationPriorityLow )
     {    
         if ( operation == operationView )

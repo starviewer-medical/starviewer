@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -19,13 +19,13 @@ class Study;
 class Series;
 class Image;
 
-/** Converteix un estudi a DICOMDIR, invocant el mËtodes i classes necess‡ries.
-  * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes sÛn :
-  * El nom dels directoris i imatges no pot ser de mes de 8 car‡cters, i ha d'estar en maj˙scules
-  * Les imatges no poden tenir extensiÛ
-  * S'ha de seguir l'estructura jer‡rquica de directoris de Pacient/Estudi/Series/Imatges
+/** Converteix un estudi a DICOMDIR, invocant el m√®todes i classes necess√†ries.
+  * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes s√≥n :
+  * El nom dels directoris i imatges no pot ser de mes de 8 car√†cters, i ha d'estar en maj√∫scules
+  * Les imatges no poden tenir extensi√≥
+  * S'ha de seguir l'estructura jer√†rquica de directoris de Pacient/Estudi/Series/Imatges
   * La imatge ha d'estar en format littleEndian
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ConvertToDicomdir : public QObject 
 {
@@ -38,14 +38,14 @@ public:
      */
     void addStudy ( QString studyUID );
 
-    /** Crear un dicomdir en el path especificat per par‡metre amb els estudis que hi ha a la llista
-     * @param dicomdirPath directori on es guardar‡ el dicomdir
-     * @return Indica l'estat en quË finalitza el mËtode
+    /** Crear un dicomdir en el path especificat per par√†metre amb els estudis que hi ha a la llista
+     * @param dicomdirPath directori on es guardar√† el dicomdir
+     * @return Indica l'estat en qu√® finalitza el m√®tode
      */
     Status convert( QString dicomdirPath );
 
-    /** Crea un fitxer README.TXT, amb informaciÛ sobre quina instituciÛ ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
-      * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer desprÈs d'haver convertir el directori en un dicomdir, si es fes abans el mËtode de convertir el directori a dicomdir fallaria, perquË no sabia com tractar el README.txt
+    /** Crea un fitxer README.TXT, amb informaci√≥ sobre quina instituci√≥ ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
+      * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer despr√©s d'haver convertir el directori en un dicomdir, si es fes abans el m√®tode de convertir el directori a dicomdir fallaria, perqu√® no sabia com tractar el README.txt
       */
     void createReadmeTxt();
 
@@ -54,7 +54,7 @@ public:
 
 private :
 
-    /*Estructura que contÈ la informaciÛ d'un estudi a convertir a dicomdir, Ès necessari guardar el Patient ID perquË segons la normativa del IHE, els estudis s'han d'agrupar per id de pacient*/
+    /*Estructura que cont√© la informaci√≥ d'un estudi a convertir a dicomdir, √©s necessari guardar el Patient ID perqu√® segons la normativa del IHE, els estudis s'han d'agrupar per id de pacient*/
     struct StudyToConvert
         {
             QString patientId;
@@ -82,23 +82,23 @@ private :
 
     /** Converteix un estudi al format littleendian
      * @param studyUID Uid de l'estudi a convertir
-     * @return Indica l'estat en quË finalitza el mËtode
+     * @return Indica l'estat en qu√® finalitza el m√®tode
      */
     Status convertStudy ( QString studyUID );
 
-    /** Converteix una sËrie al format littleendian
+    /** Converteix una s√®rie al format littleendian
      * @param series 
-     * @return Indica l'estat en quË finalitza el mËtode
+     * @return Indica l'estat en qu√® finalitza el m√®tode
      */
     Status convertSeries( Series series );
 
     /** Converteix una imatge al format littleendian
      * @param image 
-     * @return Indica l'estat en quË finalitza el mËtode
+     * @return Indica l'estat en qu√® finalitza el m√®tode
      */
     Status convertImage( Image image );  
    
-    /// esborra els estudis creats en el dicomdir, en el cas que s'haig produÌt algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
+    /// esborra els estudis creats en el dicomdir, en el cas que s'haig produ√≠t algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
 };
 

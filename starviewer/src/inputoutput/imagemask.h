@@ -22,14 +22,14 @@
 #define IMAGEMASK
 #define HAVE_CONFIG_H 1
 
-//necessitem tipus d'aquests classes que són structs,per tant no se'ns permet fer "forward declaration"
+//necessitem tipus d'aquests classes que sÃ³n structs,per tant no se'ns permet fer "forward declaration"
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h> //provide the OFcondition structure and his members
 
 class string;
 
-/** Aquesta classe permet construir una màscara per a cercar imatges 
+/** Aquesta classe permet construir una mÃ scara per a cercar imatges 
  */
 namespace udg{
 
@@ -70,8 +70,8 @@ public:
       */
     std::string getSeriesUID();
     
-    /** Retorna el número d'imatge
-      * @return número d'imatge
+    /** Retorna el nÃºmero d'imatge
+      * @return nÃºmero d'imatge
       */
     std::string getImageNumber();
     

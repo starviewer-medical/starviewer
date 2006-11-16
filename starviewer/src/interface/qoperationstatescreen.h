@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -15,7 +15,7 @@
 #include "starviewerprocessimage.h"
 #include "ui_qoperationstatescreenbase.h"
 
-/// Interfície que implementa la llista d'operacions realitzades cap a un PACS 
+/// InterfÃ­cie que implementa la llista d'operacions realitzades cap a un PACS 
 namespace udg {
 
 class Status;
@@ -36,34 +36,34 @@ public:
     
 public slots :
     
-    /** Insereixu una nova operació
-     *  @param operation operació a inserir
+    /** Insereixu una nova operaciÃ³
+     *  @param operation operaciÃ³ a inserir
      */
     void insertNewOperation( Operation *operation );
 
     /** slot que s'invoca quant un StarviewerProcessImage emet un signal imageRetrieved
-     * @param uid de l'estudi que ha finalitzat una operació d'una imatge
-     * @param número d'imatges descarregades
+     * @param uid de l'estudi que ha finalitzat una operaciÃ³ d'una imatge
+     * @param nÃºmero d'imatges descarregades
      */    
     void imageCommit( QString stidyUID , int numberOfImages );
 
     /** Augmenta en un el nombre de series descarregades
-     * @param UID de l'estudi que s'ha descarregat una sèrie
+     * @param UID de l'estudi que s'ha descarregat una sÃ¨rie
      */
     void seriesCommit( QString studyUID );
 
-    /** S'invoca quant s'ha acabat una operació. S'indica a la llista que l'operació relacionada amb l'estudi ha finalitzat
+    /** S'invoca quant s'ha acabat una operaciÃ³. S'indica a la llista que l'operaciÃ³ relacionada amb l'estudi ha finalitzat
      * @param  UID de l'estudi descarregat
      */
     void setOperationFinished( QString studyUID );
     
-    /** S'invoca quant es produeix algun error durant el processament de l'operació
+    /** S'invoca quant es produeix algun error durant el processament de l'operaciÃ³
      * @param studyUID UID de l'estudi descarregat
      */
 	void setErrorOperation( QString studyUID );
     
-    /** S'invoca quan es comença l'operació d'un estudi, per indicar-ho a la llista que aquell estudi ha començat l'operació
-     * @param  UID de l'estudi que es comença l'operació
+    /** S'invoca quan es comenÃ§a l'operaciÃ³ d'un estudi, per indicar-ho a la llista que aquell estudi ha comenÃ§at l'operaciÃ³
+     * @param  UID de l'estudi que es comenÃ§a l'operaciÃ³
      */
 	void setOperating( QString );
     

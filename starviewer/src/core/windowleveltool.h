@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -12,7 +12,7 @@
 namespace udg {
 
 /**
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Q2DViewer;
@@ -37,9 +37,9 @@ private:
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
     int m_windowLevelStartPosition[2], m_windowLevelCurrentPosition[2];
 
-/// \TODO potser aquests mËtodes slots passen a ser p˙blics
+/// \TODO potser aquests m√®todes slots passen a ser p√∫blics
 private slots:
-    /// ComenÁa el window level
+    /// Comen√ßa el window level
     void startWindowLevel();
 
     /// Calcula el nou window level

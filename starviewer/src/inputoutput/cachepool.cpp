@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -59,7 +59,7 @@ Status CachePool::updatePoolSpace( int size )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -75,7 +75,7 @@ Status CachePool::updatePoolTotalSize( int space )
     std::string logMessage , sql;
     unsigned long long spaceBytes;
     
-    //sqlite no permet en un update entre valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem un string i hi afegim multiplicar l'espai per 1024*1024, per passar a bytes
+    //sqlite no permet en un update entre valors mes gran que un int, a travÃ©s de la interfÃ­cie c++ com guardem la mida en bytes fem un string i hi afegim multiplicar l'espai per 1024*1024, per passar a bytes
     
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -98,7 +98,7 @@ Status CachePool::updatePoolTotalSize( int space )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -129,7 +129,7 @@ Status CachePool::resetPoolSpace()
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
     }
@@ -160,12 +160,12 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }    
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
    
     space = atoi( resposta[i] );
     
@@ -195,12 +195,12 @@ Status CachePool::getPoolTotalSize( unsigned int &space )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
     }    
-    i = 1;//ignorem les capçaleres
+    i = 1;//ignorem les capÃ§aleres
    
     space = atoi( resposta[i] );
     
@@ -219,7 +219,7 @@ Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;
@@ -230,7 +230,7 @@ Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
+        logMessage = "Error a la cache nÃºmero ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         return state;

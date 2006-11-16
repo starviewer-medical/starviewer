@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,19 +16,19 @@
 #include "const.h"    
 #endif
 
-/** Aquesta classe encapusa el objecte connexiÛ, que hauran d'utilitzar les classes per fer les seves crides al PACS. Aquesta classe segueix el patrÛ Abstract   *Factory. AÔllem l'objecte connexiÛ de les dctmk, d'aquesta manera si mai canvia l'objecte de connexiÛ de les dcmtk, nomÈs haurem de tocar aquesta classe 
+/** Aquesta classe encapusa el objecte connexi√≥, que hauran d'utilitzar les classes per fer les seves crides al PACS. Aquesta classe segueix el patr√≥ Abstract   *Factory. A√Øllem l'objecte connexi√≥ de les dctmk, d'aquesta manera si mai canvia l'objecte de connexi√≥ de les dcmtk, nom√©s haurem de tocar aquesta classe 
  */
 namespace udg{
 class PacsConnection{
 
 public :
 
-	/** retorna l'objecte connexiÛ de les dcmtk, perquË altres classes les puguin utilitzar per connectar-se amb el PACS i fer-li les crides, pertitents, com la classe QueryStudy,QuerySeries 
-     * @return retorna una connexiÛ dctmk
+	/** retorna l'objecte connexi√≥ de les dcmtk, perqu√® altres classes les puguin utilitzar per connectar-se amb el PACS i fer-li les crides, pertitents, com la classe QueryStudy,QuerySeries 
+     * @return retorna una connexi√≥ dctmk
      */
     T_ASC_Association* getPacsConnection();
 
-	/** Inserim a l'objecte, la connexiÛ dcmtk que utilitzarem per connectar-nos en el pacs
+	/** Inserim a l'objecte, la connexi√≥ dcmtk que utilitzarem per connectar-nos en el pacs
      * @param estableix la connexio a utilitzar
      */
     void setPacsConnection( T_ASC_Association * );

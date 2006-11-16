@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -56,10 +56,10 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
 //     createToolBars();
     createStatusBar();
 
-    // Llegim les configuracions de l'aplicació, estat de la finestra, posicio, últims
+    // Llegim les configuracions de l'aplicaciÃ³, estat de la finestra, posicio, Ãºltims
     // arxius oberts etc amb QSettings
     readSettings();
-    // icona de l'aplicació
+    // icona de l'aplicaciÃ³
     this->setWindowIcon( QPixmap(":/images/starviewer.png") );
     this->setWindowTitle( tr("StarViewer") );
 //     m_exportFileFilters = tr("JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
@@ -238,7 +238,7 @@ void QApplicationMainWindow::createActions()
 
 void QApplicationMainWindow::createMenus()
 {
-    // Menú d'arxiu: aquest es correspondrà a l'accés directe al sistema de fitxers per adquirir un volum, com pot ser un arxiu *.mhd
+    // MenÃº d'arxiu: aquest es correspondrÃ  a l'accÃ©s directe al sistema de fitxers per adquirir un volum, com pot ser un arxiu *.mhd
     m_fileMenu = menuBar()->addMenu( tr("&File") );
     m_fileMenu->addAction( m_newAction );
     m_fileMenu->addAction( m_openAction );
@@ -268,20 +268,20 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );
 
-    // accions relacionades amb la visualització
+    // accions relacionades amb la visualitzaciÃ³
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
     m_visualizationMenu->addAction( m_2DViewerAction );
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
 
-    // menú per escollir idioma
+    // menÃº per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
     createLanguageMenu();
 
     menuBar()->addSeparator();
 
-    // menú d'ajuda, ara només hi ha els típic abouts
+    // menÃº d'ajuda, ara nomÃ©s hi ha els tÃ­pic abouts
     m_helpMenu = menuBar()->addMenu(tr("&Help") );
     m_helpMenu->addAction( m_aboutAction );
 }
@@ -297,7 +297,7 @@ void QApplicationMainWindow::createLanguageMenu()
     connect( signalMapper, SIGNAL( mapped(int) ), this , SLOT( switchToLanguage(int) ) );
 
     m_catalanAction = new QAction( this );
-    m_catalanAction->setText( "Català" );
+    m_catalanAction->setText( "CatalÃ " );
     m_catalanAction->setShortcut( 0 );
     m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
     m_catalanAction->setCheckable( true );
@@ -527,7 +527,7 @@ void QApplicationMainWindow::readSettings()
 //         }
 //
 //         Output *out = new Output();
-//         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
+//         // aquÃ­ cladria recÃ²rrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
 //         out->saveSeries( fileName.toLatin1() );
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
@@ -545,7 +545,7 @@ void QApplicationMainWindow::readSettings()
 //             fileName += ".png";
 //         }
 //         Output *out = new Output();
-//         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
+//         // aquÃ­ cladria recÃ²rrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
 //         out->saveSeries( fileName.toLatin1() );
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
@@ -564,7 +564,7 @@ void QApplicationMainWindow::readSettings()
 //         }
 //
 //         Output *out = new Output();
-//         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
+//         // aquÃ­ cladria recÃ²rrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
 //         out->saveSeries( fileName.toLatin1() );
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
@@ -583,7 +583,7 @@ void QApplicationMainWindow::readSettings()
 //         }
 //
 //         Output *out = new Output();
-//         // aquí caldria recòrrer les llesques per guardar per separat en un fitxer cadascuna
+//         // aquÃ­ caldria recÃ²rrer les llesques per guardar per separat en un fitxer cadascuna
 //         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
 //         out->saveSeries( fileName.toLatin1() );
 //         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();

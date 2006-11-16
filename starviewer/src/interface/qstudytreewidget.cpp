@@ -48,7 +48,7 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     m_studyTreeView->setColumnHidden( 13, true );
     m_studyTreeView->setColumnHidden( 14 , true );
     
-    //carreguem les imatges que es mostren el QStudyTreeWidget, el :/ indica que és un QRecourse, que s'especifica al main.qrc
+    //carreguem les imatges que es mostren el QStudyTreeWidget, el :/ indica que Ã©s un QRecourse, que s'especifica al main.qrc
     m_openFolder = QIcon( ":/images/folderopen.png" );
     m_closeFolder = QIcon( ":/images/folderclose.png" );
     m_iconSeries = QIcon( ":/images/series.png" );
@@ -69,13 +69,13 @@ void QStudyTreeWidget::createConnections()
 
 void QStudyTreeWidget::createContextMenu()
 {
-    //acció veure
+    //acciÃ³ veure
     QAction *view = m_contextMenu.addAction( tr("&View") );
     view->setShortcut( tr("Ctrl+V") );
-    //acció descarregar
+    //acciÃ³ descarregar
     QAction *retrieve = m_contextMenu.addAction( tr("&Retrieve") );
     retrieve->setShortcut( tr("Ctrl+R") );
-    //acció esborrar
+    //acciÃ³ esborrar
     m_contextMenu.addSeparator();
     QAction *deleteStudy =  m_contextMenu.addAction( tr("&Delete")) ;
     deleteStudy->setShortcut( tr("Ctrl+D") );
@@ -89,7 +89,7 @@ void QStudyTreeWidget::createContextMenu()
     connect( deleteStudy , SIGNAL(triggered()), this, SLOT(deleteStudy()));
     connect( createDicomdir , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
       
-    /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
+    /*QT ignora els shortCut, especificats a travÃ©s de QAction, per aixÃ² per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquÃ­ com QShortcut*/
     (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );  
     (void) new QShortcut( view->shortcut() , this , SLOT( viewStudy() ) );
     (void) new QShortcut( retrieve->shortcut() , this , SLOT( retrieveStudy() ) );
@@ -102,7 +102,7 @@ void QStudyTreeWidget::createContextMenu()
     }   
    
     if (m_parentName == "m_tabCache")
-    {   //si el QStudyTreeWidget es el que mostra la llista d'estudis a la caché, la opció retrieve es desactiva
+    {   //si el QStudyTreeWidget es el que mostra la llista d'estudis a la cachÃ©, la opciÃ³ retrieve es desactiva
         retrieve->setEnabled(false);
     }
     
@@ -174,7 +174,7 @@ void QStudyTreeWidget::insertStudy( Study *study)
     item->setText( 6 , formatDate( study->getStudyDate() ) );
     item->setText( 7 , formatHour( study->getStudyTime() ) );
     
-    if ( study->getInstitutionName() == "" ) //si la informació ve buida l'anem a buscar a la bdd local
+    if ( study->getInstitutionName() == "" ) //si la informaciÃ³ ve buida l'anem a buscar a la bdd local
     {
         if ( m_oldPacsAETitle != study->getPacsAETitle().c_str() ) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
         {//si es un pacs diferent busquem la informacio
@@ -217,7 +217,7 @@ void QStudyTreeWidget::insertSeries( Series *serie )
     description = serie->getSeriesDescription().c_str();
     item->setText( 5 , description.simplified() );//treiem els espaics en blanc del davant i darrera
     
-    //si no tenim data o hora de la sèrie mostrem la de l'estudi
+    //si no tenim data o hora de la sÃ¨rie mostrem la de l'estudi
     if ( serie->getSeriesDate().length() != 0 )
     {
         item->setText( 6 , formatDate(serie->getSeriesDate() ) );
@@ -229,7 +229,7 @@ void QStudyTreeWidget::insertSeries( Series *serie )
     }
     
     item->setText( 11 , serie->getSeriesUID().c_str() );   
-    item->setText( 12 , "SERIES" ); //indiquem que es tracta d'una sèrie 
+    item->setText( 12 , "SERIES" ); //indiquem que es tracta d'una sÃ¨rie 
     
     text.truncate( 0 );
     text.setNum( serie->getImageNumber(), 10 );
@@ -361,11 +361,11 @@ void QStudyTreeWidget::expand( QTreeWidgetItem * item )
         {
             m_studyTreeView->setItemExpanded( item , true );
             item->setIcon( 0 , m_openFolder ); 
-            if ( item->childCount() == 0 ) //si abans hem consultat le seria ja hi tenim la seva informació, evitem d'haver de consultar el pacs cada vegada
+            if ( item->childCount() == 0 ) //si abans hem consultat le seria ja hi tenim la seva informaciÃ³, evitem d'haver de consultar el pacs cada vegada
             {
                 emit( expand( item->text(11) , item->text(10) ) );
             }
-            else setSeriesToSeriesListWidget( item ); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
+            else setSeriesToSeriesListWidget( item ); //en el cas que ja tinguem la informaciÃ³ de la sÃ¨rie, per passar la informaciÃ³ al QSeriesListWidget amb la informaciÃ³ de la sÃ¨rie cridarem aquest mÃ¨tode
             m_oldStudyUID = getSelectedStudyUID();
         }
     }
@@ -478,7 +478,7 @@ void QStudyTreeWidget::clicked( QTreeWidgetItem *item , int col )
                 QTreeWidgetItem *parent  = item->parent();
                 setSeriesToSeriesListWidget( parent );
             }
-            //indiquem que el QSeriesListWidget que seleccioni la sèrie amb el UID passa per parametre
+            //indiquem que el QSeriesListWidget que seleccioni la sÃ¨rie amb el UID passa per parametre
             emit( selectedSeriesList( item->text(11) ) );
         }
         else
@@ -513,7 +513,7 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
         else 
         {
             expand( item ); //es tracta d'un estudi
-            //QTreeWidget automaticament al fer doble click modifica l'estat de Expanded, llavors tenim el problema que a al metode expand tambe es modifica, i al modificar-lo dos vegades, queda en el seu estat inicial, per això aquí hem de ficar un altre Expanded perquè realment l'expandeixi o amagui en funció de si es mostraven o no les series
+            //QTreeWidget automaticament al fer doble click modifica l'estat de Expanded, llavors tenim el problema que a al metode expand tambe es modifica, i al modificar-lo dos vegades, queda en el seu estat inicial, per aixÃ² aquÃ­ hem de ficar un altre Expanded perquÃ¨ realment l'expandeixi o amagui en funciÃ³ de si es mostraven o no les series
             m_studyTreeView->setItemExpanded( item , !m_studyTreeView->isItemExpanded( item ) );
         }
     }

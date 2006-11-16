@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -15,11 +15,11 @@
 namespace udg {
 
 /**
-Classe que encapsula la sËrie d'un pacient.
+Classe que encapsula la s√®rie d'un pacient.
 
-La classe contÈ tot tipu d'informaciÛ relacionada amb la sËrie d'un pacient. Una sËrie equival a un volum per tant tindrem l'identificador del corresponent volum al repositori. Si l'id del volum Ès nul voldr‡ dir que no est‡ carregat a memÚria, en cas contrari estar‡ al repositori
+La classe cont√© tot tipu d'informaci√≥ relacionada amb la s√®rie d'un pacient. Una s√®rie equival a un volum per tant tindrem l'identificador del corresponent volum al repositori. Si l'id del volum √©s nul voldr√† dir que no est√† carregat a mem√≤ria, en cas contrari estar√† al repositori
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientSerie : public QObject
 {
@@ -29,38 +29,38 @@ public:
 
     ~PatientSerie();
 
-    /// Assignar/Obtenir l'identificador universal de la sËrie
+    /// Assignar/Obtenir l'identificador universal de la s√®rie
     void setUID( const char *uid );
     QString getUID() const { return m_serieUID; };
 
-    /// Assignar/Obtenir l'identificador de la sËrie
+    /// Assignar/Obtenir l'identificador de la s√®rie
     void setID( const char *id );
     QString getID() const { return m_serieID; };
 
-    /// Assignar/Obtenir l'orientaciÛ del pacient
+    /// Assignar/Obtenir l'orientaci√≥ del pacient
     void setPatientOrientation( const char *orientation );
     QString getPatientOrientation() const { return m_patientOrientation; };
 
-    /// Assignar/Obtenir la modalitat de la sËrie
+    /// Assignar/Obtenir la modalitat de la s√®rie
     void setModality( const char *modality );
     QString getModality() const { return m_modality; };
 
-    /// Assignar/Obtenir la descripciÛ de la sËrie
+    /// Assignar/Obtenir la descripci√≥ de la s√®rie
     void setDescription( const char *description );
     QString getDescription() const { return m_description; };
 
-    /// Assignar/Obtenir el protocol de la sËrie
+    /// Assignar/Obtenir el protocol de la s√®rie
     void setProtocolName( const char *protocolName );
     QString getProtocolName() const { return m_protocolName; };
 
-    /// Assignar/Obtenir el path de les imatges de la sËrie
+    /// Assignar/Obtenir el path de les imatges de la s√®rie
     void setSeriesPath( const char *seriesPath );
     QString getSeriesPath() const { return m_seriesPath; };
 
-    /// Retorna el camp clau que identificar‡ la sËrie de cares a la interfÌcie. Es composar‡ pel protocolName mÈs la descripciÛ \TODO encara per determinar
+    /// Retorna el camp clau que identificar√† la s√®rie de cares a la interf√≠cie. Es composar√† pel protocolName m√©s la descripci√≥ \TODO encara per determinar
     QString getKey();
     
-    /// Assignar/Obtenir la data i hora d'adquisiciÛ de la sËrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
+    /// Assignar/Obtenir la data i hora d'adquisici√≥ de la s√®rie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
     bool setDateTime( QString dateTime );
@@ -83,36 +83,36 @@ public:
     void setLevel( double level );
     double getLevel() const { return m_level; }
 
-    /// Assignar/Obtenir dimensions de la sËrie
+    /// Assignar/Obtenir dimensions de la s√®rie
     void setDimensions( double dimensions[3] );
     void setDimensions( double x , double y , double z );
     double *getDimensions();
     void getDimensions( double dimensions[3] );
     
-    /// Assignar/Obtenir espaiats de la sËrie
+    /// Assignar/Obtenir espaiats de la s√®rie
     void setSpacing( double spacing[3] );
     void setSpacing( double x , double y , double z );
     double *getSpacing();
     void getSpacing( double spacing[3] );
     
-    /// Assignar/Obtenir identificador del volum al repositori corresponent a la sËrie
+    /// Assignar/Obtenir identificador del volum al repositori corresponent a la s√®rie
     void setVolumeIdentifier( Identifier id );
     Identifier getVolumeIdentifier() const { return m_volumeID; }
     
 private:
-    /// Identidicador universal de la sËrie
+    /// Identidicador universal de la s√®rie
     QString m_serieUID;
     
-    /// Identificador de la sËrie
+    /// Identificador de la s√®rie
     QString m_serieID;
 
-    /// OrientaciÛ del pacient ( LR/AP/SI )
+    /// Orientaci√≥ del pacient ( LR/AP/SI )
     QString m_patientOrientation;
 
     /// Modalitat d'imatge
     QString m_modality; 
 
-    /// DescripciÛ de la sËrie
+    /// Descripci√≥ de la s√®rie
     QString m_description;
 
     /// Protocol que 'sha aplicat per obtenir la imatge
@@ -121,7 +121,7 @@ private:
     /// Directori sota el qual es trobem les imatges
     QString m_seriesPath;
 
-    /// Data i hora en que s'ha adquirit la sËrie
+    /// Data i hora en que s'ha adquirit la s√®rie
     QDateTime m_dateTime;
     
     /// Window width i window level del contrast de la imatge
@@ -131,7 +131,7 @@ private:
     /// Dimensions ( x , y , z [nombre de llesques] )
     double m_dimensions[3];
 
-    /// Espaiat en cada dimensiÛ
+    /// Espaiat en cada dimensi√≥
     double m_spacing[3];
 
     /// Identificador del volum al repositori

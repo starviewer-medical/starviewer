@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr‡fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gr√†fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -7,7 +7,7 @@
 #include "qmprextension.h"
 #include "volume.h"
 #include "q2dviewer.h"
-#include "mathtools.h" // per c‡lculs d'interseccions
+#include "mathtools.h" // per c√†lculs d'interseccions
 #include "q3dviewer.h"
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
@@ -62,7 +62,7 @@ QMPRExtension::QMPRExtension( QWidget *parent )
 QMPRExtension::~QMPRExtension()
 {
     writeSettings();
-    // fent aixÚ o no sembla que s'allibera la mateixa memÚria gr‡cies als smart pointers
+    // fent aix√≤ o no sembla que s'allibera la mateixa mem√≤ria gr√†cies als smart pointers
     m_sagitalReslice->Delete();
     m_coronalReslice->Delete();
 
@@ -93,7 +93,7 @@ QMPRExtension::~QMPRExtension()
 void QMPRExtension::init()
 {
     m_axialPlaneSource = vtkPlaneSource::New();
-    m_axialPlaneSource->SetXResolution( 1 ); // aixÌ estan configurats a vtkImagePlaneWidget
+    m_axialPlaneSource->SetXResolution( 1 ); // aix√≠ estan configurats a vtkImagePlaneWidget
     m_axialPlaneSource->SetYResolution( 1 );
 
     m_sagitalPlaneSource = vtkPlaneSource::New();
@@ -109,7 +109,7 @@ void QMPRExtension::init()
     m_thickSlabPlaneSource->SetYResolution( 1 );
 
     m_sagitalReslice = vtkImageReslice::New();
-    m_sagitalReslice->AutoCropOutputOn(); // perquË l'extent d'output sigui suficient i no es "mengi" dades
+    m_sagitalReslice->AutoCropOutputOn(); // perqu√® l'extent d'output sigui suficient i no es "mengi" dades
     m_sagitalReslice->SetInterpolationModeToCubic();
 
     m_coronalReslice = vtkImageReslice::New();
@@ -119,7 +119,7 @@ void QMPRExtension::init()
     m_axial2DView->displayScalarBarOff();
     m_sagital2DView->displayScalarBarOff();
     m_coronal2DView->displayScalarBarOff();
-    /// per defecte isomËtric
+    /// per defecte isom√®tric
     m_axialSpacing[0] = 1.;
     m_axialSpacing[1] = 1.;
     m_axialSpacing[2] = 1.;
@@ -176,8 +176,8 @@ void QMPRExtension::createActions()
 
 void QMPRExtension::createConnections()
 {
-    // conectem els sliders i demÈs visors
-    // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitarÌem les caracterÌstiques de l'auto connection
+    // conectem els sliders i dem√©s visors
+    // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitar√≠em les caracter√≠stiques de l'auto connection
     connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axialSpinBox , SLOT( setValue(int) ) );
     connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
@@ -191,7 +191,7 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
-    // aixÚ es fa per evitar que la senyal es connecti primer al toolmanager. Necessitem que primer el signal sigui tractat per l'extensiÛ i desprÈs pel tool manager \TODO aixÚ no deixa de ser un parxe, caldria pensar en un sistema de tractament de prioritats amb els events
+    // aix√≤ es fa per evitar que la senyal es connecti primer al toolmanager. Necessitem que primer el signal sigui tractat per l'extensi√≥ i despr√©s pel tool manager \TODO aix√≤ no deixa de ser un parxe, caldria pensar en un sistema de tractament de prioritats amb els events
     m_axial2DView->disableTools();
     m_sagital2DView->disableTools();
     // gestionen els events de les finestres per poder manipular els plans
@@ -235,11 +235,11 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
             connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mipViewer , SLOT( setTool(QString) ) );
             m_mipViewer->setRenderFunctionToMIP3D();
         }
-        // \TODO: aquesta manera de declarar el volum far‡ que es malgasti memÚria o ja s'allibera sol?
+        // \TODO: aquesta manera de declarar el volum far√† que es malgasti mem√≤ria o ja s'allibera sol?
         m_mipViewer->setInput( new Volume( m_coronalReslice->GetOutput() ) );
         m_mipViewer->render();
         m_mipViewer->show();
-        // disposem la distribuciÛ de widgets
+        // disposem la distribuci√≥ de widgets
         m_horizontalSplitter->insertWidget( m_horizontalSplitter->indexOf( m_verticalSplitter ) , m_mipViewer );
         m_verticalSplitter->hide();
         m_horizontalSplitter->insertWidget( 2 , m_verticalSplitter );
@@ -325,14 +325,14 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
 
 void QMPRExtension::detectAxialViewAxisActor()
 {
-    // obtenim el punt que s'ha clicat \TODO unificar aquesta operaciÛ en un sol mËtode privat o fer un mËtode d'accËs directament del propi viewer per obtenir les coordenades de mÛn actuals on es troba el cursor
+    // obtenim el punt que s'ha clicat \TODO unificar aquesta operaci√≥ en un sol m√®tode privat o fer un m√®tode d'acc√®s directament del propi viewer per obtenir les coordenades de m√≥n actuals on es troba el cursor
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
     y = m_axial2DView->getInteractor()->GetEventPosition()[1];
     double toWorld[3];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
-    // detectem quin Ès l'actor mÈs proper, l'identifiquem i llavors el deixem com a seleccionat
+    // detectem quin √©s l'actor m√©s proper, l'identifiquem i llavors el deixem com a seleccionat
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToCoronal , distanceToSagital;
@@ -345,7 +345,7 @@ void QMPRExtension::detectAxialViewAxisActor()
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
     distanceToSagital = vtkLine::DistanceToLine( point , r1 , r2 );
 
-    // donem una "toler‡ncia" mÌnima
+    // donem una "toler√†ncia" m√≠nima
     if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
     {
         if( distanceToCoronal < distanceToSagital )
@@ -439,7 +439,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
     double toWorld[3];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
-    // detectem quin Ès l'actor mÈs proper, l'identifiquem i llavors el deixem com a seleccionat
+    // detectem quin √©s l'actor m√©s proper, l'identifiquem i llavors el deixem com a seleccionat
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToCoronal;
@@ -448,7 +448,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
     distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
 
-    // donem una "toler‡ncia" mÌnima
+    // donem una "toler√†ncia" m√≠nima
     if( distanceToCoronal < 50.0 )
     {
         m_pickedActorReslice = m_coronalReslice;
@@ -540,7 +540,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     double toWorld[3];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
-    // detectem quin Ès l'actor mÈs proper, l'identifiquem i llavors el deixem com a seleccionat
+    // detectem quin √©s l'actor m√©s proper, l'identifiquem i llavors el deixem com a seleccionat
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToCoronal , distanceToSagital;
@@ -553,7 +553,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
     distanceToSagital = vtkLine::DistanceToLine( point , r1 , r2 );
 
-    // donem una "toler‡ncia" mÌnima
+    // donem una "toler√†ncia" m√≠nima
     if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
     {
         if( distanceToCoronal < distanceToSagital )
@@ -623,8 +623,8 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     double toWorld[3];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
-    // detectem quin Ès l'actor mÈs proper, l'identifiquem i llavors el deixem com a seleccionat
-    // ˙nicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
+    // detectem quin √©s l'actor m√©s proper, l'identifiquem i llavors el deixem com a seleccionat
+    // √∫nicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
     double distanceToAxial;
@@ -633,7 +633,7 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
     distanceToAxial = vtkLine::DistanceToLine( point , r1 , r2 );
 
-    // donem una "toler‡ncia" mÌnima
+    // donem una "toler√†ncia" m√≠nima
     if(  distanceToAxial < 50.0 )
     {
         m_pickedActorPlaneSource = m_axialPlaneSource;
@@ -684,7 +684,7 @@ void QMPRExtension::setInput( Volume *input )
     m_axial2DView->getDefaultWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
 
-    // Totes les vistes tindran com a referËncia el sistema de coordenades Axial, base de tots els reslice que aplicarem.
+    // Totes les vistes tindran com a refer√®ncia el sistema de coordenades Axial, base de tots els reslice que aplicarem.
     m_axial2DView->setViewToAxial();
     int extent[6];
     m_volume->getWholeExtent( extent );
@@ -725,10 +725,10 @@ void QMPRExtension::initOrientation()
 /**
     IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    ara li donem a cada pla unes dimensions, extent , espaiat, etc d'acord com si aquests plans haguessin de ser ortogonals,perÚ segons el pla de tall ser‡ d'una manera o altre
-    La vista axial mantindr‡ els espaiats i extents originals
-    La vista sagital, com que ˙nicament es podr‡ rotar sobre l'eix Y, mantindr‡ l'extent de la seva X igual que l'extent Y original. Els altres s'hauran d'adaptar a les dist‡ncies corresponents a les diagonals zmax-xmax
-    En la vista coronal, com que pot tenir qualsevol orientacio tindr‡ que adaptar els seus extents als m‡xims
+    ara li donem a cada pla unes dimensions, extent , espaiat, etc d'acord com si aquests plans haguessin de ser ortogonals,per√≤ segons el pla de tall ser√† d'una manera o altre
+    La vista axial mantindr√† els espaiats i extents originals
+    La vista sagital, com que √∫nicament es podr√† rotar sobre l'eix Y, mantindr√† l'extent de la seva X igual que l'extent Y original. Els altres s'hauran d'adaptar a les dist√†ncies corresponents a les diagonals zmax-xmax
+    En la vista coronal, com que pot tenir qualsevol orientacio tindr√† que adaptar els seus extents als m√†xims
 
 */
     // This method must be called _after_ setInput
@@ -775,32 +775,32 @@ void QMPRExtension::initOrientation()
         zbounds[0] = zbounds[1];
         zbounds[1] = t;
     }
-    //XY, z-normal : vista axial , en principi d'aquesta vista nomËs canviarem la llesca
+    //XY, z-normal : vista axial , en principi d'aquesta vista nom√®s canviarem la llesca
     m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
 
     //YZ, x-normal : vista sagital
-    // estem ajustant la mida del pla a les dimensions d'aquesta orientaciÛ
-    // \TODO podrÌem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientaciÛ en el volum, potser fent una bounding box o simplement d'una forma mÈs "bruta" doblant la longitud d'aquest pla :P
+    // estem ajustant la mida del pla a les dimensions d'aquesta orientaci√≥
+    // \TODO podr√≠em donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientaci√≥ en el volum, potser fent una bounding box o simplement d'una forma m√©s "bruta" doblant la longitud d'aquest pla :P
 
 //     double maxYBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
 //     double diffYBound = maxYBound - ybounds[1];
-// \TODO maxYBound Ès correcte, el problema que hi ha Ès que inicialment est‡ ben distribuit (0.5 amunt i avall ) perquË tenim les llesques centrades, perÚ al canviar de llesca haurÌem de tenir en compte que aquestes diferËncies s'han de canviar i equilibrar segons la llesca en que ens trobem
+// \TODO maxYBound √©s correcte, el problema que hi ha √©s que inicialment est√† ben distribuit (0.5 amunt i avall ) perqu√® tenim les llesques centrades, per√≤ al canviar de llesca haur√≠em de tenir en compte que aquestes difer√®ncies s'han de canviar i equilibrar segons la llesca en que ens trobem
     m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
     m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[0] );
     m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] );
 
-    // \TODO aqui caldria canviar-li els bounds del point 2 perquË siguin mÈs llargs i encaixi amb la diagonal
-    // perquË quedi centrat hauriem de desplaÁar la meitat de l'espai extra per l'origen i pel punt2
+    // \TODO aqui caldria canviar-li els bounds del point 2 perqu√® siguin m√©s llargs i encaixi amb la diagonal
+    // perqu√® quedi centrat hauriem de despla√ßar la meitat de l'espai extra per l'origen i pel punt2
     // posem en la llesca central
     m_sagitalPlaneSource->Push( xbounds[0] + 0.5 * ( xbounds[1] - xbounds[0] ) );
     double axis[3] = { 0 , 1 , 0 };
     rotateMiddle( 180 , axis , m_sagitalPlaneSource );
 
     //ZX, y-normal : vista coronal
-    // Ìdem anterior
-// \TODO comprovar si Ès correcte aquest ajustament de mides
+    // √≠dem anterior
+// \TODO comprovar si √©s correcte aquest ajustament de mides
     double maxZBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
     double maxXBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
     double diffXBound = maxXBound - xbounds[1];
@@ -811,7 +811,7 @@ void QMPRExtension::initOrientation()
     m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
     // posem en la llesca central
     m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) + ybounds[0] );
-    // li donem la volta perquË es vegi des del punt de vista correcte
+    // li donem la volta perqu√® es vegi des del punt de vista correcte
     axis[0] = 0; axis[1] = 0; axis[2] = 1;
     rotateMiddle( 180 , axis , m_coronalPlaneSource );
     axis[0] = 0; axis[1] = 1; axis[2] = 0;
@@ -918,10 +918,10 @@ void QMPRExtension::axialSliceUpdated( int slice )
 void QMPRExtension::updateControls()
 {
 
-// posem la representaciÛ dels plans sobre cada vista
+// posem la representaci√≥ dels plans sobre cada vista
     updateIntersectionPoint();
 
-    // Passem a sistema de coordenades de mÛn
+    // Passem a sistema de coordenades de m√≥n
     m_sagitalOverAxialAxisActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
 
@@ -947,7 +947,7 @@ void QMPRExtension::updateControls()
 
     double r[3] , t[3] , position1[3] , position2[3];
 
-    // projecciÛ sagital sobre axial i viceversa
+    // projecci√≥ sagital sobre axial i viceversa
     MathTools::planeIntersection( m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
 
     position1[0] = r[0] - t[0]*2000;
@@ -964,7 +964,7 @@ void QMPRExtension::updateControls()
     m_axialOverSagitalIntersectionAxis->SetPosition(  position1[1] , position1[2] );
     m_axialOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
 
-    // projecciÛ coronal sobre sagital
+    // projecci√≥ coronal sobre sagital
 
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
 
@@ -979,7 +979,7 @@ void QMPRExtension::updateControls()
     m_coronalOverSagitalIntersectionAxis->SetPosition( position1[1] , position1[2] );
     m_coronalOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
 
-    // projecciÛ thick slab sobre sagital
+    // projecci√≥ thick slab sobre sagital
     MathTools::planeIntersection( m_thickSlabPlaneSource->GetOrigin() , m_thickSlabPlaneSource->GetNormal() , m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
 
     position1[0] = r[0] - t[0]*2000;
@@ -993,7 +993,7 @@ void QMPRExtension::updateControls()
     m_thickSlabOverSagitalActor->SetPosition( position1[1] , position1[2] );
     m_thickSlabOverSagitalActor->SetPosition2( position2[1] , position2[2] );
 
-    // projecciÛ coronal sobre axial
+    // projecci√≥ coronal sobre axial
     MathTools::planeIntersection( m_coronalPlaneSource->GetOrigin() , m_coronalPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() , r , t );
 
     position1[0] = r[0] - t[0]*2000;
@@ -1007,7 +1007,7 @@ void QMPRExtension::updateControls()
     m_coronalOverAxialIntersectionAxis->SetPosition(  position1[0] , position1[1] );
     m_coronalOverAxialIntersectionAxis->SetPosition2( position2[0] , position2[1] );
 
-    // projecciÛ thick slab sobre axial
+    // projecci√≥ thick slab sobre axial
     MathTools::planeIntersection( m_thickSlabPlaneSource->GetOrigin() , m_thickSlabPlaneSource->GetNormal() , m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() , r , t );
 
     position1[0] = r[0] - t[0]*2000;
@@ -1126,7 +1126,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     // Generate the slicing matrix
     //
-    // Podria ser membre de classe, com era originalriament o passar per par‡metre
+    // Podria ser membre de classe, com era originalriament o passar per par√†metre
     vtkMatrix4x4 *resliceAxes = vtkMatrix4x4::New();
     resliceAxes->Identity();
     for ( i = 0; i < 3; i++ )
@@ -1207,8 +1207,8 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     reslice->SetOutputSpacing( planeSizeX/extentX , planeSizeY/extentY , 1 );
     reslice->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    // \TODO li passem thickSlab que Ès double perÚ aixÚ nomÈs accepta int's! Buscar si aquesta Ès la manera adequada. Potsre si volem fer servir doubles ho haurÌem de combinar amb l'outputSpacing
-    reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , static_cast<int>( m_thickSlab ) ); // obtenim una ˙nica llesca
+    // \TODO li passem thickSlab que √©s double per√≤ aix√≤ nom√©s accepta int's! Buscar si aquesta √©s la manera adequada. Potsre si volem fer servir doubles ho haur√≠em de combinar amb l'outputSpacing
+    reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , static_cast<int>( m_thickSlab ) ); // obtenim una √∫nica llesca
     reslice->Update();
 
 }
@@ -1331,7 +1331,7 @@ void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtk
     m_transform->Translate( plane->GetCenter()[0], plane->GetCenter()[1], plane->GetCenter()[2] );
     m_transform->RotateWXYZ( degrees , rotationAxis );
     m_transform->Translate( -plane->GetCenter()[0], -plane->GetCenter()[1], -plane->GetCenter()[2] );
-    // ara que tenim la transformaciÛ, l'apliquem als punts del pla ( origen, punt1 , punt2)
+    // ara que tenim la transformaci√≥, l'apliquem als punts del pla ( origen, punt1 , punt2)
     double newPoint[3];
     m_transform->TransformPoint( plane->GetPoint1() , newPoint );
     plane->SetPoint1( newPoint );
@@ -1344,7 +1344,7 @@ void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtk
 
 void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
-//    Normalitzem l'eix de rotaciÛ, ser‡ molt millor per les operacions a fer
+//    Normalitzem l'eix de rotaci√≥, ser√† molt millor per les operacions a fer
      vtkMath::Normalize( rotationAxis );
 
     if( isParallel( rotationAxis ) )
@@ -1381,7 +1381,7 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
         m_transform->Translate( -m_intersectionPoint[0], -m_intersectionPoint[1], -m_intersectionPoint[2] );
 
     }
-    // ara que tenim la transformaciÛ, l'apliquem als punts del pla ( origen, punt1 , punt2)
+    // ara que tenim la transformaci√≥, l'apliquem als punts del pla ( origen, punt1 , punt2)
     double newPoint[3];
     m_transform->TransformPoint( plane->GetPoint1() , newPoint );
     plane->SetPoint1( newPoint );
