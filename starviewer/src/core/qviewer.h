@@ -16,6 +16,7 @@
 // Fordward declarations
 class QVTKWidget;
 class vtkRenderer;
+class vtkRenderWindow;
 class vtkRenderWindowInteractor;
 class vtkWindowToImageFilter;
 class vtkEventQtSlotConnect;
@@ -51,6 +52,9 @@ public:
 
     /// Ens retorna el volum d'entrada
     virtual Volume* getInput( void ) { return m_mainVolume; }
+
+    /// retorna el vtkRenderWindow
+    vtkRenderWindow *getRenderWindow();
 
     /// Ens retorna el punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
     Point getModelPointFromCursor() const { return m_modelPointFromCursor; }

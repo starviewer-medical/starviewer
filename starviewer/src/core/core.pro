@@ -52,7 +52,8 @@ HEADERS += extensionfactory.h \
            q3dviewertoolmanager.h \
            translatetool.h \
            q3dmprviewertoolmanager.h \
-           qlogviewer.h 
+           qlogviewer.h \
+           screenshottool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -89,7 +90,8 @@ SOURCES += extensionmediator.cpp \
            q3dviewertoolmanager.cpp \
            translatetool.cpp \
            q3dmprviewertoolmanager.cpp \
-           qlogviewer.cpp 
+           qlogviewer.cpp \
+           screenshottool.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \

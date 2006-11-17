@@ -33,16 +33,17 @@ public:
 signals:
     /// Envia el nom de la tool activada
     void triggeredTool( QString toolName );
-    
+
 private:
     ///\TODO ara fem que només hi hagi una sola qaction per cada tool. No sabem si en in futur, per segons quina extensió sigui necessari tenir-ne 2 o més
     QAction *m_slicingAction;
     QAction *m_zoomAction;
     QAction *m_moveAction;
     QAction *m_windowLevelAction;
+    QAction *m_screenShotAction;
 
     QSignalMapper *m_signalMapper;
-    typedef std::map<QString,int> ToolMapType;
+    typedef std::map<QString,QAction*> ToolMapType;
     ToolMapType m_availableToolActions;
 };
 

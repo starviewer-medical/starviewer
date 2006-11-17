@@ -34,22 +34,22 @@ QViewer::QViewer( QWidget *parent )
     viewerLayout->setSpacing( 0 );
     viewerLayout->setMargin( 0 );
     viewerLayout->addWidget( m_vtkWidget );
-    
+
     // això ho fem perquè la finestra buida quedi en negre en un principi
     m_vtkWidget->GetRenderWindow()->Render();
-      
+
     // inicialitzem el punter del volum
     m_mainVolume = 0;
-    
+
     m_modelPointFromCursor.setValues( -1, -1 , -1 );
-    
+
     // 2x buffer
     m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
-    
+
     m_currentCursorPosition[0] = 0;
     m_currentCursorPosition[1] = 0;
     m_currentCursorPosition[2] = 0;
-    
+
     m_currentImageValue = -1;
 
     m_windowToImageFilter = vtkWindowToImageFilter::New();
@@ -69,12 +69,17 @@ vtkRenderWindowInteractor *QViewer::getInteractor()
     return m_vtkWidget->GetRenderWindow()->GetInteractor();
 }
 
+vtkRenderWindow *QViewer::getRenderWindow()
+{
+    return m_vtkWidget->GetRenderWindow();
+}
+
 void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
     emit eventReceived( event );
 }
 
-void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[3] ) 
+void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[3] )
 {
     if( renderer )
     {
@@ -89,7 +94,7 @@ void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y
             worldPoint[3] = 1.0;
         }
     }
-}  
+}
 
 void QViewer::computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] )
 {
@@ -165,7 +170,6 @@ void QViewer::grabCurrentView()
     vtkImageData *image = vtkImageData::New();
     image->ShallowCopy( m_windowToImageFilter->GetOutput() );
     m_grabList.push_back( image );
-
 }
 
-};  // end namespace udg 
+};  // end namespace udg

@@ -14,7 +14,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
  : QObject( parent )
 {
     m_signalMapper = new QSignalMapper( this );
-    
+
     m_slicingAction = new QAction( 0 );
     m_slicingAction->setText( tr("Slicer") );
     m_slicingAction->setStatusTip( tr("Enable/Disable slicing tool") );
@@ -47,14 +47,23 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_signalMapper->setMapping( m_moveAction , "TranslateTool" );
     connect( m_moveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
+    m_screenShotAction = new QAction( 0 );
+    m_screenShotAction->setText( tr("Screen Shot") );
+    m_screenShotAction->setStatusTip( tr("Enable/Disable Screen shot tool") );
+    m_screenShotAction->setIcon( QIcon(":/images/photo.png") );
+    m_screenShotAction->setCheckable( true );
+    m_signalMapper->setMapping( m_screenShotAction , "ScreenShotTool" );
+    connect( m_screenShotAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
-    
+
     // \TODO canviar els números per enums decents que ho identifiquen millor
     m_availableToolActions.clear();
-    m_availableToolActions["SlicingTool"] = 0;
-    m_availableToolActions["WindowLevelTool"] = 1;
-    m_availableToolActions["ZoomTool"] = 2;
-    m_availableToolActions["TranslateTool"] = 3;
+    m_availableToolActions["SlicingTool"] = m_slicingAction;
+    m_availableToolActions["WindowLevelTool"] = m_windowLevelAction;
+    m_availableToolActions["ZoomTool"] = m_zoomAction;
+    m_availableToolActions["TranslateTool"] = m_moveAction;
+    m_availableToolActions["ScreenShotTool"] = m_screenShotAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()
@@ -64,34 +73,8 @@ ToolsActionFactory::~ToolsActionFactory()
 QAction *ToolsActionFactory::getActionFrom( QString toolName )
 {
     if( m_availableToolActions.find( toolName ) != m_availableToolActions.end() )
-    {
-        switch( m_availableToolActions[toolName] )
-        {
-            // \TODO canviar els números per enums decents que ho identifiquen millor
-            case 0:
-                return m_slicingAction;
-            break;
-            
-            case 1:
-                return m_windowLevelAction;
-            break;
-
-            case 2:
-                return m_zoomAction;
-            break;
-
-            case 3:
-                return m_moveAction;
-            break;
-
-            default:
-            break;
-        }
-    }
-    else
-        return 0;
+        return m_availableToolActions[toolName];
+    else return 0;
 }
-
-
 
 }
