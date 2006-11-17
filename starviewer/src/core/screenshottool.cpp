@@ -6,11 +6,17 @@
  ***************************************************************************/
 #include "screenshottool.h"
 #include "q2dviewer.h"
-#include <vtkWindowToImageFilter.h>
+#include "q3dviewer.h"
+#include "q3dmprviewer.h"
+#include "logging.h"
+
 #include <vtkCommand.h>
+#include <vtkWindowToImageFilter.h>
+#include <vtkRenderWindow.h>
 #include <vtkImageData.h>
 #include <vtkPNGWriter.h>
-#include <vtkRenderWindow.h>
+#include <vtkJPEGWriter.h>
+#include <vtkBMPWriter.h>
 
 #include <QFileDialog>
 
@@ -18,10 +24,44 @@ namespace udg {
 
 ScreenShotTool::ScreenShotTool( Q2DViewer *viewer , QObject *parent , const char *name )
 {
-    if( viewer )
-        m_renderWindow = viewer->getRenderWindow();
     m_windowToImageFilter = vtkWindowToImageFilter::New();
-    m_windowToImageFilter->SetInput( m_renderWindow );
+    if( viewer )
+    {
+        m_renderWindow = viewer->getRenderWindow();
+        if( !m_renderWindow )
+            DEBUG_LOG( "La vtkRenderWindow és NUL·LA!" );
+        m_windowToImageFilter->SetInput( m_renderWindow );
+    }
+    else
+        DEBUG_LOG( "El viewer proporcionat és NUL!" );
+}
+
+ScreenShotTool::ScreenShotTool( Q3DViewer *viewer , QObject *parent , const char *name )
+{
+    m_windowToImageFilter = vtkWindowToImageFilter::New();
+    if( viewer )
+    {
+        m_renderWindow = viewer->getRenderWindow();
+        if( !m_renderWindow )
+            DEBUG_LOG( "La vtkRenderWindow és NUL·LA!" );
+        m_windowToImageFilter->SetInput( m_renderWindow );
+    }
+    else
+        DEBUG_LOG( "El viewer proporcionat és NUL!" );
+}
+
+ScreenShotTool::ScreenShotTool( Q3DMPRViewer *viewer , QObject *parent , const char *name )
+{
+    m_windowToImageFilter = vtkWindowToImageFilter::New();
+    if( viewer )
+    {
+        m_renderWindow = viewer->getRenderWindow();
+        if( !m_renderWindow )
+            DEBUG_LOG( "La vtkRenderWindow és NUL·LA!" );
+        m_windowToImageFilter->SetInput( m_renderWindow );
+    }
+    else
+        DEBUG_LOG( "El viewer proporcionat és NUL!" );
 }
 
 ScreenShotTool::~ScreenShotTool()
@@ -40,88 +80,55 @@ void ScreenShotTool::handleEvent( unsigned long eventID )
 
 void ScreenShotTool::screenShot()
 {
-    QString fileName = QFileDialog::getSaveFileName( 0, tr("Save screenshot as..."), QString(), tr("PNG (*.png)") );
+    QFileDialog saveAsDialog(0);
+    saveAsDialog.setWindowTitle( tr("Save screenshot as...") );
+    saveAsDialog.setDirectory( QDir::homePath() );
+    QStringList filters;
+    filters << tr("PNG (*.png)") << tr("Jpeg (*.jpg)") << tr("BMP (*.bmp)");
+    saveAsDialog.setFilters( filters );
+    saveAsDialog.setFileMode( QFileDialog::AnyFile );
+    saveAsDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveAsDialog.setConfirmOverwrite( true );
 
-    if ( fileName.isEmpty() )
+    QStringList fileNames;
+    if( saveAsDialog.exec() )
+        fileNames = saveAsDialog.selectedFiles();
+
+    if( fileNames.isEmpty() )
         return;
+    QString fileName = fileNames.first();
 
+    vtkImageWriter *imageWriter;
+    QString pattern( ("%s-%d.") );
+    if( saveAsDialog.selectedFilter() == tr("PNG (*.png)") )
+    {
+        imageWriter = vtkPNGWriter::New();
+        pattern += "png";
+    }
+    else if( saveAsDialog.selectedFilter() == tr("Jpeg (*.jpg)") )
+    {
+        imageWriter = vtkJPEGWriter::New();
+        pattern += "jpg";
+    }
+    else if( saveAsDialog.selectedFilter() == tr("BMP (*.bmp)") )
+    {
+        imageWriter = vtkBMPWriter::New();
+        pattern += "bmp";
+    }
+    else
+    {
+        DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
+        return;
+    }
     m_windowToImageFilter->Update();
     m_windowToImageFilter->Modified();
     vtkImageData *image = m_windowToImageFilter->GetOutput();
 
-    vtkImageWriter *pngWriter = vtkPNGWriter::New();
-    pngWriter->SetInput( image );
-    pngWriter->SetFilePattern( "%s.png" );
-    pngWriter->SetFilePrefix( qPrintable( fileName ) );
-    pngWriter->Write();
-
-//     switch( extension )
-//     {
-//         case PNG:
-//         {
-//             vtkImageWriter *pngWriter = vtkPNGWriter::New();
-//             pngWriter->SetInput( image );
-//             pngWriter->SetFilePattern( "%s-%d.png" );
-//             pngWriter->SetFilePrefix( baseName );
-//             pngWriter->Write();
-//
-//             break;
-//         }
-//         case JPEG:
-//         {
-//             vtkImageWriter *jpegWriter = vtkJPEGWriter::New();
-//             jpegWriter->SetInput( image );
-//             jpegWriter->SetFilePattern( "%s-%d.jpg" );
-//             jpegWriter->SetFilePrefix( baseName );
-//             jpegWriter->Write();
-//
-//             break;
-//         }
-//         // \TODO el format tiff fa petar al desar, mirar si �s problema de compatibilitat del sistema o de les pr�pies vtk
-//         case TIFF:
-//         {
-//             vtkImageWriter *tiffWriter = vtkTIFFWriter::New();
-//             tiffWriter->SetInput( image );
-//             tiffWriter->SetFilePattern( "%s-%d.tif" );
-//             tiffWriter->SetFilePrefix( baseName );
-//             tiffWriter->Write();
-//
-//             break;
-//         }
-//         case PNM:
-//         {
-//             vtkImageWriter *pnmWriter = vtkPNMWriter::New();
-//             pnmWriter->SetInput( image );
-//             pnmWriter->SetFilePattern( "%s-%d.pnm" );
-//             pnmWriter->SetFilePrefix( baseName );
-//             pnmWriter->Write();
-//
-//             break;
-//         }
-//         case BMP:
-//         {
-//             vtkImageWriter *bmpWriter = vtkBMPWriter::New();
-//             bmpWriter->SetInput( image );
-//             bmpWriter->SetFilePattern( "%s-%d.bmp" );
-//             bmpWriter->SetFilePrefix( baseName );
-//             bmpWriter->Write();
-//
-//             break;
-//         }
-//         case DICOM:
-//         {
-//             break;
-//         }
-//         case META:
-//         {
-//             vtkMetaImageWriter *metaWriter = vtkMetaImageWriter::New();
-//             metaWriter->SetInput( m_mainVolume->getVtkData() );
-//             metaWriter->SetFileName( baseName );
-//             metaWriter->Write();
-//
-//             break;
-//         }
-//     }
+    imageWriter->SetInput( image );
+    imageWriter->SetFilePrefix( qPrintable( fileName ) );
+    imageWriter->SetFilePattern( qPrintable( pattern ) );
+    imageWriter->Write();
+    // \TODO en alguns casos,a la imatge resultant s'hi pinta el diàleg. Mirar de solventar-ho. Una solució seria fer un close del diàleg just abans d'executar el filtre o inclús podríem fer que fos un punter i fer-ne un delete per estar més segurs.
 }
 
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr‡fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gr√†fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -17,16 +17,20 @@ namespace udg {
 /**
 Fa captures dels visors
 
-	@author Grup de Gr‡fics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gr√†fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Q2DViewer;
+class Q3DViewer;
+class Q3DMPRViewer;
 
 class ScreenShotTool: public Tool
 {
 Q_OBJECT
 public:
     ScreenShotTool(Q2DViewer *viewer , QObject *parent = 0, const char *name = 0 );
+    ScreenShotTool(Q3DViewer *viewer , QObject *parent = 0, const char *name = 0 );
+    ScreenShotTool(Q3DMPRViewer *viewer , QObject *parent = 0, const char *name = 0 );
 
     ~ScreenShotTool();
 
