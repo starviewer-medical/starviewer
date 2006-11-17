@@ -75,6 +75,7 @@ private:
     QAction *m_voxelInformationAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
+    QAction *m_screenShotAction;
     ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu

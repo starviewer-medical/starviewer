@@ -34,6 +34,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_toolsButtonGroup->addButton( m_windowLevelToolButton );
     m_toolsButtonGroup->addButton( m_zoomToolButton );
     m_toolsButtonGroup->addButton( m_moveToolButton );
+    m_toolsButtonGroup->addButton( m_screenShotToolButton );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -134,6 +135,9 @@ void Q2DViewerExtension::createActions()
 
     m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
+
+    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
+    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
