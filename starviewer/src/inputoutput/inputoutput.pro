@@ -53,7 +53,8 @@ HEADERS += const.h \
            convertdicomtolittleendian.h \
            createdicomdir.h \
            cachetools.h \
-           readdicomdir.h 
+           readdicomdir.h \
+           storeimages.h 
 SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
@@ -102,7 +103,8 @@ SOURCES += databaseconnection.cpp \
            convertdicomtolittleendian.cpp \
            createdicomdir.cpp \
            cachetools.cpp \
-           readdicomdir.cpp 
+           readdicomdir.cpp \
+           storeimages.cpp 
 TARGETDEPS += ../core/libcore.a
 LIBS += ../../src/core/libcore.a
 INCLUDEPATH += ../../src/core

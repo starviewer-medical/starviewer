@@ -140,6 +140,12 @@ public slots:
      */
     void openDicomdir(); 
 
+    /** guarda un estudi en el PACS
+     * @param studyUID uid de l'estudi a guardar
+     */
+    void storeStudyToPacs( QString studyUID );
+    
+
 signals :
      
     /** Signal que s'emet quan es vol visualtizar un estudi cap a ExtensionHandler

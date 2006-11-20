@@ -163,9 +163,7 @@ OFCondition PacsServer::configureMove( levelConnection level )
    return status;
 }
 
-OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params ,
-                        T_ASC_PresentationContextID pid ,
-                        const char* abstractSyntax )
+OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , T_ASC_PresentationContextID pid , const char* abstractSyntax )
 {
     /*
     ** We prefer to use Explicitly encoded transfer syntaxes.
@@ -204,21 +202,173 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params ,
     return ASC_addPresentationContext( m_params , pid , abstractSyntax , transferSyntaxes , numTransferSyntaxes );
 }
 
+OFCondition PacsServer::configureStore()
+{
+    OFCondition cond;
+    cond = addStoragePresentationContexts();
+    
+    return cond;
+}
+
+OFCondition PacsServer::addStoragePresentationContexts()
+{
+    /*
+     * Each SOP Class will be proposed in two presentation contexts (unless
+     * the opt_combineProposedTransferSyntaxes global variable is true).
+     * The command line specified a preferred transfer syntax to use.
+     * This prefered transfer syntax will be proposed in one
+     * presentation context and a set of alternative (fallback) transfer
+     * syntaxes will be proposed in a different presentation context.
+     *
+     * Generally, we prefer to use Explicitly encoded transfer syntaxes
+     * and if running on a Little Endian machine we prefer
+     * LittleEndianExplicitTransferSyntax to BigEndianTransferSyntax.
+     * Some SCP implementations will just select the first transfer
+     * syntax they support (this is not part of the standard) so
+     * organise the proposed transfer syntaxes to take advantage
+     * of such behaviour.
+     */
+
+    OFList<OFString> sopClasses;
+    OFList<OFString> fallbackSyntaxes;
+    OFString preferredTransferSyntax;
+
+    // Which transfer syntax was preferred on the command line
+    if ( gLocalByteOrder == EBO_LittleEndian ) 
+    {
+        /* we are on a little endian machine */
+        preferredTransferSyntax = UID_LittleEndianExplicitTransferSyntax;
+    } 
+    else
+    {  
+        preferredTransferSyntax = UID_BigEndianExplicitTransferSyntax;      /* we are on a big endian machine */
+    }
+
+    fallbackSyntaxes.push_back( UID_LittleEndianExplicitTransferSyntax );
+    fallbackSyntaxes.push_back( UID_BigEndianExplicitTransferSyntax );
+    fallbackSyntaxes.push_back( UID_LittleEndianImplicitTransferSyntax );
+    // Remove the preferred syntax from the fallback list
+    fallbackSyntaxes.remove( preferredTransferSyntax );
+
+    OFListIterator( OFString ) s_cur;
+    OFListIterator( OFString ) s_end;
+ 
+    /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
+     * les imatges alhora de preparar la connexió, les hi incloem totes les modalitats. Si alhora de connectar sabessim de quina modalitat és l'estudi només caldria afegir-hi la de la motalitat de l'estudi
+     */
+    for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ ) 
+    {
+        sopClasses.push_back( dcmShortSCUStorageSOPClassUIDs[i] );
+    }
+
+    // comprovem que no hi hagi que cap SOPClas duplicada
+    OFList< OFString > sops;
+    s_cur = sopClasses.begin();
+    s_end = sopClasses.end();
+    
+    while ( s_cur != s_end ) 
+    {
+        if ( !isaListMember( sops , *s_cur ) ) 
+        {
+            sops.push_back( *s_cur );
+        }
+        ++s_cur;
+    }
+
+    // add a presentations context for each sop class / transfer syntax pair
+    OFCondition cond = EC_Normal;
+    int pid = 3; // presentation context id ha de començar el 3 pq el 1 é
+    s_cur = sops.begin();
+    s_end = sops.end();
+    
+    while ( s_cur != s_end && cond.good() ) 
+    {
+        // No poden haver més de 255 presentation context
+        if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
+
+        // sop class with preferred transfer syntax
+        cond = addPresentationContext(pid, *s_cur, preferredTransferSyntax);
+        pid += 2;   /* only odd presentation context id's */
+
+        if ( fallbackSyntaxes.size() > 0 ) 
+        {
+            if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
+
+            // sop class with fallback transfer syntax
+            cond = addPresentationContext( pid , *s_cur , fallbackSyntaxes );
+            pid += 2;       /* only odd presentation context id's */
+        }
+        ++s_cur;
+    }
+
+    return cond;
+}
+
+OFCondition PacsServer::addPresentationContext( int presentationContextId , const OFString& abstractSyntax , const  OFList<OFString>& transferSyntaxList)
+{
+    // create an array of supported/possible transfer syntaxes
+    const char** transferSyntaxes = new const char*[transferSyntaxList.size()];
+    int transferSyntaxCount = 0;
+    OFListConstIterator( OFString ) s_cur = transferSyntaxList.begin();
+    OFListConstIterator( OFString ) s_end = transferSyntaxList.end();
+    
+    while ( s_cur != s_end ) 
+    {
+        transferSyntaxes[transferSyntaxCount++] = ( *s_cur ).c_str();
+        ++s_cur;
+    }
+
+    OFCondition cond = ASC_addPresentationContext(m_params , presentationContextId ,        abstractSyntax.c_str() , transferSyntaxes , transferSyntaxCount , ASC_SC_ROLE_DEFAULT);
+
+    delete[] transferSyntaxes;
+    return cond;
+}
+
+OFCondition PacsServer::addPresentationContext( int presentationContextId , const OFString& abstractSyntax , const OFString& transferSyntax )
+{
+    const char* c_p = transferSyntax.c_str();
+    OFCondition cond = ASC_addPresentationContext( m_params , presentationContextId ,       abstractSyntax.c_str() , &c_p , 1 , ASC_SC_ROLE_DEFAULT );
+    return cond;
+}
+
+OFBool PacsServer::isaListMember( OFList<OFString>& list , OFString& string )
+{
+    OFListIterator( OFString ) cur = list.begin();
+    OFListIterator( OFString ) end = list.end();
+
+    OFBool found = OFFalse;
+
+    while ( cur != end && !found ) 
+    {
+        found = (string == *cur);
+        ++cur;
+    }
+
+    return found;
+}
+
 Status PacsServer::connect( modalityConnection modality , levelConnection level )
 {
-    OFCondition status;
+    OFCondition cond;
     char adrLocal[255];
     Status state;
     std::string AdrServer;
 
     //create the parameters of the connection
-    status = ASC_createAssociationParameters( &m_params , ASC_DEFAULTMAXPDU );
-    if ( !status.good() ) return state.setStatus( status );
+    cond = ASC_createAssociationParameters( &m_params , ASC_DEFAULTMAXPDU );
+    if ( !cond.good() ) return state.setStatus( cond );
     
     // set calling and called AE titles
     
     //el c_str, converteix l'string que ens retornen les funcions get a un char
     ASC_setAPTitles( m_params , m_pacs.getAELocal().c_str() , m_pacs.getAEPacs().c_str() , NULL );
+    
+    /* Set the transport layer type (type of network connection) in the params */
+    /* strucutre. The default is an insecure connection; where OpenSSL is  */
+    /* available the user is able to request an encrypted,secure connection. */
+    //defineix el nivell de seguretat de la connexió, en aquest cas diem que no utilitzem cap nivell de seguretat
+    cond = ASC_setTransportLayerType(m_params, OFFalse);
+    if (!cond.good()) return state.setStatus( cond );
     
     AdrServer= constructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
     
@@ -227,12 +377,12 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     gethostname( adrLocal , 255 );
     
     // the DICOM server accepts connections at server.nowhere.com port 
-    status = ASC_setPresentationAddresses( m_params , adrLocal , AdrServer.c_str() );
-    if ( !status.good() ) return state.setStatus( status );
+    cond = ASC_setPresentationAddresses( m_params , adrLocal , AdrServer.c_str() );
+    if ( !cond.good() ) return state.setStatus( cond );
 
     //default, always configure the echo
-    status = configureEcho();
-    if ( !status.good() ) return state.setStatus( status );
+    cond = configureEcho();
+    if ( !cond.good() ) return state.setStatus( cond );
 
 
     switch ( modality )
@@ -244,8 +394,8 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         m_net = m_pacsNetwork->getNetworkQuery();
                         break;
         case query :    //configure the find paramaters depending on modality connection
-                        status = configureFind( level );
-                        if ( !status.good() ) return state.setStatus( status );
+                        cond = configureFind( level );
+                        if ( !cond.good() ) return state.setStatus( cond );
         
                         state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
@@ -253,27 +403,36 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         m_net = m_pacsNetwork->getNetworkQuery();
                         break;
         case retrieveImages : //configure the move paramaters depending on modality connection
-                        status=configureMove( level );
-                        if ( !status.good() ) return state.setStatus( status );   
+                        cond=configureMove( level );
+                        if ( !cond.good() ) return state.setStatus( cond );   
                 
                         state = m_pacsNetwork->createNetworkRetrieve( atoi( m_pacs.getLocalPort().c_str() ) , m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
                         
                         m_net = m_pacsNetwork->getNetworkRetrieve();
                         break;
+        case storeImages : 
+                        cond = configureStore();
+                        if ( !cond.good() ) return state.setStatus( cond );
+        
+                        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
+                        if ( !state.good() ) return state;
+        
+                        m_net = m_pacsNetwork->getNetworkQuery();
+                        break;
     }    
     
     //try to connect
-    status = ASC_requestAssociation( m_net , m_params , &m_assoc );
+    cond = ASC_requestAssociation( m_net , m_params , &m_assoc );
 
-    if ( status.good() )
+    if ( cond.good() )
     {
         if ( ASC_countAcceptedPresentationContexts(m_params)  ==  0 )
         {
             return state.setStatus( error_NoConnect );
         }
     }
-    else return state.setStatus( status );
+    else return state.setStatus( cond );
     
    return state.setStatus( CORRECT );
 }

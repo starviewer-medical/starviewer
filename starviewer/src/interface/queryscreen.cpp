@@ -178,6 +178,8 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_seriesListWidgetCache , SIGNAL( selectedSeriesIcon( QString) ) , m_studyTreeWidgetCache , SLOT( selectedSeriesIcon( QString) ) ); 
     connect( m_seriesListWidgetCache , SIGNAL( viewSeriesIcon() ) , m_studyTreeWidgetCache , SLOT( viewStudy() ) ); 
     connect( m_studyTreeWidgetCache , SIGNAL( selectedSeriesList( QString) ) , m_seriesListWidgetCache , SLOT( selectedSeriesList( QString) ) ); 
+connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , SLOT( storeStudyToPacs( QString) ) ); 
+    
     
     //per netejar la QSeriesIconView quant s'esborrar un estudi
     connect(this , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clearSeriesListWidget() ) );
@@ -1301,6 +1303,39 @@ void QueryScreen::openDicomdir()
     }    
    
     delete dlg;
+}
+
+void QueryScreen::storeStudyToPacs( QString studyUID )
+{
+    PacsListDB pacsListDB;
+    PacsParameters pacs;
+    StarviewerSettings settings;
+    Operation storeStudyOperation;
+    StudyMask studyMask;
+    Status state;
+    
+    
+    studyMask.setStudyUID( studyUID.toAscii().constData() );
+    storeStudyOperation.setPatientName( "Prova");
+    storeStudyOperation.setStudyUID( studyUID );
+    storeStudyOperation.setOperation( operationMove );
+    storeStudyOperation.setStudyMask( studyMask );
+    
+    
+    state = pacsListDB.queryPacs( &pacs, "PACSPROVES" );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
+    if ( !state.good() )
+    {
+        databaseError( &state );
+        return;
+    }
+
+    pacs.setAELocal( settings.getAETitleMachine().toStdString() ); //especifiquem el nostres AE
+    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
+      
+    storeStudyOperation.setPacsParameters( pacs );
+    
+    m_qexecuteOperationThread.queueOperation( storeStudyOperation );
+
 }
 
 void QueryScreen::notEnoughFreeSpace()

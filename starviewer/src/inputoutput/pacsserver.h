@@ -21,7 +21,7 @@ class PacsServer
 
 public:
  
-    enum modalityConnection { query , retrieveImages , echoPacs };
+    enum modalityConnection { query , retrieveImages , echoPacs, storeImages };
     
     //any it's only can be used with echoPacs modality
     enum levelConnection { patientLevel , studyLevel , seriesLevel , any , imageLevel };
@@ -90,6 +90,13 @@ private:
      */
    OFCondition configureMove( levelConnection );
    
+    /** Aquesta funci�privada permet configurar la connexi�per a guardar estudis en el pacs. 
+     * @return retorna l'estat de la configuració
+     */
+    OFCondition configureStore();
+
+   
+    
     /** Aquesta funció privada, configura els paràmetres pel tipus de connexió per descarregat imatges segons la màquina que tinguem
      * @param paràmetres de la connexió
      * @param Identificador de funcio
@@ -104,6 +111,37 @@ private:
      */
    std::string constructAdrServer( std::string , std::string ); //construct PACS address
     
+      
+    /** Afegeix tots els PresentationContexts necessaris per a guardar imatges en el PACS
+    * @return retorna l'estat del m�ode
+    */
+    OFCondition addStoragePresentationContexts();
+   
+   
+    /** Afageix un objecte SOP a la connexió amb el PACS
+     * @param presentationContextId número de pid
+     * @param abstractSyntax classe SOP a afegir
+     * @param transferSyntaxList 
+     * @return estat del mètode
+     */
+    OFCondition addPresentationContext( int presentationContextId, const OFString& abstractSyntax, const  OFList<OFString>& transferSyntaxList);
+  
+  
+    /** Afageix un objecte SOP a la connexi�amb el PACS
+     * @param presentationContextId número de pid
+     * @param abstractSyntax classe SOP a afegir
+     * @param transferSyntax 
+     * @return estat del mètode
+     */
+    OFCondition addPresentationContext(int presentationContextId, const OFString& abstractSyntax, const OFString& transferSyntax);
+  
+ 
+    /** comprova si un OFString pertany dins una llista
+     * @param list llista
+     * @param string string a comprovar si existeix a lla llista
+     * @return indica is l'string està dins la llista
+     */
+    OFBool isaListMember(OFList<OFString>& list, OFString& string);
 };
 };
 #endif

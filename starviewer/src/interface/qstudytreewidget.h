@@ -124,6 +124,9 @@ signals :
 
     //signal que s'emet quan es vol convertir un estudi al format DicomDir
     void convertToDicomDir( QString studyUID );
+    
+    ///signal que s'emet quan es vol guardar un estudi al PACS
+    void storeStudyToPacs( QString studyUID);
 
 public slots:
     
@@ -156,6 +159,9 @@ public slots:
 
     ///Slot que converteix un estudi 
     void createDicomDir();
+
+    ///Slot que guardar un estudi al PACS
+    void storeStudy();
 
 private :
 

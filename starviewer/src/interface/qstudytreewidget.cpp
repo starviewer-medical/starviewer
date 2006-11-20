@@ -83,22 +83,28 @@ void QStudyTreeWidget::createContextMenu()
     m_contextMenu.addSeparator();
     QAction *createDicomdir = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
     createDicomdir->setShortcut( tr( "Ctrl+M" ) );
+    m_contextMenu.addSeparator();
+    QAction *storeStudy = m_contextMenu.addAction( tr( "Store to PACS" ) );
+    storeStudy->setShortcut( tr( "Ctrl+S" ) );
 
     connect( view , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
     connect( retrieve , SIGNAL( triggered() ) , this , SLOT( retrieveStudy() ) );
     connect( deleteStudy , SIGNAL(triggered()), this, SLOT(deleteStudy()));
     connect( createDicomdir , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
+    connect( storeStudy , SIGNAL ( triggered() ) , this , SLOT ( storeStudy() ) );
       
     /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
     (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );  
     (void) new QShortcut( view->shortcut() , this , SLOT( viewStudy() ) );
     (void) new QShortcut( retrieve->shortcut() , this , SLOT( retrieveStudy() ) );
     (void) new QShortcut( createDicomdir->shortcut() , this , SLOT( createDicomDir() ) );
+    (void) new QShortcut( storeStudy->shortcut() , this , SLOT( storeStudy() ) );
     
     if (m_parentName == "m_tabPacs")
     {   //si el QStudyTreeWidget es el que mostra la llista d'estudis del PACS, la opcio delete desactivada
         deleteStudy->setEnabled(false);
-        createDicomdir->setEnabled( false );       
+        createDicomdir->setEnabled( false );
+        storeStudy->setEnabled( false );
     }   
    
     if (m_parentName == "m_tabCache")
@@ -111,6 +117,7 @@ void QStudyTreeWidget::createContextMenu()
         retrieve->setEnabled(false);
         deleteStudy->setEnabled(false);
         createDicomdir->setEnabled(false);
+        storeStudy->setEnabled( false );
     }
 }
 
@@ -534,6 +541,11 @@ void QStudyTreeWidget::retrieveStudy()
 void QStudyTreeWidget::createDicomDir()
 {
     emit ( convertToDicomDir( getSelectedStudyUID() ) );
+}
+
+void QStudyTreeWidget::storeStudy()
+{
+    emit ( storeStudyToPacs( getSelectedStudyUID() ) );
 }
 
 void QStudyTreeWidget::saveColumnsWidth()

@@ -8,6 +8,8 @@
 #include <QSemaphore>
 #include "qexecuteoperationthread.h"
 #include "studymask.h"
+#include "seriesmask.h"
+#include "imagemask.h"
 #include "pacsserver.h"
 #include "retrieveimages.h"
 #include "operation.h"
@@ -23,6 +25,11 @@
 #include "logging.h"
 #include "status.h"
 #include "cachestudydal.h"
+#include "cacheseriesdal.h"
+#include "cacheimagedal.h"
+#include "storeimages.h"
+#include "serieslist.h"
+#include "imagelist.h"
 
 namespace udg {
 
@@ -45,6 +52,7 @@ void QExecuteOperationThread::queueOperation(Operation operation)
     
     //la variable m_stop controla si el thread està engegat o parat!
     queueOperationList->insertOperation(operation); 
+    
     if(m_stop = true)
     {   //si parat l'engeguem
         m_stop = false;
@@ -78,6 +86,9 @@ void QExecuteOperationThread::run()
             case operationView : 
                  m_view = true;
                  retrieveStudy(operation);
+                 break;
+            case operationMove:
+                 moveStudy( operation );
                  break;
         }
         
@@ -291,8 +302,121 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     return state.setStatus( CORRECT );
 }
 
+Status QExecuteOperationThread::moveStudy( Operation operation )
+{
+    QList<std::string> imagePathList;
+    Status state;
+    PacsParameters pacs;
+    StarviewerSettings settings;
+    StoreImages storeImages;
+    QString logMessage , errorNumber;
+
+    logMessage = "Preparant les dades per moure estudi ";
+    logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+    logMessage.append( " al PACS " );
+    logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+    INFO_LOG( logMessage.toAscii().constData() );
+   
+    state = imagesPathToStore( operation.getStudyMask().getStudyUID().c_str() , imagePathList );
+    
+    if ( !state.good() ) return state;
+      
+    PacsServer pacsConnection( operation.getPacsParameters() );
+     
+    state = pacsConnection.connect( PacsServer::storeImages , PacsServer::any );
+    
+    if ( !state.good() )
+    {
+        logMessage.append(" S'ha produït un error al intentar connectar al PACS ");
+        logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
+        logMessage.append( ". PACS ERROR : " );
+        logMessage.append( state.text().c_str() );
+        emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) ); 
+        emit( setErrorOperation( operation.getStudyMask().getStudyUID().c_str() ) );
+        return state;
+    }
+    
+    storeImages.setConnection( pacsConnection.getConnection() );
+    storeImages.setNetwork( pacsConnection.getNetwork() );
+    state = storeImages.store( imagePathList.toStdList() );
+
+    if ( state.good() )
+    {
+        INFO_LOG("S'ha mogut l'estudi correctament" );
+        emit( setOperationFinished( operation.getStudyMask().getStudyUID().c_str() ) );// descarregat
+    }
+    else emit( setErrorOperation( operation.getStudyMask().getStudyUID().c_str() ) );
+    
+    cout<<state.text()<<endl;
+    return state;
+
+}
+
+Status QExecuteOperationThread::imagesPathToStore( QString studyUID , QList<std::string> &imagePathList )
+{
+    CacheSeriesDAL cacheSeriesDAL;
+    CacheImageDAL cacheImageDAL;
+    SeriesMask mask;
+    SeriesList seriesList;
+    Series series;
+    ImageMask imageMask;
+    ImageList imageList;
+    Image image;
+    Status state;
+    QString logMessage, errorNumber;
+    
+    mask.setStudyUID( studyUID.toAscii().constData() );
+    state = cacheSeriesDAL.querySeries( mask ,seriesList );
+    
+    if ( !state.good() )
+    {
+        logMessage = "S'ha produït un error al cercar les sèries de l'estudi que s'ha de moure Error : ";
+        errorNumber.setNum( state.code() , 10 );
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.toAscii().constData() ); 
+                
+        return state;
+    }
+        
+    seriesList.firstSeries();
+    
+    while ( !seriesList.end() )
+    {
+        series = seriesList.getSeries();
+        
+        imageMask.setSeriesUID(series.getSeriesUID().c_str() );
+        imageMask.setStudyUID( studyUID.toAscii().constData() );
+        
+        imageList.clear();
+        state = cacheImageDAL.queryImages(imageMask , imageList);
+
+        if ( !state.good() )
+        {
+            logMessage = "S'ha produït un error al cercar les imatges de l'estudi que s'ha de moure Error : ";
+            errorNumber.setNum( state.code() , 10 );
+            logMessage.append( errorNumber );
+            ERROR_LOG( logMessage.toAscii().constData() ); 
+            
+            return state;
+        }
+        
+        imageList.firstImage();
+        while ( !imageList.end() )
+        {
+            image = imageList.getImage();
+            imagePathList.push_back( image.getImagePath() );
+            imageList.nextImage();
+        }        
+        seriesList.nextSeries();
+    }
+    
+    return state;
+
+}
+
 QExecuteOperationThread::~QExecuteOperationThread()
 {
+
 }
 
 }

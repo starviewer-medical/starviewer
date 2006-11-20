@@ -28,7 +28,7 @@ public:
     QExecuteOperationThread( QObject *parent = 0 );
 
     /** afegeix una operacio a la cua, si la cua esta buida l'afegeix i crea el thread que l'executarà 
-      *         @param Operation a executar
+      *@param Operation a executar. Si l'operació de moure imatges cap un PACS, a la màscara de l'estudi de l'operació només caldrà especificar el studyUID
       */
     void queueOperation( Operation operation );
     
@@ -63,7 +63,7 @@ signals :
     void setErrorOperation( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova imatge de l'estudi
-     * @param studyUID UID de l'estudi que s'esta descarregat
+     * @param studyUID UID de l'estudi que s'està descarregant
      * @param número d'imatge descarrega
      */        
     void imageCommit( QString studyUID , int );
@@ -126,6 +126,18 @@ private :
       */
     Status enoughFreeSpace( bool &enoughSpace);
 
+
+    /** Mou un estudi descarregat al pacs especificat
+     * @param operation paràmetres de l'operació que s'ha de dur a terme. Si � un Move a la màscara només cal especificar el studyUID
+     * @return estat del mètode
+     */
+    Status moveStudy( Operation operation );
+    
+    /** Retorna el path on es troben a la maquina de totes les imatges de l'estudi que es vol guardar en un pacs
+     * @param studyUID uid de l'estudi que es vol guardar al pacs
+     * @return llista amb el path de totes les imatges que es vol guardar en el PACS
+     */
+    Status imagesPathToStore( QString studyUID , QList<std::string> &imagePathList );
 };
 
 }
