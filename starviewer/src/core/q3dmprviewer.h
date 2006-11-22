@@ -17,6 +17,7 @@ class vtkEventQtSlotConnect;
 class vtkObject;
 class vtkCommand;
 class vtkLookupTable;
+class vtkInteractorStyle;
 
 namespace udg {
 
@@ -41,6 +42,9 @@ public:
     virtual void setInput( Volume *inputImage );
 
     virtual vtkRenderer *getRenderer();
+
+    /// Retorna el vtkInteractorStyle que té associat
+    vtkInteractorStyle *getInteractorStyle();
 
     /// Retorna el volum transformat segons el reslice de cada vista
     Volume *getAxialResliceOutput();

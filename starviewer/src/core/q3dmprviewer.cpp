@@ -14,6 +14,7 @@
 #include <vtkProperty.h>
 #include <vtkImagePlaneWidget.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkInteractorStyle.h>
 #include <vtkEventQtSlotConnect.h>
 #include <QVTKWidget.h>
 #include <vtkCamera.h>
@@ -70,6 +71,17 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     m_axialResliced = 0;
     m_sagitalResliced = 0;
     m_coronalResliced = 0;
+
+    m_vtkQtConnections = vtkEventQtSlotConnect::New();
+    // despatxa qualsevol event-> tools
+    m_vtkQtConnections->Connect( this->getInteractor(),
+                                 vtkCommand::AnyEvent,
+                                 this,
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
+                                 );
+    // \TODO fer això aquí? o fer-ho en el tool manager?
+    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
 
     m_toolManager = new Q3DMPRViewerToolManager( this );
     this->enableTools();
@@ -273,6 +285,11 @@ void Q3DMPRViewer::createOutline()
 vtkRenderer *Q3DMPRViewer::getRenderer()
 {
     return m_renderer;
+}
+
+vtkInteractorStyle *Q3DMPRViewer::getInteractorStyle()
+{
+    return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
 }
 
 void Q3DMPRViewer::render()
