@@ -30,6 +30,9 @@ public:
     /// Retorna la tool que li demanem si existeix
     Tool *getTool( QString toolName );
 
+    /// Retorna el nom de la tool actual que es fa servir
+    QString getCurrentToolName(){ return m_currentToolName; };
+
 public slots:
     /// Re-envia l'event cap a la tool que necessita l'event
     void forwardEvent( unsigned long eventID );
