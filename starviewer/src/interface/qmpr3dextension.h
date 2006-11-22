@@ -14,6 +14,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
+class ToolsActionFactory;
 
 /**
 Extensió de l'MPR 3D
@@ -26,7 +27,7 @@ public:
     QMPR3DExtension( QWidget *parent = 0 );
 
     ~QMPR3DExtension();
-    
+
     /**
         Li assigna el volum amb el que s'aplica l'MPR.
     */
@@ -36,11 +37,23 @@ private:
     /// El volum d'entrada
     Volume* m_volume;
 
+    /// factoria d'accions per les tools
+    ToolsActionFactory *m_actionFactory;
+
+    /// Accions de les tools
+    QAction *m_zoomAction;
+    QAction *m_moveAction;
+    QAction *m_screenShotAction;
+    QActionGroup *m_toolsActionGroup;
+
+    /// posa a disposició les tools
+    void createTools();
+
     /// Estableix les connexions de signals i slots
     void createConnections();
-    
+
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif
