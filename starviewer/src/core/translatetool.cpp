@@ -37,7 +37,9 @@ TranslateTool::TranslateTool( Q3DMPRViewer *viewer , QObject *parent, const char
 {
     m_state = NONE;
     // \TODO implement me
-//     m_interactorStyle = viewer->getInteractorStyle();
+    m_interactorStyle = viewer->getInteractorStyle();
+    if( !m_interactorStyle )
+        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 TranslateTool::~TranslateTool()

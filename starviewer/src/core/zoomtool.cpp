@@ -35,7 +35,9 @@ ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
 {
     m_state = NONE;
     // \TODO implement me
-//     m_interactorStyle = viewer->getInteractorStyle();
+    m_interactorStyle = viewer->getInteractorStyle();
+    if( !m_interactorStyle )
+        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 ZoomTool::~ZoomTool()
