@@ -36,6 +36,7 @@
 #include <vtkLine.h>
 // pels events
 #include <vtkCommand.h>
+
 namespace udg {
 
 QMPRExtension::QMPRExtension( QWidget *parent )
@@ -47,14 +48,6 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createConnections();
     createActors();
     readSettings();
-
-    // posem a punt els botons per accedir a les tools
-    m_toolsButtonGroup = new QButtonGroup( 0 );
-    m_toolsButtonGroup->setExclusive( true );
-    m_toolsButtonGroup->addButton( m_slicingToolButton );
-    m_toolsButtonGroup->addButton( m_windowLevelToolButton );
-    m_toolsButtonGroup->addButton( m_zoomToolButton );
-    m_toolsButtonGroup->addButton( m_moveToolButton );
 
     m_thickSlab = 0.0;
 }
@@ -166,12 +159,23 @@ void QMPRExtension::createActions()
     m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
 
+    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
+    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
+
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_sagital2DView , SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_coronal2DView , SLOT( setTool(QString) ) );
 
+    // posem a punt els botons per accedir a les tools
+    m_toolsActionGroup = new QActionGroup( 0 );
+    m_toolsActionGroup->setExclusive( true );
+    m_toolsActionGroup->addAction( m_slicingAction );
+    m_toolsActionGroup->addAction( m_windowLevelAction );
+    m_toolsActionGroup->addAction( m_zoomAction );
+    m_toolsActionGroup->addAction( m_moveAction );
+    m_toolsActionGroup->addAction( m_screenShotAction );
     // activem la tool d'slicing per defecte
-    m_slicingAction->trigger();
+    m_slicingAction->setChecked( true );
 }
 
 void QMPRExtension::createConnections()
@@ -501,7 +505,6 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     axis[2] *= dot;
 
     vtkMath::Normalize( axis );
-
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
     updateControls();
