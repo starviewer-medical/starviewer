@@ -168,6 +168,7 @@ private:
     QAction *m_zoomAction;
     QAction *m_moveAction;
     QAction *m_screenShotAction;
+    QAction *m_voxelInformationAction;
     ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
