@@ -119,6 +119,20 @@ void Q3DMPRViewer::addActors()
     }
 }
 
+void Q3DMPRViewer::setTool( QString toolName )
+{
+    if( m_toolManager->setCurrentTool( toolName ) )
+    {
+        ///\Todo per implementar
+        DEBUG_LOG( qPrintable( QString("OK, hem activat la tool: ") + toolName ) );
+    }
+    else
+    {
+        ///\Todo per implementar
+        DEBUG_LOG( qPrintable( QString(":/ no s'ha pogut activar la tool: ") + toolName ) );
+    }
+}
+
 void Q3DMPRViewer::initializeWindowLevel()
 {
     if( m_mainVolume )

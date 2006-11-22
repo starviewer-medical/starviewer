@@ -124,6 +124,8 @@ public slots:
     void enableTools();
     void disableTools();
 
+    void setTool( QString toolName );
+
     virtual void render();
     void reset();
 

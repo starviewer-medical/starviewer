@@ -98,6 +98,9 @@ public slots:
     virtual void enableTools() = 0;
     virtual void disableTools() = 0;
 
+    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui. Reimplementat en cada viewer
+    virtual void setTool( QString ) = 0;
+
     /// Crida que re-inicia a l'estat incial el visor
     virtual void reset() = 0;
 

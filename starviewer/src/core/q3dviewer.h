@@ -72,7 +72,6 @@ public slots:
     void enableTools();
     void disableTools();
 
-    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui
     void setTool( QString toolName );
 
     virtual void render();
