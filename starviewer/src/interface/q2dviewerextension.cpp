@@ -26,15 +26,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     createActions();
     createConnections();
-
-    // posem a punt els botons per accedir a les tools
-    m_toolsButtonGroup = new QButtonGroup( 0 );
-    m_toolsButtonGroup->setExclusive( true );
-    m_toolsButtonGroup->addButton( m_slicingToolButton );
-    m_toolsButtonGroup->addButton( m_windowLevelToolButton );
-    m_toolsButtonGroup->addButton( m_zoomToolButton );
-    m_toolsButtonGroup->addButton( m_moveToolButton );
-    m_toolsButtonGroup->addButton( m_screenShotToolButton );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -143,8 +134,15 @@ void Q2DViewerExtension::createActions()
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
 
+    m_toolsActionGroup = new QActionGroup( 0 );
+    m_toolsActionGroup->setExclusive( true );
+    m_toolsActionGroup->addAction( m_slicingAction );
+    m_toolsActionGroup->addAction( m_windowLevelAction );
+    m_toolsActionGroup->addAction( m_zoomAction );
+    m_toolsActionGroup->addAction( m_moveAction );
+    m_toolsActionGroup->addAction( m_screenShotAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_slicingAction->trigger();
+    m_slicingAction->setChecked( true );
 }
 
 void Q2DViewerExtension::createConnections()

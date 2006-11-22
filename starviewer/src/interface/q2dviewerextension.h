@@ -79,7 +79,7 @@ private:
     ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
-    QButtonGroup *m_toolsButtonGroup;
+    QActionGroup *m_toolsActionGroup;
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
