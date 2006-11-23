@@ -90,6 +90,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     // Fi Proves de les extensions
 
     emit containsVolume( FALSE );
+
 }
 
 QApplicationMainWindow::~QApplicationMainWindow()
@@ -171,6 +172,14 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
     connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
+    m_fullScreenAction = new QAction( this );
+    m_fullScreenAction->setText( tr("Show Full Screen") );
+    m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
+    m_fullScreenAction->setShortcut( Qt::CTRL + Qt::Key_Enter );
+    m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
+    m_fullScreenAction->setCheckable( true );
+    connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
+
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
     m_aboutAction->setShortcut( 0 );
@@ -236,6 +245,24 @@ void QApplicationMainWindow::createActions()
 //     }
 }
 
+void QApplicationMainWindow::switchFullScreen( bool full )
+{
+    if( full )
+    {
+        this->showFullScreen();
+        m_fullScreenAction->setText( tr("Retract Full Screen") );
+        m_fullScreenAction->setStatusTip( tr("Switch To Normal Screen") );
+        m_fullScreenAction->setIcon( QIcon(":/images/retractFullscreen.png") );
+    }
+    else
+    {
+        this->showNormal();
+        m_fullScreenAction->setText( tr("Show Full Screen") );
+        m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
+        m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
+    }
+}
+
 void QApplicationMainWindow::createMenus()
 {
     // Menú d'arxiu: aquest es correspondrà a l'accés directe al sistema de fitxers per adquirir un volum, com pot ser un arxiu *.mhd
@@ -274,6 +301,10 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
+
+    // Menú 'display'
+    m_displayMenu = menuBar()->addMenu( tr("&Display") );
+    m_displayMenu->addAction( m_fullScreenAction );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );

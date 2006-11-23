@@ -32,23 +32,23 @@ Q_OBJECT
 public:
     ///El constructor del Mainwindow. Aquí es crea tot l'esquelet de l'interfície: Menús, Barres d'eines, toolbox, working area, etc..
     QApplicationMainWindow(QWidget *parent = 0, const char *name = 0);
-    
+
     ~QApplicationMainWindow();
-    
+
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
 
     /// Mètode de conveniència per sortir del pas de mentres. Es crida quan tenim ja un model obert i volem obri-ne un de nou
     void newAndOpen();
     void newAndOpenDir();
-    
+
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
-    
+
 public slots:
     /// Fa les tasques que cal quan s'ha carregat un volum
     void onVolumeLoaded( Identifier id );
-    
+
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
     void closeEvent(QCloseEvent *event);
@@ -56,7 +56,7 @@ protected:
 private:
     /// Gestor de serveis i miniaplicacions
     ExtensionHandler *m_extensionHandler;
-    
+
     /// Tipus de fitxer a exportar
     enum ExportFiles{ JpegExport , MetaIOExport , TiffExport, PngExport , BmpExport };
 
@@ -89,17 +89,18 @@ private:
     /// Menús
     QMenu *m_fileMenu;
     QMenu *m_visualizationMenu;
+    QMenu *m_displayMenu;
     QMenu *m_languageMenu;
     QMenu *m_helpMenu;
-    
+
     /// Sub menús
 //     QMenu *m_importFilesMenu;
 //     QMenu *m_exportFilesMenu;
 //     QMenu *m_recentFilesMenu;
-    
+
     /// Barres d'eines \TODO és possible que les fem desaparèixer
     QToolBar *m_fileToolBar;
-    
+
     /// Accions
     QAction *m_2DViewerAction;
     QAction *m_mpr2DAction;
@@ -112,6 +113,7 @@ private:
     QAction *m_closeAction;
     QAction *m_exitAction;
     QAction *m_aboutAction;
+    QAction *m_fullScreenAction;
 //     QAction *m_exportToJpegAction;
 //     QAction *m_exportToMetaIOAction;
 //     QAction *m_exportToTiffAction;
@@ -127,11 +129,11 @@ private:
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
-    
+
     // :::::::::::::::::::::::::::
     // mètodes
     // :::::::::::::::::::::::::::
-    
+
     ///Crea i inicialitza les accions de l'aplicació
     void createActions();
 
@@ -140,7 +142,7 @@ private:
 
     /// Crea el menú per escollir l'idioma de l'aplicació
     void createLanguageMenu();
-    
+
     /// Crea la barra d'eines.
     void createToolBars();
 
@@ -172,7 +174,9 @@ private slots:
 
     /// canvia a l'idioma indicat
     void switchToLanguage( int id );
-    
+
+    /// canvia a pantalla completa o no
+    void switchFullScreen( bool full );
 /*
     /// obre un dels arxius recents::\TODO això pot esdevenir \deprecated
     void openRecentFile();
