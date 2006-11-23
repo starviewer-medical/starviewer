@@ -175,6 +175,10 @@ void QMPRExtension::createActions()
     m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
     m_screenShotToolButton->setDefaultAction( m_screenShotAction );
 
+    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
+    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
+    m_rotate3DToolButton->setVisible( false );
+
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_sagital2DView , SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_coronal2DView , SLOT( setTool(QString) ) );
@@ -187,6 +191,7 @@ void QMPRExtension::createActions()
     m_toolsActionGroup->addAction( m_zoomAction );
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_screenShotAction );
+    m_toolsActionGroup->addAction( m_rotate3DAction );
     // activem la tool d'slicing per defecte
     m_slicingAction->setChecked( true );
 }
@@ -228,6 +233,7 @@ void QMPRExtension::createConnections()
     // layouts
     connect( m_horizontalLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchHorizontalLayout() ) );
     connect( m_mipAction , SIGNAL( triggered(bool) ) , this , SLOT( switchToMIPLayout(bool) ) );
+    connect( m_mipAction , SIGNAL( triggered(bool) ) , m_rotate3DToolButton , SLOT( setVisible(bool) ) );
 }
 
 void QMPRExtension::switchHorizontalLayout()
