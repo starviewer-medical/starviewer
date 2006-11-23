@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "translatetool.h"
-#include "zoomtool.h"
 #include "q2dviewer.h"
 #include "q3dviewer.h"
 #include "q3dmprviewer.h"
