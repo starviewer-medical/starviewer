@@ -9,6 +9,7 @@
 #include "zoomtool.h"
 #include "translatetool.h"
 #include "screenshottool.h"
+#include "rotate3dtool.h"
 #include "logging.h"
 
 namespace udg {
@@ -47,6 +48,7 @@ void Q3DViewerToolManager::initToolRegistration()
     m_toolList["ZoomTool"] = new ZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new TranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
+    m_toolList["3DRotationTool"] = new Rotate3DTool( m_viewer );
 }
 
 }

@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu Ã©s una biblioteca:  
+# L'objectiu és una biblioteca:  
 
 FORMS += qlogviewerbase.ui 
 HEADERS += extensionfactory.h \
@@ -53,7 +53,8 @@ HEADERS += extensionfactory.h \
            translatetool.h \
            q3dmprviewertoolmanager.h \
            qlogviewer.h \
-           screenshottool.h 
+           screenshottool.h \
+           rotate3dtool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -91,7 +92,8 @@ SOURCES += extensionmediator.cpp \
            translatetool.cpp \
            q3dmprviewertoolmanager.cpp \
            qlogviewer.cpp \
-           screenshottool.cpp 
+           screenshottool.cpp \
+           rotate3dtool.cpp 
 TEMPLATE = lib
 CONFIG += debug \
 warn_on \
