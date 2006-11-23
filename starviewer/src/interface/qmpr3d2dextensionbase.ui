@@ -105,6 +105,28 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="m_rotate3DToolButton" >
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../main/main.qrc" >:/images/rotate3d.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="m_screenShotToolButton" >
          <property name="text" >
           <string>...</string>
@@ -416,13 +438,6 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>udg::Q3DMPRViewer</class>
-   <extends>QFrame</extends>
-   <header>q3dmprviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
    <class>udg::QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
@@ -433,6 +448,13 @@
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>udg::Q3DMPRViewer</class>
+   <extends>QFrame</extends>
+   <header>q3dmprviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

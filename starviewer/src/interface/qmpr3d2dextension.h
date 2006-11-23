@@ -59,6 +59,7 @@ private:
     QAction *m_moveAction;
     QAction *m_voxelInformationAction;
     QAction *m_screenShotAction;
+    QAction *m_rotate3DAction;
     QActionGroup *m_toolsActionGroup;
     ToolsActionFactory *m_actionFactory;
 
