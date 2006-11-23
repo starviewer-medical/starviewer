@@ -46,6 +46,9 @@ void QMPR3DExtension::createTools()
     m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
     m_screenShotToolButton->setDefaultAction( m_screenShotAction );
 
+    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
+    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
+
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mpr3DView , SLOT( setTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
@@ -53,6 +56,7 @@ void QMPR3DExtension::createTools()
     m_toolsActionGroup->addAction( m_zoomAction );
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_screenShotAction );
+    m_toolsActionGroup->addAction( m_rotate3DAction );
     // activem la tool de zoom per defecte
     m_zoomAction->setChecked( true );
 }

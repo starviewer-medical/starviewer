@@ -43,6 +43,7 @@ private:
     /// Accions de les tools
     QAction *m_zoomAction;
     QAction *m_moveAction;
+    QAction *m_rotate3DAction;
     QAction *m_screenShotAction;
     QActionGroup *m_toolsActionGroup;
 
