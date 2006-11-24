@@ -12,7 +12,6 @@
 
 #include "study.h"
 #include "image.h"
-#include "starviewerprocessimage.h"
 #include "ui_qoperationstatescreenbase.h"
 
 /// Interfície que implementa la llista d'operacions realitzades cap a un PACS 

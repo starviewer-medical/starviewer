@@ -430,7 +430,7 @@
              </size>
             </property>
             <property name="text" >
-             <string>Retrieve List</string>
+             <string>Operation List</string>
             </property>
            </widget>
           </item>

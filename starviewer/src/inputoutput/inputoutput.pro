@@ -41,7 +41,6 @@ HEADERS += const.h \
            qquerystudythread.h \
            operation.h \
            queueoperationlist.h \
-           starviewerprocessimage.h \
            cacheinstallation.h \
            imagedicominformation.h \
            qexecuteoperationthread.h \
@@ -55,7 +54,8 @@ HEADERS += const.h \
            cachetools.h \
            readdicomdir.h \
            storeimages.h \
-           starviewerprocessimagestored.h 
+           starviewerprocessimagestored.h \
+           starviewerprocessimageretrieved.h 
 SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
@@ -92,7 +92,6 @@ SOURCES += databaseconnection.cpp \
            qquerystudythread.cpp \
            operation.cpp \
            queueoperationlist.cpp \
-           starviewerprocessimage.cpp \
            cacheinstallation.cpp \
            imagedicominformation.cpp \
            qexecuteoperationthread.cpp \
@@ -106,7 +105,8 @@ SOURCES += databaseconnection.cpp \
            cachetools.cpp \
            readdicomdir.cpp \
            storeimages.cpp \
-           starviewerprocessimagestored.cpp 
+           starviewerprocessimagestored.cpp \
+           starviewerprocessimageretrieved.cpp 
 TARGETDEPS += ../core/libcore.a
 LIBS += ../../src/core/libcore.a
 INCLUDEPATH += ../../src/core

@@ -15,7 +15,7 @@
 #include "operation.h"
 #include "queueoperationlist.h"
 #include "processimagesingleton.h"
-#include "starviewerprocessimage.h"
+#include "starviewerprocessimageretrieved.h"
 #include "starviewerprocessimagestored.h"
 #include "harddiskinformation.h"
 #include "scalestudy.h"
@@ -104,7 +104,7 @@ void QExecuteOperationThread::run()
 //descarrega un estudi
 void QExecuteOperationThread::retrieveStudy(Operation operation)
 {
-    StarviewerProcessImage *sProcessImg = new StarviewerProcessImage::StarviewerProcessImage();
+    StarviewerProcessImageRetrieved *sProcessImg = new StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved();
     QString studyUID;
     Status state,retState;
     QString logMessage;

@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/ 
-#ifndef UDGSTARVIEWERPROCESSIMAGE_H
-#define UDGSTARVIEWERPROCESSIMAGE_H
+#ifndef UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
+#define UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 
 #include <qobject.h>
 #include <qwidget.h>
@@ -22,14 +22,14 @@ class Series;
 /**
 @author marc
 */
-class StarviewerProcessImage: public QObject, public ProcessImage{
+class StarviewerProcessImageRetrieved: public QObject, public ProcessImage{
 
 Q_OBJECT
 
 public:
 
     ///Constructor de la classe
-    StarviewerProcessImage();
+    StarviewerProcessImageRetrieved();
 
     /** Processa la informacio de la imatge a descarregar, la guarda a la cache, si la imatge pertany a una nova sèrie també guarda la informació de la sèrie
      * @param imatge a processar 
@@ -40,7 +40,7 @@ public:
     bool getError();
 
     ///Destructor de la classe    
-    ~StarviewerProcessImage();
+    ~StarviewerProcessImageRetrieved();
 
 signals :
 

@@ -7,7 +7,7 @@
 
 #include <string.h>
 
-#include "starviewerprocessimage.h"
+#include "starviewerprocessimageretrieved.h"
 #include "imagedicominformation.h"
 #include "series.h"
 #include "starviewersettings.h"
@@ -20,14 +20,14 @@
 
 namespace udg {
 
-StarviewerProcessImage::StarviewerProcessImage() : ProcessImage()
+StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved() : ProcessImage()
 {
     m_downloadedImages = 0;
     m_error = false;
     m_downloadedSeries = 0;
 }
 
-void StarviewerProcessImage::process( Image *image )
+void StarviewerProcessImageRetrieved::process( Image *image )
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -110,7 +110,7 @@ void StarviewerProcessImage::process( Image *image )
 
 /* Ara per ara per la configuració de les dcmtk no he descober com cancel·lar la descarrega d'imatges despres de produir-se un error, l'únic solució possible ara mateix i que m'han aconsellat als forums es matar el thread però aquesta idea no m'agrada perquè si matem el thread no desconnectem del PACS, no destruim les senyals amb el QRetreiveScreen i no esborrem el thread de la llista retrieveThreads, per tant de moment el que es farà es donar el error quant hagi finalitzat la descarrega
   */
-void StarviewerProcessImage::setError()
+void StarviewerProcessImageRetrieved::setError()
 {
     std::string logMessage;
     m_error = true;
@@ -118,7 +118,7 @@ void StarviewerProcessImage::setError()
     ERROR_LOG( logMessage.c_str() );  
 }
 
-bool StarviewerProcessImage::getError()
+bool StarviewerProcessImageRetrieved::getError()
 {
     std::string logMessage;
     
@@ -130,7 +130,7 @@ bool StarviewerProcessImage::getError()
     return m_error || m_downloadedImages == 0;
 } 
 
-Status StarviewerProcessImage::getSeriesInformation( QString imagePath , Series &serie )
+Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath , Series &serie )
 {
     Status state;
     QString path;
@@ -172,7 +172,7 @@ Status StarviewerProcessImage::getSeriesInformation( QString imagePath , Series 
     return state; 
 }
 
-QString StarviewerProcessImage::createImagePath( Image *image )
+QString StarviewerProcessImageRetrieved::createImagePath( Image *image )
 {
     StarviewerSettings settings;
     Series serie;
@@ -188,12 +188,12 @@ QString StarviewerProcessImage::createImagePath( Image *image )
     return imagePath;
 }
 
-StarviewerProcessImage::~StarviewerProcessImage()
+StarviewerProcessImageRetrieved::~StarviewerProcessImageRetrieved()
 {
-    //com no sabem quant s'acaba la descàrrega de l'última sèrie, fem que s'indiqui que ha finalitzat la seva descàrrega quan es destrueix l'objecte StarViewerProcessImage, que és destruït just finalitzar la descarrega de tot l'estudi
+    //com no sabem quant s'acaba la descàrrega de l'última sèrie, fem que s'indiqui que ha finalitzat la seva descàrrega quan es destrueix l'objecte StarviewerProcessImageRetrieved, que és destruït just finalitzar la descarrega de tot l'estudi
 	emit( seriesRetrieved( m_studyUID ) );
 
-    // si les series està a 0 vol dir que l'estudi només tenia una sèrie, per tant si l'usuari ha demanat visualitzar-lo no s'haurà emés el signal seriesView, perquè no sabrem que ha finalitzat la descarrega de la sèrie, fins que es destrueixi l'objecte StarviewerProcessImage, el qual no es destrueix just quan finalitza la descàrrega de l'estudi
+    // si les series està a 0 vol dir que l'estudi només tenia una sèrie, per tant si l'usuari ha demanat visualitzar-lo no s'haurà emés el signal seriesView, perquè no sabrem que ha finalitzat la descarrega de la sèrie, fins que es destrueixi l'objecte StarviewerProcessImageRetrieved, el qual no es destrueix just quan finalitza la descàrrega de l'estudi
     if ( m_downloadedSeries == 0 ) 
     {
     	emit( seriesView( m_studyUID ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada

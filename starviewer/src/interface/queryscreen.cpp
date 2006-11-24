@@ -13,7 +13,6 @@
 #include <QDateTime>
 #include <QFileDialog>
 
-#include "starviewerprocessimage.h"
 #include "processimagesingleton.h"
 #include "pacsparameters.h"
 #include "pacsconnection.h"
