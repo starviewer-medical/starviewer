@@ -28,10 +28,10 @@ public:
     virtual void process(Image* image) = 0;
 
 	///Indica que s'ha produit algun error descarregant alguna de les imatges de l'estudi
-    virtual void setErrorRetrieving() = 0;
+    virtual void setError() = 0;
 
 	///Indica si s'ha produit algun error descarregant alguna de les imatges de l'estudi
-    virtual bool getErrorRetrieving() = 0;
+    virtual bool getError() = 0;
 
 	///Destructor de la classe
     virtual ~ProcessImage() {};

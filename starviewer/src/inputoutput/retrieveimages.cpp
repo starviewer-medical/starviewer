@@ -230,7 +230,7 @@ OFCondition echoSCP(
             
             if ( cond.bad() )
             {
-                piSingleton->setErrorRetrieving( studyUID );
+                piSingleton->setError( studyUID );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
             }         
             //calculem la mida de l'image
@@ -246,17 +246,17 @@ OFCondition echoSCP(
                 if (! DU_findSOPClassAndInstanceInDataSet( *imageDataSet , sopClass , sopInstance , opt_correctUIDPadding ) )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
-                    piSingleton->setErrorRetrieving( studyUID );
+                    piSingleton->setError( studyUID );
                 }
                 else if ( strcmp( sopClass , req->AffectedSOPClassUID ) != 0 )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    piSingleton->setErrorRetrieving( studyUID );
+                    piSingleton->setError( studyUID );
                 }
                 else if ( strcmp( sopInstance , req->AffectedSOPInstanceUID ) != 0 )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    piSingleton->setErrorRetrieving( studyUID );
+                    piSingleton->setError( studyUID );
                 }
             }   
         

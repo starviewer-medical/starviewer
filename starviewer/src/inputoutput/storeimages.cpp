@@ -6,7 +6,9 @@
  ***************************************************************************/
 #include <string>
 #include "status.h"
+#include "imagelist.h"
 #include "storeimages.h"
+#include "processimagesingleton.h"
 
 namespace udg {
 
@@ -121,20 +123,21 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     return cond;
 }
  
-Status StoreImages::store( list< std::string > imagePathList )
+Status StoreImages::store( ImageList imageList )
 {
-    list< std::string >::iterator iterator;
-    
-    iterator = imagePathList.begin();
-    std::string imagePath;
     OFCondition cond;
     Status state;
+    ProcessImageSingleton* piSingleton; 
+        
+    //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
+    piSingleton=ProcessImageSingleton::getProcessImageSingleton();  
     
-    while ( iterator != imagePathList.end() )
+    imageList.firstImage();
+    while ( !imageList.end() )
     {
-        imagePath = *( iterator );
-        cond = storeSCU( m_assoc , imagePath.c_str() );
-        iterator++;
+        cond = storeSCU( m_assoc , imageList.getImage().getImagePath().c_str() );
+        piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
+        imageList.nextImage(); 
     }
     
     return state.setStatus( cond );
@@ -142,7 +145,7 @@ Status StoreImages::store( list< std::string > imagePathList )
 
 StoreImages::~StoreImages()
 {
-}
 
+}
 
 }

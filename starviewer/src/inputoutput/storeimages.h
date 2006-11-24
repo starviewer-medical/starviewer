@@ -23,6 +23,8 @@
 namespace udg {
 
 class Status;
+class ImageList;
+
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -44,7 +46,7 @@ public:
     * @param imagePath llista amb el path de les imatges a guardar
     * @return indica estat del mètode
     */
-   Status store( list< std::string > imagePath );
+   Status store( ImageList imageList );
 
     ~StoreImages();
     

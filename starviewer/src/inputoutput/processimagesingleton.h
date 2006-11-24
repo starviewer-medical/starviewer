@@ -44,7 +44,7 @@ public:
     /** buscar l'objecte processimage que s'encarrega de gestionar la descarrega de l'estudi studyUID, per notificar l'error
      * @param UID de l'estudi que ha produit l'error
      */
-    void setErrorRetrieving( std::string studyUID );
+    void setError( std::string studyUID );
 
     /** esborra el ProcessImage de la llista
      * @param UID del Process Image de l'estudi a esborrar

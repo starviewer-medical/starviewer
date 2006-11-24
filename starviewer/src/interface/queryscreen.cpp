@@ -214,7 +214,7 @@ connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , 
     //connect tracta els errors de connexió al PACS, al descarregar imatges 
     connect ( &m_qexecuteOperationThread , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
 
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
+    connect( &m_qexecuteOperationThread , SIGNAL(  setRetrieveFinished( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) ); 
 
     //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
     connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomdir( QString ) ) );
@@ -1307,19 +1307,24 @@ void QueryScreen::openDicomdir()
 
 void QueryScreen::storeStudyToPacs( QString studyUID )
 {
+    CacheStudyDAL cacheStudy;
     PacsListDB pacsListDB;
     PacsParameters pacs;
     StarviewerSettings settings;
     Operation storeStudyOperation;
     StudyMask studyMask;
     Status state;
+    Study study;
     
+    cacheStudy.queryStudy( studyUID.toAscii().constData(), study );
     
     studyMask.setStudyUID( studyUID.toAscii().constData() );
-    storeStudyOperation.setPatientName( "Prova");
-    storeStudyOperation.setStudyUID( studyUID );
+    storeStudyOperation.setPatientName( study.getPatientName().c_str() );
+    storeStudyOperation.setStudyUID( study.getStudyUID().c_str() );
     storeStudyOperation.setOperation( operationMove );
     storeStudyOperation.setStudyMask( studyMask );
+    storeStudyOperation.setPatientID( study.getPatientId().c_str() );
+    storeStudyOperation.setStudyID( study.getStudyId().c_str() );
     
     
     state = pacsListDB.queryPacs( &pacs, "PACSPROVES" );//cerquem els par�etres del Pacs al qual s'han de cercar les dades

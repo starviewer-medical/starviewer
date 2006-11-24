@@ -70,7 +70,7 @@ void QOperationStateScreen::clearList()
     for ( int i = 0; i < qRetrieveList.count();i++ )
     {
         item = qRetrieveList.at( i );
-        if (item->text( 0 ) != tr( "PENDING" ) && item->text( 0 ) != tr( "RETRIEVING" ) )
+        if (item->text( 0 ) == tr( "RETRIEVED" ) || item->text( 0 ) == tr( "STORED" ) )
         {
             delete item;
         }
@@ -160,7 +160,7 @@ void QOperationStateScreen::setOperationFinished( QString studyUID )
             {
                 item->setText( 0 , tr( "RETRIEVED" ) ); 
             }
-            else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr(" STORED ") );
+            else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr( "STORED" ) );
         }
     }
     

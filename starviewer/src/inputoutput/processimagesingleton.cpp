@@ -63,7 +63,7 @@ void ProcessImageSingleton::process( std::string UID , Image* img )
     }
 }
 
-void ProcessImageSingleton::setErrorRetrieving( std::string studyUID )
+void ProcessImageSingleton::setError( std::string studyUID )
 {
     list<SingletonProcess>::iterator j;
     
@@ -80,7 +80,7 @@ void ProcessImageSingleton::setErrorRetrieving( std::string studyUID )
 
     if ( j != m_listProcess.end() )
     {    
-        (*j).imgProcess->setErrorRetrieving();
+        (*j).imgProcess->setError();
     }
 }
 

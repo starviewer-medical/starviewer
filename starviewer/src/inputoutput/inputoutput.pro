@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/inputoutput
-# L'objectiu Ã©s una biblioteca:  
+# L'objectiu és una biblioteca:  
 
 HEADERS += const.h \
            databaseconnection.h \
@@ -54,7 +54,8 @@ HEADERS += const.h \
            createdicomdir.h \
            cachetools.h \
            readdicomdir.h \
-           storeimages.h 
+           storeimages.h \
+           starviewerprocessimagestored.h 
 SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
@@ -104,7 +105,8 @@ SOURCES += databaseconnection.cpp \
            createdicomdir.cpp \
            cachetools.cpp \
            readdicomdir.cpp \
-           storeimages.cpp 
+           storeimages.cpp \
+           starviewerprocessimagestored.cpp 
 TARGETDEPS += ../core/libcore.a
 LIBS += ../../src/core/libcore.a
 INCLUDEPATH += ../../src/core

@@ -17,6 +17,7 @@ namespace udg {
 
 class Operation;
 class Status;
+class ImageList;
 
 class QExecuteOperationThread :public QThread
 {
@@ -52,10 +53,15 @@ signals :
      */    
     void setOperating( QString studyUID );
 
-    /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'ha descarregat
+    /** signal que s'emet cap a QRetrieveScreen per indicar que la operacio a finalitzatt
      * @param studyUID UID de l'estudi descarregat
      */    
     void setOperationFinished( QString studyUID );
+
+    /** signal que s'emet cap a QueryScreen per indicar que l'estudi s'ha descarregat
+     * @param studyUID UID de l'estudi descarregat
+     */    
+    void setRetrieveFinished( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
      * @param studyUID UID de l'estudi que ha produït l'error
@@ -137,7 +143,7 @@ private :
      * @param studyUID uid de l'estudi que es vol guardar al pacs
      * @return llista amb el path de totes les imatges que es vol guardar en el PACS
      */
-    Status imagesPathToStore( QString studyUID , QList<std::string> &imagePathList );
+    Status imagesPathToStore( QString studyUID , ImageList &imageList );
 };
 
 }

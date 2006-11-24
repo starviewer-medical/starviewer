@@ -37,7 +37,7 @@ public:
     void process( Image* image );
     
     /// Retorna si s'ha produit algun error intentant guardar alguna de les imatges al disc dur
-    bool getErrorRetrieving();
+    bool getError();
 
     ///Destructor de la classe    
     ~StarviewerProcessImage();
@@ -82,7 +82,7 @@ private :
     Status getSeriesInformation( QString imagePath , Series &serie );
 
     /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
-    void setErrorRetrieving();
+    void setError();
 };
 
 };

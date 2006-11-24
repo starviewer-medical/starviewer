@@ -40,9 +40,6 @@ void StarviewerProcessImage::process( Image *image )
     {  
         Series serie;
         
-        //enviem un signal indicant que ha començat la descarrega de l'estudi
-        emit( startRetrieving( image->getStudyUID().c_str() ) );
-        
         //canviem l'estat de l'estudi de PENDING A RETRIEVING
         state = cacheStudyDAL.setStudyRetrieving( image->getStudyUID().c_str() );
         if ( !state.good() ) m_error = true;
@@ -113,7 +110,7 @@ void StarviewerProcessImage::process( Image *image )
 
 /* Ara per ara per la configuració de les dcmtk no he descober com cancel·lar la descarrega d'imatges despres de produir-se un error, l'únic solució possible ara mateix i que m'han aconsellat als forums es matar el thread però aquesta idea no m'agrada perquè si matem el thread no desconnectem del PACS, no destruim les senyals amb el QRetreiveScreen i no esborrem el thread de la llista retrieveThreads, per tant de moment el que es farà es donar el error quant hagi finalitzat la descarrega
   */
-void StarviewerProcessImage::setErrorRetrieving()
+void StarviewerProcessImage::setError()
 {
     std::string logMessage;
     m_error = true;
@@ -121,7 +118,7 @@ void StarviewerProcessImage::setErrorRetrieving()
     ERROR_LOG( logMessage.c_str() );  
 }
 
-bool StarviewerProcessImage::getErrorRetrieving()
+bool StarviewerProcessImage::getError()
 {
     std::string logMessage;
     
@@ -193,9 +190,11 @@ QString StarviewerProcessImage::createImagePath( Image *image )
 
 StarviewerProcessImage::~StarviewerProcessImage()
 {
+    //com no sabem quant s'acaba la descàrrega de l'última sèrie, fem que s'indiqui que ha finalitzat la seva descàrrega quan es destrueix l'objecte StarViewerProcessImage, que és destruït just finalitzar la descarrega de tot l'estudi
 	emit( seriesRetrieved( m_studyUID ) );
 
-    if ( m_downloadedSeries == 0 )
+    // si les series està a 0 vol dir que l'estudi només tenia una sèrie, per tant si l'usuari ha demanat visualitzar-lo no s'haurà emés el signal seriesView, perquè no sabrem que ha finalitzat la descarrega de la sèrie, fins que es destrueixi l'objecte StarviewerProcessImage, el qual no es destrueix just quan finalitza la descàrrega de l'estudi
+    if ( m_downloadedSeries == 0 ) 
     {
     	emit( seriesView( m_studyUID ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
     }
