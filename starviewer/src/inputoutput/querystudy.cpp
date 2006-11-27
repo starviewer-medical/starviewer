@@ -94,7 +94,7 @@ void progressCallbackStudy(
     if ( text != NULL ) study.setAccessionNumber( text );
          
     //set Study Modality
-    responseIdentifiers->findAndGetString( DCM_Modality , text , false );
+    responseIdentifiers->findAndGetString( DCM_ModalitiesInStudy, text , false );
     if ( text != NULL ) study.setStudyModality( text );  
     
     //set PACS AE Title Called

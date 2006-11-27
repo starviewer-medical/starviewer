@@ -90,6 +90,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     // Fi Proves de les extensions
 
     emit containsVolume( FALSE );
+    // \TODO això és temporal, perquè es cridi per defecte només començar el diàleg del PACS
+    m_extensionHandler->request( 7 );
 
 }
 

@@ -84,6 +84,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     centerWindow(); //centrem la finestra
     
     m_textPatientID->setFocus();
+    
+    queryStudyCache();//fem que per defecte mostri els estudis de la cache
 }
 
 void QueryScreen::initialize()
@@ -1271,6 +1273,7 @@ void QueryScreen::resizePacsList()
     }
     
    this->resize( this->width() + mida, this->height() );
+   centerWindow();
 }
 
 void QueryScreen::convertToDicomdir( QString studyUID )
@@ -1592,6 +1595,8 @@ StudyMask QueryScreen::buildStudyMask()
             mask.setStudyModality(modalityMask.toAscii().constData() );
         }
     }
+    // \TODO xapussa feta perquè mostri per a la seguent release de l'starviewer la modalitat de l'estudi al consultar el pacs, això s'ha d'arreglar
+    else mask.setStudyModality( "*" );
     
     return mask;
 }
