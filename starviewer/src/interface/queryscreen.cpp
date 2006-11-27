@@ -860,7 +860,7 @@ void QueryScreen::tabChanged( int index )
         case 0: //Database
                 setEnabledModalityChecks( true );//activem el grup button de motalitat
                 m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
-                m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
+                m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
                 if (  m_PacsListShow ) resizePacsList();
                 break;
         case 1: //Pacs
@@ -1241,17 +1241,33 @@ void QueryScreen::showPacsList()
 
 void QueryScreen::resizePacsList()
 {
-    int mida;
+    int mida = 0;
     
-    //si es fals i estem al tab del Pacs s'ha de mostrar la llistat de PACS
-    if (  m_PacsListShow && m_tab->currentWidget()->objectName() == "m_tabPacs" )
-    {   qPacsList->setFixedSize( 200 ,240 );
-        mida = 200 + 20;
+    //si es cert i estem al tab del Pacs s'ha de mostrar la llistat de PACS
+    if ( m_tab->currentWidget()->objectName() == "m_tabDicomdir" )
+    {   
+        if ( m_PacsListShow && m_pacsListIsShowed )
+        {
+            qPacsList->setFixedSize( 1 , 1 );
+            mida = -( 200 + 20 );
+            m_pacsListIsShowed = false;
+        }
     }
-    else
+    else 
     {
-        qPacsList->setFixedSize( 1 , 1 );
-        mida = -( 200 + 20 );
+        if ( m_PacsListShow && !m_pacsListIsShowed )
+        {
+            qPacsList->setFixedSize( 200 ,240 );
+            mida = 200 + 20;
+            m_pacsListIsShowed = true;
+        }
+        
+        if ( !m_PacsListShow && m_pacsListIsShowed )
+        {
+            qPacsList->setFixedSize( 1 , 1 );
+            mida = -( 200 + 20 );
+            m_pacsListIsShowed = false;        
+        }
     }
     
    this->resize( this->width() + mida, this->height() );
@@ -1314,32 +1330,49 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     StudyMask studyMask;
     Status state;
     Study study;
+    PacsList pacsList;
     
-    cacheStudy.queryStudy( studyUID.toAscii().constData(), study );
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     
-    studyMask.setStudyUID( studyUID.toAscii().constData() );
-    storeStudyOperation.setPatientName( study.getPatientName().c_str() );
-    storeStudyOperation.setStudyUID( study.getStudyUID().c_str() );
-    storeStudyOperation.setOperation( operationMove );
-    storeStudyOperation.setStudyMask( studyMask );
-    storeStudyOperation.setPatientID( study.getPatientId().c_str() );
-    storeStudyOperation.setStudyID( study.getStudyId().c_str() );
-    
-    
-    state = pacsListDB.queryPacs( &pacs, "PACSPROVES" );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
-    if ( !state.good() )
+    pacsList.clear(); //netejem el pacsLIST
+    qPacsList->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+        
+    switch (pacsList.size())
     {
-        databaseError( &state );
-        return;
+        case  0 :
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "You have to select a Pacs to store the study" ));
+            break;
+        case 1 :
+            cacheStudy.queryStudy( studyUID.toAscii().constData(), study );
+            
+            studyMask.setStudyUID( studyUID.toAscii().constData() );
+            storeStudyOperation.setPatientName( study.getPatientName().c_str() );
+            storeStudyOperation.setStudyUID( study.getStudyUID().c_str() );
+            storeStudyOperation.setOperation( operationMove );
+            storeStudyOperation.setStudyMask( studyMask );
+            storeStudyOperation.setPatientID( study.getPatientId().c_str() );
+            storeStudyOperation.setStudyID( study.getStudyId().c_str() );
+            
+            
+            state = pacsListDB.queryPacs( &pacs, "PACSPROVES" );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
+            if ( !state.good() )
+            {
+                QApplication::restoreOverrideCursor();
+                databaseError( &state );
+                return;
+            }
+        
+            pacsList.firstPacs();
+            storeStudyOperation.setPacsParameters( pacsList.getPacs() );
+            
+            m_qexecuteOperationThread.queueOperation( storeStudyOperation );
+            break;
+        default :
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study can only be stored at one pacs" ));
+            break;  
     }
-
-    pacs.setAELocal( settings.getAETitleMachine().toStdString() ); //especifiquem el nostres AE
-    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
-      
-    storeStudyOperation.setPacsParameters( pacs );
     
-    m_qexecuteOperationThread.queueOperation( storeStudyOperation );
-
+    QApplication::restoreOverrideCursor();
 }
 
 void QueryScreen::notEnoughFreeSpace()

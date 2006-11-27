@@ -184,8 +184,13 @@ struct retrieveParameters
     
     ReadDicomdir m_readDicomdir;// conté la informació del dicomdir obert en aquests instants
 
-    //StudyVolum m_volum;
-    bool m_PacsListShow;
+    /*A la pestanya de dicomdir no s'ha de mostrar el QPacsList, per tant a la pestany de dicomdir 
+     * automaticament l'amaguem, i si tornem a la pestanya de la cache o del pacs, si anteriorment
+     estava desplagat es mostra el QPacsList, per això utilitzem el m_PacsListShow que guarda si
+     per la Cache o el PACS el QPacsList es mostrava. Llavors el m_PacsListIsShowed és utilitzat
+     independentment de la pestanya per saber si en aquells moments s'està mostran el QPacsListShow */
+    bool m_PacsListShow; 
+    bool m_pacsListIsShowed;
     
     QOperationStateScreen *m_OperationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
