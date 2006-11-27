@@ -25,6 +25,7 @@
 #include "extensionhandler.h"
 #include "extensionworkspace.h"
 #include "logging.h"
+#include "qlogviewer.h"
 
 // Mini - aplicacions
 #include "cacheinstallation.h"
@@ -49,6 +50,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     cacheInstallation.checkInstallationCacheDatabase();
 
     m_extensionHandler = new ExtensionHandler( this );
+
+    m_logViewer = new QLogViewer( 0 );
 
     createActions();
     createMenus();
@@ -182,6 +185,12 @@ void QApplicationMainWindow::createActions()
     m_fullScreenAction->setCheckable( true );
     connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
 
+    m_logViewerAction = new QAction( this );
+    m_logViewerAction->setText( tr("Show Log File") );
+    m_logViewerAction->setStatusTip( tr("Show log file") );
+    m_logViewerAction->setIcon( QIcon(":/images/logs.png") );
+    connect( m_logViewerAction , SIGNAL( triggered() ) , m_logViewer , SLOT( exec() ) );
+
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
     m_aboutAction->setShortcut( 0 );
@@ -307,6 +316,7 @@ void QApplicationMainWindow::createMenus()
     // Menú 'display'
     m_displayMenu = menuBar()->addMenu( tr("&Display") );
     m_displayMenu->addAction( m_fullScreenAction );
+    m_displayMenu->addAction( m_logViewerAction );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );

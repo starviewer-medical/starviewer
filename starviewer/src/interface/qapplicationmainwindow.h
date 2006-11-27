@@ -25,6 +25,7 @@ namespace udg{
 // Forward declarations
 class ExtensionWorkspace;
 class ExtensionHandler;
+class QLogViewer;
 
 class QApplicationMainWindow : public QMainWindow
 {
@@ -114,6 +115,7 @@ private:
     QAction *m_exitAction;
     QAction *m_aboutAction;
     QAction *m_fullScreenAction;
+    QAction *m_logViewerAction;
 //     QAction *m_exportToJpegAction;
 //     QAction *m_exportToMetaIOAction;
 //     QAction *m_exportToTiffAction;
@@ -129,6 +131,9 @@ private:
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
+
+    /// Per veure els logs
+    QLogViewer *m_logViewer;
 
     // :::::::::::::::::::::::::::
     // mètodes
