@@ -482,6 +482,10 @@
         <source>Coronal view</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
 </context>
 <context>
     <name>QMPRExtensionBase</name>
@@ -1276,6 +1280,26 @@ Acc:%4
         <source>Close the current extension page</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Show Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch To Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Retract Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch To Normal Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Display</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QConfigurationScreen</name>
@@ -1667,6 +1691,18 @@ Acc:%4
         <source>Change views layout</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Voxel Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable voxel information over cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QMPRExtension</name>
@@ -1700,6 +1736,18 @@ Acc:%4
     </message>
     <message>
         <source>Maximum Intensity Projection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voxel Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1953,6 +2001,14 @@ Acc:%4
     <message>
         <source>Ctrl+M</source>
         <translation type="unfinished">Ctrl+M</translation>
+    </message>
+    <message>
+        <source>Store to PACS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

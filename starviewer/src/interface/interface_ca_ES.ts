@@ -288,7 +288,7 @@
     </message>
     <message>
         <source>Create database</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear la base de dades</translation>
     </message>
     <message>
         <source>Institution Information</source>
@@ -406,7 +406,7 @@
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
@@ -481,39 +481,43 @@
     </message>
     <message>
         <source>Enable axial plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el pla axial</translation>
     </message>
     <message>
         <source>Enable sagital plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el pla sagital</translation>
     </message>
     <message>
         <source>Enable coronal plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el pla coronal</translation>
     </message>
     <message>
         <source>Switch to axial view</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a vista axial</translation>
     </message>
     <message>
         <source>Axial view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista Axial</translation>
     </message>
     <message>
         <source>Switch to sagital view</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a vista sagital</translation>
     </message>
     <message>
         <source>Sagital view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista sagital</translation>
     </message>
     <message>
         <source>Switch to coronal view</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a vista coronal</translation>
     </message>
     <message>
         <source>Coronal view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista coronal</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>...</translation>
     </message>
 </context>
 <context>
@@ -584,23 +588,23 @@
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Slicing</source>
-        <translation type="unfinished"></translation>
+        <translation>Moure llesques</translation>
     </message>
     <message>
         <source>Window Level</source>
-        <translation type="unfinished">Lluentor</translation>
+        <translation>Lluentor/Contrast</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Moure</translation>
     </message>
 </context>
 <context>
@@ -646,7 +650,7 @@
     </message>
     <message>
         <source>Loading, please wait...</source>
-        <translation type="unfinished">Carregant, si us plau espereu-vos...</translation>
+        <translation>Carregant, si us plau espereu-vos...</translation>
     </message>
 </context>
 <context>
@@ -673,11 +677,11 @@
     </message>
     <message>
         <source>Serie loading</source>
-        <translation type="unfinished">Carregant la sèrie</translation>
+        <translation>Carregant la sèrie</translation>
     </message>
     <message>
         <source>Loading, please wait...</source>
-        <translation type="unfinished">Carregant, si us plau espereu...</translation>
+        <translation>Carregant, si us plau espereu...</translation>
     </message>
 </context>
 <context>
@@ -786,47 +790,47 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Change To Single View Mode</source>
-        <translation type="unfinished">Canviar a vista simple</translation>
+        <translation>Canviar a vista simple</translation>
     </message>
     <message>
         <source>&amp;Double View</source>
-        <translation type="unfinished">Vista &amp;Doble</translation>
+        <translation>Vista &amp;Doble</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
         <source>Change To Double View Mode</source>
-        <translation type="unfinished">Canviar a vista doble</translation>
+        <translation>Canviar a mode de vista doble</translation>
     </message>
     <message>
         <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informació de voxel</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+I</translation>
     </message>
     <message>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar la informació devoxel sobre el cursor</translation>
     </message>
     <message>
         <source>Rotate Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar en sentit horari</translation>
     </message>
     <message>
         <source>Rotate the image in clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar la imatge en el sentit horari</translation>
     </message>
     <message>
         <source>Rotate Counter Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar en sentit anti-horari</translation>
     </message>
     <message>
         <source>Rotate the image in counter clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar la imatge en sentit anti-horari</translation>
     </message>
 </context>
 <context>
@@ -885,7 +889,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Switch Double View</source>
@@ -905,19 +909,19 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>window level</source>
-        <translation type="unfinished"></translation>
+        <translation>Lluentor/Contrast</translation>
     </message>
     <message>
         <source>zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>zoom</translation>
     </message>
     <message>
         <source>move</source>
-        <translation type="unfinished"></translation>
+        <translation>moure</translation>
     </message>
     <message>
         <source>voxel information</source>
-        <translation type="unfinished"></translation>
+        <translation>informació de voxel</translation>
     </message>
 </context>
 <context>
@@ -1284,6 +1288,26 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Close the current extension page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch To Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Retract Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch To Normal Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Display</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1724,6 +1748,18 @@ WW: %5 WL: %6</translation>
         <source>Change views layout</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Voxel Information</source>
+        <translation type="unfinished">Informació de voxel</translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Enable voxel information over cursor</source>
+        <translation type="unfinished">Habilitar la informació devoxel sobre el cursor</translation>
+    </message>
 </context>
 <context>
     <name>udg::QMPRExtension</name>
@@ -1758,6 +1794,18 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Maximum Intensity Projection</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voxel Information</source>
+        <translation type="unfinished">Informació de voxel</translation>
+    </message>
+    <message>
+        <source>Ctrl+I</source>
+        <translation type="unfinished">Ctrl+I</translation>
+    </message>
+    <message>
+        <source>Enable voxel information over cursor</source>
+        <translation type="unfinished">Habilitar la informació devoxel sobre el cursor</translation>
     </message>
 </context>
 <context>
@@ -1799,51 +1847,51 @@ WW: %5 WL: %6</translation>
     <name>udg::QOperationStateScreenBase</name>
     <message>
         <source>Retrieve list studies</source>
-        <translation type="unfinished">Llistat d&apos;estudis descarregats</translation>
+        <translation>Llistat d&apos;estudis descarregats</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished">Estat</translation>
+        <translation>Estat</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished">Direcció</translation>
+        <translation>Direcció</translation>
     </message>
     <message>
         <source>From/To</source>
-        <translation type="unfinished">De/Cap a</translation>
+        <translation>De/Cap a</translation>
     </message>
     <message>
         <source>Patient ID</source>
-        <translation type="unfinished">ID Pacient</translation>
+        <translation>ID Pacient</translation>
     </message>
     <message>
         <source>Patient Name</source>
-        <translation type="unfinished">Nom Pacient</translation>
+        <translation>Nom Pacient</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>Started</source>
-        <translation type="unfinished"></translation>
+        <translation>Començat</translation>
     </message>
     <message>
         <source>Series</source>
-        <translation type="unfinished"></translation>
+        <translation>Sèries</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation type="unfinished">Imatges</translation>
+        <translation>Imatges</translation>
     </message>
     <message>
         <source>StudyUID</source>
-        <translation type="unfinished"></translation>
+        <translation>StudyUID</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Netejar</translation>
+        <translation>Netejar</translation>
     </message>
 </context>
 <context>
@@ -2021,10 +2069,18 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Convert to DicomDir</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir a DicomDir</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Store to PACS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
