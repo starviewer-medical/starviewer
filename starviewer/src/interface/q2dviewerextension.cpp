@@ -11,6 +11,7 @@
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
 #include <QAction>
+#include <QSettings>
 // VTK
 #include <vtkRenderer.h>
 #include "slicing2dtool.h"
@@ -24,12 +25,15 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_mainVolume = 0;
     m_secondaryVolume = 0;
 
+    readSettings();
     createActions();
     createConnections();
+    changeViewToSingle();
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
 {
+    writeSettings();
 }
 
 void Q2DViewerExtension::createActions()
@@ -87,7 +91,6 @@ void Q2DViewerExtension::createActions()
     m_voxelInformationAction->setCheckable( true );
     m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
 
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
     connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView2_1 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
     connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView2_2 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
@@ -98,7 +101,6 @@ void Q2DViewerExtension::createActions()
     m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
     connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( rotateClockWise() ) );
     connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( rotateClockWise() ) );
 
@@ -109,7 +111,6 @@ void Q2DViewerExtension::createActions()
     m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
 
-    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( rotateCounterClockWise() ) );
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( rotateCounterClockWise() ) );
 
@@ -130,7 +131,6 @@ void Q2DViewerExtension::createActions()
     m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
     m_screenShotToolButton->setDefaultAction( m_screenShotAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
 
@@ -147,10 +147,6 @@ void Q2DViewerExtension::createActions()
 
 void Q2DViewerExtension::createConnections()
 {
-    connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
-    connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-    connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
-
     // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
     connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
     connect( m_spinBox2_1 , SIGNAL( valueChanged(int) ) , m_2DView2_1 , SLOT( setSlice(int) ) );
@@ -160,12 +156,9 @@ void Q2DViewerExtension::createConnections()
     connect( m_spinBox2_2 , SIGNAL( valueChanged(int) ) , m_2DView2_2 , SLOT( setSlice(int) ) );
     connect( m_2DView2_2 , SIGNAL( sliceChanged(int) ) , m_slider2_2 , SLOT( setValue(int) ) );
 
-    // sincronisme window level \TODO veure perquè no hi ha sincronisme entre una pàgina i l'altre
-    connect( m_2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView2_1 , SLOT( setWindowLevel( double , double ) ) );
+    // sincronisme window level
     connect( m_2DView2_1 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView2_2 , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_2DView2_1 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_2DView2_2 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView2_1 , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_2DView2_2 , SIGNAL( windowLevelChanged( double , double ) ) , m_2DView , SLOT( setWindowLevel( double , double ) ) );
 
     connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
     connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
@@ -174,18 +167,14 @@ void Q2DViewerExtension::createConnections()
     connect( m_singleViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSingle() ) );
     connect( m_doubleViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToDouble() ) );
 
-    connect( m_stackedWidget , SIGNAL( currentChanged(int) ) , this , SLOT( pageChange(int) ) );
-
     connect( m_synchroCheckBox , SIGNAL( clicked(bool) ) , this , SLOT( synchronizeSlices(bool) ) );
 
     connect( m_chooseSeriePushButton , SIGNAL( clicked() ) , this , SLOT( chooseNewSerie() ) );
 
     // window level combo box
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView2_1 , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView2_2 , SLOT( setWindowLevel(double,double) ) );
 
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView , SLOT( resetWindowLevelToDefault() ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView2_1 , SLOT( resetWindowLevelToDefault() ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView2_2 , SLOT( resetWindowLevelToDefault() ) );
 }
@@ -194,11 +183,10 @@ void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     // \TODO ara ho fem "a saco" però s'hauria de millorar
-    m_2DView->setInput( m_mainVolume );
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
     double wl[2];
-    m_2DView->getDefaultWindowLevel( wl );
+    m_2DView2_1->getDefaultWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
@@ -211,7 +199,7 @@ void Q2DViewerExtension::setSecondInput( Volume *input )
     m_2DView2_2->setInput( m_secondaryVolume );
     INFO_LOG("Afegim un segon volum per comparar")
     changeViewToAxial();
-    m_stackedWidget->setCurrentIndex( 1 );
+    changeViewToDouble();
 }
 
 void Q2DViewerExtension::changeViewToAxial()
@@ -219,44 +207,27 @@ void Q2DViewerExtension::changeViewToAxial()
     m_currentView = Axial;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-    switch( m_stackedWidget->currentIndex() )
-    {
-    case 0:
-        m_spinBox->setMinimum( extent[4] );
-        m_spinBox->setMaximum( extent[5] );
-        m_slider->setMaximum( extent[5] );
-        m_viewText->setText( tr("XY : Axial") );
-        m_2DView->setViewToAxial();
-        INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
-        m_2DView->render();
-    break;
+    int secondExtent[6];
+    if( m_secondaryVolume )
+        m_secondaryVolume->getWholeExtent( secondExtent );
+    else
+        m_mainVolume->getWholeExtent( secondExtent );
 
-    case 1:
-        int secondExtent[6];
-        if( m_secondaryVolume )
-            m_secondaryVolume->getWholeExtent( secondExtent );
-        else
-            m_mainVolume->getWholeExtent( secondExtent );
+    m_spinBox2_1->setMinimum( extent[4] );
+    m_spinBox2_1->setMaximum( extent[5] );
+    m_slider2_1->setMaximum( extent[5] );
+    m_viewText2_1->setText( tr("XY : Axial") );
+    m_2DView2_1->setViewToAxial();
+    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.1)")
+    m_2DView2_1->render();
 
-        m_spinBox2_1->setMinimum( extent[4] );
-        m_spinBox2_1->setMaximum( extent[5] );
-        m_slider2_1->setMaximum( extent[5] );
-        m_viewText2_1->setText( tr("XY : Axial") );
-        m_2DView2_1->setViewToAxial();
-        INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.1)")
-        m_2DView2_1->render();
-
-        m_spinBox2_2->setMinimum( secondExtent[4] );
-        m_spinBox2_2->setMaximum( secondExtent[5] );
-        m_slider2_2->setMaximum( secondExtent[5] );
-        m_viewText2_2->setText( tr("XY : Axial") );
-        m_2DView2_2->setViewToAxial();
-        INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.2)")
-        m_2DView2_2->render();
-    break;
-
-    }
-
+    m_spinBox2_2->setMinimum( secondExtent[4] );
+    m_spinBox2_2->setMaximum( secondExtent[5] );
+    m_slider2_2->setMaximum( secondExtent[5] );
+    m_viewText2_2->setText( tr("XY : Axial") );
+    m_2DView2_2->setViewToAxial();
+    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.2)")
+    m_2DView2_2->render();
 }
 
 void Q2DViewerExtension::changeViewToSagital()
@@ -264,42 +235,27 @@ void Q2DViewerExtension::changeViewToSagital()
     m_currentView = Sagital;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-    switch( m_stackedWidget->currentIndex() )
-    {
-    case 0:
-        m_spinBox->setMinimum( extent[0] );
-        m_spinBox->setMaximum( extent[1] );
-        m_slider->setMaximum( extent[1] );
-        m_viewText->setText( tr("YZ : Sagital") );
-        m_2DView->setViewToSagittal();
-        INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
-        m_2DView->render();
-    break;
+    int secondExtent[6];
+    if( m_secondaryVolume )
+        m_secondaryVolume->getWholeExtent( secondExtent );
+    else
+        m_mainVolume->getWholeExtent( secondExtent );
 
-    case 1:
-        int secondExtent[6];
-        if( m_secondaryVolume )
-            m_secondaryVolume->getWholeExtent( secondExtent );
-        else
-            m_mainVolume->getWholeExtent( secondExtent );
+    m_spinBox2_1->setMinimum( extent[0] );
+    m_spinBox2_1->setMaximum( extent[1] );
+    m_slider2_1->setMaximum( extent[1] );
+    m_viewText2_1->setText( tr("YZ : Sagital") );
+    m_2DView2_1->setViewToSagittal();
+    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.1)")
+    m_2DView2_1->render();
 
-        m_spinBox2_1->setMinimum( extent[0] );
-        m_spinBox2_1->setMaximum( extent[1] );
-        m_slider2_1->setMaximum( extent[1] );
-        m_viewText2_1->setText( tr("YZ : Sagital") );
-        m_2DView2_1->setViewToSagittal();
-        INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.1)")
-        m_2DView2_1->render();
-
-        m_spinBox2_2->setMinimum( secondExtent[0] );
-        m_spinBox2_2->setMaximum( secondExtent[1] );
-        m_slider2_2->setMaximum( secondExtent[1] );
-        m_viewText2_2->setText( tr("YZ : Sagital") );
-        m_2DView2_2->setViewToSagittal();
-        INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.2)")
-        m_2DView2_2->render();
-    break;
-    }
+    m_spinBox2_2->setMinimum( secondExtent[0] );
+    m_spinBox2_2->setMaximum( secondExtent[1] );
+    m_slider2_2->setMaximum( secondExtent[1] );
+    m_viewText2_2->setText( tr("YZ : Sagital") );
+    m_2DView2_2->setViewToSagittal();
+    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.2)")
+    m_2DView2_2->render();
 }
 
 void Q2DViewerExtension::changeViewToCoronal()
@@ -307,42 +263,27 @@ void Q2DViewerExtension::changeViewToCoronal()
     m_currentView = Coronal;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-    switch( m_stackedWidget->currentIndex() )
-    {
-    case 0:
-        m_spinBox->setMinimum( extent[2] );
-        m_spinBox->setMaximum( extent[3] );
-        m_slider->setMaximum( extent[3] );
-        m_viewText->setText( tr("XZ : Coronal") );
-        m_2DView->setViewToCoronal();
-        INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
-        m_2DView->render();
-    break;
+    int secondExtent[6];
+    if( m_secondaryVolume )
+        m_secondaryVolume->getWholeExtent( secondExtent );
+    else
+        m_mainVolume->getWholeExtent( secondExtent );
 
-    case 1:
-        int secondExtent[6];
-        if( m_secondaryVolume )
-            m_secondaryVolume->getWholeExtent( secondExtent );
-        else
-            m_mainVolume->getWholeExtent( secondExtent );
+    m_spinBox2_1->setMinimum( extent[2] );
+    m_spinBox2_1->setMaximum( extent[3] );
+    m_slider2_1->setMaximum( extent[3] );
+    m_viewText2_1->setText( tr("XZ : Coronal") );
+    m_2DView2_1->setViewToCoronal();
+    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.1)")
+    m_2DView2_1->render();
 
-        m_spinBox2_1->setMinimum( extent[2] );
-        m_spinBox2_1->setMaximum( extent[3] );
-        m_slider2_1->setMaximum( extent[3] );
-        m_viewText2_1->setText( tr("XZ : Coronal") );
-        m_2DView2_1->setViewToCoronal();
-        INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.1)")
-        m_2DView2_1->render();
-
-        m_spinBox2_2->setMinimum( secondExtent[2] );
-        m_spinBox2_2->setMaximum( secondExtent[3] );
-        m_slider2_2->setMaximum( secondExtent[3] );
-        m_viewText2_2->setText( tr("XZ : Coronal") );
-        m_2DView2_2->setViewToCoronal();
-        INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.2)")
-        m_2DView2_2->render();
-    break;
-    }
+    m_spinBox2_2->setMinimum( secondExtent[2] );
+    m_spinBox2_2->setMaximum( secondExtent[3] );
+    m_slider2_2->setMaximum( secondExtent[3] );
+    m_viewText2_2->setText( tr("XZ : Coronal") );
+    m_2DView2_2->setViewToCoronal();
+    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.2)")
+    m_2DView2_2->render();
 }
 
 void Q2DViewerExtension::setView( ViewType view )
@@ -363,12 +304,12 @@ void Q2DViewerExtension::setView( ViewType view )
 
 void Q2DViewerExtension::changeViewToSingle()
 {
-    m_stackedWidget->setCurrentIndex( 0 );
+    m_splitter->widget( 1 )->hide();
 }
 
 void Q2DViewerExtension::changeViewToDouble()
 {
-    m_stackedWidget->setCurrentIndex( 1 );
+    m_splitter->widget( 1 )->show();
 }
 
 void Q2DViewerExtension::pageChange( int index )
@@ -395,6 +336,26 @@ void Q2DViewerExtension::synchronizeSlices( bool ok )
 void Q2DViewerExtension::chooseNewSerie()
 {
     emit newSerie();
+}
+
+void Q2DViewerExtension::readSettings()
+{
+    QSettings settings("GGG", "StarViewer-App-2DViewer");
+    settings.beginGroup("StarViewer-App-2DViewer");
+
+    m_splitter->restoreState( settings.value("splitter").toByteArray() );
+
+    settings.endGroup();
+}
+
+void Q2DViewerExtension::writeSettings()
+{
+    QSettings settings("GGG", "StarViewer-App-2DViewer");
+    settings.beginGroup("StarViewer-App-2DViewer");
+
+    settings.setValue("splitter", m_splitter->saveState() );
+
+    settings.endGroup();
 }
 
 }

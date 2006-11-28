@@ -14,7 +14,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>2</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -374,20 +374,20 @@
     </layout>
    </item>
    <item>
-    <widget class="QStackedWidget" name="m_stackedWidget" >
-     <property name="currentIndex" >
-      <number>0</number>
+    <widget class="QSplitter" name="m_splitter" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="page" >
+     <widget class="QWidget" name="widget" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>9</number>
+        <number>0</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
        <item>
-        <widget class="udg::Q2DViewer" name="m_2DView" />
+        <widget class="udg::Q2DViewer" name="m_2DView2_1" />
        </item>
        <item>
         <layout class="QHBoxLayout" >
@@ -398,7 +398,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="m_viewText" >
+          <widget class="QLabel" name="m_viewText2_1" >
            <property name="text" >
             <string>XY : Axial</string>
            </property>
@@ -408,7 +408,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="m_slider" >
+          <widget class="QSlider" name="m_slider2_1" >
            <property name="focusPolicy" >
             <enum>Qt::NoFocus</enum>
            </property>
@@ -421,7 +421,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="m_spinBox" >
+          <widget class="QSpinBox" name="m_spinBox2_1" >
            <property name="maximum" >
             <number>0</number>
            </property>
@@ -431,126 +431,56 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2" >
+     <widget class="QWidget" name="widget2" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>9</number>
+        <number>0</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
        <item>
-        <widget class="QSplitter" name="splitter" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
+        <widget class="udg::Q2DViewer" name="m_2DView2_2" />
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
          </property>
-         <widget class="QWidget" name="widget" >
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
+         <property name="spacing" >
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="m_viewText2_2" >
+           <property name="text" >
+            <string>XY : Axial</string>
+           </property>
+           <property name="scaledContents" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="m_slider2_2" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="maximum" >
             <number>0</number>
            </property>
-           <property name="spacing" >
-            <number>6</number>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
            </property>
-           <item>
-            <widget class="udg::Q2DViewer" name="m_2DView2_1" />
-           </item>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="m_viewText2_1" >
-               <property name="text" >
-                <string>XY : Axial</string>
-               </property>
-               <property name="scaledContents" >
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="m_slider2_1" >
-               <property name="focusPolicy" >
-                <enum>Qt::NoFocus</enum>
-               </property>
-               <property name="maximum" >
-                <number>0</number>
-               </property>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="m_spinBox2_1" >
-               <property name="maximum" >
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="widget2" >
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="m_spinBox2_2" >
+           <property name="maximum" >
             <number>0</number>
            </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <item>
-            <widget class="udg::Q2DViewer" name="m_2DView2_2" />
-           </item>
-           <item>
-            <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
-             <property name="spacing" >
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="m_viewText2_2" >
-               <property name="text" >
-                <string>XY : Axial</string>
-               </property>
-               <property name="scaledContents" >
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="m_slider2_2" >
-               <property name="focusPolicy" >
-                <enum>Qt::NoFocus</enum>
-               </property>
-               <property name="maximum" >
-                <number>0</number>
-               </property>
-               <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="m_spinBox2_2" >
-               <property name="maximum" >
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </widget>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

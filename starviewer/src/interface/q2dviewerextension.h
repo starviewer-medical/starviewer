@@ -87,6 +87,10 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
+    /// Llegir/Escriure la configuració de l'aplicació
+    void readSettings();
+    void writeSettings();
+
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
