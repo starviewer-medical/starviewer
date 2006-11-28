@@ -142,7 +142,7 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_screenShotAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_slicingAction->setChecked( true );
+    m_slicingAction->trigger();
 }
 
 void Q2DViewerExtension::createConnections()

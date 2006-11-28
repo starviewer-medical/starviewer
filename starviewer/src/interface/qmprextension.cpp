@@ -193,7 +193,7 @@ void QMPRExtension::createActions()
     m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_rotate3DAction );
     // activem la tool d'slicing per defecte
-    m_slicingAction->setChecked( true );
+    m_slicingAction->trigger();
 }
 
 void QMPRExtension::createConnections()

@@ -58,7 +58,7 @@ void QMPR3DExtension::createTools()
     m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_rotate3DAction );
     // activem la tool de zoom per defecte
-    m_zoomAction->setChecked( true );
+    m_zoomAction->trigger();
 }
 
 void QMPR3DExtension::createConnections()

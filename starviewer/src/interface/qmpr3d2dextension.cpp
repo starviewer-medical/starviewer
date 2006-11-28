@@ -166,7 +166,7 @@ void QMPR3D2DExtension::createTools()
     m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_rotate3DAction );
     // activem la tool de zoom per defecte
-    m_windowLevelAction->setChecked( true );
+    m_windowLevelAction->trigger();
 }
 
 void QMPR3D2DExtension::switchBigView()
