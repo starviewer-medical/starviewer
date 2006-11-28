@@ -11,6 +11,7 @@
 
 class vtkOrientationMarkerWidget;
 class vtkRenderWindowInteractor;
+class vtkAnnotatedCubeActor;
 
 namespace udg {
 
@@ -27,16 +28,21 @@ public:
 
     ~Q3DOrientationMarker();
 
+    /// Li posem les etiquetes de texte que han d'anar per cada cara del cub
+    void setOrientationText( const char *right, const char *left, const char *posterior, const char *anterior, const char *superior, const char *inferior );
+
 public slots:
     /// Mètodes per controlar si s'habilita el widget o no
     void setEnabled( bool enable );
     void enable();
     void disable();
-    
+
 private:
     /// Widget per veure la orientació en 3D
     vtkOrientationMarkerWidget *m_markerWidget;
-    
+
+    ///
+    vtkAnnotatedCubeActor *m_cubeActor;
 };
 
 }
