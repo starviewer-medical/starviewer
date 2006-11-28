@@ -74,7 +74,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
 //     m_exportToDicomFilter = tr("DICOM Images (*.dcm)");
 
     // Proves de les extensions
-    QWidget * extension = ExtensionFactory::instance()->create("TestingExtension");
+    QWidget *extension = ExtensionFactory::instance()->create("TestingExtension");
     ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("TestingExtension");
 
     QList<QString> extensionsNames = ExtensionFactory::instance()->getFactoryNamesList();
@@ -93,9 +93,6 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     // Fi Proves de les extensions
 
     emit containsVolume( FALSE );
-    // \TODO això és temporal, perquè es cridi per defecte només començar el diàleg del PACS
-    m_extensionHandler->request( 7 );
-
 }
 
 QApplicationMainWindow::~QApplicationMainWindow()
@@ -325,7 +322,7 @@ void QApplicationMainWindow::createMenus()
     menuBar()->addSeparator();
 
     // menú d'ajuda, ara només hi ha els típic abouts
-    m_helpMenu = menuBar()->addMenu(tr("&Help") );
+    m_helpMenu = menuBar()->addMenu( tr("&Help") );
     m_helpMenu->addAction( m_aboutAction );
 }
 
@@ -524,14 +521,14 @@ void QApplicationMainWindow::readSettings()
     QSettings settings("software-inc.com", "StarViewer");
     settings.beginGroup("StarViewer");
 
-    move( settings.value("position", QPoint(200, 200)).toPoint());
-    resize( settings.value("size", QSize(400, 400)).toSize());
+    move( settings.value( "position", QPoint(200, 200)).toPoint() );
+    resize( settings.value( "size", QSize(400, 400)).toSize() );
 
 //     m_recentFiles = settings.value("recentFiles").toStringList();
 //     updateRecentFileActions();
 
-    m_workingDirectory = settings.value("workingDirectory", ".").toString();
-    m_exportWorkingDirectory = settings.value("exportWorkingDirectory", ".").toString();
+    m_workingDirectory = settings.value( "workingDirectory" , "." ).toString();
+    m_exportWorkingDirectory = settings.value( "exportWorkingDirectory" , "." ).toString();
 
     settings.endGroup();
 }
