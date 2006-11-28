@@ -791,10 +791,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>2&amp;D Viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -824,6 +820,22 @@
     </message>
     <message>
         <source>&amp;Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Log File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show log file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Version : 0.2-RC1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1304,16 +1316,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> STORED </source>
+        <source>STORED</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::QOperationStateScreenBase</name>
-    <message>
-        <source>Retrieve list studies</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Status</source>
         <translation type="unfinished"></translation>
@@ -1356,6 +1364,10 @@
     </message>
     <message>
         <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Queue Operation List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1724,6 +1736,14 @@
         <source> Can&apos;t query studies to PACS </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You have to select a Pacs to store the study</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The study can only be stored at one pacs</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QueryScreenBase</name>
@@ -1749,10 +1769,6 @@
     </message>
     <message>
         <source>Retrieve</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Retrieve List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1921,6 +1937,10 @@
     </message>
     <message>
         <source>Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operation List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

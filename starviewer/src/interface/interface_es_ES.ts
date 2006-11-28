@@ -255,43 +255,43 @@
     </message>
     <message>
         <source>Create database</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear la base de datos</translation>
     </message>
     <message>
         <source>Institution Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de la Institución</translation>
     </message>
     <message>
         <source>Institution information contact</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de contacto de la institución</translation>
     </message>
     <message>
         <source>Institution :</source>
-        <translation type="unfinished"></translation>
+        <translation>Institución:</translation>
     </message>
     <message>
         <source>Adress :      </source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección:</translation>
     </message>
     <message>
         <source>Town :         </source>
-        <translation type="unfinished"></translation>
+        <translation>Ciudad:</translation>
     </message>
     <message>
         <source>ZIP Code :</source>
-        <translation type="unfinished"></translation>
+        <translation>Código Postal:</translation>
     </message>
     <message>
         <source>Country :</source>
-        <translation type="unfinished"></translation>
+        <translation>País:</translation>
     </message>
     <message>
         <source>Contact e-mail :</source>
-        <translation type="unfinished"></translation>
+        <translation>Correo electrónico de contacto:</translation>
     </message>
     <message>
         <source>Phone Number :</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de teléfono:</translation>
     </message>
 </context>
 <context>
@@ -305,7 +305,7 @@
     <name>QMPR3D2DExtensionBase</name>
     <message>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation>Form1</translation>
     </message>
     <message>
         <source>Axial</source>
@@ -321,7 +321,7 @@
     </message>
     <message>
         <source>WW/WL:</source>
-        <translation type="unfinished">WW/WL:</translation>
+        <translation>WW/WL:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -373,14 +373,14 @@
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
     <name>QMPR3DExtensionBase</name>
     <message>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Axial</source>
@@ -396,7 +396,7 @@
     </message>
     <message>
         <source>WW/WL:</source>
-        <translation type="unfinished">WW/WL:</translation>
+        <translation>WW/WL:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -448,50 +448,50 @@
     </message>
     <message>
         <source>Enable axial plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el plano axial</translation>
     </message>
     <message>
         <source>Enable sagital plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el plano sagital</translation>
     </message>
     <message>
         <source>Enable coronal plane</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar el plano coronal</translation>
     </message>
     <message>
         <source>Switch to axial view</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a la vista axial</translation>
     </message>
     <message>
         <source>Axial view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista axial</translation>
     </message>
     <message>
         <source>Switch to sagital view</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a vista sagital</translation>
     </message>
     <message>
         <source>Sagital view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista sagital</translation>
     </message>
     <message>
         <source>Switch to coronal view</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a vista coronal</translation>
     </message>
     <message>
         <source>Coronal view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista coronal</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
     <name>QMPRExtensionBase</name>
     <message>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>WW/WL:</source>
@@ -551,23 +551,23 @@
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Slicing</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Window Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Brillo/Contraste</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover</translation>
     </message>
 </context>
 <context>
@@ -613,7 +613,7 @@
     </message>
     <message>
         <source>Loading, please wait...</source>
-        <translation type="unfinished">Cargando, espere por favor...</translation>
+        <translation>Cargando, espere por favor...</translation>
     </message>
 </context>
 <context>
@@ -640,7 +640,7 @@
     </message>
     <message>
         <source>Serie loading</source>
-        <translation type="unfinished">Cargando serie</translation>
+        <translation>Cargando serie</translation>
     </message>
     <message>
         <source>Loading, please wait...</source>
@@ -704,7 +704,7 @@ Acc:%4
     <name>udg::Q2DViewerExtension</name>
     <message>
         <source>&amp;Axial View</source>
-        <translation type="unfinished">Vista &amp;Axial</translation>
+        <translation>Vista &amp;Axial</translation>
     </message>
     <message>
         <source>Ctrl+A</source>
@@ -712,11 +712,11 @@ Acc:%4
     </message>
     <message>
         <source>Change Current View To Axial</source>
-        <translation type="unfinished">Cambiar vista actual a Axial</translation>
+        <translation>Cambiar vista actual a Axial</translation>
     </message>
     <message>
         <source>&amp;Sagital View</source>
-        <translation type="unfinished">Vista &amp;Sagital</translation>
+        <translation>Vista &amp;Sagital</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
@@ -724,11 +724,11 @@ Acc:%4
     </message>
     <message>
         <source>Change Current View To Sagital</source>
-        <translation type="unfinished">Cambiar vista actual a Sagital</translation>
+        <translation>Cambiar vista actual a Sagital</translation>
     </message>
     <message>
         <source>&amp;Coronal View</source>
-        <translation type="unfinished">Vista &amp;Coronal</translation>
+        <translation>Vista &amp;Coronal</translation>
     </message>
     <message>
         <source>Ctrl+C</source>
@@ -736,7 +736,7 @@ Acc:%4
     </message>
     <message>
         <source>Change Current View To Coronal</source>
-        <translation type="unfinished">Cambiar Vista Actual a Coronal</translation>
+        <translation>Cambiar Vista Actual a Coronal</translation>
     </message>
     <message>
         <source>XY : Axial</source>
@@ -760,51 +760,51 @@ Acc:%4
     </message>
     <message>
         <source>&amp;Single View</source>
-        <translation type="unfinished">Vista &amp;Simple</translation>
+        <translation>Vista &amp;Simple</translation>
     </message>
     <message>
         <source>Change To Single View Mode</source>
-        <translation type="unfinished">Canviar a vista simple</translation>
+        <translation>Canviar a vista simple</translation>
     </message>
     <message>
         <source>&amp;Double View</source>
-        <translation type="unfinished">Vista &amp;Doble</translation>
+        <translation>Vista &amp;Doble</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Change To Double View Mode</source>
-        <translation type="unfinished">Canviar a Vista Doble</translation>
+        <translation>Cambiar a Vista Doble</translation>
     </message>
     <message>
         <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de voxel</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar la información de voxel sobre el cursor</translation>
     </message>
     <message>
         <source>Rotate Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar en sentido horario</translation>
     </message>
     <message>
         <source>Rotate the image in clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota la imagen en sentido horario</translation>
     </message>
     <message>
         <source>Rotate Counter Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar en sentido anti-horario</translation>
     </message>
     <message>
         <source>Rotate the image in counter clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rota la imagen en sentido anti-horario</translation>
     </message>
 </context>
 <context>
@@ -883,19 +883,19 @@ Acc:%4
     </message>
     <message>
         <source>window level</source>
-        <translation type="unfinished"></translation>
+        <translation>Brillo/Contraste</translation>
     </message>
     <message>
         <source>zoom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>move</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover</translation>
     </message>
     <message>
         <source>voxel information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de voxel</translation>
     </message>
 </context>
 <context>
@@ -1261,10 +1261,6 @@ Acc:%4
         <translation>Los cambios surtirán efecto una vez se haya reiniciado la aplicación</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>2&amp;D Viewer</source>
         <translation>Visor 2&amp;D</translation>
     </message>
@@ -1278,26 +1274,42 @@ Acc:%4
     </message>
     <message>
         <source>Close the current extension page</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerrar la página de extensión actual</translation>
     </message>
     <message>
         <source>Show Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar a pantalla completa</translation>
     </message>
     <message>
         <source>Switch To Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a modo de pantalla completa</translation>
     </message>
     <message>
         <source>Retract Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Salir de modo a pantalla completa</translation>
     </message>
     <message>
         <source>Switch To Normal Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a modo de pantalla normal</translation>
     </message>
     <message>
         <source>&amp;Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Log File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show log file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Version : 0.2-RC1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1662,11 +1674,11 @@ Acc:%4
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
         <source>Window Width</source>
-        <translation type="unfinished">Contraste</translation>
+        <translation>Contraste</translation>
     </message>
     <message>
         <source>Window Level</source>
-        <translation type="unfinished">Brillo</translation>
+        <translation>Brillo</translation>
     </message>
     <message>
         <source>OK</source>
@@ -1678,30 +1690,30 @@ Acc:%4
     </message>
     <message>
         <source>Custom Window Level Settings</source>
-        <translation type="unfinished">Ajustes personalizados de contraste</translation>
+        <translation>Ajustes personalizados de contraste</translation>
     </message>
 </context>
 <context>
     <name>udg::QMPR3D2DExtension</name>
     <message>
         <source>Switch horizontal layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar distribución horizontal</translation>
     </message>
     <message>
         <source>Change views layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar la distrubución de las vistas</translation>
     </message>
     <message>
         <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de voxel</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar la información de voxel sobre el cursor</translation>
     </message>
 </context>
 <context>
@@ -1724,65 +1736,69 @@ Acc:%4
     </message>
     <message>
         <source>Switch horizontal layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar distribución horizontal</translation>
     </message>
     <message>
         <source>&amp;MIP</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIP</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished">Ctrl+M</translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>Maximum Intensity Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyección de Máxima Intensidad</translation>
     </message>
     <message>
         <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de voxel</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar la información de voxel sobre el cursor</translation>
     </message>
 </context>
 <context>
     <name>udg::QOperationStateScreen</name>
     <message>
         <source>PENDING</source>
-        <translation type="unfinished">PENDIENTE</translation>
+        <translation>PENDIENTE</translation>
     </message>
     <message>
         <source>Local</source>
-        <translation type="unfinished">Local</translation>
+        <translation>Local</translation>
     </message>
     <message>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor</translation>
     </message>
     <message>
         <source>RETRIEVING</source>
-        <translation type="unfinished">DESCARGANDO</translation>
+        <translation>DESCARGANDO</translation>
     </message>
     <message>
         <source> STORING </source>
-        <translation type="unfinished"></translation>
+        <translation>ALMACENANDO</translation>
     </message>
     <message>
         <source>ERROR</source>
-        <translation type="unfinished">ERROR</translation>
+        <translation>ERROR</translation>
     </message>
     <message>
         <source>RETRIEVED</source>
-        <translation type="unfinished">DESCARGADO</translation>
+        <translation>DESCARGADO</translation>
     </message>
     <message>
         <source> STORED </source>
+        <translation type="obsolete">ALMACENADO</translation>
+    </message>
+    <message>
+        <source>STORED</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1790,51 +1806,55 @@ Acc:%4
     <name>udg::QOperationStateScreenBase</name>
     <message>
         <source>Retrieve list studies</source>
-        <translation type="unfinished">Lista de estudios descargados</translation>
+        <translation type="obsolete">Lista de estudios descargados</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation type="unfinished">Estado</translation>
+        <translation>Estado</translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation type="unfinished">Dirección</translation>
+        <translation>Dirección</translation>
     </message>
     <message>
         <source>From/To</source>
-        <translation type="unfinished">De/A</translation>
+        <translation>De/A</translation>
     </message>
     <message>
         <source>Patient ID</source>
-        <translation type="unfinished">ID Paciente</translation>
+        <translation>ID Paciente</translation>
     </message>
     <message>
         <source>Patient Name</source>
-        <translation type="unfinished">Nombre del paciente</translation>
+        <translation>Nombre del paciente</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Fecha</translation>
+        <translation>Fecha</translation>
     </message>
     <message>
         <source>Started</source>
-        <translation type="unfinished">Empezado</translation>
+        <translation>Empezado</translation>
     </message>
     <message>
         <source>Series</source>
-        <translation type="unfinished"></translation>
+        <translation>Series</translation>
     </message>
     <message>
         <source>Images</source>
-        <translation type="unfinished">Imagenes</translation>
+        <translation>Imágenes</translation>
     </message>
     <message>
         <source>StudyUID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Borrar</translation>
+        <translation>Borrar</translation>
+    </message>
+    <message>
+        <source>Queue Operation List</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1996,19 +2016,19 @@ Acc:%4
     </message>
     <message>
         <source>Convert to DicomDir</source>
-        <translation type="unfinished"></translation>
+        <translation>Convertir a DicomDir</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished">Ctrl+M</translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <source>Store to PACS</source>
-        <translation type="unfinished"></translation>
+        <translation>Almacenar en PACS</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2074,55 +2094,55 @@ Acc:%4
     <name>udg::QWindowLevelComboBox</name>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Por defecto</translation>
     </message>
     <message>
         <source>CT Bone</source>
-        <translation type="unfinished">CT Óseo</translation>
+        <translation>CT Óseo</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished">CT Pulmonar</translation>
+        <translation>CT Pulmonar</translation>
     </message>
     <message>
         <source>CT Soft Tissues, Non Contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, Sin Contraste</translation>
     </message>
     <message>
         <source>CT Liver, Non Contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, Sin Contraste</translation>
     </message>
     <message>
         <source>CT Soft Tissues, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, Contraste Medio</translation>
     </message>
     <message>
         <source>CT Liver, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, Contraste Medio</translation>
     </message>
     <message>
         <source>CT Neck, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Cuello,  Contraste Medio</translation>
     </message>
     <message>
         <source>Angiography</source>
-        <translation type="unfinished">Angiografía</translation>
+        <translation>Angiografía</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished">Osteoporosis</translation>
+        <translation>Osteoporosis</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished">Emfisema</translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Custom...</source>
-        <translation type="unfinished">A medida...</translation>
+        <translation>A medida...</translation>
     </message>
 </context>
 <context>
@@ -2276,6 +2296,14 @@ Acc:%4
         <source> Can&apos;t query studies to PACS </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You have to select a Pacs to store the study</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The study can only be stored at one pacs</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QueryScreenBase</name>
@@ -2305,7 +2333,7 @@ Acc:%4
     </message>
     <message>
         <source>Retrieve List</source>
-        <translation>
+        <translation type="obsolete">
 Lista de descargas</translation>
     </message>
     <message>
@@ -2474,6 +2502,10 @@ Lista de descargas</translation>
     </message>
     <message>
         <source>Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operation List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

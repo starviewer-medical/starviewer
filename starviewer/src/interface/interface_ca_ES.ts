@@ -292,7 +292,7 @@
     </message>
     <message>
         <source>Institution Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informació de la Institució</translation>
     </message>
     <message>
         <source>Institution information contact</source>
@@ -1271,10 +1271,6 @@ WW: %5 WL: %6</translation>
         <translation>Els canvis tindran efecte un cop s&apos;hagi reiniciat l&apos;aplicacio</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : 0.1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>2&amp;D Viewer</source>
         <translation>Visor 2&amp;D</translation>
     </message>
@@ -1288,26 +1284,42 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Close the current extension page</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanca la pàgina actual de l&apos;extensió</translation>
     </message>
     <message>
         <source>Show Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar en mode a pantalla completa</translation>
     </message>
     <message>
         <source>Switch To Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a mode de pantalla completa</translation>
     </message>
     <message>
         <source>Retract Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortir de mode a pantalla completa</translation>
     </message>
     <message>
         <source>Switch To Normal Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar a mode de pantalla normal</translation>
     </message>
     <message>
         <source>&amp;Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Log File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show log file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Version : 0.2-RC1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1742,23 +1754,23 @@ WW: %5 WL: %6</translation>
     <name>udg::QMPR3D2DExtension</name>
     <message>
         <source>Switch horizontal layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar la distribució horitzontal</translation>
     </message>
     <message>
         <source>Change views layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar la distribució de les vistes</translation>
     </message>
     <message>
         <source>Voxel Information</source>
-        <translation type="unfinished">Informació de voxel</translation>
+        <translation>Informació de voxel</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="unfinished">Ctrl+I</translation>
+        <translation>Ctrl+I</translation>
     </message>
     <message>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished">Habilitar la informació devoxel sobre el cursor</translation>
+        <translation>Habilitar la informació devoxel sobre el cursor</translation>
     </message>
 </context>
 <context>
@@ -1781,65 +1793,69 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Switch horizontal layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Canviar la distribució horitzontal</translation>
     </message>
     <message>
         <source>&amp;MIP</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;MIP</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Maximum Intensity Projection</source>
-        <translation type="unfinished"></translation>
+        <translation>Projecció de Màxima Intensitat</translation>
     </message>
     <message>
         <source>Voxel Information</source>
-        <translation type="unfinished">Informació de voxel</translation>
+        <translation>Informació de voxel</translation>
     </message>
     <message>
         <source>Ctrl+I</source>
-        <translation type="unfinished">Ctrl+I</translation>
+        <translation>Ctrl+I</translation>
     </message>
     <message>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished">Habilitar la informació devoxel sobre el cursor</translation>
+        <translation>Habilitar la informació devoxel sobre el cursor</translation>
     </message>
 </context>
 <context>
     <name>udg::QOperationStateScreen</name>
     <message>
         <source>PENDING</source>
-        <translation type="unfinished">PENDENT</translation>
+        <translation>PENDENT</translation>
     </message>
     <message>
         <source>Local</source>
-        <translation type="unfinished">Local</translation>
+        <translation>Local</translation>
     </message>
     <message>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor</translation>
     </message>
     <message>
         <source>RETRIEVING</source>
-        <translation type="unfinished">DESCARREGANT</translation>
+        <translation>DESCARREGANT</translation>
     </message>
     <message>
         <source> STORING </source>
-        <translation type="unfinished"></translation>
+        <translation>EMMAGATZEMANT</translation>
     </message>
     <message>
         <source>ERROR</source>
-        <translation type="unfinished">ERROR</translation>
+        <translation>ERROR</translation>
     </message>
     <message>
         <source>RETRIEVED</source>
-        <translation type="unfinished">DESCARREGAT</translation>
+        <translation>DESCARREGAT</translation>
     </message>
     <message>
         <source> STORED </source>
+        <translation type="obsolete">EMMAGATZEMAT</translation>
+    </message>
+    <message>
+        <source>STORED</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1847,7 +1863,7 @@ WW: %5 WL: %6</translation>
     <name>udg::QOperationStateScreenBase</name>
     <message>
         <source>Retrieve list studies</source>
-        <translation>Llistat d&apos;estudis descarregats</translation>
+        <translation type="obsolete">Llistat d&apos;estudis descarregats</translation>
     </message>
     <message>
         <source>Status</source>
@@ -1892,6 +1908,10 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Clear</source>
         <translation>Netejar</translation>
+    </message>
+    <message>
+        <source>Queue Operation List</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2073,15 +2093,15 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Store to PACS</source>
-        <translation type="unfinished"></translation>
+        <translation>Emmagatzemar al PACS</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2147,55 +2167,55 @@ WW: %5 WL: %6</translation>
     <name>udg::QWindowLevelComboBox</name>
     <message>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Per defecte</translation>
     </message>
     <message>
         <source>CT Bone</source>
-        <translation type="unfinished">Ós CT</translation>
+        <translation>Ós CT</translation>
     </message>
     <message>
         <source>CT Lung</source>
-        <translation type="unfinished">Pulmó CT</translation>
+        <translation>Pulmó CT</translation>
     </message>
     <message>
         <source>CT Soft Tissues, Non Contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Teixits Tous, Sense Contrast</translation>
     </message>
     <message>
         <source>CT Liver, Non Contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Fetge, Sense Contrast</translation>
     </message>
     <message>
         <source>CT Soft Tissues, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Teixits Tous, Contrast Mitjà</translation>
     </message>
     <message>
         <source>CT Liver, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Fetge, Contrast Mitjà</translation>
     </message>
     <message>
         <source>CT Neck, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Coll, Contrast Mitjà</translation>
     </message>
     <message>
         <source>Angiography</source>
-        <translation type="unfinished">Angiografia</translation>
+        <translation>Angiografia</translation>
     </message>
     <message>
         <source>Osteoporosis</source>
-        <translation type="unfinished">Osteoporosi</translation>
+        <translation>Osteoporosi</translation>
     </message>
     <message>
         <source>Emphysema</source>
-        <translation type="unfinished">Emfisema</translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Custom...</source>
-        <translation type="unfinished">A mida...</translation>
+        <translation>A mida...</translation>
     </message>
 </context>
 <context>
@@ -2378,6 +2398,14 @@ WW: %5 WL: %6</translation>
         <source> Can&apos;t query studies to PACS </source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>You have to select a Pacs to store the study</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The study can only be stored at one pacs</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QueryScreenBase</name>
@@ -2407,7 +2435,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Retrieve List</source>
-        <translation>Llista de descàrrega</translation>
+        <translation type="obsolete">Llista de descàrrega</translation>
     </message>
     <message>
         <source>View</source>
@@ -2575,6 +2603,10 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Operation List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
