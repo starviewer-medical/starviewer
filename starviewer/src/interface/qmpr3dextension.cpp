@@ -25,6 +25,7 @@ QMPR3DExtension::QMPR3DExtension( QWidget *parent )
     m_axialViewEnabledButton->setChecked( true );
     m_sagitalViewEnabledButton->setChecked( true );
     m_coronalViewEnabledButton->setChecked( true );
+    m_mpr3DView->orientationMarkerOff();
 }
 
 

@@ -46,6 +46,7 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     m_axial2DView->displayScalarBarOff();
     m_sagital2DView->displayScalarBarOff();
     m_coronal2DView->displayScalarBarOff();
+    m_mpr3DView->orientationMarkerOff();
 
     readSettings();
 }

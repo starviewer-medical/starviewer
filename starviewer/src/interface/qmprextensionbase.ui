@@ -191,7 +191,7 @@
          <item>
           <widget class="QLabel" name="label_2" >
            <property name="text" >
-            <string>Thick Slab</string>
+            <string>Thick Slab (mm)</string>
            </property>
           </widget>
          </item>
@@ -395,16 +395,16 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>udg::QWindowLevelComboBox</class>
-   <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>udg::Q2DViewer</class>
-   <extends>QWidget</extends>
-   <header>q2dviewer.h</header>
+   <class>udg::QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

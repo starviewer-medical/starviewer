@@ -255,6 +255,7 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
         if( !m_mipViewer )
         {
             m_mipViewer = new Q3DViewer;
+            m_mipViewer->orientationMarkerOff();
             connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mipViewer , SLOT( setTool(QString) ) );
             m_mipViewer->setRenderFunctionToMIP3D();
         }
