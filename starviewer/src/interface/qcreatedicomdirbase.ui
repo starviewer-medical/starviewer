@@ -116,7 +116,7 @@
               </font>
              </property>
              <property name="text" >
-              <string>Mida Dicomdir :</string>
+              <string>Size of Dicomdir :</string>
              </property>
             </widget>
            </item>
@@ -381,7 +381,7 @@
         <item>
          <widget class="QPushButton" name="m_buttonRemoveAll" >
           <property name="toolTip" >
-           <string>Removel all the studies of the list</string>
+           <string>Remove all the studies of the list</string>
           </property>
           <property name="text" >
            <string>Remove All</string>

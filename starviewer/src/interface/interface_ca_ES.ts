@@ -295,36 +295,36 @@
         <translation>Informació de la Institució</translation>
     </message>
     <message>
-        <source>Institution information contact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Institution :</source>
-        <translation type="unfinished"></translation>
+        <translation>Institució :</translation>
     </message>
     <message>
         <source>Adress :      </source>
-        <translation type="unfinished"></translation>
+        <translation>Adreça :</translation>
     </message>
     <message>
         <source>Town :         </source>
-        <translation type="unfinished"></translation>
+        <translation>Ciutat : </translation>
     </message>
     <message>
         <source>ZIP Code :</source>
-        <translation type="unfinished"></translation>
+        <translation>Codi postal : </translation>
     </message>
     <message>
         <source>Country :</source>
-        <translation type="unfinished"></translation>
+        <translation>País :</translation>
     </message>
     <message>
         <source>Contact e-mail :</source>
-        <translation type="unfinished"></translation>
+        <translation>E-mail :</translation>
     </message>
     <message>
         <source>Phone Number :</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de telèfon :</translation>
+    </message>
+    <message>
+        <source>Institution contact information </source>
+        <translation>Informació de contacte de l&apos;institució</translation>
     </message>
 </context>
 <context>
@@ -584,7 +584,7 @@
     </message>
     <message>
         <source>Thick Slab</source>
-        <translation>Gruix de tall</translation>
+        <translation type="obsolete">Gruix de tall</translation>
     </message>
     <message>
         <source>...</source>
@@ -605,6 +605,10 @@
     <message>
         <source>Move</source>
         <translation>Moure</translation>
+    </message>
+    <message>
+        <source>Thick Slab (mm)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -688,13 +692,13 @@
     <name>udg::Q2DViewer</name>
     <message>
         <source>Slice: %1/%2</source>
-        <translation>Tall: %1/%2</translation>
+        <translation type="obsolete">Tall: %1/%2</translation>
     </message>
     <message>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
-        <translation>Mida Imatge: %1 x %2
+        <translation type="obsolete">Mida Imatge: %1 x %2
 Mida Vista: %3 x %4
 WW: %5 WL: %6</translation>
     </message>
@@ -1408,7 +1412,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Register duplicated.</source>
-        <translation>Registre Duplicat</translation>
+        <translation>Registre duplicat.</translation>
     </message>
     <message>
         <source>The application has to be restart to apply the changes</source>
@@ -1432,245 +1436,249 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source> Pacs </source>
-        <translation type="unfinished"></translation>
+        <translation>Pacs</translation>
     </message>
     <message>
         <source> doesn&apos;t responds </source>
-        <translation type="unfinished"></translation>
+        <translation>no respon</translation>
     </message>
     <message>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
-        <translation type="unfinished">Assegureu-vos que la IP i el AETitle del PACS és correcte</translation>
+        <translation>Assegureu-vos que la IP i el AETitle del PACS és correcte</translation>
     </message>
     <message>
         <source> Test of Pacs </source>
-        <translation type="unfinished"></translation>
+        <translation>Testejar Pacs</translation>
     </message>
     <message>
         <source> is correct </source>
-        <translation type="unfinished"></translation>
+        <translation>és correcte </translation>
     </message>
     <message>
         <source> doesn&apos;t responds correctly</source>
-        <translation type="unfinished"></translation>
+        <translation>no respon correctament </translation>
     </message>
     <message>
         <source>Can&apos;t create the directory. Please check users permission</source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari</translation>
     </message>
     <message>
         <source>Database is locked</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades esta bloquejada</translation>
     </message>
 </context>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <source>Create dicomdir at</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cd occupied</source>
-        <translation type="unfinished"></translation>
+        <translation>Cd ocupat </translation>
     </message>
     <message>
         <source>StarViewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Dvd Ocuppied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
-        <translation type="unfinished"></translation>
+        <translation>Dvd ocupat </translation>
     </message>
     <message>
         <source>The size of Dicomdir is </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>With this study the Dicomdir exceeds the size of the device. Please change the device or create the dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>La mida del dicomdir és </translation>
     </message>
     <message>
         <source>The study exists in the Dicomdir list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can&apos;t create the temporary directory. Please check users permission</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter a diretory to create de dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;estudi ja existeix a la llista de Dicomdir</translation>
     </message>
     <message>
         <source>Create Dicomdir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The directory contains a dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear Dicomdir</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
-        <translation type="unfinished">&amp;Si</translation>
+        <translation>&amp;Si</translation>
     </message>
     <message>
         <source>&amp;No</source>
-        <translation type="unfinished">&amp;No</translation>
+        <translation>&amp;No</translation>
     </message>
     <message>
         <source>Create directory ?</source>
-        <translation type="unfinished">Crear el directori ?</translation>
+        <translation>Crear el directori ?</translation>
     </message>
     <message>
         <source>The Dicomdir directory doesn&apos;t exists. Do you want to create it ?</source>
-        <translation type="unfinished"></translation>
+        <translation>El directori del Dicomdir no existeix. El voleu crear ?</translation>
     </message>
     <message>
         <source>Can&apos;t create the directory. Please check users permission</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not enough free space to create dicom dir. Please free space</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please, first select the studies which you want to create a dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot crear el directori. Si us plau reviseu els permisos d&apos;usuari</translation>
     </message>
     <message>
         <source>Error creating Dicomdir. Be sure you have user permissions in </source>
-        <translation type="unfinished"></translation>
+        <translation>Error creant el Dicomdir. Si us plau assegureu-vos que tingueu permisos a </translation>
     </message>
     <message>
         <source>The size of Dicomdir is 0 Mb</source>
-        <translation type="unfinished"></translation>
+        <translation>La mida del Dicomdir és de 0 Mb</translation>
     </message>
     <message>
         <source>Dicomdir Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directori Dicomdir</translation>
     </message>
     <message>
         <source>Please Select a study to remove</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Si us plau seleccioneu l&apos;estudi a esborrar</translation>
     </message>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
-        <translation type="unfinished">La base de dades està corrupte o error de sintaxis SQL</translation>
+        <translation>La base de dades està corrupte o error de sintaxis SQL</translation>
     </message>
     <message>
         <source>Error Number : </source>
-        <translation type="unfinished"></translation>
+        <translation>Error número : </translation>
     </message>
     <message>
         <source>Database is locked</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades està bloquejada</translation>
     </message>
     <message>
         <source>Database is corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades està corrompuda.</translation>
     </message>
     <message>
         <source>Register duplicated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Registre duplicat.</translation>
     </message>
     <message>
         <source>Internal Database error</source>
-        <translation type="unfinished">Error intern de la base de dades</translation>
+        <translation>Error intern de la base de dades</translation>
+    </message>
+    <message>
+        <source>Can&apos;t create the temporary directory to create Dicomdir. Please check users permission</source>
+        <translation>No es pot crear el directori temporal per crear el Dicomdir. Si us plau reviseu els vostres permisos d&apos;usuari</translation>
+    </message>
+    <message>
+        <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
+        <translation>El dispositiu seleccionat no té suficient espai per copiar tots els estudis, si us plau esborreu algun estudi. La capacitat d&apos;un Cd és de 700 Mb</translation>
+    </message>
+    <message>
+        <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
+        <translation>El dispositiu seleccionat no té suficient espai per copiar tots els estudis, si us plau esborreu algun estudi. La capacitat d&apos;un Dvd és de 4400 Mb</translation>
+    </message>
+    <message>
+        <source>Create Dicomdir at</source>
+        <translation>Crear el Dicomdir a </translation>
+    </message>
+    <message>
+        <source>Please enter a diretory to create de Dicomdir</source>
+        <translation>Si us plau especifiqueu un directori on crear el Dicomdir</translation>
+    </message>
+    <message>
+        <source>The directory contains a Dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
+        <translation>El directori ja conté un Dicomdir. El voleu sobreescriure i esborrar tots els fitxers del directori ?</translation>
+    </message>
+    <message>
+        <source>Please, first select the studies which you want to create a Dicomdir</source>
+        <translation>Si us plau, primer seleccioneu amb quins estudis voleu crear el Dicomdir</translation>
+    </message>
+    <message>
+        <source>Not enough free space to create Dicomdir. Please free space</source>
+        <translation>No hi ha suficient espai per crear el Dicomdir. Si us plau allibereu espai</translation>
+    </message>
+    <message>
+        <source>With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir</source>
+        <translation>Amb aquest estudi s&apos;excedeix la capacitat màxima del dispositiu seleccionat. Si us plau canviï el dispositiu seleccionat o creï el Dicomdir</translation>
+    </message>
+    <message>
+        <source>Please select a study to remove of the list</source>
+        <translation>Si us plau seleccioni l&apos;estudi que vol esborrar de la llista</translation>
     </message>
 </context>
 <context>
     <name>udg::QCreateDicomdirBase</name>
     <message>
         <source>Create DicomDir</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear Dicomdir</translation>
     </message>
     <message>
         <source>650 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mida Dicomdir :</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Create Dicomdir at :</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear Dicomdir a : </translation>
     </message>
     <message>
         <source>Copy to disk or external device</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear al disc dur o dispostiu extern</translation>
     </message>
     <message>
         <source>Burn in a Cd</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear en un Cd</translation>
     </message>
     <message>
         <source>Burn in a Dvd</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear en un Dvd</translation>
     </message>
     <message>
         <source>Creates the Dicomdir with the selected studies</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea el Dicomdir amb els estudis seleccionats</translation>
     </message>
     <message>
         <source>Create Dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear Dicomdir</translation>
     </message>
     <message>
         <source>Study</source>
-        <translation type="unfinished"></translation>
+        <translation>Estudi</translation>
     </message>
     <message>
         <source>Patient ID</source>
-        <translation type="unfinished">ID Pacient</translation>
+        <translation>ID Pacient</translation>
     </message>
     <message>
         <source>Patient Name</source>
-        <translation type="unfinished">Nom Pacient</translation>
+        <translation>Nom Pacient</translation>
     </message>
     <message>
         <source>Modality</source>
-        <translation type="unfinished">Modalitat</translation>
+        <translation>Modalitat</translation>
     </message>
     <message>
         <source>Study Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Data de l&apos;estudi</translation>
     </message>
     <message>
         <source>Study Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Hora de l&apos;estudi</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Descripció</translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <source>studyUID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Remove selected study of the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborra l&apos;estudi seleccionat de la llista</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Removel all the studies of the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar</translation>
     </message>
     <message>
         <source>Remove All</source>
-        <translation type="unfinished"></translation>
+        <translation>Esborrar Tots</translation>
+    </message>
+    <message>
+        <source>Size of Dicomdir :</source>
+        <translation>Mida del Dicomdir :</translation>
+    </message>
+    <message>
+        <source>Remove all the studies of the list</source>
+        <translation>Esborra tots els estudis de la llista</translation>
     </message>
 </context>
 <context>
@@ -1813,7 +1821,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source> STORING </source>
-        <translation>EMMAGATZEMANT</translation>
+        <translation>ENVIANT</translation>
     </message>
     <message>
         <source>ERROR</source>
@@ -1829,7 +1837,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>STORED</source>
-        <translation type="unfinished"></translation>
+        <translation>ENVIAT</translation>
     </message>
 </context>
 <context>
@@ -1884,7 +1892,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Queue Operation List</source>
-        <translation type="unfinished"></translation>
+        <translation>Llista de peticions</translation>
     </message>
 </context>
 <context>
@@ -2353,31 +2361,31 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Error, not opened Dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Error, no s&apos;ha obert cap Dicomdir</translation>
     </message>
     <message>
         <source>Error quering in dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Error consultant el Dicomdir</translation>
     </message>
     <message>
         <source>Dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Error openning dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Error obrint el Dicomdir</translation>
     </message>
     <message>
         <source> Can&apos;t query studies to PACS </source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot consultar els estudies del PACS </translation>
     </message>
     <message>
         <source>You have to select a Pacs to store the study</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha de seleccionar un Pacs on enviar l&apos;estudi</translation>
     </message>
     <message>
         <source>The study can only be stored at one pacs</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;estudi només pot ser enviar a un Pacs</translation>
     </message>
 </context>
 <context>
@@ -2568,19 +2576,19 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Create Dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Crear Dicomdir</translation>
     </message>
     <message>
         <source>Open Dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Obrir Dicomdir</translation>
     </message>
     <message>
         <source>Dicomdir</source>
-        <translation type="unfinished"></translation>
+        <translation>Dicomdir</translation>
     </message>
     <message>
         <source>Operation List</source>
-        <translation type="unfinished"></translation>
+        <translation>Llista de peticions</translation>
     </message>
 </context>
 </TS>

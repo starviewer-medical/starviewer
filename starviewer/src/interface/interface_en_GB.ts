@@ -261,10 +261,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Institution information contact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Institution :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -290,6 +286,10 @@
     </message>
     <message>
         <source>Phone Number :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Institution contact information </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -401,10 +401,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Thick Slab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -422,6 +418,10 @@
     </message>
     <message>
         <source>Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thick Slab (mm)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -985,10 +985,6 @@
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <source>Create dicomdir at</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cd occupied</source>
         <translation type="unfinished"></translation>
     </message>
@@ -997,15 +993,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Dvd Ocuppied</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1013,27 +1001,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>With this study the Dicomdir exceeds the size of the device. Please change the device or create the dicomdir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The study exists in the Dicomdir list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can&apos;t create the temporary directory. Please check users permission</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter a diretory to create de dicomdir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Create Dicomdir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The directory contains a dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1057,14 +1029,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not enough free space to create dicom dir. Please free space</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please, first select the studies which you want to create a dicomdir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Error creating Dicomdir. Be sure you have user permissions in </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1074,10 +1038,6 @@
     </message>
     <message>
         <source>Dicomdir Directory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please Select a study to remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1104,6 +1064,46 @@
         <source>Internal Database error</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Can&apos;t create the temporary directory to create Dicomdir. Please check users permission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Dicomdir at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter a diretory to create de Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The directory contains a Dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please, first select the studies which you want to create a Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enough free space to create Dicomdir. Please free space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a study to remove of the list</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QCreateDicomdirBase</name>
@@ -1113,10 +1113,6 @@
     </message>
     <message>
         <source>650 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mida Dicomdir :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1184,11 +1180,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Removel all the studies of the list</source>
+        <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Remove All</source>
+        <source>Size of Dicomdir :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all the studies of the list</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
