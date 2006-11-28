@@ -687,41 +687,14 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <source>&amp;Reset</source>
-        <translation type="obsolete">&amp;Reiniciar</translation>
-    </message>
-    <message>
-        <source>Ctrl+R</source>
-        <translation type="obsolete">Ctrl+R</translation>
-    </message>
-    <message>
-        <source>Reset initial parameters</source>
-        <translation type="obsolete">Reinicia els paràmetres inicials</translation>
-    </message>
-    <message>
-        <source>No Info</source>
-        <translation type="obsolete">Sense Informació</translation>
-    </message>
-    <message>
-        <source>Image Size: %1 x %2
-View Size: %3 x %4
-Off Image
-WW: %5 WL: %6 </source>
-        <translation type="obsolete">Mida de la imatge: %1 x %2\nMida de la Vista: %3 x %4\nFora d&apos;Imatge\nWW: %5 WL: %6</translation>
-    </message>
-    <message>
-        <source>No info</source>
-        <translation type="obsolete">Sense Informació</translation>
-    </message>
-    <message>
         <source>Slice: %1/%2</source>
-        <translation type="obsolete">Tall: %1/%2</translation>
+        <translation>Tall: %1/%2</translation>
     </message>
     <message>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
-        <translation type="obsolete">Mida Imatge: %1 x %2
+        <translation>Mida Imatge: %1 x %2
 Mida Vista: %3 x %4
 WW: %5 WL: %6</translation>
     </message>
@@ -996,7 +969,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
-        <translation type="unfinished">&amp;Obrir</translation>
+        <translation type="unfinished">Obrir</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
@@ -1032,7 +1005,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation type="unfinished">Sobre</translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <source>Show the application&apos;s About box</source>
@@ -1188,7 +1161,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>&amp;PACS...</source>
-        <translation type="unfinished">&amp;PACS</translation>
+        <translation>&amp;PACS</translation>
     </message>
     <message>
         <source>Ctrl+P</source>
@@ -1304,19 +1277,19 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>&amp;Display</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Show Log File</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.%1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer és un programari de processament d&apos;imatge dedicat a imatges DICOM produides per equipament mèdic (MRI, CT, PET, PET-CT, ...) També pot llegir altres formats de fitxer especificats per l&apos;estàndar MetaIO  ( fitxers *.mhd ). Compleix amb l&apos;estàndar DICOM per a la transferència i formats d&apos;imatges. Starviewer és capaç de rebre imatges transferides per un protocol de comunicació DICOM desde qualsevol PACS i modalitat d&apos;imatge mèdica (STORE SCP - Service Class Provider, STORE SCU - Service Class User i Consulta/Recuperació).&lt;p&gt;Starviewer està dissenyat per a la navegació i visualització d&apos;imatges multimodals i multidimensionals: Visor 2D,  Visor MPR 2D ( Multi Planar Reconstruction ), Visor MPR 3D, Visor Híbrid ( 3D/2D ) MPR i Projecció de Màxima Intensitat ( MIP ).&lt;p&gt;%1</translation>
     </message>
     <message>
         <source>&lt;p&gt;Version : 0.2-RC1&lt;/p&gt;</source>
