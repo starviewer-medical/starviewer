@@ -256,6 +256,15 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
         {
             m_mipViewer = new Q3DViewer;
             m_mipViewer->orientationMarkerOff();
+            // això és un petit parxe per solventar que el mip no sap quina tool estem fent servir
+            // \TODO solucionar això d'una manera més elegant
+            if( m_zoomAction->isChecked() )
+                m_mipViewer->setTool( "ZoomTool" );
+            else if( m_moveAction->isChecked() )
+                m_mipViewer->setTool( "TranslateTool" );
+            else if( m_screenShotAction->isChecked() )
+                m_mipViewer->setTool("ScreenShotTool");
+            // fi parxe
             connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mipViewer , SLOT( setTool(QString) ) );
             m_mipViewer->setRenderFunctionToMIP3D();
         }
