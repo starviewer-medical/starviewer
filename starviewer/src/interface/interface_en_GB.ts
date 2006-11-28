@@ -101,10 +101,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Comptact Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -979,6 +975,14 @@
     </message>
     <message>
         <source>Database is locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The extension of the database has to be &apos;.sdb&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

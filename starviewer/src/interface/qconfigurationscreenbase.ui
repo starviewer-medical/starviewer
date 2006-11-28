@@ -1255,7 +1255,7 @@
              <item>
               <widget class="QPushButton" name="m_buttonCompactDatabase" >
                <property name="toolTip" >
-                <string>Comptact Database</string>
+                <string>Compact Database</string>
                </property>
                <property name="text" >
                 <string>Compact Database</string>

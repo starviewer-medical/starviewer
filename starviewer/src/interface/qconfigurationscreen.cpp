@@ -894,18 +894,18 @@ void QConfigurationScreen::createDatabase()
     
     if ( m_textDatabaseRoot->text().right(4) != ".sdb" )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , "The extension of the database has to be '.sdb'" );        
+        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The extension of the database has to be '.sdb'" ) );        
     }
     else
     {
         if ( databaseFile.exists( m_textDatabaseRoot->text() ) )
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , "Starviewer can't create the database because, a database with the same name exists in the directory" );                  
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr ( "Starviewer can't create the database because, a database with the same name exists in the directory" ) );                  
         }
         else
         {
             settings.setDatabasePath( m_textDatabaseRoot->text() );
-            QMessageBox::warning( this , tr( "StarViewer" ) , "The application has to be restart to apply the changes" );        
+            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes"  ));        
             m_createDatabase = true;
         }
     }

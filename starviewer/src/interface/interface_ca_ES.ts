@@ -123,7 +123,7 @@
     </message>
     <message>
         <source>Comptact Database</source>
-        <translation>Compactar base de dades</translation>
+        <translation type="obsolete">Compactar base de dades</translation>
     </message>
     <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
@@ -240,7 +240,7 @@
     </message>
     <message>
         <source>Compact Database</source>
-        <translation>Compactar Base de dades</translation>
+        <translation>Compactar base de dades</translation>
     </message>
     <message>
         <source>Examine disk to find the directory to save the retrieved images</source>
@@ -1448,11 +1448,11 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source> Test of Pacs </source>
-        <translation>Testejar Pacs</translation>
+        <translation>El test del Pacs </translation>
     </message>
     <message>
         <source> is correct </source>
-        <translation>és correcte </translation>
+        <translation>  és correcte </translation>
     </message>
     <message>
         <source> doesn&apos;t responds correctly</source>
@@ -1465,6 +1465,14 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Database is locked</source>
         <translation>La base de dades esta bloquejada</translation>
+    </message>
+    <message>
+        <source>The extension of the database has to be &apos;.sdb&apos;</source>
+        <translation>L&apos;extensió de la base de dades ha de ser  &apos;.sdb&apos;</translation>
+    </message>
+    <message>
+        <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
+        <translation>Starviewer no pot crear la base de dades, perquè ja existeix una base de dades amb el mateix nom en el directori</translation>
     </message>
 </context>
 <context>
@@ -2207,7 +2215,7 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
-        <translation>No s&apos;ha especificat cap filtre per la cerca. Aquesta cerca pot durat necessitar tardar bastanta estona. Esteu segur que voleu continuar ?</translation>
+        <translation>No s&apos;ha especificat cap filtre per la cerca. Aquesta cerca pot necessitar bastanta estona. Esteu segurs que voleu continuar ?</translation>
     </message>
     <message>
         <source>Yes</source>

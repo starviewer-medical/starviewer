@@ -103,7 +103,7 @@
     </message>
     <message>
         <source>Comptact Database</source>
-        <translation>Compactar la Base de Datos</translation>
+        <translation type="obsolete">Compactar base de Datos</translation>
     </message>
     <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Compact Database</source>
-        <translation>Caompactar Base de Datos</translation>
+        <translation>Caompactar base de Datos</translation>
     </message>
     <message>
         <source>Examine disk to find the directory to save the retrieved images</source>
@@ -1449,11 +1449,11 @@ Acc:%4
     </message>
     <message>
         <source> Test of Pacs </source>
-        <translation>Testear Pacs</translation>
+        <translation>El Testeo del Pacs </translation>
     </message>
     <message>
         <source> is correct </source>
-        <translation>es correcto</translation>
+        <translation> es correcto</translation>
     </message>
     <message>
         <source> doesn&apos;t responds correctly</source>
@@ -1466,6 +1466,14 @@ Acc:%4
     <message>
         <source>Database is locked</source>
         <translation>La base de datos está bloqueada</translation>
+    </message>
+    <message>
+        <source>The extension of the database has to be &apos;.sdb&apos;</source>
+        <translation>La extensión de la base de datos debe ser &apos;.sdb&apos;</translation>
+    </message>
+    <message>
+        <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
+        <translation>Starviewer no puede crear la base de datos, porqué existe otra base de datos en el directorio con el mismo nombre</translation>
     </message>
 </context>
 <context>
