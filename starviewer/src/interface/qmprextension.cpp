@@ -1446,8 +1446,23 @@ void QMPRExtension::readSettings()
     QSettings settings("GGG", "StarViewer-App-MPR");
     settings.beginGroup("StarViewer-App-MPR");
 
-    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
+    if( settings.value("horizontalSplitter").toByteArray().isEmpty() )
+    {
+        QList<int> list;
+        list << this->size().width()/2 << this->size().width()/2;
+        m_horizontalSplitter->setSizes( list );
+    }
+    else
+        m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
+
+    if( settings.value("verticalSplitter").toByteArray().isEmpty() )
+    {
+        QList<int> list;
+        list << this->size().height()/2 << this->size().height()/2;
+        m_verticalSplitter->setSizes( list );
+    }
+    else
+        m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
 
     m_defaultSaveDir = settings.value("defaultSaveDir", ".").toString();
 

@@ -383,8 +383,23 @@ void QMPR3D2DExtension::readSettings()
     QSettings settings("GGG", "StarViewer-App-MPR-3D-2D");
     settings.beginGroup("StarViewer-App-MPR-3D-2D");
 
-    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
+    if( settings.value("horizontalSplitter").toByteArray().isEmpty() )
+    {
+        QList<int> list;
+        list << this->size().width()/2 << this->size().width()/2;
+        m_horizontalSplitter->setSizes( list );
+    }
+    else
+        m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
+
+    if( settings.value("verticalSplitter").toByteArray().isEmpty() )
+    {
+        QList<int> list;
+        list << this->size().height()/3 << this->size().height()/3 << this->size().height()/3;
+        m_verticalSplitter->setSizes( list );
+    }
+    else
+        m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
 
     settings.endGroup();
 }
