@@ -12,6 +12,7 @@
 #include <QSettings>
 #include <QLocale>
 #include <QDir>
+#include <QTextCodec>
 #include "logging.h"
 #include "extensions.h"
 
@@ -35,6 +36,9 @@ int main(int argc, char *argv[])
     app.setOrganizationName("GGG");
     app.setOrganizationDomain("ima.udg.es");
     app.setApplicationName("Starviewer");
+
+    // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ). Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
+    QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
 
     configureLogging();
     // translation
