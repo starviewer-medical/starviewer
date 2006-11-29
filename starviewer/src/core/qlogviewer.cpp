@@ -29,12 +29,8 @@ QLogViewer::QLogViewer(QWidget *parent)
     else
     {
         INFO_LOG( "S'ha obert amb èxit l'arxiu de logs" );
-        QByteArray data = logFile.readAll();
-        QTextCodec *codec = Qt::codecForHtml( data );
-        QString str = codec->toUnicode( data );
-        //     str = QString::fromLocal8Bit( data );
         m_logBrowser->setReadOnly( true );
-        m_logBrowser->setPlainText( str );
+        m_logBrowser->setPlainText( logFile.readAll() );
     }
     createConnections();
 }
@@ -61,7 +57,6 @@ void QLogViewer::saveLogFileAs()
         return;
 
     QTextStream logStream( &file );
-    logStream.setCodec( QTextCodec::codecForName("UTF-8") );
     logStream << m_logBrowser->document()->toPlainText();
 }
 
