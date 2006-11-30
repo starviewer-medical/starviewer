@@ -6,14 +6,6 @@
         <translation>Configuració</translation>
     </message>
     <message>
-        <source>Allows to modify Pacs List</source>
-        <translation type="obsolete">Permet modificar la llista de pacs</translation>
-    </message>
-    <message>
-        <source>Allowd to modify Cache configuration</source>
-        <translation type="obsolete">Permet modificar la configuració de la caché</translation>
-    </message>
-    <message>
         <source>Pacs Device</source>
         <translation>Dispositius Pacs</translation>
     </message>
@@ -42,10 +34,6 @@
         <translation>Esborrar</translation>
     </message>
     <message>
-        <source>Delete selected Pacss</source>
-        <translation type="obsolete">Esborra el Pacs seleccionat</translation>
-    </message>
-    <message>
         <source>Test</source>
         <translation>Testejar</translation>
     </message>
@@ -56,10 +44,6 @@
     <message>
         <source>Clear</source>
         <translation>Netejar</translation>
-    </message>
-    <message>
-        <source>Crear the text boxes</source>
-        <translation type="obsolete">Neteja les caixes de text</translation>
     </message>
     <message>
         <source>&lt;b&gt;AE Title :&lt;/b&gt;</source>
@@ -102,14 +86,6 @@
         <translation>&lt;b&gt;Ruta base de dades :&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>Examinate</source>
-        <translation type="obsolete">Examinar</translation>
-    </message>
-    <message>
-        <source>Examinate disk  to find the database</source>
-        <translation type="obsolete">Examina el disc per trobar la base de dades</translation>
-    </message>
-    <message>
         <source>Delete All Studies</source>
         <translation>Esborrar tots els estudis</translation>
     </message>
@@ -118,21 +94,8 @@
         <translation>Esborra tots els estudis de la cache</translation>
     </message>
     <message>
-        <source>Compact DataBase</source>
-        <translation type="obsolete">Compactar base de dades</translation>
-    </message>
-    <message>
-        <source>Comptact Database</source>
-        <translation type="obsolete">Compactar base de dades</translation>
-    </message>
-    <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
         <translation>&lt;b&gt;Ruta Imatges Cache :&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Examinate loca to find the directory to save the retrieved images</source>
-        <translation type="obsolete">Examina el disc local per obtenir el directori on guardar les imatges descarregades
-</translation>
     </message>
     <message>
         <source>&lt;b&gt;Pool Size :&lt;/b&gt;</source>
@@ -197,14 +160,6 @@
     <message>
         <source>&lt;b&gt;Language :&lt;/b&gt;</source>
         <translation>&lt;b&gt;Idioma : &lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Count the number of images (reduce the query speed)</source>
-        <translation type="obsolete">Compta el número de imatges (redueix velocitat de les consultes)</translation>
-    </message>
-    <message>
-        <source>Previsualitzate the images of a study (reduces the query speed)</source>
-        <translation type="obsolete">Previsualitzar imatges de l&apos;estudi  (redueix velocitat de les consultes)</translation>
     </message>
     <message>
         <source>AETitle</source>
@@ -357,54 +312,6 @@
         <translation>WW/WL:</translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Defecte</translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">Ós CT</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">Pulmó CT</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , noncontrast</source>
-        <translation type="obsolete">Teixits Tous CT, baix contrast</translation>
-    </message>
-    <message>
-        <source>CT Liver , noncontrast</source>
-        <translation type="obsolete">Fetge CT , baix constrast</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , medium contrast</source>
-        <translation type="obsolete">Teixits Tous CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Liver , medium contrast</source>
-        <translation type="obsolete">Fetge CT , contrast mitjà</translation>
-    </message>
-    <message>
-        <source>Neck , medium contrast</source>
-        <translation type="obsolete">Coll CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>Angiography</source>
-        <translation type="obsolete">Angiografia</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosi</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A mida...</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -430,54 +337,6 @@
     <message>
         <source>WW/WL:</source>
         <translation>WW/WL:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Defecte</translation>
-    </message>
-    <message>
-        <source>CT Bone  </source>
-        <translation type="obsolete">Ós CT</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">Pulmó CT</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , noncontrast</source>
-        <translation type="obsolete">Teixits Tous CT, baix contrast</translation>
-    </message>
-    <message>
-        <source>CT Liver , noncontrast</source>
-        <translation type="obsolete">Fetge CT , baix constrast</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , medium contrast</source>
-        <translation type="obsolete">Teixits Tous CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Liver , medium contrast</source>
-        <translation type="obsolete">Fetge CT , contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Neck , medium contrast</source>
-        <translation type="obsolete">Coll CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>Angiography</source>
-        <translation type="obsolete">Angiografia</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosi</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">A mida...</translation>
     </message>
     <message>
         <source>Enable axial plane</source>
@@ -527,64 +386,8 @@
         <translation></translation>
     </message>
     <message>
-        <source>MIP</source>
-        <translation type="obsolete">MIP</translation>
-    </message>
-    <message>
         <source>WW/WL:</source>
         <translation>WW/WL:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Defecte</translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">Ós CT</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">Pulmó CT</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="obsolete">Teixits Tous CT, baix contrast</translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="obsolete">Fetge CT , baix constrast</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="obsolete">Teixits Tous CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="obsolete">Fetge CT , contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="obsolete">Coll CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="obsolete">Angiografia</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosi</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A mida...</translation>
-    </message>
-    <message>
-        <source>Thick Slab</source>
-        <translation type="obsolete">Gruix de tall</translation>
     </message>
     <message>
         <source>...</source>
@@ -608,7 +411,7 @@
     </message>
     <message>
         <source>Thick Slab (mm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruix de tall (mm)</translation>
     </message>
 </context>
 <context>
@@ -672,10 +475,6 @@
         <translation>MPR 3D-2D</translation>
     </message>
     <message>
-        <source>Default Viewer</source>
-        <translation type="obsolete">Visor per defecte</translation>
-    </message>
-    <message>
         <source>2D Viewer</source>
         <translation>Visor 2D</translation>
     </message>
@@ -686,21 +485,6 @@
     <message>
         <source>Loading, please wait...</source>
         <translation>Carregant, si us plau espereu...</translation>
-    </message>
-</context>
-<context>
-    <name>udg::Q2DViewer</name>
-    <message>
-        <source>Slice: %1/%2</source>
-        <translation type="obsolete">Tall: %1/%2</translation>
-    </message>
-    <message>
-        <source>Image Size: %1 x %2
-View Size: %3 x %4
-WW: %5 WL: %6 </source>
-        <translation type="obsolete">Mida Imatge: %1 x %2
-Mida Vista: %3 x %4
-WW: %5 WL: %6</translation>
     </message>
 </context>
 <context>
@@ -752,14 +536,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>XZ : Coronal</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="obsolete">Canviar a Vista Doble</translation>
-    </message>
-    <message>
-        <source>Switch Single View</source>
-        <translation type="obsolete">Canviar a Vista Simple</translation>
     </message>
     <message>
         <source>&amp;Single View</source>
@@ -817,60 +593,8 @@ WW: %5 WL: %6</translation>
         <translation></translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Defecte</translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">Ós CT</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">Pulmó CT</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="obsolete">Teixits Tous CT, baix contrast</translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="obsolete">Fetge CT , baix constrast</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="obsolete">Teixits Tous CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="obsolete">Fetge CT , contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="obsolete">Coll CT, contrast mitjà</translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="obsolete">Angiografia</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosi</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A mida...</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="obsolete">Canviar a Vista Doble</translation>
     </message>
     <message>
         <source>Choose Serie To Compare</source>
@@ -904,60 +628,8 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::QApplicationMainWindow</name>
     <message>
-        <source>&amp;Mutual Information</source>
-        <translation type="obsolete">Informació &amp;Mútua</translation>
-    </message>
-    <message>
-        <source>Loading image data...</source>
-        <translation type="obsolete">Carregant dades d&apos;imatge...</translation>
-    </message>
-    <message>
-        <source>Abort</source>
-        <translation type="obsolete">Abortar</translation>
-    </message>
-    <message>
-        <source>Progress</source>
-        <translation type="obsolete">Progrés</translation>
-    </message>
-    <message>
-        <source>Caption</source>
-        <translation type="obsolete">Llegenda</translation>
-    </message>
-    <message>
         <source>StarViewer</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="obsolete">Imatges MetaIO (*.mhd);;Imatges DICOM (*.dcm);;Tots els Arxius (*)</translation>
-    </message>
-    <message>
-        <source>JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="obsolete">Imatge JPEG (*.jpg);;Imatges MetaIO (*.mhd);;Imatges DICOM (*.dcm);;Tots els Arxius (*)</translation>
-    </message>
-    <message>
-        <source>JPEG Images (*.jpg)</source>
-        <translation type="obsolete">Imatges JPEG (*.jpg)</translation>
-    </message>
-    <message>
-        <source>MetaIO Images (*.mhd)</source>
-        <translation type="obsolete">Imatges MetaIO (*.mhd)</translation>
-    </message>
-    <message>
-        <source>PNG Images (*.png)</source>
-        <translation type="obsolete">Imatges PNG (*.png)</translation>
-    </message>
-    <message>
-        <source>TIFF Images (*.tiff)</source>
-        <translation type="obsolete">Imatges Tiff (*.tiff)</translation>
-    </message>
-    <message>
-        <source>BMP Images (*.bmp)</source>
-        <translation type="obsolete">Imatges BMP (*.bmp)</translation>
-    </message>
-    <message>
-        <source>DICOM Images (*.dcm)</source>
-        <translation type="obsolete">Imatges DICOM (*.dcm)</translation>
     </message>
     <message>
         <source>&amp;New</source>
@@ -966,10 +638,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
-    </message>
-    <message>
-        <source>Create a new working area</source>
-        <translation type="obsolete">Crea un nou espai de treball</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
@@ -984,48 +652,12 @@ WW: %5 WL: %6</translation>
         <translation>Obrir un arxiu de volum existent</translation>
     </message>
     <message>
-        <source>Export to JPEG</source>
-        <translation type="obsolete">Exportar a format JPEG</translation>
-    </message>
-    <message>
-        <source>Export the volume to jpeg format</source>
-        <translation type="obsolete">Exportar el volum a format jpeg</translation>
-    </message>
-    <message>
-        <source>Export to MetaIO</source>
-        <translation type="obsolete">Export al format MetaIO</translation>
-    </message>
-    <message>
-        <source>Export the volume to MetaIO format</source>
-        <translation type="obsolete">Exportar el volum al format MetaIO</translation>
-    </message>
-    <message>
-        <source>&amp;Show ToolBox</source>
-        <translation type="obsolete">Mostrar la Capsa d&apos;Eines</translation>
-    </message>
-    <message>
-        <source>Show or hide the toolbox</source>
-        <translation type="obsolete">Mostrar o amagar la Caipsa d&apos;Eines</translation>
-    </message>
-    <message>
         <source>&amp;About</source>
         <translation>Sobre</translation>
     </message>
     <message>
         <source>Show the application&apos;s About box</source>
         <translation>Mostra el missatge informatiu de l&apos;aplicació</translation>
-    </message>
-    <message>
-        <source>Arranges all windows in a tile pattern</source>
-        <translation type="obsolete">Coloca totes les finestres en un patró de quadrícula</translation>
-    </message>
-    <message>
-        <source>&amp;Cascade</source>
-        <translation type="obsolete">&amp;Cascada</translation>
-    </message>
-    <message>
-        <source>Arranges all the windows in a cascade pattern</source>
-        <translation type="obsolete">Coloca les finestres en un patró de cascada</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
@@ -1048,48 +680,8 @@ WW: %5 WL: %6</translation>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <source>Close the current window</source>
-        <translation type="obsolete">Tancar la finestra actual</translation>
-    </message>
-    <message>
-        <source>Export file dialog</source>
-        <translation type="obsolete">Diàleg d&apos;exportació d&apos;arxius</translation>
-    </message>
-    <message>
-        <source>Chose an image filename</source>
-        <translation type="obsolete">Escull un nom d&apos;arxiu per a la imatge</translation>
-    </message>
-    <message>
-        <source>&amp;Import</source>
-        <translation type="obsolete">&amp;Importar</translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="obsolete">&amp;Exportar</translation>
-    </message>
-    <message>
-        <source>&amp;Recent files</source>
-        <translation type="obsolete">Arxius &amp;Recents</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Arxiva</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation type="obsolete">&amp;Vista</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation type="obsolete">&amp;Eines</translation>
-    </message>
-    <message>
-        <source>&amp;Options</source>
-        <translation type="obsolete">&amp;Opcions</translation>
-    </message>
-    <message>
-        <source>&amp;Windows</source>
-        <translation type="obsolete">&amp;Finestres</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -1100,64 +692,12 @@ WW: %5 WL: %6</translation>
         <translation>Arxiva</translation>
     </message>
     <message>
-        <source>Options</source>
-        <translation type="obsolete">Opcions</translation>
-    </message>
-    <message>
-        <source>Mutual Information</source>
-        <translation type="obsolete">Informació Mútua</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Error</translation>
-    </message>
-    <message>
-        <source>Exception while reading file. Cannot open the specified file.</source>
-        <translation type="obsolete">Excepció mentres es llegia l&apos;arxiu. No s&apos;ha pogut obrir l&apos;arxiu especificat.</translation>
-    </message>
-    <message>
-        <source>Loading image %1</source>
-        <translation type="obsolete">Carregant l&apos;imatge %1</translation>
-    </message>
-    <message>
-        <source>File loaded</source>
-        <translation type="obsolete">Arxiu carregat</translation>
-    </message>
-    <message>
-        <source>Error loading %1</source>
-        <translation type="obsolete">Error carregant %1</translation>
-    </message>
-    <message>
-        <source>%1 - %2</source>
-        <translation type="obsolete">%1 -%2</translation>
-    </message>
-    <message>
-        <source>2D Viewer</source>
-        <translation type="obsolete">Visor 2D</translation>
-    </message>
-    <message>
-        <source>&amp;%1 %2</source>
-        <translation type="obsolete">&amp;%1 %2</translation>
-    </message>
-    <message>
-        <source> MOD </source>
-        <translation type="obsolete">MOD</translation>
-    </message>
-    <message>
         <source>About StarViewer</source>
         <translation>Sobre l&apos;StarViewer</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 1.0&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2004 Universitat de Girona&lt;p&gt;StarViewer is a small application that lets you view &lt;b&gt;DICOM&lt;/b&gt;, &lt;b&gt;MHD&apos;s&lt;/b&gt;,... files and manipulate them.</source>
-        <translation type="obsolete">&lt;h2&gt;StarViewer 1.0&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2004 Universitat de Girona&lt;p&gt;L&apos;StarViewer és una petita aplicació que permet visualitzar arxius &lt;b&gt;DICOM&lt;/b&gt;, &lt;b&gt;MHD&apos;s&lt;/b&gt;,... i manipular-los.</translation>
-    </message>
-    <message>
         <source>&amp;Language</source>
         <translation>&amp;Idioma</translation>
-    </message>
-    <message>
-        <source>open file dialog</source>
-        <translation type="obsolete">Diàleg d&apos;obrir arxiu</translation>
     </message>
     <message>
         <source>Open a new working window</source>
@@ -1200,16 +740,8 @@ WW: %5 WL: %6</translation>
         <translation>Obrir l&apos;aplicació visor MPR 3D-2D</translation>
     </message>
     <message>
-        <source>Close the current volume</source>
-        <translation type="obsolete">Tanca el volum actual</translation>
-    </message>
-    <message>
         <source>&amp;Visualization</source>
         <translation>&amp;Visualització</translation>
-    </message>
-    <message>
-        <source>Extensions</source>
-        <translation type="obsolete">Extensions</translation>
     </message>
     <message>
         <source>Open &amp;DICOM Directory</source>
@@ -1232,10 +764,6 @@ WW: %5 WL: %6</translation>
         <translation>Canviar a llengua Castellana</translation>
     </message>
     <message>
-        <source>English</source>
-        <translation type="obsolete">Català</translation>
-    </message>
-    <message>
         <source>Switch to English Language</source>
         <translation>Canviar a llengua Anglesa</translation>
     </message>
@@ -1254,10 +782,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Open the 2D Viewer Application</source>
         <translation>Obrir l&apos;aplicacio visor 2D</translation>
-    </message>
-    <message>
-        <source>Close the current serie</source>
-        <translation type="obsolete">Tancar la sèrie actual</translation>
     </message>
     <message>
         <source>Close the current extension page</source>
@@ -1285,19 +809,15 @@ WW: %5 WL: %6</translation>
     </message>
     <message>
         <source>Show Log File</source>
-        <translation></translation>
+        <translation>Mostrar Arxiu de Bitàcola</translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation></translation>
+        <translation>Mostrar arxiu de bitàcola</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.%1</source>
-        <translation type="unfinished">&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer és un programari de processament d&apos;imatge dedicat a imatges DICOM produides per equipament mèdic (MRI, CT, PET, PET-CT, ...) També pot llegir altres formats de fitxer especificats per l&apos;estàndar MetaIO  ( fitxers *.mhd ). Compleix amb l&apos;estàndar DICOM per a la transferència i formats d&apos;imatges. Starviewer és capaç de rebre imatges transferides per un protocol de comunicació DICOM desde qualsevol PACS i modalitat d&apos;imatge mèdica (STORE SCP - Service Class Provider, STORE SCU - Service Class User i Consulta/Recuperació).&lt;p&gt;Starviewer està dissenyat per a la navegació i visualització d&apos;imatges multimodals i multidimensionals: Visor 2D,  Visor MPR 2D ( Multi Planar Reconstruction ), Visor MPR 3D, Visor Híbrid ( 3D/2D ) MPR i Projecció de Màxima Intensitat ( MIP ).&lt;p&gt;%1</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Version : 0.2-RC1&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
+        <translation>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer és un programari de processament d&apos;imatge dedicat a imatges DICOM produides per equipament mèdic (MRI, CT, PET, PET-CT, ...) També pot llegir altres formats de fitxer especificats per l&apos;estàndar MetaIO  ( fitxers *.mhd ). Compleix amb l&apos;estàndar DICOM per a la transferència i formats d&apos;imatges. Starviewer és capaç de rebre imatges transferides per un protocol de comunicació DICOM desde qualsevol PACS i modalitat d&apos;imatge mèdica (STORE SCP - Service Class Provider, STORE SCU - Service Class User i Consulta/Recuperació).&lt;p&gt;Starviewer està dissenyat per a la navegació i visualització d&apos;imatges multimodals i multidimensionals: Visor 2D,  Visor MPR 2D ( Multi Planar Reconstruction ), Visor MPR 3D, Visor Híbrid ( 3D/2D ) MPR i Projecció de Màxima Intensitat ( MIP ).&lt;p&gt;Versió: %1&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -1313,14 +833,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Select a Pacs for delete</source>
         <translation>Seleccioneu un Pacs per esborrar</translation>
-    </message>
-    <message>
-        <source>YES</source>
-        <translation type="obsolete">SI</translation>
-    </message>
-    <message>
-        <source>NO</source>
-        <translation type="obsolete">NO</translation>
     </message>
     <message>
         <source>AETitle field can&apos;t be empty</source>
@@ -1357,18 +869,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Are you sure you want to delete all Studies of the cache ?</source>
         <translation>Esteu segurs que voleu esborrar tots els estudis de la cache ?</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="obsolete">Si</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="obsolete">No</translation>
-    </message>
-    <message>
-        <source>Database not found.</source>
-        <translation type="obsolete">No s&apos;ha trobat la base de dades.</translation>
     </message>
     <message>
         <source>Error Number : </source>
@@ -1421,10 +921,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
         <translation>La base de dades està corrupte o error de sintaxis SQL</translation>
-    </message>
-    <message>
-        <source>Database is looked</source>
-        <translation type="obsolete">Base de dades bloquejada</translation>
     </message>
     <message>
         <source>To solve this error restart the user session</source>
@@ -1532,10 +1028,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Dicomdir Directory</source>
         <translation>Directori Dicomdir</translation>
-    </message>
-    <message>
-        <source>Please Select a study to remove</source>
-        <translation type="obsolete">Si us plau seleccioneu l&apos;estudi a esborrar</translation>
     </message>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
@@ -1692,10 +1184,6 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <source>Dialog</source>
-        <translation type="obsolete">Diàleg</translation>
-    </message>
-    <message>
         <source>Window Width</source>
         <translation>Contrast</translation>
     </message>
@@ -1714,29 +1202,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Custom Window Level Settings</source>
         <translation>Ajustament del contrast a mida</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QDefaultViewerExtensionBase</name>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">Ós CT</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">Pulmó CT</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosi</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A mida...</translation>
     </message>
 </context>
 <context>
@@ -1840,20 +1305,12 @@ WW: %5 WL: %6</translation>
         <translation>DESCARREGAT</translation>
     </message>
     <message>
-        <source> STORED </source>
-        <translation type="obsolete">EMMAGATZEMAT</translation>
-    </message>
-    <message>
         <source>STORED</source>
         <translation>ENVIAT</translation>
     </message>
 </context>
 <context>
     <name>udg::QOperationStateScreenBase</name>
-    <message>
-        <source>Retrieve list studies</source>
-        <translation type="obsolete">Llistat d&apos;estudis descarregats</translation>
-    </message>
     <message>
         <source>Status</source>
         <translation>Estat</translation>
@@ -1906,10 +1363,6 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::QPacsList</name>
     <message>
-        <source>Database not found.</source>
-        <translation type="obsolete">No s&apos;ha trobat la base de dades.</translation>
-    </message>
-    <message>
         <source>Error Number : </source>
         <translation>Error número :</translation>
     </message>
@@ -1932,88 +1385,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Database is looked</source>
         <translation>Base de dades bloquejada</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QRetrieveScreen</name>
-    <message>
-        <source>PENDING</source>
-        <translation type="obsolete">PENDENT</translation>
-    </message>
-    <message>
-        <source>Local</source>
-        <translation type="obsolete">Local</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="obsolete">Començat</translation>
-    </message>
-    <message>
-        <source>RETRIEVING</source>
-        <translation type="obsolete">DESCARREGANT</translation>
-    </message>
-    <message>
-        <source>ERROR</source>
-        <translation type="obsolete">ERROR</translation>
-    </message>
-    <message>
-        <source>RETRIEVED</source>
-        <translation type="obsolete">DESCARREGAT</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QRetrieveScreenBase</name>
-    <message>
-        <source>Retrieve list studies</source>
-        <translation type="obsolete">Llistat d&apos;estudis descarregats</translation>
-    </message>
-    <message>
-        <source>Patient ID</source>
-        <translation type="obsolete">ID Pacient</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="obsolete">Hora</translation>
-    </message>
-    <message>
-        <source>Series</source>
-        <translation type="obsolete">Sèries</translation>
-    </message>
-    <message>
-        <source>Image</source>
-        <translation type="obsolete">Imatge</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Netejar</translation>
-    </message>
-    <message>
-        <source>Status                         </source>
-        <translation type="obsolete">Estat</translation>
-    </message>
-    <message>
-        <source>Direction</source>
-        <translation type="obsolete">Direcció</translation>
-    </message>
-    <message>
-        <source>From/To</source>
-        <translation type="obsolete">De/Cap a</translation>
-    </message>
-    <message>
-        <source>Patient Name</source>
-        <translation type="obsolete">Nom Pacient</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Data</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="obsolete">Estat</translation>
-    </message>
-    <message>
-        <source>Images</source>
-        <translation type="obsolete">Imatges</translation>
     </message>
 </context>
 <context>
@@ -2047,10 +1418,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>&amp;Delete</source>
         <translation>&amp;Esborrar</translation>
-    </message>
-    <message>
-        <source>Study</source>
-        <translation type="obsolete">Estudi </translation>
     </message>
     <message>
         <source>Series </source>
@@ -2218,14 +1585,6 @@ WW: %5 WL: %6</translation>
         <translation>No s&apos;ha especificat cap filtre per la cerca. Aquesta cerca pot necessitar bastanta estona. Esteu segurs que voleu continuar ?</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation type="obsolete">Si</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="obsolete">No</translation>
-    </message>
-    <message>
         <source>StarViewer</source>
         <translation></translation>
     </message>
@@ -2241,10 +1600,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>No study match found.</source>
         <translation>No s&apos;han trobat coincidències.</translation>
-    </message>
-    <message>
-        <source>Error! connecting to PACS : </source>
-        <translation type="obsolete">ERROR! Connectant al Pacs :</translation>
     </message>
     <message>
         <source>Error! Can&apos;t query studies in PACS : </source>
@@ -2264,28 +1619,12 @@ WW: %5 WL: %6</translation>
         <translation>Selecciona un estudi a descarregar</translation>
     </message>
     <message>
-        <source>Error disk space under 1 Gb. Plese free spaces in your disk </source>
-        <translation type="obsolete">Espai de disc dur per sota 1 GB. Si us plau allibera espai en el teu disc dur per descarregar nous estudis</translation>
-    </message>
-    <message>
         <source>Internal Error : </source>
         <translation>Error intern :</translation>
     </message>
     <message>
-        <source>Error trying to visualitzate the study</source>
-        <translation type="obsolete">ERROR! Intentant visualitzar l&apos;estudi</translation>
-    </message>
-    <message>
         <source>Please select a study to delete</source>
         <translation>Si us plau selecciona un estudi a esborrar</translation>
-    </message>
-    <message>
-        <source>The study has been retrieved.</source>
-        <translation type="obsolete">L&apos;estudi ha estat descarregat.</translation>
-    </message>
-    <message>
-        <source>Database not found.</source>
-        <translation type="obsolete">No s&apos;ha trobat la base de dades.</translation>
     </message>
     <message>
         <source>Error Number : </source>
@@ -2421,10 +1760,6 @@ WW: %5 WL: %6</translation>
     <message>
         <source>Retrieve</source>
         <translation>Descarregar</translation>
-    </message>
-    <message>
-        <source>Retrieve List</source>
-        <translation type="obsolete">Llista de descàrrega</translation>
     </message>
     <message>
         <source>View</source>

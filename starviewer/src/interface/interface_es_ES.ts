@@ -34,10 +34,6 @@
         <translation>Borrar</translation>
     </message>
     <message>
-        <source>Delete selected Pacss</source>
-        <translation type="obsolete">Borrar los Pacs seleccionados</translation>
-    </message>
-    <message>
         <source>Test</source>
         <translation>Compobar</translation>
     </message>
@@ -48,10 +44,6 @@
     <message>
         <source>Clear</source>
         <translation>Borrar</translation>
-    </message>
-    <message>
-        <source>Crear the text boxes</source>
-        <translation type="obsolete">Borrar las cajas de texto</translation>
     </message>
     <message>
         <source>&lt;b&gt;AE Title :&lt;/b&gt;</source>
@@ -100,10 +92,6 @@
     <message>
         <source>Delete all the studies of the cache</source>
         <translation>Borrar todos los estudios de la cache</translation>
-    </message>
-    <message>
-        <source>Comptact Database</source>
-        <translation type="obsolete">Compactar base de Datos</translation>
     </message>
     <message>
         <source>&lt;b&gt;Cache Image Path :&lt;/b&gt;</source>
@@ -262,10 +250,6 @@
         <translation>Información de la Institución</translation>
     </message>
     <message>
-        <source>Institution information contact</source>
-        <translation type="obsolete">Información de contacto de la institución</translation>
-    </message>
-    <message>
         <source>Institution :</source>
         <translation>Institución:</translation>
     </message>
@@ -328,54 +312,6 @@
         <translation>WW/WL:</translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Defecto</translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">CT Óseo</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">CT Pulmonar</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , noncontrast</source>
-        <translation type="obsolete">CT Tejidos Blandos, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Liver , noncontrast</source>
-        <translation type="obsolete">CT Hígado, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , medium contrast</source>
-        <translation type="obsolete">CT Tejidos Blandos, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Liver , medium contrast</source>
-        <translation type="obsolete">CT Hígado, contraste medio</translation>
-    </message>
-    <message>
-        <source>Neck , medium contrast</source>
-        <translation type="obsolete">Cuello, contraste medio</translation>
-    </message>
-    <message>
-        <source>Angiography</source>
-        <translation type="obsolete">Angiografía</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosis</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A medida...</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -401,54 +337,6 @@
     <message>
         <source>WW/WL:</source>
         <translation>WW/WL:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Por defecto</translation>
-    </message>
-    <message>
-        <source>CT Bone  </source>
-        <translation type="obsolete">CT Óseo</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">CT Pulmonar</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , noncontrast</source>
-        <translation type="obsolete">CT Tejidos Blandos, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Liver , noncontrast</source>
-        <translation type="obsolete">CT Hígado, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , medium contrast</source>
-        <translation type="obsolete">CT Tejidos Blandos, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Liver , medium contrast</source>
-        <translation type="obsolete">CT Hígado, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Neck , medium contrast</source>
-        <translation type="obsolete">Cuello, contraste medio</translation>
-    </message>
-    <message>
-        <source>Angiography</source>
-        <translation type="obsolete">Angiografía</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosis</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom</source>
-        <translation type="obsolete">A medida...</translation>
     </message>
     <message>
         <source>Enable axial plane</source>
@@ -502,58 +390,6 @@
         <translation>WW/WL:</translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Por defecto</translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">CT Óseo</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">CT Pulmonar</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="obsolete">CT Tejidos Blandos, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="obsolete">CT Hígado, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="obsolete">CT Tejidos Blandos, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="obsolete">CT Hígado, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="obsolete">Cuello, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="obsolete">Angiografía</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosis</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A medida...</translation>
-    </message>
-    <message>
-        <source>Thick Slab</source>
-        <translation type="obsolete">Grosor de corte</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -575,7 +411,7 @@
     </message>
     <message>
         <source>Thick Slab (mm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosor de corte (mm)</translation>
     </message>
 </context>
 <context>
@@ -639,10 +475,6 @@
         <translation>MPR 3D-2D</translation>
     </message>
     <message>
-        <source>Default Viewer</source>
-        <translation type="obsolete">Visor por defecto</translation>
-    </message>
-    <message>
         <source>2D Viewer</source>
         <translation>Visor 2D</translation>
     </message>
@@ -653,59 +485,6 @@
     <message>
         <source>Loading, please wait...</source>
         <translation type="unfinished">Cargando, espere por favor</translation>
-    </message>
-</context>
-<context>
-    <name>udg::Q2DViewer</name>
-    <message>
-        <source>&amp;Reset</source>
-        <translation type="obsolete">&amp;Reiniciar</translation>
-    </message>
-    <message>
-        <source>Ctrl+R</source>
-        <translation type="obsolete">Ctrl+R</translation>
-    </message>
-    <message>
-        <source>Reset initial parameters</source>
-        <translation type="obsolete">Reiniciar parámetros iniciales</translation>
-    </message>
-    <message>
-        <source>No Info</source>
-        <translation type="obsolete">Sin Información</translation>
-    </message>
-    <message>
-        <source>No info</source>
-        <translation type="obsolete">Sin Información</translation>
-    </message>
-    <message>
-        <source>Slice: %1/%2</source>
-        <translation type="obsolete">Corte: %1/%2</translation>
-    </message>
-    <message>
-        <source>Image Size: %1 x %2
-View Size: %3 x %4
-WW: %5 WL: %6 </source>
-        <translation type="obsolete">Tamaño Imagen: %1 x %2
-Tamaño Vista: %3 x %4
-WW: %5 WL: %6</translation>
-    </message>
-    <message>
-        <source>%1
-%2
-%3
-Acc:%4
-%5
-%6</source>
-        <translation type="obsolete">%1
-%2
-%3
-Acc:%4
-%5
-%6</translation>
-    </message>
-    <message>
-        <source>%1</source>
-        <translation type="obsolete">%1</translation>
     </message>
 </context>
 <context>
@@ -757,14 +536,6 @@ Acc:%4
     <message>
         <source>XZ : Coronal</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="obsolete">Cambiar a Vista Doble</translation>
-    </message>
-    <message>
-        <source>Switch Single View</source>
-        <translation type="obsolete">Cambiar a Vista Simple</translation>
     </message>
     <message>
         <source>&amp;Single View</source>
@@ -822,60 +593,8 @@ Acc:%4
         <translation></translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Predeterminado</translation>
-    </message>
-    <message>
-        <source>CT Bone</source>
-        <translation type="obsolete">CT Óseo</translation>
-    </message>
-    <message>
-        <source>CT Lung</source>
-        <translation type="obsolete">CT Pulmonar</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues, noncontrast</source>
-        <translation type="obsolete">CT Tejidos Blandos, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Liver, noncontrast</source>
-        <translation type="obsolete">CT Hígado, bajo contraste</translation>
-    </message>
-    <message>
-        <source>CT Soft Tissues , Contrast Medium</source>
-        <translation type="obsolete">CT Tejidos Blandos, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Liver , Contrast Medium</source>
-        <translation type="obsolete">CT Hígado, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Neck , Constrast Medium</source>
-        <translation type="obsolete">Cuello, contraste medio</translation>
-    </message>
-    <message>
-        <source>CT Angiography</source>
-        <translation type="obsolete">Angiografía</translation>
-    </message>
-    <message>
-        <source>Osteoporosis</source>
-        <translation type="obsolete">Osteoporosis</translation>
-    </message>
-    <message>
-        <source>Emphysema</source>
-        <translation type="obsolete">Emfisema</translation>
-    </message>
-    <message>
-        <source>Custom...</source>
-        <translation type="obsolete">A medida...</translation>
-    </message>
-    <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Switch Double View</source>
-        <translation type="obsolete">Cambiar a Vista Doble</translation>
     </message>
     <message>
         <source>Choose Serie To Compare</source>
@@ -909,52 +628,8 @@ Acc:%4
 <context>
     <name>udg::QApplicationMainWindow</name>
     <message>
-        <source>Abort</source>
-        <translation type="obsolete">Abortar</translation>
-    </message>
-    <message>
-        <source>Progress</source>
-        <translation type="obsolete">Progreso</translation>
-    </message>
-    <message>
-        <source>Caption</source>
-        <translation type="obsolete">Leyenda</translation>
-    </message>
-    <message>
         <source>StarViewer</source>
         <translation>StarViewer</translation>
-    </message>
-    <message>
-        <source>MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="obsolete">Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
-    </message>
-    <message>
-        <source>JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)</source>
-        <translation type="obsolete">Imágenes JPEG (*.jpg);;Imágenes MetaIO (*.mhd);;Imágenes DICOM (*.dcm);;Todos los archivos (*)</translation>
-    </message>
-    <message>
-        <source>JPEG Images (*.jpg)</source>
-        <translation type="obsolete">Imágenes JPEG (*.jpg)</translation>
-    </message>
-    <message>
-        <source>MetaIO Images (*.mhd)</source>
-        <translation type="obsolete">Imágenes MetaIO (*.mhd)</translation>
-    </message>
-    <message>
-        <source>PNG Images (*.png)</source>
-        <translation type="obsolete">Imágenes PNG (*.png)</translation>
-    </message>
-    <message>
-        <source>TIFF Images (*.tiff)</source>
-        <translation type="obsolete">Imágenes TIFF (*.tiff)</translation>
-    </message>
-    <message>
-        <source>BMP Images (*.bmp)</source>
-        <translation type="obsolete">Imágenes BMP (*.bmp)</translation>
-    </message>
-    <message>
-        <source>DICOM Images (*.dcm)</source>
-        <translation type="obsolete">Imágenes DICOM (*.dcm)</translation>
     </message>
     <message>
         <source>&amp;New</source>
@@ -963,10 +638,6 @@ Acc:%4
     <message>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
-    </message>
-    <message>
-        <source>Create a new working area</source>
-        <translation type="obsolete">Crear una nueva área de trabajo</translation>
     </message>
     <message>
         <source>&amp;Open...</source>
@@ -981,64 +652,12 @@ Acc:%4
         <translation>Abrir un archivo de volumen existente</translation>
     </message>
     <message>
-        <source>Export to JPEG</source>
-        <translation type="obsolete">Exportar a JPEG</translation>
-    </message>
-    <message>
-        <source>Export the volume to jpeg format</source>
-        <translation type="obsolete">Exportar el volumen a formato JPEG</translation>
-    </message>
-    <message>
-        <source>Export to MetaIO</source>
-        <translation type="obsolete">Exportar a MetaIO</translation>
-    </message>
-    <message>
-        <source>Export the volume to MetaIO format</source>
-        <translation type="obsolete">Exportar el volumen a formato MetaIO</translation>
-    </message>
-    <message>
-        <source>Export to PNG</source>
-        <translation type="obsolete">Exportar a PNG</translation>
-    </message>
-    <message>
-        <source>Export the volume to png format</source>
-        <translation type="obsolete">Exportar el volumen a formato png</translation>
-    </message>
-    <message>
-        <source>Export to BMP</source>
-        <translation type="obsolete">Exportar a BMP</translation>
-    </message>
-    <message>
-        <source>Export the volume to bmp format</source>
-        <translation type="obsolete">Exportar el volumen a formato de mapa de bits</translation>
-    </message>
-    <message>
-        <source>&amp;Show ToolBox</source>
-        <translation type="obsolete">&amp;Mostrar la caja de herramientas</translation>
-    </message>
-    <message>
-        <source>Show or hide the toolbox</source>
-        <translation type="obsolete">Mostrar u ocultar la caja de herramientas</translation>
-    </message>
-    <message>
         <source>&amp;About</source>
         <translation>&amp;Sobre</translation>
     </message>
     <message>
         <source>Show the application&apos;s About box</source>
         <translation>Muestra información de la aplicación</translation>
-    </message>
-    <message>
-        <source>&amp;Tile</source>
-        <translation type="obsolete">Cua&amp;drícula</translation>
-    </message>
-    <message>
-        <source>&amp;Cascade</source>
-        <translation type="obsolete">&amp;Cascada</translation>
-    </message>
-    <message>
-        <source>Arranges all the windows in a cascade pattern</source>
-        <translation type="obsolete">Colocar todas las ventanas en un patrón de cascada</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
@@ -1061,48 +680,8 @@ Acc:%4
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <source>Close the current window</source>
-        <translation type="obsolete">Cerrar la ventana actual</translation>
-    </message>
-    <message>
-        <source>Export file dialog</source>
-        <translation type="obsolete">Diaogo de exportación de archivos</translation>
-    </message>
-    <message>
-        <source>Chose an image filename</source>
-        <translation type="obsolete">Escoger un nombre de archivo de imagen</translation>
-    </message>
-    <message>
-        <source>&amp;Import</source>
-        <translation type="obsolete">&amp;Importar</translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="obsolete">&amp;Exportar</translation>
-    </message>
-    <message>
-        <source>&amp;Recent files</source>
-        <translation type="obsolete">Archivos &amp;Recientes</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Archivar</translation>
-    </message>
-    <message>
-        <source>&amp;View</source>
-        <translation type="obsolete">V&amp;ista</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation type="obsolete">&amp;Herramientas</translation>
-    </message>
-    <message>
-        <source>&amp;Options</source>
-        <translation type="obsolete">&amp;Opciones</translation>
-    </message>
-    <message>
-        <source>&amp;Windows</source>
-        <translation type="obsolete">&amp;Ventanas</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -1113,48 +692,12 @@ Acc:%4
         <translation>Archivar</translation>
     </message>
     <message>
-        <source>Options</source>
-        <translation type="obsolete">Opciones</translation>
-    </message>
-    <message>
-        <source>Mutual Information</source>
-        <translation type="obsolete">Información Mútua</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Error</translation>
-    </message>
-    <message>
-        <source>Exception while reading file. Cannot open the specified file.</source>
-        <translation type="obsolete">Excepción durante la lectura del archivo. No se ha podido abrir el archivo especificado.</translation>
-    </message>
-    <message>
-        <source>Loading image %1</source>
-        <translation type="obsolete">Cargando imagen %1</translation>
-    </message>
-    <message>
-        <source>File loaded</source>
-        <translation type="obsolete">Archivo cargado</translation>
-    </message>
-    <message>
-        <source>Error loading %1</source>
-        <translation type="obsolete">Error cargando %1</translation>
-    </message>
-    <message>
-        <source>2D Viewer</source>
-        <translation type="obsolete">Visor 2D</translation>
-    </message>
-    <message>
         <source>About StarViewer</source>
         <translation>Sobre Starviewer</translation>
     </message>
     <message>
         <source>&amp;Language</source>
         <translation>&amp;Idioma</translation>
-    </message>
-    <message>
-        <source>open file dialog</source>
-        <translation type="obsolete">Diálogo de abrir archivo</translation>
     </message>
     <message>
         <source>Open a new working window</source>
@@ -1177,10 +720,6 @@ Acc:%4
         <translation>Visor &amp;MPR 2D</translation>
     </message>
     <message>
-        <source>Ctrl+M</source>
-        <translation type="obsolete">Ctrl+M</translation>
-    </message>
-    <message>
         <source>Open the 2D MPR Application Viewer</source>
         <translation>Abre la aplicación Visor MPR 2D</translation>
     </message>
@@ -1197,24 +736,12 @@ Acc:%4
         <translation>Visor MP&amp;R 3D-2D</translation>
     </message>
     <message>
-        <source>Ctrl+R</source>
-        <translation type="obsolete">Ctrl+R</translation>
-    </message>
-    <message>
         <source>Open the 3D-2D MPR Application Viewer</source>
         <translation>Abre la aplicación Visor MPR 3D-2D</translation>
     </message>
     <message>
-        <source>Close the current volume</source>
-        <translation type="obsolete">Cierra el volumen actual</translation>
-    </message>
-    <message>
         <source>&amp;Visualization</source>
         <translation>&amp;Visualización</translation>
-    </message>
-    <message>
-        <source>Extensions</source>
-        <translation type="obsolete">Extensiones</translation>
     </message>
     <message>
         <source>Open &amp;DICOM Directory</source>
@@ -1229,32 +756,12 @@ Acc:%4
         <translation>Abrir una carpeta DICOM existente</translation>
     </message>
     <message>
-        <source>&amp;Default Viewer</source>
-        <translation type="obsolete">Visor por &amp;Defecto</translation>
-    </message>
-    <message>
-        <source>Open the Default Viewer Application</source>
-        <translation type="obsolete">Abrir la aplicación visor por defecto</translation>
-    </message>
-    <message>
-        <source>Catalan</source>
-        <translation type="obsolete">Catalán</translation>
-    </message>
-    <message>
         <source>Switch to Catalan Language</source>
         <translation>Cambiar a lengua catalana</translation>
     </message>
     <message>
-        <source>Spanish</source>
-        <translation type="obsolete">Castellano</translation>
-    </message>
-    <message>
         <source>Switch to Spanish Language</source>
         <translation>Cambiar a lengua castellana</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="obsolete">Inglés</translation>
     </message>
     <message>
         <source>Switch to English Language</source>
@@ -1275,10 +782,6 @@ Acc:%4
     <message>
         <source>Open the 2D Viewer Application</source>
         <translation>Abrir la aplicación Visor 2D</translation>
-    </message>
-    <message>
-        <source>Close the current serie</source>
-        <translation type="obsolete">Cerrar la serie actual</translation>
     </message>
     <message>
         <source>Close the current extension page</source>
@@ -1306,19 +809,16 @@ Acc:%4
     </message>
     <message>
         <source>Show Log File</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar Archivo de Bitácora</translation>
     </message>
     <message>
         <source>Show log file</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar archivo de bitácora</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Version : 0.2-RC1&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
+        <translation>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer és un programa de procesamiento de imagen dedicado a imágenes DICOM producidas por equipos médicos (MRI, CT, PET, PET-CT, ...) También puede leer otros formatos de archivo especificados por el estándar MetaIO  ( archivos *.mhd ). Cumple con el estándar DICOM para la transferencia y formatos de imágenes. Starviewer es capaz de recibir imágenes transferidas por un protocolo de comunicación DICOM desde qualquier PACS y modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User y Consulta/Recuperación).&lt;p&gt;Starviewer está diseñado para la navegación y visualización de imágenes multimodales y multidimensionales: Visor 2D,  Visor MPR 2D ( Multi Planar Reconstruction ), Visor MPR 3D, Visor Híbrido ( 3D/2D ) MPR y Projección de Máxima Intensidad ( MIP ).&lt;p&gt;Versión: %1&lt;/p&gt;
+</translation>
     </message>
 </context>
 <context>
@@ -1424,10 +924,6 @@ Acc:%4
         <translation>La base de datos está corrupta o error en sintaxis SQL</translation>
     </message>
     <message>
-        <source>Database is looked</source>
-        <translation type="obsolete">La base de datos está bloqueada</translation>
-    </message>
-    <message>
         <source>To solve this error restart the user session</source>
         <translation>Para resolver este error, reinicie la sesión de usuario</translation>
     </message>
@@ -1479,10 +975,6 @@ Acc:%4
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <source>Create dicomdir at</source>
-        <translation type="obsolete">Crear el Dicomdir en</translation>
-    </message>
-    <message>
         <source>Cd occupied</source>
         <translation>Cd ocupado</translation>
     </message>
@@ -1503,16 +995,8 @@ Acc:%4
         <translation>El estudio ya está añadido en la lista de Dicomdir</translation>
     </message>
     <message>
-        <source>Please enter a diretory to create de dicomdir</source>
-        <translation type="obsolete">Por favor indique el directorio donde se tiene que crear el Dicomdir</translation>
-    </message>
-    <message>
         <source>Create Dicomdir</source>
         <translation>Crear Dicomcidr</translation>
-    </message>
-    <message>
-        <source>The directory contains a dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
-        <translation type="obsolete">El directorio ya contiene un dicomdir. Desea sobreescribir el directorio i borrar todos los archivos del directorio?</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
@@ -1545,10 +1029,6 @@ Acc:%4
     <message>
         <source>Dicomdir Directory</source>
         <translation>Directorio Dicomdir</translation>
-    </message>
-    <message>
-        <source>Please Select a study to remove</source>
-        <translation type="obsolete">Por favor seleccione el estudio que desea quitar</translation>
     </message>
     <message>
         <source>Database is corrupted or SQL syntax error</source>
@@ -1589,10 +1069,6 @@ Acc:%4
     <message>
         <source>Create Dicomdir at</source>
         <translation>Crear el dicomdir en </translation>
-    </message>
-    <message>
-        <source>With this study the Dicomdir exceeds the size of the selected device. Please change the selected device or create the Dicomdir</source>
-        <translation type="obsolete">Con este nuevo estudio se excede el tamaño del dispositivo seleccionado. Por favor canvie de dispositivo o cree el Dicomdir, sin el nuevo estudio</translation>
     </message>
     <message>
         <source>Please enter a diretory to create de Dicomdir</source>
@@ -1692,10 +1168,6 @@ Acc:%4
     <message>
         <source>Remove</source>
         <translation>Quitar</translation>
-    </message>
-    <message>
-        <source>Removel all the studies of the list</source>
-        <translation type="obsolete">Quitar todos los estudios de la lista</translation>
     </message>
     <message>
         <source>Remove All</source>
@@ -1834,20 +1306,12 @@ Acc:%4
         <translation>DESCARGADO</translation>
     </message>
     <message>
-        <source> STORED </source>
-        <translation type="obsolete">ALMACENADO</translation>
-    </message>
-    <message>
         <source>STORED</source>
         <translation>ENVIADO</translation>
     </message>
 </context>
 <context>
     <name>udg::QOperationStateScreenBase</name>
-    <message>
-        <source>Retrieve list studies</source>
-        <translation type="obsolete">Lista de estudios descargados</translation>
-    </message>
     <message>
         <source>Status</source>
         <translation>Estado</translation>
@@ -1925,76 +1389,6 @@ Acc:%4
     </message>
 </context>
 <context>
-    <name>udg::QRetrieveScreen</name>
-    <message>
-        <source>PENDING</source>
-        <translation type="obsolete">PENDIENTE</translation>
-    </message>
-    <message>
-        <source>Local</source>
-        <translation type="obsolete">Local</translation>
-    </message>
-    <message>
-        <source>RETRIEVING</source>
-        <translation type="obsolete">DESCARGANDO</translation>
-    </message>
-    <message>
-        <source>ERROR</source>
-        <translation type="obsolete">ERROR</translation>
-    </message>
-    <message>
-        <source>RETRIEVED</source>
-        <translation type="obsolete">DESCARGADO</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QRetrieveScreenBase</name>
-    <message>
-        <source>Retrieve list studies</source>
-        <translation type="obsolete">Lista de estudios descargados</translation>
-    </message>
-    <message>
-        <source>Patient ID</source>
-        <translation type="obsolete">ID Paciente</translation>
-    </message>
-    <message>
-        <source>Started</source>
-        <translation type="obsolete">Empezado</translation>
-    </message>
-    <message>
-        <source>Series</source>
-        <translation type="obsolete">Series</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Borrar</translation>
-    </message>
-    <message>
-        <source>Direction</source>
-        <translation type="obsolete">Dirección</translation>
-    </message>
-    <message>
-        <source>From/To</source>
-        <translation type="obsolete">De/A</translation>
-    </message>
-    <message>
-        <source>Patient Name</source>
-        <translation type="obsolete">Nombre del paciente</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation type="obsolete">Fecha</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="obsolete">Estado</translation>
-    </message>
-    <message>
-        <source>Images</source>
-        <translation type="obsolete">Imagenes</translation>
-    </message>
-</context>
-<context>
     <name>udg::QSeriesListWidget</name>
     <message>
         <source>Series </source>
@@ -2025,10 +1419,6 @@ Acc:%4
     <message>
         <source>&amp;Delete</source>
         <translation>&amp;Borrar</translation>
-    </message>
-    <message>
-        <source>Study</source>
-        <translation type="obsolete">Estudio</translation>
     </message>
     <message>
         <source>Series </source>
@@ -2370,11 +1760,6 @@ Acc:%4
     <message>
         <source>Retrieve</source>
         <translation>Descargar</translation>
-    </message>
-    <message>
-        <source>Retrieve List</source>
-        <translation type="obsolete">
-Lista de descargas</translation>
     </message>
     <message>
         <source>View</source>
