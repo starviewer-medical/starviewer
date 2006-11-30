@@ -177,7 +177,8 @@ void QApplicationMainWindow::createActions()
     m_fullScreenAction = new QAction( this );
     m_fullScreenAction->setText( tr("Show Full Screen") );
     m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
-    m_fullScreenAction->setShortcut( Qt::CTRL + Qt::Key_Enter );
+    m_fullScreenAction->setShortcut( Qt::CTRL + Qt::Key_Return );
+    m_fullScreenAction->setShortcutContext( Qt::ApplicationShortcut );
     m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
     m_fullScreenAction->setCheckable( true );
     connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
@@ -338,7 +339,6 @@ void QApplicationMainWindow::createLanguageMenu()
 
     m_catalanAction = new QAction( this );
     m_catalanAction->setText( "Català" );
-    m_catalanAction->setShortcut( 0 );
     m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
     m_catalanAction->setCheckable( true );
     if( defaultLocale == QString("interface_ca_ES") )
@@ -351,7 +351,6 @@ void QApplicationMainWindow::createLanguageMenu()
 
     m_spanishAction = new QAction( this );
     m_spanishAction->setText( "Castellano" );
-    m_spanishAction->setShortcut( 0 );
     m_spanishAction->setStatusTip( tr("Switch to Spanish Language") );
     m_spanishAction->setCheckable( true );
     if( defaultLocale == QString("interface_es_ES") )
@@ -363,7 +362,6 @@ void QApplicationMainWindow::createLanguageMenu()
 
     m_englishAction = new QAction( this );
     m_englishAction->setText( "English" );
-    m_englishAction->setShortcut( 0 );
     m_englishAction->setStatusTip( tr("Switch to English Language") );
     m_englishAction->setCheckable( true );
     if( defaultLocale == QString("interface_en_GB") )
