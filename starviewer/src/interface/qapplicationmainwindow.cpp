@@ -476,6 +476,7 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 {
     writeSettings();
+    // \TODO aquí hauríem de controlar si l'aplicació està fent altres tasques pendents que s'haurien de finalitzar abans de tancar l'aplicació com per exemple imatges en descàrrega del PACS o similar
     event->accept();
 }
 
