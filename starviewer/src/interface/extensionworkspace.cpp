@@ -51,11 +51,16 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
 {
-    INFO_LOG( qPrintable( "Tancant extensió: " + application->objectName() ) );
-    this->removeTab( this->indexOf( application ) );
-    if( this->count() < 1 )
-        m_closeTabButton->hide();
-    m_lastIndex = this->currentIndex();
+    if( application )
+    {
+        INFO_LOG( qPrintable( "Tancant extensió: " + application->objectName() ) );
+        this->removeTab( this->indexOf( application ) );
+        if( this->count() < 1 )
+            m_closeTabButton->hide();
+        m_lastIndex = this->currentIndex();
+    }
+    else
+        DEBUG_LOG( "S'ha donat una widget nul per eliminar" );
 }
 
 void ExtensionWorkspace::closeCurrentApplication()
