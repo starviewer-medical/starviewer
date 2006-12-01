@@ -233,9 +233,11 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
         return state;
     }    
     
-    i = 1;//ignorem les capçaleres
-   
-    size = atol( resposta [i] );
+    if ( resposta[1] != NULL )
+    {   
+        size = atol( resposta [i] );
+    }
+    else size = 0;
    
    return state;  
 }
