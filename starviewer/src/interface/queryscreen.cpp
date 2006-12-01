@@ -143,13 +143,6 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_checkFrom, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextFrom( int ) ) );
     connect( m_checkTo, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
     
-    //lineedit al fer entrer que cerquin    
-    connect( m_textPatientID , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
-    connect( m_textLastName , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
-    connect( m_textFirstName , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
-    connect( m_textStudyID , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
-    connect( m_textAccessionNumber , SIGNAL( returnPressed() ) , this , SLOT( searchStudy() ) );
-    
     //checkbox
     connect( m_checkAll, SIGNAL( clicked() ) , this , SLOT( clearCheckedModality() ) );
     connect( m_checkCT, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
@@ -537,6 +530,7 @@ void QueryScreen::queryStudyDicomdir()
         m_studyTreeWidgetDicomdir->clear();        
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
+        cout<<"fai\n";
         return;
     }
 
