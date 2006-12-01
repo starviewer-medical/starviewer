@@ -9,6 +9,7 @@
 #include <QApplication>
 
 #include "starviewersettings.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -39,11 +40,13 @@ void StarviewerSettings::setMaximumDaysNotViewedStudy( QString  days )
 
 QString StarviewerSettings::getDatabasePath()
 {
-    QDir currentDir;
+    QDir dir;
     QString defaultDir;
     
     //construim directori per defecte
-    defaultDir.append( "/var/cache/starviewer/pacs/database/dicom.sdb" );
+    defaultDir.append( dir.homePath() + "/.starviewer/pacs/database/dicom.sdb" );
+    
+    DEBUG_LOG(defaultDir.toAscii().constData());
     
     return m_starviewerSettings.value( databaseRootKey , defaultDir ).toString();
 }
@@ -56,9 +59,10 @@ QString StarviewerSettings::getPoolSize()
 QString StarviewerSettings::getCacheImagePath()
 {
     QString defaultDir;
+    QDir dir;
     
     //construim directori per defecte
-    defaultDir.append( "/var/cache/starviewer/pacs/dicom/" );
+    defaultDir.append( dir.homePath() + "/.starviewer/pacs/dicom/" );
     
     return m_starviewerSettings.value( cacheImagePathKey , defaultDir ).toString();
 }
@@ -107,7 +111,7 @@ QString StarviewerSettings::getTimeout()
 
 QString StarviewerSettings::getLocalPort()
 {
-    return m_starviewerSettings.value( localPortKey , "104" ).toString();
+    return m_starviewerSettings.value( localPortKey , "4006" ).toString();
 }
 
 QString StarviewerSettings::getLanguage()

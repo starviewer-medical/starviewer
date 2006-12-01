@@ -962,14 +962,6 @@
         <source>Database is locked</source>
         <translation>La base de dades esta bloquejada</translation>
     </message>
-    <message>
-        <source>The extension of the database has to be &apos;.sdb&apos;</source>
-        <translation>L&apos;extensió de la base de dades ha de ser  &apos;.sdb&apos;</translation>
-    </message>
-    <message>
-        <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
-        <translation>Starviewer no pot crear la base de dades, perquè ja existeix una base de dades amb el mateix nom en el directori</translation>
-    </message>
 </context>
 <context>
     <name>udg::QCreateDicomdir</name>
@@ -1170,7 +1162,7 @@
     </message>
     <message>
         <source>Remove All</source>
-        <translation>Esborrar Tots</translation>
+        <translation>Esborrar tots</translation>
     </message>
     <message>
         <source>Size of Dicomdir :</source>
