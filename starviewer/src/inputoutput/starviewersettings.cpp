@@ -51,7 +51,7 @@ QString StarviewerSettings::getDatabasePath()
 
 QString StarviewerSettings::getPoolSize()
 {
-    return m_starviewerSettings.value( poolSizeKey , "30" ).toString();
+    return m_starviewerSettings.value( poolSizeKey , "20" ).toString();
 }
 
 QString StarviewerSettings::getCacheImagePath()
@@ -67,7 +67,7 @@ QString StarviewerSettings::getCacheImagePath()
 
 QString StarviewerSettings::getMaximumDaysNotViewedStudy()
 {
-    return m_starviewerSettings.value( MaximumDaysNotViewedStudy  ,  "10" ).toString();
+    return m_starviewerSettings.value( MaximumDaysNotViewedStudy  ,  "7" ).toString();
 }
 
 /************************ CONFIGURACIO PACS************************************************/
