@@ -207,7 +207,7 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
 
 Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
 {
-    int columns , rows , i = 0 , stateDatabase;
+    int columns , rows , stateDatabase;
     char **resposta = NULL , **error = NULL , errorNumber[5];
     std::string logMessage , sql;
     Status state;
@@ -235,7 +235,7 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
     
     if ( resposta[1] != NULL )
     {   
-        size = atol( resposta [i] );
+        size = atol( resposta [1] );
     }
     else size = 0;
    
