@@ -159,7 +159,7 @@
     </message>
     <message>
         <source>&lt;b&gt;Language :&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Idioma : &lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Idioma : &lt;/b&gt;</translation>
     </message>
     <message>
         <source>AETitle</source>
@@ -948,7 +948,7 @@
     </message>
     <message>
         <source> is correct </source>
-        <translation>  és correcte </translation>
+        <translation type="unfinished"> és correcte </translation>
     </message>
     <message>
         <source> doesn&apos;t responds correctly</source>
@@ -961,6 +961,14 @@
     <message>
         <source>Database is locked</source>
         <translation>La base de dades esta bloquejada</translation>
+    </message>
+    <message>
+        <source>The extension of the database has to be &apos;.sdb&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -159,7 +159,7 @@
     </message>
     <message>
         <source>&lt;b&gt;Language :&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Idioma :&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Idioma :&lt;/b&gt;</translation>
     </message>
     <message>
         <source>AETitle</source>
@@ -207,7 +207,7 @@
     </message>
     <message>
         <source>Delete studies that has not been viewed in :</source>
-        <translation>Borrar estudios que no se han mirado en:</translation>
+        <translation>Borrar estudios que no se han abierto en:</translation>
     </message>
     <message>
         <source>days</source>
@@ -945,11 +945,11 @@
     </message>
     <message>
         <source> Test of Pacs </source>
-        <translation>El Testeo del Pacs </translation>
+        <translation>El Testeo del Pacs(sp)</translation>
     </message>
     <message>
         <source> is correct </source>
-        <translation> es correcto</translation>
+        <translation>(sp)es correcto</translation>
     </message>
     <message>
         <source> doesn&apos;t responds correctly</source>
