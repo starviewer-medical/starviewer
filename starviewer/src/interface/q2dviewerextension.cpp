@@ -182,7 +182,6 @@ void Q2DViewerExtension::createConnections()
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    // \TODO ara ho fem "a saco" però s'hauria de millorar
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
     double wl[2];
@@ -195,11 +194,10 @@ void Q2DViewerExtension::setInput( Volume *input )
 void Q2DViewerExtension::setSecondInput( Volume *input )
 {
     m_secondaryVolume = input;
-    // \TODO ara ho fem "a saco" però s'hauria de millorar
     m_2DView2_2->setInput( m_secondaryVolume );
     INFO_LOG("Afegim un segon volum per comparar")
     changeViewToAxial();
-    changeViewToDouble();
+    m_doubleViewAction->trigger();
 }
 
 void Q2DViewerExtension::changeViewToAxial()
@@ -218,7 +216,7 @@ void Q2DViewerExtension::changeViewToAxial()
     m_slider2_1->setMaximum( extent[5] );
     m_viewText2_1->setText( tr("XY : Axial") );
     m_2DView2_1->setViewToAxial();
-    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.1)")
+    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
     m_2DView2_1->render();
 
     m_spinBox2_2->setMinimum( secondExtent[4] );
@@ -226,7 +224,7 @@ void Q2DViewerExtension::changeViewToAxial()
     m_slider2_2->setMaximum( secondExtent[5] );
     m_viewText2_2->setText( tr("XY : Axial") );
     m_2DView2_2->setViewToAxial();
-    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2.2)")
+    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 2)")
     m_2DView2_2->render();
 }
 
@@ -246,7 +244,7 @@ void Q2DViewerExtension::changeViewToSagital()
     m_slider2_1->setMaximum( extent[1] );
     m_viewText2_1->setText( tr("YZ : Sagital") );
     m_2DView2_1->setViewToSagittal();
-    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.1)")
+    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
     m_2DView2_1->render();
 
     m_spinBox2_2->setMinimum( secondExtent[0] );
@@ -254,7 +252,7 @@ void Q2DViewerExtension::changeViewToSagital()
     m_slider2_2->setMaximum( secondExtent[1] );
     m_viewText2_2->setText( tr("YZ : Sagital") );
     m_2DView2_2->setViewToSagittal();
-    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2.2)")
+    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 2)")
     m_2DView2_2->render();
 }
 
@@ -274,7 +272,7 @@ void Q2DViewerExtension::changeViewToCoronal()
     m_slider2_1->setMaximum( extent[3] );
     m_viewText2_1->setText( tr("XZ : Coronal") );
     m_2DView2_1->setViewToCoronal();
-    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.1)")
+    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
     m_2DView2_1->render();
 
     m_spinBox2_2->setMinimum( secondExtent[2] );
@@ -282,7 +280,7 @@ void Q2DViewerExtension::changeViewToCoronal()
     m_slider2_2->setMaximum( secondExtent[3] );
     m_viewText2_2->setText( tr("XZ : Coronal") );
     m_2DView2_2->setViewToCoronal();
-    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2.2)")
+    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 2)")
     m_2DView2_2->render();
 }
 
