@@ -242,7 +242,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
         QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the temporary directory to create Dicomdir. Please check users permission" ) );
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
-        DEBUG_LOG( logMessage.toAscii().constData() );
+        ERROR_LOG( logMessage.toAscii().constData() );
         return state.setStatus( "Can't create temporary Dicomdir", false , 3002 );
     }
     else
@@ -297,7 +297,7 @@ void QCreateDicomdir::createDicomdirOnHard()
                             QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the directory. Please check users permission" ) );
                             logMessage = "Error al crear directori ";
                             logMessage.append( dicomdirPath );
-                            DEBUG_LOG( logMessage.toAscii().constData() );
+                            ERROR_LOG( logMessage.toAscii().constData() );
                         }
                         break;
                     case 1: 

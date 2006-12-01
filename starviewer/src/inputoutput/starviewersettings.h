@@ -23,7 +23,6 @@ const QString AETitleMachineKey("pacs/pacsparam/AETitle" );
 const QString localPortKey("pacs/pacsparam/localPort" );
 const QString timeoutPacsKey("pacs/pacsparam/timeout" );
 const QString maxConnectionsKey("pacs/pacsparam/MaxConnects" );
-const QString selectLanguageKey("pacs/language" );
 const QString pacsColumnWidthKey("pacs/interfase/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString cacheColumnWidthKey("pacs/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString dicomdirColumnWidthKey("pacs/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
@@ -102,11 +101,6 @@ public:
 	 */
     void setLocalPort( QString );
 
-	/** estableix l'idioma de l'aplicació
-	 * @param idioma de l'aplicació
-	 */
-    void setLanguage( QString );
-
 	/** Nombre màxim de connexions simultànies al PACS
 	 * @param nombre màxim de connexions
   	 */
@@ -126,11 +120,6 @@ public:
 	 * @return port Local
 	 */
     QString getLocalPort();
-
-	/** retorna l'idioma seleccionat per l'usuari
-	 * @return idioma seleccionat
-	 */
-    QString getLanguage();
 
 	/** retorna el nombre màxim de connexions simultànies que es poden tenir atacant a un PACS
 	 * @return nombre màxim de connexions

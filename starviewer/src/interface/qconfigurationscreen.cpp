@@ -104,7 +104,6 @@ void QConfigurationScreen::createConnections()
     connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT ( configurationChangedDatabaseRoot( const QString& ) ) );
     connect( m_textLocalPort , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textMaxConnections , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_comboLanguage , SIGNAL( editTextChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textInstitutionName , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textInstitutionAddress , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
     connect( m_textInstitutionTown , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );

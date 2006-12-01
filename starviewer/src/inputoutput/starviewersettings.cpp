@@ -46,8 +46,6 @@ QString StarviewerSettings::getDatabasePath()
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/database/dicom.sdb" );
     
-    DEBUG_LOG(defaultDir.toAscii().constData());
-    
     return m_starviewerSettings.value( databaseRootKey , defaultDir ).toString();
 }
 
@@ -89,11 +87,6 @@ void StarviewerSettings::setLocalPort( QString port )
     m_starviewerSettings.setValue( localPortKey , port );
 }
 
-void StarviewerSettings::setLanguage( QString lang )
-{
-    m_starviewerSettings.setValue( selectLanguageKey , lang );
-}
-
 void StarviewerSettings::setMaxConnections( QString maxConn )
 {
     m_starviewerSettings.setValue( maxConnectionsKey , maxConn );
@@ -112,11 +105,6 @@ QString StarviewerSettings::getTimeout()
 QString StarviewerSettings::getLocalPort()
 {
     return m_starviewerSettings.value( localPortKey , "4006" ).toString();
-}
-
-QString StarviewerSettings::getLanguage()
-{
-    return m_starviewerSettings.value( selectLanguageKey , "104" ).toString();
 }
 
 QString StarviewerSettings::getMaxConnections()
