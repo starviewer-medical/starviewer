@@ -10,6 +10,7 @@
 #include "tool.h"
 
 class vtkInteractorStyle;
+class vtkRenderer;
 
 namespace udg {
 
@@ -29,17 +30,20 @@ public:
     ZoomTool( Q2DViewer *viewer , QObject *parent = 0, const char *name = 0 );
     ZoomTool( Q3DViewer *viewer , QObject *parent = 0, const char *name = 0 );
     ZoomTool( Q3DMPRViewer *viewer , QObject *parent = 0, const char *name = 0 );
-    
+
     ~ZoomTool();
-    
+
     void handleEvent( unsigned long eventID );
 
 private:
     /// interactor style que omplirem en el constructor depenent del visor
     vtkInteractorStyle *m_interactorStyle;
-    
+
+    /// El renderer el necessitem per la càmera
+    vtkRenderer *m_renderer;
+
 /// \TODO potser aquests mètodes slots passen a ser públics
-private slots: 
+private slots:
     /// Comença el zoom
     void startZoom();
 
@@ -48,6 +52,9 @@ private slots:
 
     /// Atura l'estat de zoom
     void endZoom();
+
+    /// Augmenta o disminueix el zoom, mètode per roda del mouse o combinació de tecles CTRL++ o CTRL+-, per exemple
+    void zoom( double factor );
 };
 
 }

@@ -11,7 +11,10 @@
 #include "logging.h"
 #include <vtkInteractorStyleImage.h>
 #include <vtkInteractorStyle.h>
+#include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
+#include <vtkCamera.h>
+#include <vtkRenderer.h>
 
 namespace udg {
 
@@ -21,6 +24,7 @@ ZoomTool::ZoomTool( Q2DViewer *viewer , QObject *parent, const char *name )
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
         DEBUG_LOG( "L'interactor Style és buit!" );
+    m_renderer = viewer->getRenderer();
 }
 
 ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
@@ -29,15 +33,16 @@ ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
         DEBUG_LOG( "L'interactor Style és buit!" );
+    m_renderer = viewer->getRenderer();
 }
 
 ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
 {
     m_state = NONE;
-    // \TODO implement me
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
         DEBUG_LOG( "L'interactor Style és buit!" );
+    m_renderer = viewer->getRenderer();
 }
 
 ZoomTool::~ZoomTool()
@@ -61,16 +66,13 @@ void ZoomTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MouseWheelForwardEvent:
-//         m_interactorStyle->StartDolly();
-//         m_interactorStyle->Dolly( pow(1.1, 2.0) );
-//         m_interactorStyle->EndDolly();
+        // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
+        this->zoom( pow(1.1, 2.0) );
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
-        if( m_interactorStyle )
-            m_interactorStyle->Zoom();
-        else
-            DEBUG_LOG( "::MouseWheelBackwardZoom(): L'interactor Style és buit!" );
+        // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
+        this->zoom( pow(1.1, -2.0) );
     break;
 
     default:
@@ -109,6 +111,43 @@ void ZoomTool::endZoom()
     }
     else
         DEBUG_LOG( "::endZoom(): L'interactor Style és buit!" );
+}
+
+void ZoomTool::zoom( double factor )
+{
+    if( m_interactorStyle )
+    {
+        if( m_renderer )
+        {
+            m_interactorStyle->StartDolly();
+            // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
+            vtkCamera *camera = m_renderer->GetActiveCamera();
+            if ( camera->GetParallelProjection() )
+            {
+                camera->SetParallelScale(camera->GetParallelScale() / factor );
+            }
+            else
+            {
+                camera->Dolly(factor);
+                if ( m_interactorStyle->GetAutoAdjustCameraClippingRange() )
+                {
+                    m_renderer->ResetCameraClippingRange();
+                }
+            }
+
+            if ( m_interactorStyle->GetInteractor()->GetLightFollowCamera() )
+            {
+                m_renderer->UpdateLightsGeometryToFollowCamera();
+            }
+            m_interactorStyle->GetInteractor()->Render();
+
+            m_interactorStyle->EndDolly();
+        }
+        else
+            DEBUG_LOG( "::zoom(double factor): El renderer és NUL!" );
+    }
+    else
+        DEBUG_LOG( "::zoom(double factor): L'interactor Style és buit!" );
 }
 
 }
