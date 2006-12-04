@@ -10,7 +10,6 @@
 #include "tool.h"
 
 class vtkInteractorStyle;
-class vtkRenderer;
 
 namespace udg {
 
@@ -38,9 +37,6 @@ public:
 private:
     /// interactor style que omplirem en el constructor depenent del visor
     vtkInteractorStyle *m_interactorStyle;
-
-    /// El renderer el necessitem per la càmera
-    vtkRenderer *m_renderer;
 
 /// \TODO potser aquests mètodes slots passen a ser públics
 private slots:

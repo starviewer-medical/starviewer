@@ -24,7 +24,6 @@ ZoomTool::ZoomTool( Q2DViewer *viewer , QObject *parent, const char *name )
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
         DEBUG_LOG( "L'interactor Style és buit!" );
-    m_renderer = viewer->getRenderer();
 }
 
 ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
@@ -33,7 +32,6 @@ ZoomTool::ZoomTool( Q3DViewer *viewer , QObject *parent, const char *name )
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
         DEBUG_LOG( "L'interactor Style és buit!" );
-    m_renderer = viewer->getRenderer();
 }
 
 ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
@@ -42,7 +40,6 @@ ZoomTool::ZoomTool( Q3DMPRViewer *viewer , QObject *parent, const char *name )
     m_interactorStyle = viewer->getInteractorStyle();
     if( !m_interactorStyle )
         DEBUG_LOG( "L'interactor Style és buit!" );
-    m_renderer = viewer->getRenderer();
 }
 
 ZoomTool::~ZoomTool()
@@ -117,11 +114,12 @@ void ZoomTool::zoom( double factor )
 {
     if( m_interactorStyle )
     {
-        if( m_renderer )
+        vtkRenderer *renderer = m_interactorStyle->GetCurrentRenderer();
+        if( renderer )
         {
             m_interactorStyle->StartDolly();
             // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
-            vtkCamera *camera = m_renderer->GetActiveCamera();
+            vtkCamera *camera = renderer->GetActiveCamera();
             if ( camera->GetParallelProjection() )
             {
                 camera->SetParallelScale(camera->GetParallelScale() / factor );
@@ -131,13 +129,13 @@ void ZoomTool::zoom( double factor )
                 camera->Dolly(factor);
                 if ( m_interactorStyle->GetAutoAdjustCameraClippingRange() )
                 {
-                    m_renderer->ResetCameraClippingRange();
+                    renderer->ResetCameraClippingRange();
                 }
             }
 
             if ( m_interactorStyle->GetInteractor()->GetLightFollowCamera() )
             {
-                m_renderer->UpdateLightsGeometryToFollowCamera();
+                renderer->UpdateLightsGeometryToFollowCamera();
             }
             m_interactorStyle->GetInteractor()->Render();
 
