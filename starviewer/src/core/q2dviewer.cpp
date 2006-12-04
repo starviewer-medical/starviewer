@@ -813,6 +813,7 @@ void Q2DViewer::setupInteraction()
     // configurem l'Image Viewer i el qvtkWidget
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
+    m_viewer->GetInteractorStyle()->SetCurrentRenderer( this->getRenderer() );
     //\TODO això dóna un error de vtk perquè el viewer no té input, però no afecta a la execució de l'apicació
     m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
