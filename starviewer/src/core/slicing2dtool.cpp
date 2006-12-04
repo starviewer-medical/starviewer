@@ -82,26 +82,14 @@ void Slicing2DTool::doSlicing()
     {
         if( m_state == SLICING )
         {
-            m_currentPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
             m_currentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
-            int dx = m_currentPosition[0] - m_startPosition[0];
-            int dy = m_startPosition[1] - m_currentPosition[1];
+            int dy = m_currentPosition[1] - m_startPosition[1];
 
-            m_startPosition[0] = m_currentPosition[0];
             m_startPosition[1] = m_currentPosition[1];
-
-            int value = 0, increment = 0;
+            int value = 0;
             if( dy )
                 value = dy/abs(dy);
-            else if ( dx )
-                value = dx/abs(dx);
-
-            if( value < 0 )
-                increment = -1;
-            else if( value > 0 )
-                increment = 1;
-
-            m_2DViewer->setSlice( m_2DViewer->getSlice() + increment );
+            m_2DViewer->setSlice( m_2DViewer->getSlice() + value );
         }
     }
     else
