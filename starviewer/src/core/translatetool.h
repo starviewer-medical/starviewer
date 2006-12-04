@@ -37,9 +37,12 @@ public:
 private:
     /// interactor style que omplirem en el constructor depenent del visor
     vtkInteractorStyle *m_interactorStyle;
-    
+
+    /// realitza la feina de desplaçament
+    void pan();
+
 /// \TODO potser aquests mètodes slots passen a ser públics
-private slots: 
+private slots:
     /// Comença el translate
     void startTranslate();
 
