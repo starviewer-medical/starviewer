@@ -945,11 +945,11 @@
     </message>
     <message>
         <source> Test of Pacs </source>
-        <translation>El Testeo del Pacs(sp)</translation>
+        <translation>El Teste del Pacs</translation>
     </message>
     <message>
         <source> is correct </source>
-        <translation>(sp)es correcto</translation>
+        <translation>es correcto</translation>
     </message>
     <message>
         <source> doesn&apos;t responds correctly</source>

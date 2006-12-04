@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
-# L'objectiu Ã©s una biblioteca:  
+# L'objectiu és una biblioteca:  
 
 FORMS += qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \
@@ -51,7 +51,6 @@ SOURCES += qapplicationmainwindow.cpp \
            qconfigurationscreen.cpp \
            qpacslist.cpp \
            queryscreen.cpp \
-           queryscreenerror.cpp \
            qmprextension.cpp \
            qmprextensioncreator.cpp \
            qmpr3dextensioncreator.cpp \

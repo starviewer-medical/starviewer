@@ -1613,6 +1613,59 @@ QString QueryScreen::logQueryStudy()
     return logMessage;
 }
 
+/** Tracta els errors que s'han produït a la base de dades en general
+  *           @param state [in] Estat del mètode
+  */
+void QueryScreen::databaseError(Status *state)
+{
+
+    QString text,code;
+    if (!state->good())
+    {
+        switch(state->code())
+        {  case 2001 : text.insert(0,tr("Database is corrupted or SQL syntax error"));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2005 : text.insert(0,tr("Database is looked"));
+                        text.append("\n");
+                        text.append("To solve this error restart the user session");
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2011 : text.insert(0,tr("Database is corrupted."));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2019 : text.insert(0,tr("Register duplicated."));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;
+            case 2050 : text.insert(0,"Not Connected to database");
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+                        break;            
+            default :   text.insert(0,tr("Internal Database error"));
+                        text.append("\n");
+                        text.append(tr("Error Number : "));
+                        code.setNum(state->code(),10);
+                        text.append(code);
+        }
+        QMessageBox::critical( this, tr("StarViewer"),text);
+    }
+}    
+    
+
 QueryScreen::~QueryScreen()
 {
 }
