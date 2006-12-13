@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr�ics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -25,64 +25,64 @@ public:
     /// Constructor de la classe
     ImageDicomInformation();
 
-    /** Obre el DICOM del qual s'ha d'obtenir la informaci�      
+    /** Obre el DICOM del qual s'ha d'obtenir la informació
      *         @param ruta del fitxer
      */
     Status openDicomFile( std::string filePath );
-    
+
     /** Retorna el study UID de l'imatge
      *         @param study UID de l'imatge
      */
     std::string getStudyUID();
-    
+
     /** Retorna el ID de l'estudi de l'imatge
      *         @param study ID de l'estudi de l'imatge
      */
     std::string getStudyID();
-    
+
     /** Retorna el series UID de l'imatge
      *         @param series UID de l'imatge
      */
     std::string getSeriesUID();
-    
+
     /** Retorna el series number de l'imatge
      *         @param series number
      */
     std::string getSeriesNumber();
-    
-    /** Retorna la modalitat de la s�ie
-     *         @param modalitat de la s�ie
+
+    /** Retorna la modalitat de la sèrie
+     *         @param modalitat de la sèrie
      */
     std::string getSeriesModality();
-    
+
     /** Retorna el nom del Procotol utilitzat
      *         @param Protocol utilitzat
      */
     std::string getSeriesProtocolName();
-    
-    /** Retorna la descripci�de la s�ie
-     *         @param descripci�de la s�ie
+
+    /** Retorna la descripció de la sèrie
+     *         @param descripció de la sèrie
      */
     std::string getSeriesDescription();
-    
+
     /** Retorna la part del cos examinada
      *         @param part del cos examinada
      */
     std::string getSeriesBodyPartExamined();
-    
+
     /** Retorna l'hora en que s'ha capturat la serie
      *         @return hora en que s'ha capturat la serie
      */
     std::string getSeriesTime();
-    
-    /** Retorna data en que s'ha capturat la serie
-     *         @return data en que s'ha capturat la serie
+
+    /** Retorna data en que s'ha capturat la sèrie
+     *         @return data en que s'ha capturat la sèrie
      */
-    std::string getSeriesDate();    
-    
+    std::string getSeriesDate();
+
     /// Destructor de la classe
     ~ImageDicomInformation();
-    
+
 private :
 
     DcmFileFormat *m_dicomFile;
