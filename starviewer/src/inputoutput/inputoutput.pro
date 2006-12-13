@@ -7,7 +7,6 @@ HEADERS += const.h \
            databaseconnection.h \
            image.h \
            imagelist.h \
-           imagelistsingleton.h \
            imagemask.h \
            pacsconnection.h \
            pacslistdb.h \
@@ -59,7 +58,6 @@ HEADERS += const.h \
 SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
-           imagelistsingleton.cpp \
            imagemask.cpp \
            pacsconnection.cpp \
            pacslist.cpp \
