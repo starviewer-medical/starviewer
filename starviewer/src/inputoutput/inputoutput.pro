@@ -54,7 +54,8 @@ HEADERS += const.h \
            readdicomdir.h \
            storeimages.h \
            starviewerprocessimagestored.h \
-           starviewerprocessimageretrieved.h 
+           starviewerprocessimageretrieved.h \
+           imagelistsingleton.h 
 SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
@@ -104,7 +105,8 @@ SOURCES += databaseconnection.cpp \
            readdicomdir.cpp \
            storeimages.cpp \
            starviewerprocessimagestored.cpp \
-           starviewerprocessimageretrieved.cpp 
+           starviewerprocessimageretrieved.cpp \
+           imagelistsingleton.cpp 
 TARGETDEPS += ../core/libcore.a
 LIBS += ../../src/core/libcore.a
 INCLUDEPATH += ../../src/core
