@@ -1,0 +1,4 @@
+DCMTKLIBDIR = $$(DCMTKLIBDIR)
+isEmpty(DCMTKLIBDIR){
+	DCMTKLIBDIR = /usr/lib/dcmtk/
+}

@@ -1,3 +1,5 @@
+include(defaultdirectories.inc)
+
 INCLUDEPATH += /usr/include/dcmtk/ \
 	/usr/include/dcmtk/dcmdata/ \
 	/usr/include/dcmtk/dcmimgle/ \
@@ -8,7 +10,7 @@ INCLUDEPATH += /usr/include/dcmtk/ \
 	/usr/include/dcmtk/config \
 	/usr/include/dcmtk/dcmjpeg
 
-LIBS += -L/usr/lib/dcmtk/ \
+LIBS += -L$$DCMTKLIBDIR \
 	-lsqlite3 \
 	-ldcmnet \
 	-ldcmdata \
