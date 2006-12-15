@@ -187,7 +187,7 @@ void Q3DMPRViewer::initializePlanes()
     m_axialImagePlaneWidget->SetPicker( picker );
     m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_axialImagePlaneWidget->SetKeyPressActivationValue('z');
-    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 1 , 0 );
+    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor( 1. , 1. , .0 );
     m_axialImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
     m_axialImagePlaneWidget->TextureInterpolateOn();
     m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
@@ -198,7 +198,7 @@ void Q3DMPRViewer::initializePlanes()
     m_sagitalImagePlaneWidget->SetPicker( picker );
     m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_sagitalImagePlaneWidget->SetKeyPressActivationValue('x');
-    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor( 1 , 0 , 0 );
+    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor( 1. , .6 , .0 );
     m_sagitalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
     m_sagitalImagePlaneWidget->TextureInterpolateOn();
     m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
@@ -209,7 +209,7 @@ void Q3DMPRViewer::initializePlanes()
     m_coronalImagePlaneWidget->DisplayTextOn();
     m_coronalImagePlaneWidget->SetPicker( picker );
     m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
-    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( 0 , 0 , 1 );
+    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( .0 , 1. , 1. );
     m_coronalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
     m_coronalImagePlaneWidget->TextureInterpolateOn();
     m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
