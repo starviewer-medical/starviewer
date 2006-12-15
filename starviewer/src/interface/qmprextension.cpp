@@ -896,37 +896,37 @@ void QMPRExtension::createActors()
     m_sagitalOverAxialAxisActor->TickVisibilityOff();
     m_sagitalOverAxialAxisActor->LabelVisibilityOff();
     m_sagitalOverAxialAxisActor->TitleVisibilityOff();
-    m_sagitalOverAxialAxisActor->GetProperty()->SetColor( 1 , 0 , 1 );
+    m_sagitalOverAxialAxisActor->GetProperty()->SetColor( 1. , .6 , .0 );
 
     m_coronalOverAxialIntersectionAxis->TickVisibilityOff();
     m_coronalOverAxialIntersectionAxis->LabelVisibilityOff();
     m_coronalOverAxialIntersectionAxis->TitleVisibilityOff();
-    m_coronalOverAxialIntersectionAxis->GetProperty()->SetColor( 0 , 1 , 1 );
+    m_coronalOverAxialIntersectionAxis->GetProperty()->SetColor( .0 , 1. , 1. );
 
     m_coronalOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_coronalOverSagitalIntersectionAxis->TickVisibilityOff();
     m_coronalOverSagitalIntersectionAxis->LabelVisibilityOff();
     m_coronalOverSagitalIntersectionAxis->TitleVisibilityOff();
-    m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor( 0 , 1 , 1 );
+    m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor( .0 , 1. , 1. );
 
     m_axialOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_axialOverSagitalIntersectionAxis->TickVisibilityOff();
     m_axialOverSagitalIntersectionAxis->LabelVisibilityOff();
     m_axialOverSagitalIntersectionAxis->TitleVisibilityOff();
-    m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor( 1 , 1 , 0 );
+    m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor( 1. , 1. , .0 );
 
     m_thickSlabOverAxialActor->AxisVisibilityOn();
     m_thickSlabOverAxialActor->TickVisibilityOff();
     m_thickSlabOverAxialActor->LabelVisibilityOff();
     m_thickSlabOverAxialActor->TitleVisibilityOff();
-    m_thickSlabOverAxialActor->GetProperty()->SetColor( 0 , 1 , 1 );
+    m_thickSlabOverAxialActor->GetProperty()->SetColor( .0 , 1. , 1. );
     m_thickSlabOverAxialActor->GetProperty()->SetLineStipplePattern( 65280 );
 
     m_thickSlabOverSagitalActor->AxisVisibilityOn();
     m_thickSlabOverSagitalActor->TickVisibilityOff();
     m_thickSlabOverSagitalActor->LabelVisibilityOff();
     m_thickSlabOverSagitalActor->TitleVisibilityOff();
-    m_thickSlabOverSagitalActor->GetProperty()->SetColor( 0 , 1 , 1 );
+    m_thickSlabOverSagitalActor->GetProperty()->SetColor( .0 , 1. , 1. );
     m_thickSlabOverSagitalActor->GetProperty()->SetLineStipplePattern( 65280 );
 
     m_axial2DView->getRenderer()->AddActor2D( m_sagitalOverAxialAxisActor );

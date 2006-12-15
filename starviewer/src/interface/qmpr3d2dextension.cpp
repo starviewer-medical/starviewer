@@ -225,25 +225,25 @@ void QMPR3D2DExtension::createActors()
     m_sagitalOverAxialIntersectionAxis->TickVisibilityOff();
     m_sagitalOverAxialIntersectionAxis->LabelVisibilityOff();
     m_sagitalOverAxialIntersectionAxis->TitleVisibilityOff();
-    m_sagitalOverAxialIntersectionAxis->GetProperty()->SetColor( 1 , 0 , 0 );
+    m_sagitalOverAxialIntersectionAxis->GetProperty()->SetColor( 1. , .6 , .0 );
 
     m_coronalOverAxialIntersectionAxis->AxisVisibilityOn();
     m_coronalOverAxialIntersectionAxis->TickVisibilityOff();
     m_coronalOverAxialIntersectionAxis->LabelVisibilityOff();
     m_coronalOverAxialIntersectionAxis->TitleVisibilityOff();
-    m_coronalOverAxialIntersectionAxis->GetProperty()->SetColor( 0 , 0 , 1 );
+    m_coronalOverAxialIntersectionAxis->GetProperty()->SetColor( .0 , 1. , 1. );
 
     m_axialOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_axialOverSagitalIntersectionAxis->TickVisibilityOff();
     m_axialOverSagitalIntersectionAxis->LabelVisibilityOff();
     m_axialOverSagitalIntersectionAxis->TitleVisibilityOff();
-    m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor( 1 , 1 , 0 );
+    m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor( 1. , 1. , .0 );
 
     m_coronalOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_coronalOverSagitalIntersectionAxis->TickVisibilityOff();
     m_coronalOverSagitalIntersectionAxis->LabelVisibilityOff();
     m_coronalOverSagitalIntersectionAxis->TitleVisibilityOff();
-    m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor( 0 , 0 , 1 );
+    m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor( .0 , 1. , 1. );
 
     // Els afegim als visors corresponents
 
