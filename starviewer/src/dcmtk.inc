@@ -1,21 +1,20 @@
 include(defaultdirectories.inc)
 
-INCLUDEPATH += /usr/include/dcmtk/ \
-	/usr/include/dcmtk/dcmdata/ \
-	/usr/include/dcmtk/dcmimgle/ \
-	/usr/include/dcmtk/dcmnet/ \
-	/usr/include/dcmtk/dcmsign/ \
-	/usr/include/dcmtk/ofstd/ \
-	/usr/include/dcmtk/dcmimage/ \
-	/usr/include/dcmtk/config \
-	/usr/include/dcmtk/dcmjpeg
+INCLUDEPATH += $${DCMTKINCLUDEDIR} \
+    $${DCMTKINCLUDEDIR}/dcmdata/ \
+    $${DCMTKINCLUDEDIR}/dcmimgle/ \
+    $${DCMTKINCLUDEDIR}/dcmnet/ \
+    $${DCMTKINCLUDEDIR}/dcmsign/ \
+    $${DCMTKINCLUDEDIR}/ofstd/ \
+    $${DCMTKINCLUDEDIR}/dcmimage/ \
+    $${DCMTKINCLUDEDIR}/config \
+    $${DCMTKINCLUDEDIR}/dcmjpeg
 
-LIBS += -L$$DCMTKLIBDIR \
-	-lsqlite3 \
-	-ldcmnet \
-	-ldcmdata \
-	-ldcmimage \
-	-ldcmimgle \
-	-lofstd \
-	-ldcmjpeg
-    
+LIBS += -L$${DCMTKLIBDIR} \
+    -lsqlite3 \
+    -ldcmnet \
+    -ldcmdata \
+    -ldcmimage \
+    -ldcmimgle \
+    -lofstd \
+    -ldcmjpeg

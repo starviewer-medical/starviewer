@@ -1,21 +1,22 @@
+include(defaultdirectories.inc)
 
-INCLUDEPATH += $(ITKINCLUDEDIR) \
-              $(ITKINCLUDEDIR)/Algorithms \
-              $(ITKINCLUDEDIR)/BasicFilters \
-              $(ITKINCLUDEDIR)/Common \
-              $(ITKINCLUDEDIR)/Numerics \
-              $(ITKINCLUDEDIR)/IO \
-              $(ITKINCLUDEDIR)/Numerics/FEM \
-              $(ITKINCLUDEDIR)/Numerics/Statistics \
-              $(ITKINCLUDEDIR)/SpatialObject \
-              $(ITKINCLUDEDIR)/Utilities/MetaIO \
-              $(ITKINCLUDEDIR)/Utilities \
-              $(ITKINCLUDEDIR)/Utilities/vxl/vcl \
-              $(ITKINCLUDEDIR)/Utilities/vxl/core \
-              $(ITKINCLUDEDIR)/gdcm/src \
-              $(ITKINCLUDEDIR)/Utilities/NrrdIO
+INCLUDEPATH += $${ITKINCLUDEDIR} \
+              $${ITKINCLUDEDIR}/Algorithms \
+              $${ITKINCLUDEDIR}/BasicFilters \
+              $${ITKINCLUDEDIR}/Common \
+              $${ITKINCLUDEDIR}/Numerics \
+              $${ITKINCLUDEDIR}/IO \
+              $${ITKINCLUDEDIR}/Numerics/FEM \
+              $${ITKINCLUDEDIR}/Numerics/Statistics \
+              $${ITKINCLUDEDIR}/SpatialObject \
+              $${ITKINCLUDEDIR}/Utilities/MetaIO \
+              $${ITKINCLUDEDIR}/Utilities \
+              $${ITKINCLUDEDIR}/Utilities/vxl/vcl \
+              $${ITKINCLUDEDIR}/Utilities/vxl/core \
+              $${ITKINCLUDEDIR}/gdcm/src \
+              $${ITKINCLUDEDIR}/Utilities/NrrdIO
 
-LIBS += -L$(ITKLIBDIR) \
+LIBS += -L$${ITKLIBDIR} \
         -lITKAlgorithms \
         -lITKBasicFilters \
         -lITKCommon \

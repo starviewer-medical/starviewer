@@ -1,7 +1,8 @@
+include(defaultdirectories.inc)
 
-INCLUDEPATH += $(VTKINCLUDEDIR) 
+INCLUDEPATH += $${VTKINCLUDEDIR}
 
-LIBS += -L$(VTKLIBDIR) \
+LIBS += -L$${VTKLIBDIR} \
         -lvtkCommon \
         -lvtkDICOMParser \
         -lvtkFiltering \
