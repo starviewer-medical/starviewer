@@ -115,10 +115,10 @@ UI_DIR = ../../tmp/ui
 OBJECTS_DIR = ../../tmp/obj
 QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
 QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-CONFIG += debug \
-warn_on \
+CONFIG += warn_on \
 staticlib
 TEMPLATE = lib
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
+include(../compilationtype.inc)

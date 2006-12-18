@@ -27,13 +27,13 @@ MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui 
 OBJECTS_DIR = ../../tmp/obj 
 TARGET = ../../bin/starviewer 
-CONFIG += release \
-          warn_on 
+CONFIG += warn_on 
 TEMPLATE = app 
 SOURCES += main.cpp 
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
+include(../compilationtype.inc)
 
 # Instalem les extensions
 

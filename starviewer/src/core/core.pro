@@ -95,8 +95,7 @@ SOURCES += extensionmediator.cpp \
            screenshottool.cpp \
            rotate3dtool.cpp 
 TEMPLATE = lib
-CONFIG += debug \
-warn_on \
+CONFIG += warn_on \
 thread \
 staticlib \
 qt \
@@ -110,3 +109,4 @@ LIBS += -llog4cxx
 INCLUDEPATH += /usr/include/log4cxx/
 include(../itk.inc)
 include(../vtk.inc)
+include(../compilationtype.inc)

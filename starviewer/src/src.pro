@@ -9,8 +9,7 @@ SUBDIRS += core \
            interface \
            main 
 TEMPLATE = subdirs 
-CONFIG += debug \
-          warn_on 
+CONFIG += warn_on 
 OBJECTS_DIR = ../tmp/obj 
 UI_DIR = ../tmp/ui 
 MOC_DIR = ../tmp/moc 
@@ -21,3 +20,5 @@ TARGETDEPS += ../src/main/../bin/starviewer \
               ../src/interface/libinterface.a \
               ../src/inputoutput/libinputoutput.a \
               ../src/core/core.a
+
+include(compilationtype.inc)

@@ -3,9 +3,10 @@
 # Subdirectori relatiu al directori principal del projecte: .
 # L'objectiu és un subdirectori del projecte 
 
+include(src/compilationtype.inc)
+
 SUBDIRS += src 
 TEMPLATE = subdirs 
-CONFIG += release \
-          warn_on \
+CONFIG += warn_on \
           qt \
           thread 

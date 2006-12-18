@@ -8,3 +8,5 @@ for(dir, SUBDIRS) {
         SUBDIRS -= $$dir
     }
 }
+
+include(../compilationtype.inc)
