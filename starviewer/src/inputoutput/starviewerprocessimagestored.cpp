@@ -35,7 +35,7 @@ void StarviewerProcessImageStored::process( Image *image )
 
 StarviewerProcessImageStored::~StarviewerProcessImageStored()
 {
-    //com no sabem quant s'acaba de guardar l'última sèrie, fem que s'indiqui que ha finalitzat el procés de moure quan es destrueix l'objecte StarViewerProcessImageStored, que és destruït just finalitzar el procés d'emmagatzematge de tot l'estudi
+    //com no sabem quant s'acaba de guardar l'última sèrie, fem que s'indiqui que ha finalitzat el procés de moure quan es destrueix l'objecte StarviewerProcessImageStored, que és destruït just finalitzar el procés d'emmagatzematge de tot l'estudi
     emit( seriesStored( m_studyUID ) );
 }
 

@@ -112,7 +112,7 @@ void QueryScreen::deleteOldStudies()
     
     if ( !state.good() ) 
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error deleting old studies" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error deleting old studies" ) );
         databaseError( &state );
     }
 }
@@ -419,7 +419,7 @@ void QueryScreen::queryStudyPacs()
     
     if ( pacsList.end() ) //es comprova que hi hagi pacs seleccionats
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Please select a PACS to query" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
         return;      
     }
     
@@ -429,7 +429,7 @@ void QueryScreen::queryStudyPacs()
     {
         m_studyTreeWidgetPacs->clear();
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "ERROR QUERING!." ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
         return;  
     }
      
@@ -439,7 +439,7 @@ void QueryScreen::queryStudyPacs()
     {
         m_studyTreeWidgetPacs->clear();        
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
         return;
     }
     m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
@@ -480,7 +480,7 @@ void QueryScreen::queryStudyCache()
     {
         m_studyTreeWidgetCache->clear();
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
         return;
     }
     
@@ -509,13 +509,13 @@ void QueryScreen::queryStudyDicomdir()
         QApplication::restoreOverrideCursor();
         if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error, not opened Dicomdir" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error, not opened Dicomdir" ) );
             logMessage = "No s'ha obert cap directori dicomdir ";
             logMessage.append ( state.text().c_str() );
         }
         else
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error quering in dicomdir" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error quering in dicomdir" ) );
             logMessage = "Error cercant estudis al dicomdir ";
             logMessage.append ( state.text().c_str() );
         }   
@@ -529,7 +529,7 @@ void QueryScreen::queryStudyDicomdir()
     {
         m_studyTreeWidgetDicomdir->clear();        
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No study match found." ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
         cout<<"fai\n";
         return;
     }
@@ -615,14 +615,14 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
 
         text.insert( 0 , tr( "Error! Can't query studies in PACS : " ) );
         text.append( pacsAETitle);
-        QMessageBox::warning( this , tr( "StarViewer" ) , text );
+        QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;         
     }
     
     m_seriesListSingleton->firstSeries();
     if ( m_seriesListSingleton->end() )
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No series match for this study.\n" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
         return;
     }
     
@@ -669,7 +669,7 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
     m_seriesListCache.firstSeries();
     if ( m_seriesListCache.end() )
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No series match for this study.\n" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
         return;
     }
     
@@ -709,7 +709,7 @@ void QueryScreen::querySeriesDicomdir( QString studyUID )
     seriesList.firstSeries();
     if ( seriesList.end() )
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "No series match for this study.\n" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
         return;
     }
      
@@ -749,9 +749,9 @@ void QueryScreen::retrievePacs( bool view )
         QApplication::restoreOverrideCursor();
         if ( view)
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a study to view " ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
         }
-        else QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a study to download " ) );
+        else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to download " ) );
         return;
     }
     studyUID.insert(0 , m_studyTreeWidgetPacs->getSelectedStudyUID().toAscii().constData() );
@@ -760,7 +760,7 @@ void QueryScreen::retrievePacs( bool view )
     if ( !m_studyListSingleton->findStudy( studyUID.toAscii().constData() ) )
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Internal Error : " ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
         return;
     }
    
@@ -776,7 +776,7 @@ void QueryScreen::retrievePacs( bool view )
             {
                 studyRetrievedView( studyUID ); 
             }
-            else QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study has been retrieved or is retrieving." ) );
+            else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study has been retrieved or is retrieving." ) );
         }
         else databaseError( &state );
         
@@ -932,7 +932,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
         
     if ( studyUID == "" )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a study to view " ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
         return;
     }    
     
@@ -1032,7 +1032,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
         
     if ( studyUID == "" )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a study to view " ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
         return;
     }    
     
@@ -1136,7 +1136,7 @@ void QueryScreen::deleteStudyCache()
     
     if ( studyUID == "" )
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please select a study to delete" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select a study to delete" ) );
         return;    
     }
     
@@ -1298,7 +1298,7 @@ void QueryScreen::openDicomdir()
 
         if ( !state.good() )
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Error openning dicomdir" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error openning dicomdir" ) );
             logMessage = "Error al obrir el dicomdir " + dicomdirPath;
             logMessage.append ( state.text().c_str() );
             ERROR_LOG( logMessage.toAscii().constData() );
@@ -1337,7 +1337,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     switch (pacsList.size())
     {
         case  0 :
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "You have to select a Pacs to store the study" ));
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "You have to select a Pacs to store the study" ));
             break;
         case 1 :
             cacheStudy.queryStudy( studyUID.toAscii().constData(), study );
@@ -1365,7 +1365,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
             m_qexecuteOperationThread.queueOperation( storeStudyOperation );
             break;
         default :
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study can only be stored at one pacs" ));
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study can only be stored at one pacs" ));
             break;  
     }
     
@@ -1374,12 +1374,12 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
 
 void QueryScreen::notEnoughFreeSpace()
 {
-    QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Not enough space to retrieve studies. Please free space" ) );
+    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Not enough space to retrieve studies. Please free space" ) );
 }
 
 void QueryScreen::errorFreeingCacheSpace()
 {
-    QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error Freeing Space. The study couldn't be retrieved" ) );
+    QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error Freeing Space. The study couldn't be retrieved" ) );
 }
 
 void QueryScreen::errorConnectingPacs( int PacsID )
@@ -1397,7 +1397,7 @@ void QueryScreen::errorConnectingPacs( int PacsID )
     errorMessage.append( '\n' );
     errorMessage.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) ); 
     
-    QMessageBox::critical( this , tr( "StarViewer" ) , errorMessage );
+    QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
 }
 
 void QueryScreen::errorQueringStudiesPacs( int PacsID )
@@ -1415,7 +1415,7 @@ void QueryScreen::errorQueringStudiesPacs( int PacsID )
     errorMessage.append( '\n' );
     errorMessage.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) ); 
     
-    QMessageBox::critical( this , tr( "StarViewer" ) , errorMessage );
+    QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
 }
 
 SeriesMask QueryScreen::buildSeriesMask( QString studyUID)
@@ -1661,7 +1661,7 @@ void QueryScreen::databaseError(Status *state)
                         code.setNum(state->code(),10);
                         text.append(code);
         }
-        QMessageBox::critical( this, tr("StarViewer"),text);
+        QMessageBox::critical( this, tr("Starviewer"),text);
     }
 }    
     

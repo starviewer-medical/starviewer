@@ -198,11 +198,6 @@
         <translation>&lt;b&gt;Número máximo de connexiones simultáneas :&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="" line="6921248"/>
-        <source>&lt;b&gt;Language :&lt;/b&gt;</source>
-        <translation type="obsolete">&lt;b&gt;Idioma :&lt;/b&gt;</translation>
-    </message>
-    <message>
         <location filename="qconfigurationscreenbase.ui" line="525"/>
         <source>AETitle</source>
         <translation></translation>
@@ -351,14 +346,6 @@
         <location filename="qconfigurationscreenbase.ui" line="2049"/>
         <source>Institution contact information </source>
         <translation>Información de contacto de la institución </translation>
-    </message>
-</context>
-<context>
-    <name>QFileDialog</name>
-    <message>
-        <location filename="" line="6921248"/>
-        <source>Open</source>
-        <translation type="obsolete">Abrir</translation>
     </message>
 </context>
 <context>
@@ -779,8 +766,8 @@
     <name>udg::QApplicationMainWindow</name>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="67"/>
-        <source>StarViewer</source>
-        <translation>StarViewer</translation>
+        <source>Starviewer</source>
+        <translation>Starviewer</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="111"/>
@@ -848,22 +835,22 @@
         <translation>&amp;Archivar</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="326"/>
+        <location filename="qapplicationmainwindow.cpp" line="325"/>
         <source>&amp;Help</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="423"/>
+        <location filename="qapplicationmainwindow.cpp" line="424"/>
         <source>File</source>
         <translation>Archivar</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="485"/>
-        <source>About StarViewer</source>
+        <location filename="qapplicationmainwindow.cpp" line="486"/>
+        <source>About Starviewer</source>
         <translation>Sobre Starviewer</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="320"/>
+        <location filename="qapplicationmainwindow.cpp" line="315"/>
         <source>&amp;Language</source>
         <translation>&amp;Idioma</translation>
     </message>
@@ -938,27 +925,27 @@
         <translation>Abrir una carpeta DICOM existente</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="342"/>
+        <location filename="qapplicationmainwindow.cpp" line="343"/>
         <source>Switch to Catalan Language</source>
         <translation>Cambiar a lengua catalana</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="354"/>
+        <location filename="qapplicationmainwindow.cpp" line="355"/>
         <source>Switch to Spanish Language</source>
         <translation>Cambiar a lengua castellana</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="365"/>
+        <location filename="qapplicationmainwindow.cpp" line="366"/>
         <source>Switch to English Language</source>
         <translation>Cambiar a lengua inglesa</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="417"/>
+        <location filename="qapplicationmainwindow.cpp" line="418"/>
         <source>Language Switch</source>
         <translation>Cambio de Idioma</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="417"/>
+        <location filename="qapplicationmainwindow.cpp" line="418"/>
         <source>The changes will take effect after restarting the application</source>
         <translation>Los cambios surtirán efecto una vez se haya reiniciado la aplicación</translation>
     </message>
@@ -998,33 +985,28 @@
         <translation>Cambiar a modo de pantalla normal</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="315"/>
-        <source>&amp;Display</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="187"/>
-        <source>Show Log File</source>
-        <translation>Mostrar Archivo de Bitácora</translation>
-    </message>
-    <message>
         <location filename="qapplicationmainwindow.cpp" line="188"/>
         <source>Show log file</source>
         <translation>Mostrar archivo de bitácora</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="490"/>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
-        <translation>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer és un programa de procesamiento de imagen dedicado a imágenes DICOM producidas por equipos médicos (MRI, CT, PET, PET-CT, ...) También puede leer otros formatos de archivo especificados por el estándar MetaIO  ( archivos *.mhd ). Cumple con el estándar DICOM para la transferencia y formatos de imágenes. Starviewer es capaz de recibir imágenes transferidas por un protocolo de comunicación DICOM desde qualquier PACS y modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User y Consulta/Recuperación).&lt;p&gt;Starviewer está diseñado para la navegación y visualización de imágenes multimodales y multidimensionales: Visor 2D,  Visor MPR 2D ( Multi Planar Reconstruction ), Visor MPR 3D, Visor Híbrido ( 3D/2D ) MPR y Projección de Máxima Intensidad ( MIP ).&lt;p&gt;Versión: %1&lt;/p&gt;
+        <location filename="qapplicationmainwindow.cpp" line="491"/>
+        <source>&lt;h2&gt;Starviewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
+        <translation>&lt;h2&gt;Starviewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer és un programa de procesamiento de imagen dedicado a imágenes DICOM producidas por equipos médicos (MRI, CT, PET, PET-CT, ...) También puede leer otros formatos de archivo especificados por el estándar MetaIO  ( archivos *.mhd ). Cumple con el estándar DICOM para la transferencia y formatos de imágenes. Starviewer es capaz de recibir imágenes transferidas por un protocolo de comunicación DICOM desde qualquier PACS y modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User y Consulta/Recuperación).&lt;p&gt;Starviewer está diseñado para la navegación y visualización de imágenes multimodales y multidimensionales: Visor 2D,  Visor MPR 2D ( Multi Planar Reconstruction ), Visor MPR 3D, Visor Híbrido ( 3D/2D ) MPR y Projección de Máxima Intensidad ( MIP ).&lt;p&gt;Versión: %1&lt;/p&gt;
 </translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="319"/>
+        <source>&amp;Window</source>
+        <translation>&amp;Ventana</translation>
     </message>
 </context>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
         <location filename="qconfigurationscreen.cpp" line="957"/>
-        <source>StarViewer</source>
-        <translation>StarViewer</translation>
+        <source>Starviewer</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="343"/>
@@ -1070,11 +1052,6 @@
         <location filename="qconfigurationscreen.cpp" line="586"/>
         <source>Invalid database path</source>
         <translation>Ruta a la base de datos inválida</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="808"/>
-        <source>Starviewer</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="809"/>
@@ -1216,8 +1193,8 @@
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="579"/>
-        <source>StarViewer</source>
-        <translation>StarViewer</translation>
+        <source>Starviewer</source>
+        <translation>Starviewer</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="106"/>
@@ -1705,8 +1682,8 @@
     </message>
     <message>
         <location filename="qpacslist.cpp" line="148"/>
-        <source>StarViewer</source>
-        <translation>StarViewer</translation>
+        <source>Starviewer</source>
+        <translation>Starviewer</translation>
     </message>
     <message>
         <location filename="qpacslist.cpp" line="129"/>
@@ -1962,19 +1939,14 @@
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1143"/>
+        <location filename="queryscreen.cpp" line="1664"/>
         <source>Starviewer</source>
-        <translation></translation>
+        <translation>Starviewer</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="365"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation>No ha especificado ningún filtro. Está consulta puede tardar bastantes minutos. ¿Está seguro que desea continuar?</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1664"/>
-        <source>StarViewer</source>
-        <translation>StarViewer</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="422"/>

@@ -280,7 +280,7 @@ void QConfigurationScreen::addPacs()
             if ( state.code() == 2019 )
             {
             
-                QMessageBox::warning( this , tr("StarViewer") , tr("AETitle ") + pacs.getAEPacs().c_str() + tr(" exists") + "\n" );
+                QMessageBox::warning( this , tr("Starviewer") , tr("AETitle ") + pacs.getAEPacs().c_str() + tr(" exists") + "\n" );
             }else databaseError( &state );
 
         }
@@ -340,7 +340,7 @@ void QConfigurationScreen::updatePacs()
     
     if ( m_PacsID == 0 )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a Pacs for update" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a Pacs for update" ) );
         return;
     }
    
@@ -387,7 +387,7 @@ void QConfigurationScreen::deletePacs()
     
     if ( m_PacsID == 0 )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Select a Pacs for delete" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a Pacs for delete" ) );
         return;
     }    
     
@@ -473,7 +473,7 @@ void QConfigurationScreen::test()
         message.append( tr ( " doesn't responds " ) );
         message.append( '\n' );
         message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) ); 
-        QMessageBox::warning( this , tr("StarViewer") , message );
+        QMessageBox::warning( this , tr("Starviewer") , message );
         
         logMessage.insert( 0 , "Doing echo pacs " );
         logMessage.append( pacs.getAEPacs().c_str() );
@@ -490,7 +490,7 @@ void QConfigurationScreen::test()
             message.insert( 0 , tr( " Test of Pacs " ) );
             message.append( pacs.getAEPacs().c_str() );
             message.append( tr ( " is correct " ) );
-            QMessageBox::information( this , tr("StarViewer") , message );
+            QMessageBox::information( this , tr("Starviewer") , message );
     
             logMessage.insert( 0 , "Test of Pacs " );
             logMessage.append( pacs.getAEPacs().c_str() );
@@ -504,7 +504,7 @@ void QConfigurationScreen::test()
             message.append( tr ( " doesn't responds correctly" ) );
             message.append( '\n' );
             message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) ); 
-            QMessageBox::warning( this , tr("StarViewer") , message );
+            QMessageBox::warning( this , tr("Starviewer") , message );
             
             logMessage.insert( 0 , "Doing echo pacs " );
             logMessage.append( pacs.getAEPacs().c_str() );
@@ -524,7 +524,7 @@ bool QConfigurationScreen::validatePacsParameters()
     text = m_textAETitle->text();
     if ( text.length() == 0 )
     {
-         QMessageBox::warning( this , tr("StarViewer") , tr("AETitle field can't be empty") );
+         QMessageBox::warning( this , tr("Starviewer") , tr("AETitle field can't be empty") );
         return false;
     }
     
@@ -532,7 +532,7 @@ bool QConfigurationScreen::validatePacsParameters()
     text = m_textAddress->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr ( "Incorrect address server" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr ( "Incorrect address server" ) );
         return false;
     }   
     
@@ -540,7 +540,7 @@ bool QConfigurationScreen::validatePacsParameters()
     text = m_textPort->text();
     if ( !( text.toInt( NULL , 10 ) >= 0 && text.toInt( NULL , 10 ) <= 65535 ) || text.length() ==0 )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "PACS Port has to be between 0 and 65535" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "PACS Port has to be between 0 and 65535" ) );
         return false;    
     }
     
@@ -548,7 +548,7 @@ bool QConfigurationScreen::validatePacsParameters()
     text = m_textInstitution->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Institution field can't be empty" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Institution field can't be empty" ) );
         return false;
     }   
     
@@ -565,7 +565,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if ( m_textLocalPort->text().toInt( NULL , 10 ) < 0 || m_textLocalPort->text().toInt( NULL , 10 ) > 65535 )
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Local Port has to be between 0 and 65535" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Local Port has to be between 0 and 65535" ) );
             return false;        
         }
     }
@@ -574,7 +574,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if ( m_textMaxConnections->text().toInt( NULL , 10 ) < 1 || m_textMaxConnections->text().toInt( NULL , 10 ) > 15 )
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Maximum simultaenious connections has to be between 1 and 15" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Maximum simultaenious connections has to be between 1 and 15" ) );
             return false;        
         }
     }    
@@ -583,7 +583,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if ( !dir.exists(m_textDatabaseRoot->text() ) && m_createDatabase == false ) // si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Invalid database path" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Invalid database path" ) );
             return false;             
         }
     }
@@ -600,7 +600,7 @@ bool QConfigurationScreen::validateChanges()
                 case 0:
                     if ( !dir.mkpath( m_textCacheImagePath->text() ) )
                     {
-                        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the directory. Please check users permission" ) );
+                        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the directory. Please check users permission" ) );
                         return false;
                     }
                     else return true;
@@ -619,7 +619,7 @@ bool QConfigurationScreen::validateChanges()
 
 		if ( m_textPoolSize->text().toUInt( NULL , 10 )* 1024 < usedSpace )
 		{
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "Pool space can't be less than used space" ) );		
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Pool space can't be less than used space" ) );
 			return false;
 		}
 	}
@@ -653,7 +653,7 @@ bool QConfigurationScreen::applyChanges()
         
         if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The application has to be restart to apply the changes" ) );
         }
         
         m_configurationChanged = false;
@@ -893,18 +893,18 @@ void QConfigurationScreen::createDatabase()
     
     if ( m_textDatabaseRoot->text().right(4) != ".sdb" )
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The extension of the database has to be '.sdb'" ) );        
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The extension of the database has to be '.sdb'" ) );
     }
     else
     {
         if ( databaseFile.exists( m_textDatabaseRoot->text() ) )
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr ( "Starviewer can't create the database because, a database with the same name exists in the directory" ) );                  
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr ( "Starviewer can't create the database because, a database with the same name exists in the directory" ) );
         }
         else
         {
             settings.setDatabasePath( m_textDatabaseRoot->text() );
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The application has to be restart to apply the changes"  ));        
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The application has to be restart to apply the changes"  ));
             m_createDatabase = true;
         }
     }
@@ -954,7 +954,7 @@ void QConfigurationScreen::databaseError(Status *state)
                         code.setNum( state->code() , 10 );
                         text.append( code );
         }
-        QMessageBox::critical( this , tr( "StarViewer" ) , text );
+        QMessageBox::critical( this , tr( "Starviewer" ) , text );
     }    
 }
 

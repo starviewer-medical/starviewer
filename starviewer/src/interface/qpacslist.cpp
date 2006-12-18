@@ -145,7 +145,7 @@ void QPacsList::databaseError( Status *state )
                         text.append( code );
                         break;
         }
-        QMessageBox::critical( this , tr("StarViewer"), text );
+        QMessageBox::critical( this , tr("Starviewer"), text );
     }    
 }
 

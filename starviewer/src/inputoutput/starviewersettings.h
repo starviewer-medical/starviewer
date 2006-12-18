@@ -16,24 +16,24 @@ namespace udg {
 @author marc
 */
 
-const QString databaseRootKey("pacs/cache/sdatabasePath" ); //indica on es troba la bd
-const QString poolSizeKey("pacs/cache/poolSize" );
-const QString cacheImagePathKey("pacs/cache/imagePath" );
-const QString AETitleMachineKey("pacs/pacsparam/AETitle" );
-const QString localPortKey("pacs/pacsparam/localPort" );
-const QString timeoutPacsKey("pacs/pacsparam/timeout" );
-const QString maxConnectionsKey("pacs/pacsparam/MaxConnects" );
-const QString pacsColumnWidthKey("pacs/interfase/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString cacheColumnWidthKey("pacs/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString dicomdirColumnWidthKey("pacs/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString MaximumDaysNotViewedStudy("pacs/cache/MaximumDaysNotViewedStudy" );
-const QString InstitutionName("pacs/institution/name");
-const QString InstitutionAddress("pacs/institution/address");
-const QString InstitutionTown("pacs/institution/town");
-const QString InstitutionZipCode("pacs/institution/zipCode");
-const QString InstitutionCountry("pacs/institution/country");
-const QString InstitutionEmail("pacs/institution/Email");
-const QString InstitutionPhoneNumber("pacs/institution/phoneNumber");
+const QString databaseRootKey("/cache/sdatabasePath" ); //indica on es troba la bd
+const QString poolSizeKey("/cache/poolSize" );
+const QString cacheImagePathKey("/cache/imagePath" );
+const QString AETitleMachineKey("/pacsparam/AETitle" );
+const QString localPortKey("/pacsparam/localPort" );
+const QString timeoutPacsKey("/pacsparam/timeout" );
+const QString maxConnectionsKey("/pacsparam/MaxConnects" );
+const QString pacsColumnWidthKey("/interface/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString cacheColumnWidthKey("/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString dicomdirColumnWidthKey("/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString MaximumDaysNotViewedStudy("/cache/MaximumDaysNotViewedStudy" );
+const QString InstitutionName("/institution/name");
+const QString InstitutionAddress("/institution/address");
+const QString InstitutionTown("/institution/town");
+const QString InstitutionZipCode("/institution/zipCode");
+const QString InstitutionCountry("/institution/country");
+const QString InstitutionEmail("/institution/Email");
+const QString InstitutionPhoneNumber("/institution/phoneNumber");
 
 class StarviewerSettings{
 public:
@@ -235,6 +235,8 @@ public:
     
     
 private :
+    /// Nom del grup on es guarda la configuració d'aquesta classe
+    const QString GroupSettingsName;
 
     QSettings m_starviewerSettings;
     

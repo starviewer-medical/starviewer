@@ -90,7 +90,7 @@ private:
     /// Menús
     QMenu *m_fileMenu;
     QMenu *m_visualizationMenu;
-    QMenu *m_displayMenu;
+    QMenu *m_windowMenu;
     QMenu *m_languageMenu;
     QMenu *m_helpMenu;
 

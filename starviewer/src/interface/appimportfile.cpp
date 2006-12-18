@@ -120,8 +120,8 @@ void AppImportFile::finish()
 
 void AppImportFile::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-ImportFile");
-    settings.beginGroup("StarViewer-App-ImportFile");
+    QSettings settings;
+    settings.beginGroup("Starviewer-App-ImportFile");
     m_workingDirectory = settings.value("workingDirectory", ".").toString();
     m_workingDicomDirectory = settings.value("workingDicomDirectory", ".").toString();
     settings.endGroup();
@@ -129,8 +129,8 @@ void AppImportFile::readSettings()
 
 void AppImportFile::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-ImportFile");
-    settings.beginGroup("StarViewer-App-ImportFile");
+    QSettings settings;
+    settings.beginGroup("Starviewer-App-ImportFile");
     settings.setValue("workingDirectory", m_workingDirectory );
     settings.setValue("workingDicomDirectory", m_workingDicomDirectory );
     settings.endGroup();

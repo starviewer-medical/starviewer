@@ -91,7 +91,7 @@ void QCreateDicomdir::changedAction( int index )
                  }
                  else
                  {
-                    QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb" ) );
+                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb" ) );
                     m_comboBoxAction->setCurrentIndex( 0 );
                  }
                  break;
@@ -110,7 +110,7 @@ void QCreateDicomdir::changedAction( int index )
                  }
                  else
                  {
-                    QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb" ) );
+                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb" ) );
                     m_comboBoxAction->setCurrentIndex( 0 );
                  }
                  break;
@@ -177,7 +177,7 @@ void QCreateDicomdir::addStudy( Study study )
         //només comprovem l'espai si gravem a un cd o dvd
         if ( studySize + m_dicomdirSize > m_DiskSpace && m_comboBoxAction->currentIndex() != 0 )
         {
-            QMessageBox::warning( this , tr( "StarViewer" ) , tr( "With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir" ) );
         }
         else
         {   //afegim la informació de l'estudi a la llista
@@ -197,7 +197,7 @@ void QCreateDicomdir::addStudy( Study study )
     }
     else
     {
-        QMessageBox::warning( this , tr( "StarViewer" ) , tr( "The study exists in the Dicomdir list" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study exists in the Dicomdir list" ) );
     }
 }
 
@@ -239,7 +239,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
-        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the temporary directory to create Dicomdir. Please check users permission" ) );
+        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create Dicomdir. Please check users permission" ) );
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
         ERROR_LOG( logMessage.toAscii().constData() );
@@ -263,7 +263,7 @@ void QCreateDicomdir::createDicomdirOnHard()
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please enter a diretory to create de Dicomdir" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please enter a diretory to create de Dicomdir" ) );
         return;
     }
     
@@ -294,7 +294,7 @@ void QCreateDicomdir::createDicomdirOnHard()
                     case 0:
                         if ( !directoryDicomdirPath.mkpath( dicomdirPath ) )
                         {
-                            QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Can't create the directory. Please check users permission" ) );
+                            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the directory. Please check users permission" ) );
                             logMessage = "Error al crear directori ";
                             logMessage.append( dicomdirPath );
                             ERROR_LOG( logMessage.toAscii().constData() );
@@ -320,7 +320,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Not enough free space to create Dicomdir. Please free space" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Not enough free space to create Dicomdir. Please free space" ) );
         
         logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
         logMessage.append( state.text().c_str() );        
@@ -333,7 +333,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     
     if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please, first select the studies which you want to create a Dicomdir" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies which you want to create a Dicomdir" ) );
         return state.setStatus( "No study selected to create Dicomdir", false , 3001 );
     }
 
@@ -352,7 +352,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     
     if ( !state.good() )
     {
-        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
+        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
         logMessage = "Error al crear el Dicomdir ERROR : ";
         logMessage.append( state.text().c_str() );        
         ERROR_LOG ( logMessage.toAscii().constData() );
@@ -420,7 +420,7 @@ void QCreateDicomdir::removeSelectedStudy()
         
     if ( selectedStudies.count() == 0 )
     {
-        QMessageBox::information( this , tr( "StarViewer" ) , tr( "Please select a study to remove of the list" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select a study to remove of the list" ) );
     }
     else
     {
@@ -576,7 +576,7 @@ void QCreateDicomdir::databaseError( Status *state )
                         code.setNum( state->code() , 10 );
                         text.append( code );
         }
-        QMessageBox::critical( this , tr( "StarViewer" ) , text );
+        QMessageBox::critical( this , tr( "Starviewer" ) , text );
     }    
 }
 

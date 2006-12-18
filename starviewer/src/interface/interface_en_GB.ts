@@ -349,9 +349,6 @@
     </message>
 </context>
 <context>
-    <name>QFileDialog</name>
-</context>
-<context>
     <name>QMPR3D2DExtensionBase</name>
     <message>
         <location filename="qmpr3d2dextensionbase.ui" line="16"/>
@@ -779,7 +776,7 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="67"/>
-        <source>StarViewer</source>
+        <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -833,23 +830,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="320"/>
+        <location filename="qapplicationmainwindow.cpp" line="315"/>
         <source>&amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="326"/>
+        <location filename="qapplicationmainwindow.cpp" line="325"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="423"/>
+        <location filename="qapplicationmainwindow.cpp" line="424"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="485"/>
-        <source>About StarViewer</source>
+        <location filename="qapplicationmainwindow.cpp" line="486"/>
+        <source>About Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -928,27 +925,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="342"/>
+        <location filename="qapplicationmainwindow.cpp" line="343"/>
         <source>Switch to Catalan Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="354"/>
+        <location filename="qapplicationmainwindow.cpp" line="355"/>
         <source>Switch to Spanish Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="365"/>
+        <location filename="qapplicationmainwindow.cpp" line="366"/>
         <source>Switch to English Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="417"/>
+        <location filename="qapplicationmainwindow.cpp" line="418"/>
         <source>Language Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="417"/>
+        <location filename="qapplicationmainwindow.cpp" line="418"/>
         <source>The changes will take effect after restarting the application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -988,23 +985,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="315"/>
-        <source>&amp;Display</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="187"/>
-        <source>Show Log File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qapplicationmainwindow.cpp" line="188"/>
         <source>Show log file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="490"/>
-        <source>&lt;h2&gt;StarViewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
+        <location filename="qapplicationmainwindow.cpp" line="491"/>
+        <source>&lt;h2&gt;Starviewer 2006 &lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2006 Universitat de Girona&lt;p&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP).&lt;p&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="319"/>
+        <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1012,7 +1004,7 @@
     <name>udg::QConfigurationScreen</name>
     <message>
         <location filename="qconfigurationscreen.cpp" line="957"/>
-        <source>StarViewer</source>
+        <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1058,11 +1050,6 @@
     <message>
         <location filename="qconfigurationscreen.cpp" line="586"/>
         <source>Invalid database path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="808"/>
-        <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1205,7 +1192,7 @@
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="579"/>
-        <source>StarViewer</source>
+        <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1694,7 +1681,7 @@
     </message>
     <message>
         <location filename="qpacslist.cpp" line="148"/>
-        <source>StarViewer</source>
+        <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1951,18 +1938,13 @@
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1143"/>
+        <location filename="queryscreen.cpp" line="1664"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="365"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1664"/>
-        <source>StarViewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

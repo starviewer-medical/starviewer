@@ -338,8 +338,8 @@ void Q2DViewerExtension::chooseNewSerie()
 
 void Q2DViewerExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-2DViewer");
-    settings.beginGroup("StarViewer-App-2DViewer");
+    QSettings settings;
+    settings.beginGroup("Starviewer-App-2DViewer");
 
     m_splitter->restoreState( settings.value("splitter").toByteArray() );
 
@@ -348,8 +348,8 @@ void Q2DViewerExtension::readSettings()
 
 void Q2DViewerExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-2DViewer");
-    settings.beginGroup("StarViewer-App-2DViewer");
+    QSettings settings;
+    settings.beginGroup("Starviewer-App-2DViewer");
 
     settings.setValue("splitter", m_splitter->saveState() );
 

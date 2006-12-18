@@ -64,7 +64,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
     readSettings();
     // icona de l'aplicació
     this->setWindowIcon( QPixmap(":/images/starviewer.png") );
-    this->setWindowTitle( tr("StarViewer") );
+    this->setWindowTitle( tr("Starviewer") );
 //     m_exportFileFilters = tr("JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
 //     m_exportToJpegFilter = tr("JPEG Images (*.jpg)");
 //     m_exportToMetaIOFilter = tr("MetaIO Images (*.mhd)");
@@ -184,7 +184,7 @@ void QApplicationMainWindow::createActions()
     connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
 
     m_logViewerAction = new QAction( this );
-    m_logViewerAction->setText( tr("Show Log File") );
+    m_logViewerAction->setText( tr("Show log file") );
     m_logViewerAction->setStatusTip( tr("Show log file") );
     m_logViewerAction->setIcon( QIcon(":/images/logs.png") );
     connect( m_logViewerAction , SIGNAL( triggered() ) , m_logViewer , SLOT( exec() ) );
@@ -311,26 +311,27 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
 
-    // Menú 'display'
-    m_displayMenu = menuBar()->addMenu( tr("&Display") );
-    m_displayMenu->addAction( m_fullScreenAction );
-    m_displayMenu->addAction( m_logViewerAction );
-
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
     createLanguageMenu();
 
+    // Menú 'window'
+    m_windowMenu = menuBar()->addMenu( tr("&Window") );
+    m_windowMenu->addAction( m_fullScreenAction );
+
     menuBar()->addSeparator();
 
-    // menú d'ajuda, ara només hi ha els típic abouts
+    // menú d'ajuda i suport
     m_helpMenu = menuBar()->addMenu( tr("&Help") );
+    m_helpMenu->addAction( m_logViewerAction );
+    m_helpMenu->addSeparator();
     m_helpMenu->addAction( m_aboutAction );
 }
 
 void QApplicationMainWindow::createLanguageMenu()
 {
-    QSettings settings("GGG", "StarViewer-Core");
-    settings.beginGroup("StarViewer-Language");
+    QSettings settings;
+    settings.beginGroup("Starviewer-Language");
     QString defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
     settings.endGroup();
 
@@ -409,8 +410,8 @@ void QApplicationMainWindow::switchToLanguage( int id )
 
     if( id < 3 && id > -1 )
     {
-        QSettings settings("GGG", "StarViewer-Core");
-        settings.beginGroup("StarViewer-Language");
+        QSettings settings;
+        settings.beginGroup("Starviewer-Language");
         settings.setValue( "languageLocale", locale );
         settings.endGroup();
     }
@@ -482,8 +483,8 @@ void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 
 void QApplicationMainWindow::about()
 {
-    QMessageBox::about(this, tr("About StarViewer"),
-            tr("<h2>StarViewer 2006 </h2>"
+    QMessageBox::about(this, tr("About Starviewer"),
+            tr("<h2>Starviewer 2006 </h2>"
                "<p>Copyright &copy; 2006 Universitat de Girona"
                "<p>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve)."
                "<p>Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP)."
@@ -502,9 +503,9 @@ void QApplicationMainWindow::onVolumeLoaded( Identifier id )
 
 void QApplicationMainWindow::writeSettings()
 {
-    QSettings settings("software-inc.com", "StarViewer");
+    QSettings settings;
 
-    settings.beginGroup("StarViewer");
+    settings.beginGroup("Starviewer");
 
     settings.setValue( "position", pos() );
     settings.setValue( "size", size() );
@@ -517,8 +518,8 @@ void QApplicationMainWindow::writeSettings()
 
 void QApplicationMainWindow::readSettings()
 {
-    QSettings settings("software-inc.com", "StarViewer");
-    settings.beginGroup("StarViewer");
+    QSettings settings;
+    settings.beginGroup("Starviewer");
 
     move( settings.value( "position", QPoint(200, 200)).toPoint() );
     resize( settings.value( "size", QSize(400, 400)).toSize() );
@@ -649,7 +650,7 @@ void QApplicationMainWindow::readSettings()
 // {
 //     m_currentFile = fileName;
 //     if ( m_currentFile.isEmpty() )
-//         setWindowTitle(tr("StarViewer"));
+//         setWindowTitle(tr("Starviewer"));
 //     else
 //         setWindowTitle(tr("%1 - %2").arg( QFileInfo( m_currentFile ).fileName() )
 //                                     .arg( tr("Starviewer") ) );

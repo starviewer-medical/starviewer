@@ -1443,8 +1443,8 @@ void QMPRExtension::updateThickSlab( int value )
 
 void QMPRExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-MPR");
-    settings.beginGroup("StarViewer-App-MPR");
+    QSettings settings;
+    settings.beginGroup("Starviewer-App-MPR");
 
     if( settings.value("horizontalSplitter").toByteArray().isEmpty() )
     {
@@ -1471,8 +1471,8 @@ void QMPRExtension::readSettings()
 
 void QMPRExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-MPR");
-    settings.beginGroup("StarViewer-App-MPR");
+    QSettings settings;
+    settings.beginGroup("Starviewer-App-MPR");
 
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
     settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
