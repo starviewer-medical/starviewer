@@ -10,7 +10,6 @@
 
 #include "starviewersettings.h"
 #include "logging.h"
-#include <QDebug>
 
 namespace udg {
 
