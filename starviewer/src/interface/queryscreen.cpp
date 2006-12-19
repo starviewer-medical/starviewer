@@ -476,21 +476,28 @@ void QueryScreen::queryStudyCache()
     
     m_studyListCache.firstStudy();
 
-    if ( m_studyListCache.end() ) //no hi ha estudis
-    {
+    /* Aquest mètode a part de ser cridada quan l'usuari fa click al botó search, també es cridada al 
+     * constructor d'aquesta classe, per a que al engegar l'aplicació ja es mostri la llista d'estudis
+     * que hi ha a la base de dades local. Si el mètode no troba cap estudi a la base de dades local 
+     * es llença el missatge que no s'han trobat estudis, però com que no és idonii, en el cas aquest que es 
+     * crida des del constructor que es mostri el missatge de que no s'han trobat estudis al engegar l'aplicació, el que 
+     * es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
+     * vol dir que el mètode ha estat invocat des del constructor
+     */
+    if ( m_studyListCache.end() && isActiveWindow() )
+    { //no hi ha estudis
         m_studyTreeWidgetCache->clear();
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
-        return;
     }
+    else
+    {
+        m_studyTreeWidgetCache->insertStudyList( &m_studyListCache );//es mostra la llista d'estudis
     
-    m_studyTreeWidgetCache->insertStudyList( &m_studyListCache );//es mostra la llista d'estudis
-    
-    m_studyTreeWidgetCache->setSortColumn( 2 ); //ordenem pel nom
+        m_studyTreeWidgetCache->setSortColumn( 2 ); //ordenem pel nom
 
-    QApplication::restoreOverrideCursor();
-    
-    cout<<"entro"<<endl;
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 void QueryScreen::queryStudyDicomdir()
@@ -532,7 +539,6 @@ void QueryScreen::queryStudyDicomdir()
         m_studyTreeWidgetDicomdir->clear();        
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
-        cout<<"fai\n";
         return;
     }
 
