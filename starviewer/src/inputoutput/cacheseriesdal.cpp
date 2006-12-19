@@ -62,6 +62,7 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }
     
     return state;
@@ -95,6 +96,7 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( buildSqlQuerySeries( &seriesMask ).c_str()  );
         return state;
     }
     
@@ -152,6 +154,7 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }
     return state;
 }

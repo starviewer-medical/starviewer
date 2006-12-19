@@ -67,6 +67,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     
@@ -110,6 +111,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
                                 
@@ -141,6 +143,7 @@ Status CacheStudyDAL::queryStudy( StudyMask studyMask , StudyList &ls )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( buildSqlQueryStudy( & studyMask ).c_str() );
         return state;
     }
     
@@ -199,6 +202,7 @@ Status CacheStudyDAL::queryOldStudies( std::string OldStudiesDate , StudyList &l
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }
         
@@ -254,6 +258,7 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }
         
@@ -282,6 +287,7 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
             logMessage = "Error a la cache número ";
             logMessage.append( errorNumber );
             ERROR_LOG( logMessage.c_str() );
+            ERROR_LOG( sql.c_str() );
         }
     }
     
@@ -338,6 +344,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }           
     else if (  rows == 0 )
@@ -350,6 +357,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }
     else
@@ -374,6 +382,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }   
     else if (  rows == 0 )
@@ -385,6 +394,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }
     
@@ -408,6 +418,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
             logMessage = "Error a la cache número ";
             logMessage.append( errorNumber );
             ERROR_LOG( logMessage.c_str() );
+            ERROR_LOG( sqlSentence );
             return state;
         }    
     }
@@ -429,6 +440,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     
@@ -448,6 +460,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     
@@ -467,6 +480,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }
 
@@ -493,6 +507,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -514,6 +529,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
         
@@ -566,6 +582,7 @@ Status CacheStudyDAL::delNotRetrievedStudies()
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }
    
@@ -617,6 +634,7 @@ Status CacheStudyDAL::setStudyRetrieved( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
     }
     
     return state;
@@ -652,6 +670,7 @@ Status CacheStudyDAL::setStudyRetrieving( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;
@@ -687,6 +706,7 @@ Status CacheStudyDAL::setStudyModality( std::string studyUID , std::string modal
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }
     return state;
 }
@@ -721,6 +741,7 @@ Status CacheStudyDAL::updateStudyAccTime( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;

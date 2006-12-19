@@ -68,6 +68,7 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        if ( stateQuery.code() == 2099 ) ERROR_LOG( sqlSentence );
     }    
 
     return state;                    
@@ -118,6 +119,7 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }        
     
@@ -153,6 +155,7 @@ Status PacsListDB::queryPacsList( PacsList &list )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }    
     
@@ -209,6 +212,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }    
     
@@ -260,6 +264,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }    
     
@@ -308,6 +313,7 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
     }                 
     return state;
 
@@ -347,6 +353,7 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
     }   
     return state;
 }

@@ -76,9 +76,10 @@ Status CacheImageDAL::insertImage( Image *image )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
-                                    
+                               
     //Actualitzem l'espai ocupat de la cache , per la nova imatge descarregada                                
     sql.clear();  
     sql.insert( 0 , "Update Pool Set Space = Space + %i " );
@@ -97,6 +98,7 @@ Status CacheImageDAL::insertImage( Image *image )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     
@@ -144,6 +146,7 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( buildSqlQueryImages( &imageMask ).c_str()  );
         return state;
     }    
     
@@ -196,6 +199,7 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( buildSqlCountImageNumber( &imageMask ).c_str() );
         return state;
     }    
     i = 1;//ignorem les capçaleres
@@ -230,6 +234,7 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( buildSqlSizeImage( &imageMask ).c_str() );
         return state;
     }    
     
@@ -272,6 +277,7 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }    
 
     return state;

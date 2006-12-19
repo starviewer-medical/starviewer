@@ -62,6 +62,7 @@ Status CachePool::updatePoolSpace( int size )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
     }
     
     return state;
@@ -101,6 +102,7 @@ Status CachePool::updatePoolTotalSize( int space )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
     }
     
     return state;
@@ -132,6 +134,7 @@ Status CachePool::resetPoolSpace()
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
     }
 
     return state;
@@ -163,6 +166,7 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }    
     i = 1;//ignorem les capçaleres
@@ -198,6 +202,7 @@ Status CachePool::getPoolTotalSize( unsigned int &space )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
         return state;
     }    
     i = 1;//ignorem les capçaleres

@@ -35,7 +35,13 @@ bool CacheInstallation::checkInstallationCacheImagePath()
         }
     }
     
-    INFO_LOG(" Estat de la cache d'imatges correcte ");    
+    INFO_LOG( "Estat de la cache d'imatges correcte " );    
+    
+    missatgeLog = "Cache d'imatges utilitzada : ";
+    missatgeLog.append( settings.getCacheImagePath()); 
+    
+    INFO_LOG( missatgeLog.toAscii().constData()  );
+    
     return true;
 }
 
@@ -68,7 +74,11 @@ bool CacheInstallation::checkInstallationCacheDatabase()
         }
     }
     
-    INFO_LOG( "Estat de la base de dades correcte " );    
+    INFO_LOG( "Estat de la base de dades correcte " );  
+      
+    missatgeLog =  "Base de dades utilitzada : ";
+    missatgeLog.append( settings.getDatabasePath() );
+    INFO_LOG( missatgeLog.toAscii().constData() );
     return true;
 }
 

@@ -11,6 +11,7 @@
 #include "cachetools.h"
 #include "databaseconnection.h"
 #include "status.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -37,6 +38,7 @@ Status CacheTools::compactCachePacs()
     databaseConnection->releaseLock();
                                 
     state = databaseConnection->databaseStatus ( stateDatabase );
+    INFO_LOG( "S'HA COMPACTAT LA BASE DE DADES" );
 
     return state;
 }
