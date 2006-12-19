@@ -131,6 +131,18 @@ void StarviewerSettings::setStudyDicomdirListColumnWidth( int col , int width )
     m_starviewerSettings.setValue( key , width );
 }
 
+void StarviewerSettings::setQueryScreenWindowPositionX( int positionX )
+{
+    QString key = GroupSettingsName + queryScreenWindowPositionX;
+    m_starviewerSettings.setValue( key , positionX );
+}
+
+void StarviewerSettings::setQueryScreenWindowPositionY( int positionY )
+{
+    QString key = GroupSettingsName + queryScreenWindowPositionY;
+    m_starviewerSettings.setValue( key , positionY );
+}
+
 int StarviewerSettings::getStudyPacsListColumnWidth( int col )
 {
     QString key = GroupSettingsName + pacsColumnWidthKey + QString::number(col);
@@ -147,6 +159,18 @@ int StarviewerSettings::getStudyDicomdirListColumnWidth( int col )
 {
     QString key = GroupSettingsName + dicomdirColumnWidthKey + QString::number( col );
     return m_starviewerSettings.value( key , 100 ).toInt();
+}
+
+int StarviewerSettings::getQueryScreenWindowPositionX()
+{
+    QString key = GroupSettingsName + queryScreenWindowPositionX;
+    return m_starviewerSettings.value( key , 50 ).toInt();
+}
+
+int StarviewerSettings::getQueryScreenWindowPositionY()
+{
+    QString key = GroupSettingsName + queryScreenWindowPositionY;
+    return m_starviewerSettings.value( key , 50 ).toInt();
 }
 
 /*** Dades de la institució*/

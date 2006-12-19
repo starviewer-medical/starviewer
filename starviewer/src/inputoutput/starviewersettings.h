@@ -34,6 +34,8 @@ const QString InstitutionZipCode("/institution/zipCode");
 const QString InstitutionCountry("/institution/country");
 const QString InstitutionEmail("/institution/Email");
 const QString InstitutionPhoneNumber("/institution/phoneNumber");
+const QString queryScreenWindowPositionX("/interface/queryscreen/windowPositionX");
+const QString queryScreenWindowPositionY("/interface/queryscreen/windowPositionY");
 
 class StarviewerSettings{
 public:
@@ -145,6 +147,16 @@ public:
      * @param amplada de la columna
      */
     void setStudyDicomdirListColumnWidth( int col , int width ); 
+    
+    /** guarda en quina és la posició en l'eix de coordenades X en que es troba la interficie queryscreen
+     * @param positionX posició en l'eix de coordenades X de la pantalla queryScreen
+     */
+    void setQueryScreenWindowPositionX( int positionX ); 
+    
+    /** guarda en quina és la posició en l'eix de coordenades Y en que es troba la interficie queryscreen
+     * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
+     */
+    void setQueryScreenWindowPositionY( int positionY );
       
 	/** retorna l'amplada del número de columna de la llista d'estudis del PACS ,  passat per paràmetre
 	 * @return amplada de la columna
@@ -161,6 +173,15 @@ public:
      */
     int getStudyDicomdirListColumnWidth( int column );
 
+    /** retorna en quin posició de l'eix estava la pantalla queryscreen l'última vegada que s'ha tancat l'aplicació
+     * @return posicó en l'eix X que es trobava la interficie queryScreen
+     */
+    int getQueryScreenWindowPositionX();
+    
+    /** retorna en quin posició de l'eix estava la pantalla queryscreen l'última vegada que s'ha tancat l'aplicació
+     * @return posicó en l'eix Y que es trobava la interficie queryScreen
+     */
+    int getQueryScreenWindowPositionY();
     //informació de l'institució
     
     /** Guarda el nom de la institució

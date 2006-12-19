@@ -81,7 +81,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
    
-    centerWindow(); //centrem la finestra
+    setWindowPosition(); //la pantalla sempre es situa en el lloc on estava l'última vegada que es va tancar
     
     m_textPatientID->setFocus();
     
@@ -218,11 +218,11 @@ connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , 
 
 }
 
-void QueryScreen::centerWindow()
+void QueryScreen::setWindowPosition()
 {
-    QDesktopWidget *d = QApplication::desktop();
+    StarviewerSettings settings;
         
-    move( ( d->width() - frameGeometry().width() ) / 2 , (d->height() - frameGeometry().height() ) / 2 );
+    move( settings.getQueryScreenWindowPositionX() , settings.getQueryScreenWindowPositionX() );
 }
 
 void QueryScreen::clearTexts()
@@ -489,6 +489,8 @@ void QueryScreen::queryStudyCache()
     m_studyTreeWidgetCache->setSortColumn( 2 ); //ordenem pel nom
 
     QApplication::restoreOverrideCursor();
+    
+    cout<<"entro"<<endl;
 }
 
 void QueryScreen::queryStudyDicomdir()
@@ -1267,7 +1269,6 @@ void QueryScreen::resizePacsList()
     }
     
    this->resize( this->width() + mida, this->height() );
-   centerWindow();
 }
 
 void QueryScreen::convertToDicomdir( QString studyUID )
@@ -1668,6 +1669,11 @@ void QueryScreen::databaseError(Status *state)
 
 QueryScreen::~QueryScreen()
 {
+    StarviewerSettings settings;
+    
+    //guardem la posició en que es troba la pantalla
+    settings.setQueryScreenWindowPositionX( x() ); 
+    settings.setQueryScreenWindowPositionY( y() );
 }
 
 };

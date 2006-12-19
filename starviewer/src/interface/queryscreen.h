@@ -304,7 +304,7 @@ struct retrieveParameters
     void databaseError( Status *state );
     
     /// Centra la finestra a la pantalla
-    void centerWindow();
+    void setWindowPosition();
     
     /// Assigna la mida al PacsList en funcio del tab en que es trobi i de la variable m_PacsListShow
     void resizePacsList();
