@@ -71,7 +71,7 @@ public:
     double getCurrentImageValue() const { return m_currentImageValue; }
 
     /// Passa coordenades de display a coordenades de món i viceversa \TODO aquest metode haurioa de ser virtual al pare
-    static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[3] );
+    static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] );
     static void computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] );
 
     /// Fa una captura de la vista actual i la guarda en una estructura interna
