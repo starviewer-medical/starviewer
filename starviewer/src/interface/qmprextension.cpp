@@ -362,7 +362,7 @@ void QMPRExtension::detectAxialViewAxisActor()
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
     y = m_axial2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -408,7 +408,7 @@ void QMPRExtension::rotateAxialViewAxisActor()
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
     y = m_axial2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x , y , 0 , toWorld );
 
     double vec1[3], vec2[3];
@@ -469,7 +469,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
     int x, y;
     x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
     y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -501,7 +501,7 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     int x, y;
     x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
     y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
     //
@@ -569,7 +569,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
     y = m_axial2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -610,7 +610,7 @@ void QMPRExtension::pushAxialViewAxisActor()
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
     y = m_axial2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
     // Get the motion vector
@@ -652,7 +652,7 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     int x, y;
     x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
     y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -681,7 +681,7 @@ void QMPRExtension::pushSagitalViewAxisActor()
     int x, y;
     x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
     y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
-    double toWorld[3];
+    double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
     m_axial2DView->setSlice( static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
