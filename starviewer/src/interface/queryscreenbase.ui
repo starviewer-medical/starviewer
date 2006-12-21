@@ -1,30 +1,13 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::QueryScreenBase</class>
  <widget class="QDialog" name="udg::QueryScreenBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>832</width>
-    <height>833</height>
-   </rect>
-  </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>1</hsizetype>
-    <vsizetype>1</vsizetype>
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize" >
-   <size>
     <width>800</width>
     <height>770</height>
-   </size>
+   </rect>
   </property>
   <property name="windowTitle" >
    <string>Query Study</string>
@@ -37,194 +20,99 @@
     <number>6</number>
    </property>
    <item row="3" column="0" >
-    <widget class="QTabWidget" name="m_tab" >
-     <property name="enabled" >
-      <bool>true</bool>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
      </property>
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>3</hsizetype>
-       <vsizetype>3</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+     <property name="spacing" >
+      <number>6</number>
      </property>
-     <property name="tabPosition" >
-      <enum>QTabWidget::North</enum>
-     </property>
-     <property name="tabShape" >
-      <enum>QTabWidget::Rounded</enum>
-     </property>
-     <widget class="QWidget" name="m_tabCache" >
-      <attribute name="title" >
-       <string>Local Database</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
        </property>
-       <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetCache" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>5</width>
-             <height>5</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="udg::QSeriesListWidget" name="m_seriesListWidgetCache" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="m_tabPacs" >
-      <attribute name="title" >
-       <string>PacsServer</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
+       <property name="sizeHint" >
+        <size>
+         <width>251</width>
+         <height>28</height>
+        </size>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_buttonCreateDicomdir" >
+       <property name="text" >
+        <string>Create Dicomdir</string>
        </property>
-       <item row="1" column="0" colspan="2" >
-        <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetPacs" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>7</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>0</width>
-           <height>159</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="1" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="m_tabDicomdir" >
-      <attribute name="title" >
-       <string>Dicomdir</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="spacing" >
-        <number>6</number>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Fixed</enum>
        </property>
-       <item row="0" column="0" >
-        <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetDicomdir" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>7</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize" >
-          <size>
-           <width>0</width>
-           <height>159</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
+       <property name="sizeHint" >
+        <size>
+         <width>21</width>
+         <height>28</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_buttonOpenDicomdir" >
+       <property name="text" >
+        <string>Open Dicomdir</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>21</width>
+         <height>28</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_buttonConfig" >
+       <property name="text" >
+        <string>config</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>211</width>
+         <height>28</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item row="0" column="0" >
     <layout class="QHBoxLayout" >
@@ -467,7 +355,7 @@
                  </font>
                 </property>
                 <property name="text" >
-                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Patient ID :&lt;/p>&lt;/body>&lt;/html></string>
+                 <string>Patient ID:</string>
                 </property>
                </widget>
               </item>
@@ -490,7 +378,7 @@
                  </size>
                 </property>
                 <property name="text" >
-                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Last Name :&lt;/p>&lt;/body>&lt;/html></string>
+                 <string>Last Name:</string>
                 </property>
                </widget>
               </item>
@@ -513,7 +401,7 @@
                  </size>
                 </property>
                 <property name="text" >
-                 <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First Name :&lt;/p>&lt;/body>&lt;/html></string>
+                 <string>First Name:</string>
                 </property>
                </widget>
               </item>
@@ -657,7 +545,7 @@
                 <item row="0" column="0" >
                  <widget class="QLabel" name="textLabel5_3" >
                   <property name="text" >
-                   <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Study ID :&lt;/p>&lt;/body>&lt;/html></string>
+                   <string>Study ID:</string>
                   </property>
                  </widget>
                 </item>
@@ -674,7 +562,7 @@
                 <item row="1" column="0" colspan="2" >
                  <widget class="QLabel" name="textLabel6_3" >
                   <property name="text" >
-                   <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Accession Number :&lt;/p>&lt;/body>&lt;/html></string>
+                   <string>Accession Number:</string>
                   </property>
                  </widget>
                 </item>
@@ -1091,7 +979,7 @@
       </layout>
      </item>
      <item>
-      <widget class="udg::QPacsList" name="qPacsList" >
+      <widget class="udg::QPacsList" native="1" name="qPacsList" >
        <property name="minimumSize" >
         <size>
          <width>20</width>
@@ -1102,142 +990,153 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
+   <item row="2" column="0" >
+    <widget class="QTabWidget" name="m_tab" >
+     <property name="enabled" >
+      <bool>true</bool>
      </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Fixed</enum>
+     <property name="tabPosition" >
+      <enum>QTabWidget::North</enum>
      </property>
-     <property name="sizeHint" >
-      <size>
-       <width>814</width>
-       <height>16</height>
-      </size>
+     <property name="tabShape" >
+      <enum>QTabWidget::Rounded</enum>
      </property>
-    </spacer>
-   </item>
-   <item row="4" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
+     <property name="currentIndex" >
+      <number>2</number>
      </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+     <widget class="QWidget" name="m_tabCache" >
+      <attribute name="title" >
+       <string>Local Database</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
        </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Expanding</enum>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-       <property name="sizeHint" >
-        <size>
-         <width>251</width>
-         <height>28</height>
-        </size>
+       <item row="0" column="0" >
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetCache" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>7</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>5</width>
+             <height>5</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="udg::QSeriesListWidget" native="1" name="m_seriesListWidgetCache" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>7</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_tabPacs" >
+      <attribute name="title" >
+       <string>PacsServer</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
        </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_buttonCreateDicomdir" >
-       <property name="text" >
-        <string>Create Dicomdir</string>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+       <item>
+        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetPacs" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_tabDicomdir" >
+      <attribute name="title" >
+       <string>Dicomdir</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
        </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Fixed</enum>
+       <property name="spacing" >
+        <number>6</number>
        </property>
-       <property name="sizeHint" >
-        <size>
-         <width>21</width>
-         <height>28</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_buttonOpenDicomdir" >
-       <property name="text" >
-        <string>Open Dicomdir</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>21</width>
-         <height>28</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_buttonConfig" >
-       <property name="text" >
-        <string>config</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>211</width>
-         <height>28</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+       <item row="0" column="0" >
+        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetDicomdir" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
+   <class>udg::QStudyTreeWidget</class>
+   <extends>QWidget</extends>
+   <header>qstudytreewidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>udg::QPacsList</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>qpacslist.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>udg::QSeriesListWidget</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>qserieslistwidget.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>udg::QStudyTreeWidget</class>
-   <extends></extends>
-   <header>qstudytreewidget.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>
