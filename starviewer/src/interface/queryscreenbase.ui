@@ -1002,7 +1002,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="m_tabCache" >
       <attribute name="title" >
@@ -1124,6 +1124,11 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>udg::QSeriesListWidget</class>
+   <extends>QWidget</extends>
+   <header>qserieslistwidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>udg::QStudyTreeWidget</class>
    <extends>QWidget</extends>
    <header>qstudytreewidget.h</header>
@@ -1132,11 +1137,6 @@
    <class>udg::QPacsList</class>
    <extends>QWidget</extends>
    <header>qpacslist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>udg::QSeriesListWidget</class>
-   <extends>QWidget</extends>
-   <header>qserieslistwidget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
