@@ -28,6 +28,7 @@
 // PACS --------------------------------------------
 #include "queryscreen.h"
 #include "seriesvolum.h"
+#include "input.h"
 
 namespace udg {
 
@@ -93,7 +94,6 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
 
@@ -107,7 +107,6 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
 
@@ -121,7 +120,6 @@ void ExtensionHandler::request( int who )
         }
         else
         {
-            // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
 
