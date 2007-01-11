@@ -12,8 +12,6 @@
 #include <QProgressDialog>
 // recursos
 #include "volumerepository.h"
-#include "input.h"
-#include "output.h"
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
 #include "volumesourceinformation.h"
@@ -38,10 +36,8 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
 {
     this->setObjectName( name );
     m_volumeRepository = VolumeRepository::getRepository();
-    m_inputReader = new Input;
-    m_outputWriter = new Output;
-    m_mainApp = mainApp;    
-    
+    m_mainApp = mainApp;
+
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
     m_queryScreen = new QueryScreen( m_mainApp );
@@ -57,7 +53,7 @@ ExtensionHandler::~ExtensionHandler()
 void ExtensionHandler::createConnections()
 {
     connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
-    
+
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
 }
@@ -72,7 +68,7 @@ void ExtensionHandler::request( int who )
 // \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
     switch( who )
     {
-    
+
     case 1:
         if( m_volumeID.isNull() )
         {
@@ -86,7 +82,7 @@ void ExtensionHandler::request( int who )
             m_mainApp->newAndOpen();
         }
     break;
-    
+
     /// 2D MPR VIEW
     case 2:
         if( !m_volumeID.isNull() )
@@ -100,7 +96,7 @@ void ExtensionHandler::request( int who )
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
-    
+
     /// MPR 3D VIEW
     case 3:
         if( !m_volumeID.isNull() )
@@ -114,7 +110,7 @@ void ExtensionHandler::request( int who )
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
         }
     break;
-    
+
     /// MPR 3D-2D VIEW
     case 4:
         if( !m_volumeID.isNull() )
@@ -141,7 +137,7 @@ void ExtensionHandler::request( int who )
             m_mainApp->newAndOpenDir();
         }
     break;
-    
+
     case 7:
         m_queryScreen->show();
     break;
@@ -155,7 +151,7 @@ void ExtensionHandler::request( int who )
 //         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
         connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
         connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
-    
+
         break;
     }
     default:
@@ -166,7 +162,7 @@ void ExtensionHandler::request( int who )
 //         defaultViewerExtension2->populateToolBar( m_mainApp->getExtensionsToolBar() );
         connect( defaultViewerExtension2 , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
         connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension2 , SLOT( setSecondInput(Volume*) ) );
-    
+
         break;
     }
     }
@@ -201,53 +197,6 @@ void ExtensionHandler::onVolumeLoaded( Identifier id )
     request( 8 );
 }
 
-bool ExtensionHandler::open( QString fileName )
-{
-    bool ok = true; 
-    
-    if ( m_volumeID.isNull() )
-    {
-        // indiquem que ens obri el fitxer
-        if( QFileInfo( fileName ).suffix() == "dcm") // petita prova per provar lectura de DICOM's
-        {
-            if( m_inputReader->readSeries( QFileInfo(fileName).dir().absolutePath().toLatin1() ) )
-            { 
-                // creem el volum
-                Volume *dummyVolume = m_inputReader->getData();
-                // afegim el nou volum al repositori
-                m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
-                request(8);
-            }
-            else
-            {
-                // no s'ha pogut obrir l'arxiu per algun motiu
-                ok = false;
-            }
-        }
-        else
-        {
-            if( m_inputReader->openFile( fileName.toLatin1() ) )
-            { 
-                // creem el volum
-                Volume *dummyVolume = m_inputReader->getData();
-                // afegim el nou volum al repositori
-                m_volumeID = m_volumeRepository->addVolume( dummyVolume );            
-                request(8);
-            }
-            else
-            {
-                // no s'ha pogut obrir l'arxiu per algun motiu
-                ok = false;
-            }
-        }        
-    }
-    else
-    {
-        //Si ja tenim obert un model, obrim una finestra nova ???
-    } 
-    return ok;  
-}
-
 void ExtensionHandler::viewStudy( StudyVolum study )
 {
     Input *input = new Input;
@@ -261,7 +210,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
     SeriesVolum serie;
-    
+
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
     study.firstSerie();
     while ( !study.end() )
@@ -273,14 +222,14 @@ void ExtensionHandler::viewStudy( StudyVolum study )
         study.nextSerie();
     }
     if ( study.end() )
-    { 
+    {
         //si no l'hem trobat per defecte mostrarem la primera serie
         study.firstSerie();
     }
-    
+
     serie = study.getSeriesVolum();
 
-	if ( serie.getNumberOfImages() > 1)
+	if ( serie.getNumberOfImages() > 1 )
 	{
     	input->readSeries( serie.getSeriesPath().c_str() );
     }
@@ -295,7 +244,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
         Identifier id;
         id = m_volumeRepository->addVolume( dummyVolume );
         // obrir nova finestra
-        QString windowName;    
+        QString windowName;
         QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" , m_mainApp->getCountQApplicationMainWindow() + 1 ) ) );
         newMainWindow->show();
         newMainWindow->onVolumeLoaded( id );
@@ -306,7 +255,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
         m_volumeID = m_volumeRepository->addVolume( dummyVolume );
         m_mainApp->onVolumeLoaded( m_volumeID );
         m_mainApp->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
-    }    
+    }
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
@@ -322,7 +271,7 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
     SeriesVolum serie;
-    
+
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
     study.firstSerie();
     while ( !study.end() )
@@ -334,11 +283,11 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
         study.nextSerie();
     }
     if ( study.end() )
-    { 
+    {
         //si no l'hem trobat per defecte mostrarem la primera serie
         study.firstSerie();
     }
-    
+
     serie = study.getSeriesVolum();
 
 	if ( serie.getNumberOfImages() > 1 )
@@ -357,7 +306,7 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     Volume *dummyVolume = input->getData();
     m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-    emit secondInput( dummyVolume );    
+    emit secondInput( dummyVolume );
 }
 
 void ExtensionHandler::extensionChanged( int index )
@@ -366,4 +315,4 @@ void ExtensionHandler::extensionChanged( int index )
     m_mainApp->m_extensionWorkspace->setLastIndex( index );
 }
 
-};  // end namespace udg 
+};  // end namespace udg
