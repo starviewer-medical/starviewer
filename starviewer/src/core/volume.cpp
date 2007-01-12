@@ -3,10 +3,10 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGVOLUME_CPP
 #define UDGVOLUME_CPP
- 
+
 // VTK
 #include <vtkImageData.h>
 
@@ -27,8 +27,8 @@ Volume::Volume()
 {
     init();
 }
- 
-Volume::Volume( ItkImageTypePointer itkImage ) 
+
+Volume::Volume( ItkImageTypePointer itkImage )
 {
     init();
     this->setData( itkImage );
@@ -42,9 +42,9 @@ Volume::Volume( VtkImageTypePointer vtkImage )
 
 void Volume::init()
 {
-    m_imageDataITK = 0;
-    m_imageDataVTK = 0;
-    
+    // \TODO és millor crear un objecte o assignar-li NUL a l'inicialitzar? Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
+    m_imageDataVTK = vtkImageData::New();
+
     m_itkToVtkFilter = ItkToVtkFilterType::New();
     m_vtkToItkFilter = VtkToItkFilterType::New();
 
@@ -53,58 +53,51 @@ void Volume::init()
 
 Volume::~Volume()
 {
-   if( m_imageDataITK  )
-       m_imageDataITK->Delete(); // necessari???
-   if( m_imageDataVTK )
-       m_imageDataVTK->Delete();
 }
 
-Volume::ItkImageTypePointer Volume::getItkData(  )
+Volume::ItkImageTypePointer Volume::getItkData()
 {
-    return m_imageDataITK; 
-}
-
-Volume::VtkImageTypePointer Volume::getVtkData(  )
-{
-    if( m_imageDataVTK == 0  && m_imageDataITK )
+    m_vtkToItkFilter->SetInput( m_imageDataVTK );
+    try
     {
-        m_itkToVtkFilter->SetInput( m_imageDataITK );
-        m_imageDataVTK = m_itkToVtkFilter->GetOutput(); // ficar GetImporter/Exporter?
-        try
-        {
-            m_itkToVtkFilter->Update();
-        }
-        catch( itk::ExceptionObject & excep )
-        {
-            WARN_LOG( "Excepció en el filtre itkToVtk :: Volume::getVtkData " )
-            std::cerr << excep << std::endl;
-        }
+        m_vtkToItkFilter->GetImporter()->Update();
     }
+    catch( itk::ExceptionObject & excep )
+    {
+        WARN_LOG( qPrintable( QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription() ) )
+        std::cerr << excep << std::endl;
+    }
+    return m_vtkToItkFilter->GetImporter()->GetOutput();
+}
+
+Volume::VtkImageTypePointer Volume::getVtkData()
+{
     return m_imageDataVTK;
 }
 
 void Volume::setData( ItkImageTypePointer itkImage  )
 {
-    m_imageDataITK = itkImage; 
+    m_itkToVtkFilter->SetInput( itkImage );
+    try
+    {
+        m_itkToVtkFilter->Update();
+    }
+    catch( itk::ExceptionObject & excep )
+    {
+        WARN_LOG( qPrintable( QString("Excepció en el filtre itkToVtk :: Volume::setData( ItkImageTypePointer itkImage ) -> ") + excep.GetDescription() ) )
+        std::cerr << excep << std::endl;
+    }
+    if( m_imageDataVTK )
+        m_imageDataVTK->ReleaseData();
+    m_imageDataVTK = m_itkToVtkFilter->GetOutput();
 }
 
 void Volume::setData( VtkImageTypePointer vtkImage )
 {
     // \TODO fer còpia local, no només punter-> com fer-ho?
+    if( m_imageDataVTK )
+        m_imageDataVTK->ReleaseData();
     m_imageDataVTK = vtkImage;
-    
-    m_vtkToItkFilter->SetInput( m_imageDataVTK );
-    m_imageDataITK = m_vtkToItkFilter->GetImporter()->GetOutput();
-    
-    try
-    {
-        m_vtkToItkFilter->GetImporter()->Update();
-    }
-    catch(itk::ExceptionObject & excep)
-    {
-        WARN_LOG( "Excepció en el filtre vtkToItk :: Volume::setData " )
-        std::cerr << excep << std::endl;    
-    }
 }
 
 void Volume::updateInformation()

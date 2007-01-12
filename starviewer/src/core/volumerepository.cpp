@@ -23,7 +23,7 @@ VolumeRepository::VolumeRepository()
 Identifier VolumeRepository::addVolume( Volume* model)
 {
     Identifier id;
-    
+
     id = this->addItem( model );
     emit itemAdded( id );
     INFO_LOG( qPrintable( "S'ha afegit al repositori el volum amb id: " + QString::number( id.getValue() ) )  );
@@ -32,12 +32,18 @@ Identifier VolumeRepository::addVolume( Volume* model)
 
 Volume* VolumeRepository::getVolume( Identifier id )
 {
-    return this->getItem( id );    
+    return this->getItem( id );
 }
 
 void VolumeRepository::removeVolume( Identifier id )
 {
-    this->removeItem( id );    
+    // l'obtenim
+    Volume *dum = this->getVolume( id );
+    // el treiem de la llista
+    this->removeItem( id );
+    // i l'eliminem
+    delete dum;
+
     emit itemRemoved( id );
     INFO_LOG( qPrintable( "S'ha esborrat del repositori el volum amb id: " + QString::number( id.getValue() ) ) );
 }

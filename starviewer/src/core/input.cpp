@@ -13,8 +13,6 @@
 // std
 #include <iostream>
 //ITK
-#include <itkSpatialOrientation.h>
-#include <itkOrientImageFilter.h>
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
 // QT
@@ -22,42 +20,44 @@
 // VTK
 #include <vtkMath.h> // pel cross
 #include <vtkImageChangeInformation.h> // per portar a l'origen
-#include <vtkImageReslice.h>
-#include <vtkMatrix4x4.h>
 
 namespace udg {
 
 Input::Input()
 {
-    m_reader = ReaderType::New(); 
-    m_seriesReader = SeriesReaderType::New(); 
+    m_reader = ReaderType::New();
+    m_seriesReader = SeriesReaderType::New();
     m_volumeData = new Volume;
-    
+
     m_gdcmIO = ImageIOType::New();
     m_namesGenerator = NamesGeneratorType::New();
-    
+
    /* typedef itk::QtSignalAdaptor SignalAdaptorType;
     SignalAdaptorType m_progressSignalAdaptor;
-   */ 
+   */
      itk::QtSignalAdaptor *m_progressSignalAdaptor = new itk::QtSignalAdaptor;
 //   Connect the adaptor as an observer of a Filter's event
     m_seriesReader->AddObserver( itk::ProgressEvent(),  m_progressSignalAdaptor->GetCommand() );
-// 
+//
 //  Connect the adaptor's Signal to the Qt Widget Slot
    connect( m_progressSignalAdaptor, SIGNAL( Signal() ), this, SLOT( slotProgress() ) );
 }
 
 Input::~Input()
 {
+    m_seriesReader->Delete();
+    m_reader->Delete();
+    m_gdcmIO->Delete();
+    delete m_volumeData;
 }
- 
+
 bool Input::openFile( const char * fileName )
-{ 
+{
     ProgressCommand::Pointer observer = ProgressCommand::New();
     m_reader->AddObserver( itk::ProgressEvent(), observer );
-    
+
     bool ok = true;
-    
+
     m_reader->SetFileName( fileName );
     emit progress(0);
     try
@@ -66,7 +66,7 @@ bool Input::openFile( const char * fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció llegint l'arxiu [" + QString::fromLatin1(fileName) + "]" ) )
+        WARN_LOG( qPrintable( "Excepció llegint l'arxiu [" + QString::fromLatin1(fileName) + QString("] -> ") + e.GetDescription() ) )
         std::cerr << e << std::endl;
 
         ok = false;
@@ -74,7 +74,10 @@ bool Input::openFile( const char * fileName )
     }
     if ( ok )
     {
-        m_volumeData->setData( m_reader->GetOutput() );
+        ImageType::Pointer imageData;
+        imageData = m_reader->GetOutput();
+        m_volumeData->setData( imageData );
+        imageData->Delete();
 
         vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
         changeFilter->SetInput( m_volumeData->getVtkData() );
@@ -92,32 +95,34 @@ bool Input::readSeries( const char *dirPath )
 //     m_seriesReader->AddObserver( itk::ProgressEvent(), observer );
 
     bool ok = true;
-    
+
     m_namesGenerator->SetInputDirectory( dirPath );
-    
+
     const SeriesReaderType::FileNamesContainer &filenames = m_namesGenerator->GetInputFileNames();
     // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
-    m_seriesReader->SetImageIO( m_gdcmIO );  
+    m_seriesReader->SetImageIO( m_gdcmIO );
     m_seriesReader->SetFileNames( filenames );
-    
+
     emit progress( 0 );
-    
+
     try
     {
         m_seriesReader->Update();
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció llegint els arxius del directori [" + QString::fromLatin1(dirPath) + "]" ) )
+        WARN_LOG( qPrintable( "Excepció llegint els arxius del directori [" + QString::fromLatin1(dirPath) + QString("] -> ") + e.GetDescription() ) )
         std::cerr << e << std::endl;
         ok = false;
         emit progress( -1 ); // això podria indicar excepció
     }
     if ( ok )
     {
-        m_volumeData->setData( m_seriesReader->GetOutput() );
-        m_volumeData->getItkData()->SetMetaDataDictionary( m_gdcmIO->GetMetaDataDictionary() );
-
+        ImageType::Pointer imageData;
+        imageData = m_seriesReader->GetOutput();
+        imageData->SetMetaDataDictionary( m_gdcmIO->GetMetaDataDictionary() );
+        m_volumeData->setData( imageData );
+        imageData->Delete();
         vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
         changeFilter->SetInput( m_volumeData->getVtkData() );
         changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
@@ -126,7 +131,7 @@ bool Input::readSeries( const char *dirPath )
         emit progress( 100 );
         this->setVolumeInformation();
     }
-    
+
     return ok;
 }
 
@@ -151,14 +156,14 @@ bool Input::queryTagAsString( std::string tag , std::string &result )
     bool ok = true;
     typedef itk::MetaDataDictionary   DictionaryType;
     const  DictionaryType & dictionary = m_gdcmIO->GetMetaDataDictionary();
-    
+
     typedef itk::MetaDataObject< std::string > MetaDataStringType;
 
     DictionaryType::ConstIterator itr = dictionary.Begin();
     DictionaryType::ConstIterator end = dictionary.End();
-    
+
     DictionaryType::ConstIterator tagItr = dictionary.Find( tag );
-    
+
     if( tagItr == end )
     {
         ok = false;
@@ -166,7 +171,7 @@ bool Input::queryTagAsString( std::string tag , std::string &result )
     else
     {
         MetaDataStringType::ConstPointer entryvalue = dynamic_cast<const MetaDataStringType *>( tagItr->second.GetPointer() );
-    
+
         if( entryvalue )
         {
             result = entryvalue->GetMetaDataObjectValue();
@@ -239,11 +244,11 @@ void Input::setVolumeInformation()
                     dirCosinesValuesX[ i ] = list.at( i ).toDouble();
                     dirCosinesValuesY[ i ] = list.at( i+3 ).toDouble();
                 }
-    
+
                 vtkMath::Cross( dirCosinesValuesX , dirCosinesValuesY , dirCosinesValuesZ );
                 // I ara ens disposem a crear l'string amb l'orientació del pacient
                 QString patientOrientationString;
-                
+
                 patientOrientationString = this->getOrientation( dirCosinesValuesX );
                 patientOrientationString += ",";
                 patientOrientationString += this->getOrientation( dirCosinesValuesY );
@@ -291,7 +296,7 @@ void Input::setVolumeInformation()
     {
         m_volumeData->getVolumeSourceInformation()->setPatientID( value.c_str() );
     }
-    
+
     // data de l'estudi
     if( queryTagAsString( "0008|0020" , value ) )
     {
@@ -321,7 +326,7 @@ void Input::setVolumeInformation()
             str = str.left( str.indexOf( "\\" ) );
         }
         double window = str.toDouble();
-        
+
         m_volumeData->getVolumeSourceInformation()->setWindow( window );
 
         queryTagAsString( "0028|1050" , value );
@@ -340,7 +345,7 @@ void Input::setVolumeInformation()
     {
         m_volumeData->getVolumeSourceInformation()->setProtocolName( value.c_str() );
     }
-    
+
 }
 
 }; // end namespace udg
