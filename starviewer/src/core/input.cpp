@@ -79,11 +79,6 @@ bool Input::openFile( const char * fileName )
         m_volumeData->setData( imageData );
         imageData->Delete();
 
-        vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
-        changeFilter->SetInput( m_volumeData->getVtkData() );
-        changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-        m_volumeData->setData( changeFilter->GetOutput() );
-
         emit progress( 100 );
     }
     return ok;
