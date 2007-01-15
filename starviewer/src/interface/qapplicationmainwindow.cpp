@@ -457,10 +457,6 @@ void QApplicationMainWindow::newAndOpenDir()
     newMainWindow->m_openDirAction->trigger();
 }
 
-void QApplicationMainWindow::close()
-{
-}
-
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 {
     QWidgetList list( QApplication::topLevelWidgets() );
