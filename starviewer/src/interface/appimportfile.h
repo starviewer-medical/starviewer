@@ -19,7 +19,6 @@ namespace udg {
 // Fordward Declarations
 class VolumeRepository;
 class Input;
-class Output;
 
 /**
 Mini-aplicació encarregada de permetre carregar un model des del sistema de fitxers al repositori de volums
@@ -29,26 +28,24 @@ Mini-aplicació encarregada de permetre carregar un model des del sistema de fit
 class AppImportFile : public QObject{
 Q_OBJECT
 public:
-    
+
     AppImportFile(QObject *parent = 0, const char *name = 0);
     ~AppImportFile();
-    
+
     /// Obre el diàleg per poder obrir arxius
-    void open();
+    bool open();
 
     /// Obre el diàleg per poder obrir arxius d'un directori DICOM
-    void openDirectory();
-    
+    bool openDirectory();
+
     /// Retorna l'id de l'últim volum que ha depositat al repositori
     Identifier getVolumeIdentifier(){ return m_volumeID; }
 
-signals:
-    /// Aquesta senyal s'emetrà quan s'hagi afegit un volum al repositori
-    void newVolume( Identifier );
-    
-public slots:
-    /// Mètode específic per quan es tanca l'aplicació, allibera recursos i "deixa les coses al seu lloc"
-    void finish();
+    /// fa la feina 'bruta' d'obrir l'arxiu
+    bool loadFile( QString fileName );
+
+    /// fa la feina 'bruta' d'obrir un directori d'arxius dicom
+    bool loadDirectory( QString directoryName );
 
 private:
     /// Directori de treball per fitxers ordinaris
@@ -64,21 +61,15 @@ private:
     void readSettings();
     void writeSettings();
 
-    /// fa la feina 'bruta' d'obrir l'arxiu
-    bool loadFile( QString fileName );
-
-    /// fa la feina 'bruta' d'obrir un directori d'arxius dicom
-    bool loadDirectory( QString directoryName );
-
     /// Mostra el progrés al carregar un arxiu
     QProgressDialog *m_progressDialog;
-    
+
     // :::::::::::::::::::::::::::::::::::::::::
     // Recursos
     // :::::::::::::::::::::::::::::::::::::::::
 
     /// L'id del volum amb el que estem treballant
-    Identifier m_volumeID;    
+    Identifier m_volumeID;
 
     /// El repository de volums
     udg::VolumeRepository* m_volumeRepository;

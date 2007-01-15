@@ -53,8 +53,6 @@ ExtensionHandler::~ExtensionHandler()
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_importFileApp , SIGNAL( newVolume( Identifier ) ) , m_mainApp , SLOT( onVolumeLoaded( Identifier ) ) );
-
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
 }
@@ -74,8 +72,8 @@ void ExtensionHandler::request( int who )
         if( m_volumeID.isNull() )
         {
         // open!
-            m_importFileApp->open();
-            m_importFileApp->finish();
+            if( m_importFileApp->open() )
+                m_mainApp->onVolumeLoaded( m_importFileApp->getVolumeIdentifier() );
         }
         else
         {
@@ -127,8 +125,8 @@ void ExtensionHandler::request( int who )
         if( m_volumeID.isNull() )
         {
             // open dicom dir
-            m_importFileApp->openDirectory();
-            m_importFileApp->finish();
+            if( m_importFileApp->openDirectory() )
+                m_mainApp->onVolumeLoaded( m_importFileApp->getVolumeIdentifier() );
         }
         else
         {
