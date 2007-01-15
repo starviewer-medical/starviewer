@@ -303,8 +303,14 @@ struct retrieveParameters
      */
     void databaseError( Status *state );
     
-    /// Centra la finestra a la pantalla
+    /// Posiciona la pantalla en funció dels valors guardarts a StarviewerSettings
     void setWindowPosition();
+    
+    /// Estableix la mida de la pantalla en funció dels valors guardats a StarviewerSettings
+    void setWindowSize();
+    
+    ///Retorna els Splitter al estat que estaven quan es va tancar l'aplicació
+    void setQSplitterState();
     
     /// Assigna la mida al PacsList en funcio del tab en que es trobi i de la variable m_PacsListShow
     void resizePacsList();

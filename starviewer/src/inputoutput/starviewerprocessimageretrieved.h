@@ -68,8 +68,9 @@ signals :
 private :
 
     int m_downloadedImages , m_downloadedSeries;
-    QString m_oldSeriesUID , m_studyUID;
+    QString m_studyUID;
     bool m_error;
+    QStringList m_addedSeriesList;
     
     /** Crea el path de la imatge d'on obtenir la informació de les series
      * @param imatge de la que s'ha d'obtenir el path
@@ -83,6 +84,13 @@ private :
 
     /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     void setError();
+    
+    
+    /** insereix una nova sèrie a la base de dades
+     * @param newImage imatge de la qual hem d'inserir la informació de la sèrie
+     * @return estat del procés
+     */
+    Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage);
 };
 
 };

@@ -31,11 +31,9 @@ void StarviewerProcessImageRetrieved::process( Image *image )
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
-    CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
 
-    /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera
-    serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
+    /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
     if ( m_downloadedImages == 0 )
     {  
         Series serie;
@@ -45,48 +43,21 @@ void StarviewerProcessImageRetrieved::process( Image *image )
         if ( !state.good() ) m_error = true;
         
         //inserim serie
+        insertSerie( image );
+        
         state = getSeriesInformation ( createImagePath( image  ), serie );
-        
-        if ( state.good() )
-        {
-            state = cacheSeriesDAL.insertSeries( &serie );
-        }
-        //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
         if ( !state.good() ) m_error = true;
-        
+           
         state = cacheStudyDAL.setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
-        
-        //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
-        if ( !state.good() ) 
-        {
-            m_error = true;
-        }
-        else m_oldSeriesUID = image->getSeriesUID().c_str();
-        
+        if ( !state.good() ) m_error = true;
+               
         m_studyUID = image->getStudyUID().c_str();
     }
     
     //inserim la nova sèrie que es descarrega
-    if ( m_oldSeriesUID != image->getSeriesUID().c_str() )
+    if ( !m_addedSeriesList.contains( image->getSeriesUID().c_str() ) )
     {
-        Series serie;
-    
-        //inserim serie
-        state = getSeriesInformation ( createImagePath( image ) , serie );
-        
-        if ( state.good() )
-        {
-            state = cacheSeriesDAL.insertSeries( &serie );
-        }
-        //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
-        //l'error 2019 no el tractem, perquè indica serie duplicada, alguns pacs envien les imatges desornades per tant pot ser que les imatges d'una mateixa serie arribin separades, i intentem inserir altre vegada la serie
-        if ( !state.good() && state.code() != 2019 )
-        {
-            m_error = true;
-        }
-        //Nomes emitirem el signal quant la operacio s'hagi realitzat amb exit, pq hi ha alguns PACS que retornen les
-        //imatges desordenades, i no venen agrupades per sèries
-        else  
+        if ( insertSerie( image ).good() )
         {
             emit( seriesRetrieved( image->getStudyUID().c_str() ) );
             
@@ -96,7 +67,6 @@ void StarviewerProcessImageRetrieved::process( Image *image )
             }
             m_downloadedSeries++;
         }
-        m_oldSeriesUID = image->getSeriesUID().c_str();
     }
     
     //inserim imatge
@@ -106,6 +76,28 @@ void StarviewerProcessImageRetrieved::process( Image *image )
    
     m_downloadedImages++;
     emit( imageRetrieved( image->getStudyUID().c_str(),m_downloadedImages ) );
+}
+
+Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
+{
+    Series serie;
+    Status state;
+    CacheSeriesDAL cacheSeriesDAL;
+
+    //inserim serie
+    state = getSeriesInformation ( createImagePath( newImage ) , serie );
+    
+    if ( state.good() )
+    {
+        state = cacheSeriesDAL.insertSeries( &serie );
+        if ( !state.good())
+        {
+            m_error = true;
+        }
+        else m_addedSeriesList.push_back( serie.getSeriesUID().c_str() );
+    }
+    
+    return state;
 }
 
 /* Ara per ara per la configuració de les dcmtk no he descober com cancel·lar la descarrega d'imatges despres de produir-se un error, l'únic solució possible ara mateix i que m'han aconsellat als forums es matar el thread però aquesta idea no m'agrada perquè si matem el thread no desconnectem del PACS, no destruim les senyals amb el QRetreiveScreen i no esborrem el thread de la llista retrieveThreads, per tant de moment el que es farà es donar el error quant hagi finalitzat la descarrega
