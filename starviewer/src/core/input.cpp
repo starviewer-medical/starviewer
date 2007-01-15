@@ -19,7 +19,7 @@
 #include <QStringList>
 // VTK
 #include <vtkMath.h> // pel cross
-#include <vtkImageChangeInformation.h> // per portar a l'origen
+// #include <vtkImageChangeInformation.h> // per portar a l'origen
 
 namespace udg {
 
@@ -118,10 +118,6 @@ bool Input::readSeries( const char *dirPath )
         imageData->SetMetaDataDictionary( m_gdcmIO->GetMetaDataDictionary() );
         m_volumeData->setData( imageData );
         imageData->Delete();
-        vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
-        changeFilter->SetInput( m_volumeData->getVtkData() );
-        changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-        m_volumeData->setData( changeFilter->GetOutput() );
 
         emit progress( 100 );
         this->setVolumeInformation();
