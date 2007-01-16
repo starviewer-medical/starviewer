@@ -11,7 +11,7 @@
 #include "volumesourceinformation.h"
 #include "logging.h"
 // std
-#include <iostream>
+#include <iostream> // pel cerr de les excepcions i printTag()
 //ITK
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
@@ -19,7 +19,6 @@
 #include <QStringList>
 // VTK
 #include <vtkMath.h> // pel cross
-// #include <vtkImageChangeInformation.h> // per portar a l'origen
 
 namespace udg {
 
