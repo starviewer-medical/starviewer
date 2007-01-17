@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::QueryScreenBase</class>
  <widget class="QDialog" name="udg::QueryScreenBase" >
   <property name="geometry" >
@@ -982,7 +979,7 @@
       </layout>
      </item>
      <item>
-      <widget class="udg::QPacsList" name="qPacsList" >
+      <widget class="udg::QPacsList" native="1" name="qPacsList" >
        <property name="minimumSize" >
         <size>
          <width>20</width>
@@ -1005,7 +1002,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="m_tabCache" >
       <attribute name="title" >
@@ -1023,7 +1020,7 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetCache" >
+         <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetCache" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>7</hsizetype>
@@ -1033,7 +1030,7 @@
            </sizepolicy>
           </property>
          </widget>
-         <widget class="udg::QSeriesListWidget" name="m_seriesListWidgetCache" >
+         <widget class="udg::QSeriesListWidget" native="1" name="m_seriesListWidgetCache" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>7</hsizetype>
@@ -1059,7 +1056,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetPacs" >
+        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetPacs" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -1084,7 +1081,7 @@
         <number>6</number>
        </property>
        <item row="0" column="0" >
-        <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidgetDicomdir" >
+        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetDicomdir" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -1102,28 +1099,21 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>udg::QSeriesListWidget</class>
    <extends>QWidget</extends>
    <header>qserieslistwidget.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>udg::QStudyTreeWidget</class>
    <extends>QWidget</extends>
    <header>qstudytreewidget.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>udg::QPacsList</class>
    <extends>QWidget</extends>
    <header>qpacslist.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <tabstops>
