@@ -143,6 +143,24 @@ void StarviewerSettings::setQueryScreenWindowPositionY( int positionY )
     m_starviewerSettings.setValue( key , positionY );
 }
 
+void StarviewerSettings::setQueryScreenWindowWidth( int width )
+{
+    QString key = GroupSettingsName + queryScreenWindowWidth;
+    m_starviewerSettings.setValue( key , width );
+}
+
+void StarviewerSettings::setQueryScreenWindowHeight( int height )
+{
+    QString key = GroupSettingsName + queryScreenWindowHeight;
+    m_starviewerSettings.setValue( key , height );
+}
+
+void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( QByteArray state )
+{
+    QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
+    m_starviewerSettings.setValue( key , state );
+}
+
 int StarviewerSettings::getStudyPacsListColumnWidth( int col )
 {
     QString key = GroupSettingsName + pacsColumnWidthKey + QString::number(col);
@@ -171,6 +189,24 @@ int StarviewerSettings::getQueryScreenWindowPositionY()
 {
     QString key = GroupSettingsName + queryScreenWindowPositionY;
     return m_starviewerSettings.value( key , 50 ).toInt();
+}
+
+int StarviewerSettings::getQueryScreenWindowWidth()
+{
+    QString key = GroupSettingsName + queryScreenWindowWidth;
+    return m_starviewerSettings.value( key , 800 ).toInt();
+}
+
+int StarviewerSettings::getQueryScreenWindowHeight()
+{
+    QString key = GroupSettingsName + queryScreenWindowHeight;
+    return m_starviewerSettings.value( key , 770 ).toInt();
+}
+
+QByteArray StarviewerSettings::getQueryScreenStudyTreeSeriesListQSplitterState()
+{
+    QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
+    return m_starviewerSettings.value( key ).toByteArray();
 }
 
 /*** Dades de la institució*/

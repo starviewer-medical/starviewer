@@ -82,6 +82,9 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
    
     setWindowPosition(); //la pantalla sempre es situa en el lloc on estava l'última vegada que es va tancar
+    setWindowSize();//la pantalla sempre té les dimensions de l'última vegada que es va tancar
+    
+    setQSplitterState(); //posa els splitters en el lloc on estaven l'última vegada que es va tancar l'aplicació
     
     m_textPatientID->setFocus();
     
@@ -223,6 +226,23 @@ void QueryScreen::setWindowPosition()
     StarviewerSettings settings;
         
     move( settings.getQueryScreenWindowPositionX() , settings.getQueryScreenWindowPositionX() );
+}
+
+void QueryScreen::setWindowSize()
+{
+    StarviewerSettings settings;
+    
+    resize( settings.getQueryScreenWindowWidth() , settings.getQueryScreenWindowHeight() );
+}
+
+void QueryScreen::setQSplitterState()
+{
+    StarviewerSettings settings;
+    
+    if ( !settings.getQueryScreenStudyTreeSeriesListQSplitterState().isEmpty() )
+    {
+        m_StudyTreeSeriesListQSplitter->restoreState( settings.getQueryScreenStudyTreeSeriesListQSplitterState() );
+    }
 }
 
 void QueryScreen::clearTexts()
@@ -778,6 +798,7 @@ void QueryScreen::retrievePacs( bool view )
     if (  !state.good() )
     {   
         QApplication::restoreOverrideCursor();
+        cout<<"state : " << state.code() << endl;
         if (  state.code() == 2019 ) //l'estudi ja existeix
         {   
             if (  view )  //si es vol visualitzar no donem missatge de que ja esta descarregat, obrim l'estudi
@@ -1534,8 +1555,7 @@ StudyMask QueryScreen::buildStudyMask()
     mask.setPatientAge( "" );
     mask.setAccessionNumber( m_textAccessionNumber->text().toStdString() );
     
-    /*Aquesta mascara només serveix per la caché, no serveix pel pacs!!!!!!!!!!!!!!!!!!!1*/
-    if ( !m_checkAll->isChecked() )
+    if ( m_buttonGroupModality->isEnabled() )
     { //es crea una sentencia per poder fer un in       
         if ( m_checkCT->isChecked() )
         {
@@ -1596,7 +1616,6 @@ StudyMask QueryScreen::buildStudyMask()
             mask.setStudyModality(modalityMask.toAscii().constData() );
         }
     }
-    // \TODO xapussa feta perquè mostri per a la seguent release de l'starviewer la modalitat de l'estudi al consultar el pacs, això s'ha d'arreglar
     else mask.setStudyModality( "*" );
     
     return mask;
@@ -1680,6 +1699,13 @@ QueryScreen::~QueryScreen()
     //guardem la posició en que es troba la pantalla
     settings.setQueryScreenWindowPositionX( x() ); 
     settings.setQueryScreenWindowPositionY( y() );
+    
+    //guardem les dimensions de la pantalla
+    settings.setQueryScreenWindowHeight( height() );
+    settings.setQueryScreenWindowWidth( width() );
+    
+    //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
+    settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
 }
 
 };

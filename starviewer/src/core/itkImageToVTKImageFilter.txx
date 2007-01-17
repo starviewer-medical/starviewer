@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToVTKImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003/07/21 20:19:52 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2005/06/12 01:23:44 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,6 +61,11 @@ template <class TInputImage>
 ImageToVTKImageFilter<TInputImage>
 ::~ImageToVTKImageFilter()
 {
+  if( m_Importer )
+    {
+    m_Importer->Delete();
+    m_Importer = 0;
+    }
 }
 
 

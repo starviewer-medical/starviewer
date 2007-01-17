@@ -34,6 +34,7 @@
 #include <vtkImageReslice.h>
 #include <vtkTransform.h>
 #include <vtkLine.h>
+#include <vtkImageChangeInformation.h> // per portar a l'origen
 // pels events
 #include <vtkCommand.h>
 
@@ -703,6 +704,12 @@ void QMPRExtension::releasePushSagitalViewAxisActor()
 void QMPRExtension::setInput( Volume *input )
 {
     m_volume = input;
+
+    //\TODO Això s'ha d'entendre com un parxe. L'mpr hauria de funcionar bé sense aplicar aquesta transformació. Aquesta transformació s'hauria de tenir en compte en els plans que construim
+    vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
+    changeFilter->SetInput( m_volume->getVtkData() );
+    changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
+    m_volume->setData( changeFilter->GetOutput() );
 
     m_volume->updateInformation();
     m_volume->getSpacing( m_axialSpacing );

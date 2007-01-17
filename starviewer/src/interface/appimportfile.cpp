@@ -13,9 +13,7 @@
 // recursos
 #include "volumerepository.h"
 #include "input.h"
-#include "output.h"
 #include "logging.h"
-#include <iostream>
 
 namespace udg {
 
@@ -24,7 +22,7 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
 {
     this->setObjectName( name );
     m_openFileFilters = tr("MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
-    
+
     m_volumeRepository = udg::VolumeRepository::getRepository();
     m_inputReader = new udg::Input;
 
@@ -42,47 +40,63 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
 
 AppImportFile::~AppImportFile()
 {
-    finish();
 }
 
-void AppImportFile::open()
+bool AppImportFile::open()
 {
+    bool ok = true;
+
     QString fileName = QFileDialog::getOpenFileName( 0 , tr("Chose an image filename") ,  m_workingDirectory, m_openFileFilters );
-            
+
     if ( !fileName.isEmpty() )
     {
-        if( loadFile( fileName ) )  
+        if( loadFile( fileName ) )
         {
             // cal informar a l'aplicació de l'id del volum
             // la utilitat
             m_workingDirectory = QFileInfo( fileName ).dir().path();
+            writeSettings();
             INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName ) );
         }
+        else
+            ok = false;
     }
+    else
+        ok = false;
+
+    return ok;
 }
 
-void AppImportFile::openDirectory()
+bool AppImportFile::openDirectory()
 {
+    bool ok = true;
+
     QString directoryName = QFileDialog::getExistingDirectory( 0 , tr("Choose a directory") , m_workingDicomDirectory , QFileDialog::ShowDirsOnly );
     if ( !directoryName.isEmpty() )
     {
         if( loadDirectory( directoryName ) )
         {
             m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
+            writeSettings();
             INFO_LOG( qPrintable( "S'obre el directori: " + directoryName ) );
         }
+        else
+            ok = false;
     }
+    else
+        ok = false;
+
+    return ok;
 }
 
 bool AppImportFile::loadFile( QString fileName )
 {
-    bool ok = true; 
+    bool ok = true;
 
     if( m_inputReader->openFile( fileName.toLatin1() ) )
     {
         // afegim el nou volum al repositori
         m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
-        emit newVolume( m_volumeID );
     }
     else
     {
@@ -96,13 +110,12 @@ bool AppImportFile::loadFile( QString fileName )
 
 bool AppImportFile::loadDirectory( QString directoryName )
 {
-    bool ok = true; 
+    bool ok = true;
 
     if( m_inputReader->readSeries( directoryName.toLatin1() ) )
     {
         // afegim el nou volum al repositori
         m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
-        emit newVolume( m_volumeID );
     }
     else
     {
@@ -111,11 +124,6 @@ bool AppImportFile::loadDirectory( QString directoryName )
     }
 
     return ok;
-}
-
-void AppImportFile::finish()
-{
-    writeSettings();
 }
 
 void AppImportFile::readSettings()
@@ -136,4 +144,4 @@ void AppImportFile::writeSettings()
     settings.endGroup();
 }
 
-};  // end namespace udg 
+};  // end namespace udg

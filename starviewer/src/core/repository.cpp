@@ -29,34 +29,33 @@ Identifier Repository< ItemType >::addItem( ItemType* item )
 template< typename ItemType >
 ItemType* Repository< ItemType >::getItem( const Identifier id )
 {
- 
+
     Identifier listID;
-    
+
     ItemListIteratorType itr;
     itr = m_itemList.begin();
     listID = (*itr).first; // s'ha de fer així perquè sinó dóna un error guarro
     while( itr != m_itemList.end() && listID != id )
-    { 
+    {
         itr++;
         listID = (*itr).first;
     }
-    
+
     if( listID == id )
     {
         return itr->second;
     }
     else // \TODO aquí es podria generar una excepció
     {
-        ItemType* dummy;
-        return dummy;
+        return 0;
     }
-    
+
 }
- 
+
 template< typename ItemType >
 void Repository< ItemType >::removeItem( const Identifier id )
 {
-    m_itemList.erase( id );    
+    m_itemList.erase( id );
 }
 
 template< typename ItemType >
@@ -66,7 +65,7 @@ int Repository< ItemType >::getNumberOfItems()
 }
 
 template< typename ItemType >
-Identifier *Repository< ItemType >::getIdentifierList() 
+Identifier *Repository< ItemType >::getIdentifierList()
 {
     // declarem la llista d'id's que tindrà tants elements com el map
     Identifier *idList;
@@ -82,18 +81,18 @@ Identifier *Repository< ItemType >::getIdentifierList()
         ItemListIteratorType itr;
         itr = m_itemList.begin();
         // recorrem amb un iterador el map i omplim al llista
-        
+
         int i = 0;
         while( itr != m_itemList.end()  )
-        { 
+        {
             idList[ i ] = (*itr).first;
             itr++;
             i++;
         }
     }
-    
+
     return idList;
-    
+
 }
 
 template< typename ItemType >
@@ -101,7 +100,7 @@ void Repository< ItemType >::cleanUp()
 {
     int items = this->getNumberOfItems();
     Identifier idList[ items ];
-    
+
     for( int i = 0; i < items; i++ )
         this->removeItem( idList[i] );
 }

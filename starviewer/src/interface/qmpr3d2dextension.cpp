@@ -11,7 +11,7 @@
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
-
+#include "volume.h"
 // qt
 #include <QToolButton>
 #include <QSplitter>
@@ -24,6 +24,7 @@
 #include <vtkCamera.h>
 #include <vtkAxisActor2D.h>
 #include <vtkProperty2D.h>
+#include <vtkImageChangeInformation.h> // per portar a l'origen
 
 namespace udg {
 
@@ -64,6 +65,13 @@ QMPR3D2DExtension::~QMPR3D2DExtension()
 void QMPR3D2DExtension::setInput( Volume *input )
 {
     m_volume = input;
+
+    //\TODO Això s'ha d'entendre com un parxe. L'mpr hauria de funcionar bé sense aplicar aquesta transformació. Aquesta transformació s'hauria de tenir en compte en els plans que construim
+    vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
+    changeFilter->SetInput( m_volume->getVtkData() );
+    changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
+    m_volume->setData( changeFilter->GetOutput() );
+
     INFO_LOG( "QMPR3D2DExtensions:: Ens donen l'input" );
     m_mpr3DView->setInput( m_volume );
 

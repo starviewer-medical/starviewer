@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>799</width>
     <height>770</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="3" column="0" >
+   <item row="2" column="0" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -990,7 +990,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0" >
+   <item row="1" column="0" >
     <widget class="QTabWidget" name="m_tab" >
      <property name="enabled" >
       <bool>true</bool>
@@ -1016,54 +1016,31 @@
         <number>6</number>
        </property>
        <item row="0" column="0" >
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
+        <widget class="QSplitter" name="m_StudyTreeSeriesListQSplitter" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetCache" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>5</width>
-             <height>5</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="udg::QSeriesListWidget" native="1" name="m_seriesListWidgetCache" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>7</hsizetype>
-             <vsizetype>7</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetCache" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+         <widget class="udg::QSeriesListWidget" native="1" name="m_seriesListWidgetCache" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </widget>
        </item>
       </layout>
      </widget>

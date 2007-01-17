@@ -36,6 +36,9 @@ const QString InstitutionEmail("/institution/Email");
 const QString InstitutionPhoneNumber("/institution/phoneNumber");
 const QString queryScreenWindowPositionX("/interface/queryscreen/windowPositionX");
 const QString queryScreenWindowPositionY("/interface/queryscreen/windowPositionY");
+const QString queryScreenWindowWidth("/interface/queryscreen/windowWidth");
+const QString queryScreenWindowHeight("/interface/queryscreen/windowHeigth");
+const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 
 class StarviewerSettings{
 public:
@@ -157,7 +160,22 @@ public:
      * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
      */
     void setQueryScreenWindowPositionY( int positionY );
+    
+    /** guarda quina és l'amplada de la queryScreen
+     * @param width amplada de la queryScreen
+     */
+    void setQueryScreenWindowWidth( int width ); 
+    
+    /** guarda quina és l'allargada de la pantalla queryscreen
+     * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
+     */
+    void setQueryScreenWindowHeight( int height );
       
+    /** guarda l'estat en que es troba el QSplitter que divideix a la pestany de local el StudyList i el SeriesList
+     * @param state estat del QSplitter
+     */
+    void setQueryScreenStudyTreeSeriesListQSplitterState( QByteArray state );
+
 	/** retorna l'amplada del número de columna de la llista d'estudis del PACS ,  passat per paràmetre
 	 * @return amplada de la columna
 	 */
@@ -173,16 +191,30 @@ public:
      */
     int getStudyDicomdirListColumnWidth( int column );
 
-    /** retorna en quin posició de l'eix estava la pantalla queryscreen l'última vegada que s'ha tancat l'aplicació
+    /** retorna en quin posició de l'eix estava la pantalla queryScreen guardada al QSettings l'aplicació
      * @return posicó en l'eix X que es trobava la interficie queryScreen
      */
     int getQueryScreenWindowPositionX();
     
-    /** retorna en quin posició de l'eix estava la pantalla queryscreen l'última vegada que s'ha tancat l'aplicació
+    /** retorna en quin posició de l'eix estava la pantalla queryScreen guardada al QSettings l'aplicació
      * @return posicó en l'eix Y que es trobava la interficie queryScreen
      */
     int getQueryScreenWindowPositionY();
-    //informació de l'institució
+
+    /** retorna quina era l'amplada de la pantalla queryScreen guardada al QSettings
+     * @return amplada de la pantalla
+     */
+    int getQueryScreenWindowWidth();
+    
+    /** retorna l'allargada la pantalla queryScreen guardada al QSettings
+     * @return posicó en l'eix Y que es trobava la interficie queryScreen
+     */
+    int getQueryScreenWindowHeight();
+    
+    /** retorna l'estat amb que estava el QSplitter que separa el StudyTree i el SeriesList
+     * @return estat del QSpliltter
+     */
+    QByteArray getQueryScreenStudyTreeSeriesListQSplitterState();
     
     /** Guarda el nom de la institució
      * @param institutionName nom de l'institució

@@ -171,9 +171,6 @@ private slots:
     /// Obre una nova finestra
     void newFile();
 
-    /// Slot tancar volum
-    void close();
-
     /// mostra el formulari d'about
     void about();
 

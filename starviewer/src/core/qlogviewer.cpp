@@ -18,7 +18,17 @@ QLogViewer::QLogViewer(QWidget *parent)
  : QDialog(parent)
 {
     setupUi( this );
-    // carreguem l'arxiu de log
+//     // carreguem l'arxiu de log
+//     updateData();
+    createConnections();
+}
+
+QLogViewer::~QLogViewer()
+{
+}
+
+void QLogViewer::updateData()
+{
     // \TODO aquest directori s'hauria de guardar en alguna mena de qsettings o similar
     QFile logFile( QDir::homePath() + "/.starviewer/log/starviewer.log" );
     if ( !logFile.open( QFile::ReadOnly | QFile::Text) )
@@ -32,11 +42,6 @@ QLogViewer::QLogViewer(QWidget *parent)
         m_logBrowser->setReadOnly( true );
         m_logBrowser->setPlainText( logFile.readAll() );
     }
-    createConnections();
-}
-
-QLogViewer::~QLogViewer()
-{
 }
 
 void QLogViewer::createConnections()

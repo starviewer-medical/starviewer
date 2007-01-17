@@ -97,8 +97,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
 
 QApplicationMainWindow::~QApplicationMainWindow()
 {
-    m_extensionHandler->killBill();
     delete m_extensionWorkspace;
+    m_extensionHandler->killBill();
 }
 
 void QApplicationMainWindow::createActions()
@@ -187,7 +187,9 @@ void QApplicationMainWindow::createActions()
     m_logViewerAction->setText( tr("Show log file") );
     m_logViewerAction->setStatusTip( tr("Show log file") );
     m_logViewerAction->setIcon( QIcon(":/images/logs.png") );
+    connect( m_logViewerAction , SIGNAL( triggered() ) , m_logViewer , SLOT( updateData() ) );
     connect( m_logViewerAction , SIGNAL( triggered() ) , m_logViewer , SLOT( exec() ) );
+
 
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
@@ -455,10 +457,6 @@ void QApplicationMainWindow::newAndOpenDir()
     newMainWindow->m_openDirAction->trigger();
 }
 
-void QApplicationMainWindow::close()
-{
-}
-
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 {
     QWidgetList list( QApplication::topLevelWidgets() );
@@ -488,7 +486,7 @@ void QApplicationMainWindow::about()
                "<p>Copyright &copy; 2006 Universitat de Girona"
                "<p>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve)."
                "<p>Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP)."
-               "<p>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.<p>Version : %1 </p>").arg( "0.2-RC1" )
+               "<p>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.<p>Version : %1 </p>").arg( "0.2.1" )
                );
 }
 

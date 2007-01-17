@@ -26,6 +26,9 @@ public slots:
     /// Obre un diàleg per guardar el fitxer de log en una altre ubicació
     void saveLogFileAs();
 
+    /// Actualitza les dades del fitxer de log que mostra
+    void updateData();
+
 private slots:
     /// Crea les connexions entre signals i slots
     void createConnections();
