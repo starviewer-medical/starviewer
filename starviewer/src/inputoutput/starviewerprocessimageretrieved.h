@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 #define UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 
@@ -32,14 +32,14 @@ public:
     StarviewerProcessImageRetrieved();
 
     /** Processa la informacio de la imatge a descarregar, la guarda a la cache, si la imatge pertany a una nova sèrie també guarda la informació de la sèrie
-     * @param imatge a processar 
+     * @param imatge a processar
      */
     void process( Image* image );
-    
+
     /// Retorna si s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     bool getError();
 
-    ///Destructor de la classe    
+    ///Destructor de la classe
     ~StarviewerProcessImageRetrieved();
 
 signals :
@@ -64,19 +64,19 @@ signals :
       *@para UID de l'estudi
       */
     void seriesView ( QString );
-    
+
 private :
 
     int m_downloadedImages , m_downloadedSeries;
     QString m_studyUID;
     bool m_error;
     QStringList m_addedSeriesList;
-    
+
     /** Crea el path de la imatge d'on obtenir la informació de les series
      * @param imatge de la que s'ha d'obtenir el path
      */
     QString createImagePath( Image* image );
-    
+
     /** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
      * @param path de la imatge d'on obtenir la informació de la sèrie
      */
@@ -84,13 +84,13 @@ private :
 
     /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     void setError();
-    
-    
+
+
     /** insereix una nova sèrie a la base de dades
      * @param newImage imatge de la qual hem d'inserir la informació de la sèrie
      * @return estat del procés
      */
-    Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage);
+    Status insertSerie(Image *newImage);
 };
 
 };
