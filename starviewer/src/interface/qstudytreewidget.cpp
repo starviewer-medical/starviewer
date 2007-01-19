@@ -54,7 +54,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     m_iconSeries = QIcon( ":/images/series.png" );
     
     m_parentName = parent->objectName();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
-    cout<<"Nom del pare"<<m_parentName.toAscii().constData()<<endl;
     createContextMenu(); //creem el menu contextual
     createConnections();
    
@@ -107,6 +106,7 @@ void QStudyTreeWidget::createContextMenu()
         storeStudy->setEnabled( false );
     }   
    
+    //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
     if (m_parentName == "m_StudyTreeSeriesListQSplitter")
     {   //si el QStudyTreeWidget es el que mostra la llista d'estudis a la caché, la opció retrieve es desactiva
         retrieve->setEnabled(false);
@@ -126,17 +126,15 @@ void QStudyTreeWidget::setWidthColumns()
     StarviewerSettings settings;
     
     for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
-    {
+    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
         if (m_parentName == "m_StudyTreeSeriesListQSplitter")
         {
-            cout<<"entro1"<<endl;
             m_studyTreeView->header()->resizeSection( i ,settings.getStudyCacheListColumnWidth(i) );
         }
     
         //Renombrem segons quin objecte es tracti, si es el que mostra la llista d'estudis del PACS o de la cache
         if (m_parentName == "m_tabPacs")
         { 
-            cout<<"entro2 "<<endl;
             m_studyTreeView->header()->resizeSection( i , settings.getStudyPacsListColumnWidth( i ) );
         }   
         
@@ -563,6 +561,7 @@ void QStudyTreeWidget::saveColumnsWidth()
             settings.setStudyPacsListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
         }   
     
+        //Al haver un QSplitter el nom del Pare del TabCache és l'splitter  
         if ( m_parentName == "m_StudyTreeSeriesListQSplitter" )
         {
             settings.setStudyCacheListColumnWidth( i , m_studyTreeView->columnWidth( i ) ); 
