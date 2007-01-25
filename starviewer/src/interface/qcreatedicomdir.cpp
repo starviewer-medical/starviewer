@@ -485,7 +485,7 @@ bool QCreateDicomdir::enoughFreeSpace( QString path )
 {
     HardDiskInformation hardDisk;
 
-    if ( hardDisk.getTotalNumberOfBytes( path.toAscii().constData() ) < m_dicomdirSize )
+    if ( hardDisk.getNumberOfFreeMBytes( path.toAscii().constData() ) < static_cast<quint64> (m_dicomdirSize / ( 1024 * 1204 ) ) )
     {
         return false;
     }
