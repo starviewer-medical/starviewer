@@ -125,7 +125,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
  
 Status StoreImages::store( ImageList imageList )
 {
-    OFCondition cond;
+    OFCondition cond = EC_Normal;
     Status state;
     ProcessImageSingleton* piSingleton; 
         
@@ -133,7 +133,7 @@ Status StoreImages::store( ImageList imageList )
     piSingleton=ProcessImageSingleton::getProcessImageSingleton();  
     
     imageList.firstImage();
-    while ( !imageList.end() )
+    while ( !imageList.end() &&  !cond.bad() )
     {
         cond = storeSCU( m_assoc , imageList.getImage().getImagePath().c_str() );
         piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
