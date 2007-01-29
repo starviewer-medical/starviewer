@@ -165,7 +165,12 @@
             <widget class="QComboBox" name="m_comboBoxAction" >
              <item>
               <property name="text" >
-               <string>Copy to disk or external device</string>
+               <string>Copy to disk</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Copy to usb or flash memories</string>
               </property>
              </item>
              <item>

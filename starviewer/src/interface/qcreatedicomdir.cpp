@@ -67,7 +67,7 @@ void QCreateDicomdir::changedAction( int index )
 
     switch( index )
     {
-        case 0 : //disc dur o dispositiu extrable
+        case 0  : //memòria usb o flash == 1
                  m_labelMbCdDvdOcupat->setVisible( false );
                  m_progressBarOcupat->setVisible( false );
                  m_labelSizeOfDicomdir->setVisible( true );
@@ -76,7 +76,16 @@ void QCreateDicomdir::changedAction( int index )
                  m_labelCreateDicomdir->setText( tr( "Create Dicomdir at"  ) );
                  m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha màxim
                  break;
-        case 1 : //cd
+        case 1  : //memòria usb o flash == 1
+                 m_labelMbCdDvdOcupat->setVisible( false );
+                 m_progressBarOcupat->setVisible( false );
+                 m_labelSizeOfDicomdir->setVisible( true );
+                 m_lineEditDicomdirPath->setVisible( true );
+                 m_buttonExamineDisk->setVisible( true );
+                 m_labelCreateDicomdir->setText( tr( "Create Dicomdir at"  ) );
+                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar a usb o memòria flash, no hi ha màxim perqué no sabem l'usuari en quin dispositu ho vol gravar
+                 break;                 
+        case 2 : //cd
                  if ( sizeInMB < 700 )
                  {
                     m_labelMbCdDvdOcupat->setVisible( true );
@@ -95,7 +104,7 @@ void QCreateDicomdir::changedAction( int index )
                     m_comboBoxAction->setCurrentIndex( 0 );
                  }
                  break;
-        case 2 : //dvd
+        case 3 : //dvd
                  if ( sizeInMB < 4400 )
                  {
                     m_labelMbCdDvdOcupat->setVisible( true );
@@ -205,14 +214,17 @@ void QCreateDicomdir::createDicomdir()
 {
     switch( m_comboBoxAction->currentIndex() )
     {
-        case 0 : //disc dur o dispositiu extrable
-                 createDicomdirOnHard();
+        case 0 : //disc dur 
+                 createDicomdirOnHardDiskOrFlashMemories();
                  break;
-        case 1 : //cd
-                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( cd );
+        case 1 : //memòria usb o flash 
+                 createDicomdirOnHardDiskOrFlashMemories();
+                 break;                 
+        case 2 : //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
+                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( recordDeviceDicomDir(cd) );
                  break;
-        case 2 : //dvd
-                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( dvd );
+        case 3 : //dvd, si s'ha creat bé, executem el programa per gravar el dicomdir a dvd's
+                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( recordDeviceDicomDir(dvd) );
                  break;
     }
 }
@@ -227,15 +239,16 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     dicomdirPath.insert( 0 , temporaryDirPath.tempPath() );
     dicomdirPath.append( "/DICOMDIR" ); // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
         
-        
     //si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
         DeleteDirectory delDirectory;
         delDirectory.deleteDirectory( dicomdirPath , true );
     }
-        
-    INFO_LOG ( "Iniciant la creació del Dicomdir en cd-dvd" );
+    
+    logMessage = "Iniciant la creació del Dicomdir en cd-dvd al directori temporal ";
+    logMessage.append( dicomdirPath );
+    INFO_LOG (  logMessage.toAscii().constData() );
     
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
@@ -251,21 +264,24 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     }
 }
 
-void QCreateDicomdir::createDicomdirOnHard()
+void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 {
     QString dicomdirPath = m_lineEditDicomdirPath->text() , logMessage;
     DeleteDirectory delDirectory;
     QDir directoryDicomdirPath( dicomdirPath );
 
     //Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
-    
-    INFO_LOG ( "Iniciant la creació del Dicomdir en el disc dur o dispositiu extern" );
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please enter a diretory to create de Dicomdir" ) );
         return;
     }
+    
+    
+    logMessage = "Iniciant la creació del Dicomdir en discdur o usb al directori ";
+    logMessage.append( dicomdirPath );
+    INFO_LOG (  logMessage.toAscii().constData() );
     
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
@@ -278,6 +294,7 @@ void QCreateDicomdir::createDicomdirOnHard()
                 delDirectory.deleteDirectory( dicomdirPath , false );
                 break;
             case 1:
+                INFO_LOG( "El directori no està buit, i l'usuari no dona permís per esborrar el seu contingut") ;
                 return; //no fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
                 break;
         }
@@ -301,7 +318,8 @@ void QCreateDicomdir::createDicomdirOnHard()
                         }
                         break;
                     case 1: 
-                        return; //cancel·lem
+                        INFO_LOG( "El directori especificat per l'usuari no existeix, i no el vol crear per tant cancel·lem la creació del DICOMDIR" );
+                        return; //cancel·lem;
                         break;
                 }
         }    
@@ -347,8 +365,22 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         logMessage.append( " s'afegirà al Dicomdir " );
         INFO_LOG ( logMessage.toAscii().constData() );
     }
-
-    state = convertToDicomdir.convert( dicomdirPath );//s'inicia la conversió
+    
+    switch( m_comboBoxAction->currentIndex() )
+    {
+        case 0 : //disc dur o dispositiu extrable
+                 state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( harddisk ) );
+                 break;
+        case 1 : //usb o memòria flash
+                 state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( usb ) );
+                 break;
+        case 2 : //cd
+                 state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( cd ) );
+                 break;
+        case 3 : //dvd
+                 state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( dvd ) );
+                 break;
+    }
     
     if ( !state.good() )
     {
@@ -456,7 +488,7 @@ bool QCreateDicomdir::existsStudy( QString studyUID )
     else return false;
 }
 
-void QCreateDicomdir::executek3b( recordDevice device )
+void QCreateDicomdir::executek3b( recordDeviceDicomDir device )
 {
     QProcess k3b;
     QStringList k3bParamatersList;
@@ -467,13 +499,15 @@ void QCreateDicomdir::executek3b( recordDevice device )
     
     switch( device )
     {
-        case cd :   k3bParamatersList.push_back( "--datacd" );
+        case recordDeviceDicomDir(cd) :   
+                    k3bParamatersList.push_back( "--datacd" );
                     paramater= temporaryDirPath.tempPath() + "/DICOMDIR/";
                     k3bParamatersList.push_back(  paramater );
                     //k3bParamatersList.push_back( "*" );
                     k3b.execute( "k3b" , k3bParamatersList );
                     break;
-        case dvd:   k3bParamatersList.push_back( "--datadvd" );
+        case recordDeviceDicomDir(dvd):  
+                    k3bParamatersList.push_back( "--datadvd" );
                     paramater= temporaryDirPath.tempPath() + "/DICOMDIR/";
                     k3bParamatersList.push_back(  paramater );
                     k3b.execute( "k3b" , k3bParamatersList );

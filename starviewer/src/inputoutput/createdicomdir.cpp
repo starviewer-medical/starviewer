@@ -27,18 +27,21 @@ CreateDicomdir::CreateDicomdir()
     m_optProfile = DicomDirInterface::AP_GeneralPurpose;//PErmet gravar al discdur i tb usb's
 }
 
-void CreateDicomdir::setDevice( Device deviceToCreateDicomdir )
+void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
 {
     //indiquem que el propòsit d'aquest dicomdir
     switch ( deviceToCreateDicomdir ) 
     {
-        case harddisk :
+        case recordDeviceDicomDir(harddisk) :
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
-        case cdDvd :
+        case recordDeviceDicomDir(cd) :
+            m_optProfile = DicomDirInterface::AP_GeneralPurpose;
+            break;
+        case recordDeviceDicomDir(dvd) :
             m_optProfile = DicomDirInterface::AP_GeneralPurposeDVD;
             break;
-        case usb :
+        case recordDeviceDicomDir(usb) :
             m_optProfile = DicomDirInterface::AP_USBandFlash;
             break;
         default : 

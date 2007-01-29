@@ -76,7 +76,7 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     else m_studiesToConvert.push_back( studyToConvert );//en aquest cas val al final
 }
 
-Status ConvertToDicomdir::convert( QString dicomdirPath )
+Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir selectedDevice )
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     CacheImageDAL cacheImageDAL;
@@ -120,10 +120,10 @@ Status ConvertToDicomdir::convert( QString dicomdirPath )
         return state;
     }
    
+    createDicomdir.setDevice( selectedDevice );
     state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     
     m_progress->close();
-    
     if ( !state.good() )
     {
         deleteStudies();

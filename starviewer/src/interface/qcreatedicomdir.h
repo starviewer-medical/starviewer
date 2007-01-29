@@ -9,6 +9,7 @@
 
 #include <QMenu>
 #include <ui_qcreatedicomdirbase.h>
+#include "const.h"
 
 namespace udg {
 
@@ -21,7 +22,6 @@ class Status;
 class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
 Q_OBJECT
 
-    enum recordDevice { cd , dvd };
     
 public:
 
@@ -109,9 +109,9 @@ private:
      */
     Status createDicomdirOnCdOrDvd();
 
-    /** Crea el dicomdir al disc dur o en un pendrive
+    /** Crea el dicomdir al disc dur , dispositiu externs, usb o memòries flash
      */
-    void createDicomdirOnHard();
+    void createDicomdirOnHardDiskOrFlashMemories();
 
     /** Comprova si aquest directori ja és un dicomdir
      * dicomdir a comprova sir és un directori
@@ -121,7 +121,7 @@ private:
     /** executa el k3b per gravar en un cd o dvd depenent de l'opció escollida
      * @param device dispositiu al que es grava, pot ser cd o dvd
      */
-    void executek3b( recordDevice device );
+    void executek3b( recordDeviceDicomDir device );
 
     
     /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit

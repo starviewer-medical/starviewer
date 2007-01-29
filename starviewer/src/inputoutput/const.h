@@ -134,6 +134,8 @@ namespace udg
     const int operationPrint = 2;
     const int operationMove = 3;
     const int operationView = 4;
+    
+    enum recordDeviceDicomDir { harddisk , cd , dvd , usb };
 }
 
 

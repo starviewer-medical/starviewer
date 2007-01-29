@@ -798,7 +798,7 @@ void QueryScreen::retrievePacs( bool view )
     if (  !state.good() )
     {   
         QApplication::restoreOverrideCursor();
-        cout<<"state : " << state.code() << endl;
+        
         if (  state.code() == 2019 ) //l'estudi ja existeix
         {   
             if (  view )  //si es vol visualitzar no donem missatge de que ja esta descarregat, obrim l'estudi

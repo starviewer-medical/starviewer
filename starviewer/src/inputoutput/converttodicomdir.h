@@ -8,6 +8,7 @@
 #define UDGCONVERTTODICOMDIR_H
 #include <QProgressDialog>
 #include <QObject>
+#include "const.h"
 
 class QString;
 class QStringList;
@@ -42,7 +43,7 @@ public:
      * @param dicomdirPath directori on es guardarà el dicomdir
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convert( QString dicomdirPath );
+    Status convert( QString dicomdirPath, recordDeviceDicomDir selectedDevice );
 
     /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
       * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
