@@ -119,7 +119,7 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="1452"/>
-        <source>Pacs Configuration</source>
+        <source>Local Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -244,7 +244,7 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="2092"/>
-        <source>Adress :      </source>
+        <source>Address :      </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -324,7 +324,7 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="1590"/>
-        <source>Maximum Simultaenious Connections :</source>
+        <source>Maximum Simultaneous Connections :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

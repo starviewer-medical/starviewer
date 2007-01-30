@@ -95,7 +95,7 @@
     </message>
     <message>
         <source>Pacs Configuration</source>
-        <translation>Configuración del Pacs</translation>
+        <translation type="obsolete">Configuración del Pacs</translation>
     </message>
     <message>
         <source>99; </source>
@@ -195,7 +195,7 @@
     </message>
     <message>
         <source>Adress :      </source>
-        <translation>Dirección:</translation>
+        <translation type="obsolete">Dirección:</translation>
     </message>
     <message>
         <source>Town :         </source>
@@ -259,7 +259,7 @@
     </message>
     <message>
         <source>Maximum Simultaenious Connections :</source>
-        <translation>Máximas Connexiones Simultáneas :</translation>
+        <translation type="obsolete">Máximas Connexiones Simultáneas :</translation>
     </message>
     <message>
         <source>Timeout </source>
@@ -272,6 +272,18 @@
     <message>
         <source>AETitle Machine :</source>
         <translation>AETitle Máquina :</translation>
+    </message>
+    <message>
+        <source>Local Configuration</source>
+        <translation>Configuración Local</translation>
+    </message>
+    <message>
+        <source>Maximum Simultaneous Connections :</source>
+        <translation>Connexiones Simultáneas Máximas :</translation>
+    </message>
+    <message>
+        <source>Address :      </source>
+        <translation>Direcció :</translation>
     </message>
 </context>
 <context>
