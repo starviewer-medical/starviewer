@@ -1449,7 +1449,7 @@
      </widget>
      <widget class="QWidget" name="TabPage_2" >
       <attribute name="title" >
-       <string>Pacs Configuration</string>
+       <string>Local Configuration</string>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
@@ -1587,7 +1587,7 @@
                  </sizepolicy>
                 </property>
                 <property name="text" >
-                 <string>Maximum Simultaenious Connections :</string>
+                 <string>Maximum Simultaneous Connections :</string>
                 </property>
                </widget>
               </item>
@@ -2089,7 +2089,7 @@
               <item>
                <widget class="QLabel" name="label_4" >
                 <property name="text" >
-                 <string>Adress :      </string>
+                 <string>Address :      </string>
                 </property>
                </widget>
               </item>
