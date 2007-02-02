@@ -138,7 +138,7 @@ void QOperationStateScreen::setOperating( QString studyUID )
         {
             item->setText( 0 , tr( "RETRIEVING" ) ); 
         }
-        else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr(" STORING ") );
+        else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr( "STORING" ) );
     }
 }
 

@@ -738,7 +738,7 @@
                     </size>
                    </property>
                    <property name="text" >
-                    <string>DataBase path :</string>
+                    <string>Database path :</string>
                    </property>
                    <property name="textFormat" >
                     <enum>Qt::RichText</enum>
