@@ -289,7 +289,7 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="741"/>
-        <source>DataBase path :</source>
+        <source>Database path :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1590,7 +1590,7 @@
     </message>
     <message>
         <location filename="qoperationstatescreen.cpp" line="141"/>
-        <source> STORING </source>
+        <source>STORING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
