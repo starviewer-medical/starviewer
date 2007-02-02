@@ -360,7 +360,14 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
         INFO_LOG("S'ha mogut l'estudi correctament" );
         emit( setOperationFinished( operation.getStudyMask().getStudyUID().c_str() ) );// descarregat
     }
-    else emit( setErrorOperation( operation.getStudyMask().getStudyUID().c_str() ) );
+    else
+    {
+        emit( setErrorOperation( operation.getStudyMask().getStudyUID().c_str() ) );
+        logMessage = "S'ha produit un error intentant guardar l'estudi : ";
+        logMessage.append( state.text().c_str() );
+        
+        ERROR_LOG( logMessage.toAscii().constData() );
+    }
     
     return state;
 

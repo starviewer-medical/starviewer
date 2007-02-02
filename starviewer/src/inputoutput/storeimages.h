@@ -25,6 +25,9 @@ namespace udg {
 class Status;
 class ImageList;
 
+//codi d'error que retorna l'store a part del OFCondition, aquest status code també s'ha de comprovar
+static int m_lastStatusCode;
+
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */

@@ -50,8 +50,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     DIC_UI sopClass;
     DIC_UI sopInstance;
     DcmDataset *statusDetail = NULL;
-    static int lastStatusCode;
-
+    
     OFBool unsuccessfulStoreEncountered = OFTrue; // assumption
 
     /* read information from file. After the call to DcmFileFormat::loadFile(...) the information */
@@ -111,8 +110,8 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
      */
     if ( cond == EC_Normal && ( rsp.DimseStatus == STATUS_Success || DICOM_WARNING_STATUS( rsp.DimseStatus ) ) ) unsuccessfulStoreEncountered = OFFalse;
 
-    /* remember the response's status for later transmissions of data */
-    lastStatusCode = rsp.DimseStatus;
+     
+    m_lastStatusCode = rsp.DimseStatus;
 
     /* dump some more general information */
     if ( cond != EC_Normal ) DimseCondition::dump( cond );
@@ -128,19 +127,38 @@ Status StoreImages::store( ImageList imageList )
     OFCondition cond = EC_Normal;
     Status state;
     ProcessImageSingleton* piSingleton; 
+    char hexadecimalCodeError[6];        
+    std::string statusMessage;
         
     //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
     piSingleton=ProcessImageSingleton::getProcessImageSingleton();  
     
     imageList.firstImage();
-    while ( !imageList.end() &&  !cond.bad() )
+    while ( !imageList.end() &&  !cond.bad() && m_lastStatusCode == STATUS_Success )
     {
         cond = storeSCU( m_assoc , imageList.getImage().getImagePath().c_str() );
         piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
         imageList.nextImage(); 
     }
     
-    return state.setStatus( cond );
+    /*aquest codi és un altre que s'ha de comprovar que no s'hi hagi produït cap error, el retorna
+    el cstore, aquest codi està codificat en format hexadecimal a dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h
+    en allà es pot descodificar i saber quin error, per això si es produeix aquest error hem d'anar
+    a dimse.h i mirar quina codifació té*/
+
+    if ( m_lastStatusCode != STATUS_Success )
+    {
+        sprintf(hexadecimalCodeError, "%x" , m_lastStatusCode);
+        statusMessage = "Error ";
+        statusMessage.append( hexadecimalCodeError );
+        statusMessage += " al fer el store de la imatge ";
+        statusMessage += " per coneixer el significat de l'error consultar el fitxer ";
+        statusMessage += "dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h";
+        state.setStatus( statusMessage, false , 1400 );
+        
+        return state;
+    }
+    else return state.setStatus( cond );
 }
 
 StoreImages::~StoreImages()
