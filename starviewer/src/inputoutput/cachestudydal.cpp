@@ -763,7 +763,6 @@ std::string CacheStudyDAL::buildSqlQueryStudy(StudyMask* studyMask)
     studyDate = studyMask->getStudyDate();
     stuID = studyMask->getStudyId();
     accNum = studyMask->getAccessionNumber();
-    stuMod = studyMask->getStudyModality();
     stuInsUID = studyMask->getStudyUID();
     
     //cognoms del pacient
@@ -836,10 +835,9 @@ std::string CacheStudyDAL::buildSqlQueryStudy(StudyMask* studyMask)
         sql.append( "' " );        
     }
     
-    if ( stuMod != "*" && stuMod.length() > 0 )
+    if ( studyMask->getStudyModality() != "*" && studyMask->getStudyModality().length() > 0 )
     {
-        sql.append( " and Modali in " );
-        sql.append( stuMod );
+        sql.append( buildSqlStudyModality( studyMask ) );
     }
     
     return sql;
@@ -884,6 +882,34 @@ int CacheStudyDAL::getDate()
     strftime( cad , 9 , "%Y%m%d" , tmPtr );
   
     return atoi( cad );
+}
+
+
+/** Sabem que la màscara de modalitat té format "MR,CT,NM" passem a sentència sql fent and ( Modali = 'MR' or Modali='CT' .... )
+ */
+std::string CacheStudyDAL::buildSqlStudyModality( StudyMask *mask )
+{
+    std::string sqlSentence;
+    int index = 0;
+    
+    if ( mask->getStudyModality().length() > 0 )
+    {
+        //inserim la primera modalitat
+        sqlSentence.insert( 0 , " and ( Modali = '" );
+        sqlSentence.append( mask->getStudyModality().substr( 0 , 2 ) );
+        
+        index = 3; //=3 perqué ignorem la coma per exemple "CT,MR,NM"
+        while ( mask->getStudyModality().length() > index )
+        {
+            sqlSentence.append( "' or Modali = '" );
+            sqlSentence.append( mask->getStudyModality().substr( index , 2 ) );
+            index += 3;
+        }
+        
+        sqlSentence.append( "')" ); // tanquem el primer parentesis
+    }
+    
+    return sqlSentence;
 }
 
 CacheStudyDAL::~CacheStudyDAL()

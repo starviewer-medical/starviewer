@@ -106,6 +106,14 @@ public slots:
     
     /// Activa o desactiva el text de la data desde
     void setEnabledTextFrom( int );
+           
+    /** Activa o desactiva el mode AutoExclusive dels checkbox de modalitat d'estudi, si està activat 
+     * només un checkbox d'aquell grup pot estar activa alhora
+     * Per exemple en el PACS només podem buscar per una modalitat d'estudi, per tant activarem aquest mode
+     * però per la base de dades podem buscar per més d'una modalitat per tant ho desactivarem
+     * @param enabled indicia si s'activa o desactiva el mode AutoExclusive
+     */
+    void setCheckModalityAutoExclusive(bool enabled);
         
     /// Posa a verdader o fals tots els check modality, i deixa a true el all
     void clearCheckedModality();
@@ -195,12 +203,7 @@ struct retrieveParameters
     QOperationStateScreen *m_OperationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;   
-    
-    /** Activa o desactiva els checkbox per buscar per modalitat, en funcio del paràmetre passat
-     * @param boolea que indica si s'ha d'activar els checkbox de modalitat o desactivar
-     */
-    void setEnabledModalityChecks( bool );
-    
+        
     ///Connecta els signals i slots pertinents
     void connectSignalsAndSlots();    
     
@@ -322,6 +325,12 @@ struct retrieveParameters
      * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis	
      */
     QString logQueryStudy();
+    
+    /** Afegeix una modalitat a cercar a la màscara d'estudi. 
+     * @param mask màscara a la que s'ha d'afegir la modalitat
+     * @param modality modalitat a afegir
+     */
+    void addModalityStudyMask( StudyMask* mask, std::string modality );
 };
 
 };

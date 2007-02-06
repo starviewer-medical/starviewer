@@ -98,8 +98,6 @@ void QueryScreen::initialize()
     //indiquem que la llista de Pacs no es mostra
     m_PacsListShow = false;
 
-    setEnabledModalityChecks( true );
-
     qPacsList->setMaximumSize( 1 , 1 );//amaguem al finestra del QPacsList
 
     m_textFrom->setDate( currentDate.currentDate() );
@@ -269,26 +267,6 @@ void QueryScreen::setEnabledTextFrom( int value )
     m_textFrom->setEnabled( value );
 }
 
-void QueryScreen::setEnabledModalityChecks( bool enabled )
-{
-    m_checkAll->setEnabled( enabled );
-    m_checkCR->setEnabled( enabled );
-    m_checkCT->setEnabled( enabled );
-    m_checkDX->setEnabled( enabled );
-    m_checkES->setEnabled( enabled );
-    m_checkMG->setEnabled( enabled );
-    m_checkMR->setEnabled( enabled );
-    m_checkNM->setEnabled( enabled );
-    m_checkDT->setEnabled( enabled );
-    m_checkPT->setEnabled( enabled );
-    m_checkRF->setEnabled( enabled );
-    m_checkSC->setEnabled( enabled );
-    m_checkUS->setEnabled( enabled );
-    m_checkXA->setEnabled( enabled );
-    
-    m_buttonGroupModality->setEnabled( enabled );
-}
-
 void QueryScreen::clearCheckedModality()
 {
     m_checkAll->setChecked( true );
@@ -327,6 +305,25 @@ void QueryScreen::setCheckAll()
      } 
      else m_checkAll->setChecked( true );
 }
+
+void QueryScreen::setCheckModalityAutoExclusive(bool enabled)
+{
+    m_checkAll->setAutoExclusive( enabled );
+    m_checkCR->setAutoExclusive( enabled );
+    m_checkCT->setAutoExclusive( enabled );
+    m_checkDX->setAutoExclusive( enabled );
+    m_checkES->setAutoExclusive( enabled );
+    m_checkMG->setAutoExclusive( enabled );
+    m_checkMR->setAutoExclusive( enabled );
+    m_checkNM->setAutoExclusive( enabled );
+    m_checkDT->setAutoExclusive( enabled );
+    m_checkPT->setAutoExclusive( enabled );
+    m_checkRF->setAutoExclusive( enabled );
+    m_checkSC->setAutoExclusive( enabled );
+    m_checkUS->setAutoExclusive( enabled );
+    m_checkXA->setAutoExclusive( enabled );
+}
+
 
 void QueryScreen::dateFromChanged( const QDate &data )
 {
@@ -412,7 +409,8 @@ bool QueryScreen::validateNoEmptyMask()
          m_textStudyID->text().length() == 0 &&
          m_textAccessionNumber->text().length() == 0 &&
          !m_checkFrom->isChecked()  &&
-         !m_checkTo->isChecked() )
+         !m_checkTo->isChecked() &&
+         m_checkAll->isChecked() )
     {
         return false;
     }
@@ -883,21 +881,26 @@ void QueryScreen::tabChanged( int index )
     switch ( index )
     {
         case 0: //Database
-                setEnabledModalityChecks( true );//activem el grup button de motalitat
+                m_buttonGroupModality->setEnabled( true );;//activem el grup button de motalitat
                 m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
                 m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                setCheckModalityAutoExclusive( false );//podem fer cerques per més d'una modalitat d'estudi a la vegada
+                clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
                 break;
         case 1: //Pacs
-                setEnabledModalityChecks( false );//desactivem el grup button de modalitat
+                m_buttonGroupModality->setEnabled( true );;//activem el grup button de modalitat
                 m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
                 m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                setCheckModalityAutoExclusive( true );//només podem cercar per una modalitat d'estudi a la vegada
+                clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
                 break;
         case 2: //Dicomdir
-                setEnabledModalityChecks( false );//desactivem el grup button de modalitat
+                m_buttonGroupModality->setEnabled( false );;//desactivem el grup button de modalitat
                 m_buttonRetrieve->setEnabled( false );//activem el boto retrieve
                 m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
+                clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
                 break;
         }
@@ -1559,66 +1562,74 @@ StudyMask QueryScreen::buildStudyMask()
     { //es crea una sentencia per poder fer un in       
         if ( m_checkCT->isChecked() )
         {
-            modalityMask.append( ",'CT'" );
+            addModalityStudyMask( &mask , "CT" );
         }
         if ( m_checkCR->isChecked() )
         {
-            modalityMask.append( ",'CR'" );
+            addModalityStudyMask( &mask , "CR" );
         }        
         if ( m_checkDX->isChecked() )
         {
-            modalityMask.append( ",'DX'" );
+            addModalityStudyMask( &mask , "DX" );
         }        
         if ( m_checkES->isChecked() )
         {
-            modalityMask.append( ",'ES'" );
+            addModalityStudyMask( &mask , "ES" );
         }        
         if ( m_checkMG->isChecked() )
         {
-            modalityMask.append( ",'MG'" );
+            addModalityStudyMask( &mask ,"MG" );
         }        
         if ( m_checkMR->isChecked() )
         {
-            modalityMask.append( ",'MR'" );
+            addModalityStudyMask( &mask , "MR" );
         }        
         if ( m_checkNM->isChecked() )
         {
-            modalityMask.append( ",'NM'" );
+            addModalityStudyMask( &mask , "NM" );
         }        
         if ( m_checkDT->isChecked() )
         {
-            modalityMask.append( ",'DT'" );
+            addModalityStudyMask( &mask , "DT" );
         }        
         if ( m_checkPT->isChecked() )
         {
-            modalityMask.append( ",'PT'" );
+            addModalityStudyMask( &mask , "PT" );
         }        
         if ( m_checkRF->isChecked() )
         {
-            modalityMask.append( ",'RF'" );
+            addModalityStudyMask( &mask , "RF" );
         }
         if ( m_checkSC->isChecked() )
         {
-            modalityMask.append( ",'SC'" );
+            addModalityStudyMask( &mask , "SC" );
         }        
         if ( m_checkUS->isChecked() )
         {
-            modalityMask.append( ",'US'" );
+            addModalityStudyMask( &mask , "US" );
         }        
         if ( m_checkXA->isChecked() )
         {
-            modalityMask.append( ",'XA'" );
+            addModalityStudyMask( &mask , "XA" );
         }        
-        if  (modalityMask.length()> 0) 
-        {
-            modalityMask = modalityMask.replace( 0 , 1 , "(" );
-            modalityMask.append( ")" );
-            mask.setStudyModality(modalityMask.toAscii().constData() );
-        }
     }
-    else mask.setStudyModality( "*" );
     
     return mask;
+}
+
+void QueryScreen::addModalityStudyMask( StudyMask* mask, std::string modality )
+{
+    QString studyModalities;
+
+    if ( mask->getStudyModality().length() > 0 ) // ja hi ha una altra modalitat
+    {
+        studyModalities.insert( 0 , mask->getStudyModality().c_str() );
+        studyModalities.append( "," );
+        studyModalities.append( modality.c_str() );
+    }
+    else studyModalities.insert( 0 , modality.c_str() );
+    
+    mask->setStudyModality( studyModalities.toAscii().constData() );
 }
 
 QString QueryScreen::logQueryStudy()

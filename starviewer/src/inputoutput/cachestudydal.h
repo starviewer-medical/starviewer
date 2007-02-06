@@ -132,6 +132,13 @@ private :
      *    @return retorna la data del sistema en format yyyymmdd
      */
     int getDate();
+    
+    /** Passant-li la màscara d'estudi construeix la sentència sql per a buscar per modalitat, si s'ha especificat modalitat
+     * Les modalitats han d'estar separades per ','
+     * @param màscara
+     * @return sentència sql
+     */
+    std::string buildSqlStudyModality( StudyMask * mask );
 
 };
 }
