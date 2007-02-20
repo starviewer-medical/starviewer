@@ -17,6 +17,8 @@
 #include <itkMetaDataObject.h>
 // QT
 #include <QStringList>
+#include <QFileInfo>
+#include <QDir>
 // VTK
 #include <vtkMath.h> // pel cross
 
@@ -83,46 +85,62 @@ bool Input::openFile( const char * fileName )
     return ok;
 }
 
+bool Input::readFiles( std::vector< std::string > filenames )
+{
+    if( filenames.empty() )
+    {
+        WARN_LOG( "La llista de noms de fitxer per carregar és buida" );
+        return false;
+    }
+
+    bool ok = true;
+    if( filenames.size() > 1 )
+    {
+        // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
+        m_seriesReader->SetImageIO( m_gdcmIO );
+        m_seriesReader->SetFileNames( filenames );
+
+        emit progress( 0 );
+
+        try
+        {
+            m_seriesReader->Update();
+        }
+        catch ( itk::ExceptionObject & e )
+        {
+            WARN_LOG( qPrintable( "Excepció llegint els arxius del directori [" + QFileInfo( filenames[0].c_str() ).dir().path() + QString("] -> ") + e.GetDescription() ) )
+            std::cerr << e << std::endl;
+            ok = false;
+            emit progress( -1 ); // això podria indicar excepció
+        }
+        if ( ok )
+        {
+            ImageType::Pointer imageData;
+            imageData = m_seriesReader->GetOutput();
+            imageData->SetMetaDataDictionary( m_gdcmIO->GetMetaDataDictionary() );
+            m_volumeData->setData( imageData );
+            imageData->Delete();
+
+            emit progress( 100 );
+            this->setVolumeInformation();
+        }
+    }
+    else
+    {
+        this->openFile( filenames[0].c_str() );
+    }
+    return ok;
+}
+
 bool Input::readSeries( const char *dirPath )
 {
 //     SeriesProgressCommand::Pointer observer = SeriesProgressCommand::New();
 //     m_seriesReader->AddObserver( itk::ProgressEvent(), observer );
 
-    bool ok = true;
-
     m_namesGenerator->SetInputDirectory( dirPath );
 
     const SeriesReaderType::FileNamesContainer &filenames = m_namesGenerator->GetInputFileNames();
-    // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
-    m_seriesReader->SetImageIO( m_gdcmIO );
-    m_seriesReader->SetFileNames( filenames );
-
-    emit progress( 0 );
-
-    try
-    {
-        m_seriesReader->Update();
-    }
-    catch ( itk::ExceptionObject & e )
-    {
-        WARN_LOG( qPrintable( "Excepció llegint els arxius del directori [" + QString::fromLatin1(dirPath) + QString("] -> ") + e.GetDescription() ) )
-        std::cerr << e << std::endl;
-        ok = false;
-        emit progress( -1 ); // això podria indicar excepció
-    }
-    if ( ok )
-    {
-        ImageType::Pointer imageData;
-        imageData = m_seriesReader->GetOutput();
-        imageData->SetMetaDataDictionary( m_gdcmIO->GetMetaDataDictionary() );
-        m_volumeData->setData( imageData );
-        imageData->Delete();
-
-        emit progress( 100 );
-        this->setVolumeInformation();
-    }
-
-    return ok;
+    return readFiles( filenames );
 }
 
 void Input::printTag( std::string tag , std::string name )

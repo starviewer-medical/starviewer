@@ -115,6 +115,9 @@ public:
     /// Carrega un volum a partir del nom de fitxer que se li passi
     bool openFile(const char *fileName);
 
+    ///Donat un conjunt de fitxers els carrega en una única sèrie/volum
+    bool readFiles( std::vector< std::string > filenames );
+
     /// Lector de sèries dicom donat un directori que les conté
     bool readSeries( const char *dirPath );
 
