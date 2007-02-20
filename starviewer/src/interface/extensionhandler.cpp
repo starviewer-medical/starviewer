@@ -224,7 +224,7 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     }
 
     serie = study.getSeriesVolum();
-    input->readFiles( serie.getVectorSeriesPath() );
+    input->readFiles( serie.getVectorImagePath() );
 
     Volume *dummyVolume = input->getData();
     if( !m_volumeID.isNull() )
@@ -277,7 +277,7 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     }
 
     serie = study.getSeriesVolum();
-    input->readFiles( serie.getVectorSeriesPath() );
+    input->readFiles( serie.getVectorImagePath() );
 
     if( !m_compareVolumeID.isNull() )
     {

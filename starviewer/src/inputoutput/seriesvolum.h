@@ -3,11 +3,11 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGSERIESVOLUM_H
 #define UDGSERIESVOLUM_H
 
-#include <vector> 
+#include <vector>
 
 class string;
 
@@ -18,9 +18,9 @@ namespace udg {
 */
 class SeriesVolum
 {
-        
+
 public:
-    
+
     ///Constructor de la classe
     SeriesVolum();
 
@@ -28,7 +28,7 @@ public:
      * @param string path de la imatge
      */
     void addImage( std::string );
-    
+
     /** Estableix el UID de l'estudi al que pertany la serie
      * @param string UID de l'estudi
      */
@@ -58,7 +58,7 @@ public:
      * @param string path de la serie
      */
     void setSeriesPath( std::string );
-        
+
     /** retorna el UID de la serie
      * @return UID de la serie
      */
@@ -88,7 +88,7 @@ public:
      * @return el path de la serie
      */
     std::string getSeriesPath();
-        
+
     /** retorna el nombre d'imatges de la sèrie
      * @return número d'imatges de les series
      */
@@ -97,7 +97,7 @@ public:
     /** retorna un vector amb el path de totes les imatges que conte la sèrie
       * @return vector amb el path de totes les imatges de la sèrie
       */
-	std::vector <std::string>getVectorSeriesPath();   
+	std::vector <std::string>getVectorImagePath();
 
     ///Destructor de la classe
     ~SeriesVolum();

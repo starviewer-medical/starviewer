@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include <string>
 
 #include "seriesvolum.h"
@@ -84,7 +84,7 @@ std::string SeriesVolum::getSeriesPath()
     return m_seriesPath;
 }
 
-std::vector <std::string> SeriesVolum::getVectorSeriesPath()
+std::vector <std::string> SeriesVolum::getVectorImagePath()
 {
 	return m_vectorSeriesVolum;
 }
