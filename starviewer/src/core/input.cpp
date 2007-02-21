@@ -80,6 +80,8 @@ bool Input::openFile( const char * fileName )
         m_volumeData->setData( imageData );
         imageData->Delete();
 
+        m_volumeData->getVolumeSourceInformation()->loadDicomDataset( fileName );
+        this->setVolumeInformation();
         emit progress( 100 );
     }
     return ok;
@@ -121,8 +123,9 @@ bool Input::readFiles( std::vector< std::string > filenames )
             m_volumeData->setData( imageData );
             imageData->Delete();
 
-            emit progress( 100 );
+            m_volumeData->getVolumeSourceInformation()->loadDicomDataset( filenames[0].c_str() );
             this->setVolumeInformation();
+            emit progress( 100 );
         }
     }
     else
