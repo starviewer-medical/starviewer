@@ -187,8 +187,10 @@ public:
     /// Assigna/Obté les dades dicom en format dcmtk
     void setDicomDataset( DcmDataset *data );
     DcmDataset *getDicomDataset();
-    /// Carrega les dades dicom d'un arxiu
-    bool loadDicomDataset( const char *filename );
+
+    /// Indiquem la llista de fitxers que formen el volum i es carrega el dicomdataset (privat)
+    void setFilenames( std::vector< std::string > filenames );
+    void setFilenames( std::string filename ); // ho sobrecarreguem per quan només es tracti d'un sol arxiu
 
     enum PhotometricInterpretationType{ Monochrome1 , Monochrome2 , PaletteColor, RGB, YBRFull, YBRFull422, YBRPartial422, YBRPartial420, YBRICT, YBRRCT,  Unknown };
     /// Retorna la intepretació fotomètrica d'una imatge d'escala de grisos. Pot ser Monochrome1 (vídeo invers ) o MonocMonochrome2 (normal, el més usual) pel que a nosaltres ens interessa de moment
@@ -228,11 +230,17 @@ private:
     /// Llista de les descripcions dels windows levels ( si n'hi ha )
     QStringList m_windowLevelDescriptions;
 
+    /// Vector amb els noms dels fitxers que conformen el volum
+    std::vector< std::string > m_filenamesArray;
+
     /// info de dicom en format dcmtk
     DcmDataset *m_dicomData;
 
     ///Llegeix la informació sobre les dades de window level
     void readWindowLevelData();
+
+    /// Carrega les dades dicom d'un arxiu
+    bool loadDicomDataset( const char *filename );
 };
 
 };  //  end  namespace udg

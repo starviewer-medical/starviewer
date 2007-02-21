@@ -161,6 +161,22 @@ bool VolumeSourceInformation::loadDicomDataset( const char *filename )
     }
 }
 
+void VolumeSourceInformation::setFilenames( std::vector< std::string > filenames )
+{
+    m_filenamesArray = filenames;
+    if( !m_filenamesArray.empty() )
+        this->loadDicomDataset( m_filenamesArray[0].c_str() ); //\TODO ara es fa així, però podria ser que tinguèssim un tracte més "refinat"
+    else
+        WARN_LOG("La llista de fitxers és buida");
+}
+
+void VolumeSourceInformation::setFilenames( std::string filenames )
+{
+    m_filenamesArray.clear();
+    m_filenamesArray.push_back( filenames );
+    this->loadDicomDataset( m_filenamesArray[0].c_str() );
+}
+
 void VolumeSourceInformation::setDicomDataset( DcmDataset *data )
 {
     m_dicomData = data;

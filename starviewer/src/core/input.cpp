@@ -80,7 +80,7 @@ bool Input::openFile( const char * fileName )
         m_volumeData->setData( imageData );
         imageData->Delete();
 
-        m_volumeData->getVolumeSourceInformation()->loadDicomDataset( fileName );
+        m_volumeData->getVolumeSourceInformation()->setFilenames( fileName );
         this->setVolumeInformation();
         emit progress( 100 );
     }
@@ -123,7 +123,7 @@ bool Input::readFiles( std::vector< std::string > filenames )
             m_volumeData->setData( imageData );
             imageData->Delete();
 
-            m_volumeData->getVolumeSourceInformation()->loadDicomDataset( filenames[0].c_str() );
+            m_volumeData->getVolumeSourceInformation()->setFilenames( filenames );
             this->setVolumeInformation();
             emit progress( 100 );
         }
