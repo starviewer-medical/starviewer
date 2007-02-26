@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "serieslistsingleton.h"
 
 namespace udg {
@@ -21,7 +21,7 @@ SeriesListSingleton * SeriesListSingleton::getSeriesListSingleton()
     {
         pInstance = new SeriesListSingleton;
     }
-    
+
     return pInstance;
 }
 

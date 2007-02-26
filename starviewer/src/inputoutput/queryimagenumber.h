@@ -29,7 +29,7 @@
 #include "pacsserver.h"
 
 /// Classe que per una màscara d'una sèrie compte les imatges que conté aquesta sèrie. Aquesta classe no és reentrant
-// Aquesta classe no es pot fer amb més d'un thread a la vegada degut a la variable global imageNumberGlobal 
+// Aquesta classe no es pot fer amb més d'un thread a la vegada degut a la variable global imageNumberGlobal
 
 namespace udg{
 
@@ -41,19 +41,19 @@ class QueryImageNumber
 {
 
 public:
-   
+
     /** Constructor Class
      * @param Connection to use to query the image's number
-     * @param Mask to search 
+     * @param Mask to search
      */
-   QueryImageNumber( PacsConnection , ImageMask ); 
-   
+   QueryImageNumber( PacsConnection , ImageMask );
+
     /** Sets the connection to us, to query the image number
      * @param Pacs connection
      */
    void setConnection( PacsConnection );
 
-    /** This action sets the mask that we will use to count image in to the pacs. 
+    /** This action sets the mask that we will use to count image in to the pacs.
      * @param  Image's mask
      */
    void setMask( ImageMask * );
@@ -62,12 +62,12 @@ public:
      * @return The status of the action
      */
    Status count();
-   
+
     /** Return the number of images.
      * @return the number of images
      */
    int getImageNumber();
-       
+
 private:
 
     T_ASC_Association *m_assoc; // request DICOM association;

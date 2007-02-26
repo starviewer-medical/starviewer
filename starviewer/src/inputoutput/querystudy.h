@@ -37,11 +37,11 @@ namespace udg{
 class Study;
 class Status;
 
-class QueryStudy 
+class QueryStudy
 {
 
 public:
- 
+
     /** This action sets the connection that we will use to connect to the pacs
      * @param connection Openned connection to the pacs
      * @param study Mask
@@ -57,17 +57,17 @@ public:
      * @param status
      */
    Status find();
-   
+
     /** This action sets the mask that we will use to search the studies in to the pacs. This mask is created by mask class
      * @param search Mask
      */
    void setMask( StudyMask );
-    
+
     /** get the list study with the results of the query
      * @return A pointer to the ListStudy with the results of the query
      */
    StudyListSingleton* getStudyList();
-       
+
 private:
 
     T_ASC_Association *m_assoc; // request DICOM association;

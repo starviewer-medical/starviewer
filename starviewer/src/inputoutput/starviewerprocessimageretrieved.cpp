@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 
 #include <string.h>
 
@@ -35,32 +35,32 @@ void StarviewerProcessImageRetrieved::process( Image *image )
 
     /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
     if ( m_downloadedImages == 0 )
-    {  
+    {
         Series serie;
-        
+
         //canviem l'estat de l'estudi de PENDING A RETRIEVING
         state = cacheStudyDAL.setStudyRetrieving( image->getStudyUID().c_str() );
         if ( !state.good() ) m_error = true;
-        
+
         //inserim serie
         insertSerie( image );
-        
+
         state = getSeriesInformation ( createImagePath( image  ), serie );
         if ( !state.good() ) m_error = true;
-           
+
         state = cacheStudyDAL.setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
         if ( !state.good() ) m_error = true;
-               
+
         m_studyUID = image->getStudyUID().c_str();
     }
-    
+
     //inserim la nova sèrie que es descarrega
     if ( !m_addedSeriesList.contains( image->getSeriesUID().c_str() ) )
     {
         if ( insertSerie( image ).good() )
         {
             emit( seriesRetrieved( image->getStudyUID().c_str() ) );
-            
+
             if ( m_downloadedSeries == 0 )
             {
                 emit( seriesView( image->getStudyUID().c_str() ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
@@ -68,12 +68,12 @@ void StarviewerProcessImageRetrieved::process( Image *image )
             m_downloadedSeries++;
         }
     }
-    
+
     //inserim imatge
     state = cacheImageDAL.insertImage( image );
     //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
     if ( !state.good() ) m_error = true;
-   
+
     m_downloadedImages++;
     emit( imageRetrieved( image->getStudyUID().c_str(),m_downloadedImages ) );
 }
@@ -86,7 +86,7 @@ Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
 
     //inserim serie
     state = getSeriesInformation ( createImagePath( newImage ) , serie );
-    
+
     if ( state.good() )
     {
         state = cacheSeriesDAL.insertSeries( &serie );
@@ -96,7 +96,7 @@ Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
         }
         else m_addedSeriesList.push_back( serie.getSeriesUID().c_str() );
     }
-    
+
     return state;
 }
 
@@ -107,20 +107,20 @@ void StarviewerProcessImageRetrieved::setError()
     std::string logMessage;
     m_error = true;
     logMessage = "Error descarregant l'estudi";
-    ERROR_LOG( logMessage.c_str() );  
+    ERROR_LOG( logMessage.c_str() );
 }
 
 bool StarviewerProcessImageRetrieved::getError()
 {
     std::string logMessage;
-    
+
     if ( m_downloadedImages == 0)
     {
         logMessage = "Error s'han descarregat 0 imatges de l'estudi";
-        ERROR_LOG( logMessage.c_str() );          
+        ERROR_LOG( logMessage.c_str() );
     }
     return m_error || m_downloadedImages == 0;
-} 
+}
 
 Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath , Series &serie )
 {
@@ -128,11 +128,11 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
     QString path;
     std::string logMessage;
     char errorNumber[5];
-    
+
     ImageDicomInformation dInfo;
-    
+
     state = dInfo.openDicomFile( imagePath.toAscii().constData() );
-    
+
     serie.setStudyUID( dInfo.getStudyUID() );
     serie.setSeriesUID( dInfo.getSeriesUID() );
     serie.setSeriesNumber( dInfo.getSeriesNumber() );
@@ -142,16 +142,16 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
     serie.setProtocolName( dInfo.getSeriesProtocolName() );
     serie.setSeriesTime( dInfo.getSeriesTime() );
     serie.setSeriesDate( dInfo.getSeriesDate() );
-    
+
     //calculem el path de la serie
     path = dInfo.getStudyUID().c_str();
     path.append( "/" );
     path.append( dInfo.getSeriesUID().c_str() );
     path.append( "/" );
-    
+
     serie.setSeriesPath( path.toAscii().constData());
-    
-        
+
+
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
@@ -159,17 +159,17 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
         logMessage.append( errorNumber );
         logMessage.append( " ERROR : " );
         logMessage.append( state.text() );
-        ERROR_LOG( logMessage.c_str() );  
-    }    
-    return state; 
+        ERROR_LOG( logMessage.c_str() );
+    }
+    return state;
 }
 
 QString StarviewerProcessImageRetrieved::createImagePath( Image *image )
 {
     StarviewerSettings settings;
     Series serie;
-    QString imagePath;   
-    
+    QString imagePath;
+
     imagePath.insert( 0 , settings.getCacheImagePath() );
     imagePath.append( image->getStudyUID().c_str() );
     imagePath.append( "/" );
@@ -186,7 +186,7 @@ StarviewerProcessImageRetrieved::~StarviewerProcessImageRetrieved()
 	emit( seriesRetrieved( m_studyUID ) );
 
     // si les series està a 0 vol dir que l'estudi només tenia una sèrie, per tant si l'usuari ha demanat visualitzar-lo no s'haurà emés el signal seriesView, perquè no sabrem que ha finalitzat la descarrega de la sèrie, fins que es destrueixi l'objecte StarviewerProcessImageRetrieved, el qual no es destrueix just quan finalitza la descàrrega de l'estudi
-    if ( m_downloadedSeries == 0 ) 
+    if ( m_downloadedSeries == 0 )
     {
     	emit( seriesView( m_studyUID ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
     }

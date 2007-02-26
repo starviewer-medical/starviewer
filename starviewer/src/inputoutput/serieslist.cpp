@@ -15,7 +15,7 @@ SeriesList::SeriesList()
 {
     buit = true;
     m_iterator = m_seriesList.begin();
-}    
+}
 
 void SeriesList::insert(Series series)
 {
@@ -33,7 +33,7 @@ bool SeriesList::end()
     if ( m_seriesList.size() == 0 )
     {
         return true;
-    }   
+    }
     else return m_iterator == m_seriesList.end();
 }
 

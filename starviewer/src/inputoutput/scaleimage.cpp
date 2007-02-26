@@ -7,7 +7,7 @@
 #include "scaleimage.h"
 
 #define HAVE_CONFIG_H 1
- 
+
 //#define BUILD_DCM2PNM_AS_DCMJ2PNM // compile "dcm2pnm" with dcmjpeg support
 
 #include "dcmtk/config/osconfig.h"    /* make sure OS specific configuration is included first */
@@ -95,22 +95,22 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
     OFCondition cond = dfile->loadFile( dicomFile , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
 
     if ( cond.bad() ) return errorDicomFileNotFound;
-   
+
     E_TransferSyntax xfer = dfile->getDataset()->getOriginalXfer();
 
     //carreguem el fitxer dicom a escalar
     DicomImage *di = new DicomImage( dfile , xfer , opt_compatibilityMode , opt_frame - 1 , opt_frameCount );
-    
+
     if ( di == NULL ) return errorOutofMemory;
 
     if ( di->getStatus() != EIS_Normal ) return errorOpeningDicomFile;
 
 
     di->hideAllOverlays();
-    //escalem l'imatge    
+    //escalem l'imatge
     DicomImage *newimage;
-    
-        
+
+
     //Escalem pel cantó més gran
     if ( di->getWidth() < di->getHeight() )
     {
@@ -120,14 +120,14 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
      else
      {
         opt_scale_size_x = pixelsSize;
-        opt_scale_size_y = 0;  
+        opt_scale_size_y = 0;
      }
-    
+
     di->setMinMaxWindow( 1 ); //Establim el VOI LUT, aquí indiquem que aquesta imatge és per visualitzar per una finestra, aplica filtres perquè es vegi correctament
-    
+
     newimage = di->createScaledImage( opt_scale_size_x , opt_scale_size_y , ( int ) opt_useInterpolation , opt_useAspectRatio );
-           
-    if ( newimage==NULL ) 
+
+    if ( newimage==NULL )
     {
         return errorScalingImage;
     }
@@ -147,7 +147,7 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
     unsigned int fcount = ( unsigned int )( ( ( opt_frameCount > 0 ) && ( opt_frameCount <= di->getFrameCount() ) ) ? opt_frameCount : di->getFrameCount() );
 
     for ( unsigned int frame = 0; frame < fcount; frame++ )
-    {        
+    {
         ofile = fopen( lpgmFile, "wb" );
         if ( ofile == NULL )
         {
@@ -156,10 +156,10 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
             /* finally create PGM BMP file */
        result = di->writeRawPPM( ofile , 8 , frame );
        fclose( ofile );
-       
+
        if ( !result ) return errorWritingNewImage;
    }
-    
+
     delete di;
 
     // deregister RLE decompression codec

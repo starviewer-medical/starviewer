@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGSTARVIEWERSETTINGS_H
 #define UDGSTARVIEWERSETTINGS_H
 
@@ -69,7 +69,7 @@ public:
 	 * @param número maxim de dies
 	 */
     void setMaximumDaysNotViewedStudy( QString  );
-      
+
 	/** retorna el path de la base de dades
 	 * @return retorna el path de la base de dades
 	 */
@@ -89,7 +89,7 @@ public:
 	 * @return retorn el path de la cache
 	 */
     QString getMaximumDaysNotViewedStudy();
-    
+
     //Pacs
 	/** guarda el AETitle de la màquina
 	 * @param AETitle de la màquina
@@ -110,7 +110,7 @@ public:
 	 * @param nombre màxim de connexions
   	 */
     void setMaxConnections( QString );
-      
+
 	/** retorna el AEtitle de la màquina
 	 * @return AETitle de la màquina
 	 */
@@ -130,7 +130,7 @@ public:
 	 * @return nombre màxim de connexions
 	 */
     QString getMaxConnections();
-      
+
     //interficie
 
 	/** guarda la mida de la columna que se li passa per paràmetre del QStudyListView ,  encarregat de mostrar les dades del Pacs
@@ -143,34 +143,34 @@ public:
 	 * @param número de columna
 	 * @param amplada de la columna
 	 */
-    void setStudyCacheListColumnWidth( int col , int width );      
-    
+    void setStudyCacheListColumnWidth( int col , int width );
+
     /** guarda la mida de la columna que se li passa per paràmetre del QStudyListView ,  encarregat de mostrar les dades d'un dicomdir
      * @param número de columna
      * @param amplada de la columna
      */
-    void setStudyDicomdirListColumnWidth( int col , int width ); 
-    
+    void setStudyDicomdirListColumnWidth( int col , int width );
+
     /** guarda en quina és la posició en l'eix de coordenades X en que es troba la interficie queryscreen
      * @param positionX posició en l'eix de coordenades X de la pantalla queryScreen
      */
-    void setQueryScreenWindowPositionX( int positionX ); 
-    
+    void setQueryScreenWindowPositionX( int positionX );
+
     /** guarda en quina és la posició en l'eix de coordenades Y en que es troba la interficie queryscreen
      * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
      */
     void setQueryScreenWindowPositionY( int positionY );
-    
+
     /** guarda quina és l'amplada de la queryScreen
      * @param width amplada de la queryScreen
      */
-    void setQueryScreenWindowWidth( int width ); 
-    
+    void setQueryScreenWindowWidth( int width );
+
     /** guarda quina és l'allargada de la pantalla queryscreen
      * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
      */
     void setQueryScreenWindowHeight( int height );
-      
+
     /** guarda l'estat en que es troba el QSplitter que divideix a la pestany de local el StudyList i el SeriesList
      * @param state estat del QSplitter
      */
@@ -185,7 +185,7 @@ public:
 	 * @return amplada de la columna
 	 */
    	int getStudyCacheListColumnWidth( int column );
-      
+
     /** retorna l'amplada del número de columna de la llista d'estudis de Dicomdir,  passat per paràmetre
      * @return amplada de la columna
      */
@@ -195,7 +195,7 @@ public:
      * @return posicó en l'eix X que es trobava la interficie queryScreen
      */
     int getQueryScreenWindowPositionX();
-    
+
     /** retorna en quin posició de l'eix estava la pantalla queryScreen guardada al QSettings l'aplicació
      * @return posicó en l'eix Y que es trobava la interficie queryScreen
      */
@@ -205,39 +205,39 @@ public:
      * @return amplada de la pantalla
      */
     int getQueryScreenWindowWidth();
-    
+
     /** retorna l'allargada la pantalla queryScreen guardada al QSettings
      * @return posicó en l'eix Y que es trobava la interficie queryScreen
      */
     int getQueryScreenWindowHeight();
-    
+
     /** retorna l'estat amb que estava el QSplitter que separa el StudyTree i el SeriesList
      * @return estat del QSpliltter
      */
     QByteArray getQueryScreenStudyTreeSeriesListQSplitterState();
-    
+
     /** Guarda el nom de la institució
      * @param institutionName nom de l'institució
      */
     void setInstitutionName( QString institutionName );
-    
+
     /** Guarda l'adreça de la institució
      * @param institutionAddress adreça de la institució
      */
     void setInstitutionAddress( QString institutionNameString );
-    
+
     /** Guarda la poblacio de la institució
      * @param institutionTown població de la institució
      */
     void setInstitutionTown( QString institutionTownString );
-    
+
     /** Guarda el codi postal de la institució
      * @param institutionZipCode codi postal del a institució
      */
     void setInstitutionZipCode( QString institutionZipCodeString );
 
     /** Guarda el país de la institució
-     * @param institutionCountry 
+     * @param institutionCountry
      */
     void setInstitutionCountry( QString institutionCountryString );
 
@@ -247,52 +247,52 @@ public:
     void setInstitutionEmail( QString institutionEmailString );
 
     /** Guarda el telefon de la institució
-     * @param institutionPhoneNumber telèfon 
+     * @param institutionPhoneNumber telèfon
      */
     void setInstitutionPhoneNumber( QString institutionPhoneNumberString );
-       
+
     /** retorna el nom de la institució
      * @return nom de la institució
      */
     QString getInstitutionName();
-    
+
     /** retorna el adreça de la institució
      * @return adreça de la institució
      */
     QString getInstitutionAddress();
-    
+
     /** retorna la ciutat de la institució
      * @return ciutat de la institució
      */
     QString getInstitutionTown();
-    
+
     /** retorna el codi postal de la institució
      * @return codi postal de la institució
      */
     QString getInstitutionZipCode();
-    
+
     /** retorna el país de la institució
      * @return país de la institució
      */
     QString getInstitutionCountry();
-    
+
     /** retorna el correu electrònic de la institució
      * @return correu electrònic de la institució
      */
     QString getInstitutionEmail();
-    
+
     /** retorna el telèfon de la institució
      * @return telèfon de la institució
      */
     QString getInstitutionPhoneNumber();
-    
-    
+
+
 private :
     /// Nom del grup on es guarda la configuració d'aquesta classe
     const QString GroupSettingsName;
 
     QSettings m_starviewerSettings;
-    
+
 };
 
 };

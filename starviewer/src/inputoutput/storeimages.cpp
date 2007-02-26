@@ -50,7 +50,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     DIC_UI sopClass;
     DIC_UI sopInstance;
     DcmDataset *statusDetail = NULL;
-    
+
     OFBool unsuccessfulStoreEncountered = OFTrue; // assumption
 
     /* read information from file. After the call to DcmFileFormat::loadFile(...) the information */
@@ -64,7 +64,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     if ( cond.bad() ) return cond;
 
     /* figure out which SOP class and SOP instance is encapsulated in the file */
-    if ( !DU_findSOPClassAndInstanceInDataSet( dcmff.getDataset() , sopClass , sopInstance , OFFalse ) ) 
+    if ( !DU_findSOPClassAndInstanceInDataSet( dcmff.getDataset() , sopClass , sopInstance , OFFalse ) )
     {
         return DIMSE_BADDATA;
     }
@@ -77,20 +77,20 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
      * to find a presentation context for deflated explicit VR first.
      */
 
-    if ( filexfer.getXfer() != EXS_Unknown ) 
+    if ( filexfer.getXfer() != EXS_Unknown )
     {
         presId = ASC_findAcceptedPresentationContextID( assoc , sopClass , filexfer.getXferID() );
     }
     else presId = ASC_findAcceptedPresentationContextID( assoc , sopClass );
-    
-    if ( presId == 0 ) 
+
+    if ( presId == 0 )
     {
         const char *modalityName = dcmSOPClassUIDToModality( sopClass );
-        
+
         if ( !modalityName ) modalityName = dcmFindNameOfUID( sopClass );
-        
+
         if ( !modalityName ) modalityName = "unknown SOP class";
-        
+
         return DIMSE_NOVALIDPRESENTATIONCONTEXTID;
     }
 
@@ -110,7 +110,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
      */
     if ( cond == EC_Normal && ( rsp.DimseStatus == STATUS_Success || DICOM_WARNING_STATUS( rsp.DimseStatus ) ) ) unsuccessfulStoreEncountered = OFFalse;
 
-     
+
     m_lastStatusCode = rsp.DimseStatus;
 
     /* dump some more general information */
@@ -118,29 +118,29 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
 
     /* dump status detail information if there is some */
     if ( statusDetail != NULL ) delete statusDetail;
-    
+
     return cond;
 }
- 
+
 Status StoreImages::store( ImageList imageList )
 {
     OFCondition cond = EC_Normal;
     Status state;
-    ProcessImageSingleton* piSingleton; 
-    char hexadecimalCodeError[6];        
+    ProcessImageSingleton* piSingleton;
+    char hexadecimalCodeError[6];
     std::string statusMessage;
-        
+
     //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
-    piSingleton=ProcessImageSingleton::getProcessImageSingleton();  
-    
+    piSingleton=ProcessImageSingleton::getProcessImageSingleton();
+
     imageList.firstImage();
     while ( !imageList.end() &&  !cond.bad() && m_lastStatusCode == STATUS_Success )
     {
         cond = storeSCU( m_assoc , imageList.getImage().getImagePath().c_str() );
         piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
-        imageList.nextImage(); 
+        imageList.nextImage();
     }
-    
+
     /*aquest codi és un altre que s'ha de comprovar que no s'hi hagi produït cap error, el retorna
     el cstore, aquest codi està codificat en format hexadecimal a dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h
     en allà es pot descodificar i saber quin error, per això si es produeix aquest error hem d'anar
@@ -155,7 +155,7 @@ Status StoreImages::store( ImageList imageList )
         statusMessage += " per coneixer el significat de l'error consultar el fitxer ";
         statusMessage += "dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h";
         state.setStatus( statusMessage, false , 1400 );
-        
+
         return state;
     }
     else return state.setStatus( cond );

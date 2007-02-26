@@ -36,23 +36,23 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
     const char* knownAbstractSyntaxes[] = {
         UID_VerificationSOPClass
     };
-    
+
     //default value from movescu.cpp
     OFCmdUnsignedInt  opt_maxPDU = ASC_DEFAULTMAXPDU;
-    
+
     const char* transferSyntaxes[] = { NULL , NULL , NULL , NULL };
     int numTransferSyntaxes;
 
     OFCondition cond = ASC_receiveAssociation( aNet , assoc , opt_maxPDU );
-    
+
     if ( cond.good() )
     {
           if ( gLocalByteOrder == EBO_LittleEndian )  /* defined in dcxfer.h */
           {
             transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
             transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-          } 
-          else 
+          }
+          else
           {
             transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
             transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
@@ -75,10 +75,10 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
                 transferSyntaxes , numTransferSyntaxes );
         }
     }
-    
+
     if ( cond.good() ) cond = ASC_acknowledgeAssociation( *assoc );
-    
-    if ( cond.bad() ) 
+
+    if ( cond.bad() )
     {
         ASC_dropAssociation( *assoc );
         ASC_destroyAssociation( assoc );
@@ -106,7 +106,7 @@ OFCondition echoSCP(
   {
     DimseCondition::dump( cond );
   }
-  
+
   return cond;
 }
 
@@ -137,7 +137,7 @@ OFCondition echoSCP(
     DIR *pdir;
 
     Image img;
-    
+
       switch ( progress->state )
       {
         case DIMSE_StoreBegin:
@@ -151,22 +151,22 @@ OFCondition echoSCP(
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
         *statusDetail = NULL;    /* no status detail */
-    
+
         /* could save the image somewhere else, put it in database, etc */
         /*
         * An appropriate status code is already set in the resp structure, it need not be success.
         * For example, if the caller has already detected an out of resources problem then the
         * status will reflect this.  The callback function is still called to allow cleanup.
         */
-        // rsp->DimseStatus = STATUS_Success;      
+        // rsp->DimseStatus = STATUS_Success;
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
-            ProcessImageSingleton* piSingleton; 
-        
+            ProcessImageSingleton* piSingleton;
+
             //proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
-            piSingleton=ProcessImageSingleton::getProcessImageSingleton();  
-            
+            piSingleton=ProcessImageSingleton::getProcessImageSingleton();
+
             const char* fileName = cbdata->imageFileName;
             const char *studyUID = NULL;
             const char *seriesUID = NULL;
@@ -174,26 +174,26 @@ OFCondition echoSCP(
             const char *imageNumber = NULL;
             std::string pathfile;
             int imageSize;
-        
+
             //Definim els TagKey per indicar que volem treure de la imatge
             DcmTagKey studyInstanceUIDTagKey( DCM_StudyInstanceUID ); //studyUID
             DcmTagKey seriesInstanceUIDTagKey( DCM_SeriesInstanceUID );//seriesUID
             DcmTagKey SOPInstanceUIDTagKey ( DCM_SOPInstanceUID );
-            DcmTagKey imageNumberTagKey (DCM_InstanceNumber );    //número d'imatge    
-            
+            DcmTagKey imageNumberTagKey (DCM_InstanceNumber );    //número d'imatge
+
             pathfile.insert( 0 , piSingleton->getPath() );//agafem el path del directori on es guarden les imatges
-            
+
             //obtenim la informacio de la imatge
             OFCondition ec;
             ec = ( *imageDataSet )->findAndGetString( SOPInstanceUIDTagKey , SoPUID, OFFalse );
             ec = ( *imageDataSet )->findAndGetString( imageNumberTagKey , imageNumber, OFFalse );
             //recuperem l'estudi UID de la imatge, per saber el directori on l'hem de guardar
             ec = ( *imageDataSet )->findAndGetString( studyInstanceUIDTagKey , studyUID , OFFalse );
-            
+
             studyDir = studyUID;
-            
+
             pathfile.append( studyDir );
-  
+
             //comprovem, si el directori de l'estudi ja està creat
             pdir = opendir( pathfile.c_str() );
             if ( !pdir )
@@ -201,41 +201,41 @@ OFCondition echoSCP(
                 mkdir( pathfile.c_str() , S_IRWXU | S_IRWXG | S_IRWXO );
             }
             else closedir( pdir );
-            
-            //obtenim a quina sèrie pertany la imatage per saber el directori on l'hem de guardar 
+
+            //obtenim a quina sèrie pertany la imatage per saber el directori on l'hem de guardar
             ( *imageDataSet )->findAndGetString( seriesInstanceUIDTagKey , seriesUID , OFFalse );
-        
+
             seriesDir = seriesUID;
-        
+
             pathfile.append( "/" );
             pathfile.append( seriesDir );
-            
+
             //comprovem, si el directori de la sèrie ja està creat
             pdir = opendir( pathfile.c_str()) ;
             if ( !pdir )
             {
                 mkdir( pathfile.c_str(), S_IRWXU | S_IRWXG | S_IRWXO );
             }
-            else closedir( pdir );                
-        
+            else closedir( pdir );
+
             //acabem de concatenar el nom del fitxer
             pathfile.append("/");
             pathfile.append( fileName );
-            
+
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
-        
+
             OFCondition cond = cbdata->dcmff->saveFile( pathfile.c_str() , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
-            
+
             if ( cond.bad() )
             {
                 piSingleton->setError( studyUID );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
-            }         
+            }
             //calculem la mida de l'image
             imageSize = cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType );
-        
+
             /* should really check the image to make sure it is consistent,
             * that its sopClass and sopInstance correspond with those in
             * the request.
@@ -258,11 +258,11 @@ OFCondition echoSCP(
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( studyUID );
                 }
-            }   
-        
+            }
+
             // si el numero d'imatges es null li posem 999999, per posteriorment nosaltres poder-ho saber
             if ( imageNumber == NULL ) imageNumber = "999999";
-        
+
             //guardem la informacio a l'objecte imatge
             img.setStudyUID( studyUID );
             img.setSeriesUID( seriesUID );
@@ -270,12 +270,12 @@ OFCondition echoSCP(
             img.setImageName( fileName );
             img.setImageNumber( atoi( imageNumber ) );
             img.setImagePath( pathfile.c_str() );
-            img.setImageSize( imageSize ); 
-            
+            img.setImageSize( imageSize );
+
             piSingleton->process( img.getStudyUID() ,&img );
         }
     }
-    
+
     return;
 }
 
@@ -285,8 +285,8 @@ OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_Pr
     T_DIMSE_C_StoreRQ *req;
     char imageFileName[2048];
     req = &msg->msg.CStoreRQ;
-    
-    /* I found its default value in movescu.cpp */ 
+
+    /* I found its default value in movescu.cpp */
     OFBool opt_useMetaheader = OFTrue;
 
     sprintf( imageFileName , "%s.%s" , dcmSOPClassUIDToModality( req->AffectedSOPClassUID ), req->AffectedSOPInstanceUID );
@@ -296,11 +296,11 @@ OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_Pr
     callbackData.imageFileName = imageFileName;
     DcmFileFormat dcmff;
     callbackData.dcmff = &dcmff;
-    
+
     DcmDataset *dset = dcmff.getDataset();
-    
+
     cond = DIMSE_storeProvider( assoc , presID , req , (char *)NULL , opt_useMetaheader , &dset , storeSCPCallback , ( void* ) &callbackData , DIMSE_BLOCKING , 0 );
-   
+
     if ( cond.bad() )
     {
       DimseCondition::dump( cond );
@@ -322,9 +322,9 @@ OFCondition subOpSCP( T_ASC_Association **subAssoc )
 
     OFCondition cond = DIMSE_receiveCommand( *subAssoc , DIMSE_BLOCKING , 0 , &presID , &msg , NULL );
 
-    if ( cond == EC_Normal ) 
+    if ( cond == EC_Normal )
     {
-        switch ( msg.CommandField ) 
+        switch ( msg.CommandField )
         {
         case DIMSE_C_STORE_RQ:
             cond = storeSCP( *subAssoc , &msg , presID );
@@ -366,16 +366,16 @@ OFCondition subOpSCP( T_ASC_Association **subAssoc )
 
 void subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc )
 {
-    if ( aNet == NULL ) 
+    if ( aNet == NULL )
     {
         return;   /* help no net ! */
     }
-    
-    if ( *subAssoc == NULL ) 
+
+    if ( *subAssoc == NULL )
     {
         acceptSubAssoc( aNet , subAssoc );
     }
-    else 
+    else
     {
         subOpSCP( subAssoc );
     }
@@ -393,11 +393,11 @@ Status RetrieveImages::moveSCU()
     Status state;
 
     //If not connection has been setted, return error because we need a PACS connection
-    if ( m_assoc == NULL ) 
+    if ( m_assoc == NULL )
     {
         return state.setStatus( error_NoConnection );
     }
-    
+
     //If not mask has been setted, return error, we need a search mask
     if ( m_mask == NULL )
     {
@@ -406,10 +406,10 @@ Status RetrieveImages::moveSCU()
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
     presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_MOVEStudyRootQueryRetrieveInformationModel );
-    if ( presId == 0 ) return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );    
+    if ( presId == 0 ) return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
     callbackData.assoc = m_assoc;
     callbackData.presId = presId;
-    
+
     req.MessageID = msgId;
     strcpy( req.AffectedSOPClassUID , UID_MOVEStudyRootQueryRetrieveInformationModel );
     req.Priority = DIMSE_PRIORITY_MEDIUM;
@@ -422,13 +422,13 @@ Status RetrieveImages::moveSCU()
         m_net , subOpCallback , NULL ,
         &rsp , &statusDetail , &rspIds );
 
-    if ( cond != EC_Normal ) 
+    if ( cond != EC_Normal )
     {
         DimseCondition::dump(cond);
-    } 
-    
+    }
+
     if ( rspIds != NULL ) delete rspIds;
-        
+
     state.setStatus( cond );
 
     return state;

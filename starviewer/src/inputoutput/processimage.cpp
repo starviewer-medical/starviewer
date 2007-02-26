@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "processimage.h"
 #include "image.h"
 

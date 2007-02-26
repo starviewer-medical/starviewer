@@ -29,21 +29,21 @@ Status CacheImageDAL::insertImage( Image *image )
     Status state;
     char *sqlSentence , errorNumber[5];
     std::string logMessage , sql;
-    
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
-    
+
     sql.insert( 0 , "Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) " );
     sql.append( "values (%Q,%Q,%Q,%i,%Q,%Q,%i,%Q)" );
-    
+
     databaseConnection->getLock();
 
     stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacció
 
     state = databaseConnection->databaseStatus( stateDatabase );
-    
+
     if ( !state.good() )
     {
          stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
@@ -54,8 +54,8 @@ Status CacheImageDAL::insertImage( Image *image )
         ERROR_LOG( logMessage.c_str() );
         return state;
     }
-    
-    sqlSentence = sqlite3_mprintf( sql.c_str() 
+
+    sqlSentence = sqlite3_mprintf( sql.c_str()
                                 ,image->getSoPUID().c_str()
                                 ,image->getStudyUID().c_str()
                                 ,image->getSeriesUID().c_str()
@@ -64,7 +64,7 @@ Status CacheImageDAL::insertImage( Image *image )
                                 ,"0" //Image Date
                                 ,image->getImageSize()
                                 ,image->getImageName().c_str() );   //Image size
-                                                
+
     stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
 
     state = databaseConnection->databaseStatus( stateDatabase );
@@ -79,16 +79,16 @@ Status CacheImageDAL::insertImage( Image *image )
         ERROR_LOG( sqlSentence );
         return state;
     }
-                               
-    //Actualitzem l'espai ocupat de la cache , per la nova imatge descarregada                                
-    sql.clear();  
+
+    //Actualitzem l'espai ocupat de la cache , per la nova imatge descarregada
+    sql.clear();
     sql.insert( 0 , "Update Pool Set Space = Space + %i " );
     sql.append( "where Param = 'USED'" );
-    
+
     sqlSentence = sqlite3_mprintf( sql.c_str() , image->getImageSize() );
-    
+
     stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
-    
+
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
@@ -101,11 +101,11 @@ Status CacheImageDAL::insertImage( Image *image )
         ERROR_LOG( sqlSentence );
         return state;
     }
-    
+
     stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
-    
+
     databaseConnection->releaseLock();
-                                
+
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
@@ -113,8 +113,8 @@ Status CacheImageDAL::insertImage( Image *image )
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
-    }    
-    
+    }
+
     return state;
 }
 
@@ -126,19 +126,19 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
     std::string logMessage , absPath;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-        
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
-    }    
-        
+    }
+
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , 
-                                      buildSqlQueryImages( &imageMask ).c_str() , 
-                                    &resposta , &rows , &columns , error ); 
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() ,
+                                      buildSqlQueryImages( &imageMask ).c_str() ,
+                                    &resposta , &rows , &columns , error );
                                     //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     databaseConnection->releaseLock();
-    
+
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
@@ -148,13 +148,13 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
         ERROR_LOG( logMessage.c_str() );
         ERROR_LOG( buildSqlQueryImages( &imageMask ).c_str()  );
         return state;
-    }    
-    
+    }
+
     i = 1;//ignorem les capçaleres
     while (i <= rows )
-    {   
+    {
         image.setImageNumber(atoi( resposta [ 0 + i * columns ] ) );
-        
+
         //creem el path absolut
         absPath.erase();
         absPath.insert( 0 , resposta[1 + i * columns ] );
@@ -162,16 +162,16 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
         absPath.append( "/" );
         absPath.append( resposta [ 5 + i * columns ] ); //incloem el nom de la imatge
         image.setImagePath( absPath.c_str() );
-        
+
         image.setStudyUID( resposta [ 2 + i * columns ] );
         image.setSeriesUID( resposta [ 3 + i * columns ] );
-        image.setSoPUID( resposta [ 4 + i * columns ] );        
+        image.setSoPUID( resposta [ 4 + i * columns ] );
         image.setImageName( resposta [ 5 + i * columns ] );
-        
+
         ls.insert( image );
         i++;
     }
-    
+
     return state;
 }
 
@@ -182,16 +182,16 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
     Status state;
     std::string sql , logMessage;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus ( 50 );
     }
-    
+
     databaseConnection->getLock();
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlCountImageNumber( &imageMask ).c_str() , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
-    
+
     state = databaseConnection->databaseStatus ( stateDatabase );
     if ( !state.good() )
     {
@@ -201,11 +201,11 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
         ERROR_LOG( logMessage.c_str() );
         ERROR_LOG( buildSqlCountImageNumber( &imageMask ).c_str() );
         return state;
-    }    
+    }
     i = 1;//ignorem les capçaleres
-   
+
     imageNumber = atoi( resposta [i] );
-   
+
    return state;
 }
 
@@ -216,18 +216,18 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
     std::string logMessage , sql;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus ( 50 );
     }
-    
+
     databaseConnection->getLock();
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlSizeImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
-    
+
     state = databaseConnection->databaseStatus ( stateDatabase );
-    
+
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
@@ -236,15 +236,15 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
         ERROR_LOG( logMessage.c_str() );
         ERROR_LOG( buildSqlSizeImage( &imageMask ).c_str() );
         return state;
-    }    
-    
+    }
+
     if ( resposta[1] != NULL )
-    {   
+    {
         size = atol( resposta [1] );
     }
     else size = 0;
-   
-   return state;  
+
+   return state;
 }
 Status CacheImageDAL::deleteImages( std::string studyUID )
 {
@@ -254,22 +254,22 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
     char *sqlSentence , errorNumber[5];
     std::string logMessage;
     Status state;
-    
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
-   
+
     sql.insert( 0 , "delete from image where StuInsUID = %Q" );
-    
+
     sqlSentence = sqlite3_mprintf( sql.c_str() , studyUID.c_str() );
-    
+
     databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
-        
+
     stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
-    
+
     databaseConnection->releaseLock();
-    
+
     state =  databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
@@ -278,7 +278,7 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
         logMessage.append( errorNumber );
         ERROR_LOG( logMessage.c_str() );
         ERROR_LOG( sqlSentence );
-    }    
+    }
 
     return state;
 
@@ -287,7 +287,7 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
 std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
 {
     std::string sql , whereClause = "";
-    
+
     sql.insert( 0 , "select count(*) from image " );
 
     //si hi ha UID study
@@ -331,7 +331,7 @@ std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
             whereClause.append( "'" );
         }
     }
-    
+
     if ( whereClause.length() > 0 )
     {
         sql.append( whereClause );
@@ -399,24 +399,24 @@ std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
 std::string CacheImageDAL::buildSqlQueryImages( ImageMask *imageMask )
 {
     std::string sql  ,imgNum;
-    
+
     sql.insert( 0 , "select ImgNum , AbsPath , Image.StuInsUID , SerInsUID , SopInsUID , ImgNam from image , study where Image.StuInsUID = '" );
     sql.append( imageMask->getStudyUID() );
     sql.append( "' and SerInsUID = '" );
     sql.append( imageMask->getSeriesUID() );
     sql.append( "' and Study.StuInsUID = Image.StuInsUID " );
-    
+
     imgNum = imageMask->getImageNumber();
-    
+
     if ( imgNum.length() > 0 )
     {
         sql.append( " and ImgNum = " );
         sql.append( imgNum );
         sql.append( " " );
     }
-    
+
     sql.append( " order by ImgNum" );
-    
+
     return sql;
 }
 

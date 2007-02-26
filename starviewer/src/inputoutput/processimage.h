@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGPROCESSIMAGE_H
 #define UDGPROCESSIMAGE_H
 
@@ -19,7 +19,7 @@ class ProcessImage
 
 public:
 
-	///Constructor de la classe    
+	///Constructor de la classe
     ProcessImage();
 
 	/** Processa la imatge
@@ -35,7 +35,7 @@ public:
 
 	///Destructor de la classe
     virtual ~ProcessImage() {};
-    
+
 };
 
 };

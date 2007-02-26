@@ -28,12 +28,12 @@ class Image;
   * La imatge ha d'estar en format littleEndian
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ConvertToDicomdir : public QObject 
+class ConvertToDicomdir : public QObject
 {
 public:
 
     ConvertToDicomdir( );
-    
+
     /** Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
      * @param studyUID UID de l'estudi a convertir a dicomdir
      */
@@ -61,8 +61,8 @@ private :
             QString patientId;
             QString studyUID;
         };
-       
-    QList<StudyToConvert> m_studiesToConvert; 
+
+    QList<StudyToConvert> m_studiesToConvert;
     QProgressDialog *m_progress;
 
     QString m_dicomDirPath;
@@ -70,7 +70,7 @@ private :
     QString m_dicomDirSeriesPath;
     QString m_oldPatientId;
     QString m_dicomdirPatientPath;
-    
+
     QStringList m_patientDirectories;
 
     int m_patient;
@@ -88,17 +88,17 @@ private :
     Status convertStudy ( QString studyUID );
 
     /** Converteix una sèrie al format littleendian
-     * @param series 
+     * @param series
      * @return Indica l'estat en què finalitza el mètode
      */
     Status convertSeries( Series series );
 
     /** Converteix una imatge al format littleendian
-     * @param image 
+     * @param image
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convertImage( Image image );  
-   
+    Status convertImage( Image image );
+
     /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
 };

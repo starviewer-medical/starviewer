@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "qpacslist.h"
 
 #include <QTreeView>
@@ -33,30 +33,30 @@ void QPacsList::refresh()
     PacsList   pacsList;
     PacsParameters pacs;
     Status state;
-    
-    m_PacsTreeView->clear();    
+
+    m_PacsTreeView->clear();
 
     state = pacsListDB.queryPacsList( pacsList );
-    
+
     if ( !state.good() )
     {
         databaseError( &state );
         return;
     }
-    
+
     pacsList.firstPacs();
-    
+
     while ( !pacsList.end() )
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
         pacs = pacsList.getPacs();
         item->setText( 0 , pacs.getAEPacs().c_str() );
         item->setText( 1 , pacs.getInstitution().c_str() );
-        item->setText( 2 , pacs.getDescription().c_str() );   
+        item->setText( 2 , pacs.getDescription().c_str() );
         item->setText( 3 , pacs.getDefault().c_str() );
         pacsList.nextPacs();
     }
-    
+
     setSelectedDefaultPacs();
 }
 
@@ -64,7 +64,7 @@ void QPacsList::setSelectedDefaultPacs()
 {
     QList<QTreeWidgetItem *> qPacsList( m_PacsTreeView->findItems( "*" , Qt::MatchWildcard , 0 ) );
     QTreeWidgetItem *item;
-    
+
     for  (int i = 0; i < qPacsList.count(); i++ )
     {
         item = qPacsList.at( i );
@@ -80,17 +80,17 @@ Status QPacsList::getSelectedPacs( PacsList *pacsList )
     PacsListDB pacsListDB;
     Status state;
     StarviewerSettings settings;
-    
+
     QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
     QTreeWidgetItem *item;
-    
+
     for ( int i = 0; i < qPacsList.count(); i++ )
     {
         item = qPacsList.at( i );
         PacsParameters pacs;
-        
+
         state = pacsListDB.queryPacs( &pacs , item->text( 0 ).toStdString() ); //fem el query per cercar la informació del PACS
-            
+
         if ( state.good() )
         {
             pacs.setAELocal( settings.getAETitleMachine().toStdString() );
@@ -98,9 +98,9 @@ Status QPacsList::getSelectedPacs( PacsList *pacsList )
             pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
             pacsList->insertPacs( pacs ); //inserim a la llista
         }
-        else return state;        
+        else return state;
     }
-  
+
   return state;
 }
 
@@ -111,7 +111,7 @@ void QPacsList::databaseError( Status *state )
     if ( !state->good() )
     {
         switch( state->code() )
-        {   
+        {
             case 2001 : text.insert( 0 , tr( "Database is corrupted or SQL syntax error" ) );
                         text.append( "\n" );
                         text.append( tr( "Error Number : " ) );
@@ -137,7 +137,7 @@ void QPacsList::databaseError( Status *state )
                         text.append( tr( "Error Number : " ) );
                         code.setNum( state->code() , 10 );
                         text.append( code );
-                        break;            
+                        break;
             default :   text.insert( 0 , tr("Internal Database error") );
                         text.append( "\n" );
                         text.append( tr( "Error Number : " ) );
@@ -146,7 +146,7 @@ void QPacsList::databaseError( Status *state )
                         break;
         }
         QMessageBox::critical( this , tr("Starviewer"), text );
-    }    
+    }
 }
 
 QPacsList::~QPacsList()

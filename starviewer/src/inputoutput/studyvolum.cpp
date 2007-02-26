@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include <string>
 
 #include "studyvolum.h"
@@ -107,7 +107,7 @@ std::string StudyVolum::getDefaultSeriesUID()
 void StudyVolum::firstSerie()
 {
     i = m_vectorStudyVolum.begin();
-}    
+}
 
 void StudyVolum::nextSerie()
 {

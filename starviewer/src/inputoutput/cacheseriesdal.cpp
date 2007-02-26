@@ -29,17 +29,17 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     char *sqlSentence , errorNumber[5];
     std::string logMessage , sql;
-    
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
-    
+
     sql.insert( 0 , "Insert into Series " );
     sql.append( " ( SerInsUID , SerNum , StuInsUID , SerMod , ProNam , SerDes , SerPath , BodParExa , SerDat , SerTim ) " );
     sql.append( " values ( %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q ) " );
-    
-    sqlSentence = sqlite3_mprintf( sql.c_str() 
+
+    sqlSentence = sqlite3_mprintf( sql.c_str()
                                 ,serie->getSeriesUID().c_str()
                                 ,serie->getSeriesNumber().c_str()
                                 ,serie->getStudyUID().c_str()
@@ -50,11 +50,11 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
                                 ,serie->getBodyPartExaminated().c_str()
                                 ,serie->getSeriesDate().c_str()
                                 ,serie->getSeriesTime().c_str() );
-                                
-    databaseConnection->getLock();                                    
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;          
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;
     databaseConnection->releaseLock();
-    
+
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
@@ -64,7 +64,7 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
         ERROR_LOG( logMessage.c_str() );
         ERROR_LOG( sqlSentence );
     }
-    
+
     return state;
 }
 
@@ -77,18 +77,18 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
     std::string logMessage;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-        
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
-    }    
-        
+    }
+
     mask = seriesMask.getSeriesMask();
-                     
+
     databaseConnection->getLock();
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlQuerySeries( &seriesMask ).c_str() , &resposta , &rows, &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de columnss.
     databaseConnection->releaseLock();
-    
+
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
@@ -99,10 +99,10 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
         ERROR_LOG( buildSqlQuerySeries( &seriesMask ).c_str()  );
         return state;
     }
-    
+
     i = 1;//ignorem les capçaleres
     while (i <= rows )
-    {   
+    {
         series.setSeriesUID( resposta [ 0 + i * columns ] );
         series.setSeriesNumber( resposta [ 1 + i * columns ] );
         series.setStudyUID( resposta [ 2 + i * columns ] );
@@ -113,7 +113,7 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
         series.setBodyPartExaminated( resposta [ 7 + i * columns ] );
         series.setSeriesDate( resposta[ 8 + i * columns ] );
         series.setSeriesTime( resposta[ 9 + i * columns ] );
-        
+
         ls.insert( series );
         i++;
     }
@@ -128,26 +128,26 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
     char *sqlSentence , errorNumber[5];
     std::string logMessage;
     Status state;
-    
+
     databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
-    
+
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
-    
+
     sql.insert( 0 , "delete from series where StuInsUID = %Q" );
-    
-    
-    sqlSentence = sqlite3_mprintf( sql.c_str() 
+
+
+    sqlSentence = sqlite3_mprintf( sql.c_str()
                                     ,studyUID.c_str() );
-                                
-    databaseConnection->getLock();                                    
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;          
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;
     databaseConnection->releaseLock();
- 
+
     state = databaseConnection->databaseStatus( stateDatabase );
-    
+
     if ( !state.good() )
     {
         sprintf( errorNumber , "%i" , state.code() );
@@ -162,13 +162,13 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
 std::string CacheSeriesDAL::buildSqlQuerySeries( SeriesMask *seriesMask )
 {
     std::string sql;
-    
+
     sql.insert( 0 , "select SerInsUID , SerNum , StuInsUID , SerMod , SerDes , ProNam, SerPath , BodParExa " );
     sql.append( ", SerDat , SerTim " );
     sql.append( " from series where StuInsUID = '" );
     sql.append( seriesMask->getStudyUID() );
     sql.append( "' order by SerDat , SerTim , SerNum" );
-    
+
     return sql;
 }
 

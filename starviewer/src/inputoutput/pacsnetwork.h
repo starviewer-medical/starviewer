@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGPACSNETWORK_H
 #define UDGPACSNETWORK_H
 
@@ -25,43 +25,43 @@ public:
     /** Retorna una instancia de l'objecte
      * @return instancia de l'objecte
      */
-    static PacsNetwork* getPacsNetwork();   
- 
+    static PacsNetwork* getPacsNetwork();
+
     /** Preparar un network per a fer l'acció de query, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
      *            @param timeout dels query
      */
     Status createNetworkQuery(int time);
-    
+
     /** Prepara un network per a fer l'acció de retrieve imatges, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
      * @param port a utilitzar per rebre les images
      * @param timeout de l'accio retrieve
      */
     Status createNetworkRetrieve(int port,int timeout);
-   
+
     /** retorna la configuració network de per fer queries
      * @return Retorna el network per fer queries
      */
     T_ASC_Network * getNetworkQuery();
-    
+
     /** retorna la configuració network de per fer els retrieves
      * @return Retorna el network per fer els retrieves
      */
     T_ASC_Network * getNetworkRetrieve();
-    
+
     ///Destructor de la classe
     ~PacsNetwork();
-    
+
 private :
 
-    static PacsNetwork *pacsNetwork;    
+    static PacsNetwork *pacsNetwork;
     T_ASC_Network *m_networkQuery , *m_networkRetrieve;
-  
+
     /// Desconnecta els network
     void disconnect();
-    
+
     ///Constructor de la classe
     PacsNetwork();
-    
+
 };
 
 };

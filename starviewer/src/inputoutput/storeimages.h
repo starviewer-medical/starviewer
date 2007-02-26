@@ -39,7 +39,7 @@ public:
      * @param   connection [in] Study's Open connection to the pacs
      */
    void setConnection( PacsConnection connection );
-   
+
    /** Sets the network to use for retrieve the images
     * @param Network to use
     */
@@ -52,7 +52,7 @@ public:
    Status store( ImageList imageList );
 
     ~StoreImages();
-    
+
 private :
     T_ASC_Association *m_assoc; // request DICOM association;
     T_ASC_Network *m_net;

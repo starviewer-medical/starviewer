@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGIMAGELISTSINGLETON_H
 #define UDGIMAGELISTSINGLETON_H
 #include "imagelist.h"
@@ -21,14 +21,14 @@ public:
      * @return instància a la ImageList
      */
     static ImageListSingleton* getImageListSingleton();
-     
+
 private:
 
     static ImageListSingleton *pInstance;
 
     ///constructor de la classe
     ImageListSingleton();
-    
+
     ///destructor de la classe
     ~ImageListSingleton();
 

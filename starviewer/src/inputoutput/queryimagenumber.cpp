@@ -27,7 +27,7 @@ void QueryImageNumber:: setMask( ImageMask* image )
 
 /*It's a callback function, can't own to the class, It's can be called if its belongs to the class, for this
   reason, it hasn't been declared in this class  */
-/// This action is called for every image that returns the count action. Count the number of images 
+/// This action is called for every image that returns the count action. Count the number of images
 void progressCallbackCountImages(
         void * /*callbackData*/ ,
         T_DIMSE_C_FindRQ * /*request*/ ,
@@ -35,7 +35,7 @@ void progressCallbackCountImages(
         T_DIMSE_C_FindRSP */*rsp*/,
         DcmDataset */*responseIdentifiers*/
         )
-{        
+{
     imageNumberGlobal++;
 }
 
@@ -49,13 +49,13 @@ Status QueryImageNumber::count()
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
     Status state;
-    
+
     //If not connection has been setted, return error because we need a PACS connection
-    if ( m_assoc == NULL ) 
+    if ( m_assoc == NULL )
     {
         return state.setStatus( error_NoConnection );
     }
-    
+
     //If not mask has been setted, return error, we need a search mask
     if ( m_mask == NULL )
     {
@@ -65,7 +65,7 @@ Status QueryImageNumber::count()
     /* figure out which of the accepted presentation contexts should be used */
     presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_FINDStudyRootQueryRetrieveInformationModel );
     if ( presId == 0 )
-    {        
+    {
         return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
     }
 
@@ -81,7 +81,7 @@ Status QueryImageNumber::count()
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,                     progressCallbackCountImages , NULL , DIMSE_BLOCKING , 0 , &rsp , &statusDetail );
     m_imageNumber = imageNumberGlobal;
     /* dump status detail information if there is some */
-    if ( statusDetail != NULL ) 
+    if ( statusDetail != NULL )
     {
         delete statusDetail;
     }

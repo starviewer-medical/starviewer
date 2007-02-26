@@ -3,8 +3,8 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
-#include <string> 
+ ***************************************************************************/
+#include <string>
 
 #include "processimagesingleton.h"
 #include "processimage.h"
@@ -15,7 +15,7 @@ ProcessImageSingleton::ProcessImageSingleton()
 {
     int init_value = 1;//Només un thread alhora pot gravar a la llista
     m_semafor = ( sem_t* ) malloc( sizeof( sem_t ) );
-    sem_init( m_semafor , 0 , init_value );    
+    sem_init( m_semafor , 0 , init_value );
 }
 
 ProcessImageSingleton* ProcessImageSingleton::pInstance = 0;
@@ -26,18 +26,18 @@ ProcessImageSingleton* ProcessImageSingleton::getProcessImageSingleton()
     {
         pInstance = new ProcessImageSingleton;
     }
-    
+
     return pInstance;
 }
 
 void ProcessImageSingleton::addNewProcessImage( std::string UID , ProcessImage *pi )
 {
     SingletonProcess sp;
-    
+
     sp.studyUID = UID;
     sp.imgProcess = pi;
-    
-    sem_wait( m_semafor );   
+
+    sem_wait( m_semafor );
     m_listProcess.push_back( sp );
     sem_post( m_semafor );
 }
@@ -45,9 +45,9 @@ void ProcessImageSingleton::addNewProcessImage( std::string UID , ProcessImage *
 void ProcessImageSingleton::process( std::string UID , Image* img )
 {
     list<SingletonProcess>::iterator j;
-    
+
     j = m_listProcess.begin();
-    
+
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != UID )
@@ -66,9 +66,9 @@ void ProcessImageSingleton::process( std::string UID , Image* img )
 void ProcessImageSingleton::setError( std::string studyUID )
 {
     list<SingletonProcess>::iterator j;
-    
+
     j = m_listProcess.begin();
-    
+
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != studyUID )
@@ -79,7 +79,7 @@ void ProcessImageSingleton::setError( std::string studyUID )
     }
 
     if ( j != m_listProcess.end() )
-    {    
+    {
         (*j).imgProcess->setError();
     }
 }
@@ -87,9 +87,9 @@ void ProcessImageSingleton::setError( std::string studyUID )
 bool ProcessImageSingleton::delProcessImage( std::string UID )
 {
     list<SingletonProcess>::iterator j;
-    
+
     j = m_listProcess.begin();
-    
+
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != UID )
@@ -100,7 +100,7 @@ bool ProcessImageSingleton::delProcessImage( std::string UID )
     }
 
     if ( j != m_listProcess.end() )
-    {   
+    {
         sem_wait( m_semafor );
         m_listProcess.erase( j );
         sem_post( m_semafor );

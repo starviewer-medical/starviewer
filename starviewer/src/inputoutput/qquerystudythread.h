@@ -23,29 +23,29 @@ public:
 
     /// Constructor de la classe
     QQueryStudyThread( QObject *parent = 0 );
-    
+
     /** Accio que executa el thread
      * @param parametres del pacs a consultar
      * @param màscara de cerca
      */
     void queryStudy( PacsParameters parameters , StudyMask mask );
-    
+
     /// el codi d'aquest mètode es el que s'executa en un nou thread
     void run();
-    
+
     ///Destructor de la classe
     ~QQueryStudyThread();
- 
+
 signals:
-    
+
     /** signal que s'envia per indicar que hi hagut un error connectant al PACS
-     * @param ID del pacs que ha produit l'error 
+     * @param ID del pacs que ha produit l'error
      */
     void errorConnectingPacs( int pacsID );
 
     /** signal que s'envia per indicar que hi hagut un error cercant al PACS
-     * @param ID del pacs que ha produit l'error 
-     */    
+     * @param ID del pacs que ha produit l'error
+     */
     void errorQueringStudiesPacs( int pacsID );
 
 protected :

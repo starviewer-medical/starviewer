@@ -63,11 +63,11 @@ Status MultipleQueryStudy::StartQueries()
     PacsParameters pacsParameters;
     QLineEdit prova;
     QString missatgeLog;
-    
+
     m_studyListSingleton->clear();
-    
+
     m_pacsList.firstPacs();
-           
+
     while ( !m_pacsList.end() ) //Anem creant threads per cercar
     {
         //aquest signal ha de ser QDirectConnection, pq sera el propi thread qui executara l'slot d'alliberar un recurs del semafor, si fos queued, hauria de ser el pare qui respongues al signal, pero com estaria fent el sem_wait no respondria mai! i tindríem deadlock
@@ -82,7 +82,7 @@ Status MultipleQueryStudy::StartQueries()
         m_pacsList.nextPacs();
         i++;
     }
-    
+
     m_pacsList.firstPacs();
     for (j = 0;j < m_pacsList.size();j++)
     {//Esperem que tots els threads estiguin
@@ -90,13 +90,13 @@ Status MultipleQueryStudy::StartQueries()
         //m_thread[j]->delete();
         m_pacsList.nextPacs();
     }
-    
+
     //si no hi ha error retornem l'status ok
     if ( !error )
     {
         state.setStatus( CORRECT );
     }
-    
+
     return state;
 }
 

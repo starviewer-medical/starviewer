@@ -22,8 +22,8 @@ Q_OBJECT
 public:
     StarviewerProcessImageStored(QObject *parent = 0);
 
-    void process( Image * image ); 
-    
+    void process( Image * image );
+
     ~StarviewerProcessImageStored();
 
 signals :
@@ -43,13 +43,13 @@ signals :
       * @param número d'imatge
       */
     void startStoring( QString );
-    
+
     bool getError();
-    
+
     void setError();
 
     private:
-    
+
     int m_imagesStored;
     QString m_oldSeriesUID, m_studyUID;
 };

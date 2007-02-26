@@ -6,18 +6,18 @@ namespace udg
 {
 /*Tenint en compte que es podran realitzar multiples cerques en diferents pacs alhora, això implica que tindrem diferents threads executant-se
    que hauran d'inserir studis a la llista d'estudis, això fa necessari que la part d'inserir un nou estudi a la llista s'hagi de fer en execlusió
-   mutua, ja que com es pot consultatr a 
+   mutua, ja que com es pot consultatr a
  */
- 
+
 StudyList::StudyList()
 {
     int init_value = 1;//Només un thread alhora pot gravar a la llista
-    
+
     m_semafor = (sem_t*) malloc( sizeof( sem_t ) );
     sem_init( m_semafor , 0 , init_value );
-    
+
     m_iterator = m_listStudy.begin();
-}    
+}
 
 void StudyList::insert( Study study )
 {
@@ -48,16 +48,16 @@ bool StudyList::end()
 
 bool StudyList::findStudy( std::string UID )
 {
-    sem_wait( m_semafor );    
+    sem_wait( m_semafor );
     m_iterator = m_listStudy.begin();
     if ( m_iterator==m_listStudy.end() ) return false;
-    
+
     while ( m_iterator != m_listStudy.end() )
     {
         if ( (*m_iterator).getStudyUID() == UID ) break;
         else m_iterator++;
     }
-    
+
     sem_post( m_semafor );
     return ( m_iterator != m_listStudy.end() );
 

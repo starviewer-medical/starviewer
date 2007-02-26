@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGPROCESSIMAGESINGLETON_H
 #define UDGPROCESSIMAGESINGLETON_H
 
@@ -23,12 +23,12 @@ class string;
  */
 class ProcessImageSingleton{
 public:
-    
+
     /** retorna una instancia de l'objecte
      * @return instancia de l'objecte
      */
     static ProcessImageSingleton* getProcessImageSingleton();
- 
+
     /** Afegeix un nou objecte ProcessImage, que s'encarregarrà de processar la informació de cada imatge descarregada
      * @param UID de l'estudi
      * @param Objecte processimage que tractarà la descarrega d'imatges
@@ -39,7 +39,7 @@ public:
      * @param UID de l'estudi que ha produit l'error
      * @param imatge descarregada
      */
-    void process( std::string ,  Image *image ); 
+    void process( std::string ,  Image *image );
 
     /** buscar l'objecte processimage que s'encarrega de gestionar la descarrega de l'estudi studyUID, per notificar l'error
      * @param UID de l'estudi que ha produit l'error
@@ -49,7 +49,7 @@ public:
     /** esborra el ProcessImage de la llista
      * @param UID del Process Image de l'estudi a esborrar
      */
-    bool delProcessImage( std::string );    
+    bool delProcessImage( std::string );
 
     /** Estableix el path on s'han de guardar les imatges de la caché
      * @param path de la cache on es guarden les imatges
@@ -60,10 +60,10 @@ public:
      * @return path de la cache
      */
     std::string getPath();
-    
+
     /// destructor de la classe
-    ~ProcessImageSingleton();    
-        
+    ~ProcessImageSingleton();
+
 private:
 
     static ProcessImageSingleton* pInstance;
@@ -74,12 +74,12 @@ private:
         std::string studyUID;
     };
 
-    list<SingletonProcess>m_listProcess;     
+    list<SingletonProcess>m_listProcess;
     list<SingletonProcess>::iterator i;
-    
+
     sem_t *m_semafor;
     std::string m_imagePath;
-    
+
     /// Constructor de la classe
     ProcessImageSingleton();
 };

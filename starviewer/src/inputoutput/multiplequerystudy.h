@@ -26,25 +26,25 @@ Q_OBJECT
 public:
     ///constructor de la classe
     MultipleQueryStudy( QObject *parent = 0 );
-    
+
     ///destructor de la classe
     ~MultipleQueryStudy();
-   
+
     /** Ens permet indicar quina màscara utilitzarem per fer la query als PACS
      * @param StudyMask Màscara del estudis a cercar
      */
     void setMask( StudyMask );
-    
+
     /** Estableix la llista de PACS als quals es farà la cerca
      * @param PacsList amb els pacs als quals es cercarà
      */
     void setPacsList( PacsList );
-    
+
     /** Una vegada haguem especificat la màscara, i tots els PACS als que volem realitzar la query, aquesta acció iniciara el procés de cerca a tots els PACS
-     * @return Estat del mètode 
+     * @return Estat del mètode
      */
     Status StartQueries();
-    
+
     /** retorna un apuntador a la llist amb els estudis
      * @return  Llista amb els estudis trobats que complien amb la màscara.
      */
@@ -58,34 +58,34 @@ signals :
     void errorConnectingPacs( int );
 
     /** signal que s'envia per indicar que hi hagut un error cercant al PACS
-     * @param ID del pacs que ha produit l'error 
-     */    
+     * @param ID del pacs que ha produit l'error
+     */
     void errorQueringStudiesPacs( int pacsID );
 
 public slots :
 
     /// Slot que s'activa pel signal de QQuerStudyThread, quan un thread acaba allibera un recurs del semàfor, perquè es pugui iniciar una altre thread per continuar amb la cerca
     void threadFinished();
-    
+
     /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produït algun error al connectar amb el PACS
      * @param pacsID del pacs que ha produït l'error
-     */   
+     */
     void slotErrorConnectingPacs( int );
 
     /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produït algun error al fer la query amb el PACS
      * @param pacsID del pacs que ha produït l'error
-     */   
+     */
     void slotErrorQueringStudiesPacs( int );
 
 
 private :
 
     StudyMask m_searchMask;
-    
+
     StudyListSingleton* m_studyListSingleton;
     PacsList m_pacsList;
     int m_maxThreads;//Nombre màxim de threads que es poden executar a la vegada
-   
+
 };
 
 }

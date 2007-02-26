@@ -23,7 +23,7 @@
 
  /*this file contains some structs necessaries in the program*/
 
- 
+
 /*This struct is used in pacsmove.cpp, it can't be included in the pacsmove class declaration because
   it's used from a callback action of function*/
 struct StoreCallbackData
@@ -32,8 +32,8 @@ struct StoreCallbackData
         DcmFileFormat* dcmff;
         T_ASC_Association* assoc;
     };
-    
-    
+
+
 
 /*This struct is used in pacsmove.cpp, it can't be included in the pacsmove class declaration because
   it's used from a callback action of function*/
@@ -41,5 +41,5 @@ typedef struct {
     T_ASC_Association *assoc;
     T_ASC_PresentationContextID presId;
     } MyCallbackInfo;
-      
- 
+
+

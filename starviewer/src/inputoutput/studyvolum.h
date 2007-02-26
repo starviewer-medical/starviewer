@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGSTUDYVOLUM_H
 #define UDGSTUDYVOLUM_H
 
@@ -22,7 +22,7 @@ class StudyVolum
 
 public:
     StudyVolum();
-    
+
     /** Permet afegir una sèrie a aquest estudi. S'utilitza per especificar quines sèries te un estudi
      * @param SeriesVolum SeriesVolum a afegir
      */
@@ -72,7 +72,7 @@ public:
      * @param UID de la serie a visualitzar
      */
     void setDefaultSeriesUID( std::string );
-    
+
 
     /** retorna el UID de l'estudi
      * @return UID de l'estudi
@@ -113,7 +113,7 @@ public:
      * @return UID de la sèrie a visualitzar
      */
     std::string getDefaultSeriesUID();
-    
+
     /// Es situa a la primera serie de l'estudi
     void firstSerie();
 
@@ -124,16 +124,16 @@ public:
      * @return boolea indicant si hem arribat al final de la llista de series
      */
     bool end();
-    
+
     /** retorna l'actual seriesVolum al que apunta la llista
      * @return retorna el seriesVolum al que s'apunta
      */
     SeriesVolum getSeriesVolum();
 
-    ///Destructor de la classe    
+    ///Destructor de la classe
     ~StudyVolum();
 
-private: 
+private:
 
     std::string m_studyUID;
     std::string m_studyId;
@@ -143,7 +143,7 @@ private:
     std::string m_patientId;
     std::string m_patientAge;
     std::string m_defaultSeriesUID;//conté el UID de la serie que s'ha visualitzar per defecte, ja que quant visualitzem només s'obrira una sèrie de l'estudi
-    
+
     std::vector <SeriesVolum> m_vectorStudyVolum;
     std::vector <SeriesVolum>::iterator i;
 };

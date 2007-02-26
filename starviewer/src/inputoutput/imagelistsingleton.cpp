@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "imagelistsingleton.h"
 
 namespace udg {
@@ -20,7 +20,7 @@ ImageListSingleton * ImageListSingleton::getImageListSingleton()
     {
         pInstance = new ImageListSingleton;
     }
-    
+
     return pInstance;
 }
 

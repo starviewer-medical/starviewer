@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #ifndef UDGSERIESLISTSINGLETON_H
 #define UDGSERIESLISTSINGLETON_H
 
@@ -23,10 +23,10 @@ public :
      * @return instancia de l'objecte
      */
      static SeriesListSingleton* getSeriesListSingleton();
-    
-    ///Desctructor de la classe 
+
+    ///Desctructor de la classe
     ~SeriesListSingleton();
-     
+
 private:
 
     ///Constructor de la classe

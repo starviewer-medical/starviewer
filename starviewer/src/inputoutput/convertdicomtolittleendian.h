@@ -24,8 +24,8 @@ public:
 
     /** Converteix el fitxer d'entrada dicom a format little endian i el guarda, amb el nom i directori que s'indiqui a outputfile
      * @param inputFile  ruta completa del fitxer a convertir
-     * @param outputFile ruta completa indicant on s'ha de desar el fitxer convertit, s'hi ha d'incloure el nom del fitxer 
-     * @return 
+     * @param outputFile ruta completa indicant on s'ha de desar el fitxer convertit, s'hi ha d'incloure el nom del fitxer
+     * @return
      */
     Status convert( std::string inputFile , std::string outputFile );
 

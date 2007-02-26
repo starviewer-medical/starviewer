@@ -40,7 +40,7 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
     OFCondition error;
     Status state;
     E_TransferSyntax opt_ixfer = EXS_Unknown; //Transfer Syntax del fitxer d'entrada
-    E_FileReadMode opt_readMode = ERM_autoDetect; 
+    E_FileReadMode opt_readMode = ERM_autoDetect;
     E_TransferSyntax opt_oxfer = EXS_LittleEndianExplicit;
     std::string descriptionError;
     E_EncodingType opt_oenctype = EET_ExplicitLength;
@@ -66,7 +66,7 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
         descriptionError.append ( opt_oxferSyn.getXferName() );
         descriptionError.append( " possible" );
         state.setStatus( descriptionError , false , 1300 );
-        
+
         return state;
     }
 

@@ -21,10 +21,10 @@ public:
     CacheTools();
 
     /** Compacta la base de dades de la cache, per estalviar espai
-     * @return estat del mètode  
+     * @return estat del mètode
      */
     Status compactCachePacs();
-    
+
     ~CacheTools();
 
 };

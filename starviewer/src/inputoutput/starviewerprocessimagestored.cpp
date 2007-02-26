@@ -22,7 +22,7 @@ void StarviewerProcessImageStored::process( Image *image )
       m_oldSeriesUID = image->getSeriesUID().c_str();
       m_studyUID = image->getStudyUID().c_str();
     }
-    
+
     if ( m_oldSeriesUID != image->getSeriesUID().c_str() ) // canviem de serie d'imatges guardades
     {
         emit( seriesStored( image->getStudyUID().c_str() ) );

@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "studylistsingleton.h"
 
 namespace udg {
@@ -20,7 +20,7 @@ StudyListSingleton * StudyListSingleton::getStudyListSingleton()
     {
         pInstance = new StudyListSingleton;
     }
-    
+
     return pInstance;
 }
 

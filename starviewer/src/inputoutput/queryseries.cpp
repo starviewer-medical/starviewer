@@ -34,14 +34,14 @@ void progressCallbackSeries(
         T_DIMSE_C_FindRSP */*rsp*/,
         DcmDataset *responseIdentifiers
         )
-{        
+{
     Series series;
     const char* text;
-    SeriesListSingleton* seriesListSingleton; 
+    SeriesListSingleton* seriesListSingleton;
     std::string path;
-    
+
     //el path el construirem nosaltres, estarà format per UIDStudy/UIDSeries, aquest sempre sera el path on s'hauran de guardar les series
-    
+
     //set the series number
     responseIdentifiers->findAndGetString( DCM_SeriesNumber , text , false );
     if ( text != NULL ) series.setSeriesNumber( text );
@@ -49,27 +49,27 @@ void progressCallbackSeries(
     //set series date
     responseIdentifiers->findAndGetString( DCM_SeriesDate , text , false );
     if ( text != NULL ) series.setSeriesDate( text );
-        
+
     //set series description
     responseIdentifiers->findAndGetString( DCM_SeriesDescription , text , false );
     if ( text != NULL ) series.setSeriesDescription( text );
-    
+
     //set Study UID
      responseIdentifiers->findAndGetString( DCM_StudyInstanceUID , text , false );
-     if ( text != NULL ) 
-     {   
-         series.setStudyUID( text );     
+     if ( text != NULL )
+     {
+         series.setStudyUID( text );
          path.insert( 0 , text );
          path.append( "/" );
      }
      //set series modality
      responseIdentifiers->findAndGetString( DCM_Modality , text , false );
-     if ( text != NULL ) series.setSeriesModality( text ); 
+     if ( text != NULL ) series.setSeriesModality( text );
 
-     //set series time    
+     //set series time
      responseIdentifiers->findAndGetString( DCM_SeriesTime ,text , false );
      if ( text != NULL ) series.setSeriesTime( text );
-     
+
      //set series UID
      responseIdentifiers->findAndGetString( DCM_SeriesInstanceUID , text , false );
      if ( text != NULL )
@@ -78,21 +78,21 @@ void progressCallbackSeries(
          path.append( text );
          path.append( "/" );
      }
-     
+
      responseIdentifiers->findAndGetString( DCM_BodyPartExamined , text , false );
      if ( text != NULL ) series.setBodyPartExaminated( text );
 
      responseIdentifiers->findAndGetString(DCM_ProtocolName , text , false );
-     if ( text != NULL ) series.setProtocolName( text );     
+     if ( text != NULL ) series.setProtocolName( text );
 
      responseIdentifiers->findAndGetString( DCM_OperatorsName , text , false );
      if ( text != NULL ) series.setOperatorName( text );
-     
+
      //inserim el path
-     
+
      series.setSeriesPath(path.c_str());
-                    
-    //gets the pointer to the series list and inserts the new serie    
+
+    //gets the pointer to the series list and inserts the new serie
     seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
     seriesListSingleton->insert( series );
 }
@@ -108,13 +108,13 @@ Status QuerySeries::find()
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
     Status state;
-    
+
     //If not connection has been setted, return error because we need a PACS connection
-    if ( m_assoc == NULL ) 
+    if ( m_assoc == NULL )
     {
         return state.setStatus( error_NoConnection );
     }
-    
+
     //If not mask has been setted, return error, we need a search mask
     if ( m_mask == NULL )
     {
@@ -124,7 +124,7 @@ Status QuerySeries::find()
     /* figure out which of the accepted presentation contexts should be used */
     presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_FINDStudyRootQueryRetrieveInformationModel );
     if ( presId == 0 )
-    {        
+    {
         return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
     }
 
@@ -141,7 +141,7 @@ Status QuerySeries::find()
                           progressCallbackSeries ,NULL ,
                           DIMSE_BLOCKING , 0,
                           &rsp , &statusDetail );
-    
+
     /* dump status detail information if there is some */
     if ( statusDetail != NULL ) {
         delete statusDetail;

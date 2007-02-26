@@ -10,7 +10,7 @@ namespace udg{
 PacsServer::PacsServer( PacsParameters p )
 {
 
-    m_pacs = p;  
+    m_pacs = p;
     m_net = NULL;
     m_params = NULL;
     m_assoc = NULL;
@@ -29,62 +29,62 @@ Status PacsServer::echo()
 {
     OFCondition status_echo;
     Status state;
-    
+
     DIC_US id = m_assoc->nextMsgID++; // generate next message ID
     DIC_US status; // DIMSE status of C-ECHO-RSP will be stored here
     DcmDataset *sd = NULL; // status detail will be stored here
     // send C-ECHO-RQ and handle response
     status_echo=DIMSE_echoUser( m_assoc , id , DIMSE_BLOCKING , 0 , &status, &sd );
-    
+
     delete sd; // we don't care about status detail
-    
+
     return state.setStatus( status_echo );
-}  
+}
 
 OFCondition PacsServer::configureEcho()
 {
     int pid;
     // list of transfer syntaxes, only a single entry here
     const char* transferSyntaxes[] = { UID_LittleEndianImplicitTransferSyntax };
-    
+
     // add presentation pid to association request
-    
+
     pid=1;//pid always has to be odd
-        
+
     return ASC_addPresentationContext( m_params , pid , UID_VerificationSOPClass , transferSyntaxes , DIM_OF( transferSyntaxes ) );
 }
 
 OFCondition PacsServer::configureFind( levelConnection level )
 {
     int pid;
-    
+
     //we specify the type transfer
     const char* transferSyntaxes[] = { NULL , NULL , UID_LittleEndianImplicitTransferSyntax };
 
     /* gLocalByteOrder is defined in dcxfer.h */
-    if ( gLocalByteOrder == EBO_LittleEndian ) 
+    if ( gLocalByteOrder == EBO_LittleEndian )
     {
         /* we are on a little endian machine */
         transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-    } 
-    else 
+    }
+    else
     {
         /* we are on a big endian machine */
         transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
     }
-    
+
     static const char *     opt_abstractSyntax;
-   
-    //specified the level 
+
+    //specified the level
     if ( level == studyLevel)
     {
-       opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;  
-    }  
+       opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
+    }
     else if ( level == patientLevel )
     {
-        opt_abstractSyntax = UID_FINDPatientStudyOnlyQueryRetrieveInformationModel; 
+        opt_abstractSyntax = UID_FINDPatientStudyOnlyQueryRetrieveInformationModel;
     }
     else if ( level == seriesLevel )
     {// UID_FINDStudyRootQueryRetrieveInformationModel includes the information of series level
@@ -94,17 +94,17 @@ OFCondition PacsServer::configureFind( levelConnection level )
     {// UID_FINDStudyRootQueryRetrieveInformationModel includes the information of image level
         opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
     }
-      
+
     pid = 3; //pid always have to be an odd number
-   
+
     return ASC_addPresentationContext( m_params , pid , opt_abstractSyntax , transferSyntaxes , DIM_OF(transferSyntaxes) );
-} 
+}
 
 OFCondition PacsServer::configureMove( levelConnection level )
 {
     int pid;
     OFCondition status;
-    
+
     //we specify the transfer
     const char* transferSyntaxes[] = { NULL , NULL , UID_LittleEndianImplicitTransferSyntax };
 
@@ -113,29 +113,29 @@ OFCondition PacsServer::configureMove( levelConnection level )
         /* we are on a little endian machine */
         transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-    } 
-    else 
+    }
+    else
     {
         /* we are on a big endian machine */
         transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
     }
-    
+
    //specify the modality of the find,this is necessary in move, bescause first of all the pacs has to search the study
    static const char *     opt_abstractSyntaxFind;
-   static const char *     opt_abstractSyntaxMove;  
-   
+   static const char *     opt_abstractSyntaxMove;
+
    //Alhora de moure les imatges, el PACS primer ha de verificar que existexi unes imatges que compleixin la mÃ scara que se li ha passat
    //per aixÃ² primer ha de fer un "find", degut aquest fet aquÃ­ hem d'especificar dos funcions a fer la de buscar "UID_FIND" i descarregar "UID_MOVE"
     if ( level == studyLevel )
     {
-        opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;        
-        opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;  
-    }  
+        opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
+        opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
+    }
     else if ( level == patientLevel )
     {
-        opt_abstractSyntaxFind = UID_FINDPatientStudyOnlyQueryRetrieveInformationModel; 
-        opt_abstractSyntaxMove = UID_MOVEPatientStudyOnlyQueryRetrieveInformationModel; 
+        opt_abstractSyntaxFind = UID_FINDPatientStudyOnlyQueryRetrieveInformationModel;
+        opt_abstractSyntaxMove = UID_MOVEPatientStudyOnlyQueryRetrieveInformationModel;
     }
     else if ( level == seriesLevel )
     {
@@ -147,19 +147,19 @@ OFCondition PacsServer::configureMove( levelConnection level )
         opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
     }
-        
+
    pid = 3; //sempre ha de ser imparell
-       
+
    status = addPresentationContextMove( m_params, pid , opt_abstractSyntaxFind );
 
    if ( status.bad() ) return status;
-  
+
    pid = pid + 2; //pid always have to be an odd number
 
    status = addPresentationContextMove( m_params, pid , opt_abstractSyntaxMove );
 
    if ( status.bad() ) return status;
-   
+
    return status;
 }
 
@@ -190,8 +190,8 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , 
     {
         transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-    } 
-    else 
+    }
+    else
     {
         transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
@@ -206,7 +206,7 @@ OFCondition PacsServer::configureStore()
 {
     OFCondition cond;
     cond = addStoragePresentationContexts();
-    
+
     return cond;
 }
 
@@ -234,13 +234,13 @@ OFCondition PacsServer::addStoragePresentationContexts()
     OFString preferredTransferSyntax;
 
     // Which transfer syntax was preferred on the command line
-    if ( gLocalByteOrder == EBO_LittleEndian ) 
+    if ( gLocalByteOrder == EBO_LittleEndian )
     {
         /* we are on a little endian machine */
         preferredTransferSyntax = UID_LittleEndianExplicitTransferSyntax;
-    } 
+    }
     else
-    {  
+    {
         preferredTransferSyntax = UID_BigEndianExplicitTransferSyntax;      /* we are on a big endian machine */
     }
 
@@ -252,11 +252,11 @@ OFCondition PacsServer::addStoragePresentationContexts()
 
     OFListIterator( OFString ) s_cur;
     OFListIterator( OFString ) s_end;
- 
-    /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
-     * les imatges alhora de preparar la connexió, les hi incloem totes les modalitats. Si alhora de connectar sabessim de quina modalitat és l'estudi només caldria afegir-hi la de la motalitat de l'estudi
+
+    /*Afegim totes les classes SOP de transfarï¿½cia d'imatges. com que desconeixem de quina modalitat sï¿½
+     * les imatges alhora de preparar la connexiï¿½ les hi incloem totes les modalitats. Si alhora de connectar sabessim de quina modalitat ï¿½ l'estudi nomï¿½ caldria afegir-hi la de la motalitat de l'estudi
      */
-    for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ ) 
+    for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ )
     {
         sopClasses.push_back( dcmShortSCUStorageSOPClassUIDs[i] );
     }
@@ -265,10 +265,10 @@ OFCondition PacsServer::addStoragePresentationContexts()
     OFList< OFString > sops;
     s_cur = sopClasses.begin();
     s_end = sopClasses.end();
-    
-    while ( s_cur != s_end ) 
+
+    while ( s_cur != s_end )
     {
-        if ( !isaListMember( sops , *s_cur ) ) 
+        if ( !isaListMember( sops , *s_cur ) )
         {
             sops.push_back( *s_cur );
         }
@@ -277,20 +277,19 @@ OFCondition PacsServer::addStoragePresentationContexts()
 
     // add a presentations context for each sop class / transfer syntax pair
     OFCondition cond = EC_Normal;
-    int pid = 3; // presentation context id ha de començar el 3 pq el 1 é
-    s_cur = sops.begin();
+    int pid = 3; // presentation context id ha de comenï¿½r el 3 pq el 1 ï¿½    s_cur = sops.begin();
     s_end = sops.end();
-    
-    while ( s_cur != s_end && cond.good() ) 
+
+    while ( s_cur != s_end && cond.good() )
     {
-        // No poden haver més de 255 presentation context
+        // No poden haver mï¿½ de 255 presentation context
         if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
 
         // sop class with preferred transfer syntax
         cond = addPresentationContext(pid, *s_cur, preferredTransferSyntax);
         pid += 2;   /* only odd presentation context id's */
 
-        if ( fallbackSyntaxes.size() > 0 ) 
+        if ( fallbackSyntaxes.size() > 0 )
         {
             if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
 
@@ -311,8 +310,8 @@ OFCondition PacsServer::addPresentationContext( int presentationContextId , cons
     int transferSyntaxCount = 0;
     OFListConstIterator( OFString ) s_cur = transferSyntaxList.begin();
     OFListConstIterator( OFString ) s_end = transferSyntaxList.end();
-    
-    while ( s_cur != s_end ) 
+
+    while ( s_cur != s_end )
     {
         transferSyntaxes[transferSyntaxCount++] = ( *s_cur ).c_str();
         ++s_cur;
@@ -338,7 +337,7 @@ OFBool PacsServer::isaListMember( OFList<OFString>& list , OFString& string )
 
     OFBool found = OFFalse;
 
-    while ( cur != end && !found ) 
+    while ( cur != end && !found )
     {
         found = (string == *cur);
         ++cur;
@@ -357,26 +356,26 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     //create the parameters of the connection
     cond = ASC_createAssociationParameters( &m_params , ASC_DEFAULTMAXPDU );
     if ( !cond.good() ) return state.setStatus( cond );
-    
+
     // set calling and called AE titles
-    
+
     //el c_str, converteix l'string que ens retornen les funcions get a un char
     ASC_setAPTitles( m_params , m_pacs.getAELocal().c_str() , m_pacs.getAEPacs().c_str() , NULL );
-    
+
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
     /* available the user is able to request an encrypted,secure connection. */
-    //defineix el nivell de seguretat de la connexió, en aquest cas diem que no utilitzem cap nivell de seguretat
+    //defineix el nivell de seguretat de la connexiï¿½ en aquest cas diem que no utilitzem cap nivell de seguretat
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
-    
+
     AdrServer= constructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
-    
+
     //get localhost name
-    
+
     gethostname( adrLocal , 255 );
-    
-    // the DICOM server accepts connections at server.nowhere.com port 
+
+    // the DICOM server accepts connections at server.nowhere.com port
     cond = ASC_setPresentationAddresses( m_params , adrLocal , AdrServer.c_str() );
     if ( !cond.good() ) return state.setStatus( cond );
 
@@ -396,32 +395,32 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
         case query :    //configure the find paramaters depending on modality connection
                         cond = configureFind( level );
                         if ( !cond.good() ) return state.setStatus( cond );
-        
+
                         state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
-        
+
                         m_net = m_pacsNetwork->getNetworkQuery();
                         break;
         case retrieveImages : //configure the move paramaters depending on modality connection
                         cond=configureMove( level );
-                        if ( !cond.good() ) return state.setStatus( cond );   
-                
+                        if ( !cond.good() ) return state.setStatus( cond );
+
                         state = m_pacsNetwork->createNetworkRetrieve( atoi( m_pacs.getLocalPort().c_str() ) , m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
-                        
+
                         m_net = m_pacsNetwork->getNetworkRetrieve();
                         break;
-        case storeImages : 
+        case storeImages :
                         cond = configureStore();
                         if ( !cond.good() ) return state.setStatus( cond );
-        
+
                         state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
-        
+
                         m_net = m_pacsNetwork->getNetworkQuery();
                         break;
-    }    
-    
+    }
+
     //try to connect
     cond = ASC_requestAssociation( m_net , m_params , &m_assoc );
 
@@ -433,7 +432,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
         }
     }
     else return state.setStatus( cond );
-    
+
    return state.setStatus( CORRECT );
 }
 
@@ -441,18 +440,18 @@ void PacsServer::disconnect()
 {
     ASC_releaseAssociation( m_assoc ); // release association
     ASC_destroyAssociation( &m_assoc ); // delete assoc structure
-    
+
 }
 
 std::string PacsServer:: constructAdrServer( std::string host , std::string port )
 {
 //The format is "server:port"
     std::string adrServer;
-    
+
     adrServer.insert( 0 , host );
     adrServer.insert( adrServer.length() , ":" );
-    adrServer.insert( adrServer.length() , port );   
-    
+    adrServer.insert( adrServer.length() , port );
+
     return adrServer;
 }
 

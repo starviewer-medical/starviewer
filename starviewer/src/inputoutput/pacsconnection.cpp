@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
- 
+
 #include "const.h"
 #include "pacsconnection.h"
 

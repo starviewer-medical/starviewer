@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include <string>
- 
+
 #include "status.h"
 
 namespace udg{
@@ -16,7 +16,7 @@ Status::Status()
 }
 
 bool Status:: good()
-{    
+{
 	return m_success;
 }
 
@@ -34,8 +34,8 @@ Status Status:: setStatus( const OFCondition  status )
 {
 	m_descText = status.text();
 	m_success = status.good();
-	m_numberError = status.code();	
- 
+	m_numberError = status.code();
+
     return *this;
 }
 
@@ -44,7 +44,7 @@ Status Status:: setStatus( std::string desc , bool ok , int numError )
     m_descText = desc;
     m_success = ok;
     m_numberError = numError;
-    
+
     return *this;
 }
 

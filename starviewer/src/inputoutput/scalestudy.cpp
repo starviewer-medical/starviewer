@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
-7 *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/

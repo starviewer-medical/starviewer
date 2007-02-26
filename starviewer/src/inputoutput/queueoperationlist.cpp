@@ -22,7 +22,7 @@ QueueOperationList * QueueOperationList::getQueueOperationList()
     {
         pInstance = new QueueOperationList;
     }
-    
+
     return pInstance;
 }
 
@@ -38,25 +38,25 @@ Operation QueueOperationList::getMaximumPriorityOperation()
     //s'ordena la llista
     Operation ope;
     int maxPriorityOperation = 1000, positionMaxPriorityOperation = 0;
-    
+
     //s'agafa la primera operacio i l'esborra
     for (int i = 0;i<m_queueOperationList.count();i++)
     {
         ope = m_queueOperationList.at(i);
-        
+
         if (ope.getPriority() < maxPriorityOperation)
         {
             maxPriorityOperation = ope.getPriority();
             positionMaxPriorityOperation = i;
-        }            
+        }
     }
-    
+
     if (!m_queueOperationList.isEmpty())
     {
         ope = m_queueOperationList.at(positionMaxPriorityOperation);
         m_queueOperationList.removeAt(positionMaxPriorityOperation);
     }
-    
+
     return ope;
 
 }

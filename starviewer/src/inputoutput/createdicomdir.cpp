@@ -30,7 +30,7 @@ CreateDicomdir::CreateDicomdir()
 void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
 {
     //indiquem que el propòsit d'aquest dicomdir
-    switch ( deviceToCreateDicomdir ) 
+    switch ( deviceToCreateDicomdir )
     {
         case recordDeviceDicomDir(harddisk) :
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
@@ -44,7 +44,7 @@ void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
         case recordDeviceDicomDir(usb) :
             m_optProfile = DicomDirInterface::AP_USBandFlash;
             break;
-        default : 
+        default :
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
             break;
     }
@@ -64,15 +64,15 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     DicomDirInterface ddir;
     E_EncodingType opt_enctype = EET_ExplicitLength;
     E_GrpLenEncoding opt_glenc = EGL_withoutGL;
-    
+
     Status state;
-    
+
     //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
     OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , opt_directory );
-         
+
     //comprovem que el directori no estigui buit
-    if ( fileNames.empty() ) 
-    {     
+    if ( fileNames.empty() )
+    {
         ERROR_LOG ( "El directori origen està buit" );
         state.setStatus( " no input files: the directory is empty " , false , 1301 );
         return state;
@@ -80,7 +80,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
 
     //creem el dicomdir
     result = ddir.createNewDicomDir( m_optProfile , opt_output , opt_fileset );
-    
+
     if ( !result.good() )
     {
         errorMessage = "Error al crear el DICOMDIR. ERROR : ";
@@ -105,7 +105,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
             if ( result.good() ) iter++;
         }
 
-        if ( !result.good() ) 
+        if ( !result.good() )
         {
 			errorMessage = "Error al convertir a DICOMDIR el fitxer : ";
 			errorMessage.append((*iter).c_str());

@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "pacsnetwork.h"
 #include "status.h"
 
@@ -23,25 +23,25 @@ PacsNetwork* PacsNetwork::getPacsNetwork()
     {
         pacsNetwork = new PacsNetwork;
     }
-    
-    return pacsNetwork; 
+
+    return pacsNetwork;
 }
 
 Status PacsNetwork::createNetworkRetrieve( int port , int timeout )
 {
     Status state;
     OFCondition status;
-    
+
     if ( m_networkRetrieve == NULL )
     {
         status = ASC_initializeNetwork( NET_ACCEPTORREQUESTOR , port , timeout , &m_networkRetrieve );
-        if ( !status.good() ) 
+        if ( !status.good() )
         {
             state.setStatus( status );
             return state;
         }
     }
-    
+
     return state.setStatus( CORRECT );
 }
 
@@ -49,17 +49,17 @@ Status PacsNetwork::createNetworkQuery( int timeout )
 {
     Status state;
     OFCondition status;
-    
+
     if ( m_networkQuery == NULL )
     {
         status =ASC_initializeNetwork( NET_REQUESTOR , 0 , timeout , &m_networkQuery );
-        if ( !status.good() ) 
+        if ( !status.good() )
         {
             state.setStatus( status );
             return state;
         }
     }
-    
+
     return state.setStatus( CORRECT );
 }
 
@@ -79,7 +79,7 @@ void PacsNetwork::disconnect()
     if ( m_networkQuery != NULL )  ASC_dropNetwork( &m_networkQuery ); // delete net structure
 
     //esborrem la configuració de la xarxa per retrieves
-    
+
     if ( m_networkRetrieve != NULL ) ASC_dropNetwork( &m_networkRetrieve );
 }
 

@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 #include "pacslist.h"
 #include <string>
 
@@ -33,8 +33,8 @@ bool PacsList::findPacs( std::string AETitle )
 
     i = m_listPacs.begin();
     if ( i == m_listPacs.end() ) return false;
-    
-    
+
+
     while ( i != m_listPacs.end() )
     {
         if ( (*i).getAEPacs() == AETitle ) break;

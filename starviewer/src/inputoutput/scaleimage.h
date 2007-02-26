@@ -15,13 +15,13 @@ namespace udg {
 class ScaleImage
 {
 public:
-    
+
     ///Constructor de la classe
     ScaleImage();
-    
+
     ///Destructor de la classe
     ~ScaleImage();
-    
+
     /** Converteix un dicom a un pgm (Imatge que pot ser visualitzada amb qualsevol eina gràfica).
      * @param dicomFile path del dicom a convertir a png
      * @param lpgmFile path del fitxer pgm desti

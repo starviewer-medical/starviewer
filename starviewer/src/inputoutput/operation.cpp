@@ -15,15 +15,15 @@ Operation::Operation()
     m_operation = operationUnknow;
 }
 
-bool Operation::operator < ( Operation ope ) const 
+bool Operation::operator < ( Operation ope ) const
 {
-    //ordena al reves, perque la prioritat més gran és la 0    
+    //ordena al reves, perque la prioritat més gran és la 0
     if ( ope.getPriority() < m_priority )
     {
         return true;
     }
     else return false;
-}    
+}
 
 void Operation::setStudyMask( StudyMask mask )
 {
@@ -49,15 +49,15 @@ void Operation::setOperation( int operation )
         m_operation = operationUnknow;
     }
     else m_operation = operation;
-    
+
     // si no s'especifica la prioritat, el setOperation automaticament l'assigna en funció del tipus d'operacio
     if  ( m_priority > operationPriorityLow )
-    {    
+    {
         if ( operation == operationView )
         {
             m_priority = operationPriorityHigh;
         }
-        else m_priority = operationPriorityMedium; 
+        else m_priority = operationPriorityMedium;
     }
 }
 

@@ -36,14 +36,14 @@ public:
      * @return estat del mètode
      */
     Status open( std::string dicomdirPath );
-    
+
     /** Retorna la llista d'estudis que conté el dicomdir
       * @param studyList llista amb els estudis que conté el dicomdir
       * @param studyMask màscara de cerca dels estudis a cercar dins el dicomdir
       * @return estat del mètode
       */
     Status readStudies( StudyList &studyList , StudyMask studyMask );
-    
+
     /** Retorna la llista de sèries d'un estudi que estigui en el dicomdir
      * @param studyUID UID de l'estudi del qual es vol consultar les sèries
      * @param seriesList llista amb les sèries que conté l'estudi
@@ -84,35 +84,35 @@ private :
      */
     bool matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId );
 
-    /** Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching 
+    /** Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
      * @param studyMaskStudyUID studyUID de la màscara
      * @param studyStudyUID studyUID de l'estudi trobat al dicomdir
      * @return retorna cert si els dos studyUID son iguals o studyMaskStudyUID està buit
      */
     bool matchStudyMaskStudyUID( std::string studyMaskStudyUID , std:: string studyStudyUID );
 
-    /** Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching 
-     * @param studyMaskPatientId 
-     * @param studyPatientId 
+    /** Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
+     * @param studyMaskPatientId
+     * @param studyPatientId
      * @return retorna cert si els dos patientId són iguals o studyMaskPatientId està buit
      */
     bool matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId );
 
     /** Comprova que la data de la màscara i la de l'estudi facin matching. Si la studyMaskDate és buida retorna cert per defecte
-     * @param studyMaskDate Màscara de dates 
+     * @param studyMaskDate Màscara de dates
      * @param studyDate Data de l'estudi
      * @return retorna cert si es fa matching amb la data de la màscara o studyMaskDate és buit
      */
     bool matchStudyMaskDate( std::string studyMaskDate , std::string studyDate );
 
-    /** Comprova que el nom del pacient de la màscara i el de l'estudi facin matching. Si la studyMaskPatientName és buida retorna cert per defecte. En aquest cas fem wildcard matching 
+    /** Comprova que el nom del pacient de la màscara i el de l'estudi facin matching. Si la studyMaskPatientName és buida retorna cert per defecte. En aquest cas fem wildcard matching
      * @param studyMaskPatienName Màscara de nom pacient
      * @param studyPatientName Nom del pacient
      * @return retorna cert si es fa matching amb el nom del pacient de la màscara o studyMaskPatient és buit
      */
     bool matchStudyMaskPatientName( std::string studyMaskPatientName , std::string studyPatientName );
 
-    /** Comprova que el AccessionNumber de la màscara i el de l'estudi facin matching. Si la studyMaskAccessionNumber és buida retorna cert per defecte. En aquest cas fem wildcard matching 
+    /** Comprova que el AccessionNumber de la màscara i el de l'estudi facin matching. Si la studyMaskAccessionNumber és buida retorna cert per defecte. En aquest cas fem wildcard matching
      * @param studyMaskPatienName Màscara de AccessionNumber
      * @param studyPatientName AccessionNumber de l'estudi
      * @return retorna cert si es fa matching amb studyAccessionNumber de la màscara o studyMaskAccessionNumber és buit
@@ -125,7 +125,7 @@ private :
      * @return cadena en majúscules
      */
     std::string upperString( std:: string original );
-    
+
     /** canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas de linux les hem de passar a '/'
      * @param original path original
      * @return path amb '/'

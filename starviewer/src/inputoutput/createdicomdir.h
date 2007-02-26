@@ -28,7 +28,7 @@ public:
      * @param deviceToCreateDicomdir Dispositiu on crearem el dicomdir (harddisk,cdDvd,usb)
      */
     void setDevice( recordDeviceDicomDir deviceToCreateDicomdir );
-        
+
     /** Crea el fitxer DicomDir amb l'estructura dels estudis del directori passat per paràmetre
      * @param dicomdirPath directori a convertir a dicomdir
      * @return estat de finalització del mètode

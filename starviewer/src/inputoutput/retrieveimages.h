@@ -43,32 +43,32 @@ class RetrieveImages
 {
 
 public:
- 
+
    ///constructor de la classe
    RetrieveImages();
-   
+
     /** This action sets the connection that we will use to connect to the pacs
      * @param   connection [in] Study's Open connection to the pacs
      */
    void setConnection(PacsConnection connection);
-   
+
    /** Sets the network to use for retrieve the images
     * @param Network to use
     */
    void setNetwork (T_ASC_Network * network);
-   
+
     /** This action sets the mask that we will use to retrieve the series in to the pacs. This mask is created by mask class
     * @param   searchMask [in] Study's Open connection to the pacs
     */
    void setMask(StudyMask);
-   
+
    /** Download the study's Image
     * @return state of the method
     */
    Status moveSCU();
-       
+
 private:
-    
+
     T_ASC_Association *m_assoc; // request DICOM association;
     T_ASC_Network *m_net;
     DcmDataset *m_mask;

@@ -36,14 +36,14 @@ void QQueryStudyThread::run()
     INFO_LOG( infoLogInitialitzedThread().toAscii().constData() );
 
     state = server.connect( PacsServer::query,PacsServer::studyLevel );
-    
+
     if ( !state.good() )
     {
         missatgeLog = "Error al connectar al PACS ";
         missatgeLog.append( m_param.getAEPacs().c_str() );
         missatgeLog.append( ". PACS ERROR : " );
         missatgeLog.append( state.text().c_str() );
-        
+
         ERROR_LOG( missatgeLog.toAscii().constData() );
         emit( errorConnectingPacs( m_param.getPacsID() ) );
         exit(1);
@@ -51,13 +51,13 @@ void QQueryStudyThread::run()
     else
     {
         //creem l'objecte fer la query
-        QueryStudy qs( server.getConnection() , m_mask ); 
-        
+        QueryStudy qs( server.getConnection() , m_mask );
+
         //busquem els estudis
         state = qs.find();
-        
-        if (! state.good() ) 
-        {   
+
+        if (! state.good() )
+        {
             missatgeLog = "Error cercant al PACS ";
             missatgeLog.append( m_param.getAEPacs().c_str() );
             missatgeLog.append( ". PACS ERROR : " );
@@ -65,12 +65,12 @@ void QQueryStudyThread::run()
             ERROR_LOG( missatgeLog.toAscii().constData() );
             emit( errorQueringStudiesPacs( m_param.getPacsID() ) );
         }
-        
+
         missatgeLog = "Thread del PACS ";
         missatgeLog.append( m_param.getAEPacs().c_str() );
-        missatgeLog.append( " finalitzant" );       
+        missatgeLog.append( " finalitzant" );
         INFO_LOG ( missatgeLog.toAscii().constData() );
-        
+
         //desconnectem
         server.disconnect();
         exit( 0 );
@@ -80,9 +80,9 @@ void QQueryStudyThread::run()
 QString QQueryStudyThread::infoLogInitialitzedThread()
 {
     QString missatgeLog, pacsLog;
- 
+
     missatgeLog = "thread iniciat per cercar al PACS ";
-    
+
     pacsLog.insert( 0 , m_param.getAELocal().c_str() );
     pacsLog.append( ";" );
     pacsLog.append( m_param.getAEPacs().c_str() );
@@ -91,9 +91,9 @@ QString QQueryStudyThread::infoLogInitialitzedThread()
     pacsLog.append( ";" );
     pacsLog.append( m_param.getPacsPort().c_str() );
     pacsLog.append( ";" );
-    
+
     missatgeLog += pacsLog;
-    
+
     return missatgeLog;
 }
 

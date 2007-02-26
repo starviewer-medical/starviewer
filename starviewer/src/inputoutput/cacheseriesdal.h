@@ -28,7 +28,7 @@ public:
      * @param series Dades de la sèrie
      * @return retorna l'estat de la inserció
      */
-    Status insertSeries( Series * serie ); 
+    Status insertSeries( Series * serie );
 
     /** Cerca les sèries demanades a la màscara. Important! Aquesta acció només té en compte l'StudyUID de la màscara per fer la cerca, els altres camps de la màscara els ignorarà!
      * @param  mascarà de la serie amb l' sstudiUID a buscar
@@ -49,9 +49,9 @@ private:
     /** Construeix la sentència per buscar les sèries d'un estudi
      * @param mask màscara de cerca
      * @return sentència sql
-     */    
+     */
     std::string buildSqlQuerySeries( SeriesMask *seriesMask );
-	
+
 };
 
 }

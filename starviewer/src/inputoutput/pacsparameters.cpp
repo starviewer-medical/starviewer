@@ -16,29 +16,29 @@ PacsParameters::PacsParameters( std::string adr , std::string port , std::string
 }
 
 PacsParameters::PacsParameters()
-{ 
+{
     m_PacsID = 0;
 }
 
 void PacsParameters::setPacsAdr( std::string adr )
-{     
+{
      m_Adr = adr;
-}  
+}
 
 void PacsParameters::setPacsPort( std::string port )
-{     
+{
      m_Port = port;
-}  
+}
 
 void PacsParameters::setAELocal( std::string aet )
-{     
+{
      m_aeTitle = aet;
-}  
+}
 
 void PacsParameters::setAEPacs( std::string aec )
-{     
+{
      m_aeCalled = aec;
-}  
+}
 
 void PacsParameters::setLocalPort( std::string port )
 {

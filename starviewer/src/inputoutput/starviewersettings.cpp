@@ -3,7 +3,7 @@
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
- ***************************************************************************/ 
+ ***************************************************************************/
 
 #include <QDir>
 #include <QApplication>
@@ -42,10 +42,10 @@ QString StarviewerSettings::getDatabasePath()
 {
     QDir dir;
     QString defaultDir;
-    
+
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/database/dicom.sdb" );
-    
+
     return m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString();
 }
 
@@ -58,10 +58,10 @@ QString StarviewerSettings::getCacheImagePath()
 {
     QString defaultDir;
     QDir dir;
-    
+
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/dicom/" );
-    
+
     return m_starviewerSettings.value( GroupSettingsName + cacheImagePathKey , defaultDir ).toString();
 }
 

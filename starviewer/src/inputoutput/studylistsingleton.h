@@ -16,20 +16,20 @@ namespace udg {
 @author marc
 */
 class StudyListSingleton: public StudyList{
-    
+
 public:
-    
+
     /** Retorna una instancia de l'objecte
      * @return instancia de l'objecte
      */
     static StudyListSingleton* getStudyListSingleton();
-    
+
     ///Destructor de la classe
     ~StudyListSingleton();
-    
+
 private :
     static StudyListSingleton *pInstance;
-    
+
     ///Constructor de la classe
     StudyListSingleton();
 
