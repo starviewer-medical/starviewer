@@ -254,8 +254,8 @@ OFCondition PacsServer::addStoragePresentationContexts()
     OFListIterator( OFString ) s_cur;
     OFListIterator( OFString ) s_end;
 
-    /*Afegim totes les classes SOP de transfar�cia d'imatges. com que desconeixem de quina modalitat s�
-     * les imatges alhora de preparar la connexi� les hi incloem totes les modalitats. Si alhora de connectar sabessim de quina modalitat � l'estudi nom� caldria afegir-hi la de la motalitat de l'estudi
+    /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
+     * les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és l'estudi només caldria afegir-hi la de la motalitat de l'estudi
      */
     for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ )
     {
@@ -278,7 +278,7 @@ OFCondition PacsServer::addStoragePresentationContexts()
 
     // add a presentations context for each sop class / transfer syntax pair
     OFCondition cond = EC_Normal;
-    int pid = 3; // presentation context id ha de comen�r el 3 pq el 1 �    s_cur = sops.begin();
+    int pid = 3; // presentation context id ha de començar el 3 pq el 1 és    s_cur = sops.begin();
     s_end = sops.end();
 
     while ( s_cur != s_end && cond.good() )
@@ -376,7 +376,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
     /* available the user is able to request an encrypted,secure connection. */
-    //defineix el nivell de seguretat de la connexi� en aquest cas diem que no utilitzem cap nivell de seguretat
+    //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
 
