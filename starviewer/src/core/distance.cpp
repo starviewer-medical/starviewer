@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "distance.h"
-#include <math.h>
 
 
 namespace udg {
@@ -14,44 +13,37 @@ Distance::Distance()
 {
 }
 
-Distance::Distance( double* first , double* second )
+Distance::Distance( Point first , Point second )
 {
     setPoints( first , second );
+}
+
+Distance::Distance( Point points[2] )
+{
+    setPoints( points[0] , points[1] );
 }
 
 Distance::~Distance()
 {
 }
 
-void Distance::setPoint( double* point , int n )
+void Distance::setPoint( Point point , int n )
 {
-    if( n <= 1 )
+    if( n == 0 )
         setFirstPoint( point );
     else
         setSecondPoint( point );
 }
     
-void Distance::setPoints( double* first , double* second )
+void Distance::setPoints( Point first , Point second )
 {
     setFirstPoint( first );
     setSecondPoint( second );
 }
 
-double Distance::getDistance2D()
+double Distance::getDistance()
 {
-    double xx = (m_first[0] - m_second[0]);
-    double yy = (m_first[1] - m_second[1]);
-    double valor = pow(xx, 2) + pow(yy, 2);
-    return (sqrt(valor));
-}
-
-double Distance::getDistance3D()
-{
-    double xx = (m_first[0] - m_second[0]);
-    double yy = (m_first[1] - m_second[1]);
-    double zz = (m_first[2] - m_second[2]);
-    double valor = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
-    return (sqrt(valor));
+    return m_first.distance( m_second );
 }
 
 };  // end namespace udg 

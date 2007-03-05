@@ -767,8 +767,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     switch( event )
     {
     case vtkCommand::MouseMoveEvent:
-        if ( m_mainVolume )
-            updateVoxelInformation();
+        updateVoxelInformation();
     break;
 
     case vtkCommand::EnterEvent:
@@ -903,8 +902,8 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         blender = vtkImageBlend::New();
         blender->SetInput(m_mainVolume->getVtkData());
         blender->AddInput(m_overlayVolume->getVtkData());
-        blender->SetOpacity( 1, 1-m_opacityOverlay );
-        blender->SetOpacity( 2, m_opacityOverlay );
+        blender->SetOpacity( 1, 0.5 );
+        blender->SetOpacity( 2, 0.5 );
         m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
@@ -1237,11 +1236,6 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             break;
         }
     }
-}
-
-void Q2DViewer::setOpacityOverlay ( double op )
-{
-    m_opacityOverlay=op;
 }
 
 };  // end namespace udg

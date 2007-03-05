@@ -62,16 +62,8 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_rotate3dAction->setCheckable( true );
     m_signalMapper->setMapping( m_rotate3dAction , "3DRotationTool" );
     connect( m_rotate3dAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-    
-    m_shapeAction = new QAction( 0 );
-    m_shapeAction->setText( tr("Shapes") );
-    m_shapeAction->setStatusTip( tr("Enable/Disable Shape tool") );
-    m_shapeAction->setIcon( QIcon(":/images/shapes.png") );
-    m_shapeAction->setCheckable( true );
-    m_signalMapper->setMapping( m_shapeAction , "ShapeTool" );
-    connect( m_shapeAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
-    connect( m_signalMapper, SIGNAL( mapped( QString ) ), this , SIGNAL( triggeredTool( QString ) ) );
+    connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
 
     m_availableToolActions.clear();
     m_availableToolActions["SlicingTool"] = m_slicingAction;
@@ -80,7 +72,6 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["TranslateTool"] = m_moveAction;
     m_availableToolActions["ScreenShotTool"] = m_screenShotAction;
     m_availableToolActions["3DRotationTool"] = m_rotate3dAction;
-    m_availableToolActions["ShapeTool"] = m_shapeAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()

@@ -8,6 +8,10 @@
 #define UDGVOLUMESOURCEINFORMATION_H
 
 #include <QString>
+#include <QStringList>
+#include <vector>
+
+class DcmDataset;
 
 namespace udg {
 
@@ -16,7 +20,7 @@ Conté informació relacionada amb el volum, com per exemple dades del pacient.
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class VolumeSourceInformation 
+class VolumeSourceInformation
 {
 public:
     VolumeSourceInformation();
@@ -37,7 +41,7 @@ public:
         En un scan tipu "radiografia" frontal ( com si ens fessin una foto de cares ) l'string seria LIP, ja que l'eix X avança cap a l'esquerra del pacient, l'eix Y avança cap als peus (part inferior) del pacient i l'eix Z avança cap a l'esquena del pacient
 
         Més informació a l'standard DICOM capítols C.7.6.2.1.1 , C.7.6.1.1.1
-        
+
         (
         especifica els "direction cosines" de la primera fila i de la primera columna respecte al pacient. Aquests atributs vindran en parells. El valor de la fila pels eixos x, y, i z respectivament seguits pels valors de la Columna per els eixos x, y, i z respectivament. La direcció dels eixos està definida completament per l'orientació del pacient.
          L'eix de les X incrementa cap a l'esquerra del pacient.
@@ -60,7 +64,7 @@ public:
 
     /// Retorna l'string d'orientació del pacient invertit, és a dir L <=> R , P <=> A , S <=> I
     QString getRevertedPatientOrientationString();
-    
+
     /// Assigna/Retorna nom del pacient
     void setPatientName( const char * patientName )
     {
@@ -139,28 +143,21 @@ public:
     {
         m_windowLevel[1] = level;
     }
-    double getWindow()
-    {
-        return m_windowLevel[0];
-    }
-    double getLevel()
-    {
-        return m_windowLevel[1];
-    }
-    double *getWindowLevel()
-    {
-        return m_windowLevel;
-    }
-    void getWindowLevel( double &window , double &level )
-    {
-        window = m_windowLevel[0];
-        level = m_windowLevel[1];
-    }
-    void getWindowLevel( double windowLevel[2] )
-    {
-        windowLevel[0] = m_windowLevel[0];
-        windowLevel[1] = m_windowLevel[1];
-    }
+    /// Retorna els valors de window level. Per defecte en retorna el primer, però en poden haver-hi més. Si poition està fora de rang retornarà el primer.
+    double getWindow( int position = 0 );
+    double getLevel( int position = 0 );
+    double *getWindowLevel( int position = 0 );
+    void getWindowLevel( double &window , double &level, int position = 0 );
+    void getWindowLevel( double windowLevel[2], int position = 0 );
+
+    /// Retorna les descripcions associades als window levels
+    const char *getWindowLevelDescription( int position = 0 );
+
+    /// Ens diu si té un window level vàlid o no
+    bool hasWindowLevel();
+
+    /// Ens retorna en nombre de windows levels que conté la imatge
+    int getNumberOfWindowLevels();
 
     /// Assigna/Retorna el nom del protocol
     void setProtocolName( const char * protocol )
@@ -186,7 +183,34 @@ public:
     void getXDirectionCosines( double xCosines[3] );
     void getYDirectionCosines( double yCosines[3] );
     void getZDirectionCosines( double zCosines[3] );
-    
+
+    /// Assigna/Obté les dades dicom en format dcmtk
+    void setDicomDataset( DcmDataset *data );
+    DcmDataset *getDicomDataset();
+
+    /// Indiquem la llista de fitxers que formen el volum i es carrega el dicomdataset (privat)
+    void setFilenames( std::vector< std::string > filenames );
+    void setFilenames( std::string filename ); // ho sobrecarreguem per quan només es tracti d'un sol arxiu
+
+    enum PhotometricInterpretationType{ Monochrome1 , Monochrome2 , PaletteColor, RGB, YBRFull, YBRFull422, YBRPartial422, YBRPartial420, YBRICT, YBRRCT,  Unknown };
+    /// Retorna la intepretació fotomètrica d'una imatge d'escala de grisos. Pot ser Monochrome1 (vídeo invers ) o MonocMonochrome2 (normal, el més usual) pel que a nosaltres ens interessa de moment
+    unsigned getPhotometricInterpretation();
+
+    /// Obtenim els bits que s'han fet servir per allotjar cada pixel i quants per codificar el rang.
+    unsigned getBitsStored();
+    unsigned getBitsAllocated();
+
+    enum { UnsignedPixelRepresentation , SignedPixelRepresentation };
+    /// Ens diu si els pixels són signed o unsigned (0,1)
+    unsigned getPixelRepresentation();
+
+    /// Diu si existeixen valors de rescale
+    bool hasModalityRescale();
+
+    /// Recupera els valors de rescale slope/intercept
+    double getRescaleSlope();
+    double getRescaleIntercept();
+
 private:
 
     QString m_patientName;
@@ -200,8 +224,25 @@ private:
     double m_windowLevel[2];
     double m_directionCosines[9];
 
+    /// Llista dels windows levels de la imatge
+    std::vector< double* > m_windowLevelList;
+
+    /// Llista de les descripcions dels windows levels ( si n'hi ha )
+    QStringList m_windowLevelDescriptions;
+
+    /// Vector amb els noms dels fitxers que conformen el volum
+    std::vector< std::string > m_filenamesArray;
+
+    /// info de dicom en format dcmtk
+    DcmDataset *m_dicomData;
+
+    ///Llegeix la informació sobre les dades de window level
+    void readWindowLevelData();
+
+    /// Carrega les dades dicom d'un arxiu
+    bool loadDicomDataset( const char *filename );
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

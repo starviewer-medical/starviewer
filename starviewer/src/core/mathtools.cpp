@@ -17,7 +17,7 @@ namespace udg{
 double MathTools::logTwo(const double x, const bool zero)
 {
     if (x < 0) 
-        WARN_LOG( "MathTools::logTwo >> Log of negative number" );
+        WARN_LOG( "MathTools::logTwo >> Log of negative number" )
 
     if (zero) 
     {
@@ -26,7 +26,7 @@ double MathTools::logTwo(const double x, const bool zero)
     else 
     { 
         if (x == 0) 
-            WARN_LOG( "MathTools::logTwo >> Log of zero" );
+            WARN_LOG( "MathTools::logTwo >> Log of zero" )
             
         return double( log(double(x)) ) * M_LOG2E; 
     }

@@ -40,7 +40,6 @@ private:
     QAction *m_zoomAction;
     QAction *m_moveAction;
     QAction *m_windowLevelAction;
-    QAction *m_shapeAction;
     QAction *m_screenShotAction;
     QAction *m_rotate3dAction;
 

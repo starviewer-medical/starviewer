@@ -7,7 +7,7 @@
 
 #ifndef _LOGGING_
 #define _LOGGING_
- 
+
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
@@ -17,8 +17,6 @@
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/propertyconfigurator.h>
 #include <log4cxx/helpers/exception.h>
-
-#define DEBUG
 
 /// Macro per a inicialitzar els logger
 #define LOGGER_INIT( file ) \
@@ -31,11 +29,12 @@
     INFO_LOG("") \
 }
 
-/// Macro per a missatges de debug
-#ifdef DEBUG 
-#define DEBUG_LOG( msg ) LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development") , msg )
+/// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir una variable pròpia, com per exemple DEBUG
+#ifdef QT_NO_DEBUG
+#define DEBUG_LOG( msg );
 #else
-#define DEBUG_LOG( msg )
+#define DEBUG_LOG( msg ) LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development") , msg )
+
 #endif
 
 /// Macro per a missatges d'informació general
