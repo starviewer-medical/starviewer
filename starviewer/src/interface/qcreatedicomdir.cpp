@@ -16,6 +16,7 @@
 #include <QProcess>
 #include <QContextMenuEvent>
 #include <QShortcut>
+#include <QProgressDialog>
 
 #include "study.h"
 #include "converttodicomdir.h"
@@ -212,6 +213,8 @@ void QCreateDicomdir::addStudy( Study study )
 
 void QCreateDicomdir::createDicomdir()
 {
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
     switch( m_comboBoxAction->currentIndex() )
     {
         case 0 : //disc dur
@@ -221,12 +224,14 @@ void QCreateDicomdir::createDicomdir()
                  createDicomdirOnHardDiskOrFlashMemories();
                  break;
         case 2 : //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
-                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( recordDeviceDicomDir(cd) );
+                 if ( createDicomdirOnCdOrDvd().good() ) burnDicomdir( recordDeviceDicomDir(cd) );
                  break;
         case 3 : //dvd, si s'ha creat bé, executem el programa per gravar el dicomdir a dvd's
-                 if ( createDicomdirOnCdOrDvd().good() ) executek3b( recordDeviceDicomDir(dvd) );
+                 if ( createDicomdirOnCdOrDvd().good() ) burnDicomdir( recordDeviceDicomDir(dvd) );
                  break;
     }
+
+    QApplication::restoreOverrideCursor();
 }
 
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
@@ -488,31 +493,53 @@ bool QCreateDicomdir::existsStudy( QString studyUID )
     else return false;
 }
 
-void QCreateDicomdir::executek3b( recordDeviceDicomDir device )
+void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
 {
-    QProcess k3b;
-    QStringList k3bParamatersList;
+    QProcess k3b, mkisofs;
+    QStringList k3bParamatersList, mkisofsParamaterList;
     QDir temporaryDirPath;
-    QString paramater;
+    QString dicomdirPath, outputIsoPathParameter, isoPath;
 
-    k3bParamatersList.push_back( "--nosplash" );
+    //com que de moment no hi ha comunicacio amb el mkisofs es crea aquest progress bar per donar algo de feeling a l'usuari, per a que no es pensi que s'ha penjat l'aplicació
+    QProgressDialog *progressBar = new QProgressDialog( tr( "Creating Dicomdir Image..." ) , "" , 0 , 10 );;
+    progressBar->setMinimumDuration( 0 );
+    progressBar->setCancelButton( 0 );
+    progressBar->setValue(7);
+
+    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR/";
+
+    //indiquem al directori i nom de la imatge a crear
+    isoPath = dicomdirPath;
+    isoPath.append( "/dicomdir.iso" );
+
+    //el mkisofs per indica el nom de la iso a crear se li ha de posar amb el parametre -o
+    outputIsoPathParameter = "-o";
+    outputIsoPathParameter.append( isoPath );
+
+    mkisofsParamaterList.push_back( "-V STARVIEWER DICOMDIR" );//indiquem que el label de la imatge és STARVIEWER DICOMDIR
+    mkisofsParamaterList.push_back( outputIsoPathParameter ); //nom i directori on guardarem la imatge
+    mkisofsParamaterList.push_back( dicomdirPath );//path a convertir en iso
+
+    mkisofs.execute( "mkisofs" , mkisofsParamaterList );//creem la imatge
+    mkisofs.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
+
+    k3bParamatersList.push_back( "--nosplash" );//que no s'engegui l'splash del k3b
 
     switch( device )
     {
         case recordDeviceDicomDir(cd) :
-                    k3bParamatersList.push_back( "--datacd" );
-                    paramater= temporaryDirPath.tempPath() + "/DICOMDIR/";
-                    k3bParamatersList.push_back(  paramater );
-                    //k3bParamatersList.push_back( "*" );
-                    k3b.execute( "k3b" , k3bParamatersList );
-                    break;
+                k3bParamatersList.push_back( "--cdimage" );
+                k3bParamatersList.push_back( isoPath );
+                k3b.execute( "k3b" , k3bParamatersList );
+                break;
         case recordDeviceDicomDir(dvd):
-                    k3bParamatersList.push_back( "--datadvd" );
-                    paramater= temporaryDirPath.tempPath() + "/DICOMDIR/";
-                    k3bParamatersList.push_back(  paramater );
-                    k3b.execute( "k3b" , k3bParamatersList );
-                    break;
+                k3bParamatersList.push_back( "--dvdimage" );
+                k3bParamatersList.push_back( isoPath );
+                k3b.execute( "k3b" , k3bParamatersList );
+                break;
     }
+
+    progressBar->close();
 }
 
 bool QCreateDicomdir::enoughFreeSpace( QString path )

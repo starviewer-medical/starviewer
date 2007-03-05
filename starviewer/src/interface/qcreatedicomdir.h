@@ -22,7 +22,7 @@ class Status;
 class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
 Q_OBJECT
 
-    
+
 public:
 
     QCreateDicomdir( QWidget *parent = 0 );
@@ -52,19 +52,19 @@ public slots:
     void createDicomdir();
 
 public slots:
-        
+
     /** Slot que s'activa quan canviem els dispositiu d'emmagatzemament seleccionat al combobox
      * @param index del combobox
      */
     void changedAction( int index );
-    
+
 private:
 
     unsigned long m_dicomdirSize;
     unsigned long m_DiskSpace;
     QMenu m_contextMenu;///<Menu contextual
 
-    ///Crea les connexions de signals i slots de la interfície    
+    ///Crea les connexions de signals i slots de la interfície
     void createConnections();
 
     ///crea el menu contextual
@@ -74,7 +74,7 @@ private:
      * @param data de l'estudi
      */
     QString formatDate( const std::string );
-    
+
     /**Formata l'hora
      * @param Hora de l'estudi
      */
@@ -85,7 +85,7 @@ private:
      * @return indica si existeix l'estudi a la llista d'estudis pendents de passa a DicomDir
      */
     bool existsStudy( QString studyUID );
-    
+
     ///Dona valor a l'etiqueta que indica l'espai que ocupa el Dicomdir
     void setDicomdirSize();
 
@@ -105,7 +105,7 @@ private:
      */
     Status startCreateDicomdir( QString dicomdirPath );
 
-    /** Crear el dicomdir en un cd o dvd 
+    /** Crear el dicomdir en un cd o dvd
      */
     Status createDicomdirOnCdOrDvd();
 
@@ -118,12 +118,12 @@ private:
      */
     bool dicomdirPathIsADicomdir( QString dicomdirPath );
 
-    /** executa el k3b per gravar en un cd o dvd depenent de l'opció escollida
+    /** genera una imatge iso i crida el k3b per gravar la imatge
      * @param device dispositiu al que es grava, pot ser cd o dvd
      */
-    void executek3b( recordDeviceDicomDir device );
+    void burnDicomdir( recordDeviceDicomDir device );
 
-    
+
     /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit
      */
     void clearQCreateDicomdirScreen();
