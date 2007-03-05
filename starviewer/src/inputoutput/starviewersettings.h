@@ -39,6 +39,7 @@ const QString queryScreenWindowPositionY("/interface/queryscreen/windowPositionY
 const QString queryScreenWindowWidth("/interface/queryscreen/windowWidth");
 const QString queryScreenWindowHeight("/interface/queryscreen/windowHeigth");
 const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
+const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
 
 class StarviewerSettings{
 public:
@@ -286,6 +287,15 @@ public:
      */
     QString getInstitutionPhoneNumber();
 
+    /** Estableix si l'aplicació s'ha d'executar en mode verbose o no (les comunicacions del pacs surten per cònsola)
+     * @param VerboseMode indica si l'aplicació s'executa en mode verbose
+     */
+    void setLogCommunicationPacsVerboseMode(bool VerboseMode);
+
+    /** retorn si hem d'executar l'aplicació en verbose Mode,
+      * @return indica si s'executa l'aplicació en verbode Mode
+      */
+    bool getLogCommunicationPacsVerboseMode();
 
 private :
     /// Nom del grup on es guarda la configuració d'aquesta classe

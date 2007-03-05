@@ -7,6 +7,7 @@
 #include "pacsparameters.h"
 #include "pacsnetwork.h"
 #include "pacsconnection.h"
+#include "dcmtk/dcmdata/dcdebug.h"
 
 class string;
 class Status;

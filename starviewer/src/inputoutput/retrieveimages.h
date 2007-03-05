@@ -27,11 +27,12 @@
 #include "dcfilefo.h"
 #include "dcdict.h"
 #include "ofconapp.h"
-#include "dcuid.h"    /* for dcmtk version name */
+#include "dcuid.h"
 #include "studymask.h"
 
 #include "pacsconnection.h"
 #include "imagelistsingleton.h"
+#include "starviewersettings.h"
 
 /** This class helps to interactive with the pacs, retrieve images that match with the mask
  */

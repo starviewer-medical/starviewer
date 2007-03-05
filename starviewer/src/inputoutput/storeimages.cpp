@@ -28,7 +28,26 @@ void StoreImages::setNetwork ( T_ASC_Network * network )
 
 static void progressCallback( void * /*callbackData*/ , T_DIMSE_StoreProgress *progress , T_DIMSE_C_StoreRQ * /*req*/)
 {
-    //no duem a terme cap accio
+    StarviewerSettings settings;
+
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        switch ( progress->state )
+        {
+            case DIMSE_StoreBegin:
+                cout << "TRANSMITTING:";
+                break;
+            case DIMSE_StoreEnd:
+                cout << endl;
+                break;
+            default:
+                cout << "." ;
+                break;
+            }
+        fflush(stdout);
+    }
+#endif
 }
 
 static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
@@ -50,8 +69,17 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     DIC_UI sopClass;
     DIC_UI sopInstance;
     DcmDataset *statusDetail = NULL;
+    StarviewerSettings settings;
 
     OFBool unsuccessfulStoreEncountered = OFTrue; // assumption
+
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "--------------------------\n";
+        cout << "Sending file: " << fname << endl;
+    }
+#endif
 
     /* read information from file. After the call to DcmFileFormat::loadFile(...) the information */
     /* which is encapsulated in the file will be available through the DcmFileFormat object. */
@@ -59,6 +87,15 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     /* meta header information) and DcmFileFormat::getDataset() (for data set information). */
     DcmFileFormat dcmff;
     OFCondition cond = dcmff.loadFile( fname );
+
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "====================================== DICOM DATA OBJECT TO STORE ======================================" << endl;
+        dcmff.print( COUT );
+        cout << "-----------" << endl;
+    }
+#endif
 
     /* figure out if an error occured while the file was read*/
     if ( cond.bad() ) return cond;
@@ -94,6 +131,18 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
         return DIMSE_NOVALIDPRESENTATIONCONTEXTID;
     }
 
+    /* if required, dump general information concerning transfer syntaxes */
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        DcmXfer fileTransfer(dcmff.getDataset()->getOriginalXfer());
+        T_ASC_PresentationContext pc;
+        ASC_findAcceptedPresentationContext(assoc->params, presId, &pc);
+        DcmXfer netTransfer(pc.acceptedTransferSyntax);
+        cout << "Transfer: " << dcmFindNameOfUID(fileTransfer.getXferID()) << " -> " <<  dcmFindNameOfUID(netTransfer.getXferID()) << endl;
+    }
+#endif
+
     /* prepare the transmission of data */
     bzero((char*)&req, sizeof(req));
     req.MessageID = msgId;
@@ -101,6 +150,13 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     strcpy( req.AffectedSOPInstanceUID , sopInstance );
     req.DataSetType = DIMSE_DATASET_PRESENT;
     req.Priority = DIMSE_PRIORITY_LOW;
+
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "Store SCU RQ: MsgID " << msgId << ", (" << dcmSOPClassUIDToModality(sopClass) << ")" << endl;
+    }
+#endif
 
     cond = DIMSE_storeUser( assoc , presId , &req , NULL , dcmff.getDataset() , progressCallback , NULL ,  DIMSE_BLOCKING , 0 , &rsp , &statusDetail , NULL , DU_fileSize( fname ) );
 
@@ -110,15 +166,28 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
      */
     if ( cond == EC_Normal && ( rsp.DimseStatus == STATUS_Success || DICOM_WARNING_STATUS( rsp.DimseStatus ) ) ) unsuccessfulStoreEncountered = OFFalse;
 
-
     m_lastStatusCode = rsp.DimseStatus;
 
-    /* dump some more general information */
-    if ( cond != EC_Normal ) DimseCondition::dump( cond );
+#ifndef QT_NO_DEBUG
+    if ( cond == EC_Normal && settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "====================================== CSTORE-RSP ======================================" <<endl;
+        DIMSE_printCStoreRSP( stdout , &rsp );
+    }
+#endif
 
     /* dump status detail information if there is some */
-    if ( statusDetail != NULL ) delete statusDetail;
-
+    if ( statusDetail != NULL )
+    {
+#ifndef QT_NO_DEBUG
+        if ( settings.getLogCommunicationPacsVerboseMode() )
+        {
+            cout << "====================================== STATUS-DETAIL ======================================" <<endl;
+            statusDetail->print( COUT );
+        }
+#endif
+        delete statusDetail;
+    }
     return cond;
 }
 

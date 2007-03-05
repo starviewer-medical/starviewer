@@ -281,6 +281,17 @@ QString StarviewerSettings::getInstitutionEmail()
     return m_starviewerSettings.value( GroupSettingsName + InstitutionEmail , "" ).toString();
 }
 
+void StarviewerSettings::setLogCommunicationPacsVerboseMode(bool verboseMode)
+{
+    m_starviewerSettings.setValue( GroupSettingsName + logsPacsCommunicationModeVerbose , verboseMode );
+}
+
+bool StarviewerSettings::getLogCommunicationPacsVerboseMode()
+{
+    return m_starviewerSettings.value( GroupSettingsName + logsPacsCommunicationModeVerbose , false ).toBool();
+}
+
+
 StarviewerSettings::~StarviewerSettings()
 {
 }

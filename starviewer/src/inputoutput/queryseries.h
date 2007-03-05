@@ -23,10 +23,13 @@
 
 #include <assoc.h>
 #include <ofcond.h>
+#include <diutil.h>
 #include "serieslistsingleton.h"
 #include "pacsserver.h"
 #include "seriesmask.h"
 #include "status.h"
+#include "starviewersettings.h"
+
 class PacsConnection;
 
 /// This class helps to interactive with the pacs, allow us to find series in the pacs, setting a search mask. Very important a connection and a mask search must be setted before query Series!!

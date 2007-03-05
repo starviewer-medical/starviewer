@@ -5,6 +5,7 @@
 #include "study.h"
 #include "status.h"
 
+
 #ifndef CONST
 #include "const.h"
 #endif
@@ -36,14 +37,29 @@ the class pacsfind  */
 void progressCallbackStudy(
         void * /*callbackData*/ ,
         T_DIMSE_C_FindRQ * /*request*/ ,
-        int /*responseCount*/,
-        T_DIMSE_C_FindRSP */*rsp*/,
+        int responseCount,
+        T_DIMSE_C_FindRSP *rsp,
         DcmDataset *responseIdentifiers
         )
 {
     Study study;
     const char* text;
     StudyListSingleton *studyList;
+    StarviewerSettings settings;
+
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        /* dump response number */
+        cout<< "RESPONSE: " << responseCount << "(" << DU_cfindStatusString( rsp->DimseStatus ) << ")" << endl;
+
+        /* dump data set which was received */
+        responseIdentifiers->print(COUT);
+
+        /* dump delimiter */
+        cout << "--------" << endl;
+    }
+#endif
 
     //set the patient Name
     responseIdentifiers->findAndGetString( DCM_PatientsName , text , false );
@@ -118,6 +134,7 @@ Status QueryStudy::find()
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
     Status state;
+    StarviewerSettings settings;
 
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )
@@ -145,15 +162,39 @@ Status QueryStudy::find()
     req.DataSetType = DIMSE_DATASET_PRESENT;
     req.Priority = DIMSE_PRIORITY_LOW;
 
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "Find SCU RQ: MsgID " << msgId << endl;
+        cout << "====================================== REQUEST ======================================" <<endl;
+        m_mask->print( COUT );
+    }
+#endif
+
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
                           progressCallbackStudy , NULL ,
                           DIMSE_BLOCKING , 0 ,
                           &rsp , &statusDetail );
 
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "====================================== CFIND-RSP ======================================" <<endl;
+        DIMSE_printCFindRSP( stdout , &rsp );
+    }
+#endif
+
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
     {
+#ifndef QT_NO_DEBUG
+        if ( settings.getLogCommunicationPacsVerboseMode() )
+        {
+            cout << "====================================== STATUS-DETAIL ======================================" <<endl;
+            statusDetail->print( COUT );
+        }
+#endif
         delete statusDetail;
     }
 

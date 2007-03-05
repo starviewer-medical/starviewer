@@ -27,9 +27,11 @@
 
 class PacsConnection;
 #include <ofcond.h>
+#include <diutil.h>
 #include "studylistsingleton.h"
 #include "pacsserver.h"
 #include "studymask.h"
+#include "starviewersettings.h"
 
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 namespace udg{

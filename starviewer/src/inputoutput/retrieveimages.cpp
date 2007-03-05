@@ -86,10 +86,19 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
     return cond;
 }
 
-void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int /*responseCount*/ , T_DIMSE_C_MoveRSP */*response*/ )
+void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response )
 {
     OFCondition cond = EC_Normal;
     MyCallbackInfo *myCallbackData;
+    StarviewerSettings settings;
+
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "Move Response " << responseCount << endl;
+        DIMSE_printCMoveRSP( stdout , response );
+    }
+#endif
 
     myCallbackData = ( MyCallbackInfo* )callbackData;
 }
@@ -112,6 +121,16 @@ OFCondition echoSCP(
 
 /// Aquesta funció s'encarrega de guardar cada paquet que rebem
 /*It's a callback function, can't own to the class */
+ /**
+  *
+  * @param callbackData
+  * @param progress
+  * @param req
+  * @param
+  * @param imageDataSet
+  * @param rsp
+  * @param statusDetail
+  */
  void storeSCPCallback(
     /* in */
     void *callbackData ,
@@ -135,18 +154,28 @@ OFCondition echoSCP(
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
     std::string       seriesDir , studyDir;
     DIR *pdir;
-
     Image img;
+    StarviewerSettings settings;
 
-      switch ( progress->state )
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+      switch (progress->state)
       {
         case DIMSE_StoreBegin:
+          cout<<"====================================== REICIVING DICOM DATA ======================================" << endl;
+          cout << "RECEIVING:" ;
           break;
         case DIMSE_StoreEnd:
+          cout << endl;
           break;
         default:
+          cout << ".";
           break;
       }
+      fflush(stdout);
+    }
+#endif
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
@@ -233,6 +262,14 @@ OFCondition echoSCP(
                 piSingleton->setError( studyUID );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
             }
+
+#ifndef QT_NO_DEBUG
+            if ( settings.getLogCommunicationPacsVerboseMode() )
+            {
+                cout << "====================================== DICOM DATA OBJECT RETRIEVED ======================================" << endl;
+               cbdata->dcmff->print( COUT );
+            }
+#endif
             //calculem la mida de l'image
             imageSize = cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType );
 
@@ -285,9 +322,16 @@ OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_Pr
     T_DIMSE_C_StoreRQ *req;
     char imageFileName[2048];
     req = &msg->msg.CStoreRQ;
+    OFBool opt_useMetaheader = OFTrue; // I found its default value in movescu.cpp */
+    StarviewerSettings settings;
 
-    /* I found its default value in movescu.cpp */
-    OFBool opt_useMetaheader = OFTrue;
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+      cout << "Received " <<endl ;
+      DIMSE_printCStoreRQ( stdout , req );
+    }
+#endif
 
     sprintf( imageFileName , "%s.%s" , dcmSOPClassUIDToModality( req->AffectedSOPClassUID ), req->AffectedSOPInstanceUID );
 
@@ -391,6 +435,7 @@ Status RetrieveImages::moveSCU()
     DcmDataset          *statusDetail = NULL;
     MyCallbackInfo      callbackData;
     Status state;
+    StarviewerSettings settings;
 
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )
@@ -410,6 +455,15 @@ Status RetrieveImages::moveSCU()
     callbackData.assoc = m_assoc;
     callbackData.presId = presId;
 
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "Move SCU RQ: MsgID " << msgId << endl;
+        cout << "====================================== REQUEST ======================================" <<endl;
+        m_mask->print( COUT );
+    }
+#endif
+
     req.MessageID = msgId;
     strcpy( req.AffectedSOPClassUID , UID_MOVEStudyRootQueryRetrieveInformationModel );
     req.Priority = DIMSE_PRIORITY_MEDIUM;
@@ -422,9 +476,30 @@ Status RetrieveImages::moveSCU()
         m_net , subOpCallback , NULL ,
         &rsp , &statusDetail , &rspIds );
 
-    if ( cond != EC_Normal )
+#ifndef QT_NO_DEBUG
+    if ( cond == EC_Normal && settings.getLogCommunicationPacsVerboseMode() )
     {
-        DimseCondition::dump(cond);
+        cout << "====================================== CMOVE-RSP ======================================" <<endl;
+        DIMSE_printCMoveRSP( stdout , &rsp );
+        if ( rspIds != NULL )
+        {
+            cout << "Response Identifiers:" << endl;
+            rspIds->print(COUT);
+        }
+    }
+#endif
+
+    /* dump status detail information if there is some */
+    if ( statusDetail != NULL )
+    {
+#ifndef QT_NO_DEBUG
+        if ( settings.getLogCommunicationPacsVerboseMode() )
+        {
+            cout << "====================================== STATUS-DETAIL ======================================" <<endl;
+            statusDetail->print( COUT );
+        }
+#endif
+        delete statusDetail;
     }
 
     if ( rspIds != NULL ) delete rspIds;

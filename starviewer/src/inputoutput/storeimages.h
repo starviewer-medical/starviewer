@@ -19,6 +19,7 @@
 #include "pacsconnection.h"
 #include <list>
 #include <string>
+#include "starviewersettings.h"
 
 namespace udg {
 

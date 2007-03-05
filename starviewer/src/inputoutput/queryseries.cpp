@@ -30,17 +30,30 @@ void QuerySeries:: setMask( SeriesMask *series )
 void progressCallbackSeries(
         void * /*callbackData*/ ,
         T_DIMSE_C_FindRQ * /*request*/ ,
-        int /*responseCount*/,
-        T_DIMSE_C_FindRSP */*rsp*/,
+        int responseCount,
+        T_DIMSE_C_FindRSP *rsp,
         DcmDataset *responseIdentifiers
         )
 {
     Series series;
     const char* text;
     SeriesListSingleton* seriesListSingleton;
-    std::string path;
+    StarviewerSettings settings;
+    std::string path;    //el path el construirem nosaltres, estarà format per UIDStudy/UIDSeries, aquest sempre sera el path on s'hauran de guardar les series
 
-    //el path el construirem nosaltres, estarà format per UIDStudy/UIDSeries, aquest sempre sera el path on s'hauran de guardar les series
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        /* dump response number */
+        cout<< "RESPONSE: " << responseCount << "(" << DU_cfindStatusString( rsp->DimseStatus ) << ")" << endl;
+
+        /* dump data set which was received */
+        responseIdentifiers->print(COUT);
+
+        /* dump delimiter */
+        cout << "--------" << endl;
+    }
+#endif
 
     //set the series number
     responseIdentifiers->findAndGetString( DCM_SeriesNumber , text , false );
@@ -108,6 +121,7 @@ Status QuerySeries::find()
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
     Status state;
+    StarviewerSettings settings;
 
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )
@@ -135,6 +149,14 @@ Status QuerySeries::find()
     req.DataSetType = DIMSE_DATASET_PRESENT;
     req.Priority = DIMSE_PRIORITY_LOW;
 
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "Find SCU RQ: MsgID " << msgId << endl;
+        cout << "====================================== REQUEST ======================================" <<endl;
+        m_mask->print( COUT );
+    }
+#endif
 
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,  //dcmtk lib call
@@ -142,8 +164,24 @@ Status QuerySeries::find()
                           DIMSE_BLOCKING , 0,
                           &rsp , &statusDetail );
 
+#ifndef QT_NO_DEBUG
+    if ( settings.getLogCommunicationPacsVerboseMode() )
+    {
+        cout << "====================================== CFIND-RSP ======================================" <<endl;
+        DIMSE_printCFindRSP(stdout, &rsp);
+    }
+#endif
+
     /* dump status detail information if there is some */
-    if ( statusDetail != NULL ) {
+    if ( statusDetail != NULL )
+    {
+#ifndef QT_NO_DEBUG
+        if ( settings.getLogCommunicationPacsVerboseMode() )
+        {
+            cout << "====================================== STATUS-DETAIL ======================================" <<endl;
+            statusDetail->print(COUT);
+        }
+#endif
         delete statusDetail;
     }
 
