@@ -101,7 +101,7 @@ public:
     {
         return m_volumeInformation;
     }
-
+    
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter< ItkImageType > ItkToVtkFilterType;

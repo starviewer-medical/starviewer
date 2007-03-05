@@ -38,7 +38,7 @@ public:
      * @param path Indica el path a un directori/fitxer dintre de la partició
      * @return El nombre total de bytes que té una partició
      */
-    quint64 getTotalNumberOfBytes(QString path);
+    unsigned long getTotalNumberOfBytes(QString path);
 
     /**
      * Retorna el número de Bytes d'espai lliure que ens queden en una partició concreta i que poden ser utilitzats per l'usuari. Cal fer
@@ -51,7 +51,7 @@ public:
      * @param path Indica el path a un directori/fitxer dintre de la partició
      * @return El nombre de bytes lliures que té una partició i poden ser utilitzats per l'usuari que executa el programa
      */
-    quint64 getNumberOfFreeBytes(QString path);
+    unsigned long getNumberOfFreeBytes(QString path);
 
     /**
      * Es comporta exactament igual que getTotalNumberOfBytes() però retorna MBytes en comptes de Bytes. Cal tenir en compte, però, que
@@ -59,7 +59,7 @@ public:
      * @param path Indica el path a un directori/fitxer dintre de la partició
      * @return El nombre de MBytes truncats (ex.: si és 1,9MBytes reals retornarà 1Mbytes)
      */
-    quint64 getTotalNumberOfMBytes(QString path);
+    unsigned long getTotalNumberOfMBytes(QString path);
     
     /**
      * Es comporta exactament igual que getNumberOfFreeBytes() però retorna MBytes en comptes de Bytes. Cal tenir en compte, però, que
@@ -67,7 +67,7 @@ public:
      * @param path Indica el path a un directori/fitxer dintre de la partició
      * @return El nombre de MBytes lliures truncats (ex.: si és 1,9MBytes reals retornarà 1MByte)
      */
-    quint64 getNumberOfFreeMBytes(QString path);
+    unsigned long getNumberOfFreeMBytes(QString path);
 
 private:
     quint64 getTotalBytesPlataformEspecific(QString path);

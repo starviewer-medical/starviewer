@@ -57,7 +57,7 @@ public:
     vtkRenderWindow *getRenderWindow();
 
     /// Ens retorna el punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
-    Point getModelPointFromCursor() const { return m_modelPointFromCursor; }
+//     Point getModelPointFromCursor() const { return m_modelPointFromCursor; }
 
     /// Retorna la posició sobre la que es troba el cursor ( coordenades de mon )
     void getCurrentCursorPosition( double xyz[3] )
@@ -116,7 +116,10 @@ protected:
     QVTKWidget* m_vtkWidget;
 
     /// El punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
-    Point m_modelPointFromCursor;
+    
+    /// \TODO Aquest punt s'ha de treure perquè no es fa servir ( en principi ) 
+//     Point m_modelPointFromCursor;
+    
 
     /// Posició sobre la que es troba el ratolí
     double m_currentCursorPosition[3];

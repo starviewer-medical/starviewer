@@ -9,43 +9,38 @@
 
 namespace udg {
 
-Point::Point()
+Point::Point() : Shape()
 {
-    m_x = m_y = m_z =  0;
-    
+    for (int i = 0; i < 2; i++)
+        m_point[i]=  0;
 }
 
-Point::Point( double points[3] )
+Point::Point( double points[2] )  : Shape()
 {
-    setValues( points );
+    m_point[0] = points[0];
+    m_point[1] = points[1];
 }
 
-Point::Point( double x , double y , double z )
+Point::Point( double x , double y )  : Shape()
 {
-    setValues( x , y , z );
+    m_point[0] = x;
+    m_point[1] = y;
 }
 
 Point::~Point()
 {
 }
 
-void Point::setValues( double x, double y , double z )
+void Point::setValues( double x, double y )
 {
     setX( x );
     setY( y );
-    setZ( z );
 }
 
-void Point::setValues( double points[3] )
+void Point::setValues( double points[2] )
 {
     setX( points[0] );
     setY( points[1] );
-    setZ( points[2] );
-}
-
-double Point::distance( Point p )
-{
-    return sqrt( pow( (m_x-p.m_x) ,2) + pow( (m_y-p.m_y) ,2) + pow( (m_z-p.m_z) ,2) );
 }
 
 };  // end namespace udg 

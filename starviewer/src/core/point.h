@@ -7,48 +7,40 @@
 #ifndef UDGPOINT_H
 #define UDGPOINT_H
 
+#include "shape.h"
+
 namespace udg {
 
 /**
-Classe que engloba un punt geomètric,\TODO fer template o fer que sempre per defecte sigui 3D-> fer 3D i ja està
-\TODO fer servir vtkCoordinate, ens proporciona diverses tranformacions per als punts segons si referenciem global, viewport, etc...
-vtkCoordinate
-The coordinate systems in vtk are as follows:
-
-  DISPLAY -             x-y pixel values in window
-  NORMALIZED DISPLAY -  x-y (0,1) normalized values
-  VIEWPORT -            x-y pixel values in viewport
-  NORMALIZED VIEWPORT - x-y (0,1) normalized value in viewport
-  VIEW -                x-y-z (-1,1) values in camera coordinates. (z is depth)
-  WORLD -               x-y-z global coordinate values
-  USERDEFINED -         x-y-z in User defined space
-
-etc etc, per més mirar documentació de la classe...
-
 @author Grup de Gràfics de Girona  ( GGG )
+
+Classe que implementa un punt geomètric en 2D,com a subclasse de Shape.
 */
-class Point 
+class Point   : public Shape
 {
 public:
     Point();
-    Point( double points[3] );
-    Point( double x , double y , double z );
+    Point( double points[2] );
+    Point( double x , double y );
     ~Point();
 
-    void setX( double x ){ m_x = x; }
-    void setY( double y ){ m_y = y; }
-    void setZ( double z ){ m_z = z; }
-    void setValues( double x , double y , double z );
-    void setValues( double points[3] );
+    void setX( double x ){ m_point[0] = x; }
+    void setY( double y ){ m_point[1] = y; }
+    void setValues( double x , double y );
+    void setValues( double points[2] );
     
-    double getX(){ return m_x; }
-    double getY(){ return m_y; }
-    double getZ(){ return m_z; }
-    double distance( Point p );
+    double getX(){ return m_point[0]; }
+    double getY(){ return m_point[1]; }
+    
+    double* getPoint();
+
+    /// ens retorna el tipus d'objecte que és.
+    const char* getClassName()
+    {return ( "Point" );}
     
 private:
     /// Coordenades
-    double m_x, m_y, m_z;
+    double m_point[2];
 };
 
 };  //  end  namespace udg 

@@ -42,7 +42,7 @@ visor->setInput( volum );
 visor->setView( Q2DViewer::Axial );
 visor->render();
 
-En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat mab el mètode setOverlayInput().
+En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
 Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe, en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
 \TODO acabar la doc sobre solapament
 
@@ -96,6 +96,9 @@ public:
 
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );
+    
+    /// Canviem l'opacitat del volum solapat
+    void setOpacityOverlay ( double op );
 
     // Mètodes específics checkerboard
     /// Obtenim el nombre de divisions
@@ -150,7 +153,7 @@ public slots:
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
 
-    /// indica el tipu de solapament dels volums, per defecte checkerboard
+    /// indica el tipus de solapament dels volums, per defecte checkerboard
     void setOverlay( OverlayType overlay ){ m_overlay = overlay; }
     void setOverlayToBlend(){ setOverlay( Q2DViewer::Blend ); };
     void setOverlayToCheckerBoard(){ setOverlay( Q2DViewer::CheckerBoard ); };
@@ -243,6 +246,9 @@ protected:
 
     /// Aquest és el segon volum afegit a solapar
     Volume* m_overlayVolume;
+    
+    /// Opacitat del segon volume
+    double m_opacityOverlay;
 
     /// El nombre de divisions per cada dimensió
     int m_divisions[3];

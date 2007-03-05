@@ -34,6 +34,18 @@
 // Texture2D i Texture3D
 #include <vtkVolumeTextureMapper2D.h>
 #include <vtkVolumeTextureMapper3D.h>
+// contouring i marching cubes
+#include <vtkImageShrink3D.h>
+#include <vtkImageGaussianSmooth.h>
+#include <vtkContourFilter.h>
+#include <vtkReverseSense.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkSmoothPolyDataFilter.h>
+#include <vtkStripper.h>
+#include <vtkImageMarchingCubes.h>
+#include <vtkPolyDataNormals.h>
+#include <vtkDecimatePro.h>
 // LUT's
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
@@ -131,6 +143,12 @@ QString Q3DViewer::getRenderFunctionAsString()
     case Texture3D:
         result = "Texture3D";
     break;
+    case Contouring:
+        result = "Contouring";
+    break;
+    case MarchingCubes:
+        result = "MarchingCubes";
+    break;
     }
     return result;
 }
@@ -160,6 +178,12 @@ void Q3DViewer::render()
         break;
         case Texture3D:
             renderTexture3D();
+        break;
+        case Contouring:
+            renderContouring();
+        break;
+        case MarchingCubes:
+            renderMarchingCubes();
         break;
         }
         this->resetOrientation();
@@ -455,6 +479,127 @@ void Q3DViewer::renderTexture3D()
         DEBUG_LOG( "No es pot fer render per textures 3D, no s'ha proporcionat cap volum d'entrada" );
 }
 
+void Q3DViewer::renderContouring()
+{
+    if ( m_mainVolume != 0 )
+    {
+//         cout << " fem contouring "<<endl;
+        vtkImageShrink3D *m_shrink = vtkImageShrink3D::New();
+        
+        m_shrink->SetInput( m_mainVolume->getVtkData() );
+        
+//         cout << "factors del shrink: " << m_shrink->GetShrinkFactors()[0] << " " << m_shrink->GetShrinkFactors()[1] << " " << m_shrink->GetShrinkFactors()[2] << " " <<endl;
+        
+        vtkImageGaussianSmooth *m_smooth = vtkImageGaussianSmooth::New();
+        m_smooth->SetDimensionality( 3 );
+        m_smooth->SetRadiusFactor( 2 );
+        m_smooth->SetInput( m_shrink->GetOutput() );
+        
+        vtkContourFilter *contour = vtkContourFilter::New();
+        contour->SetInputConnection( m_smooth->GetOutputPort());
+        contour->GenerateValues( 1, 30, 30);
+        contour->ComputeScalarsOff();
+        contour->ComputeGradientsOff();
+        
+        vtkDecimatePro *decimator = vtkDecimatePro::New();
+        decimator->SetInputConnection( contour->GetOutputPort() );
+        decimator->SetTargetReduction( 0.9 );
+        decimator->PreserveTopologyOn();
+        
+        vtkReverseSense *reverse = vtkReverseSense::New();
+        reverse->SetInputConnection(decimator->GetOutputPort());
+        reverse->ReverseCellsOn();
+        reverse->ReverseNormalsOn();
+    
+        vtkPolyDataMapper *m_polyDataMapper = vtkPolyDataMapper::New();
+        
+        m_polyDataMapper->SetInputConnection( reverse->GetOutputPort() );
+        m_polyDataMapper->ScalarVisibilityOn();
+        m_polyDataMapper->ImmediateModeRenderingOn();
+    
+        vtkActor *m_3DActor = vtkActor::New();
+        m_3DActor->SetMapper( m_polyDataMapper );
+        m_3DActor->GetProperty()->SetColor(1,1,1);
+        
+        m_renderer->AddActor( m_3DActor );
+        m_renderer->Render();
+        
+        decimator->Delete();
+        m_3DActor->Delete();
+        m_polyDataMapper->Delete();
+        contour->Delete();
+        m_smooth->Delete();
+        m_shrink->Delete();
+        reverse->Delete();
+    }
+    else
+        DEBUG_LOG( "No s'ha proporcionat cap volum d'entrada" );
+}
+
+void Q3DViewer::renderMarchingCubes()
+{
+    if ( m_mainVolume != 0 )
+    {
+        cout << " fem marching "<<endl;
+        vtkImageShrink3D *m_shrink = vtkImageShrink3D::New();
+        
+        m_shrink->SetInput( m_mainVolume->getVtkData() );
+        
+        vtkImageGaussianSmooth *m_smooth = vtkImageGaussianSmooth::New();
+        m_smooth->SetDimensionality( 3 );
+        m_smooth->SetRadiusFactor( 1 );
+        m_smooth->SetInput( m_shrink->GetOutput() );
+        
+        vtkImageMarchingCubes *m_marching = vtkImageMarchingCubes::New();
+        m_marching->SetInput( m_smooth->GetOutput() );
+        
+        vtkSmoothPolyDataFilter *m_smoothPolyData = vtkSmoothPolyDataFilter::New();
+        m_smoothPolyData->SetInput( m_marching->GetOutput() );
+        m_smoothPolyData->SetNumberOfIterations( m_iterations );
+        m_smoothPolyData->SetRelaxationFactor( m_relaxation );
+        m_smoothPolyData->SetFeatureAngle( m_angle );
+        m_smoothPolyData->FeatureEdgeSmoothingOff();
+        m_smoothPolyData->SetConvergence( m_convergence );
+        (m_smoothPolyData->GetOutput() )->ReleaseDataFlagOn();
+        
+        vtkPolyDataNormals *m_normals = vtkPolyDataNormals::New();
+        m_normals->SetInput( m_smoothPolyData->GetOutput() );
+        m_normals->FlipNormalsOn();
+        m_normals->SetFeatureAngle( m_angle );
+        (m_normals->GetOutput() )->ReleaseDataFlagOn();
+        
+        vtkStripper *m_stripper = vtkStripper::New();
+        m_stripper->SetInput( m_normals->GetOutput() );
+        ( m_stripper->GetOutput() )->ReleaseDataFlagOn();
+        
+        m_stripper->Update();
+        
+        vtkPolyDataMapper *m_polyDataMapper = vtkPolyDataMapper::New();
+        
+        m_polyDataMapper->SetInput( m_stripper->GetOutput() );
+        m_polyDataMapper->ScalarVisibilityOn();
+        m_polyDataMapper->ImmediateModeRenderingOn();
+    
+        vtkActor *m_3DActor = vtkActor::New();
+        m_3DActor->SetMapper( m_polyDataMapper );
+        m_3DActor->GetProperty()->SetColor(1,1,1);
+        
+        m_renderer->AddActor( m_3DActor );
+        m_renderer->Render();
+        
+        m_3DActor->Delete();
+        m_polyDataMapper->Delete();
+        m_stripper->Delete();
+        m_normals->Delete();
+        m_smoothPolyData->Delete();
+        m_marching->Delete();
+        m_smooth->Delete();
+        m_shrink->Delete();
+    }
+    else
+        DEBUG_LOG( "No s'ha proporcionat cap volum d'entrada" );
+}
+
 void Q3DViewer::resetViewToAxial()
 {
     this->setCameraOrientation( Axial );
@@ -529,6 +674,14 @@ void Q3DViewer::setCameraOrientation(int orientation)
         }
         this->getRenderer()->ResetCamera();
     }
+}
+
+void Q3DViewer::setMarchingCubesParameters( int iterations, double relaxation, double angle, double convergence )
+{
+    m_iterations = iterations;
+    m_relaxation = relaxation;
+    m_angle = angle;
+    m_convergence = convergence;
 }
 
 };  // end namespace udg {

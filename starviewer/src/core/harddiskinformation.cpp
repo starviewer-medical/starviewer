@@ -23,22 +23,22 @@ HardDiskInformation::~HardDiskInformation()
 {
 }
 
-quint64 HardDiskInformation::getTotalNumberOfBytes(QString path)
+unsigned long HardDiskInformation::getTotalNumberOfBytes(QString path)
 {
     return static_cast<unsigned long>( getTotalBytesPlataformEspecific(path) );
 }
 
-quint64 HardDiskInformation::getNumberOfFreeBytes(QString path)
+unsigned long HardDiskInformation::getNumberOfFreeBytes(QString path)
 {
     return static_cast<unsigned long>( getFreeBytesPlataformEspecific(path) );
 }
 
-quint64 HardDiskInformation::getTotalNumberOfMBytes(QString path)
+unsigned long HardDiskInformation::getTotalNumberOfMBytes(QString path)
 {
     return static_cast<unsigned long>( getTotalBytesPlataformEspecific(path) / 1048576 );
 }
 
-quint64 HardDiskInformation::getNumberOfFreeMBytes(QString path)
+unsigned long HardDiskInformation::getNumberOfFreeMBytes(QString path)
 {
     return static_cast<unsigned long>( getFreeBytesPlataformEspecific(path) / 1048576 );
 }

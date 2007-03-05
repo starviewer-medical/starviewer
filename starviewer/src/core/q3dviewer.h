@@ -31,7 +31,7 @@ class Q3DViewerToolManager;
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting , MIP3D, IsoSurface , Texture2D , Texture3D };
+    enum RenderFunction{ RayCasting , MIP3D, IsoSurface , Texture2D , Texture3D, Contouring, MarchingCubes };
 
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
@@ -57,6 +57,8 @@ public slots:
     void setRenderFunctionToIsoSurface(){ m_renderFunction = IsoSurface; };
     void setRenderFunctionToTexture2D(){ m_renderFunction = Texture2D; };
     void setRenderFunctionToTexture3D(){ m_renderFunction = Texture3D; };
+    void setRenderFunctionToContouring(){ m_renderFunction = Contouring; };
+    void setRenderFunctionToMarchingcubes(){ m_renderFunction = MarchingCubes; };
 
     /// Reinicia la vista
     void resetViewToAxial();
@@ -76,6 +78,9 @@ public slots:
 
     virtual void render();
     void reset();
+    
+    ///mètode per assignar dels paràmetres necessaris per executar marching cubes
+    void setMarchingCubesParameters( int iterations, double relaxation, double angle, double convergence );
 
 protected:
     /// el renderer
@@ -98,7 +103,13 @@ private:
 
     /// fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
     void renderTexture3D();
-
+    
+    /// fa la visualització per contorn de superfíces
+    void renderContouring();
+    
+    /// fa la visualització mitjançant marching cubes
+    void renderMarchingCubes();
+    
     /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
     bool rescale();
 
@@ -120,6 +131,19 @@ private:
 
     /// El manager de les tools
     Q3DViewerToolManager *m_toolManager;
+    
+    ///atributs de la renderització marching cubes
+    ///nombre d'iteracions que aplica el mètode
+    int m_iterations; 
+    
+    ///relaxació
+    double m_relaxation;
+    
+    ///angle de les normals
+    double m_angle; 
+    
+    ///convergència
+    double m_convergence;
 };
 
 };  //  end  namespace udg

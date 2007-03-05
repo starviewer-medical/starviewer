@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -8,66 +8,159 @@
 #define UDGDISTANCETOOL_H
 
 #include "tool.h"
-#include "distance.h"
-#include <list>
+#include <QMultiMap>
 
-// Forward declarations
-class vtkActorCollection;
-class vtkActor;
-class vtkPolyDataMapper;
-class vtkRenderer;
+class vtkRenderWindowInteractor;
+class vtkPropPicker;
 class vtkLineSource;
+class vtkActor;
+class vtkActor2D;
+class vtkPolyDataMapper;
+class vtkPolyDataMapper2D;
+class vtkDiskSource;
+class vtkCaptionActor2D;
 
 namespace udg {
-
-// Forward declarations
-class QViewer;
-
+    
+    class Q2DViewer;
+    class Distance;
 /**
-Tool per a mesurar distàncies
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+ */
 
-@author Grup de Gràfics de Girona  ( GGG )
-*/
-class DistanceTool : public Tool{
-Q_OBJECT
-public:
-    DistanceTool( QViewer *viewer, QObject *parent = 0, const char *name = 0);
-    ~DistanceTool();
+    class DistanceTool : public Tool
+    {
+        Q_OBJECT
+        public:
+            
+            /// estats de la tool
+            enum { NONE , ANNOTATING, MOVINGPOINT };
+    
+            DistanceTool( Q2DViewer *viewer , QObject *parent = 0 , const char *name = 0 );
 
-    enum State{ Begin, FirstPointCandidate , FirstPointChosen , SecondPointCandidate };
+            ~DistanceTool();
     
-    virtual void dispatchEvent( EventIdType event );
-    
-    /// retorna la capa on es pinten tots els elements visibles de la tool
-    vtkRenderer *getRendererLayer(){ return m_distanceRenderer; };
-    
-    void setRendererLayer( vtkRenderer *renderer ){ m_distanceRenderer = renderer; }
-private:
-    /// Estat de la Tool
-    State m_state;
-    /// Mesura que s'està realitzant en aquell moment
-    Distance m_distance; 
-    /// Llista de distàncies recolectades
-    std::list< Distance > m_distanceList;
-    /// Visor amb que estem treballant
-    QViewer *m_viewer;
-    /// Dibuixa sobre l'escena els marcadors que indiquen la distància [1r punt, 2n punt, recta entre aquests, label amb la distància ]
-    // \TODO es podria fer una classe ToolLayer :: DistanceToolLayer que agrupi tot el referent a 'pintar'
-    void drawDistance();
-    /// Conté tots els actors a pintar en pantalla que representin les distàncies
-    vtkActorCollection *m_distanceActorsCollection;
-    /// Actors diversos que representen la distància que estem mesurant
-    vtkActor *m_firstPointActor, *m_secondPointActor, *m_distanceLineActor;
-    vtkLineSource *m_lineSource;
-    /// Els mappers corresponents
-    vtkPolyDataMapper *m_pointMapper, *m_lineMapper;
-    
-    
-    /// El renderer per aquests elements
-    vtkRenderer *m_distanceRenderer;
-    
-};
+            /// tracta els events que succeeixen dins de l'escena
+            void handleEvent( unsigned long eventID );
+            
+            ///ens retorna la distància que conté un determinat actor2D (si és que la conté)
+            Distance* getDistanceFromActor2D( vtkActor2D* );
 
-};  //  end  namespace udg 
+        private:
+            
+            void createAction(){};
+            
+            void giveMeTheNearestPoint();
+            
+            void moveSelectedPoint();
+            
+            void updateSelectedPoint();
+            
+    /**
+    map de distàncies:
+        Utilitzarem un QMultiMap per guardar les distàncies. La diferència entre QMap i QMultiMap és que aquest últim permet
+        guardar més d'un objecte amb la mateixa clau, és a dir, tenir més d'una entrada per a una mateixa clau. Utilitzarem 
+        la llesca on s'ha anotat la distància com a clau del QMultiMap i la distància anotada serà la dada. Així, quan volguem 
+        totes les distàncies de la llesca "x", crearem una llista amb totes les files que tenen per clau a "x".
+        
+        Representació:
+    
+        [nº de llesca][Distància]
+        [     1      ][   d1    ]
+        [     1      ][   d2    ]
+        [     2      ][   d3    ]
+        [     2      ][   d4    ]
+        ...
+    */
+            QMultiMap<int, vtkActor2D*> m_distancesMap;                    
+    
+    ///interactor de l'escena
+            vtkRenderWindowInteractor   *m_interactor;
+    
+    ///picker de l'escena
+            vtkPropPicker               *m_picker;
+    
+    ///visor sobre el que es programa la tool
+            Q2DViewer                   *m_2DViewer;
+    
+    ///objecte per a dibuixar la línia que ens determinarà la distància que estem anotant
+            vtkLineSource               *m_distanceLine;
+            
+     ///objecte per a dibuixar la línia seleccionada amb el botó dret
+            vtkLineSource               *m_selectedDistance;
+    
+    ///punts per representar els extrems de les distàncies
+            vtkActor2D                   *m_diskActor1;
+            vtkActor2D                   *m_diskActor2;
+            vtkActor2D                   *m_selectedDiskActor;
+            
+    ///actor que representa la distància que ha rebut l'últim focus (és a dir, per l'últim que hem passat per sobre)
+            vtkActor2D                  *m_focusedActor;
+            
+    ///actor que representa l'última distància seleccionada (amb el botó dret)
+            vtkActor2D                  *m_selectedActor;
+    
+    ///discs que representen els extrems de les distàncies
+            vtkDiskSource               *m_disk1;
+            vtkDiskSource               *m_disk2;
+            
+    ///mapejadors dels punts que representen els extrems de les distàncies
+            vtkPolyDataMapper2D          *m_diskMapper1;
+            vtkPolyDataMapper2D          *m_diskMapper2;
+    
+    ///actor per a representar la línia de la distància
+            vtkActor2D                   *m_lineActor;
+    
+    ///mapejador de la línia de distància
+            vtkPolyDataMapper2D          *m_lineMapper;
+    
+    ///actor per a mostrar la distància anotada
+            vtkCaptionActor2D            *m_textDistanceActor;
+
+    /// valors per controlar l'anotació de les distàncies 
+            double                        m_distanceStartPosition[3], m_distanceCurrentPosition[3];
+    
+    /// controlador dels punts de la distància
+            bool                         m_firstPointLocated;
+            
+    /// enter per saber quin dels dos punts d'una distància hem seleccionat
+            int                         m_pointOfDistance;
+    
+    ///indica si estem a sobre d'alguna distància de les anotades
+            bool                        m_somePropFocused;
+    
+    ///indica si hem seleccionat alguna de les distànces anotades
+            bool                        m_somePropSelected;
+    
+    ///dibuixa els extrems d'una determinada distància, passats per paràmetre. 
+            void drawEndsOfSelectedDistance( double *point1, double *point2 );
+    
+    ///oculta els extrems de la distància que ha sigut seleccionada.
+            void hideEndsOfSelectedDistance();
+    
+        private slots: 
+    /// Comença l'anotació de la distància
+            void startDistanceAnnotation();
+
+    /// simula la nova distància
+            void doDistanceSimulation();
+
+    /// Calcula la nova distància i després atura l'estat d'anotació de distància
+            void endDistanceAnnotation();
+    
+    /// Selecciona la distància sobre la que estem, com a efecte de la polsació del botó dret
+            void selectDistance();
+    
+    /** 
+        És el mètode que s'executa quan no s'està anotant cap distància i ens movem per sobre la imatge.
+        Està pendent de mirar si passa per sobre d'alguna distància i si és així, la resalta per saber
+        quina distància tenim seleccionada si escollíssim borrar amb el botó dret.
+    */
+            void waitingForAction();
+            
+            ///dibuixa totes les distàncies de la llesca que demanem per paràmetre
+            void drawDistancesOfSlice( int );
+    };
+}
 
 #endif
