@@ -25,22 +25,22 @@ HardDiskInformation::~HardDiskInformation()
 
 quint64 HardDiskInformation::getTotalNumberOfBytes(QString path)
 {
-    return static_cast<unsigned long>( getTotalBytesPlataformEspecific(path) );
+    return getTotalBytesPlataformEspecific(path);
 }
 
 quint64 HardDiskInformation::getNumberOfFreeBytes(QString path)
 {
-    return static_cast<unsigned long>( getFreeBytesPlataformEspecific(path) );
+    return getFreeBytesPlataformEspecific(path);
 }
 
 quint64 HardDiskInformation::getTotalNumberOfMBytes(QString path)
 {
-    return static_cast<unsigned long>( getTotalBytesPlataformEspecific(path) / 1048576 );
+    return getTotalBytesPlataformEspecific(path) / 1048576;
 }
 
 quint64 HardDiskInformation::getNumberOfFreeMBytes(QString path)
 {
-    return static_cast<unsigned long>( getFreeBytesPlataformEspecific(path) / 1048576 );
+    return getFreeBytesPlataformEspecific(path) / 1048576;
 }
 
 quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
@@ -52,7 +52,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
 #error Mètode no comprovat en win32. Cal descomentar i comprovar-ho.
     /*
     ULARGE_INTEGER totalBytes;
-    
+
     if ( GetDiskFreeSpaceExA(path.toAscii(), null, &totalBytes, null) )
     {
         total = static_cast<quint64>(totalBytes.QuadPart);
@@ -87,7 +87,7 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
 #error Mètode no comprovat en win32. Cal descomentar i comprovar-ho.
     /*
     ULARGE_INTEGER freeBytes;
-    
+
     if ( GetDiskFreeSpaceExA(path.toAscii(), &freeBytes, null, null) )
     {
         total = static_cast<quint64>(freeBytes.QuadPart);
