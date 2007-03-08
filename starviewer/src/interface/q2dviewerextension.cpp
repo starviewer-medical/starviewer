@@ -310,11 +310,6 @@ void Q2DViewerExtension::changeViewToDouble()
     m_splitter->widget( 1 )->show();
 }
 
-void Q2DViewerExtension::pageChange( int index )
-{
-    setView( m_currentView );
-}
-
 void Q2DViewerExtension::synchronizeSlices( bool ok )
 {
     if( ok )

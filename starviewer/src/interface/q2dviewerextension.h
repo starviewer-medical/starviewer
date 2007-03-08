@@ -95,9 +95,6 @@ private:
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
 private slots:
-    /// Actua quan es canvia de pàgina, és a dir es passa d'un determinat layout a un de simple, doble , triple , etc
-    void pageChange( int index );
-
     /// sincronitza les llesques de les sèries que es visualitzen
     void synchronizeSlices( bool ok );
 
