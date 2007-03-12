@@ -195,6 +195,10 @@ public:
     enum PhotometricInterpretationType{ Monochrome1 , Monochrome2 , PaletteColor, RGB, YBRFull, YBRFull422, YBRPartial422, YBRPartial420, YBRICT, YBRRCT,  Unknown };
     /// Retorna la intepretació fotomètrica d'una imatge d'escala de grisos. Pot ser Monochrome1 (vídeo invers ) o MonocMonochrome2 (normal, el més usual) pel que a nosaltres ens interessa de moment
     unsigned getPhotometricInterpretation();
+    const char *getPhotometricInterpretationAsString();
+
+    /// Ens diu si la imatge és de tipus MONOCHROME1, fals altrament. NOTA: que no sigui MONOCHROME1 no implica que sigui MONOCHROME2!!
+    bool isMonochrome1();
 
     /// Obtenim els bits que s'han fet servir per allotjar cada pixel i quants per codificar el rang.
     unsigned getBitsStored();

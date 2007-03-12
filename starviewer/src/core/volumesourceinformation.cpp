@@ -190,45 +190,48 @@ DcmDataset *VolumeSourceInformation::getDicomDataset()
 
 unsigned VolumeSourceInformation::getPhotometricInterpretation()
 {
-    if( m_dicomData )
-    {
-        const char *photoString;
-        if( m_dicomData->findAndGetString( DCM_PhotometricInterpretation , photoString ).good() )
-        {
-            QString qPhotoString( photoString );
-            if( qPhotoString == "MONOCHROME1" )
-                return Monochrome1;
-            else if( qPhotoString == "MONOCHROME2" )
-                return Monochrome2;
-            else if( qPhotoString == "PALETTE COLOR" )
-                return PaletteColor;
-            else if( qPhotoString == "RGB" )
-                return RGB;
-            else if( qPhotoString == "YBR_FULL" )
-                return YBRFull;
-            else if( qPhotoString == "YBR_FULL_422" )
-                return YBRFull422;
-            else if( qPhotoString == "YBR_PARTIAL_422" )
-                return YBRPartial422;
-            else if( qPhotoString == "YBR_PARTIAL_420" )
-                return YBRPartial420;
-            else if( qPhotoString == "YBR_ICT" )
-                return YBRICT;
-            else if( qPhotoString == "YBR_RCT" )
-                return YBRRCT;
-            else
-                return Unknown;
-        }
-        else
-        {
-            return Unknown;
-        }
-    }
+    const char *photoString = this->getPhotometricInterpretationAsString();
+
+    QString qPhotoString( photoString );
+    if( qPhotoString == "MONOCHROME1" )
+        return Monochrome1;
+    else if( qPhotoString == "MONOCHROME2" )
+        return Monochrome2;
+    else if( qPhotoString == "PALETTE COLOR" )
+        return PaletteColor;
+    else if( qPhotoString == "RGB" )
+        return RGB;
+    else if( qPhotoString == "YBR_FULL" )
+        return YBRFull;
+    else if( qPhotoString == "YBR_FULL_422" )
+        return YBRFull422;
+    else if( qPhotoString == "YBR_PARTIAL_422" )
+        return YBRPartial422;
+    else if( qPhotoString == "YBR_PARTIAL_420" )
+        return YBRPartial420;
+    else if( qPhotoString == "YBR_ICT" )
+        return YBRICT;
+    else if( qPhotoString == "YBR_RCT" )
+        return YBRRCT;
     else
-    {
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
         return Unknown;
-    }
+}
+
+const char *VolumeSourceInformation::getPhotometricInterpretationAsString()
+{
+    // \TODO es podria afegir una mica és de control a nivell de debug per si no es llegeix aquesta dada, perquè per exemple no existeix
+    const char *photoString = NULL;
+    if( m_dicomData )
+        m_dicomData->findAndGetString( DCM_PhotometricInterpretation , photoString );
+    else
+        DEBUG_LOG( "No hi ha m_dicomData creat" );
+
+    return photoString;
+}
+
+bool VolumeSourceInformation::isMonochrome1()
+{
+    return this->getPhotometricInterpretation() == Monochrome1;
 }
 
 unsigned VolumeSourceInformation::getBitsStored()
