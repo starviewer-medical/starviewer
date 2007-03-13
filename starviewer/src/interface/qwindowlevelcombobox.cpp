@@ -22,126 +22,67 @@ QWindowLevelComboBox::~QWindowLevelComboBox()
 {
 }
 
+void QWindowLevelComboBox::insertWindowLevelPreset( double window, double level, int position, QString description )
+{
+    std::vector< double *>::iterator iterator;
+    iterator = m_windowLevelArray.begin();
+    int i = 0;
+    while( iterator != m_windowLevelArray.end() && i < position )
+    {
+        i++;
+        iterator++;
+    }
+    this->insertItem( i, description );
+    double *wl = new double[2];
+    wl[0] = window;
+    wl[1] = level;
+    m_windowLevelArray.insert( iterator, wl );
+}
+
 void QWindowLevelComboBox::createConnections()
 {
-    connect( this , SIGNAL( activated(int) ) , this , SLOT( processSelected(int) ) );
+    connect( this , SIGNAL( activated(int) ) , this , SLOT( setActiveWindowLevel(int) ) );
     connect( this , SIGNAL( windowLevel( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
     connect( m_customWindowLevelDialog , SIGNAL( windowLevel(double,double) ) , this , SLOT( updateWindowLevel(double,double) ) );
 }
 
 void QWindowLevelComboBox::populate()
 {
-    this->addItem( tr("Default") );
-    this->addItem( tr("CT Bone") );
-    this->addItem( tr("CT Lung") );
-    this->addItem( tr("CT Soft Tissues, Non Contrast") );
-    this->addItem( tr("CT Liver, Non Contrast") );
-    this->addItem( tr("CT Soft Tissues, Contrast Medium") );
-    this->addItem( tr("CT Liver, Contrast Medium") );
-    this->addItem( tr("CT Neck, Contrast Medium") );
-    this->addItem( tr("Angiography") );
-    this->addItem( tr("Osteoporosis") );
-    this->addItem( tr("Emphysema") );
-    this->addItem( tr("Petrous Bone") );
-    this->addItem( tr("Custom...") );
+    this->insertWindowLevelPreset( 2000 , 500, 0, tr("CT Bone") );
+    this->insertWindowLevelPreset( 1500 , -650, 1, tr("CT Lung") );
+    this->insertWindowLevelPreset( 400 , 40, 2, tr("CT Soft Tissues, Non Contrast") );
+    this->insertWindowLevelPreset( 200 , 40, 3, tr("CT Liver, Non Contrast") );
+    this->insertWindowLevelPreset( 400 , 70, 4, tr("CT Soft Tissues, Contrast Medium") );
+    this->insertWindowLevelPreset( 300 , 60, 5, tr("CT Liver, Contrast Medium") ); // 60-100
+    this->insertWindowLevelPreset( 300 , 50, 6, tr("CT Neck, Contrast Medium") );
+    this->insertWindowLevelPreset( 500 , 100, 7, tr("Angiography") ); // 100-200
+    this->insertWindowLevelPreset( 1000 , 300, 8, tr("Osteoporosis") );// 100-1500:window!
+    this->insertWindowLevelPreset( 800 , -800, 9, tr("Emphysema") );
+    this->insertWindowLevelPreset( 4000 , 700, 10, tr("Petrous Bone") );
+    this->insertWindowLevelPreset( 0 , 0, 11, tr("Custom") );
 }
 
-void QWindowLevelComboBox::processSelected( int value )
+void QWindowLevelComboBox::setActiveWindowLevel( int value )
 {
-    switch( value )
+    int customIndex = this->findText( tr("Custom") );
+    if( customIndex != value  )
     {
-    case 0:
-        emit defaultValue();
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Defecte");
-        return;
-    break;
-
-    case 1:
-        m_window = 2000;
-        m_level = 500;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Bone");
-    break;
-
-    case 2:
-        m_window = 1500;
-        m_level = -650;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Lung");
-    break;
-
-    case 3:
-        m_window = 400;
-        m_level = 40;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> SoftTissuesNC");
-    break;
-
-    case 4:
-        m_window = 200;
-        m_level = 40;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> LiverNC");
-    break;
-
-    case 5:
-        m_window = 400;
-        m_level = 70;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> SoftTissuesCM");
-    break;
-
-    case 6:
-        m_window = 300;
-        m_level = 60; // 60-100
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> LiverCM");
-    break;
-
-    case 7:
-        m_window = 300;
-        m_level = 50;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> NeckCM");
-    break;
-
-    case 8:
-        m_window = 500;
-        m_level = 100; // 100-200
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Angiography");
-    break;
-
-    case 9:
-        m_window = 1000; // 100-1500
-        m_level = 300;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Osteoporosis");
-    break;
-
-    case 10:
-        m_window = 800;
-        m_level = -800;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Emfisema");
-    break;
-    
-    case 11:
-        m_window = 4000;
-        m_level = 700;
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Petrous Bone");
-    break;
-
-    case 12:
-        // custom
-        m_customWindowLevelDialog->exec();
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Custom");
-    break;
-
-    default:
-        emit defaultValue();
-        INFO_LOG("QWindowLevelComboBox: Canviem Window Level >> Defecte");
-        return;
-    break;
+        this->updateWindowLevel( m_windowLevelArray[ value ][0], m_windowLevelArray[ value ][1] );
     }
-    emit windowLevel( m_window , m_level );
+    else
+    {
+        m_customWindowLevelDialog->exec();
+    }
 }
 
 void QWindowLevelComboBox::updateWindowLevel( double window , double level )
 {
-    m_window = window;
-    m_level = level;
-    emit windowLevel( m_window , m_level );
+    double *wl = new double[2];
+    wl[0] = window;
+    wl[1] = level;
+    int customIndex = this->findText( tr("Custom") );
+    m_windowLevelArray[ customIndex ] = wl;
+    emit windowLevel( wl[0] , wl[1] );
 }
 
 };

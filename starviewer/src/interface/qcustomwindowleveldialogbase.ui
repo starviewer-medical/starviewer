@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::QCustomWindowLevelDialogBase</class>
  <widget class="QDialog" name="udg::QCustomWindowLevelDialogBase" >
   <property name="geometry" >
@@ -51,10 +48,10 @@
        <item>
         <widget class="QDoubleSpinBox" name="m_windowSpinBox" >
          <property name="maximum" >
-          <double>5000</double>
+          <double>131070.000000000000000</double>
          </property>
          <property name="minimum" >
-          <double>-5000</double>
+          <double>-131070.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -68,10 +65,10 @@
        <item>
         <widget class="QDoubleSpinBox" name="m_levelSpinBox" >
          <property name="maximum" >
-          <double>5000</double>
+          <double>131070.000000000000000</double>
          </property>
          <property name="minimum" >
-          <double>-5000</double>
+          <double>-131070.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -147,7 +144,6 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <resources/>
  <connections>
   <connection>

@@ -27,6 +27,9 @@ public:
 
     ~QWindowLevelComboBox();
 
+    /// afegeix un window level
+    void insertWindowLevelPreset( double window, double level, int position, QString description );
+
 signals:
     /// Emet els valors de window level escollits
     void windowLevel( double window , double level );
@@ -37,7 +40,7 @@ signals:
 public slots:
     /// Actualitza el window level i emet senyal
     void updateWindowLevel( double window , double level );
-    
+
 private:
     /// Diàleg per escollir un window level personalitzat
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
@@ -48,13 +51,13 @@ private:
     /// Crea les connexions
     void createConnections();
 
-    /// valors del window level
-    double m_window , m_level;
-    
+    /// Llista de valors de window Level
+    std::vector<double *> m_windowLevelArray;
+
 private slots:
-    /// Li passarem l'índex de l'ítem del combo que s'hagi seleccionat per a fer el que calgui amb la selecció
-    void processSelected( int value );
-    
+    /// Seleccionem el window level que volem aplicar com a actiu
+    void setActiveWindowLevel( int value );
+
 };
 
 }
