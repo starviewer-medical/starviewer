@@ -56,6 +56,7 @@ bool AppImportFile::open()
             // la utilitat
             m_workingDirectory = QFileInfo( fileName ).dir().path();
             writeSettings();
+            m_lastOpenedFilename = fileName;
             INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName ) );
         }
         else
@@ -124,6 +125,11 @@ bool AppImportFile::loadDirectory( QString directoryName )
     }
 
     return ok;
+}
+
+const char *AppImportFile::getLastOpenedFilename()
+{
+    return m_lastOpenedFilename.toAscii().constData();
 }
 
 void AppImportFile::readSettings()

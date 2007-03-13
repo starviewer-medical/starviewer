@@ -73,7 +73,10 @@ void ExtensionHandler::request( int who )
         {
         // open!
             if( m_importFileApp->open() )
+            {
                 m_mainApp->onVolumeLoaded( m_importFileApp->getVolumeIdentifier() );
+                m_mainApp->setWindowTitle( m_importFileApp->getLastOpenedFilename() );
+            }
         }
         else
         {

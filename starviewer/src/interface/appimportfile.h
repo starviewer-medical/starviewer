@@ -47,6 +47,9 @@ public:
     /// fa la feina 'bruta' d'obrir un directori d'arxius dicom
     bool loadDirectory( QString directoryName );
 
+    /// Ens retorna el nom de l'últim arxiu que s'ha obert amb èxit
+    const char *getLastOpenedFilename();
+
 private:
     /// Directori de treball per fitxers ordinaris
     QString m_workingDirectory;
@@ -56,6 +59,9 @@ private:
 
     /// Filtres de fitxer
     QString m_openFileFilters;
+
+    /// Nom de l'últim arxiu que s'ha obert amb èxit
+    QString m_lastOpenedFilename;
 
     /// llegeix escriu configuracions
     void readSettings();
