@@ -179,7 +179,7 @@ void Q2DViewer::createOrientationAnnotations()
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
         m_patientOrientationTextActor[i]->ScaledTextOff();
-        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize( 12 );
+        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize( 18 );
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
 
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
@@ -348,7 +348,7 @@ void Q2DViewer::updateCameraRotation()
         mapOrientationStringToAnnotation();
         updateWindowInformationAnnotation();
         updateRulers();
-        this->getInteractor()->Render();
+        this->refresh();
     }
     else
     {
@@ -721,7 +721,7 @@ void Q2DViewer::updateVoxelInformation()
         m_voxelInformationCaption->SetAttachmentPoint( q );
         m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(m_currentCursorPosition[0],0,'f',2).arg(m_currentCursorPosition[1],0,'f',2).arg(m_currentCursorPosition[2],0,'f',2).arg(m_currentImageValue) ) );
     }
-    this->getInteractor()->Render();
+    this->refresh();
 }
 
 void Q2DViewer::setTool( QString toolName )
@@ -775,7 +775,7 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
 
     case vtkCommand::LeaveEvent:
         m_voxelInformationCaption->VisibilityOff();
-        this->getInteractor()->Render();
+        this->refresh();
     break;
 
     default:
@@ -988,7 +988,7 @@ void Q2DViewer::updateView()
         mapOrientationStringToAnnotation();
         updateWindowInformationAnnotation();
         updateRulers();
-        this->getInteractor()->Render();
+        this->refresh();
     }
     else
     {
@@ -1004,7 +1004,7 @@ void Q2DViewer::setSlice( int value )
         m_viewer->SetSlice( m_currentSlice );
         emit sliceChanged( m_currentSlice );
         updateSliceAnnotation();
-        this->getInteractor()->Render();
+        this->refresh();
     }
 }
 
@@ -1089,7 +1089,7 @@ void Q2DViewer::resetWindowLevelToDefault()
     {
         m_viewer->SetColorWindow( m_defaultWindow );
         m_viewer->SetColorLevel( m_defaultLevel );
-        this->getInteractor()->Render();
+        this->refresh();
         updateWindowLevelAnnotation();
     }
     else
