@@ -162,6 +162,11 @@ bool QViewer::saveGrabbedViews( const char *baseName , FileType extension )
         return false;
 }
 
+void QViewer::refresh()
+{
+    this->getInteractor()->Render();
+}
+
 void QViewer::grabCurrentView()
 {
     m_windowToImageFilter->Update();

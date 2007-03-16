@@ -83,6 +83,9 @@ public:
     /// Retorna el nombre de vistes capturades que estan desades
     int grabbedViewsCount(){ return m_grabList.size(); }
 
+    /// Refresca l'escena amb el RenderWindowInteractor. És sobretot per haver d'escriure menys.
+    void refresh();
+
 public slots:
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
