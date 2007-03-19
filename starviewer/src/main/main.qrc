@@ -38,6 +38,7 @@
 	<file>images/rotate3d.png</file>
 	<file>images/fullscreen.png</file>
 	<file>images/retractFullscreen.png</file>
+        <file>images/distance.png</file>
         <file>translations/interface_ca_ES.qm</file>
         <file>translations/interface_en_GB.qm</file>
         <file>translations/interface_es_ES.qm</file>
