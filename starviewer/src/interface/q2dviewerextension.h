@@ -76,6 +76,7 @@ private:
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
     QAction *m_screenShotAction;
+    QAction *m_distanceAction;
     ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu

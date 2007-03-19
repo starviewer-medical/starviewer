@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::Q2DViewerExtensionBase</class>
  <widget class="QWidget" name="udg::Q2DViewerExtensionBase" >
   <property name="geometry" >
@@ -89,6 +86,28 @@
          </property>
          <property name="icon" >
           <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_distanceToolButton" >
+         <property name="text" >
+          <string>zoom</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../main/main.qrc" >:/images/distance.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
@@ -387,7 +406,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="udg::Q2DViewer" name="m_2DView2_1" />
+        <widget class="udg::Q2DViewer" native="1" name="m_2DView2_1" />
        </item>
        <item>
         <layout class="QHBoxLayout" >
@@ -440,7 +459,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="udg::Q2DViewer" name="m_2DView2_2" />
+        <widget class="udg::Q2DViewer" native="1" name="m_2DView2_2" />
        </item>
        <item>
         <layout class="QHBoxLayout" >
@@ -489,21 +508,16 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <resources>

@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>QMPRExtensionBase</class>
  <widget class="QWidget" name="QMPRExtensionBase" >
   <property name="geometry" >
@@ -129,6 +126,28 @@
            </property>
            <property name="icon" >
             <iconset resource="../main/main.qrc" >:/images/rotate3d.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_distanceToolButton" >
+           <property name="text" >
+            <string>zoom</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/distance.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -341,7 +360,7 @@
          </layout>
         </item>
         <item>
-         <widget class="udg::Q2DViewer" name="m_axial2DView" >
+         <widget class="udg::Q2DViewer" native="1" name="m_axial2DView" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>7</hsizetype>
@@ -363,7 +382,7 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="udg::Q2DViewer" name="m_sagital2DView" >
+         <widget class="udg::Q2DViewer" native="1" name="m_sagital2DView" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>7</hsizetype>
@@ -377,7 +396,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="udg::Q2DViewer" name="m_coronal2DView" >
+     <widget class="udg::Q2DViewer" native="1" name="m_coronal2DView" >
       <property name="sizePolicy" >
        <sizepolicy>
         <hsizetype>7</hsizetype>
@@ -392,21 +411,16 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>udg::Q2DViewer</class>
-   <extends>QWidget</extends>
-   <header>q2dviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
   <customwidget>
    <class>udg::QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
   </customwidget>
  </customwidgets>
  <resources>

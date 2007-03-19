@@ -176,6 +176,9 @@ void QMPRExtension::createActions()
     m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
     m_screenShotToolButton->setDefaultAction( m_screenShotAction );
 
+    m_distanceAction= m_actionFactory->getActionFrom( "DistanceTool" );
+    m_distanceToolButton->setDefaultAction( m_distanceAction );
+    
     m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
     m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
     m_rotate3DToolButton->setVisible( false );
@@ -193,6 +196,7 @@ void QMPRExtension::createActions()
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_rotate3DAction );
+    m_toolsActionGroup->addAction( m_distanceAction );
     // activem la tool d'slicing per defecte
     m_slicingAction->trigger();
 }

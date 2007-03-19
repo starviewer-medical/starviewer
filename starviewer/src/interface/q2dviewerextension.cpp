@@ -24,7 +24,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     setupUi( this );
     m_mainVolume = 0;
     m_secondaryVolume = 0;
-
+    
     readSettings();
     createActions();
     createConnections();
@@ -114,6 +114,7 @@ void Q2DViewerExtension::createActions()
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( rotateCounterClockWise() ) );
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( rotateCounterClockWise() ) );
 
+
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
     m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
@@ -130,6 +131,9 @@ void Q2DViewerExtension::createActions()
 
     m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
     m_screenShotToolButton->setDefaultAction( m_screenShotAction );
+    
+    m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
+    m_distanceToolButton->setDefaultAction( m_distanceAction );
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
@@ -141,6 +145,7 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_zoomAction );
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_screenShotAction );
+    m_toolsActionGroup->addAction( m_distanceAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
 }
