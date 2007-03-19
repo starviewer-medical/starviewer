@@ -62,6 +62,14 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_rotate3dAction->setCheckable( true );
     m_signalMapper->setMapping( m_rotate3dAction , "3DRotationTool" );
     connect( m_rotate3dAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    
+    m_distanceAction = new QAction( 0 );
+    m_distanceAction->setText( tr("Distances") );
+    m_distanceAction->setStatusTip( tr("Enable/Disable Distances tool") );
+    m_distanceAction->setIcon( QIcon(":/images/distance.png") );
+    m_distanceAction->setCheckable( true );
+    m_signalMapper->setMapping( m_distanceAction , "DistanceTool" );
+    connect( m_distanceAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
 
@@ -72,6 +80,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["TranslateTool"] = m_moveAction;
     m_availableToolActions["ScreenShotTool"] = m_screenShotAction;
     m_availableToolActions["3DRotationTool"] = m_rotate3dAction;
+    m_availableToolActions["DistanceTool"] = m_distanceAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()

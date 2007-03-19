@@ -42,6 +42,7 @@ private:
     QAction *m_windowLevelAction;
     QAction *m_screenShotAction;
     QAction *m_rotate3dAction;
+    QAction *m_distanceAction;
 
     QSignalMapper *m_signalMapper;
     typedef std::map<QString,QAction*> ToolMapType;
