@@ -18,7 +18,6 @@ FORMS += qconfigurationscreenbase.ui \
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
-IDLS += qoperationstatescreenbase.ui 
 HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
            extensioncreator.h \
