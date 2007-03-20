@@ -278,7 +278,8 @@ OFCondition PacsServer::addStoragePresentationContexts()
 
     // add a presentations context for each sop class / transfer syntax pair
     OFCondition cond = EC_Normal;
-    int pid = 3; // presentation context id ha de començar el 3 pq el 1 és    s_cur = sops.begin();
+    int pid = 3; // presentation context id ha de començar el 3 pq el 1 és el echo
+    s_cur = sops.begin();
     s_end = sops.end();
 
     while ( s_cur != s_end && cond.good() )
