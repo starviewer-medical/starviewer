@@ -244,15 +244,18 @@ void DistanceTool::endDistanceAnnotation()
 
     switch ( m_2DViewer->getView() )
     {
-        case Q2DViewer::Axial:
-            m_distancesOfAxialViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
-            break;
-        case Q2DViewer::Sagittal:
-            m_distancesOfSagittalViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
-            break;
-        case Q2DViewer::Coronal:
-            m_distancesOfCoronalViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
-            break;
+    case Q2DViewer::Axial:
+        m_distancesOfAxialViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
+        break;
+    case Q2DViewer::Sagittal:
+        m_distancesOfSagittalViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
+        break;
+    case Q2DViewer::Coronal:
+        m_distancesOfCoronalViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
+        break;
+    default:
+        DEBUG_LOG( "El visor no té cap vista assignada encara" );
+        break;
     }
     m_2DViewer->getRenderer()->RemoveActor( m_lineActor );
     m_2DViewer->refresh();
@@ -281,8 +284,6 @@ Distance DistanceTool::getDistanceFromActor2D( vtkActor2D *actor )
 
 void DistanceTool::selectDistance()
 {
-    vtkPropCollection *propCollection = NULL;
-
     if( m_selectedAssembly )
     {
         this->setDistanceColor( m_selectedAssembly , Qt::green );
@@ -440,10 +441,6 @@ void DistanceTool::updateSelectedPoint()
 
 void DistanceTool::drawDistancesOfSlice( int slice )
 {
-    int i;
-    vtkPropCollection *pickCollection;
-    vtkProp *auxProp;
-
     // si hem canviat de vista, primer fem invisibles els actors de la última vista a la última llesca
     int viewToClear;
     if( m_lastView != m_2DViewer->getView() )
@@ -455,7 +452,6 @@ void DistanceTool::drawDistancesOfSlice( int slice )
     else // continuem a la mateixa vista
         viewToClear = m_2DViewer->getView();
 
-    vtkPropCollection *distance = NULL;
     QList< vtkPropAssembly *> list;
     switch( viewToClear )
     {
@@ -476,7 +472,6 @@ void DistanceTool::drawDistancesOfSlice( int slice )
     break;
     }
 
-    vtkPropCollection *assemblyCollection = NULL;
     foreach( vtkPropAssembly *assembly, list )
     {
         assembly->VisibilityOff();
@@ -505,7 +500,6 @@ void DistanceTool::drawDistancesOfSlice( int slice )
     break;
     }
 
-    assemblyCollection = NULL;
     foreach( vtkPropAssembly *assembly, list )
     {
         assembly->VisibilityOn();
