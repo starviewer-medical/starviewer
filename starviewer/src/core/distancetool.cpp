@@ -33,7 +33,7 @@
 namespace udg {
 
 DistanceTool::DistanceTool( Q2DViewer *viewer , QObject *, const char * )
-: HighlightColor( Qt::yellow ), NormalColor( Qt::green ), SelectedColor( Qt::yellow )
+: HighlightColor( Qt::darkGreen ), NormalColor( Qt::green ), SelectedColor( Qt::darkGreen )
 
 {
     m_state = NONE;
