@@ -457,43 +457,48 @@
 <context>
     <name>QMPRExtensionBase</name>
     <message>
-        <location filename="qmprextensionbase.ui" line="16"/>
+        <location filename="qmprextensionbase.ui" line="13"/>
         <source>Form1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="280"/>
+        <location filename="qmprextensionbase.ui" line="299"/>
         <source>WW/WL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="238"/>
+        <location filename="qmprextensionbase.ui" line="257"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="52"/>
+        <location filename="qmprextensionbase.ui" line="49"/>
         <source>Slicing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="71"/>
+        <location filename="qmprextensionbase.ui" line="68"/>
         <source>Window Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="90"/>
+        <location filename="qmprextensionbase.ui" line="87"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="109"/>
+        <location filename="qmprextensionbase.ui" line="106"/>
         <source>Move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextensionbase.ui" line="194"/>
+        <location filename="qmprextensionbase.ui" line="213"/>
         <source>Thick Slab (mm)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qmprextensionbase.ui" line="147"/>
+        <source>zoom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -538,7 +543,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="appimportfile.cpp" line="74"/>
+        <location filename="appimportfile.cpp" line="75"/>
         <source>Choose a directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -556,32 +561,32 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="91"/>
+        <location filename="extensionhandler.cpp" line="94"/>
         <source>2D MPR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="104"/>
+        <location filename="extensionhandler.cpp" line="107"/>
         <source>3D MPR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="117"/>
+        <location filename="extensionhandler.cpp" line="120"/>
         <source>3D-2D MPR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="157"/>
+        <location filename="extensionhandler.cpp" line="160"/>
         <source>2D Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="264"/>
+        <location filename="extensionhandler.cpp" line="259"/>
         <source>Serie loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="266"/>
+        <location filename="extensionhandler.cpp" line="261"/>
         <source>Loading, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -634,17 +639,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="225"/>
+        <location filename="q2dviewerextension.cpp" line="230"/>
         <source>XY : Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="253"/>
+        <location filename="q2dviewerextension.cpp" line="258"/>
         <source>YZ : Sagital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="281"/>
+        <location filename="q2dviewerextension.cpp" line="286"/>
         <source>XZ : Coronal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -712,47 +717,47 @@
 <context>
     <name>udg::Q2DViewerExtensionBase</name>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="338"/>
+        <location filename="q2dviewerextensionbase.ui" line="357"/>
         <source>WW/WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="293"/>
+        <location filename="q2dviewerextensionbase.ui" line="312"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="361"/>
+        <location filename="q2dviewerextensionbase.ui" line="380"/>
         <source>Choose Serie To Compare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="368"/>
+        <location filename="q2dviewerextensionbase.ui" line="387"/>
         <source>Synchronize Slices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="456"/>
+        <location filename="q2dviewerextensionbase.ui" line="475"/>
         <source>XY : Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="66"/>
+        <location filename="q2dviewerextensionbase.ui" line="63"/>
         <source>window level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="88"/>
+        <location filename="q2dviewerextensionbase.ui" line="107"/>
         <source>zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="110"/>
+        <location filename="q2dviewerextensionbase.ui" line="129"/>
         <source>move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="271"/>
+        <location filename="q2dviewerextensionbase.ui" line="290"/>
         <source>voxel information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1181,153 +1186,158 @@
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="96"/>
+        <location filename="qcreatedicomdir.cpp" line="97"/>
         <source>Cd occupied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="613"/>
+        <location filename="qcreatedicomdir.cpp" line="640"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="115"/>
+        <location filename="qcreatedicomdir.cpp" line="116"/>
         <source>Dvd Ocuppied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="146"/>
+        <location filename="qcreatedicomdir.cpp" line="147"/>
         <source>The size of Dicomdir is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="209"/>
+        <location filename="qcreatedicomdir.cpp" line="210"/>
         <source>The study exists in the Dicomdir list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="289"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>Create Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="309"/>
+        <location filename="qcreatedicomdir.cpp" line="314"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="309"/>
+        <location filename="qcreatedicomdir.cpp" line="314"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="307"/>
+        <location filename="qcreatedicomdir.cpp" line="312"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="308"/>
+        <location filename="qcreatedicomdir.cpp" line="313"/>
         <source>The Dicomdir directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="319"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="387"/>
+        <location filename="qcreatedicomdir.cpp" line="392"/>
         <source>Error creating Dicomdir. Be sure you have user permissions in </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="412"/>
+        <location filename="qcreatedicomdir.cpp" line="417"/>
         <source>The size of Dicomdir is 0 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="420"/>
+        <location filename="qcreatedicomdir.cpp" line="425"/>
         <source>Dicomdir Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="575"/>
+        <location filename="qcreatedicomdir.cpp" line="602"/>
         <source>Database is corrupted or SQL syntax error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="609"/>
+        <location filename="qcreatedicomdir.cpp" line="636"/>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="581"/>
+        <location filename="qcreatedicomdir.cpp" line="608"/>
         <source>Database is locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="589"/>
+        <location filename="qcreatedicomdir.cpp" line="616"/>
         <source>Database is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="595"/>
+        <location filename="qcreatedicomdir.cpp" line="622"/>
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="607"/>
+        <location filename="qcreatedicomdir.cpp" line="634"/>
         <source>Internal Database error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="255"/>
+        <location filename="qcreatedicomdir.cpp" line="260"/>
         <source>Can&apos;t create the temporary directory to create Dicomdir. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="103"/>
+        <location filename="qcreatedicomdir.cpp" line="104"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="122"/>
+        <location filename="qcreatedicomdir.cpp" line="123"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="85"/>
+        <location filename="qcreatedicomdir.cpp" line="86"/>
         <source>Create Dicomdir at</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="277"/>
+        <location filename="qcreatedicomdir.cpp" line="282"/>
         <source>Please enter a diretory to create de Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="295"/>
         <source>The directory contains a Dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="354"/>
+        <location filename="qcreatedicomdir.cpp" line="359"/>
         <source>Please, first select the studies which you want to create a Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="341"/>
+        <location filename="qcreatedicomdir.cpp" line="346"/>
         <source>Not enough free space to create Dicomdir. Please free space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="189"/>
+        <location filename="qcreatedicomdir.cpp" line="190"/>
         <source>With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="455"/>
+        <location filename="qcreatedicomdir.cpp" line="460"/>
         <source>Please select a study to remove of the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="504"/>
+        <source>Creating Dicomdir Image...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1447,27 +1457,27 @@
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="47"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
         <source>Window Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="64"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="61"/>
         <source>Window Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="120"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="117"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="127"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="124"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="16"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="13"/>
         <source>Custom Window Level Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1475,7 +1485,7 @@
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1315"/>
+        <location filename="queryscreen.cpp" line="1318"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1516,17 +1526,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="865"/>
+        <location filename="qmprextension.cpp" line="869"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="865"/>
+        <location filename="qmprextension.cpp" line="869"/>
         <source>There are not grabbed views to save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="869"/>
+        <location filename="qmprextension.cpp" line="873"/>
         <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1870,261 +1880,256 @@
 <context>
     <name>udg::QWindowLevelComboBox</name>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="34"/>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qwindowlevelcombobox.cpp" line="35"/>
+        <location filename="qwindowlevelcombobox.cpp" line="51"/>
         <source>CT Bone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="36"/>
+        <location filename="qwindowlevelcombobox.cpp" line="52"/>
         <source>CT Lung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="37"/>
+        <location filename="qwindowlevelcombobox.cpp" line="53"/>
         <source>CT Soft Tissues, Non Contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="38"/>
+        <location filename="qwindowlevelcombobox.cpp" line="54"/>
         <source>CT Liver, Non Contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="39"/>
+        <location filename="qwindowlevelcombobox.cpp" line="55"/>
         <source>CT Soft Tissues, Contrast Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="40"/>
+        <location filename="qwindowlevelcombobox.cpp" line="56"/>
         <source>CT Liver, Contrast Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="41"/>
+        <location filename="qwindowlevelcombobox.cpp" line="57"/>
         <source>CT Neck, Contrast Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="42"/>
+        <location filename="qwindowlevelcombobox.cpp" line="58"/>
         <source>Angiography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="43"/>
+        <location filename="qwindowlevelcombobox.cpp" line="59"/>
         <source>Osteoporosis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="44"/>
+        <location filename="qwindowlevelcombobox.cpp" line="60"/>
         <source>Emphysema</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="45"/>
+        <location filename="qwindowlevelcombobox.cpp" line="61"/>
         <source>Petrous Bone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="46"/>
-        <source>Custom...</source>
+        <location filename="qwindowlevelcombobox.cpp" line="83"/>
+        <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1690"/>
+        <location filename="queryscreen.cpp" line="1701"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="385"/>
+        <location filename="queryscreen.cpp" line="382"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="442"/>
+        <location filename="queryscreen.cpp" line="440"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="452"/>
+        <location filename="queryscreen.cpp" line="450"/>
         <source>ERROR QUERING!.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="561"/>
+        <location filename="queryscreen.cpp" line="559"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="644"/>
+        <location filename="queryscreen.cpp" line="642"/>
         <source>Error! Can&apos;t query studies in PACS : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="740"/>
+        <location filename="queryscreen.cpp" line="738"/>
         <source>No series match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="754"/>
+        <location filename="queryscreen.cpp" line="752"/>
         <source>Are you sure you want to retrieve this Study ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="782"/>
+        <location filename="queryscreen.cpp" line="780"/>
         <source>Select a study to download </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="791"/>
+        <location filename="queryscreen.cpp" line="789"/>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1168"/>
+        <location filename="queryscreen.cpp" line="1171"/>
         <source>Please select a study to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1686"/>
+        <location filename="queryscreen.cpp" line="1697"/>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1666"/>
+        <location filename="queryscreen.cpp" line="1677"/>
         <source>Database is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1684"/>
+        <location filename="queryscreen.cpp" line="1695"/>
         <source>Internal Database error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1256"/>
+        <location filename="queryscreen.cpp" line="1259"/>
         <source>Hide Pacs List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1064"/>
+        <location filename="queryscreen.cpp" line="1067"/>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1173"/>
+        <location filename="queryscreen.cpp" line="1176"/>
         <source>Are you sure you want to delete this Study ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1672"/>
+        <location filename="queryscreen.cpp" line="1683"/>
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="118"/>
+        <location filename="queryscreen.cpp" line="116"/>
         <source>Error deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="808"/>
+        <location filename="queryscreen.cpp" line="806"/>
         <source>The study has been retrieved or is retrieving.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="916"/>
+        <location filename="queryscreen.cpp" line="919"/>
         <source>Are you sure you want to view this Study ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1174"/>
+        <location filename="queryscreen.cpp" line="1177"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1174"/>
+        <location filename="queryscreen.cpp" line="1177"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1405"/>
+        <location filename="queryscreen.cpp" line="1408"/>
         <source>Not enough space to retrieve studies. Please free space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1410"/>
+        <location filename="queryscreen.cpp" line="1413"/>
         <source>Error Freeing Space. The study couldn&apos;t be retrieved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1421"/>
+        <location filename="queryscreen.cpp" line="1424"/>
         <source> Can&apos;t connect to PACS </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1441"/>
+        <location filename="queryscreen.cpp" line="1444"/>
         <source> of </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1444"/>
+        <location filename="queryscreen.cpp" line="1447"/>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1652"/>
+        <location filename="queryscreen.cpp" line="1663"/>
         <source>Database is corrupted or SQL syntax error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1658"/>
+        <location filename="queryscreen.cpp" line="1669"/>
         <source>Database is looked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1260"/>
+        <location filename="queryscreen.cpp" line="1263"/>
         <source>Show Pacs List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="541"/>
+        <location filename="queryscreen.cpp" line="539"/>
         <source>Error, not opened Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="547"/>
+        <location filename="queryscreen.cpp" line="545"/>
         <source>Error quering in dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1315"/>
+        <location filename="queryscreen.cpp" line="1318"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1329"/>
+        <location filename="queryscreen.cpp" line="1332"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1439"/>
+        <location filename="queryscreen.cpp" line="1442"/>
         <source> Can&apos;t query studies to PACS </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1368"/>
+        <location filename="queryscreen.cpp" line="1371"/>
         <source>You have to select a Pacs to store the study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1396"/>
+        <location filename="queryscreen.cpp" line="1399"/>
         <source>The study can only be stored at one pacs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2132,247 +2137,247 @@
 <context>
     <name>udg::QueryScreenBase</name>
     <message>
-        <location filename="queryscreenbase.ui" line="13"/>
+        <location filename="queryscreenbase.ui" line="16"/>
         <source>Query Study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="297"/>
+        <location filename="queryscreenbase.ui" line="300"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="294"/>
+        <location filename="queryscreenbase.ui" line="297"/>
         <source>search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="273"/>
+        <location filename="queryscreenbase.ui" line="276"/>
         <source>Today</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="252"/>
+        <location filename="queryscreenbase.ui" line="255"/>
         <source>Yesterday</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="231"/>
+        <location filename="queryscreenbase.ui" line="234"/>
         <source>Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="189"/>
+        <location filename="queryscreenbase.ui" line="192"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="168"/>
+        <location filename="queryscreenbase.ui" line="171"/>
         <source>Clear Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="321"/>
+        <location filename="queryscreenbase.ui" line="324"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="456"/>
+        <location filename="queryscreenbase.ui" line="459"/>
         <source>Study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="531"/>
+        <location filename="queryscreenbase.ui" line="534"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="492"/>
+        <location filename="queryscreenbase.ui" line="495"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="593"/>
+        <location filename="queryscreenbase.ui" line="596"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="690"/>
+        <location filename="queryscreenbase.ui" line="693"/>
         <source>MG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="855"/>
+        <location filename="queryscreenbase.ui" line="861"/>
         <source>SC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="753"/>
+        <location filename="queryscreenbase.ui" line="759"/>
         <source>PT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="750"/>
+        <location filename="queryscreenbase.ui" line="756"/>
         <source>Penetrant Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="894"/>
+        <location filename="queryscreenbase.ui" line="900"/>
         <source>US</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="891"/>
+        <location filename="queryscreenbase.ui" line="897"/>
         <source>Ultrasounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="837"/>
+        <location filename="queryscreenbase.ui" line="843"/>
         <source>DT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="834"/>
+        <location filename="queryscreenbase.ui" line="840"/>
         <source> Dental Technician</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="816"/>
+        <location filename="queryscreenbase.ui" line="822"/>
         <source>MR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="813"/>
+        <location filename="queryscreenbase.ui" line="819"/>
         <source>Magnetic Resonance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="672"/>
+        <location filename="queryscreenbase.ui" line="675"/>
         <source>CT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="666"/>
+        <location filename="queryscreenbase.ui" line="669"/>
         <source>Computerized Tomography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="648"/>
+        <location filename="queryscreenbase.ui" line="651"/>
         <source>DX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="645"/>
+        <location filename="queryscreenbase.ui" line="648"/>
         <source>Direct Radiography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="774"/>
+        <location filename="queryscreenbase.ui" line="780"/>
         <source>NM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="771"/>
+        <location filename="queryscreenbase.ui" line="777"/>
         <source>Nuclear Medicine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="795"/>
+        <location filename="queryscreenbase.ui" line="801"/>
         <source>RF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="792"/>
+        <location filename="queryscreenbase.ui" line="798"/>
         <source>Radiography Fluoroscopy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="627"/>
+        <location filename="queryscreenbase.ui" line="630"/>
         <source>CR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="624"/>
+        <location filename="queryscreenbase.ui" line="627"/>
         <source>Computerized Radiography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="732"/>
+        <location filename="queryscreenbase.ui" line="738"/>
         <source>ES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="708"/>
+        <location filename="queryscreenbase.ui" line="711"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="873"/>
+        <location filename="queryscreenbase.ui" line="879"/>
         <source>XA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="971"/>
+        <location filename="queryscreenbase.ui" line="977"/>
         <source>Show PacsList</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1009"/>
+        <location filename="queryscreenbase.ui" line="1015"/>
         <source>Local Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="95"/>
+        <location filename="queryscreenbase.ui" line="98"/>
         <source>config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1049"/>
+        <location filename="queryscreenbase.ui" line="1055"/>
         <source>PacsServer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="49"/>
+        <location filename="queryscreenbase.ui" line="52"/>
         <source>Create Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="72"/>
+        <location filename="queryscreenbase.ui" line="75"/>
         <source>Open Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1074"/>
+        <location filename="queryscreenbase.ui" line="1080"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="210"/>
+        <location filename="queryscreenbase.ui" line="213"/>
         <source>Operation List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="358"/>
+        <location filename="queryscreenbase.ui" line="361"/>
         <source>Patient ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="381"/>
+        <location filename="queryscreenbase.ui" line="384"/>
         <source>Last Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="404"/>
+        <location filename="queryscreenbase.ui" line="407"/>
         <source>First Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="548"/>
+        <location filename="queryscreenbase.ui" line="551"/>
         <source>Study ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="565"/>
+        <location filename="queryscreenbase.ui" line="568"/>
         <source>Accession Number:</source>
         <translation type="unfinished"></translation>
     </message>
