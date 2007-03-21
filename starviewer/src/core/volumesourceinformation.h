@@ -192,6 +192,9 @@ public:
     void setFilenames( std::vector< std::string > filenames );
     void setFilenames( std::string filename ); // ho sobrecarreguem per quan només es tracti d'un sol arxiu
 
+    /// Obtenim la llista d'arxius que conformen el volum
+    std::vector< std::string > getFilenames() const { return m_filenamesArray; }
+
     enum PhotometricInterpretationType{ Monochrome1 , Monochrome2 , PaletteColor, RGB, YBRFull, YBRFull422, YBRPartial422, YBRPartial420, YBRICT, YBRRCT,  Unknown };
     /// Retorna la intepretació fotomètrica d'una imatge d'escala de grisos. Pot ser Monochrome1 (vídeo invers ) o MonocMonochrome2 (normal, el més usual) pel que a nosaltres ens interessa de moment
     unsigned getPhotometricInterpretation();
