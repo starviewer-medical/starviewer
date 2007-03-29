@@ -57,9 +57,18 @@ private:
     void updateSelectedPoint();
 
     vtkCaptionActor2D* createACaption2D();
-
-    /// Donat un punt 2D en coordenades de món, es retorna l'actor més proper, dins del llindar m_tolerance, de la llesca actual
-    AssemblyAndLineObject *getNearestAssembly( double point[2] );
+    
+    ///actualitza la posició del primer punt de la distància seleccionada
+    void updateFirstPoint();
+    
+    ///actualitza la posició del segon punt de la distància seleccionada
+    void updateSecondPoint();
+    
+    ///calcula quin punt de la distància seleccionada, és més proper a on es produeix l'event que el crida.
+    void getNearestPointOfSelectedDistance();
+    
+    /// Donat un punt 3D en coordenades de món, es retorna l'actor més proper, dins del llindar m_tolerance, de la llesca actual
+    AssemblyAndLineObject *getNearestAssembly( double point[3] );
 
     /// Ressalta l'actor 2D que estigui més a prop de la posició actual del cursor
     void highlightNearestAssembly();
@@ -69,14 +78,14 @@ private:
 
     /**
     map de distàncies:
-        Utilitzarem un QMultiMap per guardar les distàncies. La diferÃ¨ncia entre QMap i QMultiMap és que aquest últim permet
+        Utilitzarem un QMultiMap per guardar les distàncies. La diferència entre QMap i QMultiMap és que aquest últim permet
         guardar més d'un objecte amb la mateixa clau, és a dir, tenir més d'una entrada per a una mateixa clau. Utilitzarem
         la llesca on s'ha anotat la distància com a clau del QMultiMap i la distància anotada serà la dada. Així, quan volguem
         totes les distàncies de la llesca "x", crearem una llista amb totes les files que tenen per clau a "x".
 
         Representació:
 
-        [nÂº de llesca][Distància]
+        [nº de llesca][Distància]
         [     1      ][   d1    ]
         [     1      ][   d2    ]
         [     2      ][   d3    ]
@@ -108,23 +117,26 @@ private:
     /// valors per controlar l'anotació de les distàncies
     double m_distanceStartPosition[3], m_distanceCurrentPosition[3];
 
-    /// controlador dels punts de la distància
-    bool m_firstPointLocated;
+    /// objectes per manipular els extrems de la distància seeccionada
+    vtkDiskSource *m_vertex1;
+    vtkDiskSource *m_vertex2;
+    
+    ///mapejadors dels punts que representen els vèrtexs de la distància seleccionada
+    vtkPolyDataMapper2D *m_vertex1Mapper;
+    vtkPolyDataMapper2D *m_vertex2Mapper;
+    
+    ///actors dels punts que representen els vèrtexs de la distància seleccionada
+    vtkActor2D *m_vertex1Actor;
+    vtkActor2D *m_vertex2Actor;
 
-    /// enter per saber quin dels dos punts d'una distància hem seleccionat
-    int m_pointOfDistance;
-
-    /// indica si estem a sobre d'alguna distància de les anotades
-    bool m_somePropFocused;
-
-    /// indica si hem seleccionat alguna de les distànces anotades
-    bool m_somePropSelected;
-
-    /// Ãltim actor que s'ha ressaltat
+    /// Últim actor que s'ha ressaltat
     AssemblyAndLineObject *m_previousHighlightedAssembly;
 
     /// Llesca actual on estem pintant les distàncies. Ens serveix per controlar els actors que s'han de dibuixar o no al canviar de llesca
     int m_currentSlice;
+    
+    /// atribut per saber quin dels dos punts de la distància seleccionada és el més proper
+    int m_nearestPoint;
 
     /// Manté la última vista del 2DViewer. Ens servirà per controlar les distàncies visibles quan canviem de vista
     int m_lastView;
@@ -135,7 +147,7 @@ private:
     const QColor SelectedColor;
 
 private slots:
-    /// ComenÃ§a l'anotació de la distància
+    /// Comença l'anotació de la distància
     void startDistanceAnnotation();
 
     /// simula la nova distància
@@ -152,6 +164,9 @@ private slots:
 
     ///respon als events de teclat
     void answerToKeyEvent();
+    
+    /// deselecciona la distància que està seleccionada en el moment de cridar l'slot
+    void unselectDistance();
 };
 
 //CLASSE INTERNA DE DISTANCETOOL
