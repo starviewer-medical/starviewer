@@ -9,24 +9,25 @@
 
 #include "tool.h"
 
+#include <vtkLineSource.h>
+#include <vtkPropAssembly.h>
+#include <vtkPropCollection.h>
+#include <vtkCaptionActor2D.h>
+
 #include <QMultiMap>
 #include <QColor>
 
 class vtkRenderWindowInteractor;
 class vtkLineSource;
-class vtkActor;
-class vtkPropAssembly;
 class vtkActor2D;
-class vtkPolyDataMapper;
 class vtkPolyDataMapper2D;
 class vtkDiskSource;
-class vtkCaptionActor2D;
-class vtkProp;
 
 namespace udg {
 
 class Q2DViewer;
 class Distance;
+class AssemblyAndLineObject;
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -39,6 +40,10 @@ public:
 
     /// estats de la tool
     enum { NONE , ANNOTATING, MOVINGPOINT };
+    
+    /// enumeració per saber quin dels dos punts de la distància seleccionada és el més proper
+    enum { NOTHINGSELECTED, FIRST, SECOND };
+    
 
     DistanceTool( Q2DViewer *viewer , QObject *parent = 0 , const char *name = 0 );
 
@@ -47,47 +52,40 @@ public:
     /// tracta els events que succeeixen dins de l'escena
     void handleEvent( unsigned long eventID );
 
-    ///ens retorna la distància que conté un determinat actor2D (si és que la conté)
-    Distance getDistanceFromActor2D( vtkActor2D* );
-
 private:
-
-    void createAction(){};
-
-    void moveSelectedPoint();
 
     void updateSelectedPoint();
 
     vtkCaptionActor2D* createACaption2D();
 
     /// Donat un punt 2D en coordenades de món, es retorna l'actor més proper, dins del llindar m_tolerance, de la llesca actual
-    vtkPropAssembly *getNearestAssembly( double point[2] );
+    AssemblyAndLineObject *getNearestAssembly( double point[2] );
 
     /// Ressalta l'actor 2D que estigui més a prop de la posició actual del cursor
     void highlightNearestAssembly();
 
     /// Pinta un assembly del color que li diem
-    void setDistanceColor( vtkPropAssembly * distance , QColor color );
+    void setDistanceColor( AssemblyAndLineObject* assembly, QColor color );
 
     /**
     map de distàncies:
-        Utilitzarem un QMultiMap per guardar les distàncies. La diferència entre QMap i QMultiMap és que aquest últim permet
+        Utilitzarem un QMultiMap per guardar les distàncies. La diferÃ¨ncia entre QMap i QMultiMap és que aquest últim permet
         guardar més d'un objecte amb la mateixa clau, és a dir, tenir més d'una entrada per a una mateixa clau. Utilitzarem
         la llesca on s'ha anotat la distància com a clau del QMultiMap i la distància anotada serà la dada. Així, quan volguem
         totes les distàncies de la llesca "x", crearem una llista amb totes les files que tenen per clau a "x".
 
         Representació:
 
-        [nº de llesca][Distància]
+        [nÂº de llesca][Distància]
         [     1      ][   d1    ]
         [     1      ][   d2    ]
         [     2      ][   d3    ]
         [     2      ][   d4    ]
         ...
     */
-    QMultiMap<int, vtkPropAssembly*> m_distancesOfAxialViewMap;
-    QMultiMap<int, vtkPropAssembly*> m_distancesOfCoronalViewMap;
-    QMultiMap<int, vtkPropAssembly*> m_distancesOfSagittalViewMap;
+    QMultiMap<int, AssemblyAndLineObject*> m_distancesOfAxialViewMap;
+    QMultiMap<int, AssemblyAndLineObject*> m_distancesOfCoronalViewMap;
+    QMultiMap<int, AssemblyAndLineObject*> m_distancesOfSagittalViewMap;
 
     ///visor sobre el que es programa la tool
     Q2DViewer *m_2DViewer;
@@ -95,14 +93,8 @@ private:
     ///objecte per a dibuixar la línia que ens determinarà la distància que estem anotant
     vtkLineSource *m_distanceLine;
 
-    ///actor que representa l'última distància seleccionada (amb el botó dret)
-    vtkActor2D *m_selectedDistance;
-
-    ///guarda una referència a la distància més propera
-    vtkProp *m_nearestProp;
-
     ///assemblatge que conté la distància que hem seleccionat amb la seva corresponent etiqueta d'anotació
-    vtkPropAssembly *m_selectedAssembly;
+    AssemblyAndLineObject *m_selectedAssembly;
 
     ///actor per a representar la línia de la distància
     vtkActor2D *m_lineActor;
@@ -128,8 +120,8 @@ private:
     /// indica si hem seleccionat alguna de les distànces anotades
     bool m_somePropSelected;
 
-    /// Últim actor que s'ha ressaltat
-    vtkPropAssembly *m_previousHighlightedAssembly;
+    /// Ãltim actor que s'ha ressaltat
+    AssemblyAndLineObject *m_previousHighlightedAssembly;
 
     /// Llesca actual on estem pintant les distàncies. Ens serveix per controlar els actors que s'han de dibuixar o no al canviar de llesca
     int m_currentSlice;
@@ -143,7 +135,7 @@ private:
     const QColor SelectedColor;
 
 private slots:
-    /// Comença l'anotació de la distància
+    /// ComenÃ§a l'anotació de la distància
     void startDistanceAnnotation();
 
     /// simula la nova distància
@@ -162,6 +154,50 @@ private slots:
     void answerToKeyEvent();
 };
 
+//CLASSE INTERNA DE DISTANCETOOL
+
+class AssemblyAndLineObject
+{
+    ///Ens permet fer agrupacions d'un assembly i el vtkLineSource associat per tenir accés més directe a la distància.
+    public:
+
+        AssemblyAndLineObject( vtkPropAssembly *assembly , vtkLineSource *line )
+        {m_assembly = assembly; m_line = line;};
+
+        ~AssemblyAndLineObject()
+        {m_assembly->Delete(); m_line->Delete();};
+        
+        //MÈTODES
+        
+        ///ens retorna l'assembly
+        vtkPropAssembly* getAssembly()
+        {return m_assembly;};
+
+        ///ens retorna el vtkLineSource
+        vtkLineSource* getLine()
+        {return m_line;};
+        
+        ///ens retorna el vtkCaptionActor2D que hi ha dins de l'assembly
+        vtkCaptionActor2D* getCaption()
+        {
+            vtkPropCollection *assemblyCollection = m_assembly->GetParts();
+            return (vtkCaptionActor2D::SafeDownCast ( assemblyCollection->GetItemAsObject( 1 ) ) );
+        };
+
+        ///ens permet associar l'assembly
+        void setAssembly( vtkPropAssembly *assembly )
+        {m_assembly = assembly;};
+
+        ///ens permet associar el vtkLineSource
+        void setLine( vtkLineSource *line )
+        {m_line = line;};
+
+    private:
+
+        vtkPropAssembly *m_assembly;
+        
+        vtkLineSource *m_line;
+};
 }
 
 #endif

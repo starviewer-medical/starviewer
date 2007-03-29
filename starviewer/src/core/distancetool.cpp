@@ -13,18 +13,13 @@
 #include <vtkAlgorithmOutput.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkActor2DCollection.h>
 #include <vtkDiskSource.h>
-#include <vtkPolyDataMapper.h>
 #include <vtkPolyDataMapper2D.h>
-#include <vtkLineSource.h>
 #include <vtkActor2D.h>
 #include <vtkCaptionActor2D.h>
-#include <vtkPropAssembly.h>
 #include <vtkProperty.h>
 #include <vtkProperty2D.h>
 #include <vtkTextProperty.h>
-#include <vtkPropPicker.h>
 #include <math.h>
 #include <QList>
 
@@ -38,17 +33,12 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject *, const char * )
 {
     m_state = NONE;
     m_2DViewer = viewer;
-    m_firstPointLocated = false;
     m_selectedAssembly = NULL;
-    m_somePropSelected = false;
-    m_nearestProp = NULL;
-
     m_previousHighlightedAssembly = NULL;
 
     //creació de tots els objectes de la classe
     m_distanceLine = vtkLineSource::New();
     m_lineActor = vtkActor2D::New();
-
     m_lineMapper = vtkPolyDataMapper2D::New();
 
     //assignem propietats als objectes
@@ -108,32 +98,22 @@ void DistanceTool::handleEvent( unsigned long eventID )
     {
         //click amb el botó esquerre: anotació de distància
         case vtkCommand::LeftButtonPressEvent:
-            //anotem distància si no hi ha cap distància seleccionada, altrament
-            //el que volem és interactuar amb la distància
-            if (!m_somePropSelected)
+
+            if ( !m_selectedAssembly )
             {
-                if ( !m_firstPointLocated )
+                if ( m_state == NONE )
                     this->startDistanceAnnotation();
-                else
+                else if ( m_state == ANNOTATING )
                     this->endDistanceAnnotation();
             }
-//                 else
-//                 {
-//                     if ( m_state == MOVINGPOINT )
-//                         this->updateSelectedPoint();
-//                     else
-//                         this->giveMeTheNearestPoint();
-//                 }
             break;
 
         case vtkCommand::MouseMoveEvent:
-            //al moure el mouse, simulem la distància que s'anotarà, dibuixant una línia.
-            if( m_state == ANNOTATING )
-                this->doDistanceSimulation();
-            else if ( m_state == NONE )
+            
+            if ( m_state == NONE )
                 this->highlightNearestAssembly();
-            else if ( m_state == MOVINGPOINT )
-                this->moveSelectedPoint();
+            else if( m_state == ANNOTATING )
+                this->doDistanceSimulation();
             break;
 
         //click amb el botó dret: volem que si l'element clickat és una distància, quedi seleccionat.
@@ -142,7 +122,7 @@ void DistanceTool::handleEvent( unsigned long eventID )
             break;
 
         case vtkCommand::KeyPressEvent:
-            answerToKeyEvent();
+                this->answerToKeyEvent();
             break;
 
         default:
@@ -173,9 +153,6 @@ void DistanceTool::startDistanceAnnotation()
 
     m_lineMapper->SetInput( m_distanceLine->GetOutput() );
     m_lineActor->SetMapper( m_lineMapper );
-
-    //deixem constància de que ja hem anotat el primer punt
-    m_firstPointLocated = true;
 
     m_2DViewer->getRenderer()->AddActor(m_lineActor);
 }
@@ -240,18 +217,20 @@ void DistanceTool::endDistanceAnnotation()
     m_actorsAssembly->AddPart( m_lineActorAux );
     m_actorsAssembly->AddPart( m_textDistanceActor );
 
+    AssemblyAndLineObject *assemblyAndLine = new AssemblyAndLineObject(m_actorsAssembly, m_distanceLineAux );
+    
     m_2DViewer->getRenderer()->AddActor( m_actorsAssembly );
 
     switch ( m_2DViewer->getView() )
     {
     case Q2DViewer::Axial:
-        m_distancesOfAxialViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
+        m_distancesOfAxialViewMap.insert( m_2DViewer->getSlice(), assemblyAndLine );
         break;
     case Q2DViewer::Sagittal:
-        m_distancesOfSagittalViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
+        m_distancesOfSagittalViewMap.insert( m_2DViewer->getSlice(), assemblyAndLine );
         break;
     case Q2DViewer::Coronal:
-        m_distancesOfCoronalViewMap.insert( m_2DViewer->getSlice(), m_actorsAssembly );
+        m_distancesOfCoronalViewMap.insert( m_2DViewer->getSlice(), assemblyAndLine );
         break;
     default:
         DEBUG_LOG( "El visor no té cap vista assignada encara" );
@@ -269,34 +248,39 @@ void DistanceTool::endDistanceAnnotation()
 
     //determinem que estem en l'estat NONE, és a dir, no estem anotant cap distància.
     m_state = NONE;
-
-    //deixem constància de que ja hem anotat la distància.
-    m_firstPointLocated = false;
-}
-
-Distance DistanceTool::getDistanceFromActor2D( vtkActor2D *actor )
-{
-    vtkPolyDataMapper2D *auxMap = vtkPolyDataMapper2D::SafeDownCast( actor->GetMapper() );
-    vtkLineSource *ls = vtkLineSource::SafeDownCast( auxMap->GetInput()->GetProducerPort()->GetProducer() );
-
-    return ( Distance( ls->GetPoint1(), ls->GetPoint2() ) );
 }
 
 void DistanceTool::selectDistance()
 {
     if( m_selectedAssembly )
     {
-        this->setDistanceColor( m_selectedAssembly , Qt::green );
-        m_selectedAssembly = NULL;
+        this->setDistanceColor( m_selectedAssembly , NormalColor );
+        
+        if( m_previousHighlightedAssembly )
+        {
+            if ( m_previousHighlightedAssembly == m_selectedAssembly )
+                m_selectedAssembly = NULL;
+            else
+            {
+                m_selectedAssembly = m_previousHighlightedAssembly;
+                m_previousHighlightedAssembly = NULL;
+            }
+        }
     }
-
-    if( m_previousHighlightedAssembly )
+    else
     {
-        m_selectedAssembly = m_previousHighlightedAssembly;
-        m_previousHighlightedAssembly = NULL;
+        int x, y;
+        x = m_2DViewer->getInteractor()->GetEventPosition()[0];
+        y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+        double toWorld[4];
+        m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
+        double point[2] = { toWorld[0] , toWorld[1] };
 
+        m_selectedAssembly = (this->getNearestAssembly( point ));
         this->setDistanceColor( m_selectedAssembly , SelectedColor );
     }
+
+    
     m_2DViewer->refresh();
 }
 
@@ -309,27 +293,29 @@ void DistanceTool::highlightNearestAssembly()
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
     double point[2] = { toWorld[0] , toWorld[1] };
 
-    vtkPropAssembly *assembly = this->getNearestAssembly( point );
+    AssemblyAndLineObject *assembly = (this->getNearestAssembly( point ));
     if( assembly )
     {
         this->setDistanceColor( assembly , HighlightColor );
         if( m_previousHighlightedAssembly != assembly &&  m_previousHighlightedAssembly != m_selectedAssembly )
-            this->setDistanceColor( m_previousHighlightedAssembly , Qt::green );
+            this->setDistanceColor( m_previousHighlightedAssembly , NormalColor );
         m_previousHighlightedAssembly = assembly;
     }
     else
     {
         if( m_previousHighlightedAssembly && m_previousHighlightedAssembly != m_selectedAssembly )
-            this->setDistanceColor( m_previousHighlightedAssembly , Qt::green );
+            this->setDistanceColor( m_previousHighlightedAssembly , NormalColor );
     }
 }
 
-void DistanceTool::setDistanceColor( vtkPropAssembly *distance, QColor color )
+void DistanceTool::setDistanceColor( AssemblyAndLineObject *assembly, QColor color )
 {
-    if( distance )
+    if( assembly )
     {
         vtkActor2D *line;
         vtkCaptionActor2D *caption;
+        vtkPropAssembly *distance;
+        distance = assembly->getAssembly();
         vtkPropCollection *assemblyCollection = distance->GetParts();
 
         line = vtkActor2D::SafeDownCast ( assemblyCollection->GetItemAsObject( 0 ) );
@@ -344,11 +330,11 @@ void DistanceTool::setDistanceColor( vtkPropAssembly *distance, QColor color )
         DEBUG_LOG( "Assembly buit!" );
 }
 
-vtkPropAssembly *DistanceTool::getNearestAssembly( double point[2] )
+AssemblyAndLineObject* DistanceTool::getNearestAssembly( double point[2] )
 {
-    QList< vtkPropAssembly * > actorsList;
+    QList< AssemblyAndLineObject* > actorsList;
     switch( m_2DViewer->getView() )
-    {
+    {   
     case Q2DViewer::Axial:
         actorsList = m_distancesOfAxialViewMap.values( m_2DViewer->getSlice() );
     break;
@@ -366,23 +352,20 @@ vtkPropAssembly *DistanceTool::getNearestAssembly( double point[2] )
     break;
     }
 
-    vtkPropAssembly *nearest = NULL;
+    AssemblyAndLineObject *nearest = NULL;
     double minDistance = VTK_DOUBLE_MAX;
     double *p1, *p2;
     double distance;
-    Distance dist;
-    vtkActor2D *lineActor = NULL;
-    vtkPropCollection *assemblyCollection = NULL;
+    vtkLineSource *line;
+    
     // d'aquest punt tan sols modificarem la x i la y. La z queda fixada sempre a 0
     double point3D[3] = { .0, .0, .0 };
-    foreach( vtkPropAssembly *candidate, actorsList )
+    foreach( AssemblyAndLineObject *candidate, actorsList )
     {
-        assemblyCollection = candidate->GetParts();
-        lineActor = vtkActor2D::SafeDownCast ( assemblyCollection->GetItemAsObject( 0 ) );
-        dist = this->getDistanceFromActor2D( lineActor );
-        p1 = dist.getFirstPoint();
+        line = candidate->getLine();
+        p1 = line->GetPoint1();
         p1[2] = 0.0;
-        p2 = dist.getSecondPoint();
+        p2 = line->GetPoint2();
         p2[2] = 0.0;
         point3D[0] = point[0];
         point3D[1] = point[1];
@@ -393,55 +376,16 @@ vtkPropAssembly *DistanceTool::getNearestAssembly( double point[2] )
             nearest = candidate;
         }
     }
+    
     return nearest;
 }
 
-void DistanceTool::moveSelectedPoint()
-{
-//     m_2DViewer->getCurrentCursorPosition( m_distanceCurrentPosition );
-//
-//         if (m_pointOfDistance == 1)
-//             m_selectedDistance->SetPoint1( m_distanceCurrentPosition );
-//         else
-//             m_selectedDistance->SetPoint2( m_distanceCurrentPosition );
-//
-// //         m_selectedDiskActor->SetPosition( m_distanceCurrentPosition );
-//
-//         m_selectedActor->VisibilityOn();
-//
-//         m_2DViewer->getInteractor()->Render();
-}
-
 void DistanceTool::updateSelectedPoint()
-{
-//         double clickPosition[3];
-//
-//         m_state = NONE;
-//
-//         m_2DViewer->getCurrentCursorPosition(clickPosition);
-//
-//         Distance d;
-//
-//         if (m_pointOfDistance == 1)
-//             d.setPoints( m_selectedDistance->GetPoint2() , clickPosition );
-//         else
-//             d.setPoints( m_selectedDistance->GetPoint1() , clickPosition );
-//
-//         QString str = QString("%1 mm").arg(d.getDistance2D(), 0, 'f', 2);
-//
-//         //Assignem el text a l'etiqueta de la distància i la situem
-//         m_textDistanceActor->SetCaption( qPrintable ( str ));
-//         m_textDistanceActor->SetAttachmentPoint( clickPosition );
-// //         m_2DViewer->getRenderer()->AddActor(m_selectedActor);
-//
-//         m_textDistanceActor->VisibilityOn();
-//
-//         m_2DViewer->getInteractor()->Render();
-}
+{}
 
 void DistanceTool::drawDistancesOfSlice( int slice )
 {
-    // si hem canviat de vista, primer fem invisibles els actors de la última vista a la última llesca
+    // si hem canviat de vista, primer fem invisibles els actors de la Ãºltima vista a la Ãºltima llesca
     int viewToClear;
     if( m_lastView != m_2DViewer->getView() )
     {
@@ -452,7 +396,7 @@ void DistanceTool::drawDistancesOfSlice( int slice )
     else // continuem a la mateixa vista
         viewToClear = m_2DViewer->getView();
 
-    QList< vtkPropAssembly *> list;
+    QList< AssemblyAndLineObject *> list;
     switch( viewToClear )
     {
     case Q2DViewer::Axial:
@@ -472,9 +416,9 @@ void DistanceTool::drawDistancesOfSlice( int slice )
     break;
     }
 
-    foreach( vtkPropAssembly *assembly, list )
+    foreach( AssemblyAndLineObject *assembly, list )
     {
-        assembly->VisibilityOff();
+        assembly->getAssembly()->VisibilityOff();
     }
 
     // actualitzem la llesca
@@ -500,9 +444,9 @@ void DistanceTool::drawDistancesOfSlice( int slice )
     break;
     }
 
-    foreach( vtkPropAssembly *assembly, list )
+    foreach( AssemblyAndLineObject *assembly, list )
     {
-        assembly->VisibilityOn();
+        assembly->getAssembly()->VisibilityOn();
     }
 
     m_2DViewer->refresh();
@@ -520,19 +464,19 @@ void DistanceTool::answerToKeyEvent()
 
     if ( m_selectedAssembly != NULL && keyInt == 127 )
     {
-        QMutableMapIterator< int , vtkPropAssembly * > *iterator = NULL;
+        QMutableMapIterator< int , AssemblyAndLineObject* > *iterator = NULL;
         switch( m_lastView )
         {
         case Q2DViewer::Axial:
-            iterator = new QMutableMapIterator< int , vtkPropAssembly * >( m_distancesOfAxialViewMap );
+            iterator = new QMutableMapIterator< int , AssemblyAndLineObject* >( m_distancesOfAxialViewMap );
         break;
 
         case Q2DViewer::Sagittal:
-            iterator = new QMutableMapIterator< int , vtkPropAssembly * >( m_distancesOfSagittalViewMap );
+            iterator = new QMutableMapIterator< int , AssemblyAndLineObject* >( m_distancesOfSagittalViewMap );
         break;
 
         case Q2DViewer::Coronal:
-            iterator = new QMutableMapIterator< int , vtkPropAssembly * >( m_distancesOfCoronalViewMap );
+            iterator = new QMutableMapIterator< int , AssemblyAndLineObject* >( m_distancesOfCoronalViewMap );
         break;
 
         default:
@@ -545,9 +489,10 @@ void DistanceTool::answerToKeyEvent()
             if( iterator->findNext( m_selectedAssembly ) )
             {
                 iterator->remove();
-                m_2DViewer->getRenderer()->RemoveActor( m_selectedAssembly );
+                m_2DViewer->getRenderer()->RemoveActor( (m_selectedAssembly->getAssembly()) );
                 if( m_selectedAssembly == m_previousHighlightedAssembly )
                     m_previousHighlightedAssembly = NULL;
+                
                 m_selectedAssembly = NULL;
                 m_2DViewer->refresh();
             }
