@@ -50,7 +50,6 @@ bool StudyList::findStudy( std::string UID )
 {
     sem_wait( m_semafor );
     m_iterator = m_listStudy.begin();
-    if ( m_iterator==m_listStudy.end() ) return false;
 
     while ( m_iterator != m_listStudy.end() )
     {
