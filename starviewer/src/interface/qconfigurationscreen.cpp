@@ -17,6 +17,8 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QTreeView>
+#include <QCloseEvent>
+#include <QHeaderView>
 
 #include "pacsparameters.h"
 #include "status.h"
@@ -55,6 +57,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     createConnections();
 	setIconButtons();
 
+    setWidthColumns();
 }
 
 void QConfigurationScreen::createConnections()
@@ -128,6 +131,17 @@ void QConfigurationScreen::createConnections()
     connect( m_buttonTestPacs , SIGNAL( clicked() ) , this , SLOT( test() ) );
     connect( m_PacsTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int) ) , this , SLOT( selectedPacs( QTreeWidgetItem * , int ) ) );
 }
+
+void QConfigurationScreen::setWidthColumns()
+{
+    StarviewerSettings settings;
+
+    for ( int index = 0; index < m_PacsTreeView->columnCount(); index++ )
+    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
+            m_PacsTreeView->header()->resizeSection( index ,settings.getQConfigurationPacsDeviceColumnWidth(  index ) );
+    }
+}
+
 
 void QConfigurationScreen::setIconButtons()
 {
@@ -909,6 +923,23 @@ void QConfigurationScreen::createDatabase()
         }
     }
 }
+
+void QConfigurationScreen::saveColumnsWidth()
+{
+    StarviewerSettings settings;
+    for ( int i = 0; i < m_PacsTreeView->columnCount(); i++ )
+    {
+        settings.setQConfigurationPacsDeviceColumnWidth( i , m_PacsTreeView->columnWidth( i ) );
+    }
+}
+
+void QConfigurationScreen::closeEvent( QCloseEvent* ce )
+{
+    saveColumnsWidth();
+
+    ce->accept();
+}
+
 
 void QConfigurationScreen::databaseError(Status *state)
 {

@@ -40,6 +40,9 @@ const QString queryScreenWindowWidth("/interface/queryscreen/windowWidth");
 const QString queryScreenWindowHeight("/interface/queryscreen/windowHeigth");
 const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
+const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString qCreateDicomdirColumnWidthKey("/interface/qCreateDicomdir/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString qConfigurationPacsDeviceColumnWidthKey("/interface/qConfigurationPacsDevice/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 
 class StarviewerSettings{
 public:
@@ -177,6 +180,24 @@ public:
      */
     void setQueryScreenStudyTreeSeriesListQSplitterState( QByteArray state );
 
+    /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget de QOperationStateScreen ,  encarregat de mostrar l'estat de les operacions relacionades amb el PACS
+     * @param número de columna
+     * @param amplada de la columna
+     */
+    void setQOperationStateColumnWidth( int col , int width );
+
+    /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget QCreatoDicomdir ,  on s'hi mostren quins estudis es convertiran en dicomdirs
+     * @param número de columna
+     * @param amplada de la columna
+     */
+    void setQCreateDicomdirColumnWidth( int col , int width );
+
+    /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget de la QConfigurationScreen ,  on s'hi mostren quins pacs tenim per connectar-nos
+     * @param número de columna
+     * @param amplada de la columna
+     */
+    void setQConfigurationPacsDeviceColumnWidth( int col , int width );
+
 	/** retorna l'amplada del número de columna de la llista d'estudis del PACS ,  passat per paràmetre
 	 * @return amplada de la columna
 	 */
@@ -216,6 +237,22 @@ public:
      * @return estat del QSpliltter
      */
     QByteArray getQueryScreenStudyTreeSeriesListQSplitterState();
+
+    /** retorna l'amplada del número de columna de la QTreeWidget de la QOperationStateScreen
+     * @return amplada de la columna
+     */
+    int getQOperationStateColumnWidth( int column );
+
+    /** retorna l'amplada del número de columna de la QTreeWidget de la QCreatoDicomdir
+     * @return amplada de la columna
+     */
+    int getQCreateDicomdirColumnWidth( int column );
+
+    /** retorna l'amplada del número de columna de la QTreeWidget de la QConfigurationScree
+     * @return amplada de la columna
+     */
+    int getQConfigurationPacsDeviceColumnWidth( int column );
+
 
     /** Guarda el nom de la institució
      * @param institutionName nom de l'institució
@@ -296,6 +333,7 @@ public:
       * @return indica si s'executa l'aplicació en verbode Mode
       */
     bool getLogCommunicationPacsVerboseMode();
+
 
 private :
     /// Nom del grup on es guarda la configuració d'aquesta classe

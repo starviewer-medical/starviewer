@@ -17,6 +17,8 @@
 #include <QContextMenuEvent>
 #include <QShortcut>
 #include <QProgressDialog>
+#include <QCloseEvent>
+#include <QHeaderView>
 
 #include "study.h"
 #include "converttodicomdir.h"
@@ -27,6 +29,7 @@
 #include "imagemask.h"
 #include "harddiskinformation.h"
 #include "deletedirectory.h"
+#include "starviewersettings.h"
 
 namespace udg {
 
@@ -51,6 +54,8 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     //per defecte gravem al disc dur per tant, l'espai és il·limitat
     m_DiskSpace = ( unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
+
+    setWidthColumns();
 }
 
 void QCreateDicomdir::createConnections()
@@ -60,6 +65,16 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
     connect( m_comboBoxAction , SIGNAL( currentIndexChanged( int ) ) , this , SLOT( changedAction( int ) ) );
+}
+
+void QCreateDicomdir::setWidthColumns()
+{
+    StarviewerSettings settings;
+
+    for ( int index = 0; index < m_dicomdirStudiesList->columnCount(); index++ )
+    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
+            m_dicomdirStudiesList->header()->resizeSection( index ,settings.getQCreateDicomdirColumnWidth( index ) );
+    }
 }
 
 void QCreateDicomdir::changedAction( int index )
@@ -646,6 +661,22 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )
     QFile dicomdirFile;
 
     return dicomdirFile.exists( dicomdirPath + "/DICOMDIR" );
+}
+
+void QCreateDicomdir::saveColumnsWidth()
+{
+    StarviewerSettings settings;
+    for ( int i = 0; i < m_dicomdirStudiesList->columnCount(); i++ )
+    {
+        settings.setQCreateDicomdirColumnWidth( i , m_dicomdirStudiesList->columnWidth( i ) );
+    }
+}
+
+void QCreateDicomdir::closeEvent( QCloseEvent* ce )
+{
+    saveColumnsWidth();
+
+    ce->accept();
 }
 
 QCreateDicomdir::~QCreateDicomdir()

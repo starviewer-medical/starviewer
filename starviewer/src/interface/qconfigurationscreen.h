@@ -90,6 +90,13 @@ signals :
     ///signal que s'emet quan la cache ha estat netejada cap a QueryScreen, pq netegi el QStudyTreeView que mostra els estudis de la cache
     void cacheCleared();
 
+protected :
+
+    /** Event que s'activa al tancar al rebren un event de tancament
+     * @param event de tancament
+     */
+    void closeEvent( QCloseEvent* ce );
+
 private :
 
     int m_PacsID; /// Conté el D del pacs seleccionat en aquell moment
@@ -98,6 +105,10 @@ private :
 
     ///crea els connects dels signals i slots
     void createConnections();
+
+    /** Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla. La mida de les columnes la tenim guardada al StarviewerSettings
+     */
+    void setWidthColumns();
 
     /** Comprovem que els paràmetres dels PACS siguin correctes.
      *  1r Que el AETitle no estigui en blanc,
@@ -147,6 +158,10 @@ private :
 
 	/// col·loca les icones als buttons d'acceptar, cancel·lar i applicar de l'apartat de Pacs i la Cache
 	void setIconButtons();
+
+    /** Guarda la mida de les columnes del QTreeWidget de la pestanya de PACS Device al StarviewerSettings
+     */
+    void saveColumnsWidth();
 
 };
 

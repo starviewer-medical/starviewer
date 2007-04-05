@@ -161,6 +161,24 @@ void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( QByteA
     m_starviewerSettings.setValue( key , state );
 }
 
+void StarviewerSettings::setQOperationStateColumnWidth( int col , int width )
+{
+    QString key = GroupSettingsName + qOperationStateColumnWidthKey + QString::number( col );
+    m_starviewerSettings.setValue( key , width );
+}
+
+void StarviewerSettings::setQCreateDicomdirColumnWidth( int col , int width )
+{
+    QString key = GroupSettingsName + qCreateDicomdirColumnWidthKey + QString::number( col );
+    m_starviewerSettings.setValue( key , width );
+}
+
+void StarviewerSettings::setQConfigurationPacsDeviceColumnWidth( int col , int width )
+{
+    QString key = GroupSettingsName + qConfigurationPacsDeviceColumnWidthKey + QString::number( col );
+    m_starviewerSettings.setValue( key , width );
+}
+
 int StarviewerSettings::getStudyPacsListColumnWidth( int col )
 {
     QString key = GroupSettingsName + pacsColumnWidthKey + QString::number(col);
@@ -207,6 +225,24 @@ QByteArray StarviewerSettings::getQueryScreenStudyTreeSeriesListQSplitterState()
 {
     QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
     return m_starviewerSettings.value( key ).toByteArray();
+}
+
+int StarviewerSettings::getQOperationStateColumnWidth( int col )
+{
+    QString key = GroupSettingsName + qOperationStateColumnWidthKey + QString::number( col );
+    return m_starviewerSettings.value( key , 100 ).toInt();
+}
+
+int StarviewerSettings::getQCreateDicomdirColumnWidth( int col )
+{
+    QString key = GroupSettingsName + qCreateDicomdirColumnWidthKey + QString::number( col );
+    return m_starviewerSettings.value( key , 100 ).toInt();
+}
+
+int StarviewerSettings::getQConfigurationPacsDeviceColumnWidth( int col )
+{
+    QString key = GroupSettingsName + qConfigurationPacsDeviceColumnWidthKey + QString::number( col );
+    return m_starviewerSettings.value( key , 100 ).toInt();
 }
 
 /*** Dades de la institució*/

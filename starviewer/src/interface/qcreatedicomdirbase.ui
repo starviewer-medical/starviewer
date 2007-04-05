@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::QCreateDicomdirBase</class>
  <widget class="QDialog" name="udg::QCreateDicomdirBase" >
   <property name="geometry" >
@@ -272,6 +269,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="horizontalScrollBarPolicy" >
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
         <property name="selectionMode" >
          <enum>QAbstractItemView::ExtendedSelection</enum>
         </property>
@@ -413,7 +413,6 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <resources>
   <include location="../main/main.qrc" />
  </resources>
