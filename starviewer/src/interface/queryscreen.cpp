@@ -1123,6 +1123,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
         seriesVol.setStudyId( stu.getStudyId() );
         seriesVol.setStudyUID( stu.getStudyUID() );
         seriesVol.setSeriesPath( absSeriesPath.toAscii().constData() );
+        seriesVol.setSeriesModality( series.getSeriesModality().c_str() );
 
         imageList.clear();
         state = m_readDicomdir.readImages( series.getSeriesUID() , imageList );//accedim a llegir la informació de les imatges per cada serie
