@@ -1015,6 +1015,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
         seriesVol.setStudyId( stu.getStudyId() );
         seriesVol.setStudyUID( stu.getStudyUID() );
         seriesVol.setSeriesPath( absSeriesPath.toStdString() );
+        seriesVol.setSeriesModality( series.getSeriesModality().c_str() );
 
         imageMask.setSeriesUID(series.getSeriesUID().c_str() );
         imageMask.setStudyUID( stu.getStudyUID().c_str() );
