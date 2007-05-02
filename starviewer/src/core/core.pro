@@ -48,6 +48,7 @@ HEADERS += extensionfactory.h \
            q2dviewertoolmanager.h \
            windowleveltool.h \
            toolsactionfactory.h \
+           seedtool.h \
            zoomtool.h \
            q3dviewertoolmanager.h \
            translatetool.h \
@@ -88,6 +89,7 @@ SOURCES += extensionmediator.cpp \
            q2dviewertoolmanager.cpp \
            windowleveltool.cpp \
            toolsactionfactory.cpp \
+           seedtool.cpp \
            zoomtool.cpp \
            q3dviewertoolmanager.cpp \
            translatetool.cpp \

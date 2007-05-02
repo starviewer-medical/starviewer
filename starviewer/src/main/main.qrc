@@ -1,6 +1,10 @@
 <RCC>
     <qresource prefix="/" >
         <file>cache/database.sql</file>
+        <file>images/eraser.png</file>
+        <file>images/pencil.png</file>
+        <file>images/airbrush.png</file>
+        <file>images/seed.png</file>
         <file>images/addViewRight.png</file>
         <file>images/apply.png</file>
         <file>images/axial.png</file>

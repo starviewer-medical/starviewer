@@ -22,6 +22,9 @@
 #include "qmpr3dextension.h"
 #include "qmpr3d2dextension.h"
 #include "q2dviewerextension.h"
+#include "qstrokesegmentationextension.h"
+#include "qlandmarkregistrationextension.h"
+#include "qedemasegmentationextension.h"
 
 // Fi de l'espai reservat pels include de les mini-apps
 
@@ -153,6 +156,36 @@ void ExtensionHandler::request( int who )
 
         break;
     }
+
+    /// Stroke Segmentation
+    case 9:
+    {
+        QStrokeSegmentationExtension *strokeSegmentationExtension = new QStrokeSegmentationExtension;
+        strokeSegmentationExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+        m_mainApp->m_extensionWorkspace->addApplication( strokeSegmentationExtension , tr("Stroke Segmentation"));
+    }
+    break;
+
+    /// Landmark Registration
+    case 10:
+    {
+        QLandmarkRegistrationExtension *landmarkRegistrationExtension = new QLandmarkRegistrationExtension;
+        connect( landmarkRegistrationExtension, SIGNAL( newSerie() ), this, SLOT( openSerieToCompare() ) );
+        connect( this , SIGNAL( secondInput(Volume*) ) , landmarkRegistrationExtension , SLOT( setSecondInput(Volume*) ) );
+        landmarkRegistrationExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+        m_mainApp->m_extensionWorkspace->addApplication( landmarkRegistrationExtension , tr("Landmark Registration"));
+    }
+    break;
+
+    /// Edema Segmentation
+    case 11:
+    {
+        QEdemaSegmentationExtension *edemaSegmentationExtension = new QEdemaSegmentationExtension;
+        edemaSegmentationExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+        m_mainApp->m_extensionWorkspace->addApplication( edemaSegmentationExtension , tr("Edema Segmentation"));
+    }
+    break;
+
     default:
     {
         Q2DViewerExtension *defaultViewerExtension2 = new Q2DViewerExtension;

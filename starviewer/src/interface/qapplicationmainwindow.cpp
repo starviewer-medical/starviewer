@@ -174,6 +174,30 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
     connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
+    m_strokeSegmentationAction = new QAction( this );
+    m_strokeSegmentationAction->setText( tr("Stroke Segmentation") );
+    m_strokeSegmentationAction->setStatusTip( tr("Open the Stroke Segmentation Application") );
+    m_strokeSegmentationAction->setEnabled( false );
+    m_signalMapper->setMapping( m_strokeSegmentationAction , 9 );
+    m_signalMapper->setMapping( m_strokeSegmentationAction , "Stroke Segmentation Extension" );
+    connect( m_strokeSegmentationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
+    m_landmarkRegistrationAction = new QAction( this );
+    m_landmarkRegistrationAction->setText( tr("LandmarkRegistration") );
+    m_landmarkRegistrationAction->setStatusTip( tr("Open the Landmark Registration Application") );
+    m_landmarkRegistrationAction->setEnabled( false );
+    m_signalMapper->setMapping( m_landmarkRegistrationAction , 10 );
+    m_signalMapper->setMapping( m_landmarkRegistrationAction , "Landmark Registration Extension" );
+    connect( m_landmarkRegistrationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
+    m_edemaSegmentationAction = new QAction( this );
+    m_edemaSegmentationAction->setText( tr("Edema Segmentation") );
+    m_edemaSegmentationAction->setStatusTip( tr("Open the Edema Segmentation Application") );
+    m_edemaSegmentationAction->setEnabled( false );
+    m_signalMapper->setMapping( m_edemaSegmentationAction , 11 );
+    m_signalMapper->setMapping( m_edemaSegmentationAction , "Edema Segmentation Extension" );
+    connect( m_edemaSegmentationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
     m_fullScreenAction = new QAction( this );
     m_fullScreenAction->setText( tr("Show Full Screen") );
     m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
@@ -312,6 +336,9 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
+    m_visualizationMenu->addAction( m_strokeSegmentationAction );
+    m_visualizationMenu->addAction( m_landmarkRegistrationAction );
+    m_visualizationMenu->addAction( m_edemaSegmentationAction );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
@@ -496,6 +523,9 @@ void QApplicationMainWindow::onVolumeLoaded( Identifier id )
     m_mpr2DAction->setEnabled( true );
     m_mpr3DAction->setEnabled( true );
     m_mpr3D2DAction->setEnabled( true );
+    m_strokeSegmentationAction->setEnabled( true );
+    m_landmarkRegistrationAction->setEnabled( true );
+    m_edemaSegmentationAction->setEnabled( true );
     m_extensionHandler->onVolumeLoaded( id );
 }
 

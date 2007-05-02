@@ -108,6 +108,10 @@ private:
     QAction *m_mpr3DAction;
     QAction *m_mpr3D2DAction;
     QAction *m_pacsAction;
+    QAction *m_strokeSegmentationAction;
+    QAction *m_landmarkRegistrationAction;
+    QAction *m_edemaSegmentationAction;
+
     QAction *m_newAction;
     QAction *m_openAction;
     QAction *m_openDirAction;

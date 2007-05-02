@@ -13,6 +13,7 @@
 #include "screenshottool.h"
 #include "distancetool.h"
 #include "logging.h"
+#include "seedtool.h"
 
 namespace udg {
 
@@ -52,6 +53,7 @@ void Q2DViewerToolManager::initToolRegistration()
     m_toolList["ZoomTool"] = new ZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new TranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
+    m_toolList["SeedTool"] = new SeedTool( m_viewer );
     m_toolList["DistanceTool"] = new DistanceTool( m_viewer );
 }
 

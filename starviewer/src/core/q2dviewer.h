@@ -28,6 +28,7 @@ class vtkCoordinate;
 class vtkCaptionActor2D;
 class vtkScalarBarActor;
 class vtkInteractorStyleImage;
+class vtkImageBlend;
 
 namespace udg {
 
@@ -96,6 +97,9 @@ public:
 
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );
+
+    /// Canviem l'opacitat del volum solapat
+    void setOpacityOverlay ( double op );
 
     // Mètodes específics checkerboard
     /// Obtenim el nombre de divisions
@@ -216,6 +220,12 @@ public slots:
     void enableTools();
     void disableTools();
 
+    /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
+    void setSeedPosition( double pos[3] );
+
+    /// Obtenir la llavor
+    void getSeedPosition( double pos[3] );
+
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
     void rotateClockWise();
 
@@ -244,6 +254,12 @@ protected:
     /// Aquest és el segon volum afegit a solapar
     Volume* m_overlayVolume;
 
+    /// Aquest és el blender per veure imatges fusionades
+    vtkImageBlend* m_blender;
+
+    /// Opacitat del segon volume
+    double m_opacityOverlay;
+
     /// El nombre de divisions per cada dimensió
     int m_divisions[3];
 
@@ -269,7 +285,7 @@ private:
     /// inicialitza els strings d'informació que es mostraran a la pantalla
     void initInformationText();
 
-    /// Tipu de solapament dels volums en cas que en tinguem més d'un
+    /// Tipus de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
 
     /// configuració de la interacció amb l'usuari
@@ -344,6 +360,9 @@ private:
     /// El manager de les tools
     Q2DViewerToolManager *m_toolManager;
 
+    ///Informació de la posició de la seed
+    double m_seedPosition[3];
+
     /// per controlar si la info de voxel està habilitada o no
     bool m_voxelInformationEnabled;
 
@@ -360,6 +379,10 @@ signals:
 
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
+
+    /// Senyal que s'envia quan la llavor s'ha canviat \TODO mirar de treure-ho i posar-ho en la tool SeedTool
+    void seedChanged();
+
 };
 
 };  //  end  namespace udg

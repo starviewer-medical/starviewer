@@ -47,6 +47,13 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_signalMapper->setMapping( m_moveAction , "TranslateTool" );
     connect( m_moveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
+    m_seedAction = new QAction( 0 );
+    m_seedAction->setText( tr("Seed") );
+    m_seedAction->setStatusTip( tr("Put Seed tool") );
+    m_seedAction->setCheckable( true );
+    m_signalMapper->setMapping( m_seedAction , "SeedTool" );
+    connect( m_seedAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
     m_screenShotAction = new QAction( 0 );
     m_screenShotAction->setText( tr("Screen Shot") );
     m_screenShotAction->setStatusTip( tr("Enable/Disable Screen shot tool") );
@@ -79,6 +86,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["ZoomTool"] = m_zoomAction;
     m_availableToolActions["TranslateTool"] = m_moveAction;
     m_availableToolActions["ScreenShotTool"] = m_screenShotAction;
+    m_availableToolActions["SeedTool"] = m_seedAction;
     m_availableToolActions["3DRotationTool"] = m_rotate3dAction;
     m_availableToolActions["DistanceTool"] = m_distanceAction;
 }

@@ -73,6 +73,9 @@ Q2DViewer::Q2DViewer( QWidget *parent , unsigned int annotations )
     m_viewer = vtkImageViewer2::New();
     // preparem el picker
     m_picker = vtkPropPicker::New();
+    // preparem el picker
+    m_blender = 0;
+
     m_overlayVolume = 0;
     m_voxelInformationCaption = 0;
     m_textAnnotation = 0;
@@ -881,11 +884,13 @@ void Q2DViewer::setOverlayInput( Volume* volume )
 {
     m_overlayVolume = volume;
 
+        // \TODO s'hauria d'eliminar aquests objectes en algun punt (veure cas del blend)
     vtkImageCheckerboard *imageCheckerBoard = vtkImageCheckerboard::New();
-    vtkImageBlend *blender;
-
     vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
 
+        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
+
+    //std::cout<<"overlay: "<<m_overlay<<" [CB="<<CheckerBoard<<", BL="<<Blend<<" ,RW="<<RectilinearWipe<<"]" <<std::endl;
     switch( m_overlay )
     {
     case CheckerBoard:
@@ -899,12 +904,21 @@ void Q2DViewer::setOverlayInput( Volume* volume )
     break;
 
     case Blend:
-        blender = vtkImageBlend::New();
-        blender->SetInput(m_mainVolume->getVtkData());
-        blender->AddInput(m_overlayVolume->getVtkData());
-        blender->SetOpacity( 1, 0.5 );
-        blender->SetOpacity( 2, 0.5 );
-        m_viewer->SetInputConnection( blender->GetOutputPort() ); // li donem el blender com a input
+        if (m_blender==0)
+        {
+            m_blender = vtkImageBlend::New();
+        }
+        else
+        {
+            //\TODO: sembla que hi hauria una manera millor de fer-ho, però l'Anton no l'ha trobat
+            m_blender->Delete();
+            m_blender = vtkImageBlend::New();
+        }
+        m_blender->SetInput(m_mainVolume->getVtkData());
+        m_blender->AddInput(m_overlayVolume->getVtkData());
+        m_blender->SetOpacity( 1, 1.0 - m_opacityOverlay );
+        m_blender->SetOpacity( 2, m_opacityOverlay );
+        m_viewer->SetInputConnection( m_blender->GetOutputPort() ); // li donem el blender com a input
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
 
@@ -917,6 +931,11 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
     }
+}
+
+void Q2DViewer::setOpacityOverlay ( double op )
+{
+    m_opacityOverlay=op;
 }
 
 void Q2DViewer::render()
@@ -1135,6 +1154,21 @@ void Q2DViewer::getDivisions( int data[3] )
     data[0] = m_divisions[0];
     data[1] = m_divisions[1];
     data[2] = m_divisions[2];
+}
+
+void Q2DViewer::setSeedPosition( double pos[3] )
+{
+    m_seedPosition[0] = pos[0];
+    m_seedPosition[1] = pos[1];
+    m_seedPosition[2] = pos[2];
+    emit seedChanged();
+}
+
+void Q2DViewer::getSeedPosition( double pos[3] )
+{
+    pos[0] = m_seedPosition[0];
+    pos[1] = m_seedPosition[1];
+    pos[2] = m_seedPosition[2];
 }
 
 void Q2DViewer::saveAll( const char *baseName , FileType extension )
