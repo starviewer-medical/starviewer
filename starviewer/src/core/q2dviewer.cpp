@@ -40,6 +40,7 @@
 #include <vtkProperty2D.h>
 #include <vtkScalarBarActor.h>
 #include <vtkLookupTable.h>
+#include <vtkImageMapToWindowLevelColors.h>
 // desar imatges
 #include <vtkWindowToImageFilter.h>
 #include <vtkPNGWriter.h>
@@ -302,15 +303,20 @@ void Q2DViewer::updateScalarBar()
 {
     if( m_mainVolume )
     {
-        vtkLookupTable *lookup = vtkLookupTable::New();
-        double range[2];
-        range[0] = m_viewer->GetColorLevel() - m_viewer->GetColorWindow()/2;
-        range[1] = m_viewer->GetColorLevel() + m_viewer->GetColorWindow()/2;
-        lookup->SetTableRange( range );
-        lookup->SetSaturationRange( 0 , 0 );
-        lookup->SetHueRange( 0 , 0 );
-        lookup->SetValueRange( 0 , 1 );
-        lookup->Build();
+        // \TODO HACK!!
+        vtkLookupTable * lookup = vtkLookupTable::SafeDownCast( this->getImageViewer()->GetWindowLevel()->GetLookupTable() );
+        if ( !lookup )
+        {
+            lookup = vtkLookupTable::New();
+            double range[2];
+            range[0] = m_viewer->GetColorLevel() - m_viewer->GetColorWindow()/2;
+            range[1] = m_viewer->GetColorLevel() + m_viewer->GetColorWindow()/2;
+            lookup->SetTableRange( range );
+            lookup->SetSaturationRange( 0 , 0 );
+            lookup->SetHueRange( 0 , 0 );
+            lookup->SetValueRange( 0 , 1 );
+            lookup->Build();
+        }
         m_scalarBar->SetLookupTable( lookup );
     }
     else

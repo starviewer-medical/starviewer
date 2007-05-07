@@ -25,6 +25,7 @@
 #include "qstrokesegmentationextension.h"
 #include "qlandmarkregistrationextension.h"
 #include "qedemasegmentationextension.h"
+#include "qdifuperfuextension.h"
 
 // Fi de l'espai reservat pels include de les mini-apps
 
@@ -186,6 +187,23 @@ void ExtensionHandler::request( int who )
     }
     break;
 
+    /// Diffusion-Perfusion Segmentation
+    case 12:
+        {
+            QDifuPerfuSegmentationExtension * diffusionPerfusionSegmentationExtension
+                    = new QDifuPerfuSegmentationExtension();
+            diffusionPerfusionSegmentationExtension->setDiffusionInput(
+                    m_volumeRepository->getVolume( m_volumeID ) );
+            m_mainApp->m_extensionWorkspace->addApplication(
+                    diffusionPerfusionSegmentationExtension, tr("Diffusion-Perfusion Segmentation") );
+
+            connect( diffusionPerfusionSegmentationExtension, SIGNAL( openPerfusionImage() ),
+                        this, SLOT( openPerfusionImage() ) );
+            connect( this, SIGNAL( perfusionImage(Volume*) ),
+                        diffusionPerfusionSegmentationExtension, SLOT( setPerfusionInput(Volume*) ) );
+        }
+        break;
+
     default:
     {
         Q2DViewerExtension *defaultViewerExtension2 = new Q2DViewerExtension;
@@ -218,6 +236,21 @@ void ExtensionHandler::openSerieToCompare()
     connect( queryScreen , SIGNAL( viewStudy(StudyVolum) ) , this , SLOT( viewStudyToCompare(StudyVolum) ) );
     queryScreen->show();
 }
+
+
+
+void ExtensionHandler::openPerfusionImage()
+{
+//     QueryScreen * queryScreen = new QueryScreen( m_mainApp );
+    disconnect( m_queryScreen, SIGNAL( viewStudy(StudyVolum) ),
+                this, SLOT( viewStudy(StudyVolum) ) );
+    connect( m_queryScreen, SIGNAL( viewStudy(StudyVolum) ),
+             this, SLOT( viewStudyForPerfusion(StudyVolum) ) );
+
+    m_queryScreen->show();
+}
+
+
 
 void ExtensionHandler::request( const QString &who )
 {
@@ -323,6 +356,55 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
     m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
     emit secondInput( dummyVolume );
+}
+
+void ExtensionHandler::viewStudyForPerfusion( StudyVolum study )
+{
+    Input *input = new Input;
+    QProgressDialog progressDialog;
+    progressDialog.setRange( 0 , 100 );
+    progressDialog.setMinimumDuration( 0 );
+    progressDialog.setWindowTitle( tr("Serie loading") );
+    // atenció: el missatge triga una miqueta a aparèixer...
+    progressDialog.setLabelText( tr("Loading, please wait...") );
+    progressDialog.setCancelButton( 0 );
+    connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
+    SeriesVolum serie;
+
+    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
+    study.firstSerie();
+    while ( !study.end() )
+    {
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
+        {
+            break;
+        }
+        study.nextSerie();
+    }
+    if ( study.end() )
+    {
+        //si no l'hem trobat per defecte mostrarem la primera serie
+        study.firstSerie();
+    }
+
+    serie = study.getSeriesVolum();
+    input->readFiles( serie.getVectorImagePath() );
+
+    if( !m_compareVolumeID.isNull() )
+    {
+        m_volumeRepository->removeVolume( m_compareVolumeID );
+    }
+
+    Volume * dummyVolume = input->getData();
+    m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
+    m_mainApp->setCursor( QCursor( Qt::ArrowCursor ) );
+
+    emit perfusionImage( dummyVolume );
+
+    disconnect( m_queryScreen , SIGNAL( viewStudy(StudyVolum) ),
+                this, SLOT( viewStudyForPerfusion(StudyVolum) ) );
+    connect( m_queryScreen, SIGNAL( viewStudy(StudyVolum) ),
+             this, SLOT( viewStudy(StudyVolum) ) );
 }
 
 void ExtensionHandler::extensionChanged( int index )

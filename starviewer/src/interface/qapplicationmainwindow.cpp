@@ -198,6 +198,17 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_edemaSegmentationAction , "Edema Segmentation Extension" );
     connect( m_edemaSegmentationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
+    m_diffusionPerfusionSegmentationAction = new QAction( this );
+    m_diffusionPerfusionSegmentationAction->setText( tr("Diffusion-Perfusion Segmentation") );
+    m_diffusionPerfusionSegmentationAction->setStatusTip(
+            tr("Open the Diffusion-Perfusion Segmentation Application") );
+    m_diffusionPerfusionSegmentationAction->setEnabled( false );
+    m_signalMapper->setMapping( m_diffusionPerfusionSegmentationAction, 12 );
+    m_signalMapper->setMapping( m_diffusionPerfusionSegmentationAction,
+                                "Diffusion-Perfusion Extension" );
+    connect( m_diffusionPerfusionSegmentationAction, SIGNAL( triggered() ),
+             m_signalMapper, SLOT( map() ) );
+
     m_fullScreenAction = new QAction( this );
     m_fullScreenAction->setText( tr("Show Full Screen") );
     m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
@@ -339,6 +350,7 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_strokeSegmentationAction );
     m_visualizationMenu->addAction( m_landmarkRegistrationAction );
     m_visualizationMenu->addAction( m_edemaSegmentationAction );
+    m_visualizationMenu->addAction( m_diffusionPerfusionSegmentationAction );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
@@ -526,6 +538,8 @@ void QApplicationMainWindow::onVolumeLoaded( Identifier id )
     m_strokeSegmentationAction->setEnabled( true );
     m_landmarkRegistrationAction->setEnabled( true );
     m_edemaSegmentationAction->setEnabled( true );
+    m_diffusionPerfusionSegmentationAction->setEnabled( true );
+
     m_extensionHandler->onVolumeLoaded( id );
 }
 

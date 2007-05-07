@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
-# L'objectiu és una biblioteca:  
+# L'objectiu Ã©s una biblioteca:  
 
 FORMS += qconfigurationscreenbase.ui \
          qmpr3d2dextensionbase.ui \
@@ -17,7 +17,8 @@ FORMS += qconfigurationscreenbase.ui \
          qstrokesegmentationextensionbase.ui \
          qlandmarkregistrationextensionbase.ui \
          qoperationstatescreenbase.ui \
-         qedemasegmentationextensionbase.ui 
+         qedemasegmentationextensionbase.ui \
+         qdifuperfuextensionbase.ui 
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -43,6 +44,10 @@ HEADERS += qapplicationmainwindow.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            qcreatedicomdir.h \
+           qdifuperfuextension.h \
+           itkRegistre3DAffine.h \
+           udgPerfusionEstimator.h \
+           udgBinaryMaker.h \
            qstrokesegmentationextension.h \
            strokesegmentationmethod.h \
            qlandmarkregistrationextension.h \
@@ -76,6 +81,10 @@ SOURCES += qapplicationmainwindow.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp \
+           qdifuperfuextension.cpp \
+           itkRegistre3DAffine.cpp \
+           udgPerfusionEstimator.cpp \
+           udgBinaryMaker.cpp \
            qstrokesegmentationextension.cpp \
            strokesegmentationmethod.cpp \
            qlandmarkregistrationextension.cpp \

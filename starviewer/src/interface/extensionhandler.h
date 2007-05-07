@@ -46,11 +46,14 @@ public slots:
     /// aplicació que s'executa per defecte quan carreguem un volum al repositori
     void onVolumeLoaded( Identifier id );
 
-    /// [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
+    /// \TODO [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
     void viewStudy( StudyVolum study );
 
-    /// [apanyo] Slot que afegeix al 2n visor una sèrie escollida per comparar-> és un mètode moooolt temporal.
+    /// \TODO [apanyo] Slot que afegeix al 2n visor una sèrie escollida per comparar-> és un mètode moooolt temporal.
     void viewStudyToCompare( StudyVolum study );
+
+    /// \TODO [apanyo] Obre la imatge de perfusió del mètode de difusió-perfusió.
+    void viewStudyForPerfusion( StudyVolum study );
 
     /// cridat quan l'aplicació mor
     void killBill();
@@ -100,9 +103,16 @@ private slots:
     /// [temporal] Obre una sèrie per comparar en el visor per defecte
     void openSerieToCompare();
 
+    /// [temporal] Llança el diàleg per obrir la imatge de perfusió del mètode de difusió-perfusió.
+    void openPerfusionImage();
+
 signals:
     /// Emet un senyal amb el segon volum per comparar
     void secondInput( Volume* );
+
+    /// [temporal] Emet un senyal amb el volum de perfusió del mètode de difusió-perfusió.
+    void perfusionImage( Volume * volume );
+
 };
 
 };  //  end  namespace udg

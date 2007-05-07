@@ -111,6 +111,7 @@ private:
     QAction *m_strokeSegmentationAction;
     QAction *m_landmarkRegistrationAction;
     QAction *m_edemaSegmentationAction;
+    QAction *m_diffusionPerfusionSegmentationAction;
 
     QAction *m_newAction;
     QAction *m_openAction;

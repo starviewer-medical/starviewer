@@ -1,0 +1,1496 @@
+<ui version="4.0" >
+ <class>QDifuPerfuExtensionBase</class>
+ <widget class="QWidget" name="QDifuPerfuExtensionBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>944</width>
+    <height>743</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="m_horizontalSplitter" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="layoutWidget" >
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="m_diffusionPerfusionMethodGroupBox" >
+         <property name="title" >
+          <string>Diffusion-Perfusion Segmentation</string>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="m_diffusionImageGroupBox" >
+            <property name="title" >
+             <string>Diffusion image</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_totalDiffusionImagesLabel" >
+                 <property name="text" >
+                  <string>Number of dynamics</string>
+                 </property>
+                 <property name="buddy" >
+                  <cstring>m_totalDiffusionImagesSpinBox</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_totalDiffusionImagesSpinBox" >
+                 <property name="minimum" >
+                  <number>1</number>
+                 </property>
+                 <property name="value" >
+                  <number>5</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_selectedDiffusionImageLabel" >
+                 <property name="text" >
+                  <string>Selected</string>
+                 </property>
+                 <property name="buddy" >
+                  <cstring>m_selectedDiffusionImageSpinBox</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_selectedDiffusionImageSpinBox" >
+                 <property name="maximum" >
+                  <number>4</number>
+                 </property>
+                 <property name="value" >
+                  <number>4</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_perfusionImageGroupBox" >
+            <property name="title" >
+             <string>Perfusion image</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QStackedWidget" name="m_perfusionImageStackedWidget" >
+               <property name="currentIndex" >
+                <number>0</number>
+               </property>
+               <widget class="QWidget" name="m_openPerfusionImagePage" >
+                <layout class="QVBoxLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <property name="spacing" >
+                  <number>6</number>
+                 </property>
+                 <item>
+                  <widget class="QPushButton" name="m_openPerfusionImagePushButton" >
+                   <property name="text" >
+                    <string>Open...</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="m_selectPerfusionImagePage" >
+                <layout class="QVBoxLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <property name="spacing" >
+                  <number>6</number>
+                 </property>
+                 <item>
+                  <layout class="QHBoxLayout" >
+                   <property name="margin" >
+                    <number>0</number>
+                   </property>
+                   <property name="spacing" >
+                    <number>6</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="m_totalPerfusionImagesLabel" >
+                     <property name="text" >
+                      <string>Number of maps</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="m_totalPerfusionImagesSpinBox" >
+                     <property name="minimum" >
+                      <number>1</number>
+                     </property>
+                     <property name="value" >
+                      <number>5</number>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" >
+                   <property name="margin" >
+                    <number>0</number>
+                   </property>
+                   <property name="spacing" >
+                    <number>6</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="m_selectedPerfusionImageLabel" >
+                     <property name="text" >
+                      <string>Selected</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="m_selectedPerfusionImageSpinBox" >
+                     <property name="maximum" >
+                      <number>4</number>
+                     </property>
+                     <property name="value" >
+                      <number>4</number>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_strokeGroupBox" >
+            <property name="title" >
+             <string>Stroke</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_strokeLowerValueLabel" >
+                 <property name="text" >
+                  <string>Lower value</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSlider" name="m_strokeLowerValueSlider" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_strokeLowerValueSpinBox" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_strokeUpperValueLabel" >
+                 <property name="text" >
+                  <string>Upper value</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSlider" name="m_strokeUpperValueSlider" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_strokeUpperValueSpinBox" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="m_strokeViewThresholdsPushButton" >
+                 <property name="layoutDirection" >
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="text" >
+                  <string>View thresholds</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_strokeSeedLabel" >
+                 <property name="enabled" >
+                  <bool>true</bool>
+                 </property>
+                 <property name="text" >
+                  <string>Seed</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="m_strokeSeedXLineEdit" >
+                 <property name="enabled" >
+                  <bool>true</bool>
+                 </property>
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>4</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="readOnly" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="m_strokeSeedYLineEdit" >
+                 <property name="enabled" >
+                  <bool>true</bool>
+                 </property>
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>4</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="readOnly" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="m_strokeSeedZLineEdit" >
+                 <property name="enabled" >
+                  <bool>true</bool>
+                 </property>
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>4</hsizetype>
+                   <vsizetype>0</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize" >
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="readOnly" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="m_strokeApplyPushButton" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="layoutDirection" >
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="text" >
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_strokeVolumeLabel" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>Volume (in mm&lt;sup>3&lt;/sup>)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="m_strokeVolumeLineEdit" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="readOnly" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="m_strokeVolumeUpdatePushButton" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>Update</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_ventriclesGroupBox" >
+            <property name="title" >
+             <string>Ventricles</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_ventriclesLowerValueLabel" >
+                 <property name="text" >
+                  <string>Value</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSlider" name="m_ventriclesLowerValueSlider" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_ventriclesLowerValueSpinBox" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="m_ventriclesApplyPushButton" >
+                 <property name="layoutDirection" >
+                  <enum>Qt::RightToLeft</enum>
+                 </property>
+                 <property name="text" >
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_registrationGroupBox" >
+            <property name="title" >
+             <string>Registration</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="m_applyRegistrationPushButton" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Apply</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_blackpointEstimationGroupBox" >
+            <property name="title" >
+             <string>Blackpoint estimation</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="m_computeBlackpointEstimationPushButton" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Compute</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_penombraSegmentationGroupBox" >
+            <property name="title" >
+             <string>Penombra segmentation</string>
+            </property>
+            <layout class="QVBoxLayout" >
+             <property name="margin" >
+              <number>9</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_penombraLowerValueLabel" >
+                 <property name="text" >
+                  <string>Lower value</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSlider" name="m_penombraLowerValueSlider" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                 <property name="value" >
+                  <number>128</number>
+                 </property>
+                 <property name="orientation" >
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_penombraLowerValueSpinBox" >
+                 <property name="maximum" >
+                  <number>255</number>
+                 </property>
+                 <property name="value" >
+                  <number>128</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_penombraVolumeLabel" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>Volume (in mm&lt;sup>3&lt;/sup>)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="m_penombraVolumeLineEdit" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="readOnly" >
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="m_penombraApplyPushButton" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>300</width>
+           <height>16</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget" >
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="m_slicingToolButton" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="checked" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_windowLevelToolButton" >
+           <property name="text" >
+            <string>window level</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_zoomToolButton" >
+           <property name="text" >
+            <string>zoom</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_moveToolButton" >
+           <property name="text" >
+            <string>move</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_rotateClockWiseToolButton" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_editorToolButton" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/pencil.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_voxelInformationToolButton" >
+           <property name="layoutDirection" >
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="text" >
+            <string>voxel information</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_seedToolButton" >
+           <property name="text" >
+            <string>...</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/seed.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_filterDiffusionPushButton" >
+           <property name="text" >
+            <string>Filter diffusion image</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="m_viewLabel" >
+             <property name="text" >
+              <string>View</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_lesionViewToolButton" >
+             <property name="text" >
+              <string>Lesion</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_ventriclesViewToolButton" >
+             <property name="text" >
+              <string>Ventricles</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="m_eraseButton" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>1</hsizetype>
+               <vsizetype>1</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="icon" >
+              <iconset resource="../main/main.qrc" >:/images/eraser.png</iconset>
+             </property>
+             <property name="flat" >
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_paintButton" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>1</hsizetype>
+               <vsizetype>1</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="icon" >
+              <iconset resource="../main/main.qrc" >:/images/airbrush.png</iconset>
+             </property>
+             <property name="checkable" >
+              <bool>false</bool>
+             </property>
+             <property name="checked" >
+              <bool>false</bool>
+             </property>
+             <property name="flat" >
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_eraseSliceButton" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="icon" >
+              <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3" >
+             <property name="text" >
+              <string>Size</string>
+             </property>
+             <property name="alignment" >
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="m_editorSize" >
+             <property name="enabled" >
+              <bool>false</bool>
+             </property>
+             <property name="minimum" >
+              <number>0</number>
+             </property>
+             <property name="value" >
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_5" >
+             <property name="text" >
+              <string>Patient name</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_patientNameLineEdit" >
+             <property name="readOnly" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="m_synchroCheckBox" >
+             <property name="text" >
+              <string>Synchronize slices</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QSplitter" name="splitter" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QWidget" name="layoutWidget" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_diffusionOpacityLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Opacity</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="m_diffusionOpacitySlider" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <number>100</number>
+               </property>
+               <property name="value" >
+                <number>50</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="udg::Q2DViewer" native="1" name="m_diffusion2DView" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>7</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>100000</width>
+               <height>100000</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_diffusionSliceLabel" >
+               <property name="text" >
+                <string>Slice</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="m_diffusionSliceSlider" >
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_diffusionSliceSpinBox" />
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="layoutWidget" >
+          <layout class="QVBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_perfusionOpacityLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Opacity</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="m_perfusionOpacitySlider" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <number>100</number>
+               </property>
+               <property name="value" >
+                <number>50</number>
+               </property>
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="udg::Q2DViewer" native="1" name="m_perfusion2DView" >
+             <property name="sizePolicy" >
+              <sizepolicy>
+               <hsizetype>7</hsizetype>
+               <vsizetype>7</vsizetype>
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>100000</width>
+               <height>100000</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <property name="margin" >
+              <number>0</number>
+             </property>
+             <property name="spacing" >
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="m_perfusionSliceLabel" >
+               <property name="text" >
+                <string>Slice</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="m_perfusionSliceSlider" >
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_perfusionSliceSpinBox" />
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>m_diffusionSliceSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_diffusionSliceSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>567</x>
+     <y>752</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>630</x>
+     <y>758</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_diffusionSliceSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_diffusionSliceSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>630</x>
+     <y>758</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>567</x>
+     <y>752</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_strokeLowerValueSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_strokeLowerValueSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>252</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>304</x>
+     <y>276</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_strokeLowerValueSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_strokeLowerValueSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>304</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>252</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_strokeUpperValueSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_strokeUpperValueSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>252</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>304</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_strokeUpperValueSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_strokeUpperValueSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>304</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>252</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_perfusionSliceSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_perfusionSliceSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>889</x>
+     <y>752</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>946</x>
+     <y>758</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_perfusionSliceSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_perfusionSliceSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>946</x>
+     <y>758</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>889</x>
+     <y>752</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_ventriclesLowerValueSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_ventriclesLowerValueSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>171</x>
+     <y>476</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>223</x>
+     <y>479</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_ventriclesLowerValueSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_ventriclesLowerValueSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>223</x>
+     <y>479</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>171</x>
+     <y>476</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_penombraLowerValueSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_penombraLowerValueSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>304</x>
+     <y>690</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>252</x>
+     <y>687</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_penombraLowerValueSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_penombraLowerValueSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>136</x>
+     <y>686</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>261</x>
+     <y>680</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
