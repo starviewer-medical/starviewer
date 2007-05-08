@@ -55,7 +55,6 @@ HEADERS += qapplicationmainwindow.h \
            landmarkregistrator.h \
            leastsquareddistancecostfunction.h \
            qoperationstatescreen.h \
-           itkVolumeCalculatorImageFilter.h \
            qedemasegmentationextension.h \
            itkErfcLevelSetFunction.h \
            itkErfcLevelSetImageFilter.h 
@@ -92,7 +91,6 @@ SOURCES += qapplicationmainwindow.cpp \
            landmarkregistrator.cpp \
            leastsquareddistancecostfunction.cpp \
            qoperationstatescreen.cpp \
-           itkVolumeCalculatorImageFilter.cpp \
            qedemasegmentationextension.cpp \
            itkErfcLevelSetFunction.cpp \
            itkErfcLevelSetImageFilter.cpp 
