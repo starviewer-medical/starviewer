@@ -58,6 +58,9 @@ public slots:
     /// cridat quan l'aplicació mor
     void killBill();
 
+    /// [temporal] Llança el diàleg per obrir la imatge de perfusió del mètode de difusió-perfusió.
+    void openPerfusionImage();
+
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
@@ -102,9 +105,6 @@ private slots:
 
     /// [temporal] Obre una sèrie per comparar en el visor per defecte
     void openSerieToCompare();
-
-    /// [temporal] Llança el diàleg per obrir la imatge de perfusió del mètode de difusió-perfusió.
-    void openPerfusionImage();
 
 signals:
     /// Emet un senyal amb el segon volum per comparar

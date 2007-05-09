@@ -16,6 +16,10 @@
 #include "qapplicationmainwindow.h"
 #include "volumesourceinformation.h"
 
+#include "extensionmediatorfactory.h"
+#include "extensionfactory.h"
+#include <QDebug>
+
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
 #include "qmprextension.h"
@@ -25,7 +29,6 @@
 #include "qstrokesegmentationextension.h"
 #include "qlandmarkregistrationextension.h"
 #include "qedemasegmentationextension.h"
-#include "qdifuperfuextension.h"
 
 // Fi de l'espai reservat pels include de les mini-apps
 
@@ -189,20 +192,21 @@ void ExtensionHandler::request( int who )
 
     /// Diffusion-Perfusion Segmentation
     case 12:
-        {
-            QDifuPerfuSegmentationExtension * diffusionPerfusionSegmentationExtension
-                    = new QDifuPerfuSegmentationExtension();
-            diffusionPerfusionSegmentationExtension->setDiffusionInput(
-                    m_volumeRepository->getVolume( m_volumeID ) );
-            m_mainApp->m_extensionWorkspace->addApplication(
-                    diffusionPerfusionSegmentationExtension, tr("Diffusion-Perfusion Segmentation") );
+    {
+        QWidget *extension = ExtensionFactory::instance()->create("DiffusionPerfusionSegmentationExtension");
+        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("DiffusionPerfusionSegmentationExtension");
 
-            connect( diffusionPerfusionSegmentationExtension, SIGNAL( openPerfusionImage() ),
-                        this, SLOT( openPerfusionImage() ) );
-            connect( this, SIGNAL( perfusionImage(Volume*) ),
-                        diffusionPerfusionSegmentationExtension, SLOT( setPerfusionInput(Volume*) ) );
+        if (mediator && extension)
+        {
+            mediator->initializeExtension(extension, this, m_volumeID);
+            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
         }
-        break;
+        else
+        {
+            qDebug() << "Error carregant DiffusionPerfusionSegmentationExtension";
+        }
+    }
+    break;
 
     default:
     {

@@ -1,7 +1,8 @@
 
 TEMPLATE = subdirs 
 
-SUBDIRS = testing
+SUBDIRS = testing \
+          diffusionperfusionsegmentation
 
 for(dir, SUBDIRS) {
     !exists($$dir) {

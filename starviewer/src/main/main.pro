@@ -1,6 +1,7 @@
 # Incloem les extensions
 
-EXTENSIONS = testing
+EXTENSIONS = testing \
+             diffusionperfusionsegmentation
 
 for(dir, EXTENSIONS) {
     exists(../extensions/$$dir) {

@@ -714,7 +714,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/slicing.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -739,7 +739,7 @@
             <string>window level</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/windowLevel.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -761,7 +761,7 @@
             <string>zoom</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/zoom.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -783,7 +783,7 @@
             <string>move</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/move.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -805,7 +805,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/rotateClockWise.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -824,7 +824,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/pencil.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/pencil.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -849,7 +849,7 @@
             <string>voxel information</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/voxelInformation.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -871,7 +871,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/seed.png</iconset>
+            <iconset resource="../../main/main.qrc" >:/images/seed.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -973,7 +973,7 @@
               <string/>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/eraser.png</iconset>
+              <iconset resource="../../main/main.qrc" >:/images/eraser.png</iconset>
              </property>
              <property name="flat" >
               <bool>false</bool>
@@ -997,7 +997,7 @@
               <string/>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/airbrush.png</iconset>
+              <iconset resource="../../main/main.qrc" >:/images/airbrush.png</iconset>
              </property>
              <property name="checkable" >
               <bool>false</bool>
@@ -1019,7 +1019,7 @@
               <string/>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+              <iconset resource="../../main/main.qrc" >:/images/axial.png</iconset>
              </property>
             </widget>
            </item>
@@ -1297,7 +1297,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../main/main.qrc" />
+  <include location="../../main/main.qrc" />
  </resources>
  <connections>
   <connection>

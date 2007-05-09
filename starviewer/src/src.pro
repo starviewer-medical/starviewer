@@ -4,9 +4,9 @@
 # L'objectiu és un subdirectori del projecte 
 
 SUBDIRS += core \
-           extensions \
            inputoutput \
            interface \
+           extensions \
            main 
 TEMPLATE = subdirs 
 CONFIG += warn_on 

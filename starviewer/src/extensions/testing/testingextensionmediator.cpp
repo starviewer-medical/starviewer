@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "testingextensionmediator.h"
-#include "testingextension.h"
 
 namespace udg{
 
@@ -24,7 +23,7 @@ DisplayableID TestingExtensionMediator::getExtensionID() const
     return DisplayableID("TestingExtension",tr("Testing"));
 }
 
-bool TestingExtensionMediator::setExtension( QWidget * extension )
+bool TestingExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
 {
     return ( m_extension = qobject_cast<TestingExtension*>(extension) );
 }

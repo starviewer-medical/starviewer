@@ -10,7 +10,7 @@ echo ' ' > extensions.h
 echo '#ifndef EXTENSIONS_H' >> extensions.h
 echo '#define EXTENSIONS_H' >> extensions.h
 
-for include in `grep -Ir InstallExtension ../extensions/*|grep -v .svn|grep .h|cut -d: -f1`
+for include in `grep -Ir InstallExtension ../extensions/*|grep -v .svn|cut -d: -f1|grep .h$`
 do
 	echo "#include \"$include\"">> extensions.h
 done

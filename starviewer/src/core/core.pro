@@ -57,7 +57,6 @@ HEADERS += extensionfactory.h \
            screenshottool.h \
            rotate3dtool.h \
            distancetool.h \
-           volumecalculator.h \
            itkVolumeCalculatorImageFilter.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -100,7 +99,6 @@ SOURCES += extensionmediator.cpp \
            screenshottool.cpp \
            rotate3dtool.cpp \
            distancetool.cpp \
-           volumecalculator.cpp \
            itkVolumeCalculatorImageFilter.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
