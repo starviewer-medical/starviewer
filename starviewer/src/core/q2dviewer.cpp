@@ -821,7 +821,11 @@ void Q2DViewer::setupInteraction()
     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
                                  vtkCommand::AnyEvent,
                                  this,
+#ifdef VTK_QT_5_0_SUPPORT
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
+#else
                                  SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
+#endif
                                  );
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );

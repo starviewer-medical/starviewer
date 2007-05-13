@@ -90,6 +90,11 @@ public slots:
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
 
+#ifdef VTK_QT_5_0_SUPPORT
+    /// \TODO Esborrar el metode. Metode de compatibilitat amb VTK 5.0 de vtkQtConnection
+    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
+#endif
+
     /// Força l'execució de la visualització
     virtual void render() = 0;
 

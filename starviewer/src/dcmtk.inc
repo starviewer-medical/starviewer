@@ -12,9 +12,13 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
 
 LIBS += -L$${DCMTKLIBDIR} \
     -lsqlite3 \
+    -lwrap \
     -ldcmnet \
     -ldcmdata \
     -ldcmimage \
     -ldcmimgle \
     -lofstd \
-    -ldcmjpeg
+    -ldcmjpeg \
+    -lijg8 \
+    -lijg12 \
+    -lijg16

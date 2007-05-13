@@ -79,6 +79,13 @@ void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_da
     emit eventReceived( event );
 }
 
+#ifdef VTK_QT_5_0_SUPPORT
+void QViewer::eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command )
+{
+    this->eventHandler(obj, event, client_data, NULL, command);
+}
+#endif
+
 void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] )
 {
     if( renderer )
