@@ -1,7 +1,10 @@
 # Incloem les extensions
 
 EXTENSIONS = testing \
-             diffusionperfusionsegmentation
+             diffusionperfusionsegmentation \
+             edemasegmentation \
+             landmarkregistration \
+             strokesegmentation
 
 for(dir, EXTENSIONS) {
     exists(../extensions/$$dir) {

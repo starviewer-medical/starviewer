@@ -2,7 +2,10 @@
 TEMPLATE = subdirs 
 
 SUBDIRS = testing \
-          diffusionperfusionsegmentation
+          diffusionperfusionsegmentation \
+          edemasegmentation \
+          landmarkregistration \
+          strokesegmentation
 
 for(dir, SUBDIRS) {
     !exists($$dir) {

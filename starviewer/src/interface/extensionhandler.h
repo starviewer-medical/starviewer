@@ -58,8 +58,11 @@ public slots:
     /// cridat quan l'aplicació mor
     void killBill();
 
-    /// [temporal] Llança el diàleg per obrir la imatge de perfusió del mètode de difusió-perfusió.
+    /// \TODO [temporal] Llança el diàleg per obrir la imatge de perfusió del mètode de difusió-perfusió.
     void openPerfusionImage();
+
+    /// \TODO [temporal] Obre una sèrie per comparar en el visor per defecte
+    void openSerieToCompare();
 
 private:
     /// Punter a l'aplicació principal
@@ -102,9 +105,6 @@ private slots:
 
     /// Slot que es crida quan hem canviat d'una extensió a una altre
     void extensionChanged( int index );
-
-    /// [temporal] Obre una sèrie per comparar en el visor per defecte
-    void openSerieToCompare();
 
 signals:
     /// Emet un senyal amb el segon volum per comparar

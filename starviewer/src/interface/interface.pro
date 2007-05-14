@@ -14,10 +14,7 @@ FORMS += qconfigurationscreenbase.ui \
          q2dviewerextensionbase.ui \
          qcustomwindowleveldialogbase.ui \
          qcreatedicomdirbase.ui \
-         qstrokesegmentationextensionbase.ui \
-         qlandmarkregistrationextensionbase.ui \
-         qoperationstatescreenbase.ui \
-         qedemasegmentationextensionbase.ui
+         qoperationstatescreenbase.ui
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -43,16 +40,7 @@ HEADERS += qapplicationmainwindow.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            qcreatedicomdir.h \
-           qstrokesegmentationextension.h \
-           strokesegmentationmethod.h \
-           qlandmarkregistrationextension.h \
-           reglandmark.h \
-           landmarkregistrator.h \
-           leastsquareddistancecostfunction.h \
-           qoperationstatescreen.h \
-           qedemasegmentationextension.h \
-           itkErfcLevelSetFunction.h \
-           itkErfcLevelSetImageFilter.h 
+           qoperationstatescreen.h
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
@@ -75,16 +63,7 @@ SOURCES += qapplicationmainwindow.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp \
-           qstrokesegmentationextension.cpp \
-           strokesegmentationmethod.cpp \
-           qlandmarkregistrationextension.cpp \
-           reglandmark.cpp \
-           landmarkregistrator.cpp \
-           leastsquareddistancecostfunction.cpp \
-           qoperationstatescreen.cpp \
-           qedemasegmentationextension.cpp \
-           itkErfcLevelSetFunction.cpp \
-           itkErfcLevelSetImageFilter.cpp 
+           qoperationstatescreen.cpp
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../inputoutput/libinputoutput.a \

@@ -57,6 +57,9 @@ HEADERS += extensionfactory.h \
            screenshottool.h \
            rotate3dtool.h \
            distancetool.h \
+           strokesegmentationmethod.h \
+           itkErfcLevelSetFunction.h \
+           itkErfcLevelSetImageFilter.h \
            itkVolumeCalculatorImageFilter.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -99,6 +102,9 @@ SOURCES += extensionmediator.cpp \
            screenshottool.cpp \
            rotate3dtool.cpp \
            distancetool.cpp \
+           strokesegmentationmethod.cpp \
+           itkErfcLevelSetFunction.cpp \
+           itkErfcLevelSetImageFilter.cpp \
            itkVolumeCalculatorImageFilter.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
