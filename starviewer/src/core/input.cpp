@@ -334,6 +334,17 @@ void Input::setVolumeInformation()
         m_volumeData->getVolumeSourceInformation()->setProtocolName( value.c_str() );
     }
 
+    //Number of Phases, TAG PRIVAT PHILIPS
+    if( queryTagAsString( "2001|1017" , value ) )
+    {
+        m_volumeData->getVolumeSourceInformation()->setNumberOfPhases( atoi( value.c_str() ) );
+    }
+
+    //Number of Slices Per Phase, nombre de llesques per cada fase, TAG PRIVAT PHILIPS
+    if( queryTagAsString( "2001|1018" , value ) )
+    {
+        m_volumeData->getVolumeSourceInformation()->setNumberOfSlices( atoi( value.c_str() ) );
+    }
 }
 
 }; // end namespace udg

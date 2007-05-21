@@ -218,6 +218,26 @@ public:
     double getRescaleSlope();
     double getRescaleIntercept();
 
+    /// Assigna/Retorna el numero de fases (TAG PRIVAT PHILIPS)
+    void setNumberOfPhases( int phases )
+    {
+        m_numberOfPhases = phases;
+    };
+    int getNumberOfPhases() const
+    {
+        return m_numberOfPhases;
+    };
+
+    /// Assigna/Retorna el numero de llesques (TAG PRIVAT PHILIPS)
+    void setNumberOfSlices( int slices )
+    {
+        m_numberOfSlices = slices;
+    };
+    int getNumberOfSlices() const
+    {
+        return m_numberOfSlices;
+    };
+
 private:
 
     QString m_patientName;
@@ -231,6 +251,9 @@ private:
     double m_windowLevel[2];
     double m_directionCosines[9];
 
+    /// tags privats PHILIPS per controlar nombre de fases i llesques diferents en tot el conjunt
+    int m_numberOfPhases, m_numberOfSlices;
+
     /// Llista dels windows levels de la imatge
     std::vector< double* > m_windowLevelList;
 
@@ -242,6 +265,7 @@ private:
 
     /// info de dicom en format dcmtk
     DcmDataset *m_dicomData;
+
 
     ///Llegeix la informació sobre les dades de window level
     void readWindowLevelData();
