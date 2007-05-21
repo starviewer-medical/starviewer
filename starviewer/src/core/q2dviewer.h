@@ -8,6 +8,7 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
+#include <QMap>
 
 // Fordward declarations
 // qt
@@ -29,6 +30,12 @@ class vtkCaptionActor2D;
 class vtkScalarBarActor;
 class vtkInteractorStyleImage;
 class vtkImageBlend;
+
+/// tractament múltiples vistes
+class vtkPropCollection;
+class vtkRendererCollection;
+class vtkCollection;
+class vtkActor2DCollection;
 
 namespace udg {
 
@@ -69,9 +76,10 @@ public:
     enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x2 , PatientOrientationAnnotation = 0x4 , RulersAnnotation = 0x8 , AllAnnotation = 0xE };
+    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x1 , PatientOrientationAnnotation = 0x2 , RulersAnnotation = 0x4 , SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40,
+    AllAnnotation = 0x7F };
 
-    Q2DViewer( QWidget *parent = 0 , unsigned int annotations = Q2DViewer::AllAnnotation );
+    Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
 
     virtual vtkRenderer *getRenderer();
@@ -119,29 +127,31 @@ public:
     double getCurrentColorWindow();
     double getCurrentColorLevel();
 
+    /**
+        Mètodes pel tractament de múltiples vistes
+    */
+    /// Assignar/afegir files i columnes
+    void setRows( int rows );
+    void addRows( int rows );
+    void removeRows( int rows );
+    void setColumns( int columns );
+    void addColumns( int columns );
+    void removeColumns( int columns );
+    void setGrid( int rows, int columns );
+    /// Donada una llesca, li diem en quantes files i columnes volem dividir les seves fases
+    void setPhaseRows( int slice, int rows );
+    void addPhaseRows( int slice, int rows );
+    void removePhaseRows( int slice, int rows );
+    void setPhaseColumns( int slice, int columns );
+    void addPhaseColumns( int slice, int columns );
+    void removePhaseColumns( int slice, int columns );
+    void setPhaseGrid( int slice, int rows, int columns );
+
+    /// Indiquem quina informació mostrem
+    void updateInformation();
+
 public slots:
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
-
-    /// Indiquem si volem veure la informació del volum per pantalla \TODO realment es farà servir aquest mètode?
-    void displayInformationText( bool display );
-
-    /// Mètodes varis per mostrar o no certa informació en pantalla
-    void displaySliceOn();
-    void displaySliceOff();
-    void displayProtocolNameOn();
-    void displayProtocolNameOff();
-    void displayWindowInformationOn();
-    void displayWindowInformationOff();
-    void displaySerieInformationOn();
-    void displaySerieInformationOff();
-    void displayRulersOn();
-    void displayRulersOff();
-    void displayRulersLabelsOn();
-    void displayRulersLabelsOff();
-    void displayPatientOrientationOn();
-    void displayPatientOrientationOff();
-    void displayScalarBarOn();
-    void displayScalarBarOff();
 
     /// Habilita/deshabilita que es vegi la info de voxel
     void setVoxelInformationCaptionEnabled( bool enable );
@@ -153,6 +163,9 @@ public slots:
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
+
+    /// canvia la fase en que es veuen les llesques si n'hi ha
+    void setPhase( int value );
 
     /// indica el tipu de solapament dels volums, per defecte checkerboard
     void setOverlay( OverlayType overlay ){ m_overlay = overlay; }
@@ -179,22 +192,9 @@ public slots:
 
     void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, void *call_data, vtkCommand * command);
 
-    /// Afegir o treure la visibilitat d'una anotació textual
-    void addAnnotation( AnnotationFlags annotation )
-    {
-        m_enabledAnnotations = m_enabledAnnotations | annotation;
-        updateAnnotations();
-    }
-    void removeAnnotation( AnnotationFlags annotation )
-    {
-        // si existeix, llavors la "restem", sinó no cal fer res
-        if( m_enabledAnnotations & annotation )
-        {
-            m_enabledAnnotations -= annotation;
-            updateAnnotations();
-        }
-
-    }
+    /// Afegir o treure la visibilitat d'una anotació textual/gràfica
+    void enableAnnotation( AnnotationFlags annotation, bool enable = true );
+    void removeAnnotation( AnnotationFlags annotation );
 
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
@@ -251,6 +251,9 @@ protected:
     /// La llesca actual que estem visualitzant
     int m_currentSlice;
 
+    /// La fase (instant de temps) de les llesques
+    int m_currentPhase;
+
     /// Aquest és el segon volum afegit a solapar
     Volume* m_overlayVolume;
 
@@ -266,8 +269,8 @@ protected:
     /// El picker per anotar punts de la imatge
     vtkPropPicker *m_picker;
 
-    /// Textes informatius de l'image actor , ens estalviarà molta feina
-    vtkCornerAnnotation *m_textAnnotation;
+    /// Annotacions de texte referents a informació de la sèrie (nom de pacient, protocol,descripció de sèrie, data de l'estudi)
+    vtkCornerAnnotation *m_serieInformationAnnotation;
 
     /// Actualitza la vista en el rendering
     void updateView();
@@ -279,11 +282,11 @@ private:
     /// flag que ens indica quines anotacions es veuran per la finestra
     unsigned int m_enabledAnnotations;
 
-    /// Refresca les anotacions que s'han de veure i les que no
+    /// Refresca les anotacions que s'han de veure i les que no \TODO no fa res
     void updateAnnotations();
 
-    /// inicialitza els strings d'informació que es mostraran a la pantalla
-    void initInformationText();
+    /// inicialitza les annotacions de texte
+    void initTextAnnotations();
 
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
@@ -339,12 +342,6 @@ private:
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
 
-    /// Actualització d'anotacions vàries
-    void updateSliceAnnotation();
-    void updateWindowInformationAnnotation();
-    void updateSerieInformationAnnotation();
-    void updateProtocolNameAnnotation();
-
     /// Mides (x,y) de la imatge que mostrarem com informació adicional
     int m_imageSizeInformation[2];
 
@@ -368,6 +365,63 @@ private:
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
+
+    /**
+        Membres pel tractament de múltiples vistes
+    */
+
+    /// Afegeix/Eliminia un nou renderer amb imatge, actors, etc
+    void addRenderScene();
+    void removeRenderScene();
+
+    /// actualitza la distibució de files i columnes (a nivell de llesques)
+    void updateGrid();
+
+    /// actualitza la distibució de files i columnes (a nivell de fases)
+    void updatePhaseGrid( int slice );
+
+    /// actualitza la distribució de viewports
+    void updateViewports();
+
+    /// Actualitza les característiques dels actors dels viewports
+    void updateDisplayExtent();
+
+    /// crea i retorna un ruler stàndar
+    vtkAxisActor2D* createRuler();
+
+    /// controla el nombre de files i columnes en que es distribueix el visor
+    int m_columns, m_rows;
+
+    /// Controla el nombre de llesques en que es subdivideix la finestra
+    int m_numberOfSlicesWindows;
+
+    /// per controlar els marges de la zona on es mostraran les llesques (xMin,yMin,xMax,yMax)
+    double m_slicesViewportExtent[4];
+
+    /// Col·lecció d'actors per cada llesca
+    vtkPropCollection *m_sliceActorCollection;
+
+    /// Col·lecció de renderers per cada llesca
+    vtkRendererCollection *m_rendererCollection;
+
+    /// Col·lecció de coordenades dels rulers \TODO canviar el vtkCollection per alguna estructura tipu stl::list<>
+    vtkCollection *m_anchoredRulerCoordinatesCollection;
+
+    /// Col·lecció de rulers per cada viewport
+    vtkActor2DCollection *m_rulerActorCollection;
+
+    /// Col·lecció d'anotacions per cada viewport
+    vtkActor2DCollection *m_sliceAnnotationsCollection;
+
+    /// ampliació tractament dinàmic
+    /// Nombre de fases
+    int m_numberOfPhases;
+
+    /// Valor màxim al que pot arribar m_currentSlice
+    int m_maxSliceValue;
+
+    /// Mapa que guarda la distribució en graella de les fases d'una llesca ( si en té )
+    QMap<int, int *> m_phaseGridMap;
 
 private slots:
     /// Actualitza la rotació de la càmera \sa rotateClockWise() i rotateCounterClockWise()
