@@ -44,9 +44,9 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     createActors();
     updateActors();
 
-    m_axial2DView->displayScalarBarOff();
-    m_sagital2DView->displayScalarBarOff();
-    m_coronal2DView->displayScalarBarOff();
+    m_axial2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
+    m_sagital2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
+    m_coronal2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
     m_mpr3DView->orientationMarkerOff();
 
     readSettings();

@@ -110,9 +110,9 @@ void QMPRExtension::init()
     m_coronalReslice->AutoCropOutputOn();
     m_coronalReslice->SetInterpolationModeToCubic();
 
-    m_axial2DView->displayScalarBarOff();
-    m_sagital2DView->displayScalarBarOff();
-    m_coronal2DView->displayScalarBarOff();
+    m_axial2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
+    m_sagital2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
+    m_coronal2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
     /// per defecte isomètric
     m_axialSpacing[0] = 1.;
     m_axialSpacing[1] = 1.;
@@ -178,7 +178,7 @@ void QMPRExtension::createActions()
 
     m_distanceAction= m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
-    
+
     m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
     m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
     m_rotate3DToolButton->setVisible( false );
