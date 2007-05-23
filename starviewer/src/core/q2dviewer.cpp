@@ -1374,7 +1374,7 @@ void Q2DViewer::setGrid( int rows, int columns )
 
 void Q2DViewer::setPhaseRows( int slice, int rows )
 {
-    if( rows > 0 )
+    if( rows > 0 && m_numberOfPhases > 1)
     {
         int *value;
         int renderersCount = 0;
@@ -1383,7 +1383,7 @@ void Q2DViewer::setPhaseRows( int slice, int rows )
         if( mapIterator != m_phaseGridMap.end() )
         {
             value = mapIterator.value();
-            renderersCount = value[0]*value[1] - rows * value[1];
+            renderersCount = (rows * value[1]) - (value[0]*value[1]);
             value[0] = rows;
         }
         else
@@ -1391,7 +1391,7 @@ void Q2DViewer::setPhaseRows( int slice, int rows )
             value = new int[2];
             value[0] = rows;
             value[1] = 1;
-            renderersCount = rows;
+            renderersCount = rows - 1;
 
         }
         // afegir renderers per fase
@@ -1405,7 +1405,7 @@ void Q2DViewer::setPhaseRows( int slice, int rows )
         // eliminar renderers per fase
         else if( renderersCount < 0 )
         {
-            for( int i = 0; i < renderersCount; i-- )
+            for( int i = 0; i > renderersCount; i-- )
             {
                 removeRenderScene();
             }
@@ -1458,7 +1458,7 @@ void Q2DViewer::removePhaseRows( int slice, int rows )
 
 void Q2DViewer::setPhaseColumns( int slice, int columns )
 {
-    if( columns > 0 )
+    if( columns > 0 && m_numberOfPhases > 1)
     {
         int *value;
         int renderersCount = 0;
@@ -1467,7 +1467,7 @@ void Q2DViewer::setPhaseColumns( int slice, int columns )
         if( mapIterator != m_phaseGridMap.end() )
         {
             value = mapIterator.value();
-            renderersCount = value[0]*value[1] - value[0] * columns;
+            renderersCount =  (value[0] * columns) - (value[0]*value[1]);
             value[1] = columns;
         }
         else
@@ -1476,7 +1476,7 @@ void Q2DViewer::setPhaseColumns( int slice, int columns )
             value[0] = 1;
             value[1] = columns;
 
-            renderersCount = columns;
+            renderersCount = columns - 1;
 
         }
         // afegir renderers per fase
@@ -1490,7 +1490,7 @@ void Q2DViewer::setPhaseColumns( int slice, int columns )
         // eliminar renderers per fase
         else if( renderersCount < 0 )
         {
-            for( int i = 0; i < renderersCount; i-- )
+            for( int i = 0; i > renderersCount; i-- )
             {
                 removeRenderScene();
             }
@@ -1844,11 +1844,12 @@ void Q2DViewer::updateDisplayExtent()
                             break;
                     }
 
-                    lowerLeftText = tr("Slice: %1/%2")
+                    lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
+                        .arg( i + 1 )
+                        .arg( m_maxSliceValue + 1 )
                         .arg( value + 1 )
-                        .arg( m_maxSliceValue + 1 );
+                        .arg( m_numberOfPhases );
                     sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
-
                     //renderer->ResetCamera();
                     if( value >=  m_viewer->GetSliceMax() )
                         value = 0;
@@ -1887,9 +1888,11 @@ void Q2DViewer::updateDisplayExtent()
                         break;
                 }
 
-                lowerLeftText = tr("Slice: %1/%2")
+                lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
+                    .arg( i + 1 )
+                    .arg( m_maxSliceValue + 1 )
                     .arg( value + 1 )
-                    .arg( m_maxSliceValue + 1 );
+                    .arg( m_numberOfPhases );
                 sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
 
                 //renderer->ResetCamera();
