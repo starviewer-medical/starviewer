@@ -184,9 +184,9 @@ public:
     void getYDirectionCosines( double yCosines[3] );
     void getZDirectionCosines( double zCosines[3] );
 
-    /// Assigna/Obté les dades dicom en format dcmtk
+    /// Assigna/Obté les dades dicom en format dcmtk. \TODO revisar aquest set, perquè en principi no s'hauria de poder fer
     void setDicomDataset( DcmDataset *data );
-    DcmDataset *getDicomDataset();
+    DcmDataset *getDicomDataset( int index = 0 );
 
     /// Indiquem la llista de fitxers que formen el volum i es carrega el dicomdataset (privat)
     void setFilenames( std::vector< std::string > filenames );
@@ -217,6 +217,24 @@ public:
     /// Recupera els valors de rescale slope/intercept
     double getRescaleSlope();
     double getRescaleIntercept();
+
+    /// Assigna/Obté la descripció de la sèrie
+    const char *getSeriesDescription(){ return qPrintable( m_seriesDescription ); };
+    void setSeriesDescription( const char *description ){ m_seriesDescription = description; };
+
+    /// Assigna/obté l'UID de la sèrie
+    const char *getSeriesInstanceUID(){ return qPrintable( m_seriesInstanceUID ); }
+    void setSeriesInstanceUID( const char *uid ){ m_seriesInstanceUID = uid; }
+
+    // Mètodes per tractar imatges de tipus multi-frame
+    /// Diu si el volum és de tipus multiframe \TODO encara no estem segurs de que es faci aquesta consulta de forma correcta
+    bool isMultiFrame();
+
+    /// Ens diu el nombre de frames del que està composat el volum
+    int getNumberOfFrames();
+
+    /// Ens retorna el  el SOP Instance UID d'una imatge en el volum
+    QString getImageSOPInstanceUID( int index );
 
     /// Assigna/Retorna el numero de fases (TAG PRIVAT PHILIPS)
     void setNumberOfPhases( int phases )
@@ -250,6 +268,8 @@ private:
     QString m_protocolName;
     double m_windowLevel[2];
     double m_directionCosines[9];
+    QString m_seriesDescription;
+    QString m_seriesInstanceUID;
 
     /// tags privats PHILIPS per controlar nombre de fases i llesques diferents en tot el conjunt
     int m_numberOfPhases, m_numberOfSlices;
@@ -272,6 +292,9 @@ private:
 
     /// Carrega les dades dicom d'un arxiu
     bool loadDicomDataset( const char *filename );
+
+    /// Recull la informació de la sèrie que ens interessa
+    void collectSerieInformation();
 };
 
 };  //  end  namespace udg

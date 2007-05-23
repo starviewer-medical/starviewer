@@ -154,12 +154,35 @@ bool VolumeSourceInformation::loadDicomDataset( const char *filename )
     if( status.good() )
     {
         this->setDicomDataset( dicomFile.getAndRemoveDataset() );
+        // omplim la informació necessària
+        this->collectSerieInformation();
         return true;
     }
     else
     {
         std::cerr << "algo falla::: " << status.text() << std::endl << "ARXIU: "<< filename << std::endl;
         return false;
+    }
+}
+
+void VolumeSourceInformation::collectSerieInformation()
+{
+    if( m_dicomData )
+    {
+        // TODO ara només agafem aquesta informació, a la llarga hem de recolectar tota la informació que es recolecta a la classe Input quan fem un read.
+        const char *value = NULL;
+        if( m_dicomData->findAndGetString( DCM_SeriesDescription , value ).good() )
+        {
+            this->setSeriesDescription( value );
+        }
+        if( m_dicomData->findAndGetString( DCM_SeriesInstanceUID , value ).good() )
+        {
+            this->setSeriesInstanceUID( value );
+        }
+    }
+    else
+    {
+        DEBUG_LOG("No tenim un dicom dataset vàlid!");
     }
 }
 
@@ -185,9 +208,31 @@ void VolumeSourceInformation::setDicomDataset( DcmDataset *data )
     readWindowLevelData();
 }
 
-DcmDataset *VolumeSourceInformation::getDicomDataset()
+DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
 {
-    return m_dicomData;
+    if( index == 0 )
+        return m_dicomData;
+    else if( index > 0 && index < m_filenamesArray.size() )
+    {
+        DcmFileFormat dicomFile;
+        OFCondition status = dicomFile.loadFile( m_filenamesArray[index].c_str() );
+        if( status.good() )
+        {
+            DcmDataset *dataset = NULL;
+            dataset = dicomFile.getAndRemoveDataset();
+            return dataset;
+        }
+        else
+        {
+            ERROR_LOG( qPrintable( QString("No s'ha pogut carregar arxiu dicom [%1]. Missatge d'error:[%2] ").arg( status.text() ).arg(m_filenamesArray[index].c_str() ) ) );
+            return false;
+        }
+    }
+    else
+    {
+        ERROR_LOG("S'ha demanat una imatge fora de rang");
+        return 0;
+    }
 }
 
 unsigned VolumeSourceInformation::getPhotometricInterpretation()
@@ -443,6 +488,55 @@ void VolumeSourceInformation::readWindowLevelData()
     {
         DEBUG_LOG("No s'ha pogut llegir la informació de window level. No hi ha un dicom dataset vàlid.");
     }
+}
+
+bool VolumeSourceInformation::isMultiFrame()
+{
+    bool result = false;
+    if( m_dicomData )
+    {
+        if( m_dicomData->tagExists( DCM_NumberOfFrames ) )
+            result = true;
+    }
+    else
+    {
+        DEBUG_LOG("No hi ha un dicom dataset vàlid");
+    }
+    return result;
+}
+
+int VolumeSourceInformation::getNumberOfFrames()
+{
+    Sint32 frames = 0;
+    if( m_dicomData )
+    {
+        OFCondition status = m_dicomData->findAndGetSint32( DCM_NumberOfFrames, frames );
+        if( status.bad() )
+            DEBUG_LOG( qPrintable( QString("No s'han pogut llegir els frames: ") + status.text() )  );
+    }
+    else
+    {
+        DEBUG_LOG("No hi ha un dicom dataset vàlid");
+    }
+    return frames;
+}
+
+QString VolumeSourceInformation::getImageSOPInstanceUID( int index )
+{
+    QString result;
+    DcmDataset *dataset = this->getDicomDataset( index );
+    if( dataset )
+    {
+        const char *value;
+        dataset->findAndGetString( DCM_SOPInstanceUID, value );
+        result = QString( value );
+        DEBUG_LOG( qPrintable( QString("El valor del sop instance és %1 :: %2").arg(value).arg(result) ) );
+    }
+    else
+    {
+        ERROR_LOG("El dataset retornat és nul");
+    }
+    return result;
 }
 
 };  // end namespace udg
