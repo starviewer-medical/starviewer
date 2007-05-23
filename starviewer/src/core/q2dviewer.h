@@ -21,7 +21,6 @@ class vtkTextActor;
 class vtkObject;
 class vtkCommand;
 class vtkRenderer;
-// class vtkRenderWindowInteractor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
@@ -30,12 +29,18 @@ class vtkCaptionActor2D;
 class vtkScalarBarActor;
 class vtkInteractorStyleImage;
 class vtkImageBlend;
+class vtkImageActor;
 
 /// tractament múltiples vistes
 class vtkPropCollection;
 class vtkRendererCollection;
 class vtkCollection;
 class vtkActor2DCollection;
+
+// grayscale pipeline
+class vtkImageMapToWindowLevelColors;
+class vtkImageShiftScale;
+class vtkWindowLevelLookupTable;
 
 namespace udg {
 
@@ -70,7 +75,7 @@ class Q2DViewer  : public QViewer{
 Q_OBJECT
 public:
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
-    enum ViewType{ Axial, Coronal, Sagittal , None };
+    enum ViewType{ Axial, Coronal, Sagittal };
 
     /// tipus de fusió dels models
     enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
@@ -150,6 +155,28 @@ public:
     /// Indiquem quina informació mostrem
     void updateInformation();
 
+    /// Mètodes de conveniència pels presentation state
+    void setModalityRescale( vtkImageShiftScale *rescale ){ m_modalityLUTRescale = rescale; };
+    vtkImageActor *getImageActor();
+
+    //
+    // DISPLAYED AREA. Mètodes per poder modificar l'àrea visible del volum (zoom enquadrat) i/o canviar aspecte, espaiat de presentació, etc
+    //
+    /// Canviem l'aspecte entre els eixos x/y
+    void setPixelAspectRatio( double ratio );
+
+    /// canviem l'espaiat de pixel en la presentació en les direccions x/y ( no l'espaiat del volum en sí )
+    void setPresentationPixelSpacing( double x, double y );
+
+    /// Fem un zoom del requadre definit pels paràmetres topLeft i rightBottom en coordenades de món perquè s'ajusti a la mida de la finestra
+    void scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY );
+
+    /// En aquest mode, es presenta la imatge de tal manera que les mides estan a escala real, per tant 1mm de la imatge en pantalla seria 1 mm real d'aquella llesca. \TODO aquest mètode encara no està en funcionament, però el deixem per implementar en un futur pròxim
+    void setTrueSizeMode( bool on = true );
+
+    /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
+    void setMagnificationFactor( double factor );
+
 public slots:
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
 
@@ -196,6 +223,13 @@ public slots:
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
     void removeAnnotation( AnnotationFlags annotation );
 
+    /// Ajusta els ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
+    void setDefaultWindowLevel( double window, double level )
+    {
+        m_defaultWindow = window;
+        m_defaultLevel = level;
+    };
+
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
 
@@ -231,6 +265,28 @@ public slots:
 
     /// Aplica una rotació de 90 graus en el sentit contrari a les agulles del rellotge
     void rotateCounterClockWise();
+
+    /// Aplica una rotació absoluta de (90º * factor) mod 360 sobre la imatge. Per tant es fa la rotació com si la imatge estigués amb una rotació inicial de 0º
+    void setRotationFactor( int factor );
+
+    /// Aplica un flip horitzontal/vertical sobre la imatge. El flip vertical es farà com una rotació de 180º seguida d'un flip horitzontal
+    void horizontalFlip();
+    void verticalFlip();
+
+    /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
+    void resetCamera();
+
+    ///Mètode de conveniència pel tractament dels presentation states
+    vtkImageMapToWindowLevelColors *getWindowLevelMapper() const { return m_windowLevelLUTMapper; }
+
+    ///
+    void setModalityRescale( double slope, double intercept );
+    void setModalityLUT( vtkWindowLevelLookupTable *lut );
+    void setVOILUT( vtkWindowLevelLookupTable *lut );
+    void setPresentationLUT( vtkWindowLevelLookupTable *lut );
+
+    /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat. Això permet que el càlcul s'hagi fet en un presentation state, per exemple
+    void applyGrayscalePipeline();
 
 protected:
     /// Connector d'events vtk i slots qt
@@ -272,8 +328,11 @@ protected:
     /// Annotacions de texte referents a informació de la sèrie (nom de pacient, protocol,descripció de sèrie, data de l'estudi)
     vtkCornerAnnotation *m_serieInformationAnnotation;
 
-    /// Actualitza la vista en el rendering
-    void updateView();
+    /// Actualitza la vista en el rendering-> ARA es diu updateCamera
+//     void updateView();
+
+    /// Per controlar l'espaiat en que presentem la imatge
+    double m_presentationPixelSpacing[2];
 
     // Processem l'event de resize de la finestra Qt
     virtual void resizeEvent( QResizeEvent* resize );
@@ -423,9 +482,76 @@ private:
     /// Mapa que guarda la distribució en graella de les fases d'una llesca ( si en té )
     QMap<int, int *> m_phaseGridMap;
 
+        /// Indica si cal aplicar un flip horitzontal o no sobre la càmera
+    bool m_applyFlip;
+
+    /// Aquesta variable controla si la imatge està flipada respecte la seva orientació original. Útil per controlar annotacions.
+    bool m_isImageFlipped;
+
+    /// Rangs de dades que ens seran força útils a l'hora de controlar el pipeline de grayscale
+    double m_modalityRange[2];
+
+    /// Fa els càlculs del pipeline de l'escala de grisos del volum d'entrada. És a dir calcularà la modality lut, voi lut i presentation lut però no l'aplicarà
+    void computeInputGrayscalePipeline();
+
+    /**
+     * Aplica la transformació de modalitat sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
+     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
+
+        1.1. La imatge original té una modality LUT. La llegim i l'apliquem al principi del pipeline. El seu input són les dades originals del volum.
+
+        1.2. La imatge original conté rescale slope i rescale intercept. No cal fer res, el lector d'itk (GDCM) ja aplica aquesta transformació automàticament quan llegim el volum.
+
+        1.3. No hi ha cap informació referent a modality LUTs. No cal fer res. Aplicar transformació identitat
+
+     2.- En en cas que tinguem un presentation state associat, pot passar el següent
+
+        2.1. El PS té una modality LUT. ídem 1.1
+
+        2.2. El PS conté rescale slope i rescale intercept. Cal aplicar un filtre de rescale (vtImageShiftScale). \TODO Com que la imatge que llegim ja té aplicat el rescale/intercept de la imatge, no sabem si cal contrestar primer la transformació que ens vé de "gratis".
+
+        2.3. ídem 1.3 \TODO però no sabem si en el cas que tinguem un rescalat de "gratis" caldria desfer-lo, és a dir, donar els raw pixels!
+
+    Els canvis de la modality LUT s'apliquen a totes les imatges contingudes en el volum
+     */
+    void computeModalityLUT();
+    ///
+    void applyMaskSubstraction();
+
+    /**
+     *  Aplica l'ajustament de finestra sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
+
+     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
+
+        1.1. La imatge original té una VOI LUT. La llegim i l'apliquem com a input del window level mapper. \TODO problema: no sabem ben bé què passa si abans teníem una modality LUT. En principi hauríem de fer servir el mapeig sobre l'anterior lut.
+
+        1.2. La imatge original conté valors de window level. Apliquem aquests valors sobre el window level mapper.
+
+        1.3. No hi ha cap informació referent a VOI LUTs. No cal fer res. Aplicar transformació identitat, és a dir el window serà el rang de dades i el level el window/2.
+
+     2.- En en cas que tinguem un presentation state associat, actuem igual que en 1.x. Els valors del presentation state prevalen sobre els de la imatge.
+
+    Es pot tenir més d'una VOI LUT (ja sigui en format de LUT o de window level). Això significa que tenim diverses opcions de presentació. Es pot agafar una per defecte però l'aplicació hauria de mostrar la possiblitat d'escollir entre aquestes.
+
+    Els canvis de la VOI LUT es poden aplicar a sub-conjunts d'imatges referenciades. Això es donarà en el cas d'imatges multi-frame.
+
+    De cares al connectathon només es tracta una sola VOI LUT i imatges mono-frame, però hem de tenir en compte que l'estàndar DICOM contempla les possibilitats abans mencionades.
+     */
+    void computeVOILUT();
+
+    /// objectes per a les transformacions en el pipeline d'escala de grisos
+    vtkImageMapToWindowLevelColors *m_windowLevelLUTMapper;
+    vtkImageShiftScale *m_modalityLUTRescale;
+
+    /// Les diferents look up tables que ens podem trobar durant tot el procés.
+    vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
+
+    /// Aquest mètode s'encarrega de donar-nos en format vtk el tipu de lookup table de la grayscale pipeline que ens ofereix el presentation state actualment assignat. type: 0 -> modality lut, 1-> VOI lut, 2-> presentation lut  \TODO mètode temporal
+    vtkWindowLevelLookupTable *parseLookupTable( int type );
+
 private slots:
-    /// Actualitza la rotació de la càmera \sa rotateClockWise() i rotateCounterClockWise()
-    void updateCameraRotation();
+    /// Actualitza les transformacions de càmera ( de moment rotació i flip )
+    void updateCamera();
 
 signals:
     /// envia la nova llesca en la que ens trobem
@@ -436,6 +562,12 @@ signals:
 
     /// Senyal que s'envia quan la llavor s'ha canviat \TODO mirar de treure-ho i posar-ho en la tool SeedTool
     void seedChanged();
+
+    /// informa del valor del m_rotateFactor. S'emetrà quan la rotació de la càmera s'hagi fet efectiva
+    void rotationFactorChanged(int);
+
+    /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
+    void rotationDegreesChanged(double);
 
 };
 

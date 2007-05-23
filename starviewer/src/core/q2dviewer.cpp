@@ -61,13 +61,29 @@
 #include <vtkActor2DCollection.h>
 #include <vtkImageActor.h>
 
+// displayed area
+#include <vtkImageChangeInformation.h>
+#include <vtkImageResample.h>
+
+// grayscale pipeline
+#include <vtkImageMapToWindowLevelColors.h>
+#include <vtkImageShiftScale.h>
+#include <vtkWindowLevelLookupTable.h>
+
+// dcmtk:
+//\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
+#define HAVE_CONFIG_H 1
+#include "dcmtk/dcmdata/dcdatset.h"
+#include "dcmtk/dcmdata/dcdeftag.h" // DcmTagKey
+#include "dcmtk/dcmdata/dcsequen.h" // DcmSequenceOfItems
+
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_serieInformationAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_currentPhase(0), m_numberOfSlicesWindows(1)
+ : QViewer( parent ), m_serieInformationAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_currentPhase(0), m_numberOfSlicesWindows(1), m_currentSlice(0), m_overlayVolume(0), m_rotateFactor(0), m_voxelInformationCaption(0), m_applyFlip(false), m_isImageFlipped(false), m_scalarBar(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0), m_toolManager(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
     m_enabledAnnotations = Q2DViewer::AllAnnotation;
-    m_lastView = None;
+    m_lastView = Q2DViewer::Axial;
     m_currentSlice = 0;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -109,6 +125,12 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
     disableVoxelInformationCaption();
+
+    // grayscale pipeline
+    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
+    m_windowLevelLUTMapper->SetOutputFormatToLuminance();
+
+    m_modalityLUTRescale = 0; //vtkImageShiftScale::New();
 
     // inicialització viewport de les llesques
     m_slicesViewportExtent[0]=.0;
@@ -394,110 +416,92 @@ void Q2DViewer::createScalarBar()
 
 void Q2DViewer::updateScalarBar()
 {
+    // Així és més ràpid i senzill
     if( m_mainVolume )
     {
-        // \TODO HACK!!
-        vtkLookupTable * lookup = vtkLookupTable::SafeDownCast( this->getImageViewer()->GetWindowLevel()->GetLookupTable() );
-        if ( !lookup )
-        {
-            lookup = vtkLookupTable::New();
-            double range[2];
-            range[0] = m_viewer->GetColorLevel() - m_viewer->GetColorWindow()/2;
-            range[1] = m_viewer->GetColorLevel() + m_viewer->GetColorWindow()/2;
-            lookup->SetTableRange( range );
-            lookup->SetSaturationRange( 0 , 0 );
-            lookup->SetHueRange( 0 , 0 );
-            lookup->SetValueRange( 0 , 1 );
-            lookup->Build();
-        }
+        vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
+        lookup->SetWindow( m_windowLevelLUTMapper->GetWindow() );
+        lookup->SetLevel( m_windowLevelLUTMapper->GetLevel() );
+        lookup->Build();
         m_scalarBar->SetLookupTable( lookup );
     }
     else
         DEBUG_LOG( "No hi ha cap volum assignat. No podem donar LUT a l'escala de colors" );
 }
 
-void Q2DViewer::updateCameraRotation()
-{
-    if( m_viewer->GetInput() )
-    {
-        vtkCamera *cam;
-        vtkRenderer *renderer;
-        vtkRendererCollection* renderCollection = m_viewer->GetRenderWindow()->GetRenderers();
-        int i = 0;
-
-        switch( this->m_lastView )
-        {
-        case Axial:
-            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
-            {
-                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
-                {
-                    cam->SetRoll( -m_rotateFactor*90. + 180. );
-                }
-                i++;
-            }
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
-        break;
-        case Sagittal:
-            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
-            {
-                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
-                {
-                    cam->SetRoll( -m_rotateFactor*90. -90. );
-                }
-                i++;
-            }
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
-        break;
-
-        case Coronal:
-            m_viewer->SetSliceOrientationToXZ();
-            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
-            {
-                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
-                {
-                    cam->SetRoll( -m_rotateFactor*90. -90. );
-                }
-                i++;
-            }
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
-        break;
-        }
-
-        mapOrientationStringToAnnotation();
-        this->updateInformation();
-        this->updateRulers();
-        this->refresh();
-    }
-    else
-    {
-        WARN_LOG( "Intentant actualitzar rotació de càmera sense haver donat un input abans..." );
-    }
-}
-
 void Q2DViewer::rotateClockWise()
 {
     m_rotateFactor = (m_rotateFactor+1) % 4 ;
-    updateCameraRotation();
+    updateCamera();
 }
 
 void Q2DViewer::rotateCounterClockWise()
 {
     m_rotateFactor = (m_rotateFactor+3) % 4 ;
-    updateCameraRotation();
+    updateCamera();
+}
+
+void Q2DViewer::setRotationFactor( int factor )
+{
+    m_rotateFactor = factor;
+//     this->updateCameraRotation();
+    updateCamera();
+}
+
+void Q2DViewer::horizontalFlip()
+{
+    m_applyFlip = true;
+    m_isImageFlipped = ! m_isImageFlipped;
+    updateCamera();
+}
+
+void Q2DViewer::verticalFlip()
+{
+    m_rotateFactor = (m_rotateFactor + 2) % 4 ;
+    horizontalFlip();
+}
+
+void Q2DViewer::setModalityRescale( double slope, double intercept )
+{
+    if( !m_modalityLUTRescale )
+    {
+        m_modalityLUTRescale = vtkImageShiftScale::New();
+        m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+    }
+    m_modalityLUTRescale->SetShift( slope );
+    m_modalityLUTRescale->SetScale( intercept );
+}
+
+void Q2DViewer::setModalityLUT( vtkWindowLevelLookupTable *lut )
+{
+    if( !lut && m_modalityLut )
+    {
+        m_modalityLut->Delete();
+    }
+    m_modalityLut = lut;
+}
+
+void Q2DViewer::setVOILUT( vtkWindowLevelLookupTable *lut )
+{
+    if( !lut && m_windowLevelLut )
+    {
+        m_windowLevelLut->Delete();
+    }
+    m_windowLevelLut = lut;
+}
+
+void Q2DViewer::setPresentationLUT( vtkWindowLevelLookupTable *lut )
+{
+    if( !lut && m_presentationLut )
+    {
+        m_presentationLut->Delete();
+    }
+    m_presentationLut = lut;
 }
 
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
+    //\TODO CAL APLICAR ELS FLIPS!!!!
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
     QString revertedOrientation = m_mainVolume->getVolumeSourceInformation()->getRevertedPatientOrientationString() ;
 
@@ -509,6 +513,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
+            //\TODO experimental, encara no sabem si ho estem fem bé el flip
             m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(0) ) );
             m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
             m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
@@ -527,6 +532,13 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
             m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( revertedList.at(2) ) );
             m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
+        }
+        if( m_isImageFlipped )
+        {
+            // llavors caldrà intercanviar esquerra per dreta
+            QString swap( m_patientOrientationTextActor[0]->GetInput() );
+            m_patientOrientationTextActor[0]->SetInput( m_patientOrientationTextActor[2]->GetInput() );
+            m_patientOrientationTextActor[2]->SetInput( qPrintable( swap ) );
         }
     }
     else
@@ -801,6 +813,7 @@ void Q2DViewer::setupInteraction()
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
 
 // menú contextual TODO el farem servir???
 //     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
@@ -814,16 +827,22 @@ void Q2DViewer::setInput( Volume* volume )
     if( volume == 0 )
         return;
     m_mainVolume = volume;
-    m_viewer->SetInput( m_mainVolume->getVtkData() );
-    // ajustem el window Level per defecte
-    m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
-    m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
-    if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
-    {
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        m_defaultWindow = fabs( range[1] - range[0] );
-        m_defaultLevel = ( range[1] + range[0] )/ 2.0;
-    }
+
+//     m_viewer->SetInput( m_mainVolume->getVtkData() );
+//     // ajustem el window Level per defecte
+//     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
+//     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+//     if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
+//     {
+//         double * range = m_mainVolume->getVtkData()->GetScalarRange();
+//         m_defaultWindow = fabs( range[1] - range[0] );
+//         m_defaultLevel = ( range[1] + range[0] )/ 2.0;
+//     }
+
+    // obtenim valors de gris i aquestes coses
+    // aquí es crea tot el pieline del visualitzador
+    this->computeInputGrayscalePipeline();
+    this->applyGrayscalePipeline();
 
     int extent[6];
     double origin[3], spacing[3];
@@ -836,6 +855,10 @@ void Q2DViewer::setInput( Volume* volume )
     m_rulerExtent[3] = origin[1] + extent[3]*spacing[1];
     m_rulerExtent[4] = origin[2];
     m_rulerExtent[5] = origin[2] + extent[5]*spacing[2];
+
+// \TODO això no sabem si serà del tot necessari
+//     m_picker->PickFromListOn();
+//     m_picker->AddPickList( m_viewer->GetImageActor() );
 
     m_numberOfPhases = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases();
     if( m_numberOfPhases > 1 )
@@ -870,13 +893,10 @@ void Q2DViewer::setOverlayInput( Volume* volume )
 {
     m_overlayVolume = volume;
 
-        // \TODO s'hauria d'eliminar aquests objectes en algun punt (veure cas del blend)
+    // \TODO s'hauria d'eliminar aquests objectes en algun punt (veure cas del blend)
     vtkImageCheckerboard *imageCheckerBoard = vtkImageCheckerboard::New();
     vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
-
-        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
-
-    //std::cout<<"overlay: "<<m_overlay<<" [CB="<<CheckerBoard<<", BL="<<Blend<<" ,RW="<<RectilinearWipe<<"]" <<std::endl;
+    // \TODO hauríem d'actualitzar valors que es calculen al setInput de la variable m_overlay!
     switch( m_overlay )
     {
     case CheckerBoard:
@@ -932,7 +952,7 @@ void Q2DViewer::render()
        // Això és necessari perquè la imatge es rescali a les mides de la finestreta
        // Automatically set up the camera based on the visible actors. The camera will reposition itself to view the center point of the actors, and move along its initial view plane normal (i.e., vector defined from camera position to focal point) so that all of the actors can be seen.
         this->getRenderer()->ResetCamera();
-        updateView();
+        updateCamera();
     }
     else
     {
@@ -943,14 +963,117 @@ void Q2DViewer::render()
 void Q2DViewer::setView( ViewType view )
 {
     m_lastView = view;
-    m_rotateFactor = 0;
-    updateView();
+    resetCamera();
 }
 
-void Q2DViewer::updateView()
+void Q2DViewer::updateCamera()
 {
     if( m_viewer->GetInput() )
     {
+        vtkCamera *cam;
+        vtkRenderer *renderer;
+        vtkRendererCollection* renderCollection = m_viewer->GetRenderWindow()->GetRenderers();
+        int i = 0;
+
+        switch( this->m_lastView )
+        {
+        case Axial:
+            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            {
+                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
+                cam = renderer->GetActiveCamera();
+                if ( cam )
+                {
+                    cam->SetRoll( -m_rotateFactor*90. + 180. );
+                }
+                i++;
+            }
+            emit rotationDegreesChanged( -m_rotateFactor*90. + 180. );
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
+        break;
+        case Sagittal:
+            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            {
+                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
+                cam = renderer->GetActiveCamera();
+                if ( cam )
+                {
+                    cam->SetRoll( -m_rotateFactor*90. -90. );
+                }
+                i++;
+            }
+            emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
+        break;
+
+        case Coronal:
+            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            {
+                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
+                cam = renderer->GetActiveCamera();
+                if ( cam )
+                {
+                    cam->SetRoll( -m_rotateFactor*90. );
+                }
+                i++;
+            }
+            emit rotationDegreesChanged( -m_rotateFactor*90. );
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
+        break;
+        }
+        emit rotationFactorChanged( m_rotateFactor );
+        //\TODO mirar bé com aplicar el flip,encara no és correcte
+        if( m_applyFlip )
+        {
+            // funciona bé només en axial!
+            // Caldria escollir quina és la manera que més convé de fer-ho
+            // Alternativa 1)
+            // així movem la càmera, però faltaria que la imatge no es mogués de lloc
+            cam->Azimuth( 180 );
+
+            // Alternativa 2)
+            // D'aquesta manera només movem l'actor. Per contra, el sistema de coordenades queda "igual" cosa que es reflexa en els rulers que no indiquen les coordenades correctes de la imatge
+//             double *center;
+//             center = m_viewer->GetImageActor()->GetCenter();
+//             m_viewer->GetImageActor()->SetOrigin( center );
+//             m_viewer->GetImageActor()->RotateY( 180 );
+
+            // Alternativa 3) La que ens proposen a la mailing list. Fa el mateix que azimuth
+            // una manera d'arreglar això seria mirar la posició respecte el centre i llavors invertir el desplaçament que hi hagi tant sobre les Y com sobre les X
+//             double cameraPosition[3];
+//             cam->GetPosition(cameraPosition);
+//             double cameraFocalPoint[3];
+//             cam->GetFocalPoint(cameraFocalPoint);
+//             for ( int i = 0; i < 3; ++i )
+//             {
+//                 cameraPosition[i] = 2.0*cameraFocalPoint[i] - cameraPosition[i];
+//             }
+//             cam->SetPosition(cameraPosition);
+//             this->getRenderer()->ResetCameraClippingRange();
+//             m_viewer->Render();
+            m_applyFlip = false;
+        }
+        mapOrientationStringToAnnotation();
+        this->updateInformation();
+        this->updateRulers();
+        this->refresh();
+    }
+    else
+    {
+        WARN_LOG( "Intentant actualitzar rotació de càmera sense haver donat un input abans..." );
+    }
+}
+
+void Q2DViewer::resetCamera()
+{
+    if( m_viewer->GetInput() )
+    {
+        m_rotateFactor = 0;
+        m_applyFlip = false;
+        m_isImageFlipped = false;
         vtkCamera *cam;
         vtkRenderer *renderer;
         int i = 0;
@@ -967,11 +1090,12 @@ void Q2DViewer::updateView()
                     cam->SetFocalPoint(0,0,0);
                     cam->SetViewUp(0,-1,0);
                     cam->SetPosition(0,0,-1);
-//                     this->getRenderer()->ResetCamera();
+                    cam->SetRoll( -m_rotateFactor*90. + 180. );
                     renderer->ResetCamera();
                 }
                 i++;
             }
+            emit rotationDegreesChanged( -m_rotateFactor*90. + 180. );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
@@ -990,6 +1114,7 @@ void Q2DViewer::updateView()
                     cam->SetRoll( -m_rotateFactor*90. -90. );
                     renderer->ResetCamera();
                 }
+                emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
                 i++;
             }
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
@@ -1011,18 +1136,15 @@ void Q2DViewer::updateView()
                     cam->SetRoll( -m_rotateFactor*90. );
                     renderer->ResetCamera();
                 }
+                emit rotationDegreesChanged( -m_rotateFactor*90. );
                 i++;
             }
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
-
-        default:
-        // podem posar en Axial o no fer res
-            this->setView( Axial );
-        break;
         }
+        this->refresh();
         // cada cop que canviem de llesca posarem per defecte la llesca a 0 si té més d'una fase i la del mig si només en té 1
         if( m_numberOfPhases > 1 )
         {
@@ -1030,8 +1152,8 @@ void Q2DViewer::updateView()
         }
         else
         {
-            setSlice( m_viewer->GetSliceRange()[1] /2  );
             m_maxSliceValue = m_viewer->GetSliceRange()[1];
+            setSlice( m_viewer->GetSliceRange()[1] /2  );
         }
         mapOrientationStringToAnnotation();
         updateRulers();
@@ -1080,11 +1202,11 @@ void Q2DViewer::setWindowLevel( double window , double level )
 {
     if( m_mainVolume )
     {
-        m_viewer->SetColorLevel( level );
-        m_viewer->SetColorWindow( window );
+        m_windowLevelLUTMapper->SetWindow( window );
+        m_windowLevelLUTMapper->SetLevel( level );
         updateInformation();
         updateScalarBar();
-        getInteractor()->Render();
+        refresh();
     }
     else
     {
@@ -1109,8 +1231,8 @@ void Q2DViewer::getCurrentWindowLevel( double wl[2] )
 {
     if( m_mainVolume )
     {
-        wl[0] = m_viewer->GetColorWindow();
-        wl[1] = m_viewer->GetColorLevel();
+        wl[0] = m_windowLevelLUTMapper->GetWindow();
+        wl[1] = m_windowLevelLUTMapper->GetLevel();
     }
     else
     {
@@ -1122,7 +1244,7 @@ double Q2DViewer::getCurrentColorWindow()
 {
     if( m_mainVolume )
     {
-        return m_viewer->GetColorWindow();
+        return m_windowLevelLUTMapper->GetWindow();
     }
     else
     {
@@ -1135,7 +1257,7 @@ double Q2DViewer::getCurrentColorLevel()
 {
     if( m_mainVolume )
     {
-        return m_viewer->GetColorLevel();
+        return m_windowLevelLUTMapper->GetLevel();
     }
     else
     {
@@ -1148,11 +1270,13 @@ void Q2DViewer::resetWindowLevelToDefault()
 {
     // això ens dóna un level/level "maco" per defecte
     // situem el level al mig i donem un window complet de tot el rang
+    //\TODO aquí caldria tenir en compte el default del presentation state actual si l'hi ha
     if( m_mainVolume )
     {
-        m_viewer->SetColorWindow( m_defaultWindow );
-        m_viewer->SetColorLevel( m_defaultLevel );
+        m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
+        m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
         this->refresh();
+        //\TODO fer updateInformation() en comptes d'aquest?
         updateWindowLevelAnnotation();
     }
     else
@@ -1161,17 +1285,165 @@ void Q2DViewer::resetWindowLevelToDefault()
     }
 }
 
+vtkImageActor *Q2DViewer::getImageActor()
+{
+    return m_viewer->GetImageActor();
+}
+
+void Q2DViewer::setPixelAspectRatio( double ratio )
+{
+    if( ratio != 1.0 && ratio > 0.0 )
+    {
+        m_mainVolume->updateInformation();
+        double spacing[3];
+        m_mainVolume->getSpacing( spacing );
+
+        vtkImageChangeInformation *change = vtkImageChangeInformation::New();
+        change->SetInput( m_viewer->GetImageActor()->GetInput() );
+
+        if( ratio > 1.0 )
+            change->SetOutputSpacing( spacing[0]*ratio, spacing[1], spacing[2] );
+        else
+            change->SetOutputSpacing( spacing[0], spacing[1]*ratio, spacing[2] );
+        m_viewer->GetImageActor()->SetInput( change->GetOutput() );
+    }
+    else
+    {
+        DEBUG_LOG( qPrintable( QString("Ratio no aplicable: %1").arg(ratio) ) );
+    }
+}
+
+void Q2DViewer::setPresentationPixelSpacing( double x , double y )
+{
+    m_presentationPixelSpacing[0] = x;
+    m_presentationPixelSpacing[1] = y;
+}
+
+void Q2DViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY )
+{
+    double width, height;
+    width = fabs( topLeftX - bottomRightX );
+    height = fabs( topLeftY - bottomRightY );
+
+    int *size = this->getRenderer()->GetSize();
+    int *rendererOrigin = this->getRenderer()->GetOrigin();
+    vtkCamera *cam = this->getRenderer()->GetActiveCamera();
+
+    double min[2];
+    double rbcenter[4];
+    min[0] = bottomRightX < topLeftX ?
+        bottomRightX : topLeftX;
+    min[1] = bottomRightY < topLeftY ?
+        bottomRightY : topLeftY;
+
+    rbcenter[0] = min[0] + 0.5*width;
+    rbcenter[1] = min[1] + 0.5*height;
+    rbcenter[2] = 0.0;
+    rbcenter[3] = 1.0;
+
+    // \TODO aquesta normalització potser no és necessària
+    double invw;
+    double winCenter[3];
+    winCenter[0] = rendererOrigin[0] + 0.5*size[0];
+    winCenter[1] = rendererOrigin[1] + 0.5*size[1];
+    winCenter[2] = 0;
+
+    this->getRenderer()->SetDisplayPoint( winCenter );
+    this->getRenderer()->DisplayToView();
+    this->getRenderer()->ViewToWorld();
+
+    double worldWinCenter[4];
+    this->getRenderer()->GetWorldPoint( worldWinCenter );
+    invw = 1.0/worldWinCenter[3];
+    worldWinCenter[0] *= invw;
+    worldWinCenter[1] *= invw;
+    worldWinCenter[2] *= invw;
+
+    double translation[3];
+    translation[0] = rbcenter[0] - worldWinCenter[0];
+    translation[1] = rbcenter[1] - worldWinCenter[1];
+    translation[2] = rbcenter[2] - worldWinCenter[2];
+
+    double pos[3], fp[3];
+    cam->GetPosition( pos );
+    cam->GetFocalPoint( fp );
+
+    pos[0] += translation[0];
+    pos[1] += translation[1];
+    pos[2] += translation[2];
+    fp[0] += translation[0];
+    fp[1] += translation[1];
+    fp[2] += translation[2];
+
+    cam->SetPosition( pos );
+    cam->SetFocalPoint( fp );
+
+    // ara cal calcular la width i height en coordenades de display
+    double displayTopLeft[3], displayBottomRight[3];
+    this->computeWorldToDisplay( this->getRenderer(), topLeftX, topLeftY, 0.0, displayTopLeft );
+    this->computeWorldToDisplay( this->getRenderer(), bottomRightX, bottomRightY, 0.0, displayBottomRight );
+    // recalculem ara tenint en compte el display
+    width = fabs( displayTopLeft[0] - displayBottomRight[0] );
+    height = fabs( displayTopLeft[1] - displayBottomRight[1] );
+    //\TODO caldria considerar l'opció d'afegir un marge per si no volem que la regió escollida mantingui una distància amb les vores de la finestra
+    // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
+    if( size[0] < size[1] )
+        cam->Zoom( size[0] / (float)width );
+    else
+        cam->Zoom( size[1] / (float)height );
+
+    this->getRenderer()->ResetCameraClippingRange();
+    this->refresh();
+}
+
+void Q2DViewer::setTrueSizeMode( bool on )
+{
+    if( on )
+    {
+        DEBUG_LOG("Presentation size mode: TRUE SIZE:: NO IMPLEMENTAT ENCARA!");
+        // \TODO això encara no funciona
+    }
+}
+
+void Q2DViewer::setMagnificationFactor( double factor )
+{
+    // presumiblement un SetScale(factor,factor,1) de l'ImageActor podria ser una solució alternativa
+    if( factor > 0.0 && factor != 1.0 )
+    {
+        m_mainVolume->updateInformation();
+        double spacing[3];
+        m_mainVolume->getSpacing( spacing );
+        vtkImageChangeInformation *change = vtkImageChangeInformation::New();
+        change->SetInput( m_viewer->GetImageActor()->GetInput() );
+        change->SetOutputSpacing( spacing[0]*factor, spacing[1]*factor, spacing[2] );
+        vtkImageResample *resample = vtkImageResample::New();
+        resample->SetInput( change->GetOutput() );
+        resample->SetAxisMagnificationFactor( 0, factor );
+        resample->SetAxisMagnificationFactor( 1, factor );
+        resample->SetAxisMagnificationFactor( 2, 1.0 );
+        resample->SetAxisOutputSpacing( 0, spacing[0]*factor );
+        resample->SetAxisOutputSpacing( 1, spacing[1]*factor );
+        resample->SetAxisOutputSpacing( 2, 1.0 );
+        resample->Update();
+        m_viewer->GetImageActor()->SetInput( resample->GetOutput() );
+    }
+    else
+    {
+        DEBUG_LOG( qPrintable( QString("Factor no aplicable: %1").arg(factor) ) );
+    }
+}
+
 void Q2DViewer::updateWindowLevelAnnotation()
 {
     updateInformation();
-    emit windowLevelChanged( m_viewer->GetColorWindow() , m_viewer->GetColorLevel() );
+    emit windowLevelChanged( m_windowLevelLUTMapper->GetWindow() , m_windowLevelLUTMapper->GetLevel() );
     updateScalarBar();
 }
 
 void Q2DViewer::reset()
 {
     //\TODO: completar, encara és incomplert
-    updateView();
+    setViewToAxial();
 }
 
 void Q2DViewer::setDivisions( int x , int y , int z )
@@ -1591,8 +1863,8 @@ void Q2DViewer::updateInformation()
                     .arg( m_imageSizeInformation[1] )
                     .arg( renderer->GetSize()[0] )
                     .arg( renderer->GetSize()[1] )
-                    .arg( m_viewer->GetColorWindow() )
-                    .arg( m_viewer->GetColorLevel() );
+                    .arg( m_windowLevelLUTMapper->GetWindow() )
+                    .arg( m_windowLevelLUTMapper->GetLevel() );
         }
         else
             m_upperLeftText = "";
@@ -1918,6 +2190,393 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
 void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
 {
     enableAnnotation( annotation, false );
+}
+
+void Q2DViewer::computeInputGrayscalePipeline()
+{
+    // si llegim l'arxiu tal qual, la modality no cal aplicar-la perquè les pròpies gdcm ja ens apliquen la modality lut
+    computeModalityLUT();
+//     applyMaskSubstraction();
+    computeVOILUT();
+}
+
+void Q2DViewer::applyGrayscalePipeline()
+{
+    DEBUG_LOG( "*** Grayscale Transform Pipeline Begin ***" );
+    DEBUG_LOG( qPrintable( QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
+    .arg( m_mainVolume->getVolumeSourceInformation()->getBitsAllocated() )
+    .arg( m_mainVolume->getVolumeSourceInformation()->getBitsStored() )
+    .arg( m_mainVolume->getVtkData()->GetScalarRange()[0] )
+    .arg( m_mainVolume->getVtkData()->GetScalarRange()[1] )
+    .arg( m_mainVolume->getVolumeSourceInformation()->getPixelRepresentation() )
+    .arg( m_mainVolume->getVolumeSourceInformation()->getPhotometricInterpretationAsString() )
+                    ) );
+
+
+//\TODO Això s'ha d'aplicar enfunció de si tenim presentationm state o no? mirar si s'ha de fer aquí o al presentation state attacher...
+
+//     if( m_mainVolume->getVolumeSourceInformation()->isMonochrome1() && m_presentationStateFilename != NULL )
+//     {
+//         DEBUG_LOG("La imatge és MONOCHROME1: ¿invertim les dades després de la VOI LUT i abans de la presentation LUT?... Si hi ha presentation state això no s'hauria de fer!");
+//         if( m_presentationLut )
+//         {
+//             m_presentationLut->InverseVideoOn();
+//             DEBUG_LOG("Inverteixo la PRESENTATION LUT");
+//         }
+//         else if( m_windowLevelLut )
+//         {
+//             m_windowLevelLut->InverseVideoOn();
+//             DEBUG_LOG("Inverteixo la VOI LUT");
+//         }
+//         else if( m_modalityLut )
+//         {
+//             m_modalityLut->InverseVideoOn();
+//             DEBUG_LOG("Inverteixo la MODALITY LUT");
+//         }
+//     }
+    // crear el pipeline en funció de tot el que ens hem trobat
+    if( m_modalityLut )
+    {
+        if( m_windowLevelLut )
+        {
+            if( m_presentationLut ) // modality lut + windowlevel lut + presentation lut
+            {
+                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
+                m_viewer->SetInput( m_mainVolume->getVtkData() );
+                m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
+                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
+                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
+                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
+            }
+            else // modality lut + windowlevel lut
+            {
+                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Output  :: NOT IMPLEMENTED YET!");
+            }
+        }
+        else
+        {
+            if( m_presentationLut ) // modality lut + presentation lut [ + ww/wl ]
+            {
+                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Presentation LUT -> Output  :: NOT IMPLEMENTED YET!");
+            }
+            else // modality [ + ww/wl ]
+            {
+                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Output ");
+                m_viewer->SetInput( m_mainVolume->getVtkData() );
+                m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                m_windowLevelLUTMapper->SetLookupTable( m_modalityLut );
+                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
+                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
+                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
+            }
+        }
+    }
+    else
+    {
+        if( m_windowLevelLut )
+        {
+            if( m_presentationLut )
+            {
+                if( m_modalityLUTRescale ) // rescale slope + windowlevel lut + presentation lut
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Presentation LUT -> Output  :: NOT IMPLEMENTED YET!");
+                }
+                else // windowlevel lut + presentation lut
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Presentation LUT -> Output :: NOT IMPLEMENTED YET!");
+                }
+            }
+            else // windowlevel lut
+            {
+                if( m_modalityLUTRescale ) // rescale slope + windowlevel lut
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Output ");
+                    m_viewer->SetInput( m_modalityLUTRescale->GetOutput() );
+                    m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
+                }
+                else // windowlevel lut
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Output ");
+                    m_viewer->SetInput( m_mainVolume->getVtkData() );
+                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                }
+                m_windowLevelLUTMapper->SetLookupTable( m_windowLevelLut );
+                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                // es dóna per fet que el window level queda ajustat per defecte
+                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
+                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
+            }
+        }
+        else
+        {
+            if( m_presentationLut )
+            {
+                if( m_modalityLUTRescale ) // rescale slope + [ww/wl +] presentation
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
+                    m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+                    m_viewer->SetInput( m_modalityLUTRescale->GetOutput() );
+                    m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
+                }
+                else // [ww/wl +] presentation
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Presentation LUT -> Output ");
+                    m_viewer->SetInput( m_mainVolume->getVtkData() );
+                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                }
+                m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
+                // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
+                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
+                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
+                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+            }
+            else
+            {
+                if( m_modalityLUTRescale ) // rescale slope
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Output ");
+//                     m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+                    m_viewer->SetInput( m_modalityLUTRescale->GetOutput() );
+                    m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
+                }
+                else // res
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
+                    m_viewer->SetInput( m_mainVolume->getVtkData() );
+                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                }
+                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
+                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
+                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+            }
+        }
+    }
+    updateWindowLevelAnnotation();
+}
+
+void Q2DViewer::computeModalityLUT()
+{
+    // If the Modality LUT or equivalent Attributes are part of both the Image and the Presentation State, then the Presentation State Modality LUT shall be used instead of the Image Modality LUT or equivalent Attributes in the Image. If the Modality LUT is not present in the Presentation State it shall be assumed to be an identity transformation. Any Modality LUT or equivalent Attributes in the Image shall not be used.
+
+    // busquem si existeix una modality lut
+    m_modalityLut = this->parseLookupTable( 0 );
+    if( m_modalityLut )
+    {
+        m_modalityRange[0] = m_modalityLut->GetTableRange()[0];
+        m_modalityRange[1] = m_modalityLut->GetTableRange()[1];
+        if( m_modalityLUTRescale )
+        {
+            m_modalityLUTRescale->Delete();
+            m_modalityLUTRescale = 0;
+        }
+    }
+    // si no hi ha lut busquem els paràmetres de rescale
+    else
+    {
+        // mirar el de la imatge, només per curiositat perquè les itk ja l'apliquen directament
+        DEBUG_LOG( qPrintable( QString("Image Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
+        .arg( m_mainVolume->getVolumeSourceInformation()->getRescaleSlope() )
+        .arg( m_mainVolume->getVolumeSourceInformation()->getRescaleIntercept() )
+        ) );
+        if( m_modalityLUTRescale )
+        {
+            m_modalityLUTRescale->Delete();
+            m_modalityLUTRescale = 0;
+        }
+        m_modalityRange[0] = m_mainVolume->getVtkData()->GetScalarRange()[0];
+        m_modalityRange[1] = m_mainVolume->getVtkData()->GetScalarRange()[1];
+    }
+}
+
+void Q2DViewer::applyMaskSubstraction()
+{
+    //
+    // 2. Mask Substraction
+    //
+    //             The mask transformation may be applied in the case of multi-frame images for which other frames at a fixed frame position or time interval relative to the current frame may be subtracted from the current frame. Multiple mask frames may be averaged, and sub-pixel shifted before subtraction.
+    //             The result will be a signed value with a bit length one longer than the source frames.
+    // When there is no difference between corresponding pixel values, the subtracted image pixel will have a value of 0.
+    // If a pixel in the current frame has a greater value than in the mask frame, then the resulting frame shall have a positive value. If it has a lesser value, then the resulting frame shall have a negative value.
+
+    // aquests canvis s'apliquen a totes les imatges
+}
+
+void Q2DViewer::computeVOILUT()
+{
+    //
+    // 3. VOI LUT
+    //
+    // If a VOI LUT is part of both the Image and the Presentation State then the Presentation State VOI LUT shall be used instead of the Image VOI LUT. If a VOI LUT (that applies to the Image) is not present in the Presentation State , it shall be assumed to be an identity transformation. Any VOI LUT or equivalent values in the Image shall not be used.
+
+    // aquests canvis es poden aplicar a un subconjunt de imatges/frames. Per tant podem tenir diverses VOI LUT per una mateixa sèrie que s'apliquen a diverses imatges.
+
+    // primer busquem voi lut, sinó busquem window level
+    m_windowLevelLut = this->parseLookupTable(1);
+    // si hi ha una VOI LUT
+    if( m_windowLevelLut )
+    {
+        // Ara podem considerar els tres casos anteriors de la modality: hi ha rescale, hi ha lut o no hi ha res. el 1r i el tercer es tracten igual.
+        if( m_modalityLut )
+        {
+            DEBUG_LOG("Encara no sabem què fer en aquest cas (concatenar modality + voi LUT)");
+        }
+        else
+        {
+            m_defaultWindow = m_windowLevelLut->GetTableRange()[1] - m_windowLevelLut->GetTableRange()[0];
+            m_defaultLevel = m_defaultWindow / 2.0;
+        }
+    }
+    else
+    {
+        // només mirem el del nostre propi volum
+
+        if( m_mainVolume->getVolumeSourceInformation()->hasWindowLevel() )
+        {
+            // Encara que en tingui més d'un window level, agafarem el primer i prou. Si n'hi ha més s'escolliran desde l'extensió adequada
+            m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
+            m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+            DEBUG_LOG( qPrintable( QString("Image VOI Adjustment: Window: %1, Level: %2")
+                .arg( m_defaultWindow )
+                .arg( m_defaultLevel )
+                ) );
+        }
+        else
+        {
+            // ajustar un al rang de dades adequat
+            m_defaultWindow = fabs( m_modalityRange[1] - m_modalityRange[0] );
+            m_defaultLevel = ( m_modalityRange[1] + m_modalityRange[0] )/ 2.0;
+            DEBUG_LOG( qPrintable( QString("No Image VOI Adjustment, creating a nice and automatic one: Window: %1, Level: %2")
+            .arg( m_defaultWindow )
+            .arg( m_defaultLevel )
+            ) );
+        }
+    }
+}
+
+vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
+{
+    DcmTagKey lutType;
+    vtkWindowLevelLookupTable *vtkLut = 0;
+    QString lutDescription;
+    bool signedRepresentation = false;
+    if( m_mainVolume->getVolumeSourceInformation()->getPixelRepresentation() == VolumeSourceInformation::SignedPixelRepresentation )
+            signedRepresentation = true;
+    switch( type )
+    {
+    case 0:
+        lutType = DCM_ModalityLUTSequence;
+        lutDescription = "Modality LUT";
+    break;
+
+    case 1:
+        lutType = DCM_VOILUTSequence;
+        lutDescription = "Window Level LUT";
+    break;
+
+    case 2:
+        lutType = DCM_PresentationLUTSequence;
+        lutDescription = "Presentation LUT";
+    break;
+    }
+    DcmStack stack;
+    bool ok = true;
+
+    DcmDataset *data = m_mainVolume->getVolumeSourceInformation()->getDicomDataset();
+    if( data->search( lutType, stack ).bad() )
+        ok = false;
+    else
+        DEBUG_LOG( qPrintable( QString("Parsing [%1] from dicom dataset").arg( lutDescription ) ) );
+
+    if( ok )
+    {
+        DcmSequenceOfItems *lutSequence = NULL;
+        lutSequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
+        DcmItem *item = lutSequence->getItem( 0 );
+        // obtenim la descripció de la lut que ens especifica el format d'aquesta
+        const Uint16 *lutDescriptor;
+        OFCondition status = item->findAndGetUint16Array( DcmTagKey( DCM_LUTDescriptor ) , lutDescriptor  );
+        if( status.good() )
+        {
+            // 0: # d'entrades a la lookup table. Quan val 0 equival a 2^16 ( 65536 )
+
+            // 1: FirstStoredPixelValueMapped: El valor del primer valor de pixel de la imatge mapejat. Aquest valor es mapeja a la primera entrada de la lut. Tots els valors de pixel de la imatge menors que aquest es mapejen amb el valor de la primera entrada de la lut. Un pixel amb valor FirstStoredPixelValueMapped + 1, es mapejarà amb la següent entrada de la lut i així fins arribar a la última entrada de la lut. Els valors per sobre de la última entrada també es mapejen amb el valor de l'última entrada de la lut. Aquest valor estableix la relació entre els valors de la imatge i les entrades de la lut.
+            // Per exemple, FirstStoredPixelValueMapped = 63488. Els valors de la imatge que estiguin per sota d'aquest se'ls assignarà el valor de la primera entrada de la lut (lut[0]). FirstStoredPixelValueMapped+1 es correspondrà amb lut[1], etc fins FirstStoredPixelValueMapped+n=> lut[n-1], on n seran el nombre d'entrades de la lut. Els valors de pixel més grans que FirstStoredPixelValueMapped+n-1 es mapejaran amb el valor de lut[n-1].
+
+            // 2: Especifica el nombre de bits per cada entrada a la lut, que podran ser 8 o 16, corresponent amb el rang de valors de la lut que podrà ser de 256 o 65536 respectivament
+
+            // allotjem la memòria per les dades de la lut
+            int numberOfEntries;
+            if( lutDescriptor[0] == 0 )
+                numberOfEntries = 65535;
+            else
+                numberOfEntries =  lutDescriptor[0];
+            signed int firstStored;
+            if( signedRepresentation )
+                firstStored = static_cast<signed short>( lutDescriptor[1] );
+            else
+                firstStored = lutDescriptor[1];
+
+            DEBUG_LOG( qPrintable( QString("LUT Descriptor: %1\\%2\\%3")
+            .arg( numberOfEntries )
+            .arg( firstStored )
+            .arg( lutDescriptor[2] )
+            ) );
+
+            vtkLut = vtkWindowLevelLookupTable::New();
+            vtkLut->SetNumberOfTableValues( numberOfEntries );
+            vtkLut->SetTableRange( firstStored , firstStored + numberOfEntries );
+
+            // Encara que lutDescriptor[2] pugui ser 8,10,12 o 16 bits, sempre llegirem en un vector de components de 16 bits per comoditat
+            const Uint16 *lutData16;
+            lutData16 = new Uint16[ numberOfEntries ];
+            // obtenim les dades de la lut
+            status = item->findAndGetUint16Array( DcmTagKey( DCM_LUTData ) , lutData16  );
+            if( status.good() )
+            {
+                unsigned int min = 65535, max = 0;
+                for( int i = 0; i < numberOfEntries; i++ )
+                {
+                    if( lutData16[i] > max )
+                        max = lutData16[i];
+                    if( lutData16[i] < min )
+                        min = lutData16[i];
+                }
+//                 std::cout << std::endl << std::endl << "************ COMENÇUT **************" << std::endl << std::endl;
+                for( int i =0; i < numberOfEntries; i++ )
+                {
+                    double value;
+                    if( m_windowLevelLut ) // ens precedeix una VOI lut
+                        value = m_windowLevelLut->GetTableValue( i )[0];
+                        //value = m_windowLevelLut->GetLuminance( i );
+                    else if( m_modalityLut ) // només ens precedeix una modality
+                        value = m_modalityLut->GetTableValue( i )[0];
+                        //value = m_modalityLut->GetLuminance( i );
+                    else // no hi ha cap lut precedent
+                        value = (double)lutData16[ i ]/max;
+//                     std::cout << "Value que coloco a l'índex[" << i << "]: " << value << std::endl;
+                    vtkLut->SetTableValue( i , value , value , value , 1.0 );
+                }
+//                 std::cout << std::endl << std::endl << "************ ACABUT **************" << std::endl << std::endl;
+            }
+            else
+                std::cout << "Error message:: " << status.text() << std::endl;
+
+// experiment
+//             unsigned char *outTable = new unsigned char[ numberOfEntries ];
+//             void *inPtr = m_mainVolume->getVtkData()->GetScalarPointer();
+//             vtkLut->MapScalarsThroughTable2( inPtr, outTable, m_mainVolume->getVtkData()->GetScalarType(), numberOfEntries, 1, 1 );
+//             for( int i = 0; i < numberOfEntries; i++ )
+//                 std::cout << "value: " << (int)outTable[i] << std::endl;
+
+//             vtkLut->SetRampToLinear();
+        }
+        else
+            std::cout << "Error message:: " << status.text() << std::endl;
+    }
+    return vtkLut;
 }
 
 };  // end namespace udg

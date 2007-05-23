@@ -8,6 +8,8 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
     $${DCMTKINCLUDEDIR}/ofstd/ \
     $${DCMTKINCLUDEDIR}/dcmimage/ \
     $${DCMTKINCLUDEDIR}/config \
+    $${DCMTKINCLUDEDIR}/dcmpstat \
+    $${DCMTKINCLUDEDIR}/dcmsr \
     $${DCMTKINCLUDEDIR}/dcmjpeg
 
 LIBS += -L$${DCMTKLIBDIR} \
@@ -17,4 +19,6 @@ LIBS += -L$${DCMTKLIBDIR} \
     -ldcmimage \
     -ldcmimgle \
     -lofstd \
+    -ldcmpstat \
+    -ldcmsr \
     -ldcmjpeg

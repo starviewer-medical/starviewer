@@ -60,7 +60,14 @@ HEADERS += extensionfactory.h \
            strokesegmentationmethod.h \
            itkErfcLevelSetFunction.h \
            itkErfcLevelSetImageFilter.h \
-           itkVolumeCalculatorImageFilter.h 
+           itkVolumeCalculatorImageFilter.h \
+           keyimagenotefilereader.h \
+           keyimagenote.h \
+           q2dviewerkeyimagenoteattacher.h \
+           q2dviewerblackboard.h \
+           vtkAtamaiPolyDataToImageStencil2.h \
+           shutterfilter.h \
+           q2dviewerpresentationstateattacher.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -105,7 +112,14 @@ SOURCES += extensionmediator.cpp \
            strokesegmentationmethod.cpp \
            itkErfcLevelSetFunction.cpp \
            itkErfcLevelSetImageFilter.cpp \
-           itkVolumeCalculatorImageFilter.cpp 
+           itkVolumeCalculatorImageFilter.cpp \
+           keyimagenote.cpp \
+           keyimagenotefilereader.cpp \
+           q2dviewerkeyimagenoteattacher.cpp \
+           q2dviewerblackboard.cpp \
+           vtkAtamaiPolyDataToImageStencil2.cxx \
+           shutterfilter.cpp \
+           q2dviewerpresentationstateattacher.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
@@ -121,4 +135,5 @@ LIBS += -llog4cxx
 INCLUDEPATH += /usr/include/log4cxx/
 include(../itk.inc)
 include(../vtk.inc)
+include(../dcmtk.inc)
 include(../compilationtype.inc)
