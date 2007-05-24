@@ -17,6 +17,9 @@ namespace udg {
 // FWD declarations
 class Volume;
 class ToolsActionFactory;
+class Q2DViewerKeyImageNoteAttacher;
+class Q2DViewerPresentationStateAttacher;
+class KeyImageNote;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -45,6 +48,12 @@ public slots:
 
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
+
+    /// Carrega un Key Image Note
+    void loadKeyImageNote(const QString &filename);
+
+    /// Carrega un Presentation State
+    void loadPresentationState(const QString &filename);
 
 private:
     /// Tipus de vistes que podem tenir
@@ -75,10 +84,13 @@ private:
     QAction *m_voxelInformationAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
+    QAction *m_flipHorizontalAction;
+    QAction *m_flipVerticalAction;
     QAction *m_screenShotAction;
     QAction *m_distanceAction;
     ToolsActionFactory *m_actionFactory;
 
+    QAction *m_presentationStateAction;
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
 
@@ -95,12 +107,21 @@ private:
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
+    Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher1, *m_keyImageNoteAttacher2;
+    KeyImageNote *m_keyImageNote;
+
+    /// S'encarrega d'aplicar els presentation states
+    Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
+
 private slots:
     /// sincronitza les llesques de les sèries que es visualitzen
     void synchronizeSlices( bool ok );
 
     /// ens permet escollir una nova sèrie per a comparar
     void chooseNewSerie();
+
+    /// activem o desactivem el presentation state
+    void enablePresentationState( bool enable );
 
 signals:
     /// Aquest senyal s'emetrà quan es vulgui canviar de sèrie per comparar

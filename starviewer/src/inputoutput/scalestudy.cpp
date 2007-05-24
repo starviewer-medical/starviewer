@@ -8,9 +8,8 @@
 
 #include "scalestudy.h"
 #include "serieslist.h"
-#include "seriesmask.h"
+#include "dicommask.h"
 #include "status.h"
-#include "imagemask.h"
 #include "image.h"
 #include "imagelist.h"
 #include "starviewersettings.h"
@@ -28,7 +27,7 @@ void ScaleStudy::scale( std::string studyUID )
 {
     Status state;
     SeriesList seriesList;
-    ImageMask mask;
+    DicomMask mask;
     int number;
     char imgNumX[6];
     std::string absPath , relPath , absPathScal ;
@@ -79,7 +78,7 @@ void ScaleStudy::scale( std::string studyUID )
 
 Status ScaleStudy::getSeriesOfStudy( std::string studyUID , SeriesList &seriesList )
 {
-    SeriesMask mask;
+    DicomMask mask;
     CacheSeriesDAL cacheSeriesDAL;
 
     mask.setStudyUID( studyUID.c_str() );
@@ -87,14 +86,14 @@ Status ScaleStudy::getSeriesOfStudy( std::string studyUID , SeriesList &seriesLi
     return cacheSeriesDAL.querySeries( mask , seriesList );
 }
 
-Status ScaleStudy::countImageNumber( ImageMask mask, int &number )
+Status ScaleStudy::countImageNumber( DicomMask mask, int &number )
 {
     CacheImageDAL cacheImageDAL;
 
     return cacheImageDAL.countImageNumber( mask , number );
 }
 
-Status ScaleStudy::imageRelativePath( ImageMask mask , std::string &relPath )
+Status ScaleStudy::imageRelativePath( DicomMask mask , std::string &relPath )
 {
     ImageList imageList;
     Image image;

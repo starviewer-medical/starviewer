@@ -25,7 +25,7 @@ bool Operation::operator < ( Operation ope ) const
     else return false;
 }
 
-void Operation::setStudyMask( StudyMask mask )
+void Operation::setDicomMask( DicomMask mask )
 {
     m_mask = mask;
 }
@@ -66,7 +66,7 @@ void Operation::setPacsParameters( PacsParameters parameters )
     m_pacsParameters = parameters;
 }
 
-StudyMask Operation::getStudyMask()
+DicomMask Operation::getDicomMask()
 {
     return m_mask;
 }

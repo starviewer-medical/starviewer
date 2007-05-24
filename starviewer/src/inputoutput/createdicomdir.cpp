@@ -20,6 +20,8 @@
 #define PATTERN_MATCHING_AVAILABLE
 #endif
 
+#include "imagedicominformation.h"
+
 namespace udg {
 
 CreateDicomdir::CreateDicomdir()
@@ -107,15 +109,48 @@ Status CreateDicomdir::create( std::string dicomdirPath )
 
         if ( !result.good() )
         {
-			errorMessage = "Error al convertir a DICOMDIR el fitxer : ";
-			errorMessage.append((*iter).c_str());
-        	ERROR_LOG ( errorMessage.c_str() );
+            std::string imageErrorPath;
+
+            imageErrorPath = dicomdirPath;
+            imageErrorPath.append( "/" );
+            imageErrorPath.append ( ( *iter ).c_str() );
+
+			errorConvertingFile ( imageErrorPath );
+
             result = EC_IllegalCall;
         }
         else result = ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
     }
 
     return state.setStatus( result );
+}
+
+void CreateDicomdir::errorConvertingFile( std::string imagePath )
+{
+    std::string logMessage;
+    Status state;
+    ImageDicomInformation dInfo;
+
+    state = dInfo.openDicomFile( imagePath );
+
+    if ( state.good() )
+    {
+        logMessage = "Error al convertir a DICOMDIR el fitxer : ";
+        logMessage.append( dInfo.getStudyUID() );
+        logMessage.append( "/" );
+        logMessage.append( dInfo.getSeriesUID() );
+        logMessage.append( "/" );
+        logMessage.append( dInfo.getSeriesModality() );
+        logMessage.append( "." );
+        logMessage.append( dInfo.getSOPInstanceUID() );
+    }
+    else
+    {
+        logMessage = "Error al convertir a DICOMDIR el fitxer que es troba a la cache, al directori : ";
+        logMessage.append( imagePath );
+    }
+
+    ERROR_LOG ( logMessage.c_str() );
 }
 
 CreateDicomdir::~CreateDicomdir()

@@ -28,7 +28,7 @@
 #include "dcdict.h"
 #include "ofconapp.h"
 #include "dcuid.h"
-#include "studymask.h"
+#include "dicommask.h"
 
 #include "pacsconnection.h"
 #include "imagelistsingleton.h"
@@ -58,15 +58,15 @@ public:
     */
    void setNetwork (T_ASC_Network * network);
 
-    /** This action sets the mask that we will use to retrieve the series in to the pacs. This mask is created by mask class
-    * @param   searchMask [in] Study's Open connection to the pacs
+    /** This action sets the mask that we will use to retrieve the image in to the pacs.
+    * @param mask Màscara de cerca
     */
-   void setMask(StudyMask);
+   void setMask( DicomMask mask );
 
    /** Download the study's Image
     * @return state of the method
     */
-   Status moveSCU();
+   Status retrieve();
 
 private:
 

@@ -1,4 +1,4 @@
-#include "querystudy.h"
+#include "querypacs.h"
 #include <dcdeftag.h> //provide the information for the tags
 #include "studylist.h"
 #include "pacsconnection.h"
@@ -12,22 +12,9 @@
 
 namespace udg{
 
-QueryStudy::QueryStudy( PacsConnection connection , StudyMask study )
+void QueryPacs::setConnection( PacsConnection connection )
 {
     m_assoc = connection.getPacsConnection();
-    m_mask = study.getMask();
-}
-
-void QueryStudy::setConnection( PacsConnection connection )
-{
-    m_assoc = connection.getPacsConnection();
-    //gets a pointer to list study, where the result of the search will be insert
-    m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
-}
-
-void QueryStudy:: setMask( StudyMask study )
-{
-    m_mask = study.getMask();
 }
 
 /*It's a callback function, can't own to the class, It's can be called if its belongs to the class, for this
@@ -42,9 +29,7 @@ void progressCallbackStudy(
         DcmDataset *responseIdentifiers
         )
 {
-    Study study;
     const char* text;
-    StudyListSingleton *studyList;
     StarviewerSettings settings;
 
 #ifndef QT_NO_DEBUG
@@ -61,72 +46,56 @@ void progressCallbackStudy(
     }
 #endif
 
-    //set the patient Name
-    responseIdentifiers->findAndGetString( DCM_PatientsName , text , false );
-    if ( text != NULL ) study.setPatientName( text );
+    responseIdentifiers->findAndGetString( DCM_QueryRetrieveLevel , text , false );
 
-    //set Patient's Birth Date
-    responseIdentifiers->findAndGetString( DCM_PatientsBirthDate , text , false );
-    if ( text != NULL ) study.setPatientBirthDate( text );
+    //Comprovem quin tipus d'objecte ens ha retorna el PACS i el transforme a un objecte del nostre tipus
 
-    //set Patient's Id
-    responseIdentifiers->findAndGetString( DCM_PatientID , text , false );
-    if ( text != NULL ) study.setPatientId( text );
+    //en el cas que l'objecte que cercàvem fos un estudi afegi
+    if ( strcmp( text ,"STUDY" ) == 0 )
+    {
+        Study queriedStudy( responseIdentifiers );
+        //gets the pointer to the study list and inserts the new study
+        StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
-    //set Patient's Sex
-    responseIdentifiers->findAndGetString( DCM_PatientsSex , text , false );
-    if ( text != NULL ) study.setPatientSex( text );
+        //if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) ); TODO Connectathon
 
-    //set Patiens Age
-    responseIdentifiers->findAndGetString( DCM_PatientsAge , text , false );
-    if ( text != NULL ) study.setPatientAge( text );
+        if ( !studyList->exists( queriedStudy.getStudyUID() ) ) studyList->insert( queriedStudy );
+    } //si la query retorna un objecte sèrie
+    else if ( strcmp( text, "SERIES" ) == 0 )
+    {
+        Series queriedSerie( responseIdentifiers );
 
-    //set Study ID
-    responseIdentifiers->findAndGetString( DCM_StudyID , text , false );
-    if ( text != NULL ) study.setStudyId( text );
+        StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
-    //set Study Date
-    responseIdentifiers->findAndGetString( DCM_StudyDate , text , false );
-    if ( text != NULL ) study.setStudyDate( text );
+        //if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) ); TODO Connectathon
 
-     //set Study Description
-    responseIdentifiers->findAndGetString( DCM_StudyDescription , text , false );
-    if ( text != NULL ) study.setStudyDescription( text );
+        if ( !studyList->exists( queriedSerie.getStudyUID() ) ) studyList->insert( Study( responseIdentifiers ) );
 
-    //set Study Time
-    responseIdentifiers->findAndGetString( DCM_StudyTime , text , false );
-    if ( text != NULL ) study.setStudyTime( text );
+        SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
+        seriesList->insert( Series( responseIdentifiers) );
+    }// si la query retorna un objecte imatge
+    else if ( strcmp( text , "IMAGE" ) == 0)
+    {
+        Image queriedImage( responseIdentifiers );
 
-    //set Institution Name
-    responseIdentifiers->findAndGetString( DCM_InstitutionName , text , false );
-    if ( text != NULL ) study.setInstitutionName( text );
+        StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
-    //set StudyUID
-    responseIdentifiers->findAndGetString( DCM_StudyInstanceUID , text , false );
-    if ( text != NULL ) study.setStudyUID( text );
+        //if ( !studyList->exists( queriedImage.getStudyUID() , queriedImage.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) ); TODO Connectathon
 
-    //set Accession Number
-    responseIdentifiers->findAndGetString( DCM_AccessionNumber , text , false );
-    if ( text != NULL ) study.setAccessionNumber( text );
+        if ( !studyList->exists( queriedImage.getStudyUID() ) ) studyList->insert( Study( responseIdentifiers ) );
 
-    //set Study Modality
-    responseIdentifiers->findAndGetString( DCM_ModalitiesInStudy, text , false );
-    if ( text != NULL ) study.setStudyModality( text );
+        SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
+        if ( !seriesList->exists( queriedImage.getStudyUID() , queriedImage.getSeriesUID() , queriedImage.getPacsAETitle() ) )  seriesList->insert( Series( responseIdentifiers ) );
 
-    //set PACS AE Title Called
-    responseIdentifiers->findAndGetString( DCM_RetrieveAETitle , text , false );
-    if ( text != NULL ) study.setPacsAETitle( text );
-
-    //gets the pointer to the study list and inserts the new study
-    studyList = StudyListSingleton::getStudyListSingleton();
-    studyList->insert( study );
-
+        ImageListSingleton *imageList = ImageListSingleton::getImageListSingleton();
+        imageList->insert( queriedImage );
+    }
 }
 
 //Diem a quin nivell fem les cerques d'estudis! Molt important hem de fer a nivell de root
 static const char *     opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
-Status QueryStudy::find()
+Status QueryPacs::query()
 {
     DIC_US msgId = m_assoc->nextMsgID++;
     T_ASC_PresentationContextID presId;
@@ -202,11 +171,11 @@ Status QueryStudy::find()
     return state.setStatus( cond );
 }
 
-StudyListSingleton* QueryStudy::getStudyList()
+Status QueryPacs::query( DicomMask mask )
 {
-    m_studyListSingleton->firstStudy();
-    return m_studyListSingleton;
+    m_mask = mask.getDicomMask();
+
+    return query();
 }
 
 }
-

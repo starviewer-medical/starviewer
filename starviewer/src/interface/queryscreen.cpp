@@ -20,12 +20,9 @@
 #include "studylist.h"
 #include "qstudytreewidget.h"
 #include "series.h"
-#include "seriesmask.h"
-#include "queryseries.h"
+#include "querypacs.h"
 #include "pacsparameters.h"
 #include "pacsserver.h"
-#include "imagemask.h"
-#include "queryimagenumber.h"
 #include "qserieslistwidget.h"
 #include "retrieveimages.h"
 #include "qconfigurationscreen.h"
@@ -43,7 +40,10 @@
 #include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
-#include "seriesmask.h"
+
+#include "qchooseoneobjectdialog.h"
+
+#include "importdicomdir.h"
 
 namespace udg {
 
@@ -80,6 +80,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     //Instanciem els llistats
     m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
+    m_imageListSingleton = ImageListSingleton::getImageListSingleton();
 
     setWindowPosition(); //la pantalla sempre es situa en el lloc on estava l'última vegada que es va tancar
     setWindowSize();//la pantalla sempre té les dimensions de l'última vegada que es va tancar
@@ -89,6 +90,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_textPatientID->setFocus();
 
     queryStudyCache();//fem que per defecte mostri els estudis de la cache
+    m_pushButtonAdvancedSearch->hide();
+    m_qwidgetAdvancedSearch->hide();
 }
 
 void QueryScreen::initialize()
@@ -100,8 +103,8 @@ void QueryScreen::initialize()
 
     qPacsList->setMaximumSize( 1 , 1 );//amaguem al finestra del QPacsList
 
-    m_textFrom->setDate( currentDate.currentDate() );
-    m_textTo->setDate( currentDate.currentDate() );
+    m_dateStudyDateFrom->setDate( currentDate.currentDate() );
+    m_dateStudyDateTo->setDate( currentDate.currentDate() );
 }
 
 void QueryScreen::deleteOldStudies()
@@ -132,10 +135,13 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_buttonView , SIGNAL( clicked() ) , this , SLOT( view() ) );
     connect( m_buttonCreateDicomdir , SIGNAL ( clicked() ) , this , SLOT( showCreateDicomdirScreen() ) );
 
-    //connectem Slots dels StudyList amb la interficie
-    connect( m_studyTreeWidgetPacs , SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetCache,  SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetDicomdir,  SIGNAL( expand( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
+    //connectem Slots dels StudyTreeWidget amb la interficie
+    connect( m_studyTreeWidgetPacs , SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetCache,  SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir,  SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetCache , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
 
     //es canvia de pestanya del TAB
     connect( m_tab , SIGNAL( currentChanged( int ) ) , this , SLOT( tabChanged( int ) ) );
@@ -144,21 +150,25 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_checkFrom, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextFrom( int ) ) );
     connect( m_checkTo, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
 
+    //connectem el QDateEdit
+    connect( m_dateStudyDateFrom, SIGNAL( dateChanged( QDate ) ) , this , SLOT( searchStudyfromDateChanged( QDate ) ) );
+
     //checkbox
     connect( m_checkAll, SIGNAL( clicked() ) , this , SLOT( clearCheckedModality() ) );
-    connect( m_checkCT, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkCR, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkDX, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkES, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkMG, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkMR, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkNM, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkDT, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkPT, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkRF, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkSC, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkUS, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
-    connect( m_checkXA, SIGNAL( clicked() ) , this , SLOT( setCheckAll() ) );
+    connect( m_checkCT, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkCR, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkDX, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkES, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkMG, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkMR, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkNM, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkDT, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkPT, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkRF, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkSC, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkUS, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkXA, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
+    connect( m_checkOtherModality, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
 
     //conectem els signals dels TreeView
 
@@ -183,8 +193,12 @@ connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , 
     connect( m_studyTreeWidgetPacs , SIGNAL( view() ) , this , SLOT( view() ) );
     connect( m_studyTreeWidgetPacs , SIGNAL( retrieve() ) , this , SLOT( retrieve() ) );
 
+    //slot per importar objecte del dicomdir
+    connect( m_studyTreeWidgetDicomdir , SIGNAL( retrieve() ) , this , SLOT( importDicomdir() ) );
+
+
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
-     QObject::connect( &m_qexecuteOperationThread , SIGNAL( viewStudy( QString) ) , this , SLOT( studyRetrievedView( QString) ) , Qt::QueuedConnection );
+     QObject::connect( &m_qexecuteOperationThread , SIGNAL( viewStudy( QString , QString , QString ) ) , this , SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_OperationStateScreen, SLOT(  setErrorOperation( QString ) ) );
@@ -217,6 +231,11 @@ connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , 
     //connecta amb el mètode que obre un dicomdir
     connect( m_buttonOpenDicomdir , SIGNAL( clicked() ) , this , SLOT( openDicomdir() ) );
 
+    //Amaga o ensenya la cerca avançada
+    connect( m_pushButtonAdvancedSearch , SIGNAL( toggled( bool ) ) , m_qwidgetAdvancedSearch , SLOT( setVisible( bool ) ) );
+
+    connect( m_textOtherModality , SIGNAL ( editingFinished () ) , SLOT( textOtherModalityEdited() ) );
+
 }
 
 void QueryScreen::setWindowPosition()
@@ -247,11 +266,23 @@ void QueryScreen::clearTexts()
 {
     m_textStudyID->setText( "" );
     m_textPatientID->setText( "" );
-    m_textFirstName->setText( "" );
-    m_textLastName->setText( "" );
+    m_textPatientName->setText( "" );
     m_textAccessionNumber->setText( "" );
     m_checkTo->setChecked( false );
     m_checkFrom->setChecked( false );
+    m_textReferringPhysiciansName->setText( "" );
+    m_textStudyUID->setText( "" );
+    m_textSeriesUID->setText( "" );
+    m_textRequestedProcedureID->setText( "" );
+    m_textScheduledProcedureStepID->setText( "" );
+    m_textSOPInstanceUID->setText( "" );
+    m_textInstanceNumber->setText( "" );
+    m_textPPStartDate->setText( "" );
+    m_textPPStartTime->setText( "" );
+    m_textSeriesNumber->setText( "" );
+    m_textStudyModality->setText( "" );
+
+    clearCheckedModality();
 
     setEnabledTextTo( m_checkTo->isChecked() );
     setEnabledTextFrom( m_checkFrom->isChecked() );
@@ -259,12 +290,17 @@ void QueryScreen::clearTexts()
 
 void QueryScreen::setEnabledTextTo( int value )
 {
-    m_textTo->setEnabled( value );
+    m_dateStudyDateTo->setEnabled( value );
 }
 
 void QueryScreen::setEnabledTextFrom( int value )
 {
-    m_textFrom->setEnabled( value );
+    m_dateStudyDateFrom->setEnabled( value );
+}
+
+void QueryScreen::searchStudyfromDateChanged( QDate fromDate )
+{
+    m_dateStudyDateTo->setDate( fromDate );
 }
 
 void QueryScreen::clearCheckedModality()
@@ -283,9 +319,12 @@ void QueryScreen::clearCheckedModality()
     m_checkSC->setChecked( false );
     m_checkUS->setChecked( false );
     m_checkXA->setChecked( false );
+
+    m_textOtherModality->setText( "" );
+    m_textOtherModality->setEnabled( false );
 }
 
-void QueryScreen::setCheckAll()
+void QueryScreen::checkedSeriesModality()
 {
     if ( m_checkCR->isChecked() ||
         m_checkCT->isChecked() ||
@@ -299,44 +338,56 @@ void QueryScreen::setCheckAll()
         m_checkRF->isChecked() ||
         m_checkSC->isChecked() ||
         m_checkUS->isChecked() ||
-        m_checkXA->isChecked() )
-     {
-         m_checkAll->setChecked( false );
-     }
-     else m_checkAll->setChecked( true );
+        m_checkXA->isChecked() ||
+        m_checkAll->isChecked() )
+    {
+        m_textOtherModality->setText( "" );
+        m_textOtherModality->setEnabled( false );
+    }
+    else
+    {
+        m_textOtherModality->setEnabled( true );
+        m_textOtherModality->setText( "" );
+    }
 }
 
-void QueryScreen::setCheckModalityAutoExclusive(bool enabled)
+void QueryScreen::textOtherModalityEdited()
 {
-    m_checkAll->setAutoExclusive( enabled );
-    m_checkCR->setAutoExclusive( enabled );
-    m_checkCT->setAutoExclusive( enabled );
-    m_checkDX->setAutoExclusive( enabled );
-    m_checkES->setAutoExclusive( enabled );
-    m_checkMG->setAutoExclusive( enabled );
-    m_checkMR->setAutoExclusive( enabled );
-    m_checkNM->setAutoExclusive( enabled );
-    m_checkDT->setAutoExclusive( enabled );
-    m_checkPT->setAutoExclusive( enabled );
-    m_checkRF->setAutoExclusive( enabled );
-    m_checkSC->setAutoExclusive( enabled );
-    m_checkUS->setAutoExclusive( enabled );
-    m_checkXA->setAutoExclusive( enabled );
+    if ( m_textOtherModality->text() == "")
+    {
+        clearCheckedModality();
+    }
+    else
+    {
+        m_checkAll->setChecked( false );
+        m_checkCR->setChecked( false );
+        m_checkCT->setChecked( false );
+        m_checkDX->setChecked( false );
+        m_checkES->setChecked( false );
+        m_checkMG->setChecked( false );
+        m_checkMR->setChecked( false );
+        m_checkNM->setChecked( false );
+        m_checkDT->setChecked( false );
+        m_checkPT->setChecked( false );
+        m_checkRF->setChecked( false );
+        m_checkSC->setChecked( false );
+        m_checkUS->setChecked( false );
+        m_checkXA->setChecked( false );
+    }
 }
-
 
 void QueryScreen::dateFromChanged( const QDate &data )
 {
-    m_textTo->setDate( data );
+    m_dateStudyDateTo->setDate( data );
 }
 
 void QueryScreen::setEnabledDates( bool enabled )
 {
-    m_textFrom->setEnabled( enabled );
+    m_dateStudyDateFrom->setEnabled( enabled );
     m_checkFrom->setEnabled( enabled );
     m_checkFrom->setChecked( enabled );
 
-    m_textTo->setEnabled( enabled );
+    m_dateStudyDateTo->setEnabled( enabled );
     m_checkTo->setEnabled( enabled );
     m_checkTo->setChecked( enabled );
 }
@@ -347,8 +398,8 @@ void QueryScreen::searchTodayStudy()
 
     setEnabledDates( true );
 
-    m_textTo->setDate(today.currentDate() );
-    m_textFrom->setDate(today.currentDate() );
+    m_dateStudyDateTo->setDate(today.currentDate() );
+    m_dateStudyDateFrom->setDate(today.currentDate() );
     searchStudy();
 }
 
@@ -360,8 +411,8 @@ void QueryScreen::searchYesterdayStudy()
     setEnabledDates( true );
     yesterday = yesterday.addDays( -1 );//calcula la data d'ahir
 
-    m_textFrom->setDate( yesterday );
-    m_textTo->setDate( yesterday );
+    m_dateStudyDateFrom->setDate( yesterday );
+    m_dateStudyDateTo->setDate( yesterday );
     searchStudy();
 }
 
@@ -404,17 +455,50 @@ void QueryScreen::searchStudy()
 bool QueryScreen::validateNoEmptyMask()
 {
     if ( m_textPatientID->text().length() == 0 &&
-         m_textFirstName->text().length() == 0 &&
-         m_textLastName->text().length() == 0 &&
+         m_textPatientName->text().length() == 0 &&
          m_textStudyID->text().length() == 0 &&
          m_textAccessionNumber->text().length() == 0 &&
          !m_checkFrom->isChecked()  &&
          !m_checkTo->isChecked() &&
-         m_checkAll->isChecked() )
+         m_checkAll->isChecked() &&
+         !m_textReferringPhysiciansName->text().length() == 0 &&
+         !m_textSeriesNumber->text().length() == 0 &&
+         m_textStudyUID->text().length() == 0 &&
+         m_textSeriesUID->text().length() == 0 &&
+         m_textRequestedProcedureID->text().length() == 0 &&
+         m_textScheduledProcedureStepID->text().length() == 0 &&
+         m_textPPStartDate->text().length() == 0 &&
+         m_textPPStartTime->text().length() == 0 &&
+         m_textSOPInstanceUID->text().length() == 0 &&
+         m_textInstanceNumber->text().length() == 0 &&
+         m_textStudyModality->text().length() )
     {
         return false;
     }
     else return true;
+}
+
+Status QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer *pacsConnection )
+{
+    PacsParameters pacs;
+    PacsListDB pacsListDB;
+    Status state;
+    StarviewerSettings settings;
+    QString logMessage;
+
+    state = pacsListDB.queryPacs( &pacs, AETitlePACS.toAscii().constData() );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    if ( !state.good() )
+    {
+        databaseError( &state );
+        return state;
+    }
+
+    pacs.setAELocal( settings.getAETitleMachine().toStdString() ); //especifiquem el nostres AE
+    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
+
+    pacsConnection->setPacs( pacs );
+
+    return state;
 }
 
 void QueryScreen::queryStudyPacs()
@@ -434,7 +518,9 @@ void QueryScreen::queryStudyPacs()
     qPacsList->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     pacsList.firstPacs();
-
+    m_seriesListSingleton->clear();
+    m_studyListSingleton->clear();
+    m_imageListSingleton->clear();
     if ( pacsList.end() ) //es comprova que hi hagi pacs seleccionats
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
@@ -442,7 +528,11 @@ void QueryScreen::queryStudyPacs()
     }
 
     multipleQueryStudy.setPacsList( pacsList ); //indiquem a quins Pacs Cercar
-    multipleQueryStudy.setMask( buildStudyMask() ); //construim la mascara
+    multipleQueryStudy.setMask( buildDicomMask() ); //construim la mascara
+
+    pacsList.firstPacs();
+    m_lastQueriedPacs = pacsList.getPacs().getAEPacs().c_str();
+
     if ( !multipleQueryStudy.StartQueries().good() )  //fem la query
     {
         m_studyTreeWidgetPacs->clear();
@@ -461,6 +551,8 @@ void QueryScreen::queryStudyPacs()
         return;
     }
     m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
+    m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
+    m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
     m_studyTreeWidgetPacs->setSortColumn( 2 );//ordenem pel nom
 
     QApplication::restoreOverrideCursor();
@@ -482,7 +574,7 @@ void QueryScreen::queryStudyCache()
 
     m_studyListCache.clear();
 
-    state= cacheStudyDAL.queryStudy( buildStudyMask() , m_studyListCache ); //busquem els estudis a la cache
+    state= cacheStudyDAL.queryStudy( buildDicomMask() , m_studyListCache ); //busquem els estudis a la cache
 
     if ( !state.good() )
     {
@@ -529,7 +621,7 @@ void QueryScreen::queryStudyDicomdir()
     logMessage = "Cerca d'estudis al Dicomdir amb paràmetres " + logQueryStudy();
     INFO_LOG ( logMessage.toAscii().constData() );
 
-    state = m_readDicomdir.readStudies( dicomdirStudyList , buildStudyMask() );
+    state = m_readDicomdir.readStudies( dicomdirStudyList , buildDicomMask() );
 
     if ( !state.good() )
     {
@@ -563,6 +655,8 @@ void QueryScreen::queryStudyDicomdir()
     m_studyTreeWidgetDicomdir->clear();
     m_studyTreeWidgetDicomdir->insertStudyList( &dicomdirStudyList );
 
+    m_studyTreeWidgetDicomdir->setSortColumn( 2 );//ordenem pel nom
+
     QApplication::restoreOverrideCursor();
 }
 
@@ -587,33 +681,44 @@ void QueryScreen::searchSeries( QString studyUID , QString pacsAETitle )
     QApplication::restoreOverrideCursor();
 }
 
+/* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
+void QueryScreen::searchImages( QString studyUID , QString seriesUID , QString pacsAETitle )
+{
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
+    switch ( m_tab->currentIndex() )
+    {
+        case 0 : // si estem a la pestanya de la cache
+            queryImageCache( studyUID , seriesUID );
+            break;
+        case 1 :  //si estem la pestanya del PACS fem query al Pacs
+            queryImagePacs( studyUID , seriesUID , pacsAETitle );
+            break;
+        case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
+            queryImageDicomdir( studyUID , seriesUID );
+            break;
+    }
+
+    QApplication::restoreOverrideCursor();
+}
+
+
 void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool show )
 {
     Series serie;
-    ImageMask imagem;
-    QString text,timeoutPacs;
-    PacsParameters pacs;
-    PacsListDB pacsListDB;
     Status state;
-    StarviewerSettings settings;
-    QString logMessage;
+    QString logMessage , text;
+    PacsServer pacsConnection;
+    QueryPacs querySeriesPacs;
+
+    m_seriesListSingleton->clear();//netegem la llista de sèries
 
     logMessage = "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle;
     INFO_LOG( logMessage.toAscii().constData() );
 
-    state = pacsListDB.queryPacs( &pacs, pacsAETitle.toAscii().constData() );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-    if ( !state.good() )
-    {
-        databaseError( &state );
-        return;
-    }
+    if ( pacsAETitle.isEmpty() ) pacsAETitle = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
 
-    pacs.setAELocal( settings.getAETitleMachine().toStdString() ); //especifiquem el nostres AE
-    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
-
-    m_seriesListSingleton->clear();
-
-    PacsServer pacsConnection( pacs );
+    if ( ! preparePacsServerConnection( pacsAETitle, &pacsConnection ).good() ) return;
 
     state = pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel);
     if ( !state.good() )
@@ -624,22 +729,23 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
         logMessage.append( state.text().c_str() );
         ERROR_LOG( logMessage.toAscii().constData() );
 
-        errorConnectingPacs ( pacs.getPacsID() );
+        errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
         return;
     }
 
-    QuerySeries querySeries( pacsConnection.getConnection() , buildSeriesMask( studyUID ) );
+    querySeriesPacs.setConnection( pacsConnection.getConnection() );
+    state = querySeriesPacs.query( buildSeriesDicomMask( studyUID ) );
+    pacsConnection.disconnect();
 
-    state = querySeries.find();
     if ( !state.good() )
     {//Error a la query
-        logMessage = "QueryScreen::QuerySeriesPacs : Error cercant les sèries al PACS ";
+        logMessage = "QueryScreen::QueryPacs : Error cercant les sèries al PACS ";
         logMessage.append( pacsAETitle );
         logMessage.append( ". PACS ERROR : " );
         logMessage.append( state.text().c_str() );
         ERROR_LOG( logMessage.toAscii().constData() );
 
-        text.insert( 0 , tr( "Error! Can't query studies in PACS : " ) );
+        text.insert( 0 , tr( "Error! Can't query series in PACS : " ) );
         text.append( pacsAETitle);
         QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;
@@ -652,31 +758,19 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
         return;
     }
 
-    m_seriesListSingleton->firstSeries();
-
-    while ( !m_seriesListSingleton->end() )
-    {
-        serie = m_seriesListSingleton->getSeries();
-
-        if ( show )
-        {
-            m_studyTreeWidgetPacs->insertSeries( &serie );//inserim la informació de les imatges al formulari
-
-        }
-        m_seriesListSingleton->nextSeries();
-    }
-    pacsConnection.disconnect();
+    //si la query és per mostrar les series al PACS les inserim a l'objecte studyTreeWidget
+    if ( show ) m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
 }
 
 void QueryScreen::QuerySeriesCache( QString studyUID )
 {
     Series serie;
-    ImageMask imageMask;
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     int imagesNumber;
     Status state;
     QString logMessage;
+    DicomMask mask;
 
     logMessage = "Cerca de sèries a la caché de l'estudi " + studyUID;
     INFO_LOG( logMessage.toAscii().constData() );
@@ -684,7 +778,8 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
     m_seriesListCache.clear();//preparem la llista de series
 
     //preparem la mascara i cerquem les series a la cache
-    state=cacheSeriesDAL.querySeries( buildSeriesMask( studyUID ) , m_seriesListCache );
+    mask.setStudyUID( studyUID.toStdString() );
+    state=cacheSeriesDAL.querySeries( mask , m_seriesListCache );
 
     if ( !state.good() )
     {
@@ -707,10 +802,9 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
         serie= m_seriesListCache.getSeries();
 
         //preparem per fer la cerca d'imatges
-        imageMask.setStudyUID( serie.getStudyUID() );
-        imageMask.setSeriesUID( serie.getSeriesUID() );
+        mask.setSeriesUID( serie.getSeriesUID() );
 
-        state = cacheImageDAL.countImageNumber( imageMask , imagesNumber );
+        state = cacheImageDAL.countImageNumber( mask , imagesNumber );
         serie.setImageNumber( imagesNumber );
         if ( !state.good() )
         {
@@ -727,7 +821,7 @@ void QueryScreen::querySeriesDicomdir( QString studyUID )
     SeriesList seriesList;
     QString logMessage;
 
-    m_readDicomdir.readSeries( studyUID.toAscii().constData() , seriesList );
+    m_readDicomdir.readSeries( studyUID.toAscii().constData() , "" , seriesList ); //"" pq no busquem cap serie en concret
 
     logMessage = "Cerca de sèries a la caché de l'estudi " + studyUID;
     INFO_LOG( logMessage.toAscii().constData() );
@@ -739,11 +833,75 @@ void QueryScreen::querySeriesDicomdir( QString studyUID )
         return;
     }
 
-    while ( !seriesList.end() )
-    {
-        m_studyTreeWidgetDicomdir->insertSeries( &seriesList.getSeries() );//inserim la informació de la sèrie al llistat
-        seriesList.nextSeries();
+    m_studyTreeWidgetDicomdir->insertSeriesList( &seriesList );//inserim la informació de la sèrie al llistat
+}
+
+void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString AETitlePACS )
+{
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
+    Series serie;
+    Status state;
+    QString logMessage , text;
+    PacsServer pacsConnection;
+    QueryPacs queryImages;
+    DicomMask dicomMask;
+
+    if ( AETitlePACS.isEmpty() ) AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
+    m_imageListSingleton->clear();//netejem la llista de sèries
+
+    logMessage = "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS;
+    INFO_LOG( logMessage.toAscii().constData() );
+
+    dicomMask.setStudyUID( studyUID.toAscii().constData() );
+    dicomMask.setSeriesUID( seriesUID.toAscii().constData() );
+    dicomMask.setImageNumber( "" );
+    dicomMask.setSOPInstanceUID( "" );
+
+    if ( ! preparePacsServerConnection( AETitlePACS, &pacsConnection ).good() ) return;
+
+    state = pacsConnection.connect(PacsServer::query,PacsServer::imageLevel);
+    if ( !state.good() )
+    {//Error al connectar
+        logMessage = "Error al connectar al pacs ";
+        logMessage.append( AETitlePACS );
+        logMessage.append( ". PACS ERROR : " );
+        logMessage.append( state.text().c_str() );
+        ERROR_LOG( logMessage.toAscii().constData() );
+
+        errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
+        return;
     }
+
+    queryImages.setConnection( pacsConnection.getConnection() );
+
+    state = queryImages.query( dicomMask );
+    if ( !state.good() )
+    {//Error a la query
+        logMessage = "QueryScreen::QueryPacs : Error cercant les images al PACS ";
+        logMessage.append( AETitlePACS );
+        logMessage.append( ". PACS ERROR : " );
+        logMessage.append( state.text().c_str() );
+        ERROR_LOG( logMessage.toAscii().constData() );
+
+        text.insert( 0 , tr( "Error! Can't query images in PACS : " ) );
+        text.append( AETitlePACS );
+        QMessageBox::warning( this , tr( "Starviewer" ) , text );
+        return;
+    }
+
+    pacsConnection.disconnect();
+
+    m_imageListSingleton->firstImage();
+    if ( m_imageListSingleton->end() )
+    {
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No image match for this series.\n" ) );
+        return;
+    }
+
+    m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
+
+    QApplication::restoreOverrideCursor();
 }
 
 void QueryScreen::retrieve()
@@ -755,18 +913,67 @@ void QueryScreen::retrieve()
     {
     case 0:
         retrievePacs( false );
+        break;
     }
+}
+
+void QueryScreen::queryImageDicomdir(QString studyUID, QString seriesUID )
+{
+    ImageList imageList;
+    QString logMessage;
+
+    m_readDicomdir.readImages( seriesUID.toAscii().constData() , ""  , imageList );
+
+    logMessage = "Cerca d'imatges al dicomdir de l'estudi " + studyUID + " i serie " + seriesUID;
+    INFO_LOG( logMessage.toAscii().constData() );
+
+    imageList.firstImage();
+    if ( imageList.end() )
+    {
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
+        return;
+    }
+
+    m_studyTreeWidgetDicomdir->insertImageList( &imageList );//inserim la informació de la sèrie al llistat
+
+}
+
+void QueryScreen::queryImageCache(QString studyUID, QString seriesUID )
+{
+    CacheImageDAL cacheImageDAL;
+    ImageList imageList;
+    QString logMessage;
+    DicomMask mask;
+
+    logMessage = "Cerca d'imatges al dicomdir de l'estudi " + studyUID + " i serie " + seriesUID;
+    INFO_LOG( logMessage.toAscii().constData() );
+
+    mask.setStudyUID( studyUID.toStdString() );
+    mask.setSeriesUID( seriesUID.toStdString() );
+
+    cacheImageDAL.queryImages( mask , imageList );
+
+    imageList.firstImage();
+    if ( imageList.end() )
+    {
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
+        return;
+    }
+
+    m_studyTreeWidgetCache->insertImageList( &imageList );//inserim la informació de la sèrie al llistat
 }
 
 void QueryScreen::retrievePacs( bool view )
 {
-    StudyMask mask;
+    DicomMask mask;
     QString studyUID,defaultSeriesUID;
     Status state;
     Operation operation;
     PacsParameters pacs;
     PacsListDB pacsListDB;
     StarviewerSettings settings;
+    QString pacsAETitle;
+    Study studyToRetrieve;
 
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
 
@@ -783,37 +990,46 @@ void QueryScreen::retrievePacs( bool view )
     studyUID.insert(0 , m_studyTreeWidgetPacs->getSelectedStudyUID().toAscii().constData() );
 
     //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
-    if ( !m_studyListSingleton->findStudy( studyUID.toAscii().constData() ) )
+    if ( !m_studyListSingleton->exists( studyUID.toAscii().constData() , m_studyTreeWidgetPacs->getSelectedPacsAETitle().toAscii().constData() ) )
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
         return;
     }
 
+    studyToRetrieve = m_studyListSingleton->getStudy();
+    if ( m_studyTreeWidgetPacs->getSelectedPacsAETitle().isEmpty() ) //per les mesatools que no retornen a quin PACS pertany l'estudi cercat
+    {
+        pacsAETitle = m_lastQueriedPacs;
+        studyToRetrieve.setPacsAETitle( m_lastQueriedPacs.toStdString() );
+    }
+    else pacsAETitle = m_studyTreeWidgetPacs->getSelectedPacsAETitle();
+
     //Inserim l'informació de l'estudi a la caché!
-    state = insertStudyCache( m_studyListSingleton->getStudy() );
+    state = insertStudyCache( studyToRetrieve );
 
     if (  !state.good() )
     {
-        QApplication::restoreOverrideCursor();
-
-        if (  state.code() == 2019 ) //l'estudi ja existeix
+        if ( state.code() != 2019 ) // si hi ha l'error 2019, indica que l'estudi ja existeix a la base de dades, per tant estar parcialment o totalment descarregat, de totes maneres el tornem a descarregar
         {
-            if (  view )  //si es vol visualitzar no donem missatge de que ja esta descarregat, obrim l'estudi
-            {
-                studyRetrievedView( studyUID );
-            }
-            else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study has been retrieved or is retrieving." ) );
+            QApplication::restoreOverrideCursor();
+            databaseError( &state );
+            return;
         }
-        else databaseError( &state );
-
-        return;
+        else // si l'estudi ja existeix actualizem la seva informació també
+        {
+            CacheStudyDAL cacheStudyDAL; //Actualitzem la informació
+            cacheStudyDAL.updateStudy ( studyToRetrieve );
+        }
     }
 
     mask.setStudyUID( studyUID.toAscii().constData() );//definim la màscara per descarregar l'estudi
+    if ( m_studyTreeWidgetPacs->getSelectedSeriesUID() != "") mask.setSeriesUID( m_studyTreeWidgetPacs->getSelectedSeriesUID().toAscii().constData() );
+
+    if ( m_studyTreeWidgetPacs->getSelectedImageUID() != "") mask.setSOPInstanceUID(  m_studyTreeWidgetPacs->getSelectedImageUID().toAscii().constData() );
 
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    state = pacsListDB.queryPacs( &pacs , m_studyTreeWidgetPacs->getSelectedStudyPacsAETitle().toAscii().constData() );
+    state = pacsListDB.queryPacs( &pacs , pacsAETitle.toAscii().constData() );
 
     if ( !state.good() )
     {
@@ -832,7 +1048,7 @@ void QueryScreen::retrievePacs( bool view )
 
     //definim l'operacio
     operation.setPacsParameters( pacs );
-    operation.setStudyMask( mask );
+    operation.setDicomMask( mask );
     if ( view )
     {
         operation.setOperation( operationView );
@@ -869,11 +1085,9 @@ Status QueryScreen::insertStudyCache( Study stu )
     return state;
 }
 
-void QueryScreen::studyRetrievedView( QString studyUID )
+void QueryScreen::studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
-    QString series = "";
-
-    retrieveCache( studyUID , series );
+    retrieveCache( studyUID , seriesUID , sopInstanceUID );
 }
 
 void QueryScreen::tabChanged( int index )
@@ -881,20 +1095,22 @@ void QueryScreen::tabChanged( int index )
     switch ( index )
     {
         case 0: //Database
-                m_buttonGroupModality->setEnabled( true );;//activem el grup button de motalitat
+                m_buttonGroupModality->setEnabled( false );//desactivem el grup button de motalitat
                 m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
                 m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
-                setCheckModalityAutoExclusive( false );//podem fer cerques per més d'una modalitat d'estudi a la vegada
                 clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
+                m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
+                m_pushButtonAdvancedSearch->hide();
                 break;
         case 1: //Pacs
                 m_buttonGroupModality->setEnabled( true );;//activem el grup button de modalitat
                 m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
                 m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
-                setCheckModalityAutoExclusive( true );//només podem cercar per una modalitat d'estudi a la vegada
                 clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
+                m_pushButtonAdvancedSearch->show();
+                if ( m_pushButtonAdvancedSearch->isChecked() ) m_qwidgetAdvancedSearch->show();
                 break;
         case 2: //Dicomdir
                 m_buttonGroupModality->setEnabled( false );;//desactivem el grup button de modalitat
@@ -902,6 +1118,8 @@ void QueryScreen::tabChanged( int index )
                 m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
+                m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
+                m_pushButtonAdvancedSearch->hide();
                 break;
         }
 }
@@ -912,7 +1130,7 @@ void QueryScreen::view()
     switch ( m_tab->currentIndex() )
     {
         case 0 :
-            retrieveCache( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() );
+            retrieveCache( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID() );
             break;
         case 1 :
             switch( QMessageBox::information( this , tr( "Starviewer" ) ,
@@ -926,7 +1144,7 @@ void QueryScreen::view()
             }
            break;
         case 2 :
-            retrieveDicomdir( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() );
+            retrieveDicomdir( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID() );
             break;
         default :
             break;
@@ -944,7 +1162,7 @@ void QueryScreen::view()
 }
 
 
-void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
+void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     CacheStudyDAL cacheStudyDAL;
     CacheSeriesDAL cacheSeriesDAL;
@@ -952,10 +1170,9 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
     Status state;
     StudyList stuList;
     Study stu;
-    SeriesMask mask;
+    DicomMask mask;
     SeriesList seriesList;
     Series series;
-    ImageMask imageMask;
     ImageList imageList;
     QString absSeriesPath;
     StarviewerSettings settings;
@@ -1017,11 +1234,10 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
         seriesVol.setSeriesPath( absSeriesPath.toStdString() );
         seriesVol.setSeriesModality( series.getSeriesModality().c_str() );
 
-        imageMask.setSeriesUID(series.getSeriesUID().c_str() );
-        imageMask.setStudyUID( stu.getStudyUID().c_str() );
-
+        mask.setSeriesUID(series.getSeriesUID().c_str() );
+        mask.setSOPInstanceUID( sopInstanceUID.toStdString() );
         imageList.clear();
-        state= cacheImageDAL.queryImages(imageMask , imageList);
+        state= cacheImageDAL.queryImages( mask , imageList );
 
         if ( !state.good() )
         {
@@ -1048,15 +1264,15 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID )
     {
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
-    emit( viewStudy(volum) );
+    this->emitViewSignal(volum);
 }
 
-void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
+void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     ImageList imageList;
     Status state;
     StudyList stuList;
-    StudyMask studyMask;
+    DicomMask studyMask;
     Study stu;
     SeriesList seriesList;
     Series series;
@@ -1093,7 +1309,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
     volum.setStudyUID( stu.getStudyUID() );
 
     //busquem les series
-    state = m_readDicomdir.readSeries( studyUID.toAscii().constData() , seriesList );
+    state = m_readDicomdir.readSeries( studyUID.toAscii().constData() , "" , seriesList );//"" pq no busquem cap serie en concreet
     if ( !state.good() )
     {
         logMessage = "Error al cercar l'estudi al dicomdir ERROR : ";
@@ -1126,7 +1342,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
         seriesVol.setSeriesModality( series.getSeriesModality().c_str() );
 
         imageList.clear();
-        state = m_readDicomdir.readImages( series.getSeriesUID() , imageList );//accedim a llegir la informació de les imatges per cada serie
+        state = m_readDicomdir.readImages( series.getSeriesUID() , sopInstanceUID.toStdString() , imageList );//accedim a llegir la informació de les imatges per cada serie
         if ( !state.good() )
         {
             logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
@@ -1156,7 +1372,18 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID )
     logMessage = "Ha finalitzat la càrrega de l'estudi des del dicomdir";
     INFO_LOG ( logMessage.toAscii().constData() );
 
-    emit( viewStudy(volum) );
+    this->emitViewSignal(volum);
+}
+
+void QueryScreen::importDicomdir()
+{
+    ImportDicomdir importDicom;
+
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
+    importDicom.import( m_readDicomdir.getDicomdirPath() , m_studyTreeWidgetDicomdir->getSelectedStudyUID().toStdString() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID().toStdString() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID().toStdString() );
+
+    QApplication::restoreOverrideCursor();
 }
 
 void QueryScreen::deleteStudyCache()
@@ -1357,7 +1584,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     PacsParameters pacs;
     StarviewerSettings settings;
     Operation storeStudyOperation;
-    StudyMask studyMask;
+    DicomMask dicomMask;
     Status state;
     Study study;
     PacsList pacsList;
@@ -1375,16 +1602,16 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
         case 1 :
             cacheStudy.queryStudy( studyUID.toAscii().constData(), study );
 
-            studyMask.setStudyUID( studyUID.toAscii().constData() );
+            dicomMask.setStudyUID( studyUID.toAscii().constData() );
             storeStudyOperation.setPatientName( study.getPatientName().c_str() );
             storeStudyOperation.setStudyUID( study.getStudyUID().c_str() );
             storeStudyOperation.setOperation( operationMove );
-            storeStudyOperation.setStudyMask( studyMask );
+            storeStudyOperation.setDicomMask( dicomMask );
             storeStudyOperation.setPatientID( study.getPatientId().c_str() );
             storeStudyOperation.setStudyID( study.getStudyId().c_str() );
 
-
-            state = pacsListDB.queryPacs( &pacs, "PACSPROVES" );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
+            pacsList.firstPacs();
+            state = pacsListDB.queryPacs( &pacs, pacsList.getPacs().getAEPacs() );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
             if ( !state.good() )
             {
                 QApplication::restoreOverrideCursor();
@@ -1415,13 +1642,14 @@ void QueryScreen::errorFreeingCacheSpace()
     QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error Freeing Space. The study couldn't be retrieved" ) );
 }
 
-void QueryScreen::errorConnectingPacs( int PacsID )
+void QueryScreen::errorConnectingPacs( int IDPacs )
 {
     PacsListDB pacsListDB;
     PacsParameters errorPacs;
     QString errorMessage;
 
-    pacsListDB.queryPacs( &errorPacs, PacsID );
+    pacsListDB.queryPacs( &errorPacs, IDPacs );
+
 
     errorMessage.insert( 0 , tr( " Can't connect to PACS " ) );
     errorMessage.append( errorPacs.getAEPacs().c_str() );
@@ -1451,9 +1679,9 @@ void QueryScreen::errorQueringStudiesPacs( int PacsID )
     QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
 }
 
-SeriesMask QueryScreen::buildSeriesMask( QString studyUID)
+DicomMask QueryScreen::buildSeriesDicomMask( QString studyUID )
 {
-    SeriesMask mask;
+    DicomMask mask;
 
     mask.setStudyUID( studyUID.toAscii().constData() );
     mask.setSeriesDate( "" );
@@ -1462,31 +1690,11 @@ SeriesMask QueryScreen::buildSeriesMask( QString studyUID)
     mask.setSeriesNumber( "" );
     mask.setSeriesBodyPartExaminated( "" );
     mask.setSeriesUID( "" );
+    mask.setPPSStartDate( "" );
+    mask.setPPStartTime( "" );
+    mask.setRequestAttributeSequence( "" , "" );
 
     return mask;
-}
-
-QString QueryScreen::buildPatientName()
-{
-    QString patientName;
-
-    if ( m_textFirstName->text().length() == 0 && m_textLastName->text().length() == 0)
-    {
-        patientName.append( "" );
-    }
-    else
-    {
-        patientName.append( m_textLastName->text() );
-        //posem * per si només posem el primer cognom
-        patientName.append( "*" );//posem * per si no posa el nom complet, i espai per separar del nom
-        if ( m_textFirstName->text().length() > 0)
-        {
-            patientName.append( m_textFirstName->text() );
-            patientName.append( "*" );//per si no posa el nom complet
-        }
-    }
-
-    return patientName;
 }
 
 QString QueryScreen::buildStudyDates()
@@ -1495,131 +1703,148 @@ QString QueryScreen::buildStudyDates()
 
     if ( m_checkFrom->isChecked() && m_checkTo->isChecked() )
     {
-        date.append( m_textFrom->date().toString( "yyyyMMdd" ) );
-        date.append( "-" );
-        date.append( m_textTo->date().toString( "yyyyMMdd" ) );
+        if ( m_dateStudyDateFrom->date() == m_dateStudyDateTo->date() )
+        {
+            date.append( m_dateStudyDateFrom->date().toString( "yyyyMMdd" ) );
+        }
+        else
+        {
+            date.append( m_dateStudyDateFrom->date().toString( "yyyyMMdd" ) );
+            date.append( "-" );
+            date.append( m_dateStudyDateTo->date().toString( "yyyyMMdd" ) );
+        }
     }
     else
     {
         if ( m_checkFrom->isChecked() )
         {
-            date.append( m_textFrom->date().toString( "yyyyMMdd" ) );
+            date.append( m_dateStudyDateFrom->date().toString( "yyyyMMdd" ) );
             date.append( "-" ); // indiquem que volem buscar tots els estudis d'aquella data en endavant
         }
         else if ( m_checkTo->isChecked() )
         {
             date.append( "-" ); //indiquem que volem buscar tots els estudis que no superin aquesta data
-            date.append( m_textTo->date().toString( "yyyyMMdd" ) );
+            date.append( m_dateStudyDateTo->date().toString( "yyyyMMdd" ) );
         }
     }
 
     return date;
 }
 
-QString QueryScreen::buildPatientId()
-{
-    QString patientIdMask;
-
-    if ( m_textPatientID->text().length() > 0 )
-    {
-        patientIdMask = "*" + m_textPatientID->text() + "*";
-    }
-
-    return patientIdMask;
-}
-
-QString QueryScreen::buildStudyId()
-{
-    QString studyIdMask;
-
-    if ( m_textStudyID->text().length() > 0 )
-    {
-        studyIdMask = "*" + m_textStudyID->text() + "*";
-    }
-
-    return studyIdMask;
-}
-
-StudyMask QueryScreen::buildStudyMask()
+DicomMask QueryScreen::buildDicomMask()
 {
     /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
     /*Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/
     /*En aquí hem de fer un set a tots els camps que volem cercar */
-    StudyMask mask;
+    DicomMask mask;
     QString modalityMask;
 
-    mask.setPatientId( buildPatientId().toStdString() );
-    mask.setPatientName( buildPatientName().toStdString() );
-    mask.setStudyId( buildStudyId().toStdString()  );
-    mask.setStudyDate(buildStudyDates().toStdString() );
+    //Sempre anem a buscar nivell d'estudi
+    mask.setPatientId( m_textPatientID->text().toStdString() );
+    mask.setPatientName( m_textPatientName->text().toStdString() );
+    mask.setStudyId( m_textStudyID->text().toStdString()  );
+    mask.setStudyDate( buildStudyDates().toStdString() );
     mask.setStudyDescription( "" );
-    mask.setStudyTime( "" );
-    mask.setStudyUID( "" );
+    mask.setStudyTime( m_textStudyTime->text().toStdString() );
+    mask.setStudyUID( m_textStudyUID->text().toStdString() );
     mask.setInstitutionName( "" );
-    mask.setStudyModality( "" );
+    mask.setStudyModality( m_textStudyModality->text().toStdString() );
     mask.setPatientAge( "" );
     mask.setAccessionNumber( m_textAccessionNumber->text().toStdString() );
+    mask.setReferringPhysiciansName( m_textReferringPhysiciansName->text().toStdString() );
+    mask.setPatientSex( "" );
+    mask.setPatientBirth( "" );
 
-    if ( m_buttonGroupModality->isEnabled() )
-    { //es crea una sentencia per poder fer un in
-        if ( m_checkCT->isChecked() )
-        {
-            addModalityStudyMask( &mask , "CT" );
+    //si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
+    if (!m_textSeriesUID->text().isEmpty() || !m_textScheduledProcedureStepID->text().isEmpty() ||
+        !m_textRequestedProcedureID->text().isEmpty() || !m_checkAll->isChecked() ||
+        !m_textSOPInstanceUID->text().isEmpty() || !m_textInstanceNumber->text().isEmpty() ||
+        !m_textPPStartDate->text().isEmpty() || !m_textPPStartTime->text().isEmpty() ||
+        !m_textSeriesNumber->text().isEmpty()
+       )
+    {
+        mask.setSeriesDate( "" );
+        mask.setSeriesTime( "" );
+        mask.setSeriesModality( "" );
+        mask.setSeriesNumber( m_textSeriesNumber->text().toStdString() );
+        mask.setSeriesBodyPartExaminated( "" );
+        mask.setSeriesUID( m_textSeriesUID->text().toStdString() );
+        mask.setRequestAttributeSequence( m_textRequestedProcedureID->text() , m_textScheduledProcedureStepID->text() );
+        mask.setPPSStartDate( m_textPPStartDate->text().toStdString() );
+        mask.setPPStartTime( m_textPPStartTime->text().toStdString() );
+
+        if ( m_buttonGroupModality->isEnabled() )
+        { //es crea una sentencia per poder fer un in
+            if ( m_checkCT->isChecked() )
+            {
+                mask.setSeriesModality( "CT" );
+            }
+            else if ( m_checkCR->isChecked() )
+            {
+                mask.setSeriesModality( "CR" );
+            }
+            else if ( m_checkDX->isChecked() )
+            {
+                mask.setSeriesModality( "DX" );
+            }
+            else if ( m_checkES->isChecked() )
+            {
+                mask.setSeriesModality( "ES" );
+            }
+            else if ( m_checkMG->isChecked() )
+            {
+                mask.setSeriesModality( "MG" );
+            }
+            else if ( m_checkMR->isChecked() )
+            {
+                mask.setSeriesModality( "MR" );
+            }
+            else if ( m_checkNM->isChecked() )
+            {
+                mask.setSeriesModality( "NM" );
+            }
+            else if ( m_checkDT->isChecked() )
+            {
+                mask.setSeriesModality( "DT" );
+            }
+            else if ( m_checkPT->isChecked() )
+            {
+                mask.setSeriesModality(  "PT" );
+            }
+            else if ( m_checkRF->isChecked() )
+            {
+                mask.setSeriesModality(  "RF" );
+            }
+            else if ( m_checkSC->isChecked() )
+            {
+                mask.setSeriesModality(  "SC" );
+            }
+            else if ( m_checkUS->isChecked() )
+            {
+                mask.setSeriesModality(  "US" );
+            }
+            else if ( m_checkXA->isChecked() )
+            {
+                mask.setSeriesModality(  "XA" );
+            }
+            else if ( m_checkOtherModality->isChecked() )
+            {
+                mask.setSeriesModality( m_textOtherModality->text().toStdString() );
+            }
         }
-        if ( m_checkCR->isChecked() )
+
+        if ( !m_textSOPInstanceUID->text().isEmpty() || !m_textInstanceNumber->text().isEmpty() )
         {
-            addModalityStudyMask( &mask , "CR" );
+            mask.setImageNumber( m_textInstanceNumber->text().toStdString() );
+            mask.setSOPInstanceUID( m_textSOPInstanceUID->text().toStdString() );
         }
-        if ( m_checkDX->isChecked() )
-        {
-            addModalityStudyMask( &mask , "DX" );
-        }
-        if ( m_checkES->isChecked() )
-        {
-            addModalityStudyMask( &mask , "ES" );
-        }
-        if ( m_checkMG->isChecked() )
-        {
-            addModalityStudyMask( &mask ,"MG" );
-        }
-        if ( m_checkMR->isChecked() )
-        {
-            addModalityStudyMask( &mask , "MR" );
-        }
-        if ( m_checkNM->isChecked() )
-        {
-            addModalityStudyMask( &mask , "NM" );
-        }
-        if ( m_checkDT->isChecked() )
-        {
-            addModalityStudyMask( &mask , "DT" );
-        }
-        if ( m_checkPT->isChecked() )
-        {
-            addModalityStudyMask( &mask , "PT" );
-        }
-        if ( m_checkRF->isChecked() )
-        {
-            addModalityStudyMask( &mask , "RF" );
-        }
-        if ( m_checkSC->isChecked() )
-        {
-            addModalityStudyMask( &mask , "SC" );
-        }
-        if ( m_checkUS->isChecked() )
-        {
-            addModalityStudyMask( &mask , "US" );
-        }
-        if ( m_checkXA->isChecked() )
-        {
-            addModalityStudyMask( &mask , "XA" );
-        }
+
     }
 
     return mask;
 }
 
-void QueryScreen::addModalityStudyMask( StudyMask* mask, std::string modality )
+void QueryScreen::addModalityStudyMask( DicomMask* mask, std::string modality )
 {
     QString studyModalities;
 
@@ -1640,7 +1865,7 @@ QString QueryScreen::logQueryStudy()
 
     logMessage.insert( 0 , m_textPatientID->text() );
     logMessage.append(  ";" );
-    logMessage.append(  buildPatientName() );
+    logMessage.append(  m_textPatientName->text() );
     logMessage.append(  ";" );
     logMessage.append(  m_textStudyID->text() );
     logMessage.append(  ";" );
@@ -1704,7 +1929,6 @@ void QueryScreen::databaseError(Status *state)
     }
 }
 
-
 QueryScreen::~QueryScreen()
 {
     StarviewerSettings settings;
@@ -1719,6 +1943,93 @@ QueryScreen::~QueryScreen()
 
     //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
     settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
+}
+
+void QueryScreen::emitViewSignal(StudyVolum study)
+{
+    QStringList imageSupportedModalities;
+    QStringList othersSupportedModalities;
+
+    // \TODO Caldria especificar, exactament, totes les modalitats que es suporten del totxo 03, C.7.3.1.1.1 de l'especificació DICOM
+    imageSupportedModalities << "CT" << "CR" << "MR" << "ES" << "MG" << "OT" << "US" << "NM" << "RF" << "XA" << "DT" << "SC" << "DX" << "PT";
+    othersSupportedModalities << "KO" << "PR";
+
+    study.firstSerie();
+    while ( !study.end() )
+    {
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
+        {
+            break;
+        }
+        study.nextSerie();
+    }
+    if ( study.end() )
+    {
+        WARN_LOG("La DefaultSeriesUID no es trobava en el volum, s'agafa la primera sèrie");
+        //si no l'hem trobat per defecte mostrarem la primera serie
+        study.firstSerie();
+        return;
+    }
+
+    SeriesVolum serie = study.getSeriesVolum();
+
+    QString modality = QString::fromStdString(serie.getSeriesModality());
+    INFO_LOG( qPrintable("S'ha escollit obrir del QueryScreen una sèrie de la modalitat [" + modality + "]") );
+
+    if ( othersSupportedModalities.contains( modality ) )
+    {
+        std::vector<std::string> filenames = serie.getVectorImagePath();
+
+        if( filenames.empty() )
+        {
+            ERROR_LOG("La llista de noms de fitxer per carregar és buida");
+            return;
+        }
+
+        QString filename;
+        if( filenames.size() > 1 )
+        {
+            INFO_LOG("La llista de noms de fitxer per carregar té més d'una sèrie/imatge");
+            QStringList list;
+            for(int i=0; i<filenames.size(); ++i)
+            {
+                list << QString::fromStdString( filenames[i] );
+            }
+            QChooseOneObjectDialog dialog(this);
+            dialog.setObjectsList(list);
+            dialog.exec();
+            filename = dialog.getChoosed();
+            if(filename.isEmpty())
+            {
+                ERROR_LOG("No s'ha seleccionat cap filename de la llista!");
+                return;
+            }
+        }
+        else
+        {
+            //Extraiem el nom de l'Ãºnic fitxer de la Ãºnica sÃ¨rie que hi hauria d'haver
+            filename = QString::fromStdString(filenames[0]);
+        }
+
+        INFO_LOG( qPrintable("S'obrirà, concretament, el fitxer " + filename) );
+
+        if(modality == "KO")
+                emit viewKeyImageNote(filename);
+        else if(modality == "PR")
+                emit viewPresentationState(filename);
+    }
+    // \TODO hem de fer un tractament especialitzat de cada tipu de modalitat si cal
+    else /*if ( imageSupportedModalities.contains( modality ) ) */
+    {
+        INFO_LOG("Fem un viewStudy");
+        emit viewStudy(study);
+    }
+//     else
+//     {
+//         QMessageBox::information( this , tr( "Starviewer" ) , tr( "Sorry, selected modality is not supported." ) );
+//         ERROR_LOG( qPrintable( QString("No s'ha pogut carregar la sèrie [%1] ja que és de la modalitat [%2] que no es suporta")
+//                 .arg( study.getDefaultSeriesUID().c_str() ).arg(modality) ) );
+//     }
 }
 
 };

@@ -32,6 +32,7 @@ void StarviewerProcessImageRetrieved::process( Image *image )
     Status state;
     CacheStudyDAL cacheStudyDAL;
     CacheImageDAL cacheImageDAL;
+    Series serie;
 
     /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
     if ( m_downloadedImages == 0 )
@@ -48,16 +49,14 @@ void StarviewerProcessImageRetrieved::process( Image *image )
         state = getSeriesInformation ( createImagePath( image  ), serie );
         if ( !state.good() ) m_error = true;
 
-        state = cacheStudyDAL.setStudyModality( serie.getStudyUID() , serie.getSeriesModality() );
-        if ( !state.good() ) m_error = true;
-
         m_studyUID = image->getStudyUID().c_str();
     }
 
     //inserim la nova sèrie que es descarrega
     if ( !m_addedSeriesList.contains( image->getSeriesUID().c_str() ) )
     {
-        if ( insertSerie( image ).good() )
+        state = insertSerie( image );
+        if ( state.good() || ( !state.good() && state.code() == 2019 ) ) // 2019, cas en que ja existia la serie a la base de dades, en aquest cas s'esta tornant a baixar la sèrie
         {
             emit( seriesRetrieved( image->getStudyUID().c_str() ) );
 
@@ -71,8 +70,8 @@ void StarviewerProcessImageRetrieved::process( Image *image )
 
     //inserim imatge
     state = cacheImageDAL.insertImage( image );
-    //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error
-    if ( !state.good() ) m_error = true;
+    //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error, en cas de l'error 2019 és que la imatge ja existia a la cache
+    if ( !state.good() && state.code() != 2019 ) m_error = true;
 
     m_downloadedImages++;
     emit( imageRetrieved( image->getStudyUID().c_str(),m_downloadedImages ) );
@@ -90,7 +89,8 @@ Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
     if ( state.good() )
     {
         state = cacheSeriesDAL.insertSeries( &serie );
-        if ( !state.good())
+        //Podria ser que la sèrie estigués parcialment baixada, per tant si ja existeix ignorem l'errorProcessImage() de que ja existeix la sèrie a la base de dades
+        if ( !state.good() && state.code() != 2019)
         {
             m_error = true;
         }
@@ -185,11 +185,6 @@ StarviewerProcessImageRetrieved::~StarviewerProcessImageRetrieved()
     //com no sabem quant s'acaba la descàrrega de l'última sèrie, fem que s'indiqui que ha finalitzat la seva descàrrega quan es destrueix l'objecte StarviewerProcessImageRetrieved, que és destruït just finalitzar la descarrega de tot l'estudi
 	emit( seriesRetrieved( m_studyUID ) );
 
-    // si les series està a 0 vol dir que l'estudi només tenia una sèrie, per tant si l'usuari ha demanat visualitzar-lo no s'haurà emés el signal seriesView, perquè no sabrem que ha finalitzat la descarrega de la sèrie, fins que es destrueixi l'objecte StarviewerProcessImageRetrieved, el qual no es destrueix just quan finalitza la descàrrega de l'estudi
-    if ( m_downloadedSeries == 0 )
-    {
-    	emit( seriesView( m_studyUID ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
-    }
 }
 
 };

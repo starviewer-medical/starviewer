@@ -46,10 +46,12 @@ class StudyList
      */
     Study getStudy();
 
-    /** This function gets the number of studies in the list
+    /** Indica si un determinat estudi d'un determinat PACS està dins la llista
+     * @param studyUID UID de l'estudi
+     * @param AETitlePacs AETitle del Pacs on ha d'estat l'estudi
      * @return  number of studies in the list
      */
-    bool findStudy( std::string );
+    bool exists( std::string studyUID , std::string AETitlePacs="" );
 
     /// neteja la llista d'estudis
     void clear();

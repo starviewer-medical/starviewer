@@ -80,6 +80,11 @@ public:
      */
     std::string getSeriesDate();
 
+    /** Retorna el SOPInstanceUID d'una iamtge
+     * @return SOPInstanceUID de la imatge
+     */
+    std::string getSOPInstanceUID();
+
     /// Destructor de la classe
     ~ImageDicomInformation();
 

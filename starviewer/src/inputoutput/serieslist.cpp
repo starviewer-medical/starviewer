@@ -13,14 +13,21 @@ namespace udg
  */
 SeriesList::SeriesList()
 {
+    int init_value = 1;//Només un thread alhora pot gravar a la llista
+
+    m_semafor = (sem_t*) malloc( sizeof( sem_t ) );
+    sem_init( m_semafor , 0 , init_value );
+
     buit = true;
     m_iterator = m_seriesList.begin();
 }
 
 void SeriesList::insert(Series series)
 {
+    sem_wait( m_semafor );
     m_seriesList.push_back( series );
     buit = false;
+    sem_post( m_semafor );
 }
 
 void SeriesList::firstSeries()
@@ -55,6 +62,21 @@ int SeriesList::count()
 void SeriesList::clear()
 {
     if ( m_seriesList.size() != 0 ) m_seriesList.clear();
+}
+
+bool SeriesList::exists( std::string studyUID , std::string seriesUID , std::string AETitlePacs )
+{
+    sem_wait( m_semafor );
+    m_iterator = m_seriesList.begin();
+
+    while ( m_iterator != m_seriesList.end() )
+    {
+        if ( (*m_iterator).getStudyUID() == studyUID && (*m_iterator).getPacsAETitle() == AETitlePacs  && (*m_iterator).getSeriesUID() == seriesUID   ) break;
+        else m_iterator++;
+    }
+
+    sem_post( m_semafor );
+    return ( m_iterator != m_seriesList.end() );
 }
 
 }

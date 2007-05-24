@@ -28,7 +28,7 @@ MultipleQueryStudy::MultipleQueryStudy( QObject *parent )
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
 }
 
-void MultipleQueryStudy::setMask( StudyMask mask )
+void MultipleQueryStudy::setMask( DicomMask mask )
 {
     m_searchMask = mask;
 }

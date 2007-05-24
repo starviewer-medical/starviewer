@@ -16,13 +16,15 @@
 #include "qoperationstatescreen.h"
 #include "qcreatedicomdir.h"
 #include "readdicomdir.h"
+#include "imagelistsingleton.h"
+#include "dicommask.h"
 
 namespace udg {
 
 class SeriesList;
 class Status;
-class SeriesMask;
 class ReadDicomdir;
+class PacsServer;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -60,6 +62,13 @@ public slots:
      */
     void searchSeries( QString , QString );
 
+    /** Busca la informació d'una sèrie
+     * @param studyUID UID de l'estidi
+     * @param seriesUID
+     * @param pacsAETItle AEtitle del pacs a buscar la sèrie
+     */
+    void searchImages( QString , QString , QString );
+
     /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat
      */
@@ -69,6 +78,9 @@ public slots:
      * @param view boolea que indica si després de la descarrega s'ha de visualitzar l'estudi
      */
     void retrieve();
+
+    ///importa el dicomdir a la nostra base de ades
+    void importDicomdir();
 
     /// Slot que mostra la interfície QRetrieveScreen
     void showRetrieveScreen();
@@ -89,12 +101,14 @@ public slots:
     void deleteStudyCache();
 
     /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si l'usuari així ho ha indicat
-     * @param UID de l'estudi descarregat
+     * @param studyUID studyUID de l'estudi descarregat
+     * @param seriesUID seriesUID de la sèrie descarregada
+     * @param sopInstanceUID de la imatge descarregada
      */
-    void studyRetrievedView( QString );
+    void studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
     /// Slot que activa o desactiva el m_checkAll en funció de si hi ha alguna modalitat d'estudi seleccionada
-    void setCheckAll();
+    void checkedSeriesModality();
 
     /** Quant la data from canvia, amb aquest slot també es canvia la data del TO, per a que vagin sincronitzats
      * @param data
@@ -107,13 +121,8 @@ public slots:
     /// Activa o desactiva el text de la data desde
     void setEnabledTextFrom( int );
 
-    /** Activa o desactiva el mode AutoExclusive dels checkbox de modalitat d'estudi, si està activat
-     * només un checkbox d'aquell grup pot estar activa alhora
-     * Per exemple en el PACS només podem buscar per una modalitat d'estudi, per tant activarem aquest mode
-     * però per la base de dades podem buscar per més d'una modalitat per tant ho desactivarem
-     * @param enabled indicia si s'activa o desactiva el mode AutoExclusive
-     */
-    void setCheckModalityAutoExclusive(bool enabled);
+    ///Si la data del m_textDate canviarà la data m_textTo, per si es vol cercar per una data concreta
+    void searchStudyfromDateChanged( QDate fromDate );
 
     /// Posa a verdader o fals tots els check modality, i deixa a true el all
     void clearCheckedModality();
@@ -122,9 +131,9 @@ public slots:
     void notEnoughFreeSpace();
 
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
-     * @param id del PACS
+     * @param pacsID ID del pacs a la base de ades local
      */
-    void errorConnectingPacs( int );
+    void errorConnectingPacs( int pacsID );
 
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
      * @param id del PACS
@@ -153,6 +162,28 @@ public slots:
      */
     void storeStudyToPacs( QString studyUID );
 
+    /** Cerca les imatges d'una sèrie al PACS
+     * @param StudyUID uid de l'estudi
+     * @param SeriesUID  uid de la sèrie
+     * @param PacsAETitle AETitle del PACS a buscar la sèrie
+     */
+    void queryImagePacs( QString StudyUID , QString SeriesUID , QString PacsAETitle );
+
+    /** Cerca les imatges d'una sèrie al DICOMDIR
+     * @param StudyUID uid de l'estudi
+     * @param SeriesUID  uid de la sèrie
+     */
+    void queryImageDicomdir( QString StudyUID , QString SeriesUID  );
+
+    /** Cerca les imatges d'una sèrie a la cache
+     * @param StudyUID uid de l'estudi
+     * @param SeriesUID  uid de la sèrie
+     */
+    void queryImageCache(QString studyUID, QString seriesUID );
+
+    /** Slot que s'activa quan s'ha editat el m_textOtherModality, en cas que el text sigui <> "" deselecciona totes les modalitats, i en cas que sigui = "" selecciona la modalitat checkAll
+     */
+    void textOtherModalityEdited();
 
 signals :
 
@@ -163,6 +194,12 @@ signals :
 
     /// Signal cap a QSeriesListWidget, que neteja la llista de sèries del Widget
     void clearSeriesListWidget();
+
+    /// Signal que s'emet quan s'escull veure un Key Image Note. Es passa el path d'aquest
+    void viewKeyImageNote( const QString & path);
+
+    /// Signal que s'emet quan s'escull veure un Presentation State. Es passa el path d'aquest
+    void viewPresentationState( const QString & path);
 
 protected :
 
@@ -186,6 +223,7 @@ struct retrieveParameters
     StudyList m_studyListCache;//aquest es utilitzat per buscar estudis a la cache
     SeriesListSingleton *m_seriesListSingleton;
     SeriesList m_seriesListCache;
+    ImageListSingleton *m_imageListSingleton;
     ProcessImageSingleton *m_piSingleton;
 
     MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
@@ -204,6 +242,8 @@ struct retrieveParameters
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;
 
+    QString m_lastQueriedPacs;//Indica quin és l'últim pacs que hem consultat, això es per de cares anar al connectathon, ja que les messatools no retornen el tag indicant a quin pacs pertanyen, per això és necessari guardar quin és l'últim pacs consultat per saber si hem de descarregar l'estudi, consultar, sèrie etc a quin PACS atacar.
+
     ///Connecta els signals i slots pertinents
     void connectSignalsAndSlots();
 
@@ -212,41 +252,22 @@ struct retrieveParameters
      */
     void setEnabledDates(bool);
 
-    /** Construeix la màscara de cerca de la sèrie
-     * @param UID de l'estudi
-     * @return màscara
-     */
-    SeriesMask buildSeriesMask(QString);
+    DicomMask buildSeriesDicomMask(QString);
 
     /** valida que la màscara de cerca no estigui buida, en el cas que ho sigui s'haurà d'avisar al usuari, perquè fer una cerca al Pacs sense filtrar potser molt lenta, al haver de mostrar totes les dades
      * @return indica si el filtre de cerca està buit
      */
     bool validateNoEmptyMask();
 
-    /** Construeix la màscara d'entrada pels estudis
-     * @return retorna la màscara d'un estudi
+    /** Construeix la màscara d'entrada pels dicom
+     * @return retorna la màscara d'un objecte dicom
      */
-    StudyMask buildStudyMask();
-
-    /** Contrueix el nom del pacient per a crear la màscara, el format del la màscara de pacient ha de ser "*" o "congoms* Nom*"
-     * @return retorna la màscara amb el nom del pacient
-     */
-    QString buildPatientName();
+    DicomMask buildDicomMask();
 
     /** construeix la màscara de les dates
      * @return retorna la màscara de les dates
      */
     QString buildStudyDates();
-
-    /** construeix la màscara per cerca el Id de pacient en mode WildCard
-      * @return màscara del PatientId
-      */
-    QString buildPatientId();
-
-    /** construeix la màscara per cerca el Id d'estudi en mode WildCard
-      * @return màscara del StudyId
-      */
-    QString buildStudyId();
 
     /** Descarrega una estudi del pacs
      * @param indica si l'estudi s'ha de visualitzar
@@ -256,15 +277,17 @@ struct retrieveParameters
     /** Carrega un estudi de la cache perque pugui ser visualitzat a la classe Volum i emet una senyal perque sigui visualitzat
      * @param UID de l'estudi
      * @param UID de la serie que s'ha de visualitzar per defecte, si es buit, es posara per defecte la primera serie de l'estudi
+     * @param sopInstanceUID sopInstanceUID de l'imatge a visualitzar
     */
-    void retrieveCache( QString StudyUID , QString SeriesUID );
+    void retrieveCache( QString StudyUID , QString SeriesUID , QString sopInstanceUID );
 
 
     /** Carrega un estudi d'un dicomdir perque pugui ser visualitzat a la classe Volum i emet una senyal perque sigui visualitzat
      * @param UID de l'estudi
      * @param UID de la serie que s'ha de visualitzar per defecte, si es buit, es posara per defecte la primera serie de l'estudi
+     * @param UID de l'imatge
     */
-    void retrieveDicomdir( QString StudyUID , QString SeriesUID );
+    void retrieveDicomdir( QString StudyUID , QString SeriesUID , QString sopInstanceUID );
 
     /** Insereix un estudi a descarregar a la cache
      * @param estudi a insertat
@@ -330,7 +353,17 @@ struct retrieveParameters
      * @param mask màscara a la que s'ha d'afegir la modalitat
      * @param modality modalitat a afegir
      */
-    void addModalityStudyMask( StudyMask* mask, std::string modality );
+    void addModalityStudyMask( DicomMask* mask, std::string modality );
+
+    /** Donat un AETitle busca les dades del PACS a la base de dades i prepara un objecte PACSERVER, per poder
+     * connectar al PACS
+     * @param AETitlePACS Aetitle del PACS a connectar
+     * @return Objecte ParcsServer a punt per connectar amb el PACS
+     */
+    Status preparePacsServerConnection( QString AETitlePACS , PacsServer *pacsConnection );
+
+    /// Mètode que a partir d'un StudyVolum emetrà el signal correcte depenent de la modalitat que s'intenta obrir
+    void emitViewSignal(StudyVolum study);
 };
 
 };

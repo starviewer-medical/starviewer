@@ -102,8 +102,11 @@ namespace udg
     const OFConditionConst errorDMaskPatientAge(          0, 1125, OF_error,      "Error in PatientAge Mask");
     const OFConditionConst errorMaskPatientAge (errorDMaskPatientAge);
 
-    const OFConditionConst errorDMaskInstanceNumber(          0, 1125, OF_error,      "Error in ImageNumber Mask");
+    const OFConditionConst errorDMaskInstanceNumber(          0, 1126, OF_error,      "Error in ImageNumber Mask");
     const OFConditionConst error_MaskInstanceNumber (errorDMaskInstanceNumber);
+
+    const OFConditionConst errorDMaskInsertTag(          0, 1127, OF_error,      "Error inserting tag in Mask");
+    const OFConditionConst error_MaskInsertTag  (errorDMaskInsertTag );
 
     const OFConditionConst error_DNoConnect(          0, 1200, OF_error,      "Can't connect");
     const OFConditionConst error_NoConnect (error_DNoConnect);
@@ -136,6 +139,8 @@ namespace udg
     const int operationView = 4;
 
     enum recordDeviceDicomDir { harddisk , cd , dvd , usb };
+
+    const std::string implementationVersionName = "IDI-UDG_STARVIEWER_03";//Estableix quin els nom d'aplicació que enviem quan ens comuniquem amb un PACS
 }
 
 

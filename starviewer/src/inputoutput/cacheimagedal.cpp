@@ -10,7 +10,7 @@
 #include "image.h"
 #include "status.h"
 #include "databaseconnection.h"
-#include "imagemask.h"
+#include "dicommask.h"
 #include "logging.h"
 
 #include "cacheimagedal.h"
@@ -56,7 +56,7 @@ Status CacheImageDAL::insertImage( Image *image )
     }
 
     sqlSentence = sqlite3_mprintf( sql.c_str()
-                                ,image->getSoPUID().c_str()
+                                ,image->getSOPInstanceUID().c_str()
                                 ,image->getStudyUID().c_str()
                                 ,image->getSeriesUID().c_str()
                                 ,image->getImageNumber()
@@ -72,11 +72,27 @@ Status CacheImageDAL::insertImage( Image *image )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sqlSentence );
+
+        if ( state.code() != 2019 )
+        {
+
+            sprintf( errorNumber , "%i" , state.code() );
+            logMessage = "Error a la cache número ";
+            logMessage.append( errorNumber );
+            ERROR_LOG( logMessage.c_str() );
+            ERROR_LOG( sqlSentence );
+        }
+        else
+        {
+            logMessage = " La image de la l'estudi ";
+            logMessage.append( image->getStudyUID().c_str() );
+            logMessage.append ( " amb el SeriesUID " );
+            logMessage.append( image->getSeriesUID().c_str() );
+            logMessage.append ( " amb el SopInstanceUID " );
+            logMessage.append( image->getSOPInstanceUID().c_str() );
+            logMessage.append( " ja existeix a la base de dades " );
+            INFO_LOG ( logMessage );
+        }
         return state;
     }
 
@@ -118,7 +134,7 @@ Status CacheImageDAL::insertImage( Image *image )
     return state;
 }
 
-Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
+Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;
     Image image;
@@ -165,7 +181,7 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
 
         image.setStudyUID( resposta [ 2 + i * columns ] );
         image.setSeriesUID( resposta [ 3 + i * columns ] );
-        image.setSoPUID( resposta [ 4 + i * columns ] );
+        image.setSOPInstanceUID( resposta [ 4 + i * columns ] );
         image.setImageName( resposta [ 5 + i * columns ] );
 
         ls.insert( image );
@@ -175,7 +191,7 @@ Status CacheImageDAL::queryImages( ImageMask imageMask , ImageList &ls )
     return state;
 }
 
-Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
+Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
 {
     int columns , rows , i = 0 , stateDatabase;
     char **resposta = NULL , **error = NULL , errorNumber[5];
@@ -209,7 +225,7 @@ Status CacheImageDAL::countImageNumber( ImageMask imageMask , int &imageNumber )
    return state;
 }
 
-Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
+Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 {
     int columns , rows , stateDatabase;
     char **resposta = NULL , **error = NULL , errorNumber[5];
@@ -246,6 +262,45 @@ Status CacheImageDAL::imageSize (  ImageMask imageMask , unsigned long &size )
 
    return state;
 }
+
+Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
+{
+    int columns , rows , stateDatabase;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
+    std::string logMessage , sql;
+    Status state;
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus ( 50 );
+    }
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlExistImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    databaseConnection->releaseLock();
+
+    state = databaseConnection->databaseStatus ( stateDatabase );
+
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( buildSqlSizeImage( &imageMask ).c_str() );
+        return state;
+    }
+
+    if ( resposta[1] != NULL )
+    {
+        exist = true;
+    }
+    else exist = false;
+
+   return state;
+}
+
 Status CacheImageDAL::deleteImages( std::string studyUID )
 {
     std::string sql;
@@ -284,7 +339,7 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
 
 }
 
-std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
+std::string CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
 {
     std::string sql , whereClause = "";
 
@@ -340,7 +395,7 @@ std::string CacheImageDAL::buildSqlCountImageNumber( ImageMask *imageMask )
     return sql;
 }
 
-std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
+std::string CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
 {
     std::string sql , whereClause ="";
 
@@ -396,15 +451,85 @@ std::string CacheImageDAL::buildSqlSizeImage( ImageMask *imageMask )
     return sql;
 }
 
-std::string CacheImageDAL::buildSqlQueryImages( ImageMask *imageMask )
+std::string CacheImageDAL::buildSqlExistImage( DicomMask *imageMask )
+{
+    std::string sql , whereClause ="";
+
+    sql.insert( 0 , "select sum(ImgSiz) from image " );
+
+    //si hi ha UID study
+    if ( imageMask->getStudyUID().length() > 0 )
+    {
+        whereClause.insert( 0 , " where StuInsUID = '" );
+        whereClause.append( imageMask->getStudyUID() );
+        whereClause.append( "'" );
+    }
+
+    //si hi ha UID de la sèrie
+    if ( imageMask->getSeriesUID().length() > 0 )
+    {
+        if ( whereClause.length() > 0 )
+        {
+            whereClause.append( " and SerInsUID = '" );
+            whereClause.append( imageMask->getSeriesUID() );
+            whereClause.append( "'" );
+        }
+        else
+        {
+            whereClause.insert( 0 , " where SerInsUID = '" );
+            whereClause.append( imageMask->getSeriesUID() );
+            whereClause.append( "'" );
+        }
+    }
+
+    //si hi ha SopInsUID
+    if ( imageMask->getSOPInstanceUID().length() > 0 )
+    {
+        if ( whereClause.length() > 0 )
+        {
+            whereClause.append( " and SopInsUID = '" );
+            whereClause.append( imageMask->getSOPInstanceUID() );
+            whereClause.append( "'" );
+        }
+        else
+        {
+            whereClause.insert( 0 , " where SopInsUID = '" );
+            whereClause.append( imageMask->getSOPInstanceUID() );
+            whereClause.append( "'" );
+        }
+    }
+
+    if ( whereClause.length() > 0 )
+    {
+        sql.append( whereClause );
+    }
+
+    return sql;
+}
+
+std::string CacheImageDAL::buildSqlQueryImages( DicomMask *imageMask )
 {
     std::string sql  ,imgNum;
 
     sql.insert( 0 , "select ImgNum , AbsPath , Image.StuInsUID , SerInsUID , SopInsUID , ImgNam from image , study where Image.StuInsUID = '" );
     sql.append( imageMask->getStudyUID() );
-    sql.append( "' and SerInsUID = '" );
-    sql.append( imageMask->getSeriesUID() );
-    sql.append( "' and Study.StuInsUID = Image.StuInsUID " );
+    sql.append( "'" );
+
+    if ( imageMask->getSeriesUID().length() > 0 )
+    {
+        sql.append( " and SerInsUID = '" );
+        sql.append( imageMask->getSeriesUID() );
+        sql.append( "'" );
+    }
+
+    if ( imageMask->getSOPInstanceUID().length() > 0 )
+    {
+        sql.append( " and SopInsUID = '" );
+        sql.append( imageMask->getSOPInstanceUID() );
+        sql.append( "'" );
+    }
+
+    sql.append( " and Study.StuInsUID = Image.StuInsUID " );
 
     imgNum = imageMask->getImageNumber();
 

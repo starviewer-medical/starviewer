@@ -24,9 +24,9 @@ void RetrieveImages::setNetwork ( T_ASC_Network * network )
     m_net = network;
 }
 
-void RetrieveImages:: setMask( StudyMask Study )
+void RetrieveImages:: setMask( DicomMask mask )
 {
-    m_mask = Study.getMask();
+    m_mask = mask.getDicomMask();
 }
 
 /// En aquesta funció acceptem la connexió que se'ns sol·licita per transmetre'ns imatges
@@ -152,9 +152,6 @@ OFCondition echoSCP(
     OFCmdUnsignedInt  opt_itempad = 0;
     OFBool            opt_correctUIDPadding = OFFalse;
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
-    std::string       seriesDir , studyDir;
-    DIR *pdir;
-    Image img;
     StarviewerSettings settings;
 
 #ifndef QT_NO_DEBUG
@@ -191,75 +188,50 @@ OFCondition echoSCP(
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
-            ProcessImageSingleton* piSingleton;
-
-            //proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
-            piSingleton=ProcessImageSingleton::getProcessImageSingleton();
-
-            const char* fileName = cbdata->imageFileName;
-            const char *studyUID = NULL;
-            const char *seriesUID = NULL;
-            const char *SoPUID = NULL;
-            const char *imageNumber = NULL;
-            std::string pathfile;
+            ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
+            std::string studyPath, seriesPath, imagePath;
             int imageSize;
+            Image retrievedImage( * imageDataSet );
+            DIR *pdir;
 
-            //Definim els TagKey per indicar que volem treure de la imatge
-            DcmTagKey studyInstanceUIDTagKey( DCM_StudyInstanceUID ); //studyUID
-            DcmTagKey seriesInstanceUIDTagKey( DCM_SeriesInstanceUID );//seriesUID
-            DcmTagKey SOPInstanceUIDTagKey ( DCM_SOPInstanceUID );
-            DcmTagKey imageNumberTagKey (DCM_InstanceNumber );    //número d'imatge
-
-            pathfile.insert( 0 , piSingleton->getPath() );//agafem el path del directori on es guarden les imatges
-
-            //obtenim la informacio de la imatge
-            OFCondition ec;
-            ec = ( *imageDataSet )->findAndGetString( SOPInstanceUIDTagKey , SoPUID, OFFalse );
-            ec = ( *imageDataSet )->findAndGetString( imageNumberTagKey , imageNumber, OFFalse );
-            //recuperem l'estudi UID de la imatge, per saber el directori on l'hem de guardar
-            ec = ( *imageDataSet )->findAndGetString( studyInstanceUIDTagKey , studyUID , OFFalse );
-
-            studyDir = studyUID;
-
-            pathfile.append( studyDir );
+            studyPath.insert( 0 , piSingleton->getPath() );//agafem el path del directori on es guarden les imatges
+            studyPath.append( retrievedImage.getStudyUID() );
 
             //comprovem, si el directori de l'estudi ja està creat
-            pdir = opendir( pathfile.c_str() );
+            pdir = opendir( studyPath.c_str() );
             if ( !pdir )
             {
-                mkdir( pathfile.c_str() , S_IRWXU | S_IRWXG | S_IRWXO );
+                mkdir( studyPath.c_str() , S_IRWXU | S_IRWXG | S_IRWXO );
             }
             else closedir( pdir );
 
-            //obtenim a quina sèrie pertany la imatage per saber el directori on l'hem de guardar
-            ( *imageDataSet )->findAndGetString( seriesInstanceUIDTagKey , seriesUID , OFFalse );
+            seriesPath = studyPath;
+            seriesPath.append( "/" ); //conc
+            seriesPath.append( retrievedImage.getSeriesUID() );
 
-            seriesDir = seriesUID;
-
-            pathfile.append( "/" );
-            pathfile.append( seriesDir );
-
-            //comprovem, si el directori de la sèrie ja està creat
-            pdir = opendir( pathfile.c_str()) ;
+            //comprovem, si el directori de la sèrie ja està creat, sinó el creem
+            pdir = opendir( seriesPath.c_str()) ;
             if ( !pdir )
             {
-                mkdir( pathfile.c_str(), S_IRWXU | S_IRWXG | S_IRWXO );
+                mkdir( seriesPath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO );
             }
             else closedir( pdir );
 
             //acabem de concatenar el nom del fitxer
-            pathfile.append("/");
-            pathfile.append( fileName );
+            imagePath = seriesPath;
+            imagePath.append("/");
+            imagePath.append( cbdata->imageFileName );
 
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
-            OFCondition cond = cbdata->dcmff->saveFile( pathfile.c_str() , xfer , opt_sequenceType , opt_groupLength ,
+            //Guardem la imatge
+            OFCondition cond = cbdata->dcmff->saveFile( imagePath.c_str() , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
 
             if ( cond.bad() )
             {
-                piSingleton->setError( studyUID );
+                piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
             }
 
@@ -283,33 +255,26 @@ OFCondition echoSCP(
                 if (! DU_findSOPClassAndInstanceInDataSet( *imageDataSet , sopClass , sopInstance , opt_correctUIDPadding ) )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
-                    piSingleton->setError( studyUID );
+                    piSingleton->setError( retrievedImage.getStudyUID() );
                 }
                 else if ( strcmp( sopClass , req->AffectedSOPClassUID ) != 0 )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    piSingleton->setError( studyUID );
+                    piSingleton->setError( retrievedImage.getStudyUID() );
                 }
                 else if ( strcmp( sopInstance , req->AffectedSOPInstanceUID ) != 0 )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    piSingleton->setError( studyUID );
+                    piSingleton->setError( retrievedImage.getStudyUID() );
                 }
             }
 
-            // si el numero d'imatges es null li posem 999999, per posteriorment nosaltres poder-ho saber
-            if ( imageNumber == NULL ) imageNumber = "999999";
+            //guardem la informacio que hem calculat nosaltres a l'objecte imatge
+            retrievedImage.setImageName( cbdata->imageFileName );
+            retrievedImage.setImagePath( imagePath.c_str() );
+            retrievedImage.setImageSize( imageSize );
 
-            //guardem la informacio a l'objecte imatge
-            img.setStudyUID( studyUID );
-            img.setSeriesUID( seriesUID );
-            img.setSoPUID( SoPUID );
-            img.setImageName( fileName );
-            img.setImageNumber( atoi( imageNumber ) );
-            img.setImagePath( pathfile.c_str() );
-            img.setImageSize( imageSize );
-
-            piSingleton->process( img.getStudyUID() ,&img );
+            piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
         }
     }
 
@@ -425,7 +390,7 @@ void subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_As
     }
 }
 
-Status RetrieveImages::moveSCU()
+Status RetrieveImages::retrieve()
 {
     T_ASC_PresentationContextID presId;
     T_DIMSE_C_MoveRQ    req;

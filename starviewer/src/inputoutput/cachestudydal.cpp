@@ -14,9 +14,9 @@
 #include "databaseconnection.h"
 #include "study.h"
 #include "studylist.h"
-#include "studymask.h"
 #include "cachepool.h"
 #include "logging.h"
+#include "dicommask.h"
 
 namespace udg {
 
@@ -38,18 +38,18 @@ Status CacheStudyDAL::insertStudy( Study *study )
     }
 
     // Hi ha noms del pacients que depenent de la màquina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
-    patientName = study->getPatientName();
+    /*patientName = study->getPatientName();
 
     while ( patientName.find( '^' ) != std::string::npos )
     {
         patientName.replace( patientName.find( '^' ) , 1 , " " , 1 );
-    }
+    }*/
 
     sql.insert(0, "Insert into Patient ( PatId , PatNam , PatBirDat , PatSex ) values ( %Q , %Q , %Q , %Q )");
 
     sqlSentence = sqlite3_mprintf( sql.c_str() ,
                                         study->getPatientId().c_str() ,
-                                        patientName.c_str() ,
+                                        study->getPatientName().c_str() ,
                                         study->getPatientBirthDate().c_str() ,
                                         study->getPatientSex().c_str() );
 
@@ -107,6 +107,58 @@ Status CacheStudyDAL::insertStudy( Study *study )
 
     if ( !state.good() )
     {
+        if ( state.code() != 2019 )
+        {
+            sprintf( errorNumber , "%i" , state.code() );
+            logMessage = "Error a la cache número ";
+            logMessage.append( errorNumber );
+            ERROR_LOG( logMessage.c_str() );
+            ERROR_LOG( sqlSentence );
+        }
+        else
+        {
+            logMessage = " L'estudi ";
+            logMessage.append( study->getStudyUID().c_str() );
+            logMessage.append( " ja existeix a la base de dades " );
+            INFO_LOG ( logMessage );
+        }
+
+    }
+
+    return state;
+}
+
+Status CacheStudyDAL::insertStudyDicomdir( Study *study )
+{
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    std::string insertPatient , insertStudy , sql , patientName , logMessage;
+    int stateDatabase;
+    Status state;
+    char *sqlSentence , errorNumber[5];
+
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus( 50 );
+    }
+
+    sql.insert(0, "Insert into Patient ( PatId , PatNam , PatBirDat , PatSex ) values ( %Q , %Q , %Q , %Q )");
+
+    sqlSentence = sqlite3_mprintf( sql.c_str() ,
+                                        study->getPatientId().c_str() ,
+                                        study->getPatientName().c_str() ,
+                                        study->getPatientBirthDate().c_str() ,
+                                        study->getPatientSex().c_str() );
+
+    databaseConnection->getLock(); //s'insereix el pacient
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;
+    databaseConnection->releaseLock();
+
+    state = databaseConnection->databaseStatus( stateDatabase );
+
+    //si l'stateDatabase de l'operació és fals, però l'error és el 2019, significa que el pacient, ja existia a la bdd, per tant
+    //continuem inserint l'estudi, si es provoca qualsevol altre error parem
+    if ( !state.good() && state.code() != 2019 )
+    {
         sprintf( errorNumber , "%i" , state.code() );
         logMessage = "Error a la cache número ";
         logMessage.append( errorNumber );
@@ -115,10 +167,63 @@ Status CacheStudyDAL::insertStudy( Study *study )
         return state;
     }
 
+    sql.clear();
+    sql.insert( 0 , "Insert into Study " ); //crem el el sql per inserir l'estudi ,al final fem un select per assignar a l'estudi l'id del PACS al que pertany
+    sql.append( "( PatId , StuInsUID , StuID , StuDat , StuTim , RefPhyNam , AccNum , StuDes , Modali , " );
+    sql.append( " OpeNam , Locati , AccDat , AccTim , AbsPath , Status , PacsID , PatAge ) " );
+    sql.append( " Values ( %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %Q , %i , %i , %Q , %Q , " );
+    sql.append( " %i  , %Q) " );//busquem l'id del PACS
+
+    delete sqlSentence;
+    sqlSentence = sqlite3_mprintf( sql.c_str()
+                                ,study->getPatientId().c_str()
+                                ,study->getStudyUID().c_str()
+                                ,study->getStudyId().c_str()
+                                ,study->getStudyDate().c_str()
+                                ,study->getStudyTime().c_str()
+                                ,""                        //Referring Physician Name
+                                ,study->getAccessionNumber().c_str()
+                                ,study->getStudyDescription().c_str()
+                                ,study->getStudyModality().c_str()   //Modality
+                                ,""                        //Operator Name
+                                ,""                        //Location
+                                ,getDate()                 //Access Date
+                                ,getTime()                 //Access Time
+                                ,study->getAbsPath().c_str()
+                                ,"PENDING"                 //stateDatabase pendent perquè la descarrega de l'estudi encara no està completa
+                                , "99999"
+                                ,study->getPatientAge().c_str()
+                                );
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;
+    databaseConnection->releaseLock();
+
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        if ( state.code() != 2019 )
+        {
+            sprintf( errorNumber , "%i" , state.code() );
+            logMessage = "Error a la cache número ";
+            logMessage.append( errorNumber );
+            ERROR_LOG( logMessage.c_str() );
+            ERROR_LOG( sqlSentence );
+        }
+        else
+        {
+            logMessage = " L'estudi ";
+            logMessage.append( study->getStudyUID().c_str() );
+            logMessage.append( " ja existeix a la base de dades " );
+            INFO_LOG ( logMessage );
+        }
+
+    }
+
     return state;
 }
 
-Status CacheStudyDAL::queryStudy( StudyMask studyMask , StudyList &ls )
+Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
@@ -158,9 +263,10 @@ Status CacheStudyDAL::queryStudy( StudyMask studyMask , StudyList &ls )
         stu.setStudyTime( resposta [ 5+ i * columns ] );
         stu.setStudyDescription( resposta [ 6+ i * columns ] );
         stu.setStudyUID( resposta [ 7+ i * columns ] );
-        stu.setPacsAETitle( resposta [ 8 + i * columns ] );
-        stu.setAbsPath( resposta [ 9 + i * columns ] );
-        stu.setStudyModality( resposta [ 10 + i * columns ] );
+        //stu.setPacsAETitle( resposta [ 8 + i * columns ] );
+        stu.setAbsPath( resposta [ 8 + i * columns ] );
+        stu.setStudyModality( resposta [ 9 + i * columns ] );
+        stu.setAccessionNumber( resposta [ 10 + i * columns ] );
         ls.insert( stu );
         i++;
     }
@@ -232,11 +338,11 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
     Status state;
     std::string sql , logMessage;
 
-    sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AETitle, AbsPath, Modali " );
+    sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali " );
     sql.append( " from Patient,Study,PacsList " );
     sql.append( " where Study.PatID=Patient.PatId " );
     sql.append( " and Status in ( 'RETRIEVED' , 'RETRIEVING' ) " );
-    sql.append( " and PacsList.PacsID=Study.PacsID" ); //busquem el nom del pacs
+    //sql.append( " and PacsList.PacsID=Study.PacsID" ); //busquem el nom del pacs
     sql.append( " and StuInsUID = '" );
     sql.append( studyUID );
     sql.append( "'" );
@@ -273,9 +379,9 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
         study.setStudyTime( resposta [ 5+ i * columns ] );
         study.setStudyDescription( resposta [ 6+ i * columns ] );
         study.setStudyUID( resposta [ 7+ i * columns ] );
-        study.setPacsAETitle( resposta [ 8 + i * columns ] );
-        study.setAbsPath( resposta [ 9 + i * columns ] );
-        study.setStudyModality( resposta [ 10 + i * columns ] );
+        //study.setPacsAETitle( resposta [ 8 + i * columns ] );
+        study.setAbsPath( resposta [ 8 + i * columns ] );
+        study.setStudyModality( resposta [ 9 + i * columns ] );
     }
     else
     {
@@ -300,7 +406,7 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
     Status state;
     int stateDatabase;
     char **resposta = NULL , **error = NULL;
-    int columns , rows , studySize , i;
+    int columns , rows , studySize;
     std::string sql , absPathStudy , logMessage;
     CachePool cachePool;
     char *sqlSentence , errorNumber[5];
@@ -676,41 +782,6 @@ Status CacheStudyDAL::setStudyRetrieving( std::string studyUID )
     return state;
 }
 
-Status CacheStudyDAL::setStudyModality( std::string studyUID , std::string modality )
-{
-    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int stateDatabase;
-    Status state;
-    std::string sql , logMessage;
-    char* sqlSentence , errorNumber[5];
-
-    if ( !databaseConnection->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return databaseConnection->databaseStatus( 50 );
-    }
-
-    sql.insert( 0 , "update study set Modali = %Q " );
-    sql.append( "where StuInsUID= %Q" );
-
-    sqlSentence = sqlite3_mprintf( sql.c_str() , modality.c_str(), studyUID.c_str()  );
-
-    databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
-    databaseConnection->releaseLock();
-
-    state = databaseConnection->databaseStatus( stateDatabase );
-
-    if ( !state.good() )
-    {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sqlSentence );
-    }
-    return state;
-}
-
 Status CacheStudyDAL::updateStudyAccTime( std::string studyUID )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
@@ -747,15 +818,111 @@ Status CacheStudyDAL::updateStudyAccTime( std::string studyUID )
     return state;
 }
 
-std::string CacheStudyDAL::buildSqlQueryStudy(StudyMask* studyMask)
+Status CacheStudyDAL::updateStudy( Study updateStudy )
+{
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    int stateDatabase;
+    Status state;
+    std::string sql , logMessage;
+    char* sqlSentence , errorNumber[5];
+
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus( 50 );
+    }
+
+    //Actualizem estudi
+
+    sql.insert( 0 , "Update Study set StuID = %Q, " );
+    sql.append( " StuDat = %Q, " );
+    sql.append( " StuTim = %Q, " );
+    sql.append( " RefPhyNam = %Q, " );
+    sql.append( " AccNum = %Q, " );
+    sql.append( " StuDes = %Q, " );
+    sql.append( " Modali = %Q, " );
+    sql.append( " OpeNam = %Q, " );
+    sql.append( " Locati = %Q, " );
+    sql.append( " AccDat = %i, " );
+    sql.append( " AccTim = %i, " );
+    sql.append( " Status = 'PENDING', ");
+    sql.append( " PatID = %Q" );
+    sql.append( "where StuInsUID = %Q" );
+
+    sqlSentence = sqlite3_mprintf(  sql.c_str()
+                                    ,updateStudy.getStudyId().c_str()
+                                    ,updateStudy.getStudyDate().c_str()
+                                    ,updateStudy.getStudyTime().c_str()
+                                    ,""                        //Referring Physician Name
+                                    ,updateStudy.getAccessionNumber().c_str()
+                                    ,updateStudy.getStudyDescription().c_str()
+                                    ,updateStudy.getStudyModality().c_str()   //Modality
+                                    ,""                        //Operator Name
+                                    ,""                        //Location
+                                    ,getDate()                 //Access Date
+                                    ,getTime()                 //Access Time
+                                    ,updateStudy.getPatientId().c_str()
+                                    ,updateStudy.getStudyUID().c_str() );
+
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
+    databaseConnection->releaseLock();
+
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
+
+        return state;
+    }
+
+    delete sqlSentence;
+
+    //ACTUALITZEM DADES PACIENT
+
+    sql.clear();
+    sql.insert(0, "Update Patient set PatNam = %Q, " );
+    sql.append( " PatBirDat = %Q, " );
+    sql.append( " PatSex = %Q " );
+    sql.append( "where PatID = %Q ");
+
+    sqlSentence = sqlite3_mprintf(  sql.c_str() ,
+                                    updateStudy.getPatientName().c_str() ,
+                                    updateStudy.getPatientBirthDate().c_str() ,
+                                    updateStudy.getPatientSex().c_str(),
+                                    updateStudy.getPatientId().c_str() );
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
+    databaseConnection->releaseLock();
+
+    state = databaseConnection->databaseStatus( stateDatabase );
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sqlSentence );
+    }
+
+
+    return state;
+}
+
+std::string CacheStudyDAL::buildSqlQueryStudy(DicomMask* studyMask)
 {
     std::string sql ,patientName,patID,stuDatMin,stuDatMax,stuID,accNum,stuInsUID,stuMod,studyDate;
 
-    sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AETitle, AbsPath, Modali " );
-    sql.append( " from Patient,Study,PacsList " );
+    sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum  " );
+    sql.append( " from Patient,Study " );
     sql.append( " where Study.PatID=Patient.PatId " );
     sql.append( " and Status = 'RETRIEVED' " );
-    sql.append( " and PacsList.PacsID=Study.PacsID" ); //busquem el nom del pacs
+    //sql.append( " and PacsList.PacsID=Study.PacsID" ); //busquem el nom del pacs
 
     //llegim la informació de la màscara
     patientName = replaceAsterisk( studyMask->getPatientName() );
@@ -887,10 +1054,10 @@ int CacheStudyDAL::getDate()
 
 /** Sabem que la màscara de modalitat té format "MR,CT,NM" passem a sentència sql fent and ( Modali = 'MR' or Modali='CT' .... )
  */
-std::string CacheStudyDAL::buildSqlStudyModality( StudyMask *mask )
+std::string CacheStudyDAL::buildSqlStudyModality( DicomMask *mask )
 {
     std::string sqlSentence;
-    int index = 0;
+    uint index = 0;
 
     if ( mask->getStudyModality().length() > 0 )
     {

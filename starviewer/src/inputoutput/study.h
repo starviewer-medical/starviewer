@@ -1,8 +1,12 @@
 #ifndef STUDY
 #define STUDY
 
-#include <string>
+#define HAVE_CONFIG_H 1
+
 #include <list>
+#include <string>
+#include <dimse.h> // provide the structure DcmDataSet
+#include <dcdeftag.h> //provide the information for the tags
 
 /** This class sets and gets study's fields
  */
@@ -15,6 +19,11 @@ class Study
 
     ///constructor de la classe
     Study();
+
+    /** Constructor de la classe a partir d'un objecte DcmDataset de les dcmtk
+     * @param Objecte DcmDataset a partir del qual construir l'estudi
+     */
+    Study( DcmDataset *);
 
     /** Operador de la classe
      * @param  Estudi amb el que sl'ha de comprar
@@ -97,6 +106,11 @@ class Study
      */
     void setAbsPath( std::string );
 
+    /** estableix el referringPhysiciansName
+     * @param  referringPhysiciansName
+     */
+    void setReferringPhysiciansName( std::string referringPhysiciansName );
+
     /** This function get the Patient's name.
      *              @return  Patient's Name
      */
@@ -172,6 +186,11 @@ class Study
      */
     std::string getAbsPath();
 
+    /** retorna el referringPhysiciansName
+     * @return referringPhysiciansName
+     */
+    std::string getReferringPhysiciansName();
+
  private :
 
     std::string m_patientName;
@@ -192,6 +211,7 @@ class Study
 
     std::string m_pacsAETitle;
     std::string m_absPath;
+    std::string m_referringPhysiciansName;
 };
 }; //end namespace
 #endif

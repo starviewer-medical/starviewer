@@ -109,17 +109,32 @@ class Input : public QObject
 Q_OBJECT
 public:
 
+    /// Tipus d'error que podem tenir
+    enum { NoError = 1, SizeMismatch, InvalidFileName, UnknownError };
+
     Input();
     ~Input();
 
-    /// Carrega un volum a partir del nom de fitxer que se li passi
-    bool openFile(const char *fileName);
+    /**
+     * Carrega un volum a partir del nom de fitxer que se li passi
+     * @param fileName
+     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
+     */
+    int openFile(const char *fileName);
 
-    ///Donat un conjunt de fitxers els carrega en una única sèrie/volum
-    bool readFiles( std::vector< std::string > filenames );
+    /**
+     * Donat un conjunt de fitxers els carrega en una única sèrie/volum
+     * @param filenames
+     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
+     */
+    int readFiles( std::vector< std::string > filenames );
 
-    /// Lector de sèries dicom donat un directori que les conté
-    bool readSeries( const char *dirPath );
+    /**
+     * Lector de sèries dicom donat un directori que les conté
+     * @param dirPath
+     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
+     */
+    int readSeries( const char *dirPath );
 
     /// Retorna un Volum
     Volume* getData() const { return m_volumeData; };

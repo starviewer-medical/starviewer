@@ -26,7 +26,7 @@
 #include "logging.h"
 #include "status.h"
 #include "cacheimagedal.h"
-#include "imagemask.h"
+#include "dicommask.h"
 #include "harddiskinformation.h"
 #include "deletedirectory.h"
 #include "starviewersettings.h"
@@ -182,7 +182,7 @@ void QCreateDicomdir::setDicomdirSize()
 void QCreateDicomdir::addStudy( Study study )
 {
     CacheImageDAL cacheImageDAL;
-    ImageMask imageMask;
+    DicomMask imageMask;
     unsigned long studySize;
     Status state;
 
@@ -462,7 +462,7 @@ void QCreateDicomdir::removeAllStudies()
 
 void QCreateDicomdir::removeSelectedStudy()
 {
-    ImageMask imageMask;
+    DicomMask imageMask;
     CacheImageDAL cacheImageDAL;
     Status state;
     unsigned long studySize;

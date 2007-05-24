@@ -13,7 +13,7 @@ namespace udg {
 
 class SeriesList;
 class Status;
-class ImageMask;
+class DicomMask;
 
 /** Escala les imatges del mig de cada sèrie d'un estudi, per poder ser previsualitzades quant es consulta la caché
 @author Grup de Gràfics de Girona  ( GGG )
@@ -44,14 +44,14 @@ public:
      * @param número d'imatges
      * @return retorna l'estat del mètode
      */
-    Status countImageNumber( ImageMask , int &number );
+    Status countImageNumber( DicomMask , int &number );
 
     /** busca el path retatiu de la imatge que se li passa per paràmetre
      * @param màscara de la imatge a buscar el path relatiu
      * @param path relatiu, respecte el directori de l'estudi
      * @return retorna l'estat del mètode
      */
-    Status imageRelativePath( ImageMask , std::string &relPath );
+    Status imageRelativePath( DicomMask , std::string &relPath );
 
     ///Destructor de la classe
     ~ScaleStudy();

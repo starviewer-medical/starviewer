@@ -8,7 +8,7 @@
 #define UDGQQueryStudyThread_H
 #include <QThread>
 
-#include "studymask.h"
+#include "dicommask.h"
 #include "pacsparameters.h"
 
 namespace udg {
@@ -26,9 +26,9 @@ public:
 
     /** Accio que executa el thread
      * @param parametres del pacs a consultar
-     * @param màscara de cerca
+     * @param DicomMask màscara de cerca
      */
-    void queryStudy( PacsParameters parameters , StudyMask mask );
+    void queryStudy( PacsParameters parameters , DicomMask mask );
 
     /// el codi d'aquest mètode es el que s'executa en un nou thread
     void run();
@@ -58,7 +58,7 @@ private :
     QString infoLogInitialitzedThread();
 
     PacsParameters m_param;
-    StudyMask m_mask;
+    DicomMask m_mask;
 };
 
 }  //end namespace UdG

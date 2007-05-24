@@ -181,6 +181,19 @@ std::string ImageDicomInformation::getSeriesDate()
     else return seriesDate;
 }
 
+std::string ImageDicomInformation::getSOPInstanceUID()
+{
+    DcmTagKey sopInstanceUIDTagKey( DCM_SOPInstanceUID );
+    const char *sopInstanceUID = NULL;
+
+    OFCondition cond = m_dataset->findAndGetString( sopInstanceUIDTagKey , sopInstanceUID , OFFalse );
+
+    if ( !cond.good() || sopInstanceUID == NULL )
+    {
+        return "";
+    }
+    else return sopInstanceUID;
+}
 ImageDicomInformation::~ImageDicomInformation()
 {
 }

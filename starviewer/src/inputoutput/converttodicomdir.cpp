@@ -20,8 +20,7 @@
 #include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
-#include "seriesmask.h"
-#include "imagemask.h"
+#include "dicommask.h"
 #include "serieslist.h"
 #include "imagelist.h"
 #include "study.h"
@@ -80,7 +79,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     CacheImageDAL cacheImageDAL;
-    ImageMask imageMask;
+    DicomMask imageMask;
     Status state;
     int imageNumberStudy , imageNumberTotal = 0 , i = 0;
     CreateDicomdir createDicomdir;
@@ -180,7 +179,7 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
     QChar fillChar = '0';
     QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
     SeriesList seriesList;
-    SeriesMask seriesMask;
+    DicomMask seriesMask;
     Series series;
     Status state;
 
@@ -221,7 +220,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
     //creem el nom del directori de la sèrie, el format és SERXXXXX, on XXXXX és el numero de sèrie dins l'estudi
     QString seriesName = QString( "/SER%1" ).arg( m_series , 5 , 10 , fillChar );
     Image image;
-    ImageMask imageMask;
+    DicomMask imageMask;
     ImageList imageList;
     Status state;
 

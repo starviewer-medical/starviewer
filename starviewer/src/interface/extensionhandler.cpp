@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QProgressDialog>
+#include <QMessageBox>
 // recursos
 #include "volumerepository.h"
 #include "extensionworkspace.h"
@@ -73,19 +74,27 @@ void ExtensionHandler::request( int who )
     {
 
     case 1:
-        if( m_volumeID.isNull() )
+        switch( m_importFileApp->open() )
         {
-        // open!
-            if( m_importFileApp->open() )
+        case Input::NoError:
+            // Si carreguem una imatge i ja en tenim una de carregada cal crear una finestra nova
+            if( m_volumeID.isNull() )
             {
                 m_mainApp->onVolumeLoaded( m_importFileApp->getVolumeIdentifier() );
                 m_mainApp->setWindowTitle( m_importFileApp->getLastOpenedFilename() );
             }
-        }
-        else
-        {
+            else
+            {
             // ara com li diem que en la nova finestra volem que s'executi la petició d'importar arxiu?
-            m_mainApp->newAndOpen();
+                m_mainApp->newAndOpen();
+            }
+            break;
+
+        case Input::InvalidFileName:
+            break;
+
+        case Input::SizeMismatch:
+            break;
         }
     break;
 
@@ -147,16 +156,8 @@ void ExtensionHandler::request( int who )
 
     /// Default viewer: 2D Viewer
     case 8:
-    {
-        Q2DViewerExtension *defaultViewerExtension = new Q2DViewerExtension;
-        defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-        m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("2D Viewer"));
-//         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
-        connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
-        connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
-
+        this->load2DViewerExtension();
         break;
-    }
 
     /// Stroke Segmentation
     case 9:
@@ -231,17 +232,25 @@ void ExtensionHandler::request( int who )
     break;
 
     default:
-    {
-        Q2DViewerExtension *defaultViewerExtension2 = new Q2DViewerExtension;
-        defaultViewerExtension2->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-        m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension2 , tr("2D Viewer"));
-//         defaultViewerExtension2->populateToolBar( m_mainApp->getExtensionsToolBar() );
-        connect( defaultViewerExtension2 , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
-        connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension2 , SLOT( setSecondInput(Volume*) ) );
-
+        this->load2DViewerExtension();
         break;
     }
-    }
+}
+
+void ExtensionHandler::load2DViewerExtension()
+{
+    Q2DViewerExtension *defaultViewerExtension = new Q2DViewerExtension;
+    defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+    m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("2D Viewer"));
+//         defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
+    connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
+    connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
+    connect( m_queryScreen, SIGNAL(viewKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
+    connect( m_queryScreen, SIGNAL(viewPresentationState(const QString &)),
+             defaultViewerExtension, SLOT(loadPresentationState(const QString &) ));
+    connect( m_importFileApp, SIGNAL(openKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
+    connect( m_importFileApp, SIGNAL(openPresentationState( const QString& )),
+             defaultViewerExtension, SLOT(loadPresentationState( const QString& )));
 }
 
 void ExtensionHandler::killBill()
@@ -319,27 +328,43 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     }
 
     serie = study.getSeriesVolum();
-    input->readFiles( serie.getVectorImagePath() );
+    switch( input->readFiles( serie.getVectorImagePath() ) )
+    {
+    case Input::NoError:
+    {
+        Volume *dummyVolume = input->getData();
+        if( !m_volumeID.isNull() )
+        {
+            Identifier id;
+            id = m_volumeRepository->addVolume( dummyVolume );
+            // obrir nova finestra
+            QString windowName;
+            QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" , m_mainApp->getCountQApplicationMainWindow() + 1 ) ) );
+            newMainWindow->show();
+            newMainWindow->onVolumeLoaded( id );
+            newMainWindow->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
+        }
+        else
+        {
+            m_volumeID = m_volumeRepository->addVolume( dummyVolume );
+            m_mainApp->onVolumeLoaded( m_volumeID );
+            m_mainApp->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
+        }
+        m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+    }
+    break;
 
-    Volume *dummyVolume = input->getData();
-    if( !m_volumeID.isNull() )
-    {
-        Identifier id;
-        id = m_volumeRepository->addVolume( dummyVolume );
-        // obrir nova finestra
-        QString windowName;
-        QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" , m_mainApp->getCountQApplicationMainWindow() + 1 ) ) );
-        newMainWindow->show();
-        newMainWindow->onVolumeLoaded( id );
-        newMainWindow->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
+    case Input::InvalidFileName:
+        QMessageBox::critical( m_mainApp, tr("Error"), tr("Invalid path or filename/s") );
+        m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+        break;
+
+    case Input::SizeMismatch:
+        QMessageBox::critical( m_mainApp, tr("Error"), tr("Images of different size in the same serie. Open the images of the serie separately") );
+        m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+        break;
     }
-    else
-    {
-        m_volumeID = m_volumeRepository->addVolume( dummyVolume );
-        m_mainApp->onVolumeLoaded( m_volumeID );
-        m_mainApp->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
-    }
-    m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+
 }
 
 void ExtensionHandler::viewStudyToCompare( StudyVolum study )
@@ -372,16 +397,33 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     }
 
     serie = study.getSeriesVolum();
-    input->readFiles( serie.getVectorImagePath() );
-
-    if( !m_compareVolumeID.isNull() )
+    switch( input->readFiles( serie.getVectorImagePath() ) )
     {
-        m_volumeRepository->removeVolume( m_compareVolumeID );
+    case Input::NoError:
+    {
+        if( !m_compareVolumeID.isNull() )
+        {
+            m_volumeRepository->removeVolume( m_compareVolumeID );
+        }
+        Volume *dummyVolume = input->getData();
+        m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
+        m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+        emit secondInput( dummyVolume );
+    break;
     }
-    Volume *dummyVolume = input->getData();
-    m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
-    m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-    emit secondInput( dummyVolume );
+    case Input::InvalidFileName:
+        QMessageBox::critical( m_mainApp, tr("Error"), tr("Invalid path or filename/s") );
+        m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+        break;
+
+    case Input::SizeMismatch:
+        QMessageBox::critical( m_mainApp, tr("Error"), tr("Images of different size in the same serie. Open the images of the serie separately") );
+        m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+        break;
+
+    case Input::UnknownError:
+        break;
+    }
 }
 
 void ExtensionHandler::viewStudyForPerfusion( StudyVolum study )

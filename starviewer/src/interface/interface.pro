@@ -14,7 +14,8 @@ FORMS += qconfigurationscreenbase.ui \
          q2dviewerextensionbase.ui \
          qcustomwindowleveldialogbase.ui \
          qcreatedicomdirbase.ui \
-         qoperationstatescreenbase.ui
+         qoperationstatescreenbase.ui \
+         qchooseoneobjectdialogbase.ui
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
@@ -40,7 +41,8 @@ HEADERS += qapplicationmainwindow.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            qcreatedicomdir.h \
-           qoperationstatescreen.h
+           qoperationstatescreen.h \
+           qchooseoneobjectdialog.h 
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
            extensioncreator.cpp \
@@ -63,7 +65,8 @@ SOURCES += qapplicationmainwindow.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp \
-           qoperationstatescreen.cpp
+           qoperationstatescreen.cpp \
+           qchooseoneobjectdialog.cpp 
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../inputoutput/libinputoutput.a \

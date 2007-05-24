@@ -4,6 +4,7 @@
 #define HAVE_CONFIG_H 1
 
 #include "series.h"
+#include <semaphore.h>
 class string;
 
 /* ATENCIO AQUESTA CLASSE NO SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'IMPLEMENTEN SEMAFORS
@@ -52,9 +53,17 @@ class SeriesList
     /// Aquests mètode buida la llista
     void clear();
 
+    /** Indica si una sèrie d'un determinat PACS està dins la llista
+     * @param studyUID UID de l'estudi
+     * @param AETitlePacs AETitle del Pacs on ha d'estat l'estudi
+     * @return  number of studies in the list
+     */
+    bool exists( std::string studyUID , std::string seriesUID , std::string AETitlePacs );
+
  private :
 
     bool buit;
+    sem_t *m_semafor;
 
     std::list<Series> m_seriesList;
     std::list<Series>::iterator m_iterator;

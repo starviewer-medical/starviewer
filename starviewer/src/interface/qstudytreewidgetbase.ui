@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::QStudyTreeWidgetBase</class>
  <widget class="QWidget" name="udg::QStudyTreeWidgetBase" >
   <property name="geometry" >
@@ -45,10 +42,13 @@
       <enum>QAbstractItemView::SingleSelection</enum>
      </property>
      <property name="rootIsDecorated" >
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="sortingEnabled" >
       <bool>true</bool>
+     </property>
+     <property name="animated" >
+      <bool>false</bool>
      </property>
      <column>
       <property name="text" >
@@ -123,6 +123,31 @@
      <column>
       <property name="text" >
        <string>Protocol Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Ref Physician Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>PP Start Date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>PP Start Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Req. Proc. ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Sche. Proc. Step ID</string>
       </property>
      </column>
      <column>

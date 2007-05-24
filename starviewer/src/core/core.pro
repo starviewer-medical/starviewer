@@ -3,7 +3,7 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/core
 # L'objectiu � una biblioteca:  
 
-FORMS += qlogviewerbase.ui 
+FORMS += qlogviewerbase.ui
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \

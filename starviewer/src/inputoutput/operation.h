@@ -7,7 +7,7 @@
 #ifndef UDGOPERATION_H
 #define UDGOPERATION_H
 
-#include "studymask.h"
+#include "dicommask.h"
 #include "pacsparameters.h"
 #include <QString>
 
@@ -22,9 +22,9 @@ public:
     Operation();
 
     /** Especifica la màscara de l'estudi per aquella operacio,
-     * @param màscara de l'estudi
+     * @param mask màscara de l'operació
      */
-    void setStudyMask( StudyMask mask );
+    void setDicomMask( DicomMask mask );
 
     /** Estableix la prioritat de l'aplicació si no s'especifica, el setOperation automaticament l'assigna en funció del tipus d'operacio
      * @param prioritat
@@ -47,10 +47,10 @@ public:
      */
     void setPacsParameters( PacsParameters parameters );
 
-   /** Retorna la màscara de l'estudi
-    * @return màscara de l'estudi
+   /** Retorna la màscara de l'operació
+    * @return màscara de l'operació
     */
-    StudyMask getStudyMask();
+    DicomMask getDicomMask();
 
     /** Retorna la prioritat de l'operació
      * @return prioritat de l'operació
@@ -115,7 +115,7 @@ public:
 
 private :
 
-    StudyMask m_mask;
+    DicomMask m_mask;
     int m_priority;
     int m_operation;
     PacsParameters m_pacsParameters;

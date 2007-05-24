@@ -7,7 +7,6 @@ HEADERS += const.h \
            databaseconnection.h \
            image.h \
            imagelist.h \
-           imagemask.h \
            pacsconnection.h \
            pacslistdb.h \
            pacslist.h \
@@ -16,20 +15,15 @@ HEADERS += const.h \
            pacsserver.h \
            processimage.h \
            processimagesingleton.h \
-           queryimagenumber.h \
-           queryseries.h \
-           querystudy.h \
            retrieveimages.h \
            series.h \
            serieslist.h \
            serieslistsingleton.h \
-           seriesmask.h \
            starviewersettings.h \
            status.h \
            struct.h \
            study.h \
            studylistsingleton.h \
-           studymask.h \
            studylist.h \
            seriesvolum.h \
            studyvolum.h \
@@ -55,11 +49,13 @@ HEADERS += const.h \
            storeimages.h \
            starviewerprocessimagestored.h \
            starviewerprocessimageretrieved.h \
-           imagelistsingleton.h 
+           imagelistsingleton.h \
+           querypacs.h \
+           dicommask.h \
+           importdicomdir.h 
 SOURCES += databaseconnection.cpp \
            image.cpp \
            imagelist.cpp \
-           imagemask.cpp \
            pacsconnection.cpp \
            pacslist.cpp \
            pacslistdb.cpp \
@@ -68,19 +64,14 @@ SOURCES += databaseconnection.cpp \
            pacsserver.cpp \
            processimage.cpp \
            processimagesingleton.cpp \
-           queryimagenumber.cpp \
-           queryseries.cpp \
-           querystudy.cpp \
            retrieveimages.cpp \
            series.cpp \
            serieslist.cpp \
            serieslistsingleton.cpp \
-           seriesmask.cpp \
            starviewersettings.cpp \
            status.cpp \
            study.cpp \
            studylistsingleton.cpp \
-           studymask.cpp \
            studylist.cpp \
            seriesvolum.cpp \
            studyvolum.cpp \
@@ -106,7 +97,10 @@ SOURCES += databaseconnection.cpp \
            storeimages.cpp \
            starviewerprocessimagestored.cpp \
            starviewerprocessimageretrieved.cpp \
-           imagelistsingleton.cpp 
+           imagelistsingleton.cpp \
+           querypacs.cpp \
+           dicommask.cpp \
+           importdicomdir.cpp 
 TARGETDEPS += ../core/libcore.a
 LIBS += ../../src/core/libcore.a
 INCLUDEPATH += ../../src/core

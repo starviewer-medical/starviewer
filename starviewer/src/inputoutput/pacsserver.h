@@ -52,6 +52,11 @@ public:
      */
     void setPacs( PacsParameters );
 
+    /** retorna els paràmetres del PACS
+     * @return paràmetres del Pacs
+     */
+    PacsParameters getPacs();
+
     /** Retorna una connexió per a poder buscar informació, o descarregar imatges
      * @return retorna una connexió de PACS
      */

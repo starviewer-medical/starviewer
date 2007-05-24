@@ -8,7 +8,7 @@
 #include <string>
 #include <sqlite3.h>
 
-#include "seriesmask.h"
+#include "dicommask.h"
 #include "status.h"
 #include "cacheseriesdal.h"
 #include "series.h"
@@ -58,17 +58,29 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sqlSentence );
+        if ( state.code() != 2019 )
+        {
+            sprintf( errorNumber , "%i" , state.code() );
+            logMessage = "Error a la cache número ";
+            logMessage.append( errorNumber );
+            ERROR_LOG( logMessage.c_str() );
+            ERROR_LOG( sqlSentence );
+        }
+        else
+        {
+            logMessage = " La sèrie de la l'estudi ";
+            logMessage.append( serie->getStudyUID().c_str() );
+            logMessage.append ( " amb el SeriesUID " );
+            logMessage.append( serie->getSeriesUID().c_str() );
+            logMessage.append( " ja existeix a la base de dades " );
+            INFO_LOG ( logMessage );
+        }
     }
 
     return state;
 }
 
-Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
+Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
 {
     DcmDataset* mask = NULL;
     int columns , rows , i = 0 , stateDatabase;
@@ -83,7 +95,7 @@ Status CacheSeriesDAL::querySeries( SeriesMask seriesMask , SeriesList &ls )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    mask = seriesMask.getSeriesMask();
+    mask = seriesMask.getDicomMask();
 
     databaseConnection->getLock();
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlQuerySeries( &seriesMask ).c_str() , &resposta , &rows, &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de columnss.
@@ -159,7 +171,7 @@ Status CacheSeriesDAL::deleteSeries( std::string studyUID )
     return state;
 }
 
-std::string CacheSeriesDAL::buildSqlQuerySeries( SeriesMask *seriesMask )
+std::string CacheSeriesDAL::buildSqlQuerySeries( DicomMask *seriesMask )
 {
     std::string sql;
 

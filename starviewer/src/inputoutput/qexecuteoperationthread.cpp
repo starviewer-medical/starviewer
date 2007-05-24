@@ -7,9 +7,6 @@
 
 #include <QSemaphore>
 #include "qexecuteoperationthread.h"
-#include "studymask.h"
-#include "seriesmask.h"
-#include "imagemask.h"
 #include "pacsserver.h"
 #include "retrieveimages.h"
 #include "operation.h"
@@ -31,6 +28,7 @@
 #include "storeimages.h"
 #include "serieslist.h"
 #include "imagelist.h"
+#include "querypacs.h"
 
 namespace udg {
 
@@ -105,13 +103,13 @@ void QExecuteOperationThread::run()
 void QExecuteOperationThread::retrieveStudy(Operation operation)
 {
     StarviewerProcessImageRetrieved *sProcessImg = new StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved();
-    QString studyUID;
+    QString studyUID = operation.getStudyUID();
     Status state,retState;
     QString logMessage;
     CacheStudyDAL cacheStudyDAL;
 
     logMessage = "Iniciant la descàrrega de l'estudi ";
-    logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+    logMessage.append( studyUID.toAscii().constData() );
     logMessage.append( "del pacs " );
     logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
 
@@ -119,10 +117,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
     ScaleStudy scaleStudy;
-    RetrieveImages retrieve;
+    RetrieveImages retrieveImages;
     bool enoughSpace , errorRetrieving ;
-
-    studyUID = operation.getStudyMask().getStudyUID().c_str();
 
     state = enoughFreeSpace( enoughSpace );
 
@@ -132,7 +128,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     if ( !state.good() || !enoughSpace )
     {
         logMessage = "La descàrrega de l'estudi ";
-        logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+        logMessage.append( studyUID.toAscii().constData() );
         logMessage.append( "del pacs " );
         logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
 
@@ -171,32 +167,28 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     }
 
     //passem els parametres a la classe retrieveImages
-    retrieve.setConnection( pacsConnection.getConnection() );
-    retrieve.setMask( operation.getStudyMask() );
-    retrieve.setNetwork( pacsConnection.getNetwork() );
+    retrieveImages.setConnection( pacsConnection.getConnection() );
+    retrieveImages.setMask( operation.getDicomMask() );
+    retrieveImages.setNetwork( pacsConnection.getNetwork() );
 
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage( studyUID.toAscii().constData(),sProcessImg) ;
 
-    //connectem els signals del starviewerProcessImage
-    connect( sProcessImg , SIGNAL( seriesView( QString ) ) , this , SLOT( firstSeriesRetrieved( QString ) ) );
     connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
     connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
 
-    retState = retrieve.moveSCU();
+    retState = retrieveImages.retrieve();
+
     pacsConnection.disconnect();
 
     errorRetrieving = sProcessImg->getError();
-    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
-    piSingleton->delProcessImage( studyUID.toAscii().constData() );
-    delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
 
     if (!retState.good() || errorRetrieving )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi
         if ( !retState.good() )
         {
             logMessage = "S'ha produit algun error durant la descàrrega de l'estudi ";
-            logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+            logMessage.append( studyUID.toAscii().constData() );
             logMessage.append( " del pacs " );
             logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
             logMessage.append( ". PACS ERROR : " );
@@ -207,7 +199,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         if ( errorRetrieving )
         {
             logMessage = "S'ha produit algun error durant el processat de les imatges descarregades ( Classe StarviewerProcessImage) per l'estudi ";
-            logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+            logMessage.append( studyUID.toAscii().constData() );
             logMessage.append( " del pacs " );
             logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
             ERROR_LOG ( logMessage.toAscii().constData() );
@@ -218,22 +210,23 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     }
     else
     {
+        cacheStudyDAL.setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a   descarregat
+
         logMessage = "Ha finalitzat la descàrrega de l'estudi ";
-        logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+        logMessage.append( studyUID.toAscii().constData() );
         logMessage.append( "del pacs " );
         logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
         INFO_LOG( logMessage.toAscii().constData() );
         scaleStudy.scale( studyUID.toAscii().constData() ); //escalem l'estudi per la previsualització de la caché
         emit( setOperationFinished( studyUID.toAscii().constData() ) );// descarregat a QOperationStateScreen
         emit( setRetrieveFinished( studyUID.toAscii().constData() ) );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
-        cacheStudyDAL.setStudyRetrieved( studyUID.toAscii().constData() ); //posem l'estudi com a descarregat
+
+        if ( m_view ) emit ( viewStudy( operation.getDicomMask().getStudyUID().c_str() , operation.getDicomMask().getSeriesUID().c_str() , operation.getDicomMask().getSOPInstanceUID().c_str() ) );
     }
 
-}
-
-void QExecuteOperationThread::firstSeriesRetrieved( QString studyUID )
-{
-     if ( m_view ) emit( viewStudy( studyUID ) ); //signal cap a QueryScreen
+    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
+    piSingleton->delProcessImage( studyUID.toAscii().constData() );
+    delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
 }
 
 void QExecuteOperationThread::imageCommitSlot( QString studyUID , int imageNumber)
@@ -316,14 +309,15 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
     logMessage = "Preparant les dades per moure estudi ";
-    logMessage.append( operation.getStudyMask().getStudyUID().c_str() );
+    logMessage.append( operation.getStudyUID().toAscii().constData() );
     logMessage.append( " al PACS " );
     logMessage.append( operation.getPacsParameters().getAEPacs().c_str() );
     INFO_LOG( logMessage.toAscii().constData() );
 
-    emit( setOperating( operation.getStudyMask().getStudyUID().c_str() ) );//Indiquem al QOperationState que comença l'enviament de les imatges
+    emit( setOperating( operation.getStudyUID().toAscii().constData() ) );//Indiquem al QOperationState que comença l'enviament de les imatges
 
-    state = imagesPathToStore( operation.getStudyMask().getStudyUID().c_str() , imageList );
+    //cercquem el path de les imatges a emmagatzemar
+    state = imagesPathToStore( operation.getStudyUID().toAscii().constData() , imageList );
 
     if ( !state.good() ) return state;
 
@@ -338,12 +332,12 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
         logMessage.append( ". PACS ERROR : " );
         logMessage.append( state.text().c_str() );
         emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) );
-        emit( setErrorOperation( operation.getStudyMask().getStudyUID().c_str() ) );
+        emit( setErrorOperation( operation.getStudyUID().toAscii().constData() ) );
         return state;
     }
 
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges guardades
-    piSingleton->addNewProcessImage( operation.getStudyMask().getStudyUID().c_str() , storedProcessImage ) ;
+    piSingleton->addNewProcessImage( operation.getStudyUID().toAscii().constData() , storedProcessImage ) ;
 
     connect( storedProcessImage , SIGNAL( imageStored( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
     connect( storedProcessImage , SIGNAL( seriesStored( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
@@ -352,17 +346,17 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     storeImages.setNetwork( pacsConnection.getNetwork() );
     state = storeImages.store( imageList );
 
-    piSingleton->delProcessImage( operation.getStudyMask().getStudyUID().c_str() );
+    piSingleton->delProcessImage( operation.getStudyUID().toAscii().constData() );
     delete storedProcessImage; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
 
     if ( state.good() )
     {
         INFO_LOG("S'ha mogut l'estudi correctament" );
-        emit( setOperationFinished( operation.getStudyMask().getStudyUID().c_str() ) );// descarregat
+        emit( setOperationFinished( operation.getStudyUID().toAscii().constData() ) );// descarregat
     }
     else
     {
-        emit( setErrorOperation( operation.getStudyMask().getStudyUID().c_str() ) );
+        emit( setErrorOperation( operation.getStudyUID().toAscii().constData() ) );
         logMessage = "S'ha produit un error intentant guardar l'estudi : ";
         logMessage.append( state.text().c_str() );
 
@@ -377,10 +371,9 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
 {
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
-    SeriesMask mask;
+    DicomMask mask;
     SeriesList seriesList;
     Series series;
-    ImageMask imageMask;
     ImageList imageListSeries;
     Image image;
     Status state;
@@ -405,11 +398,10 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
     {
         series = seriesList.getSeries();
 
-        imageMask.setSeriesUID( series.getSeriesUID().c_str() );
-        imageMask.setStudyUID( studyUID.toAscii().constData() );
+        mask.setSeriesUID( series.getSeriesUID().c_str() );
 
         imageList.clear();
-        state = cacheImageDAL.queryImages( imageMask , imageListSeries );
+        state = cacheImageDAL.queryImages( mask , imageListSeries );
 
         if ( !state.good() )
         {

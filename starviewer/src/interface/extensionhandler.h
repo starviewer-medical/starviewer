@@ -101,6 +101,9 @@ private:
     /// La pantalla d'accés al pacs
     QueryScreen *m_queryScreen;
 
+    /// carrega una nova pestanya amb l'extensió de 2DViewer
+    void load2DViewerExtension();
+
 private slots:
 
     /// Slot que es crida quan hem canviat d'una extensió a una altre

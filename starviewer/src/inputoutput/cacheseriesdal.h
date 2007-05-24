@@ -12,7 +12,7 @@ class Status;
 
 namespace udg {
 
-class SeriesMask;
+class DicomMask;
 class Series;
 class SeriesList;
 /** Classe que conté els mètodes d'accés a la Taula series
@@ -35,7 +35,7 @@ public:
      * @param  retorna la llista amb la sèries trobades
      * @return retorna estat del mètode
      */
-    Status querySeries( SeriesMask mask , SeriesList &list );
+    Status querySeries( DicomMask mask , SeriesList &list );
 
     /** Esborra les series que tinguin el studyUID passat per paràmetre
       * @param studyUID StudyUID de les imatges a esborrar
@@ -50,7 +50,7 @@ private:
      * @param mask màscara de cerca
      * @return sentència sql
      */
-    std::string buildSqlQuerySeries( SeriesMask *seriesMask );
+    std::string buildSqlQuerySeries( DicomMask *dicomMask );
 
 };
 

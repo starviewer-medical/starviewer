@@ -12,7 +12,33 @@ Image::Image()
 {
 }
 
-void Image::setSoPUID( std::string UID )
+Image::Image(DcmDataset *imageDataset)
+{
+    const char *text;
+
+    imageDataset->findAndGetString( DCM_StudyInstanceUID , text , false );
+    if ( text != NULL ) setStudyUID( text );
+
+    imageDataset->findAndGetString( DCM_SeriesInstanceUID , text , false );
+    if ( text != NULL ) setSeriesUID( text );
+
+    imageDataset->findAndGetString( DCM_SOPInstanceUID , text , false );
+    if ( text != NULL ) setSOPInstanceUID( text );
+
+    imageDataset->findAndGetString( DCM_InstanceNumber , text , false );
+    if ( text != NULL )
+    {
+        setImageNumber ( atoi ( text ) );
+    }
+    //TODO mirar perquè posem un número d'imatge per defecte si no el tenen
+    else setImageNumber( 99999 ); //algunes imatges no tenen número d'imatge per defecte els hi posem aquest
+
+    imageDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
+    if ( text != NULL ) setPacsAETitle( text );
+
+}
+
+void Image::setSOPInstanceUID( std::string UID )
 {
     m_SoPUID.erase();
     m_SoPUID.insert( 0 , UID );
@@ -52,7 +78,12 @@ void Image::setImageSize( int bytes )
     m_imageSize = bytes;
 }
 
-std::string Image::getSoPUID()
+void Image::setPacsAETitle( string AETitle )
+{
+    m_pacsAETitle = AETitle;
+}
+
+std::string Image::getSOPInstanceUID()
 {
     return m_SoPUID;
 }
@@ -85,6 +116,11 @@ int Image::getImageNumber()
 int Image::getImageSize()
 {
     return m_imageSize;
+}
+
+string Image::getPacsAETitle()
+{
+    return m_pacsAETitle;
 }
 
 Image::~Image()

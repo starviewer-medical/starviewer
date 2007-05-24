@@ -12,6 +12,7 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
     $${DCMTKINCLUDEDIR}/dcmsr \
     $${DCMTKINCLUDEDIR}/dcmjpeg
 
+
 LIBS += -L$${DCMTKLIBDIR} \
     -lsqlite3 \
     -ldcmnet \

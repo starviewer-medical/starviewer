@@ -18,10 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef STUDYMASK
-#define STUDYMASK
+#ifndef DICOMMASK
+#define DICOMMASK
+
+#include <QString>
+
 #define HAVE_CONFIG_H 1
 
+#include "const.h"
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h> //provide the OFcondition structure and his members
@@ -34,12 +38,12 @@ namespace udg{
 class Status;
 class string;
 
-class StudyMask
+class DicomMask
 {
 
 public:
 
-    StudyMask();
+    DicomMask();
 
     /** This action especified that in the search we want the Patient's Name
      * @param Name of the patient to search.
@@ -134,6 +138,12 @@ public:
      */
     Status setAccessionNumber(std::string);
 
+    /** Establei el ReferringPhysiciansName
+     * @param physiciansName
+     * @return estat del mètode
+     */
+    Status setReferringPhysiciansName( std::string physiciansName );
+
     /** Retorna de la màscara l'estudi UID
      * @param mask [in] màscara de la cerca
      * @return   Estudi UID que cerquem
@@ -200,18 +210,199 @@ public:
      */
     std::string getInstitutionName();
 
-    /** Return the generated search mask
-     * @return returns de search mask
+    /** retorna el ReferringPhysiciansName
+      * @return ReferringPhysiciansName
+      */
+    std:: string getReferringPhysiciansName();
+
+    /** This action especified in the search which series number we want to match
+     * @param seriesNumber' Number of the series to search. If this parameter is null it's supose that any mask is applied at this field
+     * @return estat del mètode
      */
-    DcmDataset* getMask();
+    Status setSeriesNumber(std:: string );
+
+    /** Aquest mètode especifica per quina data s'ha de buscar la serie. El format es YYYYMMDD
+     * Si passem una data sola, per exemple 20040505 només buscara sèries d'aquell dia
+     * Si passem una data amb un guio a davant, per exemple -20040505 , buscarà sèries fetes aquell dia o abans
+     * Si passem una data amb un guio a darrera, per exemple 20040505- , buscarà series fetes aquell dia, o dies posteriors
+     * Si passem dos dates separades per un guio, per exemple 20030505-20040505 , buscarà sèries fetes entre aquelles dos dates
+     * @param series data a cercar la sèrie
+     * @return estat del mètode
+     */
+    Status setSeriesDate(std::string date);
+
+     /** Especifica l'hora de la serie a buscar, les hores es passen en format HHMM
+      *         Si es buit busca per qualsevol hora.
+      *         Si se li passa una hora com 1753, buscarà series d'aquella hora
+      *         Si se li passa una hora amb guió a davant, com -1753 , buscarà sèries d'aquella hora o fetes abans
+      *         Si se li passa una hora amb guió a darrera, com 1753- , buscarà series fetes a partir d'aquella hora
+      *         Si se li passa dos hores separades per un guió, com 1223-1753 , buscarà series fetes entre aquelles hores
+      * @param Series Hora de la serie
+      * @retun estat del mètode
+      */
+    Status setSeriesTime(std::string);
+
+    /** This action especified that in the search we want the seriess description
+     * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
+     * @return estat del mètode
+     */
+    Status setSeriesDescription(std::string);
+
+    /** This action especified that in the search we want the series modality
+     * @param series modality the study to search. If this parameter is null it's supose that any mask is applied at this field
+     * @return estat del mètode
+     */
+    Status setSeriesModality(std::string);
+
+    /** This action especified that in the search we want to query the operator's name
+     * @param Operator's name. If this parameter is null it's supose that any mask is applied at this field
+     * @return estat del mètode
+     */
+    Status setSeriesOperator(std::string);
+
+    /** This action especified that in the search we want to query the body part examinated
+     * @param Body Part. If this parameter is null it's supose that any mask is applied at this field
+     * @return estat del mètode
+     */
+    Status setSeriesBodyPartExaminated(std::string);
+
+    /** This action especified that in the search we want to query the Protocol Name
+     * @param Protocol Name. If this parameter is null it's supose that any mask is applied at this field
+     * @return estat del mètode
+     */
+    Status setSeriesProtocolName(std::string);
+
+     /** This action especified that in the search we want the seriess description
+     * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
+     * @return estat del mètode
+     */
+    Status setSeriesUID(std::string date);
+
+    /** Estableix la seqüència per cercar per la requested atribute sequence.
+     * RequestAtrributeSequence està format pel RequestedProcedureID i el procedureStepID
+     * @param RequestedProcedureID Requested Procedure ID pel qual s'ha de cercar
+     * @param ScheduledProcedureStepID Scheduled Procedure Step ID pel qual s'ha de cercar
+     * @return estat del mètode
+     */
+    Status setRequestAttributeSequence( QString procedureID, QString procedureStepID );
+
+    /** Estableix la màscara de cerca del Perfomed Procedure Step Start date
+     * @param startDate Perfomed Procedure Step Start date pel qual cercar
+     * @return estat del mètode
+     */
+    Status setPPSStartDate( std::string startDate );
+
+    /** Estableix la màscara de cerca del Perfomed Procedure Step Start Time
+     * @param startTime Perfomed Procedure Step Start Time pel qual cercar
+     * @return estat del mètode
+     */
+    Status setPPStartTime( std:: string startTime );
+
+    /** Retorna el series Number
+     * @return   series Number
+     */
+    std::string getSeriesNumber();
+
+    /** Retorna la data de la sèrie
+     * @return   data de la sèrie
+     */
+    std::string getSeriesDate();
+
+    /** Retorna l'hora de la sèrie
+     * @return   hora de la sèrie
+     */
+    std::string getSeriesTime();
+
+    /** Retorna la descripcio de la sèrie
+     * @return descripcio de la serie
+     */
+    std::string getSeriesDescription();
+
+    /** Retorna la modalitat de la sèrie
+     * @return modalitat de la sèrie
+     */
+    std::string getSeriesModality();
+
+    /** Retorna l'operador que captat la serie
+     * @return operdor
+     */
+    std::string getSeriesOperator();
+
+    /** Retorna la part del cos examinada en la serie
+     * @return part del cos examinada
+     */
+    std::string getSeriesBodyPartExaminated();
+
+    /** Retorna el nom del protocol utiltizat la serie
+     * @return nom del protocol utilitzat a la seire
+     */
+    std::string getSeriesProtocolName();
+
+    /** Retorna l'uid de la serie
+     * @return SeriesUID
+     */
+    std::string getSeriesUID();
+
+    /** retorna el Requested procedures ID
+     * @return requesta procedure ID
+     */
+    std::string getRequestedProcedureID();
+
+    /** retorna el scheduled procedure step ID
+     * @return scheduled procedure step ID
+     */
+    std::string getScheduledProcedureStepID();
+
+    /** retorna el Perfomed Procedure Step Start date
+     * @return Perfomed Procedure Step Start date
+     */
+    std::string getPPSStartDate();
+
+    /** retorna el Perfomed Procedure Step Start Time
+     * @return Perfomed Procedure Step Start Time
+     */
+    std::string getPPSStartTime();
+
+    /** set the StudyId of the images
+     * @param   Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
+     * @return The state of the action
+     */
+    Status setImageNumber( std::string );
+
+    /** Estableix el instance UID de l'image
+     * @param SOPIntanceUID Instance UID de l'imatge
+     * @return estat del mètode
+     */
+    Status setSOPInstanceUID( std::string SOPInstanceUID);
+
+    /** Retorna el número d'imatge
+      * @return número d'imatge
+      */
+    std::string getImageNumber();
+
+    /** retorna el SOPInstance UID de l'imatge
+     * @return SOPInstance UID de l'imatge
+     */
+    std::string getSOPInstanceUID();
+
+    /** retorna a quin nivell es fa la màscara
+     */
+    std::string getRetrieveLevel();
+
+    DcmDataset* getDicomMask();
 
 private:
 
-   DcmDataset *m_mask;
+   //enum objectMask { StudyMask , SeriesMask , ImageMask };
+    enum ObjectMask { StudyMask , SeriesMask , ImageMask };
+    DcmDataset *m_mask;
+    ObjectMask m_objectMask;
 
-    /// This action especified that the query search, will use the retrieve level Study. For any doubts about this retrieve level and the query/retrieve fields, consult DICOMS's documentation in Chapter 4, C.6.2.1
-   void retrieveLevel();
+    /** En funció de per quins elements establim que hem de crear la màscara el retrieve estableix un nivell o altre de cercar
+    * @param retrieveLevel retrieve level amb que ataquem al PACS
+    */
+    void retrieveLevel( ObjectMask retrieveLevel);
 };
 
-}; //end namespace
+} //end namespace
 #endif

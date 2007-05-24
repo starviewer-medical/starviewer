@@ -14,7 +14,7 @@ namespace udg {
 class Study;
 class Status;
 class StudyList;
-class StudyMask;
+class DicomMask;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -47,12 +47,20 @@ public:
      */
     Status insertStudy( Study * );
 
+     /*  Insereix estudi
+     *
+     * @param Study[in]  Informació de l'estudi
+     * @return retorna l'estat de l'inserció
+     */
+    Status insertStudyDicomdir( Study * );
+
+
     /** Cerca els estudis que compleixen la màscara a la caché
      * @param Màscara de la cerca
      * @param StudyList amb els resultats
      * @return retorna estat del mètode
      */
-    Status queryStudy( StudyMask mask , StudyList &list );
+    Status queryStudy( DicomMask mask , StudyList &list );
 
     /** Cerca l'estudi que compleix amb la màscara de cerca. Cerca ens els estudis que estan en estat Retrived o Retrieving
      * @param  Màscara de  la cerca
@@ -106,6 +114,12 @@ public:
      */
     Status setStudyRetrieved( std::string studyUID );
 
+    /** Updata les dades de l'estudi i pacient que se li passa per paràmetre. El campl clau per buscar l'estudi a actualitzar és l'UID
+     *
+     * @param updateStudy
+     * @return
+     */
+    Status updateStudy( Study updateStudy );
 
     ~CacheStudyDAL();
 
@@ -115,7 +129,7 @@ private :
      * @param mascara de cerca
      * @return retorna estat del mètode
      */
-    std::string buildSqlQueryStudy( StudyMask *studyMask );
+    std::string buildSqlQueryStudy( DicomMask *studyMask );
 
     /** Converteix l'asterisc, que conte el tag origen per %, per transformar-lo a la sintaxis de sql
      * @param string original
@@ -138,7 +152,7 @@ private :
      * @param màscara
      * @return sentència sql
      */
-    std::string buildSqlStudyModality( StudyMask * mask );
+    std::string buildSqlStudyModality( DicomMask * mask );
 
 };
 }

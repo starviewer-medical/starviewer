@@ -45,8 +45,10 @@ signals :
 
     /** signal que s'emet cap a QueryScreen quant s'ha descarregat la primera serie d'un estudi per a que pugui ser visualitzat
      * @param studyUID UID de l'estudi a visualitzar
+     * @param seriesUID de la imatge a visualitzar
+     * @param imageUID de l'imatge a visualitzar
      */
-    void viewStudy( QString studyUID );
+    void viewStudy( QString studyUID , QString seriesUID , QString imageUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'està descarregant
      * @param studyUID UID de l'estudi que s'està descarregant
@@ -97,11 +99,6 @@ signals :
 
 private slots :
 
-    /** Si la operacio es un view, emet un signal per indicar que ja es pot obrir la primera serie de l'estudi
-      *     @param studyUID de l'estudi a descarregar
-      */
-     void firstSeriesRetrieved( QString );
-
     /** Emet un singnal cap al queryscreen per indicar que s'ha descarregat una imatge
       *     @param UID de l'estudi
       *     @param número d'imatge
@@ -144,6 +141,7 @@ private :
      * @return llista amb el path de totes les imatges que es vol guardar en el PACS
      */
     Status imagesPathToStore( QString studyUID , ImageList &imageList );
+
 };
 
 }

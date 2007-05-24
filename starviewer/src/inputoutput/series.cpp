@@ -1,10 +1,85 @@
 #include "series.h"
+#include "dcsequen.h"
 
 namespace udg{
 
 Series::Series()
 {
     m_imageNumber = 0;
+}
+
+Series::Series(DcmDataset *seriesDataset)
+{
+    const char *text;
+    string path;
+
+    //set the series number
+    seriesDataset->findAndGetString( DCM_SeriesNumber , text , false );
+    if ( text != NULL ) setSeriesNumber( text );
+
+    //set series date
+    seriesDataset->findAndGetString( DCM_SeriesDate , text , false );
+    if ( text != NULL ) setSeriesDate( text );
+
+    //set series description
+    seriesDataset->findAndGetString( DCM_SeriesDescription , text , false );
+    if ( text != NULL ) setSeriesDescription( text );
+
+    //set Study UID
+    seriesDataset->findAndGetString( DCM_StudyInstanceUID , text , false );
+    if ( text != NULL )
+    {
+        setStudyUID( text );
+        path.insert( 0 , text );
+        path.append( "/" );
+    }
+    //set series modality
+    seriesDataset->findAndGetString( DCM_Modality , text , false );
+    if ( text != NULL ) setSeriesModality( text );
+
+    //set series time
+    seriesDataset->findAndGetString( DCM_SeriesTime ,text , false );
+    if ( text != NULL ) setSeriesTime( text );
+
+    //set series UID
+    seriesDataset->findAndGetString( DCM_SeriesInstanceUID , text , false );
+    if ( text != NULL )
+    {
+        setSeriesUID( text );
+        path.append( text );
+        path.append( "/" );
+    }
+
+    seriesDataset->findAndGetString( DCM_BodyPartExamined , text , false );
+    if ( text != NULL ) setBodyPartExaminated( text );
+
+    seriesDataset->findAndGetString(DCM_ProtocolName , text , false );
+    if ( text != NULL ) setProtocolName( text );
+
+    seriesDataset->findAndGetString( DCM_OperatorsName , text , false );
+    if ( text != NULL ) setOperatorName( text );
+
+    seriesDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
+    if ( text != NULL ) setPacsAETitle( text );
+
+    DcmSequenceOfItems *requestAttributesSequence;
+    seriesDataset->findAndGetSequence( DCM_RequestAttributesSequence , requestAttributesSequence , false );
+    if ( requestAttributesSequence != NULL )
+    {
+        DcmItem * itemsSequence = requestAttributesSequence->getItem( 0 );
+
+        itemsSequence->findAndGetString( DCM_ScheduledProcedureStepID , text , false );
+        if ( text != NULL ) setScheduledProcedureStepID( text );
+
+        itemsSequence->findAndGetString( DCM_RequestedProcedureID , text , false );
+        if ( text != NULL )  setRequestedProcedureID( text );
+    }
+
+    seriesDataset->findAndGetString( DCM_PerformedProcedureStepStartDate , text , false );
+    if ( text != NULL ) setPPSStartDate( text );
+
+    seriesDataset->findAndGetString( DCM_PerformedProcedureStepStartTime , text , false );
+    if ( text != NULL ) setPPSStartTime( text );
 }
 
 /** This operator helps to us to sort the serieslist in oder by Series Number
@@ -94,6 +169,32 @@ void Series::setImageNumber( int iNumber )
     m_imageNumber = iNumber;
 }
 
+void Series::setPacsAETitle( std::string AETitlePACS )
+{
+    m_seriesAETitlePACS.erase();
+    m_seriesAETitlePACS.insert( 0 , AETitlePACS );
+}
+
+void Series::setRequestedProcedureID( std::string requestedProcedureID )
+{
+    m_requestedProcedureID = requestedProcedureID;
+}
+
+void Series::setScheduledProcedureStepID( std::string scheduledProcedureID )
+{
+    m_scheduledProcedureStepID = scheduledProcedureID;
+}
+
+void Series::setPPSStartDate( std::string startDate )
+{
+    m_ppsStartDate = startDate;
+}
+
+void Series::setPPSStartTime( std::string startTime )
+{
+    m_ppsStartTime = startTime;
+}
+
 /**********************************************************************************************************************/
 /*                                    GET SERIES FIELDS                                                               */
 /**********************************************************************************************************************/
@@ -156,6 +257,31 @@ std::string Series::getSeriesPath()
 int Series::getImageNumber()
 {
     return m_imageNumber;
+}
+
+std::string Series::getRequestedProcedureID()
+{
+    return m_requestedProcedureID;
+}
+
+std::string Series::getScheduledProcedureStepID()
+{
+    return m_scheduledProcedureStepID;
+}
+
+std::string Series::getPPSStartDate()
+{
+    return m_ppsStartDate;
+}
+
+std::string Series::getPPStartTime()
+{
+    return m_ppsStartTime;
+}
+
+std::string Series::getPacsAETitle()
+{
+    return m_seriesAETitlePACS;
 }
 
 }

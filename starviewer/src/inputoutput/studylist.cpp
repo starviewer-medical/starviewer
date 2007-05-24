@@ -46,20 +46,32 @@ bool StudyList::end()
     else return m_iterator == m_listStudy.end();
 }
 
-bool StudyList::findStudy( std::string UID )
+bool StudyList::exists( std::string UID , std::string AETitlePacs )
 {
     sem_wait( m_semafor );
     m_iterator = m_listStudy.begin();
 
-    while ( m_iterator != m_listStudy.end() )
+    if ( AETitlePacs == "" ) // si no ens passen un AETitle, al hora de mirar si un estudi existeix un estudi a la llista, no discriminem per AETitle, només per UID
     {
-        if ( (*m_iterator).getStudyUID() == UID ) break;
-        else m_iterator++;
+        while ( m_iterator != m_listStudy.end() )
+        {
+
+            if ( (*m_iterator).getStudyUID() == UID ) break;
+            else m_iterator++;
+        }
+    }
+    else // si ens passen AETitle, al hora de comprovar si un estudi està a la llista discriminem per UID i AETitle
+    {
+        while ( m_iterator != m_listStudy.end() )
+        {
+
+            if ( (*m_iterator).getStudyUID() == UID && (*m_iterator).getPacsAETitle() == AETitlePacs ) break;
+            else m_iterator++;
+        }
     }
 
     sem_post( m_semafor );
     return ( m_iterator != m_listStudy.end() );
-
 }
 
 Study StudyList::getStudy()
@@ -74,7 +86,9 @@ int StudyList::count()
 
 void StudyList::clear()
 {
+    sem_wait( m_semafor );
     m_listStudy.clear();
+    sem_post( m_semafor );
 }
 
 }

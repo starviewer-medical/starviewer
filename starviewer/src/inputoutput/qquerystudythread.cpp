@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "qquerystudythread.h"
 #include "pacsserver.h"
-#include "querystudy.h"
+#include "querypacs.h"
 #include "status.h"
 #include "logging.h"
 
@@ -18,7 +18,7 @@ QQueryStudyThread::QQueryStudyThread(QObject *parent)
 
 }
 
-void QQueryStudyThread::queryStudy( PacsParameters param , StudyMask mask )
+void QQueryStudyThread::queryStudy( PacsParameters param , DicomMask mask )
 {
     m_param = param;
     m_mask = mask;
@@ -31,11 +31,11 @@ void QQueryStudyThread::run()
     Status state;
     QString missatgeLog;
     //creem la connexió
-    PacsServer server(m_param);
+    PacsServer serverSCP(m_param);
 
     INFO_LOG( infoLogInitialitzedThread().toAscii().constData() );
 
-    state = server.connect( PacsServer::query,PacsServer::studyLevel );
+    state = serverSCP.connect( PacsServer::query,PacsServer::studyLevel );
 
     if ( !state.good() )
     {
@@ -51,10 +51,11 @@ void QQueryStudyThread::run()
     else
     {
         //creem l'objecte fer la query
-        QueryStudy qs( server.getConnection() , m_mask );
+        QueryPacs queryPacsStudy;
 
+        queryPacsStudy.setConnection( serverSCP.getConnection() );
         //busquem els estudis
-        state = qs.find();
+        state = queryPacsStudy.query( m_mask );
 
         if (! state.good() )
         {
@@ -72,7 +73,7 @@ void QQueryStudyThread::run()
         INFO_LOG ( missatgeLog.toAscii().constData() );
 
         //desconnectem
-        server.disconnect();
+        serverSCP.disconnect();
         exit( 0 );
     }
 }

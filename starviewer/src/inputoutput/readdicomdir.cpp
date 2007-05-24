@@ -16,7 +16,7 @@
 #include "studylist.h"
 #include "series.h"
 #include "serieslist.h"
-#include "studymask.h"
+#include "dicommask.h"
 #include "image.h"
 #include "imagelist.h"
 
@@ -47,7 +47,7 @@ Status ReadDicomdir::open( std::string dicomdirPath )
 }
 
 //El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que conté n series, i que conté n imatges, per llegir la informació hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent així fins arribar al nivell de baix de tot, les imatges,
-Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
+Status ReadDicomdir::readStudies( StudyList &studyList , DicomMask studyMask )
 {
     Status state;
 
@@ -97,6 +97,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
             studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
             study.setStudyUID( text.c_str() );
 
+
             if ( matchStudyMask( study , studyMask ) ) //comprovem si l'estudi compleix la màscara de cerca que ens han passat
             {
                 studyList.insert( study );
@@ -112,7 +113,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , StudyMask studyMask )
 }
 
 //Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada trobat, podrem accedir a la seva informacio de la sèrie
-Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
+Status ReadDicomdir::readSeries( std::string studyUID , std::string seriesUID , SeriesList &seriesList )
 {
     Status state;
 
@@ -150,34 +151,39 @@ Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
     if ( trobat )//si hem trobat l'estudi amb el UID que cercàvem
     {
         DcmDirectoryRecord *seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
+
+        series.setStudyUID( studyUID );
+
         while ( seriesRecord != NULL )
         {
-            //Número de sèrie
-            seriesRecord->findAndGetOFStringArray( DCM_SeriesNumber , text );
-            series.setSeriesNumber( text.c_str() );
-
             //UID Serie
             seriesRecord->findAndGetOFStringArray( DCM_SeriesInstanceUID , text );
             series.setSeriesUID( text.c_str() );
 
-            //Modalitat sèrie
-            seriesRecord->findAndGetOFStringArray( DCM_Modality , text );
-            series.setSeriesModality( text.c_str() );
+            if ( series.getSeriesUID() == seriesUID || seriesUID.length() == 0)
+            {
+                //Número de sèrie
+                seriesRecord->findAndGetOFStringArray( DCM_SeriesNumber , text );
+                series.setSeriesNumber( text.c_str() );
 
-            //Per obtenir el directori de les series, no hi ha cap més manera que accedir. a la primera imatge de la serie i consultar-ne el directori
+                //Modalitat sèrie
+                seriesRecord->findAndGetOFStringArray( DCM_Modality , text );
+                series.setSeriesModality( text.c_str() );
 
-            DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 );
+                //Per obtenir el directori de les series, no hi ha cap més manera que accedir. a la primera imatge de la serie i consultar-ne el directori
 
-            //Path de la imatge ens retorna el path absolut respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
-            imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );
-            seriesPath.clear();
-            seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
-            seriesPath = replaceBarra( seriesPath );
-            seriesPath = seriesPath.substr( 0 , seriesPath.rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
-            series.setSeriesPath( seriesPath.c_str() );
+                DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 );
 
-            seriesList.insert( series );//inserim a la llista de sèrie
+                //Path de la imatge ens retorna el path absolut respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
+                imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );
+                seriesPath.clear();
+                seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
+                seriesPath = replaceBarra( seriesPath );
+                seriesPath = seriesPath.substr( 0 , seriesPath.rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
+                series.setSeriesPath( seriesPath.c_str() );
 
+                seriesList.insert( series );//inserim a la llista de sèrie
+            }
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi
         }
     }
@@ -185,7 +191,7 @@ Status ReadDicomdir::readSeries( std::string studyUID , SeriesList &seriesList )
     return state.setStatus( m_dicomdir->error() );
 }
 
-Status ReadDicomdir::readImages( std::string seriesUID , ImageList &imageList )
+Status ReadDicomdir::readImages( std::string seriesUID , std::string sopInstanceUID , ImageList &imageList )
 {
     Status state;
 
@@ -205,7 +211,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , ImageList &imageList )
     {
         studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
 
-        while (  studyRecord != NULL && !trobat )//accedim a niell estudi
+        while (  studyRecord != NULL && !trobat )//accedim a nivell estudi
         {
             seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
             while ( seriesRecord != NULL && !trobat )//accedim a nivell
@@ -233,26 +239,30 @@ Status ReadDicomdir::readImages( std::string seriesUID , ImageList &imageList )
     if ( trobat )//si hem trobat la sèrie amb el UID que cercàvem
     {
         DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
+
         while ( imageRecord != NULL )
         {
             //SopUid Image
-            imageRecord->findAndGetOFStringArray( DCM_ReferencedSOPInstanceUID , text );
-            image.setSoPUID( text.c_str() );
+            imageRecord->findAndGetOFStringArray( DCM_ReferencedSOPInstanceUIDInFile , text );
+            image.setSOPInstanceUID( text.c_str() );
 
-            //Instance Number (Número d'imatge
-            imageRecord->findAndGetOFStringArray( DCM_InstanceNumber , text );
-            image.setImageNumber( atoi( text.c_str() ) );
+            if ( sopInstanceUID.length() == 0 || sopInstanceUID == image.getSOPInstanceUID() )
+            {
+                //Instance Number (Número d'imatge
+                imageRecord->findAndGetOFStringArray( DCM_InstanceNumber , text );
+                image.setImageNumber( atoi( text.c_str() ) );
 
-             //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
-            imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
-            imagePath.clear();
-            //creem el path absolut
-            imagePath.insert( 0 , m_dicomdirAbsolutePath );
-            imagePath.append( "/" ),
-            imagePath.append( replaceBarra ( text.c_str() ) );
-            image.setImagePath( imagePath.c_str() );
+                //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
+                imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
+                imagePath.clear();
+                //creem el path absolut
+                imagePath.insert( 0 , m_dicomdirAbsolutePath );
+                imagePath.append( "/" ),
+                imagePath.append( replaceBarra ( text.c_str() ) );
+                image.setImagePath( imagePath.c_str() );
 
-            imageList.insert( image );//inserim a la llista la imatge*/
+                imageList.insert( image );//inserim a la llista la imatge*/
+            }
 
             imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
         }
@@ -267,7 +277,7 @@ std::string ReadDicomdir::getDicomdirPath()
 }
 
 //Per fer el match seguirem els criteris del PACS
-bool ReadDicomdir::matchStudyMask( Study study , StudyMask studyMask )
+bool ReadDicomdir::matchStudyMask( Study study , DicomMask studyMask )
 {
     if ( !matchStudyMaskStudyId( studyMask.getStudyId() , study.getStudyId() ) ) return false;
 
@@ -289,7 +299,8 @@ bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: s
     if ( studyMaskStudyId.length() > 0 )
     { //si hi ha màscara d'estudi Id
       //el id de l'estudi, des de la classe query screen el guardem a la màscara es amb format '*StudyID*'. Els '*' s'han de treure
-        studyMaskStudyId = upperString( studyMaskStudyId.substr( 1 , studyMaskStudyId.length() - 2 ) );
+        studyMaskStudyId = upperString( studyMaskStudyId );
+        studyStudyId = upperString( studyStudyId );
 
         if ( studyStudyId.find( studyMaskStudyId ) ==  std::string::npos )
         {
@@ -328,7 +339,8 @@ bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std
     { //si hi ha màscara Patient Id
       //el id del pacient, des de la classe query screen el guardem a la màscara es amb format '*PatientID*'. Els '*' s'han de treure
 
-        studyMaskPatientId = upperString( studyMaskPatientId.substr( 1 , studyMaskPatientId.length() - 2 ) );
+        studyMaskPatientId = upperString( studyMaskPatientId );
+        studyPatientId = upperString(  studyPatientId );
 
         if ( studyPatientId.find( studyMaskPatientId ) ==  std::string::npos )
         {
@@ -401,24 +413,19 @@ bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName ,
     std:: string lastPatientName , firstPatientName;
 
     if ( studyMaskPatientName.length() > 0 )
-    { //En Pacs la màscara del nom té el següent format Cognoms*Nom*
+    {
       //Seguint els criteris del PACS la cerca es fa en wildcard, és a dir no cal que els dos string sigui igual mentre que la màscara del nom del pacient estigui continguda dins studyPatientName n'hi ha suficient
         studyMaskPatientName = upperString( studyMaskPatientName );
-        lastPatientName = studyMaskPatientName.substr( 0 , studyMaskPatientName.find_first_of ( "*" ) );
+        studyPatientName = upperString( studyPatientName );
 
-        if ( lastPatientName.length() > 0)
+        if ( studyPatientName.find( studyMaskPatientName ) )
         {
-            if ( studyPatientName.find ( lastPatientName ) == std::string::npos ) return false; //comprovem si el nom del pacient conte el cognom
+            return false;
         }
-
-        if ( studyMaskPatientName.find_first_of( "*" ) < studyMaskPatientName.length() ) //si la màscara també contem el nom del pacient
+        else
         {
-            firstPatientName = studyMaskPatientName.substr( studyMaskPatientName.find_first_of ( "*" ) + 1 , studyMaskPatientName.length() - studyMaskPatientName.find_first_of ( "*" ) -2 );  //ignorem el * de final del Nom
-
-            if ( studyPatientName.find ( firstPatientName ) == std::string::npos ) return false;
+            return true;
         }
-
-        return true;
     }
 
     return true;

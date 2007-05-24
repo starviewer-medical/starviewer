@@ -19,7 +19,7 @@ class Status;
 class StudyList;
 class SeriesList;
 class ImageList;
-class StudyMask;
+class DicomMask;
 class Study;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
@@ -42,21 +42,21 @@ public:
       * @param studyMask màscara de cerca dels estudis a cercar dins el dicomdir
       * @return estat del mètode
       */
-    Status readStudies( StudyList &studyList , StudyMask studyMask );
+    Status readStudies( StudyList &studyList , DicomMask studyMask );
 
     /** Retorna la llista de sèries d'un estudi que estigui en el dicomdir
      * @param studyUID UID de l'estudi del qual es vol consultar les sèries
      * @param seriesList llista amb les sèries que conté l'estudi
      * @return estat del mètode
      */
-    Status readSeries ( std::string studyUID , SeriesList  &serieList );
+    Status readSeries ( std::string studyUID , std::string seriesUID , SeriesList  &serieList );
 
     /** Retorna la llista d'imatges que conté un estudi
      * @param seriesUID UID de la serie que volem obtenir les imatges
      * @param imageList Llistat de les imatges que conté
      * @return estat del mètode
      */
-    Status readImages( std::string seriesUID , ImageList &imageList );
+    Status readImages( std::string seriesUID , std::string sopInstanceUID , ImageList &imageList );
 
     /** Retorna el path del dicomdir
      * @return path del dicomdir
@@ -75,7 +75,7 @@ private :
      * @param studyMask màscara de l'estudi
      * @return cert si l'estudi complei la màscara
      */
-    bool matchStudyMask( Study study , StudyMask studyMask );
+    bool matchStudyMask( Study study , DicomMask studyMask );
 
     /** Comprova que els dos StudyId el de la màscara i el de l'estudi siguin iguals. Si l'estudi Id de la màscara està buit, per defecte retorna cert
      * @param studyMaskStudyId studyId de la màscara

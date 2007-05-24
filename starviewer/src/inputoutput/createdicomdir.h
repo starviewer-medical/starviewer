@@ -41,6 +41,12 @@ private:
 
     DicomDirInterface::E_ApplicationProfile m_optProfile;
 
+
+    /** Crea un missatge d'error per un fitxer que no s'ha pogut convertir a DicomDir
+     * @param imagePath path de la imatge que dona l'error
+     */
+    void errorConvertingFile( std::string imagePath );
+
 };
 
 }

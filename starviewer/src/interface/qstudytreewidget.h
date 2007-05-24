@@ -31,8 +31,11 @@ namespace udg {
 */
 
 class StudyList;
-class Series;
 class Study;
+class SeriesList;
+class Series;
+class ImageList;
+class Image;
 
 class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
 {
@@ -52,10 +55,25 @@ public:
      */
     void insertStudy( Study * );
 
+    /** Insereix un llista de sèries a l'estudi seleccionat actualment
+     * @param seriesList series afegir
+     */
+    void insertSeriesList( SeriesList *seriesList );
+
     /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
-     *                    @param informació de la serie
+     *@param informació de la serie
      */
     void insertSeries( Series *serie );
+
+    /** Insereix una llista d'imatges a la sèrie seleccionada actualment
+     * @param imageList llista d'imatges afegir a la sèrie
+     */
+    void insertImageList( ImageList *imageList );
+
+    /** Insereix una image a la sèrie que està seleccionada
+     * @param image imatge a afegir
+     */
+    void insertImage( Image *image );
 
     /** removes study from the list
      * @param esbora l'estudi amb StudyUID de la llista
@@ -70,17 +88,22 @@ public:
     /** Retorna el AETitle del PACS  l'estudi seleccionat
      * @return AETitle del PACS de l'estudi seleccionat
      */
-    QString getSelectedStudyPacsAETitle();
+    QString getSelectedPacsAETitle();
 
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat
      */
     QString getSelectedStudyUID();
 
-    /** Retorna el UID Study de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
+    /** Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
      *  @return UID de la sèrie seleccionat
      */
     QString getSelectedSeriesUID();
+
+        /** Retorna el UID de la imatge seleccionada, si en aquell moment no hi ha cap imatge seleccionada, retorna un QString buit
+     *  @return UID de la imatge seleccionada
+     */
+    QString getSelectedImageUID();
 
     /// guarda de la mida de les columnes
     void saveColumnsWidth();
@@ -101,7 +124,9 @@ protected:
 
 signals :
     ///que s'activa al fer click sobre un estudi, demanem a la queryScreen que busqui la informacio de les series d'aquell estudi
-    void expand( QString , QString );
+    void expandStudy( QString , QString );
+
+    void expandSeries( QString AETitlePACS, QString StudyUID, QString SeriesUID );
 
     ///signal que s'emet quan es vol descarregar l'estudi seleccionat a la QStudyTreeView
     void retrieve();
@@ -134,12 +159,14 @@ public slots:
      */
     void selectedSeriesIcon( QString );
 
-    /** Quant seleccionem una serie de la llista, emiteix un signal cap al QSeriesListWidget per a que hi seleccioni la serie, seleccionada, a mes si clickem sobre un estudi expandid, s'ha de tornar a recarregar el QSeriesListWidget amb les series d'aquell estudi també en el QSeriesListWidget
+    /** Quant seleccionem una objecte de la llista, emet un signal cap SeriesListWidget, perque visualitzi
+     * totes les series de l'objecte
      * @param item sobre el que s'ha fet click
      */
     void clicked( QTreeWidgetItem * , int );
 
-    /**  Si fem doble click a una serie del TreeView es visualitzarà si és una sèrie, o si és un estudi es mostraran les series o s'amagaran si abans es mostraven
+    /**  Al fer doble click sobre un objecte de la llista l'expandeix o retreu en funcio de si esta
+     * expandit o retre
      * @param item sobre el que s'ha fet click
      */
     void doubleClicked( QTreeWidgetItem * , int );
@@ -147,8 +174,8 @@ public slots:
     /// Neteja el TreeView
     void clear( );
 
-    /// Slot que descarrega un estudi
-    void retrieveStudy( );
+    /// Slot que descarrega imatges
+    void retrieveImages( );
 
     /// ESborra un estudi de la caché
     void deleteStudy( );
@@ -182,16 +209,6 @@ private :
      */
     void setSeriesToSeriesListWidget( QTreeWidgetItem *item );
 
-    /** Expandeix l'estudi i mostra la llista series
-     * @param item a expandir
-     */
-    void expand( QTreeWidgetItem * );
-
-    /** Formata el nom
-     * @param Nom i cognoms del pacient
-     */
-    QString formatName( const std::string );
-
     /** formata l'edat per mostrar per pantalla
      * @param edat
      */
@@ -206,6 +223,13 @@ private :
      * @param Hora de l'estudi
      */
     QString formatHour( const std::string );
+
+    /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
+     * un mateix estudi pot estar a més d'un PACS
+     * @param studyUID uid de l'estudi a cercar
+     * @param AETitle AEtitle de la màquina on està l'estudi
+     */
+    QTreeWidgetItem* getStudyItem( std::string studyUID , std::string AETitle );
 };
 
 }; // end namespace

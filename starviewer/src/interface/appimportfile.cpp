@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QFileInfo>
 #include <QProgressDialog>
+#include <QMessageBox>
 // recursos
 #include "volumerepository.h"
 #include "input.h"
@@ -21,7 +22,6 @@ AppImportFile::AppImportFile(QObject *parent, const char *name)
  : QObject( parent )
 {
     this->setObjectName( name );
-    m_openFileFilters = tr("MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
 
     m_volumeRepository = udg::VolumeRepository::getRepository();
     m_inputReader = new udg::Input;
@@ -44,28 +44,54 @@ AppImportFile::~AppImportFile()
 
 bool AppImportFile::open()
 {
-    bool ok = true;
+    bool openedImage = false;
 
-    QString fileName = QFileDialog::getOpenFileName( 0 , tr("Chose an image filename") ,  m_workingDirectory, m_openFileFilters );
+    const QString PresentationStateFilter("Presentation State (*)"), KeyImageNoteFilter("Key Image Note (*)");
+    const QString ResultFileFilter("Result (*.res)");
+    const QString MetaIOImageFilter("MetaIO Image (*.mhd)"), DICOMImageFilter("DICOM Images (*.dcm)"), AllFilesFilter("All Files (*)");
+    QStringList imagesFilter;
+    imagesFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
+
+    QString fileFilter = MetaIOImageFilter + ";;" + DICOMImageFilter + ";;";
+    fileFilter += PresentationStateFilter + ";;" + KeyImageNoteFilter + ";;" + ResultFileFilter + ";;" + AllFilesFilter;
+
+    QString selectedFilter, fileName;
+    fileName = QFileDialog::getOpenFileName( NULL, tr("Choose a file to open..."), m_workingDirectory, fileFilter , &selectedFilter );
 
     if ( !fileName.isEmpty() )
     {
-        if( loadFile( fileName ) )
+        INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter) );
+        if (imagesFilter.contains(selectedFilter))
         {
-            // cal informar a l'aplicació de l'id del volum
-            // la utilitat
-            m_workingDirectory = QFileInfo( fileName ).dir().path();
-            writeSettings();
-            m_lastOpenedFilename = fileName;
-            INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName ) );
+            if( loadFile( fileName ) )
+            {
+                // cal informar a l'aplicació de l'id del volum
+                // la utilitat
+                m_lastOpenedFilename = fileName;
+                openedImage = true;
+            }
+            else
+            {
+                QMessageBox::critical( 0, tr("Error"), tr("Cannot read this File or File Format is wrong") );
+            }
+        }
+        else if (selectedFilter == KeyImageNoteFilter)
+        {
+            emit openKeyImageNote(fileName);
+        }
+        else if (selectedFilter == PresentationStateFilter)
+        {
+            emit openPresentationState(fileName);
         }
         else
-            ok = false;
+        {
+            ERROR_LOG("Cas no tractat al obrir un fitxer");
+        }
+        m_workingDirectory = QFileInfo( fileName ).dir().path();
+        writeSettings();
     }
-    else
-        ok = false;
 
-    return ok;
+    return openedImage;
 }
 
 bool AppImportFile::openDirectory()
@@ -90,41 +116,38 @@ bool AppImportFile::openDirectory()
     return ok;
 }
 
-bool AppImportFile::loadFile( QString fileName )
+int AppImportFile::loadFile( QString fileName )
 {
-    bool ok = true;
-
-    if( m_inputReader->openFile( fileName.toLatin1() ) )
+    int errorCode;
+    errorCode = m_inputReader->openFile( fileName.toLatin1() );
+    switch( errorCode )
     {
-        // afegim el nou volum al repositori
+    case Input::NoError:
         m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
+        break;
+    case Input::InvalidFileName:
+        break;
+    case Input::SizeMismatch:
+        break;
     }
-    else
-    {
-        // no s'ha pogut obrir l'arxiu per algun motiu
-        ERROR_LOG( qPrintable( "No s'ha pogut obrir el fitxer: " + fileName ) );
-        ok = false;
-    }
-
-    return ok;
+    return errorCode;
 }
 
-bool AppImportFile::loadDirectory( QString directoryName )
+int AppImportFile::loadDirectory( QString directoryName )
 {
-    bool ok = true;
-
-    if( m_inputReader->readSeries( directoryName.toLatin1() ) )
+    int errorCode;
+    errorCode = m_inputReader->readSeries( directoryName.toLatin1() );
+    switch( errorCode )
     {
-        // afegim el nou volum al repositori
-        m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
+    case Input::NoError:
+        m_volumeID = m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
+        break;
+    case Input::InvalidFileName:
+        break;
+    case Input::SizeMismatch:
+        break;
     }
-    else
-    {
-        ERROR_LOG( qPrintable( "No s'ha pogut obrir el directori: " + directoryName ) );
-        ok = false;
-    }
-
-    return ok;
+    return errorCode;
 }
 
 const char *AppImportFile::getLastOpenedFilename()

@@ -13,7 +13,7 @@ class string;
 
 namespace udg {
 
-class ImageMask;
+class DicomMask;
 class Status;
 class Image;
 
@@ -39,27 +39,30 @@ public:
      * @param llistat amb les imatges trobades
      * @return retorna estat del mètode
      */
-    Status queryImages( ImageMask mask , ImageList &list );
+    Status queryImages( DicomMask mask , ImageList &list );
 
     /** compta les imatges d'una sèrie
-     * @param imageMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie
+     * @param dicomMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie
      * @param imageNumber conte el nombre d'imatges
      * @return retorna estat del mètode
      */
-    Status countImageNumber( ImageMask mask , int &imageNumber );
+    Status countImageNumber( DicomMask mask , int &imageNumber );
 
     /** compta lo que ocupen les imatges que compleixen la màscara de cerca
-     * @param imageMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie
+     * @param dicomMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie
      * @param size Mida de les imatges que compleixen la màscara en bytes
      * @return retorna estat del mètode
      */
-    Status imageSize( ImageMask mask , unsigned long &size );
+    Status imageSize( DicomMask mask , unsigned long &size );
 
 
     /** Esborra les imatges que tinguin el studyUID passat per paràmetre
       * @param studyUID StudyUID de les imatges a esborrar
       */
     Status deleteImages( std::string studyUID );
+
+    ///comprova si existeix una imatge
+    Status existImage( DicomMask mask, bool &exist );
 
     ~CacheImageDAL();
 
@@ -69,20 +72,22 @@ private :
      * @param mask màscara de cerca
      * @return sentència sql
      */
-    std::string buildSqlQueryImages( ImageMask *imageMask );
+    std::string buildSqlQueryImages( DicomMask *dicomMask );
 
     /** Construiex la sentència sql per comptar el nombre d'imatges de la sèrie d'un estudi
      * @param mask màscara per construir la sentència sql
      * @return retorna la sentència Sql
      */
-    std::string buildSqlCountImageNumber( ImageMask *imageMask );
+    std::string buildSqlCountImageNumber( DicomMask *dicomMask );
 
     /** Construiex la sentència sql per comptar el tamany ocupat per les imatges que compleixen la màscara
      * @param mask màscara per construir la sentència sql
      * @return retorna la sentència Sql
      */
-    std::string buildSqlSizeImage( ImageMask *imageMask );
+    std::string buildSqlSizeImage( DicomMask *dicomMask );
 
+    //sentencia per si existeix imatge
+    std::string buildSqlExistImage( DicomMask *imageMask );
 
 };
 

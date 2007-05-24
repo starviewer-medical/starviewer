@@ -516,6 +516,11 @@ void PacsServer:: setPacs( PacsParameters p )
     m_pacs = p;
 }
 
+PacsParameters PacsServer::getPacs()
+{
+    return m_pacs;
+}
+
 PacsConnection PacsServer:: getConnection()
 {
     PacsConnection connection;

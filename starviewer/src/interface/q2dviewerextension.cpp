@@ -10,8 +10,15 @@
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
+#include "volumesourceinformation.h"
 #include <QAction>
 #include <QSettings>
+// EXTRA!!! \TODO es temporal
+#include <QFileDialog>
+#include <QDebug>
+#include "keyimagenote.h"
+#include "q2dviewerkeyimagenoteattacher.h"
+#include "q2dviewerpresentationstateattacher.h"
 // VTK
 #include <vtkRenderer.h>
 #include "slicing2dtool.h"
@@ -19,12 +26,16 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_presentationStateAttacher(0)
 {
     setupUi( this );
     m_mainVolume = 0;
     m_secondaryVolume = 0;
-    
+    m_keyImageNoteAttacher1 = m_keyImageNoteAttacher2 = NULL;
+    m_keyImageNote = NULL;
+
+    m_synchroCheckBox->setVisible( false );
+    m_chooseSeriePushButton->setText( tr("") );
     readSettings();
     createActions();
     createConnections();
@@ -82,6 +93,14 @@ void Q2DViewerExtension::createActions()
     viewActionGroup->addAction( m_doubleViewAction );
     m_singleViewAction->setChecked( true );
 
+    // per activar i desactivar els presentation states
+    m_presentationStateAction = new QAction( 0 );
+    m_presentationStateAction->setText( tr("PS") );
+    m_presentationStateAction->setStatusTip( tr("Enable/Disable the current attached") );
+    m_presentationStateAction->setCheckable( true );
+    m_presentationStateAction->setEnabled(false);
+    m_presentationStateAction->setChecked(false);
+    m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
     // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
     m_voxelInformationAction = new QAction( 0 );
     m_voxelInformationAction->setText( tr("Voxel Information") );
@@ -114,6 +133,23 @@ void Q2DViewerExtension::createActions()
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( rotateCounterClockWise() ) );
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( rotateCounterClockWise() ) );
 
+    m_flipHorizontalAction = new QAction(0);
+    m_flipHorizontalAction->setText( tr("Flip Horizontal") );
+    m_flipHorizontalAction->setStatusTip( tr("Flip the image horizontally") );
+    m_flipHorizontalAction->setIcon( QIcon(":/images/flipHorizontal.png") );
+    m_flipHorizontalToolButton->setDefaultAction( m_flipHorizontalAction );
+
+    connect( m_flipHorizontalAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( horizontalFlip() ) );
+    connect( m_flipHorizontalAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( horizontalFlip() ) );
+
+    m_flipVerticalAction = new QAction(0);
+    m_flipVerticalAction->setText( tr("Flip Vertical") );
+    m_flipVerticalAction->setStatusTip( tr("Flip the image vertically") );
+    m_flipVerticalAction->setIcon( QIcon(":/images/flipVertical.png") );
+    m_flipVerticalToolButton->setDefaultAction( m_flipVerticalAction );
+
+    connect( m_flipVerticalAction , SIGNAL( triggered() ) , m_2DView2_1 , SLOT( verticalFlip() ) );
+    connect( m_flipVerticalAction , SIGNAL( triggered() ) , m_2DView2_2 , SLOT( verticalFlip() ) );
 
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
@@ -131,7 +167,7 @@ void Q2DViewerExtension::createActions()
 
     m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
     m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-    
+
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
 
@@ -148,6 +184,19 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_distanceAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
+}
+
+void Q2DViewerExtension::enablePresentationState(bool enable)
+{
+    if( enable )
+    {
+        m_presentationStateAttacher->attach();
+    }
+    else
+    {
+        m_presentationStateAttacher->detach();
+        this->setInput( m_mainVolume );
+    }
 }
 
 void Q2DViewerExtension::createConnections()
@@ -182,6 +231,10 @@ void Q2DViewerExtension::createConnections()
 
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView2_1 , SLOT( resetWindowLevelToDefault() ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView2_2 , SLOT( resetWindowLevelToDefault() ) );
+
+    // EXTRA!!!!!\TODO es temporal
+    // enable/disable presentation states
+    connect( m_presentationStateAction, SIGNAL( toggled(bool) ), this, SLOT( enablePresentationState(bool) ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -189,9 +242,29 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_2DView2_1->setInput( m_mainVolume );
     m_2DView2_2->setInput( m_mainVolume );
+
+    // Omplim el combo amb tants window levels com tingui el volum
     double wl[2];
-    m_2DView2_1->getDefaultWindowLevel( wl );
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
+    int wlCount = m_mainVolume->getVolumeSourceInformation()->getNumberOfWindowLevels();
+    if( wlCount )
+    {
+        for( int i = 0; i < wlCount; i++ )
+        {
+            m_mainVolume->getVolumeSourceInformation()->getWindowLevel( wl, i );
+            const char *description = m_mainVolume->getVolumeSourceInformation()->getWindowLevelDescription( i );
+            if( description )
+                m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], i, description );
+            else
+                m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], i, tr("Default %1").arg(i) );
+        }
+    }
+    else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
+    {
+        m_2DView2_1->getDefaultWindowLevel( wl );
+        m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
+    }
+    m_windowLevelComboBox->setCurrentIndex( 0 );
+
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
 }
@@ -303,6 +376,50 @@ void Q2DViewerExtension::setView( ViewType view )
         changeViewToCoronal();
     break;
     }
+}
+
+void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
+{
+    if (m_keyImageNote != NULL)
+    {
+        delete m_keyImageNote;
+    }
+    m_keyImageNote = new KeyImageNote();
+    if ( ! m_keyImageNote->loadFromFile(filename))
+    {
+        qDebug() << "ERROR! Al llegir el KIN " << filename;
+        return;
+    }
+
+    // Es carrega l'attacher per el viewer principal
+    if ( m_keyImageNoteAttacher1 != NULL)
+    {
+        delete m_keyImageNoteAttacher1;
+    }
+    m_keyImageNoteAttacher1 = new Q2DViewerKeyImageNoteAttacher(m_2DView2_1, m_keyImageNote);
+    m_keyImageNoteAttacher1->setVisibleAdditionalInformation(true);
+    m_keyImageNoteAttacher1->attach();
+
+    // Es carrega l'attacher per el viewer secundari
+    if ( m_keyImageNoteAttacher2 != NULL)
+    {
+        delete m_keyImageNoteAttacher2;
+    }
+    m_keyImageNoteAttacher2 = new Q2DViewerKeyImageNoteAttacher(m_2DView2_2, m_keyImageNote);
+    m_keyImageNoteAttacher2->setVisibleAdditionalInformation(true);
+    m_keyImageNoteAttacher2->attach();
+}
+
+void Q2DViewerExtension::loadPresentationState(const QString &filename)
+{
+    // Es carrega l'attacher per el viewer principal només
+    if( m_presentationStateAttacher != NULL )
+    {
+        delete m_presentationStateAttacher;
+    }
+    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_2DView2_1, qPrintable(filename) );
+    m_presentationStateAction->setEnabled( true );
+    m_presentationStateAction->setChecked( true );
 }
 
 void Q2DViewerExtension::changeViewToSingle()

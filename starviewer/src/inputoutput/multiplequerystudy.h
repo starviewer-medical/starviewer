@@ -11,7 +11,7 @@
 
 #include "pacslist.h"
 #include "studylistsingleton.h"
-#include "studymask.h"
+#include "dicommask.h"
 
 namespace udg {
 
@@ -31,9 +31,9 @@ public:
     ~MultipleQueryStudy();
 
     /** Ens permet indicar quina màscara utilitzarem per fer la query als PACS
-     * @param StudyMask Màscara del estudis a cercar
+     * @param DicomMask Màscara del estudis a cercar
      */
-    void setMask( StudyMask );
+    void setMask( DicomMask );
 
     /** Estableix la llista de PACS als quals es farà la cerca
      * @param PacsList amb els pacs als quals es cercarà
@@ -80,7 +80,7 @@ public slots :
 
 private :
 
-    StudyMask m_searchMask;
+    DicomMask m_searchMask;
 
     StudyListSingleton* m_studyListSingleton;
     PacsList m_pacsList;

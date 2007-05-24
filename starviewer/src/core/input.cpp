@@ -52,12 +52,12 @@ Input::~Input()
     delete m_volumeData;
 }
 
-bool Input::openFile( const char * fileName )
+int Input::openFile( const char * fileName )
 {
     ProgressCommand::Pointer observer = ProgressCommand::New();
     m_reader->AddObserver( itk::ProgressEvent(), observer );
 
-    bool ok = true;
+    int errorCode = NoError;
 
     m_reader->SetFileName( fileName );
     emit progress(0);
@@ -67,13 +67,19 @@ bool Input::openFile( const char * fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció llegint l'arxiu [" + QString::fromLatin1(fileName) + QString("] -> ") + e.GetDescription() ) )
-        std::cerr << e << std::endl;
-
-        ok = false;
+        ERROR_LOG( qPrintable( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+                .arg( QFileInfo( fileName ).dir().path() )
+                .arg( e.GetDescription() )
+                ) );
+        // llegim el missatge d'error per esbrinar de quin error es tracta
+        QString errorMessage( e.GetDescription() );
+        if( errorMessage.contains("Size mismatch") )
+        {
+            errorCode = SizeMismatch;
+        }
         emit progress( -1 ); // això podria indicar excepció
     }
-    if ( ok )
+    if ( errorCode == NoError )
     {
         ImageType::Pointer imageData;
         imageData = m_reader->GetOutput();
@@ -84,18 +90,19 @@ bool Input::openFile( const char * fileName )
         this->setVolumeInformation();
         emit progress( 100 );
     }
-    return ok;
+    return errorCode;
 }
 
-bool Input::readFiles( std::vector< std::string > filenames )
+int Input::readFiles( std::vector< std::string > filenames )
 {
+    int errorCode = NoError;
     if( filenames.empty() )
     {
         WARN_LOG( "La llista de noms de fitxer per carregar és buida" );
-        return false;
+        errorCode = InvalidFileName;
+        return errorCode;
     }
 
-    bool ok = true;
     if( filenames.size() > 1 )
     {
         // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
@@ -110,12 +117,14 @@ bool Input::readFiles( std::vector< std::string > filenames )
         }
         catch ( itk::ExceptionObject & e )
         {
-            WARN_LOG( qPrintable( "Excepció llegint els arxius del directori [" + QFileInfo( filenames[0].c_str() ).dir().path() + QString("] -> ") + e.GetDescription() ) )
-            std::cerr << e << std::endl;
-            ok = false;
+            ERROR_LOG( qPrintable( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+                .arg( QFileInfo( filenames[0].c_str() ).dir().path() )
+                .arg( e.GetDescription() )
+                ) );
+            errorCode = SizeMismatch;
             emit progress( -1 ); // això podria indicar excepció
         }
-        if ( ok )
+        if ( errorCode == NoError )
         {
             ImageType::Pointer imageData;
             imageData = m_seriesReader->GetOutput();
@@ -132,10 +141,10 @@ bool Input::readFiles( std::vector< std::string > filenames )
     {
         this->openFile( filenames[0].c_str() );
     }
-    return ok;
+    return errorCode;
 }
 
-bool Input::readSeries( const char *dirPath )
+int Input::readSeries( const char *dirPath )
 {
 //     SeriesProgressCommand::Pointer observer = SeriesProgressCommand::New();
 //     m_seriesReader->AddObserver( itk::ProgressEvent(), observer );

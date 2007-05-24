@@ -17,59 +17,52 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef QUERYSERIES
-#define QUERYSERIES
+
+#ifndef QUERYSTUDY
+#define QUERYSUTY
 #define HAVE_CONFIG_H 1
 
 #include <assoc.h>
-#include <ofcond.h>
-#include <diutil.h>
-#include "serieslistsingleton.h"
-#include "pacsserver.h"
-#include "seriesmask.h"
-#include "status.h"
-#include "starviewersettings.h"
+#include <dimse.h>
 
 class PacsConnection;
+#include <ofcond.h>
+#include <diutil.h>
+#include "studylistsingleton.h"
+#include "serieslistsingleton.h"
+#include "imagelistsingleton.h"
+#include "pacsserver.h"
+#include "starviewersettings.h"
+#include "dicommask.h"
 
-/// This class helps to interactive with the pacs, allow us to find series in the pacs, setting a search mask. Very important a connection and a mask search must be setted before query Series!!
-
+/// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 namespace udg{
-class QuerySeries
-{
 
-class Series;
+class Study;
+class Status;
+
+class QueryPacs
+{
 
 public:
 
-    /** This action sets the connection that we will use to connect to the pacs
-     * @param Open connection to the pacs
-     */
-   QuerySeries( PacsConnection , SeriesMask );
+    /** Estableix la connexió a utilitzar per comunicar-se amb el PACS
+      */
+    void setConnection( PacsConnection connection );
 
-    /** Sets and openn connection to search a series
-     * @param pacs Connection
+    /** màscara dicom a cercar
+     * @param mask màscara
+     * @return estat del mètode
      */
-   void setConnection( PacsConnection );
-
-   /// This action finds the series in the pacs with the established mask
-   Status find();
-
-    /** This action sets the mask that we will use to search the series in to the pacs. This mask is created by mask class
-     * @param Series maks
-     */
-   void setMask( SeriesMask * );
-
-    /** get the list study with the results of the query
-     * @return  A pointer to the ListSeries with the results of the query
-     */
-   SeriesListSingleton* getSeriesList();
+    Status query( DicomMask mask);
 
 private:
 
     T_ASC_Association *m_assoc; // request DICOM association;
-    SeriesListSingleton* m_seriesListSingleton;
     DcmDataset *m_mask;
+
+    //fa el query al pacs
+    Status query();
 
 };
 };

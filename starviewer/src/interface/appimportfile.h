@@ -32,7 +32,7 @@ public:
     AppImportFile(QObject *parent = 0, const char *name = 0);
     ~AppImportFile();
 
-    /// Obre el diàleg per poder obrir arxius
+    /// Obre el diàleg per poder obrir arxius, retornant true si s'ha obert una imatge, false si no
     bool open();
 
     /// Obre el diàleg per poder obrir arxius d'un directori DICOM
@@ -42,13 +42,21 @@ public:
     Identifier getVolumeIdentifier(){ return m_volumeID; }
 
     /// fa la feina 'bruta' d'obrir l'arxiu
-    bool loadFile( QString fileName );
+    int loadFile( QString fileName );
 
     /// fa la feina 'bruta' d'obrir un directori d'arxius dicom
-    bool loadDirectory( QString directoryName );
+    int loadDirectory( QString directoryName );
 
     /// Ens retorna el nom de l'últim arxiu que s'ha obert amb èxit
     const char *getLastOpenedFilename();
+
+signals:
+    /// Signal que s'emet quan s'escull obrir un Key Image Note. Es passa el path d'aquest
+    void openKeyImageNote( const QString & path);
+
+    /// Signal que s'emet quan s'escull obrir un Presentation State. Es passa el path d'aquest
+    void openPresentationState( const QString & path);
+
 
 private:
     /// Directori de treball per fitxers ordinaris
@@ -56,9 +64,6 @@ private:
 
     /// Directori de treball per directoris dicom
     QString m_workingDicomDirectory;
-
-    /// Filtres de fitxer
-    QString m_openFileFilters;
 
     /// Nom de l'últim arxiu que s'ha obert amb èxit
     QString m_lastOpenedFilename;

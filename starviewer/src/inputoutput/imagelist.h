@@ -12,6 +12,7 @@
 #include <list>
 
 #include "image.h"
+#include <semaphore.h>
 
 class string;
 
@@ -61,6 +62,8 @@ public:
     void clear();
 
  private :
+
+    sem_t *m_semafor;
 
     list<Image> m_imageList;
     list<Image>::iterator m_iterator;
