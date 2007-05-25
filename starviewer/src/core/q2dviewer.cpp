@@ -1188,7 +1188,7 @@ void Q2DViewer::setSlice( int value )
         int slice = m_currentSlice;
         int *grid;
         QMap<int, int*>::iterator mapIterator;
-    
+
         for( i = 0; i < m_numberOfSlicesWindows; i++ )
         {
             mapIterator = m_phaseGridMap.find( slice );
@@ -1203,7 +1203,7 @@ void Q2DViewer::setSlice( int value )
             else slice += 1;
         }
 
-        int renderersAnteriors = m_rendererCollection->GetNumberOfItems(); 
+        int renderersAnteriors = m_rendererCollection->GetNumberOfItems();
         newNumberOfRenderers -= renderersAnteriors;
 
         if( newNumberOfRenderers > 0 )
@@ -2193,7 +2193,6 @@ void Q2DViewer::updateDisplayExtent()
                         .arg( value + 1 )
                         .arg( m_numberOfPhases );
                     sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
-                    //renderer->ResetCamera();
                     if( value >=  m_viewer->GetSliceMax() )
                         value = 0;
                     else
@@ -2247,7 +2246,6 @@ void Q2DViewer::updateDisplayExtent()
                 }
                 sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
 
-                //renderer->ResetCamera();
                 if( value >=  m_viewer->GetSliceMax() )
                     value = 0;
                 else
