@@ -331,9 +331,6 @@ protected:
     /// Col·lecció per guardar les informacions de cada llesca per tal que es mostrin el tamany d'acord amb el grid especificat per la llesca
     vtkActor2DCollection *m_informationCollection;
 
-    /// Actualitza la vista en el rendering-> ARA es diu updateCamera
-//     void updateView();
-
     /// Per controlar l'espaiat en que presentem la imatge
     double m_presentationPixelSpacing[2];
 
@@ -488,7 +485,7 @@ private:
     /// Mapa que guarda la distribució en graella de les fases d'una llesca ( si en té )
     QMap<int, int *> m_phaseGridMap;
 
-        /// Indica si cal aplicar un flip horitzontal o no sobre la càmera
+    /// Indica si cal aplicar un flip horitzontal o no sobre la càmera
     bool m_applyFlip;
 
     /// Aquesta variable controla si la imatge està flipada respecte la seva orientació original. Útil per controlar annotacions.
