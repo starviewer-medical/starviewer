@@ -913,19 +913,12 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         if (m_blender==0)
         {
             m_blender = vtkImageBlend::New();
+            m_blender->SetInput(0, m_mainVolume->getVtkData());
         }
-        else
-        {
-            //\TODO: sembla que hi hauria una manera millor de fer-ho, però l'Anton no l'ha trobat
-            m_blender->Delete();
-            m_blender = vtkImageBlend::New();
-        }
-        m_blender->SetInput(m_mainVolume->getVtkData());
-        m_blender->AddInput(m_overlayVolume->getVtkData());
+        m_blender->SetInput(1, m_overlayVolume->getVtkData());
         m_blender->SetOpacity( 1, 1.0 - m_opacityOverlay );
-        m_blender->SetOpacity( 2, m_opacityOverlay );
-        m_viewer->SetInputConnection( m_blender->GetOutputPort() ); // li donem el blender com a input
-        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
+        // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
+        m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
     break;
 
     case RectilinearWipe:
