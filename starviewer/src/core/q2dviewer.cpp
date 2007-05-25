@@ -144,10 +144,13 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     m_sliceActorCollection = vtkPropCollection::New();
     m_rendererCollection = vtkRendererCollection::New();
+    m_informationCollection = vtkActor2DCollection::New();
+    m_scalarBarCollection = vtkActor2DCollection::New();
 
-    m_sliceActorCollection->AddItem(m_viewer->GetImageActor());
-
+    m_sliceActorCollection->AddItem( m_viewer->GetImageActor() );
     m_rendererCollection->AddItem( m_viewer->GetRenderer() );
+    m_informationCollection->AddItem ( m_serieInformationAnnotation );
+    m_scalarBarCollection->AddItem( m_scalarBar );
 
     this->updateGrid();
 
@@ -201,7 +204,7 @@ void Q2DViewer::createAnnotations()
     m_sliceAnnotationsCollection = vtkActor2DCollection::New();
 
     // escala de colors
-    createScalarBar();
+    m_scalarBar = createScalarBar();
     // anotacions de l'orientació del pacient
     createOrientationAnnotations();
     // Llegenda amb informació del voxel
@@ -399,31 +402,40 @@ void Q2DViewer::updateRulers()
     }
 }
 
-void Q2DViewer::createScalarBar()
+vtkScalarBarActor* Q2DViewer::createScalarBar()
 {
-    m_scalarBar = vtkScalarBarActor::New();
-    m_scalarBar->SetOrientationToVertical();
-    m_scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
-    m_scalarBar->SetPosition( 0.8 , -0.8 );
-    m_scalarBar->SetWidth( 0.1 );
-    m_scalarBar->SetHeight( 0.6 );
-    m_scalarBar->SetLabelFormat( "%.2f" );
-    m_scalarBar->SetNumberOfLabels( 3 );
-    m_scalarBar->GetLabelTextProperty()->ItalicOff();
-    m_scalarBar->GetLabelTextProperty()->BoldOff();
-    m_scalarBar->GetLabelTextProperty()->SetJustificationToRight();
+    vtkScalarBarActor *scalarBar = vtkScalarBarActor::New();
+    scalarBar->SetOrientationToVertical();
+    scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
+    scalarBar->SetPosition( 0.8 , -0.8 );
+    scalarBar->SetWidth( 0.1 );
+    scalarBar->SetHeight( 0.6 );
+    scalarBar->SetLabelFormat( "%.2f" );
+    scalarBar->SetNumberOfLabels( 3 );
+    scalarBar->GetLabelTextProperty()->ItalicOff();
+    scalarBar->GetLabelTextProperty()->BoldOff();
+    scalarBar->GetLabelTextProperty()->SetJustificationToRight();
+    return scalarBar;
 }
 
 void Q2DViewer::updateScalarBar()
 {
     // Així és més ràpid i senzill
+
+    vtkScalarBarActor *scalarBar;
+    int i;
+
     if( m_mainVolume )
     {
         vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
         lookup->SetWindow( m_windowLevelLUTMapper->GetWindow() );
         lookup->SetLevel( m_windowLevelLUTMapper->GetLevel() );
         lookup->Build();
-        m_scalarBar->SetLookupTable( lookup );
+        for ( i = 0; i < m_scalarBarCollection->GetNumberOfItems(); i++ )
+        {
+            scalarBar = vtkScalarBarActor::SafeDownCast( m_scalarBarCollection->GetItemAsObject( i ) );
+            scalarBar->SetLookupTable( lookup );
+        }
     }
     else
         DEBUG_LOG( "No hi ha cap volum assignat. No podem donar LUT a l'escala de colors" );
@@ -862,7 +874,7 @@ void Q2DViewer::setInput( Volume* volume )
 
     m_numberOfPhases = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases();
     if( m_numberOfPhases > 1 )
-        m_maxSliceValue = m_mainVolume->getVolumeSourceInformation()->getNumberOfSlices();
+        m_maxSliceValue = m_mainVolume->getVolumeSourceInformation()->getNumberOfSlices() - 1;
     else
     {
         m_maxSliceValue = m_viewer->GetSliceMax();
@@ -1167,6 +1179,49 @@ void Q2DViewer::setSlice( int value )
         value = m_maxSliceValue;
 
     this->m_currentSlice = value;
+
+    if( this->m_mainVolume )
+    {
+        // Calcular si necessitarem més renders o menys, ja que al canviar de llesca ens trobem que potser tenim un grid per una llesca que no es veu i passem a veure o al revés
+        int newNumberOfRenderers=0;
+        int i;
+        int slice = m_currentSlice;
+        int *grid;
+        QMap<int, int*>::iterator mapIterator;
+    
+        for( i = 0; i < m_numberOfSlicesWindows; i++ )
+        {
+            mapIterator = m_phaseGridMap.find( slice );
+            if( mapIterator != m_phaseGridMap.end() )
+            {
+                grid = mapIterator.value();
+                newNumberOfRenderers += ( grid[0]*grid[1] );
+            }
+            else newNumberOfRenderers += 1;
+
+            if (slice == m_maxSliceValue) slice = 0;
+            else slice += 1;
+        }
+
+        int renderersAnteriors = m_rendererCollection->GetNumberOfItems(); 
+        newNumberOfRenderers -= renderersAnteriors;
+
+        if( newNumberOfRenderers > 0 )
+        {
+            for( i = 0; i < newNumberOfRenderers; i++ )
+            {
+                addRenderScene();
+            }
+        }
+        // eliminar renderers per fase
+        else if( newNumberOfRenderers < 0 )
+        {
+            for( i = 0; i > newNumberOfRenderers; i-- )
+            {
+                removeRenderScene();
+            }
+        }
+    }
     this->updateDisplayExtent();
 
     emit sliceChanged( m_currentSlice );
@@ -1891,9 +1946,11 @@ void Q2DViewer::addRenderScene()
     vtkCamera *camera;
     vtkImageActor *actor;
     vtkCornerAnnotation *sliceAnnotation;
+    vtkCornerAnnotation *serieInformationAnnotation;
     vtkAxisActor2D *sideRuler;
     vtkAxisActor2D *bottomRuler;
     vtkCoordinate *anchoredRulerCoordinates;
+    vtkScalarBarActor *scalarBar;
 
     vtkCamera *referenceCamera = this->getRenderer()->GetActiveCamera();
     double position[3], focalPoint[3], viewUp[3];
@@ -1924,7 +1981,14 @@ void Q2DViewer::addRenderScene()
     m_sliceAnnotationsCollection->AddItem( sliceAnnotation );
 
     // li afegim les annotacions fixes
-    renderer->AddActor2D( m_serieInformationAnnotation );
+//     renderer->AddActor2D( m_serieInformationAnnotation );
+    // afegim una nova anotació per cada llesca perquè al mostrar sigui
+    // d'acord amb el grid escollit
+    serieInformationAnnotation = vtkCornerAnnotation::New();
+    serieInformationAnnotation->SetText( 1,m_serieInformationAnnotation->GetText( 1 ) );
+    serieInformationAnnotation->SetText( 3,m_serieInformationAnnotation->GetText( 3 ) );
+    renderer->AddActor2D( serieInformationAnnotation );
+    m_informationCollection->AddItem( serieInformationAnnotation );
 
     // afegim les annotacions d'orientació de pacient (per cada llesca)
     for( int j = 0; j < 4; j++ )
@@ -1939,7 +2003,13 @@ void Q2DViewer::addRenderScene()
     renderer->AddActor2D( bottomRuler );
 
     // Afegim a cada viewport el mateix scalar bar.\TODO tenir en compte que podria ser diferent, ara mateix afegim sempre el mateix actor
-    renderer->AddActor2D( m_scalarBar );
+//     renderer->AddActor2D( m_scalarBar );
+
+    // afegim l'scalarBar a cada llesca per tal que tingui el tamany corresponent amb el grid assignat.
+    scalarBar = createScalarBar();
+    renderer->AddActor2D( scalarBar );
+    m_scalarBarCollection->AddItem( scalarBar );
+
 
     // coordenades fixes per ancorar els rulers al lateral i a la part inferior
     anchoredRulerCoordinates = vtkCoordinate::New();
@@ -1962,6 +2032,11 @@ void Q2DViewer::removeRenderScene()
     m_sliceActorCollection->RemoveItem( m_sliceActorCollection->GetLastProp() );
     m_rendererCollection->RemoveItem( renderer );
     m_sliceAnnotationsCollection->RemoveItem( m_sliceAnnotationsCollection->GetLastActor2D());
+    m_informationCollection->RemoveItem( m_informationCollection->GetLastActor2D() );
+    m_scalarBarCollection->RemoveItem( m_scalarBarCollection->GetLastActor2D() );
+    m_rulerActorCollection->RemoveItem( m_rulerActorCollection->GetLastActor2D() );
+    m_rulerActorCollection->RemoveItem( m_rulerActorCollection->GetLastActor2D() );
+
     renderer->Render();
     renderer->Delete();
 }
@@ -2019,9 +2094,9 @@ void Q2DViewer::updateViewports()
 
     int maxSlice = m_viewer->GetSliceMax();
     vtkRenderer* renderer;
-    vtkCornerAnnotation *sliceAnnotation;
 
     int rendererIndex = 0;
+    int slice = m_currentSlice;
 
     for ( i = 0; i < m_rows; i++ )
     {
@@ -2030,7 +2105,7 @@ void Q2DViewer::updateViewports()
 
         while (j < m_columns && ((i*m_columns + j)< maxSlice) )
         {
-            QMap<int,int*>::iterator iterator = m_phaseGridMap.find( i*m_rows + j );
+            QMap<int,int*>::iterator iterator = m_phaseGridMap.find( slice );
             if( iterator != m_phaseGridMap.end() )
             {
                 int *value = iterator.value();
@@ -2062,6 +2137,9 @@ void Q2DViewer::updateViewports()
             }
             xmin += sizeHorizontal;
             j++;
+
+            if( slice == m_maxSliceValue ) slice = 0;
+            else slice += 1;
         }
         xmin = m_slicesViewportExtent[0];
         ymax = ymax - sizeVertical;
@@ -2110,8 +2188,8 @@ void Q2DViewer::updateDisplayExtent()
                     }
 
                     lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
-                        .arg( i + 1 )
-                        .arg( m_maxSliceValue + 1 )
+                        .arg( ((int)(value/m_numberOfPhases)) + 1 )
+                        .arg( m_maxSliceValue +1 )
                         .arg( value + 1 )
                         .arg( m_numberOfPhases );
                     sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
@@ -2153,11 +2231,20 @@ void Q2DViewer::updateDisplayExtent()
                         break;
                 }
 
-                lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
-                    .arg( i + 1 )
-                    .arg( m_maxSliceValue + 1 )
+                if ( m_numberOfPhases > 1)
+                {
+                    lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
+                        .arg( (value/m_numberOfPhases) + 1 )
+                        .arg( m_maxSliceValue + 1 )
+                        .arg( m_currentPhase + 1 )
+                        .arg( m_numberOfPhases );
+                }
+                else
+                {
+                    lowerLeftText = tr("Slice: %1/%2")
                     .arg( value + 1 )
-                    .arg( m_numberOfPhases );
+                    .arg( m_maxSliceValue + 1 );
+                }
                 sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
 
                 //renderer->ResetCamera();

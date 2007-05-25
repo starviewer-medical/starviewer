@@ -328,6 +328,9 @@ protected:
     /// Annotacions de texte referents a informació de la sèrie (nom de pacient, protocol,descripció de sèrie, data de l'estudi)
     vtkCornerAnnotation *m_serieInformationAnnotation;
 
+    /// Col·lecció per guardar les informacions de cada llesca per tal que es mostrin el tamany d'acord amb el grid especificat per la llesca
+    vtkActor2DCollection *m_informationCollection;
+
     /// Actualitza la vista en el rendering-> ARA es diu updateCamera
 //     void updateView();
 
@@ -366,7 +369,7 @@ private:
     void updateRulers();
 
     /// Crea la barra de valors
-    void createScalarBar();
+    vtkScalarBarActor * createScalarBar();
 
     /// Actualitza la barra de valors
     void updateScalarBar();
@@ -468,6 +471,9 @@ private:
 
     /// Col·lecció de rulers per cada viewport
     vtkActor2DCollection *m_rulerActorCollection;
+
+    /// Col·lecció per guardar tots els scalarBar de cada render, per tal que cadascún tingui la mida d'acord amb el render que la conté.
+    vtkActor2DCollection *m_scalarBarCollection;
 
     /// Col·lecció d'anotacions per cada viewport
     vtkActor2DCollection *m_sliceAnnotationsCollection;
