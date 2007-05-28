@@ -4,7 +4,8 @@ EXTENSIONS = testing \
              diffusionperfusionsegmentation \
              edemasegmentation \
              landmarkregistration \
-             strokesegmentation
+             strokesegmentation \
+             optimalviewpoint
 
 for(dir, EXTENSIONS) {
     exists(../extensions/$$dir) {

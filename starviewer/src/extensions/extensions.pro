@@ -5,7 +5,8 @@ SUBDIRS = testing \
           diffusionperfusionsegmentation \
           edemasegmentation \
           landmarkregistration \
-          strokesegmentation
+          strokesegmentation \
+          optimalviewpoint
 
 for(dir, SUBDIRS) {
     !exists($$dir) {

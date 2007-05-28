@@ -112,6 +112,7 @@ private:
     QAction *m_landmarkRegistrationAction;
     QAction *m_edemaSegmentationAction;
     QAction *m_diffusionPerfusionSegmentationAction;
+    QAction *m_optimalViewpointAction;
 
     QAction *m_newAction;
     QAction *m_openAction;

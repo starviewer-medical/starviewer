@@ -209,6 +209,17 @@ void QApplicationMainWindow::createActions()
     connect( m_diffusionPerfusionSegmentationAction, SIGNAL( triggered() ),
              m_signalMapper, SLOT( map() ) );
 
+    m_optimalViewpointAction = new QAction( this );
+    m_optimalViewpointAction->setText( tr("Optimal Viewpoint") );
+    m_optimalViewpointAction->setStatusTip(
+            tr("Open the Optimal Viewpoint Application") );
+    m_optimalViewpointAction->setEnabled( false );
+    m_signalMapper->setMapping( m_optimalViewpointAction, 13 );
+    m_signalMapper->setMapping( m_optimalViewpointAction,
+                                "Optimal Viewpoint Extension" );
+    connect( m_optimalViewpointAction, SIGNAL( triggered() ),
+             m_signalMapper, SLOT( map() ) );
+
     m_fullScreenAction = new QAction( this );
     m_fullScreenAction->setText( tr("Show Full Screen") );
     m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
@@ -351,6 +362,7 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_landmarkRegistrationAction );
     m_visualizationMenu->addAction( m_edemaSegmentationAction );
     m_visualizationMenu->addAction( m_diffusionPerfusionSegmentationAction );
+    m_visualizationMenu->addAction( m_optimalViewpointAction );
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
@@ -539,6 +551,7 @@ void QApplicationMainWindow::onVolumeLoaded( Identifier id )
     m_landmarkRegistrationAction->setEnabled( true );
     m_edemaSegmentationAction->setEnabled( true );
     m_diffusionPerfusionSegmentationAction->setEnabled( true );
+    m_optimalViewpointAction->setEnabled( true );
 
     m_extensionHandler->onVolumeLoaded( id );
 }

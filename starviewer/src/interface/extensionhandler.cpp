@@ -231,6 +231,24 @@ void ExtensionHandler::request( int who )
     }
     break;
 
+    /// Optimal Viewpoint
+    case 13:
+    {
+        QWidget *extension = ExtensionFactory::instance()->create("OptimalViewpointExtension");
+        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("OptimalViewpointExtension");
+
+        if (mediator && extension)
+        {
+            mediator->initializeExtension(extension, this, m_volumeID);
+            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
+        }
+        else
+        {
+            qDebug() << "Error carregant OptimalViewpointExtension";
+        }
+    }
+    break;
+
     default:
         this->load2DViewerExtension();
         break;
