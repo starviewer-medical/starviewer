@@ -137,6 +137,7 @@ private:
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
+    QList<QAction*> m_actionsList;
 
     /// Per veure els logs
     QLogViewer *m_logViewer;

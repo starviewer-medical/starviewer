@@ -159,96 +159,6 @@ void ExtensionHandler::request( int who )
         this->load2DViewerExtension();
         break;
 
-    /// Stroke Segmentation
-    case 9:
-    {
-        QWidget *extension = ExtensionFactory::instance()->create("StrokeSegmentationExtension");
-        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("StrokeSegmentationExtension");
-
-        if (mediator && extension)
-        {
-            mediator->initializeExtension(extension, this, m_volumeID);
-            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
-        }
-        else
-        {
-            qDebug() << "Error carregant StrokeSegmentationExtension";
-        }
-    }
-    break;
-
-    /// Landmark Registration
-    case 10:
-    {
-        QWidget *extension = ExtensionFactory::instance()->create("LandmarkRegistrationExtension");
-        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("LandmarkRegistrationExtension");
-
-        if (mediator && extension)
-        {
-            mediator->initializeExtension(extension, this, m_volumeID);
-            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
-        }
-        else
-        {
-            qDebug() << "Error carregant LandmarkRegistrationExtension";
-        }
-    }
-    break;
-
-    /// Edema Segmentation
-    case 11:
-    {
-        QWidget *extension = ExtensionFactory::instance()->create("EdemaSegmentationExtension");
-        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("EdemaSegmentationExtension");
-
-        if (mediator && extension)
-        {
-            mediator->initializeExtension(extension, this, m_volumeID);
-            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
-        }
-        else
-        {
-            qDebug() << "Error carregant EdemaSegmentationExtension";
-        }
-    }
-    break;
-
-    /// Diffusion-Perfusion Segmentation
-    case 12:
-    {
-        QWidget *extension = ExtensionFactory::instance()->create("DiffusionPerfusionSegmentationExtension");
-        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("DiffusionPerfusionSegmentationExtension");
-
-        if (mediator && extension)
-        {
-            mediator->initializeExtension(extension, this, m_volumeID);
-            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
-        }
-        else
-        {
-            qDebug() << "Error carregant DiffusionPerfusionSegmentationExtension";
-        }
-    }
-    break;
-
-    /// Optimal Viewpoint
-    case 13:
-    {
-        QWidget *extension = ExtensionFactory::instance()->create("OptimalViewpointExtension");
-        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("OptimalViewpointExtension");
-
-        if (mediator && extension)
-        {
-            mediator->initializeExtension(extension, this, m_volumeID);
-            m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
-        }
-        else
-        {
-            qDebug() << "Error carregant OptimalViewpointExtension";
-        }
-    }
-    break;
-
     default:
         this->load2DViewerExtension();
         break;
@@ -307,6 +217,18 @@ void ExtensionHandler::openPerfusionImage()
 
 void ExtensionHandler::request( const QString &who )
 {
+    QWidget *extension = ExtensionFactory::instance()->create(who);
+    ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create(who);
+
+    if (mediator && extension)
+    {
+        mediator->initializeExtension(extension, this, m_volumeID);
+        m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
+    }
+    else
+    {
+        qDebug() << "Error carregant " + who;
+    }
 }
 
 void ExtensionHandler::onVolumeLoaded( Identifier id )

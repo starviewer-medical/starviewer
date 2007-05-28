@@ -155,51 +155,26 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
     connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
-    m_strokeSegmentationAction = new QAction( this );
-    m_strokeSegmentationAction->setText( tr("Stroke Segmentation") );
-    m_strokeSegmentationAction->setStatusTip( tr("Open the Stroke Segmentation Application") );
-    m_strokeSegmentationAction->setEnabled( false );
-    m_signalMapper->setMapping( m_strokeSegmentationAction , 9 );
-    m_signalMapper->setMapping( m_strokeSegmentationAction , "Stroke Segmentation Extension" );
-    connect( m_strokeSegmentationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
+    foreach(QString name, extensionsMediatorNames)
+    {
+        ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create(name);
 
-    m_landmarkRegistrationAction = new QAction( this );
-    m_landmarkRegistrationAction->setText( tr("LandmarkRegistration") );
-    m_landmarkRegistrationAction->setStatusTip( tr("Open the Landmark Registration Application") );
-    m_landmarkRegistrationAction->setEnabled( false );
-    m_signalMapper->setMapping( m_landmarkRegistrationAction , 10 );
-    m_signalMapper->setMapping( m_landmarkRegistrationAction , "Landmark Registration Extension" );
-    connect( m_landmarkRegistrationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-
-    m_edemaSegmentationAction = new QAction( this );
-    m_edemaSegmentationAction->setText( tr("Edema Segmentation") );
-    m_edemaSegmentationAction->setStatusTip( tr("Open the Edema Segmentation Application") );
-    m_edemaSegmentationAction->setEnabled( false );
-    m_signalMapper->setMapping( m_edemaSegmentationAction , 11 );
-    m_signalMapper->setMapping( m_edemaSegmentationAction , "Edema Segmentation Extension" );
-    connect( m_edemaSegmentationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-
-    m_diffusionPerfusionSegmentationAction = new QAction( this );
-    m_diffusionPerfusionSegmentationAction->setText( tr("Diffusion-Perfusion Segmentation") );
-    m_diffusionPerfusionSegmentationAction->setStatusTip(
-            tr("Open the Diffusion-Perfusion Segmentation Application") );
-    m_diffusionPerfusionSegmentationAction->setEnabled( false );
-    m_signalMapper->setMapping( m_diffusionPerfusionSegmentationAction, 12 );
-    m_signalMapper->setMapping( m_diffusionPerfusionSegmentationAction,
-                                "Diffusion-Perfusion Extension" );
-    connect( m_diffusionPerfusionSegmentationAction, SIGNAL( triggered() ),
-             m_signalMapper, SLOT( map() ) );
-
-    m_optimalViewpointAction = new QAction( this );
-    m_optimalViewpointAction->setText( tr("Optimal Viewpoint") );
-    m_optimalViewpointAction->setStatusTip(
-            tr("Open the Optimal Viewpoint Application") );
-    m_optimalViewpointAction->setEnabled( false );
-    m_signalMapper->setMapping( m_optimalViewpointAction, 13 );
-    m_signalMapper->setMapping( m_optimalViewpointAction,
-                                "Optimal Viewpoint Extension" );
-    connect( m_optimalViewpointAction, SIGNAL( triggered() ),
-             m_signalMapper, SLOT( map() ) );
+        if (mediator)
+        {
+            QAction *action = new QAction(this);
+            action->setText( mediator->getExtensionID().getLabel() );
+            action->setStatusTip( tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
+            action->setEnabled( false );
+            m_signalMapper->setMapping( action , mediator->getExtensionID().getID() );
+            connect( action , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+            m_actionsList.append(action);
+        }
+        else
+        {
+            qDebug() << "Error carregant el mediator de " + name;
+        }
+    }
 
     m_fullScreenAction = new QAction( this );
     m_fullScreenAction->setText( tr("Show Full Screen") );
@@ -339,11 +314,11 @@ void QApplicationMainWindow::createMenus()
     m_visualizationMenu->addAction( m_mpr2DAction );
     m_visualizationMenu->addAction( m_mpr3DAction );
     m_visualizationMenu->addAction( m_mpr3D2DAction );
-    m_visualizationMenu->addAction( m_strokeSegmentationAction );
-    m_visualizationMenu->addAction( m_landmarkRegistrationAction );
-    m_visualizationMenu->addAction( m_edemaSegmentationAction );
-    m_visualizationMenu->addAction( m_diffusionPerfusionSegmentationAction );
-    m_visualizationMenu->addAction( m_optimalViewpointAction );
+
+    foreach(QAction *action, m_actionsList)
+    {
+        m_visualizationMenu->addAction(action);
+    }
 
     // menú per escollir idioma
     m_languageMenu = menuBar()->addMenu( tr("&Language") );
@@ -528,11 +503,11 @@ void QApplicationMainWindow::onVolumeLoaded( Identifier id )
     m_mpr2DAction->setEnabled( true );
     m_mpr3DAction->setEnabled( true );
     m_mpr3D2DAction->setEnabled( true );
-    m_strokeSegmentationAction->setEnabled( true );
-    m_landmarkRegistrationAction->setEnabled( true );
-    m_edemaSegmentationAction->setEnabled( true );
-    m_diffusionPerfusionSegmentationAction->setEnabled( true );
-    m_optimalViewpointAction->setEnabled( true );
+
+    foreach(QAction *action, m_actionsList)
+    {
+        action->setEnabled( true );
+    }
 
     m_extensionHandler->onVolumeLoaded( id );
 }
