@@ -1,8 +1,7 @@
 
 TEMPLATE = subdirs 
 
-SUBDIRS = testing \
-          diffusionperfusionsegmentation \
+SUBDIRS = diffusionperfusionsegmentation \
           edemasegmentation \
           landmarkregistration \
           strokesegmentation \

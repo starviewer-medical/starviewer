@@ -1,7 +1,6 @@
 # Incloem les extensions
 
-EXTENSIONS = testing \
-             diffusionperfusionsegmentation \
+EXTENSIONS = diffusionperfusionsegmentation \
              edemasegmentation \
              landmarkregistration \
              strokesegmentation \

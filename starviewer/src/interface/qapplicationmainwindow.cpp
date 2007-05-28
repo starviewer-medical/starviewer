@@ -73,25 +73,6 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *nam
 //     m_exportToBmpFilter = tr("BMP Images (*.bmp)");
 //     m_exportToDicomFilter = tr("DICOM Images (*.dcm)");
 
-    // Proves de les extensions
-    QWidget *extension = ExtensionFactory::instance()->create("TestingExtension");
-    ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create("TestingExtension");
-
-    QList<QString> extensionsNames = ExtensionFactory::instance()->getFactoryNamesList();
-    qDebug() << "Extensions:";
-    foreach(QString name, extensionsNames)
-    {
-        qDebug() << name;
-    }
-
-    QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
-    qDebug() << "Mediators:";
-    foreach(QString name, extensionsMediatorNames)
-    {
-        qDebug() << name;
-    }
-    // Fi Proves de les extensions
-
     emit containsVolume( FALSE );
 }
 
