@@ -1,16 +1,8 @@
 
 TEMPLATE = subdirs 
 
-SUBDIRS = diffusionperfusionsegmentation \
-          edemasegmentation \
-          landmarkregistration \
-          strokesegmentation \
-          optimalviewpoint
-
-for(dir, SUBDIRS) {
-    !exists($$dir) {
-        SUBDIRS -= $$dir
-    }
-}
+SUBDIRS = main \
+          contrib \
+          playground
 
 include(../compilationtype.inc)

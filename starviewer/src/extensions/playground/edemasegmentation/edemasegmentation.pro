@@ -8,18 +8,18 @@ HEADERS += qedemasegmentationextension.h \
            edemasegmentationextensionmediator.h 
 SOURCES += qedemasegmentationextension.cpp \
            edemasegmentationextensionmediator.cpp 
-TARGETDEPS += ../../core/libcore.a \
-../../inputoutput/libinputoutput.a \
-../../interface/libinterface.a
-LIBS += ../../inputoutput/libinputoutput.a \
-../../core/libcore.a \
-../../interface/libinterface.a
-INCLUDEPATH += ../../inputoutput \
-../../core \
-../../interface
-MOC_DIR = ../../../tmp/moc
-UI_DIR = ../../../tmp/ui
-OBJECTS_DIR = ../../../tmp/obj
+TARGETDEPS += ../../../core/libcore.a \
+../../../inputoutput/libinputoutput.a \
+../../../interface/libinterface.a
+LIBS += ../../../inputoutput/libinputoutput.a \
+../../../core/libcore.a \
+../../../interface/libinterface.a
+INCLUDEPATH += ../../../inputoutput \
+../../../core \
+../../../interface
+MOC_DIR = ../../../../tmp/moc
+UI_DIR = ../../../../tmp/ui
+OBJECTS_DIR = ../../../../tmp/obj
 QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
 QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
 CONFIG += warn_on \
@@ -31,7 +31,7 @@ staticlib \
 exceptions \
 stl
 TEMPLATE = lib
-include(../../vtk.inc)
-include(../../itk.inc)
-include(../../dcmtk.inc)
-include(../../compilationtype.inc)
+include(../../../vtk.inc)
+include(../../../itk.inc)
+include(../../../dcmtk.inc)
+include(../../../compilationtype.inc)

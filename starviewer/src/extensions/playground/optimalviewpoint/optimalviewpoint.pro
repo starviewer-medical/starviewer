@@ -57,18 +57,18 @@ SOURCES += gradienteditor2.cpp \
            vtkVolumeRayCastCompositeFunctionOptimalViewpoint.cxx \
            optimalviewpointextensionmediator.cpp \
            qoptimalviewpointextension.cpp 
-TARGETDEPS += ../../interface/libinterface.a \
-../../core/libcore.a \
-../../inputoutput/libinputoutput.a
-LIBS += ../../interface/libinterface.a \
-../../core/libcore.a \
-../../inputoutput/libinputoutput.a
-INCLUDEPATH += ../../interface \
-../../core \
-../../inputoutput
-MOC_DIR = ../../../tmp/moc
-UI_DIR = ../../../tmp/ui
-OBJECTS_DIR = ../../../tmp/obj
+TARGETDEPS += ../../../interface/libinterface.a \
+../../../core/libcore.a \
+../../../inputoutput/libinputoutput.a
+LIBS += ../../../interface/libinterface.a \
+../../../core/libcore.a \
+../../../inputoutput/libinputoutput.a
+INCLUDEPATH += ../../../interface \
+../../../core \
+../../../inputoutput
+MOC_DIR = ../../../../tmp/moc
+UI_DIR = ../../../../tmp/ui
+OBJECTS_DIR = ../../../../tmp/obj
 QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
 QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
 CONFIG += release \
@@ -81,7 +81,7 @@ staticlib \
 exceptions \
 stl
 TEMPLATE = lib
-include(../../vtk.inc)
-include(../../itk.inc)
-include(../../dcmtk.inc)
-include(../../compilationtype.inc)
+include(../../../vtk.inc)
+include(../../../itk.inc)
+include(../../../dcmtk.inc)
+include(../../../compilationtype.inc)

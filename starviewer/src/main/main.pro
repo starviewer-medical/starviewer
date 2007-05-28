@@ -1,16 +1,16 @@
 # Incloem les extensions
 
-EXTENSIONS = diffusionperfusionsegmentation \
+PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              edemasegmentation \
              landmarkregistration \
              strokesegmentation \
              optimalviewpoint
 
-for(dir, EXTENSIONS) {
-    exists(../extensions/$$dir) {
-	TARGETDEPS += ../extensions/$$dir/lib$${dir}.a
-	LIBS += ../extensions/$$dir/lib$${dir}.a
-	INCLUDEPATH += ../extensions/$$dir
+for(dir, PLAYGROUND_EXTENSIONS) {
+    exists(../extensions/playground/$$dir) {
+	TARGETDEPS += ../extensions/playground/$$dir/lib$${dir}.a
+	LIBS += ../extensions/playground/$$dir/lib$${dir}.a
+	INCLUDEPATH += ../extensions/playground/$$dir
     }
 }
 
