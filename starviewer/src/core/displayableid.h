@@ -38,8 +38,8 @@ public:
 
     ~DisplayableID();
 
-    QString getID() const { return m_id; };
-    QString getLabel() const { return m_name; };
+    QString getID() const { return m_id; }
+    QString getLabel() const { return m_name; }
 
     friend inline bool operator==(const DisplayableID &, const DisplayableID &);
     friend inline bool operator!=(const DisplayableID &, const DisplayableID &);
