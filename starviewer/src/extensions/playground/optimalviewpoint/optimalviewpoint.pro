@@ -10,7 +10,6 @@ FORMS += optimalviewpointinputparametersformbase.ui \
 HEADERS += gradienteditor2.h \
            histogram.h \
            hoverpoints.h \
-           optimalviewpointdirector.h \
            optimalviewpoint.h \
            optimalviewpointinputparametersform.h \
            optimalviewpointparameters.h \
@@ -35,7 +34,6 @@ SOURCES += gradienteditor2.cpp \
            histogram.cpp \
            hoverpoints.cpp \
            optimalviewpoint.cpp \
-           optimalviewpointdirector.cpp \
            optimalviewpointinputparametersform.cpp \
            optimalviewpointparameters.cpp \
            optimalviewpointplane.cpp \
