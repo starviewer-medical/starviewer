@@ -23,16 +23,25 @@
 // vtkInteractorStyleJoystickActor vtkInteractorStyleJoystickCamera
 // vtkInteractorStyleTrackballActor vtkInteractorStyleTrackballCamera
 
+
+
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-// Versió modificada per fer servir les classes
-// vtkInteractorStyleJoystickActorGgg i vtkInteractorStyleTrackballActorGgg
-// en lloc de vtkInteractorStyleJoystickActor i
-// vtkInteractorStyleTrackballActor.
+/**
+ * \class vtkInteractorStyleSwitchGgg
+ *
+ * És una versió modificada de vtkInteractorStyleSwitch que fa servir
+ * vtkInteractorStyleJoystickActorGgg en lloc de vtkInteractorStyleJoystickActor
+ * i vtkInteractorStyleTrackballActorGgg en lloc de
+ * vtkInteractorStyleTrackballActor. Aquestes classes permeten una interacció
+ * més ràpida amb el volum.
+ */
+
+
 
 #ifndef __vtkInteractorStyleSwitchGgg_h
 #define __vtkInteractorStyleSwitchGgg_h

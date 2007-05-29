@@ -28,13 +28,23 @@
 // vtkInteractorStyleJoystickCamera vtkInteractorStyleTrackballActor
 // vtkInteractorStyleTrackballCamera
 
+
+
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-// Versió modificada per fer servir un vtkPropPicker en lloc d'un vtkCellPicker.
+/**
+ * \class vtkInteractorStyleJoystickActorGgg
+ *
+ * És una versió modificada de vtkInteractorStyleJoystickActor que fa servir un
+ * vtkPropPicker en lloc d'un vtkCellPicker. D'aquesta manera és més ràpida la
+ * interacció amb el volum.
+ */
+
+
 
 #ifndef __vtkInteractorStyleJoystickActorGgg_h
 #define __vtkInteractorStyleJoystickActorGgg_h
