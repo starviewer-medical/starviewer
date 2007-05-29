@@ -194,6 +194,21 @@ std::string ImageDicomInformation::getSOPInstanceUID()
     }
     else return sopInstanceUID;
 }
+
+std::string ImageDicomInformation::getSOPClassUID()
+{
+    DcmTagKey SOPClassUIDTagKey( DCM_SOPClassUID );
+    const char *SOPClassUID = NULL;
+
+    OFCondition cond = m_dataset->findAndGetString( SOPClassUIDTagKey , SOPClassUID , OFFalse );
+
+    if ( !cond.good() || SOPClassUID == NULL )
+    {
+        return "";
+    }
+    else return SOPClassUID;
+}
+
 ImageDicomInformation::~ImageDicomInformation()
 {
 }

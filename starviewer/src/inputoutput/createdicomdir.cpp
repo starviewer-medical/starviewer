@@ -144,7 +144,7 @@ void CreateDicomdir::errorConvertingFile( std::string imagePath )
         logMessage.append( "/" );
         logMessage.append( dInfo.getSeriesUID() );
         logMessage.append( "/" );
-        logMessage.append( dInfo.getSeriesModality() );
+        logMessage.append( dcmSOPClassUIDToModality( dInfo.getSOPClassUID().c_str() ) );
         logMessage.append( "." );
         logMessage.append( dInfo.getSOPInstanceUID() );
     }

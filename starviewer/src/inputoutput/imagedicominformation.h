@@ -85,6 +85,11 @@ public:
      */
     std::string getSOPInstanceUID();
 
+    /** Retorna el SOPClassUID de la imatge
+     * @return Retorna el SOPClassUID
+     */
+    std::string getSOPClassUID();
+
     /// Destructor de la classe
     ~ImageDicomInformation();
 
