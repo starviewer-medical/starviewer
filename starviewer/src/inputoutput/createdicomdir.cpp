@@ -80,6 +80,10 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         return state;
     }
 
+    /*Rebaixem el nivell d'estrictes, si una imatge, no té algun tag de nivell 1, que són els tags
+     * obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa */
+    ddir.enableInventMode(OFTrue);
+
     //creem el dicomdir
     result = ddir.createNewDicomDir( m_optProfile , opt_output , opt_fileset );
 
