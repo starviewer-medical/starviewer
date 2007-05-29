@@ -1,15 +1,23 @@
 #ifndef POVSPHERECLOUD_H
 #define POVSPHERECLOUD_H
 
+
+
 #include <vector>
+
+
 
 class Vector3;
 
+
+
 /**
-	@author Marc Ruiz <marc@localhost>
-*/
-class POVSphereCloud
-{
+ * Aquesta classe genera un núvol de punts distribuïts uniformement sobre la
+ * superfície d'una esfera mitjançant la subdivisió recursiva de les cares,
+ * començant amb un icosaedre.
+ */
+class POVSphereCloud {
+
 
 public:
 
@@ -19,6 +27,7 @@ public:
     void createPOVCloud();
     const std::vector< Vector3 > & getVertices() const;
     const std::vector< Vector3 > & getGeographicVertices() const;
+
 
 private:
 
@@ -39,6 +48,9 @@ private:
     void subdivide( Vector3 v1, Vector3 v2, Vector3 v3, unsigned short depth );
     void createGeographicVertices();
 
+
 };
+
+
 
 #endif

@@ -1,23 +1,33 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
+
 #include "optimalviewpointplanehelper.h"
 
+
 #include <iostream>
+
 #include "optimalviewpointplane.h"
 
+
+
 namespace udg {
+
+
 
 OptimalViewpointPlaneHelper * OptimalViewpointPlaneHelper::New()
 {
     return new OptimalViewpointPlaneHelper();
 }
 
-void OptimalViewpointPlaneHelper::Execute( vtkObject * caller, unsigned long eventId, void * callData )
+
+
+void OptimalViewpointPlaneHelper::Execute( vtkObject * /*caller*/, unsigned long eventId, void * /*callData*/ )
 {
     if ( m_plane )
     {
@@ -28,9 +38,13 @@ void OptimalViewpointPlaneHelper::Execute( vtkObject * caller, unsigned long eve
         std::cerr << "OptimalViewpointPlaneHelper: Execute(): No hi ha cap OptimalViewpointPlane assignat" << std::endl;
 }
 
+
+
 void OptimalViewpointPlaneHelper::setOptimalViewpointPlane( OptimalViewpointPlane * plane )
 {
     m_plane = plane;
 }
 
-}; // end namespace udg
+
+
+}

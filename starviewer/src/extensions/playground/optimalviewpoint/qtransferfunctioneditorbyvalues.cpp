@@ -1,28 +1,41 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+
+
 #include "qtransferfunctioneditorbyvalues.h"
+
+
+#include <math.h>
 
 #include <QBoxLayout>
 #include <QScrollArea>
-#include <math.h>
+
 #include "qtransferfunctionintervaleditor.h"
+
+
 
 namespace udg {
 
+
+
 QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * parent )
- : QWidget( parent )
+    : QWidget( parent )
 {
     setupUi( this );
+
+
+    // Creem una scroll area per si hi ha molts intervals (no es pot crear des del Qt Designer)
 
     QScrollArea * scrollArea = new QScrollArea( this );
     qobject_cast< QBoxLayout * >( this->layout() )->insertWidget( 0, scrollArea );
 
     m_intervalEditorsWidget = new QWidget( scrollArea );
-    QVBoxLayout * layout = new QVBoxLayout( m_intervalEditorsWidget );
+    QBoxLayout * layout = new QVBoxLayout( m_intervalEditorsWidget );
     m_intervalEditorsLayout = new QVBoxLayout();
     layout->addLayout( m_intervalEditorsLayout );
     layout->addStretch();
@@ -32,27 +45,32 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
     scrollArea->setWidgetResizable( true );
     scrollArea->setFrameShape( QFrame::NoFrame );
 
-    QTransferFunctionIntervalEditor * first
-            = new QTransferFunctionIntervalEditor( m_intervalEditorsWidget );
+
+    // Creem el primer interval
+
+    QTransferFunctionIntervalEditor * first = new QTransferFunctionIntervalEditor( m_intervalEditorsWidget );
     first->setIsFirst( true );
     first->setIsLast( true );
     first->setObjectName( "interval0" );
     m_intervalEditorsLayout->addWidget( first );
 
-    connect( first, SIGNAL( startChanged(int) ), this, SLOT( markAsChanged() ) );
-    connect( first, SIGNAL( endChanged(int) ), this, SLOT( markAsChanged() ) );
+    connect( first, SIGNAL( startChanged(int) ), SLOT( markAsChanged() ) );
+    connect( first, SIGNAL( endChanged(int) ), SLOT( markAsChanged() ) );
+
 
     m_numberOfIntervals = 1;
     m_changed = true;
 
-    connect( m_addPushButton, SIGNAL( clicked() ), this, SLOT( addInterval() ) );
-    connect( m_removePushButton, SIGNAL( clicked() ), this, SLOT( removeInterval() ) );
+    connect( m_addPushButton, SIGNAL( clicked() ), SLOT( addInterval() ) );
+    connect( m_removePushButton, SIGNAL( clicked() ), SLOT( removeInterval() ) );
 }
+
 
 
 QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
 {
 }
+
 
 
 const QGradientStops & QTransferFunctionEditorByValues::getTransferFunction() const
@@ -180,6 +198,7 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
 
     return afterLast;
 }
+
 
 
 }
