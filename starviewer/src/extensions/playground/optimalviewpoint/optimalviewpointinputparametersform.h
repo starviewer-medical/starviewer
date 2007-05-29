@@ -87,6 +87,7 @@ private slots:
     void setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
     void setNumberOfPlanes( const QString & numberOfPlanes );
     void openSegmentationFile();
+    void toggleSegmentationParametersPushButtonText( bool checked );
 
 signals:
 

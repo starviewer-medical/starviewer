@@ -298,4 +298,19 @@ void OptimalViewpointParameters::setCompute( bool compute )
 
 
 
+unsigned char OptimalViewpointParameters::getNumberOfClusters() const
+{
+    return m_numberOfClusters;
+}
+
+void OptimalViewpointParameters::setNumberOfClusters( unsigned char numberOfClusters )
+{
+    if ( m_numberOfClusters != numberOfClusters )
+    {
+        m_numberOfClusters = numberOfClusters; emit changed( NumberOfClusters );
+    }
+}
+
+
+
 }; // end namespace udg

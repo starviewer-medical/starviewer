@@ -76,15 +76,18 @@ void OptimalViewpointDirector::execute()
                 m_method->setSegmentationFileName( m_parameters->getSegmentationFileName() );
 
                 // segmentació del model
-                m_method->segmentateImage( m_parameters->getSegmentationIterations(),
-                                           m_parameters->getSegmentationBlockLength(),
-                                           m_parameters->getSegmentationNumberOfClusters(),
-                                           m_parameters->getSegmentationNoise(),
-                                           m_parameters->getSegmentationImageSampleDistance(),
-                                           m_parameters->getSegmentationSampleDistance() );
+                unsigned char n = m_method->segmentateImage(
+                        m_parameters->getSegmentationIterations(),
+                        m_parameters->getSegmentationBlockLength(),
+                        m_parameters->getSegmentationNumberOfClusters(),
+                        m_parameters->getSegmentationNoise(),
+                        m_parameters->getSegmentationImageSampleDistance(),
+                        m_parameters->getSegmentationSampleDistance() );
 
                 // funció de transferència ajustada
                 m_parameters->setAdjustedTransferFunction( m_method->getAdjustedTransferFunction() );
+                m_parameters->setNumberOfClusters( n );
+                std::cout << "number of clusters: " << (short) n << std::endl;
             }
 
             m_method->setNumberOfPlanes( m_parameters->getNumberOfPlanes() );

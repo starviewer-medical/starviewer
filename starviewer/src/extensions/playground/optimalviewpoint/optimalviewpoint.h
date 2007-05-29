@@ -101,12 +101,12 @@ public:
     /// Actualitza els miralls.
     void updatePlanes();
 
-    void segmentateImage( unsigned short iterations,
-                          unsigned char blockLength,
-                          unsigned char numberOfClusters,
-                          double noise,
-                          double imageSampleDistance,
-                          double sampleDistance );
+    unsigned char segmentateImage( unsigned short iterations,
+                                   unsigned char blockLength,
+                                   unsigned char numberOfClusters,
+                                   double noise,
+                                   double imageSampleDistance,
+                                   double sampleDistance );
 
     bool resultsChanged() const;
     std::vector<double> * getResults();

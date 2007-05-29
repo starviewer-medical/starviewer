@@ -59,7 +59,7 @@ public:
 
         // nous paràmetres
         ComputeWithOpacity, Interpolation, Specular, SpecularPower, UpdatePlane,
-        Compute
+        Compute, NumberOfClusters
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -133,6 +133,8 @@ public:
     void setUpdatePlane( signed char updatePlane );
     bool getCompute() const;
     void setCompute( bool compute );
+    unsigned char getNumberOfClusters() const;
+    void setNumberOfClusters( unsigned char numberOfClusters );
 
 
 
@@ -168,6 +170,7 @@ private:
     double m_specularPower;
     signed char m_updatePlane;
     bool m_compute;
+    unsigned char m_numberOfClusters;
 
 
 

@@ -291,7 +291,7 @@ double randomGenerator( long & seed )
     return static_cast<double>( c ) / static_cast<double>( a );
 }
 
-void OptimalViewpointVolume::segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise )
+unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise )
 {
     unsigned short i, k1, k2;   // j, p
     unsigned char nLabels = numberOfClusters - 1;
@@ -327,22 +327,31 @@ void OptimalViewpointVolume::segmentateVolume( unsigned short iterations, unsign
 
         if ( segFile.open( QFile::ReadOnly | QFile::Text ) )
         {
+            limits.clear();
+            sortLimits.clear();
+            maxLimits.clear();
+
             QTextStream in( &segFile );
             unsigned char nRead;
 
-            for ( nRead = 0; nRead < nLabels && !in.atEnd(); nRead++ )
+            for ( nRead = 0; /*nRead < nLabels &&*/ !in.atEnd(); nRead++ )
             {
                 QString sValue;
                 in >> sValue;
                 bool ok;
                 ushort usValue = sValue.toUShort( &ok );
-                if ( ok ) maxLimits[nRead] = usValue;
+//                 if ( ok ) maxLimits[nRead] = usValue;
+                if ( ok ) maxLimits.push_back( usValue );
                 else break;
             }
 
             segFile.close();
 
-            if ( nRead == nLabels ) presegmented = true;
+//             if ( nRead == nLabels ) presegmented = true;
+            presegmented = true;
+            nLabels = nRead;
+            sortLimits.resize( nLabels );
+            limits.resize( nLabels );
         }
     }
 
@@ -746,7 +755,7 @@ void OptimalViewpointVolume::segmentateVolume( unsigned short iterations, unsign
 
 
 
-
+    return nLabels + 1; // retornem el nombre de regions trobades
 
 
     // suavitzat (pel brainweb)

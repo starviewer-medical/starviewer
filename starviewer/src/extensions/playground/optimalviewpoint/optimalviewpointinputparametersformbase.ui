@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>572</height>
+    <height>636</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -16,6 +16,54 @@
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="m_segmentationFileLabel" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip" >
+        <string>Segmentation file</string>
+       </property>
+       <property name="text" >
+        <string>Segmentation file</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_openSegmentationFilePushButton" >
+       <property name="text" >
+        <string>Open...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="m_numberOfClustersLabel" />
+   </item>
+   <item>
+    <widget class="QPushButton" name="m_segmentationParametersPushButton" >
+     <property name="text" >
+      <string>Show segmentation parameters</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QGroupBox" name="m_groupBoxSegmentation" >
      <property name="title" >
@@ -309,38 +357,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="m_segmentationFileLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>5</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Segmentation file</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_openSegmentationFilePushButton" >
-       <property name="text" >
-        <string>Open...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item>
     <widget class="QGroupBox" name="m_groupBoxVisualization" >
@@ -786,14 +802,14 @@
         </widget>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="m_applyPushButton" >
-        <property name="text" >
-         <string>Apply</string>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="m_applyPushButton" >
+     <property name="text" >
+      <string>Apply</string>
+     </property>
     </widget>
    </item>
   </layout>
@@ -819,12 +835,12 @@
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>227</x>
-     <y>514</y>
+     <x>238</x>
+     <y>571</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>229</x>
-     <y>536</y>
+     <x>240</x>
+     <y>593</y>
     </hint>
    </hints>
   </connection>
@@ -835,12 +851,28 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>185</x>
-     <y>198</y>
+     <x>196</x>
+     <y>244</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>192</x>
-     <y>229</y>
+     <x>203</x>
+     <y>387</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_segmentationParametersPushButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_groupBoxSegmentation</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>126</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>124</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>

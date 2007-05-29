@@ -23,6 +23,7 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     setupUi( this );    // heredat d'Ui::OptimalViewpointInputParametersFormBase
 
     m_advancedControlsFrame->hide();
+    m_groupBoxSegmentation->hide();
 
     m_parameters = 0;
     m_transferFunction << QGradientStop( 0, QColor( 0, 0, 0, 0 ) )
@@ -39,6 +40,8 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( writeAllParameters() ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SIGNAL( executionRequested() ) );
     connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
+
+    connect( m_segmentationParametersPushButton, SIGNAL( toggled(bool) ), SLOT( toggleSegmentationParametersPushButtonText(bool) ) );
 }
 
 OptimalViewpointInputParametersForm::~OptimalViewpointInputParametersForm()
@@ -155,6 +158,11 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
 
             case OptimalViewpointParameters::Compute:
                 m_computeCheckBox->setChecked( m_parameters->getCompute() );
+                break;
+
+            case OptimalViewpointParameters::NumberOfClusters:
+                m_numberOfClustersLabel->setText( QString("<b>%1 clusters</b>").arg( (short) m_parameters->getNumberOfClusters() ) );
+                std::cout << "nclusters = " << (short) m_parameters->getNumberOfClusters() << std::endl;
                 break;
         }
     }
@@ -302,5 +310,14 @@ void OptimalViewpointInputParametersForm::openSegmentationFile()
 
     settings.endGroup();
 }
+
+void OptimalViewpointInputParametersForm::toggleSegmentationParametersPushButtonText( bool checked )
+{
+    if ( checked )
+        m_segmentationParametersPushButton->setText( tr("Hide segmentation parameters") );
+    else
+        m_segmentationParametersPushButton->setText( tr("Show segmentation parameters") );
+}
+
 
 }; // end namespace udg

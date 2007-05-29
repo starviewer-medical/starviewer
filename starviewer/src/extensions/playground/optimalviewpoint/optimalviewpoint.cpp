@@ -461,7 +461,7 @@ void OptimalViewpoint::updatePlanes()
     m_volume->setComputing( false );
 }
 
-void OptimalViewpoint::segmentateImage( unsigned short iterations,
+unsigned char OptimalViewpoint::segmentateImage( unsigned short iterations,
                                         unsigned char blockLength,
                                         unsigned char numberOfClusters,
                                         double noise,
@@ -489,7 +489,7 @@ void OptimalViewpoint::segmentateImage( unsigned short iterations,
                       m_volume, SLOT( setExcessEntropy(double) ) );
 
     m_volume->setComputing( true );
-    m_volume->segmentateVolume( iterations, numberOfClusters, noise );
+    m_numberOfClusters = m_volume->segmentateVolume( iterations, numberOfClusters, noise );
     m_volume->setComputing( false );
 
     QObject::disconnect( m_volume, SIGNAL( needsExcessEntropy() ),
@@ -503,7 +503,8 @@ void OptimalViewpoint::segmentateImage( unsigned short iterations,
 
     delete plane;
 
-    m_numberOfClusters = numberOfClusters;
+//     m_numberOfClusters = numberOfClusters;
+    return m_numberOfClusters;
 }
 
 bool OptimalViewpoint::resultsChanged() const

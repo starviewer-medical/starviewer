@@ -70,7 +70,7 @@ public:
     void handle( int rayId, int offset );
     void endRay( int rayId );
 
-    void segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise );
+    unsigned char segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise );
 
     void setSegmentationFileName( QString name );
 
