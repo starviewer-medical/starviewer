@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
-# Subdirectori relatiu al directori principal del projecte: ./src/extensions/optimalviewpoint
-# L'objectiu ï¿½ una biblioteca:  
+# Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/optimalviewpoint
+# L'objectiu és una biblioteca:  
 
 FORMS += optimalviewpointinputparametersformbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
@@ -12,7 +12,6 @@ HEADERS += gradienteditor2.h \
            hoverpoints.h \
            optimalviewpointdirector.h \
            optimalviewpoint.h \
-           optimalviewpointhelper.h \
            optimalviewpointinputparametersform.h \
            optimalviewpointparameters.h \
            optimalviewpointplane.h \
@@ -37,7 +36,6 @@ SOURCES += gradienteditor2.cpp \
            hoverpoints.cpp \
            optimalviewpoint.cpp \
            optimalviewpointdirector.cpp \
-           optimalviewpointhelper.cpp \
            optimalviewpointinputparametersform.cpp \
            optimalviewpointparameters.cpp \
            optimalviewpointplane.cpp \
