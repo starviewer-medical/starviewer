@@ -36,7 +36,7 @@ OptimalViewpointDirector::OptimalViewpointDirector( QWidget * viewerWidget, QObj
 OptimalViewpointDirector::~OptimalViewpointDirector()
 {
     delete m_method;
-    delete m_viewer;
+//     delete m_viewer; // sembla que el destrueix algú altre (Qt automàticament?)
 }
 
 /// Assigna l'objecte que conté els paràmetres del mètode de visualització.
