@@ -4,9 +4,6 @@
 # L'objectiu és una biblioteca:  
 
 FORMS += qconfigurationscreenbase.ui \
-         qmpr3d2dextensionbase.ui \
-         qmpr3dextensionbase.ui \
-         qmprextensionbase.ui \
          queryscreenbase.ui \
          qpacslistbase.ui \
          qstudytreewidgetbase.ui \
@@ -21,15 +18,11 @@ TRANSLATIONS += interface_ca_ES.ts \
                 interface_en_GB.ts 
 HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
-           extensionfactory2.h \
            extensionhandler.h \
            extensionworkspace.h \
            qconfigurationscreen.h \
            qpacslist.h \
            queryscreen.h \
-           qmprextension.h \
-           qmpr3dextension.h \
-           qmpr3d2dextension.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
            q2dviewerextension.h \
@@ -40,15 +33,11 @@ HEADERS += qapplicationmainwindow.h \
            qchooseoneobjectdialog.h 
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
-           extensionfactory2.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
            qconfigurationscreen.cpp \
            qpacslist.cpp \
            queryscreen.cpp \
-           qmprextension.cpp \
-           qmpr3dextension.cpp \
-           qmpr3d2dextension.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
            q2dviewerextension.cpp \

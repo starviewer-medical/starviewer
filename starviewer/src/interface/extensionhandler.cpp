@@ -23,9 +23,6 @@
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
-#include "qmprextension.h"
-#include "qmpr3dextension.h"
-#include "qmpr3d2dextension.h"
 #include "q2dviewerextension.h"
 
 // Fi de l'espai reservat pels include de les mini-apps
@@ -95,45 +92,6 @@ void ExtensionHandler::request( int who )
 
         case Input::SizeMismatch:
             break;
-        }
-    break;
-
-    /// 2D MPR VIEW
-    case 2:
-        if( !m_volumeID.isNull() )
-        {
-            QMPRExtension *mprExtension = new QMPRExtension( 0 );
-            mprExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-            m_mainApp->m_extensionWorkspace->addApplication( mprExtension , tr("2D MPR") );
-        }
-        else
-        {
-        }
-    break;
-
-    /// MPR 3D VIEW
-    case 3:
-        if( !m_volumeID.isNull() )
-        {
-            QMPR3DExtension *mpr3DExtension = new QMPR3DExtension( 0 );
-            mpr3DExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-            m_mainApp->m_extensionWorkspace->addApplication( mpr3DExtension , tr("3D MPR") );
-        }
-        else
-        {
-        }
-    break;
-
-    /// MPR 3D-2D VIEW
-    case 4:
-        if( !m_volumeID.isNull() )
-        {
-            QMPR3D2DExtension *mpr3D2DExtension = new QMPR3D2DExtension( 0 );
-            mpr3D2DExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
-            m_mainApp->m_extensionWorkspace->addApplication( mpr3D2DExtension , tr("3D-2D MPR") );
-        }
-        else
-        {
         }
     break;
 

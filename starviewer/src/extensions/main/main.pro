@@ -1,7 +1,9 @@
 
 TEMPLATE = subdirs 
 
-#SUBDIRS = 
+SUBDIRS = mpr \
+          mpr3d \
+          mpr3d2d
 
 for(dir, SUBDIRS) {
     !exists($$dir) {

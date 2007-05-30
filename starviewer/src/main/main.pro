@@ -6,11 +6,33 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              strokesegmentation \
              optimalviewpoint
 
+#CONTRIB_EXTENSIONS =
+
+MAIN_EXTENSIONS = mpr \
+                  mpr3d \
+                  mpr3d2d
+
 for(dir, PLAYGROUND_EXTENSIONS) {
     exists(../extensions/playground/$$dir) {
 	TARGETDEPS += ../extensions/playground/$$dir/lib$${dir}.a
 	LIBS += ../extensions/playground/$$dir/lib$${dir}.a
 	INCLUDEPATH += ../extensions/playground/$$dir
+    }
+}
+
+for(dir, CONTRIB_EXTENSIONS) {
+    exists(../extensions/contrib/$$dir) {
+	TARGETDEPS += ../extensions/contrib/$$dir/lib$${dir}.a
+	LIBS += ../extensions/contrib/$$dir/lib$${dir}.a
+	INCLUDEPATH += ../extensions/contrib/$$dir
+    }
+}
+
+for(dir, MAIN_EXTENSIONS) {
+    exists(../extensions/main/$$dir) {
+	TARGETDEPS += ../extensions/main/$$dir/lib$${dir}.a
+	LIBS += ../extensions/main/$$dir/lib$${dir}.a
+	INCLUDEPATH += ../extensions/main/$$dir
     }
 }
 

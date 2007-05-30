@@ -122,31 +122,6 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_pacsAction , "Open Pacs Browser" );
     connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
-    m_mpr2DAction = new QAction( this );
-    m_mpr2DAction->setText( tr("2D &MPR Viewer") );
-    m_mpr2DAction->setStatusTip( tr("Open the 2D MPR Application Viewer") );
-    m_mpr2DAction->setEnabled( false );
-    m_signalMapper->setMapping( m_mpr2DAction , 2 );
-    m_signalMapper->setMapping( m_mpr2DAction , "2D MPR" );
-    connect( m_mpr2DAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-
-    m_mpr3DAction = new QAction( this );
-    m_mpr3DAction->setText( tr("3D M&PR Viewer") );
-    m_mpr3DAction->setStatusTip( tr("Open the 3D MPR Application Viewer") );
-    m_mpr3DAction->setIcon( QIcon(":/images/mpr3D.png") );
-    m_mpr3DAction->setEnabled( false );
-    m_signalMapper->setMapping( m_mpr3DAction , 3 );
-    m_signalMapper->setMapping( m_mpr3DAction , "3D MPR" );
-    connect( m_mpr3DAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-
-    m_mpr3D2DAction = new QAction( this );
-    m_mpr3D2DAction->setText( tr("3D-2D MP&R Viewer") );
-    m_mpr3D2DAction->setStatusTip( tr("Open the 3D-2D MPR Application Viewer") );
-    m_mpr3D2DAction->setEnabled( false );
-    m_signalMapper->setMapping( m_mpr3D2DAction , 4 );
-    m_signalMapper->setMapping( m_mpr3D2DAction , "3D-2D MPR" );
-    connect( m_mpr3D2DAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-
     m_2DViewerAction = new QAction( this );
     m_2DViewerAction->setText( tr("2&D Viewer") );
     m_2DViewerAction->setStatusTip( tr("Open the 2D Viewer Application") );
@@ -311,9 +286,6 @@ void QApplicationMainWindow::createMenus()
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
     m_visualizationMenu->addAction( m_2DViewerAction );
-    m_visualizationMenu->addAction( m_mpr2DAction );
-    m_visualizationMenu->addAction( m_mpr3DAction );
-    m_visualizationMenu->addAction( m_mpr3D2DAction );
 
     foreach(QAction *action, m_actionsList)
     {
@@ -500,9 +472,6 @@ void QApplicationMainWindow::about()
 void QApplicationMainWindow::onVolumeLoaded( Identifier id )
 {
     m_2DViewerAction->setEnabled( true );
-    m_mpr2DAction->setEnabled( true );
-    m_mpr3DAction->setEnabled( true );
-    m_mpr3D2DAction->setEnabled( true );
 
     foreach(QAction *action, m_actionsList)
     {

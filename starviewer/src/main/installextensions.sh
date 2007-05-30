@@ -10,6 +10,14 @@ echo ' ' > extensions.h
 echo '#ifndef EXTENSIONS_H' >> extensions.h
 echo '#define EXTENSIONS_H' >> extensions.h
 
+for include in `grep -Ir InstallExtension ../extensions/main/*|grep -v .svn|cut -d: -f1|grep .h$`
+do
+	echo "#include \"$include\"">> extensions.h
+done
+for include in `grep -Ir InstallExtension ../extensions/contrib/*|grep -v .svn|cut -d: -f1|grep .h$`
+do
+	echo "#include \"$include\"">> extensions.h
+done
 for include in `grep -Ir InstallExtension ../extensions/playground/*|grep -v .svn|cut -d: -f1|grep .h$`
 do
 	echo "#include \"$include\"">> extensions.h

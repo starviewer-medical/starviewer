@@ -104,9 +104,6 @@ private:
 
     /// Accions
     QAction *m_2DViewerAction;
-    QAction *m_mpr2DAction;
-    QAction *m_mpr3DAction;
-    QAction *m_mpr3D2DAction;
     QAction *m_pacsAction;
     QAction *m_strokeSegmentationAction;
     QAction *m_landmarkRegistrationAction;
