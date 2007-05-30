@@ -21,7 +21,6 @@ TRANSLATIONS += interface_ca_ES.ts \
                 interface_en_GB.ts 
 HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
-           extensioncreator.h \
            extensionfactory2.h \
            extensionhandler.h \
            extensionworkspace.h \
@@ -29,15 +28,11 @@ HEADERS += qapplicationmainwindow.h \
            qpacslist.h \
            queryscreen.h \
            qmprextension.h \
-           qmprextensioncreator.h \
-           qmpr3dextensioncreator.h \
            qmpr3dextension.h \
-           qmpr3d2dextensioncreator.h \
            qmpr3d2dextension.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
            q2dviewerextension.h \
-           q2dviewerextensioncreator.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            qcreatedicomdir.h \
@@ -45,7 +40,6 @@ HEADERS += qapplicationmainwindow.h \
            qchooseoneobjectdialog.h 
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
-           extensioncreator.cpp \
            extensionfactory2.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
@@ -53,15 +47,11 @@ SOURCES += qapplicationmainwindow.cpp \
            qpacslist.cpp \
            queryscreen.cpp \
            qmprextension.cpp \
-           qmprextensioncreator.cpp \
-           qmpr3dextensioncreator.cpp \
            qmpr3dextension.cpp \
-           qmpr3d2dextensioncreator.cpp \
            qmpr3d2dextension.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
            q2dviewerextension.cpp \
-           q2dviewerextensioncreator.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp \
