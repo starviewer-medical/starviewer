@@ -14,7 +14,7 @@
 #include "optimalviewpoint.h"
 // #include "optimalviewpointdirector.h"
 #include "optimalviewpointparameters.h"
-#include "optimalviewpointinputparametersform.h"
+// #include "optimalviewpointinputparametersform.h"
 #include "optimalviewpointviewer.h"
 
 
@@ -42,13 +42,14 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 //     m_optimalViewpointDirector->setParameters( m_optimalViewpointParameters );
 
     // Creem els widgets que aniran al toolbox
-    QHBoxLayout * controlLayout = new QHBoxLayout( m_controlWidget );
-    m_optimalViewpointInputParametersForm = new OptimalViewpointInputParametersForm( m_controlWidget );
-    controlLayout->addWidget( m_optimalViewpointInputParametersForm );
-    controlLayout->setMargin( 0 );
+//     QHBoxLayout * controlLayout = new QHBoxLayout( m_controlWidget );
+//     m_optimalViewpointInputParametersForm = new OptimalViewpointInputParametersForm( m_controlWidget );
+//     controlLayout->addWidget( m_optimalViewpointInputParametersForm );
+//     controlLayout->setMargin( 0 );
 //     m_optimalViewpointInputParametersForm->setName( "Optimal Viewpoint Page" );
     // li assignem els paràmetres
-    m_optimalViewpointInputParametersForm->setParameters( m_parameters );
+//     m_optimalViewpointInputParametersForm->setParameters( m_parameters );
+    m_inputParametersWidget->setParameters( m_parameters );
 
     QHBoxLayout * viewerLayout = new QHBoxLayout( m_viewerWidget );
     viewerLayout->setMargin( 0 );
@@ -63,10 +64,12 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 
 //     connect( m_optimalViewpointAction, SIGNAL( activated() ), m_optimalViewpointDirector, SLOT( execute() ) );
-    connect( m_optimalViewpointInputParametersForm, SIGNAL( executionRequested() ), SLOT( execute() ) );
+//     connect( m_optimalViewpointInputParametersForm, SIGNAL( executionRequested() ), SLOT( execute() ) );
+    connect( m_inputParametersWidget, SIGNAL( executionRequested() ), SLOT( execute() ) );
     // connectem els paràmetres amb les interfícies
     // quan un paràmetre s'actualitzi, s'actualitzarà a tots els widgets que el tinguin com a input
-    connect( m_parameters, SIGNAL( changed(int) ), m_optimalViewpointInputParametersForm, SLOT( readParameter(int) ) );
+//     connect( m_parameters, SIGNAL( changed(int) ), m_optimalViewpointInputParametersForm, SLOT( readParameter(int) ) );
+    connect( m_parameters, SIGNAL( changed(int) ), m_inputParametersWidget, SLOT( readParameter(int) ) );
 }
 
 

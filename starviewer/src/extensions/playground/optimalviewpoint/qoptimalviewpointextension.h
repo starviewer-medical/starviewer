@@ -21,7 +21,7 @@ namespace udg {
 
 class OptimalViewpoint;
 // class OptimalViewpointDirector;
-class OptimalViewpointInputParametersForm;
+// class OptimalViewpointInputParametersForm;
 class OptimalViewpointParameters;
 class OptimalViewpointViewer;
 
@@ -58,7 +58,7 @@ private:
 
 //     OptimalViewpointDirector * m_optimalViewpointDirector;
     OptimalViewpointParameters * m_parameters;
-    OptimalViewpointInputParametersForm * m_optimalViewpointInputParametersForm;
+//     OptimalViewpointInputParametersForm * m_optimalViewpointInputParametersForm;
 
     /// Mètode.
     OptimalViewpoint * m_method;
