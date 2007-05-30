@@ -2172,6 +2172,7 @@ void Q2DViewer::updateDisplayExtent()
 
                 if( imageActor )
                 {
+                    //\TODO aquest switch no hauria de dependre de l'm_viewer, hauria d'anar en funció de les vistes que controlem nosaltres ab m_lastView
                     switch( m_viewer->GetSliceOrientation() )
                     {
                         case vtkImageViewer2::SLICE_ORIENTATION_XY:
