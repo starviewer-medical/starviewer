@@ -101,7 +101,6 @@ void QApplicationMainWindow::createActions()
     m_openAction->setStatusTip(tr("Open an existing volume file"));
     m_openAction->setIcon( QIcon(":/images/open.png") );
     m_signalMapper->setMapping( m_openAction , 1 );
-    m_signalMapper->setMapping( m_openAction , "Open File" );
     connect( m_openAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_openDirAction = new QAction( this );
@@ -110,7 +109,6 @@ void QApplicationMainWindow::createActions()
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
     m_signalMapper->setMapping( m_openDirAction , 6 );
-    m_signalMapper->setMapping( m_openDirAction , "Open Dicom Dir" );
     connect( m_openDirAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_pacsAction = new QAction( this );
@@ -119,7 +117,6 @@ void QApplicationMainWindow::createActions()
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
     m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") );
     m_signalMapper->setMapping( m_pacsAction , 7 );
-    m_signalMapper->setMapping( m_pacsAction , "Open Pacs Browser" );
     connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_2DViewerAction = new QAction( this );
@@ -127,7 +124,6 @@ void QApplicationMainWindow::createActions()
     m_2DViewerAction->setStatusTip( tr("Open the 2D Viewer Application") );
     m_2DViewerAction->setEnabled( false );
     m_signalMapper->setMapping( m_2DViewerAction , 8 );
-    m_signalMapper->setMapping( m_2DViewerAction , "2D Viewer Extension" );
     connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
