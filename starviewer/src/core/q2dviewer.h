@@ -135,6 +135,18 @@ public:
     /// retorna la llesca actual
     int getSlice( void ){ return m_currentSlice; }
 
+    /// Obté el window/level original
+    void getDefaultWindowLevel( double wl[2] );
+
+    /// Obté el window level actual de la imatge
+    void getCurrentWindowLevel( double wl[2] );
+
+    /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
+    Tool *getTool( QString toolName );
+
+    /// Obtenir la llavor
+    void getSeedPosition( double pos[3] );
+
     /**
         Mètodes pel tractament de múltiples vistes
     */
@@ -233,12 +245,6 @@ public slots:
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
 
-    /// Obté el window/level original
-    void getDefaultWindowLevel( double wl[2] );
-
-    /// Obté el window level actual de la imatge
-    void getCurrentWindowLevel( double wl[2] );
-
     /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
 
@@ -247,18 +253,12 @@ public slots:
 
     void setTool( QString toolName );
 
-    /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
-    Tool *getTool( QString toolName );
-
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
 
     /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
     void setSeedPosition( double pos[3] );
-
-    /// Obtenir la llavor
-    void getSeedPosition( double pos[3] );
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
     void rotateClockWise();
