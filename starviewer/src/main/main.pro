@@ -4,7 +4,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              edemasegmentation \
              landmarkregistration \
              strokesegmentation \
-             optimalviewpoint
+             optimalviewpoint \
+             rectumsegmentation
 
 #CONTRIB_EXTENSIONS =
 
