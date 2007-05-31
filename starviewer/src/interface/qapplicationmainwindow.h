@@ -105,11 +105,6 @@ private:
     /// Accions
     QAction *m_2DViewerAction;
     QAction *m_pacsAction;
-    QAction *m_strokeSegmentationAction;
-    QAction *m_landmarkRegistrationAction;
-    QAction *m_edemaSegmentationAction;
-    QAction *m_diffusionPerfusionSegmentationAction;
-    QAction *m_optimalViewpointAction;
 
     QAction *m_newAction;
     QAction *m_openAction;
