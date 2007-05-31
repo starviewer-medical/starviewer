@@ -132,6 +132,9 @@ public:
     double getCurrentColorWindow();
     double getCurrentColorLevel();
 
+    /// retorna la llesca actual
+    int getSlice( void ){ return m_currentSlice; }
+
     /**
         Mètodes pel tractament de múltiples vistes
     */
@@ -184,9 +187,6 @@ public slots:
     void setVoxelInformationCaptionEnabled( bool enable );
     void enableVoxelInformationCaption();
     void disableVoxelInformationCaption();
-
-    /// retorna la llesca actual
-    int getSlice( void ){ return m_currentSlice; }
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
