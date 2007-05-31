@@ -5,6 +5,7 @@ SUBDIRS = diffusionperfusionsegmentation \
           edemasegmentation \
           landmarkregistration \
           strokesegmentation \
+          rectumsegmentation \
           optimalviewpoint
 
 for(dir, SUBDIRS) {
