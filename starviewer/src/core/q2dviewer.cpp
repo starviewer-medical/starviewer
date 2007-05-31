@@ -930,7 +930,9 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         m_blender->SetInput(1, m_overlayVolume->getVtkData());
         m_blender->SetOpacity( 1, 1.0 - m_opacityOverlay );
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
+        m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
+
     break;
 
     case RectilinearWipe:
