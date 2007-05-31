@@ -213,14 +213,9 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
   binaryDilate->Update();
 
     Volume::ItkImageType::Pointer maskAux = Volume::ItkImageType::New();
-    maskAux->SetRegions( m_Mask->getItkData()->GetBufferedRegion() );
     maskAux->SetSpacing( m_Mask->getItkData()->GetSpacing() );
     maskAux->SetOrigin( m_Mask->getItkData()->GetOrigin() );
-    maskAux->Allocate();
-
-  maskAux = binaryDilate->GetOutput();
-
-    //std::cout<<"End dilate erode!!"<<std::endl;
+    maskAux = binaryDilate->GetOutput();
 
     itk::ImageRegionIterator<Volume::ItkImageType> maskIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> auxIt( maskAux, maskAux->GetBufferedRegion());
@@ -237,8 +232,6 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
         ++auxIt;
         ++maskIt;
     }
-
-    //std::cout<<"End intersection!!"<<std::endl;
 
     typedef itk::ConnectedThresholdImageFilter< Volume::ItkImageType, Volume::ItkImageType > ConnectedFilterType;
 
@@ -258,10 +251,6 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
     connectedThreshold->SetSeed( seedIndex );
 
-    //std::cout<<"Init filter"<<std::endl;
-    //std::cout<<"Parameters: "<<seedIndex<<std::endl;
-    //std::cout<<"Histogram parameters: "<<m_insideMaskValue - 2<<" "<<m_insideMaskValue + 2<<std::endl;
-
     typedef itk::VolumeCalculatorImageFilter< Volume::ItkImageType > VolumeCalcFilterType;
     VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
     volumeCalc->SetInput(connectedThreshold->GetOutput());
@@ -269,7 +258,6 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
 
     try
     {
-        //outcaster->Update();
         volumeCalc->Update();
     }
     catch( itk::ExceptionObject & excep )
@@ -280,21 +268,8 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
 
     m_volume = volumeCalc->GetVolume();
     m_cont = volumeCalc->GetVolumeCount();
-    //std::cout<<"End volume calc!!"<<std::endl;
 
-    //m_Mask->setData( outcaster->GetOutput());
     m_Mask->setData( volumeCalc->GetOutput());
-    //m_Mask->setData( binaryDilate->GetOutput());
-    //m_Volume->setData( maskAux );
-    //m_Mask->setData( maskAux );
-    //std::cout<<"Abans update!!"<<std::endl;
-    //m_Mask->getVtkData()->Update();
-    // m_Mask  = outcaster->GetOutput();
-
-    //std::cout<<"Abans delete!!"<<std::endl;
-
-    //maskAux->Delete();
-    //std::cout<<"End!!"<<std::endl;
 
     return m_volume;
 }
@@ -314,19 +289,12 @@ void StrokeSegmentationMethod::applyFilter(Volume* output)
     OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
     CurvatureFlowImageFilterType::Pointer smoothing = CurvatureFlowImageFilterType::New();
 
-
     incaster->SetInput( m_Volume->getItkData() );
     smoothing->SetInput( incaster->GetOutput() );
     outcaster->SetInput( smoothing->GetOutput() );
 
     smoothing->SetNumberOfIterations( 5 );
     smoothing->SetTimeStep( 0.0625 );
-    //smoothing->SetNumberOfIterations( numiterations );
-    //smoothing->SetTimeStep( timeStep );
-
-
-
-    std::cout<<"Init filter"<<std::endl;
 
     try
     {
@@ -344,7 +312,6 @@ void StrokeSegmentationMethod::applyFilter(Volume* output)
     return;
 }
 
-
 void StrokeSegmentationMethod::computeSpeedMap( itk::Image< float, 3 >* speedMap)
 {
     typedef   float           InternalPixelType;
@@ -360,7 +327,6 @@ void StrokeSegmentationMethod::computeSpeedMap( itk::Image< float, 3 >* speedMap
 
     this->applyFilter(m_filteredInputImage);
     itk::ImageRegionIterator<InternalImageType> auxIt( auxVolume, auxVolume->GetBufferedRegion());
-    //itk::ImageRegionIterator<Volume::ItkImageType> mainIt( m_Volume->getItkData(), m_Volume->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> mainIt( m_filteredInputImage->getItkData(), m_filteredInputImage->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> maskIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
     auxIt.GoToBegin();
@@ -386,33 +352,6 @@ void StrokeSegmentationMethod::computeSpeedMap( itk::Image< float, 3 >* speedMap
         ++maskIt;
     }
 
-    /*typedef itk::RescaleIntensityImageFilter< InternalImageType, InternalImageType> RescaleFilterType;
-    typedef itk::CastImageFilter< InternalImageType, Volume::ItkImageType > OutputCastingFilterType;
-
-
-    OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
-
-  RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
-
-  rescaler->SetInput(auxVolume);
-  rescaler->SetOutputMinimum(   0 );
-  rescaler->SetOutputMaximum( 255 );
-  outcaster->SetInput(rescaler->GetOutput());
-
-    std::cout<<"Init filter"<<std::endl;
-
-    try
-    {
-        outcaster->Update();
-    }
-    catch( itk::ExceptionObject & excep )
-    {
-        std::cerr << "Exception caught !" << std::endl;
-        std::cerr << excep << std::endl;
-    }
-
-    output->setData( outcaster->GetOutput());
-    output->getVtkData()->Update();*/
     speedMap = auxVolume;
 
     return;
@@ -434,7 +373,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     typedef itk::AffineTransform< double, 3 >  TransformType;
     typedef itk::NearestNeighborInterpolateImageFunction<Volume::ItkImageType, double >  InterpolatorType;
 
-
     //Resamplagem la imatge per tal de que tingui un vòxel isomètric (el mètode ho requereix)
     ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
     TransformType::Pointer transform = TransformType::New();
@@ -444,10 +382,11 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     resampleFilter->SetDefaultPixelValue( 0 );
     double spacing[ 3 ] , newspacing[ 3 ] ;
     //Fem el vòxel isomètric
+    double isometricSize = 5.0;
     m_Volume->getSpacing(spacing);
-    newspacing[0] = 2.0*spacing[0]; // pixel spacing in millimeters along X
-    newspacing[1] = 2.0*spacing[0]; // pixel spacing in millimeters along Y
-    newspacing[2] = 2.0*spacing[0]; // pixel spacing in millimeters along Z
+    newspacing[0] = isometricSize*spacing[0]; // pixel spacing in millimeters along X
+    newspacing[1] = isometricSize*spacing[0]; // pixel spacing in millimeters along Y
+    newspacing[2] = isometricSize*spacing[0]; // pixel spacing in millimeters along Z
 
     resampleFilter->SetOutputSpacing( newspacing );
 
@@ -480,9 +419,9 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     resampleMaskFilter->SetDefaultPixelValue( m_outsideMaskValue );
     //Fem el vòxel isomètric
     m_Mask->getSpacing(spacing);
-    newspacing[0] = 2.0*spacing[0]; // pixel spacing in millimeters along X
-    newspacing[1] = 2.0*spacing[0]; // pixel spacing in millimeters along Y
-    newspacing[2] = 2.0*spacing[0]; // pixel spacing in millimeters along Z
+    newspacing[0] = isometricSize*spacing[0]; // pixel spacing in millimeters along X
+    newspacing[1] = isometricSize*spacing[0]; // pixel spacing in millimeters along Y
+    newspacing[2] = isometricSize*spacing[0]; // pixel spacing in millimeters along Z
 
     resampleMaskFilter->SetOutputSpacing( newspacing );
 
@@ -523,13 +462,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
 
     binaryDilate->Update();
 
-
-    //std::cout<<"FI Dilate!!"<<std::endl;
-
-
-    //itk::ImageRegionIterator<Volume::ItkImageType> mainIt( m_Volume->getItkData(), m_Volume->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> mainIt( resampleFilter->GetOutput(), resampleFilter->GetOutput()->GetBufferedRegion());
-    //itk::ImageRegionIterator<Volume::ItkImageType> maskIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> maskIt( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetBufferedRegion());
 
     //COmpute image statistics
@@ -542,7 +475,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     mainIt.GoToBegin();
     maskIt.GoToBegin();
 
-    //std::cout<<"Threshold:"<<m_upperVentriclesThreshold<<" "<<m_lowerVentriclesThreshold<<std::endl;
     std::vector<unsigned int> hist(m_upperVentriclesThreshold - m_lowerVentriclesThreshold + 1,0);
     while(!mainIt.IsAtEnd())
     {
@@ -555,14 +487,10 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
         ++mainIt;
     }
 
-    //std::cout<<"FI histo!!"<<std::endl;
-    //std::ofstream fout("HistogramaGM.dat", ios::out);
     unsigned int max=0;
     int mean = 0;
     for(unsigned int k=0;k<hist.size();k++)
     {
-        //fout<<hist[k]<<std::endl;
-        //std::cout<<k<<": "<<hist[k]<<std::endl;
         if(hist[k]>max)
         {
             max=hist[k];
@@ -584,8 +512,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
 
     std::cout << "Covariance = " << std::endl ;
     std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
-    //double mean = (*covarianceAlgorithm->GetMean())[0];
-    //double variance = (*covarianceAlgorithm->GetOutput())[0][0];
 
     //Cas Comas Pey!!!!!!
     //mean = 30;
@@ -597,132 +523,125 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     std::cout <<"Mean: "<<m_mean<<", Variance: "<<m_variance << std::endl;
     //computeSpeedMap(speedMapVolume);
 
-  typedef itk::CastImageFilter< Volume::ItkImageType, InternalImageType> InputCastingFilterType;
-  InputCastingFilterType::Pointer cast = InputCastingFilterType::New();
+    typedef itk::CastImageFilter< Volume::ItkImageType, InternalImageType> InputCastingFilterType;
+    InputCastingFilterType::Pointer cast = InputCastingFilterType::New();
 
     ThresholdingFilterType::Pointer thresholder = ThresholdingFilterType::New();
 
-  thresholder->SetLowerThreshold( -1000.0 );
-  thresholder->SetUpperThreshold(     0.0 );
+    thresholder->SetLowerThreshold( -1000.0 );
+    thresholder->SetUpperThreshold(     0.0 );
 
-  thresholder->SetOutsideValue( m_outsideMaskValue );
-  thresholder->SetInsideValue(  m_insideMaskValue  );
+    thresholder->SetOutsideValue( m_outsideMaskValue );
+    thresholder->SetInsideValue(  m_insideMaskValue  );
 
-  typedef  itk::FastMarchingImageFilter< InternalImageType, InternalImageType >
+    typedef  itk::FastMarchingImageFilter< InternalImageType, InternalImageType >
     FastMarchingFilterType;
 
-  FastMarchingFilterType::Pointer  fastMarching = FastMarchingFilterType::New();
+    FastMarchingFilterType::Pointer  fastMarching = FastMarchingFilterType::New();
 
 
-  typedef  itk::ErfcLevelSetImageFilter< InternalImageType, InternalImageType,  Volume::ItkImageType > ErfcLevelSetImageFilterType;
-  ErfcLevelSetImageFilterType::Pointer erfcSegmentation = ErfcLevelSetImageFilterType::New();
+    typedef  itk::ErfcLevelSetImageFilter< InternalImageType, InternalImageType,  Volume::ItkImageType > ErfcLevelSetImageFilterType;
+    ErfcLevelSetImageFilterType::Pointer erfcSegmentation = ErfcLevelSetImageFilterType::New();
 
-  erfcSegmentation->SetPropagationScaling( 1.0 );
-  erfcSegmentation->SetCurvatureScaling( m_stoppingTime );
+    erfcSegmentation->SetPropagationScaling( 1.0 );
+    erfcSegmentation->SetCurvatureScaling( m_stoppingTime );
 
-  erfcSegmentation->SetMaximumRMSError( 0.01 );
-  erfcSegmentation->SetNumberOfIterations( 500 );
+    erfcSegmentation->SetMaximumRMSError( 0.01 );
+    erfcSegmentation->SetNumberOfIterations( 500 );
 
-  erfcSegmentation->SetLowerThreshold( m_lowerVentriclesThreshold );
-  erfcSegmentation->SetUpperThreshold( m_upperVentriclesThreshold );
-  erfcSegmentation->SetIsoSurfaceValue(0.0);
-  erfcSegmentation->SetMean(m_mean);
-  erfcSegmentation->SetVariance(m_variance);
-  erfcSegmentation->SetConstant(m_constant);
-  erfcSegmentation->SetMultiplier(m_multiplier);
-  erfcSegmentation->SetAlpha(m_alpha);
-  erfcSegmentation->SetMaskInsideValue( m_insideMaskValue );
+    erfcSegmentation->SetLowerThreshold( m_lowerVentriclesThreshold );
+    erfcSegmentation->SetUpperThreshold( m_upperVentriclesThreshold );
+    erfcSegmentation->SetIsoSurfaceValue(0.0);
+    erfcSegmentation->SetMean(m_mean);
+    erfcSegmentation->SetVariance(m_variance);
+    erfcSegmentation->SetConstant(m_constant);
+    erfcSegmentation->SetMultiplier(m_multiplier);
+    erfcSegmentation->SetAlpha(m_alpha);
+    erfcSegmentation->SetMaskInsideValue( m_insideMaskValue );
 
-  erfcSegmentation->SetInput( fastMarching->GetOutput() );
-  //cast->SetInput( m_Volume->getItkData() );
-  cast->SetInput( resampleFilter->GetOutput() );
-  //erfcSegmentation->SetFeatureImage( m_Volume->getItkData() );
-  erfcSegmentation->SetFeatureImage( cast->GetOutput() );
-  //Introduim la màscara dilatada per evitar el PV effect
-  erfcSegmentation->SetMaskImage( binaryDilate->GetOutput() );
-//   erfcSegmentation->SetMaskImage( m_Mask->getItkData() );
-  thresholder->SetInput( erfcSegmentation->GetOutput() );
+    erfcSegmentation->SetInput( fastMarching->GetOutput() );
+    cast->SetInput( resampleFilter->GetOutput() );
+    erfcSegmentation->SetFeatureImage( cast->GetOutput() );
+    //Introduim la màscara dilatada per evitar el PV effect
+    erfcSegmentation->SetMaskImage( binaryDilate->GetOutput() );
+    thresholder->SetInput( erfcSegmentation->GetOutput() );
 
-  typedef FastMarchingFilterType::NodeContainer           NodeContainer;
-  typedef FastMarchingFilterType::NodeType                NodeType;
+    typedef FastMarchingFilterType::NodeContainer           NodeContainer;
+    typedef FastMarchingFilterType::NodeType                NodeType;
 
-  NodeContainer::Pointer seeds = NodeContainer::New();
+    NodeContainer::Pointer seeds = NodeContainer::New();
 
     InternalImageType::IndexType  seedIndex;
     InternalImageType::PointType seedPoint;
     seedPoint[0] = m_px;
     seedPoint[1] = m_py;
     seedPoint[2] = m_pz;
-    //m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
     resampleMaskFilter->GetOutput()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
 
 
-  const double initialDistance = 20.0;
+    const double initialDistance = 20.0;
 
-  NodeType node;
+    NodeType node;
 
-  const double seedValue = - initialDistance;
+    const double seedValue = - initialDistance;
 
-  node.SetValue( seedValue );
-  node.SetIndex( seedIndex );
+    node.SetValue( seedValue );
+    node.SetIndex( seedIndex );
 
-  seeds->Initialize();
-  seeds->InsertElement( 0, node );
+    seeds->Initialize();
+    seeds->InsertElement( 0, node );
 
-  fastMarching->SetTrialPoints(  seeds  );
+    fastMarching->SetTrialPoints(  seeds  );
 
-  fastMarching->SetSpeedConstant( 1.0 );
+    fastMarching->SetSpeedConstant( 1.0 );
 
-  try
+    try
     {
-        //Falta fastaMarching setOutputOrigin i Spacing!!!
-      fastMarching->SetOutputOrigin(resampleMaskFilter->GetOutput()->GetOrigin());
-      fastMarching->SetOutputSpacing(resampleMaskFilter->GetOutput()->GetSpacing());
-      fastMarching->SetOutputSize(resampleMaskFilter->GetOutput()->GetBufferedRegion().GetSize() );
-      thresholder->Update();
+            //Falta fastaMarching setOutputOrigin i Spacing!!!
+        fastMarching->SetOutputOrigin(resampleMaskFilter->GetOutput()->GetOrigin());
+        fastMarching->SetOutputSpacing(resampleMaskFilter->GetOutput()->GetSpacing());
+        fastMarching->SetOutputSize(resampleMaskFilter->GetOutput()->GetBufferedRegion().GetSize() );
+        thresholder->Update();
     }
-  catch( itk::ExceptionObject & excep )
+    catch( itk::ExceptionObject & excep )
     {
-    std::cerr << "Exception caught !" << std::endl;
-    std::cerr << excep << std::endl;
+        std::cerr << "Exception caught !" << std::endl;
+        std::cerr << excep << std::endl;
     }
-  // Software Guide : EndCodeSnippet
 
-  // Print out some useful information
-  std::cout << std::endl;
-  std::cout << erfcSegmentation << std::endl;
-  std::cout << std::endl;
-  std::cout << "Max. no. iterations: " << erfcSegmentation->GetNumberOfIterations() << std::endl;
-  std::cout << "Max. RMS error: " << erfcSegmentation->GetMaximumRMSError() << std::endl;
-  std::cout << "No. elapsed iterations: " << erfcSegmentation->GetElapsedIterations() << std::endl;
-  std::cout << "RMS change: " << erfcSegmentation->GetRMSChange() << std::endl;
-  std::cout << std::endl;
+    // Print out some useful information
+    std::cout << std::endl;
+    std::cout << erfcSegmentation << std::endl;
+    std::cout << std::endl;
+    std::cout << "Max. no. iterations: " << erfcSegmentation->GetNumberOfIterations() << std::endl;
+    std::cout << "Max. RMS error: " << erfcSegmentation->GetMaximumRMSError() << std::endl;
+    std::cout << "No. elapsed iterations: " << erfcSegmentation->GetElapsedIterations() << std::endl;
+    std::cout << "RMS change: " << erfcSegmentation->GetRMSChange() << std::endl;
+    std::cout << std::endl;
 
-  typedef itk::ImageFileWriter< InternalImageType > InternalWriterType;
+    typedef itk::ImageFileWriter< InternalImageType > InternalWriterType;
 
-  InternalWriterType::Pointer mapWriter = InternalWriterType::New();
-  mapWriter->SetInput( fastMarching->GetOutput() );
-  mapWriter->SetFileName("fastMarchingImage.mhd");
-  mapWriter->Update();
+    InternalWriterType::Pointer mapWriter = InternalWriterType::New();
+    mapWriter->SetInput( fastMarching->GetOutput() );
+    mapWriter->SetFileName("fastMarchingImage.mhd");
+    mapWriter->Update();
 
-  OutputCastingFilterType::Pointer outcast = OutputCastingFilterType::New();
-  typedef itk::ImageFileWriter< Volume::ItkImageType > VolumeWriterType;
-  VolumeWriterType::Pointer speedWriter = VolumeWriterType::New();
-  outcast->SetInput( erfcSegmentation->GetSpeedImage() );
-  speedWriter->SetInput( outcast->GetOutput() );
-  speedWriter->SetFileName("speedTermImage.mhd");
-  speedWriter->Update();
+    OutputCastingFilterType::Pointer outcast = OutputCastingFilterType::New();
+    typedef itk::ImageFileWriter< Volume::ItkImageType > VolumeWriterType;
+    VolumeWriterType::Pointer speedWriter = VolumeWriterType::New();
+    outcast->SetInput( erfcSegmentation->GetSpeedImage() );
+    speedWriter->SetInput( outcast->GetOutput() );
+    speedWriter->SetFileName("speedTermImage.mhd");
+    speedWriter->Update();
 
-  VolumeWriterType::Pointer maskWriter = VolumeWriterType::New();
-  maskWriter->SetInput( thresholder->GetOutput() );
-  maskWriter->SetFileName("outputMaskImage.mhd");
-  maskWriter->Update();
+    VolumeWriterType::Pointer maskWriter = VolumeWriterType::New();
+    maskWriter->SetInput( thresholder->GetOutput() );
+    maskWriter->SetFileName("outputMaskImage.mhd");
+    maskWriter->Update();
 
     //Posem l'origin i l'spacing correctes a la sortida del filtre
     //No sé perquè no ho fa directament les ITKs!!!!
-//     thresholder->GetOutput()->SetOrigin(resampleMaskFilter->GetOutput()->GetOrigin());
-//     thresholder->GetOutput()->SetSpacing(resampleMaskFilter->GetOutput()->GetSpacing());
-//
+
     Volume::ItkImageType::PointType newor = thresholder->GetOutput()->GetOrigin();
     Volume::ItkImageType::SpacingType newsp = thresholder->GetOutput()->GetSpacing();
     newsize = thresholder->GetOutput()->GetBufferedRegion().GetSize();
@@ -751,61 +670,21 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     std::cout<<"resample: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
 
     std::cout<<"Mask Set!!"<<std::endl;
-    //lesionMask->setData( thresholder->GetOutput());
     lesionMask->setData( resampleMaskFilter2->GetOutput());
 
-  VolumeWriterType::Pointer maskWriter2 = VolumeWriterType::New();
-  maskWriter2->SetInput( resampleMaskFilter2->GetOutput() );
-  maskWriter2->SetFileName("outputMaskResampledImage.mhd");
-  maskWriter2->Update();
+    VolumeWriterType::Pointer maskWriter2 = VolumeWriterType::New();
+    maskWriter2->SetInput( resampleMaskFilter2->GetOutput() );
+    maskWriter2->SetFileName("outputMaskResampledImage.mhd");
+    maskWriter2->Update();
 
-
-/*    itk::ImageRegionIterator<Volume::ItkImageType> lesionIt( lesionMask->getItkData(), lesionMask->getItkData()->GetBufferedRegion());
-    itk::ImageRegionIterator<Volume::ItkImageType> hematomaIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
-
-    //Compute mask difference
-    lesionIt.GoToBegin();
-    hematomaIt.GoToBegin();
-    m_edemaCont = 0;
-
-    std::cout<<"Difference: "<<m_insideMaskValue<<", "<<m_outsideMaskValue<<std::endl;
-
-//     while(!lesionIt.IsAtEnd())
-//     {
-//         if(lesionIt.Value() == m_insideMaskValue)
-//         {
-//             if(hematomaIt.Value() == m_insideMaskValue)
-//             {
-//                 lesionIt.Set( m_outsideMaskValue);
-//             }
-//             else
-//             {
-//                 m_edemaCont++;
-//             }
-//         }
-//         ++lesionIt;
-//         ++hematomaIt;
-//     }
-
-    while(!lesionIt.IsAtEnd())
-    {
-        if(lesionIt.Value() == m_insideMaskValue)
-        {
-            m_edemaCont++;
-        }
-        ++lesionIt;
-    }
-*/
     lesionMask->getVtkData()->Update();
     std::cout<<"Lesion: "<<lesionMask->getItkData()->GetOrigin()<<" ,"<<lesionMask->getItkData()->GetSpacing()<<" ,"<<lesionMask->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
     std::cout<<"Volume: "<<m_Volume->getItkData()->GetOrigin()<<" ,"<<m_Volume->getItkData()->GetSpacing()<<" ,"<<m_Volume->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
-
 
     std::cout<<"End method!!"<<std::endl;
 
     double volspacing[3];
     m_Volume->getSpacing(volspacing);
-    //std::cout<<"spacing"<<spacing[0]<<" "<<spacing[1]<<" "<<spacing[2]<<std::endl;
     std::cout<<"Volume: "<<m_edemaCont<<",* "<<volspacing[0]*volspacing[1]*volspacing[2]<<std::endl;
 
     return (double)m_edemaCont*volspacing[0]*volspacing[1]*volspacing[2];
@@ -840,12 +719,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
 
     binaryDilate->Update();
 
-
-    //std::cout<<"FI Dilate!!"<<std::endl;
-
-
     itk::ImageRegionIterator<Volume::ItkImageType> mainIt( m_Volume->getItkData(), m_Volume->getItkData()->GetBufferedRegion());
-    //itk::ImageRegionIterator<Volume::ItkImageType> maskIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> maskIt( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetBufferedRegion());
 
     //COmpute image statistics
@@ -858,7 +732,6 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
     mainIt.GoToBegin();
     maskIt.GoToBegin();
 
-    //std::cout<<"Threshold:"<<m_upperVentriclesThreshold<<" "<<m_lowerVentriclesThreshold<<std::endl;
     std::vector<unsigned int> hist(m_upperVentriclesThreshold - m_lowerVentriclesThreshold + 1,0);
     while(!mainIt.IsAtEnd())
     {
@@ -871,14 +744,10 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
         ++mainIt;
     }
 
-    //std::cout<<"FI histo!!"<<std::endl;
-    //std::ofstream fout("HistogramaGM.dat", ios::out);
     unsigned int max=0;
     int mean=0;
     for(unsigned int k=0;k<hist.size();k++)
     {
-        //fout<<hist[k]<<std::endl;
-        //std::cout<<k<<": "<<hist[k]<<std::endl;
         if(hist[k]>max)
         {
             max=hist[k];
