@@ -9,11 +9,15 @@
 
 #include <iostream>
 
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSettings>
+
+
 #include "optimalviewpoint.h"
 #include "optimalviewpointparameters.h"
-// #include "magicmirrorsselectvolumesdialog.h"
-#include <QFileDialog>
-#include <QSettings>
+
+
 
 namespace udg {
 
@@ -23,16 +27,17 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     setupUi( this );    // heredat d'Ui::OptimalViewpointInputParametersFormBase
 
     m_advancedControlsFrame->hide();
-    m_groupBoxSegmentation->hide();
+    m_automaticSegmentationWidget->hide();
 
     m_parameters = 0;
     m_transferFunction << QGradientStop( 0, QColor( 0, 0, 0, 0 ) )
                        << QGradientStop( 1, QColor( 255, 255, 255, 255 ) );
     m_inited = false;
 
+    m_segmentationFileChosen = false;
+
     this->disableIndividualSincronization();
 
-//     connect( m_buttonSelect, SIGNAL( clicked() ), this, SLOT( selectVolume() ) );
 //     connect( m_gradientEditor, SIGNAL( gradientStopsChanged(const QGradientStops &) ),
 //              this, SLOT( setTransferFunction(const QGradientStops &) ) );
     connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ),
@@ -41,7 +46,12 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     connect( m_applyPushButton, SIGNAL( clicked() ), SIGNAL( executionRequested() ) );
     connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
 
-    connect( m_segmentationParametersPushButton, SIGNAL( toggled(bool) ), SLOT( toggleSegmentationParametersPushButtonText(bool) ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( requestSegmentation() ) );
+
+
+
+    m_applyPushButton->setDisabled( true );
 }
 
 OptimalViewpointInputParametersForm::~OptimalViewpointInputParametersForm()
@@ -211,29 +221,25 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
     }
 }
 
-/**
- * Mostra el quadre de diàleg que permet seleccionar els volums que es faran
- * servir.
- */
-// void OptimalViewpointInputParametersForm::selectVolume()
-// {
-//     MagicMirrorsSelectVolumesDialog * selectVolumesDialog = new MagicMirrorsSelectVolumesDialog();
-// 
-//     if ( selectVolumesDialog->exec() == QDialog::Accepted )
-//     {
-//         std::list<int> * volumeIdList = selectVolumesDialog->getSelectedVolumes();
-// 
-//         if ( volumeIdList ) // si hi ha algun volum seleccionat
-//         {
-//             m_volumeId = volumeIdList->front();
-//             m_labelVolume->setText( QString( tr("Volume %1") ).arg( volumeIdList->front() ) );
-//             m_buttonSelect->setDisabled( true );
-//             delete volumeIdList;
-//         }
-//     }
-// 
-//     delete selectVolumesDialog;
-// }
+
+void OptimalViewpointInputParametersForm::writeSegmentationParameters()
+{
+    if( !m_parameters )
+    {
+        std::cerr << "OptimalViewpointInputParametersForm: No hi ha paràmetres establerts" << std::endl;
+        return;
+    }
+
+    m_parameters->setSegmentationFileName( m_segmentationFileLabel->text() );
+    m_parameters->setSegmentationIterations( m_spinBoxSegmentationIterations->value() );
+    m_parameters->setSegmentationBlockLength( m_spinBoxSegmentationBlockLength->value() );
+    m_parameters->setSegmentationNumberOfClusters( m_spinBoxSegmentationNumberOfClusters->value() );
+    m_parameters->setSegmentationNoise( m_doubleSpinBoxSegmentationNoise->value() );
+    m_parameters->setSegmentationImageSampleDistance( m_doubleSpinBoxSegmentationImageSampleDistance->value() );
+    m_parameters->setSegmentationSampleDistance( m_doubleSpinBoxSegmentationSampleDistance->value() );
+}
+
+
 
 /// Assigna la funció de transferència actual.
 void OptimalViewpointInputParametersForm::setTransferFunction( const QGradientStops & stops )
@@ -278,9 +284,15 @@ void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const Opt
 
     m_parameters->setTransferFunction( m_transferFunction );
 
-    m_groupBoxSegmentation->setDisabled( true );
-    m_segmentationFileLabel->setDisabled( true );
-    m_openSegmentationFilePushButton->setDisabled( true );
+//     m_groupBoxSegmentation->setDisabled( true );
+//     m_segmentationFileLabel->setDisabled( true );
+//     m_openSegmentationFilePushButton->setDisabled( true );
+    m_loadSegmentationRadioButton->setDisabled( true );
+    m_loadSegmentationWidget->setDisabled( true );
+    m_automaticSegmentationRadioButton->setDisabled( true );
+    m_automaticSegmentationWidget->setDisabled( true );
+    m_segmentationOkPushButton->setDisabled( true );
+    m_applyPushButton->setEnabled( true );
 }
 
 void OptimalViewpointInputParametersForm::setNumberOfPlanes( const QString & numberOfPlanes )
@@ -303,6 +315,7 @@ void OptimalViewpointInputParametersForm::openSegmentationFile()
     if ( !segmentationFileName.isNull() )
     {
         m_segmentationFileLabel->setText( segmentationFileName );
+        m_segmentationFileChosen = true;
 
         QFileInfo segmentationFileInfo( segmentationFileName );
         settings.setValue( "segmentationFileDir", segmentationFileInfo.absolutePath() );
@@ -311,13 +324,19 @@ void OptimalViewpointInputParametersForm::openSegmentationFile()
     settings.endGroup();
 }
 
-void OptimalViewpointInputParametersForm::toggleSegmentationParametersPushButtonText( bool checked )
+
+
+void OptimalViewpointInputParametersForm::requestSegmentation()
 {
-    if ( checked )
-        m_segmentationParametersPushButton->setText( tr("Hide segmentation parameters") );
-    else
-        m_segmentationParametersPushButton->setText( tr("Show segmentation parameters") );
+    if ( m_loadSegmentationRadioButton->isChecked() )
+    {
+        if ( m_segmentationFileChosen ) emit loadSegmentationRequested();
+        else QMessageBox::warning( this, tr("No segmentation file chosen"),
+                                   tr("Please, choose a segmentation file or do an automatic segmentation.") );
+    }
+    else emit automaticSegmentationRequested();
 }
+
 
 
 }; // end namespace udg

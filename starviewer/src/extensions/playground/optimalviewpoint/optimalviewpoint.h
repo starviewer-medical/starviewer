@@ -101,12 +101,7 @@ public:
     /// Actualitza els miralls.
     void updatePlanes();
 
-    unsigned char segmentateImage( unsigned short iterations,
-                                   unsigned char blockLength,
-                                   unsigned char numberOfClusters,
-                                   double noise,
-                                   double imageSampleDistance,
-                                   double sampleDistance );
+
 
     bool resultsChanged() const;
     std::vector<double> * getResults();
@@ -123,6 +118,18 @@ public:
     void setSpecularPower( double specularPower );
     void setUpdatePlane( signed char updatePlane );
     void setCompute( bool compute );
+
+
+
+    /// Carrega la segmentació del volum des dun fitxer de text.
+    signed char loadSegmentationFromFile( const QString & segmentationFileName );
+    /// Fa una segmentació automàtica del volum.
+    unsigned char doAutomaticSegmentation( unsigned short iterations,
+                                           unsigned char blockLength,
+                                           unsigned char numberOfClusters,
+                                           double noise,
+                                           double imageSampleDistance,
+                                           double sampleDistance );
 
 
 

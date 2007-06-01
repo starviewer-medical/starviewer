@@ -461,51 +461,7 @@ void OptimalViewpoint::updatePlanes()
     m_volume->setComputing( false );
 }
 
-unsigned char OptimalViewpoint::segmentateImage( unsigned short iterations,
-                                        unsigned char blockLength,
-                                        unsigned char numberOfClusters,
-                                        double noise,
-                                        double imageSampleDistance,
-                                        double sampleDistance )
-{
-    m_volume->setImageSampleDistance( imageSampleDistance );
-    m_volume->setSampleDistance( sampleDistance );
 
-    OptimalViewpointPlane * plane = new OptimalViewpointPlane( 0, m_planeSize );
-    plane->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
-    plane->setDistance( m_volume->getMainVolume()->GetLength() );
-    plane->setEntropyL( blockLength );
-    plane->setEntropyN( numberOfClusters );
-
-    QObject::connect( m_volume, SIGNAL( needsExcessEntropy() ),
-                      plane, SLOT( updateAndRecompute() ) );
-    QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
-                      plane, SLOT( compute(int,unsigned char) ),
-                      Qt::DirectConnection );
-    QObject::connect( m_volume, SIGNAL( rayEnd(int) ),
-                      plane, SLOT( endLBlock(int) ),
-                      Qt::DirectConnection );
-    QObject::connect( plane, SIGNAL( excessEntropyComputed(double) ),
-                      m_volume, SLOT( setExcessEntropy(double) ) );
-
-    m_volume->setComputing( true );
-    m_numberOfClusters = m_volume->segmentateVolume( iterations, numberOfClusters, noise );
-    m_volume->setComputing( false );
-
-    QObject::disconnect( m_volume, SIGNAL( needsExcessEntropy() ),
-                      plane, SLOT( updateAndRecompute() ) );
-    QObject::disconnect( m_volume, SIGNAL( visited(int,unsigned char) ),
-                      plane, SLOT( compute(int,unsigned char) ) );
-    QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
-                      plane, SLOT( endLBlock(int) ) );
-    QObject::disconnect( plane, SIGNAL( excessEntropyComputed(double) ),
-                      m_volume, SLOT( setExcessEntropy(double) ) );
-
-    delete plane;
-
-//     m_numberOfClusters = numberOfClusters;
-    return m_numberOfClusters;
-}
 
 bool OptimalViewpoint::resultsChanged() const
 {
@@ -610,6 +566,62 @@ void OptimalViewpoint::setUpdatePlane( signed char updatePlane )
 void OptimalViewpoint::setCompute( bool compute )
 {
     m_compute = compute;
+}
+
+
+
+signed char OptimalViewpoint::loadSegmentationFromFile( const QString & segmentationFileName )
+{
+    m_numberOfClusters = m_volume->loadSegmentationFromFile( segmentationFileName );
+    return m_numberOfClusters;
+}
+
+
+
+unsigned char OptimalViewpoint::doAutomaticSegmentation( unsigned short iterations,
+                                                         unsigned char blockLength,
+                                                         unsigned char numberOfClusters,
+                                                         double noise,
+                                                         double imageSampleDistance,
+                                                         double sampleDistance )
+{
+    m_volume->setImageSampleDistance( imageSampleDistance );
+    m_volume->setSampleDistance( sampleDistance );
+
+    OptimalViewpointPlane * plane = new OptimalViewpointPlane( 0, m_planeSize );
+    plane->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
+    plane->setDistance( m_volume->getMainVolume()->GetLength() );
+    plane->setEntropyL( blockLength );
+    plane->setEntropyN( numberOfClusters );
+
+    QObject::connect( m_volume, SIGNAL( needsExcessEntropy() ),
+                      plane, SLOT( updateAndRecompute() ) );
+    QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
+                      plane, SLOT( compute(int,unsigned char) ),
+                      Qt::DirectConnection );
+    QObject::connect( m_volume, SIGNAL( rayEnd(int) ),
+                      plane, SLOT( endLBlock(int) ),
+                      Qt::DirectConnection );
+    QObject::connect( plane, SIGNAL( excessEntropyComputed(double) ),
+                      m_volume, SLOT( setExcessEntropy(double) ) );
+
+    m_volume->setComputing( true );
+    m_numberOfClusters = m_volume->segmentateVolume( iterations, numberOfClusters, noise );
+    m_volume->setComputing( false );
+
+    QObject::disconnect( m_volume, SIGNAL( needsExcessEntropy() ),
+                      plane, SLOT( updateAndRecompute() ) );
+    QObject::disconnect( m_volume, SIGNAL( visited(int,unsigned char) ),
+                      plane, SLOT( compute(int,unsigned char) ) );
+    QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
+                      plane, SLOT( endLBlock(int) ) );
+    QObject::disconnect( plane, SIGNAL( excessEntropyComputed(double) ),
+                      m_volume, SLOT( setExcessEntropy(double) ) );
+
+    delete plane;
+
+//     m_numberOfClusters = numberOfClusters;
+    return m_numberOfClusters;
 }
 
 

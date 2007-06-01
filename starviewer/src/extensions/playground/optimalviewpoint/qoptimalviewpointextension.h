@@ -48,6 +48,11 @@ public:
 
 public slots:
 
+    /// Carrega la segmentació des d'un fitxer.
+    void loadSegmentation();
+    /// Fa una segmentació automàtica.
+    void automaticSegmentation();
+
     /**
      * Aquest mètode aplica el mètode de visualització. Comprova primer si té
      * els paràmetres necessaris, sinó no fa res.

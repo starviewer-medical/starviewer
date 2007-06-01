@@ -51,6 +51,9 @@ public slots:
      */
     virtual void writeAllParameters();
 
+    /// Escriu els paràmetres de la segmentació al Parameters associat.
+    void writeSegmentationParameters();
+
     /// Assigna la funció de transferència actual.
     void setTransferFunction( const QGradientStops & stops );
 
@@ -77,20 +80,23 @@ private:
     /// Cert si s'ha inicialitzat la funció de transferència i fals altrament.
     bool m_inited;
 
+    /// Serà cert quan l'usuari hagi triat el fitxer de segmentació.
+    bool m_segmentationFileChosen;
+
 private slots:
 
-    /**
-     * Mostra el quadre de diàleg que permet seleccionar el volum que es farà
-     * servir.
-     */
-//     void selectVolume();
     void setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
     void setNumberOfPlanes( const QString & numberOfPlanes );
     void openSegmentationFile();
-    void toggleSegmentationParametersPushButtonText( bool checked );
+    /// Demana el tipus de segmentació adequat segons les opcions triades.
+    void requestSegmentation();
 
 signals:
 
+    /// Demana que es carregui la segmentació des d'un fitxer.
+    void loadSegmentationRequested();
+    /// Demana que s'executi la segmentació automàtica.
+    void automaticSegmentationRequested();
     void executionRequested();
 
 }; // end class OptimalViewpointInputParametersForm

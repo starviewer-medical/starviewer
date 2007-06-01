@@ -291,88 +291,206 @@ double randomGenerator( long & seed )
     return static_cast<double>( c ) / static_cast<double>( a );
 }
 
+
+
+signed char OptimalViewpointVolume::loadSegmentationFromFile( const QString & segmentationFileName )
+{
+    std::cout << "OVV::ldSegFromFile(): " << qPrintable( m_segmentationFileName ) << std::endl;
+    QFile segFile( segmentationFileName );
+
+    if ( !segFile.open( QFile::ReadOnly | QFile::Text ) )
+    {
+        std::cerr << "OVV::ldSegFromFile(): cannot open file " << qPrintable( m_segmentationFileName ) << std::endl;
+        return -1;
+    }
+
+    std::vector< unsigned char > limits;
+    QTextStream in( &segFile );
+
+    while ( !in.atEnd() && limits.size() < 5 )  /// \warning Es llegirà un màxim de 5 límits.
+    {
+        QString sValue;
+        in >> sValue;
+        bool ok;
+        ushort usValue = sValue.toUShort( &ok );
+        if ( ok ) limits.push_back( usValue );
+        else break;
+    }
+
+    segFile.close();
+
+    if ( limits.size() == 0 )
+    {
+        std::cerr << "OVV::ldSegFromFile(): no limits read" << std::endl;
+        return -1;
+    }
+
+    labelize( limits );
+    generateAdjustedTransferFunction( limits );
+
+    return limits.size() + 1;
+}
+
+
+
 unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise )
 {
     unsigned short i, k1, k2;   // j, p
     unsigned char nLabels = numberOfClusters - 1;
     unsigned char maxLevel = 255;
-    unsigned char value;
     double maxExcessEntropy = 0;
     std::vector<unsigned char> limits( nLabels );
     std::vector<unsigned char> sortLimits( nLabels );
     std::vector<unsigned char> maxLimits( nLabels );
     long seed = 1979;   // time( 0 );
     unsigned short maxIteration;
-//    int prob[10][10];
     bool genetic = true;
     bool swapping = true;
     bool finest = true;
-//     bool probok=false;
     int numbucleswap = 2;
-//     std::ofstream fout("ResultatSegmetnacio.dat", std::ios::app);
 
-//     for ( i = 0; i < 10; i++ )
-//     {
-//         for ( j = 0; j < 10; j++ )
-//         {
-//             prob[i][j] = 0;
-//         }
-//     }
-    bool presegmented = false;
 
-    if ( !m_segmentationFileName.isNull() )
+    for ( i = 0; i < nLabels; i++ )
     {
-        std::cout << qPrintable( m_segmentationFileName ) << std::endl;
-        QFile segFile( m_segmentationFileName );
-
-        if ( segFile.open( QFile::ReadOnly | QFile::Text ) )
-        {
-            limits.clear();
-            sortLimits.clear();
-            maxLimits.clear();
-
-            QTextStream in( &segFile );
-            unsigned char nRead;
-
-            for ( nRead = 0; /*nRead < nLabels &&*/ !in.atEnd(); nRead++ )
-            {
-                QString sValue;
-                in >> sValue;
-                bool ok;
-                ushort usValue = sValue.toUShort( &ok );
-//                 if ( ok ) maxLimits[nRead] = usValue;
-                if ( ok ) maxLimits.push_back( usValue );
-                else break;
-            }
-
-            segFile.close();
-
-//             if ( nRead == nLabels ) presegmented = true;
-            presegmented = true;
-            nLabels = nRead;
-            sortLimits.resize( nLabels );
-            limits.resize( nLabels );
-        }
+        limits[i] = static_cast<int>( ( i + 1 ) * maxLevel / numberOfClusters );
     }
 
-    if ( !presegmented )
+    // genetic algorithm
+    if( genetic )
     {
-        for ( i = 0; i < nLabels; i++ )
+        for ( k1 = 0; k1 < iterations; k1++ )
         {
-            limits[i] = static_cast<int>( ( i + 1 ) * maxLevel / numberOfClusters );
+            std::cout << "iteration " << k1 << std::flush;
+            copy( limits.begin(), limits.end(), sortLimits.begin() );
+            sort( sortLimits.begin(), sortLimits.end() );
+            std::cout << "==> labels: ";
+
+            for( i = 0; i < sortLimits.size(); i++ )
+                std::cout << (short) sortLimits[i] << " ";
+
+            std::cout << "==> Maxlabels: [";
+
+            for ( i = 0; i < maxLimits.size(); i++ )
+                std::cout << (short) maxLimits[i] << ", ";
+
+            std::cout << "]" << std::endl;
+
+            labelize( sortLimits ); /// \TODO es podria millorar perquè ara fa dos etiquetatges
+            std::cout << "Imatge labelitzada!!" << std::endl;
+
+
+
+            // calcular excess entropy
+            emit needsExcessEntropy();
+            std::cout << "Exces entropy (" << k1 << ") => " << m_excessEntropy << std::endl;
+
+            if ( m_excessEntropy > maxExcessEntropy )
+            {
+                maxExcessEntropy = m_excessEntropy;
+                maxIteration = k1;
+                copy( sortLimits.begin(), sortLimits.end(), maxLimits.begin() );
+                std::cout << "** is maximum **" << std::endl;
+            }
+
+            // Next limits
+
+            for ( i = 0; i < nLabels; i++ )
+            {
+                double randomValue = randomGenerator( seed );
+
+//                if ( maxLimits[i] < 0 )
+//                    maxLimits[i] = 0;
+
+                limits[i] = maxLimits[i] + static_cast<int>( noise * (2.0 * randomValue - 1.0 ) );
+            }
         }
 
-        // genetic algorithm
-        if( genetic )
+        std::cout << "MAX GENETIC ALGORITHM: Iteration " << (short) maxIteration << " ==> Max entropy = " << maxExcessEntropy << ", per " << std::flush;
+
+        for ( i = 0; i < maxLimits.size(); i++ )
         {
-            for ( k1 = 0; k1 < iterations; k1++ )
+            std::cout << (short) maxLimits[i] << " ";
+        }
+
+        std::cout << std::endl;
+    }
+    // fi genetic algorithm
+
+    // swapping algorithm
+    if ( swapping )
+    {
+        for ( int bucle = 0; bucle < numbucleswap; bucle++ )
+        {
+            for ( k1 = 0; k1 < nLabels; k1++ )
             {
-                std::cout << "iteration " << k1 << std::flush;
+                copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
+
+                for( k2 = 0; k2 < maxLevel; k2 += 8 )
+                {
+                    std::cout << "iteration " << k1 << ": " << k2 << std::flush;
+                    limits[k1] = k2;
+                    copy( limits.begin(), limits.end(), sortLimits.begin() );
+                    sort( sortLimits.begin(), sortLimits.end() );
+                    std::cout << "==> labels: ";
+
+                    for ( i = 0; i < sortLimits.size(); i++ )
+                        std::cout << (short) sortLimits[i] << " ";
+
+                    std::cout << "==> Maxlabels: [";
+
+                    for ( i = 0; i < maxLimits.size(); i++ )
+                        std::cout << (short) maxLimits[i] << ", ";
+
+                    std::cout << "]" << std::endl;
+
+                    labelize( sortLimits ); /// \TODO es podria millorar perquè ara fa dos etiquetatges
+                    std::cout << "Imatge labelitzada!!" << std::endl;
+
+                    // calcular excess entropy
+                    emit needsExcessEntropy();
+                    std::cout << "Exces entropy (" << k1 << ") => " << m_excessEntropy << std::endl;
+
+                    if ( m_excessEntropy > maxExcessEntropy )
+                    {
+                        maxExcessEntropy = m_excessEntropy;
+                        maxIteration = k1;
+                        copy( limits.begin(), limits.end(), maxLimits.begin() );
+                        std::cout << "** is maximum **" << std::endl;
+                    }
+                }
+            }
+        }
+
+        std::cout << "MAX SWAPPING ALGORITHM  ==> Max entropy = " << maxExcessEntropy << ", per " << std::flush;
+
+        for ( i = 0; i < maxLimits.size(); i++ )
+        {
+            std::cout << (short) maxLimits[i] << " ";
+        }
+
+        std::cout << std::endl;
+    }
+    // fi swapping algorithm
+
+    // finest algorithm
+    if ( finest )
+    {
+        bool canviat = true;
+
+        while ( canviat )
+        {
+            canviat = false;
+
+            for ( k1 = 0; k1 < nLabels; k1++ )
+            {
+                copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
+                limits[k1] = limits[k1] - 1;
+                std::cout << "iteration " << k1 << ": " << (short) limits[k1] << std::flush;
                 copy( limits.begin(), limits.end(), sortLimits.begin() );
                 sort( sortLimits.begin(), sortLimits.end() );
                 std::cout << "==> labels: ";
 
-                for( i = 0; i < sortLimits.size(); i++ )
+                for ( i = 0; i < sortLimits.size(); i++ )
                     std::cout << (short) sortLimits[i] << " ";
 
                 std::cout << "==> Maxlabels: [";
@@ -382,28 +500,8 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
 
                 std::cout << "]" << std::endl;
 
-                unsigned char * fixIt = m_data;
-                unsigned char * segIt = m_simplifiedData;
-                unsigned char * fixItEnd = m_data + m_dataSize;
-
-                while ( fixIt < fixItEnd )
-                {
-                    i = 0;
-                    value = *fixIt;
-
-                    while ( value > sortLimits[i] && i < nLabels )
-                    {
-                        i++;
-                    }
-
-                    *segIt = i;
-                    ++fixIt;
-                    ++segIt;
-                }
-
+                labelize( sortLimits ); /// \TODO es podria millorar perquè ara fa dos etiquetatges
                 std::cout << "Imatge labelitzada!!" << std::endl;
-
-
 
                 // calcular excess entropy
                 emit needsExcessEntropy();
@@ -412,291 +510,106 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
                 if ( m_excessEntropy > maxExcessEntropy )
                 {
                     maxExcessEntropy = m_excessEntropy;
-                    maxIteration = k1;
-                    copy( sortLimits.begin(), sortLimits.end(), maxLimits.begin() );
+                    copy( limits.begin(), limits.end(), maxLimits.begin() );
+                    canviat = true;
                     std::cout << "** is maximum **" << std::endl;
                 }
 
-                // Next limits
+                // cap a l'altra banda
+                limits[k1] = limits[k1] + 2;    // ara limits[k1] val "limits[k1] - 1"
+                std::cout << "iteration " << k1 << ": " << (short) limits[k1] << std::flush;
+                copy( limits.begin(), limits.end(), sortLimits.begin() );
+                sort( sortLimits.begin(), sortLimits.end() );
+                std::cout << "==> labels: ";
 
-                for ( i = 0; i < nLabels; i++ )
+                for ( i = 0; i < sortLimits.size(); i++ )
+                    std::cout << (short) sortLimits[i] << " ";
+
+                std::cout << "==> Maxlabels: [";
+
+                for ( i = 0; i < maxLimits.size(); i++ )
+                    std::cout << (short) maxLimits[i] << ", ";
+
+                std::cout << "]" << std::endl;
+
+                labelize( sortLimits ); /// \TODO es podria millorar perquè ara fa dos etiquetatges
+                std::cout << "Imatge labelitzada!!" << std::endl;
+
+                // calcular excess entropy
+                emit needsExcessEntropy();
+                std::cout << "Exces entropy (" << k1 << ") => " << m_excessEntropy << std::endl;
+
+                if ( m_excessEntropy > maxExcessEntropy )
                 {
-                    double randomValue = randomGenerator( seed );
-
-    //                if ( maxLimits[i] < 0 )
-    //                    maxLimits[i] = 0;
-
-                    limits[i] = maxLimits[i] + static_cast<int>( noise * (2.0 * randomValue - 1.0 ) );
+                    maxExcessEntropy = m_excessEntropy;
+                    copy( limits.begin(), limits.end(), maxLimits.begin() );
+                    canviat = true;
+                    std::cout << "** is maximum **" << std::endl;
                 }
             }
-
-            std::cout << "MAX GENETIC ALGORITHM: Iteration " << (short) maxIteration << " ==> Max entropy = " << maxExcessEntropy << ", per " << std::flush;
-
-            for ( i = 0; i < maxLimits.size(); i++ )
-            {
-                std::cout << (short) maxLimits[i] << " ";
-            }
-
-            std::cout << std::endl;
         }
-        // fi genetic algorithm
 
-        // swapping algorithm
-        if ( swapping )
+        std::cout << "MAX FINEST ALGORITHM  ==> Max entropy = " << maxExcessEntropy << ", per " << std::flush;
+
+        for ( i = 0; i < maxLimits.size(); i++ )
         {
-            for ( int bucle = 0; bucle < numbucleswap; bucle++ )
-            {
-                for ( k1 = 0; k1 < nLabels; k1++ )
-                {
-                    copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
-
-                    for( k2 = 0; k2 < maxLevel; k2 += 8 )
-                    {
-                        std::cout << "iteration " << k1 << ": " << k2 << std::flush;
-                        limits[k1] = k2;
-                        copy( limits.begin(), limits.end(), sortLimits.begin() );
-                        sort( sortLimits.begin(), sortLimits.end() );
-                        std::cout << "==> labels: ";
-
-                        for ( i = 0; i < sortLimits.size(); i++ )
-                            std::cout << (short) sortLimits[i] << " ";
-
-                        std::cout << "==> Maxlabels: [";
-
-                        for ( i = 0; i < maxLimits.size(); i++ )
-                            std::cout << (short) maxLimits[i] << ", ";
-
-                        std::cout << "]" << std::endl;
-
-                        unsigned char * fixIt = m_data;
-                        unsigned char * segIt = m_simplifiedData;
-                        unsigned char * fixItEnd = m_data + m_dataSize;
-
-                        while ( fixIt < fixItEnd )
-                        {
-                            i = 0;
-                            value = *fixIt;
-
-                            while ( value > sortLimits[i] && i < nLabels )
-                            {
-                                i++;
-                            }
-
-                            *segIt = i;
-                            ++fixIt;
-                            ++segIt;
-                        }
-
-                        std::cout << "Imatge labelitzada!!" << std::endl;
-
-                        // calcular excess entropy
-                        emit needsExcessEntropy();
-                        std::cout << "Exces entropy (" << k1 << ") => " << m_excessEntropy << std::endl;
-
-                        if ( m_excessEntropy > maxExcessEntropy )
-                        {
-                            maxExcessEntropy = m_excessEntropy;
-                            maxIteration = k1;
-                            copy( limits.begin(), limits.end(), maxLimits.begin() );
-                            std::cout << "** is maximum **" << std::endl;
-                        }
-                    }
-                }
-            }
-
-            std::cout << "MAX SWAPPING ALGORITHM  ==> Max entropy = " << maxExcessEntropy << ", per " << std::flush;
-
-            for ( i = 0; i < maxLimits.size(); i++ )
-            {
-                std::cout << (short) maxLimits[i] << " ";
-            }
-
-            std::cout << std::endl;
+            std::cout << (short) maxLimits[i] << " ";
         }
-        // fi swapping algorithm
 
-        // finest algorithm
-        if ( finest )
-        {
-            bool canviat = true;
-
-            while ( canviat )
-            {
-                canviat = false;
-
-                for ( k1 = 0; k1 < nLabels; k1++ )
-                {
-                    copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
-                    limits[k1] = limits[k1] - 1;
-                    std::cout << "iteration " << k1 << ": " << (short) limits[k1] << std::flush;
-                    copy( limits.begin(), limits.end(), sortLimits.begin() );
-                    sort( sortLimits.begin(), sortLimits.end() );
-                    std::cout << "==> labels: ";
-
-                    for ( i = 0; i < sortLimits.size(); i++ )
-                        std::cout << (short) sortLimits[i] << " ";
-
-                    std::cout << "==> Maxlabels: [";
-
-                    for ( i = 0; i < maxLimits.size(); i++ )
-                        std::cout << (short) maxLimits[i] << ", ";
-
-                    std::cout << "]" << std::endl;
-
-                    unsigned char * fixIt = m_data;
-                    unsigned char * segIt = m_simplifiedData;
-                    unsigned char * fixItEnd = m_data + m_dataSize;
-
-                    while ( fixIt < fixItEnd )
-                    {
-                        i = 0;
-                        value = *fixIt;
-
-                        while ( value > sortLimits[i] && i < nLabels )
-                        {
-                            i++;
-                        }
-
-                        *segIt = i;
-                        ++fixIt;
-                        ++segIt;
-                    }
-
-                    std::cout << "Imatge labelitzada!!" << std::endl;
-
-                    // calcular excess entropy
-                    emit needsExcessEntropy();
-                    std::cout << "Exces entropy (" << k1 << ") => " << m_excessEntropy << std::endl;
-
-                    if ( m_excessEntropy > maxExcessEntropy )
-                    {
-                        maxExcessEntropy = m_excessEntropy;
-                        copy( limits.begin(), limits.end(), maxLimits.begin() );
-                        canviat = true;
-                        std::cout << "** is maximum **" << std::endl;
-                    }
-
-                    // cap a l'altra banda
-                    limits[k1] = limits[k1] + 2;    // ara limits[k1] val "limits[k1] - 1"
-                    std::cout << "iteration " << k1 << ": " << (short) limits[k1] << std::flush;
-                    copy( limits.begin(), limits.end(), sortLimits.begin() );
-                    sort( sortLimits.begin(), sortLimits.end() );
-                    std::cout << "==> labels: ";
-
-                    for ( i = 0; i < sortLimits.size(); i++ )
-                        std::cout << (short) sortLimits[i] << " ";
-
-                    std::cout << "==> Maxlabels: [";
-
-                    for ( i = 0; i < maxLimits.size(); i++ )
-                        std::cout << (short) maxLimits[i] << ", ";
-
-                    std::cout << "]" << std::endl;
-
-                    fixIt = m_data;
-                    segIt = m_simplifiedData;
-
-                    while ( fixIt < fixItEnd )
-                    {
-                        i = 0;
-                        value = *fixIt;
-
-                        while ( value > sortLimits[i] && i < nLabels )
-                        {
-                            i++;
-                        }
-
-                        *segIt = i;
-                        ++fixIt;
-                        ++segIt;
-                    }
-
-                    std::cout << "Imatge labelitzada!!" << std::endl;
-
-                    // calcular excess entropy
-                    emit needsExcessEntropy();
-                    std::cout << "Exces entropy (" << k1 << ") => " << m_excessEntropy << std::endl;
-
-                    if ( m_excessEntropy > maxExcessEntropy )
-                    {
-                        maxExcessEntropy = m_excessEntropy;
-                        copy( limits.begin(), limits.end(), maxLimits.begin() );
-                        canviat = true;
-                        std::cout << "** is maximum **" << std::endl;
-                    }
-                }
-            }
-
-            std::cout << "MAX FINEST ALGORITHM  ==> Max entropy = " << maxExcessEntropy << ", per " << std::flush;
-
-            for ( i = 0; i < maxLimits.size(); i++ )
-            {
-                std::cout << (short) maxLimits[i] << " ";
-            }
-
-            std::cout << std::endl;
-        }
-        // fi finest algorithm
+        std::cout << std::endl;
     }
-    else QMessageBox::information( 0, "Presegmented", "Presegmented" );
+    // fi finest algorithm
 
     // desem la imatge labelitzada
     copy( maxLimits.begin(), maxLimits.end(), sortLimits.begin() );
     sort( sortLimits.begin(), sortLimits.end() );
 
-    if ( !presegmented )
-    {
-        QFile segFile( m_segmentationFileName );
 
-        if ( segFile.open( QFile::WriteOnly | QFile::Truncate | QFile::Text ) )
-        {
-            QTextStream out( &segFile );
+    labelize( sortLimits );
+    std::cout << "Imatge Final labelitzada!!" << std::endl;
 
-            for ( unsigned char nWritten = 0; nWritten < nLabels; nWritten++ )
-                out << static_cast< short >( sortLimits[nWritten] ) << " ";
+    generateAdjustedTransferFunction( sortLimits );
 
-            segFile.close();
-        }
-    }
+    return nLabels + 1; // retornem el nombre de regions trobades
+}
 
+
+
+void OptimalViewpointVolume::labelize( const std::vector< unsigned char > & limits )
+{
     unsigned char * fixIt = m_data;
 //    IteratorType grounIt(GrounImage, GrounImage->GetBufferedRegion());
     unsigned char * segIt = m_simplifiedData;
     unsigned char * seg2It = m_segmentedData;
     unsigned char * fixItEnd = m_data + m_dataSize;
 
-    int cont = 0;
+//     int cont = 0;
 
     while ( fixIt < fixItEnd )
     {
-        i = 0;
-        value = *fixIt;
+        unsigned char i = 0;
+        unsigned char value = *fixIt;
 
-        while ( value > sortLimits[i] && i < nLabels )
+        while ( value > limits[i] && i < limits.size() )
         {
             i++;
         }
 
-        cont++;
-
-//         if(probok)
-//         {
-//             prob[i][(int)grounIt.Get()]++;
-//         }
+//         cont++;
 
         *segIt = i;
 
         if ( i == 0 )
         {
-            *seg2It = sortLimits[i] / 2;
+            *seg2It = limits[i] / 2;
         }
-        else if ( i == nLabels )
+        else if ( i == limits.size() )
         {
-            *seg2It = sortLimits[i-1] + (256 - sortLimits[i-1]) / 2;
+            *seg2It = limits[i-1] + (256 - limits[i-1]) / 2;
         }
         else
         {
-            *seg2It = sortLimits[i-1] + (sortLimits[i] + 1 - sortLimits[i-1]) / 2;
+            *seg2It = limits[i-1] + (limits[i] + 1 - limits[i-1]) / 2;
         }
 
         ++fixIt;
@@ -704,72 +617,42 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
         ++segIt;
         ++seg2It;
     }
-
-    std::cout << "Imatge Final labelitzada!!" << std::endl;
-    std::cout << "Resultats Segmentació: " << std::endl;
-
-//     if(probok)
-//     {
-//         for(i=0;i<nlabels+1;i++){
-//             for(j=0;j<10;j++){
-//                 std::cout<<prob[i][j]<<"\t";
-//                 fout<<prob[i][j]<<"\t";
-//             }
-//             std::cout<<std::endl;
-//             fout<<std::endl;
-//         }
-//         fout<<"Punts totals: "<<std::endl<<cont<<std::endl;
-//     }
+}
 
 
-    // funció de transferència ajustada
+
+void OptimalViewpointVolume::generateAdjustedTransferFunction( const std::vector< unsigned char> & limits )
+{
+    srand( time( 0 ) );
+
     OptimalViewpoint::TransferFunction adjustedTransferFunction;
     int r, g, b, a;
 
-    r = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    g = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    b = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    a = 4;//static_cast<int>( randomGenerator( seed ) * 255.0 );
+    r = static_cast<int>( rand() % 256 );
+    g = static_cast<int>( rand() % 256 );
+    b = static_cast<int>( rand() % 256 );
+    a = 1;
     adjustedTransferFunction << QGradientStop( 0.0, QColor( r, g, b, a ) )
-                             << QGradientStop( sortLimits[0] / 255.0, QColor( r, g, b, a ) );
+                             << QGradientStop( limits[0] / 255.0, QColor( r, g, b, a ) );
 
-    for ( i = 0; i < nLabels - 1; i++ )
+    for ( unsigned char i = 0; i < limits.size() - 1; i++ )
     {
-        r = static_cast<int>( randomGenerator( seed ) * 255.0 );
-        g = static_cast<int>( randomGenerator( seed ) * 255.0 );
-        b = static_cast<int>( randomGenerator( seed ) * 255.0 );
-        a = static_cast<int>( randomGenerator( seed ) * 255.0 );
-        adjustedTransferFunction << QGradientStop( ( sortLimits[i] + 1 ) / 255.0, QColor( r, g, b, a ) )
-                                 << QGradientStop( sortLimits[i + 1] / 255.0, QColor( r, g, b, a ) );
+        r = static_cast<int>( rand() % 256 );
+        g = static_cast<int>( rand() % 256 );
+        b = static_cast<int>( rand() % 256 );
+        a = static_cast<int>( rand() % 256 );
+        adjustedTransferFunction << QGradientStop( ( limits[i] + 1 ) / 255.0, QColor( r, g, b, a ) )
+                                 << QGradientStop( limits[i + 1] / 255.0, QColor( r, g, b, a ) );
     }   // i == nLabels - 1
 
-    r = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    g = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    b = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    a = static_cast<int>( randomGenerator( seed ) * 255.0 );
-    adjustedTransferFunction << QGradientStop( ( sortLimits[i] + 1 ) / 255.0, QColor( r, g, b, a ) )
+    r = static_cast<int>( rand() % 256 );
+    g = static_cast<int>( rand() % 256 );
+    b = static_cast<int>( rand() % 256 );
+    a = static_cast<int>( rand() % 256 );
+    adjustedTransferFunction << QGradientStop( ( limits[limits.size()-1] + 1 ) / 255.0, QColor( r, g, b, a ) )
                              << QGradientStop( 1.0, QColor( r, g, b, a ) );
 
     emit adjustedTransferFunctionDefined( adjustedTransferFunction );
-
-
-
-
-    return nLabels + 1; // retornem el nombre de regions trobades
-
-
-    // suavitzat (pel brainweb)
-//     vtkImageGaussianSmooth * smooth = vtkImageGaussianSmooth::New();
-//     smooth->Print( std::cout );
-//     smooth->SetInput( m_image );
-// //     smooth->SetDimensionality( 3 );  // no cal
-//     smooth->SetRadiusFactor( 1.0 );
-//     smooth->SetStandardDeviation( 1.0 );
-//     smooth->Update();
-//     m_image->ShallowCopy( smooth->GetOutput() );
-//     m_image->Update();
-//     smooth->Print( std::cout );
-//     smooth->Delete();
 }
 
 

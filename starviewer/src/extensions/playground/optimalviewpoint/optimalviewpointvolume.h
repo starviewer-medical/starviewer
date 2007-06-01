@@ -70,6 +70,9 @@ public:
     void handle( int rayId, int offset );
     void endRay( int rayId );
 
+    /// Carrega la segmentació del volum des dun fitxer de text.
+    signed char loadSegmentationFromFile( const QString & segmentationFileName );
+    /// Fa una segmentació automàtica del volum.
     unsigned char segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise );
 
     void setSegmentationFileName( QString name );
@@ -95,6 +98,11 @@ public slots:
     void setComputing( bool on = true );
 
 private:
+
+    /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
+    void labelize( const std::vector< unsigned char> & limits );
+    /// Genera una funció de transferència ajustada a la segmentació a partir dels límits donats.
+    void generateAdjustedTransferFunction( const std::vector< unsigned char> & limits );
 
     /// Model de vòxels original.
     vtkImageData * m_image;

@@ -70,6 +70,10 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     // quan un paràmetre s'actualitzi, s'actualitzarà a tots els widgets que el tinguin com a input
 //     connect( m_parameters, SIGNAL( changed(int) ), m_optimalViewpointInputParametersForm, SLOT( readParameter(int) ) );
     connect( m_parameters, SIGNAL( changed(int) ), m_inputParametersWidget, SLOT( readParameter(int) ) );
+
+
+    connect( m_inputParametersWidget, SIGNAL( loadSegmentationRequested() ), SLOT( loadSegmentation() ) );
+    connect( m_inputParametersWidget, SIGNAL( automaticSegmentationRequested() ), SLOT( automaticSegmentation() ) );
 }
 
 
@@ -102,32 +106,40 @@ void QOptimalViewpointExtension::execute()
 
         if ( volume )
         {
-            if ( !m_method )
+//             if ( !m_method )    // ja no hi hauria d'entrar
+//             {
+//                 m_method = new OptimalViewpoint();
+//                 m_viewer = new OptimalViewpointViewer( m_viewerWidget );
+//                 m_viewerWidget->layout()->addWidget( m_viewer );
+//                 m_viewer->setRenderer( m_method->getMainRenderer() );
+//                 m_method->setInteractor( m_viewer->getInteractor() );
+// //                 m_applicationWindow->addWorkingAreaWidget( m_viewer, tr("Optimal Viewpoint") );
+// //                 VolumeRepository * repository = VolumeRepository::getRepository();
+//                 m_method->setImage( volume->getVtkData() );
+// //                 m_method->setImageFileName( repository->getVolume( volumeId )->getFileName() );
+//                 m_method->setSegmentationFileName( m_parameters->getSegmentationFileName() );
+// 
+//                 // segmentació del model
+//                 unsigned char n = m_method->segmentateImage(
+//                         m_parameters->getSegmentationIterations(),
+//                         m_parameters->getSegmentationBlockLength(),
+//                         m_parameters->getSegmentationNumberOfClusters(),
+//                         m_parameters->getSegmentationNoise(),
+//                         m_parameters->getSegmentationImageSampleDistance(),
+//                         m_parameters->getSegmentationSampleDistance() );
+// 
+//                 // funció de transferència ajustada
+//                 m_parameters->setAdjustedTransferFunction( m_method->getAdjustedTransferFunction() );
+//                 m_parameters->setNumberOfClusters( n );
+//                 std::cout << "number of clusters: " << (short) n << std::endl;
+//             }
+
+            if ( !m_viewer )
             {
-                m_method = new OptimalViewpoint();
                 m_viewer = new OptimalViewpointViewer( m_viewerWidget );
                 m_viewerWidget->layout()->addWidget( m_viewer );
                 m_viewer->setRenderer( m_method->getMainRenderer() );
-                m_method->setInteractor( m_viewer->getInteractor() );
-//                 m_applicationWindow->addWorkingAreaWidget( m_viewer, tr("Optimal Viewpoint") );
-//                 VolumeRepository * repository = VolumeRepository::getRepository();
-                m_method->setImage( volume->getVtkData() );
-//                 m_method->setImageFileName( repository->getVolume( volumeId )->getFileName() );
-                m_method->setSegmentationFileName( m_parameters->getSegmentationFileName() );
-
-                // segmentació del model
-                unsigned char n = m_method->segmentateImage(
-                        m_parameters->getSegmentationIterations(),
-                        m_parameters->getSegmentationBlockLength(),
-                        m_parameters->getSegmentationNumberOfClusters(),
-                        m_parameters->getSegmentationNoise(),
-                        m_parameters->getSegmentationImageSampleDistance(),
-                        m_parameters->getSegmentationSampleDistance() );
-
-                // funció de transferència ajustada
-                m_parameters->setAdjustedTransferFunction( m_method->getAdjustedTransferFunction() );
-                m_parameters->setNumberOfClusters( n );
-                std::cout << "number of clusters: " << (short) n << std::endl;
+//                 m_method->setInteractor( m_viewer->getInteractor() );
             }
 
             m_method->setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
@@ -184,6 +196,79 @@ void QOptimalViewpointExtension::execute()
             }
         }
     }
+}
+
+
+
+void QOptimalViewpointExtension::loadSegmentation()
+{
+    if ( !m_parameters )
+    {
+        std::cerr << "QOptimalViewpointExtension::loadSegmentation(): No hi ha paràmetres establerts" << std::endl;
+        return;
+    }
+
+    Volume * volume = m_parameters->getVolumeObject();
+    if ( !volume )
+    {
+        std::cerr << "QOptimalViewpointExtension::loadSegmentation(): No s'ha assignat el volum" << std::endl;
+        return;
+    }
+
+    if ( !m_method ) m_method = new OptimalViewpoint();
+
+    m_method->setImage( volume->getVtkData() );
+    signed char numberOfClusters = m_method->loadSegmentationFromFile( m_parameters->getSegmentationFileName() );
+
+    if ( numberOfClusters < 0 )
+    {
+        QMessageBox::critical( this, tr("Segmentation error"),
+                               QString( tr("Cannot load segmentation from file ") )
+                                + m_parameters->getSegmentationFileName() + "." );
+        return;
+    }
+
+    m_parameters->setAdjustedTransferFunction( m_method->getAdjustedTransferFunction() );
+    m_parameters->setNumberOfClusters( numberOfClusters );
+    std::cout << "number of clusters: " << (short) numberOfClusters << std::endl;
+
+    // TODO podríem fer la primera visualització per defecte
+}
+
+
+
+void QOptimalViewpointExtension::automaticSegmentation()
+{
+    if ( !m_parameters )
+    {
+        std::cerr << "QOptimalViewpointExtension::loadSegmentation(): No hi ha paràmetres establerts" << std::endl;
+        return;
+    }
+
+    Volume * volume = m_parameters->getVolumeObject();
+    if ( !volume )
+    {
+        std::cerr << "QOptimalViewpointExtension::loadSegmentation(): No s'ha assignat el volum" << std::endl;
+        return;
+    }
+
+    if ( !m_method ) m_method = new OptimalViewpoint();
+
+    m_method->setImage( volume->getVtkData() );
+
+    unsigned char numberOfClusters = m_method->doAutomaticSegmentation(
+            m_parameters->getSegmentationIterations(),
+            m_parameters->getSegmentationBlockLength(),
+            m_parameters->getSegmentationNumberOfClusters(),
+            m_parameters->getSegmentationNoise(),
+            m_parameters->getSegmentationImageSampleDistance(),
+            m_parameters->getSegmentationSampleDistance() );
+
+    m_parameters->setAdjustedTransferFunction( m_method->getAdjustedTransferFunction() );
+    m_parameters->setNumberOfClusters( numberOfClusters );
+    std::cout << "number of clusters: " << (short) numberOfClusters << std::endl;
+
+    // TODO podríem fer la primera visualització per defecte
 }
 
 

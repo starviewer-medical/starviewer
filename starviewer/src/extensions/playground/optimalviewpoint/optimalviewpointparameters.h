@@ -51,15 +51,19 @@ public:
     enum OptimalViewpointParametersNames
     {
         VolumeObject,
+
         SegmentationFileName,
         SegmentationIterations, SegmentationBlockLength, SegmentationNumberOfClusters,
             SegmentationNoise, SegmentationImageSampleDistance, SegmentationSampleDistance,
+
+        NumberOfClusters,
+
         NumberOfPlanes, Shade, VisualizationBlockLength,
             VisualizationImageSampleDistance, VisualizationSampleDistance, TransferFunction,
 
         // nous paràmetres
         ComputeWithOpacity, Interpolation, Specular, SpecularPower, UpdatePlane,
-        Compute, NumberOfClusters
+        Compute
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
