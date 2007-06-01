@@ -163,9 +163,9 @@ void OptimalViewpointParameters::setNumberOfPlanes( unsigned char numberOfPlanes
     m_numberOfPlanes = numberOfPlanes; emit changed( NumberOfPlanes );
 }
 
-void OptimalViewpointParameters::setTransferFunction( const OptimalViewpoint::TransferFunction & transferFunction )
+void OptimalViewpointParameters::setTransferFunctionObject( const TransferFunction & transferFunctionObject )
 {
-    m_transferFunction = transferFunction; emit changed( TransferFunction );
+    m_transferFunctionObject = transferFunctionObject; emit changed( TransferFunctionObject );
 }
 
 Volume * OptimalViewpointParameters::getVolumeObject() const
@@ -178,9 +178,9 @@ unsigned char OptimalViewpointParameters::getNumberOfPlanes() const
     return m_numberOfPlanes;
 }
 
-const OptimalViewpoint::TransferFunction & OptimalViewpointParameters::getTransferFunction() const
+const TransferFunction & OptimalViewpointParameters::getTransferFunctionObject() const
 {
-    return m_transferFunction;
+    return m_transferFunctionObject;
 }
 
 unsigned char OptimalViewpointParameters::getVisualizationBlockLength() const
@@ -196,7 +196,7 @@ void OptimalViewpointParameters::setVisualizationBlockLength( unsigned char visu
     }
 }
 
-void OptimalViewpointParameters::setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction )
+void OptimalViewpointParameters::setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction )
 {
     std::cout << "OVP::satf" << std::endl;
     emit signalAdjustedTransferFunction( adjustedTransferFunction );

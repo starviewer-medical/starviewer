@@ -28,6 +28,7 @@ public:
 
     void setIsFirst( bool isFirst );
     void setIsLast( bool isLast );
+    bool isInterval() const;
     int start() const;
     int end() const;
     QColor color() const;

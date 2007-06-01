@@ -30,6 +30,7 @@
 
 #include <vtkImageGaussianSmooth.h>
 #include "vtk4DLinearRegressionGradientEstimator.h"
+#include "transferfunction.h"
 
 
 namespace udg {
@@ -625,15 +626,17 @@ void OptimalViewpointVolume::generateAdjustedTransferFunction( const std::vector
 {
     srand( time( 0 ) );
 
-    OptimalViewpoint::TransferFunction adjustedTransferFunction;
+    TransferFunction adjustedTransferFunction;
     int r, g, b, a;
 
     r = static_cast<int>( rand() % 256 );
     g = static_cast<int>( rand() % 256 );
     b = static_cast<int>( rand() % 256 );
     a = 1;
-    adjustedTransferFunction << QGradientStop( 0.0, QColor( r, g, b, a ) )
-                             << QGradientStop( limits[0] / 255.0, QColor( r, g, b, a ) );
+//     adjustedTransferFunction << QGradientStop( 0.0, QColor( r, g, b, a ) )
+//                              << QGradientStop( limits[0] / 255.0, QColor( r, g, b, a ) );
+    adjustedTransferFunction.addPoint( 0.0, QColor( r, g, b, a ) );
+    adjustedTransferFunction.addPoint( limits[0], QColor( r, g, b, a ) );
 
     for ( unsigned char i = 0; i < limits.size() - 1; i++ )
     {
@@ -641,16 +644,24 @@ void OptimalViewpointVolume::generateAdjustedTransferFunction( const std::vector
         g = static_cast<int>( rand() % 256 );
         b = static_cast<int>( rand() % 256 );
         a = static_cast<int>( rand() % 256 );
-        adjustedTransferFunction << QGradientStop( ( limits[i] + 1 ) / 255.0, QColor( r, g, b, a ) )
-                                 << QGradientStop( limits[i + 1] / 255.0, QColor( r, g, b, a ) );
+//         adjustedTransferFunction << QGradientStop( ( limits[i] + 1 ) / 255.0, QColor( r, g, b, a ) )
+//                                  << QGradientStop( limits[i + 1] / 255.0, QColor( r, g, b, a ) );
+        adjustedTransferFunction.addPoint( limits[i] + 1, QColor( r, g, b, a ) );
+        adjustedTransferFunction.addPoint( limits[i+1], QColor( r, g, b, a ) );
     }   // i == nLabels - 1
 
     r = static_cast<int>( rand() % 256 );
     g = static_cast<int>( rand() % 256 );
     b = static_cast<int>( rand() % 256 );
     a = static_cast<int>( rand() % 256 );
-    adjustedTransferFunction << QGradientStop( ( limits[limits.size()-1] + 1 ) / 255.0, QColor( r, g, b, a ) )
-                             << QGradientStop( 1.0, QColor( r, g, b, a ) );
+//     adjustedTransferFunction << QGradientStop( ( limits[limits.size()-1] + 1 ) / 255.0, QColor( r, g, b, a ) )
+//                              << QGradientStop( 1.0, QColor( r, g, b, a ) );
+    adjustedTransferFunction.addPoint( limits[limits.size()-1] + 1, QColor( r, g, b, a ) );
+    adjustedTransferFunction.addPoint( 255.0, QColor( r, g, b, a ) );
+
+    std::cout << "OVV: atf:" << std::endl;
+    adjustedTransferFunction.print();
+    std::cout << "-------------------" << std::endl;
 
     emit adjustedTransferFunctionDefined( adjustedTransferFunction );
 }

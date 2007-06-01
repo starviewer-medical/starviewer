@@ -169,8 +169,8 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     // calculem la mida òptima pels miralls
     this->m_planeSize = (unsigned short) ceil( volume->GetLength() );
 
-    connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const OptimalViewpoint::TransferFunction&) ),
-             this, SLOT( setAdjustedTransferFunction(const OptimalViewpoint::TransferFunction&) ) );
+    connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const TransferFunction&) ),
+             this, SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
@@ -395,23 +395,25 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
     //typedef QVector<QGradientStop> QGradientStops;
     //typedef QGradientStops TransferFunction;
 
-    vtkPiecewiseFunction * opacityTransferFunction = vtkPiecewiseFunction::New();
-    vtkColorTransferFunction * colorTransferFunction = vtkColorTransferFunction::New();
-
-    for ( unsigned char k = 0; k < transferFunction.count(); k++ )
-    {
-        opacityTransferFunction->AddPoint(
-                transferFunction[k].first * 255.0,
-                transferFunction[k].second.alpha() / 255.0 );
-        colorTransferFunction->AddRGBPoint(
-                transferFunction[k].first * 255.0,
-                transferFunction[k].second.red() / 255.0,
-                transferFunction[k].second.green() / 255.0,
-                transferFunction[k].second.blue() / 255.0 );
-    }
-
-    m_volume->setOpacityTransferFunction( opacityTransferFunction );
-    m_volume->setColorTransferFunction( colorTransferFunction );
+//     vtkPiecewiseFunction * opacityTransferFunction = vtkPiecewiseFunction::New();
+//     vtkColorTransferFunction * colorTransferFunction = vtkColorTransferFunction::New();
+// 
+//     for ( unsigned char k = 0; k < transferFunction.count(); k++ )
+//     {
+//         opacityTransferFunction->AddPoint(
+//                 transferFunction[k].first * 255.0,
+//                 transferFunction[k].second.alpha() / 255.0 );
+//         colorTransferFunction->AddRGBPoint(
+//                 transferFunction[k].first * 255.0,
+//                 transferFunction[k].second.red() / 255.0,
+//                 transferFunction[k].second.green() / 255.0,
+//                 transferFunction[k].second.blue() / 255.0 );
+//     }
+// 
+//     m_volume->setOpacityTransferFunction( opacityTransferFunction );
+//     m_volume->setColorTransferFunction( colorTransferFunction );
+    m_volume->setOpacityTransferFunction( transferFunction.getOpacityTransferFunction() );
+    m_volume->setColorTransferFunction( transferFunction.getColorTransferFunction() );
 }
 
 /// Actualitza els miralls.
@@ -501,13 +503,15 @@ std::vector<double> * OptimalViewpoint::getExcessEntropyResults()
     return results;
 }
 
-const OptimalViewpoint::TransferFunction & OptimalViewpoint::getAdjustedTransferFunction() const
+const TransferFunction & OptimalViewpoint::getAdjustedTransferFunction() const
 {
     std::cout << "OV::gatf: own adjusted transfer function:" << std::endl;
-    for ( int i = 0; i < m_adjustedTransferFunction.size(); i++ )
-    {
-        std::cout << m_adjustedTransferFunction[i].first << ": " << qPrintable( m_adjustedTransferFunction[i].second.name() ) << std::endl;
-    }
+//     for ( int i = 0; i < m_adjustedTransferFunction.size(); i++ )
+//     {
+//         std::cout << m_adjustedTransferFunction[i].first << ": " << qPrintable( m_adjustedTransferFunction[i].second.name() ) << std::endl;
+//     }
+    m_adjustedTransferFunction.print();
+    std::cout << "----------------------" << std::endl;
 
     return m_adjustedTransferFunction;
 }
@@ -520,6 +524,9 @@ void OptimalViewpoint::newResults()
 void OptimalViewpoint::setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction )
 {
     m_adjustedTransferFunction = adjustedTransferFunction;
+    std::cout << "OV::satf(): atf:" << std::endl;
+    m_adjustedTransferFunction.print();
+    std::cout << "----------------------" << std::endl;
 }
 
 

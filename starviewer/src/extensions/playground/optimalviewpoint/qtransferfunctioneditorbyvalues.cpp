@@ -82,31 +82,28 @@ QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
 
 
 
-const QGradientStops & QTransferFunctionEditorByValues::getTransferFunction() const
+const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const
 {
-    //typedef QPair<qreal,QColor> QGradientStop;
-    //typedef QVector<QGradientStop> QGradientStops;
-
     m_transferFunction.clear();
 
     QList< QTransferFunctionIntervalEditor * > intervalList =
             m_intervalEditorsWidget->findChildren< QTransferFunctionIntervalEditor * >();
     QTransferFunctionIntervalEditor * interval;
     foreach ( interval, intervalList )
-        m_transferFunction << interval->getInterval();
+    {
+        m_transferFunction.addPoint( interval->start(), interval->color() );
+        if ( interval->isInterval() ) m_transferFunction.addPoint( interval->end(), interval->color() );
+    }
 
     m_changed = false;
 
     return m_transferFunction;
 }
 
-
-void QTransferFunctionEditorByValues::setTransferFunction( const QGradientStops & transferFunction )
+/// \warning Ara tractem la TransferFunction com si guardés punts RGBA. S'ha de refinar!!!
+void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunction & transferFunction )
 {
     if ( !m_changed && m_transferFunction == transferFunction ) return;
-
-    //typedef QPair<qreal,QColor> QGradientStop;
-    //typedef QVector<QGradientStop> QGradientStops;
 
     while ( m_numberOfIntervals > 1 ) removeInterval();
 
@@ -115,29 +112,58 @@ void QTransferFunctionEditorByValues::setTransferFunction( const QGradientStops 
     // sempre tindrem a punt el següent (per evitar restriccions amb els valors) i l'esborrarem al final
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
-    for ( unsigned short i = 0; i < transferFunction.size(); i++ )
+    QMapIterator< double, QColor > * it = transferFunction.getColorPoints();
+    bool first = true;
+
+    while ( it->hasNext() )
     {
-        const QGradientStop & stop = transferFunction[i];
+        it->next();
 
-        if ( i == 0 ) current->setIsInterval( false );  // cas especial: primer
+        if ( first ) current->setIsInterval( false );   // cas especial: primer
 
-        if ( i == 0 || stop.second != current->color() )
+        if ( first || it->value() != current->color() )
         {
-            if ( i > 0 )
+            if ( !first )
             {
                 current = next;
                 next = addIntervalAndReturnIt();
             }
 
-            current->setStart( static_cast< int >( round( stop.first * 255.0 ) ) );
-            current->setColor( stop.second );
+            current->setStart( static_cast< int >( round( it->key() ) ) );
+            current->setColor( it->value() );
         }
         else
         {
             current->setIsInterval( true );
-            current->setEnd( static_cast< int >( round( stop.first * 255.0 ) ) );
+            current->setEnd( static_cast< int >( round( it->key() ) ) );
         }
+
+        first = false;
     }
+
+//     for ( unsigned short i = 0; i < transferFunction.size(); i++ )
+//     {
+//         const QGradientStop & stop = transferFunction[i];
+// 
+//         if ( i == 0 ) current->setIsInterval( false );  // cas especial: primer
+// 
+//         if ( i == 0 || stop.second != current->color() )
+//         {
+//             if ( i > 0 )
+//             {
+//                 current = next;
+//                 next = addIntervalAndReturnIt();
+//             }
+// 
+//             current->setStart( static_cast< int >( round( stop.first * 255.0 ) ) );
+//             current->setColor( stop.second );
+//         }
+//         else
+//         {
+//             current->setIsInterval( true );
+//             current->setEnd( static_cast< int >( round( stop.first * 255.0 ) ) );
+//         }
+//     }
 
     removeInterval();   // esborrem l'últim interval
 

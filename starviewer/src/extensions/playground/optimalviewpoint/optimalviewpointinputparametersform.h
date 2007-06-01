@@ -11,7 +11,8 @@
 #include "qinputparameters.h"
 #include "ui_optimalviewpointinputparametersformbase.h"
 
-#include "optimalviewpoint.h"
+// #include "optimalviewpoint.h"
+#include "transferfunction.h"
 
 namespace udg {
 
@@ -55,7 +56,7 @@ public slots:
     void writeSegmentationParameters();
 
     /// Assigna la funció de transferència actual.
-    void setTransferFunction( const QGradientStops & stops );
+    void setTransferFunction( const TransferFunction & transferFunction );
 
 protected:
 
@@ -75,7 +76,7 @@ private:
 //     Identifier m_volumeId;
 
     /// Funció de transferència actual.
-    OptimalViewpoint::TransferFunction m_transferFunction;
+    TransferFunction m_transferFunction;
 
     /// Cert si s'ha inicialitzat la funció de transferència i fals altrament.
     bool m_inited;
@@ -85,7 +86,7 @@ private:
 
 private slots:
 
-    void setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
+    void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
     void setNumberOfPlanes( const QString & numberOfPlanes );
     void openSegmentationFile();
     /// Demana el tipus de segmentació adequat segons les opcions triades.

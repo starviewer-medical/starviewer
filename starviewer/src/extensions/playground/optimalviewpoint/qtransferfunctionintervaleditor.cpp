@@ -70,6 +70,12 @@ void QTransferFunctionIntervalEditor::setIsLast( bool isLast )
 }
 
 
+bool QTransferFunctionIntervalEditor::isInterval() const
+{
+    return m_isIntervalCheckBox->isChecked();
+}
+
+
 int QTransferFunctionIntervalEditor::start() const
 {
     return m_intervalStartSpinBox->value();

@@ -14,7 +14,7 @@
 #include <QSettings>
 
 
-#include "optimalviewpoint.h"
+// #include "optimalviewpoint.h"
 #include "optimalviewpointparameters.h"
 
 
@@ -30,8 +30,10 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     m_automaticSegmentationWidget->hide();
 
     m_parameters = 0;
-    m_transferFunction << QGradientStop( 0, QColor( 0, 0, 0, 0 ) )
-                       << QGradientStop( 1, QColor( 255, 255, 255, 255 ) );
+//     m_transferFunction << QGradientStop( 0, QColor( 0, 0, 0, 0 ) )
+//                        << QGradientStop( 1, QColor( 255, 255, 255, 255 ) );
+    m_transferFunction.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
+    m_transferFunction.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
     m_inited = false;
 
     m_segmentationFileChosen = false;
@@ -65,8 +67,8 @@ void OptimalViewpointInputParametersForm::setParameters( OptimalViewpointParamet
     {
         delete m_parameters;
         m_parameters = parameters;
-        connect( m_parameters, SIGNAL( signalAdjustedTransferFunction(const OptimalViewpoint::TransferFunction&) ),
-                 this, SLOT( setAdjustedTransferFunction(const OptimalViewpoint::TransferFunction&) ) );
+        connect( m_parameters, SIGNAL( signalAdjustedTransferFunction(const TransferFunction&) ),
+                 this, SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
     }
 }
 
@@ -138,9 +140,9 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
                 m_spinBoxVisualizationBlockLength->setValue( m_parameters->getVisualizationBlockLength() );
                 break;
 
-            case OptimalViewpointParameters::TransferFunction:
+            case OptimalViewpointParameters::TransferFunctionObject:
 //                 m_transferFunction = m_parameters->getTransferFunction();
-                this->setTransferFunction( m_parameters->getTransferFunction() );
+                this->setTransferFunction( m_parameters->getTransferFunctionObject() );
                 break;
 
 
@@ -206,7 +208,7 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         m_parameters->setVisualizationImageSampleDistance( m_doubleSpinBoxVisualizationImageSampleDistance->value() );
         m_parameters->setVisualizationSampleDistance( m_doubleSpinBoxVisualizationSampleDistance->value() );
         m_parameters->setVisualizationBlockLength( m_spinBoxVisualizationBlockLength->value() );
-        m_parameters->setTransferFunction( m_transferFunction );
+        m_parameters->setTransferFunctionObject( m_transferFunction );
 
 
         // nous paràmetres
@@ -242,11 +244,11 @@ void OptimalViewpointInputParametersForm::writeSegmentationParameters()
 
 
 /// Assigna la funció de transferència actual.
-void OptimalViewpointInputParametersForm::setTransferFunction( const QGradientStops & stops )
+void OptimalViewpointInputParametersForm::setTransferFunction( const TransferFunction & transferFunction )
 {
-    m_transferFunction = stops;
+    m_transferFunction = transferFunction;
 
-    m_gradientEditor->setGradientStops( stops );
+    m_gradientEditor->setGradientStops( transferFunction.getGradientStops() );
     m_gradientEditor->pointsUpdated();
 
     m_editorByValues->setTransferFunction( m_transferFunction );
@@ -272,17 +274,18 @@ void OptimalViewpointInputParametersForm::showEvent( QShowEvent * event )
     }
 }
 
-void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction )
+void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction )
 {
     std::cout << "OVIPF::satf" << std::endl;
-    m_gradientEditor->setGradientStops( adjustedTransferFunction );
+    adjustedTransferFunction.print();
+    m_gradientEditor->setGradientStops( adjustedTransferFunction.getGradientStops() );
     m_gradientEditor->pointsUpdated();
 
     m_transferFunction = adjustedTransferFunction;
 
     m_editorByValues->setTransferFunction( m_transferFunction );
 
-    m_parameters->setTransferFunction( m_transferFunction );
+    m_parameters->setTransferFunctionObject( m_transferFunction );
 
 //     m_groupBoxSegmentation->setDisabled( true );
 //     m_segmentationFileLabel->setDisabled( true );

@@ -152,7 +152,7 @@ void QOptimalViewpointExtension::execute()
             std::cout << "OVD: set sample distance" << std::endl;
             m_method->setBlockLength( m_parameters->getVisualizationBlockLength() );
             std::cout << "OVD: set block length" << std::endl;
-            m_method->setTransferFunction( m_parameters->getTransferFunction() );
+            m_method->setTransferFunction( m_parameters->getTransferFunctionObject() );
             std::cout << "OVD: set transfer function" << std::endl;
 
 

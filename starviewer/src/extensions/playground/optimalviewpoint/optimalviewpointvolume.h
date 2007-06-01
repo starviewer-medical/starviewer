@@ -12,7 +12,7 @@
 
 #include <vector>   // per std::vector<*>
 
-#include "optimalviewpoint.h" // per OptimalViewpoint::TransferFunction
+// #include "optimalviewpoint.h" // per OptimalViewpoint::TransferFunction
 
 class vtkColorTransferFunction;
 class vtkImageData;
@@ -24,6 +24,8 @@ class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
 
 namespace udg {
+
+class TransferFunction;
 
 /**
  * Encapsula el tractament de vtkVolumes que corresponen a un mateix model:
@@ -150,7 +152,7 @@ signals:
     void needsExcessEntropy();
     void visited( int rayId, unsigned char value );
     void rayEnd( int rayId );
-    void adjustedTransferFunctionDefined( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
+    void adjustedTransferFunctionDefined( const TransferFunction & adjustedTransferFunction );
 
 
 }; // end class OptimalViewpointVolume

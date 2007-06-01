@@ -10,12 +10,13 @@
 
 #include "parameters.h"
 
-#include <list> // per std::list<int>
-#include <QGradient>
+// #include <list> // per std::list<int>
+// #include <QGradient>
 
-#include "optimalviewpoint.h"   // per les funcions de transferència
+// #include "optimalviewpoint.h"   // per les funcions de transferència
 
-class QColor;
+// class QColor;
+#include "transferfunction.h"
 
 namespace udg {
 
@@ -59,7 +60,7 @@ public:
         NumberOfClusters,
 
         NumberOfPlanes, Shade, VisualizationBlockLength,
-            VisualizationImageSampleDistance, VisualizationSampleDistance, TransferFunction,
+            VisualizationImageSampleDistance, VisualizationSampleDistance, TransferFunctionObject,
 
         // nous paràmetres
         ComputeWithOpacity, Interpolation, Specular, SpecularPower, UpdatePlane,
@@ -110,16 +111,16 @@ public:
     
     void setVolumeObject( Volume * volumeObject );
     void setNumberOfPlanes( unsigned char numberOfPlanes );
-    void setTransferFunction( const OptimalViewpoint::TransferFunction & transferFunction );
+    void setTransferFunctionObject( const TransferFunction & transferFunctionObject );
     
     Volume * getVolumeObject() const;
     unsigned char getNumberOfPlanes() const;
-    const OptimalViewpoint::TransferFunction & getTransferFunction() const;
+    const TransferFunction & getTransferFunctionObject() const;
 
     unsigned char getVisualizationBlockLength() const;
     void setVisualizationBlockLength( unsigned char visualizationBlockLength );
 
-    void setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
+    void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
 
 
 
@@ -163,7 +164,7 @@ private:
     double m_visualizationImageSampleDistance;
     double m_visualizationSampleDistance;
     unsigned char m_visualizationBlockLength;
-    OptimalViewpoint::TransferFunction m_transferFunction;
+    TransferFunction m_transferFunctionObject;
 
 
 
@@ -180,7 +181,7 @@ private:
 
 signals:
 
-    void signalAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
+    void signalAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
 
 }; // end class OptimalViewpointParameters
 

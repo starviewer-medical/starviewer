@@ -10,8 +10,9 @@
 
 #include <QObject>
 
-#include <QGradient>    // per QGradientStops
+// #include <QGradient>    // per QGradientStops
 #include <vector>       // per std::vector<*>
+#include "transferfunction.h"
 
 class vtkCamera;
 class vtkRenderer;
@@ -66,7 +67,7 @@ public:
     
     //typedef QPair<qreal, QColor> QGradientStop;       // a <QGradient>
     //typedef QVector<QGradientStop> QGradientStops;    // a <QGradient>
-    typedef QGradientStops TransferFunction;                                // funció de transferència per un volum d'un mirall
+//     typedef QGradientStops TransferFunction;                                // funció de transferència per un volum d'un mirall
 
     OptimalViewpoint();
     virtual ~OptimalViewpoint();
@@ -137,7 +138,7 @@ public:
 private slots:
 
     void newResults();
-    void setAdjustedTransferFunction( const OptimalViewpoint::TransferFunction & adjustedTransferFunction );
+    void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
 
 private:
 

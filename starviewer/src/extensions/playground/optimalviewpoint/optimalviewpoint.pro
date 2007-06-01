@@ -29,7 +29,8 @@ HEADERS += gradienteditor2.h \
            vtkInteractorStyleTrackballActorGgg.h \
            vtkVolumeRayCastCompositeFunctionOptimalViewpoint.h \
            optimalviewpointextensionmediator.h \
-           qoptimalviewpointextension.h 
+           qoptimalviewpointextension.h \
+           transferfunction.h 
 SOURCES += gradienteditor2.cpp \
            histogram.cpp \
            hoverpoints.cpp \
@@ -52,7 +53,8 @@ SOURCES += gradienteditor2.cpp \
            vtkInteractorStyleTrackballActorGgg.cxx \
            vtkVolumeRayCastCompositeFunctionOptimalViewpoint.cxx \
            optimalviewpointextensionmediator.cpp \
-           qoptimalviewpointextension.cpp 
+           qoptimalviewpointextension.cpp \
+           transferfunction.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a

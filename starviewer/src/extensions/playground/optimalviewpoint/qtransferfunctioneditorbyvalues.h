@@ -9,6 +9,8 @@
 
 #include "ui_qtransferfunctioneditorbyvaluesbase.h"
 
+#include "transferfunction.h"
+
 namespace udg {
 
 class QTransferFunctionIntervalEditor;
@@ -28,8 +30,8 @@ public:
 
     virtual ~QTransferFunctionEditorByValues();
 
-    const QGradientStops & getTransferFunction() const;
-    void setTransferFunction( const QGradientStops & transferFunction );
+    const TransferFunction & getTransferFunction() const;
+    void setTransferFunction( const TransferFunction & transferFunction );
 
 public slots:
 
@@ -50,7 +52,7 @@ private:
     QTransferFunctionIntervalEditor * addIntervalAndReturnIt();
 
     unsigned short m_numberOfIntervals;
-    mutable QGradientStops m_transferFunction;
+    mutable TransferFunction m_transferFunction;
     mutable bool m_changed;
 
 };
