@@ -31,6 +31,7 @@
 #include <vtkImageGaussianSmooth.h>
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include "transferfunction.h"
+#include "transferfunctionio.h"
 
 
 namespace udg {
@@ -663,7 +664,12 @@ void OptimalViewpointVolume::generateAdjustedTransferFunction( const std::vector
     adjustedTransferFunction.print();
     std::cout << "-------------------" << std::endl;
 
+//     TransferFunction * atf = TransferFunctionIO::fromFile( "/scratch/tf0.tf" );
+
     emit adjustedTransferFunctionDefined( adjustedTransferFunction );
+//     emit adjustedTransferFunctionDefined( *atf );
+
+//     delete atf;
 }
 
 

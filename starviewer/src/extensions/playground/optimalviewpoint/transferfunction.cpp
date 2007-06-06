@@ -25,12 +25,59 @@ namespace udg {
  */
 TransferFunction::TransferFunction()
 {
+    m_changed = true;
 }
 
 
 
 TransferFunction::~TransferFunction()
 {
+    m_rgba.clear(); /// \todo en teoria no cal, però sense això peta (???!!!)
+}
+
+
+
+QColor TransferFunction::get( double x ) const
+{
+    QColor rgba = getColor( x );
+    rgba.setAlphaF( getOpacity( x ) );
+    return rgba;
+}
+
+
+
+QColor TransferFunction::getColor( double x ) const
+{
+    if ( m_color.isEmpty() ) return Qt::black;
+    if ( m_color.contains( x ) ) return m_color[x];
+    if ( x < m_color.begin().key() ) return m_color.begin().value();
+    if ( x > ( m_color.end() - 1 ).key() ) return m_color.end().value();
+
+    QMap< double, QColor >::const_iterator a, b;
+    b = m_color.lowerBound( x );
+    a = b - 1;
+    double alpha = ( x - a.key() ) / ( b.key() - a.key() );
+    QColor color;
+    color.setRedF( a.value().redF() + alpha * ( b.value().redF() - a.value().redF() ) );
+    color.setGreenF( a.value().greenF() + alpha * ( b.value().greenF() - a.value().greenF() ) );
+    color.setBlueF( a.value().blueF() + alpha * ( b.value().blueF() - a.value().blueF() ) );
+    return color;
+}
+
+
+
+double TransferFunction::getOpacity( double x ) const
+{
+    if ( m_opacity.isEmpty() ) return 0.0;
+    if ( m_opacity.contains( x ) ) return m_opacity[x];
+    if ( x < m_opacity.begin().key() ) return m_opacity.begin().value();
+    if ( x > ( m_opacity.end() - 1 ).key() ) return m_opacity.end().value();
+
+    QMap< double, double >::const_iterator a, b;
+    b = m_opacity.lowerBound( x );
+    a = b - 1;
+    double alpha = ( x - a.key() ) / ( b.key() - a.key() );
+    return a.value() + alpha * ( b.value() - a.value() );
 }
 
 
@@ -39,6 +86,7 @@ void TransferFunction::addPoint( double x, const QColor & rgba )
 {
     m_color[x] = rgba;
     m_opacity[x] = rgba.alphaF();
+    m_changed = true;
 }
 
 
@@ -47,6 +95,7 @@ void TransferFunction::addPoint( double x, const QColor & color, double opacity 
 {
     m_color[x] = color;
     m_opacity[x] = opacity;
+    m_changed = true;
 }
 
 
@@ -55,6 +104,7 @@ void TransferFunction::removePoint( double x )
 {
     m_color.remove( x );
     m_opacity.remove( x );
+    m_changed = true;
 }
 
 
@@ -70,6 +120,7 @@ void TransferFunction::removePoint( double x )
 void TransferFunction::addPointToColor( double x, const QColor & color )
 {
     m_color[x] = color;
+    m_changed = true;
 }
 
 
@@ -85,6 +136,7 @@ void TransferFunction::addPointToColor( double x, const QColor & color )
 void TransferFunction::addPointToColorRGB( double x, int r, int g, int b )
 {
     m_color[x] = QColor( r, g, b );
+    m_changed = true;
 }
 
 
@@ -102,6 +154,7 @@ void TransferFunction::addPointToColorRGB( double x, double r, double g, double 
     QColor color;
     color.setRgbF( r, g, b );
     m_color[x] = color;
+    m_changed = true;
 }
 
 
@@ -116,6 +169,7 @@ void TransferFunction::addPointToColorRGB( double x, double r, double g, double 
 void TransferFunction::removePointFromColor( double x )
 {
     m_color.remove( x );
+    m_changed = true;
 }
 
 
@@ -131,6 +185,7 @@ void TransferFunction::removePointFromColor( double x )
 void TransferFunction::addPointToOpacity( double x, double opacity )
 {
     m_opacity[x] = opacity;
+    m_changed = true;
 }
 
 
@@ -145,6 +200,7 @@ void TransferFunction::addPointToOpacity( double x, double opacity )
 void TransferFunction::removePointFromOpacity( double x )
 {
     m_opacity.remove( x );
+    m_changed = true;
 }
 
 
@@ -156,6 +212,7 @@ void TransferFunction::clear()
 {
     m_color.clear();
     m_opacity.clear();
+    m_changed = true;
 }
 
 
@@ -166,6 +223,7 @@ void TransferFunction::clear()
 void TransferFunction::clearColor()
 {
     m_color.clear();
+    m_changed = true;
 }
 
 
@@ -176,6 +234,29 @@ void TransferFunction::clearColor()
 void TransferFunction::clearOpacity()
 {
     m_opacity.clear();
+    m_changed = true;
+}
+
+
+
+QMapIterator< double, QColor > * TransferFunction::getPoints() const
+{
+    if ( m_changed )
+    {
+        m_rgba.clear();
+
+        QList< double > ckeys = m_color.keys();
+        foreach ( double x, ckeys )
+            m_rgba[x] = get( x );
+
+        QList< double > okeys = m_opacity.keys();
+        foreach ( double x, okeys )
+            if ( !m_rgba.contains( x ) ) m_rgba[x] = get( x );
+
+        m_changed = false;
+    }
+
+    return new QMapIterator< double, QColor >( m_rgba );
 }
 
 
@@ -280,18 +361,20 @@ void TransferFunction::print() const
 }
 
 
-/// \warning No està fet general!!!!!
+
 QGradientStops TransferFunction::getGradientStops() const
 {
     QGradientStops gradientStops;
 
-    QMapIterator< double, QColor > it( m_color );
+    QMapIterator< double, QColor > * it = getPoints();
 
-    while ( it.hasNext() )
+    while ( it->hasNext() )
     {
-        it.next();
-        gradientStops << QGradientStop( it.key() / 255.0, it.value() );
+        it->next();
+        gradientStops << QGradientStop( it->key() / 255.0, it->value() );
     }
+
+    delete it;
 
     return gradientStops;
 }

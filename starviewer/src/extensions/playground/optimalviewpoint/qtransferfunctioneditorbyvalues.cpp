@@ -100,7 +100,7 @@ const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() 
     return m_transferFunction;
 }
 
-/// \warning Ara tractem la TransferFunction com si guardés punts RGBA. S'ha de refinar!!!
+
 void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunction & transferFunction )
 {
     if ( !m_changed && m_transferFunction == transferFunction ) return;
@@ -112,7 +112,7 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
     // sempre tindrem a punt el següent (per evitar restriccions amb els valors) i l'esborrarem al final
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
-    QMapIterator< double, QColor > * it = transferFunction.getColorPoints();
+    QMapIterator< double, QColor > * it = transferFunction.getPoints();
     bool first = true;
 
     while ( it->hasNext() )
@@ -166,6 +166,8 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
 //     }
 
     removeInterval();   // esborrem l'últim interval
+
+    delete it;
 
     getTransferFunction();  // actualitzem m_transferFunction
 }

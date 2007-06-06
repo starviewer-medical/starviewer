@@ -30,7 +30,8 @@ HEADERS += gradienteditor2.h \
            vtkVolumeRayCastCompositeFunctionOptimalViewpoint.h \
            optimalviewpointextensionmediator.h \
            qoptimalviewpointextension.h \
-           transferfunction.h 
+           transferfunction.h \
+           transferfunctionio.h 
 SOURCES += gradienteditor2.cpp \
            histogram.cpp \
            hoverpoints.cpp \
@@ -54,7 +55,8 @@ SOURCES += gradienteditor2.cpp \
            vtkVolumeRayCastCompositeFunctionOptimalViewpoint.cxx \
            optimalviewpointextensionmediator.cpp \
            qoptimalviewpointextension.cpp \
-           transferfunction.cpp 
+           transferfunction.cpp \
+           transferfunctionio.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a

@@ -51,6 +51,13 @@ public:
     /// Destructor.
     ~TransferFunction();
 
+    /// Retorna el color i l'opacitat corresponents a x.
+    QColor get( double x ) const;
+    /// Retorna el color corresponent a x.
+    QColor getColor( double x ) const;
+    /// Retorna l'opacitat corresponent a x.
+    double getOpacity( double x ) const;
+
     /// Afegeix un punt de color i d'opacitat mitjançant un QColor RGBA.
     void addPoint( double x, const QColor & rgba );
     /// Afegeix un punt de color i d'opacitat.
@@ -79,6 +86,8 @@ public:
     /// Esborra tots els punts d'opacitat.
     void clearOpacity();
 
+    /// Accés als punts de color i d'opacitat mitjançant un iterador.
+    QMapIterator< double, QColor > * getPoints() const;
     /// Accés als punts de color mitjançant un iterador.
     QMapIterator< double, QColor > * getColorPoints() const;
     /// Accés als punts d'opacitat mitjançant un iterador.
@@ -101,6 +110,9 @@ private:
 
     QMap< double, QColor > m_color;
     QMap< double, double > m_opacity;
+
+    mutable QMap< double, QColor > m_rgba;
+    mutable bool m_changed;
 
 };
 

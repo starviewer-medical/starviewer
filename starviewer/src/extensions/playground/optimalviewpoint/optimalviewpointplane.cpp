@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
@@ -20,6 +20,7 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkWindowToImageFilter.h>
+#include <vtkMultiThreader.h>
 
 #include "optimalviewpointplanehelper.h"
 #include "histogram.h"
@@ -59,6 +60,8 @@ OptimalViewpointPlane::OptimalViewpointPlane( unsigned short id, unsigned short 
 
     m_hx = 0.0;
     m_E = 0.0;
+
+    m_numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
 }
 
 OptimalViewpointPlane::~OptimalViewpointPlane()
@@ -190,7 +193,7 @@ void OptimalViewpointPlane::endEntropyComputing()
     if ( m_compute )
     {
         std::cout << "OVP" << m_id << "::endEntropyComputing(): start" << std::endl;
-        if ( m_lastLValuesPerThread.size() != 2 )   /// \warning Sortirà un missatge d'avís si no treballem amb 2 threads. Caldria saber el nombre de threads en temps d'execució (es pot agafar de les VTK) o treure aquesta comprovació
+        if ( m_lastLValuesPerThread.size() != m_numberOfThreads )
             QMessageBox::warning( 0, "problema amb els raigs", "problema de concurrència" );
         QHashIterator< int, std::deque< unsigned char > > it( m_lastLValuesPerThread );
         while ( it.hasNext() )
@@ -385,6 +388,13 @@ void OptimalViewpointPlane::endLBlock( int threadId )
             // per comptar els canvis //////////////////////////////////////////
         }
     }
+}
+
+
+
+void OptimalViewpointPlane::setNumberOfThreads( unsigned char numberOfThreads )
+{
+    m_numberOfThreads = numberOfThreads;
 }
 
 

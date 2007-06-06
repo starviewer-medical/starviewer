@@ -56,6 +56,7 @@
 
 #include "povspherecloud.h"
 #include "vector3.h"
+#include "transferfunctionio.h"
 
 
 namespace udg {
@@ -353,15 +354,15 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
     ////////////////////////////////////////////////////////////////////////////
     //////////////////// PROVA DE POSICIONAMENT DELS PLANS /////////////////////
     ////////////////////////////////////////////////////////////////////////////
-/*
-    POVSphereCloud cloud( 1.0, 1 );
-    cloud.createPOVCloud();
-    const std::vector< Vector3 > & vertices = cloud.getVertices();
-    const std::vector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
-    std::cout << vertices.size() << " vertices:" << std::endl;
-    for ( unsigned short i = 0; i < vertices.size(); i++ )
-        std::cout << vertices[i] << ", length = " << vertices[i].length() << ", geo = " << geographicVertices[i] << std::endl;
-*/
+
+//     POVSphereCloud cloud( 1.0, 4 );
+//     cloud.createPOVCloud();
+//     const std::vector< Vector3 > & vertices = cloud.getVertices();
+//     const std::vector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
+//     std::cout << vertices.size() << " vertices:" << std::endl;
+//     for ( unsigned short i = 0; i < vertices.size(); i++ )
+//         std::cout << vertices[i] << ", length = " << vertices[i].length() << ", geo = " << geographicVertices[i] << std::endl;
+
 
 }
 
@@ -414,6 +415,7 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
 //     m_volume->setColorTransferFunction( colorTransferFunction );
     m_volume->setOpacityTransferFunction( transferFunction.getOpacityTransferFunction() );
     m_volume->setColorTransferFunction( transferFunction.getColorTransferFunction() );
+//     TransferFunctionIO::toFile( "/scratch/tf0.tf", transferFunction );
 }
 
 /// Actualitza els miralls.

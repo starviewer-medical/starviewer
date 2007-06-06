@@ -1,38 +1,93 @@
-/************************************************************************************/
-/*                                                                                  */
-/*                                POVSPHERECLOUD.CPP                                */
-/*                                                                                  */
-/************************************************************************************/
-
 #include "povspherecloud.h"
+
 
 #include <math.h>
 
 #include "vector3.h"
 
-bool equal( const Vector3 & v1, const Vector3 & v2, float error )
-{
-    Vector3 v = v1 - v2;
 
-    return ( fabs( v.x ) <= error && fabs( v.y ) <= error && fabs( v.z ) <= error );
-}
 
-/************************************************************************************/
-
+/**
+ * Crea l'objecte i inicialitza els paràmetres, però no genera els punts.
+ *
+ * \param radius Radi de l'esfera.
+ * \param depth Nivells de recursió. 0 = 12 punts, 1 = 42 punts, 2 = 162 punts,
+ * 3 = 642 punts, etc. (n = 2^(2*n)*10+2 punts?)
+ */
 POVSphereCloud::POVSphereCloud( float radius, unsigned short depth )
 {
     m_radius = radius;
     m_depth = depth;
 }
 
-/************************************************************************************/
 
+
+/**
+ * Destructor.
+ */
 POVSphereCloud::~POVSphereCloud()
+{
+}
+
+
+
+/**
+ * Genera els punts segons els paràmetres definits al constructor.
+ */
+void POVSphereCloud::createPOVCloud()
 {
     m_vertices.clear();
     m_faces.clear();
     m_normals.clear();
     m_geographicVertices.clear();
+
+    Vector3 v;
+
+    // Create the initial vertices from the sphere cloud
+    createIcosahedronVertices();
+
+    // Create the initial faces from the sphere cloud
+    createIcosahedronFaces();
+
+    FacesList tempFaces = m_faces;
+
+    m_faces.clear();
+
+    // Each triangle has to be subdivided as many times as the sphere depth
+    for ( unsigned short j = 0; j < tempFaces.size(); j += 3 )
+    {
+        unsigned short face1 = tempFaces[j];
+        unsigned short face2 = tempFaces[j+1];
+        unsigned short face3 = tempFaces[j+2];
+
+        subdivide( m_vertices[face1], m_vertices[face2], m_vertices[face3], m_depth );
+    }
+
+    // We scale all vertices about the sphere radius due to all vertices are situed at radius 1 of the center of the sphere
+    for ( unsigned short i = 0; i < m_vertices.size(); i++ )
+        m_vertices[i] *= m_radius;
+
+    createGeographicVertices();
+}
+
+
+
+/**
+ * Retorna els punts en coordenades cartesianes.
+ */
+const std::vector< Vector3 > & POVSphereCloud::getVertices() const
+{
+    return m_vertices;
+}
+
+
+
+/**
+ * Retorna els punts en coordenades geogràfiques (radi, latitud, longitud).
+ */
+const std::vector< Vector3 > & POVSphereCloud::getGeographicVertices() const
+{
+    return m_geographicVertices;
 }
 
 /************************************************************************************/
@@ -99,6 +154,15 @@ void POVSphereCloud::createIcosahedronFaces()
 }
 
 /************************************************************************************/
+
+bool equal( const Vector3 & v1, const Vector3 & v2, float error )
+{
+    Vector3 v = v1 - v2;
+
+    return ( fabs( v.x ) <= error && fabs( v.y ) <= error && fabs( v.z ) <= error );
+}
+
+/******************************************************************************/
 
 bool POVSphereCloud::findSphereCloudVertex( const Vector3 & v, unsigned short & pos ) const
 {
@@ -199,39 +263,6 @@ void POVSphereCloud::subdivide( Vector3 v1, Vector3 v2, Vector3 v3, unsigned sho
 
 /************************************************************************************/
 
-void POVSphereCloud::createPOVCloud()
-{
-    Vector3 v;
-
-    // Create the initial vertices from the sphere cloud
-    createIcosahedronVertices();
-
-    // Create the initial faces from the sphere cloud
-    createIcosahedronFaces();
-
-    FacesList tempFaces = m_faces;
-
-    m_faces.clear();
-
-    // Each triangle has to be subdivided as many times as the sphere depth
-    for ( unsigned short j = 0; j < tempFaces.size(); j += 3 )
-    {
-        unsigned short face1 = tempFaces[j];
-        unsigned short face2 = tempFaces[j+1];
-        unsigned short face3 = tempFaces[j+2];
-
-        subdivide( m_vertices[face1], m_vertices[face2], m_vertices[face3], m_depth );
-    }
-
-    // We scale all vertices about the sphere radius due to all vertices are situed at radius 1 of the center of the sphere
-    for ( unsigned short i = 0; i < m_vertices.size(); i++ )
-        m_vertices[i] *= m_radius;
-
-    createGeographicVertices();
-}
-
-/************************************************************************************/
-
 void POVSphereCloud::createGeographicVertices()
 {
     m_geographicVertices.clear();
@@ -254,18 +285,4 @@ void POVSphereCloud::createGeographicVertices()
         }
         m_geographicVertices[i] = gv;
     }
-}
-
-/************************************************************************************/
-
-const std::vector< Vector3 > & POVSphereCloud::getVertices() const
-{
-    return m_vertices;
-}
-
-/************************************************************************************/
-
-const std::vector< Vector3 > & POVSphereCloud::getGeographicVertices() const
-{
-    return m_geographicVertices;
 }
