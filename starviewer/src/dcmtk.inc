@@ -15,6 +15,7 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
 
 LIBS += -L$${DCMTKLIBDIR} \
     -lsqlite3 \
+    -lwrap \
     -ldcmnet \
     -ldcmdata \
     -ldcmimage \
@@ -22,4 +23,7 @@ LIBS += -L$${DCMTKLIBDIR} \
     -lofstd \
     -ldcmpstat \
     -ldcmsr \
-    -ldcmjpeg
+    -ldcmjpeg \
+    -lijg8 \ 
+    -lijg12 \ 
+    -lijg16
