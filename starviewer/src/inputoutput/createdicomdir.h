@@ -29,6 +29,15 @@ public:
      */
     void setDevice( recordDeviceDicomDir deviceToCreateDicomdir );
 
+    /** Permet especificar si volem treballar amb Mode Estricte. Amb Mode estricte es comprova
+     * - Que totes les imatges els tags de tipus 1 tinguin una longitut més gran de 0
+     * - Que la codificació de la informació dels píxels de les imatges compleixi l'estàndard DICOM
+     * - Que es compleixi la codificació de la resolució espacial en l'estànard DICOM
+     * - Si una imatge no té ID de pacient se l'inventa
+     * @param enabled indica si s'activa el mode esctricte
+     */
+    void setStrictMode(bool enabled);
+
     /** Crea el fitxer DicomDir amb l'estructura dels estudis del directori passat per paràmetre
      * @param dicomdirPath directori a convertir a dicomdir
      * @return estat de finalització del mètode
@@ -40,6 +49,7 @@ public:
 private:
 
     DicomDirInterface::E_ApplicationProfile m_optProfile;
+    DicomDirInterface m_ddir;
 
 
     /** Crea un missatge d'error per un fitxer que no s'ha pogut convertir a DicomDir

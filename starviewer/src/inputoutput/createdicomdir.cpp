@@ -16,6 +16,7 @@
 #include "ofstd.h"        /* for class OFStandard */
 #include "ofcond.h"       /* for class OFCondition */
 
+
 #if defined (HAVE_WINDOWS_H) || defined(HAVE_FNMATCH_H)
 #define PATTERN_MATCHING_AVAILABLE
 #endif
@@ -52,6 +53,29 @@ void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
     }
 }
 
+void CreateDicomdir::setStrictMode(bool enabled)
+{
+    if ( enabled )
+    {
+        m_ddir.enableInventMode( OFFalse );//Rebutgem imatges que contingui tags de tipus 1 amb longitut 0
+        m_ddir.disableEncodingCheck( OFFalse );//Rebutja Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableResolutionCheck( OFFalse );//rebutja imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.enableInventPatientIDMode( OFFalse );//rebutgem imatges que no tinguin PatientID
+
+        INFO_LOG( "Mode estricte ON" );
+    }
+    else // no volem mode estricte
+    {
+        m_ddir.enableInventMode( OFTrue) ;//si una imatge, no té algun tag de nivell 1, que són els tags obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa
+        m_ddir.disableEncodingCheck( OFTrue) ;//Accepta Imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
+        m_ddir.disableResolutionCheck( OFTrue );//Accepta Imatges que no compleixi la resolució espacial
+        m_ddir.enableInventPatientIDMode( OFTrue );//en cas que una pacient no tingui PatientID se l'inventa
+
+        INFO_LOG( "Mode estricte OFF" );
+    }
+
+}
+
 Status CreateDicomdir::create( std::string dicomdirPath )
 {
     std::string errorMessage , outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
@@ -63,7 +87,6 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     const char *opt_descriptor = NULL;
     const char *opt_charset = DEFAULT_DESCRIPTOR_CHARSET;
     OFCondition result;
-    DicomDirInterface ddir;
     E_EncodingType opt_enctype = EET_ExplicitLength;
     E_GrpLenEncoding opt_glenc = EGL_withoutGL;
 
@@ -80,12 +103,8 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         return state;
     }
 
-    /*Rebaixem el nivell d'estrictes, si una imatge, no té algun tag de nivell 1, que són els tags
-     * obligatoris i que no poden tenir longitut 1, al crear el dicomdir se'ls inventa */
-    ddir.enableInventMode(OFTrue);
-
     //creem el dicomdir
-    result = ddir.createNewDicomDir( m_optProfile , opt_output , opt_fileset );
+    result = m_ddir.createNewDicomDir( m_optProfile , opt_output , opt_fileset );
 
     if ( !result.good() )
     {
@@ -97,7 +116,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     }
 
     /* set fileset descriptor and character set */
-    result = ddir.setFilesetDescriptor( opt_descriptor , opt_charset );
+    result = m_ddir.setFilesetDescriptor( opt_descriptor , opt_charset );
     if ( result.good() )
     {
         OFListIterator( OFString ) iter = fileNames.begin();
@@ -107,7 +126,8 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         while ( ( iter != last ) && result.good() )
         {
             //afegim els fitxers al dicomdir
-            result = ddir.addDicomFile( (*iter).c_str() , opt_directory );
+            result = m_ddir.checkDicomFile( (*iter).c_str() , opt_directory );
+            result = m_ddir.addDicomFile( (*iter).c_str() , opt_directory );
             if ( result.good() ) iter++;
         }
 
@@ -123,7 +143,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
 
             result = EC_IllegalCall;
         }
-        else result = ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
+        else result = m_ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
     }
 
     return state.setStatus( result );

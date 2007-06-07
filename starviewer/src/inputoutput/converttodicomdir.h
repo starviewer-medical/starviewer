@@ -39,7 +39,7 @@ public:
      */
     void addStudy ( QString studyUID );
 
-    /** Crear un dicomdir en el path especificat per paràmetre amb els estudis que hi ha a la llista
+    /** Converteix a dicomdir en el path especificat els estudis que hi ha a la llista
      * @param dicomdirPath directori on es guardarà el dicomdir
      * @return Indica l'estat en què finalitza el mètode
      */
@@ -78,29 +78,37 @@ private :
     int m_series;
     int m_image;
 
-    /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
-    Status startConversionToDicomdir();
+    /** crea un dicomdir, al directori especificat
+     * @param dicomdirPath lloc a crear el dicomdir
+     * @param selectedDevice dispositiu on es crearà el dicomdir
+     * @return  estat del mètode
+     */
+    Status createDicomdir( QString dicomdirPath, recordDeviceDicomDir selectedDevice );
 
-    /** Converteix un estudi al format littleendian
+    /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
+    Status copyStudiesToDicomdirPath();
+
+    /** Converteix un estudi al format littleendian, i la copia al directori dicomdir
      * @param studyUID Uid de l'estudi a convertir
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convertStudy ( QString studyUID );
+    Status copyStudyToDicomdirPath( QString studyUID );
 
-    /** Converteix una sèrie al format littleendian
+    /** Converteix una sèrie al format littleendian, i la copia al directori dicomdir
      * @param series
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convertSeries( Series series );
+    Status copySeriesToDicomdirPath( Series series );
 
-    /** Converteix una imatge al format littleendian
+    /** Converteix una imatge al format littleendian, i la copia al directori dicomdir
      * @param image
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convertImage( Image image );
+    Status copyImageToDicomdirPath( Image image );
 
     /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
+
 };
 
 }
