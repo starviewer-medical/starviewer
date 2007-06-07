@@ -51,7 +51,7 @@ class StudyList
      * @param AETitlePacs AETitle del Pacs on ha d'estat l'estudi
      * @return  number of studies in the list
      */
-    bool exists( std::string studyUID , std::string AETitlePacs="" );
+    bool exists( std::string studyUID , std::string AETitlePacs );
 
     /// neteja la llista d'estudis
     void clear();

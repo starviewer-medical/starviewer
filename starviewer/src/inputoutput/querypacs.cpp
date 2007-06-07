@@ -57,9 +57,8 @@ void progressCallbackStudy(
         //gets the pointer to the study list and inserts the new study
         StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
-        //if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) ); TODO Connectathon
+        if ( !studyList->exists( queriedStudy.getStudyUID() , queriedStudy.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) );
 
-        if ( !studyList->exists( queriedStudy.getStudyUID() ) ) studyList->insert( queriedStudy );
     } //si la query retorna un objecte sèrie
     else if ( strcmp( text, "SERIES" ) == 0 )
     {
@@ -67,9 +66,7 @@ void progressCallbackStudy(
 
         StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
-        //if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) ); TODO Connectathon
-
-        if ( !studyList->exists( queriedSerie.getStudyUID() ) ) studyList->insert( Study( responseIdentifiers ) );
+        if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) );
 
         SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
         seriesList->insert( Series( responseIdentifiers) );
@@ -80,9 +77,7 @@ void progressCallbackStudy(
 
         StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
-        //if ( !studyList->exists( queriedImage.getStudyUID() , queriedImage.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) ); TODO Connectathon
-
-        if ( !studyList->exists( queriedImage.getStudyUID() ) ) studyList->insert( Study( responseIdentifiers ) );
+        if ( !studyList->exists( queriedImage.getStudyUID() , queriedImage.getPacsAETitle() ) ) studyList->insert( Study( responseIdentifiers ) );
 
         SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
         if ( !seriesList->exists( queriedImage.getStudyUID() , queriedImage.getSeriesUID() , queriedImage.getPacsAETitle() ) )  seriesList->insert( Series( responseIdentifiers ) );

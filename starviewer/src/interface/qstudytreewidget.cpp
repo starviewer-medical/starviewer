@@ -229,11 +229,7 @@ void QStudyTreeWidget::insertSeries( Series *serie )
     QTreeWidgetItem* item, *studyItem;
 
     studyItem = getStudyItem( serie->getStudyUID() , serie->getPacsAETitle() );
-    if ( studyItem == NULL ) // busquem l'item estudi
-    {
-        //item = new QTreeWidgetItem( m_studyTreeView ); TODO Connectathon
-    }
-    else item = new QTreeWidgetItem( studyItem );
+    item = new QTreeWidgetItem( studyItem );
 
     text.truncate( 0 );
     text.append( tr( "Series " ) );
@@ -288,33 +284,21 @@ void QStudyTreeWidget::insertImage( Image * image )
     QString text, description;
     char imageNumber[7];
     QTreeWidgetItem* studyItem, *item;
+    bool stop = false;
+    int index = 0;
 
     studyItem = getStudyItem( image->getStudyUID() , image->getPacsAETitle() );
 
-    if ( studyItem == NULL )
+    while ( !stop && index < studyItem->childCount() )
     {
-        //item = new QTreeWidgetItem( m_studyTreeView ); TODO Connectathon
-    }
-    else
-    {
-        bool stop = false;
-        int index = 0;
-
-        while ( !stop && index < studyItem->childCount() )
+        if ( studyItem->child( index )->text( 11 ) == image->getSeriesUID().c_str() )
         {
-            if ( studyItem->child( index )->text( 11 ) == image->getSeriesUID().c_str() )
-            {
-                stop = true;
-            }
-            else index++;
+            stop = true;
         }
-
-        if ( stop )
-        {
-            item = new QTreeWidgetItem( studyItem->child( index ) );
-        }
-        else item = new QTreeWidgetItem( studyItem );
+        else index++;
     }
+
+    item = new QTreeWidgetItem( studyItem->child( index ) );
 
     //convertim el numero d'imatge a text
     sprintf( imageNumber , "%i" , image->getImageNumber() );
@@ -327,7 +311,6 @@ void QStudyTreeWidget::insertImage( Image * image )
     item->setText( 10 , image->getPacsAETitle().c_str() );
     item->setText( 11 , image->getSOPInstanceUID().c_str() );
     item->setText( 12, "IMAGE" ); //indiquem que es tracta d'una imatge
-
 }
 
 QString QStudyTreeWidget::formatAge( const std::string age )
@@ -489,6 +472,9 @@ void QStudyTreeWidget::removeStudy( QString studyUID )
 {
     QList<QTreeWidgetItem *> qStudyList( m_studyTreeView->findItems( studyUID , Qt::MatchExactly, 11 ) );
     QTreeWidgetItem *item;
+
+    //Si l'estudi que anem a esborrar és el que està seleccionat el treiem del SeriesListWidget
+    if ( studyUID == getSelectedStudyUID() ) emit( clearSeriesListWidget() ); //es neteja el QSeriesListWidget
 
     for ( int i = 0; i < qStudyList.count(); i++ )
     {
