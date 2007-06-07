@@ -66,12 +66,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     //connectem signals i slots
     connectSignalsAndSlots();
 
-    state = cacheStudyDal.delNotRetrievedStudies();//Esborrem els estudis en estat 'PENDING' o 'RETRIEVING'
-    if ( !state.good() )
-    {
-        databaseError( &state );
-    } //si no hi ha error a la base de dades, podem esborrar els estudis vells
-    else deleteOldStudies();
+    //esborrem els estudis vells de la cache
+    deleteOldStudies();
 
     //carreguem el processImageSingleton
     m_piSingleton = ProcessImageSingleton::getProcessImageSingleton();

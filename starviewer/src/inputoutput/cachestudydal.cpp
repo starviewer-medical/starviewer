@@ -286,7 +286,6 @@ Status CacheStudyDAL::queryOldStudies( std::string OldStudiesDate , StudyList &l
     sql.append( " from Study" );
     sql.append( " where AccDat < " );
     sql.append( OldStudiesDate );
-    sql.append( " and Status = 'RETRIEVED' " );
     sql.append( " order by StuDat,StuTim " );
 
     char **resposta = NULL , **error = NULL;
@@ -399,6 +398,61 @@ Status CacheStudyDAL::queryStudy( std::string studyUID , Study &study )
 
     return state;
 }
+
+Status CacheStudyDAL::queryAllStudies( StudyList &ls )
+{
+    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
+    int columns , rows , i = 0 , stateDatabase;
+    Study selectedStudy;
+    char **resposta = NULL , **error = NULL , errorNumber[5];
+    Status state;
+    std::string logMessage, sql;
+
+    if ( !databaseConnection->connected() )
+    {//el 50 es l'error de no connectat a la base de dades
+        return databaseConnection->databaseStatus( 50 );
+    }
+
+    sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum " );
+    sql.append( " from Study, Patient " );
+    sql.append( " where Study.PatId = Patient.PatId " );
+
+    databaseConnection->getLock();
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    databaseConnection->releaseLock();
+    state = databaseConnection->databaseStatus( stateDatabase );
+
+    if ( !state.good() )
+    {
+        sprintf( errorNumber , "%i" , state.code() );
+        logMessage = "Error a la cache número ";
+        logMessage.append( errorNumber );
+        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( sql.c_str() );
+        return state;
+    }
+
+    i = 1;//ignorem les capçaleres
+    while ( i <= rows )
+    {
+        selectedStudy.setPatientId( resposta [ 0 + i * columns ] );
+        selectedStudy.setPatientName( resposta [ 1 + i * columns ] );
+        selectedStudy.setPatientAge( resposta [ 2+ i * columns ] );
+        selectedStudy.setStudyId( resposta [ 3+ i * columns ] );
+        selectedStudy.setStudyDate( resposta [ 4+ i * columns ] );
+        selectedStudy.setStudyTime( resposta [ 5+ i * columns ] );
+        selectedStudy.setStudyDescription( resposta [ 6+ i * columns ] );
+        selectedStudy.setStudyUID( resposta [ 7+ i * columns ] );
+        selectedStudy.setAbsPath( resposta [ 8 + i * columns ] );
+        selectedStudy.setStudyModality( resposta [ 9 + i * columns ] );
+        selectedStudy.setAccessionNumber( resposta [ 10 + i * columns ] );
+        ls.insert( selectedStudy );
+        i++;
+    }
+
+    return state;
+}
+
 
 Status CacheStudyDAL::delStudy( std::string studyUID )
 {
@@ -656,56 +710,6 @@ Status CacheStudyDAL::delStudy( std::string studyUID )
     //una vegada hem esborrat les dades de la bd, podem esborrar les imatges, això s'ha de fer al final, perqué si hi ha un error i esborrem les
     //imatges al principi, no les podrem recuperar i la informació a la base de dades hi continuarà estant
     cachePool.removeStudy( absPathStudy );
-
-    return state;
-}
-
-Status CacheStudyDAL::delNotRetrievedStudies()
-{
-    DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    Status state;
-    int stateDatabase;
-    char **resposta = NULL , **error = NULL , errorNumber[5];
-    int columns , rows , i;
-    std::string sql , studyUID , logMessage;
-
-    if ( !databaseConnection->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return databaseConnection->databaseStatus( 50 );
-    }
-
-    //cerquem els estudis pendents de finalitzar la descarrega
-    sql.insert( 0 , "select StuInsUID from Study where Status in ( 'PENDING' , 'RETRIEVING' )" );
-
-    databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
-    databaseConnection->releaseLock();
-
-    state = databaseConnection->databaseStatus( stateDatabase );
-    if ( !state.good() )
-    {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
-        return state;
-    }
-
-    //ignorem el resposta [0], perque hi ha la capçalera
-    i = 1;
-
-    while ( i <= rows )
-    {
-        studyUID.erase();
-        studyUID.insert( 0 , resposta[i] );
-         state = delStudy( studyUID );
-        if ( !state.good() )
-        {
-            break;
-        }
-        i++;
-    }
 
     return state;
 }

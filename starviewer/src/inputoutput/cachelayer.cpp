@@ -27,7 +27,6 @@ CacheLayer::CacheLayer( QObject *parent )
 Status CacheLayer::clearCache()
 {
     CacheStudyDAL cacheStudyDAL;
-    DicomMask dicomMask;
     StudyList studyList;
     Study study;
     Status state;
@@ -41,7 +40,7 @@ Status CacheLayer::clearCache()
     progress->setMinimumDuration( 0 );
     progress->setCancelButton( 0 );
 
-    state = cacheStudyDAL.queryStudy( dicomMask , studyList );//consultem tots els estudis
+    state = cacheStudyDAL.queryAllStudies( studyList );//consultem tots els estudis
 
     studyList.firstStudy();
     while ( !studyList.end() && state.good() )
