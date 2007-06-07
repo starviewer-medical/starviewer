@@ -31,7 +31,8 @@ HEADERS += gradienteditor2.h \
            optimalviewpointextensionmediator.h \
            qoptimalviewpointextension.h \
            transferfunction.h \
-           transferfunctionio.h 
+           transferfunctionio.h \
+           slicer.h 
 SOURCES += gradienteditor2.cpp \
            histogram.cpp \
            hoverpoints.cpp \
@@ -56,7 +57,8 @@ SOURCES += gradienteditor2.cpp \
            optimalviewpointextensionmediator.cpp \
            qoptimalviewpointextension.cpp \
            transferfunction.cpp \
-           transferfunctionio.cpp 
+           transferfunctionio.cpp \
+           slicer.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a

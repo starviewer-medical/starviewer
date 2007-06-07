@@ -24,6 +24,7 @@
 
 class vtkCamera;
 class vtkImageActor;
+class vtkMatrix4x4;
 class vtkRenderer;
 
 class QVTKWidget;
@@ -91,6 +92,10 @@ public:
 
 
 
+    vtkMatrix4x4 * getTransformMatrix();
+
+
+
 public slots:
 
     void updateAndRecompute();
@@ -145,6 +150,7 @@ private:
 
 
     unsigned char m_numberOfThreads;
+
 
 
 signals:

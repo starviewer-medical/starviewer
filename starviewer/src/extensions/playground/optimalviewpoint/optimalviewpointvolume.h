@@ -47,8 +47,10 @@ public:
     void setShade( bool on );
 
     void setImageSampleDistance( double imageSampleDistance );
+    double getImageSampleDistance() const { return m_imageSampleDistance; }
 
     void setSampleDistance( double sampleDistance );
+    double getSampleDistance() const { return m_sampleDistance; }
 
     /**
      * Estableix la funció de transferència d'opacitat pel vtkVolume
@@ -90,6 +92,14 @@ public:
     void setInterpolation( int interpolation );
     void setSpecular( bool on );
     void setSpecularPower( double specularPower );
+
+
+
+
+
+
+
+    vtkImageData * getLabeledImage() const { return m_simplifiedImage; }
 
 
 

@@ -57,6 +57,7 @@
 #include "povspherecloud.h"
 #include "vector3.h"
 #include "transferfunctionio.h"
+#include "slicer.h"
 
 
 namespace udg {
@@ -459,6 +460,16 @@ void OptimalViewpoint::updatePlanes()
                               (*m_planes)[m_updatePlane], SLOT( compute(int,unsigned char) ) );
             QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
                               (*m_planes)[m_updatePlane], SLOT( endLBlock(int) ) );
+
+
+            // slicer
+            Slicer slicer;
+            slicer.setInput( m_volume->getLabeledImage() );
+            slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
+            slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+            slicer.reslice();
+            slicer.compute();
+
             break;
     }
 

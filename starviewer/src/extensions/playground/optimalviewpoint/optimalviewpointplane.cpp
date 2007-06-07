@@ -25,6 +25,8 @@
 #include "optimalviewpointplanehelper.h"
 #include "histogram.h"
 
+
+
 namespace udg {
 
 OptimalViewpointPlane::OptimalViewpointPlane( unsigned short id, unsigned short size )
@@ -395,6 +397,13 @@ void OptimalViewpointPlane::endLBlock( int threadId )
 void OptimalViewpointPlane::setNumberOfThreads( unsigned char numberOfThreads )
 {
     m_numberOfThreads = numberOfThreads;
+}
+
+
+
+vtkMatrix4x4 * OptimalViewpointPlane::getTransformMatrix()
+{
+    return m_plane->GetMatrix();
 }
 
 
