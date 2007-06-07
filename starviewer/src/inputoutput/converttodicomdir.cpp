@@ -83,7 +83,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
     ImageMask imageMask;
     Status state;
     int imageNumberStudy , imageNumberTotal = 0 , i = 0;
-    CreateDicomdir createDicomdir;
+
     QString studyUID;
 
     m_dicomDirPath = dicomdirPath;
@@ -101,7 +101,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
 
     if ( !state.good() )
     {
-        //deleteStudies();
+        deleteStudies();
         return state;
     }
 
@@ -111,7 +111,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
     m_progress->setCancelButton( 0 );
 
     //copiem les imatges dels estudis seleccionats al directori desti
-    state = startConversionToDicomdir();
+    state = copyStudiesToDicomdirPath();
 
     if ( !state.good() )
     {
@@ -120,11 +120,11 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
         return state;
     }
 
-    createDicomdir.setDevice( selectedDevice );
-    state = createDicomdir.create ( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
+    //una vegada copiada les imatges les creem
+    state = createDicomdir( dicomdirPath , selectedDevice );
 
     m_progress->close();
-    if ( !state.good() )
+    if ( !state.good() && state.code() != 4001 )// l'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
     {
         deleteStudies();
     }
@@ -132,7 +132,29 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
     return state;
 }
 
-Status ConvertToDicomdir::startConversionToDicomdir()
+Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, recordDeviceDicomDir selectedDevice )
+{
+    CreateDicomdir createDicomdir;
+    Status state, stateNotDicomConformance;
+
+    createDicomdir.setDevice( selectedDevice );
+    state = createDicomdir.create( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
+    if ( !state.good() )//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
+    {
+        createDicomdir.setStrictMode( false );
+        state = createDicomdir.create( m_dicomDirPath.toAscii().constData() );
+
+        if ( state.good() )
+        {
+            return stateNotDicomConformance.setStatus("Alguna de les imatges no complia, l'estàndard DICOM" , false , 4001 );
+
+        }
+    }
+
+    return state;
+}
+
+Status ConvertToDicomdir::copyStudiesToDicomdirPath()
 {
     StudyToConvert studyToConvert;
     QString m_OldPatientId;
@@ -140,8 +162,6 @@ Status ConvertToDicomdir::startConversionToDicomdir()
     QDir patientDir;
     Status state;
     QChar fillChar = '0';
-
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     m_patient = 0;
 
@@ -161,18 +181,16 @@ Status ConvertToDicomdir::startConversionToDicomdir()
             m_patientDirectories.push_back( m_dicomdirPatientPath );//creem una llista amb els directoris creats, per si es produeix algun error esborrar-los
         }
 
-        state = convertStudy( studyToConvert.studyUID );
+        state = copyStudyToDicomdirPath( studyToConvert.studyUID );
         if ( !state.good() ) break;
         m_OldPatientId = studyToConvert.patientId;
     }
-
-    QApplication::restoreOverrideCursor();
 
     return state;
 }
 
 
-Status ConvertToDicomdir::convertStudy( QString studyUID )
+Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
 {
     /*Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir*/
     CacheSeriesDAL cacheSeriesDAL;
@@ -201,7 +219,7 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
 
     while ( !seriesList.end() ) //per cada sèrie de l'estudi, creem el directori de la sèrie
     {
-        state = convertSeries( seriesList.getSeries() );
+        state = copySeriesToDicomdirPath( seriesList.getSeries() );
 
         if ( !state.good() )
         {
@@ -213,7 +231,7 @@ Status ConvertToDicomdir::convertStudy( QString studyUID )
     return state;
 }
 
-Status ConvertToDicomdir::convertSeries( Series series )
+Status ConvertToDicomdir::copySeriesToDicomdirPath( Series series )
 {
     QDir seriesDir;
     QChar fillChar = '0';
@@ -242,7 +260,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
 
     while ( !imageList.end() ) //per cada imatge de la sèrie, la convertim a foramt littleEndian, i la copiem al directori desti
     {
-        state = convertImage( imageList.getImage() );
+        state = copyImageToDicomdirPath( imageList.getImage() );
 
         if ( !state.good() )
         {
@@ -254,7 +272,7 @@ Status ConvertToDicomdir::convertSeries( Series series )
     return state;
 }
 
-Status ConvertToDicomdir::convertImage( Image image )
+Status ConvertToDicomdir::copyImageToDicomdirPath( Image image )
 {
     QChar fillChar = '0';
     //creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie

@@ -214,6 +214,7 @@ void QCreateDicomdir::addStudy( Study study )
 void QCreateDicomdir::createDicomdir()
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    Status state;
 
     switch( m_comboBoxAction->currentIndex() )
     {
@@ -224,10 +225,14 @@ void QCreateDicomdir::createDicomdir()
                  createDicomdirOnHardDiskOrFlashMemories();
                  break;
         case 2 : //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
-                 if ( createDicomdirOnCdOrDvd().good() ) burnDicomdir( recordDeviceDicomDir(cd) );
+                 state = createDicomdirOnCdOrDvd();
+                 //error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
+                 if ( state.good() || ( !state.good() && state.code() == 4001 ) ) burnDicomdir( recordDeviceDicomDir(cd) );
                  break;
         case 3 : //dvd, si s'ha creat bé, executem el programa per gravar el dicomdir a dvd's
-                 if ( createDicomdirOnCdOrDvd().good() ) burnDicomdir( recordDeviceDicomDir(dvd) );
+                 state = createDicomdirOnCdOrDvd();
+                 //error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
+                 if ( state.good() || ( !state.good() && state.code() == 4001) ) burnDicomdir( recordDeviceDicomDir(dvd) );
                  break;
     }
 
@@ -389,22 +394,31 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( !state.good() )
     {
-        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
-        logMessage = "Error al crear el Dicomdir ERROR : ";
-        logMessage.append( state.text().c_str() );
-        ERROR_LOG ( logMessage.toAscii().constData() );
-    }
-    else
-    {
-        //Cas que sigui un cd o dvd li copiem el README.TXT
-        if ( m_comboBoxAction->currentIndex() == 1 || m_comboBoxAction->currentIndex() == 2)
+        if ( state.code() == 4001 ) //alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
         {
-            convertToDicomdir.createReadmeTxt();
+            QApplication::restoreOverrideCursor();
+            QMessageBox::information( this , tr( "Starviewer" ), tr( "Some images are not 100 % Dicom compliance. It can be possible that some viewers have problems to visualizate them " ) );
+            QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
         }
+        else
+        {
+            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
+            logMessage = "Error al crear el Dicomdir ERROR : ";
+            logMessage.append( state.text().c_str() );
+            ERROR_LOG ( logMessage.toAscii().constData() );
 
-        INFO_LOG( "Finalitzada la creació del Dicomdir" );
-        clearQCreateDicomdirScreen();
+            return state;
+        }
     }
+
+    //Cas que sigui un cd o dvd li copiem el README.TXT
+    if ( m_comboBoxAction->currentIndex() == 1 || m_comboBoxAction->currentIndex() == 2)
+    {
+        convertToDicomdir.createReadmeTxt();
+    }
+
+    INFO_LOG( "Finalitzada la creació del Dicomdir" );
+    clearQCreateDicomdirScreen();
 
     return state;
 }
@@ -504,7 +518,7 @@ void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
     QProgressDialog *progressBar = new QProgressDialog( tr( "Creating Dicomdir Image..." ) , "" , 0 , 10 );;
     progressBar->setMinimumDuration( 0 );
     progressBar->setCancelButton( 0 );
-    progressBar->setValue(7);
+    progressBar->setValue( 7 );
 
     dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR/";
 
