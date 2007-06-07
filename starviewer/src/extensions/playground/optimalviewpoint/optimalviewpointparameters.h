@@ -1,62 +1,56 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
+
 #ifndef UDGOPTIMALVIEWPOINTPARAMETERS_H
 #define UDGOPTIMALVIEWPOINTPARAMETERS_H
 
+
+
 #include "parameters.h"
 
-// #include <list> // per std::list<int>
-// #include <QGradient>
 
-// #include "optimalviewpoint.h"   // per les funcions de transferència
-
-// class QColor;
 #include "transferfunction.h"
+
+
 
 namespace udg {
 
+
+
 class Volume;
 
-/**
-    Subclasse de Parameters. En aquest cas encapsula els paràmetres d'un mètode
-    de visualització anomenat Magic Mirrors.
-    
-    Tindrem un mètode set/get per tots i cadascun dels paràmetres del mètode.
-    Els mètodes set emetran el signal changed amb l'id de paràmetre que hem
-    creat amb el tipus enumerat.
-*/
 
+
+/**
+ * Subclasse de Parameters que encapsula els paràmetres de l'extensió
+ * OptimalViewpoint.
+ *
+ * Tindrem un mètode set/get per tots i cadascun dels paràmetres del mètode. Els
+ * mètodes set emetran el signal changed amb l'id de paràmetre que hem creat amb
+ * el tipus enumerat.
+ */
 class OptimalViewpointParameters : public Parameters {
-    
+
+
     Q_OBJECT
-    
+
+
 public:
 
-
-
-    //typedef QPair<qreal, QColor> QGradientStop;       // a <QGradient>
-    //typedef QVector<QGradientStop> QGradientStops;    // a <QGradient>
-    //typedef QGradientStops TransferFunction;                                // funció de transferència per un volum d'un mirall
-    //typedef QVector<TransferFunction> OptimalViewpointTransferFunction;               // funció de transferència per tots els volums d'un mirall
-    
-    
-    /**
-        Aquest tipus enumerat ens serveix per crear els identificadors de cada
-        paràmetre.
-    */
+    /// Identificadors dels diversos paràmetres.
     enum OptimalViewpointParametersNames
     {
         VolumeObject,
-
         SegmentationFileName,
-        SegmentationIterations, SegmentationBlockLength, SegmentationNumberOfClusters,
-            SegmentationNoise, SegmentationImageSampleDistance, SegmentationSampleDistance,
-
+        SegmentationIterations, SegmentationBlockLength,
+            SegmentationNumberOfClusters, SegmentationNoise,
+            SegmentationImageSampleDistance, SegmentationSampleDistance,
         NumberOfClusters,
 
         NumberOfPlanes, Shade, VisualizationBlockLength,
@@ -70,29 +64,27 @@ public:
     OptimalViewpointParameters( QObject * parent = 0 );
     ~OptimalViewpointParameters();
 
+    void setVolumeObject( Volume * volumeObject );
+    Volume * getVolumeObject() const;
 
-    unsigned short getSegmentationIterations() const;
-    void setSegmentationIterations( unsigned short segmentationIterations );
-
-    unsigned char getSegmentationBlockLength() const;
-    void setSegmentationBlockLength( unsigned char segmentationBlockLenth );
-
-    unsigned char getSegmentationNumberOfClusters() const;
-    void setSegmentationNumberOfClusters( unsigned char segmentationNumberOfClusters );
-
-    double getSegmentationNoise() const;
-    void setSegmentationNoise( double segmentationNoise );
-
-    double getSegmentationImageSampleDistance() const;
-    void setSegmentationImageSampleDistance( double segmentationImageSampleDistance );
-
-    double getSegmentationSampleDistance() const;
-    void setSegmentationSampleDistance( double segmentationSampleDistance );
-
-    const QString & getSegmentationFileName() const;
     void setSegmentationFileName( const QString & segmentationFileName );
+    const QString & getSegmentationFileName() const;
 
+    void setSegmentationIterations( unsigned short segmentationIterations );
+    unsigned short getSegmentationIterations() const;
+    void setSegmentationBlockLength( unsigned char segmentationBlockLenth );
+    unsigned char getSegmentationBlockLength() const;
+    void setSegmentationNumberOfClusters( unsigned char segmentationNumberOfClusters );
+    unsigned char getSegmentationNumberOfClusters() const;
+    void setSegmentationNoise( double segmentationNoise );
+    double getSegmentationNoise() const;
+    void setSegmentationImageSampleDistance( double segmentationImageSampleDistance );
+    double getSegmentationImageSampleDistance() const;
+    void setSegmentationSampleDistance( double segmentationSampleDistance );
+    double getSegmentationSampleDistance() const;
 
+    void setNumberOfClusters( unsigned char numberOfClusters );
+    unsigned char getNumberOfClusters() const;
 
 
     
@@ -109,11 +101,11 @@ public:
 
     void setVisualizationSampleDistance( double visualizationSampleDistance );
     
-    void setVolumeObject( Volume * volumeObject );
+    
     void setNumberOfPlanes( unsigned char numberOfPlanes );
     void setTransferFunctionObject( const TransferFunction & transferFunctionObject );
     
-    Volume * getVolumeObject() const;
+    
     unsigned char getNumberOfPlanes() const;
     const TransferFunction & getTransferFunctionObject() const;
 
@@ -138,13 +130,12 @@ public:
     void setUpdatePlane( signed char updatePlane );
     bool getCompute() const;
     void setCompute( bool compute );
-    unsigned char getNumberOfClusters() const;
-    void setNumberOfClusters( unsigned char numberOfClusters );
+
 
 
 
 private:
-    
+
     Volume * m_volumeObject;
 
     QString m_segmentationFileName;
@@ -156,7 +147,7 @@ private:
     double m_segmentationImageSampleDistance;
     double m_segmentationSampleDistance;
 
-
+    unsigned char m_numberOfClusters;
 
     
     unsigned char m_numberOfPlanes;
@@ -175,7 +166,7 @@ private:
     double m_specularPower;
     signed char m_updatePlane;
     bool m_compute;
-    unsigned char m_numberOfClusters;
+    
 
 
 
@@ -183,8 +174,13 @@ signals:
 
     void signalAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
 
-}; // end class OptimalViewpointParameters
 
-}; // end namespace udg
+};
 
-#endif // UDGOPTIMALVIEWPOINTPARAMETERS_H
+
+
+}
+
+
+
+#endif
