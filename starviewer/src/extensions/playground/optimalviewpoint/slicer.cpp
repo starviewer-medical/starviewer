@@ -14,6 +14,7 @@
 #include <QFile>
 #include <QDataStream>
 #include <QTextStream>
+#include <QDir>
 
 #include "histogram.h"
 
@@ -83,7 +84,7 @@ void Slicer::reslice()
     unsigned char * data = reinterpret_cast<unsigned char *>( result->GetPointData()->GetScalars()->GetVoidPointer(0) );
     int size = result->GetPointData()->GetScalars()->GetSize();
 
-    QFile outFile( "/scratch/result.bin" );
+    QFile outFile( QDir::tempPath().append( "/resliced.raw" ) );
     if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         QDataStream out( &outFile );
@@ -170,7 +171,7 @@ void Slicer::compute()  /// \todo Fer-ho més eficient!!!
     }
 
     // Printar resultats
-    QFile outFile( "/scratch/smi.txt" );
+    QFile outFile( QDir::tempPath().append( "/smi.txt" ) );
     if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         QTextStream out( &outFile );
