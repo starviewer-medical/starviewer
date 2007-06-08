@@ -1,37 +1,55 @@
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Grup de Gràfics de Girona                  *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+
+
 #ifndef OPTIMALVIEWPOINTEXTENSIONMEDIATOR_H
 #define OPTIMALVIEWPOINTEXTENSIONMEDIATOR_H
 
+
+
 #include "extensionmediator.h"
+
 
 #include "installextension.h"
 #include "qoptimalviewpointextension.h"
 
-namespace udg{
+
+
+namespace udg {
+
+
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class OptimalViewpointExtensionMediator: public ExtensionMediator
-{
-public:
-    OptimalViewpointExtensionMediator(QObject *parent = 0);
+ * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+ */
+class OptimalViewpointExtensionMediator : public ExtensionMediator {
 
+
+public:
+
+    OptimalViewpointExtensionMediator( QObject * parent = 0 );
     ~OptimalViewpointExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID);
-
     virtual DisplayableID getExtensionID() const;
+
+    virtual bool initializeExtension( QWidget * extension, ExtensionHandler * extensionHandler, Identifier mainVolumeID );
+
+
 };
 
-static InstallExtension<QOptimalViewpointExtension, OptimalViewpointExtensionMediator> registerOptimalViewpointExtension;
 
 
-} //udg namespace
+static InstallExtension< QOptimalViewpointExtension, OptimalViewpointExtensionMediator > registerOptimalViewpointExtension;
+
+
+
+}
+
+
 
 #endif
