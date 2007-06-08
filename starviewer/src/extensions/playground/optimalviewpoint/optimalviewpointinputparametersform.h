@@ -91,6 +91,8 @@ private slots:
     void openSegmentationFile();
     /// Demana el tipus de segmentació adequat segons les opcions triades.
     void requestSegmentation();
+    void loadTransferFunction();
+    void saveTransferFunction();
 
 signals:
 

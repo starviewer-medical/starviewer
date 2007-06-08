@@ -16,6 +16,7 @@
 
 // #include "optimalviewpoint.h"
 #include "optimalviewpointparameters.h"
+#include "transferfunctionio.h"
 
 
 
@@ -50,6 +51,9 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
 
     connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
     connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( requestSegmentation() ) );
+
+    connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
+    connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
 
 
 
@@ -338,6 +342,61 @@ void OptimalViewpointInputParametersForm::requestSegmentation()
                                    tr("Please, choose a segmentation file or do an automatic segmentation.") );
     }
     else emit automaticSegmentationRequested();
+}
+
+
+
+void OptimalViewpointInputParametersForm::loadTransferFunction()
+{
+    QSettings settings;
+
+    settings.beginGroup( "OptimalViewpoint" );
+
+    QString transferFunctionDir = settings.value( "transferFunctionDir", QString() ).toString();
+
+    QString transferFunctionFileName =
+            QFileDialog::getOpenFileName( this, tr("Load transfer function"),
+                                          transferFunctionDir, tr("Transfer function files (*.tf);;All files (*)") );
+
+    if ( !transferFunctionFileName.isNull() )
+    {
+        TransferFunction * transferFunction = TransferFunctionIO::fromFile( transferFunctionFileName );
+        this->setTransferFunction( *transferFunction );
+        delete transferFunction;
+
+        QFileInfo transferFunctionFileInfo( transferFunctionFileName );
+        settings.setValue( "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+
+void OptimalViewpointInputParametersForm::saveTransferFunction()
+{
+    this->setTransferFunction( m_editorByValues->getTransferFunction() );
+
+    QSettings settings;
+
+    settings.beginGroup( "OptimalViewpoint" );
+
+    QString transferFunctionDir = settings.value( "transferFunctionDir", QString() ).toString();
+
+    QFileDialog saveDialog( this, tr("Save transfer function"), transferFunctionDir, tr("Transfer function files (*.tf);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "tf" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString transferFunctionFileName = saveDialog.selectedFiles().first();
+        TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunction );
+
+        QFileInfo transferFunctionFileInfo( transferFunctionFileName );
+        settings.setValue( "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
 }
 
 
