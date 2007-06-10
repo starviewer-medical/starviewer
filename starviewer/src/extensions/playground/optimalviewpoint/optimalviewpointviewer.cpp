@@ -1,51 +1,46 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
+
 #include "optimalviewpointviewer.h"
 
-#include <QBoxLayout>
+
 #include <QVTKWidget.h>
-#include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
-#include <vtkInteractorStyle.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
 
 #include "vtkInteractorStyleSwitchGgg.h"
 
+
+
 namespace udg {
 
-OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent, vtkRenderer * renderer )
- : QWidget( parent )
-{
-    QLayout * layout = new QBoxLayout( QBoxLayout::LeftToRight, this );
-    layout->setMargin( 0 );
 
-    m_vtkWidget = new QVTKWidget( this );
-    vtkRenderWindow * renderWindow = vtkRenderWindow::New();
-    QVTKInteractor * interactor = QVTKInteractor::New();
-    renderWindow->SetInteractor( interactor );
-    m_vtkWidget->SetRenderWindow( renderWindow );
-    interactor->Initialize();
+
+OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent )
+    : QViewer( parent )
+{
     vtkInteractorStyle * style = vtkInteractorStyleSwitchGgg::New();
-    interactor->SetInteractorStyle( style );
-    renderWindow->Delete();
-    interactor->Delete();
+    this->getInteractor()->SetInteractorStyle( style );
     style->Delete();
 
-    layout->addWidget( m_vtkWidget );
-
     m_renderer = 0;
-
-    this->setRenderer( renderer );
 }
+
+
 
 OptimalViewpointViewer::~OptimalViewpointViewer()
 {
     m_renderer->Delete();
 }
+
+
 
 /**
  * Assigna a la classe el renderer que haurà de fer la visualització si
@@ -61,17 +56,23 @@ void OptimalViewpointViewer::setRenderer( vtkRenderer * renderer )
     }
 }
 
-/// Retorna l'interactor de la finestra.
-QVTKInteractor * OptimalViewpointViewer::getInteractor() const
+
+
+vtkRenderer * OptimalViewpointViewer::getRenderer()
 {
-    return m_vtkWidget->GetInteractor();
+    return m_renderer;
 }
 
-/**
- * Força l'actualització de la visualització. Si la classe no té un renderer
- * no fa res.
- */
-void OptimalViewpointViewer::update()
+
+
+void OptimalViewpointViewer::setInput( Volume * volume )
+{
+    m_mainVolume = volume;
+}
+
+
+
+void OptimalViewpointViewer::render()
 {
     if ( m_renderer )
     {
@@ -79,4 +80,41 @@ void OptimalViewpointViewer::update()
     }
 }
 
-}; // end namespace udg
+
+
+void OptimalViewpointViewer::setEnableTools( bool /*enable*/ )
+{
+    // de moment res
+}
+
+
+
+void OptimalViewpointViewer::enableTools()
+{
+    // de moment res
+}
+
+
+
+void OptimalViewpointViewer::disableTools()
+{
+    // de moment res
+}
+
+
+
+void OptimalViewpointViewer::setTool( QString /*tool*/ )
+{
+    // de moment res
+}
+
+
+
+void OptimalViewpointViewer::reset()
+{
+    // de moment res
+}
+
+
+
+}
