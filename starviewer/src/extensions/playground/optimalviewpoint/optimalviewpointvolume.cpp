@@ -1,9 +1,11 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+
 
 #include "optimalviewpointvolume.h"
 
@@ -33,38 +35,50 @@
 #include "transferfunction.h"
 #include "transferfunctionio.h"
 
+#include <vtkImageShiftScale.h>
+
+
 
 namespace udg {
 
-OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image )
+
+/// \todo Presuposem que image no és null i que són dades de tipus unsigned char.
+OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * parent )
+    : QObject( parent )
 {
+    double range[2];
+    image->GetScalarRange( range );
+    double min = range[0], max = range[1];
+
+    std::cout << "min = " << min << ", max = " << max << std::endl;
+
+//     double diff = max - min;
+//     double slope = 255.0 / diff;
+//     double inter = -slope * min;
+//     double shift = inter / slope;
+
+    double shift = 0.0;
+    double slope = 255.0 / max;
+
+    vtkImageShiftScale * shifter = vtkImageShiftScale::New();
+    shifter->SetInput( image );
+    shifter->SetShift( shift );
+    shifter->SetScale( slope );
+    shifter->SetOutputScalarTypeToUnsignedChar();
+    shifter->ClampOverflowOn();
+    shifter->Update();
 
 
-    // POTSER CALDRIA AFEGIR UN Register A TOTS ELS OBJECTES QUE ES GUARDEN
+    m_image = shifter->GetOutput(); m_image->Register( 0 ); shifter->Delete();
+    m_data = reinterpret_cast< unsigned char * >( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
-
-
-    m_image = image; m_image->Register( 0 );
-
-
-
-
-    m_data = reinterpret_cast<unsigned char *>( m_image->GetPointData()->GetScalars()->GetVoidPointer(0) );
-
-
-
-
-    m_simplifiedImage = vtkImageData::New();
-    m_simplifiedImage->DeepCopy( m_image );
-    m_simplifiedImage->Register( 0 );
-    // falta la comprovació del tipus
-    m_simplifiedData = reinterpret_cast<unsigned char *>( m_simplifiedImage->GetPointData()->GetScalars()->GetVoidPointer(0) );
+    m_labeledImage = vtkImageData::New();
+    m_labeledImage->DeepCopy( m_image ); //m_labeledImage->Register( 0 );       // cal el register? (no perquè és New())??
+    m_labeledData = reinterpret_cast< unsigned char * >( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
     m_segmentedImage = vtkImageData::New();
-    m_segmentedImage->DeepCopy( m_image );
-    m_segmentedImage->Register( 0 );
-    // falta la comprovació del tipus
-    m_segmentedData = reinterpret_cast<unsigned char *>( m_segmentedImage->GetPointData()->GetScalars()->GetVoidPointer(0) );
+    m_segmentedImage->DeepCopy( m_image ); //m_segmentedImage->Register( 0 );   // cal el register? (no perquè és New())??
+    m_segmentedData = reinterpret_cast< unsigned char * >( m_segmentedImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
 
@@ -193,6 +207,8 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_mainVolume->Delete();
     m_planeVolume->Delete();
     m_image->Delete();
+    m_labeledImage->Delete();
+    m_segmentedImage->Delete();
 }
 
 void OptimalViewpointVolume::setShade( bool on )
@@ -264,7 +280,7 @@ void OptimalViewpointVolume::synchronize()
 
 void OptimalViewpointVolume::handle( int rayId, int offset )
 {
-    emit visited( rayId, *(m_simplifiedData + offset) );
+    emit visited( rayId, *(m_labeledData + offset) );
 }
 
 void OptimalViewpointVolume::endRay( int rayId )
@@ -581,7 +597,7 @@ void OptimalViewpointVolume::labelize( const std::vector< unsigned char > & limi
 {
     unsigned char * fixIt = m_data;
 //    IteratorType grounIt(GrounImage, GrounImage->GetBufferedRegion());
-    unsigned char * segIt = m_simplifiedData;
+    unsigned char * segIt = m_labeledData;
     unsigned char * seg2It = m_segmentedData;
     unsigned char * fixItEnd = m_data + m_dataSize;
 
@@ -735,4 +751,4 @@ void OptimalViewpointVolume::setSpecularPower( double specularPower )
 
 
 
-}; // end namespace udg
+}

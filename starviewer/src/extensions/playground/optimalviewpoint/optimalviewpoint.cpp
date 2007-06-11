@@ -134,34 +134,35 @@ void OptimalViewpoint::setImage( vtkImageData * image )
 
     vtkImageData * castedImage = imageCaster->GetOutput();
 
-    double srange[2];
-    castedImage->GetScalarRange( srange );
-    double min = srange[0];
-    double max = srange[1];
-
-    std::cout << "min = " << min << ", max = " << max << std::endl;
-
-//     double diff = max - min;
-//     double slope = 255.0 / diff;
-//     double inter = -slope * min;
-//     double shift = inter / slope;
-
-    double shift = 0.0;
-    double slope = 255.0 / max;
-
-    vtkImageShiftScale * shifter = vtkImageShiftScale::New();
-    shifter->SetInput( castedImage );
-    shifter->SetShift( shift );
-    shifter->SetScale( slope );
-    shifter->SetOutputScalarTypeToUnsignedChar();
-    shifter->ClampOverflowOn();
-    shifter->Update();
+//     double srange[2];
+//     castedImage->GetScalarRange( srange );
+//     double min = srange[0];
+//     double max = srange[1];
+// 
+//     std::cout << "min = " << min << ", max = " << max << std::endl;
+// 
+// //     double diff = max - min;
+// //     double slope = 255.0 / diff;
+// //     double inter = -slope * min;
+// //     double shift = inter / slope;
+// 
+//     double shift = 0.0;
+//     double slope = 255.0 / max;
+// 
+//     vtkImageShiftScale * shifter = vtkImageShiftScale::New();
+//     shifter->SetInput( castedImage );
+//     shifter->SetShift( shift );
+//     shifter->SetScale( slope );
+//     shifter->SetOutputScalarTypeToUnsignedChar();
+//     shifter->ClampOverflowOn();
+//     shifter->Update();
 
     // creem el nou volum
-    m_volume = new OptimalViewpointVolume( shifter->GetOutput() );
+//     m_volume = new OptimalViewpointVolume( shifter->GetOutput() );
+    m_volume = new OptimalViewpointVolume( imageCaster->GetOutput() );
 
     imageCaster->Delete();
-    shifter->Delete();
+//     shifter->Delete();
 
     vtkVolume * volume = m_volume->getMainVolume();
 

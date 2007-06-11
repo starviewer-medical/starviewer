@@ -1,44 +1,69 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
+
 #ifndef UDGMAGICMIRRORSVOLUME_H
 #define UDGMAGICMIRRORSVOLUME_H
 
+
+
 #include <QObject>
 
-#include <vector>   // per std::vector<*>
 
-// #include "optimalviewpoint.h" // per OptimalViewpoint::TransferFunction
+#include <vector>
+
+
 
 class vtkColorTransferFunction;
 class vtkImageData;
 class vtkPiecewiseFunction;
 class vtkVolume;
 class vtkVolumeProperty;
-class vtkVolumeRayCastMapper;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
+class vtkVolumeRayCastMapper;
+
+
 
 namespace udg {
 
+
+
 class TransferFunction;
 
+
+
 /**
- * Encapsula el tractament de vtkVolumes que corresponen a un mateix model:
- * assignar funcions de transferència i sincronitzar les transformacions.
+ * Aquesta classe gestiona el tractament de volums de l'extensió Optimal
+ * Viewpoint.
+ *
+ * Guarda tots els objectes necessaris per crear un vtkVolume a partir d'un
+ * vtkImageData, permet definir els paràmetres de la visualització del volum amb
+ * ray casting, pot segmentar un volum amb les dades d'un fitxer o amb un
+ * algorisme propi, etc.
+ *
+ * Té signals i slots que permeten la comunicació amb OptimalViewpointPlane
+ * mentre es fa una visualització.
+ *
+ * \todo S'hauria d'ampliar una mica més aquesta descripció.
+ *
+ * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
 class OptimalViewpointVolume : public QObject {
 
+
     Q_OBJECT
+
 
 public:
 
-    OptimalViewpointVolume( vtkImageData * image );
-    ~OptimalViewpointVolume();
+    OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
+    virtual ~OptimalViewpointVolume();
 
     /// Retorna el vtkVolume corresponent a l'índex donat.
     vtkVolume * getMainVolume() const;
@@ -99,7 +124,7 @@ public:
 
 
 
-    vtkImageData * getLabeledImage() const { return m_simplifiedImage; }
+    vtkImageData * getLabeledImage() const { return m_labeledImage; }
 
 
 
@@ -118,7 +143,7 @@ private:
 
     /// Model de vòxels original.
     vtkImageData * m_image;
-    vtkImageData * m_simplifiedImage;
+    vtkImageData * m_labeledImage;
     vtkImageData * m_segmentedImage;
 
     /// Vector de volums.
@@ -145,7 +170,7 @@ private:
 
 
     unsigned char * m_data;
-    unsigned char * m_simplifiedData;
+    unsigned char * m_labeledData;
     unsigned char * m_segmentedData;
     int m_dataSize;
 
@@ -165,8 +190,12 @@ signals:
     void adjustedTransferFunctionDefined( const TransferFunction & adjustedTransferFunction );
 
 
-}; // end class OptimalViewpointVolume
+};
 
-}; // end namespace udg
 
-#endif // UDGMAGICMIRRORSVOLUME_H
+
+}
+
+
+
+#endif

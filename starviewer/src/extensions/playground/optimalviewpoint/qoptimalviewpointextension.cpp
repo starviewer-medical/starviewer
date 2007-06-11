@@ -170,7 +170,7 @@ void QOptimalViewpointExtension::execute()
 
             m_method->updatePlanes();
             std::cout << "OVD: update planes" << std::endl;
-            m_viewer->update();
+            m_viewer->render();
 
             if ( m_method->resultsChanged() )
             {
