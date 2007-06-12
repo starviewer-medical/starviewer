@@ -13,8 +13,6 @@
 #include <QString>
 #include <QDir>
 #include <QFileInfo>
-// resta include's
-#include <iostream>
 
 namespace udg {
 
@@ -33,14 +31,14 @@ Output::~Output()
 bool Output::saveFile( const char* filename )
 {
     bool ok = true;
-    
+
     if( !m_volumeData )
     {
         WARN_LOG( "There's no dataset to write" );
         ok = false;
         return ok;
     }
-   
+
     m_writer->SetFileName( filename );
     emit progress(0);
     try
@@ -50,14 +48,13 @@ bool Output::saveFile( const char* filename )
     catch ( itk::ExceptionObject & e )
     {
         WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString::fromLatin1(filename) + "]" ) );
-        std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
     }
     emit progress(100);
-    
+
     return ok;
-    
+
 }
 
 bool Output::saveSeries( const char* filename , int slice )
@@ -68,7 +65,7 @@ TIFF i PNG només suporten unsigned chars i unsigned shorts, BMP nomes uchars, p
 Sempre s'ha de fer un casting ( i un rescale image? )
 */
     bool ok = true;
-    
+
     if( !m_volumeData )
     {
         WARN_LOG( "There's no dataset to write" );
@@ -80,29 +77,29 @@ Sempre s'ha de fer un casting ( i un rescale image? )
         // escriure totes les llesques
     }
     else
-    {    
+    {
         // escriure la indicada, comprovar que no sobrepassa el límit, però això ja tindria que venir bé
         // segurament el que caldria fer és canviar l'input ( fer un "reslice" i extrure les llesques requerides)
     }
-    
+
     RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
     rescaler->SetInput( m_volumeData->getItkData() );
     rescaler->SetOutputMinimum( 0 );
     rescaler->SetOutputMaximum( 255 );
-    m_seriesWriter->SetInput( rescaler->GetOutput() );    
+    m_seriesWriter->SetInput( rescaler->GetOutput() );
 
     // el format del fitxer serà NomDelFitxerXXXX.extensio on XXXX serà el nº de llesca. El nº de llesca serà de com a màxim 4 dígits
     QString seriesFormat;
     seriesFormat.sprintf( "%s/%s-%%04d.%s" , qPrintable( QFileInfo( filename ).dir().absolutePath() ) , qPrintable( QFileInfo( filename ).completeBaseName() ) , qPrintable( QFileInfo( filename ).suffix() ) );
-    
+
     typedef itk::NumericSeriesFileNames    NameGeneratorType;
     NameGeneratorType::Pointer nameGenerator = NameGeneratorType::New();
     nameGenerator->SetSeriesFormat( seriesFormat.toLatin1() );
     nameGenerator->SetStartIndex( 1 );
     nameGenerator->SetEndIndex( m_volumeData->getVtkData()->GetDimensions()[2] ); // el nombre de llesques
-    nameGenerator->SetIncrementIndex( 1 );      
+    nameGenerator->SetIncrementIndex( 1 );
     m_seriesWriter->SetFileNames( nameGenerator->GetFileNames()  );
-    
+
     emit progress(0);
     try
     {
@@ -111,7 +108,6 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     catch ( itk::ExceptionObject & e )
     {
         WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString::fromLatin1( filename ) +"]" ) );
-        std::cerr << e << std::endl;
         ok = false;
         emit progress(-1);
     }
@@ -120,11 +116,11 @@ Sempre s'ha de fer un casting ( i un rescale image? )
 }
 
 void Output::setInput(Volume* data)
-{ 
-    m_volumeData = data; 
+{
+    m_volumeData = data;
     // podríem decidir entre fer això abans o
     m_writer->SetInput( m_volumeData->getItkData() );
-    
+
 };
 
-};  // end namespace udg 
+};  // end namespace udg

@@ -8,6 +8,7 @@
 #define UDGINPUT_H
 
 #include "volume.h"
+#include "logging.h"
 // qt
 #include <QObject>
 // itk
@@ -50,11 +51,11 @@ public:
         ReaderTypePointer m_reader = dynamic_cast< ReaderTypePointer >( object );
         if( typeid( event ) == typeid( itk::ProgressEvent ) )
         {
-            std::cout << "Progressant..." << m_reader->GetProgress() << std::endl;
+            DEBUG_LOG( qPrintable( QString("Progressant...%1").arg( m_reader->GetProgress() ) ) );
         }
         else
         {
-            std::cout << "No s'ha invocat ProgressEvent" << std::endl;
+            DEBUG_LOG( qPrintable( QString("No s'ha invocat ProgressEvent") ) );
         }
     }
 };
@@ -88,11 +89,11 @@ public:
         SeriesReaderTypePointer m_seriesReader = dynamic_cast< SeriesReaderTypePointer >( object );
         if( typeid( event ) == typeid( itk::ProgressEvent ) )
         {
-            std::cout << "Progressant..." << m_seriesReader->GetProgress() << std::endl;
+            DEBUG_LOG( qPrintable( QString("Progressant... %1").arg( m_seriesReader->GetProgress() ) ) );
         }
         else
         {
-            std::cout << "No s'ha invocat ProgressEvent" << std::endl;
+            DEBUG_LOG( qPrintable( QString("No s'ha invocat ProgressEvent") ) );
         }
     }
 };

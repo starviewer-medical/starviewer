@@ -152,7 +152,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         logMessage = "Error al connectar al pacs ";
         logMessage.append( operation.getPacsParameters().getAEPacs() );
         logMessage.append( ". PACS ERROR : ");
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
 
         emit( setErrorOperation( studyUID ) );
@@ -187,7 +187,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             logMessage.append( " del pacs " );
             logMessage.append( operation.getPacsParameters().getAEPacs() );
             logMessage.append( ". PACS ERROR : " );
-            logMessage.append( retState.text().c_str() );
+            logMessage.append( retState.text() );
             ERROR_LOG( qPrintable(logMessage) );
         }
 
@@ -326,7 +326,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
         logMessage.append(" S'ha produït un error al intentar connectar al PACS ");
         logMessage.append( operation.getPacsParameters().getAEPacs() );
         logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) );
         emit( setErrorOperation( operation.getStudyUID() ) );
         return state;
@@ -354,7 +354,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     {
         emit( setErrorOperation( operation.getStudyUID() ) );
         logMessage = "S'ha produit un error intentant guardar l'estudi : ";
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
 
         ERROR_LOG( qPrintable(logMessage) );
     }

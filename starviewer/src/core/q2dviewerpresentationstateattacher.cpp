@@ -647,10 +647,10 @@ vtkWindowLevelLookupTable *Q2DViewerPresentationStateAttacher::parseLookupTable(
 //                 std::cout << std::endl << std::endl << "************ ACABUT **************" << std::endl << std::endl;
             }
             else
-                std::cout << "Error message:: " << status.text() << std::endl;
+                DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
         }
         else
-            std::cout << "Error message:: " << status.text() << std::endl;
+            DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
     }
     return vtkLut;
 }
@@ -1264,7 +1264,7 @@ void Q2DViewerPresentationStateAttacher::applyOverlayPlanes()
             m_presentationStateHandler->selectImageFrameNumber(j+1);
             DEBUG_LOG( qPrintable( QString("Tractant frame #%1").arg(j+1) ) );
             maxImg = m_presentationStateHandler->getNumberOfOverlaysInImage();
-            std::cout << "Overlays available (non-shadowed) in attached image: " << maxImg << std::endl;
+            DEBUG_LOG( qPrintable( QString("Overlays available (non-shadowed) in attached image: %1").arg( maxImg ) ) );
             for( size_t oidx = 0; oidx < maxImg; oidx++ )
             {
                 std::cout << "  Overlay #" << oidx+1 << ": group=0x" << hex << m_presentationStateHandler->getOverlayInImageGroup( oidx ) << dec << " label=\"";

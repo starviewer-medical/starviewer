@@ -196,8 +196,7 @@ Status StoreImages::store( ImageList imageList )
     OFCondition cond = EC_Normal;
     Status state;
     ProcessImageSingleton* piSingleton;
-    char hexadecimalCodeError[6];
-    std::string statusMessage;
+    QString statusMessage;
 
     //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
     piSingleton=ProcessImageSingleton::getProcessImageSingleton();
@@ -217,13 +216,7 @@ Status StoreImages::store( ImageList imageList )
 
     if ( m_lastStatusCode != STATUS_Success )
     {
-        sprintf(hexadecimalCodeError, "%x" , m_lastStatusCode);
-        statusMessage = "Error ";
-        statusMessage.append( hexadecimalCodeError );
-        statusMessage += " al fer el store de la imatge ";
-        statusMessage += " per coneixer el significat de l'error consultar el fitxer ";
-        statusMessage += "dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h";
-        state.setStatus( statusMessage, false , 1400 );
+        state.setStatus( QString("Error %1 al fer el store de la imatge per coneixer el significat de l'error consultar el fitxer dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h").arg( m_lastStatusCode ), false , 1400 );
 
         return state;
     }

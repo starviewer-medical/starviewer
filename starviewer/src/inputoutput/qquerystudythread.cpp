@@ -39,7 +39,7 @@ void QQueryStudyThread::run()
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text().c_str() ) ) );
+        ERROR_LOG( qPrintable( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text() ) ) );
         emit( errorConnectingPacs( m_param.getPacsID() ) );
         exit(1);
     }
@@ -54,7 +54,7 @@ void QQueryStudyThread::run()
 
         if (! state.good() )
         {
-            ERROR_LOG( qPrintable( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text().c_str() ) ) );
+            ERROR_LOG( qPrintable( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text() ) ) );
             emit( errorQueringStudiesPacs( m_param.getPacsID() ) );
         }
 

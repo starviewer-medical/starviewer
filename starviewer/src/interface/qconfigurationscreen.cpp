@@ -492,7 +492,7 @@ void QConfigurationScreen::test()
         logMessage.insert( 0 , "Doing echo pacs " );
         logMessage.append( pacs.getAEPacs() );
         logMessage.append( " doesn't responds. PACS ERROR : " );
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         INFO_LOG ( qPrintable(logMessage) );
     }
     else
@@ -523,7 +523,7 @@ void QConfigurationScreen::test()
             logMessage.insert( 0 , "Doing echo pacs " );
             logMessage.append( pacs.getAEPacs() );
             logMessage.append( " doesn't responds correctly. PACS ERROR : " );
-            logMessage.append( state.text().c_str() );
+            logMessage.append( state.text() );
             INFO_LOG ( qPrintable(logMessage) );
         }
     }

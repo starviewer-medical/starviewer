@@ -1,5 +1,8 @@
 #ifndef CONST
 #define CONST
+
+#include <QString>
+
 #define HAVE_CONFIG_H 1
 #include <ofcond.h>
 
@@ -140,7 +143,7 @@ namespace udg
 
     enum recordDeviceDicomDir { harddisk , cd , dvd , usb };
 
-    const std::string implementationVersionName = "IDI-UDG_STARVIEWER_03";//Estableix quin els nom d'aplicació que enviem quan ens comuniquem amb un PACS
+    const QString implementationVersionName = "IDI-UDG_STARVIEWER_03";//Estableix quin els nom d'aplicació que enviem quan ens comuniquem amb un PACS
 }
 
 

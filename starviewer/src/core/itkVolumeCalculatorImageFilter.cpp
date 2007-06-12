@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 eplace
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -39,7 +39,7 @@ VolumeCalculatorImageFilter<TInputImage>
   // just decorators around floating point types
   typename PixelObjectType::Pointer output  = static_cast<PixelObjectType*>(this->MakeOutput(1).GetPointer());
   this->ProcessObject::SetNthOutput(1, output.GetPointer());
-  
+
   m_VolumeCount = 0;
   m_VolumeReal = 0.0;
   m_InsideValue = static_cast<PixelType>(0);
@@ -118,7 +118,7 @@ VolumeCalculatorImageFilter<TInputImage>
 ::AfterThreadedGenerateData()
 {
   m_VolumeCount = 0;
-  
+
   std::vector<unsigned int>::iterator it;
   it= m_ThreadVol.begin();
   while(it != m_ThreadVol.end())
@@ -127,14 +127,14 @@ VolumeCalculatorImageFilter<TInputImage>
     it++;
     }
 
-  const SpacingType& spacing = this->GetInput()->GetSpacing();  
+  const SpacingType& spacing = this->GetInput()->GetSpacing();
   double voxelVolume = 1;
-    
+
   for(unsigned int i=0;i<InputImageDimension;i++)
   {
       voxelVolume *= spacing[i];
   }
-  
+
   m_VolumeReal = static_cast<double>(m_VolumeCount)*voxelVolume;
 
 }
@@ -143,7 +143,7 @@ template<class TInputImage>
 void
 VolumeCalculatorImageFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       int threadId) 
+                       int threadId)
 {
   PixelType value;
   ImageRegionConstIterator<TInputImage> it (this->GetInput(), outputRegionForThread);
@@ -164,11 +164,10 @@ VolumeCalculatorImageFilter<TInputImage>
     ++it;
     progress.CompletedPixel();
     }
-//    std::cout<<std::endl;
 }
 
 template <class TImage>
-void 
+void
 VolumeCalculatorImageFilter<TImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {

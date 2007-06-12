@@ -2629,7 +2629,6 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
                     if( lutData16[i] < min )
                         min = lutData16[i];
                 }
-//                 std::cout << std::endl << std::endl << "************ COMENÇUT **************" << std::endl << std::endl;
                 for( int i =0; i < numberOfEntries; i++ )
                 {
                     double value;
@@ -2641,13 +2640,11 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
                         //value = m_modalityLut->GetLuminance( i );
                     else // no hi ha cap lut precedent
                         value = (double)lutData16[ i ]/max;
-//                     std::cout << "Value que coloco a l'índex[" << i << "]: " << value << std::endl;
                     vtkLut->SetTableValue( i , value , value , value , 1.0 );
                 }
-//                 std::cout << std::endl << std::endl << "************ ACABUT **************" << std::endl << std::endl;
             }
             else
-                std::cout << "Error message:: " << status.text() << std::endl;
+                DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
 
 // experiment
 //             unsigned char *outTable = new unsigned char[ numberOfEntries ];
@@ -2659,7 +2656,7 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
 //             vtkLut->SetRampToLinear();
         }
         else
-            std::cout << "Error message:: " << status.text() << std::endl;
+            DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
     }
     return vtkLut;
 }

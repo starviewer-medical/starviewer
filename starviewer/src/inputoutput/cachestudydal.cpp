@@ -353,31 +353,26 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
     Study selectedStudy;
-    char **resposta = NULL , **error = NULL , errorNumber[5];
+    char **resposta = NULL , **error = NULL;
     Status state;
-    std::string logMessage, sql;
+    QString sqlSentence;
 
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sql.insert( 0 , "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum " );
-    sql.append( " from Study, Patient " );
-    sql.append( " where Study.PatId = Patient.PatId " );
+    sqlSentence = "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum  from Study, Patient where Study.PatId = Patient.PatId ";
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , sql.c_str() , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence) , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     databaseConnection->releaseLock();
     state = databaseConnection->databaseStatus( stateDatabase );
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( sqlSentence ) );
         return state;
     }
 

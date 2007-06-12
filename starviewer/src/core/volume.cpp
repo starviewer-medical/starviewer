@@ -13,8 +13,6 @@
 // ITK
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
-// CPP
-#include <iostream>
 
 #include "volume.h"
 #include "volumesourceinformation.h"
@@ -64,8 +62,7 @@ Volume::ItkImageTypePointer Volume::getItkData()
     }
     catch( itk::ExceptionObject & excep )
     {
-        WARN_LOG( qPrintable( QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription() ) )
-        std::cerr << excep << std::endl;
+        WARN_LOG( qPrintable( QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription() ) );
     }
     return m_vtkToItkFilter->GetImporter()->GetOutput();
 }
@@ -84,8 +81,7 @@ void Volume::setData( ItkImageTypePointer itkImage  )
     }
     catch( itk::ExceptionObject & excep )
     {
-        WARN_LOG( qPrintable( QString("Excepció en el filtre itkToVtk :: Volume::setData( ItkImageTypePointer itkImage ) -> ") + excep.GetDescription() ) )
-        std::cerr << excep << std::endl;
+        WARN_LOG( qPrintable( QString("Excepció en el filtre itkToVtk :: Volume::setData( ItkImageTypePointer itkImage ) -> ") + excep.GetDescription() ) );
     }
     if( m_imageDataVTK )
         m_imageDataVTK->ReleaseData();

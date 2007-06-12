@@ -18,7 +18,7 @@ bool Status:: good()
 	return m_success;
 }
 
-std::string Status:: text()
+QString Status:: text()
 {
     return m_descText;
 }
@@ -37,7 +37,7 @@ Status Status:: setStatus( const OFCondition  status )
     return *this;
 }
 
-Status Status:: setStatus( std::string desc , bool ok , int numError )
+Status Status:: setStatus( QString desc , bool ok , int numError )
 {
     m_descText = desc;
     m_success = ok;

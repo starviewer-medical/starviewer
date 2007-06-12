@@ -625,13 +625,13 @@ void QueryScreen::queryStudyDicomdir()
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error, not opened Dicomdir" ) );
             logMessage = "No s'ha obert cap directori dicomdir ";
-            logMessage.append ( state.text().c_str() );
+            logMessage.append ( state.text() );
         }
         else
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error quering in dicomdir" ) );
             logMessage = "Error cercant estudis al dicomdir ";
-            logMessage.append ( state.text().c_str() );
+            logMessage.append ( state.text() );
         }
         ERROR_LOG( qPrintable(logMessage) );
         return;
@@ -721,7 +721,7 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
         logMessage = "Error al connectar al pacs ";
         logMessage.append( pacsAETitle );
         logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
 
         errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
@@ -737,7 +737,7 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
         logMessage = "QueryScreen::QueryPacs : Error cercant les sèries al PACS ";
         logMessage.append( pacsAETitle );
         logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
 
         text.insert( 0 , tr( "Error! Can't query series in PACS : " ) );
@@ -861,7 +861,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
         logMessage = "Error al connectar al pacs ";
         logMessage.append( AETitlePACS );
         logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
 
         errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
@@ -876,7 +876,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
         logMessage = "QueryScreen::QueryPacs : Error cercant les images al PACS ";
         logMessage.append( AETitlePACS );
         logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
 
         text.insert( 0 , tr( "Error! Can't query images in PACS : " ) );
@@ -1289,7 +1289,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
     if ( !state.good() )
     {
         logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
         return;
     }
@@ -1308,7 +1308,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
     if ( !state.good() )
     {
         logMessage = "Error al cercar l'estudi al dicomdir ERROR : ";
-        logMessage.append( state.text().c_str() );
+        logMessage.append( state.text() );
         ERROR_LOG( qPrintable(logMessage) );
         return;
     }
@@ -1341,7 +1341,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         if ( !state.good() )
         {
             logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
-            logMessage.append( state.text().c_str() );
+            logMessage.append( state.text() );
             ERROR_LOG( qPrintable(logMessage) );
             return;
         }
@@ -1555,7 +1555,7 @@ void QueryScreen::openDicomdir()
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error openning dicomdir" ) );
             logMessage = "Error al obrir el dicomdir " + dicomdirPath;
-            logMessage.append( state.text().c_str() );
+            logMessage.append( state.text() );
             ERROR_LOG( qPrintable(logMessage) );
         }
         else

@@ -168,15 +168,15 @@ void ShutterFilter::setPresentationStateShutters( const char *presentationStateF
                             DEBUG_LOG( qPrintable( QString("L'overlay %1 és bo com a bitmap shutter i es pinta al layer #%2").arg( overlayIndex ).arg( layer ) ) );
 
                             if( presentationStateHandler->overlayInPresentationStateIsROI( overlayIndex ) )
-                                std::cout << "L'overlay és un ROI!!!!!!!!!!" << std::endl;
+                                DEBUG_LOG("L'overlay és un ROI!!!!!!!!!!")
                             else
-                                std::cout << "L'overlay és un BITMAP SHUTTER :D !!!!" << std::endl;
+                                DEBUG_LOG("L'overlay és un BITMAP SHUTTER :D !!!!");
 
                             OFCondition status;
                             status = presentationStateHandler->activateOverlayAsBitmapShutter( overlayIndex );
                             // The overlay must not be activated on a graphic layer (i.e. getOverlayInPresentationStateActivationLayer(idx) != DVPS_IDX_NONE, otherwise this method fails.
                             //     idx  index of the overlay, must be < getNumberOfOverlaysInPresentationState().
-                            std::cout << "STATUS quo: " << status.text() << std::endl;
+                            DEBUG_LOG( qPrintable( QString("STATUS quo: ") + status.text() ) );
 
                             bool isROI = false;
                             unsigned int width = 0, height = 0, left = 0, top = 0;
@@ -194,7 +194,7 @@ void ShutterFilter::setPresentationStateShutters( const char *presentationStateF
                                     foreground
                                         );
 
-                            std::cout << status.text() << std::endl;
+                            DEBUG_LOG( status.text() );
                             this->setBitmapShutter( (unsigned char *)data, width, height, left, top, foreground );
                         }
                     }
@@ -327,7 +327,7 @@ void ShutterFilter::setBitmapShutter( unsigned char *data, unsigned int width, u
                 // set scalar value accordingly
 //                             *currentVoxel = (unsigned char *)data[index];
                 *currentVoxel = unsignedData[index];
-                std::cout << "índex: " << i << "," << "," << j << "," << k << " = " << index << ": valor: " << &currentVoxel << std::endl;
+//                 DEBUG_LOG( qPrintable( QString("índex: %1, %2, %3 = %4 : valor: %5").arg(i).arg(j).arg(k).arg(index).arg(&currentVoxel) ) );
             }
         }
     }

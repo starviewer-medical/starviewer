@@ -80,7 +80,7 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     {
         cacheStudyDAL.updateStudy( study );
     }
-    else ERROR_LOG( state.text() );
+    else ERROR_LOG( qPrintable( state.text() ) );
 
     m_readDicomdir.readSeries( studyUID , seriesUID , seriesList );
 
