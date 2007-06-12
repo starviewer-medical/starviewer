@@ -353,7 +353,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     OFCondition cond;
     char adrLocal[255];
     Status state;
-    std::string AdrServer;
+    QString AdrServer;
     StarviewerSettings settings;
 
 #ifndef QT_NO_DEBUG
@@ -372,7 +372,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
     // set calling and called AE titles
     //el c_str, converteix l'string que ens retornen les funcions get a un char
-    ASC_setAPTitles( m_params , m_pacs.getAELocal().c_str() , m_pacs.getAEPacs().c_str() , NULL );
+    ASC_setAPTitles( m_params , qPrintable(m_pacs.getAELocal()) , qPrintable(m_pacs.getAEPacs()) , NULL );
 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
@@ -381,14 +381,14 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
 
-    AdrServer= constructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
+    AdrServer = constructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
 
     //get localhost name
 
     gethostname( adrLocal , 255 );
 
     // the DICOM server accepts connections at server.nowhere.com port
-    cond = ASC_setPresentationAddresses( m_params , adrLocal , AdrServer.c_str() );
+    cond = ASC_setPresentationAddresses( m_params , adrLocal , qPrintable(AdrServer) );
     if ( !cond.good() ) return state.setStatus( cond );
 
     //default, always configure the echo
@@ -427,7 +427,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond=configureMove( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkRetrieve( atoi( m_pacs.getLocalPort().c_str() ) , m_pacs.getTimeOut() );
+                        state = m_pacsNetwork->createNetworkRetrieve( m_pacs.getLocalPort().toInt() , m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkRetrieve();
@@ -499,10 +499,10 @@ void PacsServer::disconnect()
 
 }
 
-std::string PacsServer:: constructAdrServer( std::string host , std::string port )
+QString PacsServer:: constructAdrServer( QString host , QString port )
 {
 //The format is "server:port"
-    std::string adrServer;
+    QString adrServer;
 
     adrServer.insert( 0 , host );
     adrServer.insert( adrServer.length() , ":" );

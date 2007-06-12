@@ -54,10 +54,10 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     int index = 0;
     bool stop = false;
 
-    cacheStudyDAL.queryStudy( studyUID.toAscii().constData() , study ); //busquem patientID
+    cacheStudyDAL.queryStudy( studyUID, study ); //busquem patientID
 
     studyToConvert.studyUID = studyUID;
-    studyToConvert.patientId = study.getPatientId().c_str();
+    studyToConvert.patientId = study.getPatientId();
 
     while ( index < m_studiesToConvert.count() && !stop )  //busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
     {
@@ -90,7 +90,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
     //comptem el numero d'imatges pel progress de la barra
     while ( i < m_studiesToConvert.count() )
     {
-        imageMask.setStudyUID( m_studiesToConvert.value( i ).studyUID.toAscii().constData() );
+        imageMask.setStudyUID( m_studiesToConvert.value( i ).studyUID );
         state = cacheImageDAL.countImageNumber( imageMask , imageNumberStudy );
         if ( !state.good() ) break;
 
@@ -137,11 +137,11 @@ Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, recordDeviceDico
     Status state, stateNotDicomConformance;
 
     createDicomdir.setDevice( selectedDevice );
-    state = createDicomdir.create( m_dicomDirPath.toAscii().constData() );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
+    state = createDicomdir.create( m_dicomDirPath );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     if ( !state.good() )//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
     {
         createDicomdir.setStrictMode( false );
-        state = createDicomdir.create( m_dicomDirPath.toAscii().constData() );
+        state = createDicomdir.create( m_dicomDirPath );
 
         if ( state.good() )
         {
@@ -208,7 +208,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
     studyDir.mkdir( m_dicomDirStudyPath );
 
-    seriesMask.setStudyUID( studyUID.toAscii().constData() );
+    seriesMask.setStudyUID( studyUID );
 
     state = cacheSeriesDAL.querySeries( seriesMask , seriesList ); //cerquem sèries de l'estudi
 
@@ -284,17 +284,12 @@ Status ConvertToDicomdir::copyImageToDicomdirPath( Image image )
     m_image++;
 
     //Creem el path de la imatge
-    imageInputPath.insert( 0 , settings.getCacheImagePath() );
-    imageInputPath.append( image.getStudyUID().c_str() );
-    imageInputPath.append( "/" );
-    imageInputPath.append( image.getSeriesUID().c_str() );
-    imageInputPath.append( "/" );
-    imageInputPath.append( image.getImageName().c_str() );
+    imageInputPath = settings.getCacheImagePath() + image.getStudyUID() + QString("/") + image.getSeriesUID() + QString("/") + image.getImageName();
 
     imageOutputPath = m_dicomDirSeriesPath + imageName;
 
     //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
-    state = convertDicom.convert( imageInputPath.toAscii().constData() , imageOutputPath.toAscii().constData() );
+    state = convertDicom.convert( imageInputPath , imageOutputPath );
 
      m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
      m_progress->repaint();

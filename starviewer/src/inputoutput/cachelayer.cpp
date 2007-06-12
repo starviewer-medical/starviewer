@@ -84,7 +84,7 @@ Status CacheLayer::deleteOldStudies()
     lastTimeViewedMinimum = today.addDays( - settings.getMaximumDaysNotViewedStudy().toInt( NULL , 10 ) );
 
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre
-    state = cacheStudyDAL.queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ).toAscii().constData() , studyList );
+    state = cacheStudyDAL.queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ) , studyList );
     studyList.firstStudy();
 
     QProgressDialog *progress;
@@ -134,7 +134,7 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
     if ( !state.good() ) return state;
 
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre, retorna la llista ordenada per data i hora de l'ultima visualitzacio, ordenada ascendentment
-    state = cacheStudyDAL.queryOldStudies( maxDate.toString("yyyyMMdd").toAscii().constData() , studyList );
+    state = cacheStudyDAL.queryOldStudies( maxDate.toString("yyyyMMdd"), studyList );
     studyList.firstStudy();
 
     //esborrem estudis fins que la llista estigui buida o haguem alliberat l'espai en Mb passat per parametre

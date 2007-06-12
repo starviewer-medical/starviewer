@@ -7,7 +7,6 @@
 
 #define HAVE_CONFIG_H 1
 
-#include <string>
 #include <dcdeftag.h> //conte els Tags DICOM
 #include "imagedicominformation.h"
 #include "status.h"
@@ -19,7 +18,7 @@ ImageDicomInformation::ImageDicomInformation()
 
 }
 
-Status ImageDicomInformation:: openDicomFile(std::string imagePath)
+Status ImageDicomInformation:: openDicomFile(QString imagePath)
 {
     Status state;
     E_FileReadMode      opt_readMode = ERM_autoDetect;
@@ -28,7 +27,7 @@ Status ImageDicomInformation:: openDicomFile(std::string imagePath)
 
     m_dicomFile = new DcmFileFormat();
 
-    OFCondition cond = m_dicomFile->loadFile( imagePath.c_str() , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
+    OFCondition cond = m_dicomFile->loadFile( qPrintable(imagePath) , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
 
     if ( !cond.good() ) return state.setStatus( cond );
 
@@ -37,7 +36,7 @@ Status ImageDicomInformation:: openDicomFile(std::string imagePath)
     return state.setStatus( cond );
 }
 
-std::string ImageDicomInformation::getStudyUID()
+QString ImageDicomInformation::getStudyUID()
 {
     DcmTagKey studyInstanceUIDTagKey( DCM_StudyInstanceUID );
     const char *studyUID = NULL;
@@ -51,7 +50,7 @@ std::string ImageDicomInformation::getStudyUID()
     else return studyUID;
 }
 
-std::string ImageDicomInformation::getStudyID()
+QString ImageDicomInformation::getStudyID()
 {
     DcmTagKey studyIDTagKey( DCM_StudyID );
     const char *studyID = NULL;
@@ -65,7 +64,7 @@ std::string ImageDicomInformation::getStudyID()
     else return studyID;
 }
 
-std::string ImageDicomInformation::getSeriesUID()
+QString ImageDicomInformation::getSeriesUID()
 {
     DcmTagKey seriesInstanceUIDTagKey( DCM_SeriesInstanceUID );
     const char *seriesInstanceUID = NULL;
@@ -79,7 +78,7 @@ std::string ImageDicomInformation::getSeriesUID()
     else return seriesInstanceUID;
 }
 
-std::string ImageDicomInformation::getSeriesNumber()
+QString ImageDicomInformation::getSeriesNumber()
 {
     DcmTagKey seriesNumberTagKey( DCM_SeriesNumber );
     const char *seriesNumber = NULL;
@@ -93,7 +92,7 @@ std::string ImageDicomInformation::getSeriesNumber()
     else return seriesNumber;
 }
 
-std::string ImageDicomInformation::getSeriesModality()
+QString ImageDicomInformation::getSeriesModality()
 {
     DcmTagKey seriesModalityTagKey( DCM_Modality );
     const char *seriesModality = NULL;
@@ -107,7 +106,7 @@ std::string ImageDicomInformation::getSeriesModality()
     else return seriesModality;
 }
 
-std::string ImageDicomInformation::getSeriesProtocolName()
+QString ImageDicomInformation::getSeriesProtocolName()
 {
     DcmTagKey seriesProtocolNameTagKey( DCM_ProtocolName );
     const char *seriesProtocolName = NULL;
@@ -121,7 +120,7 @@ std::string ImageDicomInformation::getSeriesProtocolName()
     else return seriesProtocolName;
 }
 
-std::string ImageDicomInformation::getSeriesDescription()
+QString ImageDicomInformation::getSeriesDescription()
 {
     DcmTagKey seriesDescriptionTagKey( DCM_SeriesDescription );
     const char *seriesDescription = NULL;
@@ -139,7 +138,7 @@ std::string ImageDicomInformation::getSeriesDescription()
     else return seriesDescription;
 }
 
-std::string ImageDicomInformation::getSeriesBodyPartExamined ()
+QString ImageDicomInformation::getSeriesBodyPartExamined ()
 {
     DcmTagKey seriesBodyPartExaminedTagKey( DCM_BodyPartExamined  );
     const char *seriesBodyPartExamined  = NULL;
@@ -153,7 +152,7 @@ std::string ImageDicomInformation::getSeriesBodyPartExamined ()
     else return seriesBodyPartExamined ;
 }
 
-std::string ImageDicomInformation::getSeriesTime()
+QString ImageDicomInformation::getSeriesTime()
 {
     DcmTagKey seriesTimeTagKey( DCM_SeriesTime );
     const char *seriesTime = NULL;
@@ -167,7 +166,7 @@ std::string ImageDicomInformation::getSeriesTime()
     else return seriesTime;
 }
 
-std::string ImageDicomInformation::getSeriesDate()
+QString ImageDicomInformation::getSeriesDate()
 {
     DcmTagKey seriesDateTagKey( DCM_SeriesDate );
     const char *seriesDate = NULL;
@@ -181,7 +180,7 @@ std::string ImageDicomInformation::getSeriesDate()
     else return seriesDate;
 }
 
-std::string ImageDicomInformation::getSOPInstanceUID()
+QString ImageDicomInformation::getSOPInstanceUID()
 {
     DcmTagKey sopInstanceUIDTagKey( DCM_SOPInstanceUID );
     const char *sopInstanceUID = NULL;
@@ -195,7 +194,7 @@ std::string ImageDicomInformation::getSOPInstanceUID()
     else return sopInstanceUID;
 }
 
-std::string ImageDicomInformation::getSOPClassUID()
+QString ImageDicomInformation::getSOPClassUID()
 {
     DcmTagKey SOPClassUIDTagKey( DCM_SOPClassUID );
     const char *SOPClassUID = NULL;

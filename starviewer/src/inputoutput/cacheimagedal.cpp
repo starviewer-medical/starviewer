@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <string>
 #include <sqlite3.h>
 #include "image.h"
 #include "status.h"
@@ -27,16 +26,12 @@ Status CacheImageDAL::insertImage( Image *image )
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;
     Status state;
-    char *sqlSentence , errorNumber[5];
-    std::string logMessage , sql;
+    QString sqlSentence;
 
-    if ( !databaseConnection->connected() )
+    if( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
-
-    sql.insert( 0 , "Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) " );
-    sql.append( "values (%Q,%Q,%Q,%i,%Q,%Q,%i,%Q)" );
 
     databaseConnection->getLock();
 
@@ -46,26 +41,23 @@ Status CacheImageDAL::insertImage( Image *image )
 
     if ( !state.good() )
     {
-         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
         return state;
     }
 
-    sqlSentence = sqlite3_mprintf( sql.c_str()
-                                ,image->getSOPInstanceUID().c_str()
-                                ,image->getStudyUID().c_str()
-                                ,image->getSeriesUID().c_str()
-                                ,image->getImageNumber()
-                                ,"0" //Image time
-                                ,"0" //Image Date
-                                ,image->getImageSize()
-                                ,image->getImageName().c_str() );   //Image size
+    sqlSentence = QString("Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) values ('%1','%2','%3',%4,'%5','%6',%7,'%8')" )
+        .arg( image->getSOPInstanceUID() )
+        .arg( image->getStudyUID() )
+        .arg( image->getSeriesUID() )
+        .arg( image->getImageNumber() )
+        .arg( '0' ) //Image time
+        .arg( '0' ) //Image Date
+        .arg( image->getImageSize() )
+        .arg( image->getImageName() );
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable( sqlSentence ), 0, 0, 0);
 
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
@@ -75,46 +67,32 @@ Status CacheImageDAL::insertImage( Image *image )
 
         if ( state.code() != 2019 )
         {
-
-            sprintf( errorNumber , "%i" , state.code() );
-            logMessage = "Error a la cache número ";
-            logMessage.append( errorNumber );
-            ERROR_LOG( logMessage.c_str() );
-            ERROR_LOG( sqlSentence );
+            ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+            ERROR_LOG( qPrintable( sqlSentence ) );
         }
         else
         {
-            logMessage = " La image de la l'estudi ";
-            logMessage.append( image->getStudyUID().c_str() );
-            logMessage.append ( " amb el SeriesUID " );
-            logMessage.append( image->getSeriesUID().c_str() );
-            logMessage.append ( " amb el SopInstanceUID " );
-            logMessage.append( image->getSOPInstanceUID().c_str() );
-            logMessage.append( " ja existeix a la base de dades " );
-            INFO_LOG ( logMessage );
+            INFO_LOG ( qPrintable( QString("La image de la l'estudi %1 amb el SeriesUID %2 amb el SopInstanceUID %3 ja existeix a la base de dades")
+                .arg( image->getStudyUID() )
+                .arg( image->getSeriesUID() )
+                .arg( image->getSOPInstanceUID() )
+                ) );
         }
         return state;
     }
 
     //Actualitzem l'espai ocupat de la cache , per la nova imatge descarregada
-    sql.clear();
-    sql.insert( 0 , "Update Pool Set Space = Space + %i " );
-    sql.append( "where Param = 'USED'" );
+    sqlSentence = QString("Update Pool Set Space = Space + %1 where Param = 'USED'" ).arg(image->getImageSize() );
 
-    sqlSentence = sqlite3_mprintf( sql.c_str() , image->getImageSize() );
-
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable( sqlSentence ), 0, 0, 0);
 
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sqlSentence );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( sqlSentence ) );
         return state;
     }
 
@@ -125,10 +103,7 @@ Status CacheImageDAL::insertImage( Image *image )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
     }
 
     return state;
@@ -138,8 +113,8 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;
     Image image;
-    char **resposta = NULL , **error = NULL , errorNumber[5];
-    std::string logMessage , absPath;
+    char **resposta = NULL , **error = NULL;
+    QString absPath;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
 
@@ -150,7 +125,7 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 
     databaseConnection->getLock();
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() ,
-                                      buildSqlQueryImages( &imageMask ).c_str() ,
+                                      qPrintable( buildSqlQueryImages( &imageMask ) ) ,
                                     &resposta , &rows , &columns , error );
                                     //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     databaseConnection->releaseLock();
@@ -158,11 +133,8 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( buildSqlQueryImages( &imageMask ).c_str()  );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( buildSqlQueryImages( &imageMask ) )  );
         return state;
     }
 
@@ -172,12 +144,12 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
         image.setImageNumber(atoi( resposta [ 0 + i * columns ] ) );
 
         //creem el path absolut
-        absPath.erase();
-        absPath.insert( 0 , resposta[1 + i * columns ] );
-        absPath.append( resposta [ 3 + i * columns ] ); //incloem el directori de la serie
-        absPath.append( "/" );
-        absPath.append( resposta [ 5 + i * columns ] ); //incloem el nom de la imatge
-        image.setImagePath( absPath.c_str() );
+        absPath = QString("%1%2/%3")
+            .arg( resposta[1 + i * columns ] )
+            .arg( resposta [ 3 + i * columns ]  ) //incloem el directori de la serie
+            .arg( resposta [ 5 + i * columns ] ); //incloem el nom de la imatge
+
+        image.setImagePath( absPath );
 
         image.setStudyUID( resposta [ 2 + i * columns ] );
         image.setSeriesUID( resposta [ 3 + i * columns ] );
@@ -194,9 +166,8 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
 {
     int columns , rows , i = 0 , stateDatabase;
-    char **resposta = NULL , **error = NULL , errorNumber[5];
+    char **resposta = NULL , **error = NULL;
     Status state;
-    std::string sql , logMessage;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
 
     if ( !databaseConnection->connected() )
@@ -205,17 +176,14 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlCountImageNumber( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlCountImageNumber( &imageMask ) ) , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( buildSqlCountImageNumber( &imageMask ).c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( buildSqlCountImageNumber( &imageMask ) ) );
         return state;
     }
     i = 1;//ignorem les capçaleres
@@ -228,8 +196,7 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
 Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 {
     int columns , rows , stateDatabase;
-    char **resposta = NULL , **error = NULL , errorNumber[5];
-    std::string logMessage , sql;
+    char **resposta = NULL , **error = NULL;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
 
@@ -239,18 +206,15 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlSizeImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlSizeImage( &imageMask ) ) , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( buildSqlSizeImage( &imageMask ).c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( buildSqlSizeImage( &imageMask ) ) );
         return state;
     }
 
@@ -266,8 +230,8 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
 {
     int columns , rows , stateDatabase;
-    char **resposta = NULL , **error = NULL , errorNumber[5];
-    std::string logMessage , sql;
+    char **resposta = NULL , **error = NULL;
+    QString sql;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
 
@@ -277,18 +241,15 @@ Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , buildSqlExistImage( &imageMask ).c_str() , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlExistImage( &imageMask ) ) , &resposta , &rows , &columns , error );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( buildSqlSizeImage( &imageMask ).c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( buildSqlSizeImage( &imageMask ) ) );
         return state;
     }
 
@@ -301,13 +262,11 @@ Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
    return state;
 }
 
-Status CacheImageDAL::deleteImages( std::string studyUID )
+Status CacheImageDAL::deleteImages( QString studyUID )
 {
-    std::string sql;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;
-    char *sqlSentence , errorNumber[5];
-    std::string logMessage;
+    QString sqlSentence;
     Status state;
 
     if ( !databaseConnection->connected() )
@@ -315,33 +274,28 @@ Status CacheImageDAL::deleteImages( std::string studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sql.insert( 0 , "delete from image where StuInsUID = %Q" );
-
-    sqlSentence = sqlite3_mprintf( sql.c_str() , studyUID.c_str() );
+    sqlSentence = QString("delete from image where StuInsUID = '%1'").arg( studyUID );
 
     databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), sqlSentence , 0, 0, 0);
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable( sqlSentence ), 0, 0, 0);
 
     databaseConnection->releaseLock();
 
     state =  databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sqlSentence );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( sqlSentence ) );
     }
 
     return state;
 
 }
 
-std::string CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
+QString CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
 {
-    std::string sql , whereClause = "";
+    QString sql , whereClause = "";
 
     sql.insert( 0 , "select count(*) from image " );
 
@@ -395,9 +349,9 @@ std::string CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
     return sql;
 }
 
-std::string CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
+QString CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
 {
-    std::string sql , whereClause ="";
+    QString sql , whereClause ="";
 
     sql.insert( 0 , "select sum(ImgSiz) from image " );
 
@@ -451,9 +405,9 @@ std::string CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
     return sql;
 }
 
-std::string CacheImageDAL::buildSqlExistImage( DicomMask *imageMask )
+QString CacheImageDAL::buildSqlExistImage( DicomMask *imageMask )
 {
-    std::string sql , whereClause ="";
+    QString sql , whereClause ="";
 
     sql.insert( 0 , "select sum(ImgSiz) from image " );
 
@@ -507,9 +461,9 @@ std::string CacheImageDAL::buildSqlExistImage( DicomMask *imageMask )
     return sql;
 }
 
-std::string CacheImageDAL::buildSqlQueryImages( DicomMask *imageMask )
+QString CacheImageDAL::buildSqlQueryImages( DicomMask *imageMask )
 {
-    std::string sql  ,imgNum;
+    QString sql  ,imgNum;
 
     sql.insert( 0 , "select ImgNum , AbsPath , Image.StuInsUID , SerInsUID , SopInsUID , ImgNam from image , study where Image.StuInsUID = '" );
     sql.append( imageMask->getStudyUID() );

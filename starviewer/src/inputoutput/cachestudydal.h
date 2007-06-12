@@ -7,8 +7,6 @@
 #ifndef UDGCACHESTUDYDAL_H
 #define UDGCACHESTUDYDAL_H
 
-class string;
-
 namespace udg {
 
 class Study;
@@ -67,14 +65,14 @@ public:
      * @param  StudyList amb els resultats
      * @return retorna estat del mètode
      */
-    Status queryStudy( std::string studyUID , Study &study );
+    Status queryStudy( QString studyUID , Study &study );
 
     /** Selecciona els estudis vells que no han estat visualitzats des de una data inferior a la que es passa per parametre
      * @param Data a partir de la qual es seleccionaran els estudis vells
      * @param StudyList amb els resultats dels estudis, que l'ultima vegada visualitzats es una data inferior a la passa per paràmetre
      * @return retorna estat del mètode
      */
-    Status queryOldStudies( std::string OldStudiesDate, StudyList &list );
+    Status queryOldStudies( QString OldStudiesDate, StudyList &list );
 
     /** Selecciona tots els estudis de la base de dades, inclosos els que estan en estat PENDING and RETRIEVING
      * @param StudyList conté tots els estudis de la base de dades, independentment de l'estat
@@ -83,10 +81,10 @@ public:
     Status queryAllStudies( StudyList &list );
 
     /** Esborra un estudi de la cache, l'esborra la taula estudi,series, i image, i si el pacient d'aquell estudi, no té cap altre estudi a la cache local tambe esborrem el pacient. Aquesta operació és dur a terme en una transacció, si falla el mètode, es tirara endarrera, fins a l'estat estable de la base de dades. En aquest mètode es fa accessos a altres taules de la caché com imatge, sèrie, etc.. això és degut a que les operacions d'esborrar un estudi com que afecta a altres taules, s'han de fer una transacció, per això s'ha de tenir juntes en un mateix mètode. Ja que si durant la invocació als diferents mètodes, n'entressin altres mètodes ajens a la operació esborrar estudi, quedarien dins la transacció quan no hi pertanyen. Degut aquest motiu tots es realitzen dins el mateix mètode
-     * @param std::string UID de l'estudi
+     * @param QString UID de l'estudi
      * @return estat de l'operació
      */
-    Status delStudy( std::string );
+    Status delStudy( QString );
 
     /** actualitza l'última vegada que un estudi ha estat visualitzat, d'aquesta manera quant haguem d'esborrar estudis
      * automàticament per falta d'espai, esborarrem els que fa més temps que no s'han visualitzat.
@@ -95,26 +93,26 @@ public:
      * @param data visualització de l'estudi format 'yyyymmdd'
      * @return estat el mètode
      */
-    Status updateStudyAccTime( std::string studyUID );
+    Status updateStudyAccTime( QString studyUID );
 
     /** Updata la modalitat d'un estudi
      * @param Uid de l'estudi a actualitzar
      * @param Modalitat de l'estudi
      * @return retorna estat del mètode
      */
-    Status setStudyModality( std::string studyUID , std::string modality );
+    Status setStudyModality( QString studyUID , QString modality );
 
     /** Updata un estudi PENDING a RETRIEVING, per indicar que l'estudi s'esta descarregant
      * @param Uid de l'estudi a actualitzar
      * @return retorna estat del mètode
      */
-    Status setStudyRetrieving( std::string studyUID );
+    Status setStudyRetrieving( QString studyUID );
 
     /** Updata un estudi a l'estat RETRIEVED, per indicar que s'ha descarregat
      * @param Uid de l'estudi a actualitzar
      * @return retorna estat del mètode
      */
-    Status setStudyRetrieved( std::string studyUID );
+    Status setStudyRetrieved( QString studyUID );
 
     /** Updata les dades de l'estudi i pacient que se li passa per paràmetre. El campl clau per buscar l'estudi a actualitzar és l'UID
      *
@@ -131,13 +129,13 @@ private :
      * @param mascara de cerca
      * @return retorna estat del mètode
      */
-    std::string buildSqlQueryStudy( DicomMask *studyMask );
+    QString buildSqlQueryStudy( DicomMask *studyMask );
 
     /** Converteix l'asterisc, que conte el tag origen per %, per transformar-lo a la sintaxis de sql
      * @param string original
      * @return retorna l'string original, havent canviat els '*' per '%'
      */
-    std::string replaceAsterisk( std::string original );
+    QString replaceAsterisk( QString original );
 
     /** retorna l'hora del sistema
      * @return retorna l'hora del sistema en format HHMM
@@ -154,7 +152,7 @@ private :
      * @param màscara
      * @return sentència sql
      */
-    std::string buildSqlStudyModality( DicomMask * mask );
+    QString buildSqlStudyModality( DicomMask * mask );
 
 };
 }

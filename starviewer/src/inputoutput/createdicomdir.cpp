@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <string>
 #include "status.h"
 #include "logging.h"
 
@@ -76,13 +75,11 @@ void CreateDicomdir::setStrictMode(bool enabled)
 
 }
 
-Status CreateDicomdir::create( std::string dicomdirPath )
+Status CreateDicomdir::create( QString dicomdirPath )
 {
-    std::string errorMessage , outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
+    QString errorMessage , outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
     OFList<OFString> fileNames;/* create list of input files */
-    const char *opt_directory = dicomdirPath.c_str();
     const char *opt_pattern = NULL;
-    const char *opt_output = outputDirectory.c_str();
     const char *opt_fileset = DEFAULT_FILESETID;
     const char *opt_descriptor = NULL;
     const char *opt_charset = DEFAULT_DESCRIPTOR_CHARSET;
@@ -93,7 +90,7 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     Status state;
 
     //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
-    OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , opt_directory );
+    OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , qPrintable(dicomdirPath) );
 
     //comprovem que el directori no estigui buit
     if ( fileNames.empty() )
@@ -104,13 +101,13 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     }
 
     //creem el dicomdir
-    result = m_ddir.createNewDicomDir( m_optProfile , opt_output , opt_fileset );
+    result = m_ddir.createNewDicomDir( m_optProfile , qPrintable(outputDirectory) , opt_fileset );
 
     if ( !result.good() )
     {
         errorMessage = "Error al crear el DICOMDIR. ERROR : ";
         errorMessage.append( result.text() );
-        ERROR_LOG ( errorMessage.c_str() );
+        ERROR_LOG ( qPrintable(errorMessage) );
         state.setStatus( result );
         return state;
     }
@@ -126,14 +123,14 @@ Status CreateDicomdir::create( std::string dicomdirPath )
         while ( ( iter != last ) && result.good() )
         {
             //afegim els fitxers al dicomdir
-            result = m_ddir.checkDicomFile( (*iter).c_str() , opt_directory );
-            result = m_ddir.addDicomFile( (*iter).c_str() , opt_directory );
+            result = m_ddir.checkDicomFile( (*iter).c_str() , qPrintable(dicomdirPath) );
+            result = m_ddir.addDicomFile( (*iter).c_str() , qPrintable(dicomdirPath) );
             if ( result.good() ) iter++;
         }
 
         if ( !result.good() )
         {
-            std::string imageErrorPath;
+            QString imageErrorPath;
 
             imageErrorPath = dicomdirPath;
             imageErrorPath.append( "/" );
@@ -149,9 +146,9 @@ Status CreateDicomdir::create( std::string dicomdirPath )
     return state.setStatus( result );
 }
 
-void CreateDicomdir::errorConvertingFile( std::string imagePath )
+void CreateDicomdir::errorConvertingFile( QString imagePath )
 {
-    std::string logMessage;
+    QString logMessage;
     Status state;
     ImageDicomInformation dInfo;
 
@@ -164,7 +161,7 @@ void CreateDicomdir::errorConvertingFile( std::string imagePath )
         logMessage.append( "/" );
         logMessage.append( dInfo.getSeriesUID() );
         logMessage.append( "/" );
-        logMessage.append( dcmSOPClassUIDToModality( dInfo.getSOPClassUID().c_str() ) );
+        logMessage.append( dcmSOPClassUIDToModality( qPrintable(dInfo.getSOPClassUID()) ) );
         logMessage.append( "." );
         logMessage.append( dInfo.getSOPInstanceUID() );
     }
@@ -174,7 +171,7 @@ void CreateDicomdir::errorConvertingFile( std::string imagePath )
         logMessage.append( imagePath );
     }
 
-    ERROR_LOG ( logMessage.c_str() );
+    ERROR_LOG ( qPrintable(logMessage) );
 }
 
 CreateDicomdir::~CreateDicomdir()

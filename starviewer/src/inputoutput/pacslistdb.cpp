@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <string>
 
 #include "pacslistdb.h"
 #include "status.h"
@@ -18,13 +17,11 @@ PacsListDB::PacsListDB()
     m_DBConnect = DatabaseConnection::getDatabaseConnection();
 }
 
-
 Status PacsListDB::insertPacs( PacsParameters *pacs )
 {
     Status state , stateQuery;
     int i;
-    char *sqlSentence, errorNumber[5];
-    std::string logMessage , sql;
+    QString sqlSentence;
 
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -36,21 +33,23 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
     if ( stateQuery.code() == 2099 )
     {//El pacs no estava en està estat de baixa
         //El PACSid s'autoincrementa sol amb max(PACSID)+1
-        sql.insert( 0 , "Insert into PacsList " );
-        sql.append( "(AETitle,Server,Port,Inst,Loc,Desc,Def,PacsID,Del) " );
-        sql.append( "Values (%Q,%Q,%Q,%Q,%Q,%Q,%Q,(select max(PacsID) from PacsList)+1,'N')" );
 
+        sqlSentence = QString( "Insert into PacsList "
+                            "(AETitle,Server,Port,Inst,Loc,Desc,Def,PacsID,Del) "
+                            "Values ('%1','%2','%3','%4','%5','%6','%7',(select max(PacsID) from PacsList)+1,'N')"
+            )
+            .arg( pacs->getAEPacs() )
+            .arg( pacs->getPacsAdr() )
+            .arg( pacs->getPacsPort() )
+            .arg( pacs->getInstitution() )
+            .arg( pacs->getLocation() )
+            .arg( pacs->getDescription() )
+            .arg( pacs->getDefault() );
 
-        sqlSentence = sqlite3_mprintf( sql.c_str(),
-                                        pacs->getAEPacs().c_str() ,
-                                        pacs->getPacsAdr().c_str() ,
-                                        pacs->getPacsPort().c_str() ,
-                                        pacs->getInstitution().c_str() ,
-                                        pacs->getLocation().c_str() ,
-                                        pacs->getDescription().c_str() ,
-                                        pacs->getDefault().c_str() );
         m_DBConnect->getLock();
-        i=sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 ) ;
+
+        i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0) ;
+
         m_DBConnect->releaseLock();
 
         state = m_DBConnect->databaseStatus( i );
@@ -64,11 +63,9 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        if ( stateQuery.code() == 2099 ) ERROR_LOG( sqlSentence );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        if ( stateQuery.code() == 2099 )
+            ERROR_LOG( qPrintable(sqlSentence) );
     }
 
     return state;
@@ -78,48 +75,32 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
 {
     Status state;
     int i;
-    char *sqlSentence, errorNumber[5];
-    std::string logMessage , sql;
+    QString sqlSentence;
 
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql.insert( 0 , "Update PacsList " );
-    sql.append( "set AETitle = %Q, " );
-    sql.append( "Server = %Q, " );
-    sql.append( "Port = %Q, " );
-    sql.append( "Inst = %Q, " );
-    sql.append( "Loc = %Q, " );
-    sql.append( "Desc = %Q, " );
-    sql.append( "Def = %Q, " );
-    sql.append( "Del = %Q " );
-    sql.append ( " where PacsID = %i" );
-
-    sqlSentence = sqlite3_mprintf(sql.c_str() ,
-                                    pacs->getAEPacs().c_str() ,
-                                    pacs->getPacsAdr().c_str() ,
-                                    pacs->getPacsPort().c_str() ,
-                                    pacs->getInstitution().c_str() ,
-                                    pacs->getLocation().c_str() ,
-                                    pacs->getDescription().c_str() ,
-                                    pacs->getDefault().c_str() ,
-                                    "N" ,
-                                    pacs->getPacsID() );
+    sqlSentence = QString("Update PacsList set AETitle = '%1', Server = '%2', Port = '%3', Inst = '%4', Loc = '%5', Desc = '%6', Def = '%7', Del = 'N' where PacsID = %8" )
+        .arg( pacs->getAEPacs() )
+        .arg( pacs->getPacsAdr() )
+        .arg( pacs->getPacsPort() )
+        .arg( pacs->getInstitution() )
+        .arg( pacs->getLocation() )
+        .arg( pacs->getDescription() )
+        .arg( pacs->getDefault() )
+        .arg( pacs->getPacsID() );
 
     m_DBConnect->getLock();
-    i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 );
+    i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 );
     m_DBConnect->releaseLock();
 
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sqlSentence );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( sqlSentence ) );
         return state;
     }
 
@@ -130,8 +111,8 @@ Status PacsListDB::queryPacsList( PacsList &list )
 {
     int col , rows , i = 0 , estat;
     PacsParameters pacs;
-    char **resposta = NULL , **error = NULL, errorNumber[5];
-    std::string logMessage , sql;
+    char **resposta = NULL , **error = NULL;
+    QString sqlSentence;
     Status state;
 
     if ( !m_DBConnect->connected() )
@@ -139,23 +120,17 @@ Status PacsListDB::queryPacsList( PacsList &list )
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql.insert( 0 , "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID " );
-    sql.append( "from PacsList " );
-    sql.append( "where del = 'N' " );
-    sql.append( "order by AETitle" );
+    sqlSentence = "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where del = 'N' order by AETitle";
 
     m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
     state = m_DBConnect->databaseStatus( estat );
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable( sqlSentence ) );
         return state;
     }
 
@@ -178,11 +153,11 @@ Status PacsListDB::queryPacsList( PacsList &list )
     return state;
 }
 
-Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
+Status PacsListDB::queryPacs( PacsParameters *pacs , QString AETitle )
 {
     int col , rows = 0 , i = 0 , estat;
-    char **resposta = NULL , **error = NULL, errorNumber[5];
-    std::string logMessage , sql;
+    char **resposta = NULL , **error = NULL;
+    QString sqlSentence;
     Status state;
 
     if ( !m_DBConnect->connected() )
@@ -190,15 +165,10 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql.insert( 0 , "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID " );
-    sql.append( "from PacsList " );
-    sql.append( " where AEtitle = '" );
-    sql.append( AETitle.c_str() );
-    sql.append( "'" );
-
+    sqlSentence = QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where AEtitle = '%1'").arg( AETitle );
 
     m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
 
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
@@ -208,11 +178,8 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable(sqlSentence) );
         return state;
     }
 
@@ -235,8 +202,8 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , std::string AETitle )
 Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
 {
     int col , rows = 0 , i = 0 , estat;
-    char **resposta = NULL , **error = NULL , id[6], errorNumber[5];
-    std::string logMessage , sql;
+    char **resposta = NULL , **error = NULL;
+    QString sqlSentence;
     Status state;
 
     if ( !m_DBConnect->connected() )
@@ -244,14 +211,10 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql.insert( 0 , "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID " );
-    sql.append( "from PacsList " );
-    sprintf( id , "%i" ,pacsID );
-    sql.append( " where PacsID = " );
-    sql.append( id );
+    sqlSentence = QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where PacsID = %1").arg( pacsID );
 
     m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
 
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
@@ -260,11 +223,8 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
     state = m_DBConnect->databaseStatus( estat );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable(sqlSentence) );
         return state;
     }
 
@@ -288,32 +248,24 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
 {
     Status state;
     int i;
-    char *sqlSentence, errorNumber[5];
-    std::string logMessage , sql;
-
-    sql.insert( 0 , "update PacsList set Del = 'S'" );
-    sql.append ( " where PacsID = %i" );
+    QString sqlSentence;
 
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return m_DBConnect->databaseStatus( 50 );
     }
-
-    sqlSentence = sqlite3_mprintf( sql.c_str() , pacs->getPacsID() );
+    sqlSentence = QString("update PacsList set Del = 'S' where PacsID = %1" ).arg( pacs->getPacsID() );
 
     m_DBConnect->getLock();
-    i = sqlite3_exec( m_DBConnect->getConnection() , sqlSentence  , 0 , 0 , 0 );
+    i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 );
 
     m_DBConnect->releaseLock();
 
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable(sqlSentence) );
     }
     return state;
 
@@ -322,15 +274,11 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
 Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
 {
     int col , rows = 0 , estat;
-    char **resposta = NULL ,**error = NULL, errorNumber[5];
-    std::string logMessage , sql;
+    char **resposta = NULL ,**error = NULL;
+    QString sqlSentence;
     Status state;
 
-    sql.insert( 0 , "select PacsID " );
-    sql.append( "from PacsList " );
-    sql.append( " where AEtitle = '" );
-    sql.append(pacs->getAEPacs());
-    sql.append( "' and Del = 'S'" );
+    sqlSentence = QString("select PacsID from PacsList where AEtitle = '%1' and Del = 'S'").arg( pacs->getAEPacs() );
 
     if ( !m_DBConnect->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -338,7 +286,7 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
     }
 
     m_DBConnect->getLock();
-    estat=sqlite3_get_table( m_DBConnect->getConnection() , sql.c_str() , &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    estat=sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
 
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
@@ -349,11 +297,8 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
 
     if ( !state.good() )
     {
-        sprintf( errorNumber , "%i" , state.code() );
-        logMessage = "Error a la cache número ";
-        logMessage.append( errorNumber );
-        ERROR_LOG( logMessage.c_str() );
-        ERROR_LOG( sql.c_str() );
+        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( qPrintable(sqlSentence) );
     }
     return state;
 }

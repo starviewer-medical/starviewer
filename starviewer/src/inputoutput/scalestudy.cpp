@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <string>
 
 #include "scalestudy.h"
 #include "serieslist.h"
@@ -23,14 +22,14 @@ ScaleStudy::ScaleStudy()
 {
 }
 
-void ScaleStudy::scale( std::string studyUID )
+void ScaleStudy::scale( QString studyUID )
 {
     Status state;
     SeriesList seriesList;
     DicomMask mask;
     int number;
     char imgNumX[6];
-    std::string absPath , relPath , absPathScal ;
+    QString absPath , relPath, absPathScal;
     StarviewerSettings settings;
     ScaleImage scaleImg;
     state = getSeriesOfStudy( studyUID,seriesList ); //busquem les sèries de l'estudi
@@ -40,8 +39,8 @@ void ScaleStudy::scale( std::string studyUID )
     while ( !seriesList.end() ) //escalem una imatge per cada sèrie
     {
         //preparem la màscara per buscar la imatge del mig de l'estudi
-        mask.setSeriesUID( seriesList.getSeries().getSeriesUID().c_str() );
-        mask.setStudyUID( studyUID.c_str() );
+        mask.setSeriesUID( seriesList.getSeries().getSeriesUID() );
+        mask.setStudyUID( studyUID );
         state = countImageNumber( mask , number );//comptem el número d'imatges, per saber quina és la imatge del mig
 
         sprintf( imgNumX , "%i" , number / 2 + 1 );
@@ -57,31 +56,26 @@ void ScaleStudy::scale( std::string studyUID )
             mask.setImageNumber( "" );
             imageRelativePath( mask ,relPath );
         }
-        absPath.clear();
-        absPath.append( settings.getCacheImagePath().toAscii().constData() );
-        absPath.append( relPath ); //creem el path absolut a la imatge a la imatge
+        absPath = settings.getCacheImagePath() + relPath; //creem el path absolut a la imatge a la imatge
 
         //creem el nom de la imatge resultant escalada
-        absPathScal.clear();
-        absPathScal.append( settings.getCacheImagePath().toAscii().constData() );
-        absPathScal.append( studyUID );
-        absPathScal.append( "/" );
-        absPathScal.append( seriesList.getSeries().getSeriesUID().c_str() );
-        absPathScal.append( "/" );
-        absPathScal.append( "scaled.pgm" );
+        absPathScal = QString("%1%2/%3/scaled.pgm")
+            .arg( settings.getCacheImagePath() )
+            .arg( studyUID )
+            .arg( seriesList.getSeries().getSeriesUID() );
 
-        scaleImg.dicom2lpgm( absPath.c_str() , absPathScal.c_str() , 100 );//creem la imatge escalada
+        scaleImg.dicom2lpgm( absPath, absPathScal, 100 );//creem la imatge escalada
 
         seriesList.nextSeries();
     }
 }
 
-Status ScaleStudy::getSeriesOfStudy( std::string studyUID , SeriesList &seriesList )
+Status ScaleStudy::getSeriesOfStudy( QString studyUID , SeriesList &seriesList )
 {
     DicomMask mask;
     CacheSeriesDAL cacheSeriesDAL;
 
-    mask.setStudyUID( studyUID.c_str() );
+    mask.setStudyUID( studyUID );
 
     return cacheSeriesDAL.querySeries( mask , seriesList );
 }
@@ -93,7 +87,7 @@ Status ScaleStudy::countImageNumber( DicomMask mask, int &number )
     return cacheImageDAL.countImageNumber( mask , number );
 }
 
-Status ScaleStudy::imageRelativePath( DicomMask mask , std::string &relPath )
+Status ScaleStudy::imageRelativePath( DicomMask mask , QString &relPath )
 {
     ImageList imageList;
     Image image;
@@ -107,12 +101,11 @@ Status ScaleStudy::imageRelativePath( DicomMask mask , std::string &relPath )
     if ( !imageList.end() )
     {
         image = imageList.getImage();
-        relPath.clear();
-        relPath.append( image.getStudyUID() );
-        relPath.append( "/" );
-        relPath.append( image.getSeriesUID() );
-        relPath.append( "/" );
-        relPath.append( image.getImageName() );
+
+        relPath = QString("%1/%2/%3")
+            .arg( image.getStudyUID() )
+            .arg( image.getSeriesUID() )
+            .arg( image.getImageName() );
     }
     return state;
 }

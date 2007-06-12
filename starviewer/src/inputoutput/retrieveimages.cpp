@@ -5,7 +5,7 @@
 #include "status.h"
 
 //includes per comprovar si un directori existeix
-#include <sys/types.h>
+#include <sys/types.h> // \TODO aquest include no és únic de UNIX????
 #include <dirent.h>
 
 namespace udg{
@@ -189,31 +189,31 @@ OFCondition echoSCP(
         {
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
-            std::string studyPath, seriesPath, imagePath;
+            QString studyPath, seriesPath, imagePath;
             int imageSize;
             Image retrievedImage( * imageDataSet );
             DIR *pdir;
 
-            studyPath.insert( 0 , piSingleton->getPath() );//agafem el path del directori on es guarden les imatges
-            studyPath.append( retrievedImage.getStudyUID() );
+            studyPath = piSingleton->getPath() ;//agafem el path del directori on es guarden les imatges
+            studyPath += retrievedImage.getStudyUID();
 
             //comprovem, si el directori de l'estudi ja està creat
-            pdir = opendir( studyPath.c_str() );
+            pdir = opendir( qPrintable(studyPath) );
             if ( !pdir )
             {
-                mkdir( studyPath.c_str() , S_IRWXU | S_IRWXG | S_IRWXO );
+                mkdir( qPrintable(studyPath) , S_IRWXU | S_IRWXG | S_IRWXO );
             }
             else closedir( pdir );
 
             seriesPath = studyPath;
-            seriesPath.append( "/" ); //conc
-            seriesPath.append( retrievedImage.getSeriesUID() );
+            seriesPath += "/"; //conc
+            seriesPath += retrievedImage.getSeriesUID();
 
             //comprovem, si el directori de la sèrie ja està creat, sinó el creem
-            pdir = opendir( seriesPath.c_str()) ;
+            pdir = opendir( qPrintable( seriesPath ) ) ;
             if ( !pdir )
             {
-                mkdir( seriesPath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO );
+                mkdir( qPrintable( seriesPath ), S_IRWXU | S_IRWXG | S_IRWXO );
             }
             else closedir( pdir );
 
@@ -226,7 +226,7 @@ OFCondition echoSCP(
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
-            OFCondition cond = cbdata->dcmff->saveFile( imagePath.c_str() , xfer , opt_sequenceType , opt_groupLength ,
+            OFCondition cond = cbdata->dcmff->saveFile( qPrintable( imagePath ) , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
 
             if ( cond.bad() )
@@ -271,7 +271,7 @@ OFCondition echoSCP(
 
             //guardem la informacio que hem calculat nosaltres a l'objecte imatge
             retrievedImage.setImageName( cbdata->imageFileName );
-            retrievedImage.setImagePath( imagePath.c_str() );
+            retrievedImage.setImagePath( qPrintable( imagePath ) );
             retrievedImage.setImageSize( imageSize );
 
             piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );

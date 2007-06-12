@@ -1,6 +1,8 @@
 #ifndef PACSPARAMETERS
 #define PACSPARAMETERS
 
+#include <QString>
+
 #define HAVE_CONFIG_H 1
 #include <cond.h>
 #include <list>
@@ -18,7 +20,6 @@
  */
 namespace udg{
 
-class string;
 class Study;
 class PacsParameters
 {
@@ -32,7 +33,7 @@ public :
      * @param   aet AETitle del PACS al qual ens volem connectar
      * @param   aec AETitle de la nostra màquina. Cada màquina ha de tenir un AETitle únic. El PACS comprova al connectar-nos si la nostra IP correspont al nostre AETitle que li enviem
     */
-    PacsParameters( std::string ,  std::string ,  std::string  , std::string  );
+    PacsParameters( QString ,  QString ,  QString  , QString  );
 
     /// Constructor buit de la classe
     PacsParameters();
@@ -40,47 +41,47 @@ public :
     /** assigna l'adreça al pacs al qual ens volem connectar
      * @param  Adreça del PACS
      */
-    void setPacsAdr( std::string );
+    void setPacsAdr( QString );
 
     /** assigna el port del pacs al qual ens volem connectar
      * @param port de connexió del pacs
      */
-    void setPacsPort( std::string );
+    void setPacsPort( QString );
 
     /** assigna l'aet title de la nostre màquina local
      * @param AE Title de la màquina local
      */
-    void setAELocal( std::string );
+    void setAELocal( QString );
 
     /** assigna l'ae title del pacs al qual ens volem connectar
      * @param AE title del pacs al que es desitja connectar
      */
-    void setAEPacs( std::string );
+    void setAEPacs( QString );
 
     /** assigna el port pel qual nosaltres volem rebre les imatges del PACS
      * @param Port local
      */
-    void setLocalPort( std::string );
+    void setLocalPort( QString );
 
     /** assigna la descripció del PACS
      * @param descripció del PACS
      */
-    void setDescription( std::string );
+    void setDescription( QString );
 
     /** assigna la institucio a la qual pertany el pacs
      * @param Institucio a la qual pertany al pcacs
      */
-    void setInstitution( std::string );
+    void setInstitution( QString );
 
     /** assigna la localització del PACS
      * @param Localització del PACS
      */
-    void setLocation( std::string );
+    void setLocation( QString );
 
     /** assigna al Pacs si és el Predeterminat
      * @param indica si el PACS és el predeterminat per defecte
      */
-    void setDefault( std::string );
+    void setDefault( QString );
 
     /** assigna el timeout de la connexio
      * @param  time out en segons
@@ -95,47 +96,47 @@ public :
     /** retorna l'adreça del pacs
      * @return Adreça del pacs
      */
-     std::string  getPacsAdr();
+     QString  getPacsAdr();
 
     /** retorna el port del pacs
      * @return Port del pacs
      */
-     std::string  getPacsPort();
+     QString  getPacsPort();
 
     /** retorna l'AE Local
      * @return AE title local
      */
-     std::string  getAELocal();
+     QString  getAELocal();
 
     /** retorna l'AE del pacs
      * @return Adreça del pacs
      */
-     std::string  getAEPacs();
+     QString  getAEPacs();
 
     /** retorna el port Local pel qual desitgem rebre les imatges
      * @return Port local
      */
-     std::string  getLocalPort();
+     QString  getLocalPort();
 
     /** retorna la descripció del PACS
      * @return descripció
      */
-     std::string  getDescription();
+     QString  getDescription();
 
     /** retorna la institució a la que pertany el PACS
      * @return institucio
      */
-     std::string  getInstitution();
+     QString  getInstitution();
 
     /** retorna la localització del PACS
      * @return localització
      */
-     std::string  getLocation();
+     QString  getLocation();
 
     /** retorna si és el pacs predeterminat
      * @return si val 'S' voldrà di que és el pacs predeterminat per realitzar les cerques
      */
-     std::string  getDefault();
+     QString  getDefault();
 
     /** retorna l'id del PACS, aquest es un camp clau de la taula PacsList, que l'assigna l'aplicacio
      * @return Id del pacs
@@ -149,15 +150,15 @@ public :
 
 private :
 
-    std::string  m_aeCalled;
-    std::string  m_aeTitle;
-    std::string  m_Port;
-    std::string  m_Adr;
-    std::string  m_LocalPort; //especifica el port pel qual rebrem imatges
-    std::string  m_Desc;
-    std::string  m_Inst;
-    std::string  m_Location;
-    std::string  m_Default;
+    QString  m_aeCalled;
+    QString  m_aeTitle;
+    QString  m_Port;
+    QString  m_Adr;
+    QString  m_LocalPort; //especifica el port pel qual rebrem imatges
+    QString  m_Desc;
+    QString  m_Inst;
+    QString  m_Location;
+    QString  m_Default;
     int          m_PacsID; //camp clau de la taula PacsList, serveix per identificar els PACS, és invisible per a l'usuari, aquest camp l'assigna l'aplicacio
     int m_TimeOut;
 

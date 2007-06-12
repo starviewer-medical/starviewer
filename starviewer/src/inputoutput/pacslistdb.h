@@ -61,7 +61,7 @@ public:
      * @param pacs a cercar
      * @return estat de l'operació
      */
-    Status queryPacs( PacsParameters *pacs , std::string AETitle );
+    Status queryPacs( PacsParameters *pacs , QString AETitle );
 
     /** Cerca la informació d'un pacs en concret.
      * @param Conté la informació del pacs cercat

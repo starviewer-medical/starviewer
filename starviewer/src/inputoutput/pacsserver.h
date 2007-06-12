@@ -115,7 +115,7 @@ private:
      * @param adreça del servidor
      * @param port del servidor
      */
-   std::string constructAdrServer( std::string , std::string ); //construct PACS address
+   QString constructAdrServer( QString , QString ); //construct PACS address
 
 
     /** Afegeix tots els PresentationContexts necessaris per a guardar imatges en el PACS

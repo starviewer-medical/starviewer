@@ -21,18 +21,18 @@ class ImportDicomdir{
 public:
 
 
-    Status import( std::string dicomdirPath , std::string studyUID , std::string seriesUID , std::string imageUID );
+    Status import( QString dicomdirPath , QString studyUID , QString seriesUID , QString imageUID );
 
 private :
     ReadDicomdir m_readDicomdir;
 
-    Status importarEstudi( std::string studyUID , std::string seriesUID , std::string sopInstanceUID );
+    Status importarEstudi( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
-    Status importarSerie( std::string studyUID , std::string seriesUID , std::string sopInstanceUID );
+    Status importarSerie( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
     Status importarImatge( Image image );
 
-    void createPath( std::string path );
+    void createPath( QString path );
 
 };
 

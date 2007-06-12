@@ -7,26 +7,23 @@
 #ifndef UDGSTUDYVOLUM_H
 #define UDGSTUDYVOLUM_H
 
-#include <vector>
 #include "seriesvolum.h"
-
-class string;
 
 namespace udg {
 
 /** Aquesta classe és permet organitzar els estudis per a que l'starviewer els pugui visualitzar
 @author marc
 */
-class StudyVolum
-{
-
+class StudyVolum {
 public:
+
     StudyVolum();
+    ~StudyVolum();
 
     /** Permet afegir una sèrie a aquest estudi. S'utilitza per especificar quines sèries te un estudi
      * @param SeriesVolum SeriesVolum a afegir
      */
-    void addSeriesVolum(SeriesVolum);
+    void addSeriesVolum( SeriesVolum seriesVolum );
 
     /** Retorna el número de series que conte l'estudi
      * @return retorna el numero de series de l'estudi
@@ -36,116 +33,103 @@ public:
     /** Estableix el UID de l'estudi
      * @param UID de l'estudi
      */
-    void setStudyUID( std::string );
+    void setStudyUID( QString studyUID );
 
     /** Estableix el Id de l'estudi
      * @param Id de l'estudi
      */
-    void setStudyId( std::string );
+    void setStudyId( QString studyId );
 
     /** Estableix el temps en que es va realitzar l'estudi
      * @param Hora en que es va realitzar l'estudi
      */
-    void setStudyTime( std::string );
+    void setStudyTime( QString time );
 
     /** Estableix la data en que es va realitzar l'estudi
      * @param data de l'estudi
      */
-    void setStudyDate( std::string );
+    void setStudyDate( QString date );
 
     /** Estableix el nom del pacient de l'estudi
      * @param nom del pacient
      */
-    void setPatientName( std::string );
+    void setPatientName( QString name );
 
     /** Estableix el Id del pacient
      * @param Id del pacient
      */
-    void setPatientId( std::string );
+    void setPatientId( QString patienId );
 
     /** Estableix l'edat del pacient al realitzar-li l'estudi
      * @param Edat del pacient al realtizar-se de l'estudi
      */
-    void setPatientAge( std::string );
+    void setPatientAge( QString age );
 
     /** Estableix quina sera la serie per defecte s'obrira a l'starviewer al visualitzar l'estudi
      * @param UID de la serie a visualitzar
      */
-    void setDefaultSeriesUID( std::string );
+    void setDefaultSeriesUID( QString seriesUID );
 
 
     /** retorna el UID de l'estudi
      * @return UID de l'estudi
      */
-    std::string getStudyUID();
+    QString getStudyUID();
 
     /** retorna el Id de l'estudi
      * @return Id de l'estudi
      */
-    std::string getStudyId();
+    QString getStudyId();
 
     /** retorna el hora en que s'ha realitzat l'estudi
      * @return hora de l'estudi
      */
-    std::string getStudyTime();
+    QString getStudyTime();
 
     /** retorna la data en que s'ha realitzat l'estudi
      * @return data de l'estudi
      */
-    std::string getStudyDate();
+    QString getStudyDate();
 
     /** retorna el nom del pacient a qui s'ha realitzat l'estudi
      * @return nom del pacient
      */
-    std::string getPatientName();
+    QString getPatientName();
 
     /** retorna el Id del pacient a qui s'ha realitzat l'estudi
      * @return Id del pacient
      */
-    std::string getPatientId();
+    QString getPatientId();
 
     /** retorna el l'edat del pacient al realitzar-li l'estudi
      * @return edat del pacient
      */
-    std::string getPatientAge();
+    QString getPatientAge();
 
     /** retorna la serie que s'ha d'obrir de l'estudi en el visualitzador per defecte
      * @return UID de la sèrie a visualitzar
      */
-    std::string getDefaultSeriesUID();
+    QString getDefaultSeriesUID();
 
-    /// Es situa a la primera serie de l'estudi
-    void firstSerie();
-
-    /// seguent serie
-    void nextSerie();
-
-    /** indica si s'ha arribat al final de la llista
-     * @return boolea indicant si hem arribat al final de la llista de series
+    /** retorna el seriesVolum que indiquem
+     * @return retorna el seriesVolum que s'indica
      */
-    bool end();
-
-    /** retorna l'actual seriesVolum al que apunta la llista
-     * @return retorna el seriesVolum al que s'apunta
-     */
-    SeriesVolum getSeriesVolum();
-
-    ///Destructor de la classe
-    ~StudyVolum();
+    SeriesVolum getSeriesVolum( unsigned int index );
 
 private:
 
-    std::string m_studyUID;
-    std::string m_studyId;
-    std::string m_studyTime;
-    std::string m_studyDate;
-    std::string m_patientName;
-    std::string m_patientId;
-    std::string m_patientAge;
-    std::string m_defaultSeriesUID;//conté el UID de la serie que s'ha visualitzar per defecte, ja que quant visualitzem només s'obrira una sèrie de l'estudi
+    QString m_studyUID;
+    QString m_studyId;
+    QString m_studyTime;
+    QString m_studyDate;
+    QString m_patientName;
+    QString m_patientId;
+    QString m_patientAge;
+    QString m_defaultSeriesUID;//conté el UID de la serie que s'ha visualitzar per defecte, ja que quant visualitzem només s'obrira una sèrie de l'estudi
 
-    std::vector <SeriesVolum> m_vectorStudyVolum;
-    std::vector <SeriesVolum>::iterator i;
+    /// Conté la llista de sèries del volum. Substitueix el membre obsolet std::vector <SeriesVolum> m_vectorStudyVolum;
+    QList< SeriesVolum > m_studyVolumList;
+
 };
 
 };

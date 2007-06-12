@@ -7,7 +7,7 @@
 #ifndef UDGSCALESTUDY_H
 #define UDGSCALESTUDY_H
 
-class string;
+class QString;
 
 namespace udg {
 
@@ -30,14 +30,14 @@ public:
     /** Escala una imatge de cada sèrie per poder fer la previsualització a la caché local del studyUID
      * @param Uid de l'estudi a escakar
      */
-    void scale( std::string studyUID );
+    void scale( QString studyUID );
 
     /** Cerca les series de l'estudi
      * @param El UID de l'estudi a cercar
      * @param [out] retorna les sèries de l'estudi
      * @return retorna l'estat del mètode
      */
-    Status getSeriesOfStudy( std::string studyUID , SeriesList &seriesList );
+    Status getSeriesOfStudy( QString studyUID , SeriesList &seriesList );
 
     /** Compta el número d'imatges de l'estudi
      * @param màscara de les imatges a comptar
@@ -51,7 +51,7 @@ public:
      * @param path relatiu, respecte el directori de l'estudi
      * @return retorna l'estat del mètode
      */
-    Status imageRelativePath( DicomMask , std::string &relPath );
+    Status imageRelativePath( DicomMask , QString &relPath );
 
     ///Destructor de la classe
     ~ScaleStudy();

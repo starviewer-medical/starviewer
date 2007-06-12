@@ -7,6 +7,8 @@
 #ifndef UDGSCALEIMAGE_H
 #define UDGSCALEIMAGE_H
 
+#include <QString>
+
 /*  Aquesta classe és una modificació del programa dcmj2pnm. Per qualsevol dubte o per afegir funcions a aquesta classe consultar-la!!!
   */
 ///  Aquesta classe passant-li un fitxer dicom ens retorna una imatge de la mida de pixels especificada. Converteix la imatge a PGM i l'escala, reduint considerablement el tamany de la imatge
@@ -27,7 +29,7 @@ public:
      * @param lpgmFile path del fitxer pgm desti
      * @param pixelSize mida de pixels de l'imatge
      */
-    int dicom2lpgm(const char* ,const char *,int);
+    int dicom2lpgm(QString ,QString ,int);
 };
 };
 

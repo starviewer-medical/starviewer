@@ -9,8 +9,6 @@
 
 #include "imagelist.h"
 
-class string;
-
 namespace udg {
 
 class DicomMask;
@@ -59,7 +57,7 @@ public:
     /** Esborra les imatges que tinguin el studyUID passat per paràmetre
       * @param studyUID StudyUID de les imatges a esborrar
       */
-    Status deleteImages( std::string studyUID );
+    Status deleteImages( QString studyUID );
 
     ///comprova si existeix una imatge
     Status existImage( DicomMask mask, bool &exist );
@@ -72,22 +70,22 @@ private :
      * @param mask màscara de cerca
      * @return sentència sql
      */
-    std::string buildSqlQueryImages( DicomMask *dicomMask );
+    QString buildSqlQueryImages( DicomMask *dicomMask );
 
     /** Construiex la sentència sql per comptar el nombre d'imatges de la sèrie d'un estudi
      * @param mask màscara per construir la sentència sql
      * @return retorna la sentència Sql
      */
-    std::string buildSqlCountImageNumber( DicomMask *dicomMask );
+    QString buildSqlCountImageNumber( DicomMask *dicomMask );
 
     /** Construiex la sentència sql per comptar el tamany ocupat per les imatges que compleixen la màscara
      * @param mask màscara per construir la sentència sql
      * @return retorna la sentència Sql
      */
-    std::string buildSqlSizeImage( DicomMask *dicomMask );
+    QString buildSqlSizeImage( DicomMask *dicomMask );
 
     //sentencia per si existeix imatge
-    std::string buildSqlExistImage( DicomMask *imageMask );
+    QString buildSqlExistImage( DicomMask *imageMask );
 
 };
 

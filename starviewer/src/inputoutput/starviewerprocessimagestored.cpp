@@ -19,18 +19,18 @@ void StarviewerProcessImageStored::process( Image *image )
 {
     if ( m_imagesStored == 0 ) // és la primera imatge que guardem
     {
-      m_oldSeriesUID = image->getSeriesUID().c_str();
-      m_studyUID = image->getStudyUID().c_str();
+      m_oldSeriesUID = image->getSeriesUID();
+      m_studyUID = image->getStudyUID();
     }
 
-    if ( m_oldSeriesUID != image->getSeriesUID().c_str() ) // canviem de serie d'imatges guardades
+    if ( m_oldSeriesUID != image->getSeriesUID() ) // canviem de serie d'imatges guardades
     {
-        emit( seriesStored( image->getStudyUID().c_str() ) );
-        m_oldSeriesUID = image->getSeriesUID().c_str();
+        emit( seriesStored( image->getStudyUID() ) );
+        m_oldSeriesUID = image->getSeriesUID();
     }
 
     m_imagesStored++;
-    emit( imageStored( image->getStudyUID().c_str() , m_imagesStored ) );
+    emit( imageStored( image->getStudyUID() , m_imagesStored ) );
 }
 
 StarviewerProcessImageStored::~StarviewerProcessImageStored()

@@ -7,9 +7,9 @@
 #ifndef UDGIMAGE_H
 #define UDGIMAGE_H
 
-#define HAVE_CONFIG_H 1
+#include <QString>
 
-#include <string>
+#define HAVE_CONFIG_H 1
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 
@@ -33,27 +33,27 @@ public:
     /** Inserta el UID de la Imatge
      * @param  UID de la imatge
      */
-    void setSOPInstanceUID (std::string );
+    void setSOPInstanceUID( QString );
 
     /** Inserta el UID de la sèrie al qual pertany la imatge
      * @param  UID de la sèrie a la que pertany la imatge
      */
-    void setSeriesUID (std::string );
+    void setSeriesUID (QString );
 
     /** Inserta el path de la imatge a l'ordinador local
      * @param path de la imatge
      */
-    void setImagePath (std::string );
+    void setImagePath (QString );
 
     /** Inserta el UID de la l'estudi al qual pertany la imatge
      * @param UID  UID de la l'estudi a la que pertany la imatge
      */
-    void setStudyUID (std::string );
+    void setStudyUID (QString );
 
     /** Inserta el nom de la imatge
      * @param name [in] nom de la imatge
      */
-    void setImageName (std::string );
+    void setImageName (QString );
 
     /** Inserta el número d'imatge
      * @param Número que ocupa la imatge dins la sèrie
@@ -68,32 +68,32 @@ public:
     /** estableix el PACS al que pertany l'estudi
      * @param AETitle AETitle al que pertany la imatge
      */
-    void setPacsAETitle( std::string AETitle );
+    void setPacsAETitle( QString AETitle );
 
     /** Retorna el UID de la Imatge
      * @return  UID de la imatge
      */
-    std::string getSOPInstanceUID();
+    QString getSOPInstanceUID();
 
     /** Retorna el UID de la sèrie al qual pertany la imatge
      * @return UID de la sèrie a la que pertany la imatge
      */
-    std::string getSeriesUID();
+    QString getSeriesUID();
 
     /** Retorna el path de la imatge a l'ordinador local
      * @return path de la imatge
      */
-    std::string getImagePath ();
+    QString getImagePath ();
 
     /** Retorna el UID de l'estudi al qual pertany la imatge
      * @return UID de la l'estudi a la que pertany la imatge
      */
-    std::string getStudyUID();
+    QString getStudyUID();
 
     /** Retorna el nom de la imatge
      * @return el nom de la imatge
      */
-    std::string getImageName();
+    QString getImageName();
 
     /** retorna el número d'imatge
      * @return Retorna el número que ocupa la imatge dins la sèrie
@@ -108,16 +108,16 @@ public:
     /** retorna el AETitle de la imatge
      * @return AETitle de la imatge
      */
-    std::string getPacsAETitle();
+    QString getPacsAETitle();
 
 private:
     //variables que guarden la informació de la imatge
-    std::string m_SoPUID;
-    std::string m_seriesUID;
-    std::string m_imagePath;
-    std::string m_studyUID;
-    std::string m_imageName;
-    std::string m_pacsAETitle;
+    QString m_SoPUID;
+    QString m_seriesUID;
+    QString m_imagePath;
+    QString m_studyUID;
+    QString m_imageName;
+    QString m_pacsAETitle;
     int m_imageNumber;
     int m_imageSize;
 

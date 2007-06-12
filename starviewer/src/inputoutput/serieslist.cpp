@@ -1,4 +1,4 @@
-#include <string>
+
 #include <list>
 #include <unistd.h>
 #include <stdio.h>
@@ -64,7 +64,7 @@ void SeriesList::clear()
     if ( m_seriesList.size() != 0 ) m_seriesList.clear();
 }
 
-bool SeriesList::exists( std::string studyUID , std::string seriesUID , std::string AETitlePacs )
+bool SeriesList::exists( QString studyUID , QString seriesUID , QString AETitlePacs )
 {
     sem_wait( m_semafor );
     m_iterator = m_seriesList.begin();

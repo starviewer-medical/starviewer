@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <string>
 
 #include "processimagesingleton.h"
 #include "processimage.h"
@@ -30,7 +29,7 @@ ProcessImageSingleton* ProcessImageSingleton::getProcessImageSingleton()
     return pInstance;
 }
 
-void ProcessImageSingleton::addNewProcessImage( std::string UID , ProcessImage *pi )
+void ProcessImageSingleton::addNewProcessImage( QString UID , ProcessImage *pi )
 {
     SingletonProcess sp;
 
@@ -42,7 +41,7 @@ void ProcessImageSingleton::addNewProcessImage( std::string UID , ProcessImage *
     sem_post( m_semafor );
 }
 
-void ProcessImageSingleton::process( std::string UID , Image* img )
+void ProcessImageSingleton::process( QString UID , Image* img )
 {
     list<SingletonProcess>::iterator j;
 
@@ -63,7 +62,7 @@ void ProcessImageSingleton::process( std::string UID , Image* img )
     }
 }
 
-void ProcessImageSingleton::setError( std::string studyUID )
+void ProcessImageSingleton::setError( QString studyUID )
 {
     list<SingletonProcess>::iterator j;
 
@@ -84,7 +83,7 @@ void ProcessImageSingleton::setError( std::string studyUID )
     }
 }
 
-bool ProcessImageSingleton::delProcessImage( std::string UID )
+bool ProcessImageSingleton::delProcessImage( QString UID )
 {
     list<SingletonProcess>::iterator j;
 
@@ -109,12 +108,12 @@ bool ProcessImageSingleton::delProcessImage( std::string UID )
     else return false;
 }
 
-void ProcessImageSingleton::setPath( std::string path )
+void ProcessImageSingleton::setPath( QString path )
 {
     m_imagePath = path;
 }
 
-std::string ProcessImageSingleton::getPath()
+QString ProcessImageSingleton::getPath()
 {
     return m_imagePath;
 }

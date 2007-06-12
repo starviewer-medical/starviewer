@@ -4,9 +4,9 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <string>
 
 #include "studyvolum.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -14,114 +14,108 @@ StudyVolum::StudyVolum()
 {
 }
 
-void StudyVolum::addSeriesVolum( SeriesVolum Volum )
+void StudyVolum::addSeriesVolum( SeriesVolum seriesVolum )
 {
-    m_vectorStudyVolum.push_back( Volum );
+    m_studyVolumList += seriesVolum;
 }
 
 int StudyVolum::getNumberOfSeries()
 {
-    return m_vectorStudyVolum.size();
+    return m_studyVolumList.size();
 }
 
-void StudyVolum::setStudyUID( std::string UID )
+void StudyVolum::setStudyUID( QString studyUID )
 {
-    m_studyUID=UID;
+    m_studyUID = studyUID;
 }
 
-void StudyVolum::setStudyId( std::string Id )
+void StudyVolum::setStudyId( QString studyId )
 {
-    m_studyId=Id;
+    m_studyId = studyId;
 }
 
-void StudyVolum::setStudyTime( std::string time )
+void StudyVolum::setStudyTime( QString time )
 {
     m_studyTime = time;
 }
 
-void StudyVolum::setStudyDate( std::string date )
+void StudyVolum::setStudyDate( QString date )
 {
     m_studyDate = date;
 }
 
-void StudyVolum::setPatientName( std::string name )
+void StudyVolum::setPatientName( QString name )
 {
     m_patientName = name;
 }
 
-void StudyVolum::setPatientId( std::string Id )
+void StudyVolum::setPatientId( QString patientId )
 {
-    m_patientId = Id;
+    m_patientId = patientId;
 }
 
-void StudyVolum::setPatientAge( std::string age )
+void StudyVolum::setPatientAge( QString age )
 {
     m_patientAge = age;
 }
 
-void StudyVolum::setDefaultSeriesUID( std::string seriesUID )
+void StudyVolum::setDefaultSeriesUID( QString seriesUID )
 {
     m_defaultSeriesUID = seriesUID;
 }
 
-std::string StudyVolum::getStudyUID()
+QString StudyVolum::getStudyUID()
 {
     return m_studyUID;
 }
 
-std::string StudyVolum::getStudyId()
+QString StudyVolum::getStudyId()
 {
     return m_studyId;
 }
 
-std::string StudyVolum::getStudyTime()
+QString StudyVolum::getStudyTime()
 {
     return m_studyTime;
 }
 
-std::string StudyVolum::getStudyDate()
+QString StudyVolum::getStudyDate()
 {
     return m_studyDate;
 }
 
-std::string StudyVolum::getPatientName()
+QString StudyVolum::getPatientName()
 {
     return m_patientName;
 }
 
-std::string StudyVolum::getPatientId()
+QString StudyVolum::getPatientId()
 {
     return m_patientId;
 }
 
-std::string StudyVolum::getPatientAge()
+QString StudyVolum::getPatientAge()
 {
     return m_patientAge;
 }
 
-std::string StudyVolum::getDefaultSeriesUID()
+QString StudyVolum::getDefaultSeriesUID()
 {
     return m_defaultSeriesUID;
 }
 
-void StudyVolum::firstSerie()
+SeriesVolum StudyVolum::getSeriesVolum( unsigned int index )
 {
-    i = m_vectorStudyVolum.begin();
-}
-
-void StudyVolum::nextSerie()
-{
-    i++;
-}
-
-bool StudyVolum::end()
-{
-    return i == m_vectorStudyVolum.end();
-}
-
-SeriesVolum StudyVolum::getSeriesVolum()
-{
-    return (*i);
+    SeriesVolum result;
+    if( index > m_studyVolumList.size() )
+    {
+        DEBUG_LOG("S'està demanant un SeriesVolum no disponible. Índex > que la mida de la llista de sèries disponibles");
+    }
+    else
+    {
+        result = m_studyVolumList.at( index );
+    }
+    return result;
 }
 
 StudyVolum::~StudyVolum()

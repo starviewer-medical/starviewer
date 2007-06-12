@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <string>
+
 #include "status.h"
 #include "imagelist.h"
 #include "storeimages.h"
@@ -205,7 +205,7 @@ Status StoreImages::store( ImageList imageList )
     imageList.firstImage();
     while ( !imageList.end() &&  !cond.bad() && m_lastStatusCode == STATUS_Success )
     {
-        cond = storeSCU( m_assoc , imageList.getImage().getImagePath().c_str() );
+        cond = storeSCU( m_assoc , qPrintable(imageList.getImage().getImagePath()) );
         piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
         imageList.nextImage();
     }

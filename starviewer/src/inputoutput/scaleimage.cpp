@@ -68,7 +68,7 @@ ScaleImage::ScaleImage()
 {
 }
 
-int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixelsSize)
+int ScaleImage::dicom2lpgm(QString dicomFile, QString lpgmFile, int pixelsSize)
 {
 //valors per defecte trets de dcm2pnm.cc
     E_FileReadMode      opt_readMode = ERM_autoDetect;    /* default: fileformat or dataset */
@@ -92,7 +92,7 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
 
    //obrim el fitxer dicom
     DcmFileFormat *dfile = new DcmFileFormat();
-    OFCondition cond = dfile->loadFile( dicomFile , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
+    OFCondition cond = dfile->loadFile( qPrintable(dicomFile) , opt_transferSyntax , EGL_withoutGL , DCM_MaxReadLength , opt_readMode );
 
     if ( cond.bad() ) return errorDicomFileNotFound;
 
@@ -148,7 +148,7 @@ int ScaleImage::dicom2lpgm(const char* dicomFile, const char* lpgmFile,int pixel
 
     for ( unsigned int frame = 0; frame < fcount; frame++ )
     {
-        ofile = fopen( lpgmFile, "wb" );
+        ofile = fopen( qPrintable(lpgmFile), "wb" );
         if ( ofile == NULL )
         {
             return errorOpeningNewImage;

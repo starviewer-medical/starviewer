@@ -4,8 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <string>
-
 #include "seriesvolum.h"
 
 namespace udg {
@@ -14,84 +12,83 @@ SeriesVolum::SeriesVolum()
 {
 }
 
-void SeriesVolum::addImage( std::string path )
+SeriesVolum::~SeriesVolum()
 {
-    m_vectorSeriesVolum.push_back( path );
+}
+
+void SeriesVolum::addImage( QString imagePath )
+{
+    m_seriesImagePathList += imagePath;
 }
 
 int SeriesVolum::getNumberOfImages()
 {
-    return m_vectorSeriesVolum.size();
+    return m_seriesImagePathList.size();
 }
 
-void SeriesVolum::setStudyUID( std::string UID )
+void SeriesVolum::setStudyUID( QString UID )
 {
     m_studyUID = UID;
 }
 
-void SeriesVolum::setSeriesUID( std::string UID )
+void SeriesVolum::setSeriesUID( QString UID )
 {
     m_seriesUID = UID;
 }
 
-void SeriesVolum::setStudyId( std::string Id )
+void SeriesVolum::setStudyId( QString Id )
 {
     m_studyId = Id;
 }
 
-void SeriesVolum::setSeriesId( std::string Id )
+void SeriesVolum::setSeriesId( QString Id )
 {
     m_seriesId = Id;
 }
 
-void SeriesVolum::setSeriesModality( std::string modality )
+void SeriesVolum::setSeriesModality( QString modality )
 {
     m_seriesModality = modality;
 }
 
-void SeriesVolum::setSeriesPath( std::string path )
+void SeriesVolum::setSeriesPath( QString path )
 {
     m_seriesPath = path;
 }
 
-std::string SeriesVolum::getSeriesUID()
+QString SeriesVolum::getSeriesUID()
 {
     return m_seriesUID;
 }
 
-std::string SeriesVolum::getStudyUID()
+QString SeriesVolum::getStudyUID()
 {
     return m_studyUID;
 }
 
-std::string SeriesVolum::getSeriesId()
+QString SeriesVolum::getSeriesId()
 {
     return m_seriesId;
 }
 
-std::string SeriesVolum::getStudyId()
+QString SeriesVolum::getStudyId()
 {
     return m_studyId;
 }
 
-std::string SeriesVolum::getSeriesModality()
+QString SeriesVolum::getSeriesModality()
 {
     return m_seriesModality;
 }
 
-std::string SeriesVolum::getSeriesPath()
+QString SeriesVolum::getSeriesPath()
 {
     return m_seriesPath;
 }
 
-std::vector <std::string> SeriesVolum::getVectorImagePath()
+QStringList SeriesVolum::getImagesPathList()
 {
-	return m_vectorSeriesVolum;
-}
-
-SeriesVolum::~SeriesVolum()
-{
-
+	return m_seriesImagePathList;
 }
 
 };

@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <string>
 #include "readdicomdir.h"
 
 #include "ofstring.h"
@@ -28,10 +27,10 @@ ReadDicomdir::ReadDicomdir()
 
 }
 
-Status ReadDicomdir::open( std::string dicomdirPath )
+Status ReadDicomdir::open( QString dicomdirPath )
 {
     Status state;
-    std::string dicomdirFilePath;
+    QString dicomdirFilePath;
 
     //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if ( m_dicomdir != NULL) delete m_dicomdir;
@@ -41,7 +40,7 @@ Status ReadDicomdir::open( std::string dicomdirPath )
     //per defecte la informació dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
     dicomdirFilePath = dicomdirPath;
     dicomdirFilePath.append( "/DICOMDIR" );
-    m_dicomdir = new DcmDicomDir( dicomdirFilePath.c_str() );
+    m_dicomdir = new DcmDicomDir( qPrintable(dicomdirFilePath) );
 
     return state.setStatus( m_dicomdir->error() );
 }
@@ -113,7 +112,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , DicomMask studyMask )
 }
 
 //Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada trobat, podrem accedir a la seva informacio de la sèrie
-Status ReadDicomdir::readSeries( std::string studyUID , std::string seriesUID , SeriesList &seriesList )
+Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesList &seriesList )
 {
     Status state;
 
@@ -124,7 +123,7 @@ Status ReadDicomdir::readSeries( std::string studyUID , std::string seriesUID , 
     DcmDirectoryRecord *studyRecord;
     OFString text;
     Series series;
-    std::string studyUIDRecord , seriesPath;
+    QString studyUIDRecord , seriesPath;
     bool trobat = false;
 
     //Accedim a nivell de pacient
@@ -137,7 +136,7 @@ Status ReadDicomdir::readSeries( std::string studyUID , std::string seriesUID , 
             text.clear();
             studyUIDRecord.clear();
             studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );//obtenim el UID de l'estudi al qual estem posicionats
-            studyUIDRecord.insert( 0 , text.c_str() );
+            studyUIDRecord = text.c_str();
             if ( studyUIDRecord == studyUID ) //busquem l'estudi que continguin el mateix UID
             {
                 trobat = true;
@@ -179,8 +178,8 @@ Status ReadDicomdir::readSeries( std::string studyUID , std::string seriesUID , 
                 seriesPath.clear();
                 seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
                 seriesPath = replaceBarra( seriesPath );
-                seriesPath = seriesPath.substr( 0 , seriesPath.rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
-                series.setSeriesPath( seriesPath.c_str() );
+                seriesPath = seriesPath.mid( 0 , seriesPath.toStdString().rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
+                series.setSeriesPath( seriesPath );
 
                 seriesList.insert( series );//inserim a la llista de sèrie
             }
@@ -191,7 +190,7 @@ Status ReadDicomdir::readSeries( std::string studyUID , std::string seriesUID , 
     return state.setStatus( m_dicomdir->error() );
 }
 
-Status ReadDicomdir::readImages( std::string seriesUID , std::string sopInstanceUID , ImageList &imageList )
+Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , ImageList &imageList )
 {
     Status state;
 
@@ -202,7 +201,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , std::string sopInstance
     DcmDirectoryRecord *studyRecord, *seriesRecord;
     OFString text;
     Series series;
-    std::string studyUIDRecord , seriesUIDRecord, imagePath;
+    QString studyUIDRecord , seriesUIDRecord, imagePath;
     bool trobat = false;
     Image image;
 
@@ -224,7 +223,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , std::string sopInstance
                 if ( seriesUIDRecord == seriesUID ) //busquem la sèrie amb les imatges
                 {
                     trobat = true;
-                    image.setSeriesUID( seriesUIDRecord.c_str() );//indiquem el seriesUID
+                    image.setSeriesUID( seriesUIDRecord );//indiquem el seriesUID
                     studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
                     image.setStudyUID( text.c_str() );//Indiquem el studyUID de la imatge
                 }
@@ -259,7 +258,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , std::string sopInstance
                 imagePath.insert( 0 , m_dicomdirAbsolutePath );
                 imagePath.append( "/" ),
                 imagePath.append( replaceBarra ( text.c_str() ) );
-                image.setImagePath( imagePath.c_str() );
+                image.setImagePath( imagePath );
 
                 imageList.insert( image );//inserim a la llista la imatge*/
             }
@@ -271,7 +270,7 @@ Status ReadDicomdir::readImages( std::string seriesUID , std::string sopInstance
     return state.setStatus( m_dicomdir->error() );
 }
 
-std::string ReadDicomdir::getDicomdirPath()
+QString ReadDicomdir::getDicomdirPath()
 {
     return m_dicomdirAbsolutePath;
 }
@@ -294,15 +293,15 @@ bool ReadDicomdir::matchStudyMask( Study study , DicomMask studyMask )
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId )
+bool ReadDicomdir::matchStudyMaskStudyId( QString studyMaskStudyId , QString studyStudyId )
 {
     if ( studyMaskStudyId.length() > 0 )
     { //si hi ha màscara d'estudi Id
       //el id de l'estudi, des de la classe query screen el guardem a la màscara es amb format '*StudyID*'. Els '*' s'han de treure
-        studyMaskStudyId = upperString( studyMaskStudyId );
-        studyStudyId = upperString( studyStudyId );
+        studyMaskStudyId = studyMaskStudyId.toUpper();
+        studyStudyId = studyStudyId.toUpper();
 
-        if ( studyStudyId.find( studyMaskStudyId ) ==  std::string::npos )
+        if ( !studyStudyId.contains( studyMaskStudyId ) )
         {
             return false;
         }
@@ -315,7 +314,7 @@ bool ReadDicomdir::matchStudyMaskStudyId( std::string studyMaskStudyId , std:: s
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskStudyUID( std::string studyMaskStudyUID , std:: string studyStudyUID )
+bool ReadDicomdir::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString studyStudyUID )
 {
     if ( studyMaskStudyUID.length() > 0 )
     { //si hi ha màscara d'estudi UID
@@ -333,16 +332,16 @@ bool ReadDicomdir::matchStudyMaskStudyUID( std::string studyMaskStudyUID , std::
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId )
+bool ReadDicomdir::matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId )
 {
     if ( studyMaskPatientId.length() > 0 )
     { //si hi ha màscara Patient Id
       //el id del pacient, des de la classe query screen el guardem a la màscara es amb format '*PatientID*'. Els '*' s'han de treure
 
-        studyMaskPatientId = upperString( studyMaskPatientId );
-        studyPatientId = upperString(  studyPatientId );
+        studyMaskPatientId = studyMaskPatientId.toUpper();
+        studyPatientId = studyPatientId.toUpper();
 
-        if ( studyPatientId.find( studyMaskPatientId ) ==  std::string::npos )
+        if ( studyPatientId.contains( studyMaskPatientId ) )
         {
             return false;
         }
@@ -355,7 +354,7 @@ bool ReadDicomdir::matchStudyMaskPatientId( std::string studyMaskPatientId , std
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string studyDate )
+bool ReadDicomdir::matchStudyMaskDate( QString studyMaskDate , QString studyDate )
 {
     if ( studyMaskDate.length() > 0 )
     { //Si hi ha màscara de data
@@ -378,7 +377,7 @@ bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string s
         {
             if (  studyMaskDate.at( 0 ) == '-' ) // cas -YYYYMMDD
             {
-                if ( studyMaskDate.substr( 1 , 8 ) >= studyDate )
+                if ( studyMaskDate.mid( 1 , 8 ) >= studyDate )
                 {
                     return true;
                 }
@@ -386,7 +385,7 @@ bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string s
             }
             else if ( studyMaskDate.at( 8 ) == '-' ) // cas YYYYMMDD-
             {
-                if ( studyMaskDate.substr( 0 , 8 ) <= studyDate )
+                if ( studyMaskDate.mid( 0 , 8 ) <= studyDate )
                 {
                     return true;
                 }
@@ -395,8 +394,8 @@ bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string s
         }
         else if ( studyMaskDate.length() == 17 ) // cas YYYYMMDD-YYYYMMDD
         {
-            if ( studyMaskDate.substr( 0 , 8 ) <= studyDate &&
-                 studyMaskDate.substr( 9 , 8 ) >= studyDate )
+            if ( studyMaskDate.mid( 0 , 8 ) <= studyDate &&
+                 studyMaskDate.mid( 9 , 8 ) >= studyDate )
             {
                 return true;
             }
@@ -408,17 +407,17 @@ bool ReadDicomdir::matchStudyMaskDate( std::string studyMaskDate , std::string s
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName , std::string studyPatientName )
+bool ReadDicomdir::matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName )
 {
-    std:: string lastPatientName , firstPatientName;
+    QString lastPatientName , firstPatientName;
 
     if ( studyMaskPatientName.length() > 0 )
     {
       //Seguint els criteris del PACS la cerca es fa en wildcard, és a dir no cal que els dos string sigui igual mentre que la màscara del nom del pacient estigui continguda dins studyPatientName n'hi ha suficient
-        studyMaskPatientName = upperString( studyMaskPatientName );
-        studyPatientName = upperString( studyPatientName );
+        studyMaskPatientName = studyMaskPatientName.toUpper();
+        studyPatientName = studyPatientName.toUpper();
 
-        if ( studyPatientName.find( studyMaskPatientName ) )
+        if ( studyPatientName.contains( studyMaskPatientName ) )
         {
             return false;
         }
@@ -432,7 +431,7 @@ bool ReadDicomdir::matchStudyMaskPatientName( std::string studyMaskPatientName ,
 
 }
 
-bool ReadDicomdir::matchStudyMaskAccessionNumber( std::string studyMaskAccessionNumber , std:: string studyAccessionNumber )
+bool ReadDicomdir::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber )
 {
     if ( studyMaskAccessionNumber.length() > 0 )
     { //si hi ha màscara AccessioNumber
@@ -450,27 +449,14 @@ bool ReadDicomdir::matchStudyMaskAccessionNumber( std::string studyMaskAccession
     return true;
 }
 
-std::string ReadDicomdir::upperString( std:: string original )
+QString ReadDicomdir::replaceBarra( QString original )
 {
-    for ( unsigned int i = 0; i < original.length(); i++ )
-    {
-        original[i] = toupper( original[i] );
-    }
-
-    return original;
-}
-
-std::string ReadDicomdir::replaceBarra( std::string original )
-{
-    std::string ret;
+    QString ret;
 
     ret = original;
 
-    //string::npos es retorna quan no s'ha trobat el "\\"
-     while ( ret.find( "\\" ) != std::string::npos )
-     {
-         ret.replace( ret.find( "\\" ) , 1 , "/" , 1 );
-     }
+    while( ret.indexOf("\\") !=-1 )
+        ret.replace( ret.indexOf("\\") , 1 , "/" );
 
     return ret;
 }

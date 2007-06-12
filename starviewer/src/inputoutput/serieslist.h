@@ -1,11 +1,12 @@
 #ifndef SERIESLIST
 #define SERIESLIST
 
+#include <QString>
+
 #define HAVE_CONFIG_H 1
 
 #include "series.h"
 #include <semaphore.h>
-class string;
 
 /* ATENCIO AQUESTA CLASSE NO SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'IMPLEMENTEN SEMAFORS
  */
@@ -58,7 +59,7 @@ class SeriesList
      * @param AETitlePacs AETitle del Pacs on ha d'estat l'estudi
      * @return  number of studies in the list
      */
-    bool exists( std::string studyUID , std::string seriesUID , std::string AETitlePacs );
+    bool exists( QString studyUID , QString seriesUID , QString AETitlePacs );
 
  private :
 

@@ -7,12 +7,12 @@
 #ifndef UDGDATABASECONNECTION_H
 #define UDGDATABASECONNECTION_H
 
+#include <QString>
 #include <sqlite3.h>
 #include <semaphore.h>
 
 namespace udg {
 
-class string;
 class Status;
 
 /** Com tenim més d'una classe que han d'accedir a la mateixa Base de dades, i amb SQLITE només podem tenir una connexió per la BD creem una classe singleton que s'encarregarà de gestionar la connexió a la Base de Dades. De la mateixa manera només un thread alhora pot accedir a la BD, aquesta classe implementarà mètodes per evitar que dos threads es trobin a la vegada dins la BD
@@ -32,7 +32,7 @@ public:
      /** Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
       * @param path de la base de dades
       */
-    void setDatabasePath(std::string);
+    void setDatabasePath(QString);
 
     /** Retorna la connexió a la base de dades
      * @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
@@ -61,7 +61,7 @@ private :
     sqlite3 *m_databaseConnection;
     sem_t *m_databaseLock;
 
-    std::string m_databasePath;
+    QString m_databasePath;
 
     /// tanca la connexió de la base de dades*/
     void closeDB();

@@ -11,12 +11,12 @@
 */
 
 namespace udg{
-class StudyList
-{
+
+class StudyList{
 
  public :
 
-     StudyList();
+    StudyList();
 
     /** This action inserts a Study at the end of the list
      * @param  Study
@@ -51,7 +51,7 @@ class StudyList
      * @param AETitlePacs AETitle del Pacs on ha d'estat l'estudi
      * @return  number of studies in the list
      */
-    bool exists( std::string studyUID , std::string AETitlePacs );
+    bool exists( QString studyUID , QString AETitlePacs );
 
     /// neteja la llista d'estudis
     void clear();
@@ -59,7 +59,7 @@ class StudyList
     ///compta quants elements té la llista
     int count();
 
- private :
+private :
 
     sem_t *m_semafor;
 

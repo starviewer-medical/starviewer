@@ -12,7 +12,6 @@
 namespace udg {
 
 class Status;
-class string;
 
 /** Classe que s'encarrega de gestionar l'spool de la caché
 @author Grup de Gràfics de Girona  ( GGG )
@@ -31,7 +30,7 @@ public:
     /** Esborra un estudi de l'spool de l'aplicació
      * @param path absolut de l'estudi
      */
-    void removeStudy( std::string studyUID );
+    void removeStudy( QString studyUID );
 
     /** actualitza l'espai utiltizat de la cache a 0 bytes
      * @return estat el mètode

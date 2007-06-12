@@ -30,8 +30,8 @@ Series::Series(DcmDataset *seriesDataset)
     if ( text != NULL )
     {
         setStudyUID( text );
-        path.insert( 0 , text );
-        path.append( "/" );
+        path = text;
+        path += "/";
     }
     //set series modality
     seriesDataset->findAndGetString( DCM_Modality , text , false );
@@ -98,70 +98,59 @@ bool Series::operator<( Series a )
 /*                                    SET STUDY FIELDS                                                                 */
 /***********************************************************************************************************************/
 
-void Series:: setSeriesNumber( std::string number)
+void Series:: setSeriesNumber( QString number)
 {
-   m_seriesNumber.erase();
-   m_seriesNumber.insert( 0 , number );
+   m_seriesNumber = number;
 }
 
-void Series::setSeriesDescription( std::string description )
+void Series::setSeriesDescription( QString description )
 {
-    m_seriesDescription.erase();
-    m_seriesDescription.insert( 0 , description );
+    m_seriesDescription = description;
 }
 
-void Series::setSeriesDate( std::string date )
+void Series::setSeriesDate( QString date )
 {
-    m_seriesDate.erase();
-    m_seriesDate.insert( 0 , date );
+    m_seriesDate = date;
 }
 
-void Series::setSeriesTime( std::string time )
+void Series::setSeriesTime( QString time )
 {
-    m_seriesTime.erase();
-    m_seriesTime.insert( 0 , time );
+    m_seriesTime = time;
 }
 
-void Series::setSeriesModality( std::string modality )
+void Series::setSeriesModality( QString modality )
 {
-    m_seriesModality.erase();
-    m_seriesModality.insert( 0 , modality );
+    m_seriesModality = modality;
 }
 
-void Series::setStudyUID( std::string UID )
+void Series::setStudyUID( QString UID )
 {
-    m_studyUID.erase();
-    m_studyUID.insert( 0 , UID );
+    m_studyUID = UID;
 }
 
-void Series::setSeriesUID( std::string UID )
+void Series::setSeriesUID( QString UID )
 {
-    m_seriesUID.erase();
-    m_seriesUID.insert( 0 , UID );
+    m_seriesUID = UID;
 }
 
-void Series::setProtocolName( std::string protocol )
+void Series::setProtocolName( QString protocol )
 {
-    m_protocolName.erase();
-    m_protocolName.insert( 0 , protocol );
+    m_protocolName = protocol;
 }
 
-void Series::setBodyPartExaminated( std::string part )
+void Series::setBodyPartExaminated( QString part )
 {
-    m_bodyPartExaminated.erase();
-    m_bodyPartExaminated.insert( 0 , part );
+    m_bodyPartExaminated = part;
 }
 
-void Series::setOperatorName( std::string name )
+void Series::setOperatorName( QString name )
 {
-    m_operatorName.erase();
-    m_operatorName.insert( 0 , name );
+    m_operatorName = name;
 }
 
-void Series::setSeriesPath( std::string path )
+void Series::setSeriesPath( QString path )
 {
-    m_seriesPath.erase();
-    m_seriesPath.insert( 0 , path );
+    m_seriesPath = path;
 }
 
 void Series::setImageNumber( int iNumber )
@@ -169,28 +158,27 @@ void Series::setImageNumber( int iNumber )
     m_imageNumber = iNumber;
 }
 
-void Series::setPacsAETitle( std::string AETitlePACS )
+void Series::setPacsAETitle( QString AETitlePACS )
 {
-    m_seriesAETitlePACS.erase();
-    m_seriesAETitlePACS.insert( 0 , AETitlePACS );
+    m_seriesAETitlePACS = AETitlePACS;
 }
 
-void Series::setRequestedProcedureID( std::string requestedProcedureID )
+void Series::setRequestedProcedureID( QString requestedProcedureID )
 {
     m_requestedProcedureID = requestedProcedureID;
 }
 
-void Series::setScheduledProcedureStepID( std::string scheduledProcedureID )
+void Series::setScheduledProcedureStepID( QString scheduledProcedureID )
 {
     m_scheduledProcedureStepID = scheduledProcedureID;
 }
 
-void Series::setPPSStartDate( std::string startDate )
+void Series::setPPSStartDate( QString startDate )
 {
     m_ppsStartDate = startDate;
 }
 
-void Series::setPPSStartTime( std::string startTime )
+void Series::setPPSStartTime( QString startTime )
 {
     m_ppsStartTime = startTime;
 }
@@ -199,57 +187,57 @@ void Series::setPPSStartTime( std::string startTime )
 /*                                    GET SERIES FIELDS                                                               */
 /**********************************************************************************************************************/
 
-std::string Series:: getSeriesNumber()
+QString Series:: getSeriesNumber()
 {
     return m_seriesNumber;
 }
 
-std::string Series::getSeriesDescription()
+QString Series::getSeriesDescription()
 {
     return m_seriesDescription;
 }
 
-std::string Series::getSeriesDate()
+QString Series::getSeriesDate()
 {
     return m_seriesDate;
 }
 
-std::string Series::getSeriesTime()
+QString Series::getSeriesTime()
 {
     return m_seriesTime;
 }
 
-std::string Series::getSeriesModality()
+QString Series::getSeriesModality()
 {
     return m_seriesModality;
 }
 
-std::string Series::getStudyUID()
+QString Series::getStudyUID()
 {
     return m_studyUID;
 }
 
-std::string Series::getSeriesUID()
+QString Series::getSeriesUID()
 {
     return m_seriesUID;
 }
 
-std::string Series::getProtocolName()
+QString Series::getProtocolName()
 {
     return m_protocolName;
 }
 
-std::string Series::getBodyPartExaminated()
+QString Series::getBodyPartExaminated()
 {
     return m_bodyPartExaminated;
 }
 
-std::string Series::getOperatorName()
+QString Series::getOperatorName()
 {
     return m_operatorName;
 }
 
-std::string Series::getSeriesPath()
+QString Series::getSeriesPath()
 {
     return m_seriesPath;
 }
@@ -259,27 +247,27 @@ int Series::getImageNumber()
     return m_imageNumber;
 }
 
-std::string Series::getRequestedProcedureID()
+QString Series::getRequestedProcedureID()
 {
     return m_requestedProcedureID;
 }
 
-std::string Series::getScheduledProcedureStepID()
+QString Series::getScheduledProcedureStepID()
 {
     return m_scheduledProcedureStepID;
 }
 
-std::string Series::getPPSStartDate()
+QString Series::getPPSStartDate()
 {
     return m_ppsStartDate;
 }
 
-std::string Series::getPPStartTime()
+QString Series::getPPStartTime()
 {
     return m_ppsStartTime;
 }
 
-std::string Series::getPacsAETitle()
+QString Series::getPacsAETitle()
 {
     return m_seriesAETitlePACS;
 }

@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
 
  ***************************************************************************/
-#include <string>
+
 #include "status.h"
 
 #include "convertdicomtolittleendian.h"
@@ -33,7 +33,11 @@ ConvertDicomToLittleEndian::ConvertDicomToLittleEndian()
 {
 }
 
-Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string outputFile )
+ConvertDicomToLittleEndian::~ConvertDicomToLittleEndian()
+{
+}
+
+Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFile )
 {
     DcmFileFormat fileformat;
     DcmDataset * dataset = fileformat.getDataset();
@@ -42,7 +46,7 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
     E_TransferSyntax opt_ixfer = EXS_Unknown; //Transfer Syntax del fitxer d'entrada
     E_FileReadMode opt_readMode = ERM_autoDetect;
     E_TransferSyntax opt_oxfer = EXS_LittleEndianExplicit;
-    std::string descriptionError;
+    QString descriptionError;
     E_EncodingType opt_oenctype = EET_ExplicitLength;
     E_GrpLenEncoding opt_oglenc = EGL_recalcGL;
     E_PaddingEncoding opt_opadenc = EPD_noChange;
@@ -50,7 +54,7 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
     OFCmdUnsignedInt opt_itempad = 0;
     OFBool opt_oDataset = OFFalse;
 
-    error = fileformat.loadFile( inputFile.c_str() , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
+    error = fileformat.loadFile( qPrintable( inputFile ) , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
 
     if ( error.bad() ) return state.setStatus( error );
 
@@ -65,18 +69,14 @@ Status ConvertDicomToLittleEndian::convert( std::string inputFile , std::string 
         descriptionError =  "Error: no conversion to transfer syntax ";
         descriptionError.append ( opt_oxferSyn.getXferName() );
         descriptionError.append( " possible" );
-        state.setStatus( descriptionError , false , 1300 );
+        state.setStatus( qPrintable(descriptionError) , false , 1300 );
 
         return state;
     }
 
-    error = fileformat.saveFile( outputFile.c_str() , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
+    error = fileformat.saveFile( qPrintable( outputFile ) , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
 
     return state.setStatus( error );
-}
-
-ConvertDicomToLittleEndian::~ConvertDicomToLittleEndian()
-{
 }
 
 }

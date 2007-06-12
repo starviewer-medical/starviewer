@@ -10,7 +10,6 @@
 #include "pacsparameters.h"
 #include <list>
 
-class string;
 
 namespace udg {
 
@@ -36,7 +35,7 @@ public:
     /** cerca un pacs a la llista a través del seu AETitle
      * @param AETitle del pacs a cercar
      */
-    bool findPacs( std::string );
+    bool findPacs( QString );
 
     /** Retorna l'objecte pacs al que apunta l'iterador de la llista
      * @return Objecte PacsParameters

@@ -9,7 +9,7 @@
 
 #include "dcddirif.h"     /* for class DicomDirInterface */
 
-class string;
+#include <QString>
 
 namespace udg {
 
@@ -42,7 +42,7 @@ public:
      * @param dicomdirPath directori a convertir a dicomdir
      * @return estat de finalització del mètode
      */
-    Status create( std::string dicomdirPath );
+    Status create( QString dicomdirPath );
 
     ~CreateDicomdir();
 
@@ -55,7 +55,7 @@ private:
     /** Crea un missatge d'error per un fitxer que no s'ha pogut convertir a DicomDir
      * @param imagePath path de la imatge que dona l'error
      */
-    void errorConvertingFile( std::string imagePath );
+    void errorConvertingFile( QString imagePath );
 
 };
 

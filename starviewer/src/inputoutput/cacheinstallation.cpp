@@ -149,7 +149,7 @@ bool CacheInstallation::createDatabaseDir()
     else
     {
         missatgeLog = "No s'ha pogut crear el directori de la cache d'imatges ";
-        missatgeLog.append( databasePath.toAscii().constData() );
+        missatgeLog.append( databasePath );
         ERROR_LOG( missatgeLog.toAscii().constData() );
         return false;
     }

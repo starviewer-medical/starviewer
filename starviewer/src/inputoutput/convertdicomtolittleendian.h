@@ -7,7 +7,7 @@
 #ifndef UDGCONVERTDICOMTOLITTLEENDIAN_H
 #define UDGCONVERTDICOMTOLITTLEENDIAN_H
 
-class string;
+#include <QString>
 
 namespace udg {
 
@@ -27,7 +27,7 @@ public:
      * @param outputFile ruta completa indicant on s'ha de desar el fitxer convertit, s'hi ha d'incloure el nom del fitxer
      * @return
      */
-    Status convert( std::string inputFile , std::string outputFile );
+    Status convert( QString inputFile , QString outputFile );
 
     ~ConvertDicomToLittleEndian();
 };

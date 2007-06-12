@@ -5,8 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <string>
-
 #include "databaseconnection.h"
 #include "starviewersettings.h"
 #include "status.h"
@@ -20,21 +18,21 @@ DatabaseConnection::DatabaseConnection()
 {
    StarviewerSettings settings;
 
-   m_databasePath = settings.getDatabasePath().toAscii().constData();
+   m_databasePath = settings.getDatabasePath();
    m_databaseLock = ( sem_t* ) malloc( sizeof( sem_t ) );
    sem_init( m_databaseLock , 0 , 1 );//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
    connectDB();
 
 }
 
-void DatabaseConnection::setDatabasePath( std::string path )
+void DatabaseConnection::setDatabasePath( QString path )
 {
     m_databasePath = path;
 }
 
 void DatabaseConnection::connectDB()
 {
-    sqlite3_open( m_databasePath.c_str() , &m_databaseConnection );
+    sqlite3_open( qPrintable(m_databasePath) , &m_databaseConnection );
 }
 
 sqlite3* DatabaseConnection::getConnection()

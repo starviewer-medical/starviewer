@@ -1,11 +1,10 @@
 #include "pacsparameters.h"
 #include "const.h"
 #include "study.h"
-#include <string.h>
 
 namespace udg{
 
-PacsParameters::PacsParameters( std::string adr , std::string port , std::string aet , std::string aec )
+PacsParameters::PacsParameters( QString adr , QString port , QString aet , QString aec )
 {
     m_Adr = adr;
     m_Port = port;
@@ -20,47 +19,47 @@ PacsParameters::PacsParameters()
     m_PacsID = 0;
 }
 
-void PacsParameters::setPacsAdr( std::string adr )
+void PacsParameters::setPacsAdr( QString adr )
 {
      m_Adr = adr;
 }
 
-void PacsParameters::setPacsPort( std::string port )
+void PacsParameters::setPacsPort( QString port )
 {
      m_Port = port;
 }
 
-void PacsParameters::setAELocal( std::string aet )
+void PacsParameters::setAELocal( QString aet )
 {
      m_aeTitle = aet;
 }
 
-void PacsParameters::setAEPacs( std::string aec )
+void PacsParameters::setAEPacs( QString aec )
 {
      m_aeCalled = aec;
 }
 
-void PacsParameters::setLocalPort( std::string port )
+void PacsParameters::setLocalPort( QString port )
 {
     m_LocalPort = port;
 }
 
-void PacsParameters::setInstitution( std::string inst )
+void PacsParameters::setInstitution( QString inst )
 {
     m_Inst = inst;
 }
 
-void PacsParameters::setLocation( std::string local )
+void PacsParameters::setLocation( QString local )
 {
     m_Location = local;
 }
 
-void PacsParameters::setDescription( std::string desc )
+void PacsParameters::setDescription( QString desc )
 {
     m_Desc = desc;
 }
 
-void PacsParameters::setDefault( std::string def )
+void PacsParameters::setDefault( QString def )
 {
     m_Default = def;
 }
@@ -77,47 +76,47 @@ void PacsParameters::setPacsID( int id )
 
 /*****************************************************************************************/
 
-std::string PacsParameters::getPacsAdr()
+QString PacsParameters::getPacsAdr()
 {
     return m_Adr;
 }
 
-std::string PacsParameters::getPacsPort()
+QString PacsParameters::getPacsPort()
 {
     return m_Port;
 }
 
-std::string PacsParameters::getAELocal()
+QString PacsParameters::getAELocal()
 {
     return m_aeTitle;
 }
 
-std::string PacsParameters::getAEPacs()
+QString PacsParameters::getAEPacs()
 {
     return m_aeCalled;
 }
 
-std::string PacsParameters::getLocalPort()
+QString PacsParameters::getLocalPort()
 {
     return m_LocalPort;
 }
 
-std::string PacsParameters::getInstitution()
+QString PacsParameters::getInstitution()
 {
     return m_Inst;
 }
 
-std::string PacsParameters::getLocation()
+QString PacsParameters::getLocation()
 {
     return m_Location;
 }
 
-std::string PacsParameters::getDescription()
+QString PacsParameters::getDescription()
 {
     return m_Desc;
 }
 
-std::string PacsParameters::getDefault()
+QString PacsParameters::getDefault()
 {
     return m_Default;
 }

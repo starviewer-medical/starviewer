@@ -30,11 +30,11 @@ namespace udg
 {
 
 
-Status ImportDicomdir::import( std::string dicomdirPath , std::string studyUID , std::string seriesUID , std::string sopInstanceUID )
+Status ImportDicomdir::import( QString dicomdirPath , QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     ImageList imageList;
-    std::string studyPath;
+    QString studyPath;
 
     state = m_readDicomdir.open( dicomdirPath );
 
@@ -45,7 +45,7 @@ Status ImportDicomdir::import( std::string dicomdirPath , std::string studyUID ,
     return state;
 }
 
-Status ImportDicomdir::importarEstudi( std::string studyUID , std::string seriesUID , std::string sopInstanceUID )
+Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -53,13 +53,13 @@ Status ImportDicomdir::importarEstudi( std::string studyUID , std::string series
     DicomMask mask;
     StudyList studyList;
     SeriesList seriesList;
-    std::string studyPath;
+    QString studyPath;
     StarviewerSettings starviewerSettings;
     Study study;
     Series serie;
     ScaleStudy scaleDicomStudy;
 
-    studyPath.insert( 0 , starviewerSettings.getCacheImagePath().toStdString() );
+    studyPath.insert( 0 , starviewerSettings.getCacheImagePath() );
     studyPath.append( "/" );
     studyPath.append( studyUID );
     studyPath.append( "/" );
@@ -80,7 +80,7 @@ Status ImportDicomdir::importarEstudi( std::string studyUID , std::string series
     {
         cacheStudyDAL.updateStudy( study );
     }
-    else ERROR_LOG( state.text().c_str() );
+    else ERROR_LOG( state.text() );
 
     m_readDicomdir.readSeries( studyUID , seriesUID , seriesList );
 
@@ -105,15 +105,15 @@ Status ImportDicomdir::importarEstudi( std::string studyUID , std::string series
     return state;
 }
 
-Status ImportDicomdir::importarSerie( std::string studyUID , std::string seriesUID , std::string sopInstanceUID )
+Status ImportDicomdir::importarSerie( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     ImageList imageList;
 
-    std::string seriesPath;
+    QString seriesPath;
     StarviewerSettings starviewerSettings;
 
-    seriesPath.insert( 0 , starviewerSettings.getCacheImagePath().toStdString() );
+    seriesPath.insert( 0 , starviewerSettings.getCacheImagePath() );
     seriesPath.append( "/" );
     seriesPath.append( studyUID );
     seriesPath.append( "/" );
@@ -137,13 +137,13 @@ Status ImportDicomdir::importarSerie( std::string studyUID , std::string seriesU
 
 Status ImportDicomdir::importarImatge( Image image )
 {
-    std::string imagePath, imageFile;
+    QString imagePath, imageFile;
     QFile copyFile;
     StarviewerSettings starviewerSettings;
     CacheImageDAL cacheImage;
     Status state;
 
-    imagePath.insert( 0 , starviewerSettings.getCacheImagePath().toStdString() );
+    imagePath.insert( 0 , starviewerSettings.getCacheImagePath() );
     imagePath.append( "/" );
     imagePath.append( image.getStudyUID() );
     imagePath.append( "/" );
@@ -151,7 +151,7 @@ Status ImportDicomdir::importarImatge( Image image )
     imagePath.append( "/" );
     imagePath.append( image.getSOPInstanceUID() );
 
-    if ( copyFile.copy( image.getImagePath().c_str() , imagePath.c_str() ) )
+    if ( copyFile.copy( image.getImagePath() , imagePath ) )
     {
         image.setImageName ( image.getSOPInstanceUID() );
         state = cacheImage.insertImage( &image );
@@ -161,11 +161,11 @@ Status ImportDicomdir::importarImatge( Image image )
 
 }
 
-void ImportDicomdir::createPath( std::string path )
+void ImportDicomdir::createPath( QString path )
 {
     QDir studyDir;
 
-    studyDir.mkdir( path.c_str() );
+    studyDir.mkdir( path );
 }
 
 }

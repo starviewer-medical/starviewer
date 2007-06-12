@@ -7,10 +7,11 @@
 #ifndef UDGREADDICOMDIR_H
 #define UDGREADDICOMDIR_H
 
+#include <QString>
+
 #define HAVE_CONFIG_H 1
 #include "dcdicdir.h" //llegeix el dicom dir
 
-class string;
 class DcmDicomDir;
 
 namespace udg {
@@ -35,7 +36,7 @@ public:
      * @param dicomdirPath directori on es troba el dicomdir
      * @return estat del mètode
      */
-    Status open( std::string dicomdirPath );
+    Status open( QString dicomdirPath );
 
     /** Retorna la llista d'estudis que conté el dicomdir
       * @param studyList llista amb els estudis que conté el dicomdir
@@ -49,26 +50,26 @@ public:
      * @param seriesList llista amb les sèries que conté l'estudi
      * @return estat del mètode
      */
-    Status readSeries ( std::string studyUID , std::string seriesUID , SeriesList  &serieList );
+    Status readSeries ( QString studyUID , QString seriesUID , SeriesList  &serieList );
 
     /** Retorna la llista d'imatges que conté un estudi
      * @param seriesUID UID de la serie que volem obtenir les imatges
      * @param imageList Llistat de les imatges que conté
      * @return estat del mètode
      */
-    Status readImages( std::string seriesUID , std::string sopInstanceUID , ImageList &imageList );
+    Status readImages( QString seriesUID , QString sopInstanceUID , ImageList &imageList );
 
     /** Retorna el path del dicomdir
      * @return path del dicomdir
      */
-    std::string getDicomdirPath();
+    QString getDicomdirPath();
 
     ~ReadDicomdir();
 
 private :
 
     DcmDicomDir *m_dicomdir;
-    std::string m_dicomdirAbsolutePath;
+    QString m_dicomdirAbsolutePath;
 
     /** Comprova si un estudi compleix la màscara, pels camps PatientId, StudyID, StudyDate, PatientName i AccessionNumber
      * @param study dades de l'estudi
@@ -82,55 +83,48 @@ private :
      * @param studyStudyId studyId de l'estudi trobat al dicomdir
      * @return retorna cert si els dos studyID son iguals o studyMaskStudyID està buit
      */
-    bool matchStudyMaskStudyId( std::string studyMaskStudyId , std:: string studyStudyId );
+    bool matchStudyMaskStudyId( QString studyMaskStudyId , QString studyStudyId );
 
     /** Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
      * @param studyMaskStudyUID studyUID de la màscara
      * @param studyStudyUID studyUID de l'estudi trobat al dicomdir
      * @return retorna cert si els dos studyUID son iguals o studyMaskStudyUID està buit
      */
-    bool matchStudyMaskStudyUID( std::string studyMaskStudyUID , std:: string studyStudyUID );
+    bool matchStudyMaskStudyUID( QString studyMaskStudyUID , QString studyStudyUID );
 
     /** Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
      * @param studyMaskPatientId
      * @param studyPatientId
      * @return retorna cert si els dos patientId són iguals o studyMaskPatientId està buit
      */
-    bool matchStudyMaskPatientId( std::string studyMaskPatientId , std:: string studyPatientId );
+    bool matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId );
 
     /** Comprova que la data de la màscara i la de l'estudi facin matching. Si la studyMaskDate és buida retorna cert per defecte
      * @param studyMaskDate Màscara de dates
      * @param studyDate Data de l'estudi
      * @return retorna cert si es fa matching amb la data de la màscara o studyMaskDate és buit
      */
-    bool matchStudyMaskDate( std::string studyMaskDate , std::string studyDate );
+    bool matchStudyMaskDate( QString studyMaskDate , QString studyDate );
 
     /** Comprova que el nom del pacient de la màscara i el de l'estudi facin matching. Si la studyMaskPatientName és buida retorna cert per defecte. En aquest cas fem wildcard matching
      * @param studyMaskPatienName Màscara de nom pacient
      * @param studyPatientName Nom del pacient
      * @return retorna cert si es fa matching amb el nom del pacient de la màscara o studyMaskPatient és buit
      */
-    bool matchStudyMaskPatientName( std::string studyMaskPatientName , std::string studyPatientName );
+    bool matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName );
 
     /** Comprova que el AccessionNumber de la màscara i el de l'estudi facin matching. Si la studyMaskAccessionNumber és buida retorna cert per defecte. En aquest cas fem wildcard matching
      * @param studyMaskPatienName Màscara de AccessionNumber
      * @param studyPatientName AccessionNumber de l'estudi
      * @return retorna cert si es fa matching amb studyAccessionNumber de la màscara o studyMaskAccessionNumber és buit
      */
-    bool matchStudyMaskAccessionNumber( std::string studyMaskAccessionNumber , std::string studyAccessionNumber );
-
-    /** Converteix un string a majúscules,
-     *  Com el string distingeix entre majúscules i minúscules, per fer els match, primer convertirem l'string a majúscules, ja que el DICOM guardar la informació en majúscules
-     * @param original cadena original
-     * @return cadena en majúscules
-     */
-    std::string upperString( std:: string original );
+    bool matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber );
 
     /** canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas de linux les hem de passar a '/'
      * @param original path original
      * @return path amb '/'
      */
-    std::string replaceBarra( std::string original );
+    QString replaceBarra( QString original );
 };
 
 }

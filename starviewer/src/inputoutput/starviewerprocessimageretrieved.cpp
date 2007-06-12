@@ -40,7 +40,7 @@ void StarviewerProcessImageRetrieved::process( Image *image )
         Series serie;
 
         //canviem l'estat de l'estudi de PENDING A RETRIEVING
-        state = cacheStudyDAL.setStudyRetrieving( image->getStudyUID().c_str() );
+        state = cacheStudyDAL.setStudyRetrieving( image->getStudyUID() );
         if ( !state.good() ) m_error = true;
 
         //inserim serie
@@ -49,20 +49,20 @@ void StarviewerProcessImageRetrieved::process( Image *image )
         state = getSeriesInformation ( createImagePath( image  ), serie );
         if ( !state.good() ) m_error = true;
 
-        m_studyUID = image->getStudyUID().c_str();
+        m_studyUID = image->getStudyUID();
     }
 
     //inserim la nova sèrie que es descarrega
-    if ( !m_addedSeriesList.contains( image->getSeriesUID().c_str() ) )
+    if ( !m_addedSeriesList.contains( image->getSeriesUID() ) )
     {
         state = insertSerie( image );
         if ( state.good() || ( !state.good() && state.code() == 2019 ) ) // 2019, cas en que ja existia la serie a la base de dades, en aquest cas s'esta tornant a baixar la sèrie
         {
-            emit( seriesRetrieved( image->getStudyUID().c_str() ) );
+            emit( seriesRetrieved( image->getStudyUID() ) );
 
             if ( m_downloadedSeries == 0 )
             {
-                emit( seriesView( image->getStudyUID().c_str() ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
+                emit( seriesView( image->getStudyUID() ) ); //aquest signal s'emet cap a qexecoperationthread, indicant que hi ha apunt una serie per ser visualitzada
             }
             m_downloadedSeries++;
         }
@@ -74,7 +74,7 @@ void StarviewerProcessImageRetrieved::process( Image *image )
     if ( !state.good() && state.code() != 2019 ) m_error = true;
 
     m_downloadedImages++;
-    emit( imageRetrieved( image->getStudyUID().c_str(),m_downloadedImages ) );
+    emit( imageRetrieved( image->getStudyUID(),m_downloadedImages ) );
 }
 
 Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
@@ -94,7 +94,7 @@ Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
         {
             m_error = true;
         }
-        else m_addedSeriesList.push_back( serie.getSeriesUID().c_str() );
+        else m_addedSeriesList.push_back( serie.getSeriesUID() );
     }
 
     return state;
@@ -107,7 +107,7 @@ void StarviewerProcessImageRetrieved::setError()
     std::string logMessage;
     m_error = true;
     logMessage = "Error descarregant l'estudi";
-    ERROR_LOG( logMessage.c_str() );
+    ERROR_LOG( logMessage );
 }
 
 bool StarviewerProcessImageRetrieved::getError()
@@ -117,7 +117,7 @@ bool StarviewerProcessImageRetrieved::getError()
     if ( m_downloadedImages == 0)
     {
         logMessage = "Error s'han descarregat 0 imatges de l'estudi";
-        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( logMessage );
     }
     return m_error || m_downloadedImages == 0;
 }
@@ -131,7 +131,7 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
 
     ImageDicomInformation dInfo;
 
-    state = dInfo.openDicomFile( imagePath.toAscii().constData() );
+    state = dInfo.openDicomFile( imagePath );
 
     serie.setStudyUID( dInfo.getStudyUID() );
     serie.setSeriesUID( dInfo.getSeriesUID() );
@@ -144,13 +144,12 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
     serie.setSeriesDate( dInfo.getSeriesDate() );
 
     //calculem el path de la serie
-    path = dInfo.getStudyUID().c_str();
+    path = dInfo.getStudyUID();
     path.append( "/" );
-    path.append( dInfo.getSeriesUID().c_str() );
+    path.append( dInfo.getSeriesUID() );
     path.append( "/" );
 
-    serie.setSeriesPath( path.toAscii().constData());
-
+    serie.setSeriesPath( path.toAscii() );
 
     if ( !state.good() )
     {
@@ -159,7 +158,7 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
         logMessage.append( errorNumber );
         logMessage.append( " ERROR : " );
         logMessage.append( state.text() );
-        ERROR_LOG( logMessage.c_str() );
+        ERROR_LOG( logMessage );
     }
     return state;
 }
@@ -171,11 +170,11 @@ QString StarviewerProcessImageRetrieved::createImagePath( Image *image )
     QString imagePath;
 
     imagePath.insert( 0 , settings.getCacheImagePath() );
-    imagePath.append( image->getStudyUID().c_str() );
+    imagePath.append( image->getStudyUID() );
     imagePath.append( "/" );
-    imagePath.append( image->getSeriesUID().c_str() );
+    imagePath.append( image->getSeriesUID() );
     imagePath.append("/");
-    imagePath.append( image->getImageName().c_str() );
+    imagePath.append( image->getImageName() );
 
     return imagePath;
 }

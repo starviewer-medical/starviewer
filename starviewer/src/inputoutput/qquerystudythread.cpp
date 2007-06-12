@@ -39,12 +39,7 @@ void QQueryStudyThread::run()
 
     if ( !state.good() )
     {
-        missatgeLog = "Error al connectar al PACS ";
-        missatgeLog.append( m_param.getAEPacs().c_str() );
-        missatgeLog.append( ". PACS ERROR : " );
-        missatgeLog.append( state.text().c_str() );
-
-        ERROR_LOG( missatgeLog.toAscii().constData() );
+        ERROR_LOG( qPrintable( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text().c_str() ) ) );
         emit( errorConnectingPacs( m_param.getPacsID() ) );
         exit(1);
     }
@@ -59,18 +54,11 @@ void QQueryStudyThread::run()
 
         if (! state.good() )
         {
-            missatgeLog = "Error cercant al PACS ";
-            missatgeLog.append( m_param.getAEPacs().c_str() );
-            missatgeLog.append( ". PACS ERROR : " );
-            missatgeLog.append( state.text().c_str() );
-            ERROR_LOG( missatgeLog.toAscii().constData() );
+            ERROR_LOG( qPrintable( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text().c_str() ) ) );
             emit( errorQueringStudiesPacs( m_param.getPacsID() ) );
         }
 
-        missatgeLog = "Thread del PACS ";
-        missatgeLog.append( m_param.getAEPacs().c_str() );
-        missatgeLog.append( " finalitzant" );
-        INFO_LOG ( missatgeLog.toAscii().constData() );
+        INFO_LOG ( qPrintable( QString("Thread del PACS %1 finalitzant").arg( m_param.getAEPacs() ) ) );
 
         //desconnectem
         serverSCP.disconnect();
@@ -84,13 +72,13 @@ QString QQueryStudyThread::infoLogInitialitzedThread()
 
     missatgeLog = "thread iniciat per cercar al PACS ";
 
-    pacsLog.insert( 0 , m_param.getAELocal().c_str() );
+    pacsLog.insert( 0 , m_param.getAELocal() );
     pacsLog.append( ";" );
-    pacsLog.append( m_param.getAEPacs().c_str() );
+    pacsLog.append( m_param.getAEPacs() );
     pacsLog.append( ";" );
-    pacsLog.append( m_param.getPacsAdr().c_str() );
+    pacsLog.append( m_param.getPacsAdr() );
     pacsLog.append( ";" );
-    pacsLog.append( m_param.getPacsPort().c_str() );
+    pacsLog.append( m_param.getPacsPort() );
     pacsLog.append( ";" );
 
     missatgeLog += pacsLog;

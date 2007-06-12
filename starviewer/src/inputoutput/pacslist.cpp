@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "pacslist.h"
-#include <string>
 
 namespace udg {
 
@@ -28,7 +27,7 @@ void PacsList::nextPacs()
     i++;
 }
 
-bool PacsList::findPacs( std::string AETitle )
+bool PacsList::findPacs( QString AETitle )
 {
 
     i = m_listPacs.begin();

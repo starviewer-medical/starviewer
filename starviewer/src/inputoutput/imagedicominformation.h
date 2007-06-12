@@ -7,6 +7,8 @@
 #ifndef UDGIMAGEDICOMINFORMATION_H
 #define UDGIMAGEDICOMINFORMATION_H
 
+#include <QString>
+
 #define HAVE_CONFIG_H 1
 #include <dcfilefo.h> //obre un fitxer dicom
 
@@ -17,7 +19,6 @@ namespace udg {
 */
 
 class Status;
-class string;
 
 class ImageDicomInformation{
 public:
@@ -28,67 +29,67 @@ public:
     /** Obre el DICOM del qual s'ha d'obtenir la informació
      *         @param ruta del fitxer
      */
-    Status openDicomFile( std::string filePath );
+    Status openDicomFile( QString filePath );
 
     /** Retorna el study UID de l'imatge
      *         @param study UID de l'imatge
      */
-    std::string getStudyUID();
+    QString getStudyUID();
 
     /** Retorna el ID de l'estudi de l'imatge
      *         @param study ID de l'estudi de l'imatge
      */
-    std::string getStudyID();
+    QString getStudyID();
 
     /** Retorna el series UID de l'imatge
      *         @param series UID de l'imatge
      */
-    std::string getSeriesUID();
+    QString getSeriesUID();
 
     /** Retorna el series number de l'imatge
      *         @param series number
      */
-    std::string getSeriesNumber();
+    QString getSeriesNumber();
 
     /** Retorna la modalitat de la sèrie
      *         @param modalitat de la sèrie
      */
-    std::string getSeriesModality();
+    QString getSeriesModality();
 
     /** Retorna el nom del Procotol utilitzat
      *         @param Protocol utilitzat
      */
-    std::string getSeriesProtocolName();
+    QString getSeriesProtocolName();
 
     /** Retorna la descripció de la sèrie
      *         @param descripció de la sèrie
      */
-    std::string getSeriesDescription();
+    QString getSeriesDescription();
 
     /** Retorna la part del cos examinada
      *         @param part del cos examinada
      */
-    std::string getSeriesBodyPartExamined();
+    QString getSeriesBodyPartExamined();
 
     /** Retorna l'hora en que s'ha capturat la serie
      *         @return hora en que s'ha capturat la serie
      */
-    std::string getSeriesTime();
+    QString getSeriesTime();
 
     /** Retorna data en que s'ha capturat la sèrie
      *         @return data en que s'ha capturat la sèrie
      */
-    std::string getSeriesDate();
+    QString getSeriesDate();
 
     /** Retorna el SOPInstanceUID d'una iamtge
      * @return SOPInstanceUID de la imatge
      */
-    std::string getSOPInstanceUID();
+    QString getSOPInstanceUID();
 
     /** Retorna el SOPClassUID de la imatge
      * @return Retorna el SOPClassUID
      */
-    std::string getSOPClassUID();
+    QString getSOPClassUID();
 
     /// Destructor de la classe
     ~ImageDicomInformation();

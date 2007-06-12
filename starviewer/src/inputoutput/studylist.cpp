@@ -46,12 +46,12 @@ bool StudyList::end()
     else return m_iterator == m_listStudy.end();
 }
 
-bool StudyList::exists( std::string UID , std::string AETitlePacs )
+bool StudyList::exists( QString UID , QString AETitlePacs )
 {
     sem_wait( m_semafor );
     m_iterator = m_listStudy.begin();
 
-    if ( AETitlePacs == "" ) // si no ens passen un AETitle, al hora de mirar si un estudi existeix un estudi a la llista, no discriminem per AETitle, només per UID
+    if ( AETitlePacs.isEmpty() ) // si no ens passen un AETitle, al hora de mirar si un estudi existeix un estudi a la llista, no discriminem per AETitle, només per UID
     {
         while ( m_iterator != m_listStudy.end() )
         {

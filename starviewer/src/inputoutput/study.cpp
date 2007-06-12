@@ -4,7 +4,6 @@ namespace udg{
 
 Study::Study()
 {
-
 }
 
 Study::Study( DcmDataset * studyDcmDataset )
@@ -83,182 +82,166 @@ bool Study::operator < ( Study a )
 /*                                    SET STUDY FIELDS                                                               */
 /********************************************************************************************************************/
 
-void Study:: setPatientName( std::string name)
+void Study:: setPatientName( QString name )
 {
-    m_patientName.erase();
-    m_patientName.insert( 0 , name );
+    m_patientName = name;
 }
 
-void Study::setPatientBirthDate( std::string date )
+void Study::setPatientBirthDate( QString date )
 {
-    m_patientBirthDate.erase();
-    m_patientBirthDate.insert( 0 , date );
+    m_patientBirthDate = date;
 }
 
-void Study::setPatientId( std::string id )
+void Study::setPatientId( QString id )
 {
-    m_patientId.erase();
-    m_patientId.insert( 0 , id );
+    m_patientId = id;
 }
 
-void Study::setPatientSex( std::string sex )
+void Study::setPatientSex( QString sex )
 {
-    m_patientSex.erase();
-    m_patientSex.insert( 0 , sex );
+    m_patientSex = sex;
 }
 
-void Study::setPatientAge( std::string age )
+void Study::setPatientAge( QString age )
 {
-    m_patientAge.erase();
-    m_patientAge.insert( 0 , age );
+    m_patientAge = age;
 }
 
-void Study::setStudyId( std::string id )
+void Study::setStudyId( QString id )
 {
-    m_studyId.erase();
-    m_studyId.insert( 0 , id );
+    m_studyId = id;
 }
 
-void Study::setStudyDate( std::string date )
+void Study::setStudyDate( QString date )
 {
-    m_studyDate.erase();
-    m_studyDate.insert( 0 , date );
+    m_studyDate = date;
 }
 
-void Study::setStudyDescription( std::string desc )
+void Study::setStudyDescription( QString desc )
 {
-    m_studyDescription.erase();
-    m_studyDescription.insert( 0 , desc );
+    m_studyDescription = desc;
 }
 
-void Study::setStudyTime( std::string time )
+void Study::setStudyTime( QString time )
 {
-    m_studyTime.erase();
-    m_studyTime.insert( 0 , time );
+    m_studyTime = time;
 }
 
-void Study::setStudyModality( std::string modality )
+void Study::setStudyModality( QString modality )
 {
-    m_studyModality.erase();
-    m_studyModality.insert( 0 , modality );
+    m_studyModality = modality;
 }
 
-void Study::setStudyUID( std::string uid )
+void Study::setStudyUID( QString uid )
 {
-    m_studyUID.erase();
-    m_studyUID.insert( 0 , uid );
+    m_studyUID = uid;
 }
 
-void Study::setInstitutionName( std::string institution )
+void Study::setInstitutionName( QString institution )
 {
-    m_studyModality.erase();
-    m_studyModality.insert( 0 , institution );
+    m_studyModality = institution;
 }
 
-void Study::setAccessionNumber( std::string accession )
+void Study::setAccessionNumber( QString accession )
 {
-    m_accessionNumber.erase();
-    m_accessionNumber.insert( 0 , accession );
+    m_accessionNumber = accession;
 }
 
-void Study::setPacsAETitle( std::string title )
+void Study::setPacsAETitle( QString title )
 {
-    m_pacsAETitle.erase();
-    m_pacsAETitle.insert( 0 , title );
+    m_pacsAETitle = title;
 }
 
-void Study::setAbsPath( std::string path )
+void Study::setAbsPath( QString path )
 {
-    m_absPath.erase();
-    m_absPath.insert( 0 , path );
+    m_absPath = path;
 }
 
-void Study::setReferringPhysiciansName( std::string referringPhysiciansName )
+void Study::setReferringPhysiciansName( QString referringPhysiciansName )
 {
-    m_referringPhysiciansName.erase();
-    m_referringPhysiciansName.insert( 0 , referringPhysiciansName );
+    m_referringPhysiciansName = referringPhysiciansName;
 }
 
 /**********************************************************************************************************************/
 /*                                    GET STUDY FIELDS                                                                */
 /**********************************************************************************************************************/
 
-std::string Study:: getPatientName()
+QString Study:: getPatientName()
 {
     return m_patientName;
 }
 
-std::string Study::getPatientBirthDate()
+QString Study::getPatientBirthDate()
 {
     return m_patientBirthDate;
 }
 
-std::string Study::getPatientId()
+QString Study::getPatientId()
 {
     return m_patientId;
 }
 
-std::string Study::getPatientSex()
+QString Study::getPatientSex()
 {
     return m_patientSex;
 }
 
-std::string Study::getPatientAge()
+QString Study::getPatientAge()
 {
     return m_patientAge;
 }
 
-std::string Study::getStudyId()
+QString Study::getStudyId()
 {
     return m_studyId;
 }
 
-std::string Study::getStudyDate()
+QString Study::getStudyDate()
 {
     return m_studyDate;
 }
 
-std::string Study::getStudyTime()
+QString Study::getStudyTime()
 {
     return m_studyTime;
 }
 
-std::string Study::getStudyDescription()
+QString Study::getStudyDescription()
 {
     return m_studyDescription;
 }
 
-std::string Study::getStudyModality()
+QString Study::getStudyModality()
 {
     return m_studyModality;
 }
 
-std::string Study::getStudyUID()
+QString Study::getStudyUID()
 {
     return m_studyUID;
 }
 
-std::string Study::getInstitutionName()
+QString Study::getInstitutionName()
 {
     return m_institutionName;
 }
 
-std::string Study::getAccessionNumber()
+QString Study::getAccessionNumber()
 {
     return m_accessionNumber;
 }
 
-std::string Study::getPacsAETitle()
+QString Study::getPacsAETitle()
 {
     return m_pacsAETitle;
 }
 
-std::string Study::getReferringPhysiciansName()
+QString Study::getReferringPhysiciansName()
 {
     return m_referringPhysiciansName;
 }
 
-std::string Study::getAbsPath()
+QString Study::getAbsPath()
 {
     return m_absPath;
 }

@@ -38,34 +38,29 @@ Image::Image(DcmDataset *imageDataset)
 
 }
 
-void Image::setSOPInstanceUID( std::string UID )
+void Image::setSOPInstanceUID( QString UID )
 {
-    m_SoPUID.erase();
-    m_SoPUID.insert( 0 , UID );
+    m_SoPUID = UID;
 }
 
-void Image::setImagePath( std::string path )
+void Image::setImagePath( QString path )
 {
-    m_imagePath.erase();
-    m_imagePath.insert( 0 , path );
+    m_imagePath =  path;
 }
 
-void Image::setSeriesUID( std::string UID )
+void Image::setSeriesUID( QString UID )
 {
-    m_seriesUID.erase();
-    m_seriesUID.insert( 0 , UID );
+    m_seriesUID = UID;
 }
 
-void Image::setImageName( std::string name )
+void Image::setImageName( QString name )
 {
-    m_imageName.erase();
-    m_imageName.insert( 0 , name );
+    m_imageName = name;
 }
 
-void Image::setStudyUID( std::string UID )
+void Image::setStudyUID( QString UID )
 {
-    m_studyUID.erase();
-    m_studyUID.insert( 0 , UID );
+    m_studyUID = UID;
 }
 
 void Image::setImageNumber( int imageNum )
@@ -78,32 +73,32 @@ void Image::setImageSize( int bytes )
     m_imageSize = bytes;
 }
 
-void Image::setPacsAETitle( string AETitle )
+void Image::setPacsAETitle( QString AETitle )
 {
     m_pacsAETitle = AETitle;
 }
 
-std::string Image::getSOPInstanceUID()
+QString Image::getSOPInstanceUID()
 {
     return m_SoPUID;
 }
 
-std::string Image::getImagePath()
+QString Image::getImagePath()
 {
     return m_imagePath;
 }
 
-std::string Image::getSeriesUID()
+QString Image::getSeriesUID()
 {
     return m_seriesUID;
 }
 
-std::string Image::getImageName()
+QString Image::getImageName()
 {
     return m_imageName;
 }
 
-std::string Image::getStudyUID()
+QString Image::getStudyUID()
 {
     return m_studyUID;
 }
@@ -118,7 +113,7 @@ int Image::getImageSize()
     return m_imageSize;
 }
 
-string Image::getPacsAETitle()
+QString Image::getPacsAETitle()
 {
     return m_pacsAETitle;
 }

@@ -1,4 +1,3 @@
-#include <string>
 
 #include "dicommask.h"
 #include "status.h"
@@ -23,7 +22,7 @@ DicomMask::DicomMask()
 
     //\TODO Revisar: Establim quin és el nostre implementationVersionName ( nom de l'aplicació que rebrà el pacs que es vol connectar contra ell)
 //     DcmElement *elemImplementationVersionName = newDicomElement( DCM_ImplementationVersionName );
-//     elemImplementationVersionName->putString( implementationVersionName.c_str() );
+//     elemImplementationVersionName->putString( implementationVersionName) );
 //     m_mask->insert( elemImplementationVersionName , OFTrue );
 }
 
@@ -62,14 +61,14 @@ void DicomMask::retrieveLevel( ObjectMask object )
 
 /************************* PATIENT  *********************************************************************/
 
-Status DicomMask::setPatientId( std::string patientID )
+Status DicomMask::setPatientId( QString patientID )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_PatientID) ;
 
     retrieveLevel( StudyMask );
 
-    elem->putString( patientID.c_str() );
+    elem->putString( qPrintable(patientID) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskPatientId );
@@ -85,14 +84,14 @@ Status DicomMask::setPatientId( std::string patientID )
     return state.setStatus( correct );
 }
 
-Status DicomMask::setPatientName( std::string patientName )
+Status DicomMask::setPatientName( QString patientName )
 {
     Status state;
     DcmElement *elem = newDicomElement(DCM_PatientsName);
 
     retrieveLevel( StudyMask );
 
-    elem->putString( patientName.c_str() );
+    elem->putString( qPrintable(patientName) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskPatientName );
@@ -106,7 +105,7 @@ Status DicomMask::setPatientName( std::string patientName )
     return state.setStatus( correct );
 }
 
-Status DicomMask::setPatientBirth( std::string date )
+Status DicomMask::setPatientBirth( QString date )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_PatientsBirthDate );
@@ -115,7 +114,7 @@ Status DicomMask::setPatientBirth( std::string date )
 
     if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( error_MaskLengthDate );
 
-    elem->putString( date.c_str() );
+    elem->putString( qPrintable(date) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskPatientBirth );
@@ -130,14 +129,14 @@ Status DicomMask::setPatientBirth( std::string date )
     return state.setStatus( correct );
 }
 
-Status DicomMask::setPatientSex( std::string patientSex )
+Status DicomMask::setPatientSex( QString patientSex )
 {
     Status state;
     DcmElement *elem = newDicomElement(DCM_PatientsSex );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( patientSex.c_str() );
+    elem->putString( qPrintable(patientSex) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskPatientSex );
@@ -152,14 +151,14 @@ Status DicomMask::setPatientSex( std::string patientSex )
     return state.setStatus( correct );
 }
 
-Status DicomMask::setPatientAge( std::string patientAge )
+Status DicomMask::setPatientAge( QString patientAge )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_PatientsAge );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( patientAge.c_str() );
+    elem->putString( qPrintable(patientAge) );
 
     if ( elem->error() != EC_Normal )
     {
@@ -176,10 +175,10 @@ Status DicomMask::setPatientAge( std::string patientAge )
 }
 
 
-std::string DicomMask::getPatientId()
+QString DicomMask::getPatientId()
 {
     const char *value = NULL;
-    std::string patientID;
+    QString patientID;
 
     DcmTagKey patientIDTagKey ( DCM_PatientID );
     OFCondition ec;
@@ -191,10 +190,10 @@ std::string DicomMask::getPatientId()
     return patientID;
 }
 
-std::string DicomMask::getPatientName()
+QString DicomMask::getPatientName()
 {
     const char *value = NULL;
-    std::string patientName;
+    QString patientName;
 
     DcmTagKey patientIDTagKey ( DCM_PatientsName );
     OFCondition ec;
@@ -205,10 +204,10 @@ std::string DicomMask::getPatientName()
     return patientName;
 }
 
-std::string DicomMask::getPatientBirth()
+QString DicomMask::getPatientBirth()
 {
     const char *value = NULL;
-    std::string patientBirth;
+    QString patientBirth;
 
     DcmTagKey patientBirthTagKey ( DCM_PatientsBirthDate );
     OFCondition ec;
@@ -220,10 +219,10 @@ std::string DicomMask::getPatientBirth()
     return patientBirth;
 }
 
-std::string DicomMask::getPatientSex()
+QString DicomMask::getPatientSex()
 {
     const char *value = NULL;
-    std::string patientSex;
+    QString patientSex;
 
     DcmTagKey patientSexTagKey ( DCM_PatientsSex );
     OFCondition ec;
@@ -234,10 +233,10 @@ std::string DicomMask::getPatientSex()
     return patientSex;
 }
 
-std::string DicomMask::getPatientAge()
+QString DicomMask::getPatientAge()
 {
     const char *value = NULL;
-    std::string patientAge;
+    QString patientAge;
 
     DcmTagKey patientAgeTagKey ( DCM_PatientsAge );
     OFCondition ec;
@@ -250,14 +249,14 @@ std::string DicomMask::getPatientAge()
 
 /****************************************** STUDY *****************************************************/
 
-Status DicomMask:: setStudyId( std::string studyID )
+Status DicomMask:: setStudyId( QString studyID )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_StudyID );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( studyID.c_str() );
+    elem->putString( qPrintable(studyID) );
 
     if ( elem->error() != EC_Normal )
     {
@@ -273,7 +272,7 @@ Status DicomMask:: setStudyId( std::string studyID )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setStudyDate( std::string date )
+Status DicomMask:: setStudyDate( QString date )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_StudyDate );
@@ -283,7 +282,7 @@ Status DicomMask:: setStudyDate( std::string date )
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
     if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( error_MaskLengthDate );
 
-    elem->putString( date.c_str() );
+    elem->putString( qPrintable(date) );
 
     if ( elem->error() != EC_Normal )
     {
@@ -301,14 +300,14 @@ Status DicomMask:: setStudyDate( std::string date )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setStudyDescription( std::string desc )
+Status DicomMask:: setStudyDescription( QString desc )
 {
     Status state;
     DcmElement *elem = newDicomElement(DCM_StudyDescription);
 
     retrieveLevel( StudyMask );
 
-    elem->putString( desc.c_str() );
+    elem->putString( qPrintable(desc) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskStudyDescription);
@@ -325,14 +324,14 @@ Status DicomMask:: setStudyDescription( std::string desc )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setStudyModality( std::string modality )
+Status DicomMask:: setStudyModality( QString modality )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_ModalitiesInStudy );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( modality.c_str() );
+    elem->putString( qPrintable(modality) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskStudyModality );
@@ -348,14 +347,14 @@ Status DicomMask:: setStudyModality( std::string modality )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setStudyTime( std::string time )
+Status DicomMask:: setStudyTime( QString time )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_StudyTime );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( time.c_str() );
+    elem->putString( qPrintable(time) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskStudyTime );
@@ -371,14 +370,14 @@ Status DicomMask:: setStudyTime( std::string time )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setStudyUID( std::string studyUID )
+Status DicomMask:: setStudyUID( QString studyUID )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_StudyInstanceUID );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( studyUID.c_str() );
+    elem->putString( qPrintable(studyUID) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskStudyUID );
@@ -394,14 +393,14 @@ Status DicomMask:: setStudyUID( std::string studyUID )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setInstitutionName( std::string institution )
+Status DicomMask:: setInstitutionName( QString institution )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_InstitutionName );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( institution.c_str() );
+    elem->putString( qPrintable(institution) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskInstitutionName );
@@ -416,17 +415,17 @@ Status DicomMask:: setInstitutionName( std::string institution )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setAccessionNumber( std::string accession )
+Status DicomMask:: setAccessionNumber( QString accession )
 {
     char val[100];
     val[0] = '\0';
-    std::string value;
+    QString value;
     Status state;
     DcmElement *elem = newDicomElement( DCM_AccessionNumber );
 
     retrieveLevel( StudyMask );
 
-    elem->putString( accession.c_str() );
+    elem->putString( qPrintable(accession) );
 
     if ( elem->error() != EC_Normal )
     {
@@ -442,7 +441,7 @@ Status DicomMask:: setAccessionNumber( std::string accession )
     return state.setStatus( correct );
 }
 
-Status DicomMask::setReferringPhysiciansName( std::string physiciansName )
+Status DicomMask::setReferringPhysiciansName( QString physiciansName )
 {
     Status state;
 
@@ -450,7 +449,7 @@ Status DicomMask::setReferringPhysiciansName( std::string physiciansName )
 
     retrieveLevel( StudyMask );
 
-    elem->putString( physiciansName.c_str() );
+    elem->putString( qPrintable(physiciansName) );
 
     if ( elem->error() != EC_Normal )
     {
@@ -467,10 +466,10 @@ Status DicomMask::setReferringPhysiciansName( std::string physiciansName )
 
 /***************************************************************   GET **********************************************/
 
-std::string DicomMask::getStudyUID()
+QString DicomMask::getStudyUID()
 {
     const char * value =NULL;
-    std::string studyUID;
+    QString studyUID;
 
     DcmTagKey studyUIDTagKey ( DCM_StudyInstanceUID );
     OFCondition ec;
@@ -481,10 +480,10 @@ std::string DicomMask::getStudyUID()
     return studyUID;
 }
 
-std::string DicomMask::getStudyId()
+QString DicomMask::getStudyId()
 {
     const char *value = NULL;
-    std::string studyID;
+    QString studyID;
 
     DcmTagKey studyIDTagKey ( DCM_StudyID );
     OFCondition ec;
@@ -495,10 +494,10 @@ std::string DicomMask::getStudyId()
     return studyID;
 }
 
-std::string DicomMask::getStudyDate()
+QString DicomMask::getStudyDate()
 {
     const char * value = NULL;
-    std::string studyDate;
+    QString studyDate;
 
     DcmTagKey studyDateTagKey ( DCM_StudyDate );
     OFCondition ec;
@@ -509,10 +508,10 @@ std::string DicomMask::getStudyDate()
     return studyDate;
 }
 
-std::string DicomMask::getStudyDescription()
+QString DicomMask::getStudyDescription()
 {
     const char *value = NULL;
-    std::string studyDescription;
+    QString studyDescription;
 
     DcmTagKey studyDescriptionTagKey ( DCM_StudyDescription );
     OFCondition ec;
@@ -523,10 +522,10 @@ std::string DicomMask::getStudyDescription()
     return studyDescription;
 }
 
-std::string DicomMask::getStudyTime()
+QString DicomMask::getStudyTime()
 {
     const char *value = NULL;
-    std::string studyTime;
+    QString studyTime;
 
     DcmTagKey studyTimeTagKey ( DCM_StudyTime );
     OFCondition ec;
@@ -537,10 +536,10 @@ std::string DicomMask::getStudyTime()
     return studyTime;
 }
 
-std::string DicomMask::getStudyModality()
+QString DicomMask::getStudyModality()
 {
     const char *value = NULL;
-    std::string studyModality;
+    QString studyModality;
 
     DcmTagKey studyModalityTagKey ( DCM_ModalitiesInStudy );
     OFCondition ec;
@@ -551,10 +550,10 @@ std::string DicomMask::getStudyModality()
     return studyModality;
 }
 
-std::string DicomMask::getAccessionNumber()
+QString DicomMask::getAccessionNumber()
 {
     const char *value = NULL;
-    std::string accessionNumber;
+    QString accessionNumber;
 
     DcmTagKey accessionNumberTagKey ( DCM_AccessionNumber );
     OFCondition ec;
@@ -565,10 +564,10 @@ std::string DicomMask::getAccessionNumber()
     return accessionNumber;
 }
 
-std::string DicomMask::getInstitutionName()
+QString DicomMask::getInstitutionName()
 {
     const char *value = NULL;
-    std::string institutionName;
+    QString institutionName;
 
     DcmTagKey institutionNameTagKey (DCM_InstitutionName);
     OFCondition ec;
@@ -579,10 +578,10 @@ std::string DicomMask::getInstitutionName()
     return institutionName;
 }
 
-std::string DicomMask::getReferringPhysiciansName()
+QString DicomMask::getReferringPhysiciansName()
 {
     const char * value = NULL;
-    std::string referringPhysiciansName;
+    QString referringPhysiciansName;
 
     DcmTagKey referringPhysiciansNameTagKey ( DCM_ReferringPhysiciansName );
     OFCondition ec;
@@ -595,14 +594,14 @@ std::string DicomMask::getReferringPhysiciansName()
 
 /************************************** SERIES *************************************************/
 
-Status DicomMask:: setSeriesNumber( std::string seriesNumber )
+Status DicomMask:: setSeriesNumber( QString seriesNumber )
 {
     DcmElement *elem = newDicomElement( DCM_SeriesNumber );
     Status state;
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( seriesNumber.c_str() );
+    elem->putString( qPrintable(seriesNumber) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskSeriesNumber );
@@ -618,7 +617,7 @@ Status DicomMask:: setSeriesNumber( std::string seriesNumber )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesDate( std::string date )
+Status DicomMask:: setSeriesDate( QString date )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_SeriesDate );
@@ -628,7 +627,7 @@ Status DicomMask:: setSeriesDate( std::string date )
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
     if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( error_MaskLengthDate );
 
-    elem->putString( date.c_str() );
+    elem->putString( qPrintable(date) );
     if ( elem->error() != EC_Normal )
     {
        return state.setStatus( errorMaskSeriesDate);
@@ -642,14 +641,14 @@ Status DicomMask:: setSeriesDate( std::string date )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesDescription( std::string desc )
+Status DicomMask:: setSeriesDescription( QString desc )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_SeriesDescription );
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( desc.c_str() );
+    elem->putString( qPrintable(desc) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( errorMaskSeriesDescription );
@@ -664,14 +663,14 @@ Status DicomMask:: setSeriesDescription( std::string desc )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesModality( std::string modality )
+Status DicomMask:: setSeriesModality( QString modality )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_Modality );
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( modality.c_str() );
+    elem->putString( qPrintable(modality) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskSeriesModality );
@@ -686,7 +685,7 @@ Status DicomMask:: setSeriesModality( std::string modality )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesTime( std::string time )
+Status DicomMask:: setSeriesTime( QString time )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_SeriesTime );
@@ -696,7 +695,7 @@ Status DicomMask:: setSeriesTime( std::string time )
     //la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
     if ( time.length() != 4 && time.length() != 5 && time.length() != 9 && time.length() !=0 ) return state.setStatus( error_MaskLengthTime );
 
-    elem->putString( time.c_str() );
+    elem->putString( qPrintable(time) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskSeriesTime );
@@ -711,14 +710,14 @@ Status DicomMask:: setSeriesTime( std::string time )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesUID( std::string seriesUID )
+Status DicomMask:: setSeriesUID( QString seriesUID )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_SeriesInstanceUID );
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( seriesUID.c_str() );
+    elem->putString( qPrintable(seriesUID) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskSeriesUID );
@@ -733,14 +732,14 @@ Status DicomMask:: setSeriesUID( std::string seriesUID )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesOperator( std::string name )
+Status DicomMask:: setSeriesOperator( QString name )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_OperatorsName );
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( name.c_str() );
+    elem->putString( qPrintable(name) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskOperatorName );
@@ -755,14 +754,14 @@ Status DicomMask:: setSeriesOperator( std::string name )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesBodyPartExaminated( std::string part )
+Status DicomMask:: setSeriesBodyPartExaminated( QString part )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_BodyPartExamined );
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( part.c_str() );
+    elem->putString( qPrintable(part) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskBodyPartExaminated );
@@ -777,14 +776,14 @@ Status DicomMask:: setSeriesBodyPartExaminated( std::string part )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSeriesProtocolName( std::string name )
+Status DicomMask:: setSeriesProtocolName( QString name )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_ProtocolName );
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( name.c_str() );
+    elem->putString( qPrintable(name) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskProtocolName );
@@ -824,7 +823,7 @@ Status DicomMask::setRequestAttributeSequence( QString requestedProcedureID, QSt
     return state.setStatus( correct );
 }
 
-Status DicomMask::setPPSStartDate( std::string startDate )
+Status DicomMask::setPPSStartDate( QString startDate )
 {
     Status state;
 
@@ -832,7 +831,7 @@ Status DicomMask::setPPSStartDate( std::string startDate )
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( startDate.c_str() );
+    elem->putString( qPrintable(startDate) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskInsertTag );
@@ -847,7 +846,7 @@ Status DicomMask::setPPSStartDate( std::string startDate )
     return state.setStatus( correct );
 }
 
-Status DicomMask::setPPStartTime( std::string startTime )
+Status DicomMask::setPPStartTime( QString startTime )
 {
     Status state;
 
@@ -855,7 +854,7 @@ Status DicomMask::setPPStartTime( std::string startTime )
 
     retrieveLevel( SeriesMask );
 
-    elem->putString( startTime.c_str() );
+    elem->putString( qPrintable(startTime) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskInsertTag );
@@ -872,10 +871,10 @@ Status DicomMask::setPPStartTime( std::string startTime )
 
 /************************************************ GET **************************************************************/
 
-std::string DicomMask::getSeriesNumber()
+QString DicomMask::getSeriesNumber()
 {
     const char *value = NULL;
-    std::string seriesNumber;
+    QString seriesNumber;
 
     DcmTagKey seriesNumberTagKey (DCM_SeriesNumber);
     OFCondition ec;
@@ -886,10 +885,10 @@ std::string DicomMask::getSeriesNumber()
     return seriesNumber;
 }
 
-std::string DicomMask::getSeriesDate()
+QString DicomMask::getSeriesDate()
 {
     const char *value = NULL;
-    std::string seriesDate;
+    QString seriesDate;
 
     DcmTagKey seriesDateTagKey ( DCM_SeriesDate );
     OFCondition ec;
@@ -900,10 +899,10 @@ std::string DicomMask::getSeriesDate()
     return seriesDate;
 }
 
-std::string DicomMask::getSeriesTime()
+QString DicomMask::getSeriesTime()
 {
     const char *value = NULL;
-    std::string seriesTime;
+    QString seriesTime;
 
     DcmTagKey seriesTimeTagKey ( DCM_SeriesTime );
     OFCondition ec;
@@ -914,10 +913,10 @@ std::string DicomMask::getSeriesTime()
     return seriesTime;
 }
 
-std::string DicomMask::getSeriesDescription()
+QString DicomMask::getSeriesDescription()
 {
     const char *value = NULL;
-    std::string seriesDescription;
+    QString seriesDescription;
 
     DcmTagKey seriesDescriptionTagKey ( DCM_SeriesDescription );
     OFCondition ec;
@@ -928,10 +927,10 @@ std::string DicomMask::getSeriesDescription()
     return seriesDescription;
 }
 
-std::string DicomMask::getSeriesModality()
+QString DicomMask::getSeriesModality()
 {
     const char *value = NULL;
-    std::string seriesModality;
+    QString seriesModality;
 
     DcmTagKey seriesModalityTagKey ( DCM_Modality );
     OFCondition ec;
@@ -942,10 +941,10 @@ std::string DicomMask::getSeriesModality()
     return seriesModality;
 }
 
-std::string DicomMask::getSeriesOperator()
+QString DicomMask::getSeriesOperator()
 {
     const char *value = NULL;
-    std::string operatorsName;
+    QString operatorsName;
 
     DcmTagKey operatorsNameTagKey ( DCM_OperatorsName );
     OFCondition ec;
@@ -956,10 +955,10 @@ std::string DicomMask::getSeriesOperator()
     return operatorsName;
 }
 
-std::string DicomMask::getSeriesBodyPartExaminated()
+QString DicomMask::getSeriesBodyPartExaminated()
 {
     const char *value = NULL;
-    std::string bodyPartExaminated;
+    QString bodyPartExaminated;
 
     DcmTagKey bodyPartExaminatedTagKey ( DCM_BodyPartExamined );
     OFCondition ec;
@@ -970,10 +969,10 @@ std::string DicomMask::getSeriesBodyPartExaminated()
     return bodyPartExaminated;
 }
 
-std::string DicomMask::getSeriesProtocolName()
+QString DicomMask::getSeriesProtocolName()
 {
     const char *value = NULL;
-    std::string ProtocolName;
+    QString ProtocolName;
 
     DcmTagKey ProtocolNameTagKey ( DCM_ProtocolName );
     OFCondition ec;
@@ -984,10 +983,10 @@ std::string DicomMask::getSeriesProtocolName()
     return ProtocolName;
 }
 
-std::string DicomMask::getSeriesUID()
+QString DicomMask::getSeriesUID()
 {
     const char *value = NULL;
-    std::string seriesUID;
+    QString seriesUID;
 
     DcmTagKey seriesUIDTagKey ( DCM_SeriesInstanceUID );
     OFCondition ec;
@@ -998,10 +997,10 @@ std::string DicomMask::getSeriesUID()
     return seriesUID;
 }
 
-std::string DicomMask::getRequestedProcedureID()
+QString DicomMask::getRequestedProcedureID()
 {
     const char * value = NULL;
-    std::string requestedProcedureID;
+    QString requestedProcedureID;
     OFCondition ec;
 
     DcmSequenceOfItems *requestAttributesSequence;
@@ -1017,10 +1016,10 @@ std::string DicomMask::getRequestedProcedureID()
     return requestedProcedureID;
 }
 
-std::string DicomMask::getScheduledProcedureStepID()
+QString DicomMask::getScheduledProcedureStepID()
 {
     const char * value = NULL;
-    std::string procedureStepID;
+    QString procedureStepID;
     OFCondition ec;
 
     DcmSequenceOfItems *requestAttributesSequence;
@@ -1036,10 +1035,10 @@ std::string DicomMask::getScheduledProcedureStepID()
     return procedureStepID;
 }
 
-std::string DicomMask::getPPSStartDate()
+QString DicomMask::getPPSStartDate()
 {
     const char * value =NULL;
-    std::string startDate;
+    QString startDate;
 
     DcmTagKey tagKey ( DCM_PerformedProcedureStepStartDate );
     OFCondition ec;
@@ -1050,10 +1049,10 @@ std::string DicomMask::getPPSStartDate()
     return startDate;
 }
 
-std::string DicomMask::getPPSStartTime()
+QString DicomMask::getPPSStartTime()
 {
     const char * value =NULL;
-    std::string startTime;
+    QString startTime;
 
     DcmTagKey tagKey ( DCM_PerformedProcedureStepStartTime );
     OFCondition ec;
@@ -1066,14 +1065,14 @@ std::string DicomMask::getPPSStartTime()
 
 /********************************************** IMAGE **************************************/
 
-Status DicomMask:: setImageNumber( std::string imgNum )
+Status DicomMask:: setImageNumber( QString imgNum )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_InstanceNumber );
 
     retrieveLevel( ImageMask );
 
-    elem->putString( imgNum.c_str() );
+    elem->putString( qPrintable(imgNum) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskInstanceNumber );
@@ -1087,14 +1086,14 @@ Status DicomMask:: setImageNumber( std::string imgNum )
     return state.setStatus( correct );
 }
 
-Status DicomMask:: setSOPInstanceUID( std::string SOPInstanceUID )
+Status DicomMask:: setSOPInstanceUID( QString SOPInstanceUID )
 {
     Status state;
     DcmElement *elem = newDicomElement( DCM_SOPInstanceUID );
 
     retrieveLevel( ImageMask );
 
-    elem->putString( SOPInstanceUID.c_str() );
+    elem->putString( qPrintable(SOPInstanceUID) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( error_MaskInsertTag );
@@ -1109,10 +1108,10 @@ Status DicomMask:: setSOPInstanceUID( std::string SOPInstanceUID )
     return state.setStatus( correct );
 }
 
-std::string DicomMask::getImageNumber()
+QString DicomMask::getImageNumber()
 {
     const char *value = NULL;
-    std::string imageNumber;
+    QString imageNumber;
 
     DcmTagKey instanceNumberTagKey ( DCM_InstanceNumber );
     OFCondition ec;
@@ -1123,10 +1122,10 @@ std::string DicomMask::getImageNumber()
     return imageNumber;
 }
 
-std::string DicomMask::getSOPInstanceUID()
+QString DicomMask::getSOPInstanceUID()
 {
     const char * value = NULL;
-    std::string SOPInstanceUID;
+    QString SOPInstanceUID;
 
     DcmTagKey SOPInstanceUIDTagKey ( DCM_SOPInstanceUID );
     OFCondition ec;
@@ -1137,10 +1136,10 @@ std::string DicomMask::getSOPInstanceUID()
     return SOPInstanceUID;
 }
 
-std::string DicomMask::getRetrieveLevel()
+QString DicomMask::getRetrieveLevel()
 {
     const char * value = NULL;
-    std::string queryRetrieve;
+    QString queryRetrieve;
 
     DcmTagKey tagKey ( DCM_QueryRetrieveLevel );
     OFCondition ec;

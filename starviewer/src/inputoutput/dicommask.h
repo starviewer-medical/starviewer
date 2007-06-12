@@ -36,7 +36,6 @@
 namespace udg{
 
 class Status;
-class string;
 
 class DicomMask
 {
@@ -49,7 +48,7 @@ public:
      * @param Name of the patient to search.
      * @return state of the method
      */
-    Status setPatientName(std::string);
+    Status setPatientName( QString );
 
     /** Aquest mètode especifica la data de naixement del pacient amb la que s'han de cercar els estudis. El format és DDMMYYYY
      * Si el paràmetre no té valor, busca per totes les dates
@@ -60,31 +59,31 @@ public:
      * @param  Study's Data de naixement del pacient
      * @return state of the method
      */
-    Status setPatientBirth(std::string date);
+    Status setPatientBirth(QString date);
 
     /** This action especified that in the search we want the Patient's sex
      * @param Patient's sex of the patient to search.
      * @return state of the method
      */
-    Status setPatientSex(std::string);
+    Status setPatientSex(QString);
 
     /** This action especified that in the search we want the Patient's ID
      * @param   patientID Patient's ID of the patient to search.
      * @return state of the method
      */
-    Status setPatientId(std::string);
+    Status setPatientId(QString);
 
     /** This action especified that in the search we want the Patient's Age
      * @param  Patient's age of the patient to search.
      * @return state of the method
      */
-    Status setPatientAge(std::string);
+    Status setPatientAge(QString);
 
     /** This action especified that in the search we want the Study's Id
      * @param  Study's Id of the study to search.
      * @return state of the method
      */
-    Status setStudyId(std::string);
+    Status setStudyId(QString);
 
     /** Aquest mètode especifica la data amb la que s'han de cercar els estudis. El format és DDMMYYYY
      * Si el paràmetre no té valor, busca per totes les dates
@@ -95,19 +94,19 @@ public:
      * @param  Study's date of the study to search.
      * @return state of the method
      */
-    Status setStudyDate(std::string date);
+    Status setStudyDate(QString date);
 
     /** This action especified that in the search we want the Study's description
      *  @param Study's description of the study to search.
      *  @return state of the method
      */
-    Status setStudyDescription(std::string);
+    Status setStudyDescription(QString);
 
     /** This action especified that in the search we want the Study's modality
      * @param Study's modality the study to search.
      * @return state of the method
      */
-    Status setStudyModality(std::string);
+    Status setStudyModality(QString);
 
     /** Especifica l'hora de l'estudi a buscar, les hores es passen en format HHMM
      *         Si es buit busca per qualsevol hora.
@@ -118,108 +117,108 @@ public:
      * @param  Hora de l'estudi
      * @retun estat del mètode
      */
-    Status setStudyTime(std::string);
+    Status setStudyTime(QString);
 
     /** This action especified that in the search we want the Study's instance UID
      * @param Study's instance UID the study to search.
      * @return state of the method
      */
-    Status setStudyUID(std::string);
+    Status setStudyUID(QString);
 
     /** This action especified that in the search we want the Institution name
      * @param Institution name of the study to search.
      * @return state of the method
      */
-    Status setInstitutionName(std::string);
+    Status setInstitutionName(QString);
 
     /** This action especified that in the search we want the Accession Number
      * @param Accession Number of the study to search.
      * @return state of the method
      */
-    Status setAccessionNumber(std::string);
+    Status setAccessionNumber(QString);
 
     /** Establei el ReferringPhysiciansName
      * @param physiciansName
      * @return estat del mètode
      */
-    Status setReferringPhysiciansName( std::string physiciansName );
+    Status setReferringPhysiciansName( QString physiciansName );
 
     /** Retorna de la màscara l'estudi UID
      * @param mask [in] màscara de la cerca
      * @return   Estudi UID que cerquem
      */
-    std::string getStudyUID();
+    QString getStudyUID();
 
     /** Retorna el Id del pacient a buscar
      * @return   ID del pacient
      */
-    std::string getPatientId();
+    QString getPatientId();
 
     /** Retorna el nom del pacient
      * @return Nom del pacient
      */
-    std::string getPatientName();
+    QString getPatientName();
 
     /** Retorna la data naixement
      * @return Data de naixament del pacient
      */
-    std::string getPatientBirth();
+    QString getPatientBirth();
 
     /** Retorna l'edat de pacient
      * @return edat del pacient
      */
-    std::string getPatientAge();
+    QString getPatientAge();
 
     /** Retorna el sexe del pacient
      * @return sexe del pacient
      */
-    std::string getPatientSex();
+    QString getPatientSex();
 
     /** Retorna Id de l'estudi
      * @return   ID de l'estudi
      */
-    std::string getStudyId();
+    QString getStudyId();
 
     /** Retorna la data de l'estudi
      * @return   Data de l'estudi
      */
-    std::string getStudyDate();
+    QString getStudyDate();
 
     /** Retorna la descripció de l'estudi
      * @return   descripció de l'estudi
      */
-    std::string getStudyDescription();
+    QString getStudyDescription();
 
     /** Retorna de la modalitat de l'estudi
      * @return   Modalitat de l'estudi
      */
-    std::string getStudyModality();
+    QString getStudyModality();
 
     /** Retorna l'hora de l'estudi
      * @return   hora de l'estudi
      */
-    std::string getStudyTime();
+    QString getStudyTime();
 
     /** Retorna el accession number de l'estudi
      * @return   accession number de l'estudi
      */
-    std::string getAccessionNumber();
+    QString getAccessionNumber();
 
     /** Retorna el nom de l'institució on s'ha realitzat l'estudi
      * @return   Nom de l'institucio
      */
-    std::string getInstitutionName();
+    QString getInstitutionName();
 
     /** retorna el ReferringPhysiciansName
       * @return ReferringPhysiciansName
       */
-    std:: string getReferringPhysiciansName();
+    QString getReferringPhysiciansName();
 
     /** This action especified in the search which series number we want to match
      * @param seriesNumber' Number of the series to search. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesNumber(std:: string );
+    Status setSeriesNumber(QString );
 
     /** Aquest mètode especifica per quina data s'ha de buscar la serie. El format es YYYYMMDD
      * Si passem una data sola, per exemple 20040505 només buscara sèries d'aquell dia
@@ -229,7 +228,7 @@ public:
      * @param series data a cercar la sèrie
      * @return estat del mètode
      */
-    Status setSeriesDate(std::string date);
+    Status setSeriesDate(QString date);
 
      /** Especifica l'hora de la serie a buscar, les hores es passen en format HHMM
       *         Si es buit busca per qualsevol hora.
@@ -240,43 +239,43 @@ public:
       * @param Series Hora de la serie
       * @retun estat del mètode
       */
-    Status setSeriesTime(std::string);
+    Status setSeriesTime(QString);
 
     /** This action especified that in the search we want the seriess description
      * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
      * @return estat del mètode
      */
-    Status setSeriesDescription(std::string);
+    Status setSeriesDescription(QString);
 
     /** This action especified that in the search we want the series modality
      * @param series modality the study to search. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesModality(std::string);
+    Status setSeriesModality(QString);
 
     /** This action especified that in the search we want to query the operator's name
      * @param Operator's name. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesOperator(std::string);
+    Status setSeriesOperator(QString);
 
     /** This action especified that in the search we want to query the body part examinated
      * @param Body Part. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesBodyPartExaminated(std::string);
+    Status setSeriesBodyPartExaminated(QString);
 
     /** This action especified that in the search we want to query the Protocol Name
      * @param Protocol Name. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesProtocolName(std::string);
+    Status setSeriesProtocolName(QString);
 
      /** This action especified that in the search we want the seriess description
      * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
      * @return estat del mètode
      */
-    Status setSeriesUID(std::string date);
+    Status setSeriesUID(QString date);
 
     /** Estableix la seqüència per cercar per la requested atribute sequence.
      * RequestAtrributeSequence està format pel RequestedProcedureID i el procedureStepID
@@ -290,104 +289,104 @@ public:
      * @param startDate Perfomed Procedure Step Start date pel qual cercar
      * @return estat del mètode
      */
-    Status setPPSStartDate( std::string startDate );
+    Status setPPSStartDate( QString startDate );
 
     /** Estableix la màscara de cerca del Perfomed Procedure Step Start Time
      * @param startTime Perfomed Procedure Step Start Time pel qual cercar
      * @return estat del mètode
      */
-    Status setPPStartTime( std:: string startTime );
+    Status setPPStartTime( QString startTime );
 
     /** Retorna el series Number
      * @return   series Number
      */
-    std::string getSeriesNumber();
+    QString getSeriesNumber();
 
     /** Retorna la data de la sèrie
      * @return   data de la sèrie
      */
-    std::string getSeriesDate();
+    QString getSeriesDate();
 
     /** Retorna l'hora de la sèrie
      * @return   hora de la sèrie
      */
-    std::string getSeriesTime();
+    QString getSeriesTime();
 
     /** Retorna la descripcio de la sèrie
      * @return descripcio de la serie
      */
-    std::string getSeriesDescription();
+    QString getSeriesDescription();
 
     /** Retorna la modalitat de la sèrie
      * @return modalitat de la sèrie
      */
-    std::string getSeriesModality();
+    QString getSeriesModality();
 
     /** Retorna l'operador que captat la serie
      * @return operdor
      */
-    std::string getSeriesOperator();
+    QString getSeriesOperator();
 
     /** Retorna la part del cos examinada en la serie
      * @return part del cos examinada
      */
-    std::string getSeriesBodyPartExaminated();
+    QString getSeriesBodyPartExaminated();
 
     /** Retorna el nom del protocol utiltizat la serie
      * @return nom del protocol utilitzat a la seire
      */
-    std::string getSeriesProtocolName();
+    QString getSeriesProtocolName();
 
     /** Retorna l'uid de la serie
      * @return SeriesUID
      */
-    std::string getSeriesUID();
+    QString getSeriesUID();
 
     /** retorna el Requested procedures ID
      * @return requesta procedure ID
      */
-    std::string getRequestedProcedureID();
+    QString getRequestedProcedureID();
 
     /** retorna el scheduled procedure step ID
      * @return scheduled procedure step ID
      */
-    std::string getScheduledProcedureStepID();
+    QString getScheduledProcedureStepID();
 
     /** retorna el Perfomed Procedure Step Start date
      * @return Perfomed Procedure Step Start date
      */
-    std::string getPPSStartDate();
+    QString getPPSStartDate();
 
     /** retorna el Perfomed Procedure Step Start Time
      * @return Perfomed Procedure Step Start Time
      */
-    std::string getPPSStartTime();
+    QString getPPSStartTime();
 
     /** set the StudyId of the images
      * @param   Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
      * @return The state of the action
      */
-    Status setImageNumber( std::string );
+    Status setImageNumber( QString );
 
     /** Estableix el instance UID de l'image
      * @param SOPIntanceUID Instance UID de l'imatge
      * @return estat del mètode
      */
-    Status setSOPInstanceUID( std::string SOPInstanceUID);
+    Status setSOPInstanceUID( QString SOPInstanceUID);
 
     /** Retorna el número d'imatge
       * @return número d'imatge
       */
-    std::string getImageNumber();
+    QString getImageNumber();
 
     /** retorna el SOPInstance UID de l'imatge
      * @return SOPInstance UID de l'imatge
      */
-    std::string getSOPInstanceUID();
+    QString getSOPInstanceUID();
 
     /** retorna a quin nivell es fa la màscara
      */
-    std::string getRetrieveLevel();
+    QString getRetrieveLevel();
 
     DcmDataset* getDicomMask();
 

@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <string>
 #include <sqlite3.h>
 
 #include "cachetools.h"
@@ -23,7 +22,7 @@ Status CacheTools::compactCachePacs()
 {
     int stateDatabase;
     Status state;
-    std::string sql;
+    QString sql;
     DatabaseConnection *databaseConnection = DatabaseConnection::getDatabaseConnection();
 
     if ( !databaseConnection->connected() )
@@ -34,7 +33,7 @@ Status CacheTools::compactCachePacs()
     sql.insert( 0 , "vacuum" );//amb l'acció vacuum es compacta la base de dades
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , sql.c_str() , 0 , 0 , 0 );
+    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , qPrintable(sql) , 0 , 0 , 0 );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );

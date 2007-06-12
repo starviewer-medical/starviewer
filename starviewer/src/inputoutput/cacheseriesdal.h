@@ -7,7 +7,7 @@
 #ifndef UDGCACHESERIESDAL_H
 #define UDGCACHESERIESDAL_H
 
-class string;
+
 class Status;
 
 namespace udg {
@@ -40,7 +40,7 @@ public:
     /** Esborra les series que tinguin el studyUID passat per paràmetre
       * @param studyUID StudyUID de les imatges a esborrar
       */
-    Status deleteSeries ( std::string studyUID );
+    Status deleteSeries ( QString studyUID );
 
     ~CacheSeriesDAL();
 
@@ -50,7 +50,7 @@ private:
      * @param mask màscara de cerca
      * @return sentència sql
      */
-    std::string buildSqlQuerySeries( DicomMask *dicomMask );
+    QString buildSqlQuerySeries( DicomMask *dicomMask );
 
 };
 
