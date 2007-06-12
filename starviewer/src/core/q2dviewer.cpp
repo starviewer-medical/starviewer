@@ -2199,7 +2199,7 @@ void Q2DViewer::updateDisplayExtent()
                         .arg( m_maxSliceValue +1 )
                         .arg( value + 1 )
                         .arg( m_numberOfPhases );
-                    sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
+                    sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
                     if( value >=  m_viewer->GetSliceMax() )
                         value = 0;
                     else
@@ -2251,7 +2251,7 @@ void Q2DViewer::updateDisplayExtent()
                     .arg( value + 1 )
                     .arg( m_maxSliceValue + 1 );
                 }
-                sliceAnnotation->SetText( 0 , lowerLeftText.toAscii() );
+                sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
 
                 if( value >=  m_viewer->GetSliceMax() )
                     value = 0;

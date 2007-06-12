@@ -26,9 +26,9 @@ class ZoomTool : public Tool
 Q_OBJECT
 public:
     enum { NONE , ZOOMING };
-    ZoomTool( Q2DViewer *viewer , QObject *parent = 0, const char *name = 0 );
-    ZoomTool( Q3DViewer *viewer , QObject *parent = 0, const char *name = 0 );
-    ZoomTool( Q3DMPRViewer *viewer , QObject *parent = 0, const char *name = 0 );
+    ZoomTool( Q2DViewer *viewer , QObject *parent = 0, QString name = 0 );
+    ZoomTool( Q3DViewer *viewer , QObject *parent = 0, QString name = 0 );
+    ZoomTool( Q3DMPRViewer *viewer , QObject *parent = 0, QString name = 0 );
 
     ~ZoomTool();
 

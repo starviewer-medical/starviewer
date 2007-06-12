@@ -10,8 +10,6 @@
 #include "input.h"
 #include "volumesourceinformation.h"
 #include "logging.h"
-// std
-#include <iostream> // pel cerr de les excepcions i printTag()
 //ITK
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
@@ -52,14 +50,14 @@ Input::~Input()
     delete m_volumeData;
 }
 
-int Input::openFile( const char * fileName )
+int Input::openFile( QString fileName )
 {
     ProgressCommand::Pointer observer = ProgressCommand::New();
     m_reader->AddObserver( itk::ProgressEvent(), observer );
 
     int errorCode = NoError;
 
-    m_reader->SetFileName( fileName );
+    m_reader->SetFileName( qPrintable(fileName) );
     emit progress(0);
     try
     {
@@ -93,10 +91,10 @@ int Input::openFile( const char * fileName )
     return errorCode;
 }
 
-int Input::readFiles( std::vector< std::string > filenames )
+int Input::readFiles( QStringList filenames )
 {
     int errorCode = NoError;
-    if( filenames.empty() )
+    if( filenames.isEmpty() )
     {
         WARN_LOG( "La llista de noms de fitxer per carregar és buida" );
         errorCode = InvalidFileName;
@@ -107,7 +105,11 @@ int Input::readFiles( std::vector< std::string > filenames )
     {
         // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
         m_seriesReader->SetImageIO( m_gdcmIO );
-        m_seriesReader->SetFileNames( filenames );
+
+        // convertim la QStringList al format std::vector< std::string > que s'esperen les itk
+        std::vector< std::string > stlFilenames = qstringListToStdVectorOfStdString( filenames );
+
+        m_seriesReader->SetFileNames( stlFilenames );
 
         emit progress( 0 );
 
@@ -118,7 +120,7 @@ int Input::readFiles( std::vector< std::string > filenames )
         catch ( itk::ExceptionObject & e )
         {
             ERROR_LOG( qPrintable( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
-                .arg( QFileInfo( filenames[0].c_str() ).dir().path() )
+                .arg( QFileInfo( filenames.at(0) ).dir().path() )
                 .arg( e.GetDescription() )
                 ) );
             errorCode = SizeMismatch;
@@ -139,39 +141,23 @@ int Input::readFiles( std::vector< std::string > filenames )
     }
     else
     {
-        this->openFile( filenames[0].c_str() );
+        this->openFile( filenames.at(0) );
     }
     return errorCode;
 }
 
-int Input::readSeries( const char *dirPath )
+int Input::readSeries( QString dirPath )
 {
 //     SeriesProgressCommand::Pointer observer = SeriesProgressCommand::New();
 //     m_seriesReader->AddObserver( itk::ProgressEvent(), observer );
 
-    m_namesGenerator->SetInputDirectory( dirPath );
+    m_namesGenerator->SetInputDirectory( qPrintable(dirPath) );
 
     const SeriesReaderType::FileNamesContainer &filenames = m_namesGenerator->GetInputFileNames();
-    return readFiles( filenames );
+    return readFiles( stdVectorOfStdStringToQStringList( filenames ) );
 }
 
-void Input::printTag( std::string tag , std::string name )
-{
-    std::string tagValue;
-    if( this->queryTagAsString( tag , tagValue ) )
-    {
-        std::cout << name << " ( " << tag <<  ") ";
-        std::cout << " is: " << tagValue << std::endl;
-    }
-    else
-    {
-        std::ostringstream message;
-        message << "Tag" << tag << "(" << name << ")" << " not found in the DICOM header";
-        WARN_LOG( qPrintable( "Tag " + QString::fromStdString(tag) + "(" + QString::fromStdString(name) + ")" + " not found in the DICOM header" ) );
-    }
-}
-
-bool Input::queryTagAsString( std::string tag , std::string &result )
+bool Input::queryTagAsString( QString tag , QString &result )
 {
     bool ok = true;
     typedef itk::MetaDataDictionary   DictionaryType;
@@ -182,7 +168,7 @@ bool Input::queryTagAsString( std::string tag , std::string &result )
     DictionaryType::ConstIterator itr = dictionary.Begin();
     DictionaryType::ConstIterator end = dictionary.End();
 
-    DictionaryType::ConstIterator tagItr = dictionary.Find( tag );
+    DictionaryType::ConstIterator tagItr = dictionary.Find( tag.toStdString() );
 
     if( tagItr == end )
     {
@@ -194,15 +180,15 @@ bool Input::queryTagAsString( std::string tag , std::string &result )
 
         if( entryvalue )
         {
-            result = entryvalue->GetMetaDataObjectValue();
+            result = entryvalue->GetMetaDataObjectValue().c_str();
         }
     }
     return ok;
 }
 
-char *Input::getOrientation( double vector[3] )
+QString Input::getOrientation( double vector[3] )
 {
-        char *orientation=new char[4];
+        char *orientation = new char[4];
         char *optr = orientation;
         *optr='\0';
 
@@ -235,18 +221,17 @@ char *Input::getOrientation( double vector[3] )
             else break;
             *optr='\0';
         }
-        return orientation;
+        return QString( orientation );
 }
 
 void Input::setVolumeInformation()
 {
     // creem l'string de l'orientació del pacient
-    std::string value;
+    QString value;
     if( queryTagAsString( "0020|0020" , value ) )
     {
-        QString str = QString::fromStdString( value );
-        str.replace( QString( "\\" ) , QString( "," ) );
-        m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( qPrintable( str ) );
+        value.replace( QString( "\\" ) , QString( "," ) );
+        m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( value );
     }
     else
     {
@@ -255,8 +240,7 @@ void Input::setVolumeInformation()
         {
             // passem de l'string als valors double
             double dirCosinesValuesX[3] , dirCosinesValuesY[3] , dirCosinesValuesZ[3];
-            QString dirCosines = QString::fromStdString( value );
-            QStringList list = dirCosines.split( "\\" );
+            QStringList list = value.split( "\\" );
             if( list.size() == 6 )
             {
                 for ( int i = 0; i < 3; i++ )
@@ -282,7 +266,7 @@ void Input::setVolumeInformation()
             else
             {
                 // hi ha algun error en l'string ja que han de ser 2 parells de 3 valors
-                DEBUG_LOG( qPrintable( "No s'ha pogut determinar l'orientació del pacient (Tags 0020|0020 , 0020|0037) : " + dirCosines ) );
+                DEBUG_LOG( qPrintable( "No s'ha pogut determinar l'orientació del pacient (Tags 0020|0020 , 0020|0037) : " + value ) );
             }
         }
         else
@@ -294,66 +278,86 @@ void Input::setVolumeInformation()
     // nom de la institució on s'ha fet l'estudi
     if( queryTagAsString( "0008|0080" , value ) )
     {
-        m_volumeData->getVolumeSourceInformation()->setInstitutionName( value.c_str() );
+        m_volumeData->getVolumeSourceInformation()->setInstitutionName( value );
     }
     else
     {
         // no tenim aquesta informació \TODO cal posar res?
-        m_volumeData->getVolumeSourceInformation()->setInstitutionName( tr( "Unknown" ).toAscii() );
+        m_volumeData->getVolumeSourceInformation()->setInstitutionName( tr( "Unknown" ) );
     }
 
     // nom del pacient
     if( queryTagAsString( "0010|0010" , value ) )
     {
         // pre-tractament per treure caràcters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
-        QString name = QString::fromStdString( value );
-        while( name.indexOf("^") >= 0 )
-            name.replace( name.indexOf("^") , 1 , QString(" ") );
-        m_volumeData->getVolumeSourceInformation()->setPatientName( qPrintable( name ) );
+        while( value.indexOf("^") >= 0 )
+            value.replace( value.indexOf("^") , 1 , QString(" ") );
+        m_volumeData->getVolumeSourceInformation()->setPatientName( value );
     }
     // ID del pacient
     if( queryTagAsString( "0010|0020" , value ) )
     {
-        m_volumeData->getVolumeSourceInformation()->setPatientID( value.c_str() );
+        m_volumeData->getVolumeSourceInformation()->setPatientID( value );
     }
 
     // data de l'estudi
     if( queryTagAsString( "0008|0020" , value ) )
     {
         // la data està en format YYYYMMDD
-        m_volumeData->getVolumeSourceInformation()->setStudyDate( value.c_str() );
+        m_volumeData->getVolumeSourceInformation()->setStudyDate( value );
     }
 
     // hora de l'estudi
     if( queryTagAsString( "0008|0030" , value ) )
     {
         // l'hora està en format HHMMSS
-        m_volumeData->getVolumeSourceInformation()->setStudyTime( value.c_str() );
+        m_volumeData->getVolumeSourceInformation()->setStudyTime( value );
     }
 
     // accession number
     if( queryTagAsString( "0008|0050" , value ) )
     {
-        m_volumeData->getVolumeSourceInformation()->setAccessionNumber( value.c_str() );
+        m_volumeData->getVolumeSourceInformation()->setAccessionNumber( value );
     }
 
     // Protocol name
     if( queryTagAsString( "0018|1030" , value ) )
     {
-        m_volumeData->getVolumeSourceInformation()->setProtocolName( value.c_str() );
+        m_volumeData->getVolumeSourceInformation()->setProtocolName( value );
     }
 
     //Number of Phases, TAG PRIVAT PHILIPS
     if( queryTagAsString( "2001|1017" , value ) )
     {
-        m_volumeData->getVolumeSourceInformation()->setNumberOfPhases( atoi( value.c_str() ) );
+        m_volumeData->getVolumeSourceInformation()->setNumberOfPhases( value.toInt() );
     }
 
     //Number of Slices Per Phase, nombre de llesques per cada fase, TAG PRIVAT PHILIPS
     if( queryTagAsString( "2001|1018" , value ) )
     {
-        m_volumeData->getVolumeSourceInformation()->setNumberOfSlices( atoi( value.c_str() ) );
+        m_volumeData->getVolumeSourceInformation()->setNumberOfSlices( value.toInt() );
     }
+}
+
+
+QStringList Input::stdVectorOfStdStringToQStringList( std::vector< std::string > vector )
+{
+    QStringList list;
+    for( int i = 0; i < vector.size(); i++ )
+    {
+        list += vector[i].c_str();
+    }
+    return list;
+}
+
+std::vector< std::string > Input::qstringListToStdVectorOfStdString( QStringList list )
+{
+    std::vector< std::string > stlVector;
+    for( int i = 0; i < list.size(); i++ )
+    {
+        stlVector.push_back( list.at(i).toStdString() );
+    }
+    return stlVector;
 }
 
 }; // end namespace udg

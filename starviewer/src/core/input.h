@@ -8,8 +8,6 @@
 #define UDGINPUT_H
 
 #include "volume.h"
-// std
-#include <iostream>
 // qt
 #include <QObject>
 // itk
@@ -120,21 +118,21 @@ public:
      * @param fileName
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int openFile(const char *fileName);
+    int openFile( QString fileName );
 
     /**
      * Donat un conjunt de fitxers els carrega en una única sèrie/volum
      * @param filenames
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int readFiles( std::vector< std::string > filenames );
+    int readFiles( QStringList filenames );
 
     /**
      * Lector de sèries dicom donat un directori que les conté
      * @param dirPath
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int readSeries( const char *dirPath );
+    int readSeries( QString dirPath );
 
     /// Retorna un Volum
     Volume* getData() const { return m_volumeData; };
@@ -176,17 +174,18 @@ private:
     /// el generador dels noms dels fitxers DICOM d'un directori
     NamesGeneratorType::Pointer m_namesGenerator;
 
-    /// mètode temporal per printar tags dicom
-    void printTag( std::string tag , std::string name );
-
     /// Demana per un tag DICOM que serà retornat en format string. Retorna true si es troba el tag al header DICOM
-    bool queryTagAsString( std::string tag , std::string &result );
+    bool queryTagAsString( QString tag , QString &result );
 
     /// Es dedica a proporcionar al volum la informació que ens dóna el DICOM
     void setVolumeInformation();
 
     /// a partir dels direction cosines d'un eix ens dóna l'orientació referent al pacient en string
-    char *getOrientation( double vector[3] );
+    QString getOrientation( double vector[3] );
+
+    /// converteix un std::vector< std::string > en un QStringList i viceversa
+    static QStringList stdVectorOfStdStringToQStringList( std::vector< std::string > vector );
+    static std::vector< std::string > qstringListToStdVectorOfStdString( QStringList list );
 };
 
 };

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Grï¿½fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -18,7 +18,7 @@ class Q2DViewer;
 /**
 Tool que serveix per posar llavors en un visor 2D
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de GrÃ fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SeedTool : public Tool
 {
@@ -27,7 +27,7 @@ public:
     /// estats de la tool
     enum { NONE , SEEDING };
 
-    SeedTool(Q2DViewer *viewer , QObject *parent = 0, const char *name = 0);
+    SeedTool(Q2DViewer *viewer , QObject *parent = 0, QString name = 0);
 
     ~SeedTool();
 
@@ -38,9 +38,9 @@ public:
     int getSeedSlice(){return m_seedSlice;}
 
 private:
-    //Mètode deprecated
+    //Mï¿½tode deprecated
     void createAction();
-    
+
     Q2DViewer *m_2DViewer;
 
     int m_seedSlice;
@@ -51,9 +51,9 @@ private:
     /// Coordenades on s'ha posat la llavor
     double m_seedPosition[3];
 
-    
-/// \TODO potser aquests mètodes slots passen a ser públics
-private slots: 
+
+/// \TODO potser aquests mï¿½todes slots passen a ser pï¿½blics
+private slots:
     /// Posem la llavor
     void setSeed( );
 

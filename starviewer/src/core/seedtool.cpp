@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Grï¿½fics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -20,7 +20,7 @@
 
 namespace udg {
 
-SeedTool::SeedTool( Q2DViewer *viewer , QObject *parent, const char *name )
+SeedTool::SeedTool( Q2DViewer *viewer , QObject *parent, QString name )
 // : Tool(parent)
 {
     m_state = NONE;
@@ -32,7 +32,7 @@ SeedTool::SeedTool( Q2DViewer *viewer , QObject *parent, const char *name )
 
 SeedTool::~SeedTool()
 {
-    m_pointActor-> Delete(); 
+    m_pointActor-> Delete();
 }
 
 void SeedTool::createAction()
@@ -54,7 +54,7 @@ void SeedTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         endSeeding();
     break;
-    
+
     default:
     break;
     }
@@ -72,18 +72,18 @@ void SeedTool::setSeed( )
     point-> SetCenter(m_seedPosition);
 
     m_seedSlice = m_2DViewer->getSlice( );
- 
+
     m_pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
     vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
     pointMapper->SetInput( point->GetOutput() );
     m_pointActor->SetMapper( pointMapper );
     m_pointActor->VisibilityOn();
-        
+
     m_2DViewer->getRenderer()-> AddActor( m_pointActor );
     m_2DViewer->getInteractor()->Render();
 
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
- 
+
     pointMapper -> Delete();
     point       -> Delete();
 
@@ -95,22 +95,22 @@ void SeedTool::doSeeding( )
     {
         QString aux;
         m_2DViewer->getCurrentCursorPosition(m_seedPosition);
-    
+
         vtkSphereSource *point = vtkSphereSource::New();
         point->SetRadius(2);
         point-> SetCenter(m_seedPosition);
-    
+
         m_seedSlice = m_2DViewer->getSlice( );
-    
+
         m_pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
         vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
         pointMapper->SetInput( point->GetOutput() );
         m_pointActor->SetMapper( pointMapper );
         m_pointActor->VisibilityOn();
-            
+
         m_2DViewer->getRenderer()-> AddActor( m_pointActor );
         m_2DViewer->getInteractor()->Render();
-    
+
         pointMapper -> Delete();
         point       -> Delete();
     }

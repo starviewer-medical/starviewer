@@ -51,9 +51,9 @@ public:
       )
 
     */
-    void setPatientOrientationString( const char* patientOrientationString )
+    void setPatientOrientationString( QString patientOrientationString )
     {
-        m_patientOrientationString = QString::fromLatin1( patientOrientationString );
+        m_patientOrientationString = patientOrientationString;
     };
 
     /// Retorna l'string d'orientació del pacient
@@ -66,9 +66,9 @@ public:
     QString getRevertedPatientOrientationString();
 
     /// Assigna/Retorna nom del pacient
-    void setPatientName( const char * patientName )
+    void setPatientName( QString patientName )
     {
-        m_patientName = QString::fromLatin1( patientName );
+        m_patientName = patientName;
     };
     QString getPatientName()
     {
@@ -76,9 +76,9 @@ public:
     };
 
     /// Assigna/Retorna l'id del pacient
-    void setPatientID( const char * patientID )
+    void setPatientID( QString patientID )
     {
-        m_patientID = QString::fromLatin1( patientID );
+        m_patientID = patientID;
     };
     QString getPatientID()
     {
@@ -86,9 +86,9 @@ public:
     };
 
     /// Assigna/Retorna nom de la institució
-    void setInstitutionName( const char * institution )
+    void setInstitutionName( QString institution )
     {
-        m_institution = QString::fromLatin1( institution );
+        m_institution = institution;
     };
     QString getInstitutionName()
     {
@@ -96,9 +96,9 @@ public:
     };
 
     /// Assigna/Retorna la data de l'estudi
-    void setStudyDate( const char * studyDate )
+    void setStudyDate( QString studyDate )
     {
-        m_studyDate = QString::fromLatin1( studyDate );
+        m_studyDate = studyDate;
     };
     QString getStudyDate()
     {
@@ -106,9 +106,9 @@ public:
     };
 
     /// Assigna/Retorna l'hora de l'estudi
-    void setStudyTime( const char * studyTime )
+    void setStudyTime( QString studyTime )
     {
-        m_studyTime = QString::fromLatin1( studyTime );
+        m_studyTime = studyTime;
     };
     QString getStudyTime()
     {
@@ -116,9 +116,9 @@ public:
     };
 
     /// Assigna/Retorna l'accession number
-    void setAccessionNumber( const char * acc )
+    void setAccessionNumber( QString acc )
     {
-        m_accessionNumber = QString::fromLatin1( acc );
+        m_accessionNumber = acc;
     };
     QString getAccessionNumber()
     {
@@ -151,7 +151,7 @@ public:
     void getWindowLevel( double windowLevel[2], int position = 0 );
 
     /// Retorna les descripcions associades als window levels
-    const char *getWindowLevelDescription( int position = 0 );
+    QString getWindowLevelDescription( int position = 0 );
 
     /// Ens diu si té un window level vàlid o no
     bool hasWindowLevel();
@@ -160,9 +160,9 @@ public:
     int getNumberOfWindowLevels();
 
     /// Assigna/Retorna el nom del protocol
-    void setProtocolName( const char * protocol )
+    void setProtocolName( QString protocol )
     {
-        m_protocolName = QString::fromLatin1( protocol );
+        m_protocolName = protocol;
     };
     QString getProtocolName()
     {
@@ -189,16 +189,16 @@ public:
     DcmDataset *getDicomDataset( int index = 0 );
 
     /// Indiquem la llista de fitxers que formen el volum i es carrega el dicomdataset (privat)
-    void setFilenames( std::vector< std::string > filenames );
-    void setFilenames( std::string filename ); // ho sobrecarreguem per quan només es tracti d'un sol arxiu
+    void setFilenames( QStringList filenames );
+    void setFilenames( QString filename ); // ho sobrecarreguem per quan només es tracti d'un sol arxiu
 
     /// Obtenim la llista d'arxius que conformen el volum
-    std::vector< std::string > getFilenames() const { return m_filenamesArray; }
+    QStringList getFilenames() const { return m_filenamesList; }
 
     enum PhotometricInterpretationType{ Monochrome1 , Monochrome2 , PaletteColor, RGB, YBRFull, YBRFull422, YBRPartial422, YBRPartial420, YBRICT, YBRRCT,  Unknown };
     /// Retorna la intepretació fotomètrica d'una imatge d'escala de grisos. Pot ser Monochrome1 (vídeo invers ) o MonocMonochrome2 (normal, el més usual) pel que a nosaltres ens interessa de moment
     unsigned getPhotometricInterpretation();
-    const char *getPhotometricInterpretationAsString();
+    QString getPhotometricInterpretationAsString();
 
     /// Ens diu si la imatge és de tipus MONOCHROME1, fals altrament. NOTA: que no sigui MONOCHROME1 no implica que sigui MONOCHROME2!!
     bool isMonochrome1();
@@ -219,12 +219,12 @@ public:
     double getRescaleIntercept();
 
     /// Assigna/Obté la descripció de la sèrie
-    const char *getSeriesDescription(){ return qPrintable( m_seriesDescription ); };
-    void setSeriesDescription( const char *description ){ m_seriesDescription = description; };
+    QString getSeriesDescription(){ return m_seriesDescription; };
+    void setSeriesDescription( QString description ){ m_seriesDescription = description; };
 
     /// Assigna/obté l'UID de la sèrie
-    const char *getSeriesInstanceUID(){ return qPrintable( m_seriesInstanceUID ); }
-    void setSeriesInstanceUID( const char *uid ){ m_seriesInstanceUID = uid; }
+    QString getSeriesInstanceUID(){ return m_seriesInstanceUID; }
+    void setSeriesInstanceUID( QString uid ){ m_seriesInstanceUID = uid; }
 
     // Mètodes per tractar imatges de tipus multi-frame
     /// Diu si el volum és de tipus multiframe \TODO encara no estem segurs de que es faci aquesta consulta de forma correcta
@@ -281,17 +281,16 @@ private:
     QStringList m_windowLevelDescriptions;
 
     /// Vector amb els noms dels fitxers que conformen el volum
-    std::vector< std::string > m_filenamesArray;
+    QStringList m_filenamesList;
 
     /// info de dicom en format dcmtk
     DcmDataset *m_dicomData;
-
 
     ///Llegeix la informació sobre les dades de window level
     void readWindowLevelData();
 
     /// Carrega les dades dicom d'un arxiu
-    bool loadDicomDataset( const char *filename );
+    bool loadDicomDataset( QString filename );
 
     /// Recull la informació de la sèrie que ens interessa
     void collectSerieInformation();

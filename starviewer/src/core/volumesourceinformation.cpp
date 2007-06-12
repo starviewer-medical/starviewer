@@ -144,13 +144,13 @@ void VolumeSourceInformation::getZDirectionCosines( double zCosines[3] )
         zCosines[i] = m_directionCosines[i+6];
 }
 
-bool VolumeSourceInformation::loadDicomDataset( const char *filename )
+bool VolumeSourceInformation::loadDicomDataset( QString filename )
 {
     if( !m_dicomData )
         m_dicomData = new DcmDataset;
 
     DcmFileFormat dicomFile;
-    OFCondition status = dicomFile.loadFile( filename );
+    OFCondition status = dicomFile.loadFile( qPrintable(filename) );
     if( status.good() )
     {
         this->setDicomDataset( dicomFile.getAndRemoveDataset() );
@@ -160,7 +160,7 @@ bool VolumeSourceInformation::loadDicomDataset( const char *filename )
     }
     else
     {
-        std::cerr << "algo falla::: " << status.text() << std::endl << "ARXIU: "<< filename << std::endl;
+        DEBUG_LOG( qPrintable( QString( "algo falla::: %1\nARXIU: %2 ").arg( status.text() ).arg( filename ) ) );
         return false;
     }
 }
@@ -186,20 +186,18 @@ void VolumeSourceInformation::collectSerieInformation()
     }
 }
 
-void VolumeSourceInformation::setFilenames( std::vector< std::string > filenames )
+void VolumeSourceInformation::setFilenames( QStringList filenames )
 {
-    m_filenamesArray = filenames;
-    if( !m_filenamesArray.empty() )
-        this->loadDicomDataset( m_filenamesArray[0].c_str() ); //\TODO ara es fa així, però podria ser que tinguèssim un tracte més "refinat"
+    m_filenamesList = filenames;
+    if( !m_filenamesList.isEmpty() )
+        this->loadDicomDataset( m_filenamesList.at(0) ); //\TODO ara es fa així, però podria ser que tinguèssim un tracte més "refinat"
     else
         WARN_LOG("La llista de fitxers és buida");
 }
 
-void VolumeSourceInformation::setFilenames( std::string filenames )
+void VolumeSourceInformation::setFilenames( QString filename )
 {
-    m_filenamesArray.clear();
-    m_filenamesArray.push_back( filenames );
-    this->loadDicomDataset( m_filenamesArray[0].c_str() );
+    this->setFilenames( QStringList( filename ) );
 }
 
 void VolumeSourceInformation::setDicomDataset( DcmDataset *data )
@@ -212,10 +210,10 @@ DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
 {
     if( index == 0 )
         return m_dicomData;
-    else if( index > 0 && index < m_filenamesArray.size() )
+    else if( index > 0 && index < m_filenamesList.size() )
     {
         DcmFileFormat dicomFile;
-        OFCondition status = dicomFile.loadFile( m_filenamesArray[index].c_str() );
+        OFCondition status = dicomFile.loadFile( qPrintable( m_filenamesList.at(index) ) );
         if( status.good() )
         {
             DcmDataset *dataset = NULL;
@@ -224,7 +222,7 @@ DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
         }
         else
         {
-            ERROR_LOG( qPrintable( QString("No s'ha pogut carregar arxiu dicom [%1]. Missatge d'error:[%2] ").arg( status.text() ).arg(m_filenamesArray[index].c_str() ) ) );
+            ERROR_LOG( qPrintable( QString("No s'ha pogut carregar arxiu dicom [%1]. Missatge d'error:[%2] ").arg( status.text() ).arg(m_filenamesList.at(index)) ) );
             return false;
         }
     }
@@ -237,7 +235,7 @@ DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
 
 unsigned VolumeSourceInformation::getPhotometricInterpretation()
 {
-    const char *photoString = this->getPhotometricInterpretationAsString();
+    QString photoString = this->getPhotometricInterpretationAsString();
 
     QString qPhotoString( photoString );
     if( qPhotoString == "MONOCHROME1" )
@@ -264,7 +262,7 @@ unsigned VolumeSourceInformation::getPhotometricInterpretation()
         return Unknown;
 }
 
-const char *VolumeSourceInformation::getPhotometricInterpretationAsString()
+QString VolumeSourceInformation::getPhotometricInterpretationAsString()
 {
     // \TODO es podria afegir una mica és de control a nivell de debug per si no es llegeix aquesta dada, perquè per exemple no existeix
     const char *photoString = NULL;
@@ -273,7 +271,7 @@ const char *VolumeSourceInformation::getPhotometricInterpretationAsString()
     else
         DEBUG_LOG( "No hi ha m_dicomData creat" );
 
-    return photoString;
+    return QString( photoString );
 }
 
 bool VolumeSourceInformation::isMonochrome1()
@@ -439,12 +437,15 @@ void VolumeSourceInformation::getWindowLevel( double windowLevel[2], int positio
     windowLevel[1] = this->getLevel( position );
 }
 
-const char *VolumeSourceInformation::getWindowLevelDescription( int position )
+QString VolumeSourceInformation::getWindowLevelDescription( int position )
 {
     if( position > m_windowLevelDescriptions.size() - 1 || position < 0 )
-        return NULL;
+    {
+        DEBUG_LOG("Posició incorrecte, o bé negativa o major que el nombre de descripcions disponibles");
+        return QString();
+    }
     else
-        return qPrintable( m_windowLevelDescriptions.at( position ) );
+        return m_windowLevelDescriptions.at( position );
 }
 
 void VolumeSourceInformation::readWindowLevelData()

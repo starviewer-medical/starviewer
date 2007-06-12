@@ -22,7 +22,7 @@
 
 namespace udg {
 
-ScreenShotTool::ScreenShotTool( Q2DViewer *viewer , QObject *parent , const char *name )
+ScreenShotTool::ScreenShotTool( Q2DViewer *viewer , QObject *parent , QString name )
 {
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     if( viewer )
@@ -36,7 +36,7 @@ ScreenShotTool::ScreenShotTool( Q2DViewer *viewer , QObject *parent , const char
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
 }
 
-ScreenShotTool::ScreenShotTool( Q3DViewer *viewer , QObject *parent , const char *name )
+ScreenShotTool::ScreenShotTool( Q3DViewer *viewer , QObject *parent , QString name )
 {
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     if( viewer )
@@ -50,7 +50,7 @@ ScreenShotTool::ScreenShotTool( Q3DViewer *viewer , QObject *parent , const char
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
 }
 
-ScreenShotTool::ScreenShotTool( Q3DMPRViewer *viewer , QObject *parent , const char *name )
+ScreenShotTool::ScreenShotTool( Q3DMPRViewer *viewer , QObject *parent , QString name )
 {
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     if( viewer )

@@ -15,7 +15,7 @@
 
 namespace udg {
 
-WindowLevelTool::WindowLevelTool( Q2DViewer *viewer , QObject *parent, const char *name )
+WindowLevelTool::WindowLevelTool( Q2DViewer *viewer , QObject *parent, QString name )
 //  : Tool( parent , name )
 {
     m_state = NONE;

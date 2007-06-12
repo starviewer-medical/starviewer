@@ -7,7 +7,7 @@
 #include "toolmanager.h"
 #include "qviewer.h"
 #include "tool.h"
-
+#include "logging.h"
 namespace udg {
 
 ToolManager::ToolManager(QObject *parent)
@@ -43,6 +43,7 @@ void ToolManager::forwardEvent( unsigned long eventID )
     if( m_toolList.find( m_currentToolName ) != m_toolList.end() )
     {
         m_toolList[m_currentToolName]->handleEvent( eventID );
+        DEBUG_LOG( qPrintable(m_currentToolName) );
     }
 }
 

@@ -97,7 +97,7 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
 #else
     struct statvfs fsd;
 
-    if ( statvfs(path.toAscii(), &fsd) == 0 )
+    if ( statvfs( qPrintable(path), &fsd) == 0 )
     {
         total = static_cast<quint64>( fsd.f_bavail ) * static_cast<quint64>( fsd.f_bsize );
         existsError = false;

@@ -114,10 +114,12 @@ bool Q2DViewerPresentationStateAttacher::attach()
                             .arg( filesetID.c_str() )
                             .arg( filesetUID.c_str() )
                             ) );
-                    std::cout << "Vol UID: " << m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() << std::endl;
-                    std::cout << "Referenced Vol UID: " << m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() << std::endl;
+                    DEBUG_LOG( qPrintable( QString("Vol UID: %1\nReferenced Vol UID: %2\n")
+                        .arg( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() )
+                        .arg( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() )
+                        ) );
                     // comprovem si aquest presentation state fa referència al volum actual
-                    if( !isThisReferenced && QString( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() ) == QString( seriesUID.c_str() ) )
+                    if( !isThisReferenced && m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() == QString( seriesUID.c_str() ) )
                         isThisReferenced = true;
                 }
                 if( isThisReferenced )
@@ -129,13 +131,13 @@ bool Q2DViewerPresentationStateAttacher::attach()
                     DEBUG_LOG( "WARNING! This volume IS NOT referenced by the current presentation state" );
                 }
                 // carreguem la llista d'imatges que adjuntarem en un moment o altre segons convingui al presentation state
-                std::vector< std::string > fileList = m_viewerInput->getVolumeSourceInformation()->getFilenames();
+                QStringList fileList = m_viewerInput->getVolumeSourceInformation()->getFilenames();
                 int images = fileList.size();
                 DcmFileFormat *dicomSlice = NULL;
                 for( int i = 0; i < images; i++ )
                 {
                     dicomSlice = new DcmFileFormat;
-                    dicomSlice->loadFile( fileList[i].c_str() );
+                    dicomSlice->loadFile( qPrintable( fileList.at(i) ) );
                     m_attachedDatasetsList.push_back( dicomSlice );
                 }
                 // abans d'aplicar el presentation state cal fer un reset, pot ser que la imatge l'hàgim mogut, flipat, rotat, etc i això afectaria la processament de les transformacions espacials
