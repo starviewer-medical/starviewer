@@ -214,7 +214,7 @@ private:
 //estructura necessària per passar els paràmetres al thread que descarregarrà les imatges
 struct retrieveParameters
      {
-        std::string studyUID;
+        QString studyUID;
         PacsParameters pacs;
       };
 
@@ -353,7 +353,7 @@ struct retrieveParameters
      * @param mask màscara a la que s'ha d'afegir la modalitat
      * @param modality modalitat a afegir
      */
-    void addModalityStudyMask( DicomMask* mask, std::string modality );
+    void addModalityStudyMask( DicomMask* mask, QString modality );
 
     /** Donat un AETitle busca les dades del PACS a la base de dades i prepara un objecte PACSERVER, per poder
      * connectar al PACS

@@ -50,10 +50,10 @@ void QPacsList::refresh()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
         pacs = pacsList.getPacs();
-        item->setText( 0 , pacs.getAEPacs().c_str() );
-        item->setText( 1 , pacs.getInstitution().c_str() );
-        item->setText( 2 , pacs.getDescription().c_str() );
-        item->setText( 3 , pacs.getDefault().c_str() );
+        item->setText( 0 , pacs.getAEPacs() );
+        item->setText( 1 , pacs.getInstitution() );
+        item->setText( 2 , pacs.getDescription() );
+        item->setText( 3 , pacs.getDefault() );
         pacsList.nextPacs();
     }
 
@@ -89,11 +89,11 @@ Status QPacsList::getSelectedPacs( PacsList *pacsList )
         item = qPacsList.at( i );
         PacsParameters pacs;
 
-        state = pacsListDB.queryPacs( &pacs , item->text( 0 ).toStdString() ); //fem el query per cercar la informació del PACS
+        state = pacsListDB.queryPacs( &pacs , item->text( 0 ) ); //fem el query per cercar la informació del PACS
 
         if ( state.good() )
         {
-            pacs.setAELocal( settings.getAETitleMachine().toStdString() );
+            pacs.setAELocal( settings.getAETitleMachine() );
             //emplenem amb les dades del registre el timeout
             pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
             pacsList->insertPacs( pacs ); //inserim a la llista

@@ -34,7 +34,7 @@ Gestor de mini-aplicacions i serveis de l'aplicació principal
 class ExtensionHandler : public QObject{
 Q_OBJECT
 public:
-    ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent = 0, const char *name = 0);
+    ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent = 0, QString name = 0);
 
     ~ExtensionHandler();
 

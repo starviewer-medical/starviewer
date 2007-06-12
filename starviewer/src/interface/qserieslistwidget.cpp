@@ -42,12 +42,12 @@ void QSeriesListWidget::insertSeries( Series *serie )
     QString statusTip;
 
     text.insert( 0 , tr( "Series " ) );
-    text.append( serie->getSeriesNumber().c_str() );
+    text.append( serie->getSeriesNumber() );
 
     if ( serie->getProtocolName().length() > 0 )
     {//si hi ha descripció la inserim
         text.append( " " );
-        text.append (serie->getProtocolName().c_str() );
+        text.append (serie->getProtocolName() );
         text.append( '\n' );
     }
     else text.append( '\n' );
@@ -64,9 +64,9 @@ void QSeriesListWidget::insertSeries( Series *serie )
     if ( nameClass == "m_seriesListWidgetCache" )
     {
         pathImage.insert( 0 , settings.getCacheImagePath() );
-        pathImage.append(serie->getStudyUID().c_str() );
+        pathImage.append(serie->getStudyUID() );
         pathImage.append( "/" );
-        pathImage.append( serie->getSeriesUID().c_str() );
+        pathImage.append( serie->getSeriesUID() );
         pathImage.append( "/scaled.pgm" );
     }
 
@@ -77,7 +77,7 @@ void QSeriesListWidget::insertSeries( Series *serie )
 
     /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
    enlloc per amagar-lo, ho utilitzo per identificar la sèrie */
-    item->setStatusTip(serie->getSeriesUID().c_str());
+    item->setStatusTip(serie->getSeriesUID());
 }
 
 void QSeriesListWidget::clicked( QListWidgetItem *item )

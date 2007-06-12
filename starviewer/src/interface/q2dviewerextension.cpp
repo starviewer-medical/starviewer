@@ -251,8 +251,8 @@ void Q2DViewerExtension::setInput( Volume *input )
         for( int i = 0; i < wlCount; i++ )
         {
             m_mainVolume->getVolumeSourceInformation()->getWindowLevel( wl, i );
-            const char *description = m_mainVolume->getVolumeSourceInformation()->getWindowLevelDescription( i );
-            if( description )
+            QString description = m_mainVolume->getVolumeSourceInformation()->getWindowLevelDescription( i );
+            if( !description.isEmpty() )
                 m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], i, description );
             else
                 m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], i, tr("Default %1").arg(i) );

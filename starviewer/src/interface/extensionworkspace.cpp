@@ -12,7 +12,7 @@
 
 namespace udg {
 
-ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, const char *name)
+ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, QString name)
  : QTabWidget( parent )
 {
     this->setObjectName( name );

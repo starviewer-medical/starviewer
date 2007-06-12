@@ -29,7 +29,7 @@ class AppImportFile : public QObject{
 Q_OBJECT
 public:
 
-    AppImportFile(QObject *parent = 0, const char *name = 0);
+    AppImportFile(QObject *parent = 0, QString name = 0);
     ~AppImportFile();
 
     /// Obre el diàleg per poder obrir arxius, retornant true si s'ha obert una imatge, false si no
@@ -48,7 +48,7 @@ public:
     int loadDirectory( QString directoryName );
 
     /// Ens retorna el nom de l'últim arxiu que s'ha obert amb èxit
-    const char *getLastOpenedFilename();
+    QString getLastOpenedFilename();
 
 signals:
     /// Signal que s'emet quan s'escull obrir un Key Image Note. Es passa el path d'aquest

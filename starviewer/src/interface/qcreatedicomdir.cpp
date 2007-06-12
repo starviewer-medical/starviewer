@@ -186,7 +186,7 @@ void QCreateDicomdir::addStudy( Study study )
     unsigned long studySize;
     Status state;
 
-    if ( !existsStudy( study.getStudyUID().c_str() ) )
+    if ( !existsStudy( study.getStudyUID() ) )
     {
         //consultem la mida de l'estudi
         imageMask.setStudyUID( study.getStudyUID() );
@@ -210,14 +210,14 @@ void QCreateDicomdir::addStudy( Study study )
             m_dicomdirSize = m_dicomdirSize + studySize;
             setDicomdirSize();
 
-            item->setText( 0 , study.getStudyId().c_str() );
-            item->setText( 1 , study.getPatientId().c_str() );
-            item->setText( 2 , study.getPatientName().c_str() );
-            item->setText( 3 , study.getStudyModality().c_str() );
-            item->setText( 4 , formatDate( study.getStudyDate().c_str() ) );
-            item->setText( 5 , formatHour( study.getStudyTime().c_str() ) );
-            item->setText( 6 , study.getStudyDescription().c_str() );
-            item->setText( 7 , study.getStudyUID().c_str() );
+            item->setText( 0 , study.getStudyId() );
+            item->setText( 1 , study.getPatientId() );
+            item->setText( 2 , study.getPatientName() );
+            item->setText( 3 , study.getStudyModality() );
+            item->setText( 4 , formatDate( study.getStudyDate() ) );
+            item->setText( 5 , formatHour( study.getStudyTime() ) );
+            item->setText( 6 , study.getStudyDescription() );
+            item->setText( 7 , study.getStudyUID() );
         }
     }
     else
@@ -273,14 +273,14 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
     logMessage = "Iniciant la creació del Dicomdir en cd-dvd al directori temporal ";
     logMessage.append( dicomdirPath );
-    INFO_LOG (  logMessage.toAscii().constData() );
+    INFO_LOG (  qPrintable(logMessage) );
 
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
         QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create Dicomdir. Please check users permission" ) );
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
-        ERROR_LOG( logMessage.toAscii().constData() );
+        ERROR_LOG( qPrintable(logMessage) );
         return state.setStatus( "Can't create temporary Dicomdir", false , 3002 );
     }
     else
@@ -306,7 +306,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     logMessage = "Iniciant la creació del Dicomdir en discdur o usb al directori ";
     logMessage.append( dicomdirPath );
-    INFO_LOG (  logMessage.toAscii().constData() );
+    INFO_LOG (  qPrintable(logMessage) );
 
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
@@ -339,7 +339,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                             QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the directory. Please check users permission" ) );
                             logMessage = "Error al crear directori ";
                             logMessage.append( dicomdirPath );
-                            ERROR_LOG( logMessage.toAscii().constData() );
+                            ERROR_LOG( qPrintable(logMessage) );
                         }
                         break;
                     case 1:
@@ -359,7 +359,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     Status state;
     QString logMessage;
 
-    INFO_LOG ( logMessage.toAscii().constData() );
+    INFO_LOG ( qPrintable(logMessage) );
 
     if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
@@ -367,7 +367,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
         logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
         logMessage.append( state.text().c_str() );
-        ERROR_LOG ( logMessage.toAscii().constData() );
+        ERROR_LOG ( qPrintable(logMessage) );
         return state.setStatus( "Not enough space to create Dicomdir", false , 3000 );
     }
 
@@ -388,7 +388,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         logMessage = "L'estudi ";
         logMessage.append( item->text( 7 ) );
         logMessage.append( " s'afegirà al Dicomdir " );
-        INFO_LOG ( logMessage.toAscii().constData() );
+        INFO_LOG ( qPrintable(logMessage) );
     }
 
     switch( m_comboBoxAction->currentIndex() )
@@ -420,7 +420,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
             QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
             logMessage = "Error al crear el Dicomdir ERROR : ";
             logMessage.append( state.text().c_str() );
-            ERROR_LOG ( logMessage.toAscii().constData() );
+            ERROR_LOG ( qPrintable(logMessage) );
 
             return state;
         }
@@ -493,7 +493,7 @@ void QCreateDicomdir::removeSelectedStudy()
         for ( int i = 0; i < selectedStudies.count(); i++)
         {
             //consultem la mida de l'estudi
-            imageMask.setStudyUID( selectedStudies.at( i )->text( 7 ).toAscii().constData() );
+            imageMask.setStudyUID( selectedStudies.at( i )->text( 7 ) );
 
             state = cacheImageDAL.imageSize( imageMask , studySize );
 
@@ -575,16 +575,16 @@ bool QCreateDicomdir::enoughFreeSpace( QString path )
 {
     HardDiskInformation hardDisk;
 
-    if ( hardDisk.getNumberOfFreeMBytes( path.toAscii().constData() ) < static_cast<quint64> (m_dicomdirSize / ( 1024 * 1204 ) ) )
+    if ( hardDisk.getNumberOfFreeMBytes( path ) < static_cast<quint64> (m_dicomdirSize / ( 1024 * 1204 ) ) )
     {
         return false;
     }
     else return true;
 }
 
-QString QCreateDicomdir::formatDate( const std::string date )
+QString QCreateDicomdir::formatDate( const QString date )
 {
-    QString formateDate , originalDate ( date.c_str() );
+    QString formateDate , originalDate ( date );
 
     formateDate.insert( 0 , originalDate.mid( 6 , 2 ) ); //dd
     formateDate.append( "/" );
@@ -595,9 +595,9 @@ QString QCreateDicomdir::formatDate( const std::string date )
     return formateDate;
 }
 
-QString QCreateDicomdir::formatHour( const std::string hour )
+QString QCreateDicomdir::formatHour( const QString hour )
 {
-    QString formatedHour,originalHour( hour.c_str() );
+    QString formatedHour,originalHour( hour );
 
     formatedHour.insert( 0 , originalHour.mid( 0 , 2 ) );
     formatedHour.append( ":" );

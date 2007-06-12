@@ -36,7 +36,7 @@
 
 namespace udg{
 
-QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, const char *name )
+QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     : QMainWindow( parent )
 {
     this->setAttribute( Qt::WA_DeleteOnClose );

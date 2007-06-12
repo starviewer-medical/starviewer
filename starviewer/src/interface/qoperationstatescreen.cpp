@@ -64,7 +64,7 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
     }
     else item->setText( 1 , tr("Server") );
 
-    item->setText( 2 , operation->getPacsParameters().getAEPacs().c_str() );
+    item->setText( 2 , operation->getPacsParameters().getAEPacs() );
     item->setText( 3 , operation->getPatientID() );
     item->setText( 4 , name );
     item->setText( 5 , date.toString("dd/MM/yyyy") );

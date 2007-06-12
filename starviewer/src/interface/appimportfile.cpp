@@ -18,7 +18,7 @@
 
 namespace udg {
 
-AppImportFile::AppImportFile(QObject *parent, const char *name)
+AppImportFile::AppImportFile(QObject *parent, QString name)
  : QObject( parent )
 {
     this->setObjectName( name );
@@ -150,9 +150,9 @@ int AppImportFile::loadDirectory( QString directoryName )
     return errorCode;
 }
 
-const char *AppImportFile::getLastOpenedFilename()
+QString AppImportFile::getLastOpenedFilename()
 {
-    return m_lastOpenedFilename.toAscii().constData();
+    return m_lastOpenedFilename;
 }
 
 void AppImportFile::readSettings()

@@ -32,7 +32,7 @@ class QApplicationMainWindow : public QMainWindow
 Q_OBJECT
 public:
     ///El constructor del Mainwindow. Aquí es crea tot l'esquelet de l'interfície: Menús, Barres d'eines, toolbox, working area, etc..
-    QApplicationMainWindow(QWidget *parent = 0, const char *name = 0);
+    QApplicationMainWindow(QWidget *parent = 0, QString name = 0);
 
     ~QApplicationMainWindow();
 

@@ -34,7 +34,7 @@
 
 namespace udg {
 
-ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent, const char *name)
+ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent, QString name)
  : QObject(parent )
 {
     this->setObjectName( name );
@@ -207,26 +207,25 @@ void ExtensionHandler::viewStudy( StudyVolum study )
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
+
     SeriesVolum serie;
+    bool found = false;
+    int i = 0;
 
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    study.firstSerie();
-    while ( !study.end() )
+    while( i < study.getNumberOfSeries() && !found )
     {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
         {
-            break;
+            found = true;
+            serie = study.getSeriesVolum(i);
         }
-        study.nextSerie();
+        i++;
     }
-    if ( study.end() )
-    {
-        //si no l'hem trobat per defecte mostrarem la primera serie
-        study.firstSerie();
-    }
+    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
+        serie = study.getSeriesVolum(0);
 
-    serie = study.getSeriesVolum();
-    switch( input->readFiles( serie.getVectorImagePath() ) )
+    switch( input->readFiles( serie.getImagesPathList() ) )
     {
     case Input::NoError:
     {
@@ -276,26 +275,25 @@ void ExtensionHandler::viewStudyToCompare( StudyVolum study )
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
+
+    bool found = false;
+    int i = 0;
     SeriesVolum serie;
 
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    study.firstSerie();
-    while ( !study.end() )
+    while( i < study.getNumberOfSeries() && !found )
     {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
         {
-            break;
+            found = true;
+            serie = study.getSeriesVolum(i);
         }
-        study.nextSerie();
+        i++;
     }
-    if ( study.end() )
-    {
-        //si no l'hem trobat per defecte mostrarem la primera serie
-        study.firstSerie();
-    }
+    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
+        serie = study.getSeriesVolum(0);
 
-    serie = study.getSeriesVolum();
-    switch( input->readFiles( serie.getVectorImagePath() ) )
+    switch( input->readFiles( serie.getImagesPathList() ) )
     {
     case Input::NoError:
     {
@@ -335,27 +333,25 @@ void ExtensionHandler::viewStudyForPerfusion( StudyVolum study )
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
     connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
+
+    bool found = false;
+    int i = 0;
     SeriesVolum serie;
 
     m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    study.firstSerie();
-    while ( !study.end() )
+    while( i < study.getNumberOfSeries() && !found )
     {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum().getSeriesUID() )
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
         {
-            break;
+            found = true;
+            serie = study.getSeriesVolum(i);
         }
-        study.nextSerie();
+        i++;
     }
-    if ( study.end() )
-    {
-        //si no l'hem trobat per defecte mostrarem la primera serie
-        study.firstSerie();
-    }
+    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
+        serie = study.getSeriesVolum(0);
 
-    serie = study.getSeriesVolum();
-    input->readFiles( serie.getVectorImagePath() );
-
+    input->readFiles( serie.getImagesPathList() );
     if( !m_compareVolumeID.isNull() )
     {
         m_volumeRepository->removeVolume( m_compareVolumeID );

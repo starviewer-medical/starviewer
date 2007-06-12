@@ -271,12 +271,12 @@ void QConfigurationScreen::addPacs()
 
     if (validatePacsParameters())
     {
-        pacs.setAEPacs( m_textAETitle->text().toStdString() );
-        pacs.setPacsPort( m_textPort->text().toStdString() );
-        pacs.setPacsAdr( m_textAddress->text().toStdString() );
-        pacs.setInstitution( m_textInstitution->text().toStdString() );
-        pacs.setLocation( m_textLocation->text().toStdString() );
-        pacs.setDescription( m_textDescription->text().toStdString() );
+        pacs.setAEPacs( m_textAETitle->text() );
+        pacs.setPacsPort( m_textPort->text() );
+        pacs.setPacsAdr( m_textAddress->text() );
+        pacs.setInstitution( m_textInstitution->text() );
+        pacs.setLocation( m_textLocation->text() );
+        pacs.setDescription( m_textDescription->text() );
         if ( m_checkDefault->isChecked() )
         {
             pacs.setDefault( "S" );
@@ -285,7 +285,7 @@ void QConfigurationScreen::addPacs()
 
 		logMessage = "Afegir pacs ";
 		logMessage.append( m_textAETitle->text() );
-		INFO_LOG ( logMessage.toAscii().constData() );
+		INFO_LOG ( qPrintable(logMessage) );
 
         state =  pacsList.insertPacs( &pacs );
 
@@ -294,7 +294,7 @@ void QConfigurationScreen::addPacs()
             if ( state.code() == 2019 )
             {
 
-                QMessageBox::warning( this , tr("Starviewer") , tr("AETitle ") + pacs.getAEPacs().c_str() + tr(" exists") + "\n" );
+                QMessageBox::warning( this , tr("Starviewer") , tr("AETitle ") + pacs.getAEPacs() + tr(" exists") + "\n" );
             }else databaseError( &state );
 
         }
@@ -324,17 +324,17 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * item , int )
             return;
         }
 
-        if (list.findPacs( item->text(0).toStdString() ) ) //busquem les dades del PACS
+        if (list.findPacs( item->text(0) ) ) //busquem les dades del PACS
         {
             pacs = list.getPacs();
 
             //emplenem els textots
-            m_textAETitle->setText( pacs.getAEPacs().c_str() );
-            m_textPort->setText( pacs.getPacsPort().c_str() );
-            m_textAddress->setText( pacs.getPacsAdr().c_str() );
-            m_textInstitution->setText( pacs.getInstitution().c_str() );
-            m_textLocation->setText( pacs.getLocation().c_str() );
-            m_textDescription->setText( pacs.getDescription().c_str() );
+            m_textAETitle->setText( pacs.getAEPacs() );
+            m_textPort->setText( pacs.getPacsPort() );
+            m_textAddress->setText( pacs.getPacsAdr() );
+            m_textInstitution->setText( pacs.getInstitution() );
+            m_textLocation->setText( pacs.getLocation() );
+            m_textDescription->setText( pacs.getDescription() );
             m_PacsID = pacs.getPacsID();
             if ( pacs.getDefault() == "S" )
             {
@@ -360,12 +360,12 @@ void QConfigurationScreen::updatePacs()
 
     if ( validatePacsParameters() )
     {
-        pacs.setAEPacs( m_textAETitle->text().toStdString() );
-        pacs.setPacsPort( m_textPort->text().toStdString() );
-        pacs.setPacsAdr( m_textAddress->text().toStdString() );
-        pacs.setInstitution( m_textInstitution->text().toStdString() );
-        pacs.setLocation( m_textLocation->text().toStdString() );
-        pacs.setDescription( m_textDescription->text().toStdString() );
+        pacs.setAEPacs( m_textAETitle->text() );
+        pacs.setPacsPort( m_textPort->text() );
+        pacs.setPacsAdr( m_textAddress->text() );
+        pacs.setInstitution( m_textInstitution->text() );
+        pacs.setLocation( m_textLocation->text() );
+        pacs.setDescription( m_textDescription->text() );
         pacs.setPacsID( m_PacsID );
         if ( m_checkDefault->isChecked() )
         {
@@ -375,7 +375,7 @@ void QConfigurationScreen::updatePacs()
 
         logMessage = "Actualitzant dades del pacs ";
         logMessage.append( m_textAETitle->text() );
-        INFO_LOG ( logMessage.toAscii().constData() );
+        INFO_LOG ( qPrintable(logMessage) );
 
         state = pacsList.updatePacs( &pacs );
 
@@ -409,7 +409,7 @@ void QConfigurationScreen::deletePacs()
 
     logMessage = "Esborrant el pacs ";
     logMessage.append( m_textAETitle->text() );
-    INFO_LOG ( logMessage.toAscii().constData() );
+    INFO_LOG ( qPrintable(logMessage) );
 
     state = pacsList.deletePacs( &pacs );
 
@@ -444,12 +444,12 @@ void QConfigurationScreen::fillPacsListView()
         {
             QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
             pacs = list.getPacs();
-            item->setText( 0 , pacs.getAEPacs().c_str() );
-            item->setText( 1 , pacs.getPacsAdr().c_str() );
-            item->setText( 2 , pacs.getPacsPort().c_str() );
-            item->setText( 3 , pacs.getInstitution().c_str() );
-            item->setText( 4 , pacs.getLocation().c_str() );
-            item->setText( 5 , pacs.getDescription().c_str() );
+            item->setText( 0 , pacs.getAEPacs() );
+            item->setText( 1 , pacs.getPacsAdr() );
+            item->setText( 2 , pacs.getPacsPort() );
+            item->setText( 3 , pacs.getInstitution() );
+            item->setText( 4 , pacs.getLocation() );
+            item->setText( 5 , pacs.getDescription() );
 
             if ( pacs.getDefault() == "S" )
             {
@@ -472,10 +472,10 @@ void QConfigurationScreen::test()
     StarviewerSettings settings;
 
     //Agafem les dades del PACS que estan el textbox per testejar
-    pacs.setAEPacs( m_textAETitle->text().toStdString() );
-    pacs.setPacsPort( m_textPort->text().toStdString() );
-    pacs.setPacsAdr( m_textAddress->text().toStdString() );
-    pacs.setAELocal( settings.getAETitleMachine().toAscii().constData() );
+    pacs.setAEPacs( m_textAETitle->text() );
+    pacs.setPacsPort( m_textPort->text() );
+    pacs.setPacsAdr( m_textAddress->text() );
+    pacs.setAELocal( settings.getAETitleMachine() );
     pacsServer.setPacs( pacs );
 
     state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
@@ -483,17 +483,17 @@ void QConfigurationScreen::test()
     if ( !state.good() )
     {
         message.insert( 0 , tr( " Pacs " ) );
-        message.append( pacs.getAEPacs().c_str() );
+        message.append( pacs.getAEPacs() );
         message.append( tr ( " doesn't responds " ) );
         message.append( '\n' );
         message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
         QMessageBox::warning( this , tr("Starviewer") , message );
 
         logMessage.insert( 0 , "Doing echo pacs " );
-        logMessage.append( pacs.getAEPacs().c_str() );
+        logMessage.append( pacs.getAEPacs() );
         logMessage.append( " doesn't responds. PACS ERROR : " );
         logMessage.append( state.text().c_str() );
-        INFO_LOG ( logMessage.toAscii().constData() );
+        INFO_LOG ( qPrintable(logMessage) );
     }
     else
     {
@@ -502,29 +502,29 @@ void QConfigurationScreen::test()
         if ( state.good() )
         {
             message.insert( 0 , tr( " Test of Pacs " ) );
-            message.append( pacs.getAEPacs().c_str() );
+            message.append( pacs.getAEPacs() );
             message.append( tr ( " is correct " ) );
             QMessageBox::information( this , tr("Starviewer") , message );
 
             logMessage.insert( 0 , "Test of Pacs " );
-            logMessage.append( pacs.getAEPacs().c_str() );
+            logMessage.append( pacs.getAEPacs() );
             logMessage.append( " is correct " );
-            INFO_LOG ( logMessage.toAscii().constData() );
+            INFO_LOG ( qPrintable(logMessage) );
         }
         else
         {
             message.insert( 0 , tr( " Pacs " ) );
-            message.append( pacs.getAEPacs().c_str() );
+            message.append( pacs.getAEPacs() );
             message.append( tr ( " doesn't responds correctly" ) );
             message.append( '\n' );
             message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
             QMessageBox::warning( this , tr("Starviewer") , message );
 
             logMessage.insert( 0 , "Doing echo pacs " );
-            logMessage.append( pacs.getAEPacs().c_str() );
+            logMessage.append( pacs.getAEPacs() );
             logMessage.append( " doesn't responds correctly. PACS ERROR : " );
             logMessage.append( state.text().c_str() );
-            INFO_LOG ( logMessage.toAscii().constData() );
+            INFO_LOG ( qPrintable(logMessage) );
         }
     }
 
@@ -686,7 +686,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del AETitle de la màquina ";
         logMessage.append( m_textAETitleMachine->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         settings.setAETitleMachine(m_textAETitleMachine->text());
     }
@@ -695,7 +695,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del valor del timeout ";
         logMessage.append( m_textTimeout->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         settings.setTimeout(m_textTimeout->text());
     }
@@ -704,7 +704,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del Port d'entrada dels estudis";
         logMessage.append( m_textLocalPort->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         settings.setLocalPort( m_textLocalPort->text() );
     }
@@ -713,7 +713,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del nombre màxim de connexions ";
         logMessage.append( m_textMaxConnections->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         settings.setMaxConnections( m_textMaxConnections->text() );
     }
@@ -787,7 +787,7 @@ void QConfigurationScreen::applyChangesCache()
     {
         logMessage = "Es modificarà la mida de la cache ";
         logMessage.append( m_textPoolSize->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         state = pool.updatePoolTotalSize( m_textPoolSize->text().toInt( NULL , 10 )* 1024 );//Passem l'espai a Mb
         databaseError( &state );
@@ -797,7 +797,7 @@ void QConfigurationScreen::applyChangesCache()
     {
         logMessage = "Es modificarà el directori de la cache d'imatges ";
         logMessage.append( m_textCacheImagePath->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         settings.setCacheImagePath( m_textCacheImagePath->text() );
     }
@@ -806,7 +806,7 @@ void QConfigurationScreen::applyChangesCache()
     {
         logMessage = "Es modificarà el nombre maxim de dies d'un estudi a la cache";
         logMessage.append( m_textMaximumDaysNotViewed->text() );
-        INFO_LOG( logMessage.toAscii().constData() );
+        INFO_LOG( qPrintable(logMessage) );
 
         settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
     }

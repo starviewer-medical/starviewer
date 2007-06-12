@@ -21,8 +21,6 @@ class Status;
 */
 class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
 Q_OBJECT
-
-
 public:
 
     QCreateDicomdir( QWidget *parent = 0 );
@@ -84,12 +82,12 @@ private:
     /**Formata la data
      * @param data de l'estudi
      */
-    QString formatDate( const std::string );
+    QString formatDate( const QString );
 
     /**Formata l'hora
      * @param Hora de l'estudi
      */
-    QString formatHour( const std::string );
+    QString formatHour( const QString );
 
     /** Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a Dicomdir
      * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista

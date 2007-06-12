@@ -165,27 +165,27 @@ void QStudyTreeWidget::insertStudy( Study *study)
     QString text;
     Status state;
 
-    if ( getStudyItem( study->getStudyUID() , study->getPacsAETitle() ) != NULL ) removeStudy( study->getStudyUID().c_str() );//si l'estudi ja hi existeix a StudyTreeView l'esborrem
+    if ( getStudyItem( study->getStudyUID() , study->getPacsAETitle() ) != NULL ) removeStudy( study->getStudyUID() );//si l'estudi ja hi existeix a StudyTreeView l'esborrem
 
     QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
     text.truncate( 0 );
     text.append( tr("Study ") );
-    text.append( study->getStudyId().c_str() );
+    text.append( study->getStudyId() );
     item->setIcon( 0 ,m_closeFolder );
     item->setText( 0 , text );
 
-    item->setText( 1 , study->getPatientId().c_str() );
-    item->setText( 2 , study->getPatientName().c_str() );
+    item->setText( 1 , study->getPatientId() );
+    item->setText( 2 , study->getPatientName() );
     item->setText( 3 , formatAge( study->getPatientAge() ) );
-    item->setText( 4 , study->getStudyModality().c_str() );
-    item->setText( 5 , study->getStudyDescription().c_str() );
+    item->setText( 4 , study->getStudyModality() );
+    item->setText( 5 , study->getStudyDescription() );
     item->setText( 6 , formatDate( study->getStudyDate() ) );
-    item->setText( 7 , study->getStudyTime().c_str() );
+    item->setText( 7 , study->getStudyTime() );
     //item->setText( 7 , formatHour( study->getStudyTime() ) );
 
     if ( study->getInstitutionName() == "" ) //si la informació ve buida l'anem a buscar a la bdd local
     {
-        if ( m_oldPacsAETitle != study->getPacsAETitle().c_str() ) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
+        if ( m_oldPacsAETitle != study->getPacsAETitle() ) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
         {//si es un pacs diferent busquem la informacio
             PacsListDB pacsList;
             PacsParameters pacs;
@@ -193,21 +193,21 @@ void QStudyTreeWidget::insertStudy( Study *study)
             state = pacsList.queryPacs( &pacs , study->getPacsAETitle() );
             if ( state.good() )
             {
-                item->setText( 8 , pacs.getInstitution().c_str() );
-                m_OldInstitution = pacs.getInstitution().c_str();
+                item->setText( 8 , pacs.getInstitution() );
+                m_OldInstitution = pacs.getInstitution();
             }
-            m_oldPacsAETitle = study->getPacsAETitle().c_str();
+            m_oldPacsAETitle = study->getPacsAETitle();
         }
         else item->setText( 8 , m_OldInstitution );
     }
-    else item->setText( 8 , study->getInstitutionName().c_str() );
+    else item->setText( 8 , study->getInstitutionName() );
 
-    item->setText( 9 , study->getAccessionNumber().c_str() );
-    item->setText( 10 , study->getPacsAETitle().c_str() );
-    item->setText( 11 , study->getStudyUID().c_str() );
+    item->setText( 9 , study->getAccessionNumber() );
+    item->setText( 10 , study->getPacsAETitle() );
+    item->setText( 11 , study->getStudyUID() );
     item->setText( 12 , "STUDY" );//indiquem de que es tracta d'un estudi
     item->setText( 13 , "" );
-    item->setText( 15 , study->getReferringPhysiciansName().c_str() );
+    item->setText( 15 , study->getReferringPhysiciansName() );
 
     m_studyTreeView->clearSelection();
 }
@@ -233,12 +233,12 @@ void QStudyTreeWidget::insertSeries( Series *serie )
 
     text.truncate( 0 );
     text.append( tr( "Series " ) );
-    text.append( serie->getSeriesNumber().c_str() );
+    text.append( serie->getSeriesNumber() );
     item->setIcon( 0 , m_iconSeries );
     item->setText( 0 , text );
-    item->setText( 4 , serie->getSeriesModality().c_str() );
+    item->setText( 4 , serie->getSeriesModality() );
 
-    description = serie->getSeriesDescription().c_str();
+    description = serie->getSeriesDescription();
     item->setText( 5 , description.simplified() );//treiem els espaics en blanc del davant i darrera
 
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
@@ -252,18 +252,18 @@ void QStudyTreeWidget::insertSeries( Series *serie )
         item->setText( 7 , formatHour(serie->getSeriesTime() ) );
     }
 
-    item->setText( 10, serie->getPacsAETitle().c_str() );
-    item->setText( 11 , serie->getSeriesUID().c_str() );
+    item->setText( 10, serie->getPacsAETitle() );
+    item->setText( 11 , serie->getSeriesUID() );
     item->setText( 12 , "SERIES" ); //indiquem que es tracta d'una sèrie
 
     text.truncate( 0 );
     text.setNum( serie->getImageNumber(), 10 );
     item->setText( 13 , text );
-    item->setText( 14 , serie->getProtocolName().c_str() );
-    item->setText( 16 , serie->getPPSStartDate().c_str() );
-    item->setText( 17 , serie->getPPStartTime().c_str() );
-    item->setText( 18 , serie->getRequestedProcedureID().c_str() );
-    item->setText( 19 , serie->getScheduledProcedureStepID().c_str() );
+    item->setText( 14 , serie->getProtocolName() );
+    item->setText( 16 , serie->getPPSStartDate() );
+    item->setText( 17 , serie->getPPStartTime() );
+    item->setText( 18 , serie->getRequestedProcedureID() );
+    item->setText( 19 , serie->getScheduledProcedureStepID() );
 
     emit( addSeries(serie) );//afegim serie al SeriesIconView
 }
@@ -291,7 +291,7 @@ void QStudyTreeWidget::insertImage( Image * image )
 
     while ( !stop && index < studyItem->childCount() )
     {
-        if ( studyItem->child( index )->text( 11 ) == image->getSeriesUID().c_str() )
+        if ( studyItem->child( index )->text( 11 ) == image->getSeriesUID() )
         {
             stop = true;
         }
@@ -308,14 +308,14 @@ void QStudyTreeWidget::insertImage( Image * image )
     item->setIcon( 0 , m_iconSeries );
     item->setText( 0 , text );
 
-    item->setText( 10 , image->getPacsAETitle().c_str() );
-    item->setText( 11 , image->getSOPInstanceUID().c_str() );
+    item->setText( 10 , image->getPacsAETitle() );
+    item->setText( 11 , image->getSOPInstanceUID() );
     item->setText( 12, "IMAGE" ); //indiquem que es tracta d'una imatge
 }
 
-QString QStudyTreeWidget::formatAge( const std::string age )
+QString QStudyTreeWidget::formatAge( const QString age )
 {
-    QString text( age.c_str() );
+    QString text( age );
 
     if (text.length() > 0)
     {
@@ -328,9 +328,9 @@ QString QStudyTreeWidget::formatAge( const std::string age )
     return text;
 }
 
-QString QStudyTreeWidget::formatDate( const std::string date )
+QString QStudyTreeWidget::formatDate( const QString date )
 {
-    QString formateDate , originalDate ( date.c_str() );
+    QString formateDate , originalDate ( date );
 
     formateDate.insert( 0 , originalDate.mid( 6 , 2 ) ); //dd
     formateDate.append( "/" );
@@ -341,9 +341,9 @@ QString QStudyTreeWidget::formatDate( const std::string date )
     return formateDate;
 }
 
-QString QStudyTreeWidget::formatHour( const std::string hour )
+QString QStudyTreeWidget::formatHour( const QString hour )
 {
-    QString formatedHour,originalHour( hour.c_str() );
+    QString formatedHour,originalHour( hour );
 
     formatedHour.insert( 0 , originalHour.mid( 0 , 2 ) );
     formatedHour.append( ":" );
@@ -401,16 +401,16 @@ QString QStudyTreeWidget::getSelectedSeriesUID()
     else return "";
 }
 
-QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( std::string studyUID , std::string AETitle )
+QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AETitle )
 {
     int index = 0;
     bool stop = false;
-    QList< QTreeWidgetItem * > qStudyList( m_studyTreeView->findItems( studyUID.c_str() ,
+    QList< QTreeWidgetItem * > qStudyList( m_studyTreeView->findItems( studyUID ,
     Qt::MatchExactly , 11 ) ); //busquem l'estudi a la que pertany la sèrie
 
     while ( !stop && index < qStudyList.count() )
     {
-        if ( qStudyList.at( index )->text( 10 ) == AETitle.c_str() )
+        if ( qStudyList.at( index )->text( 10 ) == AETitle )
         {
             stop = true;
         }
@@ -457,12 +457,12 @@ void QStudyTreeWidget::setSeriesToSeriesListWidget( QTreeWidgetItem *item )
         if ( item != NULL )
         {
             Series serie;
-            serie.setSeriesUID( child->text( 11 ).toAscii().constData() );
+            serie.setSeriesUID( child->text( 11 ) );
             serie.setImageNumber( child->text( 13 ).toInt( NULL , 10 ) );
-            serie.setSeriesModality( child->text( 4 ).toAscii().constData() );
-            serie.setSeriesNumber( child->text( 0 ).remove( tr("Series") ).toAscii().constData() );
-            serie.setStudyUID( getSelectedStudyUID().toAscii().constData() );
-            serie.setProtocolName( child->text( 14 ).toAscii().constData() );
+            serie.setSeriesModality( child->text( 4 ) );
+            serie.setSeriesNumber( child->text( 0 ).remove( tr("Series") ) );
+            serie.setStudyUID( getSelectedStudyUID() );
+            serie.setProtocolName( child->text( 14 ) );
             emit( addSeries( &serie ) );
         }
     }

@@ -212,24 +212,24 @@ private :
     /** formata l'edat per mostrar per pantalla
      * @param edat
      */
-    QString formatAge( const std::string );
+    QString formatAge( const QString );
 
     /**Formata la data
      * @param data de l'estudi
      */
-    QString formatDate( const std::string );
+    QString formatDate( const QString );
 
     /**Formata l'hora
      * @param Hora de l'estudi
      */
-    QString formatHour( const std::string );
+    QString formatHour( const QString );
 
     /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
      * un mateix estudi pot estar a més d'un PACS
      * @param studyUID uid de l'estudi a cercar
      * @param AETitle AEtitle de la màquina on està l'estudi
      */
-    QTreeWidgetItem* getStudyItem( std::string studyUID , std::string AETitle );
+    QTreeWidgetItem* getStudyItem( QString studyUID , QString AETitle );
 };
 
 }; // end namespace
