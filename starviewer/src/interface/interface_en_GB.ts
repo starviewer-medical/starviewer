@@ -1191,7 +1191,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="640"/>
+        <location filename="qcreatedicomdir.cpp" line="654"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1211,82 +1211,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="299"/>
         <source>Create Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="319"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="319"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="312"/>
+        <location filename="qcreatedicomdir.cpp" line="317"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="313"/>
+        <location filename="qcreatedicomdir.cpp" line="318"/>
         <source>The Dicomdir directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="319"/>
+        <location filename="qcreatedicomdir.cpp" line="324"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="392"/>
+        <location filename="qcreatedicomdir.cpp" line="405"/>
         <source>Error creating Dicomdir. Be sure you have user permissions in </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="417"/>
+        <location filename="qcreatedicomdir.cpp" line="431"/>
         <source>The size of Dicomdir is 0 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="425"/>
+        <location filename="qcreatedicomdir.cpp" line="439"/>
         <source>Dicomdir Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="602"/>
+        <location filename="qcreatedicomdir.cpp" line="616"/>
         <source>Database is corrupted or SQL syntax error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="636"/>
+        <location filename="qcreatedicomdir.cpp" line="650"/>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="608"/>
+        <location filename="qcreatedicomdir.cpp" line="622"/>
         <source>Database is locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="616"/>
+        <location filename="qcreatedicomdir.cpp" line="630"/>
         <source>Database is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="622"/>
+        <location filename="qcreatedicomdir.cpp" line="636"/>
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="634"/>
+        <location filename="qcreatedicomdir.cpp" line="648"/>
         <source>Internal Database error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="260"/>
+        <location filename="qcreatedicomdir.cpp" line="265"/>
         <source>Can&apos;t create the temporary directory to create Dicomdir. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1306,22 +1306,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="282"/>
+        <location filename="qcreatedicomdir.cpp" line="287"/>
         <source>Please enter a diretory to create de Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="295"/>
+        <location filename="qcreatedicomdir.cpp" line="300"/>
         <source>The directory contains a Dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="359"/>
+        <location filename="qcreatedicomdir.cpp" line="364"/>
         <source>Please, first select the studies which you want to create a Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="346"/>
+        <location filename="qcreatedicomdir.cpp" line="351"/>
         <source>Not enough free space to create Dicomdir. Please free space</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1331,13 +1331,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="460"/>
+        <location filename="qcreatedicomdir.cpp" line="474"/>
         <source>Please select a study to remove of the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="504"/>
+        <location filename="qcreatedicomdir.cpp" line="518"/>
         <source>Creating Dicomdir Image...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="400"/>
+        <source>Some images are not 100 % Dicom compliance. It can be possible that some viewers have problems to visualizate them </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
