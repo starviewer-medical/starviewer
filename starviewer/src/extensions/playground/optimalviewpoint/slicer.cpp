@@ -124,7 +124,7 @@ void Slicer::compute()  /// \todo Fer-ho més eficient!!!
     for ( unsigned int i = 0; i < m_reslicedDataSize; i++ )
     {
         unsigned char value = m_reslicedData[i];
-        if ( value < m_nLabels )    // no comptem el background afegit pel reslicer
+        if ( value < m_nLabels && value > 0 )    // no comptem el background afegit pel reslicer
             oneHistogram.add( value );
     }
     std::vector< double > p_o_;
@@ -149,7 +149,7 @@ void Slicer::compute()  /// \todo Fer-ho més eficient!!!
         for ( unsigned int j = 0; j < m_sliceSize; j++ )    // iterem sobre la llesca actual
         {
             unsigned char value = slice[j];
-            if ( value < m_nLabels )    // no comptem el background afegit pel reslicer
+            if ( value < m_nLabels && value > 0 )    // no comptem el background afegit pel reslicer
                 histogram.add( value );
         }
 
