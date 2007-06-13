@@ -1541,7 +1541,7 @@ void Q2DViewer::getSeedPosition( double pos[3] )
     pos[2] = m_seedPosition[2];
 }
 
-void Q2DViewer::saveAll( const char *baseName , FileType extension )
+void Q2DViewer::saveAll( QString baseName , FileType extension )
 {
     switch( extension )
     {
@@ -1568,7 +1568,7 @@ void Q2DViewer::saveAll( const char *baseName , FileType extension )
     }
 }
 
-void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
+void Q2DViewer::saveCurrent( QString baseName , FileType extension )
 {
     m_windowToImageFilter->Update();
     m_windowToImageFilter->Modified();
@@ -1580,7 +1580,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             vtkImageWriter *pngWriter = vtkPNGWriter::New();
             pngWriter->SetInput( image );
             pngWriter->SetFilePattern( "%s-%d.png" );
-            pngWriter->SetFilePrefix( baseName );
+            pngWriter->SetFilePrefix( qPrintable(baseName) );
             pngWriter->Write();
 
             break;
@@ -1590,7 +1590,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             vtkImageWriter *jpegWriter = vtkJPEGWriter::New();
             jpegWriter->SetInput( image );
             jpegWriter->SetFilePattern( "%s-%d.jpg" );
-            jpegWriter->SetFilePrefix( baseName );
+            jpegWriter->SetFilePrefix( qPrintable(baseName) );
             jpegWriter->Write();
 
             break;
@@ -1601,7 +1601,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             vtkImageWriter *tiffWriter = vtkTIFFWriter::New();
             tiffWriter->SetInput( image );
             tiffWriter->SetFilePattern( "%s-%d.tif" );
-            tiffWriter->SetFilePrefix( baseName );
+            tiffWriter->SetFilePrefix( qPrintable(baseName) );
             tiffWriter->Write();
 
             break;
@@ -1611,7 +1611,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             vtkImageWriter *pnmWriter = vtkPNMWriter::New();
             pnmWriter->SetInput( image );
             pnmWriter->SetFilePattern( "%s-%d.pnm" );
-            pnmWriter->SetFilePrefix( baseName );
+            pnmWriter->SetFilePrefix( qPrintable(baseName) );
             pnmWriter->Write();
 
             break;
@@ -1621,7 +1621,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
             vtkImageWriter *bmpWriter = vtkBMPWriter::New();
             bmpWriter->SetInput( image );
             bmpWriter->SetFilePattern( "%s-%d.bmp" );
-            bmpWriter->SetFilePrefix( baseName );
+            bmpWriter->SetFilePrefix( qPrintable(baseName) );
             bmpWriter->Write();
 
             break;
@@ -1634,7 +1634,7 @@ void Q2DViewer::saveCurrent( const char *baseName , FileType extension )
         {
             vtkMetaImageWriter *metaWriter = vtkMetaImageWriter::New();
             metaWriter->SetInput( m_mainVolume->getVtkData() );
-            metaWriter->SetFileName( baseName );
+            metaWriter->SetFileName( qPrintable(baseName) );
             metaWriter->Write();
 
             break;

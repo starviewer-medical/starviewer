@@ -48,14 +48,14 @@ void ShutterFilter::setInput( Volume *volume )
     m_inputData = volume;
 }
 
-void ShutterFilter::setPresentationStateShutters( const char *presentationStateFile )
+void ShutterFilter::setPresentationStateShutters( const QString &presentationStateFile )
 {
     if( m_inputData )
     {
         DVPresentationState *presentationStateHandler = new DVPresentationState;
         DcmDataset *presentationStateData = NULL;
         DcmFileFormat presentationStateFileFormat;
-        OFCondition status = presentationStateFileFormat.loadFile( presentationStateFile );
+        OFCondition status = presentationStateFileFormat.loadFile( qPrintable( presentationStateFile ) );
         if( status.good() )
         {
             presentationStateData = presentationStateFileFormat.getDataset();

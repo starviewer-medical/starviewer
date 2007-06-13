@@ -29,7 +29,7 @@ public:
     ~Q3DOrientationMarker();
 
     /// Li posem les etiquetes de texte que han d'anar per cada cara del cub
-    void setOrientationText( const char *right, const char *left, const char *posterior, const char *anterior, const char *superior, const char *inferior );
+    void setOrientationText( QString right, QString left, QString posterior, QString anterior, QString superior, QString inferior );
 
 public slots:
     /// Mètodes per controlar si s'habilita el widget o no

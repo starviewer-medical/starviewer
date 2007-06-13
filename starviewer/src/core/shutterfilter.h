@@ -7,7 +7,10 @@
 #ifndef UDGSHUTTERFILTER_H
 #define UDGSHUTTERFILTER_H
 
+// stl
 #include <vector>
+//qt
+#include <QString>
 
 class vtkImageData;
 class vtkPolyDataToImageStencil;
@@ -49,7 +52,7 @@ public:
     void setInput( Volume *volume );
 
     /// Aplica els shutters definits en l'arxiu de presentation state donat
-    void setPresentationStateShutters( const char *presentationStateFile );
+    void setPresentationStateShutters( const QString &presentationStateFile );
 
     /// Defineix el shutter rectangular
     void setRectangularShutter( double leftVertical, double rightVertical, double upperHorizontal, double lowerHorizontal );

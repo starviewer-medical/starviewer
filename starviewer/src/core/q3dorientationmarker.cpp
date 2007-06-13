@@ -127,14 +127,14 @@ Q3DOrientationMarker::~Q3DOrientationMarker()
 {
 }
 
-void Q3DOrientationMarker::setOrientationText( const char *right, const char *left, const char *posterior, const char *anterior, const char *superior, const char *inferior )
+void Q3DOrientationMarker::setOrientationText( QString right, QString left, QString posterior, QString anterior, QString superior, QString inferior )
 {
-    m_cubeActor->SetXPlusFaceText( right );
-    m_cubeActor->SetXMinusFaceText( left );
-    m_cubeActor->SetYPlusFaceText( posterior );
-    m_cubeActor->SetYMinusFaceText( anterior );
-    m_cubeActor->SetZPlusFaceText( superior );
-    m_cubeActor->SetZMinusFaceText( inferior );
+    m_cubeActor->SetXPlusFaceText( qPrintable(right) );
+    m_cubeActor->SetXMinusFaceText( qPrintable(left) );
+    m_cubeActor->SetYPlusFaceText( qPrintable(posterior) );
+    m_cubeActor->SetYMinusFaceText( qPrintable(anterior) );
+    m_cubeActor->SetZPlusFaceText( qPrintable(superior) );
+    m_cubeActor->SetZMinusFaceText( qPrintable(inferior) );
 }
 
 void Q3DOrientationMarker::setEnabled( bool enable )

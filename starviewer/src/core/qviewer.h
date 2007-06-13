@@ -78,7 +78,7 @@ public:
     void grabCurrentView();
 
     /// Desa la llista de captures en un arxiu de diversos tipus amb el nom de fitxer base \c baseName i en format especificat per \c extension. Retorna TRUE si hi havia imatges per guardar, FALSE altrament
-    bool saveGrabbedViews( const char *baseName , FileType extension );
+    bool saveGrabbedViews( QString baseName , FileType extension );
 
     /// Retorna el nombre de vistes capturades que estan desades
     int grabbedViewsCount(){ return m_grabList.size(); }

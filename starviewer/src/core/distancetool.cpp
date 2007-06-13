@@ -28,7 +28,7 @@
 //\TODO treure línies comentades que no tenen cap sentit
 namespace udg {
 
-DistanceTool::DistanceTool( Q2DViewer *viewer , QObject *, const char * )
+DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
 : HighlightColor( Qt::darkGreen ), NormalColor( Qt::green ), SelectedColor( Qt::darkGreen )
 
 {

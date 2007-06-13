@@ -30,23 +30,23 @@ public:
     ~Output();
 
     /// Desa un volum en un format de fitxer donat
-    bool saveFile(const char *fileName);
+    bool saveFile(QString fileName);
 
     /// Desa un volum en una sèrie d'arxius ( png, bmp, tiff , jpg ). Si slice == -1, guarda totes les llesques altrament només en guarda la indicada
-    bool saveSeries(const char *fileName , int slice = -1 );
-    
+    bool saveSeries(QString fileName , int slice = -1 );
+
     /// Assigna el volum a escriure
-    void setInput(Volume* data);  
+    void setInput(Volume* data);
 
 signals:
     /// Indica el progrés en % de la lectura del fitxer
-    void progress( int );    
+    void progress( int );
 
 private:
     typedef Volume::ItkImageType ImageType;
     typedef itk::ImageFileWriter< ImageType >  WriterType;
     typedef WriterType::Pointer    WriterPointerType;
-    
+
     typedef itk::Image< unsigned char , 3 > RescaleImageType;
     typedef itk::RescaleIntensityImageFilter< ImageType , RescaleImageType >    RescaleFilterType;
     // declaració dels tipus per als escriptors de sèries de fitxers
@@ -58,13 +58,13 @@ private:
     /// L'escriptor estàndar de volums
     WriterPointerType    m_writer;
 
-    /// L'escriptor de sèries 
+    /// L'escriptor de sèries
     ImageSeriesWriterPointerType m_seriesWriter;
-    
+
     /// Les dades a escriure
     Volume* m_volumeData;
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

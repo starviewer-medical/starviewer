@@ -15,7 +15,7 @@
 
 namespace udg {
 
-Slicing2DTool::Slicing2DTool( Q2DViewer *viewer , QObject *parent, const char *name )
+Slicing2DTool::Slicing2DTool( Q2DViewer *viewer , QObject *parent )
 {
     m_state = NONE;
     m_startPosition[0] = 0;

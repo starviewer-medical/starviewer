@@ -30,36 +30,36 @@ public:
     ~PatientSerie();
 
     /// Assignar/Obtenir l'identificador universal de la sèrie
-    void setUID( const char *uid );
+    void setUID( QString uid );
     QString getUID() const { return m_serieUID; };
 
     /// Assignar/Obtenir l'identificador de la sèrie
-    void setID( const char *id );
+    void setID( QString id );
     QString getID() const { return m_serieID; };
 
     /// Assignar/Obtenir l'orientació del pacient
-    void setPatientOrientation( const char *orientation );
+    void setPatientOrientation( QString orientation );
     QString getPatientOrientation() const { return m_patientOrientation; };
 
     /// Assignar/Obtenir la modalitat de la sèrie
-    void setModality( const char *modality );
+    void setModality( QString modality );
     QString getModality() const { return m_modality; };
 
     /// Assignar/Obtenir la descripció de la sèrie
-    void setDescription( const char *description );
+    void setDescription( QString description );
     QString getDescription() const { return m_description; };
 
     /// Assignar/Obtenir el protocol de la sèrie
-    void setProtocolName( const char *protocolName );
+    void setProtocolName( QString protocolName );
     QString getProtocolName() const { return m_protocolName; };
 
     /// Assignar/Obtenir el path de les imatges de la sèrie
-    void setSeriesPath( const char *seriesPath );
+    void setSeriesPath( QString seriesPath );
     QString getSeriesPath() const { return m_seriesPath; };
 
     /// Retorna el camp clau que identificarà la sèrie de cares a la interfície. Es composarà pel protocolName més la descripció \TODO encara per determinar
     QString getKey();
-    
+
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
@@ -88,21 +88,21 @@ public:
     void setDimensions( double x , double y , double z );
     double *getDimensions();
     void getDimensions( double dimensions[3] );
-    
+
     /// Assignar/Obtenir espaiats de la sèrie
     void setSpacing( double spacing[3] );
     void setSpacing( double x , double y , double z );
     double *getSpacing();
     void getSpacing( double spacing[3] );
-    
+
     /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie
     void setVolumeIdentifier( Identifier id );
     Identifier getVolumeIdentifier() const { return m_volumeID; }
-    
+
 private:
     /// Identidicador universal de la sèrie
     QString m_serieUID;
-    
+
     /// Identificador de la sèrie
     QString m_serieID;
 
@@ -110,7 +110,7 @@ private:
     QString m_patientOrientation;
 
     /// Modalitat d'imatge
-    QString m_modality; 
+    QString m_modality;
 
     /// Descripció de la sèrie
     QString m_description;
@@ -123,7 +123,7 @@ private:
 
     /// Data i hora en que s'ha adquirit la sèrie
     QDateTime m_dateTime;
-    
+
     /// Window width i window level del contrast de la imatge
     double m_window;
     double m_level;

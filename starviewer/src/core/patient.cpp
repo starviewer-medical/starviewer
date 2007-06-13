@@ -18,11 +18,6 @@ Patient::~Patient()
     m_studiesHash.clear();
 }
 
-void Patient::setName( const char *name )
-{
-    m_name = QString::fromLatin1( name );
-}
-
 void Patient::setName( QString name )
 {
     m_name = name;
@@ -31,11 +26,6 @@ void Patient::setName( QString name )
 QString Patient::getName()
 {
     return m_name;
-}
-
-void Patient::setSurname( const char *surname )
-{
-    m_surname = QString::fromLatin1( surname );
 }
 
 void Patient::setSurname( QString surname )
@@ -62,7 +52,7 @@ QString Patient::getDateOfBirth()
 {
     return m_dateOfBirth.toString( "dd/MM/yyyy" );
 }
-    
+
 int Patient::getDayOfBirth()
 {
     return m_dateOfBirth.day();
@@ -82,7 +72,7 @@ int Patient::getAge()
 {
     return QDate::currentDate().year() - m_dateOfBirth.year();
 }
-    
+
 void Patient::setWeight( double weight )
 {
     m_weight = weight;

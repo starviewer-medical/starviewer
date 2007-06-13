@@ -885,9 +885,9 @@ void QMPRExtension::saveImages()
         else if( QFileInfo( fileName ).suffix() == "tif" )
             extension = QViewer::TIFF;
 
-        m_axial2DView->saveGrabbedViews( qPrintable( QFileInfo( fileName ).completeBaseName() ) ,  extension );
-        m_sagital2DView->saveGrabbedViews( qPrintable( QFileInfo( fileName ).completeBaseName() ) ,  extension );
-        m_coronal2DView->saveGrabbedViews( qPrintable( QFileInfo( fileName ).completeBaseName() ) ,  extension );
+        m_axial2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
+        m_sagital2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
+        m_coronal2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
 
         m_defaultSaveDir = QFileInfo( fileName ).absolutePath();
     }

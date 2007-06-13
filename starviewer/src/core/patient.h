@@ -29,18 +29,16 @@ public:
     ~Patient();
 
     /// Assigna/Obté nom del pacient
-    void setName( const char *name );
     void setName( QString name );
     QString getName();
 
     /// Assigna/Obté cognom del pacient
-    void setSurname( const char *surname );
     void setSurname( QString surname );
     QString getSurname();
 
     /// Retorna el camp clau que identificarà al pacient de cares a la interfície. Es composarà pel nom complert més el seu ID de pacient \TODO encara per determinar
     QString getKey();
-    
+
     /// Assigna/Obté data de naixement
     void setDateOfBirth( int day , int month , int year );
     QString getDateOfBirth();
@@ -53,7 +51,7 @@ public:
 
     /// Assigna/Obté sexe del pacient
     inline char getSex() const { return m_sex; };
-    
+
     /// Assignar/Obtenir el pes del pacient
     void setWeight( double weight );
     double getWeight() const { return m_weight; };
@@ -70,9 +68,9 @@ public:
 
     /// Obté l'estudi amb clau 'key'
     PatientStudy* getStudy( QString key );
-    
+
 private:
-    /// Identificador de pacient \TODO equival al tag DICOM ???? 
+    /// Identificador de pacient \TODO equival al tag DICOM ????
     QString m_patientID;
 
     /// Nom del pacient
@@ -96,7 +94,7 @@ private:
     /// Taula de hash que conté els estudis del pacient
     typedef QHash< QString , PatientStudy* > StudiesHashType;
     StudiesHashType m_studiesHash;
-    
+
 };
 
 }

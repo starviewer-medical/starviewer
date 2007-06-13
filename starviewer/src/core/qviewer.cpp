@@ -113,38 +113,38 @@ void QViewer::computeWorldToDisplay( vtkRenderer *renderer , double x , double y
     }
 }
 
-bool QViewer::saveGrabbedViews( const char *baseName , FileType extension )
+bool QViewer::saveGrabbedViews( QString baseName , FileType extension )
 {
     if( !m_grabList.empty() )
     {
         vtkImageWriter *writer;
-        char pattern[12] = "%s-%d.";
+        QString fileType;
         switch( extension )
         {
         case PNG:
             writer = vtkPNGWriter::New();
-            strcat( pattern , "png" );
+            fileType = "png";
         break;
 
         case JPEG:
             writer = vtkJPEGWriter::New();
-            strcat( pattern , "jpg" );
+            fileType = "jpg";
         break;
 
         // \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
         case TIFF:
             writer = vtkTIFFWriter::New();
-            strcat( pattern , "tif" );
+            fileType = "tif";
         break;
 
         case PNM:
             writer = vtkPNMWriter::New();
-            strcat( pattern , "pnm" );
+            fileType = "pnm";
         break;
 
         case BMP:
             writer = vtkBMPWriter::New();
-            strcat( pattern , "bmp" );
+            fileType = "bmp";
         break;
 
         case DICOM:
@@ -158,8 +158,7 @@ bool QViewer::saveGrabbedViews( const char *baseName , FileType extension )
         for( m_grabListIterator = m_grabList.begin(); m_grabListIterator != m_grabList.end(); m_grabListIterator++ )
         {
             writer->SetInput( *m_grabListIterator );
-            sprintf( fileName , pattern , baseName , i );
-            writer->SetFileName( fileName );
+            writer->SetFileName( qPrintable( QString("%1-%2.%3").arg( baseName ).arg( i ).arg( fileType ) ) );
             writer->Write();
             i++;
         }

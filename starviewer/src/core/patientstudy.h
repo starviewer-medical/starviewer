@@ -29,28 +29,28 @@ public:
     ~PatientStudy();
 
     /// Assignar/Obtenir l'identificador universal de l'estudi
-    void setUID( const char *uid );
+    void setUID( QString uid );
     QString getUID() const { return m_studyUID; };
 
     /// Assignar/Obtenir l'identificador de l'estudi
-    void setID( const char *id );
+    void setID( QString id );
     QString getID() const { return m_studyID; };
 
     /// Assignar/Obtenir l'accession number de l'estudi
-    void setAccessionNumber( const char *accessionNumber );
+    void setAccessionNumber( QString accessionNumber );
     QString getAccesssionNumber() const { return m_accessionNumber; };
 
     /// Assignar/Obtenir la descripció de l'estudi
-    void setDescription( const char *description );
+    void setDescription( QString description );
     QString getDescription() const { return m_description; };
 
     /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
-    void setInstitutionName( const char *institutionName );
+    void setInstitutionName( QString institutionName );
     QString getInstitutionName() const { return m_institutionName; };
 
     /// Retorna el camp clau que identificarà l'estudi de cares a la interfície. Es composarà per la data més la descripció \TODO encara per determinar
     QString getKey();
-    
+
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
@@ -74,7 +74,7 @@ public:
 
     /// Obté la sèrie amb clau 'key'
     PatientSerie *getSerie( QString key );
-    
+
 private:
     /// Identificador Universal de l'estudi
     QString m_studyUID;
@@ -90,7 +90,7 @@ private:
 
     /// Nom de l'institució en la que s'ha fet
     QString m_institutionName;
-    
+
     /// Data i hora de l'adquisició de l'estudi
     QDateTime m_dateTime;
 

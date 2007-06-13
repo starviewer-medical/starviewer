@@ -25,7 +25,7 @@ public:
     /// estats de la tool
     enum { NONE , SLICING };
 
-    Slicing2DTool( Q2DViewer *viewer , QObject *parent = 0, const char *name = 0 );
+    Slicing2DTool( Q2DViewer *viewer , QObject *parent = 0 );
     ~Slicing2DTool();
 
     void handleEvent( unsigned long eventID );

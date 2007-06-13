@@ -17,31 +17,31 @@ PatientStudy::~PatientStudy()
 {
 }
 
-void PatientStudy::setUID( const char *uid )
+void PatientStudy::setUID( QString uid )
 {
-    m_studyUID = QString::fromLatin1( uid );
+    m_studyUID = uid;
 }
 
-void PatientStudy::setID( const char *id )
+void PatientStudy::setID( QString id )
 {
-    m_studyID = QString::fromLatin1( id );
+    m_studyID = id;
 }
 
-void PatientStudy::setAccessionNumber( const char *accessionNumber )
+void PatientStudy::setAccessionNumber( QString accessionNumber )
 {
-    m_accessionNumber = QString::fromLatin1( accessionNumber );
-}
-    
-void PatientStudy::setDescription( const char *description )
-{
-    m_description = QString::fromLatin1( description );
+    m_accessionNumber = accessionNumber;
 }
 
-void PatientStudy::setInstitutionName( const char *institutionName )
+void PatientStudy::setDescription( QString description )
 {
-    m_institutionName = QString::fromLatin1( institutionName );
+    m_description = description;
 }
-  
+
+void PatientStudy::setInstitutionName( QString institutionName )
+{
+    m_institutionName = institutionName;
+}
+
 QString PatientStudy::getKey()
 {
     return this->getDateTimeAsString() + QString(" ") + m_description;

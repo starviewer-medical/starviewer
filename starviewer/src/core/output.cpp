@@ -28,7 +28,7 @@ Output::~Output()
 {
 }
 
-bool Output::saveFile( const char* filename )
+bool Output::saveFile( QString filename )
 {
     bool ok = true;
 
@@ -39,7 +39,7 @@ bool Output::saveFile( const char* filename )
         return ok;
     }
 
-    m_writer->SetFileName( filename );
+    m_writer->SetFileName( qPrintable( filename ) );
     emit progress(0);
     try
     {
@@ -47,7 +47,7 @@ bool Output::saveFile( const char* filename )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString::fromLatin1(filename) + "]" ) );
+        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString(filename) + "]" ) );
         ok = false;
         emit progress(-1);
     }
@@ -57,7 +57,7 @@ bool Output::saveFile( const char* filename )
 
 }
 
-bool Output::saveSeries( const char* filename , int slice )
+bool Output::saveSeries( QString filename , int slice )
 {
 /*
 TIFF i PNG només suporten unsigned chars i unsigned shorts, BMP nomes uchars, per tant per aquests 3 formats fem rescale a uchar ( 0-255 )
@@ -107,7 +107,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString::fromLatin1( filename ) +"]" ) );
+        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString( filename ) +"]" ) );
         ok = false;
         emit progress(-1);
     }

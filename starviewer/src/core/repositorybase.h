@@ -18,10 +18,10 @@ class RepositoryBase  : public QObject{
 Q_OBJECT
 public:
     RepositoryBase(QObject *parent = 0, const char *name = 0);
-    
+
     ~RepositoryBase();
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

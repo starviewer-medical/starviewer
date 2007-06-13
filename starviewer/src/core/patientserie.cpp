@@ -17,39 +17,39 @@ PatientSerie::~PatientSerie()
 {
 }
 
-void PatientSerie::setUID( const char *uid )
+void PatientSerie::setUID( QString uid )
 {
-    m_serieUID = QString::fromLatin1( uid );
+    m_serieUID = uid;
 }
 
-void PatientSerie::setID( const char *id )
+void PatientSerie::setID( QString id )
 {
-    m_serieID = QString::fromLatin1( id );
+    m_serieID = id;
 }
 
-void PatientSerie::setPatientOrientation( const char *orientation )
+void PatientSerie::setPatientOrientation( QString orientation )
 {
     m_patientOrientation = orientation;
 }
 
-void PatientSerie::setModality( const char *modality )
+void PatientSerie::setModality( QString modality )
 {
-    m_modality = QString::fromLatin1( modality );
+    m_modality = modality;
 }
 
-void PatientSerie::setDescription( const char *description )
+void PatientSerie::setDescription( QString description )
 {
-    m_description = QString::fromLatin1( description );
+    m_description = description;
 }
 
-void PatientSerie::setProtocolName( const char *protocolName )
+void PatientSerie::setProtocolName( QString protocolName )
 {
-    m_protocolName = QString::fromLatin1( protocolName );
+    m_protocolName = protocolName;
 }
 
-void PatientSerie::setSeriesPath( const char *seriesPath )
+void PatientSerie::setSeriesPath( QString seriesPath )
 {
-    m_seriesPath = QString::fromLatin1( seriesPath );
+    m_seriesPath = seriesPath;
 }
 
 QString PatientSerie::getKey()

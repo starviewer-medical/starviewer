@@ -40,12 +40,12 @@ public:
 
     /// estats de la tool
     enum { NONE , ANNOTATING, MOVINGPOINT };
-    
+
     /// enumeració per saber quin dels dos punts de la distància seleccionada és el més proper
     enum { NOTHINGSELECTED, FIRST, SECOND };
-    
 
-    DistanceTool( Q2DViewer *viewer , QObject *parent = 0 , const char *name = 0 );
+
+    DistanceTool( Q2DViewer *viewer , QObject *parent = 0 );
 
     ~DistanceTool();
 
@@ -57,16 +57,16 @@ private:
     void updateSelectedPoint();
 
     vtkCaptionActor2D* createACaption2D();
-    
+
     ///actualitza la posició del primer punt de la distància seleccionada
     void updateFirstPoint();
-    
+
     ///actualitza la posició del segon punt de la distància seleccionada
     void updateSecondPoint();
-    
+
     ///calcula quin punt de la distància seleccionada, és més proper a on es produeix l'event que el crida.
     void getNearestPointOfSelectedDistance();
-    
+
     /// Donat un punt 3D en coordenades de món, es retorna l'actor més proper, dins del llindar m_tolerance, de la llesca actual
     AssemblyAndLineObject *getNearestAssembly( double point[3] );
 
@@ -120,11 +120,11 @@ private:
     /// objectes per manipular els extrems de la distància seeccionada
     vtkDiskSource *m_vertex1;
     vtkDiskSource *m_vertex2;
-    
+
     ///mapejadors dels punts que representen els vèrtexs de la distància seleccionada
     vtkPolyDataMapper2D *m_vertex1Mapper;
     vtkPolyDataMapper2D *m_vertex2Mapper;
-    
+
     ///actors dels punts que representen els vèrtexs de la distància seleccionada
     vtkActor2D *m_vertex1Actor;
     vtkActor2D *m_vertex2Actor;
@@ -134,7 +134,7 @@ private:
 
     /// Llesca actual on estem pintant les distàncies. Ens serveix per controlar els actors que s'han de dibuixar o no al canviar de llesca
     int m_currentSlice;
-    
+
     /// atribut per saber quin dels dos punts de la distància seleccionada és el més proper
     int m_nearestPoint;
 
@@ -164,7 +164,7 @@ private slots:
 
     ///respon als events de teclat
     void answerToKeyEvent();
-    
+
     /// deselecciona la distància que està seleccionada en el moment de cridar l'slot
     void unselectDistance();
 };
@@ -181,9 +181,9 @@ class AssemblyAndLineObject
 
         ~AssemblyAndLineObject()
         {m_assembly->Delete(); m_line->Delete();};
-        
+
         //MÈTODES
-        
+
         ///ens retorna l'assembly
         vtkPropAssembly* getAssembly()
         {return m_assembly;};
@@ -191,7 +191,7 @@ class AssemblyAndLineObject
         ///ens retorna el vtkLineSource
         vtkLineSource* getLine()
         {return m_line;};
-        
+
         ///ens retorna el vtkCaptionActor2D que hi ha dins de l'assembly
         vtkCaptionActor2D* getCaption()
         {
@@ -210,7 +210,7 @@ class AssemblyAndLineObject
     private:
 
         vtkPropAssembly *m_assembly;
-        
+
         vtkLineSource *m_line;
 };
 }

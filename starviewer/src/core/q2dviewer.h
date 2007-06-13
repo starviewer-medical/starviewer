@@ -116,17 +116,17 @@ public:
 
     // Mètodes específics checkerboard
     /// Obtenim el nombre de divisions
-    int * getDivisions();
+    int *getDivisions();
     void getDivisions( int data[3] );
 
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int data[3] );
 
     /// Desa totes les llesques que es veuen al visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
-    void saveAll( const char *baseName , FileType extension );
+    void saveAll( QString baseName , FileType extension );
 
     /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
-    void saveCurrent( const char *baseName , FileType extension );
+    void saveCurrent( QString baseName , FileType extension );
 
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
