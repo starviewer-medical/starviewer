@@ -21,15 +21,21 @@
 **
 ****************************************************************************/
 
+
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
 #include "shadewidget.h"
 #include "hoverpoints.h"
+
+
+namespace udg {
+
 
 ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
     : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
@@ -156,6 +162,9 @@ void ShadeWidget::generateShade()
             p.fillRect(rect(), shade);
         }
     }
+
+
+}
 
 
 }

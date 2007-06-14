@@ -30,8 +30,8 @@
  ***************************************************************************/
 
 
-#ifndef QTRANSFERFUNCTIONEDITORBYGRADIENT_H
-#define QTRANSFERFUNCTIONEDITORBYGRADIENT_H
+#ifndef UDGQTRANSFERFUNCTIONEDITORBYGRADIENT_H
+#define UDGQTRANSFERFUNCTIONEDITORBYGRADIENT_H
 
 
 #include "qtransferfunctioneditor.h"
@@ -39,10 +39,10 @@
 #include "transferfunction.h"
 
 
-class ShadeWidget;
-
-
 namespace udg {
+
+
+class ShadeWidget;
 
 
 /**

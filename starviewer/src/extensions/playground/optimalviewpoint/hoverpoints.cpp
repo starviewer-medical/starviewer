@@ -21,16 +21,22 @@
 **
 ****************************************************************************/
 
+
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
 #include "hoverpoints.h"
 
 #define printf
+
+
+namespace udg {
+
 
 HoverPoints::HoverPoints(QWidget *widget, PointShape shape)
     : QObject(widget)
@@ -323,4 +329,7 @@ void HoverPoints::firePointChange()
 //     }
 
     emit pointsChanged(m_points);
+}
+
+
 }

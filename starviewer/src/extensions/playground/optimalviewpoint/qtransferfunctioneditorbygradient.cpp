@@ -79,15 +79,12 @@ void QTransferFunctionEditorByGradient::setTransferFunction( const TransferFunct
 
     QGradientStops gradientStops;
 
-    QMapIterator< double, QColor > * it = transferFunction.getPoints();
+    QList< double > points = transferFunction.getPoints();
 
-    while ( it->hasNext() )
+    foreach ( double x, points )
     {
-        it->next();
-        gradientStops << QGradientStop( it->key() / 255.0, it->value() );
+        gradientStops << QGradientStop( x / 255.0, transferFunction.get( x ) );
     }
-
-    delete it;
 
     setGradientStops( gradientStops );
 }

@@ -104,24 +104,35 @@ void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transfer
     QTextStream out( &file );
 
     out << "[Color]\n";
-    QMapIterator< double, QColor > * itc = transferFunction.getColorPoints();
-    while ( itc->hasNext() )
+//     QMapIterator< double, QColor > * itc = transferFunction.getColorPoints();
+//     while ( itc->hasNext() )
+//     {
+//         itc->next();
+//         out << itc->key() << " " << itc->value().redF() << " " << itc->value().greenF() << " " << itc->value().blueF() << "\n";
+//     }
+//     delete itc;
+    QList< double > colorPoints = transferFunction.getColorPoints();
+    foreach ( double x, colorPoints )
     {
-        itc->next();
-        out << itc->key() << " " << itc->value().redF() << " " << itc->value().greenF() << " " << itc->value().blueF() << "\n";
+        QColor color = transferFunction.getColor( x );
+        out << x << " " << color.redF() << " " << color.greenF() << " " << color.blueF() << "\n";
     }
-    delete itc;
 
     out << "\n";
 
     out << "[Opacity]\n";
-    QMapIterator< double, double > * ito = transferFunction.getOpacityPoints();
-    while ( ito->hasNext() )
+//     QMapIterator< double, double > * ito = transferFunction.getOpacityPoints();
+//     while ( ito->hasNext() )
+//     {
+//         ito->next();
+//         out << ito->key() << " " << ito->value() << "\n";
+//     }
+//     delete ito;
+    QList< double > opacityPoints = transferFunction.getOpacityPoints();
+    foreach ( double x, opacityPoints )
     {
-        ito->next();
-        out << ito->key() << " " << ito->value() << "\n";
+        out << x << " " << transferFunction.getOpacity( x ) << "\n";
     }
-    delete ito;
 
     out.flush();
     file.close();

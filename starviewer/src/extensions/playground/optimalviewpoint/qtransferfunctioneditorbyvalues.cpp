@@ -89,16 +89,14 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
     // sempre tindrem a punt el següent (per evitar restriccions amb els valors) i l'esborrarem al final
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
-    QMapIterator< double, QColor > * it = transferFunction.getPoints();
+    QList< double > points = transferFunction.getPoints();
     bool first = true;
 
-    while ( it->hasNext() )
+    foreach ( double x, points )
     {
-        it->next();
-
         if ( first ) current->setIsInterval( false );   // cas especial: primer
 
-        if ( first || it->value() != current->color() )
+        if ( first || transferFunction.get( x ) != current->color() )
         {
             if ( !first )
             {
@@ -106,21 +104,19 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
                 next = addIntervalAndReturnIt();
             }
 
-            current->setStart( static_cast< int >( round( it->key() ) ) );
-            current->setColor( it->value() );
+            current->setStart( static_cast< int >( round( x ) ) );
+            current->setColor( transferFunction.get( x ) );
         }
         else
         {
             current->setIsInterval( true );
-            current->setEnd( static_cast< int >( round( it->key() ) ) );
+            current->setEnd( static_cast< int >( round( x ) ) );
         }
 
         first = false;
     }
 
     removeInterval();   // esborrem l'últim interval
-
-    delete it;
 
     getTransferFunction();  // actualitzem m_transferFunction
 }

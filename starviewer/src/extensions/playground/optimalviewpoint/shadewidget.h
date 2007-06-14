@@ -21,19 +21,27 @@
 **
 ****************************************************************************/
 
+
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#ifndef SHADEWIDGET_H
-#define SHADEWIDGET_H
+
+#ifndef UDGSHADEWIDGET_H
+#define UDGSHADEWIDGET_H
+
 
 #include <QtGui>
 
+
+namespace udg {
+
+
 class HoverPoints;
+
 
 class ShadeWidget : public QWidget
 {
@@ -70,5 +78,9 @@ private:
     HoverPoints *m_hoverPoints;
     QLinearGradient m_alpha_gradient;
 };
+
+
+}
+
 
 #endif

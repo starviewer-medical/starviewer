@@ -6,35 +6,48 @@
  ***************************************************************************/
 
 
-
 #include "transferfunction.h"
-
-#include <QColor>
 
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
 
+#include "logging.h"
 
 
 namespace udg {
 
 
-
-/**
- * Construeix una funció de transferència buida (sense punts).
- */
 TransferFunction::TransferFunction()
 {
-    m_changed = true;
+    m_changed = m_colorChanged = m_opacityChanged = true;
+    m_colorTransferFunction = 0;
+    m_opacityTransferFunction = 0;
 }
 
+
+TransferFunction::TransferFunction( const TransferFunction & transferFunction )
+{
+    m_color = transferFunction.m_color;
+    m_opacity = transferFunction.m_opacity;
+
+    m_changed = transferFunction.m_changed;
+    if ( !m_changed ) m_rgba = transferFunction.m_rgba;
+
+    m_colorTransferFunction = transferFunction.m_colorTransferFunction;
+    if ( m_colorTransferFunction ) m_colorTransferFunction->Register( 0 );
+    m_colorChanged = transferFunction.m_colorChanged;
+    m_opacityTransferFunction = transferFunction.m_opacityTransferFunction;
+    if ( m_opacityTransferFunction ) m_opacityTransferFunction->Register( 0 );
+    m_opacityChanged = transferFunction.m_opacityChanged;
+}
 
 
 TransferFunction::~TransferFunction()
 {
     m_rgba.clear(); /// \todo en teoria no cal, però sense això peta (???!!!)
+    if ( m_colorTransferFunction ) m_colorTransferFunction->Delete();
+    if ( m_opacityTransferFunction ) m_opacityTransferFunction->Delete();
 }
-
 
 
 QColor TransferFunction::get( double x ) const
@@ -43,7 +56,6 @@ QColor TransferFunction::get( double x ) const
     rgba.setAlphaF( getOpacity( x ) );
     return rgba;
 }
-
 
 
 QColor TransferFunction::getColor( double x ) const
@@ -65,7 +77,6 @@ QColor TransferFunction::getColor( double x ) const
 }
 
 
-
 double TransferFunction::getOpacity( double x ) const
 {
     if ( m_opacity.isEmpty() ) return 0.0;
@@ -81,165 +92,97 @@ double TransferFunction::getOpacity( double x ) const
 }
 
 
-
 void TransferFunction::addPoint( double x, const QColor & rgba )
 {
     m_color[x] = rgba;
     m_opacity[x] = rgba.alphaF();
-    m_changed = true;
+    m_changed = m_colorChanged = m_opacityChanged = true;
 }
-
 
 
 void TransferFunction::addPoint( double x, const QColor & color, double opacity )
 {
     m_color[x] = color;
     m_opacity[x] = opacity;
-    m_changed = true;
+    m_changed = m_colorChanged = m_opacityChanged = true;
 }
-
 
 
 void TransferFunction::removePoint( double x )
 {
     m_color.remove( x );
     m_opacity.remove( x );
-    m_changed = true;
+    m_changed = m_colorChanged = m_opacityChanged = true;
 }
 
 
-
-/**
- * Afegeix un punt a la part de color.
- *
- * Si \a x ja té un color definit, aquest es modifica.
- *
- * \param x Valor de propietat. Real positiu.
- * \param color Color que correspon a \a x.
- */
 void TransferFunction::addPointToColor( double x, const QColor & color )
 {
     m_color[x] = color;
-    m_changed = true;
+    m_changed = m_colorChanged = true;
 }
 
 
-
-/**
- * Afegeix un punt a la part de color, en format RGB enter.
- *
- * Si \a x ja té un color definit, aquest es modifica.
- *
- * \param x Valor de propietat. Real positiu.
- * \param r,g,b Valors RGB del color que correspon a \a x. Enters a l'interval [0,255].
- */
 void TransferFunction::addPointToColorRGB( double x, int r, int g, int b )
 {
     m_color[x] = QColor( r, g, b );
-    m_changed = true;
+    m_changed = m_colorChanged = true;
 }
 
 
-
-/**
- * Afegeix un punt a la part de color, en format RGB real.
- *
- * Si \a x ja té un color definit, aquest es modifica.
- *
- * \param x Valor de propietat. Real positiu.
- * \param r,g,b Valors RGB del color que correspon a \a x. Reals a l'interval [0,1].
- */
 void TransferFunction::addPointToColorRGB( double x, double r, double g, double b )
 {
     QColor color;
     color.setRgbF( r, g, b );
     m_color[x] = color;
-    m_changed = true;
+    m_changed = m_colorChanged = true;
 }
 
 
-
-/**
- * Esborra un punt de la part de color.
- *
- * Si \a x no té cap color definit, el mètode no té efecte.
- *
- * \param x Valor de propietat. Real positiu.
- */
 void TransferFunction::removePointFromColor( double x )
 {
     m_color.remove( x );
-    m_changed = true;
+    m_changed = m_colorChanged = true;
 }
 
 
-
-/**
- * Afegeix un punt a la part d'opacitat.
- *
- * Si \a x ja té una opacitat definida, aquesta es modifica.
- *
- * \param x Valor de propietat. Real positiu.
- * \param opacity Opacitat que correspon a \a x. Real a l'interval [0,1].
- */
 void TransferFunction::addPointToOpacity( double x, double opacity )
 {
     m_opacity[x] = opacity;
-    m_changed = true;
+    m_changed = m_opacityChanged = true;
 }
 
 
-
-/**
- * Esborra un punt de la part d'opacitat.
- *
- * Si \a x no té cap opacitat definida, el mètode no té efecte.
- *
- * \param x Valor de propietat. Real positiu.
- */
 void TransferFunction::removePointFromOpacity( double x )
 {
     m_opacity.remove( x );
-    m_changed = true;
+    m_changed = m_opacityChanged = true;
 }
 
 
-
-/**
- * Esborra tots els punts de color i d'opacitat.
- */
 void TransferFunction::clear()
 {
     m_color.clear();
     m_opacity.clear();
-    m_changed = true;
+    m_changed = m_colorChanged = m_opacityChanged = true;
 }
 
 
-
-/**
- * Esborra tots els punts de color.
- */
 void TransferFunction::clearColor()
 {
     m_color.clear();
-    m_changed = true;
+    m_changed = m_colorChanged = true;
 }
 
 
-
-/**
- * Esborra tots els punts d'opacitat.
- */
 void TransferFunction::clearOpacity()
 {
     m_opacity.clear();
-    m_changed = true;
+    m_changed = m_opacityChanged = true;
 }
 
 
-
-QMapIterator< double, QColor > * TransferFunction::getPoints() const
+QList< double > TransferFunction::getPoints() const
 {
     if ( m_changed )
     {
@@ -256,117 +199,114 @@ QMapIterator< double, QColor > * TransferFunction::getPoints() const
         m_changed = false;
     }
 
-    return new QMapIterator< double, QColor >( m_rgba );
+    return m_rgba.keys();
 }
 
 
-
-/**
- * Accés als punts de color mitjançant un iterador.
- *
- * L'iterador pot ser destruït després d'utilitzar-lo.
- *
- * \return Iterador sobre els punts de color.
- */
-QMapIterator< double, QColor > * TransferFunction::getColorPoints() const
+QList< double > TransferFunction::getColorPoints() const
 {
-    return new QMapIterator< double, QColor >( m_color );
+    return m_color.keys();
 }
 
 
-
-/**
- * Accés als punts d'opacitat mitjançant un iterador.
- *
- * L'iterador pot ser destruït després d'utilitzar-lo.
- *
- * \return Iterador sobre els punts d'opacitat.
- */
-QMapIterator< double, double > * TransferFunction::getOpacityPoints() const
+QList< double > TransferFunction::getOpacityPoints() const
 {
-    return new QMapIterator< double, double >( m_opacity );
+    return m_opacity.keys();
 }
 
 
-
-/**
- * Retorna la funció de transferència de color en format VTK.
- *
- * No es guarda cap referència de la funció en format VTK.
- *
- * \return Funció de transferència de color en format VTK.
- */
 vtkColorTransferFunction * TransferFunction::getColorTransferFunction() const
 {
-    vtkColorTransferFunction * colorTransferFunction = vtkColorTransferFunction::New();
-
-    QMapIterator< double, QColor > it( m_color );
-
-    while ( it.hasNext() )
+    if ( m_colorChanged )
     {
-        it.next();
-        colorTransferFunction->AddRGBPoint( it.key(), it.value().redF(), it.value().greenF(), it.value().blueF() );
+        if ( !m_colorTransferFunction )
+            m_colorTransferFunction = vtkColorTransferFunction::New();
+
+        m_colorTransferFunction->RemoveAllPoints();
+
+        QMapIterator< double, QColor > it( m_color );
+
+        while ( it.hasNext() )
+        {
+            it.next();
+            m_colorTransferFunction->AddRGBPoint( it.key(), it.value().redF(), it.value().greenF(), it.value().blueF() );
+        }
+
+        m_colorChanged = false;
     }
 
-    return colorTransferFunction;
+    return m_colorTransferFunction;
 }
 
 
-
-/**
- * Retorna la funció de transferència d'opacitat en format VTK.
- *
- * No es guarda cap referència de la funció en format VTK.
- *
- * \return Funció de transferència d'opacitat en format VTK.
- */
 vtkPiecewiseFunction * TransferFunction::getOpacityTransferFunction() const
 {
-    vtkPiecewiseFunction * opacityTransferFunction = vtkPiecewiseFunction::New();
-
-    QMapIterator< double, double > it( m_opacity );
-
-    while ( it.hasNext() )
+    if ( m_opacityChanged )
     {
-        it.next();
-        opacityTransferFunction->AddPoint( it.key(), it.value() );
+        if ( !m_opacityTransferFunction )
+            m_opacityTransferFunction = vtkPiecewiseFunction::New();
+
+        m_opacityTransferFunction->RemoveAllPoints();
+
+        QMapIterator< double, double > it( m_opacity );
+
+        while ( it.hasNext() )
+        {
+            it.next();
+            m_opacityTransferFunction->AddPoint( it.key(), it.value() );
+        }
+
+        m_opacityChanged = false;
     }
 
-    return opacityTransferFunction;
+    return m_opacityTransferFunction;
 }
 
 
-
-/**
- * Escriu la funció de transferència a la sortida estàndard (per a debug).
- */
 void TransferFunction::print() const
 {
-    std::cout << "Color:" << std::endl;
+    DEBUG_LOG( "Color:" );
     QMapIterator< double, QColor > itc( m_color );
     while ( itc.hasNext() )
     {
         itc.next();
-        std::cout << "\tx = " << itc.key()
-                << "\trgb = " << itc.value().redF() << " " << itc.value().greenF() << " " << itc.value().blueF() << std::endl;
+        DEBUG_LOG( qPrintable( QString( "    x = %1    rgb = (%2, %3, %4)" ).arg( itc.key() )
+                  .arg( itc.value().redF() ).arg( itc.value().greenF() ).arg( itc.value().blueF() ) ) );
     }
 
-    std::cout << "Opacity:" << std::endl;
+    DEBUG_LOG( "Opacity:" );
     QMapIterator< double, double > ito( m_opacity );
     while ( ito.hasNext() )
     {
         ito.next();
-        std::cout << "\tx = " << ito.key() << "\topacity = " << ito.value() << std::endl;
+        DEBUG_LOG( qPrintable( QString( "    x = %1    opacity = %2" ).arg( ito.key() ).arg( ito.value() ) ) );
     }
 }
 
+
+TransferFunction & TransferFunction::operator =( const TransferFunction & transferFunction )
+{
+    m_color = transferFunction.m_color;
+    m_opacity = transferFunction.m_opacity;
+
+    m_changed = transferFunction.m_changed;
+    if ( !m_changed ) m_rgba = transferFunction.m_rgba;
+
+    m_colorTransferFunction = transferFunction.m_colorTransferFunction;
+    if ( m_colorTransferFunction ) m_colorTransferFunction->Register( 0 );
+    m_colorChanged = transferFunction.m_colorChanged;
+    m_opacityTransferFunction = transferFunction.m_opacityTransferFunction;
+    if ( m_opacityTransferFunction ) m_opacityTransferFunction->Register( 0 );
+    m_opacityChanged = transferFunction.m_opacityChanged;
+
+    return *this;
+}
 
 
 bool TransferFunction::operator ==( const TransferFunction & transferFunction ) const
 {
     return m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
 }
-
 
 
 }
