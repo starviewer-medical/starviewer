@@ -6,9 +6,7 @@
  ***************************************************************************/
 
 
-
 #include "qtransferfunctioneditorbyvalues.h"
-
 
 #include <math.h>
 
@@ -19,13 +17,11 @@
 #include "qtransferfunctionintervaleditor.h"
 
 
-
 namespace udg {
 
 
-
 QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * parent )
-    : QWidget( parent )
+    : QTransferFunctionEditor( parent )
 {
     setupUi( this );
 
@@ -61,13 +57,14 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
 
     // Mida mínima de la scroll area
 
-    QScrollBar scrollBar( Qt::Vertical );   // necessitem una scroll bar auxiliar
+    QScrollBar scrollBar( Qt::Vertical );   // necessitem una scroll bar auxiliar per a saber-ne l'amplada
     scrollBar.show();
     scrollArea->setMinimumWidth( first->minimumSizeHint().width() + scrollBar.width() );
     scrollBar.hide();
 
 
     m_numberOfIntervals = 1;
+
     m_changed = true;
 
     connect( m_addPushButton, SIGNAL( clicked() ), SLOT( addInterval() ) );
@@ -75,34 +72,14 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
 }
 
 
-
 QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
 {
 }
 
 
-
-const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const
-{
-    m_transferFunction.clear();
-
-    QList< QTransferFunctionIntervalEditor * > intervalList =
-            m_intervalEditorsWidget->findChildren< QTransferFunctionIntervalEditor * >();
-    QTransferFunctionIntervalEditor * interval;
-    foreach ( interval, intervalList )
-    {
-        m_transferFunction.addPoint( interval->start(), interval->color() );
-        if ( interval->isInterval() ) m_transferFunction.addPoint( interval->end(), interval->color() );
-    }
-
-    m_changed = false;
-
-    return m_transferFunction;
-}
-
-
 void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunction & transferFunction )
 {
+    // si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
     if ( !m_changed && m_transferFunction == transferFunction ) return;
 
     while ( m_numberOfIntervals > 1 ) removeInterval();
@@ -141,35 +118,30 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
         first = false;
     }
 
-//     for ( unsigned short i = 0; i < transferFunction.size(); i++ )
-//     {
-//         const QGradientStop & stop = transferFunction[i];
-// 
-//         if ( i == 0 ) current->setIsInterval( false );  // cas especial: primer
-// 
-//         if ( i == 0 || stop.second != current->color() )
-//         {
-//             if ( i > 0 )
-//             {
-//                 current = next;
-//                 next = addIntervalAndReturnIt();
-//             }
-// 
-//             current->setStart( static_cast< int >( round( stop.first * 255.0 ) ) );
-//             current->setColor( stop.second );
-//         }
-//         else
-//         {
-//             current->setIsInterval( true );
-//             current->setEnd( static_cast< int >( round( stop.first * 255.0 ) ) );
-//         }
-//     }
-
     removeInterval();   // esborrem l'últim interval
 
     delete it;
 
     getTransferFunction();  // actualitzem m_transferFunction
+}
+
+
+const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const
+{
+    m_transferFunction.clear();
+
+    QList< QTransferFunctionIntervalEditor * > intervalList =
+            m_intervalEditorsWidget->findChildren< QTransferFunctionIntervalEditor * >();
+    QTransferFunctionIntervalEditor * interval;
+    foreach ( interval, intervalList )
+    {
+        m_transferFunction.addPoint( interval->start(), interval->color() );
+        if ( interval->isInterval() ) m_transferFunction.addPoint( interval->end(), interval->color() );
+    }
+
+    m_changed = false;
+
+    return m_transferFunction;
 }
 
 
@@ -197,12 +169,6 @@ void QTransferFunctionEditorByValues::removeInterval()
     beforeLast->setIsLast( true );
 
     markAsChanged();
-}
-
-
-void QTransferFunctionEditorByValues::markAsChanged()
-{
-    m_changed = true;
 }
 
 
@@ -236,6 +202,11 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
     return afterLast;
 }
 
+
+void QTransferFunctionEditorByValues::markAsChanged()
+{
+    m_changed = true;
+}
 
 
 }

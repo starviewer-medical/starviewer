@@ -101,9 +101,6 @@ public:
     /// Escriu la funció de transferència a la sortida estàndard (per a debug).
     void print() const;
 
-    /// Retorna la funció de transferència en forma de QGradientStops.
-    QGradientStops getGradientStops() const;
-
     bool operator ==( const TransferFunction & transferFunction ) const;
 
 private:

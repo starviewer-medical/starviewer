@@ -362,25 +362,6 @@ void TransferFunction::print() const
 
 
 
-QGradientStops TransferFunction::getGradientStops() const
-{
-    QGradientStops gradientStops;
-
-    QMapIterator< double, QColor > * it = getPoints();
-
-    while ( it->hasNext() )
-    {
-        it->next();
-        gradientStops << QGradientStop( it->key() / 255.0, it->value() );
-    }
-
-    delete it;
-
-    return gradientStops;
-}
-
-
-
 bool TransferFunction::operator ==( const TransferFunction & transferFunction ) const
 {
     return m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;

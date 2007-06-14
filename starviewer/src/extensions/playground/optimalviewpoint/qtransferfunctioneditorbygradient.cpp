@@ -22,7 +22,6 @@
 ****************************************************************************/
 
 
-
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.edu/GGG/index.html                                    *
@@ -31,15 +30,20 @@
  ***************************************************************************/
 
 
-
 #include <QtGui>
 
-#include "gradienteditor2.h"
+#include "qtransferfunctioneditorbygradient.h"
 #include "shadewidget.h"
 #include "hoverpoints.h"
 
-GradientEditor2::GradientEditor2(QWidget *parent)
-    : QWidget(parent)
+#include "transferfunction.h"
+
+
+namespace udg {
+
+
+QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient( QWidget * parent )
+    : QTransferFunctionEditor( parent )
 {
     QVBoxLayout *vbox = new QVBoxLayout(this);
     vbox->setSpacing(1);
@@ -59,6 +63,39 @@ GradientEditor2::GradientEditor2(QWidget *parent)
     connect(m_green_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
     connect(m_blue_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
     connect(m_alpha_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
+
+    connect( this, SIGNAL( gradientStopsChanged(const QGradientStops&) ), SLOT( setTransferFunction(const QGradientStops&) ) );
+}
+
+
+QTransferFunctionEditorByGradient::~ QTransferFunctionEditorByGradient()
+{
+}
+
+
+void QTransferFunctionEditorByGradient::setTransferFunction( const TransferFunction & transferFunction )
+{
+    if ( m_transferFunction == transferFunction ) return;
+
+    QGradientStops gradientStops;
+
+    QMapIterator< double, QColor > * it = transferFunction.getPoints();
+
+    while ( it->hasNext() )
+    {
+        it->next();
+        gradientStops << QGradientStop( it->key() / 255.0, it->value() );
+    }
+
+    delete it;
+
+    setGradientStops( gradientStops );
+}
+
+
+const TransferFunction & QTransferFunctionEditorByGradient::getTransferFunction() const
+{
+    return m_transferFunction;
 }
 
 
@@ -68,7 +105,7 @@ inline static bool x_less_than(const QPointF &p1, const QPointF &p2)
 }
 
 
-void GradientEditor2::pointsUpdated()
+void QTransferFunctionEditorByGradient::pointsUpdated()
 {
     double w = m_alpha_shade->width();
 
@@ -112,7 +149,7 @@ static void set_shade_points(const QPolygonF &points, ShadeWidget *shade)
     shade->update();
 }
 
-void GradientEditor2::setGradientStops(const QGradientStops &stops)
+void QTransferFunctionEditorByGradient::setGradientStops(const QGradientStops &stops)
 {
     QPolygonF pts_red, pts_green, pts_blue, pts_alpha;
 
@@ -134,5 +171,19 @@ void GradientEditor2::setGradientStops(const QGradientStops &stops)
     set_shade_points(pts_green, m_green_shade);
     set_shade_points(pts_blue, m_blue_shade);
     set_shade_points(pts_alpha, m_alpha_shade);
+
+}
+
+
+void QTransferFunctionEditorByGradient::setTransferFunction( const QGradientStops & stops )
+{
+    m_transferFunction.clear();
+
+    for ( unsigned char i = 0; i < stops.size(); i++ )
+    {
+        m_transferFunction.addPoint( stops.at( i ).first * 255.0, stops.at( i ).second );
+    }
+}
+
 
 }

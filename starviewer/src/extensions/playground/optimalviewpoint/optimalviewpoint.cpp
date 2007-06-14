@@ -132,7 +132,7 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     imageCaster->SetOutputScalarType( VTK_INT );
     imageCaster->Update();
 
-    vtkImageData * castedImage = imageCaster->GetOutput();
+//     vtkImageData * castedImage = imageCaster->GetOutput();
 
 //     double srange[2];
 //     castedImage->GetScalarRange( srange );

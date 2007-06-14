@@ -22,7 +22,6 @@
 ****************************************************************************/
 
 
-
 /***************************************************************************
  *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.edu/GGG/index.html                                    *
@@ -31,21 +30,49 @@
  ***************************************************************************/
 
 
-
-#ifndef GRADIENTEDITOR2_H
-#define GRADIENTEDITOR2_H
-
+#ifndef QTRANSFERFUNCTIONEDITORBYGRADIENT_H
+#define QTRANSFERFUNCTIONEDITORBYGRADIENT_H
 
 
-#include <QWidget>
+#include "qtransferfunctioneditor.h"
+
+#include "transferfunction.h"
+
 
 class ShadeWidget;
 
-class GradientEditor2 : public QWidget
+
+namespace udg {
+
+
+/**
+ * Editor de funcions de transferència basat en gràfiques.
+ *
+ * L'usuari pot modificar 4 gràfiques (una per cada component RGBA)
+ * independentment. L'eix X representa els valors de propietat i l'eix Y la
+ * intensitat del component. L'usuari ha d'introduir els punts que defineixen la
+ * funció de transferència.
+ *
+ * Un clic amb el botó esquerre crea un punt nou. Un clic amb el botó dret sobre
+ * un punt l'esborra. Els punts existents es poden arrossegar mantenint premut
+ * el botó esquerre per modificar-los.
+ *
+ * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+ */
+class QTransferFunctionEditorByGradient : public QTransferFunctionEditor
 {
+
     Q_OBJECT
+
 public:
-    GradientEditor2(QWidget *parent);
+
+    QTransferFunctionEditorByGradient( QWidget * parent = 0 );
+    virtual ~QTransferFunctionEditorByGradient();
+
+    /// Assigna una funció de transferència a l'editor.
+    virtual void setTransferFunction( const TransferFunction & transferFunction );
+    /// Retorna la funció de transferència de l'editor.
+    virtual const TransferFunction & getTransferFunction() const;
 
     void setGradientStops(const QGradientStops &stops);
 
@@ -55,13 +82,22 @@ public slots:
 signals:
     void gradientStopsChanged(const QGradientStops &stops);
 
+private slots:
+
+    void setTransferFunction( const QGradientStops & stops );
+
 private:
     ShadeWidget *m_red_shade;
     ShadeWidget *m_green_shade;
     ShadeWidget *m_blue_shade;
     ShadeWidget *m_alpha_shade;
+
+    TransferFunction m_transferFunction;
+
 };
 
+
+}
 
 
 #endif

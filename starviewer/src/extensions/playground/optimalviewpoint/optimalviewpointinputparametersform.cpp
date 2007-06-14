@@ -252,8 +252,8 @@ void OptimalViewpointInputParametersForm::setTransferFunction( const TransferFun
 {
     m_transferFunction = transferFunction;
 
-    m_gradientEditor->setGradientStops( transferFunction.getGradientStops() );
-    m_gradientEditor->pointsUpdated();
+    m_gradientEditor->setTransferFunction( transferFunction );
+//     m_gradientEditor->pointsUpdated();
 
     m_editorByValues->setTransferFunction( m_transferFunction );
 }
@@ -282,8 +282,8 @@ void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const Tra
 {
     std::cout << "OVIPF::satf" << std::endl;
     adjustedTransferFunction.print();
-    m_gradientEditor->setGradientStops( adjustedTransferFunction.getGradientStops() );
-    m_gradientEditor->pointsUpdated();
+    m_gradientEditor->setTransferFunction( adjustedTransferFunction );
+//     m_gradientEditor->pointsUpdated();
 
     m_transferFunction = adjustedTransferFunction;
 

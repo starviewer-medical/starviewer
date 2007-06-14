@@ -7,8 +7,7 @@ FORMS += optimalviewpointinputparametersformbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
          qtransferfunctionintervaleditorbase.ui \
          qoptimalviewpointextensionbase.ui 
-HEADERS += gradienteditor2.h \
-           histogram.h \
+HEADERS += histogram.h \
            hoverpoints.h \
            optimalviewpoint.h \
            optimalviewpointinputparametersform.h \
@@ -32,9 +31,10 @@ HEADERS += gradienteditor2.h \
            qoptimalviewpointextension.h \
            transferfunction.h \
            transferfunctionio.h \
-           slicer.h 
-SOURCES += gradienteditor2.cpp \
-           histogram.cpp \
+           slicer.h \
+           qtransferfunctioneditor.h \
+           qtransferfunctioneditorbygradient.h 
+SOURCES += histogram.cpp \
            hoverpoints.cpp \
            optimalviewpoint.cpp \
            optimalviewpointinputparametersform.cpp \
@@ -58,7 +58,9 @@ SOURCES += gradienteditor2.cpp \
            qoptimalviewpointextension.cpp \
            transferfunction.cpp \
            transferfunctionio.cpp \
-           slicer.cpp 
+           slicer.cpp \
+           qtransferfunctioneditor.cpp \
+           qtransferfunctioneditorbygradient.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a
