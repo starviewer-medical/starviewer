@@ -43,7 +43,6 @@ void ToolManager::forwardEvent( unsigned long eventID )
     if( m_toolList.find( m_currentToolName ) != m_toolList.end() )
     {
         m_toolList[m_currentToolName]->handleEvent( eventID );
-        DEBUG_LOG( qPrintable(m_currentToolName) );
     }
 }
 
