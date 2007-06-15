@@ -23,13 +23,10 @@ class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
 class vtkVolumeRayCastMapper;
 
 
-
 namespace udg {
 
 
-
 class TransferFunction;
-
 
 
 /**
@@ -48,14 +45,14 @@ class TransferFunction;
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class OptimalViewpointVolume : public QObject {
-
+class OptimalViewpointVolume : public QObject
+{
 
     Q_OBJECT
 
-
 public:
 
+    /// Construeix el volum a partir de l'imatge \a image. \a image no pot ser nul.
     OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
     virtual ~OptimalViewpointVolume();
 
@@ -122,6 +119,11 @@ public:
 
     vtkImageData * getLabeledImage() const { return m_labeledImage; }
 
+    /// Retorna el valor de propietat mínim.
+    unsigned char getRangeMin() const;
+    /// Retorna el valor de propietat màxim.
+    unsigned char getRangeMax() const;
+
 
 
 
@@ -133,9 +135,9 @@ public slots:
 private:
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
-    void labelize( const QVector< unsigned char> & limits );
+    void labelize( const QVector< unsigned char > & limits );
     /// Genera una funció de transferència ajustada a la segmentació a partir dels límits donats.
-    void generateAdjustedTransferFunction( const QVector< unsigned char> & limits );
+    void generateAdjustedTransferFunction( const QVector< unsigned char > & limits );
 
     /// Model de vòxels original.
     vtkImageData * m_image;
@@ -177,9 +179,14 @@ private:
 
     QString m_segmentationFileName;
 
+    /// Valors de propietat mínim i màxim del volum.
+    unsigned char m_rangeMin, m_rangeMax;
+
 
 signals:
 
+    /// S'emet quan es crea el volum i dóna els valors de propietat mínim i màxim.
+    void scalarRange( unsigned char min, unsigned char max );
     void needsExcessEntropy();
     void visited( int rayId, unsigned char value );
     void rayEnd( int rayId );
