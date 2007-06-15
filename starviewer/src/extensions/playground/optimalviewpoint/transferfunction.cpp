@@ -33,12 +33,9 @@ TransferFunction::TransferFunction( const TransferFunction & transferFunction )
     m_changed = transferFunction.m_changed;
     if ( !m_changed ) m_rgba = transferFunction.m_rgba;
 
-    m_colorTransferFunction = transferFunction.m_colorTransferFunction;
-    if ( m_colorTransferFunction ) m_colorTransferFunction->Register( 0 );
-    m_colorChanged = transferFunction.m_colorChanged;
-    m_opacityTransferFunction = transferFunction.m_opacityTransferFunction;
-    if ( m_opacityTransferFunction ) m_opacityTransferFunction->Register( 0 );
-    m_opacityChanged = transferFunction.m_opacityChanged;
+    m_colorTransferFunction = 0;
+    m_opacityTransferFunction = 0;
+    m_colorChanged = m_opacityChanged = true;
 }
 
 
@@ -292,12 +289,7 @@ TransferFunction & TransferFunction::operator =( const TransferFunction & transf
     m_changed = transferFunction.m_changed;
     if ( !m_changed ) m_rgba = transferFunction.m_rgba;
 
-    m_colorTransferFunction = transferFunction.m_colorTransferFunction;
-    if ( m_colorTransferFunction ) m_colorTransferFunction->Register( 0 );
-    m_colorChanged = transferFunction.m_colorChanged;
-    m_opacityTransferFunction = transferFunction.m_opacityTransferFunction;
-    if ( m_opacityTransferFunction ) m_opacityTransferFunction->Register( 0 );
-    m_opacityChanged = transferFunction.m_opacityChanged;
+    m_colorChanged = m_opacityChanged = true;
 
     return *this;
 }

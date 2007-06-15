@@ -1,17 +1,26 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+
 #include "qcolorspinbox.h"
 
-QColorSpinBox::QColorSpinBox(QWidget *parent)
- : QSpinBox(parent)
-{
-    setColor( QColor( 0, 0, 0, 0 ) );
 
-    connect( this, SIGNAL( valueChanged(int) ), this, SLOT( setOpacity(int) ) );
+namespace udg {
+
+
+QColorSpinBox::QColorSpinBox( QWidget * parent )
+    : QSpinBox( parent )
+{
+    m_settingColor = false;
+
+    setMaximum( 255 );
+    setColor( QColor( 255, 255, 255, 0 ) );
+
+    connect( this, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
 }
 
 
@@ -20,7 +29,7 @@ QColorSpinBox::~QColorSpinBox()
 }
 
 
-QColor QColorSpinBox::getColor() const
+const QColor & QColorSpinBox::getColor() const
 {
     return m_color;
 }
@@ -28,14 +37,21 @@ QColor QColorSpinBox::getColor() const
 
 void QColorSpinBox::setColor( const QColor & color )
 {
+    m_settingColor = true;
     m_color = color;
     QString foreground = QString( ";color:" ) + ( color.value() < 128 ? "white" : "black" );
     this->setStyleSheet( QString( "background-color:" ) + color.name() + foreground );
     this->setValue( color.alpha() );
+    emit colorChanged( m_color );
+    m_settingColor = false;
 }
 
 
 void QColorSpinBox::setOpacity( int opacity )
 {
-    if ( opacity != m_color.alpha() ) m_color.setAlpha( opacity );
+    m_color.setAlpha( opacity );
+    if ( !m_settingColor ) emit colorChanged( m_color );
+}
+
+
 }

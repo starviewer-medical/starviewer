@@ -53,6 +53,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
 
     connect( first, SIGNAL( startChanged(int) ), SLOT( markAsChanged() ) );
     connect( first, SIGNAL( endChanged(int) ), SLOT( markAsChanged() ) );
+    connect( first, SIGNAL( colorChanged(const QColor&) ), SLOT( markAsChanged() ) );
 
 
     // Mida mínima de la scroll area
@@ -118,24 +119,28 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
 
     removeInterval();   // esborrem l'últim interval
 
+    m_changed = true;
     getTransferFunction();  // actualitzem m_transferFunction
 }
 
 
 const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const
 {
-    m_transferFunction.clear();
-
-    QList< QTransferFunctionIntervalEditor * > intervalList =
-            m_intervalEditorsWidget->findChildren< QTransferFunctionIntervalEditor * >();
-    QTransferFunctionIntervalEditor * interval;
-    foreach ( interval, intervalList )
+    if ( m_changed )
     {
-        m_transferFunction.addPoint( interval->start(), interval->color() );
-        if ( interval->isInterval() ) m_transferFunction.addPoint( interval->end(), interval->color() );
-    }
+        m_transferFunction.clear();
 
-    m_changed = false;
+        QList< QTransferFunctionIntervalEditor * > intervalList =
+                m_intervalEditorsWidget->findChildren< QTransferFunctionIntervalEditor * >();
+        QTransferFunctionIntervalEditor * interval;
+        foreach ( interval, intervalList )
+        {
+            m_transferFunction.addPoint( interval->start(), interval->color() );
+            if ( interval->isInterval() ) m_transferFunction.addPoint( interval->end(), interval->color() );
+        }
+
+        m_changed = false;
+    }
 
     return m_transferFunction;
 }
@@ -183,6 +188,7 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
 
     connect( afterLast, SIGNAL( startChanged(int) ), this, SLOT( markAsChanged() ) );
     connect( afterLast, SIGNAL( endChanged(int) ), this, SLOT( markAsChanged() ) );
+    connect( afterLast, SIGNAL( colorChanged(const QColor&) ), SLOT( markAsChanged() ) );
 
     last->setIsLast( false );
 

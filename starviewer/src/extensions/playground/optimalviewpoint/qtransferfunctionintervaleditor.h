@@ -50,42 +50,69 @@ class QTransferFunctionIntervalEditor
 public:
 
     QTransferFunctionIntervalEditor( QWidget * parent = 0 );
-
     virtual ~QTransferFunctionIntervalEditor();
 
+    /// Assigna la propietat isFirst.
     void setIsFirst( bool isFirst );
+    /// Retorna la propietat isFirst.
+    bool isFirst() const;
+    /// Assigna la propietat isLast.
     void setIsLast( bool isLast );
+    /// Retorna la propietat isLast.
+    bool isLast() const;
+    /// Retorna la propietat isInterval.
     bool isInterval() const;
-    int start() const;
-    int end() const;
-    QColor color() const;
+
+    /// Assigna el començament de l'interval.
     void setStart( int start );
+    /// Retorna el començament de l'interval.
+    int start() const;
+    /// Assigna el final de l'interval.
     void setEnd( int end );
+    /// Retorna el final de l'interval.
+    int end() const;
+    /// Assigna el color RGBA de l'interval.
     void setColor( QColor color );
-    QGradientStops getInterval() const;
+    /// Retorna el color RGBA de l'interval.
+    const QColor & color() const;
 
 public slots:
 
+    /// Assigna la propietat isInterval.
     void setIsInterval( bool isInterval );
+    /// Si previousEnd >= start --> start = previousEnd + 1.
     void setPreviousEnd( int previousEnd );
+    /// Si nextStart <= end --> end = nextStart - 1.
     void setNextStart( int nextStart );
-
-private slots:
-
-    void isIntervalToggled( bool checked );
-    void adjustWithNewStart( int start );
-    void adjustWithNewEnd( int end );
-    void selectColor();
 
 signals:
 
+    /// S'emet quan canvia el començament de l'interval.
     void startChanged( int start );
+    /// S'emet quan canvia el final de l'interval.
     void endChanged( int end );
+    /// S'emet quan canvia el color RGBA de l'interval.
+    void colorChanged( const QColor & color );
 
 private:
 
+    /// Fa els ajustos necessaris perquè l'interval sigui primer i últim alhora.
     void firstAndLast();
 
+private slots:
+
+    /// Fa els ajustes necessaris quan canvia la propietat isInterval.
+    void isIntervalToggled( bool checked );
+    /// Ajusta el final perquè sigui >= que el començament.
+    void adjustWithNewStart( int start );
+    /// Ajusta el començament perquè sigui <= que el final.
+    void adjustWithNewEnd( int end );
+    /// Obre el diàleg de selecció de color per a l'interval.
+    void selectColor();
+
+private:
+
+    /// Propietats isFirst i isLast.
     bool m_isFirst, m_isLast;
 
 };

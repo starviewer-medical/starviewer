@@ -1,10 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2005-2007 by Grup de Gràfics de Girona                  *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 
 
 #include "transferfunctionio.h"
@@ -13,12 +12,11 @@
 #include <QFile>
 #include <QTextStream>
 
+#include "logging.h"
 #include "transferfunction.h"
 
 
-
 namespace udg {
-
 
 
 TransferFunctionIO::TransferFunctionIO()
@@ -26,18 +24,16 @@ TransferFunctionIO::TransferFunctionIO()
 }
 
 
-
 TransferFunctionIO::~TransferFunctionIO()
 {
 }
-
 
 
 TransferFunction * TransferFunctionIO::fromFile( QFile & file )
 {
     if ( !file.open( QFile::ReadOnly | QFile::Text ) )
     {
-        qCritical( "No s'ha pogut obrir el fitxer %s!", qPrintable( file.fileName() ) );
+        DEBUG_LOG( qPrintable( QString( "No es pot llegir des del fitxer %1" ).arg( file.fileName() ) ) );
         return 0;
     }
 
@@ -84,7 +80,6 @@ TransferFunction * TransferFunctionIO::fromFile( QFile & file )
 }
 
 
-
 TransferFunction * TransferFunctionIO::fromFile( const QString & fileName )
 {
     QFile file( fileName );
@@ -92,25 +87,17 @@ TransferFunction * TransferFunctionIO::fromFile( const QString & fileName )
 }
 
 
-
 void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transferFunction )
 {
     if ( !file.open( QFile::WriteOnly | QFile::Truncate | QFile::Text ) )
     {
-        qCritical( "No s'ha pogut obrir el fitxer %s!", qPrintable( file.fileName() ) );
+        DEBUG_LOG( qPrintable( QString( "No es pot escriure al fitxer %1" ).arg( file.fileName() ) ) );
         return;
     }
 
     QTextStream out( &file );
 
     out << "[Color]\n";
-//     QMapIterator< double, QColor > * itc = transferFunction.getColorPoints();
-//     while ( itc->hasNext() )
-//     {
-//         itc->next();
-//         out << itc->key() << " " << itc->value().redF() << " " << itc->value().greenF() << " " << itc->value().blueF() << "\n";
-//     }
-//     delete itc;
     QList< double > colorPoints = transferFunction.getColorPoints();
     foreach ( double x, colorPoints )
     {
@@ -121,13 +108,6 @@ void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transfer
     out << "\n";
 
     out << "[Opacity]\n";
-//     QMapIterator< double, double > * ito = transferFunction.getOpacityPoints();
-//     while ( ito->hasNext() )
-//     {
-//         ito->next();
-//         out << ito->key() << " " << ito->value() << "\n";
-//     }
-//     delete ito;
     QList< double > opacityPoints = transferFunction.getOpacityPoints();
     foreach ( double x, opacityPoints )
     {
@@ -139,13 +119,11 @@ void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transfer
 }
 
 
-
 void TransferFunctionIO::toFile( const QString & fileName, const TransferFunction & transferFunction )
 {
     QFile file( fileName );
     toFile( file, transferFunction );
 }
-
 
 
 }

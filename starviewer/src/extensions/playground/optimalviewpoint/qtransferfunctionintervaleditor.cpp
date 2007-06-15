@@ -4,38 +4,38 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
+
 #include "qtransferfunctionintervaleditor.h"
 
 #include <QColorDialog>
 
+
 namespace udg {
 
+
 QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor( QWidget * parent )
- : QWidget( parent )
+    : QWidget( parent )
 {
     setupUi( this );
+
 
     m_isFirst = m_isLast = false;
 
     m_intervalEndSpinBox->setVisible( m_isIntervalCheckBox->isChecked() );
 
-    connect( m_isIntervalCheckBox, SIGNAL( toggled(bool) ), this, SLOT( isIntervalToggled(bool) ) );
-    connect( m_intervalStartSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( adjustWithNewStart(int) ) );
-    connect( m_intervalEndSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( adjustWithNewEnd(int) ) );
-    connect( m_intervalStartSpinBox, SIGNAL( valueChanged(int) ), this, SIGNAL( startChanged(int) ) );
-    connect( m_intervalEndSpinBox, SIGNAL( valueChanged(int) ), this, SIGNAL( endChanged(int) ) );
-    connect( m_selectColorPushButton, SIGNAL( clicked() ), this, SLOT( selectColor() ) );
+    connect( m_isIntervalCheckBox, SIGNAL( toggled(bool) ), SLOT( isIntervalToggled(bool) ) );
+    connect( m_intervalStartSpinBox, SIGNAL( valueChanged(int) ), SLOT( adjustWithNewStart(int) ) );
+    connect( m_intervalEndSpinBox, SIGNAL( valueChanged(int) ), SLOT( adjustWithNewEnd(int) ) );
+    connect( m_intervalStartSpinBox, SIGNAL( valueChanged(int) ), SIGNAL( startChanged(int) ) );
+    connect( m_intervalEndSpinBox, SIGNAL( valueChanged(int) ), SIGNAL( endChanged(int) ) );
+    connect( m_selectColorPushButton, SIGNAL( clicked() ), SLOT( selectColor() ) );
+    connect( m_colorSpinBox, SIGNAL( colorChanged(const QColor&) ), SIGNAL( colorChanged(const QColor&) ) );
 }
 
 
 QTransferFunctionIntervalEditor::~QTransferFunctionIntervalEditor()
 {
-}
-
-
-void QTransferFunctionIntervalEditor::setIsInterval( bool isInterval )
-{
-    m_isIntervalCheckBox->setChecked( isInterval );
 }
 
 
@@ -49,6 +49,12 @@ void QTransferFunctionIntervalEditor::setIsFirst( bool isFirst )
         if ( m_isFirst ) this->setStart( 0 );
         m_intervalStartSpinBox->setReadOnly( m_isFirst );
     }
+}
+
+
+bool QTransferFunctionIntervalEditor::isFirst() const
+{
+    return m_isFirst;
 }
 
 
@@ -70,27 +76,15 @@ void QTransferFunctionIntervalEditor::setIsLast( bool isLast )
 }
 
 
+bool QTransferFunctionIntervalEditor::isLast() const
+{
+    return m_isLast;
+}
+
+
 bool QTransferFunctionIntervalEditor::isInterval() const
 {
     return m_isIntervalCheckBox->isChecked();
-}
-
-
-int QTransferFunctionIntervalEditor::start() const
-{
-    return m_intervalStartSpinBox->value();
-}
-
-
-int QTransferFunctionIntervalEditor::end() const
-{
-    return m_intervalEndSpinBox->value();
-}
-
-
-QColor QTransferFunctionIntervalEditor::color() const
-{
-    return m_colorSpinBox->getColor();
 }
 
 
@@ -101,10 +95,22 @@ void QTransferFunctionIntervalEditor::setStart( int start )
 }
 
 
+int QTransferFunctionIntervalEditor::start() const
+{
+    return m_intervalStartSpinBox->value();
+}
+
+
 void QTransferFunctionIntervalEditor::setEnd( int end )
 {
     m_intervalEndSpinBox->setValue( end );
     emit endChanged( this->end() );
+}
+
+
+int QTransferFunctionIntervalEditor::end() const
+{
+    return m_intervalEndSpinBox->value();
 }
 
 
@@ -114,15 +120,15 @@ void QTransferFunctionIntervalEditor::setColor( QColor color )
 }
 
 
-QGradientStops QTransferFunctionIntervalEditor::getInterval() const
+const QColor & QTransferFunctionIntervalEditor::color() const
 {
-    //typedef QPair<qreal,QColor> QGradientStop;
-    //typedef QVector<QGradientStop> QGradientStops;
-    QGradientStops interval;
-    interval << QGradientStop( start() / 255.0, m_colorSpinBox->getColor() );
-    if ( m_isIntervalCheckBox->isChecked() )
-        interval << QGradientStop( end() / 255.0, m_colorSpinBox->getColor() );
-    return interval;
+    return m_colorSpinBox->getColor();
+}
+
+
+void QTransferFunctionIntervalEditor::setIsInterval( bool isInterval )
+{
+    m_isIntervalCheckBox->setChecked( isInterval );
 }
 
 
@@ -135,6 +141,17 @@ void QTransferFunctionIntervalEditor::setPreviousEnd( int previousEnd )
 void QTransferFunctionIntervalEditor::setNextStart( int nextStart )
 {
     if ( nextStart <= this->end() ) this->setEnd( nextStart - 1 );
+}
+
+
+void QTransferFunctionIntervalEditor::firstAndLast()
+{
+    m_isIntervalCheckBox->setChecked( true );
+    m_isIntervalCheckBox->setDisabled( true );
+    this->setStart( 0 );
+    m_intervalStartSpinBox->setReadOnly( true );
+    this->setEnd( 255 );
+    m_intervalEndSpinBox->setReadOnly( true );
 }
 
 
@@ -170,17 +187,6 @@ void QTransferFunctionIntervalEditor::selectColor()
     bool ok;
     color = QColor::fromRgba( QColorDialog::getRgba( color.rgba(), &ok, this ) );
     if ( ok ) this->setColor( color );
-}
-
-
-void QTransferFunctionIntervalEditor::firstAndLast()
-{
-    m_isIntervalCheckBox->setChecked( true );
-    m_isIntervalCheckBox->setDisabled( true );
-    this->setStart( 0 );
-    m_intervalStartSpinBox->setReadOnly( true );
-    this->setEnd( 255 );
-    m_intervalEndSpinBox->setReadOnly( true );
 }
 
 

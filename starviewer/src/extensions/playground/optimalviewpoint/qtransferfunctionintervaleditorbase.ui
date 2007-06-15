@@ -42,13 +42,6 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="3" >
-    <widget class="QColorSpinBox" name="m_colorSpinBox" >
-     <property name="maximum" >
-      <number>255</number>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="2" >
     <widget class="QPushButton" name="m_selectColorPushButton" >
      <property name="text" >
@@ -63,12 +56,15 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="3" >
+    <widget class="udg::QColorSpinBox" name="m_colorSpinBox" />
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="9" />
  <customwidgets>
   <customwidget>
-   <class>QColorSpinBox</class>
+   <class>udg::QColorSpinBox</class>
    <extends>QSpinBox</extends>
    <header>qcolorspinbox.h</header>
   </customwidget>

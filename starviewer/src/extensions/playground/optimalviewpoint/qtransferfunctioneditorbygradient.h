@@ -92,6 +92,7 @@ private:
     ShadeWidget *m_blue_shade;
     ShadeWidget *m_alpha_shade;
 
+    /// Funció de transferència actual.
     TransferFunction m_transferFunction;
 
 };
