@@ -6,22 +6,16 @@
  ***************************************************************************/
 
 
-
 #ifndef UDGMAGICMIRRORSVOLUME_H
 #define UDGMAGICMIRRORSVOLUME_H
 
 
-
 #include <QObject>
 
-
-#include <vector>
-
+#include <QVector>
 
 
-class vtkColorTransferFunction;
 class vtkImageData;
-class vtkPiecewiseFunction;
 class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
@@ -77,17 +71,19 @@ public:
     void setSampleDistance( double sampleDistance );
     double getSampleDistance() const { return m_sampleDistance; }
 
+    void setTransferFunction( const TransferFunction & transferFunction );
+
     /**
      * Estableix la funció de transferència d'opacitat pel vtkVolume
      * corresponent a l'índex donat.
      */
-    void setOpacityTransferFunction( vtkPiecewiseFunction * opacityTransferFunction);
+//     void setOpacityTransferFunction( vtkPiecewiseFunction * opacityTransferFunction);
 
     /**
      * Estableix la funció de transferència de color pel vtkVolume corresponent
      * a l'índex donat.
      */
-    void setColorTransferFunction( vtkColorTransferFunction * colorTransferFunction);
+//     void setColorTransferFunction( vtkColorTransferFunction * colorTransferFunction);
 
     /**
      * Sincronitza les tranformacions de tots els vtkVolumes. Concretament,
@@ -137,9 +133,9 @@ public slots:
 private:
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
-    void labelize( const std::vector< unsigned char> & limits );
+    void labelize( const QVector< unsigned char> & limits );
     /// Genera una funció de transferència ajustada a la segmentació a partir dels límits donats.
-    void generateAdjustedTransferFunction( const std::vector< unsigned char> & limits );
+    void generateAdjustedTransferFunction( const QVector< unsigned char> & limits );
 
     /// Model de vòxels original.
     vtkImageData * m_image;
@@ -159,10 +155,10 @@ private:
     vtkVolumeRayCastCompositeFunctionOptimalViewpoint * m_planeVolumeRayCastFunction;
 
     /// Vector de funcions de transferència d'opacitat.
-    vtkPiecewiseFunction * m_opacityTransferFunction;
+//     vtkPiecewiseFunction * m_opacityTransferFunction;
 
     /// Vector de funcions de transferència de color.
-    vtkColorTransferFunction * m_colorTransferFunction;
+//     vtkColorTransferFunction * m_colorTransferFunction;
 
     /// Vector de propietats de volum.
     vtkVolumeProperty * m_volumeProperty;

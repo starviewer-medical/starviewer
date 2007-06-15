@@ -151,16 +151,24 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
 
-    m_opacityTransferFunction = vtkPiecewiseFunction::New(); m_opacityTransferFunction->Register( 0 );
-    m_opacityTransferFunction->AddPoint( 0.0, 0.0 );
-    m_opacityTransferFunction->AddPoint( 255.0, 1.0 );
-    m_colorTransferFunction = vtkColorTransferFunction::New(); m_colorTransferFunction->Register( 0 );
-    m_colorTransferFunction->AddRGBPoint( 0.0, 0.0, 0.0, 0.0 );
-    m_colorTransferFunction->AddRGBPoint( 255.0, 1.0, 1.0, 1.0 );
+//     m_opacityTransferFunction = vtkPiecewiseFunction::New(); m_opacityTransferFunction->Register( 0 );
+//     m_opacityTransferFunction->AddPoint( 0.0, 0.0 );
+//     m_opacityTransferFunction->AddPoint( 255.0, 1.0 );
+    vtkPiecewiseFunction * opacityTransferFunction = vtkPiecewiseFunction::New();
+    opacityTransferFunction->AddPoint( 0.0, 0.0 );
+    opacityTransferFunction->AddPoint( 255.0, 1.0 );
+//     m_colorTransferFunction = vtkColorTransferFunction::New(); m_colorTransferFunction->Register( 0 );
+//     m_colorTransferFunction->AddRGBPoint( 0.0, 0.0, 0.0, 0.0 );
+//     m_colorTransferFunction->AddRGBPoint( 255.0, 1.0, 1.0, 1.0 );
+    vtkColorTransferFunction * colorTransferFunction = vtkColorTransferFunction::New();
+    colorTransferFunction->AddRGBPoint( 0.0, 0.0, 0.0, 0.0 );
+    colorTransferFunction->AddRGBPoint( 255.0, 1.0, 1.0, 1.0 );
     m_volumeProperty = vtkVolumeProperty::New(); m_volumeProperty->Register( 0 );
-    m_volumeProperty->SetScalarOpacity( m_opacityTransferFunction );
+//     m_volumeProperty->SetScalarOpacity( m_opacityTransferFunction );
+    m_volumeProperty->SetScalarOpacity( opacityTransferFunction );
 //     m_volumeProperty->SetGradientOpacity( m_opacityTransferFunction );
-    m_volumeProperty->SetColor( m_colorTransferFunction );
+//     m_volumeProperty->SetColor( m_colorTransferFunction );
+    m_volumeProperty->SetColor( colorTransferFunction );
 
 
 
@@ -197,8 +205,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 OptimalViewpointVolume::~OptimalViewpointVolume()
 {
-    m_opacityTransferFunction->Delete();
-    m_colorTransferFunction->Delete();
+//     m_opacityTransferFunction->Delete();
+//     m_colorTransferFunction->Delete();
     m_volumeProperty->Delete();
     m_mainVolumeRayCastFunction->Delete();
     m_planeVolumeRayCastFunction->Delete();
@@ -242,30 +250,38 @@ vtkVolume * OptimalViewpointVolume::getPlaneVolume() const
     return m_planeVolume;
 }
 
+
+void OptimalViewpointVolume::setTransferFunction( const TransferFunction & transferFunction )
+{
+    m_volumeProperty->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
+    m_volumeProperty->SetColor( transferFunction.getColorTransferFunction() );
+}
+
+
 /**
  * Estableix la funció de transferència d'opacitat pel vtkVolume
  * corresponent a l'índex donat.
  */
-void OptimalViewpointVolume::setOpacityTransferFunction( vtkPiecewiseFunction * opacityTransferFunction )
-{
-    m_opacityTransferFunction->Delete();
-    m_opacityTransferFunction = opacityTransferFunction; m_opacityTransferFunction->Register( 0 );
-    m_volumeProperty->SetScalarOpacity( opacityTransferFunction );
-//     m_volumeProperty->SetGradientOpacity( opacityTransferFunction );
-    opacityTransferFunction->Print( std::cout );
-}
+// void OptimalViewpointVolume::setOpacityTransferFunction( vtkPiecewiseFunction * opacityTransferFunction )
+// {
+//     m_opacityTransferFunction->Delete();
+//     m_opacityTransferFunction = opacityTransferFunction; m_opacityTransferFunction->Register( 0 );
+//     m_volumeProperty->SetScalarOpacity( opacityTransferFunction );
+// //     m_volumeProperty->SetGradientOpacity( opacityTransferFunction );
+//     opacityTransferFunction->Print( std::cout );
+// }
 
 /**
  * Estableix la funció de transferència de color pel vtkVolume corresponent
  * a l'índex donat.
  */
-void OptimalViewpointVolume::setColorTransferFunction( vtkColorTransferFunction * colorTransferFunction )
-{
-    m_colorTransferFunction->Delete();
-    m_colorTransferFunction = colorTransferFunction; m_colorTransferFunction->Register( 0 );
-    m_volumeProperty->SetColor( colorTransferFunction );
-    colorTransferFunction->Print( std::cout );
-}
+// void OptimalViewpointVolume::setColorTransferFunction( vtkColorTransferFunction * colorTransferFunction )
+// {
+//     m_colorTransferFunction->Delete();
+//     m_colorTransferFunction = colorTransferFunction; m_colorTransferFunction->Register( 0 );
+//     m_volumeProperty->SetColor( colorTransferFunction );
+//     colorTransferFunction->Print( std::cout );
+// }
 
 /**
  * Sincronitza les tranformacions de tots els vtkVolumes. Concretament,
@@ -322,7 +338,7 @@ signed char OptimalViewpointVolume::loadSegmentationFromFile( const QString & se
         return -1;
     }
 
-    std::vector< unsigned char > limits;
+    QVector< unsigned char > limits;
     QTextStream in( &segFile );
 
     while ( !in.atEnd() && limits.size() < 5 )  /// \warning Es llegirà un màxim de 5 límits.
@@ -357,9 +373,9 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
     unsigned char nLabels = numberOfClusters - 1;
     unsigned char maxLevel = 255;
     double maxExcessEntropy = 0;
-    std::vector<unsigned char> limits( nLabels );
-    std::vector<unsigned char> sortLimits( nLabels );
-    std::vector<unsigned char> maxLimits( nLabels );
+    QVector<unsigned char> limits( nLabels );
+    QVector<unsigned char> sortLimits( nLabels );
+    QVector<unsigned char> maxLimits( nLabels );
     long seed = 1979;   // time( 0 );
     unsigned short maxIteration;
     bool genetic = true;
@@ -379,8 +395,9 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
         for ( k1 = 0; k1 < iterations; k1++ )
         {
             std::cout << "iteration " << k1 << std::flush;
-            copy( limits.begin(), limits.end(), sortLimits.begin() );
-            sort( sortLimits.begin(), sortLimits.end() );
+//             copy( limits.begin(), limits.end(), sortLimits.begin() );
+            sortLimits = limits;
+            qSort( sortLimits.begin(), sortLimits.end() );
             std::cout << "==> labels: ";
 
             for( i = 0; i < sortLimits.size(); i++ )
@@ -406,7 +423,8 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
             {
                 maxExcessEntropy = m_excessEntropy;
                 maxIteration = k1;
-                copy( sortLimits.begin(), sortLimits.end(), maxLimits.begin() );
+//                 copy( sortLimits.begin(), sortLimits.end(), maxLimits.begin() );
+                maxLimits = sortLimits;
                 std::cout << "** is maximum **" << std::endl;
             }
 
@@ -441,14 +459,16 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
         {
             for ( k1 = 0; k1 < nLabels; k1++ )
             {
-                copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
+//                 copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
+                limits = maxLimits;
 
                 for( k2 = 0; k2 < maxLevel; k2 += 8 )
                 {
                     std::cout << "iteration " << k1 << ": " << k2 << std::flush;
                     limits[k1] = k2;
-                    copy( limits.begin(), limits.end(), sortLimits.begin() );
-                    sort( sortLimits.begin(), sortLimits.end() );
+//                     copy( limits.begin(), limits.end(), sortLimits.begin() );
+                    sortLimits = limits;
+                    qSort( sortLimits.begin(), sortLimits.end() );
                     std::cout << "==> labels: ";
 
                     for ( i = 0; i < sortLimits.size(); i++ )
@@ -472,7 +492,8 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
                     {
                         maxExcessEntropy = m_excessEntropy;
                         maxIteration = k1;
-                        copy( limits.begin(), limits.end(), maxLimits.begin() );
+//                         copy( limits.begin(), limits.end(), maxLimits.begin() );
+                        maxLimits = limits;
                         std::cout << "** is maximum **" << std::endl;
                     }
                 }
@@ -501,11 +522,13 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
 
             for ( k1 = 0; k1 < nLabels; k1++ )
             {
-                copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
+//                 copy( maxLimits.begin(), maxLimits.end(), limits.begin() );
+                limits = maxLimits;
                 limits[k1] = limits[k1] - 1;
                 std::cout << "iteration " << k1 << ": " << (short) limits[k1] << std::flush;
-                copy( limits.begin(), limits.end(), sortLimits.begin() );
-                sort( sortLimits.begin(), sortLimits.end() );
+//                 copy( limits.begin(), limits.end(), sortLimits.begin() );
+                sortLimits = limits;
+                qSort( sortLimits.begin(), sortLimits.end() );
                 std::cout << "==> labels: ";
 
                 for ( i = 0; i < sortLimits.size(); i++ )
@@ -528,7 +551,8 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
                 if ( m_excessEntropy > maxExcessEntropy )
                 {
                     maxExcessEntropy = m_excessEntropy;
-                    copy( limits.begin(), limits.end(), maxLimits.begin() );
+//                     copy( limits.begin(), limits.end(), maxLimits.begin() );
+                    maxLimits = limits;
                     canviat = true;
                     std::cout << "** is maximum **" << std::endl;
                 }
@@ -536,8 +560,9 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
                 // cap a l'altra banda
                 limits[k1] = limits[k1] + 2;    // ara limits[k1] val "limits[k1] - 1"
                 std::cout << "iteration " << k1 << ": " << (short) limits[k1] << std::flush;
-                copy( limits.begin(), limits.end(), sortLimits.begin() );
-                sort( sortLimits.begin(), sortLimits.end() );
+//                 copy( limits.begin(), limits.end(), sortLimits.begin() );
+                sortLimits = limits;
+                qSort( sortLimits.begin(), sortLimits.end() );
                 std::cout << "==> labels: ";
 
                 for ( i = 0; i < sortLimits.size(); i++ )
@@ -560,7 +585,8 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
                 if ( m_excessEntropy > maxExcessEntropy )
                 {
                     maxExcessEntropy = m_excessEntropy;
-                    copy( limits.begin(), limits.end(), maxLimits.begin() );
+//                     copy( limits.begin(), limits.end(), maxLimits.begin() );
+                    maxLimits = limits;
                     canviat = true;
                     std::cout << "** is maximum **" << std::endl;
                 }
@@ -579,8 +605,9 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
     // fi finest algorithm
 
     // desem la imatge labelitzada
-    copy( maxLimits.begin(), maxLimits.end(), sortLimits.begin() );
-    sort( sortLimits.begin(), sortLimits.end() );
+//     copy( maxLimits.begin(), maxLimits.end(), sortLimits.begin() );
+    sortLimits = maxLimits;
+    qSort( sortLimits.begin(), sortLimits.end() );
 
 
     labelize( sortLimits );
@@ -593,7 +620,7 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
 
 
 
-void OptimalViewpointVolume::labelize( const std::vector< unsigned char > & limits )
+void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
 {
     unsigned char * fixIt = m_data;
 //    IteratorType grounIt(GrounImage, GrounImage->GetBufferedRegion());
@@ -608,7 +635,7 @@ void OptimalViewpointVolume::labelize( const std::vector< unsigned char > & limi
         unsigned char i = 0;
         unsigned char value = *fixIt;
 
-        while ( value > limits[i] && i < limits.size() )
+        while ( i < limits.size() && value > limits[i] )
         {
             i++;
         }
@@ -639,7 +666,7 @@ void OptimalViewpointVolume::labelize( const std::vector< unsigned char > & limi
 
 
 
-void OptimalViewpointVolume::generateAdjustedTransferFunction( const std::vector< unsigned char> & limits )
+void OptimalViewpointVolume::generateAdjustedTransferFunction( const QVector< unsigned char> & limits )
 {
     srand( time( 0 ) );
 

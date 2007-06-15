@@ -415,9 +415,10 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
 // 
 //     m_volume->setOpacityTransferFunction( opacityTransferFunction );
 //     m_volume->setColorTransferFunction( colorTransferFunction );
-    m_volume->setOpacityTransferFunction( transferFunction.getOpacityTransferFunction() );
-    m_volume->setColorTransferFunction( transferFunction.getColorTransferFunction() );
+//     m_volume->setOpacityTransferFunction( transferFunction.getOpacityTransferFunction() );
+//     m_volume->setColorTransferFunction( transferFunction.getColorTransferFunction() );
 //     TransferFunctionIO::toFile( "/scratch/tf0.tf", transferFunction );
+    m_volume->setTransferFunction( transferFunction );
 }
 
 /// Actualitza els miralls.
