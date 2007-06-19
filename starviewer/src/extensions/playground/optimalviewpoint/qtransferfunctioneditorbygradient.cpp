@@ -168,7 +168,6 @@ void QTransferFunctionEditorByGradient::setGradientStops(const QGradientStops &s
     set_shade_points(pts_green, m_green_shade);
     set_shade_points(pts_blue, m_blue_shade);
     set_shade_points(pts_alpha, m_alpha_shade);
-
 }
 
 

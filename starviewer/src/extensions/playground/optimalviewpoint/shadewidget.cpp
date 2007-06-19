@@ -40,7 +40,6 @@ namespace udg {
 ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
     : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
 {
-
     // Checkers background
     if (m_shade_type == ARGBShade) {
         QPixmap pm(20, 20);
@@ -96,6 +95,7 @@ uint ShadeWidget::colorAt(int x)
                                  qRound(qMin(l.y2(), qreal(m_shade.height() - 1))));
         }
     }
+
     return 0;
 }
 
@@ -162,8 +162,6 @@ void ShadeWidget::generateShade()
             p.fillRect(rect(), shade);
         }
     }
-
-
 }
 
 

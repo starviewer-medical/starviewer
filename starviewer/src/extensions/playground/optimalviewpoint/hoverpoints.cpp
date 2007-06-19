@@ -57,6 +57,9 @@ HoverPoints::HoverPoints(QWidget *widget, PointShape shape)
 
     connect(this, SIGNAL(pointsChanged(const QPolygonF &)),
             m_widget, SLOT(update()));
+
+
+    m_width = m_height = -1;
 }
 
 
@@ -169,6 +172,11 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
             {
                 if ( m_width != m_widget->width() || m_height != m_widget->height() )
                 {
+                    if ( m_width == -1 && m_height == -1 )
+                    {
+                        m_width = m_widget->width();
+                        m_height = m_widget->height();
+                    }
                     double stretch_x = m_widget->width() / double(m_width);
                     double stretch_y = m_widget->height() / double(m_height);
                     for (int i=0; i<m_points.size(); ++i) {
