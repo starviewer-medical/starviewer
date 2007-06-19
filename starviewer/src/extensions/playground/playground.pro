@@ -6,7 +6,8 @@ SUBDIRS = diffusionperfusionsegmentation \
           landmarkregistration \
           strokesegmentation \
           rectumsegmentation \
-          optimalviewpoint
+          optimalviewpoint \
+          volume3dviewtesting
 
 for(dir, SUBDIRS) {
     !exists($$dir) {
