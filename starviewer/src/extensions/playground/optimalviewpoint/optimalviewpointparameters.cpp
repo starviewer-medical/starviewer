@@ -358,6 +358,19 @@ void OptimalViewpointParameters::setCompute( bool compute )
 }
 
 
+void OptimalViewpointParameters::setSimilarityThreshold( double similarityThreshold )
+{
+    if ( m_similarityThreshold != similarityThreshold )
+    {
+        m_similarityThreshold = similarityThreshold; emit changed( SimilarityThreshold );
+    }
+}
+
+
+double OptimalViewpointParameters::getSimilarityThreshold() const
+{
+    return m_similarityThreshold;
+}
 
 
 }

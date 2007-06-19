@@ -119,6 +119,7 @@ public:
     void setSpecularPower( double specularPower );
     void setUpdatePlane( signed char updatePlane );
     void setCompute( bool compute );
+    void setSimilarityThreshold( double similarityThreshold );
 
 
 
@@ -162,6 +163,7 @@ private:
     // nous paràmetres
     signed char m_updatePlane;
     bool m_compute;
+    double m_similarityThreshold;
 
 
 }; // end class OptimalViewpoint

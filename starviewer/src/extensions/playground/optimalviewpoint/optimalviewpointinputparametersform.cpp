@@ -180,6 +180,10 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
                 m_numberOfClustersLabel->setText( QString("<b>%1 clusters</b>").arg( (short) m_parameters->getNumberOfClusters() ) );
                 std::cout << "nclusters = " << (short) m_parameters->getNumberOfClusters() << std::endl;
                 break;
+
+            case OptimalViewpointParameters::SimilarityThreshold:
+                m_similarityThresholdDoubleSpinBox->setValue( m_parameters->getSimilarityThreshold() );
+                break;
         }
     }
 }
@@ -224,6 +228,7 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
         m_parameters->setUpdatePlane( m_updatePlaneSpinBox->value() );
         m_parameters->setCompute( m_computeCheckBox->isChecked() );
+        m_parameters->setSimilarityThreshold( m_similarityThresholdDoubleSpinBox->value() );
     }
 }
 

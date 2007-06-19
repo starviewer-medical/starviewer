@@ -165,6 +165,7 @@ void QOptimalViewpointExtension::execute()
             m_method->setSpecularPower( m_parameters->getSpecularPower() );
             m_method->setUpdatePlane( m_parameters->getUpdatePlane() );
             m_method->setCompute( m_parameters->getCompute() );
+            m_method->setSimilarityThreshold( m_parameters->getSimilarityThreshold() );
 
 
 

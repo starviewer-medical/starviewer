@@ -58,7 +58,8 @@ public:
 
         // nous paràmetres
         ComputeWithOpacity, Interpolation, Specular, SpecularPower, UpdatePlane,
-        Compute
+        Compute,
+        SimilarityThreshold
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -131,6 +132,9 @@ public:
     bool getCompute() const;
     void setCompute( bool compute );
 
+    void setSimilarityThreshold( double similarityThreshold );
+    double getSimilarityThreshold() const;
+
 
 
 
@@ -166,7 +170,8 @@ private:
     double m_specularPower;
     signed char m_updatePlane;
     bool m_compute;
-    
+
+    double m_similarityThreshold;
 
 
 

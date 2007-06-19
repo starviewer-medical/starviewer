@@ -465,12 +465,14 @@ void OptimalViewpoint::updatePlanes()
 
 
             // slicer
-            Slicer slicer;
+            Slicer slicer( m_updatePlane );
             slicer.setInput( m_volume->getLabeledImage() );
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
             slicer.reslice();
             slicer.compute();
+            slicer.method1A( m_similarityThreshold );
+            slicer.method1B( m_similarityThreshold );
 
             break;
     }
@@ -646,6 +648,11 @@ unsigned char OptimalViewpoint::doAutomaticSegmentation( unsigned short iteratio
     return m_numberOfClusters;
 }
 
+
+void OptimalViewpoint::setSimilarityThreshold( double similarityThreshold )
+{
+    m_similarityThreshold = similarityThreshold;
+}
 
 
 }; // end namespace udg
