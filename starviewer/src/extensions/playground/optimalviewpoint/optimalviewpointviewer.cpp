@@ -31,6 +31,7 @@ OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent )
     style->Delete();
 
     m_renderer = 0;
+    m_vtkWidget->hide();
 }
 
 
@@ -76,6 +77,7 @@ void OptimalViewpointViewer::render()
 {
     if ( m_renderer )
     {
+        m_vtkWidget->show();
         m_vtkWidget->GetRenderWindow()->Render();
     }
 }

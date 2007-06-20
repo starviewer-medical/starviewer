@@ -23,7 +23,7 @@ class OptimalViewpoint;
 // class OptimalViewpointDirector;
 // class OptimalViewpointInputParametersForm;
 class OptimalViewpointParameters;
-class OptimalViewpointViewer;
+// class OptimalViewpointViewer;
 
 class Volume;
 
@@ -69,7 +69,7 @@ private:
     OptimalViewpoint * m_method;
 
     /// Visualitzador principal.
-    OptimalViewpointViewer * m_viewer;
+//     OptimalViewpointViewer * m_viewer;
 
 };
 

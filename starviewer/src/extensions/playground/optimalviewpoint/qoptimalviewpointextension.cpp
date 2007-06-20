@@ -15,10 +15,10 @@
 // #include "optimalviewpointdirector.h"
 #include "optimalviewpointparameters.h"
 // #include "optimalviewpointinputparametersform.h"
-#include "optimalviewpointviewer.h"
+// #include "optimalviewpointviewer.h"
 
 
-#include <QVTKWidget.h> // perquè funcioni m_method->setInteractor( m_viewer->getInteractor() );
+// #include <QVTKWidget.h> // perquè funcioni m_method->setInteractor( m_viewer->getInteractor() );
 #include "volume.h"
 #include <QMessageBox>
 
@@ -51,8 +51,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 //     m_optimalViewpointInputParametersForm->setParameters( m_parameters );
     m_inputParametersWidget->setParameters( m_parameters );
 
-    QHBoxLayout * viewerLayout = new QHBoxLayout( m_viewerWidget );
-    viewerLayout->setMargin( 0 );
+//     QHBoxLayout * viewerLayout = new QHBoxLayout( m_viewerWidget );
+//     viewerLayout->setMargin( 0 );
 
     // connectem l'acció amb el director
 //     m_optimalViewpointAction = new Q3Action( this );
@@ -60,7 +60,7 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 
     m_method = 0;
-    m_viewer = 0;
+//     m_viewer = 0;
 
 
 //     connect( m_optimalViewpointAction, SIGNAL( activated() ), m_optimalViewpointDirector, SLOT( execute() ) );
@@ -134,13 +134,13 @@ void QOptimalViewpointExtension::execute()
 //                 std::cout << "number of clusters: " << (short) n << std::endl;
 //             }
 
-            if ( !m_viewer )
-            {
-                m_viewer = new OptimalViewpointViewer( m_viewerWidget );
-                m_viewerWidget->layout()->addWidget( m_viewer );
-                m_viewer->setRenderer( m_method->getMainRenderer() );
-//                 m_method->setInteractor( m_viewer->getInteractor() );
-            }
+//             if ( !m_viewer )
+//             {
+//                 m_viewer = new OptimalViewpointViewer( m_viewerWidget );
+//                 m_viewerWidget->layout()->addWidget( m_viewer );
+//                 m_viewer->setRenderer( m_method->getMainRenderer() );
+// //                 m_method->setInteractor( m_viewer->getInteractor() );
+//             }
 
             m_method->setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             std::cout << "OVD: set number of planes" << std::endl;
@@ -171,7 +171,8 @@ void QOptimalViewpointExtension::execute()
 
             m_method->updatePlanes();
             std::cout << "OVD: update planes" << std::endl;
-            m_viewer->render();
+//             m_viewer->render();
+            m_viewerWidget->render();
 
             if ( m_method->resultsChanged() )
             {
@@ -216,7 +217,11 @@ void QOptimalViewpointExtension::loadSegmentation()
         return;
     }
 
-    if ( !m_method ) m_method = new OptimalViewpoint();
+    if ( !m_method )
+    {
+        m_method = new OptimalViewpoint();
+        m_viewerWidget->setRenderer( m_method->getMainRenderer() );
+    }
 
     m_method->setImage( volume->getVtkData() );
     signed char numberOfClusters = m_method->loadSegmentationFromFile( m_parameters->getSegmentationFileName() );

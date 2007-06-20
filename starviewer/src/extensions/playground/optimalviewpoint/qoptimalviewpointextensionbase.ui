@@ -6,15 +6,24 @@
     <x>0</x>
     <y>0</y>
     <width>100</width>
-    <height>30</height>
+    <height>34</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
    </property>
    <item>
     <widget class="QSplitter" name="splitter" >
@@ -22,11 +31,9 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="udg::OptimalViewpointInputParametersForm" native="1" name="m_inputParametersWidget" />
-     <widget class="QWidget" native="1" name="m_viewerWidget" >
+     <widget class="udg::OptimalViewpointViewer" native="1" name="m_viewerWidget" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>5</hsizetype>
-        <vsizetype>5</vsizetype>
+       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -41,6 +48,12 @@
    <class>udg::OptimalViewpointInputParametersForm</class>
    <extends>QWidget</extends>
    <header>optimalviewpointinputparametersform.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::OptimalViewpointViewer</class>
+   <extends>QWidget</extends>
+   <header>optimalviewpointviewer.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
