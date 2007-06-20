@@ -14,6 +14,9 @@
 // #include "optimalviewpoint.h"
 #include "transferfunction.h"
 
+// \TODO Repassar i treure el using namespace Ui
+using namespace Ui;
+
 namespace udg {
 
 class OptimalViewpointParameters;
@@ -23,8 +26,7 @@ class Volume;
  * Interfície per definir tots els paràmetres del mètode de visualització del
  * Punt de Vista Òptim.
  */
-class OptimalViewpointInputParametersForm
-    : public udg::QInputParameters, public Ui::OptimalViewpointInputParametersFormBase
+class OptimalViewpointInputParametersForm : public udg::QInputParameters, private OptimalViewpointInputParametersFormBase
 {
 
     Q_OBJECT
