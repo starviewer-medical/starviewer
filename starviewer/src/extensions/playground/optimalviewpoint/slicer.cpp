@@ -452,7 +452,7 @@ void Slicer::method1B( double threshold )
         if ( sortedSimilarities[i].first > threshold )
         {
             //groups[sortedSimilarities[i].second+1] = groups[sortedSimilarities[i].second];
-            setGroup( groups, sortedSimilarities[i].second + 1, sortedSimilarities[i].second );
+            setGroup( groups, sortedSimilarities[i].second + 1, groups[sortedSimilarities[i].second] );
         }
         else
         {
