@@ -92,7 +92,7 @@ public slots:
     void setAxialVisibility( bool enable );
 
     /// Reinicia de nou els plans
-    void resetPlanes();
+    virtual void resetPlanes();
 
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
@@ -133,7 +133,8 @@ public slots:
     virtual void render();
     void reset();
 
-private:
+
+protected:
     /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
 
@@ -141,16 +142,16 @@ private:
     void setCameraOrientation( int orientation );
 
     /// inicialitza els valors de window level
-    void initializeWindowLevel();
+    virtual void initializeWindowLevel();
 
     /// Inicialitza els plans
     void initializePlanes();
 
     /// Actualitza les dades sobre les que tracten els plans
-    void updatePlanesData();
+    virtual void updatePlanesData();
 
     /// Afegeix l'outline de la boundingbox del model
-    void createOutline();
+    virtual void createOutline();
 
     /// Crea tots els actors que intervenen en l'escena
     void createActors();

@@ -6,7 +6,9 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              strokesegmentation \
              optimalviewpoint \
              rectumsegmentation \
-             volume3dviewtesting
+             volume3dviewtesting \
+             mprcardiac3d \
+             cardiac2dviewer
 
 #CONTRIB_EXTENSIONS =
 

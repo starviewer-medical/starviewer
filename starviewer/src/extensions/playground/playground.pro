@@ -7,7 +7,9 @@ SUBDIRS = diffusionperfusionsegmentation \
           strokesegmentation \
           rectumsegmentation \
           optimalviewpoint \
-          volume3dviewtesting
+          volume3dviewtesting \
+          mprcardiac3d \
+          cardiac2dviewer
 
 for(dir, SUBDIRS) {
     !exists($$dir) {

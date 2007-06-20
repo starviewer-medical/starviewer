@@ -102,6 +102,12 @@ public:
         return m_volumeInformation;
     }
 
+    /// TODO: Repassar: això no hauria d'anar així.
+    /// Retorna un nou Volume on la Data és només del sub volume indicat
+    Volume *getSubVolume( int index );
+
+    Volume *orderSlices(int tipus);
+
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter< ItkImageType > ItkToVtkFilterType;

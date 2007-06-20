@@ -9,10 +9,14 @@
 
 // VTK
 #include <vtkImageData.h>
+#include <vtkExtractVOI.h>
+#include <vtkImageChangeInformation.h>
 
 // ITK
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
+#include <itkExtractImageFilter.h>
+#include <itkTileImageFilter.h>
 
 #include "volume.h"
 #include "volumesourceinformation.h"
@@ -139,6 +143,105 @@ int *Volume::getDimensions()
 void Volume::getDimensions( int dims[3] )
 {
     getVtkData()->GetDimensions( dims );
+}
+
+Volume *Volume::getSubVolume( int index  )
+{
+
+    int slices = this->getVolumeSourceInformation()->getNumberOfSlices();
+
+
+    int *size = this->getWholeExtent();
+
+    vtkExtractVOI * extractedVolume = vtkExtractVOI::New();
+    vtkImageChangeInformation * vtkChange = vtkImageChangeInformation::New();
+
+    extractedVolume->SetInput( m_imageDataVTK );
+    extractedVolume->SetVOI( size[0] , size[1] , size[2] , size[3] , ( index * slices ) ,  ( ( index * slices ) + slices - 1 ) );
+
+    vtkChange->SetInput( extractedVolume->GetOutput() );
+    vtkChange->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
+    vtkChange->SetOutputExtentStart( 0 , 0 , 0 );
+
+    Volume *subVolume = new Volume( vtkChange->GetOutput() );
+    subVolume->setVolumeSourceInformation( m_volumeInformation );
+    subVolume->getVtkData()->Update();
+
+    return subVolume;
+}
+
+Volume * Volume::orderSlices(int tipus)
+{
+    int phases, slices;
+    Volume * orderedVolume;
+
+    int *dimensions = this->getDimensions();
+    ItkImageType::SizeType size;
+    size[0] = dimensions[0];
+    size[1] = dimensions[1];
+    size[2] = 0; // Volem una imatge 2D
+
+    ItkImageType::IndexType index;
+    index[0] = 0;
+    index[1] = 0;
+    index[2] = 0;
+
+
+    phases = this->getVolumeSourceInformation()->getNumberOfPhases();
+    slices = this->getVolumeSourceInformation()->getNumberOfSlices();
+
+    typedef ItkImageType ItkImageType3D;
+    typedef itk::Image<ItkPixelType, 2 > ItkImageType2D;
+
+    typedef itk::ExtractImageFilter< ItkImageType3D , ItkImageType2D > ExtractImageType;
+    typedef itk::TileImageFilter< ItkImageType2D , ItkImageType3D  > TileFilterType;
+
+
+    ExtractImageType::Pointer extractFilter = ExtractImageType::New();
+    extractFilter->SetInput( this->getItkData() );
+
+    TileFilterType::Pointer tileFilter = TileFilterType::New();
+
+    // El layout ens serveix per indicar cap on creix la cua. En aquest cas volem fer creixer la coordenada Z
+    TileFilterType::LayoutArrayType layout;
+    layout[0] = 1;
+    layout[1] = 1;
+    layout[2] = 0;
+
+    tileFilter->SetLayout( layout );
+
+    ItkImageType::RegionType region;
+    region.SetSize( size );
+
+    std::vector< ItkImageType2D::Pointer > extracts;
+
+    for ( int i = 0 ; i < phases ; i++ )
+    {
+        for (int j = 0 ; j < slices ; j++ )
+        {
+            index[2] = ( ( phases * j ) + i ) ;
+
+            region.SetIndex( index );
+
+            extractFilter->SetExtractionRegion( region );
+
+            extractFilter->Update();
+
+            extracts.push_back( extractFilter->GetOutput() );
+            extracts.back()->DisconnectPipeline(); //S'ha de desconnectar la pipeline per forçar a l'extracFilter a generar un nou output.
+
+            tileFilter->PushBackInput( extracts.back() );
+
+        }
+    }
+
+    tileFilter->Update();
+
+    orderedVolume = new Volume( tileFilter->GetOutput() );
+    orderedVolume->setVolumeSourceInformation( m_volumeInformation );
+    //orderedVolume->getVtkData()->Update();
+
+    return orderedVolume;
 }
 
 };
