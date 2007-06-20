@@ -232,6 +232,7 @@ void Q3DViewer::renderRayCasting()
 {
     if( rescale() )
     {
+        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
         // Creem la funció de transferència de l'opacitat
         vtkPiecewiseFunction* opacityTransferFunction = vtkPiecewiseFunction::New();
         opacityTransferFunction->AddPoint( 20, 0.0 );
@@ -247,6 +248,7 @@ void Q3DViewer::renderRayCasting()
 
         // La propietat descriurà com es veuran les dades
         vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
+        //\TODO aquí tindrem m_currentTransferFunction->getRGB/ColorTransferFunction() i m_currentTransferFunction->getOpacityTransferFunction() respectivament
         volumeProperty->SetColor( colorTransferFunction );
         volumeProperty->SetScalarOpacity( opacityTransferFunction );
 
@@ -279,6 +281,8 @@ void Q3DViewer::renderMIP3D()
         // Create a transfer function mapping scalar value to opacity
         // assignem una rampa d'opacitat total per valors alts i nula per valors petits
         // després en l'escala de grisos donem un  valor de gris constant ( blanc )
+
+        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
         vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
         opacityTransferFunction->AddPoint( 20 , 0.0 );
         opacityTransferFunction->AddPoint( 255 , 1.0 );
@@ -290,6 +294,7 @@ void Q3DViewer::renderMIP3D()
         // Create a set of properties for mip
         vtkVolumeProperty *mipProperty;
 
+        //\TODO aquí tindrem m_currentTransferFunction->getGrayTransferFunction() i m_currentTransferFunction->getOpacityTransferFunction() que són 1D totes dues
         mipProperty = vtkVolumeProperty::New();
         mipProperty->SetScalarOpacity( opacityTransferFunction );
         mipProperty->SetColor( grayTransferFunction );
@@ -321,6 +326,7 @@ void Q3DViewer::renderIsoSurface()
 {
     if( rescale() )
     {
+        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
         // Create a transfer function mapping scalar value to opacity
         vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
         oTFun->AddSegment(10, 0.0, 255, 0.3);
@@ -358,6 +364,7 @@ void Q3DViewer::renderIsoSurface()
         prop->SetSpecular(0.2);
         prop->SetSpecularPower(50.0);
         */
+        //\TODO aquí tindrem m_currentTransferFunction->getRGB/ColorTransferFunction() i m_currentTransferFunction->getOpacityTransferFunction(), potser faltaria la del gradient, en aquest cas és una mica més especial
         prop->SetScalarOpacity(oTFun);
         prop->SetGradientOpacity( goTFun );
         prop->SetColor( cTFun );
@@ -389,6 +396,7 @@ void Q3DViewer::renderTexture2D()
 {
     if( rescale() )
     {
+        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
         // Creem la funció de transferència de l'opacitat
         vtkPiecewiseFunction* opacityTransferFunction = vtkPiecewiseFunction::New();
         opacityTransferFunction->AddPoint( 20, 0.0 );
@@ -403,6 +411,7 @@ void Q3DViewer::renderTexture2D()
         colorTransferFunction->AddRGBPoint( 255.0, 0.0, 0.2, 0.0 );
 
         // La propietat descriurà com es veuran les dades
+        //\TODO aquí tindrem m_currentTransferFunction->getRGB/ColorTransferFunction() i m_currentTransferFunction->getOpacityTransferFunction() respectivament
         vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
         volumeProperty->SetColor( colorTransferFunction );
         volumeProperty->SetScalarOpacity( opacityTransferFunction );
@@ -426,6 +435,7 @@ void Q3DViewer::renderTexture3D()
 {
     if( rescale() )
     {
+        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
         // Creem la funció de transferència de l'opacitat
         vtkPiecewiseFunction* opacityTransferFunction = vtkPiecewiseFunction::New();
         opacityTransferFunction->AddPoint( 20, 0.0 );
@@ -441,6 +451,7 @@ void Q3DViewer::renderTexture3D()
 
         // La propietat descriurà com es veuran les dades
         vtkVolumeProperty* volumeProperty = vtkVolumeProperty::New();
+        //\TODO aquí tindrem m_currentTransferFunction->getRGB/ColorTransferFunction() i m_currentTransferFunction->getOpacityTransferFunction() respectivament
         volumeProperty->SetColor( colorTransferFunction );
         volumeProperty->SetScalarOpacity( opacityTransferFunction );
 
@@ -532,6 +543,7 @@ void Q3DViewer::setCameraOrientation(int orientation)
             break;
         }
         this->getRenderer()->ResetCamera();
+        this->refresh();
     }
 }
 
