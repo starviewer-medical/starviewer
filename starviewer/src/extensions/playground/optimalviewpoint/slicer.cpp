@@ -375,7 +375,7 @@ void Slicer::method1A( double threshold )
     unsigned short g = 0;   // id del grup
     unsigned int x = 0;
 
-    while ( x < m_sliceCount - 1 )
+    while ( x < m_sliceCount )
     {
         groups << g;    // comencem el nou grup
         unsigned int y = x + 1;
@@ -460,6 +460,18 @@ void Slicer::method1B( double threshold )
         }
 
         i--;
+    }
+
+    // assignem ids consecutius als groups
+    unsigned short g = 0, lastGroup = groups[0];
+    for ( unsigned int i = 0; i < groups.size(); i++ )
+    {
+        if ( groups[i] == lastGroup ) groups[i] = g;
+        else
+        {
+            lastGroup = groups[i];
+            groups[i] = ++g;
+        }
     }
 
     DEBUG_LOG( qPrintable( QString( "[M1B] threshold = %1" ).arg( threshold ) ) );
