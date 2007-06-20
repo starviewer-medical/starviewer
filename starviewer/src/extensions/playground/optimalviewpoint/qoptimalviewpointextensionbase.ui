@@ -10,20 +10,11 @@
    </rect>
   </property>
   <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
    <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <item>
     <widget class="QSplitter" name="splitter" >
@@ -33,7 +24,9 @@
      <widget class="udg::OptimalViewpointInputParametersForm" native="1" name="m_inputParametersWidget" />
      <widget class="udg::OptimalViewpointViewer" native="1" name="m_viewerWidget" >
       <property name="sizePolicy" >
-       <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+       <sizepolicy>
+        <hsizetype>0</hsizetype>
+        <vsizetype>0</vsizetype>
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
