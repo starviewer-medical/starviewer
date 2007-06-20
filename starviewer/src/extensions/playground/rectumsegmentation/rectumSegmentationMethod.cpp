@@ -301,7 +301,10 @@ double rectumSegmentationMethod::applyMethod()
     m_Mask->setData( maskAux );
     m_Mask->getVtkData()->Update();
 
-    this->applyMethodNextSlice(sliceNumber+1, 1, xmax, ymax);
+    if(m_cont!=0){
+        this->applyMethodNextSlice(sliceNumber+1, 1, xmax, ymax);
+        this->applyMethodNextSlice(sliceNumber-1, -1, xmax, ymax);
+    }
     return m_volume;
 }
 
@@ -411,15 +414,6 @@ void rectumSegmentationMethod::applyMethodNextSlice(int slice, int step, int see
         std::cerr << excep << std::endl;
     }
 
-        OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
-        typedef itk::ImageFileWriter< ExternalImageType > ExternalWriterType;
-
-        ExternalWriterType::Pointer mapWriter = ExternalWriterType::New();
-        outcaster->SetInput( binaryDilate->GetOutput() );
-        mapWriter->SetInput( outcaster->GetOutput() );
-        mapWriter->SetFileName("segmented.jpg");
-        mapWriter->Update();
-
     typedef itk::BinaryThresholdImageFilter< InternalImageType, InternalImageType > BinThresholdFilterType;
     typedef itk::DanielssonDistanceMapImageFilter<InternalImageType, InternalImageType >  DistanceFilterType;
     BinThresholdFilterType::Pointer binthresholdFilter = BinThresholdFilterType::New();
@@ -433,22 +427,6 @@ void rectumSegmentationMethod::applyMethodNextSlice(int slice, int step, int see
     distanceFilter->SetInput( binthresholdFilter->GetOutput() );
     std::cout<<"Inside: "<<m_insideMaskValue<<", outside: "<<m_outsideMaskValue<<std::endl;
     distanceFilter->Update();
-
-        OutputCastingFilterType::Pointer outcaster2 = OutputCastingFilterType::New();
-        ExternalWriterType::Pointer mapWriter2 = ExternalWriterType::New();
-        outcaster2->SetInput( distanceFilter->GetOutput() );
-        //outcaster2->SetInput( binthresholdFilter->GetOutput() );
-        mapWriter2->SetInput( outcaster2->GetOutput() );
-        mapWriter2->SetFileName("distanceMap.jpg");
-        mapWriter2->Update();
-
-        OutputCastingFilterType::Pointer outcaster3 = OutputCastingFilterType::New();
-        ExternalWriterType::Pointer mapWriter3 = ExternalWriterType::New();
-        //outcaster2->SetInput( distanceFilter->GetOutput() );
-        outcaster3->SetInput( binaryDilate->GetOutput() );
-        mapWriter3->SetInput( outcaster2->GetOutput() );
-        mapWriter3->SetFileName("distanceMap2.jpg");
-        mapWriter3->Update();
 
     itk::ImageRegionIteratorWithIndex< InternalImageType > itDist( distanceFilter->GetOutput(), distanceFilter->GetOutput()->GetLargestPossibleRegion() );
     itDist.GoToBegin();
@@ -473,37 +451,45 @@ void rectumSegmentationMethod::applyMethodNextSlice(int slice, int step, int see
     std::cout<<"PosMax= ["<<xmax<<", "<<ymax<<"]"<<std::endl;
 
 
-    itk::ImageRegionIterator< Volume::ItkImageType > itMask( m_Mask->getItkData(), m_Mask->getItkData()->GetLargestPossibleRegion() );
-    itMask.GoToBegin();
-    //itk::ImageRegionIterator< InternalImageType > itSeg( connectedThreshold->GetOutput(), connectedThreshold->GetOutput()->GetLargestPossibleRegion() );
-    itk::ImageRegionIterator< InternalImageType > itSeg( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetLargestPossibleRegion() );
-    itSeg.GoToBegin();
-    unsigned int i,j,k;
-    IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
-    std::cout<<sizeOut<<std::endl;
-    for(k=0;k<sizeOut[2];k++){
-        for(j=0;j<sizeOut[1];j++){
-            for(i=0;i<sizeOut[0];i++){
-                 if(k==slice){
-                    if(itSeg.Get()==m_insideMaskValue){
-                        itMask.Set(m_insideMaskValue);
-                        m_cont++;
-                    }else{
-                        itMask.Set(m_outsideMaskValue);
+    if(max != 0){
+        itk::ImageRegionIterator< Volume::ItkImageType > itMask( m_Mask->getItkData(), m_Mask->getItkData()->GetLargestPossibleRegion() );
+        itMask.GoToBegin();
+        //itk::ImageRegionIterator< InternalImageType > itSeg( connectedThreshold->GetOutput(), connectedThreshold->GetOutput()->GetLargestPossibleRegion() );
+        itk::ImageRegionIterator< InternalImageType > itSeg( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetLargestPossibleRegion() );
+        itSeg.GoToBegin();
+        unsigned int contant = m_cont;
+        unsigned int i,j,k;
+        IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
+        std::cout<<sizeOut<<std::endl;
+        for(k=0;k<sizeOut[2];k++){
+            for(j=0;j<sizeOut[1];j++){
+                for(i=0;i<sizeOut[0];i++){
+                        if(k==slice){
+                        if(itSeg.Get()==m_insideMaskValue){
+                            itMask.Set(m_insideMaskValue);
+                            m_cont++;
+                        }else{
+                            itMask.Set(m_outsideMaskValue);
+                        }
+                        ++itSeg;
                     }
-                    ++itSeg;
+                    ++itMask;
                 }
-                ++itMask;
             }
         }
+        Volume::ItkImageType::SpacingType sp = m_Volume->getItkData()->GetSpacing();
+        m_volume = m_cont*sp[0]*sp[1]*sp[2];
+
+        std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<" voxels)"<<std::endl;
+        std::cout<<"Size: "<<sizeOut<<std::endl;
+
+        m_Mask->getVtkData()->Update();
+
+        this->applyMethodNextSlice(slice + step, step, xmax, ymax);
+
+    }else{
+        std::cout<<"End for step "<<step<<" in slice "<<slice<<std::endl;
     }
-    Volume::ItkImageType::SpacingType sp = m_Volume->getItkData()->GetSpacing();
-    m_volume = m_cont*sp[0]*sp[1]*sp[2];
-
-    std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<" voxels)"<<std::endl;
-    std::cout<<"Size: "<<sizeOut<<std::endl;
-
-    m_Mask->getVtkData()->Update();
 
     return;
 }

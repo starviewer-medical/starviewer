@@ -32,9 +32,13 @@
 #include "itkListSample.h"
 #include "itkMeanCalculator.h"
 #include "itkCovarianceCalculator.h"
+#include "itkMedianImageFilter.h"
+#include "itkBinaryMedianImageFilter.h"
 
 #include "itkErfcLevelSetImageFilter.h"
 #include "itkImageFileWriter.h"
+
+#include "vtkImageThreshold.h"
 
 #include "itkResampleImageFilter.h"
 #include "itkAffineTransform.h"
@@ -147,6 +151,7 @@ double StrokeSegmentationMethod::applyMethod()
 
     m_volume = volumeCalc->GetVolume();
     m_cont = volumeCalc->GetVolumeCount();
+    std::cout<<"MCONT>"<<m_cont<<std::endl;
 
     //m_Mask->setData( outcaster->GetOutput());
     m_Mask->setData( volumeCalc->GetOutput());
@@ -154,6 +159,60 @@ double StrokeSegmentationMethod::applyMethod()
     // m_Mask  = outcaster->GetOutput();
 
     return m_volume;
+}
+
+double StrokeSegmentationMethod::applyMethodVTK()
+{
+    double pos[3];
+    double origin[3];
+    double spacing[3];
+    int index[3];
+    m_cont=0;
+    vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
+    imageThreshold->SetInput( m_Volume->getVtkData() );
+    imageThreshold->ThresholdBetween( m_lowerThreshold,  m_upperThreshold);
+    imageThreshold->SetInValue( m_insideMaskValue-100 );
+    imageThreshold->SetOutValue( m_outsideMaskValue );
+    std::cout<<"min: "<<m_insideMaskValue<<", mout: "<<m_outsideMaskValue<<std::endl;
+    imageThreshold->Update();
+    vtkImageData* imMask = imageThreshold->GetOutput();
+
+    m_Volume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+    m_Volume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    index[0]=(int)(((double)m_px-origin[0])/spacing[0]);
+    index[1]=(int)(((double)m_py-origin[1])/spacing[1]);
+    index[2]=(int)(((double)m_pz-origin[2])/spacing[2]);
+    std::cout<<"Tractant llesca "<<index[2]<<std::endl;
+
+    applyMethodVTKRecursive(imMask, index[0],index[1],index[2], 0);
+
+    std::cout<<"Tractant llesca "<<index[2]<<std::endl;
+
+    m_Mask->setData(imMask);
+
+    return m_cont*spacing[0]*spacing[1]*spacing[2];
+}
+
+void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int a, int b, int c, int prof)
+{
+    int* value;
+    int* maskValue;
+    if((a>=m_Volume->getWholeExtent()[0])&&(a<=m_Volume->getWholeExtent()[1])&&(b>=m_Volume->getWholeExtent()[2])&&(b<=m_Volume->getWholeExtent()[3])&&(c>=m_Volume->getWholeExtent()[4])&&(c<=m_Volume->getWholeExtent()[5]))
+    {
+        value=(int*)m_Volume->getVtkData()->GetScalarPointer(a,b,c);
+        maskValue=(int*)imMask->GetScalarPointer(a,b,c);
+        if ((*maskValue) == m_insideMaskValue-100)
+        {
+            (*maskValue)= m_insideMaskValue;
+            m_cont++;
+            applyMethodVTKRecursive( imMask,a, b, c+1, prof+1);
+            applyMethodVTKRecursive( imMask,a, b, c-1, prof+1);
+            applyMethodVTKRecursive( imMask,a+1, b, c, prof+1);
+            applyMethodVTKRecursive( imMask,a-1, b, c, prof+1);
+            applyMethodVTKRecursive( imMask,a, b+1, c, prof+1);
+            applyMethodVTKRecursive( imMask,a, b-1, c, prof+1);
+        }
+    }
 }
 
 double StrokeSegmentationMethod::applyCleanSkullMethod()
@@ -164,6 +223,50 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
   typedef itk::BinaryErodeImageFilter<Volume::ItkImageType,Volume::ItkImageType,StructuringElementType > ErodeFilterType;
   typedef itk::BinaryDilateImageFilter<Volume::ItkImageType,Volume::ItkImageType,StructuringElementType > DilateFilterType;
 
+    typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleFilterType;
+    typedef itk::AffineTransform< double, 3 >  TransformType;
+    typedef itk::NearestNeighborInterpolateImageFunction<Volume::ItkImageType, double >  InterpolatorType;
+
+    //Resamplagem la imatge per tal de que tingui menys vòxels i trigui menys a calcular
+    ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
+    TransformType::Pointer transform = TransformType::New();
+    resampleFilter->SetTransform( transform );
+    InterpolatorType::Pointer interpolator = InterpolatorType::New();
+    resampleFilter->SetInterpolator( interpolator );
+    resampleFilter->SetDefaultPixelValue( 0 );
+    double spacing[ 3 ] , newspacing[ 3 ] ;
+    //Fem el vòxel isomètric
+    double reducedSize = 3.0;
+    m_Volume->getSpacing(spacing);
+    newspacing[0] = reducedSize*spacing[0]; // pixel spacing in millimeters along X
+    newspacing[1] = reducedSize*spacing[1]; // pixel spacing in millimeters along Y
+    newspacing[2] = spacing[2]; // pixel spacing in millimeters along Z
+
+    resampleFilter->SetOutputSpacing( newspacing );
+
+    double origin[ 3 ], neworigin[ 3 ];
+    m_Volume->getOrigin(origin);
+    neworigin[0] = origin[0];  // X space coordinate of origin
+    neworigin[1] = origin[1];  // Y space coordinate of origin
+    neworigin[2] = origin[2];  // Z space coordinate of origin
+
+    resampleFilter->SetOutputOrigin( neworigin );
+    Volume::ItkImageType::SizeType   size, newsize;
+    size = m_Volume->getItkData()->GetBufferedRegion().GetSize();
+
+    newsize[0] = (size[0])/reducedSize;
+    newsize[1] = (size[1])/reducedSize;
+    newsize[2] = (size[2]);
+
+    resampleFilter->SetSize( newsize );
+    resampleFilter->SetInput( m_Mask->getItkData() );
+    unsigned long t1,t2,t3,t4,t5,t6,t7,t8;
+    t7=clock();
+    resampleFilter->Update();
+    t8=clock();
+    std::cout<<"resampleVolumeOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
+    std::cout<<"resampleVolumeNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
+
   ErodeFilterType::Pointer binaryErode = ErodeFilterType::New();
   DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
   DilateFilterType::Pointer binaryDilatePre = DilateFilterType::New();
@@ -171,10 +274,13 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
   binaryErode->SetErodeValue( m_insideMaskValue );
   binaryDilate->SetDilateValue( m_insideMaskValue );
   binaryDilatePre->SetDilateValue( m_insideMaskValue );
+  binaryErode->SetBackgroundValue( m_outsideMaskValue );
+  binaryDilate->SetBackgroundValue( m_outsideMaskValue );
+  binaryDilatePre->SetBackgroundValue( m_outsideMaskValue );
 
   unsigned long radiusDilatePre[3];
-  radiusDilatePre[0]=2;
-  radiusDilatePre[1]=2;
+  radiusDilatePre[0]=1;
+  radiusDilatePre[1]=1;
   radiusDilatePre[2]=1;
   StructuringElementType structuringElementDilatePre;
   structuringElementDilatePre.SetRadius( radiusDilatePre ); // 3x3 structuring element
@@ -182,12 +288,13 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
 
   binaryDilatePre->SetKernel( structuringElementDilatePre );
 
-  binaryDilatePre->SetInput( m_Mask->getItkData() );
+    //binaryDilatePre->SetInput( m_Mask->getItkData() );
+    binaryDilatePre->SetInput( resampleFilter->GetOutput() );
 
   unsigned long radiusErode[3];
-  radiusErode[0]=5;
-  radiusErode[1]=5;
-  radiusErode[2]=2;
+  radiusErode[0]=6;
+  radiusErode[1]=6;
+  radiusErode[2]=1;
 
   StructuringElementType structuringElementErode;
   structuringElementErode.SetRadius( radiusErode ); // 3x3 structuring element
@@ -199,8 +306,8 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
   binaryErode->SetInput( binaryDilatePre->GetOutput() );
 
   unsigned long radiusDilate[3];
-  radiusDilate[0]=9;
-  radiusDilate[1]=9;
+  radiusDilate[0]=8;
+  radiusDilate[1]=8;
   radiusDilate[2]=2;
   StructuringElementType structuringElementDilate;
   structuringElementDilate.SetRadius( radiusDilate ); // 3x3 structuring element
@@ -209,13 +316,40 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
   binaryDilate->SetKernel( structuringElementDilate );
 
   binaryDilate->SetInput( binaryErode->GetOutput() );
-
+  t1=clock();
+  //medianFilter->Update();
   binaryDilate->Update();
+  t2=clock();
+
+    //Resamplagem la imatge per tal de que tingui menys vòxels i trigui menys a calcular
+    ResampleFilterType::Pointer resample2Filter = ResampleFilterType::New();
+    TransformType::Pointer transform2 = TransformType::New();
+    resample2Filter->SetTransform( transform2 );
+    InterpolatorType::Pointer interpolator2 = InterpolatorType::New();
+    resample2Filter->SetInterpolator( interpolator2 );
+    resample2Filter->SetDefaultPixelValue( 0 );
+    m_Mask->getSpacing(spacing);
+    resample2Filter->SetOutputSpacing( spacing );
+
+    m_Mask->getOrigin(origin);
+    resample2Filter->SetOutputOrigin( origin );
+
+    size = m_Mask->getItkData()->GetBufferedRegion().GetSize();
+    resample2Filter->SetSize( size );
+    resample2Filter->SetInput( binaryDilate->GetOutput() );
+    t5=clock();
+    resample2Filter->Update();
+    t6=clock();
+    std::cout<<"resampleVolumeOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
+    std::cout<<"resampleVolumeNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
+
 
     Volume::ItkImageType::Pointer maskAux = Volume::ItkImageType::New();
     maskAux->SetSpacing( m_Mask->getItkData()->GetSpacing() );
     maskAux->SetOrigin( m_Mask->getItkData()->GetOrigin() );
-    maskAux = binaryDilate->GetOutput();
+    maskAux = resample2Filter->GetOutput();
+    //maskAux = binaryDilate->GetOutput();
+    //maskAux = medianFilter->GetOutput();
 
     itk::ImageRegionIterator<Volume::ItkImageType> maskIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> auxIt( maskAux, maskAux->GetBufferedRegion());
@@ -232,15 +366,16 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
         ++auxIt;
         ++maskIt;
     }
+  t3=clock();
 
     typedef itk::ConnectedThresholdImageFilter< Volume::ItkImageType, Volume::ItkImageType > ConnectedFilterType;
 
     ConnectedFilterType::Pointer connectedThreshold = ConnectedFilterType::New();
 
-    connectedThreshold->SetInput( maskAux );//Comentem aquesta l�ia per fer el filtratge
+    connectedThreshold->SetInput( maskAux );
 
-    connectedThreshold->SetLower(  m_insideMaskValue - 20  );
-    connectedThreshold->SetUpper(  m_insideMaskValue + 20  );
+    connectedThreshold->SetLower(  m_insideMaskValue - 1  );
+    connectedThreshold->SetUpper(  m_insideMaskValue + 1  );
     connectedThreshold->SetReplaceValue( m_insideMaskValue );
 
     Volume::ItkImageType::IndexType seedIndex;
@@ -254,6 +389,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     typedef itk::VolumeCalculatorImageFilter< Volume::ItkImageType > VolumeCalcFilterType;
     VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
     volumeCalc->SetInput(connectedThreshold->GetOutput());
+    //volumeCalc->SetInput(resample2Filter->GetOutput());
     volumeCalc->SetInsideValue( m_insideMaskValue );
 
     try
@@ -265,6 +401,15 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
     }
+  t4=clock();
+    std::cout<<"Estudi temps:"<<std::endl;
+    std::cout<<"Resample1    : "<<(double)(t8-t7)/1000000.0<<std::endl;
+    std::cout<<"Dilate/Erode : "<<(double)(t2-t1)/1000000.0<<std::endl;
+    std::cout<<"Resample2    : "<<(double)(t6-t5)/1000000.0<<std::endl;
+    std::cout<<"Interseccio  : "<<(double)(t3-t6)/1000000.0<<std::endl;
+    std::cout<<"ConnectedThrd: "<<(double)(t4-t3)/1000000.0<<std::endl;
+    std::cout<<"TOTAL        : "<<(double)(t4-t7)/1000000.0<<std::endl;
+
 
     m_volume = volumeCalc->GetVolume();
     m_cont = volumeCalc->GetVolumeCount();
@@ -372,6 +517,30 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleFilterType;
     typedef itk::AffineTransform< double, 3 >  TransformType;
     typedef itk::NearestNeighborInterpolateImageFunction<Volume::ItkImageType, double >  InterpolatorType;
+    typedef  itk::BinaryThresholdImageFilter< Volume::ItkImageType, Volume::ItkImageType> Thresholding2FilterType;
+    typedef itk::LinearInterpolateImageFunction<Volume::ItkImageType, double >  LinearInterpolatorType;
+
+   //variables per càlcul de temps
+   unsigned long t1,t2,t3,t4,t5,t6,t7,t8;
+
+   //Ampliem la màscara per evitar el partial volume effect
+   DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
+
+    unsigned long radiusDilate[3];
+    radiusDilate[0]=2;
+    radiusDilate[1]=2;
+    radiusDilate[2]=1;
+    StructuringElementType structuringElementDilate;
+    structuringElementDilate.SetRadius( radiusDilate ); // 3x3 structuring element
+    structuringElementDilate.CreateStructuringElement();
+
+    binaryDilate->SetDilateValue( m_insideMaskValue );
+    binaryDilate->SetKernel( structuringElementDilate );
+    binaryDilate->SetInput( m_Mask->getItkData() );
+    //binaryDilate->SetInput( resampleMaskFilter->GetOutput() );
+
+    t1=clock();
+    binaryDilate->Update();
 
     //Resamplagem la imatge per tal de que tingui un vòxel isomètric (el mètode ho requereix)
     ResampleFilterType::Pointer resampleFilter = ResampleFilterType::New();
@@ -382,7 +551,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     resampleFilter->SetDefaultPixelValue( 0 );
     double spacing[ 3 ] , newspacing[ 3 ] ;
     //Fem el vòxel isomètric
-    double isometricSize = 5.0;
+    double isometricSize = 4.0;
     m_Volume->getSpacing(spacing);
     newspacing[0] = isometricSize*spacing[0]; // pixel spacing in millimeters along X
     newspacing[1] = isometricSize*spacing[0]; // pixel spacing in millimeters along Y
@@ -406,6 +575,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
 
     resampleFilter->SetSize( newsize );
     resampleFilter->SetInput( m_Volume->getItkData() );
+    t2=clock();
     resampleFilter->Update();
     std::cout<<"resampleVolumeOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
     std::cout<<"resampleVolumeNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
@@ -438,29 +608,15 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     newsize[2] = (size[2]*spacing[2])/newspacing[2];  // number of pixels along Y
 
     resampleMaskFilter->SetSize( newsize );
-    resampleMaskFilter->SetInput( m_Mask->getItkData() );
+    //resampleMaskFilter->SetInput( m_Mask->getItkData() );
+    resampleMaskFilter->SetInput( binaryDilate->GetOutput() );
+    resampleMaskFilter->Update();
+    t3=clock();
 
     std::cout<<"resampleMaskOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
     std::cout<<"resampleMaskNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
 
     //Fi resample
-
-    DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
-
-    unsigned long radiusDilate[3];
-    radiusDilate[0]=2;
-    radiusDilate[1]=2;
-    radiusDilate[2]=2;
-    StructuringElementType structuringElementDilate;
-    structuringElementDilate.SetRadius( radiusDilate ); // 3x3 structuring element
-    structuringElementDilate.CreateStructuringElement();
-
-    binaryDilate->SetDilateValue( m_insideMaskValue );
-    binaryDilate->SetKernel( structuringElementDilate );
-    //binaryDilate->SetInput( m_Mask->getItkData() );
-    binaryDilate->SetInput( resampleMaskFilter->GetOutput() );
-
-    binaryDilate->Update();
 
     itk::ImageRegionIterator<Volume::ItkImageType> mainIt( resampleFilter->GetOutput(), resampleFilter->GetOutput()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> maskIt( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetBufferedRegion());
@@ -546,7 +702,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     erfcSegmentation->SetPropagationScaling( 1.0 );
     erfcSegmentation->SetCurvatureScaling( m_stoppingTime );
 
-    erfcSegmentation->SetMaximumRMSError( 0.01 );
+    erfcSegmentation->SetMaximumRMSError( 0.001 );
     erfcSegmentation->SetNumberOfIterations( 500 );
 
     erfcSegmentation->SetLowerThreshold( m_lowerVentriclesThreshold );
@@ -563,7 +719,8 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     cast->SetInput( resampleFilter->GetOutput() );
     erfcSegmentation->SetFeatureImage( cast->GetOutput() );
     //Introduim la màscara dilatada per evitar el PV effect
-    erfcSegmentation->SetMaskImage( binaryDilate->GetOutput() );
+    //erfcSegmentation->SetMaskImage( binaryDilate->GetOutput() );
+    erfcSegmentation->SetMaskImage( resampleMaskFilter->GetOutput() );
     thresholder->SetInput( erfcSegmentation->GetOutput() );
 
     typedef FastMarchingFilterType::NodeContainer           NodeContainer;
@@ -594,6 +751,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     fastMarching->SetTrialPoints(  seeds  );
 
     fastMarching->SetSpeedConstant( 1.0 );
+    t4=clock();
 
     try
     {
@@ -608,6 +766,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
         std::cerr << "Exception caught !" << std::endl;
         std::cerr << excep << std::endl;
     }
+    t5=clock();
 
     // Print out some useful information
     std::cout << std::endl;
@@ -618,26 +777,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     std::cout << "No. elapsed iterations: " << erfcSegmentation->GetElapsedIterations() << std::endl;
     std::cout << "RMS change: " << erfcSegmentation->GetRMSChange() << std::endl;
     std::cout << std::endl;
-
-    typedef itk::ImageFileWriter< InternalImageType > InternalWriterType;
-
-    InternalWriterType::Pointer mapWriter = InternalWriterType::New();
-    mapWriter->SetInput( fastMarching->GetOutput() );
-    mapWriter->SetFileName("fastMarchingImage.mhd");
-    mapWriter->Update();
-
-    OutputCastingFilterType::Pointer outcast = OutputCastingFilterType::New();
-    typedef itk::ImageFileWriter< Volume::ItkImageType > VolumeWriterType;
-    VolumeWriterType::Pointer speedWriter = VolumeWriterType::New();
-    outcast->SetInput( erfcSegmentation->GetSpeedImage() );
-    speedWriter->SetInput( outcast->GetOutput() );
-    speedWriter->SetFileName("speedTermImage.mhd");
-    speedWriter->Update();
-
-    VolumeWriterType::Pointer maskWriter = VolumeWriterType::New();
-    maskWriter->SetInput( thresholder->GetOutput() );
-    maskWriter->SetFileName("outputMaskImage.mhd");
-    maskWriter->Update();
 
     //Posem l'origin i l'spacing correctes a la sortida del filtre
     //No sé perquè no ho fa directament les ITKs!!!!
@@ -652,7 +791,8 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     ResampleFilterType::Pointer resampleMaskFilter2 = ResampleFilterType::New();
     TransformType::Pointer transformMask2 = TransformType::New();
     resampleMaskFilter2->SetTransform( transformMask2 );
-    InterpolatorType::Pointer interpolatorMask2 = InterpolatorType::New();
+    //InterpolatorType::Pointer interpolatorMask2 = InterpolatorType::New();
+    LinearInterpolatorType::Pointer interpolatorMask2 = LinearInterpolatorType::New();
     resampleMaskFilter2->SetInterpolator( interpolatorMask2 );
     resampleMaskFilter2->SetDefaultPixelValue( m_outsideMaskValue );
 
@@ -665,17 +805,115 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     size = m_Mask->getItkData()->GetBufferedRegion().GetSize();
     resampleMaskFilter2->SetSize( size );
     resampleMaskFilter2->SetInput( thresholder->GetOutput() );
-    resampleMaskFilter2->Update();
 
+    resampleMaskFilter2->Update();
+    t8=clock();
+
+    Thresholding2FilterType::Pointer thresholder2 = Thresholding2FilterType::New();
+
+    thresholder2->SetLowerThreshold( (m_insideMaskValue - m_outsideMaskValue)/2 );
+    thresholder2->SetUpperThreshold( m_insideMaskValue + 1 );
+
+    thresholder2->SetInsideValue( m_insideMaskValue );
+    thresholder2->SetOutsideValue(  m_outsideMaskValue  );
+
+    thresholder2->SetInput( resampleMaskFilter2->GetOutput() );
+    thresholder2->Update();
+
+/*
     std::cout<<"resample: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
 
-    std::cout<<"Mask Set!!"<<std::endl;
-    lesionMask->setData( resampleMaskFilter2->GetOutput());
+    //Fem la mediana per tal d'"arrodonir" el resultat (així no queda voxelat)
+    DilateFilterType::Pointer binaryDilate2 = DilateFilterType::New();
+    unsigned long radiusDilate2[3];
+    radiusDilate2[0]=2;
+    radiusDilate2[1]=2;
+    radiusDilate2[2]=0;
+    StructuringElementType structuringElementDilate2;
+    structuringElementDilate2.SetRadius( radiusDilate2 ); // 3x3 structuring element
+    structuringElementDilate2.CreateStructuringElement();
+    binaryDilate2->SetDilateValue( m_insideMaskValue );
+    binaryDilate2->SetBackgroundValue( m_outsideMaskValue );
+    binaryDilate2->SetKernel( structuringElementDilate2 );
+    binaryDilate2->SetInput( resampleMaskFilter2->GetOutput() );
 
-    VolumeWriterType::Pointer maskWriter2 = VolumeWriterType::New();
-    maskWriter2->SetInput( resampleMaskFilter2->GetOutput() );
-    maskWriter2->SetFileName("outputMaskResampledImage.mhd");
-    maskWriter2->Update();
+    typedef itk::BinaryErodeImageFilter<Volume::ItkImageType,Volume::ItkImageType,StructuringElementType > ErodeFilterType;
+    ErodeFilterType::Pointer binaryErode = ErodeFilterType::New();
+    binaryErode->SetErodeValue( m_insideMaskValue );
+    unsigned long radiusErode[3];
+    radiusErode[0]=4;
+    radiusErode[1]=4;
+    radiusErode[2]=0;
+    StructuringElementType structuringElementErode;
+    structuringElementErode.SetRadius( radiusErode ); // 3x3 structuring element
+    structuringElementErode.CreateStructuringElement();
+    binaryErode->SetErodeValue( m_insideMaskValue );
+    binaryErode->SetBackgroundValue( m_outsideMaskValue );
+    binaryErode->SetKernel( structuringElementErode );
+    binaryErode->SetInput( binaryDilate2->GetOutput() );
+
+    DilateFilterType::Pointer binaryDilate3 = DilateFilterType::New();
+    binaryDilate3->SetDilateValue( m_insideMaskValue );
+    unsigned long radiusDilate3[3];
+    radiusDilate3[0]=2;
+    radiusDilate3[1]=2;
+    radiusDilate3[2]=0;
+    StructuringElementType structuringElementDilate3;
+    structuringElementDilate3.SetRadius( radiusDilate3 ); // 3x3 structuring element
+    structuringElementDilate3.CreateStructuringElement();
+    binaryDilate3->SetDilateValue( m_insideMaskValue );
+    binaryDilate3->SetBackgroundValue( m_outsideMaskValue );
+    binaryDilate3->SetKernel( structuringElementDilate3 );
+    binaryDilate3->SetInput( binaryErode->GetOutput() );
+    binaryDilate3->Update();
+    */
+    /*typedef itk::MedianImageFilter<Volume::ItkImageType,Volume::ItkImageType >  MedianFilterType;
+
+    MedianFilterType::Pointer medianFilter = MedianFilterType::New();
+    Volume::ItkImageType::SizeType indexRadius;
+
+    indexRadius[0] = 2; // radius along x
+    indexRadius[1] = 2; // radius along y
+    indexRadius[2] = 0; // radius along y
+
+    medianFilter->SetRadius( indexRadius );
+    medianFilter->SetInput( resampleMaskFilter2->GetOutput() );
+    medianFilter->Update();
+    */
+    t6=clock();
+
+    std::cout<<"Mask Set!!"<<std::endl;
+    //lesionMask->setData( resampleMaskFilter2->GetOutput());
+    //lesionMask->setData( medianFilter->GetOutput());
+    //lesionMask->setData( binaryDilate3->GetOutput());
+    lesionMask->setData( thresholder2->GetOutput());
+
+    itk::ImageRegionIterator<Volume::ItkImageType> lesionIt( lesionMask->getItkData(), lesionMask->getItkData()->GetBufferedRegion());
+    itk::ImageRegionIterator<Volume::ItkImageType> hematomaIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
+
+    //Compute mask difference
+    lesionIt.GoToBegin();
+    hematomaIt.GoToBegin();
+    m_edemaCont = 0;
+
+    std::cout<<"Difference: "<<m_insideMaskValue<<", "<<m_outsideMaskValue<<std::endl;
+
+    while(!lesionIt.IsAtEnd())
+    {
+        if(lesionIt.Value() == m_insideMaskValue)
+        {
+            if(hematomaIt.Value() == m_insideMaskValue)
+            {
+                lesionIt.Set( m_outsideMaskValue);
+            }
+            else
+            {
+                m_edemaCont++;
+            }
+        }
+        ++lesionIt;
+        ++hematomaIt;
+    }
 
     lesionMask->getVtkData()->Update();
     std::cout<<"Lesion: "<<lesionMask->getItkData()->GetOrigin()<<" ,"<<lesionMask->getItkData()->GetSpacing()<<" ,"<<lesionMask->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
@@ -686,6 +924,16 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     double volspacing[3];
     m_Volume->getSpacing(volspacing);
     std::cout<<"Volume: "<<m_edemaCont<<",* "<<volspacing[0]*volspacing[1]*volspacing[2]<<std::endl;
+    t7=clock();
+    std::cout<<"Estudi temps:"<<std::endl;
+    std::cout<<"Dilate          : "<<(double)(t2-t1)/1000000.0<<std::endl;
+    std::cout<<"Resample inicial: "<<(double)(t3-t2)/1000000.0<<std::endl;
+    std::cout<<"Mean i init     : "<<(double)(t4-t3)/1000000.0<<std::endl;
+    std::cout<<"fast marching   : "<<(double)(t5-t4)/1000000.0<<std::endl;
+    std::cout<<"resample 2      : "<<(double)(t8-t5)/1000000.0<<std::endl;
+    std::cout<<"median filter   : "<<(double)(t6-t8)/1000000.0<<std::endl;
+    std::cout<<"dif i volume    : "<<(double)(t7-t6)/1000000.0<<std::endl;
+    std::cout<<"TOTAL           : "<<(double)(t7-t1)/1000000.0<<std::endl;
 
     return (double)m_edemaCont*volspacing[0]*volspacing[1]*volspacing[2];
 }
@@ -935,7 +1183,6 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
     m_Volume->getSpacing(spacing);
     //std::cout<<"spacing"<<spacing[0]<<" "<<spacing[1]<<" "<<spacing[2]<<std::endl;
     //std::cout<<"Volume: "<<m_edemaCont<<",* "<<spacing[0]*spacing[1]*spacing[2]<<std::endl;
-
     return (double)m_edemaCont*spacing[0]*spacing[1]*spacing[2];
 }
 

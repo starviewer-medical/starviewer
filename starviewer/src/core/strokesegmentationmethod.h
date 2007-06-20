@@ -23,6 +23,8 @@ public:
     ~StrokeSegmentationMethod();
 
     double applyMethod();
+    double applyMethodVTK();
+    void applyMethodVTKRecursive(vtkImageData* imMask, int a, int b, int c, int prof);
 
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();

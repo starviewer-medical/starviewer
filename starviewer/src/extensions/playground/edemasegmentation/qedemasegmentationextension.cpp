@@ -364,6 +364,8 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_2DView->getDefaultWindowLevel( wl );
     m_insideValue  = (int) wl[0];
     m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
+    m_insideValue  = 255;
+    m_outsideValue = 0;
 
     QString aux = (m_mainVolume->getVolumeSourceInformation())->getPatientName();
     m_patientNameLineEdit->insert(aux);
@@ -473,6 +475,7 @@ void QEdemaSegmentationExtension::ApplyMethod( )
     m_2DView->getSeedPosition(pos);
     m_segMethod->setSeedPosition(pos[0],pos[1],pos[2]);
     m_volume = m_segMethod->applyMethod();
+    //m_volume = m_segMethod->applyMethodVTK();//No funciona!!
     m_cont = m_segMethod->getNumberOfVoxels();
 
      std::cout<<"FI Apply filter!!"<<std::endl;
@@ -542,7 +545,7 @@ void QEdemaSegmentationExtension::ApplyVentriclesMethod( )
 
 void QEdemaSegmentationExtension::ApplyEdemaMethod( )
 {
-    std::cout<<"Init Apply filter Edema!!"<<std::endl;
+    //std::cout<<"Init Apply filter Edema!!"<<std::endl;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if(m_edemaMaskVolume == 0)
     {
@@ -579,7 +582,7 @@ void QEdemaSegmentationExtension::ApplyEdemaMethod( )
     QApplication::restoreOverrideCursor();
     //std::cout<<"Edema cont: "<<m_edemaCont<<", "<<(*m_activedCont)<<std::endl;
     //std::cout<<"Edema vol: "<<m_edemaVolume<<", "<<(*m_activedVolume)<<std::endl;
-    std::cout<<"FI Apply filter Edema!!"<<std::endl;
+    //std::cout<<"FI Apply filter Edema!!"<<std::endl;
 }
 
 
@@ -995,16 +998,12 @@ void QEdemaSegmentationExtension::viewThresholds()
     imageThreshold->ThresholdBetween( m_lowerValueSlider->value(),  m_upperValueSlider->value());
     imageThreshold->SetInValue( m_insideValue );
     imageThreshold->SetOutValue( m_outsideValue );
+    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
     imageThreshold->Update();
 
     m_lesionMaskVolume->setData(imageThreshold->GetOutput());
 
     this->viewLesionOverlay();
-
-//     m_2DView->setOverlayToBlend();
-//     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
-//     m_2DView->setOverlayInput(m_lesionMaskVolume);
-//     m_2DView->getInteractor()->Render();
 
 }
 
