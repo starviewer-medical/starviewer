@@ -149,7 +149,7 @@ Status CacheStudyDAL::insertStudyDicomdir( Study *study )
     sqlSentence = QString( "Insert into Study "
         "( PatId , StuInsUID , StuID , StuDat , StuTim , RefPhyNam , AccNum , StuDes , Modali , "
         " OpeNam , Locati , AccDat , AccTim , AbsPath , Status , PacsID , PatAge ) "
-        " Values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' , '%11' , %12 , %13 , '%14' , 'PENDING'"//stateDatabase pendent perquè la descarrega de l'estudi encara no està completa
+        " Values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' , '%11' , %12 , %13 , '%14' , 'PENDING',"//stateDatabase pendent perquè la descarrega de l'estudi encara no està completa
         " %15  , '%16') " //busquem l'id del PACS
     )
         .arg( study->getPatientId() )
