@@ -6,18 +6,14 @@
  ***************************************************************************/
 
 
-
 #ifndef UDGHISTOGRAM_H
 #define UDGHISTOGRAM_H
-
 
 
 #include <QVector>
 
 
-
 namespace udg {
-
 
 
 /**
@@ -26,10 +22,11 @@ namespace udg {
  * Guarda el nombre d'ocurrències de cada enter i també el nombre total
  * d'ocurrències.
  *
+ * \todo Potser quedaria bé amb templates.
+ *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
 class Histogram {
-
 
 public:
 
@@ -37,7 +34,6 @@ public:
     Histogram();
     /// Constructor. Crea un histograma buit i de mida \p size.
     Histogram( int size );
-    /// Destructor.
     ~Histogram();
 
     /// Retorna la mida de l'histograma.
@@ -50,7 +46,7 @@ public:
     void setSize( int size );
     /**
      * Incrementa el comptador d'ocurrències de \p value i el total. \p value ha
-     * de ser un valor en l'interval [0, size()).
+     * de ser un valor en l'interval [0, size()) (no es comprova).
      */
     void add( int value );
     /// Crea un iterador sobre els valors de l'histograma i el retorna.
@@ -66,7 +62,6 @@ public:
      */
     void combineWith( const Histogram & histogram );
 
-
 private:
 
     /// Vector amb els comptadors d'ocurrències individuals.
@@ -74,13 +69,10 @@ private:
     /// Comptador del nombre total d'ocurrències.
     unsigned long m_count;
 
-
 };
 
 
-
 }
-
 
 
 #endif

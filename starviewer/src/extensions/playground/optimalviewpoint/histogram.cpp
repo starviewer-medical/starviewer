@@ -6,20 +6,16 @@
  ***************************************************************************/
 
 
-
 #include "histogram.h"
 
 
-
 namespace udg {
-
 
 
 Histogram::Histogram()
 {
     m_count = 0;
 }
-
 
 
 Histogram::Histogram( int size )
@@ -29,11 +25,9 @@ Histogram::Histogram( int size )
 }
 
 
-
 Histogram::~Histogram()
 {
 }
-
 
 
 int Histogram::size() const
@@ -42,12 +36,10 @@ int Histogram::size() const
 }
 
 
-
 void Histogram::setSize( int size )
 {
     m_histogram.resize( size );
 }
-
 
 
 void Histogram::add( int value )
@@ -57,12 +49,10 @@ void Histogram::add( int value )
 }
 
 
-
 QVectorIterator< unsigned long > * Histogram::getIterator() const
 {
     return new QVectorIterator< unsigned long >( m_histogram );
 }
-
 
 
 unsigned long Histogram::count() const
@@ -71,13 +61,11 @@ unsigned long Histogram::count() const
 }
 
 
-
 void Histogram::reset()
 {
     m_histogram.fill( 0 );
     m_count = 0;
 }
-
 
 
 void Histogram::combineWith( const Histogram & histogram )
@@ -90,7 +78,6 @@ void Histogram::combineWith( const Histogram & histogram )
 
     m_count += histogram.m_count;
 }
-
 
 
 }
