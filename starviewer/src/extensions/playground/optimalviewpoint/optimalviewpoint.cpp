@@ -96,7 +96,7 @@ OptimalViewpoint::~OptimalViewpoint()
     renderWindow->Delete();
 */
     //if ( m_viewer ) delete m_viewer; // aquí o a OptimalViewpointDirector?
-    m_renderer->Delete();
+    if ( m_renderer ) m_renderer->Delete();
 
 
     // FALTA ESBORRAR ELS FITXERS TEMPORALS
@@ -259,6 +259,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             break;
 
         case 6:
+            for ( unsigned char i = 1; i <= 6; i++ )
+                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
             (*m_planes)[1]->setLatitude( 0.0 ); (*m_planes)[1]->setLongitude( 0.0 );
             (*m_planes)[2]->setLatitude( 90.0 ); (*m_planes)[2]->setLongitude( 0.0 );
             (*m_planes)[3]->setLatitude( -90.0 ); (*m_planes)[3]->setLongitude( 0.0 );
@@ -268,6 +270,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             break;
 
         case 8:
+            for ( unsigned char i = 1; i <= 8; i++ )
+                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
             (*m_planes)[1]->setLatitude( 45.0 ); (*m_planes)[1]->setLongitude( -45.0 );
             (*m_planes)[2]->setLatitude( 45.0 ); (*m_planes)[2]->setLongitude( 45.0 );
             (*m_planes)[3]->setLatitude( -45.0 ); (*m_planes)[3]->setLongitude( -45.0 );
@@ -276,6 +280,25 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             (*m_planes)[6]->setLatitude( 45.0 ); (*m_planes)[6]->setLongitude( 135.0 );
             (*m_planes)[7]->setLatitude( -45.0 ); (*m_planes)[7]->setLongitude( -135.0 );
             (*m_planes)[8]->setLatitude( -45.0 ); (*m_planes)[8]->setLongitude( 135.0 );
+            break;
+
+        case 12:
+            {
+                for ( unsigned char i = 1; i <= 12; i++ )
+                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getMainVolume()->GetLength() );
+                POVSphereCloud cloud( 1.0, 0 );
+                cloud.createPOVCloud();
+                const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
+                if ( geographicVertices.size() != 12 )
+                    QMessageBox::warning( 0, "No hi ha 12 punts!", QString::number( geographicVertices.size() ) );
+                QVector< Vector3 >::const_iterator it;
+                unsigned char i;
+
+                for ( it = geographicVertices.begin(), i = 1; i <= 12; it++, i++ )
+                {
+                    (*m_planes)[i]->setLatitude( it->y ); (*m_planes)[i]->setLongitude( it->z );
+                }
+            }
             break;
 
         case 20:
@@ -349,10 +372,10 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                     (*m_planes)[i]->setDistance( 2.0 * m_volume->getMainVolume()->GetLength() );
                 POVSphereCloud cloud( 1.0, 1 );
                 cloud.createPOVCloud();
-                const std::vector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
+                const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
                 if ( geographicVertices.size() != 42 )
                     QMessageBox::warning( 0, "No hi ha 42 punts!", QString::number( geographicVertices.size() ) );
-                std::vector< Vector3 >::const_iterator it;
+                QVector< Vector3 >::const_iterator it;
                 unsigned char i;
 
                 for ( it = geographicVertices.begin(), i = 1; i <= 42; it++, i++ )
