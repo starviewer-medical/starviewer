@@ -301,20 +301,20 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
     connect( m_diffusion2DView , SIGNAL( eventReceived( unsigned long ) ) , this , SLOT( strokeEventHandler(unsigned long) ) );
   // caldria pel perfusion?????
-    
-    
+
+
 
 
 
 
     connect( m_synchroCheckBox, SIGNAL( toggled(bool) ), this, SLOT( synchronizeSlices(bool) ) );
 
-    
 
 
 
 
-  
+
+
 
     // potser és millor fer-ho amb l'acció ( signal triggered() )
   connect( m_lesionViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewLesionOverlay() ) );
@@ -330,7 +330,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
   connect( m_paintButton , SIGNAL( clicked() ) , this , SLOT( setPaint() ) );
 
 
-  
+
 
 
 
@@ -472,6 +472,9 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     delete m_diffusionMainVolume;
     m_diffusionMainVolume = new Volume();
     m_diffusionMainVolume->setData( diffusionImage );
+
+    //Posem la informació de la imatge original, ja que tot el tema de DICOM (orientació, w/l,...) serà el mateix
+    m_diffusionMainVolume->setVolumeSourceInformation( m_diffusionInputVolume->getVolumeSourceInformation() );
 
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
@@ -621,6 +624,9 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     delete m_perfusionMainVolume;
     m_perfusionMainVolume = new Volume();
     m_perfusionMainVolume->setData( perfusionImage );
+
+    //Posem la informació de la imatge original, ja que tot el tema de DICOM (orientació, w/l,...) serà el mateix
+    m_perfusionMainVolume->setVolumeSourceInformation( m_perfusionInputVolume->getVolumeSourceInformation() );
 
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
