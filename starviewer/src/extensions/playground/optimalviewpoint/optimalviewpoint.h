@@ -77,6 +77,7 @@ public:
      * MagicMirrorsViewer).
      */
     vtkRenderer * getMainRenderer() const;
+    void setMainRenderer( vtkRenderer * mainRenderer );
 
     /// Assigna l'interactor de la finestra de visualització.
     void setInteractor( vtkRenderWindowInteractor * interactor );

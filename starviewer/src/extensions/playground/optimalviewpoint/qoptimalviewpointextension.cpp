@@ -220,7 +220,8 @@ void QOptimalViewpointExtension::loadSegmentation()
     if ( !m_method )
     {
         m_method = new OptimalViewpoint();
-        m_viewerWidget->setRenderer( m_method->getMainRenderer() );
+//         m_viewerWidget->setRenderer( m_method->getMainRenderer() );
+        m_method->setMainRenderer( m_viewerWidget->getRenderer() );
     }
 
     m_method->setImage( volume->getVtkData() );

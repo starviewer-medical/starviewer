@@ -6,9 +6,7 @@
  ***************************************************************************/
 
 
-
 #include "optimalviewpointviewer.h"
-
 
 #include <QVTKWidget.h>
 #include <vtkRenderWindow.h>
@@ -18,9 +16,7 @@
 #include "vtkInteractorStyleSwitchGgg.h"
 
 
-
 namespace udg {
-
 
 
 OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent )
@@ -30,10 +26,9 @@ OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent )
     this->getInteractor()->SetInteractorStyle( style );
     style->Delete();
 
-    m_renderer = 0;
-    m_vtkWidget->hide();
+    m_renderer = vtkRenderer::New();
+    m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
 }
-
 
 
 OptimalViewpointViewer::~OptimalViewpointViewer()
@@ -42,28 +37,10 @@ OptimalViewpointViewer::~OptimalViewpointViewer()
 }
 
 
-
-/**
- * Assigna a la classe el renderer que haurà de fer la visualització si
- * encara no en té cap. Si la classe ja té un renderer o el mètode rep un
- * null no fa res.
- */
-void OptimalViewpointViewer::setRenderer( vtkRenderer * renderer )
-{
-    if ( !m_renderer && renderer )
-    {
-        m_renderer = renderer; m_renderer->Register( 0 );
-        m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
-    }
-}
-
-
-
 vtkRenderer * OptimalViewpointViewer::getRenderer()
 {
     return m_renderer;
 }
-
 
 
 void OptimalViewpointViewer::setInput( Volume * volume )
@@ -72,16 +49,10 @@ void OptimalViewpointViewer::setInput( Volume * volume )
 }
 
 
-
 void OptimalViewpointViewer::render()
 {
-    if ( m_renderer )
-    {
-        m_vtkWidget->show();
-        m_vtkWidget->GetRenderWindow()->Render();
-    }
+    m_vtkWidget->GetRenderWindow()->Render();
 }
-
 
 
 void OptimalViewpointViewer::setEnableTools( bool /*enable*/ )
@@ -90,12 +61,10 @@ void OptimalViewpointViewer::setEnableTools( bool /*enable*/ )
 }
 
 
-
 void OptimalViewpointViewer::enableTools()
 {
     // de moment res
 }
-
 
 
 void OptimalViewpointViewer::disableTools()
@@ -104,19 +73,16 @@ void OptimalViewpointViewer::disableTools()
 }
 
 
-
 void OptimalViewpointViewer::setTool( QString /*tool*/ )
 {
     // de moment res
 }
 
 
-
 void OptimalViewpointViewer::reset()
 {
     // de moment res
 }
-
 
 
 }

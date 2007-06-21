@@ -6,51 +6,39 @@
  ***************************************************************************/
 
 
-
 #ifndef UDGOPTIMALVIEWPOINTVIEWER_H
 #define UDGOPTIMALVIEWPOINTVIEWER_H
-
 
 
 #include "qviewer.h"
 
 
-
 namespace udg {
-
 
 
 /**
  * Aquesta classe fa la visualització de l'extensió Optimal Viewpoint.
  *
- * Cal proporcionar-li un renderer extern abans de fer-la servir.
+ * Només s'encarrega de guardar el QVTKWidget que fa la visualització. La gestió
+ * dels volums s'ha d'implementar externament, afegint-los i traient-los del
+ * renderer que es pot obtenir d'aquesta classe.
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
 class OptimalViewpointViewer : public QViewer {
 
-
     Q_OBJECT
-
 
 public:
 
     OptimalViewpointViewer( QWidget * parent = 0 );
     virtual ~OptimalViewpointViewer();
 
-    /**
-     * Assigna a la classe el renderer que haurà de fer la visualització si
-     * encara no en té cap. Si la classe ja té un renderer o el mètode rep un
-     * null no fa res.
-     */
-    void setRenderer( vtkRenderer * renderer );
-
     /// Retorna el renderer.
     virtual vtkRenderer * getRenderer();
 
     /// Indiquem les dades d'entrada.
     virtual void setInput( Volume * volume );
-
 
 public slots:
 
@@ -70,18 +58,14 @@ public slots:
     /// Crida que reinicia a l'estat incial el visor.
     virtual void reset();
 
-
 private:
 
     vtkRenderer * m_renderer;
 
-
 };
 
 
-
 }
-
 
 
 #endif

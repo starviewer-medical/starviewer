@@ -64,11 +64,12 @@ namespace udg {
 
 OptimalViewpoint::OptimalViewpoint()
 {
-    m_renderer = vtkRenderer::New();    // creem el renderer principal
-    m_renderer->SetBackground( 0.0, 0.0, 0.0 );       // posem el fons gris
+    m_renderer = 0;
+//     m_renderer = vtkRenderer::New();    // creem el renderer principal
+//     m_renderer->SetBackground( 0.0, 0.0, 0.0 );       // posem el fons gris
 
     m_camera = vtkCamera::New();  // creem la càmera principal
-    m_renderer->SetActiveCamera( m_camera );
+//     m_renderer->SetActiveCamera( m_camera );
 
     m_planes = new PlaneVector(); // creem el vector de plans
     m_planes->resize( 1, 0 );
@@ -95,6 +96,7 @@ OptimalViewpoint::~OptimalViewpoint()
     renderWindow->Delete();
 */
     //if ( m_viewer ) delete m_viewer; // aquí o a OptimalViewpointDirector?
+    m_renderer->Delete();
 
 
     // FALTA ESBORRAR ELS FITXERS TEMPORALS
@@ -108,6 +110,14 @@ vtkRenderer * OptimalViewpoint::getMainRenderer() const
 {
     return m_renderer;
 }
+
+
+void OptimalViewpoint::setMainRenderer( vtkRenderer * mainRenderer )
+{
+    m_renderer = mainRenderer; m_renderer->Register( 0 );
+    m_renderer->SetActiveCamera( m_camera );
+}
+
 
 /// Assigna l'interactor de la finestra de visualització.
 void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
