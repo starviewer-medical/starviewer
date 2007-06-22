@@ -50,7 +50,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
- : QViewer( parent )
+ : QViewer( parent ), m_vtkVolume(0)
 {
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
@@ -217,10 +217,10 @@ bool Q3DViewer::rescale()
         rescale->SetInput( m_mainVolume->getVtkData() );
         rescale->SetShift(0);
         rescale->SetScale( 256.0 / range[1] );
-        rescale->SetOutputScalarType( VTK_UNSIGNED_CHAR );
+        rescale->SetOutputScalarType( VTK_UNSIGNED_SHORT );
     //     Fem un casting de les dades ja que el ray cast mapper nomes accepta unsigned char/short
         m_imageCaster->SetInput(  rescale->GetOutput() );
-        m_imageCaster->SetOutputScalarType( VTK_UNSIGNED_CHAR ); // tbé seria vàlid VTK_UNSIGNED_SHORT
+        m_imageCaster->SetOutputScalarType( VTK_UNSIGNED_SHORT ); // tbé seria vàlid VTK_UNSIGNED_SHORT
         m_imageCaster->ClampOverflowOn();
         m_imageCaster->Update();
         ok = true;
@@ -260,11 +260,14 @@ void Q3DViewer::renderRayCasting()
         volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
 
         // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
-        vtkVolume* volume = vtkVolume::New();
-        volume->SetMapper( volumeMapper );
-        volume->SetProperty( volumeProperty );
+        if( !m_vtkVolume )
+        {
+            m_vtkVolume = vtkVolume::New();
+            m_renderer->AddViewProp( m_vtkVolume );
+        }
 
-        m_renderer->AddViewProp( volume );
+        m_vtkVolume->SetMapper( volumeMapper );
+        m_vtkVolume->SetProperty( volumeProperty );
         m_renderer->Render();
     }
     else
@@ -311,11 +314,13 @@ void Q3DViewer::renderMIP3D()
         volumeMapper->SetInput( m_imageCaster->GetOutput()  );
     //     volumeMapper->SetGradientEstimator( gradientEstimator );
         // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
-        vtkVolume* volume = vtkVolume::New();
-        volume->SetMapper( volumeMapper );
-        volume->SetProperty( mipProperty );
-
-        m_renderer->AddViewProp( volume );
+        if( !m_vtkVolume )
+        {
+            m_vtkVolume = vtkVolume::New();
+            m_renderer->AddViewProp( m_vtkVolume );
+        }
+        m_vtkVolume->SetMapper( volumeMapper );
+        m_vtkVolume->SetProperty( mipProperty );
         m_renderer->Render();
     }
     else
@@ -381,11 +386,14 @@ void Q3DViewer::renderIsoSurface()
         volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
         volumeMapper->SetGradientEstimator( gradientEstimator );
         // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
-        vtkVolume* volume = vtkVolume::New();
-        volume->SetMapper( volumeMapper );
-        volume->SetProperty( prop );
+        if( !m_vtkVolume )
+        {
+            m_vtkVolume = vtkVolume::New();
+            m_renderer->AddViewProp( m_vtkVolume );
+        }
 
-        m_renderer->AddViewProp( volume );
+        m_vtkVolume->SetMapper( volumeMapper );
+        m_vtkVolume->SetProperty( prop );
         m_renderer->Render();
     }
     else
@@ -420,11 +428,14 @@ void Q3DViewer::renderTexture2D()
         volumeMapper->SetInput( m_imageCaster->GetOutput()  );
 
         // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
-        vtkVolume* volume = vtkVolume::New();
-        volume->SetMapper( volumeMapper );
-        volume->SetProperty( volumeProperty );
+        if( !m_vtkVolume )
+        {
+            m_vtkVolume = vtkVolume::New();
+            m_renderer->AddViewProp( m_vtkVolume );
+        }
 
-        m_renderer->AddViewProp( volume );
+        m_vtkVolume->SetMapper( volumeMapper );
+        m_vtkVolume->SetProperty( volumeProperty );
         m_renderer->Render();
     }
     else
@@ -459,11 +470,14 @@ void Q3DViewer::renderTexture3D()
         volumeMapper->SetInput( m_imageCaster->GetOutput()  );
 
         // el volum conté el mapper i la propietat i es pot usar per posicionar/orientar el volum
-        vtkVolume* volume = vtkVolume::New();
-        volume->SetMapper( volumeMapper );
-        volume->SetProperty( volumeProperty );
+        if( !m_vtkVolume )
+        {
+            m_vtkVolume = vtkVolume::New();
+            m_renderer->AddViewProp( m_vtkVolume );
+        }
 
-        m_renderer->AddViewProp( volume );
+        m_vtkVolume->SetMapper( volumeMapper );
+        m_vtkVolume->SetProperty( volumeProperty );
         m_renderer->Render();
     }
     else

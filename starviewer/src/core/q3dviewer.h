@@ -14,20 +14,21 @@ class vtkRenderer;
 class vtkImageCast;
 class vtkRenderWindowInteractor;
 class vtkInteractorStyle;
+class vtkVolume;
 
 namespace udg {
+
+// FWD declarations
+class Volume;
+class Q3DOrientationMarker;
+class Q3DViewerToolManager;
+class TransferFunction;
 
 /**
 Classe base per als visualitzadors 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-
-// FWD declarations
-class Volume;
-class Q3DOrientationMarker;
-class Q3DViewerToolManager;
-
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
@@ -77,11 +78,8 @@ public slots:
     virtual void render();
     void reset();
 
-protected:
-    /// el renderer
-    vtkRenderer* m_renderer;
-    /// la funció que es fa servir pel rendering
-    RenderFunction m_renderFunction;
+    /// Li assignem la funció de transferència que volem aplicar
+    void setTransferFunction( TransferFunction *transferFunction ){};
 
 private:
     /// fa la visualització per raycasting
@@ -106,20 +104,35 @@ private:
     /// Canvia la orientació de la càmera
     void setCameraOrientation( int orientation );
 
-    /// el caster de les imatges
-    vtkImageCast* m_imageCaster;
-
     /// Orientació que tenim
     int m_currentOrientation;
-
-    /// Widget per veure la orientació en 3D
-    Q3DOrientationMarker *m_orientationMarker;
 
     /// reinicia la orientació
     void resetOrientation();
 
+protected:
+    /// el renderer
+    vtkRenderer* m_renderer;
+
+    /// la funció que es fa servir pel rendering
+    RenderFunction m_renderFunction;
+
+private:
     /// El manager de les tools
     Q3DViewerToolManager *m_toolManager;
+
+    /// el caster de les imatges
+    vtkImageCast* m_imageCaster;
+
+    /// Widget per veure la orientació en 3D
+    Q3DOrientationMarker *m_orientationMarker;
+
+    /// El prop 3D de vtk per representar el volum
+    vtkVolume *m_vtkVolume;
+
+    /// La funció de transferència que s'aplica
+    TransferFunction *m_transferFunction;
+
 };
 
 };  //  end  namespace udg
