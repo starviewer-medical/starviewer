@@ -7,8 +7,6 @@
 #ifndef UDGCACHETOOLS_H
 #define UDGCACHETOOLS_H
 
-class string;
-
 namespace udg {
 
 class Status;
