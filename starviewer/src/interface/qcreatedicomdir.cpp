@@ -273,14 +273,14 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
     logMessage = "Iniciant la creació del Dicomdir en cd-dvd al directori temporal ";
     logMessage.append( dicomdirPath );
-    INFO_LOG (  qPrintable(logMessage) );
+    INFO_LOG ( logMessage );
 
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
         QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create Dicomdir. Please check users permission" ) );
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
-        ERROR_LOG( qPrintable(logMessage) );
+        ERROR_LOG( logMessage );
         return state.setStatus( "Can't create temporary Dicomdir", false , 3002 );
     }
     else
@@ -306,7 +306,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     logMessage = "Iniciant la creació del Dicomdir en discdur o usb al directori ";
     logMessage.append( dicomdirPath );
-    INFO_LOG (  qPrintable(logMessage) );
+    INFO_LOG ( logMessage );
 
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
@@ -339,7 +339,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                             QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the directory. Please check users permission" ) );
                             logMessage = "Error al crear directori ";
                             logMessage.append( dicomdirPath );
-                            ERROR_LOG( qPrintable(logMessage) );
+                            ERROR_LOG( logMessage );
                         }
                         break;
                     case 1:
@@ -359,7 +359,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     Status state;
     QString logMessage;
 
-    INFO_LOG ( qPrintable(logMessage) );
+    INFO_LOG( logMessage );
 
     if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
@@ -367,7 +367,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
         logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
         logMessage.append( state.text() );
-        ERROR_LOG ( qPrintable(logMessage) );
+        ERROR_LOG( logMessage );
         return state.setStatus( "Not enough space to create Dicomdir", false , 3000 );
     }
 
@@ -388,7 +388,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         logMessage = "L'estudi ";
         logMessage.append( item->text( 7 ) );
         logMessage.append( " s'afegirà al Dicomdir " );
-        INFO_LOG ( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
     }
 
     switch( m_comboBoxAction->currentIndex() )
@@ -420,7 +420,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
             QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
             logMessage = "Error al crear el Dicomdir ERROR : ";
             logMessage.append( state.text() );
-            ERROR_LOG ( qPrintable(logMessage) );
+            ERROR_LOG( logMessage );
 
             return state;
         }

@@ -63,9 +63,9 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
         if ( stateQuery.code() == 2099 )
-            ERROR_LOG( qPrintable(sqlSentence) );
+            ERROR_LOG( sqlSentence );
     }
 
     return state;
@@ -99,8 +99,8 @@ Status PacsListDB::updatePacs( PacsParameters *pacs )
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -129,8 +129,8 @@ Status PacsListDB::queryPacsList( PacsList &list )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -178,8 +178,8 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , QString AETitle )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable(sqlSentence) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -223,8 +223,8 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
     state = m_DBConnect->databaseStatus( estat );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable(sqlSentence) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -264,8 +264,8 @@ Status PacsListDB::deletePacs( PacsParameters *pacs )
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable(sqlSentence) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
     }
     return state;
 
@@ -297,8 +297,8 @@ Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable(sqlSentence) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
     }
     return state;
 }

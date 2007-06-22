@@ -1218,7 +1218,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     //   extentX of 1, which is also not desirable if the input data is invalid.
     if (realExtentX > (VTK_INT_MAX >> 1) || realExtentX < 1)
     {
-        WARN_LOG( qPrintable( "Invalid X extent. [" + QString::number( realExtentX ) + "] Perhaps the input data is empty?" ) );
+        WARN_LOG( "Invalid X extent. [" + QString::number( realExtentX ) + "] Perhaps the input data is empty?" );
         extentX = 0;
     }
     else
@@ -1236,7 +1236,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     int extentY;
     if (realExtentY > (VTK_INT_MAX >> 1) || realExtentY < 1)
     {
-        WARN_LOG( qPrintable( "Invalid Y extent. [" + QString::number( realExtentY ) + "] Perhaps the input data is empty?" ) );
+        WARN_LOG( "Invalid Y extent. [" + QString::number( realExtentY ) + "] Perhaps the input data is empty?" );
         extentY = 0;
     }
     else

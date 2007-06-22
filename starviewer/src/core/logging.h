@@ -8,6 +8,7 @@
 #ifndef _LOGGING_
 #define _LOGGING_
 
+#include <QString>
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
@@ -33,20 +34,20 @@
 #ifdef QT_NO_DEBUG
 #define DEBUG_LOG( msg );
 #else
-#define DEBUG_LOG( msg ) LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development") , msg )
+#define DEBUG_LOG( msg ) LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development") , qPrintable( QString(msg) ) )
 
 #endif
 
 /// Macro per a missatges d'informació general
-#define INFO_LOG( msg ) LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , msg )
+#define INFO_LOG( msg ) LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , qPrintable( QString(msg) ) )
 
 /// Macro per a missatges de warning
-#define WARN_LOG( msg ) LOG4CXX_WARN( log4cxx::Logger::getLogger("info.release") , msg )
+#define WARN_LOG( msg ) LOG4CXX_WARN( log4cxx::Logger::getLogger("info.release") , qPrintable( QString(msg) ) )
 
 /// Macro per a missatges d'error
-#define ERROR_LOG( msg ) LOG4CXX_ERROR( log4cxx::Logger::getLogger("errors.release") , msg )
+#define ERROR_LOG( msg ) LOG4CXX_ERROR( log4cxx::Logger::getLogger("errors.release") , qPrintable( QString(msg) ) )
 
 /// Macro per a missatges d'error fatals/crítics
-#define FATAL_LOG( msg ) LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release") , msg );
+#define FATAL_LOG( msg ) LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release") , qPrintable( QString(msg) ) );
 
 #endif

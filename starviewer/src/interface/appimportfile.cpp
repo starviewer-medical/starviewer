@@ -60,7 +60,7 @@ bool AppImportFile::open()
 
     if ( !fileName.isEmpty() )
     {
-        INFO_LOG( qPrintable( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter) );
+        INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
         if (imagesFilter.contains(selectedFilter))
         {
             if( loadFile( fileName ) )
@@ -105,7 +105,7 @@ bool AppImportFile::openDirectory()
         {
             m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
             writeSettings();
-            INFO_LOG( qPrintable( "S'obre el directori: " + directoryName ) );
+            INFO_LOG( "S'obre el directori: " + directoryName );
         }
         else
             ok = false;

@@ -43,7 +43,7 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     {
         m_closeTabButton->show();
     }
-    INFO_LOG( qPrintable( "Afegint extensió: " + caption ) );
+    INFO_LOG( "Afegint extensió: " + caption );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
     m_lastIndex = this->currentIndex();
@@ -53,7 +53,7 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
 {
     if( application )
     {
-        INFO_LOG( qPrintable( "Tancant extensió: " + application->objectName() ) );
+        INFO_LOG( "Tancant extensió: " + application->objectName() );
         this->removeTab( this->indexOf( application ) );
         if( this->count() < 1 )
             m_closeTabButton->hide();

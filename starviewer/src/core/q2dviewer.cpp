@@ -726,12 +726,12 @@ void Q2DViewer::setTool( QString toolName )
     if( m_toolManager->setCurrentTool( toolName ) )
     {
         ///\Todo per implementar
-        DEBUG_LOG( qPrintable( QString("OK, hem activat la tool: ") + toolName ) );
+        DEBUG_LOG( QString("OK, hem activat la tool: ") + toolName );
     }
     else
     {
         ///\Todo per implementar
-        DEBUG_LOG( qPrintable( QString(":/ no s'ha pogut activar la tool: ") + toolName ) );
+        DEBUG_LOG( QString(":/ no s'ha pogut activar la tool: ") + toolName );
     }
 }
 
@@ -887,7 +887,7 @@ void Q2DViewer::setInput( Volume* volume )
 
     if( m_numberOfPhases > 1 )
     {
-        DEBUG_LOG( qPrintable( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases).arg( m_maxSliceValue) ) );
+        DEBUG_LOG( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases).arg( m_maxSliceValue) );
     }
 
     updateGrid();
@@ -1363,7 +1363,7 @@ void Q2DViewer::setPixelAspectRatio( double ratio )
     }
     else
     {
-        DEBUG_LOG( qPrintable( QString("Ratio no aplicable: %1").arg(ratio) ) );
+        DEBUG_LOG( QString("Ratio no aplicable: %1").arg(ratio) );
     }
 }
 
@@ -1483,7 +1483,7 @@ void Q2DViewer::setMagnificationFactor( double factor )
     }
     else
     {
-        DEBUG_LOG( qPrintable( QString("Factor no aplicable: %1").arg(factor) ) );
+        DEBUG_LOG( QString("Factor no aplicable: %1").arg(factor) );
     }
 }
 
@@ -2288,14 +2288,14 @@ void Q2DViewer::computeInputGrayscalePipeline()
 void Q2DViewer::applyGrayscalePipeline()
 {
     DEBUG_LOG( "*** Grayscale Transform Pipeline Begin ***" );
-    DEBUG_LOG( qPrintable( QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
+    DEBUG_LOG( QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
     .arg( m_mainVolume->getVolumeSourceInformation()->getBitsAllocated() )
     .arg( m_mainVolume->getVolumeSourceInformation()->getBitsStored() )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[0] )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[1] )
     .arg( m_mainVolume->getVolumeSourceInformation()->getPixelRepresentation() )
     .arg( m_mainVolume->getVolumeSourceInformation()->getPhotometricInterpretationAsString() )
-                    ) );
+                     );
 
 
 //\TODO Això s'ha d'aplicar enfunció de si tenim presentationm state o no? mirar si s'ha de fer aquí o al presentation state attacher...
@@ -2462,10 +2462,10 @@ void Q2DViewer::computeModalityLUT()
     else
     {
         // mirar el de la imatge, només per curiositat perquè les itk ja l'apliquen directament
-        DEBUG_LOG( qPrintable( QString("Image Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
+        DEBUG_LOG( QString("Image Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
         .arg( m_mainVolume->getVolumeSourceInformation()->getRescaleSlope() )
         .arg( m_mainVolume->getVolumeSourceInformation()->getRescaleIntercept() )
-        ) );
+         );
         if( m_modalityLUTRescale )
         {
             m_modalityLUTRescale->Delete();
@@ -2523,20 +2523,20 @@ void Q2DViewer::computeVOILUT()
             // Encara que en tingui més d'un window level, agafarem el primer i prou. Si n'hi ha més s'escolliran desde l'extensió adequada
             m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
             m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
-            DEBUG_LOG( qPrintable( QString("Image VOI Adjustment: Window: %1, Level: %2")
+            DEBUG_LOG( QString("Image VOI Adjustment: Window: %1, Level: %2")
                 .arg( m_defaultWindow )
                 .arg( m_defaultLevel )
-                ) );
+                );
         }
         else
         {
             // ajustar un al rang de dades adequat
             m_defaultWindow = fabs( m_modalityRange[1] - m_modalityRange[0] );
             m_defaultLevel = ( m_modalityRange[1] + m_modalityRange[0] )/ 2.0;
-            DEBUG_LOG( qPrintable( QString("No Image VOI Adjustment, creating a nice and automatic one: Window: %1, Level: %2")
+            DEBUG_LOG( QString("No Image VOI Adjustment, creating a nice and automatic one: Window: %1, Level: %2")
             .arg( m_defaultWindow )
             .arg( m_defaultLevel )
-            ) );
+            );
         }
     }
 }
@@ -2573,7 +2573,7 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
     if( data->search( lutType, stack ).bad() )
         ok = false;
     else
-        DEBUG_LOG( qPrintable( QString("Parsing [%1] from dicom dataset").arg( lutDescription ) ) );
+        DEBUG_LOG( QString("Parsing [%1] from dicom dataset").arg( lutDescription ) );
 
     if( ok )
     {
@@ -2604,11 +2604,11 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
             else
                 firstStored = lutDescriptor[1];
 
-            DEBUG_LOG( qPrintable( QString("LUT Descriptor: %1\\%2\\%3")
+            DEBUG_LOG( QString("LUT Descriptor: %1\\%2\\%3")
             .arg( numberOfEntries )
             .arg( firstStored )
             .arg( lutDescriptor[2] )
-            ) );
+            );
 
             vtkLut = vtkWindowLevelLookupTable::New();
             vtkLut->SetNumberOfTableValues( numberOfEntries );
@@ -2644,7 +2644,7 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
                 }
             }
             else
-                DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
+                DEBUG_LOG( QString("Error message:: ") + status.text() );
 
 // experiment
 //             unsigned char *outTable = new unsigned char[ numberOfEntries ];
@@ -2656,7 +2656,7 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
 //             vtkLut->SetRampToLinear();
         }
         else
-            DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
+            DEBUG_LOG( QString("Error message:: ") + status.text() );
     }
     return vtkLut;
 }

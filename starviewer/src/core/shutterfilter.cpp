@@ -77,7 +77,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                 else
                     m_background = backValue *(range[1] / backValue) + range[0];
 
-                DEBUG_LOG( qPrintable( QString("Valor de background del Shutter donat pel presentation state: %1").arg( m_background ) ) );
+                DEBUG_LOG( QString("Valor de background del Shutter donat pel presentation state: %1").arg( m_background ) );
 
                 if( presentationStateHandler->haveShutter( DVPSU_rectangular ) )
                 {
@@ -148,7 +148,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                     m_polygonalPolyDataStencil->SetInput( extruder->GetOutput() );
                     extruder->Delete();
 
-                    DEBUG_LOG( qPrintable( QString( msg ) ) );
+                    DEBUG_LOG( QString( msg ) );
                 }
                 else
                     DEBUG_LOG( "No hi ha POLYGONAL shutter al presentation state" );
@@ -157,7 +157,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                 {
                     DEBUG_LOG( "Hi ha BITMAP shutter al presentation state" );
                     int overlays = presentationStateHandler->getNumberOfOverlaysInPresentationState();
-                    DEBUG_LOG( qPrintable( QString("Nombre d'overlays en el PS: %1").arg( overlays ) ) );
+                    DEBUG_LOG( QString("Nombre d'overlays en el PS: %1").arg( overlays ) );
 
                     for( int overlayIndex = 0; overlayIndex < overlays; overlayIndex++ )
                     {
@@ -165,7 +165,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                         {
                             int layer = presentationStateHandler->getOverlayInPresentationStateActivationLayer( overlayIndex );
 
-                            DEBUG_LOG( qPrintable( QString("L'overlay %1 és bo com a bitmap shutter i es pinta al layer #%2").arg( overlayIndex ).arg( layer ) ) );
+                            DEBUG_LOG( QString("L'overlay %1 és bo com a bitmap shutter i es pinta al layer #%2").arg( overlayIndex ).arg( layer ) );
 
                             if( presentationStateHandler->overlayInPresentationStateIsROI( overlayIndex ) )
                                 DEBUG_LOG("L'overlay és un ROI!!!!!!!!!!")
@@ -176,7 +176,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                             status = presentationStateHandler->activateOverlayAsBitmapShutter( overlayIndex );
                             // The overlay must not be activated on a graphic layer (i.e. getOverlayInPresentationStateActivationLayer(idx) != DVPS_IDX_NONE, otherwise this method fails.
                             //     idx  index of the overlay, must be < getNumberOfOverlaysInPresentationState().
-                            DEBUG_LOG( qPrintable( QString("STATUS quo: ") + status.text() ) );
+                            DEBUG_LOG( QString("STATUS quo: ") + status.text() );
 
                             bool isROI = false;
                             unsigned int width = 0, height = 0, left = 0, top = 0;
@@ -203,10 +203,10 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                     DEBUG_LOG( "No hi ha BITMAP shutter al presentation state" );
             }
             else
-                DEBUG_LOG( qPrintable( QString("No s'han pogut carregar les dades del presentation state al corresponenr handler: ") + status.text() ) );
+                DEBUG_LOG( QString("No s'han pogut carregar les dades del presentation state al corresponenr handler: ") + status.text() );
         }
         else
-            DEBUG_LOG( qPrintable( QString("No s'ha pogut carregar el fitxer de presentation state: ") + status.text() ) );
+            DEBUG_LOG( QString("No s'ha pogut carregar el fitxer de presentation state: ") + status.text() );
     }
     else
         DEBUG_LOG( "No hi ha dades d'input, no es pot aplicar cap shutter" );
@@ -214,8 +214,8 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
 
 void ShutterFilter::setRectangularShutter( double leftVertical, double rightVertical, double upperHorizontal, double lowerHorizontal )
 {
-    DEBUG_LOG( qPrintable( QString("Coordenades shutter RECTANGULAR: [LV,RV,UH,LH] %1,%2,%3,%4")
-                .arg( leftVertical ).arg( rightVertical ).arg( upperHorizontal ).arg( lowerHorizontal ) ) );
+    DEBUG_LOG( QString("Coordenades shutter RECTANGULAR: [LV,RV,UH,LH] %1,%2,%3,%4")
+                .arg( leftVertical ).arg( rightVertical ).arg( upperHorizontal ).arg( lowerHorizontal ) );
     m_inputData->updateInformation();
     double origin[3];
     m_inputData->getOrigin( origin );
@@ -258,7 +258,7 @@ void ShutterFilter::setPolygonalShutter( std::vector< double[2] > vertexs )
 
 void ShutterFilter::setCircularShutter( double center[2], double radius )
 {
-    DEBUG_LOG( qPrintable( QString("CIRCULAR shutter, centre: %1,%2 radi: %3").arg( center[0] ).arg( center[1] ).arg( radius ) ) );
+    DEBUG_LOG( QString("CIRCULAR shutter, centre: %1,%2 radi: %3").arg( center[0] ).arg( center[1] ).arg( radius ) );
     m_inputData->updateInformation();
     double origin[3];
     double spacing[3];
@@ -327,7 +327,7 @@ void ShutterFilter::setBitmapShutter( unsigned char *data, unsigned int width, u
                 // set scalar value accordingly
 //                             *currentVoxel = (unsigned char *)data[index];
                 *currentVoxel = unsignedData[index];
-//                 DEBUG_LOG( qPrintable( QString("índex: %1, %2, %3 = %4 : valor: %5").arg(i).arg(j).arg(k).arg(index).arg(&currentVoxel) ) );
+//                 DEBUG_LOG( QString("índex: %1, %2, %3 = %4 : valor: %5").arg(i).arg(j).arg(k).arg(index).arg(&currentVoxel) );
             }
         }
     }

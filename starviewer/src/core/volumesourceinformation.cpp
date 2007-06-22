@@ -160,7 +160,7 @@ bool VolumeSourceInformation::loadDicomDataset( QString filename )
     }
     else
     {
-        DEBUG_LOG( qPrintable( QString( "algo falla::: %1\nARXIU: %2 ").arg( status.text() ).arg( filename ) ) );
+        DEBUG_LOG( QString( "algo falla::: %1\nARXIU: %2 ").arg( status.text() ).arg( filename ) );
         return false;
     }
 }
@@ -222,7 +222,7 @@ DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
         }
         else
         {
-            ERROR_LOG( qPrintable( QString("No s'ha pogut carregar arxiu dicom [%1]. Missatge d'error:[%2] ").arg( status.text() ).arg(m_filenamesList.at(index)) ) );
+            ERROR_LOG( QString("No s'ha pogut carregar arxiu dicom [%1]. Missatge d'error:[%2] ").arg( status.text() ).arg(m_filenamesList.at(index)) );
             return false;
         }
     }
@@ -513,7 +513,7 @@ int VolumeSourceInformation::getNumberOfFrames()
     {
         OFCondition status = m_dicomData->findAndGetSint32( DCM_NumberOfFrames, frames );
         if( status.bad() )
-            DEBUG_LOG( qPrintable( QString("No s'han pogut llegir els frames: ") + status.text() )  );
+            DEBUG_LOG( QString("No s'han pogut llegir els frames: ") + status.text() );
     }
     else
     {
@@ -531,7 +531,7 @@ QString VolumeSourceInformation::getImageSOPInstanceUID( int index )
         const char *value;
         dataset->findAndGetString( DCM_SOPInstanceUID, value );
         result = QString( value );
-        DEBUG_LOG( qPrintable( QString("El valor del sop instance és %1 :: %2").arg(value).arg(result) ) );
+        DEBUG_LOG( QString("El valor del sop instance és %1 :: %2").arg(value).arg(result) );
     }
     else
     {

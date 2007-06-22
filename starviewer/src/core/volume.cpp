@@ -66,7 +66,7 @@ Volume::ItkImageTypePointer Volume::getItkData()
     }
     catch( itk::ExceptionObject & excep )
     {
-        WARN_LOG( qPrintable( QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription() ) );
+        WARN_LOG( QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription() );
     }
     return m_vtkToItkFilter->GetImporter()->GetOutput();
 }
@@ -85,7 +85,7 @@ void Volume::setData( ItkImageTypePointer itkImage  )
     }
     catch( itk::ExceptionObject & excep )
     {
-        WARN_LOG( qPrintable( QString("Excepció en el filtre itkToVtk :: Volume::setData( ItkImageTypePointer itkImage ) -> ") + excep.GetDescription() ) );
+        WARN_LOG( QString("Excepció en el filtre itkToVtk :: Volume::setData( ItkImageTypePointer itkImage ) -> ") + excep.GetDescription() );
     }
     if( m_imageDataVTK )
         m_imageDataVTK->ReleaseData();

@@ -144,7 +144,7 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString( "Error obtenint informació de la sèrie. Número d'error %1 ERROR: %2" ).arg( state.code() ).arg( state.text() ) ) );
+        ERROR_LOG( QString( "Error obtenint informació de la sèrie. Número d'error %1 ERROR: %2" ).arg( state.code() ).arg( state.text() ) );
     }
     return state;
 }

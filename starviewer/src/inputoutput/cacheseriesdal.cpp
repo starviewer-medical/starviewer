@@ -60,12 +60,12 @@ Status CacheSeriesDAL::insertSeries( Series *serie )
     {
         if ( state.code() != 2019 )
         {
-            ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-            ERROR_LOG( qPrintable(sqlSentence) );
+            ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+            ERROR_LOG( sqlSentence );
         }
         else
         {
-            INFO_LOG( qPrintable( QString("La sèrie de la l'estudi %1 amb el SeriesUID %2 ja existeix a la base de dades").arg( serie->getStudyUID() ).arg( serie->getSeriesUID() ) ) );
+            INFO_LOG( QString("La sèrie de la l'estudi %1 amb el SeriesUID %2 ja existeix a la base de dades").arg( serie->getStudyUID() ).arg( serie->getSeriesUID() ) );
         }
     }
 
@@ -96,8 +96,8 @@ Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( buildSqlQuerySeries( &seriesMask ) )  );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( buildSqlQuerySeries( &seriesMask )  );
         return state;
     }
 
@@ -146,8 +146,8 @@ Status CacheSeriesDAL::deleteSeries( QString studyUID )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable(sqlSentence) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
     }
     return state;
 }

@@ -87,7 +87,7 @@ bool Q2DViewerPresentationStateAttacher::attach()
                 DEBUG_LOG("ºººººººººººººººººº LLEGINT PRESENTATION STATE ºººººººººººººººººº");
                 int references = m_presentationStateHandler->numberOfImageReferences();
                 int i;
-                DEBUG_LOG( qPrintable( QString("Nombre de referències del presentation state: %1").arg( references ) ) );
+                DEBUG_LOG( QString("Nombre de referències del presentation state: %1").arg( references ) );
                 bool isThisReferenced = false;
                 for( i = 0; i < references; i++ )
                 {
@@ -104,7 +104,7 @@ bool Q2DViewerPresentationStateAttacher::attach()
                         filesetUID  //  the series storageMediaFileSetUID is returned in this string
                     );
 
-                    DEBUG_LOG( qPrintable( QString("Dades per l'element refernciat %1:\nStudy UID: %2\nSeries UID: %3\nSOP Class UID: %4\nInstance UID: %5\nFrames: %6\nAETitle: %7\nFileset ID: %8\nFileset UID: %9 ").arg( i )
+                    DEBUG_LOG( QString("Dades per l'element refernciat %1:\nStudy UID: %2\nSeries UID: %3\nSOP Class UID: %4\nInstance UID: %5\nFrames: %6\nAETitle: %7\nFileset ID: %8\nFileset UID: %9 ").arg( i )
                             .arg( studyUID.c_str() )
                             .arg( seriesUID.c_str() )
                             .arg( sopClassUID.c_str() )
@@ -113,11 +113,11 @@ bool Q2DViewerPresentationStateAttacher::attach()
                             .arg( aetitle.c_str() )
                             .arg( filesetID.c_str() )
                             .arg( filesetUID.c_str() )
-                            ) );
-                    DEBUG_LOG( qPrintable( QString("Vol UID: %1\nReferenced Vol UID: %2\n")
+                            );
+                    DEBUG_LOG( QString("Vol UID: %1\nReferenced Vol UID: %2\n")
                         .arg( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() )
                         .arg( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() )
-                        ) );
+                        );
                     // comprovem si aquest presentation state fa referència al volum actual
                     if( !isThisReferenced && m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() == QString( seriesUID.c_str() ) )
                         isThisReferenced = true;
@@ -198,7 +198,7 @@ bool Q2DViewerPresentationStateAttacher::attach()
             else
             {
                 ok = false;
-                ERROR_LOG( qPrintable( QString("Ha fallat la lectura del presentation state. Missatge d'error dcmtk: [%1]. Segurament l'arxiu no és un presentation state vàlid.").arg( status.text() ) ) );
+                ERROR_LOG( QString("Ha fallat la lectura del presentation state. Missatge d'error dcmtk: [%1]. Segurament l'arxiu no és un presentation state vàlid.").arg( status.text() ) );
                 //\TODO aquí es podria fer un 'dcmpschk' i deixar la sortida en el log o mostrar un diàleg amb el missatge amb la sortida del dcmpschk
             }
         }
@@ -345,10 +345,10 @@ void Q2DViewerPresentationStateAttacher::applyModalityLUT()
             m_modalityRange[0] = m_modalityLUTRescale->GetOutput()->GetScalarRange()[0];
             m_modalityRange[1] = m_modalityLUTRescale->GetOutput()->GetScalarRange()[1];
 
-            DEBUG_LOG( qPrintable( QString("Presentation State Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
+            DEBUG_LOG( QString("Presentation State Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
                 .arg( rescaleSlope )
                 .arg( rescaleIntercept )
-            ) );
+             );
 
 //             m_2DViewer->setModalityRescale( rescaleSlope, rescaleIntercept );
             m_2DViewer->setModalityRescale( m_modalityLUTRescale );
@@ -395,18 +395,18 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
     int sliceNumber = 0;
     for( int i = 0; i < images; i++ )
     {
-        DEBUG_LOG( qPrintable( QString("Attaching image #%1").arg( i ) ) );
+        DEBUG_LOG( QString("Attaching image #%1").arg( i ) );
         m_presentationStateHandler->attachImage( m_attachedDatasetsList[i], false );
         // ara hem de mirar quants frames té la imatge
         unsigned long frames;
         OFCondition status = m_presentationStateHandler->getImageNumberOfFrames(frames);
         if( status.bad() )
         {
-            DEBUG_LOG( qPrintable( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) ) );
+            DEBUG_LOG( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) );
         }
         else
         {
-            DEBUG_LOG( qPrintable( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) ) );
+            DEBUG_LOG( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) );
         }
         for( unsigned long j = 0; j < frames; j++ )
         {
@@ -438,14 +438,14 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
                     m_presentationStateHandler->getCurrentWindowCenter( m_level );
                     m_2DViewer->setDefaultWindowLevel( m_window, m_level );
 
-                    DEBUG_LOG( qPrintable( QString("Presentation State VOI Adjustment: Window: %1, Level: %2")
+                    DEBUG_LOG( QString("Presentation State VOI Adjustment: Window: %1, Level: %2")
                         .arg( m_window )
                         .arg( m_level )
-                        ) );
+                        );
 
                     c = m_presentationStateHandler->getCurrentVOIDescription();
                     if( c )
-                        DEBUG_LOG( qPrintable( QString("Window/Level Description: ") + QString(c) ) )
+                        DEBUG_LOG( QString("Window/Level Description: ") + QString(c) )
                     else
                         DEBUG_LOG( "Window/Level has no Description" );
                 }
@@ -454,7 +454,7 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
                 {
                     c = m_presentationStateHandler->getCurrentVOIDescription();
                     if( c )
-                        DEBUG_LOG( qPrintable( QString("Window/Level LUT Description: %1 ").arg( c ) ) )
+                        DEBUG_LOG( QString("Window/Level LUT Description: %1 ").arg( c ) )
                     else
                         DEBUG_LOG( "Window/Level LUT has no Description" );
                     // crear la LUT i assignar-li al filtre
@@ -467,10 +467,10 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
                     m_level = ( m_modalityRange[1] + m_modalityRange[0] )/ 2.0;
                     m_2DViewer->setDefaultWindowLevel( m_window, m_level );
 
-                    DEBUG_LOG( qPrintable( QString("No Presentation VOI Adjustment, creating a nice and automatic one: Window: %1, Level: %2")
+                    DEBUG_LOG( QString("No Presentation VOI Adjustment, creating a nice and automatic one: Window: %1, Level: %2")
                     .arg( m_window )
                     .arg( m_level )
-                    ) );
+                    );
                 }
                 // això és per si tenim en compte que poden haver-hi més d'una VOI lut tant en la imatge com en el presentation state
                 // de moment no farem cas de si en tenim més d'una
@@ -521,7 +521,7 @@ void Q2DViewerPresentationStateAttacher::applyPresentationLUT()
         m_presentationLut = parseLookupTable( 2 );
         c = m_presentationStateHandler->getPresentationLUTExplanation();
         if( c )
-            DEBUG_LOG( qPrintable( QString( "Presentation LUT Explanation: %1" ).arg( c ) ) )
+            DEBUG_LOG( QString( "Presentation LUT Explanation: %1" ).arg( c ) )
         else
             DEBUG_LOG( "Presentation LUT has no Explanation." );
         m_2DViewer->setPresentationLUT( m_presentationLut );
@@ -539,7 +539,7 @@ void Q2DViewerPresentationStateAttacher::applyPresentationLUT()
         else if( lutShapeStr == "INVERSE" )
         {
         }
-        DEBUG_LOG( qPrintable( QString("Presentation LUT SHAPE:: %1").arg(lutShapeStr) ) );
+        DEBUG_LOG( QString("Presentation LUT SHAPE:: %1").arg(lutShapeStr) );
     }
 }
 
@@ -573,7 +573,7 @@ vtkWindowLevelLookupTable *Q2DViewerPresentationStateAttacher::parseLookupTable(
     if( m_presentationStateData->search( lutType, stack ).good() )
     {
         ok = true;
-        DEBUG_LOG( qPrintable( QString("Parsing %1 from Presentation state file").arg( lutDescription ) ) );
+        DEBUG_LOG( QString("Parsing %1 from Presentation state file").arg( lutDescription ) );
     }
     if( ok )
     {
@@ -604,11 +604,11 @@ vtkWindowLevelLookupTable *Q2DViewerPresentationStateAttacher::parseLookupTable(
             else
                 firstStored = lutDescriptor[1];
 
-            DEBUG_LOG( qPrintable( QString("LUT Descriptor: %1\\%2\\%3")
+            DEBUG_LOG( QString("LUT Descriptor: %1\\%2\\%3")
             .arg( numberOfEntries )
             .arg( firstStored )
             .arg( lutDescriptor[2] )
-            ) );
+            );
 
             vtkLut = vtkWindowLevelLookupTable::New();
             vtkLut->SetNumberOfTableValues( numberOfEntries );
@@ -647,10 +647,10 @@ vtkWindowLevelLookupTable *Q2DViewerPresentationStateAttacher::parseLookupTable(
 //                 std::cout << std::endl << std::endl << "************ ACABUT **************" << std::endl << std::endl;
             }
             else
-                DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
+                DEBUG_LOG( QString("Error message:: ") + status.text() );
         }
         else
-            DEBUG_LOG( qPrintable( QString("Error message:: ") + status.text() ) );
+            DEBUG_LOG( QString("Error message:: ") + status.text() );
     }
     return vtkLut;
 }
@@ -664,27 +664,27 @@ QColor Q2DViewerPresentationStateAttacher::getRecommendedColor( int layer )
         Uint16 r, g, b;
         if( EC_Normal == m_presentationStateHandler->getGraphicLayerRecommendedDisplayValueGray( layer, g ) )
         {
-            DEBUG_LOG( qPrintable( QString("Valor de gris recomenat pel display: %1 al layer %2").arg(g).arg(layer) ) );
+            DEBUG_LOG( QString("Valor de gris recomenat pel display: %1 al layer %2").arg(g).arg(layer) );
             // normalitzem el valor
             color.setRedF( g/65535.0 );
             color.setBlueF( g/65535.0 );
             color.setGreenF( g/65535.0 );
         }
         else
-            DEBUG_LOG( qPrintable( QString("No hi ha valor de gris recomenat pel display al layer %1").arg(layer) ) );
+            DEBUG_LOG( QString("No hi ha valor de gris recomenat pel display al layer %1").arg(layer) );
 
         if( EC_Normal == m_presentationStateHandler->getGraphicLayerRecommendedDisplayValueRGB( layer, r, g, b ) )
         {
-            DEBUG_LOG( qPrintable( QString("Valor de color RGB recomenat pel display: %1,%2,%3").arg(r).arg(g).arg(b) ) );
+            DEBUG_LOG( QString("Valor de color RGB recomenat pel display: %1,%2,%3").arg(r).arg(g).arg(b) );
             color.setRedF( r/65535.0 );
             color.setBlueF( g/65535.0 );
             color.setGreenF( b/65535.0 );
         }
         else
-            DEBUG_LOG( qPrintable( QString("No hi ha valor de color rgb recomenat pel display al layer %1").arg(layer) ) );
+            DEBUG_LOG( QString("No hi ha valor de color rgb recomenat pel display al layer %1").arg(layer) );
     }
     else
-        DEBUG_LOG( qPrintable( QString("No hi ha valor recomenat pel display al layer %1").arg(layer) ) );
+        DEBUG_LOG( QString("No hi ha valor recomenat pel display al layer %1").arg(layer) );
     return color;
 }
 
@@ -708,39 +708,39 @@ void Q2DViewerPresentationStateAttacher::applyPreSpatialTransformAnnotation()
     int sliceNumber = 0;
     for( int i = 0; i < images; i++ )
     {
-        DEBUG_LOG( qPrintable( QString("Attaching image #%1").arg( i ) ) );
+        DEBUG_LOG( QString("Attaching image #%1").arg( i ) );
         m_presentationStateHandler->attachImage( m_attachedDatasetsList[i], false );
         // ara hem de mirar quants frames té la imatge
         unsigned long frames;
         OFCondition status = m_presentationStateHandler->getImageNumberOfFrames(frames);
         if( status.bad() )
         {
-            DEBUG_LOG( qPrintable( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) ) );
+            DEBUG_LOG( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) );
         }
         else
         {
-            DEBUG_LOG( qPrintable( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) ) );
+            DEBUG_LOG( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) );
         }
         for( unsigned long j = 0; j < frames; j++ )
         {
             // seleccionem el frame
             m_presentationStateHandler->selectImageFrameNumber(j+1);
-            DEBUG_LOG( qPrintable( QString("Tractant frame #%1").arg(j+1) ) );
+            DEBUG_LOG( QString("Tractant frame #%1").arg(j+1) );
             m_presentationStateHandler->sortGraphicLayers();  // to order of display
             // valor de color rgb amb el que pintarem l'anotació en cada layer
             QColor color;
             for( size_t layer=0; layer < m_presentationStateHandler->getNumberOfGraphicLayers(); layer++ )
             {
                 c = m_presentationStateHandler->getGraphicLayerName( layer );
-                DEBUG_LOG( qPrintable( QString("Graphic Layer #%1 [%2]").arg( layer+1 ).arg( c ) ) );
+                DEBUG_LOG( QString("Graphic Layer #%1 [%2]").arg( layer+1 ).arg( c ) );
 
                 c = m_presentationStateHandler->getGraphicLayerDescription(layer);
-                DEBUG_LOG( qPrintable( QString("Descripció: %1").arg(c) ) );
+                DEBUG_LOG( QString("Descripció: %1").arg(c) );
 
                 color = this->getRecommendedColor( layer );
                 // graphic objects
                 max = m_presentationStateHandler->getNumberOfGraphicObjects(layer);
-                DEBUG_LOG( qPrintable( QString("Nombre d'objectes gràfics: %1").arg( max ) ) );
+                DEBUG_LOG( QString("Nombre d'objectes gràfics: %1").arg( max ) );
                 DVPSGraphicObject *pgraphic = NULL;
                 for( size_t graphicidx=0; graphicidx < max; graphicidx++ )
                 {
@@ -813,7 +813,7 @@ void Q2DViewerPresentationStateAttacher::applyPreSpatialTransformAnnotation()
                         }
                         break;
                         }
-                        DEBUG_LOG( qPrintable( message ) );
+                        DEBUG_LOG( message );
                     }
                 }
             }
@@ -871,8 +871,8 @@ void Q2DViewerPresentationStateAttacher::applyDisplayedAreaTransformation()
     DEBUG_LOG("------------ Aplicant Displayed Area Transforms ------------");
 
     m_presentationStateHandler->getStandardDisplayedArea( topLeftX, topLeftY, bottomRightX, bottomRightY );
-    DEBUG_LOG( qPrintable( QString( "Displayed area TLHC[Top Left Hand Corner] %1,%2").arg( topLeftX ).arg( topLeftY ) ) );
-    DEBUG_LOG( qPrintable( QString( "Displayed area BRHC[Bottom Right Hand Corner] %1,%2").arg( bottomRightX ).arg( bottomRightY ) ) );
+    DEBUG_LOG( QString( "Displayed area TLHC[Top Left Hand Corner] %1,%2").arg( topLeftX ).arg( topLeftY ) );
+    DEBUG_LOG( QString( "Displayed area BRHC[Bottom Right Hand Corner] %1,%2").arg( bottomRightX ).arg( bottomRightY ) );
 
     m_viewerInput->updateInformation();
     double spacing[3];
@@ -889,14 +889,14 @@ void Q2DViewerPresentationStateAttacher::applyDisplayedAreaTransformation()
     double presentationPixelSpacing[2];
     if( EC_Normal == m_presentationStateHandler->getDisplayedAreaPresentationPixelSpacing( presentationPixelSpacing[0], presentationPixelSpacing[1] ) )
     {
-        DEBUG_LOG( qPrintable( QString("Presentation pixel spacing: X=%1mm Y=%2mm")
-            .arg( presentationPixelSpacing[0] ).arg( presentationPixelSpacing[1] ) ) );
+        DEBUG_LOG( QString("Presentation pixel spacing: X=%1mm Y=%2mm")
+            .arg( presentationPixelSpacing[0] ).arg( presentationPixelSpacing[1] ) );
     }
     else
     {
         //\TODO també podríem obtenir el ratio ( DCM_PresentationPixelAspectRatio : 0070,0102 ), però no sabem perquè les dcmtk ens diuen que no troben el tag. Segurament és degut a que està en una seqüència
         double ratio = m_presentationStateHandler->getDisplayedAreaPresentationPixelAspectRatio();
-        DEBUG_LOG( qPrintable( QString("Ratio obtingut %1").arg( ratio ) ) );
+        DEBUG_LOG( QString("Ratio obtingut %1").arg( ratio ) );
         m_2DViewer->setPixelAspectRatio( ratio );
     }
 
@@ -919,13 +919,13 @@ void Q2DViewerPresentationStateAttacher::applyDisplayedAreaTransformation()
     case DVPSD_magnify:
     {
         m_presentationStateHandler->getDisplayedAreaPresentationPixelMagnificationRatio( factor );
-        DEBUG_LOG( qPrintable( QString("Presentation size mode: MAGNIFY factor=%1").arg(factor) ) );
+        DEBUG_LOG( QString("Presentation size mode: MAGNIFY factor=%1").arg(factor) );
         m_2DViewer->setMagnificationFactor( factor );
     }
     break;
 
     default:
-        DEBUG_LOG( qPrintable( QString("Size mode no retorna cap valor dels 3 esperats: valor retornat: %1").arg( sizemode ) ) );
+        DEBUG_LOG( QString("Size mode no retorna cap valor dels 3 esperats: valor retornat: %1").arg( sizemode ) );
     break;
     }
 }
@@ -939,7 +939,7 @@ void Q2DViewerPresentationStateAttacher::processTextObjects( int layer, int slic
 
     unsigned int max;
     max = m_presentationStateHandler->getNumberOfTextObjects( layer );
-    DEBUG_LOG( qPrintable( QString("Nombre d'objectes de texte: %1").arg( max ) ) );
+    DEBUG_LOG( QString("Nombre d'objectes de texte: %1").arg( max ) );
     DVPSTextObject *ptext = NULL;
 
     // per les coordenades relatives a display
@@ -983,17 +983,16 @@ void Q2DViewerPresentationStateAttacher::processTextObjects( int layer, int slic
             else
                 msg += " doesn't have anchor point";
 
-            DEBUG_LOG( qPrintable( msg ) );
+            DEBUG_LOG( msg );
 
             double position[2] = { 0.0, 0.0 }, position2[2] = { 0.0, 0.0 };
             if( ptext->haveBoundingBox() )
             {
-                DEBUG_LOG( qPrintable( QString("Bounding Box de l'annotació: TLHC: %1,%2, BRHC: %3,%4")
+                DEBUG_LOG( QString("Bounding Box de l'annotació: TLHC: %1,%2, BRHC: %3,%4")
                     .arg( ptext->getBoundingBoxTLHC_x() )
                     .arg( ptext->getBoundingBoxTLHC_y() )
                     .arg( ptext->getBoundingBoxBRHC_x() )
                     .arg( ptext->getBoundingBoxBRHC_y() )
-                            )
                         );
                 double referencePoint[2], referencePoint2[2];
                 if( ptext->getBoundingBoxBRHC_x() >= ptext->getBoundingBoxTLHC_x() )
@@ -1115,40 +1114,40 @@ void Q2DViewerPresentationStateAttacher::applyPostSpatialTransformAnnotation()
     int sliceNumber = 0;
     for( int i = 0; i < images; i++ )
     {
-        DEBUG_LOG( qPrintable( QString("Attaching image #%1").arg( i ) ) );
+        DEBUG_LOG( QString("Attaching image #%1").arg( i ) );
         m_presentationStateHandler->attachImage( m_attachedDatasetsList[i], false );
         // ara hem de mirar quants frames té la imatge
         unsigned long frames;
         OFCondition status = m_presentationStateHandler->getImageNumberOfFrames(frames);
         if( status.bad() )
         {
-            DEBUG_LOG( qPrintable( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) ) );
+            DEBUG_LOG( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) );
         }
         else
         {
-            DEBUG_LOG( qPrintable( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) ) );
+            DEBUG_LOG( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) );
         }
         for( unsigned long j = 0; j < frames; j++ )
         {
             m_presentationStateHandler->selectImageFrameNumber(j+1);
-            DEBUG_LOG( qPrintable( QString("Tractant frame #%1").arg(j+1) ) );
+            DEBUG_LOG( QString("Tractant frame #%1").arg(j+1) );
             m_presentationStateHandler->sortGraphicLayers();  // to order of display
             // valor de color rgb amb el que pintarem l'anotació a cada layer
             QColor color;
             for( size_t layer=0; layer < m_presentationStateHandler->getNumberOfGraphicLayers(); layer++ )
             {
                 c = m_presentationStateHandler->getGraphicLayerName( layer );
-                DEBUG_LOG( qPrintable( QString("Graphic Layer #%1 [%2]").arg( layer+1 ).arg( c ) ) );
+                DEBUG_LOG( QString("Graphic Layer #%1 [%2]").arg( layer+1 ).arg( c ) );
 
                 c = m_presentationStateHandler->getGraphicLayerDescription(layer);
-                DEBUG_LOG( qPrintable( QString("Descripció: %1").arg(c) ) );
+                DEBUG_LOG( QString("Descripció: %1").arg(c) );
 
                 color = this->getRecommendedColor(layer);
                 // text objects
                 this->processTextObjects( layer, sliceNumber );
                 // graphic objects
                 max = m_presentationStateHandler->getNumberOfGraphicObjects(layer);
-                DEBUG_LOG( qPrintable( QString("Nombre d'objectes gràfics: %1").arg( max ) ) );
+                DEBUG_LOG( QString("Nombre d'objectes gràfics: %1").arg( max ) );
                 DVPSGraphicObject *pgraphic = NULL;
                 for( size_t graphicidx=0; graphicidx < max; graphicidx++ )
                 {
@@ -1224,7 +1223,7 @@ void Q2DViewerPresentationStateAttacher::applyPostSpatialTransformAnnotation()
                         }
                         break;
                         }
-                        DEBUG_LOG( qPrintable( message ) );
+                        DEBUG_LOG( message );
                     }
                 }
             }
@@ -1245,26 +1244,26 @@ void Q2DViewerPresentationStateAttacher::applyOverlayPlanes()
     int images = m_attachedDatasetsList.size();
     for( int i = 0; i < images; i++ )
     {
-        DEBUG_LOG( qPrintable( QString("Attaching image #%1").arg( i ) ) );
+        DEBUG_LOG( QString("Attaching image #%1").arg( i ) );
         m_presentationStateHandler->attachImage( m_attachedDatasetsList[i], false );
         // ara hem de mirar quants frames té la imatge
         unsigned long frames;
         OFCondition status = m_presentationStateHandler->getImageNumberOfFrames(frames);
         if( status.bad() )
         {
-            DEBUG_LOG( qPrintable( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) ) );
+            DEBUG_LOG( QString("Error a l'hora de llegir el nombre de frames de la imatge adjuntada::[%1]").arg( status.text() ) );
         }
         else
         {
-            DEBUG_LOG( qPrintable( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) ) );
+            DEBUG_LOG( QString("Nombre de frames en la imatge adjuntada: %1").arg(frames) );
         }
         for( unsigned long j = 0; j < frames; j++ )
         {
             // seleccionem el frame
             m_presentationStateHandler->selectImageFrameNumber(j+1);
-            DEBUG_LOG( qPrintable( QString("Tractant frame #%1").arg(j+1) ) );
+            DEBUG_LOG( QString("Tractant frame #%1").arg(j+1) );
             maxImg = m_presentationStateHandler->getNumberOfOverlaysInImage();
-            DEBUG_LOG( qPrintable( QString("Overlays available (non-shadowed) in attached image: %1").arg( maxImg ) ) );
+            DEBUG_LOG( QString("Overlays available (non-shadowed) in attached image: %1").arg( maxImg ) );
             for( size_t oidx = 0; oidx < maxImg; oidx++ )
             {
                 std::cout << "  Overlay #" << oidx+1 << ": group=0x" << hex << m_presentationStateHandler->getOverlayInImageGroup( oidx ) << dec << " label=\"";
@@ -1327,10 +1326,10 @@ void Q2DViewerPresentationStateAttacher::renderCurveObjects()
     for( size_t layer=0; layer < m_presentationStateHandler->getNumberOfGraphicLayers(); layer++ )
     {
         c = m_presentationStateHandler->getGraphicLayerName( layer );
-        DEBUG_LOG( qPrintable( QString("Graphic Layer #%1 [%2]").arg( layer+1 ).arg( c ) ) );
+        DEBUG_LOG( QString("Graphic Layer #%1 [%2]").arg( layer+1 ).arg( c ) );
 
         c = m_presentationStateHandler->getGraphicLayerDescription(layer);
-        DEBUG_LOG( qPrintable( QString("Descripció: %1").arg(c) ) );
+        DEBUG_LOG( QString("Descripció: %1").arg(c) );
 
         // curve objects
         max = m_presentationStateHandler->getNumberOfCurves( layer );

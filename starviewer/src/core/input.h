@@ -51,11 +51,11 @@ public:
         ReaderTypePointer m_reader = dynamic_cast< ReaderTypePointer >( object );
         if( typeid( event ) == typeid( itk::ProgressEvent ) )
         {
-            DEBUG_LOG( qPrintable( QString("Progressant...%1").arg( m_reader->GetProgress() ) ) );
+            DEBUG_LOG( QString("Progressant...%1").arg( m_reader->GetProgress() ) );
         }
         else
         {
-            DEBUG_LOG( qPrintable( QString("No s'ha invocat ProgressEvent") ) );
+            DEBUG_LOG( QString("No s'ha invocat ProgressEvent") );
         }
     }
 };
@@ -89,11 +89,11 @@ public:
         SeriesReaderTypePointer m_seriesReader = dynamic_cast< SeriesReaderTypePointer >( object );
         if( typeid( event ) == typeid( itk::ProgressEvent ) )
         {
-            DEBUG_LOG( qPrintable( QString("Progressant... %1").arg( m_seriesReader->GetProgress() ) ) );
+            DEBUG_LOG( QString("Progressant... %1").arg( m_seriesReader->GetProgress() ) );
         }
         else
         {
-            DEBUG_LOG( qPrintable( QString("No s'ha invocat ProgressEvent") ) );
+            DEBUG_LOG( QString("No s'ha invocat ProgressEvent") );
         }
     }
 };

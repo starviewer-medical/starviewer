@@ -63,8 +63,8 @@ Status CacheStudyDAL::insertStudy( Study *study )
     //continuem inserint l'estudi, si es provoca qualsevol altre error parem
     if ( !state.good() && state.code() != 2019 )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1 ").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1 ").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -102,11 +102,11 @@ Status CacheStudyDAL::insertStudy( Study *study )
     {
         if ( state.code() != 2019 )
         {
-            ERROR_LOG( qPrintable( QString("Error a la cache número %1 ").arg( state.code() ) ) );
-            ERROR_LOG( qPrintable( sqlSentence ) );
+            ERROR_LOG( QString("Error a la cache número %1 ").arg( state.code() ) );
+            ERROR_LOG( sqlSentence );
         }
         else
-            INFO_LOG( qPrintable( QString("L'estudi %1 ja existeix a la base de dades").arg(study->getStudyUID()) ) );
+            INFO_LOG( QString("L'estudi %1 ja existeix a la base de dades").arg(study->getStudyUID()) );
     }
 
     return state;
@@ -140,8 +140,8 @@ Status CacheStudyDAL::insertStudyDicomdir( Study *study )
     //continuem inserint l'estudi, si es provoca qualsevol altre error parem
     if ( !state.good() && state.code() != 2019 )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1 ").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1 ").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -178,11 +178,11 @@ Status CacheStudyDAL::insertStudyDicomdir( Study *study )
     {
         if ( state.code() != 2019 )
         {
-            ERROR_LOG( qPrintable( QString("Error a la cache número %1 ").arg( state.code() ) ) );
-            ERROR_LOG( qPrintable( sqlSentence ) );
+            ERROR_LOG( QString("Error a la cache número %1 ").arg( state.code() ) );
+            ERROR_LOG( sqlSentence );
         }
         else
-            INFO_LOG( qPrintable( QString("L'estudi %1 ja existeix a la base de dades").arg(study->getStudyUID()) ) );
+            INFO_LOG( QString("L'estudi %1 ja existeix a la base de dades").arg(study->getStudyUID()) );
     }
 
     return state;
@@ -208,8 +208,8 @@ Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( buildSqlQueryStudy( & studyMask ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( buildSqlQueryStudy( & studyMask ) );
         return state;
     }
 
@@ -263,8 +263,8 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -314,8 +314,8 @@ Status CacheStudyDAL::queryStudy( QString studyUID , Study &study )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -340,8 +340,8 @@ Status CacheStudyDAL::queryStudy( QString studyUID , Study &study )
         state = databaseConnection->databaseStatus( stateDatabase );
         if ( !state.good() )
         {
-            ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-            ERROR_LOG( qPrintable( sqlSentence ) );
+            ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+            ERROR_LOG( sqlSentence );
         }
     }
 
@@ -371,8 +371,8 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -424,7 +424,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
 
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         return state;
     }
 
@@ -439,8 +439,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     else if (  rows == 0 )
@@ -449,8 +449,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         databaseConnection->releaseLock();
 
         state = databaseConnection->databaseStatus( 99 );//error 99 registre no trobat
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     else
@@ -469,8 +469,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
     else if( rows == 0 )
@@ -478,8 +478,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         state = databaseConnection->databaseStatus( 99 );//error 99 registre no trobat
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -496,8 +496,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         {
             stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
             databaseConnection->releaseLock();
-            ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-            ERROR_LOG( qPrintable( sqlSentence ) );
+            ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+            ERROR_LOG( sqlSentence );
             return state;
         }
     }
@@ -512,8 +512,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -526,8 +526,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -541,8 +541,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -562,8 +562,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -577,8 +577,8 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -587,7 +587,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         return state;
     }
 
@@ -622,8 +622,8 @@ Status CacheStudyDAL::setStudyRetrieved( QString studyUID )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;
@@ -651,8 +651,8 @@ Status CacheStudyDAL::setStudyRetrieving( QString studyUID )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;
@@ -682,8 +682,8 @@ Status CacheStudyDAL::updateStudyAccTime( QString studyUID )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;
@@ -726,8 +726,8 @@ Status CacheStudyDAL::updateStudy( Study updateStudy )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -746,8 +746,8 @@ Status CacheStudyDAL::updateStudy( Study updateStudy )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg(state.code()) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;

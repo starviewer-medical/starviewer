@@ -108,7 +108,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     QString logMessage;
     CacheStudyDAL cacheStudyDAL;
 
-    INFO_LOG( qPrintable( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) ) );
+    INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
     ScaleStudy scaleStudy;
@@ -139,7 +139,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
             logMessage.append( " al intentar alliberar espai al disc " );
         }
-        ERROR_LOG( qPrintable(logMessage) );
+        ERROR_LOG( logMessage );
 
         cacheStudyDAL.delStudy( studyUID);
         return;
@@ -153,7 +153,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         logMessage.append( operation.getPacsParameters().getAEPacs() );
         logMessage.append( ". PACS ERROR : ");
         logMessage.append( state.text() );
-        ERROR_LOG( qPrintable(logMessage) );
+        ERROR_LOG( logMessage );
 
         emit( setErrorOperation( studyUID ) );
         emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) );
@@ -188,7 +188,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             logMessage.append( operation.getPacsParameters().getAEPacs() );
             logMessage.append( ". PACS ERROR : " );
             logMessage.append( retState.text() );
-            ERROR_LOG( qPrintable(logMessage) );
+            ERROR_LOG( logMessage );
         }
 
         if ( errorRetrieving )
@@ -197,7 +197,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             logMessage.append( studyUID );
             logMessage.append( " del pacs " );
             logMessage.append( operation.getPacsParameters().getAEPacs() );
-            ERROR_LOG( qPrintable(logMessage) );
+            ERROR_LOG( logMessage );
         }
 
         emit( setErrorOperation( studyUID ) );
@@ -211,7 +211,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         logMessage.append( studyUID );
         logMessage.append( "del pacs " );
         logMessage.append( operation.getPacsParameters().getAEPacs() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
         scaleStudy.scale( studyUID ); //escalem l'estudi per la previsualització de la caché
         emit( setOperationFinished( studyUID ) );// descarregat a QOperationStateScreen
         emit( setRetrieveFinished( studyUID ) );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
@@ -308,7 +308,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     logMessage.append( operation.getStudyUID() );
     logMessage.append( " al PACS " );
     logMessage.append( operation.getPacsParameters().getAEPacs() );
-    INFO_LOG( qPrintable(logMessage) );
+    INFO_LOG( logMessage );
 
     emit( setOperating( operation.getStudyUID() ) );//Indiquem al QOperationState que comença l'enviament de les imatges
 
@@ -356,7 +356,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
         logMessage = "S'ha produit un error intentant guardar l'estudi : ";
         logMessage.append( state.text() );
 
-        ERROR_LOG( qPrintable(logMessage) );
+        ERROR_LOG( logMessage );
     }
 
     return state;
@@ -383,7 +383,7 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
         logMessage = "S'ha produït un error al cercar les sèries de l'estudi que s'ha de moure Error : ";
         errorNumber.setNum( state.code() , 10 );
         logMessage.append( errorNumber );
-        ERROR_LOG( qPrintable(logMessage) );
+        ERROR_LOG( logMessage );
 
         return state;
     }
@@ -404,7 +404,7 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
             logMessage = "S'ha produït un error al cercar les imatges de l'estudi que s'ha de moure Error : ";
             errorNumber.setNum( state.code() , 10 );
             logMessage.append( errorNumber );
-            ERROR_LOG( qPrintable(logMessage) );
+            ERROR_LOG( logMessage );
 
             return state;
         }

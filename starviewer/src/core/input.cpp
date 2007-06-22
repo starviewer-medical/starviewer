@@ -65,10 +65,10 @@ int Input::openFile( QString fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        ERROR_LOG( qPrintable( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+        ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
                 .arg( QFileInfo( fileName ).dir().path() )
                 .arg( e.GetDescription() )
-                ) );
+                );
         // llegim el missatge d'error per esbrinar de quin error es tracta
         QString errorMessage( e.GetDescription() );
         if( errorMessage.contains("Size mismatch") )
@@ -119,10 +119,10 @@ int Input::readFiles( QStringList filenames )
         }
         catch ( itk::ExceptionObject & e )
         {
-            ERROR_LOG( qPrintable( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
                 .arg( QFileInfo( filenames.at(0) ).dir().path() )
                 .arg( e.GetDescription() )
-                ) );
+                );
             errorCode = SizeMismatch;
             emit progress( -1 ); // això podria indicar excepció
         }
@@ -266,7 +266,7 @@ void Input::setVolumeInformation()
             else
             {
                 // hi ha algun error en l'string ja que han de ser 2 parells de 3 valors
-                DEBUG_LOG( qPrintable( "No s'ha pogut determinar l'orientació del pacient (Tags 0020|0020 , 0020|0037) : " + value ) );
+                DEBUG_LOG( "No s'ha pogut determinar l'orientació del pacient (Tags 0020|0020 , 0020|0037) : " + value );
             }
         }
         else

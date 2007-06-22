@@ -33,7 +33,7 @@ bool KeyImageNote::loadFromFile(const QString &filename)
     KeyImageNote *keyImageNote = KINReader.read();
     if ( ! keyImageNote )
     {
-        WARN_LOG( qPrintable("Al llegir l'image note s'ha produït un error: " + KINReader.getLastErrorDescription()));
+        WARN_LOG( "Al llegir l'image note s'ha produït un error: " + KINReader.getLastErrorDescription() );
         return false;
     }
     operator=(*keyImageNote);

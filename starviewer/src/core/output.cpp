@@ -47,7 +47,7 @@ bool Output::saveFile( QString filename )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString(filename) + "]" ) );
+        WARN_LOG( "Excepció escrivint l'arxiu [" + filename + "]" );
         ok = false;
         emit progress(-1);
     }
@@ -107,7 +107,7 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     }
     catch ( itk::ExceptionObject & e )
     {
-        WARN_LOG( qPrintable( "Excepció escrivint l'arxiu [" + QString( filename ) +"]" ) );
+        WARN_LOG( "Excepció escrivint l'arxiu [" + QString( filename ) +"]" );
         ok = false;
         emit progress(-1);
     }

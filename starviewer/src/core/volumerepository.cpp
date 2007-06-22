@@ -26,7 +26,7 @@ Identifier VolumeRepository::addVolume( Volume* model)
 
     id = this->addItem( model );
     emit itemAdded( id );
-    INFO_LOG( qPrintable( "S'ha afegit al repositori el volum amb id: " + QString::number( id.getValue() ) )  );
+    INFO_LOG( "S'ha afegit al repositori el volum amb id: " + QString::number( id.getValue() ) );
     return id;
 }
 
@@ -45,7 +45,7 @@ void VolumeRepository::removeVolume( Identifier id )
     delete dum;
 
     emit itemRemoved( id );
-    INFO_LOG( qPrintable( "S'ha esborrat del repositori el volum amb id: " + QString::number( id.getValue() ) ) );
+    INFO_LOG( "S'ha esborrat del repositori el volum amb id: " + QString::number( id.getValue() ) );
 }
 
 int VolumeRepository::getNumberOfVolumes()

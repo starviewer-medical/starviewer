@@ -53,8 +53,8 @@ Status CachePool::updatePoolSpace( int size )
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sql ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sql );
     }
 
     return state;
@@ -88,8 +88,8 @@ Status CachePool::updatePoolTotalSize( int space )
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sql ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sql );
     }
 
     return state;
@@ -115,8 +115,8 @@ Status CachePool::resetPoolSpace()
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sql ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sql );
     }
 
     return state;
@@ -144,8 +144,8 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sql ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sql );
         return state;
     }
     i = 1;//ignorem les capçaleres
@@ -176,8 +176,8 @@ Status CachePool::getPoolTotalSize( unsigned int &space )
     state = m_DBConnect->databaseStatus( i );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sql ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sql );
         return state;
     }
     i = 1;//ignorem les capçaleres
@@ -196,7 +196,7 @@ Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
         return state;
     }
 
@@ -204,7 +204,7 @@ Status CachePool::getPoolFreeSpace( unsigned int &freeSpace )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
         return state;
     }
 

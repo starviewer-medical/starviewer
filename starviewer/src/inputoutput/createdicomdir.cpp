@@ -107,7 +107,7 @@ Status CreateDicomdir::create( QString dicomdirPath )
     {
         errorMessage = "Error al crear el DICOMDIR. ERROR : ";
         errorMessage.append( result.text() );
-        ERROR_LOG ( qPrintable(errorMessage) );
+        ERROR_LOG ( errorMessage );
         state.setStatus( result );
         return state;
     }
@@ -171,7 +171,7 @@ void CreateDicomdir::errorConvertingFile( QString imagePath )
         logMessage.append( imagePath );
     }
 
-    ERROR_LOG ( qPrintable(logMessage) );
+    ERROR_LOG ( logMessage );
 }
 
 CreateDicomdir::~CreateDicomdir()

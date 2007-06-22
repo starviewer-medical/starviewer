@@ -43,7 +43,7 @@ Status CacheImageDAL::insertImage( Image *image )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
         return state;
     }
 
@@ -67,16 +67,16 @@ Status CacheImageDAL::insertImage( Image *image )
 
         if ( state.code() != 2019 )
         {
-            ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-            ERROR_LOG( qPrintable( sqlSentence ) );
+            ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+            ERROR_LOG( sqlSentence );
         }
         else
         {
-            INFO_LOG ( qPrintable( QString("La image de la l'estudi %1 amb el SeriesUID %2 amb el SopInstanceUID %3 ja existeix a la base de dades")
+            INFO_LOG( QString("La image de la l'estudi %1 amb el SeriesUID %2 amb el SopInstanceUID %3 ja existeix a la base de dades")
                 .arg( image->getStudyUID() )
                 .arg( image->getSeriesUID() )
                 .arg( image->getSOPInstanceUID() )
-                ) );
+                );
         }
         return state;
     }
@@ -91,8 +91,8 @@ Status CacheImageDAL::insertImage( Image *image )
     {
         stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION ", 0 , 0 , 0 );
         databaseConnection->releaseLock();
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
         return state;
     }
 
@@ -103,7 +103,7 @@ Status CacheImageDAL::insertImage( Image *image )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
     }
 
     return state;
@@ -133,8 +133,8 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
     state = databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( buildSqlQueryImages( &imageMask ) )  );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( buildSqlQueryImages( &imageMask ) );
         return state;
     }
 
@@ -182,8 +182,8 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
     state = databaseConnection->databaseStatus ( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( buildSqlCountImageNumber( &imageMask ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( buildSqlCountImageNumber( &imageMask ) );
         return state;
     }
     i = 1;//ignorem les capçaleres
@@ -213,8 +213,8 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( buildSqlSizeImage( &imageMask ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( buildSqlSizeImage( &imageMask ) );
         return state;
     }
 
@@ -248,8 +248,8 @@ Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
 
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( buildSqlSizeImage( &imageMask ) ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( buildSqlSizeImage( &imageMask ) );
         return state;
     }
 
@@ -285,8 +285,8 @@ Status CacheImageDAL::deleteImages( QString studyUID )
     state =  databaseConnection->databaseStatus( stateDatabase );
     if ( !state.good() )
     {
-        ERROR_LOG( qPrintable( QString("Error a la cache número %1").arg( state.code() ) ) );
-        ERROR_LOG( qPrintable( sqlSentence ) );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( sqlSentence );
     }
 
     return state;

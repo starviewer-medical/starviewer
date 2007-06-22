@@ -285,7 +285,7 @@ void QConfigurationScreen::addPacs()
 
 		logMessage = "Afegir pacs ";
 		logMessage.append( m_textAETitle->text() );
-		INFO_LOG ( qPrintable(logMessage) );
+		INFO_LOG( logMessage );
 
         state =  pacsList.insertPacs( &pacs );
 
@@ -375,7 +375,7 @@ void QConfigurationScreen::updatePacs()
 
         logMessage = "Actualitzant dades del pacs ";
         logMessage.append( m_textAETitle->text() );
-        INFO_LOG ( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         state = pacsList.updatePacs( &pacs );
 
@@ -409,7 +409,7 @@ void QConfigurationScreen::deletePacs()
 
     logMessage = "Esborrant el pacs ";
     logMessage.append( m_textAETitle->text() );
-    INFO_LOG ( qPrintable(logMessage) );
+    INFO_LOG( logMessage );
 
     state = pacsList.deletePacs( &pacs );
 
@@ -493,7 +493,7 @@ void QConfigurationScreen::test()
         logMessage.append( pacs.getAEPacs() );
         logMessage.append( " doesn't responds. PACS ERROR : " );
         logMessage.append( state.text() );
-        INFO_LOG ( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
     }
     else
     {
@@ -509,7 +509,7 @@ void QConfigurationScreen::test()
             logMessage.insert( 0 , "Test of Pacs " );
             logMessage.append( pacs.getAEPacs() );
             logMessage.append( " is correct " );
-            INFO_LOG ( qPrintable(logMessage) );
+            INFO_LOG( logMessage );
         }
         else
         {
@@ -524,7 +524,7 @@ void QConfigurationScreen::test()
             logMessage.append( pacs.getAEPacs() );
             logMessage.append( " doesn't responds correctly. PACS ERROR : " );
             logMessage.append( state.text() );
-            INFO_LOG ( qPrintable(logMessage) );
+            INFO_LOG( logMessage );
         }
     }
 
@@ -686,7 +686,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del AETitle de la màquina ";
         logMessage.append( m_textAETitleMachine->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         settings.setAETitleMachine(m_textAETitleMachine->text());
     }
@@ -695,7 +695,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del valor del timeout ";
         logMessage.append( m_textTimeout->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         settings.setTimeout(m_textTimeout->text());
     }
@@ -704,7 +704,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del Port d'entrada dels estudis";
         logMessage.append( m_textLocalPort->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         settings.setLocalPort( m_textLocalPort->text() );
     }
@@ -713,7 +713,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         logMessage = "Modificació del nombre màxim de connexions ";
         logMessage.append( m_textMaxConnections->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         settings.setMaxConnections( m_textMaxConnections->text() );
     }
@@ -787,7 +787,7 @@ void QConfigurationScreen::applyChangesCache()
     {
         logMessage = "Es modificarà la mida de la cache ";
         logMessage.append( m_textPoolSize->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         state = pool.updatePoolTotalSize( m_textPoolSize->text().toInt( NULL , 10 )* 1024 );//Passem l'espai a Mb
         databaseError( &state );
@@ -797,7 +797,7 @@ void QConfigurationScreen::applyChangesCache()
     {
         logMessage = "Es modificarà el directori de la cache d'imatges ";
         logMessage.append( m_textCacheImagePath->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         settings.setCacheImagePath( m_textCacheImagePath->text() );
     }
@@ -806,7 +806,7 @@ void QConfigurationScreen::applyChangesCache()
     {
         logMessage = "Es modificarà el nombre maxim de dies d'un estudi a la cache";
         logMessage.append( m_textMaximumDaysNotViewed->text() );
-        INFO_LOG( qPrintable(logMessage) );
+        INFO_LOG( logMessage );
 
         settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
     }
