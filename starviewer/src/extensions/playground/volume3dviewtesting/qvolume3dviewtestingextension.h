@@ -33,12 +33,23 @@ public:
     /// Li donem l'input a processar
     void setInput( Volume * input );
 
+public slots:
+    /// Actualitza el viewer 3D amb la funció de transferència que estem editant
+    void updateTransferFunctionFromEditor();
+
+    /// Actualitza el mètode de rendering que s'aplica al volum segons el que s'ha escollit al combo box
+    void updateRenderingMethodFromCombo( int index );
+
 private:
     /// posa a disposició les tools
     void createTools();
 
     /// Estableix les connexions de signals i slots
     void createConnections();
+
+    /// Lectura/escriptura de configuració
+    void readSettings();
+    void writeSettings();
 
 private:
     /// El volum d'input
