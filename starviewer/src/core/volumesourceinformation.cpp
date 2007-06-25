@@ -540,4 +540,28 @@ QString VolumeSourceInformation::getImageSOPInstanceUID( int index )
     return result;
 }
 
+void VolumeSourceInformation::setPatientPosition( QString patientPosition )
+{
+    m_patientPosition = patientPosition;
+    DEBUG_LOG( "Patient position:; " + m_patientPosition );
+    if( m_patientPosition == "HFP" ) // Head First-Prone: Entra de cap i mira cap avall
+        setPatientOrientationString("LRPASI");
+    else if( m_patientPosition == "HFDR" ) // Head First-Decubitus Right: Entra de cap i recolzat sobre el braç dret
+        setPatientOrientationString("APLRSI");
+    else if( m_patientPosition == "FFDR" ) // Feet First-Decubitus Right: Entra de peus i recolzat sobre el braç dret
+        setPatientOrientationString("PALRIS");
+    else if( m_patientPosition == "FFP" ) // Feet First-Prone: Entra de peus i mira cap avall
+        setPatientOrientationString("RLPAIS");
+    else if( m_patientPosition == "HFS" ) // Head First-Supine: Entra de cap i mira cap amunt
+        setPatientOrientationString("RLAPSI");
+    else if( m_patientPosition == "HFDL" ) // Head First-Decubitus Left: Entra de cap i recolzat sobre el braç esquerre
+        setPatientOrientationString("PARLSI");
+    else if( m_patientPosition == "FFDL" ) // Feet First-Decubitus Left: Entra de peus i recolzat sobre el braç esquerre
+        setPatientOrientationString("APRLIS");
+    else if( m_patientPosition == "FFS" ) // Feet First-Supine: Entra de peus i mira cap amunt
+        setPatientOrientationString("LRAPIS");
+    else // No tenim l'atribut esperat
+        setPatientOrientationString("??????");
+}
+
 };  // end namespace udg

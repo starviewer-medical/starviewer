@@ -256,6 +256,12 @@ public:
         return m_numberOfSlices;
     };
 
+    /// Assigna/retorna la posició del pacient respecte la màquina. Quan assignem, crea automàticament la cadena d'orientació del pacient que s'usarà per fer les anotacions corresponents.
+    void setPatientPosition( QString patientPosition );
+    QString getPatientPosition() const
+    {
+        return m_patientPosition;
+    }
 private:
 
     QString m_patientName;
@@ -270,6 +276,8 @@ private:
     double m_directionCosines[9];
     QString m_seriesDescription;
     QString m_seriesInstanceUID;
+    /// ens indica la posició del pacient respecte la màquina. Útil per les annotacions de referència. Vàlid per CT i MR de moment. Veure C.7.3.1.1.2 per més explicacions
+    QString m_patientPosition;
 
     /// tags privats PHILIPS per controlar nombre de fases i llesques diferents en tot el conjunt
     int m_numberOfPhases, m_numberOfSlices;
