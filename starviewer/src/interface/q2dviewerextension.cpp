@@ -170,6 +170,10 @@ void Q2DViewerExtension::createActions()
 
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
+    
+    m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
+    m_roiToolButton->setDefaultAction( m_roiAction );
+    m_roiAction->setIcon( QIcon(":/images/roi.png") );
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_1, SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView2_2 , SLOT( setTool(QString) ) );
@@ -182,6 +186,8 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_distanceAction );
+    m_toolsActionGroup->addAction( m_roiAction );
+    
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
 }

@@ -88,6 +88,7 @@ private:
     QAction *m_flipVerticalAction;
     QAction *m_screenShotAction;
     QAction *m_distanceAction;
+    QAction *m_roiAction;
     ToolsActionFactory *m_actionFactory;
 
     QAction *m_presentationStateAction;

@@ -124,6 +124,28 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="m_roiToolButton" >
+         <property name="text" >
+          <string>zoom</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../main/main.qrc" >:/images/roi.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="m_moveToolButton" >
          <property name="text" >
           <string>move</string>
@@ -574,14 +596,14 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>QWindowLevelComboBox</class>
-   <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QWindowLevelComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qwindowlevelcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources>
