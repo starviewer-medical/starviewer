@@ -12,6 +12,7 @@
 #include "translatetool.h"
 #include "screenshottool.h"
 #include "distancetool.h"
+#include "roitool.h"
 #include "logging.h"
 #include "seedtool.h"
 
@@ -55,6 +56,7 @@ void Q2DViewerToolManager::initToolRegistration()
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
     m_toolList["SeedTool"] = new SeedTool( m_viewer );
     m_toolList["DistanceTool"] = new DistanceTool( m_viewer );
+    m_toolList["ROITool"] = new ROITool( m_viewer );
 }
 
 }
