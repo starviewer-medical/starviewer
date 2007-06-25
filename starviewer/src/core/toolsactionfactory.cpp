@@ -77,6 +77,14 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_distanceAction->setCheckable( true );
     m_signalMapper->setMapping( m_distanceAction , "DistanceTool" );
     connect( m_distanceAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    
+    m_roiAction = new QAction( 0 );
+    m_roiAction->setText( tr("ROI's") );
+    m_roiAction->setStatusTip( tr("Enable/Disable ROI tool") );
+    m_roiAction->setIcon( QIcon(":/images/roi.png") );
+    m_roiAction->setCheckable( true );
+    m_signalMapper->setMapping( m_roiAction , "ROITool" );
+    connect( m_roiAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
 
@@ -89,6 +97,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["SeedTool"] = m_seedAction;
     m_availableToolActions["3DRotationTool"] = m_rotate3dAction;
     m_availableToolActions["DistanceTool"] = m_distanceAction;
+    m_availableToolActions["ROITool"] = m_roiAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()
