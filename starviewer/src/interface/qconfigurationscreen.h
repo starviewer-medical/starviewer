@@ -9,15 +9,13 @@
 
 #include "ui_qconfigurationscreenbase.h"
 
-using namespace Ui; // \TODO això s'hauria d'evitar!
-
 namespace udg {
 
 class Status;
 /** Interfície que permet configurar els paràmetres del pacs i de la caché
 @author marc
 */
-class QConfigurationScreen : public QDialog , private QConfigurationScreenBase
+class QConfigurationScreen : public QDialog , private ::Ui::QConfigurationScreenBase
 {
 Q_OBJECT
 

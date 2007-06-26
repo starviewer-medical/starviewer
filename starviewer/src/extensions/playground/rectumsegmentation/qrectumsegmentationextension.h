@@ -12,8 +12,6 @@
 
 #include <QString>
 
-using namespace Ui;
-
 // FWD declarations
 class QAction;
 class QToolBar;
@@ -34,7 +32,7 @@ Extensi?que s'executar?per defecte a l'obrir un model
     @author Grup de Gr?ics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class QRectumSegmentationExtension : public QWidget , private QRectumSegmentationExtensionBase {
+class QRectumSegmentationExtension : public QWidget , private ::Ui::QRectumSegmentationExtensionBase {
 Q_OBJECT
 public:
     QRectumSegmentationExtension( QWidget *parent = 0 );

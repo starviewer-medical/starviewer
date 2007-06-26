@@ -15,9 +15,6 @@
 
 #include "transferfunction.h"
 
-// \TODO Repassar perquè passa això, no s'hauria de fer un "using"
-using namespace Ui;
-
 namespace udg {
 
 
@@ -36,7 +33,7 @@ class QTransferFunctionIntervalEditor;
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class QTransferFunctionEditorByValues : public QTransferFunctionEditor, private QTransferFunctionEditorByValuesBase
+class QTransferFunctionEditorByValues : public QTransferFunctionEditor, private ::Ui::QTransferFunctionEditorByValuesBase
 {
 
     Q_OBJECT

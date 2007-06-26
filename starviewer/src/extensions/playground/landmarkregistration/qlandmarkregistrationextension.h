@@ -14,8 +14,6 @@
 
 #include <QString>
 
-using namespace Ui;
-
 // FWD declarations
 class QAction;
 class QToolBar;
@@ -29,7 +27,7 @@ class ToolsActionFactory;
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QLandmarkRegistrationExtension : public QWidget , private QLandmarkRegistrationExtensionBase 
+class QLandmarkRegistrationExtension : public QWidget , private ::Ui::QLandmarkRegistrationExtensionBase 
 {
 Q_OBJECT
 public:

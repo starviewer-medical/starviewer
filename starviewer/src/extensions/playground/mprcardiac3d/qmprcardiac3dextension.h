@@ -11,8 +11,6 @@
 
 class QBasicTimer;
 
-using namespace Ui; // \TODO això hauria de ser temporal
-
 namespace udg {
 
 // FWD declarations
@@ -24,7 +22,7 @@ Extensió de l'MPR 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class QMPRCardiac3DExtension : public QWidget , private QMPRCardiac3DExtensionBase {
+class QMPRCardiac3DExtension : public QWidget , private ::Ui::QMPRCardiac3DExtensionBase {
 Q_OBJECT
 public:
     QMPRCardiac3DExtension( QWidget *parent = 0 );

@@ -10,7 +10,6 @@
 #include "ui_qpacslistbase.h"
 #include <QWidget>
 #include "status.h"
-using namespace Ui;
 
 namespace udg {
 
@@ -20,7 +19,7 @@ class PacsList;
 @author marc
 */
 
-class QPacsList : public QWidget, private /*Ui::*/QPacsListBase
+class QPacsList : public QWidget, private ::Ui::QPacsListBase
 {
 Q_OBJECT
 public:

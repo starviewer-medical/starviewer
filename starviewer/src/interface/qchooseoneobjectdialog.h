@@ -9,14 +9,12 @@
 
 #include "ui_qchooseoneobjectdialogbase.h"
 
-using namespace Ui; //\TODO S'hauria de veure perquè s'ha de posar això per fer herència!!
-
 namespace udg {
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QChooseOneObjectDialog : public QDialog, private QChooseOneObjectDialogBase
+class QChooseOneObjectDialog : public QDialog, private ::Ui::QChooseOneObjectDialogBase
 {
 Q_OBJECT
 public:

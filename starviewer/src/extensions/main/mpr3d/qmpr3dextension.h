@@ -8,7 +8,6 @@
 #define UDGQMPR3DEXTENSION_H
 
 #include "ui_qmpr3dextensionbase.h"
-using namespace Ui; // \TODO això hauria de ser temporal
 
 namespace udg {
 
@@ -21,7 +20,7 @@ Extensió de l'MPR 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class QMPR3DExtension : public QWidget , private QMPR3DExtensionBase{
+class QMPR3DExtension : public QWidget , private ::Ui::QMPR3DExtensionBase{
 Q_OBJECT
 public:
     QMPR3DExtension( QWidget *parent = 0 );
