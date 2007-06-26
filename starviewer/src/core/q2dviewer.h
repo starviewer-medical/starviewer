@@ -30,6 +30,7 @@ class vtkScalarBarActor;
 class vtkInteractorStyleImage;
 class vtkImageBlend;
 class vtkImageActor;
+class vtkProp;
 
 /// tractament múltiples vistes
 class vtkPropCollection;
@@ -70,8 +71,9 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 class Volume;
 class Q2DViewerToolManager;
 class Tool;
+class SliceAnnotationController;
 
-class Q2DViewer  : public QViewer{
+class Q2DViewer : public QViewer{
 Q_OBJECT
 public:
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
@@ -143,6 +145,9 @@ public:
 
     /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
     Tool *getTool( QString toolName );
+
+    /// A través d'aquest mètode afegirem actors associats a llesca i vista que seran visibles segons la vista i llesca en la que es trobin \TODO de moment aquest mètode és un "HELPER METHOD". Segurament aquesta funcionalitat acabarà a passar a ser competència de la futura classe Drawer destinada a pintar annotacions
+    void addSliceAnnotation( vtkProp *actor, int slice, int view );
 
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
@@ -334,7 +339,10 @@ protected:
     /// Per controlar l'espaiat en que presentem la imatge
     double m_presentationPixelSpacing[2];
 
-    // Processem l'event de resize de la finestra Qt
+    /// Controlador d'annotacions per llesca
+    SliceAnnotationController *m_sliceAnnotationController;
+
+    /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent( QResizeEvent* resize );
 
 private:
@@ -559,6 +567,9 @@ private slots:
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
+
+    /// envia la nova vista en la que ens trobem
+    void viewChanged(int);
 
     /// indica el nou window level
     void windowLevelChanged( double window , double level );

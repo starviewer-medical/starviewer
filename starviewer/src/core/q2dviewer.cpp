@@ -9,6 +9,7 @@
 #include "volume.h"
 #include "volumesourceinformation.h"
 #include "logging.h"
+#include "sliceannotationcontroller.h"
 
 // include's qt
 #include <QResizeEvent>
@@ -38,6 +39,7 @@
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
 #include <vtkProperty2D.h>
+#include <vtkProp.h>
 #include <vtkScalarBarActor.h>
 #include <vtkLookupTable.h>
 #include <vtkImageMapToWindowLevelColors.h>
@@ -109,6 +111,10 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     }
     m_sideRuler = 0;
     m_bottomRuler = 0;
+
+    m_sliceAnnotationController = new SliceAnnotationController(this);
+    connect( this, SIGNAL( sliceChanged(int) ), m_sliceAnnotationController, SLOT( setCurrentSlice(int) ) );
+    connect( this, SIGNAL( viewChanged(int) ), m_sliceAnnotationController, SLOT( setCurrentView(int) ) );
 
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -734,6 +740,11 @@ Tool *Q2DViewer::getTool( QString toolName )
     return m_toolManager->getTool( toolName );
 }
 
+void Q2DViewer::addSliceAnnotation( vtkProp *actor, int slice, int view )
+{
+    m_sliceAnnotationController->addActor( actor, slice, view );
+}
+
 void Q2DViewer::setEnableTools( bool enable )
 {
     if( enable )
@@ -968,6 +979,7 @@ void Q2DViewer::render()
 void Q2DViewer::setView( ViewType view )
 {
     m_lastView = view;
+    emit viewChanged( m_lastView );
     resetCamera();
 }
 
