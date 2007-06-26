@@ -44,6 +44,7 @@ QCardiac2DViewerExtension::QCardiac2DViewerExtension( QWidget *parent )
     m_nextStep = 1;
 
     m_spinBox->setValue( 20 );
+    m_slider->setPageStep(1);
 
     readSettings();
     createActions();

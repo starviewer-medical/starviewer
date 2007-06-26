@@ -599,7 +599,7 @@
                         </spacer>
                     </item>
                     <item>
-                        <widget class="udg::QSliderOneStep" name="m_slider" >
+                        <widget class="QSlider" name="m_slider" >
                             <property name="sizePolicy" >
                                 <sizepolicy>
                                     <hsizetype>7</hsizetype>
@@ -695,13 +695,6 @@
     <layoutdefault spacing="6" margin="11" />
     <pixmapfunction></pixmapfunction>
     <customwidgets>
-        <customwidget>
-            <class>udg::QSliderOneStep</class>
-            <extends>QSlider</extends>
-            <header>qslideronestep.h</header>
-            <container>0</container>
-            <pixmap></pixmap>
-        </customwidget>
         <customwidget>
             <class>udg::QWindowLevelComboBox</class>
             <extends>QComboBox</extends>

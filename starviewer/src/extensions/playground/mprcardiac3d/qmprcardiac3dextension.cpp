@@ -40,6 +40,7 @@ QMPRCardiac3DExtension::QMPRCardiac3DExtension( QWidget *parent )
     m_nextStep = 1;
 
     m_spinBox->setValue( 20 );
+    m_slider->setPageStep(1);
 
     createTools();
     createConnections();

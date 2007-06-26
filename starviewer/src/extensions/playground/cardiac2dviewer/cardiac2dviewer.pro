@@ -1,10 +1,8 @@
 FORMS += qcardiac2dviewerextensionbase.ui
 HEADERS += cardiac2dviewerextensionmediator.h \
-           qcardiac2dviewerextension.h \
-           qslideronestep.h
+           qcardiac2dviewerextension.h 
 SOURCES += cardiac2dviewerextensionmediator.cpp \
-           qcardiac2dviewerextension.cpp \
-           qslideronestep.cpp
+           qcardiac2dviewerextension.cpp
 TARGETDEPS += ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a \
 ../../../interface/libinterface.a
