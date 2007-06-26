@@ -22,7 +22,7 @@
 #include "logging.h"
 
 
-//\TODO CONTROLAR ELS PUNTS A DIBUIXAR EN LES DIFERENTS VISTES. ARA NOMÉS S'ESTÀ TRACTANT AXIAL.
+//\TODO Poliline acaba de tancar??
 namespace udg {
 
 ROITool::ROITool( Q2DViewer *viewer , QObject *, const char * )
@@ -73,7 +73,7 @@ ROITool::ROITool( Q2DViewer *viewer , QObject *, const char * )
     
     //fem les connexions necessàries
     connect( m_2DViewer, SIGNAL( sliceChanged( int ) ), this , SLOT( drawROIsOfSlice( int ) ) );
-//     connect( m_2DViewer, SIGNAL( sliceChanged( int ) ), this , SLOT( unselectROI() ) );
+    connect( m_2DViewer, SIGNAL( sliceChanged( int ) ), this , SLOT( unselectROI() ) );
 }
 
 ROITool::~ROITool()
@@ -196,7 +196,6 @@ void ROITool::startROIAnnotation()
 //esborrem els punts i vèrtexs del polyData
     m_points->Reset();
     m_vertexs->Reset();
-
     m_2DViewer->getInteractor()->GetEventPosition( xy );
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
 
@@ -232,8 +231,6 @@ void ROITool::startROIAnnotation()
 
 void ROITool::doROISimulation()
 {
-//\TODO CONTROLAR ELS PUNTS A DIBUIXAR EN LES DIFERENTS VISTES. ARA NOMÉS S'ESTÀ TRACTANT AXIAL.
-
     int xy[2];
     double position[4];
 
@@ -257,90 +254,215 @@ void ROITool::doROISimulation()
     m_ROIActor->VisibilityOn();
     m_2DViewer->refresh();
 }
-
+//\TODO OPTIMITZAR I REDUIR CODI REDUNDANT, SOBRETOT EN LA ZONA DE GENERACIÓ DE PUNTS DE LES ROI's
 void ROITool::calculatePointsAccordingSelectedROI( double p1[3], double p2[3] )
 {
-    //Els punts es calculen en sentit horari
-    //esborrem els punts i vèrtexs del polyData
+    double point[3], intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius;
+    
     m_points->Reset();
     m_vertexs->Reset();
 
-    double point[3], intersection[2];
-    double xRadius, yRadius;
     switch ( m_ROIType )
     {
         case RECTANGLE:
         //especifiquem el nombre de vèrtexs que té el polígon
             m_vertexs->InsertNextCell( 5 );
         
-        //primer punt
-            m_points->InsertPoint( 0, p1 );
-            m_vertexs->InsertCellPoint( 0 );
+            //tenim en compte les diferents vistes per a calcular els punts
+            switch( m_2DViewer->getView() )
+            {
+                case Q2DViewer::Axial:
+                    //primer punt
+                    m_points->InsertPoint( 0, p1 );
+                    m_vertexs->InsertCellPoint( 0 );
         
-        //el segon punt tindrà com a coordenades (p2.x, p1.y, 0)
-            point[0] = p2[0];
-            point[1] = p1[1];
-            point[2] = 0;
-            m_points->InsertPoint( 1, point );
-            m_vertexs->InsertCellPoint( 1 );
+                    //el segon punt tindrà com a coordenades (p2.x, p1.y, p1.z)
+                    point[0] = p2[0];
+                    point[1] = p1[1];
+                    point[2] = p1[2]; //abans aquesta coordenada era 0
+                    m_points->InsertPoint( 1, point );
+                    m_vertexs->InsertCellPoint( 1 );
         
-        //el tercer punt tindrà com a coordenades les del p2
-            m_points->InsertPoint( 2, p2 );
-            m_vertexs->InsertCellPoint( 2 );
+                    //el tercer punt tindrà com a coordenades les del p2
+                    m_points->InsertPoint( 2, p2 );
+                    m_vertexs->InsertCellPoint( 2 );
         
-        //el quart punt tindrà com a coordenades (p1.x, p2.y, 0)
-            point[0] = p1[0];
-            point[1] = p2[1];
-            point[2] = 0;
-            m_points->InsertPoint( 3, point );
-            m_vertexs->InsertCellPoint( 3 );
+                    //el quart punt tindrà com a coordenades (p1.x, p2.y, p1.z)
+                    point[0] = p1[0];
+                    point[1] = p2[1];
+                    point[2] = p1[2];  //abans aquesta coordenada era 0
+                    m_points->InsertPoint( 3, point );
+                    m_vertexs->InsertCellPoint( 3 );
         
-        //tanquem el polígon donant el primer punt
-            m_points->InsertPoint( 0, p1 );
-            m_vertexs->InsertCellPoint( 0 );
+                    //tanquem el polígon donant el primer punt
+                    m_points->InsertPoint( 0, p1 );
+                    m_vertexs->InsertCellPoint( 0 );
+                    break;
+                case Q2DViewer::Sagittal:
+                   //primer punt
+                    m_points->InsertPoint( 0, p1 );
+                    m_vertexs->InsertCellPoint( 0 );
+                    //el segon punt tindrà com a coordenades (p1.x, p1.y, p2.z)
+                    point[0] = p1[0];
+                    point[1] = p1[1];
+                    point[2] = p2[2];
+                    m_points->InsertPoint( 1, point );
+                    m_vertexs->InsertCellPoint( 1 );
+        
+                    //el tercer punt tindrà com a coordenades les del p2
+                    m_points->InsertPoint( 2, p2 );
+                    m_vertexs->InsertCellPoint( 2 );
+        
+                    //el quart punt tindrà com a coordenades (p1.x, p2.y, p1.z)
+                    point[0] = p1[0];
+                    point[1] = p2[1];
+                    point[2] = p1[2];
+                    m_points->InsertPoint( 3, point );
+                    m_vertexs->InsertCellPoint( 3 );
+        
+                    //tanquem el polígon donant el primer punt
+                    m_points->InsertPoint( 0, p1 );
+                    m_vertexs->InsertCellPoint( 0 );
+                    break;
+                case Q2DViewer::Coronal:
+                    //primer punt
+                    m_points->InsertPoint( 0, p1 );
+                    m_vertexs->InsertCellPoint( 0 );
+                    //el segon punt tindrà com a coordenades (p1.x, p1.y, p2.z)
+                    point[0] = p1[0];
+                    point[1] = p1[1];
+                    point[2] = p2[2];
+                    m_points->InsertPoint( 1, point );
+                    m_vertexs->InsertCellPoint( 1 );
+        
+                    //el tercer punt tindrà com a coordenades les del p2
+                    m_points->InsertPoint( 2, p2 );
+                    m_vertexs->InsertCellPoint( 2 );
+        
+                    //el quart punt tindrà com a coordenades (p2.x, p2.y, p1.z)
+                    point[0] = p2[0];
+                    point[1] = p2[1];
+                    point[2] = p1[2];
+                    m_points->InsertPoint( 3, point );
+                    m_vertexs->InsertCellPoint( 3 );
+        
+                    //tanquem el polígon donant el primer punt
+                    m_points->InsertPoint( 0, p1 );
+                    m_vertexs->InsertCellPoint( 0 );
+                    break;
+                default:
+                    DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!? Impossible calcular els punts" );
+                    break;
+            }
             break;
     
         case ELLIPSE: 
         case CIRCLE:
-        //especifiquem el nombre de vèrtexs que té el polígon
+            //especifiquem el nombre de vèrtexs que té el polígon
             m_vertexs->InsertNextCell( 61 );
-        
-            double degrees;
-        
-        //calculem els eixos
-            double xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2];
-            xAxis1[0] = p1[0];
-            xAxis1[1] = p1[1];
-        
-            xAxis2[0] = p2[0];
-            xAxis2[1] = p1[1];
-        
-            yAxis1[0] = p1[0];
-            yAxis1[1] = p1[1];
-        
-            yAxis2[0] = p1[0];
-            yAxis2[1] = p2[1];
-        
-            xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
-        
-            if ( m_ROIType == ELLIPSE )
-                yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
-            else
-                yRadius = xRadius;
-        
-            intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
-            intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
-        
-            for ( int i = 0; i < 60; i++ )
+            
+             //tenim en compte les diferents vistes per a calcular els punts
+            switch( m_2DViewer->getView() )
             {
-                degrees = i*6*vtkMath::DoubleDegreesToRadians();
-                m_points->InsertPoint( i, cos( degrees )*xRadius + intersection[0], sin( degrees )*yRadius + intersection[1], .0 );
-                m_vertexs->InsertCellPoint( i );
+                case Q2DViewer::Axial:
+                    xAxis1[0] = p1[0];
+                    xAxis1[1] = p1[1];
+                
+                    xAxis2[0] = p2[0];
+                    xAxis2[1] = p1[1];
+                
+                    yAxis1[0] = p1[0];
+                    yAxis1[1] = p1[1];
+                
+                    yAxis2[0] = p1[0];
+                    yAxis2[1] = p2[1];
+                
+                    xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
+                
+                    if ( m_ROIType == ELLIPSE )
+                        yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
+                    else
+                        yRadius = xRadius;
+                
+                    intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
+                    intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
+                
+                    for ( int i = 0; i < 60; i++ )
+                    {
+                        degrees = i*6*vtkMath::DoubleDegreesToRadians();
+                        m_points->InsertPoint( i, cos( degrees )*xRadius + intersection[0], sin( degrees )*yRadius + intersection[1], .0 );
+                        m_vertexs->InsertCellPoint( i );
+                    }
+                break;
+                
+                case Q2DViewer::Sagittal:
+                    xAxis1[0] = p1[2];
+                    xAxis1[1] = p1[1];
+                
+                    xAxis2[0] = p2[2];
+                    xAxis2[1] = p1[1];
+                
+                    yAxis1[0] = p1[2];
+                    yAxis1[1] = p1[1];
+                
+                    yAxis2[0] = p1[2];
+                    yAxis2[1] = p2[1];
+                
+                    xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
+                
+                    if ( m_ROIType == ELLIPSE )
+                        yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
+                    else
+                        yRadius = xRadius;
+                
+                    intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
+                    intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
+                
+                    for ( int i = 0; i < 60; i++ )
+                    {
+                        degrees = i*6*vtkMath::DoubleDegreesToRadians();
+                        m_points->InsertPoint( i, 0., sin( degrees )*yRadius + intersection[1],cos( degrees )*xRadius + intersection[0] );
+                        m_vertexs->InsertCellPoint( i );
+                    }
+                break;
+                    
+                case Q2DViewer::Coronal:
+                    xAxis1[0] = p1[2];
+                    xAxis1[1] = p1[0];
+                
+                    xAxis2[0] = p2[2];
+                    xAxis2[1] = p1[0];
+                
+                    yAxis1[0] = p1[2];
+                    yAxis1[1] = p1[0];
+                
+                    yAxis2[0] = p1[2];
+                    yAxis2[1] = p2[0];
+                
+                    xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
+                
+                    if ( m_ROIType == ELLIPSE )
+                        yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
+                    else
+                        yRadius = xRadius;
+                
+                    intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
+                    intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
+                
+                    for ( int i = 0; i < 60; i++ )
+                    {
+                        degrees = i*6*vtkMath::DoubleDegreesToRadians();
+                        m_points->InsertPoint( i, sin( degrees )*yRadius + intersection[1], 0., cos( degrees )*xRadius + intersection[0] );
+                        m_vertexs->InsertCellPoint( i );
+                    }
+                break;
+                    
+                default:
+                    DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!? Impossible calcular els punts" );
+                break;
             }
-        
             //afegim l'últim punt per tancar la ROI
             m_vertexs->InsertCellPoint( 0 );
-        
             break;
         default:
             break;
@@ -466,7 +588,6 @@ void ROITool::stopROIAnnotation()
             //l'actor que visualitza l'últim segment el fem invisible perquè no volem que se'ns mostri per pantalla.
             m_polyLineActor->VisibilityOff();
             
-            
             //càlcul de l'àrea del polígon definit per la polilínia 
             for ( j = 0; j < m_newROIAssembly->m_pointsList.count() ; j++ )
             {
@@ -492,7 +613,6 @@ void ROITool::stopROIAnnotation()
             }
                 
             //afegim els punts definitius a la polilínia        
-
             m_vertexs->InsertNextCell( (m_newROIAssembly->m_pointsList.count()+1) );
 
             i = 0;
@@ -516,7 +636,6 @@ void ROITool::stopROIAnnotation()
             m_points = vtkPoints::New();
             m_vertexs = vtkCellArray::New();
         }
-        //\TODO falta el càlcul de la mitjana
         //\TODO falta el càlcul de la mitjana
         mean = 0;//computeMean( m_newROIAssembly );
         
@@ -585,7 +704,6 @@ void ROITool::saveIntoAList( ROIAssembly* roi )
 
 double ROITool::computeMean( ROIAssembly *newROIAssembly )
 {
-        //\TODO CONTROLAR ELS PUNTS A DIBUIXAR EN LES DIFERENTS VISTES. ARA NOMÉS S'ESTÀ TRACTANT AXIAL.
     double mean = 0;
     int index,subId,initialPosition, endPosition;
     
@@ -800,16 +918,16 @@ void ROITool::highlightNearestROI()
     }
 }
 
-    void ROITool::setColor( ROIAssembly *roi, QColor color )
-    {
-        if( roi )
-            roi->getActor()->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
-        else
-            DEBUG_LOG( "Assembly buit!" );
-    }
+void ROITool::setColor( ROIAssembly *roi, QColor color )
+{
+    if( roi )
+        roi->getActor()->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+    else
+        DEBUG_LOG( "Assembly buit!" );
+}
 
-    void ROITool::drawROIsOfSlice( int slice )
-    {
+void ROITool::drawROIsOfSlice( int slice )
+{
     // si hem canviat de vista, primer fem invisibles els actors de la última vista a la última llesca
     int viewToClear;
     if( m_lastView != m_2DViewer->getView() )
@@ -820,7 +938,6 @@ void ROITool::highlightNearestROI()
     }
     else // continuem a la mateixa vista
         viewToClear = m_2DViewer->getView();
-    
     
     QList< ROIAssembly *> list;
     switch( viewToClear )
@@ -942,13 +1059,9 @@ vtkCaptionActor2D* ROITool::createCaption( double *point, double area, double me
     captionActor->GetCaptionTextProperty()->ItalicOff();
 
     QString str1 = QString( "Area: %1 mm3" ).arg( area, 0, 'f',  2);
-    QString str2 = QString( "Mean: %1" ).arg( mean, 0, 'f',  2);
-    
-    QString str = str1 + "\n";
-    str += str2;
-    
+        
     //Assignem el text a l'etiqueta de la distància i la situem
-    captionActor->SetCaption( qPrintable ( str ) );
+    captionActor->SetCaption( qPrintable ( str1 ) );
     captionActor->SetAttachmentPoint( point );
 
     return ( captionActor );
@@ -956,40 +1069,28 @@ vtkCaptionActor2D* ROITool::createCaption( double *point, double area, double me
 
 double* ROITool::calculateCaptionPosition( vtkPolyData *roi )
 {
-    //\TODO CONTROLAR ELS PUNTS A DIBUIXAR EN LES DIFERENTS VISTES. ARA NOMÉS S'ESTÀ TRACTANT AXIAL.
-    //agafem les fronteres del vtkPolyData
     double bounds[6];
     roi->GetBounds( bounds );
     double *position = new double[3];
     
+    position[0] = bounds[1];
+    position[2] = bounds[5];
+    
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
-//             zeroCoordinate = 'x';
-            position[0] = bounds[1];
             position[1] = bounds[2];
-            position[2] = bounds[5];
             break;
 
         case Q2DViewer::Sagittal:
-            position[0] = 0;
-            position[1] = 0;
-            position[2] = 0;
-//             zeroCoordinate = 'z';
-            break;
-
         case Q2DViewer::Coronal:
-            position[0] = 0;
-            position[1] = 0;
-            position[2] = 0;
-//             zeroCoordinate = 'y';
+            position[1] = bounds[3];
             break;
 
         default:
             DEBUG_LOG( "Cap vista assignada" );
             break;
     }
-
     return ( position );
 }
 
