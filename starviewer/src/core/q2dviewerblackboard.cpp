@@ -27,8 +27,6 @@
 
 #include <vtkTextActor.h>
 
-#include <QDebug>
-
 namespace udg {
 
 Q2DViewerBlackBoard::Q2DViewerBlackBoard( Q2DViewer *viewer, QObject *parent )
