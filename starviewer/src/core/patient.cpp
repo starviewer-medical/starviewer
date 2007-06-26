@@ -98,4 +98,12 @@ PatientStudy *Patient::getStudy( QString key )
     return m_studiesHash[ key ];
 }
 
+bool Patient::studyExists( QString key )
+{
+    if( this->getStudy(key) )
+        return true;
+    else
+        return false;
+}
+
 }

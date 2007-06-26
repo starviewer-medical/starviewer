@@ -5,11 +5,12 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "patientstudy.h"
+#include "patient.h"
 
 namespace udg {
 
-PatientStudy::PatientStudy(QObject *parent)
- : QObject(parent)
+PatientStudy::PatientStudy( Patient *parentPatient, QObject *parent )
+ : QObject(parent), m_parentPatient( parentPatient )
 {
 }
 

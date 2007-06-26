@@ -20,11 +20,14 @@ Classe que encapsula l'estudi d'un pacient
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+
+class Patient;
+
 class PatientStudy : public QObject
 {
 Q_OBJECT
 public:
-    PatientStudy(QObject *parent = 0);
+    PatientStudy( Patient *parentPatient, QObject *parent = 0);
 
     ~PatientStudy();
 
@@ -97,6 +100,9 @@ private:
     /// Taula de Hash que conté les sèries de l'estudi
     typedef QHash< QString , PatientSerie* > SeriesHashType;
     SeriesHashType m_seriesHash;
+
+    /// L'entitat Patient a la qual pertany aquest estudi
+    Patient *m_parentPatient;
 };
 
 }

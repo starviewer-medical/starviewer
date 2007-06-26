@@ -69,6 +69,9 @@ public:
     /// Obté l'estudi amb clau 'key'
     PatientStudy* getStudy( QString key );
 
+    /// Retorna cert si aquest pacient té assignat l'estudi amb clau 'key', fals altrament
+    bool studyExists( QString key );
+
 private:
     /// Identificador de pacient \TODO equival al tag DICOM ????
     QString m_patientID;

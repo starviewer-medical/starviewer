@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QString>
 #include <QDateTime>
+#include <QImage>
 #include "identifier.h"
 
 namespace udg {
@@ -17,7 +18,7 @@ namespace udg {
 /**
 Classe que encapsula la sèrie d'un pacient.
 
-La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. Una sèrie equival a un volum per tant tindrem l'identificador del corresponent volum al repositori. Si l'id del volum és nul voldrà dir que no està carregat a memòria, en cas contrari estarà al repositori
+La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. Una sèrie pot equivaler a un o més volums, per tant tindrem la llista de Volums corresponents a la sèrie.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -99,6 +100,9 @@ public:
     void setVolumeIdentifier( Identifier id );
     Identifier getVolumeIdentifier() const { return m_volumeID; }
 
+    /// Retorna el nombre de volums dels que es composa la sèrie.
+    int getNumberOfVolumes();
+
 private:
     /// Identidicador universal de la sèrie
     QString m_serieUID;
@@ -124,7 +128,10 @@ private:
     /// Data i hora en que s'ha adquirit la sèrie
     QDateTime m_dateTime;
 
-    /// Window width i window level del contrast de la imatge
+    /// Imatge de previsualització associada a la sèrie
+    QImage m_previewImage;
+
+    /// Window width i window level del contrast de la imatge \TODO podem tenir més d'un en una sèrie per tant això tendirà a quedar obsolet en aquest nivell
     double m_window;
     double m_level;
 
