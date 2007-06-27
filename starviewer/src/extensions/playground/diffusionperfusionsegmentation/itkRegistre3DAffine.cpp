@@ -89,7 +89,6 @@ void itkRegistre3DAffine<TFixedImage,TMovingImage>::SetParamatersMetric(double F
 template <typename TFixedImage, typename TMovingImage>
 void itkRegistre3DAffine<TFixedImage,TMovingImage>::SetParamatersGaussian(int FVariance, int MVariance)
 {
-std::cout<<"SetParamatersGaussian"<<std::endl;
  fixedSmoother->SetVariance( FVariance );
  movingSmoother->SetVariance( MVariance );
 }
@@ -98,7 +97,6 @@ std::cout<<"SetParamatersGaussian"<<std::endl;
 template <typename TFixedImage, typename TMovingImage>
 void itkRegistre3DAffine<TFixedImage,TMovingImage>::SetParamatresOptimizer(int Maximun, double Minium, int Iterations)
 {
-std::cout<<"SetParamatersOptimizer"<<std::endl;
 
 MaximumStepLength=Maximun;
 MiniumStepLength=Minium;
@@ -193,8 +191,6 @@ bool itkRegistre3DAffine<TFixedImage,TMovingImage>::applyMethod()
   transform->SetCenter(centerFixed);
   transform->SetTranslation(centerMoving - centerFixed);
 
-  std::cout<<"centerFixed: "<<centerFixed<<std::endl;
-  std::cout<<"centerMoving: "<<centerMoving<<std::endl;
  // transform->SetAngle(0.0);
 
 

@@ -714,7 +714,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/slicing.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/slicing.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -739,7 +739,7 @@
             <string>window level</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/windowLevel.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/windowLevel.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -761,7 +761,7 @@
             <string>zoom</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/zoom.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/zoom.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -783,7 +783,7 @@
             <string>move</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/move.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/move.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -805,7 +805,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/rotateClockWise.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -824,7 +824,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/pencil.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/pencil.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -849,7 +849,7 @@
             <string>voxel information</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/voxelInformation.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/voxelInformation.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -871,7 +871,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../../main/main.qrc" >:/images/seed.png</iconset>
+            <iconset resource="../../../main/main.qrc" >:/images/seed.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -957,69 +957,42 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="QPushButton" name="m_eraseButton" >
-             <property name="enabled" >
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>1</vsizetype>
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
+            <widget class="QToolButton" name="m_eraseButton" >
              <property name="text" >
-              <string/>
+              <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../main/main.qrc" >:/images/eraser.png</iconset>
-             </property>
-             <property name="flat" >
-              <bool>false</bool>
+              <iconset resource="../../../main/main.qrc" >:/images/eraser.png</iconset>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="m_paintButton" >
-             <property name="enabled" >
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>1</hsizetype>
-               <vsizetype>1</vsizetype>
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
+            <widget class="QToolButton" name="m_paintButton" >
              <property name="text" >
-              <string/>
+              <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../main/main.qrc" >:/images/airbrush.png</iconset>
-             </property>
-             <property name="checkable" >
-              <bool>false</bool>
-             </property>
-             <property name="checked" >
-              <bool>false</bool>
-             </property>
-             <property name="flat" >
-              <bool>false</bool>
+              <iconset resource="../../../main/main.qrc" >:/images/airbrush.png</iconset>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="m_eraseSliceButton" >
-             <property name="enabled" >
-              <bool>false</bool>
-             </property>
+            <widget class="QToolButton" name="m_eraseSliceButton" >
              <property name="text" >
-              <string/>
+              <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../../main/main.qrc" >:/images/axial.png</iconset>
+              <iconset resource="../../../main/main.qrc" >:/images/axial.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="m_eraseRegionButton" >
+             <property name="text" >
+              <string>...</string>
+             </property>
+             <property name="icon" >
+              <iconset resource="../../../main/main.qrc" >:/images/move.png</iconset>
              </property>
             </widget>
            </item>
@@ -1084,6 +1057,36 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="m_splitterLeftButton" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="icon" >
+              <iconset resource="../../../main/main.qrc" >:/images/player_back32.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_splitterCenterButton" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="icon" >
+              <iconset resource="../../../main/main.qrc" >:/images/view_left_right.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_splitterRightButton" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="icon" >
+              <iconset resource="../../../main/main.qrc" >:/images/player_play32.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QCheckBox" name="m_synchroCheckBox" >
              <property name="text" >
               <string>Synchronize slices</string>
@@ -1095,7 +1098,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QSplitter" name="splitter" >
+        <widget class="QSplitter" name="m_viewerSplitter" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
@@ -1297,7 +1300,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../main/main.qrc" />
+  <include location="../../../main/main.qrc" />
  </resources>
  <connections>
   <connection>

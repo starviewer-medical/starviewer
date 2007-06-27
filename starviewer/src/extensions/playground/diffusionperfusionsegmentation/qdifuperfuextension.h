@@ -141,9 +141,10 @@ private:
 
     double m_seedPosition[3];
 
-    bool m_isPaint;
-    bool m_isErase;
-    bool m_isEraseSlice;
+  /// tipus d'edició dels models
+    enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
+    int m_editorTool;
+
     bool m_isLeftButtonPressed;
 
     vtkActor * m_squareActor;
@@ -159,12 +160,17 @@ private:
     QAction * m_seedAction;
     QAction * m_lesionViewAction;
     QAction * m_ventriclesViewAction;
+    QAction * m_paintEditorAction;
+    QAction * m_eraseEditorAction;
+    QAction * m_eraseSliceEditorAction;
+    QAction * m_eraseRegionEditorAction;
 
     ToolsActionFactory * m_actionFactory;
 
     /// Grups de botons en format exclusiu
     QActionGroup * m_toolsActionGroup;
     QActionGroup * m_viewOverlayActionGroup;
+    QActionGroup * m_editorToolActionGroup;
 
 
     /// Crea les accions
@@ -206,11 +212,15 @@ private slots:
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition();
 
+    /// Diversos mètodes per moure l'splitter
+    void moveViewerSplitterToLeft();
+    void moveViewerSplitterToRight();
+    void moveViewerSplitterToCenter();
+
     /// Refresca el resultat del volum
     void updateStrokeVolume();
 
     void applyFilterDiffusionImage();
-    
 
 
 
@@ -218,7 +228,8 @@ private slots:
 
 
 
-    
+
+
      /// gestiona els events del m_2DView
     void strokeEventHandler( unsigned long id );
 
@@ -227,12 +238,12 @@ private slots:
 
 
 
-     /// determina la llavor del m�ode de segmentaci�    
+     /// determina la llavor del m�ode de segmentaci�
     void setEditorPoint( );
 
     /// desactiva el boole�que ens diu si est�el bot�esquerra apretat
     void setLeftButtonOff( );
-    
+
 
 
     /// Canvia la opacitat de la màscara (difusió)
@@ -241,14 +252,11 @@ private slots:
     /// Canvia la opacitat de la màscara (perfusió)
     void setPerfusionOpacity( int opacity );
 
-    /// Canvia a la opci�esborrar 
+    /// Canvia a la opció de l'editor
     void setErase();
-
-    /// Canvia a la opci�pintar
     void setPaint();
-
-    /// Canvia a la opci�esborrar llesca
     void setEraseSlice();
+    void setEraseRegion();
 
     /// Dibuixa el cursor en la forma del pinzell
     void setPaintCursor( );
@@ -256,6 +264,8 @@ private slots:
     void eraseMask(int size);
     void paintMask(int size);
     void eraseSliceMask();
+    void eraseRegionMask();
+    void eraseRegionMaskRecursive(int a, int b, int c);
 
 
 
@@ -272,7 +282,7 @@ private slots:
 
     /// ens permet escollir una nova s?ie per a comparar
     void chooseNewSerie();
-    
+
   signals:
     /// Aquest senyal s'emetr?quan es vulgui canviar de s?ie per comparar
     void newSerie();

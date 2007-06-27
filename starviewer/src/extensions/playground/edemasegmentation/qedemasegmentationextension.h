@@ -27,9 +27,9 @@ class StrokeSegmentationMethod;
 class ToolsActionFactory;
 
 /**
-Extensi?que s'executar?per defecte a l'obrir un model
+Extensió que segmenta l'hematoma i l'edema
 
-    @author Grup de Gr?ics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class QEdemaSegmentationExtension : public QWidget , private ::Ui::QEdemaSegmentationExtensionBase {
@@ -42,15 +42,15 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
-    /// Obtenim la ToolBar d'eines de l'extensi?\TODO 'pujar' al pare com a m?ode com a Extensions?
+    /// Obtenim la ToolBar d'eines de l'extensió \TODO 'pujar' al pare com a mètode com a Extensions?
     QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
 
-    /// Omple la ToolBar amb les eines de l'extensi?\TODO 'pujar' al pare com a m?ode com a Extensions?
+    /// Omple la ToolBar amb les eines de l'extensió \TODO 'pujar' al pare com a mètode com a Extensions?
     //void populateToolBar( QToolBar *toolbar );
 
 public slots:
 
-    /// Executa l'algorisme de segmetnaci�
+    /// Executa l'algorisme de segmetnació
     void ApplyMethod();
     void ApplyCleanSkullMethod( );
     void ApplyEdemaMethod( );
@@ -64,7 +64,7 @@ public slots:
     void changeViewToSingle();
     void changeViewToDouble();
 
-    /// Li assigna el volum secundari. Aquest m�ode nom? ? de conveni?cia i ? temporal
+    /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
     */
 private:
@@ -72,7 +72,7 @@ private:
     /// El volum principal
     Volume *m_mainVolume;
 
-    /// El volum on hi guardem el resultat de la segmentaci�
+    /// El volum on hi guardem el resultat de la segmentació
     Volume *m_lesionMaskVolume;
     Volume *m_edemaMaskVolume;
     Volume *m_ventriclesMaskVolume;
@@ -82,7 +82,7 @@ private:
     /// El volum on hi guardem la imatge principal filtrada
     Volume *m_filteredVolume;
 
-    /// El volum on hi guardem la fusio de la imatge i la m�cara
+    /// El volum on hi guardem la fusio de la imatge i la màscara
     //Volume *m_fusionVolume;
     //vtkImageMask *m_vtkFusionImage;
 
@@ -90,7 +90,7 @@ private:
     //vtkActor *pointActor;
     int m_seedSlice;
 
-    /// M�ode de la segmentaci�
+    /// Mètode de la segmentació
     StrokeSegmentationMethod *m_segMethod;
 
     /// Membres de classe
@@ -111,16 +111,12 @@ private:
   /// tipus d'edició dels models
     enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
     int m_editorTool;
-/*    bool m_isErase;
-    bool m_isPaint;
-    bool m_isEraseSlice;*/
-
 
     int m_minValue, m_maxValue;
     int m_insideValue, m_outsideValue;
     int m_lowerVentriclesValue, m_upperVentriclesValue;
 
-    /// La ToolBar de les eines de l'extensi?\TODO 'pujar' al pare com a membre com a Extensions? [hauria de ser protected]
+    /// La ToolBar de les eines de l'extensió \TODO 'pujar' al pare com a membre com a Extensions? [hauria de ser protected]
     QToolBar *m_toolsToolBar;
 
     /// Accions
@@ -151,16 +147,16 @@ private:
     QActionGroup *m_viewOverlayActionGroup;
     QActionGroup* m_editorToolActionGroup;
 
-    /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
+    /// crea les accions \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createActions();
 
-    /// Crea la ToolBar d'eines i altres si n'hi ha \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
+    /// Crea la ToolBar d'eines i altres si n'hi ha \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createToolBars();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-    /// Guarda i llegeix les caracter�tiques
+    /// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
 

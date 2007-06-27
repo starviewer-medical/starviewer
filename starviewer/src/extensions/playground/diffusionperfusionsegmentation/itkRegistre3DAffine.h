@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Joaquim Rodríguez i Guerrero                    *
+ *   Copyright (C) 2004 by Joaquim Rodrï¿½uez i Guerrero                    *
  *   u1033967@correu.udg.es                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -51,7 +51,7 @@
 #include "itkCommand.h"
 
 
-class CommandIterationUpdate : public itk::Command 
+class CommandIterationUpdate : public itk::Command
 {
 public:
   typedef  CommandIterationUpdate   Self;
@@ -73,15 +73,15 @@ public:
 
   void Execute(const itk::Object * object, const itk::EventObject & event)
     {
-      OptimizerPointer optimizer = 
+      OptimizerPointer optimizer =
         dynamic_cast< OptimizerPointer >( object );
       if( typeid( event ) != typeid( itk::IterationEvent ) )
         {
         return;
         }
-      std::cout << optimizer->GetCurrentIteration() << "   ";
+/*      std::cout << optimizer->GetCurrentIteration() << "   ";
       std::cout << optimizer->GetValue() << "   ";
-      std::cout << optimizer->GetCurrentPosition() << std::endl;
+      std::cout << optimizer->GetCurrentPosition() << std::endl;*/
     }
 };
 
@@ -98,9 +98,9 @@ class itkRegistre3DAffine
 
   // Tipus Imatge
 
-  
+
   // Es el mateix que hi ha ara hem l'ho de l'exemple.
-  
+
   typedef TFixedImage  FixedImageType;
   typedef TMovingImage MovingImageType;
 
@@ -116,7 +116,7 @@ class itkRegistre3DAffine
   typedef itk::NormalizeImageFilter<FixedImageType, InternalImageType>     FixedNormalizeFilterType;
   typedef itk::NormalizeImageFilter<MovingImageType, InternalImageType >   MovingNormalizeFilterType;
 
- 
+
 
   // Objectes del metode de registre
 
@@ -126,9 +126,9 @@ class itkRegistre3DAffine
 //  typedef itk::RegularStepGradientDescentOptimizer                                         OptimizerType;
 //  typedef itk::GradientDescentOptimizer                                         OptimizerType;
   typedef itk::OnePlusOneEvolutionaryOptimizer                                             OptimizerType;
-  
+
   typedef itk::LinearInterpolateImageFunction<InternalImageType, double>                   InterpolatorType;
-  
+
   typedef itk::ImageRegistrationMethod<InternalImageType, InternalImageType >              RegistrationType;
   typedef itk::MutualInformationImageToImageMetric<InternalImageType, InternalImageType >  MetricType;
 //  typedef itk::MutualInformationHistogramImageToImageMetric<InternalImageType, InternalImageType >  MetricType;
@@ -137,9 +137,9 @@ class itkRegistre3DAffine
   typedef itk::CenteredTransformInitializer< TransformType,FixedImageType,MovingImageType> TransformInitializerType;
 
   typedef itk::DiscreteGaussianImageFilter<InternalImageType, InternalImageType>  GaussianFilterType;
-  
+
   //---------------
-  
+
   typedef typename RegistrationType::ParametersType                              ParametersType;
   typedef itk::ResampleImageFilter<MovingImageType, FixedImageType >              ResampleFilterType;
 
@@ -150,13 +150,13 @@ class itkRegistre3DAffine
 
   typedef OptimizerType::ScalesType                 OptimizerScalesType;
   typedef typename TMovingImage::SpacingType       spacing;
-  
+
   typedef OptimizerType::ParametersType             OptimizerParametersType;
- 
-  
+
+
   typedef itk::ImageRegionIteratorWithIndex<FixedImageType>  FixedIteratorType;
 
- 
+
  // Definim els "objectes" que farem servir
 
  typename TransformType::Pointer             transform;
@@ -164,44 +164,44 @@ class itkRegistre3DAffine
  typename InterpolatorType::Pointer          interpolator;
  typename RegistrationType::Pointer          registration;
  typename MetricType::Pointer                metric;
- 
+
  //typename FixedImageReaderType::Pointer      fixedImageReader;
  //typename MovingImageReaderType::Pointer     movingImageReader;
  typename FixedNormalizeFilterType::Pointer  fixedNormalizer;
  typename MovingNormalizeFilterType::Pointer movingNormalizer;
- 
+
  //typename TransformInitializerType::Pointer  initializer;
 
  typename GaussianFilterType::Pointer        fixedSmoother;
- typename GaussianFilterType::Pointer        movingSmoother; 
+ typename GaussianFilterType::Pointer        movingSmoother;
 
- 
- 
- 
- typename TransformType::Pointer             finalTransform; 
+
+
+
+ typename TransformType::Pointer             finalTransform;
  typename ResampleFilterType::Pointer        resample; //
  typename FixedImageType::Pointer            OutputImage;
- 
+
 
  typename FixedImageType::Pointer            fixedInputImage;
  typename MovingImageType::Pointer           movingInputImage;
- 
+
  typedef typename FixedImageType::SizeType  regionSizeType;
- 
- 
- 
- 
+
+
+
+
 
  double  TranslationAlongX;
  double  TranslationAlongY;
  double  TranslationAlongZ;
  int     numberOfIterations;
  double  bestValue;
- 
+
  int nIterations;
  int MaximumStepLength;
  double MiniumStepLength;
- 
+
 
 
  // ---------- METODES --------------
@@ -210,11 +210,11 @@ class itkRegistre3DAffine
  void SetInputImages(TFixedImage* FixedImage, TMovingImage* MovingImage);
  void SetParamatersMetric(double FStantardDevitation, double MStantardDevitation, int NumberOfSpatialSample);
  void SetParamatersGaussian(int FVariance, int MVariance);
- void SetParamatresOptimizer(int Maximun, double Minium, int Iterations); 
+ void SetParamatresOptimizer(int Maximun, double Minium, int Iterations);
  bool applyMethod();
- 
+
  OptimizerParametersType getFinalParameters();
- 
+
 private:
   OptimizerParametersType m_finalParameters;
  };

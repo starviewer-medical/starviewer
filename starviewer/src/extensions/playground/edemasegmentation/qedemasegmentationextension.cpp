@@ -768,13 +768,14 @@ void QEdemaSegmentationExtension::setPaintCursor()
             setEditorPoint();
         }
 
-        if(m_editorTool == QEdemaSegmentationExtension::Erase || m_editorTool == QEdemaSegmentationExtension::Paint)
+        double pos[3];
+        m_2DView->getCurrentCursorPosition(pos);
+        if((m_editorTool == QEdemaSegmentationExtension::Erase || m_editorTool == QEdemaSegmentationExtension::Paint)&&(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) ))
         {
             int size = m_editorSize->value();
-            double pos[3];
             double spacing[3];
             m_lesionMaskVolume->getSpacing(spacing);
-            m_2DView->getCurrentCursorPosition(pos);
+
             vtkPoints *points = vtkPoints::New();
             points->SetNumberOfPoints(4);
 
