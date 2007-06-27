@@ -20,7 +20,7 @@
 #include <QCloseEvent>
 #include <QHeaderView>
 
-#include "study.h"
+#include "dicomstudy.h"
 #include "converttodicomdir.h"
 #include "status.h"
 #include "logging.h"
@@ -179,7 +179,7 @@ void QCreateDicomdir::setDicomdirSize()
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
 }
 
-void QCreateDicomdir::addStudy( Study study )
+void QCreateDicomdir::addStudy( DICOMStudy study )
 {
     CacheImageDAL cacheImageDAL;
     DicomMask imageMask;

@@ -9,7 +9,7 @@
 
 namespace udg {
 
-class Study;
+class DICOMStudy;
 class Status;
 class StudyList;
 class DicomMask;
@@ -43,14 +43,14 @@ public:
      * @param Study[in]  Informació de l'estudi
      * @return retorna l'estat de l'inserció
      */
-    Status insertStudy( Study * );
+    Status insertStudy( DICOMStudy * );
 
      /*  Insereix estudi
      *
      * @param Study[in]  Informació de l'estudi
      * @return retorna l'estat de l'inserció
      */
-    Status insertStudyDicomdir( Study * );
+    Status insertStudyDicomdir( DICOMStudy * );
 
 
     /** Cerca els estudis que compleixen la màscara a la caché
@@ -65,7 +65,7 @@ public:
      * @param  StudyList amb els resultats
      * @return retorna estat del mètode
      */
-    Status queryStudy( QString studyUID , Study &study );
+    Status queryStudy( QString studyUID , DICOMStudy &study );
 
     /** Selecciona els estudis vells que no han estat visualitzats des de una data inferior a la que es passa per parametre
      * @param Data a partir de la qual es seleccionaran els estudis vells
@@ -119,7 +119,7 @@ public:
      * @param updateStudy
      * @return
      */
-    Status updateStudy( Study updateStudy );
+    Status updateStudy( DICOMStudy updateStudy );
 
     ~CacheStudyDAL();
 

@@ -4,14 +4,14 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGPATIENTSTUDY_H
-#define UDGPATIENTSTUDY_H
+#ifndef UDGSTUDY_H
+#define UDGSTUDY_H
 
 #include <QObject>
 #include <QString>
 #include <QDateTime>
 #include <QHash>
-#include "patientserie.h"
+#include "serie.h"
 
 namespace udg {
 
@@ -23,13 +23,13 @@ Classe que encapsula l'estudi d'un pacient
 
 class Patient;
 
-class PatientStudy : public QObject
+class Study : public QObject
 {
 Q_OBJECT
 public:
-    PatientStudy( Patient *parentPatient, QObject *parent = 0);
+    Study( Patient *parentPatient, QObject *parent = 0);
 
-    ~PatientStudy();
+    ~Study();
 
     /// Assignar/Obtenir l'identificador universal de l'estudi
     void setUID( QString uid );
@@ -70,13 +70,13 @@ public:
     QString getTimeAsString();
 
     /// Afegeix una nova sèrie
-    void addSerie( PatientSerie *patientSerie );
+    void addSerie( Serie *serie );
 
     /// Li treu a l'estudi la sèrie amb la clau 'key'
     void removeSerie( QString key );
 
     /// Obté la sèrie amb clau 'key'
-    PatientSerie *getSerie( QString key );
+    Serie *getSerie( QString key );
 
 private:
     /// Identificador Universal de l'estudi
@@ -98,7 +98,7 @@ private:
     QDateTime m_dateTime;
 
     /// Taula de Hash que conté les sèries de l'estudi
-    typedef QHash< QString , PatientSerie* > SeriesHashType;
+    typedef QHash< QString , Serie* > SeriesHashType;
     SeriesHashType m_seriesHash;
 
     /// L'entitat Patient a la qual pertany aquest estudi

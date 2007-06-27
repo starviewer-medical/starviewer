@@ -11,7 +11,7 @@
 #include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
 #include "dcdeftag.h" //provide the information for the tags
 #include "status.h"
-#include "study.h"
+#include "dicomstudy.h"
 #include "studylist.h"
 #include "series.h"
 #include "serieslist.h"
@@ -55,7 +55,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , DicomMask studyMask )
     DcmDirectoryRecord *root = &( m_dicomdir->getRootRecord() );//accedim a l'estructura d'arbres del dicomdir
     DcmDirectoryRecord *patientRecord = root->getSub( 0 );//accedim al primer pacient
     OFString text;
-    Study study;
+    DICOMStudy study;
 
     //En aquest primer while accedim al patient Record a nivell de dades de pacient
     while ( patientRecord != NULL )
@@ -276,7 +276,7 @@ QString ReadDicomdir::getDicomdirPath()
 }
 
 //Per fer el match seguirem els criteris del PACS
-bool ReadDicomdir::matchStudyMask( Study study , DicomMask studyMask )
+bool ReadDicomdir::matchStudyMask( DICOMStudy study , DicomMask studyMask )
 {
     if ( !matchStudyMaskStudyId( studyMask.getStudyId() , study.getStudyId() ) ) return false;
 

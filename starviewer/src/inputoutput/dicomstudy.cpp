@@ -1,12 +1,12 @@
-#include "study.h"
+#include "dicomstudy.h"
 
 namespace udg{
 
-Study::Study()
+DICOMStudy::DICOMStudy()
 {
 }
 
-Study::Study( DcmDataset * studyDcmDataset )
+DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
 {
     const char *text;
 
@@ -29,19 +29,19 @@ Study::Study( DcmDataset * studyDcmDataset )
     studyDcmDataset->findAndGetString( DCM_PatientsAge , text , false );
     if ( text != NULL ) setPatientAge( text );
 
-    //set Study ID
+    //set DICOMStudy ID
     studyDcmDataset->findAndGetString( DCM_StudyID , text , false );
     if ( text != NULL ) setStudyId( text );
 
-    //set Study Date
+    //set DICOMStudy Date
     studyDcmDataset->findAndGetString( DCM_StudyDate , text , false );
     if ( text != NULL ) setStudyDate( text );
 
-        //set Study Description
+        //set DICOMStudy Description
     studyDcmDataset->findAndGetString( DCM_StudyDescription , text , false );
     if ( text != NULL ) setStudyDescription( text );
 
-    //set Study Time
+    //set DICOMStudy Time
     studyDcmDataset->findAndGetString( DCM_StudyTime , text , false );
     if ( text != NULL ) setStudyTime( text );
 
@@ -49,7 +49,7 @@ Study::Study( DcmDataset * studyDcmDataset )
     studyDcmDataset->findAndGetString( DCM_InstitutionName , text , false );
     if ( text != NULL ) setInstitutionName( text );
 
-    //set StudyUID
+    //set DICOMStudyUID
     studyDcmDataset->findAndGetString( DCM_StudyInstanceUID , text , false );
     if ( text != NULL ) setStudyUID( text );
 
@@ -57,7 +57,7 @@ Study::Study( DcmDataset * studyDcmDataset )
     studyDcmDataset->findAndGetString( DCM_AccessionNumber , text , false );
     if ( text != NULL ) setAccessionNumber( text );
 
-    //set Study Modality
+    //set DICOMStudy Modality
     studyDcmDataset->findAndGetString( DCM_ModalitiesInStudy, text , false );
     if ( text != NULL ) setStudyModality( text );
 
@@ -69,7 +69,7 @@ Study::Study( DcmDataset * studyDcmDataset )
     if ( text != NULL ) setReferringPhysiciansName( text );
 }
 
-bool Study::operator < ( Study a )
+bool DICOMStudy::operator < ( DICOMStudy a )
 {
     if ( m_patientName<a.getPatientName() )
     {
@@ -82,82 +82,82 @@ bool Study::operator < ( Study a )
 /*                                    SET STUDY FIELDS                                                               */
 /********************************************************************************************************************/
 
-void Study:: setPatientName( QString name )
+void DICOMStudy:: setPatientName( QString name )
 {
     m_patientName = name;
 }
 
-void Study::setPatientBirthDate( QString date )
+void DICOMStudy::setPatientBirthDate( QString date )
 {
     m_patientBirthDate = date;
 }
 
-void Study::setPatientId( QString id )
+void DICOMStudy::setPatientId( QString id )
 {
     m_patientId = id;
 }
 
-void Study::setPatientSex( QString sex )
+void DICOMStudy::setPatientSex( QString sex )
 {
     m_patientSex = sex;
 }
 
-void Study::setPatientAge( QString age )
+void DICOMStudy::setPatientAge( QString age )
 {
     m_patientAge = age;
 }
 
-void Study::setStudyId( QString id )
+void DICOMStudy::setStudyId( QString id )
 {
     m_studyId = id;
 }
 
-void Study::setStudyDate( QString date )
+void DICOMStudy::setStudyDate( QString date )
 {
     m_studyDate = date;
 }
 
-void Study::setStudyDescription( QString desc )
+void DICOMStudy::setStudyDescription( QString desc )
 {
     m_studyDescription = desc;
 }
 
-void Study::setStudyTime( QString time )
+void DICOMStudy::setStudyTime( QString time )
 {
     m_studyTime = time;
 }
 
-void Study::setStudyModality( QString modality )
+void DICOMStudy::setStudyModality( QString modality )
 {
     m_studyModality = modality;
 }
 
-void Study::setStudyUID( QString uid )
+void DICOMStudy::setStudyUID( QString uid )
 {
     m_studyUID = uid;
 }
 
-void Study::setInstitutionName( QString institution )
+void DICOMStudy::setInstitutionName( QString institution )
 {
     m_studyModality = institution;
 }
 
-void Study::setAccessionNumber( QString accession )
+void DICOMStudy::setAccessionNumber( QString accession )
 {
     m_accessionNumber = accession;
 }
 
-void Study::setPacsAETitle( QString title )
+void DICOMStudy::setPacsAETitle( QString title )
 {
     m_pacsAETitle = title;
 }
 
-void Study::setAbsPath( QString path )
+void DICOMStudy::setAbsPath( QString path )
 {
     m_absPath = path;
 }
 
-void Study::setReferringPhysiciansName( QString referringPhysiciansName )
+void DICOMStudy::setReferringPhysiciansName( QString referringPhysiciansName )
 {
     m_referringPhysiciansName = referringPhysiciansName;
 }
@@ -166,82 +166,82 @@ void Study::setReferringPhysiciansName( QString referringPhysiciansName )
 /*                                    GET STUDY FIELDS                                                                */
 /**********************************************************************************************************************/
 
-QString Study:: getPatientName()
+QString DICOMStudy:: getPatientName()
 {
     return m_patientName;
 }
 
-QString Study::getPatientBirthDate()
+QString DICOMStudy::getPatientBirthDate()
 {
     return m_patientBirthDate;
 }
 
-QString Study::getPatientId()
+QString DICOMStudy::getPatientId()
 {
     return m_patientId;
 }
 
-QString Study::getPatientSex()
+QString DICOMStudy::getPatientSex()
 {
     return m_patientSex;
 }
 
-QString Study::getPatientAge()
+QString DICOMStudy::getPatientAge()
 {
     return m_patientAge;
 }
 
-QString Study::getStudyId()
+QString DICOMStudy::getStudyId()
 {
     return m_studyId;
 }
 
-QString Study::getStudyDate()
+QString DICOMStudy::getStudyDate()
 {
     return m_studyDate;
 }
 
-QString Study::getStudyTime()
+QString DICOMStudy::getStudyTime()
 {
     return m_studyTime;
 }
 
-QString Study::getStudyDescription()
+QString DICOMStudy::getStudyDescription()
 {
     return m_studyDescription;
 }
 
-QString Study::getStudyModality()
+QString DICOMStudy::getStudyModality()
 {
     return m_studyModality;
 }
 
-QString Study::getStudyUID()
+QString DICOMStudy::getStudyUID()
 {
     return m_studyUID;
 }
 
-QString Study::getInstitutionName()
+QString DICOMStudy::getInstitutionName()
 {
     return m_institutionName;
 }
 
-QString Study::getAccessionNumber()
+QString DICOMStudy::getAccessionNumber()
 {
     return m_accessionNumber;
 }
 
-QString Study::getPacsAETitle()
+QString DICOMStudy::getPacsAETitle()
 {
     return m_pacsAETitle;
 }
 
-QString Study::getReferringPhysiciansName()
+QString DICOMStudy::getReferringPhysiciansName()
 {
     return m_referringPhysiciansName;
 }
 
-QString Study::getAbsPath()
+QString DICOMStudy::getAbsPath()
 {
     return m_absPath;
 }

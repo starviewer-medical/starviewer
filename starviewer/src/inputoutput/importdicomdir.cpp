@@ -15,7 +15,7 @@
 #include "studylist.h"
 #include "serieslist.h"
 #include "imagelist.h"
-#include "study.h"
+#include "dicomstudy.h"
 #include "series.h"
 #include "image.h"
 #include "dicommask.h"
@@ -55,7 +55,7 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     SeriesList seriesList;
     QString studyPath;
     StarviewerSettings starviewerSettings;
-    Study study;
+    DICOMStudy study;
     Series serie;
     ScaleStudy scaleDicomStudy;
 

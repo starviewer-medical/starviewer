@@ -38,7 +38,7 @@ class PacsConnection;
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 namespace udg{
 
-class Study;
+class DICOMStudy;
 class Status;
 
 class QueryPacs

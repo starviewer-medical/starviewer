@@ -35,8 +35,8 @@ HEADERS += extensionfactory.h \
            q3dviewer.h \
            qviewer.h \
            patient.h \
-           patientserie.h \
-           patientstudy.h \
+           serie.h \
+           study.h \
            parameters.h \
            qinputparameters.h \
            tool.h \
@@ -89,8 +89,8 @@ SOURCES += extensionmediator.cpp \
            q3dviewer.cpp \
            qviewer.cpp \
            patient.cpp \
-           patientserie.cpp \
-           patientstudy.cpp \
+           serie.cpp \
+           study.cpp \
            parameters.cpp \
            qinputparameters.cpp \
            tool.cpp \

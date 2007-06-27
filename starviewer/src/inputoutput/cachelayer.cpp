@@ -28,7 +28,7 @@ Status CacheLayer::clearCache()
 {
     CacheStudyDAL cacheStudyDAL;
     StudyList studyList;
-    Study study;
+    DICOMStudy study;
     Status state;
     CachePool pool;
     unsigned usedSpaceInit , usedSpace;
@@ -73,7 +73,7 @@ Status CacheLayer::deleteOldStudies()
     StarviewerSettings settings;
     StudyList studyList;
     Status state;
-    Study study;
+    DICOMStudy study;
     int comptador = 0;
     QString logMessage , numberOfDeletedStudies;
     CacheStudyDAL cacheStudyDAL;
@@ -119,7 +119,7 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
     StarviewerSettings settings;
     StudyList studyList;
     Status state;
-    Study study;
+    DICOMStudy study;
     CachePool pool;
     unsigned int usedSpaceInit = 0 , usedSpace = 0;
     int deletedSpace = 0;

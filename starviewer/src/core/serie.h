@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGPATIENTSERIE_H
-#define UDGPATIENTSERIE_H
+#ifndef UDGSERIE_H
+#define UDGSERIE_H
 
 #include <QObject>
 #include <QString>
@@ -25,13 +25,13 @@ La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. 
 
 class Volume;
 
-class PatientSerie : public QObject
+class Serie : public QObject
 {
 Q_OBJECT
 public:
-    PatientSerie(QObject *parent = 0);
+    Serie(QObject *parent = 0);
 
-    ~PatientSerie();
+    ~Serie();
 
     /// Assignar/Obtenir l'identificador universal de la sèrie
     void setUID( QString uid );

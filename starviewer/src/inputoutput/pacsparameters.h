@@ -20,7 +20,7 @@
  */
 namespace udg{
 
-class Study;
+class DICOMStudy;
 class PacsParameters
 {
 

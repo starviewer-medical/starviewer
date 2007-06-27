@@ -293,7 +293,7 @@ struct retrieveParameters
      * @param estudi a insertat
      * @return retorna si la operacio s'ha realitzat amb èxit
      */
-    Status insertStudyCache( Study );
+    Status insertStudyCache( DICOMStudy );
 
     /// Cerca als pacs seleccionats
     void queryStudyPacs();

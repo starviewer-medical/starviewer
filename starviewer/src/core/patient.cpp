@@ -83,9 +83,9 @@ void Patient::setHeight( double height )
     m_height = height;
 }
 
-void Patient::addStudy( PatientStudy *patientStudy )
+void Patient::addStudy( Study *study )
 {
-    m_studiesHash[ patientStudy->getKey() ] = patientStudy;
+    m_studiesHash[ study->getKey() ] = study;
 }
 
 void Patient::removeStudy( QString key )
@@ -93,7 +93,7 @@ void Patient::removeStudy( QString key )
     m_studiesHash.remove( key );
 }
 
-PatientStudy *Patient::getStudy( QString key )
+Study *Patient::getStudy( QString key )
 {
     return m_studiesHash[ key ];
 }

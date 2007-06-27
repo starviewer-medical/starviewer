@@ -19,7 +19,7 @@ StudyList::StudyList()
     m_iterator = m_listStudy.begin();
 }
 
-void StudyList::insert( Study study )
+void StudyList::insert( DICOMStudy study )
 {
     sem_wait( m_semafor );
     m_listStudy.push_back( study );
@@ -74,7 +74,7 @@ bool StudyList::exists( QString UID , QString AETitlePacs )
     return ( m_iterator != m_listStudy.end() );
 }
 
-Study StudyList::getStudy()
+DICOMStudy StudyList::getStudy()
 {
     return ( *m_iterator );
 }

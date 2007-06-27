@@ -3,7 +3,7 @@
 
 #define HAVE_CONFIG_H 1
 #include <cond.h>
-#include "study.h"
+#include "dicomstudy.h"
 #include <list>
 #include <semaphore.h>
 
@@ -21,7 +21,7 @@ class StudyList{
     /** This action inserts a Study at the end of the list
      * @param  Study
      */
-    void insert( Study study );
+    void insert( DICOMStudy study );
 
     /**This actions put the pointer of the list at the firts study.
      *It's very important before start to read, cals this action, else the pointer will be at the end of the list, and if we try to read, it will produce a segmentation fault
@@ -44,7 +44,7 @@ class StudyList{
     /** Retorna la llista a la que esa apuntant l'iterador
      * @return estudi a la que apunta la llista
      */
-    Study getStudy();
+    DICOMStudy getStudy();
 
     /** Indica si un determinat estudi d'un determinat PACS està dins la llista
      * @param studyUID UID de l'estudi
@@ -63,8 +63,8 @@ private :
 
     sem_t *m_semafor;
 
-    list< Study > m_listStudy;
-    list< Study >::iterator m_iterator;
+    list< DICOMStudy > m_listStudy;
+    list< DICOMStudy >::iterator m_iterator;
 };
 };
 #endif

@@ -22,7 +22,7 @@ HEADERS += const.h \
            starviewersettings.h \
            status.h \
            struct.h \
-           study.h \
+           dicomstudy.h \
            studylistsingleton.h \
            studylist.h \
            seriesvolum.h \
@@ -70,7 +70,7 @@ SOURCES += databaseconnection.cpp \
            serieslistsingleton.cpp \
            starviewersettings.cpp \
            status.cpp \
-           study.cpp \
+           dicomstudy.cpp \
            studylistsingleton.cpp \
            studylist.cpp \
            seriesvolum.cpp \

@@ -13,7 +13,7 @@
 
 namespace udg {
 
-class Study;
+class DICOMStudy;
 class Status;
 
 /**
@@ -28,7 +28,7 @@ public:
     /** Afegeix un estudi per convertir a dicomdir
      * @param study estudi per convertir a dicomdir
      */
-    void addStudy( Study study );
+    void addStudy( DICOMStudy study );
 
     ///Neteja el directori temporal utilitzat crear els dicomdir que es gravaran en cd o dvd
     void clearTemporaryDir();

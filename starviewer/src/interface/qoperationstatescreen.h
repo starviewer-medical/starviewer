@@ -10,7 +10,7 @@
 #include <QString>
 #include <semaphore.h>
 
-#include "study.h"
+#include "dicomstudy.h"
 #include "image.h"
 #include "ui_qoperationstatescreenbase.h"
 

@@ -1,5 +1,5 @@
-#ifndef STUDY
-#define STUDY
+#ifndef DICOMSTUDY_H
+#define DICOMSTUDY_H
 
 #include <QString>
 
@@ -13,22 +13,22 @@
 
 namespace udg{
 
-class Study{
+class DICOMStudy{
 public:
 
     ///constructor de la classe
-    Study();
+    DICOMStudy();
 
     /** Constructor de la classe a partir d'un objecte DcmDataset de les dcmtk
      * @param Objecte DcmDataset a partir del qual construir l'estudi
      */
-    Study( DcmDataset * );
+    DICOMStudy( DcmDataset * );
 
     /** Operador de la classe
      * @param  Estudi amb el que sl'ha de comprar
      * @return cert si és menor
      */
-    bool operator<(Study);
+    bool operator<(DICOMStudy);
 
     /** This action set the Patient's name.
      * @return  Patient's Name
@@ -55,33 +55,33 @@ public:
      */
     void setPatientAge( QString );
 
-    /** This action set the Study Id
-     * @param Study Id
+    /** This action set the DICOMStudy Id
+     * @param DICOMStudy Id
      */
     void setStudyId( QString );
 
-    /** This action set the Study date
-     * @param Study date
+    /** This action set the DICOMStudy date
+     * @param DICOMStudy date
      */
     void setStudyDate( QString );
 
-    /** This action set the Study Description
-     * @param Study Description
+    /** This action set the DICOMStudy Description
+     * @param DICOMStudy Description
      */
     void setStudyDescription( QString );
 
-    /** This action set the Study Modality
-     * @param Study modality
+    /** This action set the DICOMStudy Modality
+     * @param DICOMStudy modality
      */
     void setStudyModality( QString );
 
-    /** This action set the Study time
-     * @param Study time
+    /** This action set the DICOMStudy time
+     * @param DICOMStudy time
      */
     void setStudyTime( QString );
 
-    /** This action set the Study UID
-     * @param Study UID
+    /** This action set the DICOMStudy UID
+     * @param DICOMStudy UID
      */
     void setStudyUID( QString );
 
@@ -135,28 +135,28 @@ public:
      */
     QString getPatientAge();
 
-    /** This function get the Study Id.
-     *              @return  Study's Id
+    /** This function get the DICOMStudy Id.
+     *              @return  DICOMStudy's Id
      */
     QString getStudyId();
 
-    /** This function get the Study Date.
-     *              @return  Study's Date
+    /** This function get the DICOMStudy Date.
+     *              @return  DICOMStudy's Date
      */
     QString getStudyDate();
 
-    /** This function get the Study Time.
-     *              @return  Study's Time
+    /** This function get the DICOMStudy Time.
+     *              @return  DICOMStudy's Time
      */
     QString getStudyTime();
 
-    /** This function get the Study Description
-     *              @return  Study's Description
+    /** This function get the DICOMStudy Description
+     *              @return  DICOMStudy's Description
      */
     QString getStudyDescription();
 
-    /** This function get the Study Modality.
-     *              @return  Study's Modality
+    /** This function get the DICOMStudy Modality.
+     *              @return  DICOMStudy's Modality
      */
     QString getStudyModality();
 
@@ -165,8 +165,8 @@ public:
      */
     QString getInstitutionName();
 
-    /** This function get the Study UID.
-     *              @return  Study's UID
+    /** This function get the DICOMStudy UID.
+     *              @return  DICOMStudy's UID
      */
     QString getStudyUID();
 

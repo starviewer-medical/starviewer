@@ -21,7 +21,7 @@ class StudyList;
 class SeriesList;
 class ImageList;
 class DicomMask;
-class Study;
+class DICOMStudy;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
   * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a realitzar cerques.
@@ -76,7 +76,7 @@ private :
      * @param studyMask màscara de l'estudi
      * @return cert si l'estudi complei la màscara
      */
-    bool matchStudyMask( Study study , DicomMask studyMask );
+    bool matchStudyMask( DICOMStudy study , DicomMask studyMask );
 
     /** Comprova que els dos StudyId el de la màscara i el de l'estudi siguin iguals. Si l'estudi Id de la màscara està buit, per defecte retorna cert
      * @param studyMaskStudyId studyId de la màscara

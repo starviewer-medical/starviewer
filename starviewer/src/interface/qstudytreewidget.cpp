@@ -28,7 +28,7 @@
 #include "pacslistdb.h"
 #include "starviewersettings.h"
 #include "studylist.h"
-#include "study.h"
+#include "dicomstudy.h"
 #include "serieslist.h"
 #include "series.h"
 #include "imagelist.h"
@@ -160,7 +160,7 @@ void QStudyTreeWidget::insertStudyList( StudyList *studyList )
     }
 }
 
-void QStudyTreeWidget::insertStudy( Study *study)
+void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
     QString text;
     Status state;

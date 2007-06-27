@@ -11,7 +11,7 @@
 #include "cachestudydal.h"
 #include "status.h"
 #include "databaseconnection.h"
-#include "study.h"
+#include "dicomstudy.h"
 #include "studylist.h"
 #include "cachepool.h"
 #include "logging.h"
@@ -27,7 +27,7 @@ CacheStudyDAL::~CacheStudyDAL()
 {
 }
 
-Status CacheStudyDAL::insertStudy( Study *study )
+Status CacheStudyDAL::insertStudy( DICOMStudy *study )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     QString sqlSentence;
@@ -112,7 +112,7 @@ Status CacheStudyDAL::insertStudy( Study *study )
     return state;
 }
 
-Status CacheStudyDAL::insertStudyDicomdir( Study *study )
+Status CacheStudyDAL::insertStudyDicomdir( DICOMStudy *study )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     QString sqlSentence;
@@ -192,7 +192,7 @@ Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
-    Study stu;
+    DICOMStudy stu;
     char **reply = NULL , **error = NULL;
     Status state;
 
@@ -239,7 +239,7 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
-    Study stu;
+    DICOMStudy stu;
     QString sqlSentence;
 
     sqlSentence = QString( "select PatId, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali "
@@ -286,7 +286,7 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
     return state;
 }
 
-Status CacheStudyDAL::queryStudy( QString studyUID , Study &study )
+Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
@@ -352,7 +352,7 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
-    Study selectedStudy;
+    DICOMStudy selectedStudy;
     char **resposta = NULL , **error = NULL;
     Status state;
     QString sqlSentence;
@@ -689,7 +689,7 @@ Status CacheStudyDAL::updateStudyAccTime( QString studyUID )
     return state;
 }
 
-Status CacheStudyDAL::updateStudy( Study updateStudy )
+Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int stateDatabase;

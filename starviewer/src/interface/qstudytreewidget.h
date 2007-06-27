@@ -31,7 +31,7 @@ namespace udg {
 */
 
 class StudyList;
-class Study;
+class DICOMStudy;
 class SeriesList;
 class Series;
 class ImageList;
@@ -53,7 +53,7 @@ public:
     /** Inseriex la informació d'un estudi
      * @param Dades de l'estudi
      */
-    void insertStudy( Study * );
+    void insertStudy( DICOMStudy * );
 
     /** Insereix un llista de sèries a l'estudi seleccionat actualment
      * @param seriesList series afegir

@@ -23,7 +23,7 @@
 #include "dicommask.h"
 #include "serieslist.h"
 #include "imagelist.h"
-#include "study.h"
+#include "dicomstudy.h"
 #include "series.h"
 #include "image.h"
 #include "convertdicomtolittleendian.h"
@@ -50,7 +50,7 @@ void ConvertToDicomdir::addStudy( QString studyUID )
      dicomdir ja ordenats per pacient*/
     StudyToConvert studyToConvert;
     CacheStudyDAL cacheStudyDAL;
-    Study study;
+    DICOMStudy study;
     int index = 0;
     bool stop = false;
 

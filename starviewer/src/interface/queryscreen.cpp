@@ -968,7 +968,7 @@ void QueryScreen::retrievePacs( bool view )
     PacsListDB pacsListDB;
     StarviewerSettings settings;
     QString pacsAETitle;
-    Study studyToRetrieve;
+    DICOMStudy studyToRetrieve;
 
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
 
@@ -1061,11 +1061,11 @@ void QueryScreen::retrievePacs( bool view )
     QApplication::restoreOverrideCursor();
 }
 
-Status QueryScreen::insertStudyCache( Study stu )
+Status QueryScreen::insertStudyCache( DICOMStudy stu )
 {
     QString absPath;
     Status state;
-    Study study = stu;
+    DICOMStudy study = stu;
     StarviewerSettings settings;
     CacheStudyDAL cacheStudyDAL;
 
@@ -1164,7 +1164,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     CacheImageDAL cacheImageDAL;
     Status state;
     StudyList stuList;
-    Study stu;
+    DICOMStudy stu;
     DicomMask mask;
     SeriesList seriesList;
     Series series;
@@ -1268,7 +1268,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
     Status state;
     StudyList stuList;
     DicomMask studyMask;
-    Study stu;
+    DICOMStudy stu;
     SeriesList seriesList;
     Series series;
     QString absSeriesPath , logMessage;
@@ -1421,7 +1421,7 @@ void QueryScreen::deleteStudyCache()
 
 void QueryScreen::studyRetrieveFinished( QString studyUID )
 {
-    Study study;
+    DICOMStudy study;
     CacheStudyDAL cacheStudyDAL;
     Status state;
 
@@ -1528,7 +1528,7 @@ void QueryScreen::resizePacsList()
 void QueryScreen::convertToDicomdir( QString studyUID )
 {
     CacheStudyDAL cacheStudyDAL;
-    Study study;
+    DICOMStudy study;
 
     //busquem la informació de l'estudi
     cacheStudyDAL.queryStudy( studyUID , study );
@@ -1581,7 +1581,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     Operation storeStudyOperation;
     DicomMask dicomMask;
     Status state;
-    Study study;
+    DICOMStudy study;
     PacsList pacsList;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );

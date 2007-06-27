@@ -11,7 +11,7 @@
 #include <QString>
 #include <QDate>
 #include <QHash>
-#include "patientstudy.h"
+#include "study.h"
 
 namespace udg {
 
@@ -61,13 +61,13 @@ public:
     double getHeight() const { return m_height; };
 
     /// Afegeix un nou estudi
-    void addStudy( PatientStudy *patientStudy );
+    void addStudy( Study *study );
 
     /// Li treu al pacient l'estudi amb la clau 'key'
     void removeStudy( QString key );
 
     /// Obté l'estudi amb clau 'key'
-    PatientStudy* getStudy( QString key );
+    Study* getStudy( QString key );
 
     /// Retorna cert si aquest pacient té assignat l'estudi amb clau 'key', fals altrament
     bool studyExists( QString key );
@@ -95,7 +95,7 @@ private:
     double m_height;
 
     /// Taula de hash que conté els estudis del pacient
-    typedef QHash< QString , PatientStudy* > StudiesHashType;
+    typedef QHash< QString , Study* > StudiesHashType;
     StudiesHashType m_studiesHash;
 
 };
