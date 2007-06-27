@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
@@ -26,21 +26,30 @@
 
 namespace udg {
 
+
 Slicer::Slicer( unsigned char id )
 {
     m_id = id;
+
+    m_input = 0;
     m_matrix = vtkMatrix4x4::New();
+
+    m_reslicedImage = 0;
 }
 
 
 Slicer::~Slicer()
 {
+    if ( m_input ) m_input->Delete();
+    m_matrix->Delete();
+
+    if ( m_reslicedImage ) m_reslicedImage->Delete();
 }
 
 
 void Slicer::setInput( vtkImageData * input )
 {
-    m_input = input;
+    m_input = input; m_input->Register( 0 );
     double range[2];
     m_input->GetScalarRange( range );
     m_nLabels = static_cast< unsigned char >( round( range[1] ) ) + 1;
@@ -74,10 +83,9 @@ void Slicer::reslice()
     resliceAxes->SetElement( 0, 3, 0.0 );
     resliceAxes->SetElement( 1, 3, 0.0 );
     resliceAxes->SetElement( 2, 3, 0.0 );
-    resliceAxes->Print( std::cout );
 
     // Extract a slice in the desired orientation
-    vtkImageReslice *reslice = vtkImageReslice::New();
+    vtkImageReslice * reslice = vtkImageReslice::New();
     reslice->SetInput( m_input );
     reslice->SetOutputDimensionality( 3 );
     reslice->SetResliceAxes( resliceAxes );
@@ -85,38 +93,34 @@ void Slicer::reslice()
     reslice->SetBackgroundLevel( 255.0 );
     reslice->SetOutputSpacing( m_xSpacing, m_ySpacing, m_zSpacing );
     reslice->Update();
-    reslice->Print( std::cout );
+//     reslice->Print( std::cout );
 
+    // Trobar l'extent mínim
     vtkImageData * resliced = reslice->GetOutput();
     unsigned char * data = reinterpret_cast< unsigned char * >( resliced->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-
-    // trobar el millor extent
     int increments[3];
     resliced->GetIncrements( increments );
     int dims[3];
     resliced->GetDimensions( dims );
-
     int minX, maxX, minY, maxY, minZ, maxZ;
     findExtent( data, dims[0], dims[1], dims[2], increments[0], increments[1], increments[2], minX, maxX );
     findExtent( data, dims[1], dims[0], dims[2], increments[1], increments[0], increments[2], minY, maxY );
     findExtent( data, dims[2], dims[0], dims[1], increments[2], increments[0], increments[1], minZ, maxZ );
-    DEBUG_LOG( qPrintable( QString( "minX = %1, maxX = %2" ).arg( minX ).arg( maxX ) ) );
-    DEBUG_LOG( qPrintable( QString( "minY = %1, maxY = %2" ).arg( minY ).arg( maxY ) ) );
-    DEBUG_LOG( qPrintable( QString( "minZ = %1, maxZ = %2" ).arg( minZ ).arg( maxZ ) ) );
+    DEBUG_LOG( QString( "minX = %1, maxX = %2" ).arg( minX ).arg( maxX ) );
+    DEBUG_LOG( QString( "minY = %1, maxY = %2" ).arg( minY ).arg( maxY ) );
+    DEBUG_LOG( QString( "minZ = %1, maxZ = %2" ).arg( minZ ).arg( maxZ ) );
 
+    // Retallar la imatge fins al mínim extent
     vtkImageClip * clip = vtkImageClip::New();
     clip->SetInput( reslice->GetOutput() );
     clip->SetOutputWholeExtent( minX, maxX, minY, maxY, minZ, maxZ );
     clip->ClipDataOn();
     clip->Update();
 
+    // Guardar la nova imatge en un fitxer
     vtkImageData * clipped = clip->GetOutput();
     unsigned char * clippedData = reinterpret_cast< unsigned char * >( clipped->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     int size = clipped->GetPointData()->GetScalars()->GetSize();
-
-
-
-
     QFile outFile( QDir::tempPath().append( QString( "/resliced%1.raw" ).arg( static_cast< short >( m_id ) ) ) );
     if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
@@ -139,28 +143,213 @@ void Slicer::reslice()
         outFileMhd.close();
     }
 
+    // Informació sobre la nova imatge
+//     DEBUG_LOG( "------------------------------------------------------------" );
+//     clipped->Print( std::cout );
+//     DEBUG_LOG( "============================================================" );
 
-    std::cout << "-------------------------------------------------------------" << std::endl;
-    clipped->Print( std::cout );
-    std::cout << "=============================================================" << std::endl;
-
-
-
+    // Guardar la nova imatge als atributs de l'objecte
     m_reslicedImage = clip->GetOutput(); m_reslicedImage->Register( 0 );
-    m_reslicedData = reinterpret_cast<unsigned char *>( m_reslicedImage->GetPointData()->GetScalars()->GetVoidPointer(0) );
+    m_reslicedData = reinterpret_cast< unsigned char * >( m_reslicedImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_reslicedDataSize = m_reslicedImage->GetPointData()->GetScalars()->GetSize();
-    std::cout << "[Slicer] resliced data size = " << m_reslicedDataSize << std::endl;
+    DEBUG_LOG( QString( "[Slicer] resliced data size = %1" ).arg( m_reslicedDataSize ) );
     int dimensions[3];
     m_reslicedImage->GetDimensions( dimensions );
     m_sliceSize = dimensions[0] * dimensions[1];
-    std::cout << "[Slicer] slice size = " << m_sliceSize << std::endl;
+    DEBUG_LOG( QString( "[Slicer] slice size = %1" ).arg( m_sliceSize ) );
     m_sliceCount = dimensions[2];
-    std::cout << "[Slicer] slice count = " << m_sliceCount << std::endl;
-    std::cout << "[Slicer] n labels = " << (short) m_nLabels << std::endl;
+    DEBUG_LOG( QString( "[Slicer] slice count = %1" ).arg( m_sliceCount ) );
+    DEBUG_LOG( QString( "[Slicer] n labels = %1" ).arg( static_cast< short >( m_nLabels ) ) );
 
-
+    // Destruir els objectes creats
     reslice->Delete();
     clip->Delete();
+}
+
+
+void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
+{
+    DEBUG_LOG( "[*SMI*] ------------------ computeSmi 0 ------------------ " );
+    // Primer una passada per tenir un histograma independent de les llesques
+    Histogram oneHistogram( m_nLabels ); // to rule them all
+    for ( unsigned int i = 0; i < m_reslicedDataSize; i++ )
+    {
+        unsigned char value = m_reslicedData[i];
+        if ( value < m_nLabels && value > 0 )    // no comptem cap background
+            oneHistogram.add( value );
+    }
+    QVector< double > p_o_;
+    double oneCount = oneHistogram.count();
+    DEBUG_LOG( QString( "[*SMI*] one count = %1" ).arg( oneCount ) );
+    QVectorIterator< unsigned long > * itOneHistogram = oneHistogram.getIterator();
+    while ( itOneHistogram->hasNext() )
+    {
+        double d = itOneHistogram->next() / oneCount;
+        p_o_.append( d );
+        DEBUG_LOG( QString( "[*SMI*] d = %1" ).arg( d ) );
+    }
+    delete itOneHistogram;
+
+    DEBUG_LOG( "[*SMI*] ------------------ computeSmi 1 ------------------ " );
+    // Després les passades per tenir els histogrames per llesca i fer els càlculs finals
+    m_smi.clear();
+    for ( unsigned int i = 0; i < m_sliceCount; i++ )  // iterem sobre les llesques
+    {
+        Histogram histogram( m_nLabels );
+        unsigned char * slice = m_reslicedData + i * m_sliceSize;   // començament de la llesca
+        for ( unsigned int j = 0; j < m_sliceSize; j++ )    // iterem sobre la llesca actual
+        {
+            unsigned char value = slice[j];
+            if ( value < m_nLabels && value > 0 )    // no comptem cap background
+                histogram.add( value );
+        }
+
+        double I_s_O_ = 0.0;
+        double count = histogram.count();
+        QVectorIterator< unsigned long > * itHistogram = histogram.getIterator();
+        unsigned char o = 0;
+        while ( itHistogram->hasNext() )
+        {
+            double p_o_s_ = itHistogram->next() / count;
+            DEBUG_LOG( QString( "[*SMI*] p(o|s) = %1" ).arg( p_o_s_ ) );
+            if ( p_o_s_ > 0.0 ) I_s_O_ += p_o_s_ * log( p_o_s_ / p_o_[o] );
+            o++;
+        }
+        I_s_O_ /= log( 2.0 );
+        DEBUG_LOG( QString( "[*SMI*] I(s,O) = %1" ).arg( I_s_O_ ) );
+        delete itHistogram;
+        m_smi.append( I_s_O_ );
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/smi%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        for ( int i = 0; i < m_smi.size(); i++ )
+        {
+            DEBUG_LOG( QString( "[SMI] SMI[%1] = %2" ).arg( i ).arg( m_smi[i] ) );
+            out << "SMI[" << i << "] = " << m_smi[i] << "\n";
+        }
+        outFile.close();
+    }
+}
+
+
+// Ajunta les llesques començant per la primera i ajuntant mentre la semblança entre (i) i (i0) sigui més gran que un llindar.
+// Després comença un nou grup i va fent el mateix, i així fins que acaba.
+void Slicer::method1A( double threshold )   /// \todo Fer-ho més eficient!!!
+{
+    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
+    unsigned short g = 0;   // id del grup
+    unsigned int x = 0;
+
+    while ( x < m_sliceCount )
+    {
+        groups << g;    // comencem el nou grup
+        unsigned int y = x + 1;
+        bool grouped = true;
+
+        while ( y < m_sliceCount && grouped )
+        {
+            unsigned char * sliceX = m_reslicedData + x * m_sliceSize;  // començament de la llesca X
+            unsigned char * sliceY = m_reslicedData + y * m_sliceSize;  // començament de la llesca Y
+            double similarity = this->similarity( sliceX, sliceY );
+            DEBUG_LOG( QString( "[*M1A*] x = %1, y = %2; similarity = %3" ).arg( x ).arg( y ).arg( similarity ) );
+
+            if ( similarity > threshold )
+            {
+                DEBUG_LOG( "[*M1A*] agrupem!!" );
+                groups << g;
+                y++;
+            }
+            else grouped = false;
+        }
+
+        x = y;
+        g++;
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/m1a%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        DEBUG_LOG( QString( "[M1A] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        for ( int i = 0; i < groups.size(); i++ )
+        {
+            DEBUG_LOG( QString( "[M1A] group %1 : slice %2" ).arg( groups[i] ).arg( i ) );
+            out << "group " << groups[i] << " : slice " << i << "\n";
+        }
+        outFile.close();
+    }
+}
+
+
+// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
+void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
+{
+    if ( m_similarities.isEmpty() ) computeSimilarities();
+
+    QVector< QPair< double, unsigned short > > sortedSimilarities;
+
+    for ( unsigned short i = 0; i < m_similarities.size(); i++ )
+        sortedSimilarities << qMakePair( m_similarities[i], i );
+
+    qSort( sortedSimilarities );    // ordenació creixent
+
+    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
+    for ( unsigned short i = 0; i < m_sliceCount; i++ ) groups << i;    // inicialment cada llesca té un grup propi
+
+    unsigned short i = sortedSimilarities.size() - 1;
+    bool grouped = true;
+
+    DEBUG_LOG( "[*M1B*] while" );
+
+    // hauria de ser i >= 0, però com que és unsigned si es passa serà més gran que sortedSimilarities.size()
+    // quedaria millor amb un iterador
+    while ( i < sortedSimilarities.size() && grouped )
+    {
+        if ( sortedSimilarities[i].first > threshold )
+        {
+            //groups[sortedSimilarities[i].second+1] = groups[sortedSimilarities[i].second];
+            setGroup( groups, sortedSimilarities[i].second + 1, groups[sortedSimilarities[i].second] );
+        }
+        else
+        {
+            grouped = false;
+        }
+
+        i--;
+    }
+
+    // assignem ids consecutius als groups
+    unsigned short g = 0, lastGroup = groups[0];
+    for ( int i = 0; i < groups.size(); i++ )
+    {
+        if ( groups[i] == lastGroup ) groups[i] = g;
+        else
+        {
+            lastGroup = groups[i];
+            groups[i] = ++g;
+        }
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/m1b%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        DEBUG_LOG( QString( "[M1B] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        for ( int i = 0; i < groups.size(); i++ )
+        {
+            DEBUG_LOG( QString( "[M1B] group %1 : slice %2" ).arg( groups[i] ).arg( i ) );
+            out << "group " << groups[i] << " : slice " << i << "\n";
+        }
+        outFile.close();
+    }
 }
 
 
@@ -211,90 +400,6 @@ void Slicer::findExtent( const unsigned char * data,
         if ( !found ) i0--;
     }
     if ( found ) max0 = i0;
-}
-
-
-void Slicer::compute()  /// \todo Fer-ho més eficient!!!
-{
-    std::cout << "[Slicer] ----------------- compute0 -------------- " << std::endl;
-    // Primer una passada per tenir un histograma independent de les llesques
-    Histogram oneHistogram( m_nLabels ); // to rule them all
-    for ( unsigned int i = 0; i < m_reslicedDataSize; i++ )
-    {
-        unsigned char value = m_reslicedData[i];
-        if ( value < m_nLabels && value > 0 )    // no comptem cap background
-            oneHistogram.add( value );
-    }
-    std::vector< double > p_o_;
-    double oneCount = oneHistogram.count();
-    std::cout << "[Slicer] one count = " << oneCount << std::endl;
-    QVectorIterator< unsigned long > * itOneHistogram = oneHistogram.getIterator();
-    while ( itOneHistogram->hasNext() )
-    {
-        double d = itOneHistogram->next() / oneCount;
-        p_o_.push_back( d );
-        std::cout << "[Slicer] d = " << d << std::endl;
-    }
-    delete itOneHistogram;
-
-    std::cout << "[Slicer] ----------------- compute1 -------------- " << std::endl;
-    // Després les passades per tenir els histogrames per llesca i fer els càlculs finals
-    m_smi.clear();
-    for ( unsigned int i = 0; i < m_sliceCount; i++ )  // iterem sobre les llesques
-    {
-        Histogram histogram( m_nLabels );
-        unsigned char * slice = m_reslicedData + i * m_sliceSize;   // començament de la llesca
-        for ( unsigned int j = 0; j < m_sliceSize; j++ )    // iterem sobre la llesca actual
-        {
-            unsigned char value = slice[j];
-            if ( value < m_nLabels && value > 0 )    // no comptem cap background
-                histogram.add( value );
-        }
-
-        double I_s_O_ = 0.0;
-        double count = histogram.count();
-        QVectorIterator< unsigned long > * itHistogram = histogram.getIterator();
-        unsigned char o = 0;
-        while ( itHistogram->hasNext() )
-        {
-            double p_o_s_ = itHistogram->next() / count;
-            std::cout << "[Slicer] p(o|s) = " << p_o_s_ << std::endl;
-            if ( p_o_s_ > 0.0 ) I_s_O_ += p_o_s_ * log( p_o_s_ / p_o_[o] );
-            o++;
-        }
-        I_s_O_ /= log( 2.0 );
-        std::cout << "[Slicer] I(s,O) = " << I_s_O_ << std::endl;
-        delete itHistogram;
-        m_smi.push_back( I_s_O_ );
-    }
-
-    // Printar resultats
-    QFile outFile( QDir::tempPath().append( QString( "/smi%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
-    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        QTextStream out( &outFile );
-        std::cout << "[SR] Slicer results:" << std::endl;
-        for ( unsigned int i = 0; i < m_smi.size(); i++ )
-        {
-            std::cout << "[SR] SMI[" << i << "] = " << m_smi[i] << std::endl;
-            out << "SMI[" << i << "] = " << m_smi[i] << "\n";
-        }
-        std::cout << std::endl;
-        outFile.close();
-    }
-}
-
-
-void Slicer::computeSimilarities()  /// \todo Fer-ho més eficient!!!
-{
-    // calcular la similaritat entre cada parell de llesques consecutives
-    for ( unsigned int i = 0; i < m_sliceCount - 1; i++ )  // iterem sobre les llesques
-    {
-        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;          // començament de la llesca X
-        unsigned char * sliceY = m_reslicedData + ( i + 1 ) * m_sliceSize;  // començament de la llesca Y
-        DEBUG_LOG( qPrintable( QString( "[CS] X = %1, Y = %2" ).arg( i ).arg( i + 1 ) ) );
-        m_similarities << similarity( sliceX, sliceY );
-    }
 }
 
 
@@ -358,61 +463,23 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
     // H(X,Y) = 0 quan són llesques homogènies; llavors comprovem si són iguals o diferents per assingar el valor de semblança
     double similarity = ( ( H_X_Y_ > 0.0 ) ? ( I_X_Y_ / H_X_Y_ ) : ( sliceX[0] == sliceY[0] ? 1.0 : 0.0 ) );
 
-    DEBUG_LOG( qPrintable( QString( "[entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) ) );
-    DEBUG_LOG( qPrintable( QString( "[JE] H(X,Y) = %1" ).arg( H_X_Y_ ) ) );
-    DEBUG_LOG( qPrintable( QString( "[IM] I(X;Y) = %1" ).arg( I_X_Y_ ) ) );
-    DEBUG_LOG( qPrintable( QString( "[semblança] I/H = %1" ).arg( similarity ) ) );
+    DEBUG_LOG( QString( "[*similarity*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+    DEBUG_LOG( QString( "[*similarity*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
+    DEBUG_LOG( QString( "[*similarity*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
+    DEBUG_LOG( QString( "[*similarity*][semblança] I/H = %1" ).arg( similarity ) );
 
     return similarity;
 }
 
 
-// Ajunta les llesques començant per la primera i ajuntant mentre la semblança entre (i) i (i0) sigui més gran que un llindar.
-// Després comença un nou grup i va fent el mateix, i així fins que acaba.
-void Slicer::method1A( double threshold )
+void Slicer::computeSimilarities()  /// \todo Fer-ho més eficient!!!
 {
-    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
-    unsigned short g = 0;   // id del grup
-    unsigned int x = 0;
-
-    while ( x < m_sliceCount )
+    for ( int i = 0; i < m_sliceCount - 1; i++ )  // iterem sobre les llesques
     {
-        groups << g;    // comencem el nou grup
-        unsigned int y = x + 1;
-        bool grouped = true;
-
-        while ( y < m_sliceCount && grouped )
-        {
-            unsigned char * sliceX = m_reslicedData + x * m_sliceSize;  // començament de la llesca X
-            unsigned char * sliceY = m_reslicedData + y * m_sliceSize;  // començament de la llesca Y
-            double similarity = this->similarity( sliceX, sliceY );
-            DEBUG_LOG( qPrintable( QString( "[M1A] x = %1, y = %2; similarity = %3" ).arg( x ).arg( y ).arg( similarity ) ) );
-
-            if ( similarity > threshold )
-            {
-                DEBUG_LOG( "[M1A] agrupem!!" );
-                groups << g;
-                y++;
-            }
-            else grouped = false;
-        }
-
-        x = y;
-        g++;
-    }
-
-    DEBUG_LOG( qPrintable( QString( "[M1A] threshold = %1" ).arg( threshold ) ) );
-    for ( unsigned int i = 0; i < groups.size(); i++ )
-        DEBUG_LOG( qPrintable( QString( "[M1A] group %1 : slice %2" ).arg( groups[i] ).arg( i ) ) );
-
-    QFile outFile( QDir::tempPath().append( QString( "/m1a%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
-    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        QTextStream out( &outFile );
-        out << "threshold = " << threshold << "\n";
-        for ( unsigned int i = 0; i < groups.size(); i++ )
-            out << "group " << groups[i] << " : slice " << i << "\n";
-        outFile.close();
+        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;          // començament de la llesca X
+        unsigned char * sliceY = m_reslicedData + ( i + 1 ) * m_sliceSize;  // començament de la llesca Y
+        DEBUG_LOG( QString( "[*CS*] X = %1, Y = %2" ).arg( i ).arg( i + 1 ) );
+        m_similarities << similarity( sliceX, sliceY );
     }
 }
 
@@ -422,71 +489,6 @@ void Slicer::setGroup( QVector< unsigned short > & groups, unsigned short slice,
     if ( slice < m_sliceCount - 1 &&  groups[slice+1] == groups[slice] )
         setGroup( groups, slice + 1, group );
     groups[slice] = group;
-}
-
-
-// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
-void Slicer::method1B( double threshold )
-{
-    if ( m_similarities.isEmpty() ) computeSimilarities();
-
-    QVector< QPair< double, unsigned short > > sortedSimilarities;
-
-    for ( unsigned short i = 0; i < m_similarities.size(); i++ )
-        sortedSimilarities << qMakePair( m_similarities[i], i );
-
-    qSort( sortedSimilarities );    // ordenació creixent
-
-    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
-    for ( unsigned short i = 0; i < m_sliceCount; i++ ) groups << i;    // inicialment cada llesca té un grup propi
-
-    unsigned short i = sortedSimilarities.size() - 1;
-    bool grouped = true;
-
-    DEBUG_LOG( "[M1B] while" );
-
-    // hauria de ser i >= 0, però com que és unsigned si es passa serà més gran que sortedSimilarities.size()
-    // quedaria millor amb un iterador
-    while ( i < sortedSimilarities.size() && grouped )
-    {
-        if ( sortedSimilarities[i].first > threshold )
-        {
-            //groups[sortedSimilarities[i].second+1] = groups[sortedSimilarities[i].second];
-            setGroup( groups, sortedSimilarities[i].second + 1, groups[sortedSimilarities[i].second] );
-        }
-        else
-        {
-            grouped = false;
-        }
-
-        i--;
-    }
-
-    // assignem ids consecutius als groups
-    unsigned short g = 0, lastGroup = groups[0];
-    for ( unsigned int i = 0; i < groups.size(); i++ )
-    {
-        if ( groups[i] == lastGroup ) groups[i] = g;
-        else
-        {
-            lastGroup = groups[i];
-            groups[i] = ++g;
-        }
-    }
-
-    DEBUG_LOG( qPrintable( QString( "[M1B] threshold = %1" ).arg( threshold ) ) );
-    for ( unsigned int i = 0; i < groups.size(); i++ )
-        DEBUG_LOG( qPrintable( QString( "[M1B] group %1 : slice %2" ).arg( groups[i] ).arg( i ) ) );
-
-    QFile outFile( QDir::tempPath().append( QString( "/m1b%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
-    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        QTextStream out( &outFile );
-        out << "threshold = " << threshold << "\n";
-        for ( unsigned int i = 0; i < groups.size(); i++ )
-            out << "group " << groups[i] << " : slice " << i << "\n";
-        outFile.close();
-    }
 }
 
 

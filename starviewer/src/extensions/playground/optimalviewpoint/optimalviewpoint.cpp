@@ -503,7 +503,7 @@ void OptimalViewpoint::updatePlanes()
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
             slicer.reslice();
-            slicer.compute();
+            slicer.computeSmi();
             slicer.method1A( m_similarityThreshold );
             slicer.method1B( m_similarityThreshold );
 
