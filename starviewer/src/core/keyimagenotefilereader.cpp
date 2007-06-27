@@ -7,14 +7,13 @@
 #include "keyimagenotefilereader.h"
 
 #include "keyimagenote.h"
+#include "logging.h"
 
 #define HAVE_CONFIG_H 1
 #include <dcfilefo.h> // per carregar arxius dicom
 #include <dcdatset.h>
 #include <dsrdoc.h>
 #include <dsrtypes.h>
-
-#include <QDebug>
 
 namespace udg {
 
@@ -46,7 +45,7 @@ KeyImageNote* KeyImageNoteFileReader::read(const QString &filename)
     DcmFileFormat file;
     if (! file.loadFile( qPrintable(filename) ).good())
     {
-        qDebug() << "KeyImageNoteFileReader::read: No s'ha pogut llegir el fitxer del KIN";
+        DEBUG_LOG( "KeyImageNoteFileReader::read: No s'ha pogut llegir el fitxer del KIN" );
         return NULL;
     }
 
@@ -54,16 +53,16 @@ KeyImageNote* KeyImageNoteFileReader::read(const QString &filename)
     DSRDocument document;
     if (! document.read(*file.getDataset(), DSRTypes::RF_verboseDebugMode).good())
     {
-        qDebug() << "KeyImageNoteFileReader::read: No s'ha pogut llegir el document SR";
+        DEBUG_LOG( "KeyImageNoteFileReader::read: No s'ha pogut llegir el document SR" );
         return NULL;
     }
 
-    qDebug() << "KeyImageNoteFileReader::read: Comencem a parsejar el KIN";
+    DEBUG_LOG( "KeyImageNoteFileReader::read: Comencem a parsejar el KIN" );
 
     DSRSOPInstanceReferenceList &currentRequestedList = document.getCurrentRequestedProcedureEvidence();
 
 
-    qDebug() << "KeyImageNoteFileReader::read: ReferenceList = " << currentRequestedList.getNumberOfInstances();
+    DEBUG_LOG( QString("KeyImageNoteFileReader::read: ReferenceList = %1").arg( currentRequestedList.getNumberOfInstances() ) );
     QStringList currentRequested;
     currentRequestedList.gotoFirstItem();
     for(unsigned int i = 0; i < currentRequestedList.getNumberOfInstances(); ++i)
@@ -71,44 +70,44 @@ KeyImageNote* KeyImageNoteFileReader::read(const QString &filename)
         OFString SOPInstance;
         currentRequestedList.getSOPInstanceUID(SOPInstance);
         currentRequested << SOPInstance.c_str();
-        qDebug() << "Afegit: " << SOPInstance.c_str();
+        DEBUG_LOG( QString("Afegit: ") + SOPInstance.c_str() );
         if ( ! currentRequestedList.gotoNextItem().good())
         {
-            qDebug() << "KeyImageNoteFileReader::read: Error al intentar avançar en la llista";
+            DEBUG_LOG( "KeyImageNoteFileReader::read: Error al intentar avançar en la llista" );
         }
     }
 
     if (currentRequestedList.getNumberOfInstances() != currentRequested.size())
     {
-        qDebug() << "KeyImageNoteFileReader::read: Error, no s'han carregat tots els possibles UID";
+        DEBUG_LOG( "KeyImageNoteFileReader::read: Error, no s'han carregat tots els possibles UID" );
     }
 
     if (currentRequested.isEmpty())
     {
-        qDebug() << "KeyImageNoteFileReader::read: Error, no s'ha carregat cap UID!";
+        DEBUG_LOG( "KeyImageNoteFileReader::read: Error, no s'ha carregat cap UID!" );
         return NULL;
     }
 
-    qDebug() << "KeyImageNoteFileReader::read: Continuem carregant el KIN";
+    DEBUG_LOG( "KeyImageNoteFileReader::read: Continuem carregant el KIN" );
 
     DSRDocumentTree &tree = document.getTree();
     tree.print(std::cout);
 
     QString documentTitle = this->searchDocumentTitle(tree);
-    qDebug() << "KeyImageNoteFileReader::read: documentTitle = " << documentTitle;
+    DEBUG_LOG( "KeyImageNoteFileReader::read: documentTitle = " + documentTitle );
 
     QString observableContext = this->searchObservableContext(tree);
-    qDebug() << "KeyImageNoteFileReader::read: observableContext = " << observableContext;
+    DEBUG_LOG( "KeyImageNoteFileReader::read: observableContext = " + observableContext );
 
     QString documentTitleExplanation = "";
     if (documentTitle == "Rejected for Quality Reasons" or documentTitle == "Quality Issue")
     {
         documentTitleExplanation = this->searchQualityExplanationDocumentTitle(tree);
-        qDebug() << "KeyImageNoteFileReader::read: documentTitleExplanation = " << documentTitleExplanation;
+        DEBUG_LOG( "KeyImageNoteFileReader::read: documentTitleExplanation = " + documentTitleExplanation );
     }
 
     QString keyObjectDescription = this->searchObjectDescription(tree);
-    qDebug() << "KeyImageNoteFileReader::read: Key Object Description = " << keyObjectDescription;
+    DEBUG_LOG( "KeyImageNoteFileReader::read: Key Object Description = " + keyObjectDescription );
 
     KeyImageNote *keyImageNote = new KeyImageNote();
     keyImageNote->setReferencedSOPInstancesUID( currentRequested );
