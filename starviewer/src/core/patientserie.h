@@ -22,6 +22,9 @@ La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. 
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+
+class Volume;
+
 class PatientSerie : public QObject
 {
 Q_OBJECT
@@ -76,7 +79,7 @@ public:
     QTime getTime();
     QString getTimeAsString();
 
-    /// Assignar/Obtenir nivells de contrast
+    /// Assignar/Obtenir nivells de contrast \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de serie
     void setWindowLevel( double window , double level );
     double *getWindowLevel();
     void setWindow( double window );
@@ -84,24 +87,27 @@ public:
     void setLevel( double level );
     double getLevel() const { return m_level; }
 
-    /// Assignar/Obtenir dimensions de la sèrie
+    /// Assignar/Obtenir dimensions de la sèrie \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de serie
     void setDimensions( double dimensions[3] );
     void setDimensions( double x , double y , double z );
     double *getDimensions();
     void getDimensions( double dimensions[3] );
 
-    /// Assignar/Obtenir espaiats de la sèrie
+    /// Assignar/Obtenir espaiats de la sèrie \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de serie
     void setSpacing( double spacing[3] );
     void setSpacing( double x , double y , double z );
     double *getSpacing();
     void getSpacing( double spacing[3] );
 
-    /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie
+    /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie \TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
     void setVolumeIdentifier( Identifier id );
     Identifier getVolumeIdentifier() const { return m_volumeID; }
 
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
+
+    /// Retorna el subvolum amb índex 'index', per defecte, el 0
+    Volume *getVolume( int index = 0 );
 
 private:
     /// Identidicador universal de la sèrie
@@ -144,6 +150,9 @@ private:
     /// Identificador del volum al repositori
     Identifier m_volumeID;
 //     TransferFunctionList m_transferFunctionList;
+
+    /// Llista de volums que composen la sèrie. La sèrie es pot separar en diversos volums per diverses raons, com pot ser mides d'imatge diferent, sèries amb dinàmics o fases, stacks, etc.
+    QList<Volume *> m_volumesList;
 };
 
 }
