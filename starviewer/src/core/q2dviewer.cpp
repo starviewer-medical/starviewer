@@ -134,7 +134,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     // grayscale pipeline
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
-    m_windowLevelLUTMapper->SetOutputFormatToLuminance();
 
     m_modalityLUTRescale = 0; //vtkImageShiftScale::New();
 
