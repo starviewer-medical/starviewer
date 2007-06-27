@@ -12,8 +12,7 @@
 
 #include "genericsingletonfactoryregister.h"
 #include "extensionfactory.h"
-
-#include <QDebug>
+#include "logging.h"
 
 namespace udg {
 
@@ -36,7 +35,7 @@ public:
     ExtensionFactoryRegister(QString identifier)
         :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>( identifier )
     {
-        qDebug() << "ExtensionFactoryRegister" << identifier;
+        DEBUG_LOG( "ExtensionFactoryRegister" + identifier );
     }
 };
 

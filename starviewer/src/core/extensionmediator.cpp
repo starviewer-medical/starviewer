@@ -6,14 +6,14 @@
  ***************************************************************************/
 #include "extensionmediator.h"
 
-#include <QDebug>
+#include "logging.h"
 
 namespace udg{
 
 ExtensionMediator::ExtensionMediator(QObject *parent)
  : QObject(parent)
 {
-    qDebug() << "ExtensionMediator::ExtensionMediator(parent)";
+    DEBUG_LOG( "ExtensionMediator::ExtensionMediator(parent)" );
 }
 
 

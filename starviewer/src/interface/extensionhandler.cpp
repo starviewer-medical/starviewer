@@ -19,7 +19,6 @@
 
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
-#include <QDebug>
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
@@ -185,7 +184,7 @@ void ExtensionHandler::request( const QString &who )
     }
     else
     {
-        qDebug() << "Error carregant " + who;
+        DEBUG_LOG( "Error carregant " + who );
     }
 }
 

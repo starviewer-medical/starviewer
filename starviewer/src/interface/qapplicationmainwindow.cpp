@@ -32,7 +32,6 @@
 
 #include "extensionfactory.h"
 #include "extensionmediatorfactory.h"
-#include <QDebug>
 
 namespace udg{
 
@@ -143,7 +142,7 @@ void QApplicationMainWindow::createActions()
         }
         else
         {
-            qDebug() << "Error carregant el mediator de " + name;
+            DEBUG_LOG( "Error carregant el mediator de " + name );
         }
     }
 

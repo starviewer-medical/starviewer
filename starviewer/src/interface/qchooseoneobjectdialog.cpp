@@ -6,9 +6,10 @@
  ***************************************************************************/
 #include "qchooseoneobjectdialog.h"
 
+#include "logging.h"
+
 #include <QFileInfo>
 #include <QDir>
-#include <QDebug>
 
 namespace udg {
 
@@ -33,7 +34,7 @@ void QChooseOneObjectDialog::setObjectsList(const QStringList &list)
         QFileInfo fileInfo(filename);
         filename.remove( fileInfo.dir().path() );
         newList << filename;
-        qDebug() << "filename=" << filename;
+        DEBUG_LOG( "filename=" + filename );
     }
 
     m_filesList->addItems(newList);
@@ -41,7 +42,7 @@ void QChooseOneObjectDialog::setObjectsList(const QStringList &list)
 
 QString QChooseOneObjectDialog::getChoosed() const
 {
-    qDebug() << "filename choosed = " << m_objectList[m_filesList->currentIndex()];
+    DEBUG_LOG( "filename choosed = " + m_objectList[m_filesList->currentIndex()] );
     return m_objectList[m_filesList->currentIndex()];
 }
 

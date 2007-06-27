@@ -15,7 +15,6 @@
 #include <QSettings>
 // EXTRA!!! \TODO es temporal
 #include <QFileDialog>
-#include <QDebug>
 #include "keyimagenote.h"
 #include "q2dviewerkeyimagenoteattacher.h"
 #include "q2dviewerpresentationstateattacher.h"
@@ -170,7 +169,7 @@ void Q2DViewerExtension::createActions()
 
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
-    
+
     m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
     m_roiToolButton->setDefaultAction( m_roiAction );
     m_roiAction->setIcon( QIcon(":/images/roi.png") );
@@ -187,7 +186,7 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_distanceAction );
     m_toolsActionGroup->addAction( m_roiAction );
-    
+
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
 }
@@ -393,7 +392,7 @@ void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
     m_keyImageNote = new KeyImageNote();
     if ( ! m_keyImageNote->loadFromFile(filename))
     {
-        qDebug() << "ERROR! Al llegir el KIN " << filename;
+        DEBUG_LOG( "ERROR! Al llegir el KIN " + filename );
         return;
     }
 

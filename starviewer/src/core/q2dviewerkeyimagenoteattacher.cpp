@@ -14,8 +14,7 @@
 #include "q2dviewerblackboard.h"
 #include "volumesourceinformation.h"
 #include "volume.h"
-
-#include <QDebug>
+#include "logging.h"
 
 namespace udg {
 
@@ -63,7 +62,7 @@ void Q2DViewerKeyImageNoteAttacher::attach()
         SOPClass = volumeInformation->getImageSOPInstanceUID(slice);
         if (seriesReferenced.contains( SOPClass ))
         {
-            qDebug() << "Llegit KIN que conté referencia a " << SOPClass << " en la llesca " << slice;
+            DEBUG_LOG( QString("Llegit KIN que conté referencia a %1 en la llesca %2").arg(SOPClass).arg(slice) );
             m_board->addKeyImageNoteMark( slice, Q2DViewer::Axial, color, m_keyImageNote->getPrintableText());
         }
     }
