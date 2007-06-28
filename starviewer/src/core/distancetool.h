@@ -21,7 +21,6 @@ class vtkRenderWindowInteractor;
 class vtkLineSource;
 class vtkActor2D;
 class vtkPolyDataMapper2D;
-class vtkDiskSource;
 
 namespace udg {
 

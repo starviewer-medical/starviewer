@@ -12,7 +12,6 @@
 #include <vtkLine.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkDiskSource.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkActor2D.h>
 #include <vtkCaptionActor2D.h>
