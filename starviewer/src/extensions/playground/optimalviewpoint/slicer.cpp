@@ -52,7 +52,9 @@ void Slicer::setInput( vtkImageData * input )
     m_input = input; m_input->Register( 0 );
     double range[2];
     m_input->GetScalarRange( range );
-    m_nLabels = static_cast< unsigned char >( round( range[1] ) ) + 1;
+    DEBUG_LOG( QString( "scalar range = %1 %2" ).arg( range[0] ).arg( range[1] ) );
+    m_nLabels = static_cast< unsigned short >( round( range[1] ) ) + 1;
+    m_newBackground = m_nLabels < 256 ? 255 : 0;
 }
 
 
@@ -90,7 +92,8 @@ void Slicer::reslice()
     reslice->SetOutputDimensionality( 3 );
     reslice->SetResliceAxes( resliceAxes );
     reslice->AutoCropOutputOn();
-    reslice->SetBackgroundLevel( 255.0 );
+//     reslice->SetBackgroundLevel( 255.0 );
+    reslice->SetBackgroundLevel( m_newBackground );
     reslice->SetOutputSpacing( m_xSpacing, m_ySpacing, m_zSpacing );
     reslice->Update();
 //     reslice->Print( std::cout );
@@ -159,7 +162,8 @@ void Slicer::reslice()
     DEBUG_LOG( QString( "[Slicer] slice size = %1" ).arg( m_sliceSize ) );
     m_sliceCount = dimensions[2];
     DEBUG_LOG( QString( "[Slicer] slice count = %1" ).arg( m_sliceCount ) );
-    DEBUG_LOG( QString( "[Slicer] n labels = %1" ).arg( static_cast< short >( m_nLabels ) ) );
+    DEBUG_LOG( QString( "[Slicer] n labels = %1" ).arg( m_nLabels ) );
+    DEBUG_LOG( QString( "[Slicer] new background = %1" ).arg( static_cast< short >( m_newBackground ) ) );
 
     // Destruir els objectes creats
     reslice->Delete();
@@ -211,7 +215,7 @@ void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
         while ( itHistogram->hasNext() )
         {
             double p_o_s_ = itHistogram->next() / count;
-            DEBUG_LOG( QString( "[*SMI*] p(o|s) = %1" ).arg( p_o_s_ ) );
+//             DEBUG_LOG( QString( "[*SMI*] p(o|s) = %1" ).arg( p_o_s_ ) );
             if ( p_o_s_ > 0.0 ) I_s_O_ += p_o_s_ * log( p_o_s_ / p_o_[o] );
             o++;
         }
@@ -356,7 +360,7 @@ void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
 void Slicer::findExtent( const unsigned char * data,
                          int dim0, int dim1, int dim2,
                          int inc0, int inc1, int inc2,
-                         int & min0, int & max0 )
+                         int & min0, int & max0 ) const
 {
     int i0, i1, i2;
     bool found;
@@ -372,7 +376,7 @@ void Slicer::findExtent( const unsigned char * data,
             while ( i2 < dim2 && !found )
             {
                 const unsigned char * pointer = data + i0 * inc0 + i1 * inc1 + i2 * inc2;
-                found = *pointer != 0 && *pointer != 255;
+                found = *pointer != 0 && *pointer != m_newBackground;
                 i2++;
             }
             i1++;
@@ -392,7 +396,7 @@ void Slicer::findExtent( const unsigned char * data,
             while ( i2 >= 0 && !found )
             {
                 const unsigned char * pointer = data + i0 * inc0 + i1 * inc1 + i2 * inc2;
-                found = *pointer != 0 && *pointer != 255;
+                found = *pointer != 0 && *pointer != m_newBackground;
                 i2--;
             }
             i1--;
@@ -415,8 +419,8 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
 
     for ( unsigned int j = 0; j < m_sliceSize; j++ )
     {
-        unsigned char valueX = sliceX[j]; if ( valueX == 255 ) valueX = 0;
-        unsigned char valueY = sliceY[j]; if ( valueY == 255 ) valueY = 0;
+        unsigned char valueX = sliceX[j]; if ( valueX == m_newBackground ) valueX = 0;
+        unsigned char valueY = sliceY[j]; if ( valueY == m_newBackground ) valueY = 0;
         //if ( valueX < m_nLabels && valueX > 0
         //     && valueY < m_nLabels && valueY > 0 )  // no comptem cap background
         //{

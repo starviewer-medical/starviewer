@@ -117,6 +117,7 @@ public:
 
 
 
+    vtkImageData * getImage() const { return m_image; }
     vtkImageData * getLabeledImage() const { return m_labeledImage; }
 
     /// Retorna el valor de propietat mínim.

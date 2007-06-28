@@ -499,7 +499,8 @@ void OptimalViewpoint::updatePlanes()
 
             // slicer
             Slicer slicer( m_updatePlane );
-            slicer.setInput( m_volume->getLabeledImage() );
+//             slicer.setInput( m_volume->getLabeledImage() );
+            slicer.setInput( m_volume->getImage() );
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
             slicer.reslice();

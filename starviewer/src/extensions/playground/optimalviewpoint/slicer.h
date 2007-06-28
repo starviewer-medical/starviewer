@@ -79,10 +79,10 @@ public:
 private:
 
     /// Troba l'extent mínim en la direcció 0 i guarda els resultats a min0 i max0.
-    static void findExtent( const unsigned char * data,
-                            int dim0, int dim1, int dim2,
-                            int inc0, int inc1, int inc2,
-                            int & min0, int & max0 );
+    void findExtent( const unsigned char * data,
+                     int dim0, int dim1, int dim2,
+                     int inc0, int inc1, int inc2,
+                     int & min0, int & max0 ) const;
 
     /// Retorna la similaritat entre dues llesques.
     double similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const;
@@ -97,11 +97,13 @@ private:
     /// Imatge d'entrada.
     vtkImageData * m_input;
     /// Nombre de valors de la imatge d'entrada.
-    unsigned char m_nLabels;
+    unsigned short m_nLabels;
     /// Matriu de transformació.
     vtkMatrix4x4 * m_matrix;
     /// Espaiat de la imatge de sortida.
     double m_xSpacing, m_ySpacing, m_zSpacing;
+    /// Valor de propietat del background afegit pel reslice.
+    unsigned char m_newBackground;
 
     /// Nova imatge.
     vtkImageData * m_reslicedImage;

@@ -66,6 +66,10 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
         shifter->Delete();
 
         m_rangeMin = 0; m_rangeMax = 255;
+
+        double irange[2];
+        m_image->GetScalarRange( irange );
+        DEBUG_LOG( QString( "new scalar range = %1 %2" ).arg( irange[0] ).arg( irange[1] ) );
     }
 
     m_data = reinterpret_cast< unsigned char * >( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
