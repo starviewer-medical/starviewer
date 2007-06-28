@@ -117,18 +117,6 @@ private:
     /// valors per controlar l'anotació de les distàncies
     double m_distanceStartPosition[3], m_distanceCurrentPosition[3];
 
-    /// objectes per manipular els extrems de la distància seeccionada
-    vtkDiskSource *m_vertex1;
-    vtkDiskSource *m_vertex2;
-
-    ///mapejadors dels punts que representen els vèrtexs de la distància seleccionada
-    vtkPolyDataMapper2D *m_vertex1Mapper;
-    vtkPolyDataMapper2D *m_vertex2Mapper;
-
-    ///actors dels punts que representen els vèrtexs de la distància seleccionada
-    vtkActor2D *m_vertex1Actor;
-    vtkActor2D *m_vertex2Actor;
-
     /// Últim actor que s'ha ressaltat
     AssemblyAndLineObject *m_previousHighlightedAssembly;
 

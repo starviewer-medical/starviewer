@@ -42,45 +42,19 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
     m_distanceLine = vtkLineSource::New();
     m_lineActor = vtkActor2D::New();
     m_lineMapper = vtkPolyDataMapper2D::New();
-    m_vertex1 = vtkDiskSource::New();
-    m_vertex2 = vtkDiskSource::New();
-    m_vertex1Mapper = vtkPolyDataMapper2D::New();
-    m_vertex2Mapper = vtkPolyDataMapper2D::New();
-    m_vertex1Actor = vtkActor2D::New();
-    m_vertex2Actor = vtkActor2D::New();
-    m_vertex1Actor->VisibilityOff();
-    m_vertex2Actor->VisibilityOff();
 
-    //assignem propietats als objectes
-    m_vertex1Mapper->SetInputConnection( m_vertex1->GetOutputPort() );
-    m_vertex2Mapper->SetInputConnection( m_vertex2->GetOutputPort() );
-    m_vertex1Actor->SetMapper( m_vertex1Mapper );
-    m_vertex2Actor->SetMapper( m_vertex2Mapper );
     m_lineActor->GetProperty()->SetColor( NormalColor.redF(), NormalColor.greenF(), NormalColor.blueF() );
     m_lineActor->GetProperty()->SetLineWidth( 2 );
     m_distanceLine->SetResolution ( 2 );
 
-    m_vertex1->SetInnerRadius ( 1.5 );
-    m_vertex2->SetInnerRadius ( 1.5 );
-    m_vertex1->SetOuterRadius ( 2.5 );
-    m_vertex2->SetOuterRadius ( 2.5 );
-    m_vertex1->SetCircumferentialResolution( 4 );
-    m_vertex2->SetCircumferentialResolution( 4 );
-    m_vertex1Actor->GetProperty()->SetColor( HighlightColor.redF(), HighlightColor.greenF(), HighlightColor.blueF() );
-    m_vertex2Actor->GetProperty()->SetColor( HighlightColor.redF(), HighlightColor.greenF(), HighlightColor.blueF() );
-
     vtkCoordinate *coordinate = vtkCoordinate::New();
     coordinate->SetCoordinateSystemToWorld();
     m_lineMapper->SetTransformCoordinate( coordinate );
-    m_vertex1Mapper->SetTransformCoordinate( coordinate );
-    m_vertex2Mapper->SetTransformCoordinate( coordinate );
 
     if( m_2DViewer )
     {
         m_currentSlice = m_2DViewer->getSlice();
         m_lastView = m_2DViewer->getView();
-        m_2DViewer->getRenderer()->AddActor( m_vertex1Actor );
-        m_2DViewer->getRenderer()->AddActor( m_vertex2Actor );
     }
     else
     {
@@ -101,12 +75,6 @@ DistanceTool::~DistanceTool()
     m_distanceLine->Delete();
     m_lineMapper->Delete();
     m_lineActor->Delete();
-    m_vertex1->Delete();
-    m_vertex2->Delete();
-    m_vertex1Mapper->Delete();
-    m_vertex2Mapper->Delete();
-    m_vertex1Actor->Delete();
-    m_vertex2Actor->Delete();
 }
 
 void DistanceTool::unselectDistance()
