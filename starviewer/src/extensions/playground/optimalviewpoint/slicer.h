@@ -74,6 +74,8 @@ public:
      */
     void method1A( double threshold );
     /// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
+    void method1B_0( double threshold );
+    /// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
     void method1B( double threshold );
 
 private:
@@ -84,12 +86,14 @@ private:
                      int inc0, int inc1, int inc2,
                      int & min0, int & max0 ) const;
 
-    /// Retorna la similaritat entre dues llesques.
+    /// Retorna la similaritat entre dues llesques. \todo Fer-ho passant els índexs.
     double similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const;
     /// Calcula la semblança entre tots els parells de llesques consecutives.
     void computeSimilarities();
     /// Assigna el grup \a group a \a slice i totes les seves seguidores del mateix grup.
     void setGroup( QVector< unsigned short > & groups, unsigned short slice, unsigned short group ) const;
+    /// Assigna el grup \a group a \a slice i totes les seves seguidores del mateix grup.
+    void setRightGroup( QVector< unsigned short > & rightGroups, unsigned short slice, unsigned short group ) const;
 
     /// Identificador de l'objecte.
     unsigned char m_id;

@@ -292,7 +292,7 @@ void Slicer::method1A( double threshold )   /// \todo Fer-ho més eficient!!!
 
 
 // Ajunta llesques consecutives amb semblança per sobre d'un llindar.
-void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
+void Slicer::method1B_0( double threshold )   /// \todo Fer-ho més eficient!!!
 {
     if ( m_similarities.isEmpty() ) computeSimilarities();
 
@@ -350,6 +350,98 @@ void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
         for ( int i = 0; i < groups.size(); i++ )
         {
             DEBUG_LOG( QString( "[M1B] group %1 : slice %2" ).arg( groups[i] ).arg( i ) );
+            out << "group " << groups[i] << " : slice " << i << "\n";
+        }
+        outFile.close();
+    }
+}
+
+
+// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
+void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
+{
+    if ( m_similarities.isEmpty() ) computeSimilarities();
+
+    QVector< QPair< double, unsigned short > > sortedSimilarities;
+
+    for ( unsigned short i = 0; i < m_similarities.size(); i++ )
+        sortedSimilarities << qMakePair( m_similarities[i], i );
+
+    qSort( sortedSimilarities );    // ordenació creixent
+
+    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
+    QVector< unsigned short > rightGroups;   // cada posició correspon a una llesca i conté l'id de l'última llesca del grup al qual pertany la llesca
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        groups << i;    // inicialment cada llesca té un grup propi
+        rightGroups << i;
+    }
+
+    unsigned short i = sortedSimilarities.size() - 1;
+    bool belowThreshold = true;
+
+    // hauria de ser i >= 0, però com que és unsigned si es passa serà més gran que sortedSimilarities.size()
+    // quedaria millor amb un iterador
+    while ( i < sortedSimilarities.size() && belowThreshold )
+    {
+        if ( sortedSimilarities[i].first > threshold )
+        {
+            unsigned short sx = sortedSimilarities[i].second;
+            unsigned short sy = sortedSimilarities[i].second + 1;
+            unsigned short gx = groups[sx];
+            unsigned short gy = rightGroups[sy];
+            unsigned char * sliceX = m_reslicedData + gx * m_sliceSize;  // començament de la llesca X
+            unsigned char * sliceY = m_reslicedData + gy * m_sliceSize;  // començament de la llesca Y
+            double sim = similarity( sliceX, sliceY );
+            DEBUG_LOG( QString( "[*M1B*] provem %1(g%2) i %3(rg%4) --> sim = %5" ).arg( sx ).arg( gx ).arg( sy ).arg( gy ).arg( sim ) );
+            if ( sim > threshold )
+            {
+                DEBUG_LOG( QString( "[*M1B*] agrupem %1(g%2)(rg%3) i %4(g%5)(rg%6)" ).arg( sx ).arg( gx ).arg( rightGroups[sx] ).arg( sy ).arg( groups[sy] ).arg( gy ) );
+                setGroup( groups, sy, gx );
+                setRightGroup( rightGroups, sx, gy );
+                DEBUG_LOG( QString( "[*M1B*] agrupats %1(g%2)(rg%3) i %4(g%5)(rg%6)" ).arg( sx ).arg( groups[sx] ).arg( rightGroups[sx] ).arg( sy ).arg( groups[sy] ).arg( rightGroups[sy] ) );
+            }
+        }
+        else
+        {
+            belowThreshold = false;
+        }
+
+        i--;
+    }
+
+    // assignem ids consecutius als groups
+    unsigned short g = 0, lastGroup = groups[0];
+    for ( int i = 0; i < groups.size(); i++ )
+    {
+        if ( groups[i] == lastGroup ) groups[i] = g;
+        else
+        {
+            lastGroup = groups[i];
+            groups[i] = ++g;
+        }
+    }
+    unsigned short rg = groups.last(), lastRightGroup = rightGroups.last();
+    for ( int i = groups.size() - 1; i >= 0; i-- )
+    {
+        if ( rightGroups[i] == lastRightGroup ) rightGroups[i] = rg;
+        else
+        {
+            lastRightGroup = rightGroups[i];
+            rightGroups[i] = --rg;
+        }
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/m1b%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        DEBUG_LOG( QString( "[M1B] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        for ( int i = 0; i < groups.size(); i++ )
+        {
+            DEBUG_LOG( QString( "[M1B] group %1 : slice %2 : right group %3" ).arg( groups[i] ).arg( i ).arg( rightGroups[i] ) );
             out << "group " << groups[i] << " : slice " << i << "\n";
         }
         outFile.close();
@@ -490,9 +582,17 @@ void Slicer::computeSimilarities()  /// \todo Fer-ho més eficient!!!
 
 void Slicer::setGroup( QVector< unsigned short > & groups, unsigned short slice, unsigned short group ) const
 {
-    if ( slice < m_sliceCount - 1 &&  groups[slice+1] == groups[slice] )
+    if ( slice < m_sliceCount - 1 && groups[slice+1] == groups[slice] )
         setGroup( groups, slice + 1, group );
     groups[slice] = group;
+}
+
+
+void Slicer::setRightGroup( QVector< unsigned short > & rightGroups, unsigned short slice, unsigned short group ) const
+{
+    if ( slice > 0 && rightGroups[slice-1] == rightGroups[slice] )
+        setRightGroup( rightGroups, slice - 1, group );
+    rightGroups[slice] = group;
 }
 
 
