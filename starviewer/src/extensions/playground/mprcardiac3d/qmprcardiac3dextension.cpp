@@ -98,7 +98,7 @@ void QMPRCardiac3DExtension::createConnections()
 
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_mpr3DView , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_mpr3DView , SLOT( resetWindowLevelToDefault() ) );
-    
+
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_mpr3DView , SLOT( setSubVolume(int) ) );
 
     connect( m_ButtonPlay , SIGNAL( clicked() ) , this , SLOT( playImages() ) );
@@ -123,7 +123,7 @@ void QMPRCardiac3DExtension::setInput( Volume *input )
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("QMPRCardiac3DExtension:: Donem Input ");
 
-    m_firstSliceInterval = 0; 
+    m_firstSliceInterval = 0;
     m_lastSliceInterval = m_volume->getVolumeSourceInformation()->getNumberOfPhases() - 1;
 
     m_slider->setMinimum( m_firstSliceInterval );
@@ -144,14 +144,14 @@ void QMPRCardiac3DExtension::playImages(){
     }
 }
 
-void QMPRCardiac3DExtension::pauseImages() 
+void QMPRCardiac3DExtension::pauseImages()
 {
     m_timer->stop();
     m_ButtonPlay->setIcon( QIcon(":/images/player_play32.png") );
 //     m_ButtonPlay->setChecked( false );
 }
 
-void QMPRCardiac3DExtension::recordVideo() 
+void QMPRCardiac3DExtension::recordVideo()
 {
 
     int phases = m_volume->getVolumeSourceInformation()->getNumberOfPhases();
@@ -244,6 +244,7 @@ void QMPRCardiac3DExtension::recordVideo()
             videoWriter->Write();
         }
         m_progressDialog->setValue(i);
+        qApp->processEvents();
     }
     videoWriter->End();
     m_progressDialog->setValue( frames.size() );
@@ -257,7 +258,7 @@ void QMPRCardiac3DExtension::timerEvent(QTimerEvent *event)
         // Si estem al final de l'interval
         if (  m_slider->value() == m_lastSliceInterval )
         {
-            if ( m_ButtonLoop->isChecked() ) 
+            if ( m_ButtonLoop->isChecked() )
             {
                 m_slider->setValue( m_firstSliceInterval );
             }
@@ -266,7 +267,7 @@ void QMPRCardiac3DExtension::timerEvent(QTimerEvent *event)
                 m_nextStep = -1;
                 m_slider->setValue( m_slider->value() + m_nextStep );
             }
-            else 
+            else
             {
                 m_slider->setValue( m_firstSliceInterval );
                 pauseImages();

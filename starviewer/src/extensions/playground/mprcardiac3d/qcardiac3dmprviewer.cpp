@@ -82,13 +82,15 @@ void QCardiac3DMPRViewer::updatePlanesData()
     {
         cout << "inici" << endl;
         m_axialImagePlaneWidget->SetInput( m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData() );
-        
+
         if( !m_axialResliced )
         {
             m_axialResliced = new Volume( m_axialImagePlaneWidget->GetResliceOutput() );
         }
         else
+        {
             m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
+        }
         m_axialResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
 
         m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData() );
@@ -97,7 +99,9 @@ void QCardiac3DMPRViewer::updatePlanesData()
             m_sagitalResliced = new Volume( m_sagitalImagePlaneWidget->GetResliceOutput() );
         }
         else
+        {
             m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
+        }
         m_sagitalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
 
         m_coronalImagePlaneWidget->SetInput( m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData() );
@@ -106,7 +110,9 @@ void QCardiac3DMPRViewer::updatePlanesData()
             m_coronalResliced = new Volume( m_coronalImagePlaneWidget->GetResliceOutput() );
         }
         else
+        {
             m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
+        }
         m_coronalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
         cout << "fi" << endl;
     }
@@ -134,11 +140,17 @@ void QCardiac3DMPRViewer::resetPlanes()
         m_coronalImagePlaneWidget->SetSliceIndex(size[1]/2);
 
         if( m_axialPlaneVisible )
+        {
             m_axialImagePlaneWidget->On();
+        }
         if( m_sagitalPlaneVisible )
+        {
             m_sagitalImagePlaneWidget->On();
+        }
         if( m_coronalPlaneVisible )
+        {
             m_coronalImagePlaneWidget->On();
+        }
     }
 }
 
@@ -174,60 +186,55 @@ void QCardiac3DMPRViewer::setSubVolume( int index )
 
     Volume * subVolume;
 
-    m_axialImagePlaneWidget->GetPoint1 ( point1_a );
-    m_axialImagePlaneWidget->GetPoint2 ( point2_a );
-    m_axialImagePlaneWidget->GetOrigin ( orig_a );
+    m_axialImagePlaneWidget->GetPoint1( point1_a );
+    m_axialImagePlaneWidget->GetPoint2( point2_a );
+    m_axialImagePlaneWidget->GetOrigin( orig_a );
 
-    m_sagitalImagePlaneWidget->GetPoint1 ( point1_s );
-    m_sagitalImagePlaneWidget->GetPoint2 ( point2_s );
-    m_sagitalImagePlaneWidget->GetOrigin ( orig_s );
+    m_sagitalImagePlaneWidget->GetPoint1( point1_s );
+    m_sagitalImagePlaneWidget->GetPoint2( point2_s );
+    m_sagitalImagePlaneWidget->GetOrigin( orig_s );
 
-    m_coronalImagePlaneWidget->GetPoint1 ( point1_c );
-    m_coronalImagePlaneWidget->GetPoint2 ( point2_c );
-    m_coronalImagePlaneWidget->GetOrigin ( orig_c );
+    m_coronalImagePlaneWidget->GetPoint1( point1_c );
+    m_coronalImagePlaneWidget->GetPoint2( point2_c );
+    m_coronalImagePlaneWidget->GetOrigin( orig_c );
 
     m_axialImagePlaneWidget->GetWindowLevel(wl);
     m_sagitalImagePlaneWidget->GetWindowLevel(wl1);
     m_coronalImagePlaneWidget->GetWindowLevel(wl2);
 
+    int sagitalSliceIndex = m_sagitalImagePlaneWidget->GetSliceIndex();
+    int coronalSliceIndex = m_coronalImagePlaneWidget->GetSliceIndex();
+    int axialSliceIndex = m_axialImagePlaneWidget->GetSliceIndex();
+
     subVolume = m_mainVolume->getSubVolume( index );
 
-//     double * origen = subVolume->getVtkData()->GetOrigin();
-//     double * space = subVolume->getVtkData()->GetSpacing();
-//     double * origen = subVolume->getVtkData()->GetOrigin();
-//     double * space = subVolume->getVtkData()->GetSpacing();
-//     int * extent = subVolume->getVtkData()->GetExtent();
-//     cout << "origen = " << origen[0] << "," << origen[1] << "," << origen[2] << endl;
-//     cout << "spacing = " << space[0] << "," << space[1] << "," << space[2] << endl ;
-//     cout << "extent x = " << extent[0] << "," << extent[1]  << endl ;
-//     cout << "extent y = " << extent[2] << "," << extent[3]  << endl ;
-//     cout << "extent z = " << extent[4] << "," << extent[5]  << endl ;
-
     m_axialImagePlaneWidget->SetInput( subVolume->getVtkData() );
-//     m_sagitalImagePlaneWidget->SetInput( subVolume->getVtkData() );
-//     m_coronalImagePlaneWidget->SetInput( subVolume->getVtkData() );
+    m_sagitalImagePlaneWidget->SetInput( subVolume->getVtkData() );
+    m_coronalImagePlaneWidget->SetInput( subVolume->getVtkData() );
 
+    m_axialImagePlaneWidget->SetPoint1( point1_a );
+    m_axialImagePlaneWidget->SetPoint2( point2_a );
+    m_axialImagePlaneWidget->SetOrigin( orig_a );
 
-    m_axialImagePlaneWidget->SetPoint1 ( point1_a );
-    m_axialImagePlaneWidget->SetPoint2 ( point2_a );
-    m_axialImagePlaneWidget->SetOrigin ( orig_a );
-/*
-    m_sagitalImagePlaneWidget->SetPoint1 ( point1_s );
-    m_sagitalImagePlaneWidget->SetPoint2 ( point2_s );
-    m_sagitalImagePlaneWidget->SetOrigin ( orig_s );
+    m_sagitalImagePlaneWidget->SetPoint1( point1_s );
+    m_sagitalImagePlaneWidget->SetPoint2( point2_s );
+    m_sagitalImagePlaneWidget->SetOrigin( orig_s );
 
-    m_coronalImagePlaneWidget->SetPoint1 ( point1_c );
-    m_coronalImagePlaneWidget->SetPoint2 ( point2_c );
-    m_coronalImagePlaneWidget->SetOrigin ( orig_c );*/
+    m_coronalImagePlaneWidget->SetPoint1( point1_c );
+    m_coronalImagePlaneWidget->SetPoint2( point2_c );
+    m_coronalImagePlaneWidget->SetOrigin( orig_c );
+
+    m_axialImagePlaneWidget->SetSliceIndex(axialSliceIndex);
+    m_sagitalImagePlaneWidget->SetSliceIndex(sagitalSliceIndex);
+    m_coronalImagePlaneWidget->SetSliceIndex(coronalSliceIndex);
 
     m_axialImagePlaneWidget->UpdatePlacement();
-//     m_sagitalImagePlaneWidget->UpdatePlacement();
-//     m_coronalImagePlaneWidget->UpdatePlacement();
+    m_sagitalImagePlaneWidget->UpdatePlacement();
+    m_coronalImagePlaneWidget->UpdatePlacement();
 
     m_axialImagePlaneWidget->SetWindowLevel(wl[0], wl[1]);
-//     m_sagitalImagePlaneWidget->SetWindowLevel(wl1[0], wl1[1]);
-//     m_coronalImagePlaneWidget->SetWindowLevel(wl2[0], wl2[1]);
-
+    m_sagitalImagePlaneWidget->SetWindowLevel(wl1[0], wl1[1]);
+    m_coronalImagePlaneWidget->SetWindowLevel(wl2[0], wl2[1]);
 }
 
 

@@ -97,7 +97,7 @@ void QCardiac2DViewerExtension::createActions()
     m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
 
     connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    
+
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -106,7 +106,7 @@ void QCardiac2DViewerExtension::createActions()
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
     connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
-    
+
     m_rotateCounterClockWiseAction = new QAction( 0 );
     m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
     m_rotateCounterClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
@@ -115,7 +115,7 @@ void QCardiac2DViewerExtension::createActions()
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
 
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
-    
+
 
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
@@ -184,7 +184,7 @@ void QCardiac2DViewerExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_2DView->setInput( m_mainVolume );
 
-    m_firstSliceInterval = 0; 
+    m_firstSliceInterval = 0;
     m_lastSliceInterval = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases() - 1;
 
     double wl[2];
@@ -272,14 +272,14 @@ if ( !m_timer->isActive() )
     }
 }
 
-void QCardiac2DViewerExtension::pauseImages() 
+void QCardiac2DViewerExtension::pauseImages()
 {
     m_timer->stop();
     m_ButtonPlay->setIcon( QIcon(":/images/player_play32.png") );
 //     m_ButtonPlay->setChecked( false );
 }
 
-void QCardiac2DViewerExtension::recordVideo() 
+void QCardiac2DViewerExtension::recordVideo()
 {
 
     int phases = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases();
@@ -337,6 +337,7 @@ void QCardiac2DViewerExtension::recordVideo()
     }
     else if( saveAsDialog.selectedFilter() == tr("AVI (*.avi)") )
     {
+           //\TODO Sembla que les vtk no s'han compilat amb suport per avi. Repassar-ho.
 //         videoWriter = vtkAVIWriter::New();
 //         pattern = ".avi";
         return;
@@ -375,6 +376,7 @@ void QCardiac2DViewerExtension::recordVideo()
         }
 
         m_progressDialog->setValue(i);
+        qApp->processEvents();
     }
     videoWriter->End();
     m_progressDialog->setValue( frames.size() );
@@ -390,7 +392,7 @@ void QCardiac2DViewerExtension::timerEvent(QTimerEvent *event)
         // Si estem al final de l'interval
         if (  m_slider->value() == m_lastSliceInterval )
         {
-            if ( m_ButtonLoop->isChecked() ) 
+            if ( m_ButtonLoop->isChecked() )
             {
                 m_slider->setValue( m_firstSliceInterval );
             }
@@ -399,7 +401,7 @@ void QCardiac2DViewerExtension::timerEvent(QTimerEvent *event)
                 m_nextStep = -1;
                 m_slider->setValue( m_slider->value() + m_nextStep );
             }
-            else 
+            else
             {
                 m_slider->setValue( m_firstSliceInterval );
                 pauseImages();
