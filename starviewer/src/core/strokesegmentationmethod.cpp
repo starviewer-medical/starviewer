@@ -163,7 +163,6 @@ double StrokeSegmentationMethod::applyMethod()
 
 double StrokeSegmentationMethod::applyMethodVTK()
 {
-    double pos[3];
     double origin[3];
     double spacing[3];
     int index[3];
@@ -254,8 +253,8 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     Volume::ItkImageType::SizeType   size, newsize;
     size = m_Volume->getItkData()->GetBufferedRegion().GetSize();
 
-    newsize[0] = (size[0])/reducedSize;
-    newsize[1] = (size[1])/reducedSize;
+    newsize[0] = (long unsigned int)((size[0])/reducedSize);
+    newsize[1] = (long unsigned int)((size[1])/reducedSize);
     newsize[2] = (size[2]);
 
     resampleFilter->SetSize( newsize );
@@ -569,9 +568,9 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     Volume::ItkImageType::SizeType   size, newsize;
     size = m_Volume->getItkData()->GetBufferedRegion().GetSize();
 
-    newsize[0] = (size[0]*spacing[0])/newspacing[0];  // number of pixels along X
-    newsize[1] = (size[1]*spacing[1])/newspacing[1];  // number of pixels along Y
-    newsize[2] = (size[2]*spacing[2])/newspacing[2];  // number of pixels along Y
+    newsize[0] = (long unsigned int)((size[0]*spacing[0])/newspacing[0]);  // number of pixels along X
+    newsize[1] = (long unsigned int)((size[1]*spacing[1])/newspacing[1]);  // number of pixels along Y
+    newsize[2] = (long unsigned int)((size[2]*spacing[2])/newspacing[2]);  // number of pixels along Y
 
     resampleFilter->SetSize( newsize );
     resampleFilter->SetInput( m_Volume->getItkData() );
@@ -603,9 +602,9 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     resampleMaskFilter->SetOutputOrigin( neworigin );
     size = m_Mask->getItkData()->GetBufferedRegion().GetSize();
 
-    newsize[0] = (size[0]*spacing[0])/newspacing[0];  // number of pixels along X
-    newsize[1] = (size[1]*spacing[1])/newspacing[1];  // number of pixels along Y
-    newsize[2] = (size[2]*spacing[2])/newspacing[2];  // number of pixels along Y
+    newsize[0] = (long unsigned int)((size[0]*spacing[0])/newspacing[0]);  // number of pixels along X
+    newsize[1] = (long unsigned int)((size[1]*spacing[1])/newspacing[1]);  // number of pixels along Y
+    newsize[2] = (long unsigned int)((size[2]*spacing[2])/newspacing[2]);  // number of pixels along Y
 
     resampleMaskFilter->SetSize( newsize );
     //resampleMaskFilter->SetInput( m_Mask->getItkData() );
@@ -1044,7 +1043,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
     maskIt.GoToBegin();
 
 /*    const double multiplier = 1.0; */
-    double constVis = (double)m_insideMaskValue;
+//     double constVis = (double)m_insideMaskValue;
     //double constVis = 1.0;+
     double auxValue;
     //double alpha = 1.0;

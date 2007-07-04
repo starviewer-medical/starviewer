@@ -65,7 +65,7 @@ KeyImageNote* KeyImageNoteFileReader::read(const QString &filename)
     DEBUG_LOG( QString("KeyImageNoteFileReader::read: ReferenceList = %1").arg( currentRequestedList.getNumberOfInstances() ) );
     QStringList currentRequested;
     currentRequestedList.gotoFirstItem();
-    for(unsigned int i = 0; i < currentRequestedList.getNumberOfInstances(); ++i)
+    for( unsigned int i = 0; i < currentRequestedList.getNumberOfInstances(); ++i)
     {
         OFString SOPInstance;
         currentRequestedList.getSOPInstanceUID(SOPInstance);
