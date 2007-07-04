@@ -59,5 +59,10 @@
         <file>translations/interface_ca_ES.qm</file>
         <file>translations/interface_en_GB.qm</file>
         <file>translations/interface_es_ES.qm</file>
+        <file>images/viewmag+.png</file>
+        <file>images/viewmag-.png</file>
+        <file>images/view_left_right.png</file>
+        <file>images/view_top_bottom.png</file>
+        <file>images/verticalWidget.png</file>
     </qresource>
 </RCC>
