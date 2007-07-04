@@ -66,7 +66,7 @@ public:
     void simulationOfNewPolyLinePoint( double *point1, double *point2 );
     
     ///crea l'etiqueta amb la informació de la ROI
-    vtkCaptionActor2D* createCaption( double *point, double area, double mean );
+    vtkCaptionActor2D* createCaption( double *point, double area/*, double mean*/ );
     
     ///calcula el punt on ha d'anar situada l'etiqueta de la ROI
     double* calculateCaptionPosition(  vtkPolyData* );

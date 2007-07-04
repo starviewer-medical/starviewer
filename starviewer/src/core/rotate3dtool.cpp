@@ -15,7 +15,7 @@
 
 namespace udg {
 
-Rotate3DTool::Rotate3DTool( Q3DViewer *viewer , QObject *parent, QString name )
+Rotate3DTool::Rotate3DTool( Q3DViewer *viewer )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -23,7 +23,7 @@ Rotate3DTool::Rotate3DTool( Q3DViewer *viewer , QObject *parent, QString name )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-Rotate3DTool::Rotate3DTool( Q3DMPRViewer *viewer , QObject *parent, QString name )
+Rotate3DTool::Rotate3DTool( Q3DMPRViewer *viewer )
 {
     m_state = NONE;
     // \TODO implement me

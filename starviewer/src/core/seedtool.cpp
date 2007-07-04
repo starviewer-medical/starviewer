@@ -20,7 +20,7 @@
 
 namespace udg {
 
-SeedTool::SeedTool( Q2DViewer *viewer , QObject *parent, QString name )
+SeedTool::SeedTool( Q2DViewer *viewer )
 // : Tool(parent)
 {
     m_state = NONE;

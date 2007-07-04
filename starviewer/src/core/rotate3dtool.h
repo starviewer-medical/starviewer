@@ -27,8 +27,8 @@ Q_OBJECT
 public:
 
     enum { NONE , ROTATING };
-    Rotate3DTool( Q3DViewer *viewer , QObject *parent = 0, QString name = 0 );
-    Rotate3DTool( Q3DMPRViewer *viewer , QObject *parent = 0, QString name = 0 );
+    Rotate3DTool( Q3DViewer *viewer );
+    Rotate3DTool( Q3DMPRViewer *viewer );
 
     ~Rotate3DTool();
 

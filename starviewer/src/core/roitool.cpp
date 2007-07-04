@@ -639,7 +639,7 @@ void ROITool::stopROIAnnotation()
         //\TODO falta el càlcul de la mitjana
         mean = 0;//computeMean( m_newROIAssembly );
         
-        m_newROIAssembly->setCaption( createCaption( calculateCaptionPosition( m_newROIAssembly->getPolyData() ), area, mean ) );
+        m_newROIAssembly->setCaption( createCaption( calculateCaptionPosition( m_newROIAssembly->getPolyData() ), area ) );
         m_newROIAssembly->setShapeType( m_ROIType );
         this->saveIntoAList( m_newROIAssembly );
         m_2DViewer->getRenderer()->AddActor2D( m_newROIAssembly->getCaption() );
@@ -1043,7 +1043,7 @@ void ROITool::answerToKeyEvent()
     }
 }
 
-vtkCaptionActor2D* ROITool::createCaption( double *point, double area, double mean )
+vtkCaptionActor2D* ROITool::createCaption( double *point, double area/*, double mean*/ )
 {
     vtkCaptionActor2D *captionActor = vtkCaptionActor2D::New();
     captionActor->GetAttachmentPointCoordinate()->SetCoordinateSystemToWorld();
