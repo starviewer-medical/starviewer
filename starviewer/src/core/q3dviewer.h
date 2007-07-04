@@ -79,7 +79,7 @@ public slots:
     void reset();
 
     /// Li assignem la funció de transferència que volem aplicar
-    void setTransferFunction( TransferFunction *transferFunction ){};
+    void setTransferFunction( TransferFunction* ){};
 
 private:
     /// fa la visualització per raycasting

@@ -300,7 +300,7 @@ void Input::setVolumeInformation()
 QStringList Input::stdVectorOfStdStringToQStringList( std::vector< std::string > vector )
 {
     QStringList list;
-    for( int i = 0; i < vector.size(); i++ )
+    for( unsigned int i = 0; i < vector.size(); i++ )
     {
         list += vector[i].c_str();
     }

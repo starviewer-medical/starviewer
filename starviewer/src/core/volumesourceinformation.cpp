@@ -463,7 +463,7 @@ void VolumeSourceInformation::readWindowLevelData()
             windowWidthString = *((DcmDecimalString *)(stack.top()));
         }
         double *wl;
-        for( int i = 0; i < windowLevelString.getVM(); i++ )
+        for( unsigned int i = 0; i < windowLevelString.getVM(); i++ )
         {
             wl = new double[2];
             windowWidthString.getFloat64( wl[0], i );
@@ -478,7 +478,7 @@ void VolumeSourceInformation::readWindowLevelData()
         {
             wlDescriptionString = *((DcmLongString *)(stack.top()));
             OFString value;
-            for( int i = 0; i < wlDescriptionString.getVM(); i++ )
+            for( unsigned int i = 0; i < wlDescriptionString.getVM(); i++ )
             {
                 wlDescriptionString.getOFString( value , i );
                 m_windowLevelDescriptions << value.c_str();

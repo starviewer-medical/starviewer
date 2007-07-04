@@ -106,7 +106,7 @@ public:
     /// Retorna un nou Volume on la Data és només del sub volume indicat
     Volume *getSubVolume( int index );
 
-    Volume *orderSlices(int tipus);
+    Volume *orderSlices();
 
 private:
     /// Filtres per importar/exportar

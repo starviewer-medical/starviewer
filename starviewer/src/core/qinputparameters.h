@@ -44,7 +44,7 @@ public slots:
         un identificador (que, en realitat, serà un enum). Serveix per canviar els valors a partir 
         d'una classe Parameters
     */
-    virtual void readParameter(int index) /*= 0*/{}; 
+    virtual void readParameter( int ) /*= 0*/{}; 
     /**
         Escriu tots els valors de paràmetres que té actualment al Parameters associat
     */

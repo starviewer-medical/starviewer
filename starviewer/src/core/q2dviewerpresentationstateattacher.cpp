@@ -754,7 +754,7 @@ void Q2DViewerPresentationStateAttacher::applyPreSpatialTransformAnnotation()
                         // els punts del polígon en format vtk
                         vtkPoints *points = vtkPoints::New();
                         double point[2];
-                        for( int k = 0; k < j; k++ )
+                        for( unsigned long k = 0; k < j; k++ )
                         {
                             if( EC_Normal == pgraphic->getPoint( k,fx,fy ) )
                             {
@@ -1162,7 +1162,7 @@ void Q2DViewerPresentationStateAttacher::applyPostSpatialTransformAnnotation()
                         vtkPoints *points = vtkPoints::New();
                         // si les coordenades són relatives haurem de transformar els punts
                         double point[2];
-                        for( int k = 0; k < j; i++ )
+                        for( unsigned long k = 0; k < j; i++ )
                         {
                             if( EC_Normal == pgraphic->getPoint( k,fx,fy ) )
                             {

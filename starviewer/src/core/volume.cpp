@@ -170,7 +170,7 @@ Volume *Volume::getSubVolume( int index  )
     return subVolume;
 }
 
-Volume * Volume::orderSlices(int tipus)
+Volume * Volume::orderSlices()
 {
     int phases, slices;
     Volume * orderedVolume;
