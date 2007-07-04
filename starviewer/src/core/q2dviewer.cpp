@@ -739,6 +739,11 @@ Tool *Q2DViewer::getTool( QString toolName )
     return m_toolManager->getTool( toolName );
 }
 
+QString Q2DViewer::getCurrentToolName()
+{
+    return m_toolManager->getCurrentToolName();
+}
+
 void Q2DViewer::addSliceAnnotation( vtkProp *actor, int slice, int view )
 {
     m_sliceAnnotationController->addActor( actor, slice, view );
