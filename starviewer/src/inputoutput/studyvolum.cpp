@@ -104,7 +104,7 @@ QString StudyVolum::getDefaultSeriesUID()
     return m_defaultSeriesUID;
 }
 
-SeriesVolum StudyVolum::getSeriesVolum( unsigned int index )
+SeriesVolum StudyVolum::getSeriesVolum( int index )
 {
     SeriesVolum result;
     if( index > m_studyVolumList.size() )
@@ -113,7 +113,8 @@ SeriesVolum StudyVolum::getSeriesVolum( unsigned int index )
     }
     else
     {
-        result = m_studyVolumList.at( index );
+        if ( index >= 0 )
+            result = m_studyVolumList.at( index );
     }
     return result;
 }

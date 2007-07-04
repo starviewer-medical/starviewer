@@ -28,7 +28,7 @@ public:
 
     double applyMethod();
 
-    void applyMethodNextSlice(int slice, int step, int seedx, int seedy);
+    void applyMethodNextSlice( unsigned int slice, int step, int seedx, int seedy );
 
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();

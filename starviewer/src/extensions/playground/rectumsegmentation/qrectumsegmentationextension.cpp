@@ -682,7 +682,7 @@ void QRectumSegmentationExtension::setEditorPoint(  )
                     break;
                 }
             }
-            double volume = this->updateMaskVolume();
+//             double volume = this->updateMaskVolume();
             m_resultsLineEdit->clear();
             m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
             m_rectumVolumeLineEdit->clear();

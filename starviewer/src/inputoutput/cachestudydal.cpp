@@ -870,7 +870,7 @@ int CacheStudyDAL::getDate()
 QString CacheStudyDAL::buildSqlStudyModality( DicomMask *mask )
 {
     QString sqlSentence;
-    uint index = 0;
+    int index = 0;
 
     if ( mask->getStudyModality().length() > 0 )
     {

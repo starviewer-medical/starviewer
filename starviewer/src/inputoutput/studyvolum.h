@@ -114,7 +114,7 @@ public:
     /** retorna el seriesVolum que indiquem
      * @return retorna el seriesVolum que s'indica
      */
-    SeriesVolum getSeriesVolum( unsigned int index );
+    SeriesVolum getSeriesVolum( int index );
 
 private:
 

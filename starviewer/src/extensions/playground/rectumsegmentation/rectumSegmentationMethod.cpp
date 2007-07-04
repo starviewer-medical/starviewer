@@ -308,7 +308,7 @@ double rectumSegmentationMethod::applyMethod()
     return m_volume;
 }
 
-void rectumSegmentationMethod::applyMethodNextSlice(int slice, int step, int seedx, int seedy)
+void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int step, int seedx, int seedy )
 {
     typedef itk::CastImageFilter< Volume::ItkImageType, IntermediateImageType > InputCastingFilterType;
     typedef itk::CastImageFilter< InternalImageType,  ExternalImageType>    OutputCastingFilterType;
@@ -457,7 +457,6 @@ void rectumSegmentationMethod::applyMethodNextSlice(int slice, int step, int see
         //itk::ImageRegionIterator< InternalImageType > itSeg( connectedThreshold->GetOutput(), connectedThreshold->GetOutput()->GetLargestPossibleRegion() );
         itk::ImageRegionIterator< InternalImageType > itSeg( binaryDilate->GetOutput(), binaryDilate->GetOutput()->GetLargestPossibleRegion() );
         itSeg.GoToBegin();
-        unsigned int contant = m_cont;
         unsigned int i,j,k;
         IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
         std::cout<<sizeOut<<std::endl;
@@ -798,9 +797,9 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     Volume::ItkImageType::SizeType   size, newsize;
     size = m_Volume->getItkData()->GetBufferedRegion().GetSize();
 
-    newsize[0] = (size[0]*spacing[0])/newspacing[0];  // number of pixels along X
-    newsize[1] = (size[1]*spacing[1])/newspacing[1];  // number of pixels along Y
-    newsize[2] = (size[2]*spacing[2])/newspacing[2];  // number of pixels along Y
+    newsize[0] = (unsigned long int)((size[0]*spacing[0])/newspacing[0]);  // number of pixels along X
+    newsize[1] = (unsigned long int)((size[1]*spacing[1])/newspacing[1]);  // number of pixels along Y
+    newsize[2] = (unsigned long int)((size[2]*spacing[2])/newspacing[2]);  // number of pixels along Y
 
     resampleFilter->SetSize( newsize );
     resampleFilter->SetInput( m_Volume->getItkData() );
@@ -831,9 +830,9 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     resampleMaskFilter->SetOutputOrigin( neworigin );
     size = m_Mask->getItkData()->GetBufferedRegion().GetSize();
 
-    newsize[0] = (size[0]*spacing[0])/newspacing[0];  // number of pixels along X
-    newsize[1] = (size[1]*spacing[1])/newspacing[1];  // number of pixels along Y
-    newsize[2] = (size[2]*spacing[2])/newspacing[2];  // number of pixels along Y
+    newsize[0] = (unsigned long int)((size[0]*spacing[0])/newspacing[0]);  // number of pixels along X
+    newsize[1] = (unsigned long int)((size[1]*spacing[1])/newspacing[1]);  // number of pixels along Y
+    newsize[2] = (unsigned long int)((size[2]*spacing[2])/newspacing[2]);  // number of pixels along Y
 
     resampleMaskFilter->SetSize( newsize );
     resampleMaskFilter->SetInput( m_Mask->getItkData() );

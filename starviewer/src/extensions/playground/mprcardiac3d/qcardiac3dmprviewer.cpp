@@ -65,7 +65,7 @@ void QCardiac3DMPRViewer::createOutline()
 
 void QCardiac3DMPRViewer::setInput( Volume *volume )
 {
-    m_mainVolume = volume->orderSlices( 1 );
+    m_mainVolume = volume->orderSlices();
     this->createOutline();
     // li proporcionem les dades als plans
     this->updatePlanesData();

@@ -566,6 +566,8 @@ void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
                 k3bParamatersList.push_back( isoPath );
                 k3b.execute( "k3b" , k3bParamatersList );
                 break;
+        default:
+            break;
     }
 
     progressBar->close();
