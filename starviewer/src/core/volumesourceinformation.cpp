@@ -31,26 +31,26 @@ VolumeSourceInformation::~VolumeSourceInformation()
 QString VolumeSourceInformation::getRevertedPatientOrientationString()
 {
     int i = 0;
-    QString reverted;
+    QString reversed;
     while( i < m_patientOrientationString.size() )
     {
         if( m_patientOrientationString.at( i ) == 'L' )
-            reverted += "R";
+            reversed += "R";
         else if( m_patientOrientationString.at( i ) == 'R' )
-            reverted += "L";
+            reversed += "L";
         else if( m_patientOrientationString.at( i ) == 'A' )
-            reverted += "P";
+            reversed += "P";
         else if( m_patientOrientationString.at( i ) == 'P' )
-            reverted += "A";
+            reversed += "A";
         else if( m_patientOrientationString.at( i ) == 'S' )
-            reverted += "I";
+            reversed += "I";
         else if( m_patientOrientationString.at( i ) == 'I' )
-            reverted += "S";
+            reversed += "S";
         else
-            reverted += m_patientOrientationString.at( i );
+            reversed += m_patientOrientationString.at( i );
         i++;
     }
-    return reverted;
+    return reversed;
 }
 
 void VolumeSourceInformation::setDirectionCosines( double directionCosines[9] )
@@ -543,25 +543,25 @@ QString VolumeSourceInformation::getImageSOPInstanceUID( int index )
 void VolumeSourceInformation::setPatientPosition( QString patientPosition )
 {
     m_patientPosition = patientPosition;
-    DEBUG_LOG( "Patient position:; " + m_patientPosition );
-    if( m_patientPosition == "HFP" ) // Head First-Prone: Entra de cap i mira cap avall
-        setPatientOrientationString("LRPASI");
-    else if( m_patientPosition == "HFDR" ) // Head First-Decubitus Right: Entra de cap i recolzat sobre el braç dret
-        setPatientOrientationString("APLRSI");
-    else if( m_patientPosition == "FFDR" ) // Feet First-Decubitus Right: Entra de peus i recolzat sobre el braç dret
-        setPatientOrientationString("PALRIS");
-    else if( m_patientPosition == "FFP" ) // Feet First-Prone: Entra de peus i mira cap avall
-        setPatientOrientationString("RLPAIS");
-    else if( m_patientPosition == "HFS" ) // Head First-Supine: Entra de cap i mira cap amunt
-        setPatientOrientationString("RLAPSI");
-    else if( m_patientPosition == "HFDL" ) // Head First-Decubitus Left: Entra de cap i recolzat sobre el braç esquerre
-        setPatientOrientationString("PARLSI");
-    else if( m_patientPosition == "FFDL" ) // Feet First-Decubitus Left: Entra de peus i recolzat sobre el braç esquerre
-        setPatientOrientationString("APRLIS");
-    else if( m_patientPosition == "FFS" ) // Feet First-Supine: Entra de peus i mira cap amunt
-        setPatientOrientationString("LRAPIS");
-    else // No tenim l'atribut esperat
-        setPatientOrientationString("??????");
+    DEBUG_LOG( "Patient position:: " + m_patientPosition );
+//     if( m_patientPosition == "HFP" ) // Head First-Prone: Entra de cap i mira cap avall
+//         setPatientOrientationString("LRPASI");
+//     else if( m_patientPosition == "HFDR" ) // Head First-Decubitus Right: Entra de cap i recolzat sobre el braç dret
+//         setPatientOrientationString("APLRSI");
+//     else if( m_patientPosition == "FFDR" ) // Feet First-Decubitus Right: Entra de peus i recolzat sobre el braç dret
+//         setPatientOrientationString("PALRIS");
+//     else if( m_patientPosition == "FFP" ) // Feet First-Prone: Entra de peus i mira cap avall
+//         setPatientOrientationString("RLPAIS");
+//     else if( m_patientPosition == "HFS" ) // Head First-Supine: Entra de cap i mira cap amunt
+//         setPatientOrientationString("RLAPSI");
+//     else if( m_patientPosition == "HFDL" ) // Head First-Decubitus Left: Entra de cap i recolzat sobre el braç esquerre
+//         setPatientOrientationString("PARLSI");
+//     else if( m_patientPosition == "FFDL" ) // Feet First-Decubitus Left: Entra de peus i recolzat sobre el braç esquerre
+//         setPatientOrientationString("APRLIS");
+//     else if( m_patientPosition == "FFS" ) // Feet First-Supine: Entra de peus i mira cap amunt
+//         setPatientOrientationString("LRAPIS");
+//     else // No tenim l'atribut esperat
+//         setPatientOrientationString("??????");
 }
 
 };  // end namespace udg

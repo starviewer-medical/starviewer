@@ -227,10 +227,60 @@ QString Input::getOrientation( double vector[3] )
 void Input::setVolumeInformation()
 {
     QString value;
-    //obtenim l'string amb la posició del pacient
+    //obtenim l'string amb la posició del pacient relativa a la màquina(series level). Obligatori per MR i CT. No ha d'estar present si Patient Orientation Code Sequence (0054,0410) hi és, altrament és camp obligatori.
     if( queryTagAsString("0018|5100", value) )
     {
         m_volumeData->getVolumeSourceInformation()->setPatientPosition( value.trimmed() );
+    }
+    //obtenim la orientació de la imatge(image level). Això ens designarà la direcció anatòmica (R,L,P,A,H,F) dels pixels que van d'esquerra-dreta/dalt-abaix. És un camp requerit si l'imatge no requereix Image Orientation(0020,0037) i Image Position(0020,0032)
+    if( queryTagAsString( "0020|0020" , value ) )
+    {
+        value.replace( QString( "\\" ) , QString( "," ) );
+        m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( value );
+    }
+    else
+    {
+        // si no tenim la informació directament l'haurem de deduir a partir dels direction cosines
+        // l'Image Orientation
+        if( queryTagAsString( "0020|0037", value ) )
+        {
+            // passem de l'string als valors double
+            double dirCosinesValuesX[3] , dirCosinesValuesY[3] , dirCosinesValuesZ[3];
+            QStringList list = value.split( "\\" );
+            if( list.size() == 6 )
+            {
+                for ( int i = 0; i < 3; i++ )
+                {
+                    dirCosinesValuesX[ i ] = list.at( i ).toDouble();
+                    dirCosinesValuesY[ i ] = list.at( i+3 ).toDouble();
+                }
+
+                vtkMath::Cross( dirCosinesValuesX , dirCosinesValuesY , dirCosinesValuesZ );
+                // I ara ens disposem a crear l'string amb l'orientació del pacient
+                QString patientOrientationString;
+
+                patientOrientationString = this->getOrientation( dirCosinesValuesX );
+                patientOrientationString += ",";
+                patientOrientationString += this->getOrientation( dirCosinesValuesY );
+                patientOrientationString += ",";
+                patientOrientationString += this->getOrientation( dirCosinesValuesZ );
+                m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( patientOrientationString );
+                m_volumeData->getVolumeSourceInformation()->setXDirectionCosines( dirCosinesValuesX );
+                m_volumeData->getVolumeSourceInformation()->setYDirectionCosines( dirCosinesValuesY );
+                m_volumeData->getVolumeSourceInformation()->setZDirectionCosines( dirCosinesValuesZ );
+
+                DEBUG_LOG("Patient orientation string: " + patientOrientationString );
+            }
+            else
+            {
+                // hi ha algun error en l'string ja que han de ser 2 parells de 3 valors
+                DEBUG_LOG( "No s'ha pogut determinar l'orientació del pacient (Tags 0020|0020 , 0020|0037) : " + value );
+            }
+        }
+        else
+        {
+            // no podem obtenir l'string d'orientació del pacient
+        }
     }
     // nom de la institució on s'ha fet l'estudi
     if( queryTagAsString( "0008|0080" , value ) )

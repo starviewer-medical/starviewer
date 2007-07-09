@@ -520,29 +520,34 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 {
     //\TODO Cal comprovar que els flips siguin correctes
     QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
-    if( !orientation.isEmpty() )
+    QString reversedOrientation = m_mainVolume->getVolumeSourceInformation()->getRevertedPatientOrientationString() ;
+
+    QStringList list = orientation.split(",");
+    QStringList reversedList = reversedOrientation.split(",");
+
+    if( list.size() > 1 )
     {
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(0,1) ) );
-            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(1,1) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(2,1) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(3,1) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(0) ) );
+            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(1) ) );
         }
         else if( m_lastView == Sagittal )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(2,1) ) );
-            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(3,1) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(4,1) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(5,1) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(1) ) );
+            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(2) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         else if( m_lastView == Coronal )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(0,1) ) );
-            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(1,1) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(4,1) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( orientation.mid(5,1) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(0) ) );
+            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(2) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         if( m_isImageFlipped )
         {
