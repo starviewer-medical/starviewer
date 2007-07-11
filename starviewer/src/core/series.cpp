@@ -27,6 +27,11 @@ void Series::setID( QString id )
     m_seriesID = id;
 }
 
+void Series::addImage( Image *image )
+{
+    // TODO implement-me!!!
+}
+
 void Series::setPatientOrientation( QString orientation )
 {
     m_patientOrientation = orientation;
@@ -47,9 +52,9 @@ void Series::setProtocolName( QString protocolName )
     m_protocolName = protocolName;
 }
 
-void Series::setSeriessPath( QString seriessPath )
+void Series::setImagesPath( QString imagesPath )
 {
-    m_seriessPath = seriessPath;
+    m_imagesPath = imagesPath;
 }
 
 QString Series::getKey()

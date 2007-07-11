@@ -24,6 +24,8 @@ La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. 
 */
 
 class Volume;
+class Image;
+class Study;
 
 class Series : public QObject
 {
@@ -40,6 +42,12 @@ public:
     /// Assignar/Obtenir l'identificador de la sèrie
     void setID( QString id );
     QString getID() const { return m_seriesID; };
+
+    /// assigna l'estudi pare de la sèrie
+    void setParentStudy( Study *study ){ m_parentStudy = study; };
+
+    /// afegeix un objecte imatge
+    void addImage( Image *image );
 
     /// Assignar/Obtenir l'orientació del pacient
     void setPatientOrientation( QString orientation );
@@ -58,8 +66,8 @@ public:
     QString getProtocolName() const { return m_protocolName; };
 
     /// Assignar/Obtenir el path de les imatges de la sèrie
-    void setSeriessPath( QString seriessPath );
-    QString getSeriessPath() const { return m_seriessPath; };
+    void setImagesPath( QString imagesPath );
+    QString getImagesPath() const { return m_imagesPath; };
 
     /// Retorna el camp clau que identificarà la sèrie de cares a la interfície. Es composarà pel protocolName més la descripció \TODO encara per determinar
     QString getKey();
@@ -129,7 +137,7 @@ private:
     QString m_protocolName;
 
     /// Directori sota el qual es trobem les imatges
-    QString m_seriessPath;
+    QString m_imagesPath;
 
     /// Data i hora en que s'ha adquirit la sèrie
     QDateTime m_dateTime;
@@ -153,6 +161,12 @@ private:
 
     /// Llista de volums que composen la sèrie. La sèrie es pot separar en diversos volums per diverses raons, com pot ser mides d'imatge diferent, sèries amb dinàmics o fases, stacks, etc.
     QList<Volume *> m_volumesList;
+
+    /// llista d'imatges que composen la sèrie
+    QList< Image *> m_imageList;
+
+    /// Estudi pare
+    Study *m_parentStudy;
 };
 
 }

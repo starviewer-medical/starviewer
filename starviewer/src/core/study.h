@@ -27,7 +27,7 @@ class Study : public QObject
 {
 Q_OBJECT
 public:
-    Study( Patient *parentPatient, QObject *parent = 0);
+    Study( Patient *parentPatient = 0, QObject *parent = 0);
 
     ~Study();
 
