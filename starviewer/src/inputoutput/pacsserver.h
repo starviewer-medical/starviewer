@@ -9,7 +9,6 @@
 #include "pacsconnection.h"
 #include "dcmtk/dcmdata/dcdebug.h"
 
-class string;
 class Status;
 
 /** Aquest classe és la que ens ajuda interectuar amb el pacs.
@@ -101,8 +100,6 @@ private:
      */
     OFCondition configureStore();
 
-
-
     /** Aquesta funció privada, configura els paràmetres pel tipus de connexió per descarregat imatges segons la màquina que tinguem
      * @param paràmetres de la connexió
      * @param Identificador de funcio
@@ -116,7 +113,6 @@ private:
      * @param port del servidor
      */
    QString constructAdrServer( QString , QString ); //construct PACS address
-
 
     /** Afegeix tots els PresentationContexts necessaris per a guardar imatges en el PACS
     * @return retorna l'estat del m�ode
@@ -133,7 +129,7 @@ private:
     OFCondition addPresentationContext( int presentationContextId, const OFString& abstractSyntax, const  OFList<OFString>& transferSyntaxList);
 
 
-    /** Afageix un objecte SOP a la connexi�amb el PACS
+    /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
      * @param abstractSyntax classe SOP a afegir
      * @param transferSyntax

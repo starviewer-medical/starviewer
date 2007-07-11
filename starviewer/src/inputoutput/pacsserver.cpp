@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "const.h"
 #include "pacsserver.h"
 #include "status.h"

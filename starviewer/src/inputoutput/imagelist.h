@@ -14,8 +14,6 @@
 #include "dicomimage.h"
 #include <semaphore.h>
 
-class string;
-
 /* AQUESTA CLASSE NOMES SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'HAN IMPLEMENTAT SEMAFORS
   */
 namespace udg {

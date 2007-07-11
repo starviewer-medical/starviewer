@@ -36,7 +36,6 @@
 
 /** This class helps to interactive with the pacs, retrieve images that match with the mask
  */
-class string;
 class status;
 namespace udg{
 

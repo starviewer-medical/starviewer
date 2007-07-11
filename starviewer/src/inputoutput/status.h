@@ -14,8 +14,6 @@
 #include "const.h"
 #endif
 
-class string;
-
 /** Aquesta classe proporciona el control d'errors, dels mètodes invocats.
  *Aquesta classe, està basada seguin el patró Abstract Factory, el que es tracta és de separar el control d'errors del dctmk, de control
 d'errors que utilitzarem nosaltres en la nostre aplicació, aixi si mai el control d'errors de dcmtk mai canvia, només haurem de modificar aquesta classe i mai haurem de tocar les classes de la nostra aplicació que utilitzi el tractament d'errors.

@@ -733,7 +733,7 @@ Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
 
     //ACTUALITZEM DADES PACIENT
 
-    sqlSentence = QString("Update Patient set PatNam = '%1', PatBirDat = '%2', PatSex = '%3' where PatID = '%3'")
+    sqlSentence = QString("Update Patient set PatNam = '%1', PatBirDat = '%2', PatSex = '%3' where PatID = '%4'")
         .arg( updateStudy.getPatientName() )
         .arg( updateStudy.getPatientBirthDate() )
         .arg( updateStudy.getPatientSex() )

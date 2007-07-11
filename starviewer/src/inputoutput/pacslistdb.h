@@ -11,7 +11,6 @@
 #include "databaseconnection.h"
 #include "pacslist.h"
 
-class string;
 class PacsParameters;
 
 namespace udg {
