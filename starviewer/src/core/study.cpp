@@ -118,17 +118,17 @@ QString Study::getTimeAsString()
     return m_dateTime.time().toString( "hh:mm" );
 }
 
-void Study::addSerie( Serie *serie )
+void Study::addSeries( Series *series )
 {
-    m_seriesHash[ serie->getKey() ] = serie;
+    m_seriesHash[ series->getKey() ] = series;
 }
 
-void Study::removeSerie( QString key )
+void Study::removeSeries( QString key )
 {
     m_seriesHash.remove( key );
 }
 
-Serie *Study::getSerie( QString key )
+Series *Study::getSeries( QString key )
 {
     return m_seriesHash[ key ];
 }

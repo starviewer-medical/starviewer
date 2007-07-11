@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGSERIE_H
-#define UDGSERIE_H
+#ifndef UDGSERIES_H
+#define UDGSERIES_H
 
 #include <QObject>
 #include <QString>
@@ -25,21 +25,21 @@ La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. 
 
 class Volume;
 
-class Serie : public QObject
+class Series : public QObject
 {
 Q_OBJECT
 public:
-    Serie(QObject *parent = 0);
+    Series(QObject *parent = 0);
 
-    ~Serie();
+    ~Series();
 
     /// Assignar/Obtenir l'identificador universal de la sèrie
     void setUID( QString uid );
-    QString getUID() const { return m_serieUID; };
+    QString getUID() const { return m_seriesUID; };
 
     /// Assignar/Obtenir l'identificador de la sèrie
     void setID( QString id );
-    QString getID() const { return m_serieID; };
+    QString getID() const { return m_seriesID; };
 
     /// Assignar/Obtenir l'orientació del pacient
     void setPatientOrientation( QString orientation );
@@ -58,8 +58,8 @@ public:
     QString getProtocolName() const { return m_protocolName; };
 
     /// Assignar/Obtenir el path de les imatges de la sèrie
-    void setSeriesPath( QString seriesPath );
-    QString getSeriesPath() const { return m_seriesPath; };
+    void setSeriessPath( QString seriessPath );
+    QString getSeriessPath() const { return m_seriessPath; };
 
     /// Retorna el camp clau que identificarà la sèrie de cares a la interfície. Es composarà pel protocolName més la descripció \TODO encara per determinar
     QString getKey();
@@ -79,7 +79,7 @@ public:
     QTime getTime();
     QString getTimeAsString();
 
-    /// Assignar/Obtenir nivells de contrast \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de serie
+    /// Assignar/Obtenir nivells de contrast \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de series
     void setWindowLevel( double window , double level );
     double *getWindowLevel();
     void setWindow( double window );
@@ -87,13 +87,13 @@ public:
     void setLevel( double level );
     double getLevel() const { return m_level; }
 
-    /// Assignar/Obtenir dimensions de la sèrie \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de serie
+    /// Assignar/Obtenir dimensions de la sèrie \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de series
     void setDimensions( double dimensions[3] );
     void setDimensions( double x , double y , double z );
     double *getDimensions();
     void getDimensions( double dimensions[3] );
 
-    /// Assignar/Obtenir espaiats de la sèrie \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de serie
+    /// Assignar/Obtenir espaiats de la sèrie \TODO això hauria de ser a nivell de subvolum o a nivell d'imatge però no pas a nivell de series
     void setSpacing( double spacing[3] );
     void setSpacing( double x , double y , double z );
     double *getSpacing();
@@ -111,10 +111,10 @@ public:
 
 private:
     /// Identidicador universal de la sèrie
-    QString m_serieUID;
+    QString m_seriesUID;
 
     /// Identificador de la sèrie
-    QString m_serieID;
+    QString m_seriesID;
 
     /// Orientació del pacient ( LR/AP/SI )
     QString m_patientOrientation;
@@ -129,7 +129,7 @@ private:
     QString m_protocolName;
 
     /// Directori sota el qual es trobem les imatges
-    QString m_seriesPath;
+    QString m_seriessPath;
 
     /// Data i hora en que s'ha adquirit la sèrie
     QDateTime m_dateTime;

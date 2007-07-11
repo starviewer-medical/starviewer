@@ -4,60 +4,60 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "serie.h"
+#include "series.h"
 
 namespace udg {
 
-Serie::Serie(QObject *parent)
+Series::Series(QObject *parent)
  : QObject(parent)
 {
 }
 
-Serie::~Serie()
+Series::~Series()
 {
 }
 
-void Serie::setUID( QString uid )
+void Series::setUID( QString uid )
 {
-    m_serieUID = uid;
+    m_seriesUID = uid;
 }
 
-void Serie::setID( QString id )
+void Series::setID( QString id )
 {
-    m_serieID = id;
+    m_seriesID = id;
 }
 
-void Serie::setPatientOrientation( QString orientation )
+void Series::setPatientOrientation( QString orientation )
 {
     m_patientOrientation = orientation;
 }
 
-void Serie::setModality( QString modality )
+void Series::setModality( QString modality )
 {
     m_modality = modality;
 }
 
-void Serie::setDescription( QString description )
+void Series::setDescription( QString description )
 {
     m_description = description;
 }
 
-void Serie::setProtocolName( QString protocolName )
+void Series::setProtocolName( QString protocolName )
 {
     m_protocolName = protocolName;
 }
 
-void Serie::setSeriesPath( QString seriesPath )
+void Series::setSeriessPath( QString seriessPath )
 {
-    m_seriesPath = seriesPath;
+    m_seriessPath = seriessPath;
 }
 
-QString Serie::getKey()
+QString Series::getKey()
 {
     return m_protocolName + QString(" ") + m_description;
 }
 
-bool Serie::setDateTime( int day , int month , int year , int hour , int minute )
+bool Series::setDateTime( int day , int month , int year , int hour , int minute )
 {
     m_dateTime.setDate( QDate( year , month , day ) );
     m_dateTime.setTime( QTime( hour , minute ) );
@@ -65,7 +65,7 @@ bool Serie::setDateTime( int day , int month , int year , int hour , int minute 
     return m_dateTime.isValid();
 }
 
-bool Serie::setDateTime( QString date , QString time )
+bool Series::setDateTime( QString date , QString time )
 {
     m_dateTime.setDate( QDate::fromString( date , "dd/MM/yyyy" ) );
     m_dateTime.setTime( QTime::fromString( time , "hh:mm" ) );
@@ -73,136 +73,136 @@ bool Serie::setDateTime( QString date , QString time )
     return m_dateTime.isValid();
 }
 
-bool Serie::setDateTime( QString dateTime )
+bool Series::setDateTime( QString dateTime )
 {
     m_dateTime.fromString( dateTime , "dd/MM/yyyy , hh:mm" );
     return m_dateTime.isValid();
 }
 
-QString Serie::getDateTimeAsString()
+QString Series::getDateTimeAsString()
 {
     return m_dateTime.toString( "dd/MM/yyyy , hh:mm" );
 }
 
-bool Serie::setDate( int day , int month , int year )
+bool Series::setDate( int day , int month , int year )
 {
     m_dateTime.setDate( QDate( year , month , day ) );
     return m_dateTime.isValid();
 }
 
-bool Serie::setDate( QString date )
+bool Series::setDate( QString date )
 {
     m_dateTime.setDate( QDate::fromString( date , "dd/MM/yyyy") );
     return m_dateTime.isValid();
 }
 
-bool Serie::setTime( int hour , int minute )
+bool Series::setTime( int hour , int minute )
 {
     m_dateTime.setTime( QTime( hour , minute ) );
     return m_dateTime.isValid();
 }
 
-bool Serie::setTime( QString time )
+bool Series::setTime( QString time )
 {
     m_dateTime.setTime( QTime::fromString( time , "hh:mm") );
     return m_dateTime.isValid();
 }
 
-QDate Serie::getDate()
+QDate Series::getDate()
 {
     return m_dateTime.date();
 }
 
-QString Serie::getDateAsString()
+QString Series::getDateAsString()
 {
     return m_dateTime.date().toString( "dd/MM/yyy" );
 }
 
-QTime Serie::getTime()
+QTime Series::getTime()
 {
     return m_dateTime.time();
 }
 
-QString Serie::getTimeAsString()
+QString Series::getTimeAsString()
 {
     return m_dateTime.time().toString( "hh:mm" );
 }
 
-void Serie::setWindowLevel( double window , double level )
+void Series::setWindowLevel( double window , double level )
 {
     m_window = window;
     m_level = level;
 }
 
-double *Serie::getWindowLevel()
+double *Series::getWindowLevel()
 {
     static double wl[2] = { m_window , m_level };
     return wl;
 }
 
-void Serie::setWindow( double window )
+void Series::setWindow( double window )
 {
     m_window = window;
 }
 
-void Serie::setLevel( double level )
+void Series::setLevel( double level )
 {
     m_level = level;
 }
 
-void Serie::setDimensions( double dimensions[3] )
+void Series::setDimensions( double dimensions[3] )
 {
     m_dimensions[0] = dimensions[0];
     m_dimensions[1] = dimensions[1];
     m_dimensions[2] = dimensions[2];
 }
 
-void Serie::setDimensions( double x , double y , double z )
+void Series::setDimensions( double x , double y , double z )
 {
     m_dimensions[0] = x;
     m_dimensions[1] = y;
     m_dimensions[2] = z;
 }
 
-double *Serie::getDimensions()
+double *Series::getDimensions()
 {
     return m_dimensions;
 }
 
-void Serie::getDimensions( double dimensions[3] )
+void Series::getDimensions( double dimensions[3] )
 {
     dimensions[0] = m_dimensions[0];
     dimensions[1] = m_dimensions[1];
     dimensions[2] = m_dimensions[2];
 }
 
-void Serie::setSpacing( double spacing[3] )
+void Series::setSpacing( double spacing[3] )
 {
     m_spacing[0] = spacing[0];
     m_spacing[1] = spacing[1];
     m_spacing[2] = spacing[2];
 }
 
-void Serie::setSpacing( double x , double y , double z )
+void Series::setSpacing( double x , double y , double z )
 {
     m_spacing[0] = x;
     m_spacing[1] = y;
     m_spacing[2] = z;
 }
 
-double *Serie::getSpacing()
+double *Series::getSpacing()
 {
     return m_spacing;
 }
 
-void Serie::getSpacing( double spacing[3] )
+void Series::getSpacing( double spacing[3] )
 {
     m_spacing[0] = spacing[0];
     m_spacing[1] = spacing[1];
     m_spacing[2] = spacing[2];
 }
 
-void Serie::setVolumeIdentifier( Identifier id )
+void Series::setVolumeIdentifier( Identifier id )
 {
     m_volumeID = id;
 }

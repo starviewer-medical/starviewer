@@ -11,7 +11,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QHash>
-#include "serie.h"
+#include "series.h"
 
 namespace udg {
 
@@ -70,13 +70,13 @@ public:
     QString getTimeAsString();
 
     /// Afegeix una nova sèrie
-    void addSerie( Serie *serie );
+    void addSeries( Series *series );
 
     /// Li treu a l'estudi la sèrie amb la clau 'key'
-    void removeSerie( QString key );
+    void removeSeries( QString key );
 
     /// Obté la sèrie amb clau 'key'
-    Serie *getSerie( QString key );
+    Series *getSeries( QString key );
 
 private:
     /// Identificador Universal de l'estudi
@@ -98,7 +98,7 @@ private:
     QDateTime m_dateTime;
 
     /// Taula de Hash que conté les sèries de l'estudi
-    typedef QHash< QString , Serie* > SeriesHashType;
+    typedef QHash< QString , Series* > SeriesHashType;
     SeriesHashType m_seriesHash;
 
     /// L'entitat Patient a la qual pertany aquest estudi
