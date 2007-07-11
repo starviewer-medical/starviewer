@@ -7,7 +7,8 @@
 
 #include "processimagesingleton.h"
 #include "processimage.h"
-#include "image.h"
+#include "dicomimage.h"
+
 namespace udg {
 
 ProcessImageSingleton::ProcessImageSingleton()
@@ -41,7 +42,7 @@ void ProcessImageSingleton::addNewProcessImage( QString UID , ProcessImage *pi )
     sem_post( m_semafor );
 }
 
-void ProcessImageSingleton::process( QString UID , Image* img )
+void ProcessImageSingleton::process( QString UID , DICOMImage* img )
 {
     list<SingletonProcess>::iterator j;
 

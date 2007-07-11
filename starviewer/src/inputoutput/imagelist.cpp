@@ -20,7 +20,7 @@ ImageList::ImageList()
     m_iterator = m_imageList.begin();
 }
 
-void ImageList::insert( Image image )
+void ImageList::insert( DICOMImage image )
 {
     sem_wait( m_semafor );
     m_imageList.push_back( image );
@@ -42,7 +42,7 @@ void ImageList:: nextImage()
     m_iterator++;
 }
 
-Image ImageList::getImage()
+DICOMImage ImageList::getImage()
 {
     return ( *m_iterator );
 }

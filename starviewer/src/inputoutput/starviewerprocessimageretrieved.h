@@ -16,7 +16,7 @@
 namespace udg {
 
 class Status;
-class Image;
+class DICOMImage;
 class DICOMSeries;
 
 /**
@@ -34,7 +34,7 @@ public:
     /** Processa la informacio de la imatge a descarregar, la guarda a la cache, si la imatge pertany a una nova sèrie també guarda la informació de la sèrie
      * @param imatge a processar
      */
-    void process( Image* image );
+    void process( DICOMImage* image );
 
     /// Retorna si s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     bool getError();
@@ -75,7 +75,7 @@ private :
     /** Crea el path de la imatge d'on obtenir la informació de les series
      * @param imatge de la que s'ha d'obtenir el path
      */
-    QString createImagePath( Image* image );
+    QString createImagePath( DICOMImage* image );
 
     /** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
      * @param path de la imatge d'on obtenir la informació de la sèrie
@@ -90,7 +90,7 @@ private :
      * @param newImage imatge de la qual hem d'inserir la informació de la sèrie
      * @return estat del procés
      */
-    Status insertSerie(Image *newImage);
+    Status insertSerie(DICOMImage *newImage);
 };
 
 };

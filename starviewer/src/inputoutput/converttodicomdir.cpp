@@ -25,7 +25,7 @@
 #include "imagelist.h"
 #include "dicomstudy.h"
 #include "dicomseries.h"
-#include "image.h"
+#include "dicomimage.h"
 #include "convertdicomtolittleendian.h"
 #include "starviewersettings.h"
 #include "createdicomdir.h"
@@ -237,7 +237,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
     CacheImageDAL cacheImageDAL;
     //creem el nom del directori de la sèrie, el format és SERXXXXX, on XXXXX és el numero de sèrie dins l'estudi
     QString seriesName = QString( "/SER%1" ).arg( m_series , 5 , 10 , fillChar );
-    Image image;
+    DICOMImage image;
     DicomMask imageMask;
     ImageList imageList;
     Status state;
@@ -271,7 +271,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
     return state;
 }
 
-Status ConvertToDicomdir::copyImageToDicomdirPath( Image image )
+Status ConvertToDicomdir::copyImageToDicomdirPath( DICOMImage image )
 {
     QChar fillChar = '0';
     //creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie

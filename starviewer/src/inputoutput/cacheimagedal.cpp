@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 #include <sqlite3.h>
-#include "image.h"
+#include "dicomimage.h"
 #include "status.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
@@ -20,7 +20,7 @@ CacheImageDAL::CacheImageDAL()
 {
 }
 
-Status CacheImageDAL::insertImage( Image *image )
+Status CacheImageDAL::insertImage( DICOMImage *image )
 {
     //no guardem el path de la imatge perque la el podem saber amb Study.AbsPath/SeriesUID/SopInsUID
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
@@ -112,7 +112,7 @@ Status CacheImageDAL::insertImage( Image *image )
 Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;
-    Image image;
+    DICOMImage image;
     char **resposta = NULL , **error = NULL;
     QString absPath;
     Status state;

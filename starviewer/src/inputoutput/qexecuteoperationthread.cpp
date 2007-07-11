@@ -371,7 +371,7 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
     SeriesList seriesList;
     DICOMSeries series;
     ImageList imageListSeries;
-    Image image;
+    DICOMImage image;
     Status state;
     QString logMessage, errorNumber;
 

@@ -5,7 +5,7 @@
 
 HEADERS += const.h \
            databaseconnection.h \
-           image.h \
+           dicomimage.h \
            imagelist.h \
            pacsconnection.h \
            pacslistdb.h \
@@ -54,7 +54,7 @@ HEADERS += const.h \
            dicommask.h \
            importdicomdir.h 
 SOURCES += databaseconnection.cpp \
-           image.cpp \
+           dicomimage.cpp \
            imagelist.cpp \
            pacsconnection.cpp \
            pacslist.cpp \

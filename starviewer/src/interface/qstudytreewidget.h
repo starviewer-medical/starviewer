@@ -35,7 +35,7 @@ class DICOMStudy;
 class SeriesList;
 class DICOMSeries;
 class ImageList;
-class Image;
+class DICOMImage;
 
 class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
 {
@@ -73,7 +73,7 @@ public:
     /** Insereix una image a la sèrie que està seleccionada
      * @param image imatge a afegir
      */
-    void insertImage( Image *image );
+    void insertImage( DICOMImage *image );
 
     /** removes study from the list
      * @param esbora l'estudi amb StudyUID de la llista

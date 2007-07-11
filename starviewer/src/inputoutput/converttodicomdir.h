@@ -17,7 +17,7 @@ namespace udg {
 
 class Status;
 class DICOMSeries;
-class Image;
+class DICOMImage;
 
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries.
   * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes són :
@@ -103,7 +103,7 @@ private :
      * @param image
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copyImageToDicomdirPath( Image image );
+    Status copyImageToDicomdirPath( DICOMImage image );
 
     /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();

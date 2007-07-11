@@ -16,7 +16,7 @@
 #include "dicomseries.h"
 #include "serieslist.h"
 #include "dicommask.h"
-#include "image.h"
+#include "dicomimage.h"
 #include "imagelist.h"
 
 namespace udg {
@@ -203,7 +203,7 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
     DICOMSeries series;
     QString studyUIDRecord , seriesUIDRecord, imagePath;
     bool trobat = false;
-    Image image;
+    DICOMImage image;
 
     //Accedim a nivell de pacient
     while ( patientRecord != NULL && !trobat )

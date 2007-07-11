@@ -73,7 +73,7 @@ void progressCallbackStudy(
     }// si la query retorna un objecte imatge
     else if ( strcmp( text , "IMAGE" ) == 0)
     {
-        Image queriedImage( responseIdentifiers );
+        DICOMImage queriedImage( responseIdentifiers );
 
         StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 

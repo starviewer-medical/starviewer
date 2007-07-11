@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGIMAGE_H
-#define UDGIMAGE_H
+#ifndef UDGDICOMIMAGE_H
+#define UDGDICOMIMAGE_H
 
 #include <QString>
 
@@ -18,17 +18,17 @@ namespace udg {
 /** Classe image encarregada de guardar la informació d'una imatge
 @author marc
 */
-class Image{
+class DICOMImage{
 public:
 
     /// Constructor de la classe
-    Image();
+    DICOMImage();
 
     ///Constructor a partir d'un dataset provinent d'un objecte DICOM, no emplene el camps ImageFileName, ImagePath i ImageSize
-    Image(DcmDataset *imageDataset);
+    DICOMImage(DcmDataset *imageDataset);
 
     /// destructor de la classe
-    ~Image();
+    ~DICOMImage();
 
     /** Inserta el UID de la Imatge
      * @param  UID de la imatge

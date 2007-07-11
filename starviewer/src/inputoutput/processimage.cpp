@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "processimage.h"
-#include "image.h"
 
 namespace udg {
 

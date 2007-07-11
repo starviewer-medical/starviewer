@@ -32,7 +32,7 @@
 #include "serieslist.h"
 #include "dicomseries.h"
 #include "imagelist.h"
-#include "image.h"
+#include "dicomimage.h"
 #include "status.h"
 
 namespace udg {
@@ -279,7 +279,7 @@ void QStudyTreeWidget::insertImageList( ImageList *imageList )
     }
 }
 
-void QStudyTreeWidget::insertImage( Image * image )
+void QStudyTreeWidget::insertImage( DICOMImage * image )
 {
     QString text, description;
     char imageNumber[7];

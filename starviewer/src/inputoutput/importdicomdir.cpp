@@ -17,11 +17,10 @@
 #include "imagelist.h"
 #include "dicomstudy.h"
 #include "dicomseries.h"
-#include "image.h"
+#include "dicomimage.h"
 #include "dicommask.h"
 #include <QDir>
 #include <QFile>
-#include "image.h"
 #include "starviewersettings.h"
 #include "logging.h"
 #include "scalestudy.h"
@@ -135,7 +134,7 @@ Status ImportDicomdir::importarSerie( QString studyUID , QString seriesUID , QSt
     return state;
 }
 
-Status ImportDicomdir::importarImatge( Image image )
+Status ImportDicomdir::importarImatge( DICOMImage image )
 {
     QString imagePath, imageFile;
     QFile copyFile;

@@ -11,7 +11,7 @@
 #include <cond.h>
 #include <list>
 
-#include "image.h"
+#include "dicomimage.h"
 #include <semaphore.h>
 
 class string;
@@ -35,7 +35,7 @@ public:
     /** Insereix una imatge a la llista
      * @param  Imatge a inserir
      */
-    void insert(Image);
+    void insert(DICOMImage);
 
      ///Aquesta accio situa l'iterador de la llista al primer element de la llista abans de començar a llegir s'ha d'invocar aquest mètode
     void firstImage();
@@ -56,7 +56,7 @@ public:
     /** retorna un objecte image
      * @return objecte image
      */
-    Image getImage();
+    DICOMImage getImage();
 
     /// Aquest mètode buida la llista
     void clear();
@@ -65,8 +65,8 @@ public:
 
     sem_t *m_semafor;
 
-    list<Image> m_imageList;
-    list<Image>::iterator m_iterator;
+    list<DICOMImage> m_imageList;
+    list<DICOMImage>::iterator m_iterator;
 
 };
 };//end namespace udg

@@ -191,7 +191,7 @@ OFCondition echoSCP(
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
             QString studyPath, seriesPath, imagePath;
             int imageSize;
-            Image retrievedImage( * imageDataSet );
+            DICOMImage retrievedImage( * imageDataSet );
             DIR *pdir;
 
             studyPath = piSingleton->getPath() ;//agafem el path del directori on es guarden les imatges

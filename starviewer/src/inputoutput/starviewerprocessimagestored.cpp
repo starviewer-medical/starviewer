@@ -15,7 +15,7 @@ StarviewerProcessImageStored::StarviewerProcessImageStored(QObject *parent)
     m_imagesStored = 0;
 }
 
-void StarviewerProcessImageStored::process( Image *image )
+void StarviewerProcessImageStored::process( DICOMImage *image )
 {
     if ( m_imagesStored == 0 ) // és la primera imatge que guardem
     {

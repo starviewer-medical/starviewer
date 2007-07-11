@@ -10,7 +10,7 @@
 #include "dicomseries.h"
 #include "starviewersettings.h"
 #include "status.h"
-#include "image.h"
+#include "dicomimage.h"
 #include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
@@ -25,7 +25,7 @@ StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved() : ProcessImag
     m_downloadedSeries = 0;
 }
 
-void StarviewerProcessImageRetrieved::process( Image *image )
+void StarviewerProcessImageRetrieved::process( DICOMImage *image )
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -75,7 +75,7 @@ void StarviewerProcessImageRetrieved::process( Image *image )
     emit( imageRetrieved( image->getStudyUID(),m_downloadedImages ) );
 }
 
-Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
+Status StarviewerProcessImageRetrieved::insertSerie(DICOMImage *newImage)
 {
     DICOMSeries serie;
     Status state;
@@ -149,7 +149,7 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
     return state;
 }
 
-QString StarviewerProcessImageRetrieved::createImagePath( Image *image )
+QString StarviewerProcessImageRetrieved::createImagePath( DICOMImage *image )
 {
     StarviewerSettings settings;
     DICOMSeries serie;

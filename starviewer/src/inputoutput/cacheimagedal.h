@@ -13,7 +13,7 @@ namespace udg {
 
 class DicomMask;
 class Status;
-class Image;
+class DICOMImage;
 
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -30,7 +30,7 @@ public:
      * @param dades de la imatge
      * @return retorna estat del mètode
      */
-    Status insertImage( Image * );
+    Status insertImage( DICOMImage * );
 
     /** Cerca les imatges demanades a la màscara. Important! Aquesta acció només té en compte l'StudyUID i el SeriesUID de la màscara per fer la cerca, els altres caps de la màscara els ignorarà!
      * @param  mascara de les imatges a cercar

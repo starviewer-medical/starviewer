@@ -12,7 +12,7 @@
 namespace udg {
 
 class Status;
-class Image;
+class DICOMImage;
 
 /** Aquesta classe permet importar un dicomdir a la nostra base de ades
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -30,7 +30,7 @@ private :
 
     Status importarSerie( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
-    Status importarImatge( Image image );
+    Status importarImatge( DICOMImage image );
 
     void createPath( QString path );
 

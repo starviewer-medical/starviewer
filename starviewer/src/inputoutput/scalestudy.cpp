@@ -9,7 +9,7 @@
 #include "serieslist.h"
 #include "dicommask.h"
 #include "status.h"
-#include "image.h"
+#include "dicomimage.h"
 #include "imagelist.h"
 #include "starviewersettings.h"
 #include "scaleimage.h"
@@ -90,7 +90,7 @@ Status ScaleStudy::countImageNumber( DicomMask mask, int &number )
 Status ScaleStudy::imageRelativePath( DicomMask mask , QString &relPath )
 {
     ImageList imageList;
-    Image image;
+    DICOMImage image;
     Status state;
 
     CacheImageDAL cacheImageDAL;

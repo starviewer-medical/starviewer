@@ -9,7 +9,7 @@
 
 #include <QObject>
 #include "processimage.h"
-#include "image.h"
+#include "dicomimage.h"
 
 namespace udg {
 
@@ -22,7 +22,7 @@ Q_OBJECT
 public:
     StarviewerProcessImageStored(QObject *parent = 0);
 
-    void process( Image * image );
+    void process( DICOMImage * image );
 
     ~StarviewerProcessImageStored();
 

@@ -4,15 +4,15 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "image.h"
+#include "dicomimage.h"
 
 namespace udg {
 
-Image::Image()
+DICOMImage::DICOMImage()
 {
 }
 
-Image::Image(DcmDataset *imageDataset)
+DICOMImage::DICOMImage(DcmDataset *imageDataset)
 {
     const char *text;
 
@@ -38,88 +38,89 @@ Image::Image(DcmDataset *imageDataset)
 
 }
 
-void Image::setSOPInstanceUID( QString UID )
+DICOMImage::~DICOMImage()
+{
+}
+
+
+void DICOMImage::setSOPInstanceUID( QString UID )
 {
     m_SoPUID = UID;
 }
 
-void Image::setImagePath( QString path )
+void DICOMImage::setImagePath( QString path )
 {
     m_imagePath =  path;
 }
 
-void Image::setSeriesUID( QString UID )
+void DICOMImage::setSeriesUID( QString UID )
 {
     m_seriesUID = UID;
 }
 
-void Image::setImageName( QString name )
+void DICOMImage::setImageName( QString name )
 {
     m_imageName = name;
 }
 
-void Image::setStudyUID( QString UID )
+void DICOMImage::setStudyUID( QString UID )
 {
     m_studyUID = UID;
 }
 
-void Image::setImageNumber( int imageNum )
+void DICOMImage::setImageNumber( int imageNum )
 {
     m_imageNumber = imageNum;
 }
 
-void Image::setImageSize( int bytes )
+void DICOMImage::setImageSize( int bytes )
 {
     m_imageSize = bytes;
 }
 
-void Image::setPacsAETitle( QString AETitle )
+void DICOMImage::setPacsAETitle( QString AETitle )
 {
     m_pacsAETitle = AETitle;
 }
 
-QString Image::getSOPInstanceUID()
+QString DICOMImage::getSOPInstanceUID()
 {
     return m_SoPUID;
 }
 
-QString Image::getImagePath()
+QString DICOMImage::getImagePath()
 {
     return m_imagePath;
 }
 
-QString Image::getSeriesUID()
+QString DICOMImage::getSeriesUID()
 {
     return m_seriesUID;
 }
 
-QString Image::getImageName()
+QString DICOMImage::getImageName()
 {
     return m_imageName;
 }
 
-QString Image::getStudyUID()
+QString DICOMImage::getStudyUID()
 {
     return m_studyUID;
 }
 
-int Image::getImageNumber()
+int DICOMImage::getImageNumber()
 {
     return m_imageNumber;
 }
 
-int Image::getImageSize()
+int DICOMImage::getImageSize()
 {
     return m_imageSize;
 }
 
-QString Image::getPacsAETitle()
+QString DICOMImage::getPacsAETitle()
 {
     return m_pacsAETitle;
-}
-
-Image::~Image()
-{
 }
 
 };

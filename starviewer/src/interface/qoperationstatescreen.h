@@ -11,7 +11,6 @@
 #include <semaphore.h>
 
 #include "dicomstudy.h"
-#include "image.h"
 #include "ui_qoperationstatescreenbase.h"
 
 /// Interfície que implementa la llista d'operacions realitzades cap a un PACS
