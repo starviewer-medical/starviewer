@@ -69,7 +69,8 @@ HEADERS += extensionfactory.h \
            vtkAtamaiPolyDataToImageStencil2.h \
            shutterfilter.h \
            q2dviewerpresentationstateattacher.h  \
-           sliceannotationcontroller.h
+           sliceannotationcontroller.h \
+           image.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -123,7 +124,8 @@ SOURCES += extensionmediator.cpp \
            vtkAtamaiPolyDataToImageStencil2.cxx \
            shutterfilter.cpp \
            q2dviewerpresentationstateattacher.cpp  \
-           sliceannotationcontroller.cpp
+           sliceannotationcontroller.cpp \
+           image.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
