@@ -413,9 +413,6 @@ void QueryScreen::searchYesterdayStudy()
 
 void QueryScreen::searchStudy()
 {
-    QString logMessage;
-
-
     switch ( m_tab->currentIndex() )
     {
         case 0:
@@ -479,7 +476,6 @@ Status QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer 
     PacsListDB pacsListDB;
     Status state;
     StarviewerSettings settings;
-    QString logMessage;
 
     state = pacsListDB.queryPacs( &pacs, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
     if ( !state.good() )
@@ -502,12 +498,10 @@ void QueryScreen::queryStudyPacs()
     PacsParameters pa;
     QString result;
     StarviewerSettings settings;
-    QString logMessage;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    logMessage = "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy();
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy() );
 
     pacsList.clear(); //netejem el pacsLIST
     qPacsList->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
@@ -558,18 +552,16 @@ void QueryScreen::queryStudyCache()
 {
     CacheStudyDAL cacheStudyDAL;
     Status state;
-    QString logMessage;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    logMessage = "Cerca d'estudis a la cache amb paràmetres " + logQueryStudy();
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca d'estudis a la cache amb paràmetres " + logQueryStudy() );
 
     m_seriesListWidgetCache->clear();
 
     m_studyListCache.clear();
 
-    state= cacheStudyDAL.queryStudy( buildDicomMask() , m_studyListCache ); //busquem els estudis a la cache
+    state = cacheStudyDAL.queryStudy( buildDicomMask() , m_studyListCache ); //busquem els estudis a la cache
 
     if ( !state.good() )
     {
@@ -609,12 +601,10 @@ void QueryScreen::queryStudyDicomdir()
 {
     Status state;
     StudyList dicomdirStudyList;
-    QString logMessage;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    logMessage = "Cerca d'estudis al Dicomdir amb paràmetres " + logQueryStudy();
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca d'estudis al Dicomdir amb paràmetres " + logQueryStudy() );
 
     state = m_readDicomdir.readStudies( dicomdirStudyList , buildDicomMask() );
 
@@ -624,16 +614,13 @@ void QueryScreen::queryStudyDicomdir()
         if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error, not opened Dicomdir" ) );
-            logMessage = "No s'ha obert cap directori dicomdir ";
-            logMessage.append ( state.text() );
+            ERROR_LOG( "No s'ha obert cap directori dicomdir " + state.text() );
         }
         else
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error quering in dicomdir" ) );
-            logMessage = "Error cercant estudis al dicomdir ";
-            logMessage.append ( state.text() );
+            ERROR_LOG( "Error cercant estudis al dicomdir " + state.text() );
         }
-        ERROR_LOG( logMessage );
         return;
     }
 
@@ -702,14 +689,13 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
 {
     DICOMSeries serie;
     Status state;
-    QString logMessage , text;
+    QString text;
     PacsServer pacsConnection;
     QueryPacs querySeriesPacs;
 
     m_seriesListSingleton->clear();//netegem la llista de sèries
 
-    logMessage = "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
 
     if ( pacsAETitle.isEmpty() ) pacsAETitle = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
 
@@ -718,11 +704,7 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
     state = pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel);
     if ( !state.good() )
     {//Error al connectar
-        logMessage = "Error al connectar al pacs ";
-        logMessage.append( pacsAETitle );
-        logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
+        ERROR_LOG( "Error al connectar al pacs " + pacsAETitle + ". PACS ERROR : " + state.text() );
 
         errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
         return;
@@ -734,14 +716,10 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
 
     if ( !state.good() )
     {//Error a la query
-        logMessage = "QueryScreen::QueryPacs : Error cercant les sèries al PACS ";
-        logMessage.append( pacsAETitle );
-        logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
+        ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les sèries al PACS " + pacsAETitle + ". PACS ERROR : " + state.text() );
 
         text.insert( 0 , tr( "Error! Can't query series in PACS : " ) );
-        text.append( pacsAETitle);
+        text.append( pacsAETitle );
         QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;
     }
@@ -764,11 +742,9 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
     CacheImageDAL cacheImageDAL;
     int imagesNumber;
     Status state;
-    QString logMessage;
     DicomMask mask;
 
-    logMessage = "Cerca de sèries a la caché de l'estudi " + studyUID;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca de sèries a la caché de l'estudi " + studyUID );
 
     m_seriesListCache.clear();//preparem la llista de series
 
@@ -814,12 +790,10 @@ void QueryScreen::QuerySeriesCache( QString studyUID )
 void QueryScreen::querySeriesDicomdir( QString studyUID )
 {
     SeriesList seriesList;
-    QString logMessage;
 
     m_readDicomdir.readSeries( studyUID , "" , seriesList ); //"" pq no busquem cap serie en concret
 
-    logMessage = "Cerca de sèries a la caché de l'estudi " + studyUID;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca de sèries a la caché de l'estudi " + studyUID );
 
     seriesList.firstSeries();
     if ( seriesList.end() )
@@ -837,7 +811,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
     DICOMSeries serie;
     Status state;
-    QString logMessage , text;
+    QString text;
     PacsServer pacsConnection;
     QueryPacs queryImages;
     DicomMask dicomMask;
@@ -845,8 +819,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     if ( AETitlePACS.isEmpty() ) AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
     m_imageListSingleton->clear();//netejem la llista de sèries
 
-    logMessage = "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS );
 
     dicomMask.setStudyUID( studyUID );
     dicomMask.setSeriesUID( seriesUID );
@@ -857,13 +830,8 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
     state = pacsConnection.connect(PacsServer::query,PacsServer::imageLevel);
     if ( !state.good() )
-    {//Error al connectar
-        logMessage = "Error al connectar al pacs ";
-        logMessage.append( AETitlePACS );
-        logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
-
+    {   //Error al connectar
+        ERROR_LOG( "Error al connectar al pacs " + AETitlePACS + ". PACS ERROR : " + state.text() );
         errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
         return;
     }
@@ -872,12 +840,8 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
     state = queryImages.query( dicomMask );
     if ( !state.good() )
-    {//Error a la query
-        logMessage = "QueryScreen::QueryPacs : Error cercant les images al PACS ";
-        logMessage.append( AETitlePACS );
-        logMessage.append( ". PACS ERROR : " );
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
+    {   //Error a la query
+        ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les images al PACS " + AETitlePACS + ". PACS ERROR : " + state.text() );
 
         text.insert( 0 , tr( "Error! Can't query images in PACS : " ) );
         text.append( AETitlePACS );
@@ -915,12 +879,10 @@ void QueryScreen::retrieve()
 void QueryScreen::queryImageDicomdir(QString studyUID, QString seriesUID )
 {
     ImageList imageList;
-    QString logMessage;
 
     m_readDicomdir.readImages( seriesUID , ""  , imageList );
 
-    logMessage = "Cerca d'imatges al dicomdir de l'estudi " + studyUID + " i serie " + seriesUID;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca d'imatges al dicomdir de l'estudi " + studyUID + " i serie " + seriesUID );
 
     imageList.firstImage();
     if ( imageList.end() )
@@ -930,18 +892,15 @@ void QueryScreen::queryImageDicomdir(QString studyUID, QString seriesUID )
     }
 
     m_studyTreeWidgetDicomdir->insertImageList( &imageList );//inserim la informació de la sèrie al llistat
-
 }
 
 void QueryScreen::queryImageCache(QString studyUID, QString seriesUID )
 {
     CacheImageDAL cacheImageDAL;
     ImageList imageList;
-    QString logMessage;
     DicomMask mask;
 
-    logMessage = "Cerca d'imatges al dicomdir de l'estudi " + studyUID + " i serie " + seriesUID;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Cerca d'imatges al dicomdir de l'estudi " + studyUID + " i serie " + seriesUID );
 
     mask.setStudyUID( studyUID );
     mask.setSeriesUID( seriesUID );
@@ -1171,8 +1130,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     ImageList imageList;
     QString absSeriesPath;
     StarviewerSettings settings;
-    StudyVolum volum;
-    QString logMessage;
+    StudyVolum volume;
 
     if ( studyUID == "" )
     {
@@ -1180,8 +1138,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
         return;
     }
 
-    logMessage = "Es visualitza l'estudi " + studyUID;
-    INFO_LOG( logMessage );
+    INFO_LOG( "Es visualitza l'estudi " + studyUID );
 
     state = cacheStudyDAL.queryStudy( studyUID , study ); //cerquem la informació de l'estudi
     if ( !state.good() )
@@ -1190,13 +1147,13 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
         return;
     }
 
-    volum.setPatientAge( study.getPatientAge() );
-    volum.setPatientId( study.getPatientId() );
-    volum.setPatientName( study.getPatientName() );
-    volum.setStudyDate( study.getStudyDate() );
-    volum.setStudyId( study.getStudyId() );
-    volum.setStudyTime( study.getStudyTime() );
-    volum.setStudyUID( study.getStudyUID() );
+    volume.setPatientAge( study.getPatientAge() );
+    volume.setPatientId( study.getPatientId() );
+    volume.setPatientName( study.getPatientName() );
+    volume.setStudyDate( study.getStudyDate() );
+    volume.setStudyId( study.getStudyId() );
+    volume.setStudyTime( study.getStudyTime() );
+    volume.setStudyUID( study.getStudyUID() );
 
     mask.setStudyUID( study.getStudyUID() );
 
@@ -1212,9 +1169,9 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     //si es buit indiquem que per defecte es visualitza la primera serie
     if ( seriesUID == "" )
     {
-        volum.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
+        volume.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
     }
-    else volum.setDefaultSeriesUID( seriesUID );
+    else volume.setDefaultSeriesUID( seriesUID );
 
     while ( !seriesList.end() )
     {
@@ -1248,7 +1205,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
             imageList.nextImage();
         }
 
-        volum.addSeriesVolum( seriesVol );
+        volume.addSeriesVolum( seriesVol );
         seriesList.nextSeries();
     }
 
@@ -1259,7 +1216,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     {
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
-    this->emitViewSignal(volum);
+    this->emitViewSignal(volume);
 }
 
 void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QString sopInstanceUID )
@@ -1271,8 +1228,8 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
     DICOMStudy study;
     SeriesList seriesList;
     DICOMSeries series;
-    QString absSeriesPath , logMessage;
-    StudyVolum volum;
+    QString absSeriesPath;
+    StudyVolum volume;
 
     if ( studyUID == "" )
     {
@@ -1280,36 +1237,31 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         return;
     }
 
-    logMessage = "Es visualitza l'estudi  " + studyUID + " guardat en el dicomdir";
-    INFO_LOG( logMessage );
+    INFO_LOG( "Es visualitza l'estudi  " + studyUID + " guardat en el dicomdir" );
 
     //busquem informacio de l'estudi
     studyMask.setStudyUID( studyUID );
     state = m_readDicomdir.readStudies( studyList , studyMask );
     if ( !state.good() )
     {
-        logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
+        ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
         return;
     }
 
     studyList.firstStudy();//tenim la informació de l'estudi
     study = studyList.getStudy();
 
-    volum.setPatientId( study.getPatientId() );//Carreguem la informacio de l'estudi al volum
-    volum.setPatientName( study.getPatientName() );
-    volum.setStudyDate( study.getStudyDate() );
-    volum.setStudyId( study.getStudyId() );
-    volum.setStudyUID( study.getStudyUID() );
+    volume.setPatientId( study.getPatientId() );//Carreguem la informacio de l'estudi al volume
+    volume.setPatientName( study.getPatientName() );
+    volume.setStudyDate( study.getStudyDate() );
+    volume.setStudyId( study.getStudyId() );
+    volume.setStudyUID( study.getStudyUID() );
 
     //busquem les series
     state = m_readDicomdir.readSeries( studyUID , "" , seriesList );//"" pq no busquem cap serie en concreet
     if ( !state.good() )
     {
-        logMessage = "Error al cercar l'estudi al dicomdir ERROR : ";
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
+        ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR : " + state.text() );
         return;
     }
     seriesList.firstSeries();
@@ -1317,9 +1269,9 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
     //si es buit indiquem que per defecte es visualitza la primera serie
     if ( seriesUID == "" )
     {
-        volum.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
+        volume.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
     }
-    else volum.setDefaultSeriesUID( seriesUID );
+    else volume.setDefaultSeriesUID( seriesUID );
 
     while ( !seriesList.end() )
     {
@@ -1340,9 +1292,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         state = m_readDicomdir.readImages( series.getSeriesUID() , sopInstanceUID , imageList );//accedim a llegir la informació de les imatges per cada serie
         if ( !state.good() )
         {
-            logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
-            logMessage.append( state.text() );
-            ERROR_LOG( logMessage );
+            ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
             return;
         }
 
@@ -1354,7 +1304,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
             imageList.nextImage();
         }
 
-        volum.addSeriesVolum( seriesVol );
+        volume.addSeriesVolum( seriesVol );
         seriesList.nextSeries();
     }
 
@@ -1364,10 +1314,9 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
-    logMessage = "Ha finalitzat la càrrega de l'estudi des del dicomdir";
-    INFO_LOG( logMessage );
+    INFO_LOG( "Ha finalitzat la càrrega de l'estudi des del dicomdir" );
 
-    this->emitViewSignal(volum);
+    this->emitViewSignal(volume);
 }
 
 void QueryScreen::importDicomdir()
@@ -1386,7 +1335,6 @@ void QueryScreen::deleteStudyCache()
     Status state;
     CacheStudyDAL cacheStudyDAL;
     QString studyUID;
-    QString logMessage;
 
     studyUID = m_studyTreeWidgetCache->getSelectedStudyUID();
 
@@ -1402,8 +1350,7 @@ void QueryScreen::deleteStudyCache()
 				      0, 1 ) )
     {
         case 0:
-            logMessage = "S'esborra de la cache l'estudi " + studyUID;
-            INFO_LOG( logMessage );
+            INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
 
             state = cacheStudyDAL.delStudy( studyUID );
 
@@ -1540,7 +1487,7 @@ void QueryScreen::convertToDicomdir( QString studyUID )
 void QueryScreen::openDicomdir()
 {
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Dicomdir" ) );
-    QString path, dicomdirPath , logMessage;
+    QString path, dicomdirPath;
 
     dlg->setFileMode( QFileDialog::DirectoryOnly );
     Status state;
@@ -1554,14 +1501,11 @@ void QueryScreen::openDicomdir()
         if ( !state.good() )
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error openning dicomdir" ) );
-            logMessage = "Error al obrir el dicomdir " + dicomdirPath;
-            logMessage.append( state.text() );
-            ERROR_LOG( logMessage );
+            ERROR_LOG( "Error al obrir el dicomdir " + dicomdirPath + state.text() );
         }
         else
         {
-            logMessage = "Obert el dicomdir " + dicomdirPath;
-            INFO_LOG( logMessage );
+            INFO_LOG( "Obert el dicomdir " + dicomdirPath );
             m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
         }
 
@@ -1963,7 +1907,7 @@ void QueryScreen::emitViewSignal(StudyVolum study)
     }
     if( !found )
     {
-        WARN_LOG("La DefaultSeriesUID no es trobava en el volum, s'agafa la primera sèrie");
+        WARN_LOG("La DefaultSeriesUID no es trobava en el volume, s'agafa la primera sèrie");
         //si no l'hem trobat per defecte mostrarem la primera serie
         serie = study.getSeriesVolum(0);
         return;
