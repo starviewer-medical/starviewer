@@ -1163,8 +1163,8 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     Status state;
-    StudyList stuList;
-    DICOMStudy stu;
+    StudyList studyList;
+    DICOMStudy study;
     DicomMask mask;
     SeriesList seriesList;
     Series series;
@@ -1183,22 +1183,22 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     logMessage = "Es visualitza l'estudi " + studyUID;
     INFO_LOG( logMessage );
 
-    state = cacheStudyDAL.queryStudy( studyUID , stu ); //cerquem la informació de l'estudi
+    state = cacheStudyDAL.queryStudy( studyUID , study ); //cerquem la informació de l'estudi
     if ( !state.good() )
     {
         databaseError( &state );
         return;
     }
 
-    volum.setPatientAge( stu.getPatientAge() );
-    volum.setPatientId( stu.getPatientId() );
-    volum.setPatientName( stu.getPatientName() );
-    volum.setStudyDate( stu.getStudyDate() );
-    volum.setStudyId( stu.getStudyId() );
-    volum.setStudyTime( stu.getStudyTime() );
-    volum.setStudyUID( stu.getStudyUID() );
+    volum.setPatientAge( study.getPatientAge() );
+    volum.setPatientId( study.getPatientId() );
+    volum.setPatientName( study.getPatientName() );
+    volum.setStudyDate( study.getStudyDate() );
+    volum.setStudyId( study.getStudyId() );
+    volum.setStudyTime( study.getStudyTime() );
+    volum.setStudyUID( study.getStudyUID() );
 
-    mask.setStudyUID( stu.getStudyUID() );
+    mask.setStudyUID( study.getStudyUID() );
 
     cacheSeriesDAL.querySeries( mask ,seriesList );
     if ( !state.good() )
@@ -1224,8 +1224,8 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
         absSeriesPath = settings.getCacheImagePath();
         absSeriesPath += series.getSeriesPath();
         seriesVol.setSeriesUID(series.getSeriesUID() );
-        seriesVol.setStudyId( stu.getStudyId() );
-        seriesVol.setStudyUID( stu.getStudyUID() );
+        seriesVol.setStudyId( study.getStudyId() );
+        seriesVol.setStudyUID( study.getStudyUID() );
         seriesVol.setSeriesPath( absSeriesPath );
         seriesVol.setSeriesModality( series.getSeriesModality() );
 
@@ -1266,9 +1266,9 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
 {
     ImageList imageList;
     Status state;
-    StudyList stuList;
+    StudyList studyList;
     DicomMask studyMask;
-    DICOMStudy stu;
+    DICOMStudy study;
     SeriesList seriesList;
     Series series;
     QString absSeriesPath , logMessage;
@@ -1285,7 +1285,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
 
     //busquem informacio de l'estudi
     studyMask.setStudyUID( studyUID );
-    state = m_readDicomdir.readStudies( stuList , studyMask );
+    state = m_readDicomdir.readStudies( studyList , studyMask );
     if ( !state.good() )
     {
         logMessage = "Error al cercar l'estudi al dicomdir ERROR :";
@@ -1294,14 +1294,14 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         return;
     }
 
-    stuList.firstStudy();//tenim la informació de l'estudi
-    stu = stuList.getStudy();
+    studyList.firstStudy();//tenim la informació de l'estudi
+    study = studyList.getStudy();
 
-    volum.setPatientId( stu.getPatientId() );//Carreguem la informacio de l'estudi al volum
-    volum.setPatientName( stu.getPatientName() );
-    volum.setStudyDate( stu.getStudyDate() );
-    volum.setStudyId( stu.getStudyId() );
-    volum.setStudyUID( stu.getStudyUID() );
+    volum.setPatientId( study.getPatientId() );//Carreguem la informacio de l'estudi al volum
+    volum.setPatientName( study.getPatientName() );
+    volum.setStudyDate( study.getStudyDate() );
+    volum.setStudyId( study.getStudyId() );
+    volum.setStudyUID( study.getStudyUID() );
 
     //busquem les series
     state = m_readDicomdir.readSeries( studyUID , "" , seriesList );//"" pq no busquem cap serie en concreet
@@ -1331,8 +1331,8 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         absSeriesPath.append( "/" );
         absSeriesPath.append( series.getSeriesPath() ); //afegim el path relatiu de les series
         seriesVol.setSeriesUID( series.getSeriesUID() );
-        seriesVol.setStudyId( stu.getStudyId() );
-        seriesVol.setStudyUID( stu.getStudyUID() );
+        seriesVol.setStudyId( study.getStudyId() );
+        seriesVol.setStudyUID( study.getStudyUID() );
         seriesVol.setSeriesPath( absSeriesPath );
         seriesVol.setSeriesModality( series.getSeriesModality() );
 
