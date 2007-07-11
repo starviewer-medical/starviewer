@@ -17,7 +17,7 @@ namespace udg {
 
 class Status;
 class Image;
-class Series;
+class DICOMSeries;
 
 /**
 @author marc
@@ -80,7 +80,7 @@ private :
     /** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
      * @param path de la imatge d'on obtenir la informació de la sèrie
      */
-    Status getSeriesInformation( QString imagePath , Series &serie );
+    Status getSeriesInformation( QString imagePath , DICOMSeries &serie );
 
     /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     void setError();

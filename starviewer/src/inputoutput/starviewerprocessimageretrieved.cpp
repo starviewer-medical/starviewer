@@ -7,7 +7,7 @@
 
 #include "starviewerprocessimageretrieved.h"
 #include "imagedicominformation.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "starviewersettings.h"
 #include "status.h"
 #include "image.h"
@@ -30,12 +30,12 @@ void StarviewerProcessImageRetrieved::process( Image *image )
     Status state;
     CacheStudyDAL cacheStudyDAL;
     CacheImageDAL cacheImageDAL;
-    Series serie;
+    DICOMSeries serie;
 
     /*si es la primera imatge que es descarrega fem un signal indicant que comença la descarrega, inserim la primera serie, i ara que tenim la informació de la sèrie update la modalitat de l'estudi*/
     if ( m_downloadedImages == 0 )
     {
-        Series serie;
+        DICOMSeries serie;
 
         //canviem l'estat de l'estudi de PENDING A RETRIEVING
         state = cacheStudyDAL.setStudyRetrieving( image->getStudyUID() );
@@ -77,7 +77,7 @@ void StarviewerProcessImageRetrieved::process( Image *image )
 
 Status StarviewerProcessImageRetrieved::insertSerie(Image *newImage)
 {
-    Series serie;
+    DICOMSeries serie;
     Status state;
     CacheSeriesDAL cacheSeriesDAL;
 
@@ -115,7 +115,7 @@ bool StarviewerProcessImageRetrieved::getError()
     return m_error || m_downloadedImages == 0;
 }
 
-Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath , Series &serie )
+Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath , DICOMSeries &serie )
 {
     Status state;
     QString path;
@@ -152,7 +152,7 @@ Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath 
 QString StarviewerProcessImageRetrieved::createImagePath( Image *image )
 {
     StarviewerSettings settings;
-    Series serie;
+    DICOMSeries serie;
     QString imagePath;
 
     imagePath.insert( 0 , settings.getCacheImagePath() );

@@ -5,7 +5,7 @@
 
 #define HAVE_CONFIG_H 1
 
-#include "series.h"
+#include "dicomseries.h"
 #include <semaphore.h>
 
 /* ATENCIO AQUESTA CLASSE NO SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'IMPLEMENTEN SEMAFORS
@@ -26,7 +26,7 @@ class SeriesList
     /** This action inserts a Study at the end of the list
      *              @param  Study
      */
-    void insert(Series series);
+    void insert(DICOMSeries series);
 
     /**This actions put the pointer of the list at the firts study.
      *It's very important before start to read, cals this action, else the pointer will be at the end of the list, and if we try to read, it will produce a segmentation fault
@@ -49,7 +49,7 @@ class SeriesList
     /** Returns a Series
      * @return return a series
      */
-    Series getSeries();
+    DICOMSeries getSeries();
 
     /// Aquests mètode buida la llista
     void clear();
@@ -66,8 +66,8 @@ class SeriesList
     bool buit;
     sem_t *m_semafor;
 
-    std::list<Series> m_seriesList;
-    std::list<Series>::iterator m_iterator;
+    std::list<DICOMSeries> m_seriesList;
+    std::list<DICOMSeries>::iterator m_iterator;
 };
 }; //end name space
 #endif

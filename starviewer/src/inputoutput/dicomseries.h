@@ -1,5 +1,5 @@
-#ifndef SERIES
-#define SERIES
+#ifndef DICOMSERIES
+#define DICOMSERIES
 
 #include <QString>
 
@@ -13,23 +13,23 @@
 
 namespace udg{
 
-class Series
+class DICOMSeries
 {
 
  public :
 
     /// Initialize the fields of the series
-    Series();
+    DICOMSeries();
 
     /** Construeix un objecte Series a partir un dmcdataset de dicom
      * @param  dcmdataset a partir del qual construir l'objecte
      */
-    Series(DcmDataset *);
+    DICOMSeries(DcmDataset *);
 
     /** Operador que ens ajudar a ordenar les series pel camp seriesNumber
      * @param Serie amb la que hem de comparar
      */
-    bool operator<( Series );
+    bool operator<( DICOMSeries series );
 
     /** This action set the series Number
      * @param Series Number

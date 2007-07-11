@@ -13,7 +13,7 @@
 #include "status.h"
 #include "dicomstudy.h"
 #include "studylist.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "serieslist.h"
 #include "dicommask.h"
 #include "image.h"
@@ -122,7 +122,7 @@ Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesLi
     DcmDirectoryRecord *patientRecord = root->getSub( 0 );//accedim al primer pacient
     DcmDirectoryRecord *studyRecord;
     OFString text;
-    Series series;
+    DICOMSeries series;
     QString studyUIDRecord , seriesPath;
     bool trobat = false;
 
@@ -200,7 +200,7 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
     DcmDirectoryRecord *patientRecord = root->getSub( 0 );//accedim al primer pacient
     DcmDirectoryRecord *studyRecord, *seriesRecord;
     OFString text;
-    Series series;
+    DICOMSeries series;
     QString studyUIDRecord , seriesUIDRecord, imagePath;
     bool trobat = false;
     Image image;

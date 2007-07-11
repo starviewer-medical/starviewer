@@ -17,7 +17,7 @@ namespace udg {
 @author marc
 */
 
-class Series;
+class DICOMSeries;
 
 const int scaledSeriesSizeX = 100;///< Mida de la imatge escalada a l'eix x
 const int scaledSeriesSizeY = 100;///< Mida de la imatge escalada a l'eix y
@@ -34,7 +34,7 @@ public:
     /** Insereix l'informació d'una sèrie al ListICon
      * @param descripció de la sèrie
      */
-    void insertSeries( Series *serie );
+    void insertSeries( DICOMSeries *serie );
 
     ///Neteja el ListWidget de sèries
     void clear();
@@ -50,7 +50,7 @@ public slots:
     /** Slot, que al rebre la senyal addSeries del del QStudyTreeWidget afegeix una sèrie al IconView
      *  @param serie
      */
-    void addSeries( Series *serie );
+    void addSeries( DICOMSeries *serie );
 
     /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
      *  @param serie Seleccionada

@@ -62,14 +62,14 @@ void progressCallbackStudy(
     } //si la query retorna un objecte sèrie
     else if ( strcmp( text, "SERIES" ) == 0 )
     {
-        Series queriedSerie( responseIdentifiers );
+        DICOMSeries queriedSerie( responseIdentifiers );
 
         StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
 
         if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( DICOMStudy( responseIdentifiers ) );
 
         SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
-        seriesList->insert( Series( responseIdentifiers) );
+        seriesList->insert( DICOMSeries( responseIdentifiers) );
     }// si la query retorna un objecte imatge
     else if ( strcmp( text , "IMAGE" ) == 0)
     {
@@ -80,7 +80,7 @@ void progressCallbackStudy(
         if ( !studyList->exists( queriedImage.getStudyUID() , queriedImage.getPacsAETitle() ) ) studyList->insert( DICOMStudy( responseIdentifiers ) );
 
         SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
-        if ( !seriesList->exists( queriedImage.getStudyUID() , queriedImage.getSeriesUID() , queriedImage.getPacsAETitle() ) )  seriesList->insert( Series( responseIdentifiers ) );
+        if ( !seriesList->exists( queriedImage.getStudyUID() , queriedImage.getSeriesUID() , queriedImage.getPacsAETitle() ) )  seriesList->insert( DICOMSeries( responseIdentifiers ) );
 
         ImageListSingleton *imageList = ImageListSingleton::getImageListSingleton();
         imageList->insert( queriedImage );

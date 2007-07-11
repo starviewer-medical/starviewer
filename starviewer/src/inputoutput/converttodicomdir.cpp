@@ -24,7 +24,7 @@
 #include "serieslist.h"
 #include "imagelist.h"
 #include "dicomstudy.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "image.h"
 #include "convertdicomtolittleendian.h"
 #include "starviewersettings.h"
@@ -198,7 +198,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
     SeriesList seriesList;
     DicomMask seriesMask;
-    Series series;
+    DICOMSeries series;
     Status state;
 
     m_study++;
@@ -230,7 +230,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     return state;
 }
 
-Status ConvertToDicomdir::copySeriesToDicomdirPath( Series series )
+Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
 {
     QDir seriesDir;
     QChar fillChar = '0';
@@ -278,7 +278,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath( Image image )
     QString  imageName = QString( "/IMG%1" ).arg( m_image , 5 , 10 , fillChar ) , imageInputPath , imageOutputPath;
     ConvertDicomToLittleEndian convertDicom;
     StarviewerSettings settings;
-    Series serie;
+    DICOMSeries serie;
     Status state;
 
     m_image++;

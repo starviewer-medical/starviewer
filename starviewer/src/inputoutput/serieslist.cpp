@@ -22,7 +22,7 @@ SeriesList::SeriesList()
     m_iterator = m_seriesList.begin();
 }
 
-void SeriesList::insert(Series series)
+void SeriesList::insert(DICOMSeries series)
 {
     sem_wait( m_semafor );
     m_seriesList.push_back( series );
@@ -49,7 +49,7 @@ void SeriesList:: nextSeries()
     m_iterator++;
 }
 
-Series SeriesList::getSeries()
+DICOMSeries SeriesList::getSeries()
 {
     return ( *m_iterator );
 }

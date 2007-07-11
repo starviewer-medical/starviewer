@@ -10,7 +10,7 @@
 #include "dicommask.h"
 #include "status.h"
 #include "cacheseriesdal.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "serieslist.h"
 #include "logging.h"
 #include "databaseconnection.h"
@@ -25,7 +25,7 @@ CacheSeriesDAL::~CacheSeriesDAL()
 {
 }
 
-Status CacheSeriesDAL::insertSeries( Series *serie )
+Status CacheSeriesDAL::insertSeries( DICOMSeries *serie )
 {
     int stateDatabase;
     Status state;
@@ -76,7 +76,7 @@ Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
 {
     DcmDataset* mask = NULL;
     int columns , rows , i = 0 , stateDatabase;
-    Series series;
+    DICOMSeries series;
     char **resposta = NULL , **error = NULL;
     QString logMessage;
     Status state;

@@ -18,7 +18,7 @@
 #include "multiplequerystudy.h"
 #include "studylist.h"
 #include "qstudytreewidget.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "querypacs.h"
 #include "pacsparameters.h"
 #include "pacsserver.h"
@@ -173,7 +173,7 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_studyTreeWidgetDicomdir , SIGNAL( view() ) , this , SLOT( view() ) );//quan fem doble click sobre un estudi o sèrie de la llista d'estudis
 
     //connectem els signes del SeriesIconView StudyListView
-    connect( m_studyTreeWidgetCache , SIGNAL( addSeries(Series * ) ) , m_seriesListWidgetCache , SLOT( addSeries(Series *) ) );
+    connect( m_studyTreeWidgetCache , SIGNAL( addSeries(DICOMSeries * ) ) , m_seriesListWidgetCache , SLOT( addSeries(DICOMSeries *) ) );
     connect( m_studyTreeWidgetCache , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clearSeriesListWidget() ) );
     connect( m_seriesListWidgetCache , SIGNAL( selectedSeriesIcon( QString) ) , m_studyTreeWidgetCache , SLOT( selectedSeriesIcon( QString) ) );
     connect( m_seriesListWidgetCache , SIGNAL( viewSeriesIcon() ) , m_studyTreeWidgetCache , SLOT( viewStudy() ) );
@@ -700,7 +700,7 @@ void QueryScreen::searchImages( QString studyUID , QString seriesUID , QString p
 
 void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool show )
 {
-    Series serie;
+    DICOMSeries serie;
     Status state;
     QString logMessage , text;
     PacsServer pacsConnection;
@@ -759,7 +759,7 @@ void QueryScreen::QuerySeriesPacs( QString studyUID , QString pacsAETitle , bool
 
 void QueryScreen::QuerySeriesCache( QString studyUID )
 {
-    Series serie;
+    DICOMSeries serie;
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     int imagesNumber;
@@ -835,7 +835,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    Series serie;
+    DICOMSeries serie;
     Status state;
     QString logMessage , text;
     PacsServer pacsConnection;
@@ -1167,7 +1167,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     DICOMStudy study;
     DicomMask mask;
     SeriesList seriesList;
-    Series series;
+    DICOMSeries series;
     ImageList imageList;
     QString absSeriesPath;
     StarviewerSettings settings;
@@ -1270,7 +1270,7 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
     DicomMask studyMask;
     DICOMStudy study;
     SeriesList seriesList;
-    Series series;
+    DICOMSeries series;
     QString absSeriesPath , logMessage;
     StudyVolum volum;
 

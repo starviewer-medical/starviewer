@@ -16,8 +16,7 @@ class QStringList;
 namespace udg {
 
 class Status;
-class Study;
-class Series;
+class DICOMSeries;
 class Image;
 
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries.
@@ -98,7 +97,7 @@ private :
      * @param series
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copySeriesToDicomdirPath( Series series );
+    Status copySeriesToDicomdirPath( DICOMSeries series );
 
     /** Converteix una imatge al format littleendian, i la copia al directori dicomdir
      * @param image

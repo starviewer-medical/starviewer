@@ -9,7 +9,7 @@
 #include <QString>
 #include <QIcon>
 
-#include "series.h"
+#include "dicomseries.h"
 #include "starviewersettings.h"
 
 namespace udg {
@@ -34,7 +34,7 @@ void QSeriesListWidget::createConnections()
     connect( m_seriesListWidget , SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ), SLOT( view(QListWidgetItem * ) ) );
 }
 
-void QSeriesListWidget::insertSeries( Series *serie )
+void QSeriesListWidget::insertSeries( DICOMSeries *serie )
 {
     QString text,num,pathImage,nameClass;
     StarviewerSettings settings;
@@ -112,7 +112,7 @@ void QSeriesListWidget::clear()
     m_seriesListWidget->clear();
 }
 
-void QSeriesListWidget::addSeries( Series *serie )
+void QSeriesListWidget::addSeries( DICOMSeries *serie )
 {
     insertSeries( serie );
 }

@@ -1,14 +1,14 @@
-#include "series.h"
+#include "dicomseries.h"
 #include "dcsequen.h"
 
 namespace udg{
 
-Series::Series()
+DICOMSeries::DICOMSeries()
 {
     m_imageNumber = 0;
 }
 
-Series::Series(DcmDataset *seriesDataset)
+DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
 {
     const char *text;
     string path;
@@ -85,9 +85,9 @@ Series::Series(DcmDataset *seriesDataset)
 /** This operator helps to us to sort the serieslist in oder by Series Number
   *
   */
-bool Series::operator<( Series a )
+bool DICOMSeries::operator<( DICOMSeries series )
 {
-    if (m_seriesNumber<a.getSeriesNumber())
+    if( m_seriesNumber < series.getSeriesNumber() )
     {
         return true;
     }
@@ -98,87 +98,87 @@ bool Series::operator<( Series a )
 /*                                    SET STUDY FIELDS                                                                 */
 /***********************************************************************************************************************/
 
-void Series:: setSeriesNumber( QString number)
+void DICOMSeries:: setSeriesNumber( QString number)
 {
    m_seriesNumber = number;
 }
 
-void Series::setSeriesDescription( QString description )
+void DICOMSeries::setSeriesDescription( QString description )
 {
     m_seriesDescription = description;
 }
 
-void Series::setSeriesDate( QString date )
+void DICOMSeries::setSeriesDate( QString date )
 {
     m_seriesDate = date;
 }
 
-void Series::setSeriesTime( QString time )
+void DICOMSeries::setSeriesTime( QString time )
 {
     m_seriesTime = time;
 }
 
-void Series::setSeriesModality( QString modality )
+void DICOMSeries::setSeriesModality( QString modality )
 {
     m_seriesModality = modality;
 }
 
-void Series::setStudyUID( QString UID )
+void DICOMSeries::setStudyUID( QString UID )
 {
     m_studyUID = UID;
 }
 
-void Series::setSeriesUID( QString UID )
+void DICOMSeries::setSeriesUID( QString UID )
 {
     m_seriesUID = UID;
 }
 
-void Series::setProtocolName( QString protocol )
+void DICOMSeries::setProtocolName( QString protocol )
 {
     m_protocolName = protocol;
 }
 
-void Series::setBodyPartExaminated( QString part )
+void DICOMSeries::setBodyPartExaminated( QString part )
 {
     m_bodyPartExaminated = part;
 }
 
-void Series::setOperatorName( QString name )
+void DICOMSeries::setOperatorName( QString name )
 {
     m_operatorName = name;
 }
 
-void Series::setSeriesPath( QString path )
+void DICOMSeries::setSeriesPath( QString path )
 {
     m_seriesPath = path;
 }
 
-void Series::setImageNumber( int iNumber )
+void DICOMSeries::setImageNumber( int iNumber )
 {
     m_imageNumber = iNumber;
 }
 
-void Series::setPacsAETitle( QString AETitlePACS )
+void DICOMSeries::setPacsAETitle( QString AETitlePACS )
 {
     m_seriesAETitlePACS = AETitlePACS;
 }
 
-void Series::setRequestedProcedureID( QString requestedProcedureID )
+void DICOMSeries::setRequestedProcedureID( QString requestedProcedureID )
 {
     m_requestedProcedureID = requestedProcedureID;
 }
 
-void Series::setScheduledProcedureStepID( QString scheduledProcedureID )
+void DICOMSeries::setScheduledProcedureStepID( QString scheduledProcedureID )
 {
     m_scheduledProcedureStepID = scheduledProcedureID;
 }
 
-void Series::setPPSStartDate( QString startDate )
+void DICOMSeries::setPPSStartDate( QString startDate )
 {
     m_ppsStartDate = startDate;
 }
 
-void Series::setPPSStartTime( QString startTime )
+void DICOMSeries::setPPSStartTime( QString startTime )
 {
     m_ppsStartTime = startTime;
 }
@@ -187,87 +187,87 @@ void Series::setPPSStartTime( QString startTime )
 /*                                    GET SERIES FIELDS                                                               */
 /**********************************************************************************************************************/
 
-QString Series:: getSeriesNumber()
+QString DICOMSeries:: getSeriesNumber()
 {
     return m_seriesNumber;
 }
 
-QString Series::getSeriesDescription()
+QString DICOMSeries::getSeriesDescription()
 {
     return m_seriesDescription;
 }
 
-QString Series::getSeriesDate()
+QString DICOMSeries::getSeriesDate()
 {
     return m_seriesDate;
 }
 
-QString Series::getSeriesTime()
+QString DICOMSeries::getSeriesTime()
 {
     return m_seriesTime;
 }
 
-QString Series::getSeriesModality()
+QString DICOMSeries::getSeriesModality()
 {
     return m_seriesModality;
 }
 
-QString Series::getStudyUID()
+QString DICOMSeries::getStudyUID()
 {
     return m_studyUID;
 }
 
-QString Series::getSeriesUID()
+QString DICOMSeries::getSeriesUID()
 {
     return m_seriesUID;
 }
 
-QString Series::getProtocolName()
+QString DICOMSeries::getProtocolName()
 {
     return m_protocolName;
 }
 
-QString Series::getBodyPartExaminated()
+QString DICOMSeries::getBodyPartExaminated()
 {
     return m_bodyPartExaminated;
 }
 
-QString Series::getOperatorName()
+QString DICOMSeries::getOperatorName()
 {
     return m_operatorName;
 }
 
-QString Series::getSeriesPath()
+QString DICOMSeries::getSeriesPath()
 {
     return m_seriesPath;
 }
 
-int Series::getImageNumber()
+int DICOMSeries::getImageNumber()
 {
     return m_imageNumber;
 }
 
-QString Series::getRequestedProcedureID()
+QString DICOMSeries::getRequestedProcedureID()
 {
     return m_requestedProcedureID;
 }
 
-QString Series::getScheduledProcedureStepID()
+QString DICOMSeries::getScheduledProcedureStepID()
 {
     return m_scheduledProcedureStepID;
 }
 
-QString Series::getPPSStartDate()
+QString DICOMSeries::getPPSStartDate()
 {
     return m_ppsStartDate;
 }
 
-QString Series::getPPStartTime()
+QString DICOMSeries::getPPStartTime()
 {
     return m_ppsStartTime;
 }
 
-QString Series::getPacsAETitle()
+QString DICOMSeries::getPacsAETitle()
 {
     return m_seriesAETitlePACS;
 }

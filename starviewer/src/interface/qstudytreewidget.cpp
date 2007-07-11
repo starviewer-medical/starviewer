@@ -30,7 +30,7 @@
 #include "studylist.h"
 #include "dicomstudy.h"
 #include "serieslist.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "imagelist.h"
 #include "image.h"
 #include "status.h"
@@ -223,7 +223,7 @@ void QStudyTreeWidget::insertSeriesList( SeriesList *seriesList )
     }
 }
 
-void QStudyTreeWidget::insertSeries( Series *serie )
+void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
 {
     QString text, description;
     QTreeWidgetItem* item, *studyItem;
@@ -456,7 +456,7 @@ void QStudyTreeWidget::setSeriesToSeriesListWidget( QTreeWidgetItem *item )
         child = item->child( i );
         if ( item != NULL )
         {
-            Series serie;
+            DICOMSeries serie;
             serie.setSeriesUID( child->text( 11 ) );
             serie.setImageNumber( child->text( 13 ).toInt( NULL , 10 ) );
             serie.setSeriesModality( child->text( 4 ) );

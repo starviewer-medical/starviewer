@@ -33,7 +33,7 @@ namespace udg {
 class StudyList;
 class DICOMStudy;
 class SeriesList;
-class Series;
+class DICOMSeries;
 class ImageList;
 class Image;
 
@@ -63,7 +63,7 @@ public:
     /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
      *@param informació de la serie
      */
-    void insertSeries( Series *serie );
+    void insertSeries( DICOMSeries *serie );
 
     /** Insereix una llista d'imatges a la sèrie seleccionada actualment
      * @param imageList llista d'imatges afegir a la sèrie
@@ -138,7 +138,7 @@ signals :
     void view();
 
     ///signal que s'emet quan es vol afegir una serie al QSeriesListWidget
-    void addSeries(Series *serie);
+    void addSeries(DICOMSeries *serie);
 
     ///signal que s'emet per netejar el QSeriesListWidget
     void clearSeriesListWidget();

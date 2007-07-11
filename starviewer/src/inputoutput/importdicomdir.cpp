@@ -16,7 +16,7 @@
 #include "serieslist.h"
 #include "imagelist.h"
 #include "dicomstudy.h"
-#include "series.h"
+#include "dicomseries.h"
 #include "image.h"
 #include "dicommask.h"
 #include <QDir>
@@ -56,7 +56,7 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     QString studyPath;
     StarviewerSettings starviewerSettings;
     DICOMStudy study;
-    Series serie;
+    DICOMSeries serie;
     ScaleStudy scaleDicomStudy;
 
     studyPath.insert( 0 , starviewerSettings.getCacheImagePath() );

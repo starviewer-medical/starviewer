@@ -13,7 +13,7 @@ class Status;
 namespace udg {
 
 class DicomMask;
-class Series;
+class DICOMSeries;
 class SeriesList;
 /** Classe que conté els mètodes d'accés a la Taula series
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -28,7 +28,7 @@ public:
      * @param series Dades de la sèrie
      * @return retorna l'estat de la inserció
      */
-    Status insertSeries( Series * serie );
+    Status insertSeries( DICOMSeries * serie );
 
     /** Cerca les sèries demanades a la màscara. Important! Aquesta acció només té en compte l'StudyUID de la màscara per fer la cerca, els altres camps de la màscara els ignorarà!
      * @param  mascarà de la serie amb l' sstudiUID a buscar

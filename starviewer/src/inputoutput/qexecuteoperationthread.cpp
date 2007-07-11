@@ -369,7 +369,7 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
     CacheImageDAL cacheImageDAL;
     DicomMask mask;
     SeriesList seriesList;
-    Series series;
+    DICOMSeries series;
     ImageList imageListSeries;
     Image image;
     Status state;

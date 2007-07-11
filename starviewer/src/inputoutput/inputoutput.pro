@@ -16,7 +16,7 @@ HEADERS += const.h \
            processimage.h \
            processimagesingleton.h \
            retrieveimages.h \
-           series.h \
+           dicomseries.h \
            serieslist.h \
            serieslistsingleton.h \
            starviewersettings.h \
@@ -65,7 +65,7 @@ SOURCES += databaseconnection.cpp \
            processimage.cpp \
            processimagesingleton.cpp \
            retrieveimages.cpp \
-           series.cpp \
+           dicomseries.cpp \
            serieslist.cpp \
            serieslistsingleton.cpp \
            starviewersettings.cpp \
