@@ -1004,7 +1004,7 @@ void Q2DViewer::updateCamera()
         switch( this->m_lastView )
         {
         case Axial:
-            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 cam = renderer->GetActiveCamera();
@@ -1019,7 +1019,7 @@ void Q2DViewer::updateCamera()
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
         case Sagittal:
-            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 cam = renderer->GetActiveCamera();
@@ -1035,7 +1035,7 @@ void Q2DViewer::updateCamera()
         break;
 
         case Coronal:
-            while( i < (renderCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 cam = renderer->GetActiveCamera();
