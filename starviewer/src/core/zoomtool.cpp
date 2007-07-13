@@ -18,7 +18,7 @@
 
 namespace udg {
 
-ZoomTool::ZoomTool( Q2DViewer *viewer )
+ZoomTool::ZoomTool( Q2DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -26,7 +26,7 @@ ZoomTool::ZoomTool( Q2DViewer *viewer )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-ZoomTool::ZoomTool( Q3DViewer *viewer )
+ZoomTool::ZoomTool( Q3DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -34,7 +34,7 @@ ZoomTool::ZoomTool( Q3DViewer *viewer )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-ZoomTool::ZoomTool( Q3DMPRViewer *viewer )
+ZoomTool::ZoomTool( Q3DMPRViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();

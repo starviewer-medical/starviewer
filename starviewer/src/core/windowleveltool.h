@@ -24,7 +24,7 @@ public:
     /// estats de la tool
     enum { NONE , WINDOWLEVELING };
 
-    WindowLevelTool( Q2DViewer *viewer );
+    WindowLevelTool( Q2DViewer *viewer, QObject *parent = 0 );
 
     ~WindowLevelTool();
 

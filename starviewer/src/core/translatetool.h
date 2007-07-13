@@ -26,9 +26,9 @@ class TranslateTool : public Tool
 Q_OBJECT
 public:
     enum { NONE , TRANSLATING };
-    TranslateTool( Q2DViewer *viewer );
-    TranslateTool( Q3DViewer *viewer );
-    TranslateTool( Q3DMPRViewer *viewer );
+    TranslateTool( Q2DViewer *viewer, QObject *parent = 0 );
+    TranslateTool( Q3DViewer *viewer, QObject *parent = 0 );
+    TranslateTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
 
     ~TranslateTool();
 

@@ -28,9 +28,9 @@ class ScreenShotTool: public Tool
 {
 Q_OBJECT
 public:
-    ScreenShotTool(Q2DViewer *viewer );
-    ScreenShotTool(Q3DViewer *viewer );
-    ScreenShotTool(Q3DMPRViewer *viewer );
+    ScreenShotTool(Q2DViewer *viewer, QObject *parent = 0 );
+    ScreenShotTool(Q3DViewer *viewer, QObject *parent = 0 );
+    ScreenShotTool(Q3DMPRViewer *viewer, QObject *parent = 0 );
 
     ~ScreenShotTool();
 

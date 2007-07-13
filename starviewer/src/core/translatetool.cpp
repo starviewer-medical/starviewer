@@ -19,7 +19,7 @@
 
 namespace udg {
 
-TranslateTool::TranslateTool( Q2DViewer *viewer )
+TranslateTool::TranslateTool( Q2DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -27,7 +27,7 @@ TranslateTool::TranslateTool( Q2DViewer *viewer )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-TranslateTool::TranslateTool( Q3DViewer *viewer )
+TranslateTool::TranslateTool( Q3DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -35,7 +35,7 @@ TranslateTool::TranslateTool( Q3DViewer *viewer )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-TranslateTool::TranslateTool( Q3DMPRViewer *viewer )
+TranslateTool::TranslateTool( Q3DMPRViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
