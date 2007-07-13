@@ -699,6 +699,11 @@
             <string>42</string>
            </property>
           </item>
+          <item>
+           <property name="text" >
+            <string>162</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

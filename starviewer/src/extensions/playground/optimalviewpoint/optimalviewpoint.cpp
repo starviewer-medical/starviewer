@@ -384,6 +384,25 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                 }
             }
             break;
+
+        case 162:
+            {
+                for ( unsigned char i = 1; i <= 162; i++ )
+                    (*m_planes)[i]->setDistance( 4.0 * m_volume->getMainVolume()->GetLength() );
+                POVSphereCloud cloud( 1.0, 2 );
+                cloud.createPOVCloud();
+                const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
+                if ( geographicVertices.size() != 162 )
+                    QMessageBox::warning( 0, "No hi ha 162 punts!", QString::number( geographicVertices.size() ) );
+                QVector< Vector3 >::const_iterator it;
+                unsigned char i;
+
+                for ( it = geographicVertices.begin(), i = 1; i <= 162; it++, i++ )
+                {
+                    (*m_planes)[i]->setLatitude( it->y ); (*m_planes)[i]->setLongitude( it->z );
+                }
+            }
+            break;
     }
 
     ////////////////////////////////////////////////////////////////////////////
