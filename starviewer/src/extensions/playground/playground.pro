@@ -10,7 +10,8 @@ SUBDIRS = diffusionperfusionsegmentation \
           volume3dviewtesting \
           mprcardiac3d \
           cardiac2dviewer \
-          multiq2dviewer
+          multiq2dviewer \
+          segmentationframework
 
 for(dir, SUBDIRS) {
     !exists($$dir) {

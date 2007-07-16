@@ -9,7 +9,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              volume3dviewtesting \
              mprcardiac3d \
              cardiac2dviewer \
-             multiq2dviewer
+             multiq2dviewer \
+             segmentationframework
 
 #CONTRIB_EXTENSIONS =
 

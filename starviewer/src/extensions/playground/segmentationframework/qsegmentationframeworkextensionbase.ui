@@ -1,0 +1,28 @@
+<ui version="4.0" >
+ <class>QSegmentationFrameworkExtensionBase</class>
+ <widget class="QWidget" name="QSegmentationFrameworkExtensionBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>962</width>
+    <height>574</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
+ <connections/>
+</ui>
