@@ -77,7 +77,7 @@ Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
     DcmDataset* mask = NULL;
     int columns , rows , i = 0 , stateDatabase;
     DICOMSeries series;
-    char **resposta = NULL , **error = NULL;
+    char **reply = NULL , **error = NULL;
     QString logMessage;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
@@ -90,7 +90,7 @@ Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
     mask = seriesMask.getDicomMask();
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(buildSqlQuerySeries( &seriesMask )), &resposta , &rows, &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de columnss.
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(buildSqlQuerySeries( &seriesMask )), &reply , &rows, &columns , error ); //connexio a la bdd,sentencia sql ,reply, numero de files,numero de columnss.
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus( stateDatabase );
@@ -104,16 +104,16 @@ Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
     i = 1;//ignorem les capçaleres
     while (i <= rows )
     {
-        series.setSeriesUID( resposta [ 0 + i * columns ] );
-        series.setSeriesNumber( resposta [ 1 + i * columns ] );
-        series.setStudyUID( resposta [ 2 + i * columns ] );
-        series.setSeriesModality( resposta [ 3 + i * columns ] );
-        series.setSeriesDescription( resposta [ 4 + i * columns ] );
-        series.setProtocolName( resposta [ 5 + i * columns ] );
-        series.setSeriesPath( resposta [ 6 + i * columns ] );
-        series.setBodyPartExaminated( resposta [ 7 + i * columns ] );
-        series.setSeriesDate( resposta[ 8 + i * columns ] );
-        series.setSeriesTime( resposta[ 9 + i * columns ] );
+        series.setSeriesUID( reply [ 0 + i * columns ] );
+        series.setSeriesNumber( reply [ 1 + i * columns ] );
+        series.setStudyUID( reply [ 2 + i * columns ] );
+        series.setSeriesModality( reply [ 3 + i * columns ] );
+        series.setSeriesDescription( reply [ 4 + i * columns ] );
+        series.setProtocolName( reply [ 5 + i * columns ] );
+        series.setSeriesPath( reply [ 6 + i * columns ] );
+        series.setBodyPartExaminated( reply [ 7 + i * columns ] );
+        series.setSeriesDate( reply[ 8 + i * columns ] );
+        series.setSeriesTime( reply[ 9 + i * columns ] );
 
         ls.insert( series );
         i++;

@@ -113,7 +113,7 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 {
     int columns , rows , i = 0 , stateDatabase;
     DICOMImage image;
-    char **resposta = NULL , **error = NULL;
+    char **reply = NULL , **error = NULL;
     QString absPath;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
@@ -126,8 +126,8 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
     databaseConnection->getLock();
     stateDatabase = sqlite3_get_table( databaseConnection->getConnection() ,
                                       qPrintable( buildSqlQueryImages( &imageMask ) ) ,
-                                    &resposta , &rows , &columns , error );
-                                    //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+                                    &reply , &rows , &columns , error );
+                                    //connexio a la bdd,sentencia sql ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus( stateDatabase );
@@ -141,20 +141,20 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
     i = 1;//ignorem les capçaleres
     while (i <= rows )
     {
-        image.setImageNumber(atoi( resposta [ 0 + i * columns ] ) );
+        image.setImageNumber(atoi( reply [ 0 + i * columns ] ) );
 
         //creem el path absolut
         absPath = QString("%1%2/%3")
-            .arg( resposta[1 + i * columns ] )
-            .arg( resposta [ 3 + i * columns ]  ) //incloem el directori de la serie
-            .arg( resposta [ 5 + i * columns ] ); //incloem el nom de la imatge
+            .arg( reply[1 + i * columns ] )
+            .arg( reply [ 3 + i * columns ]  ) //incloem el directori de la serie
+            .arg( reply [ 5 + i * columns ] ); //incloem el nom de la imatge
 
         image.setImagePath( absPath );
 
-        image.setStudyUID( resposta [ 2 + i * columns ] );
-        image.setSeriesUID( resposta [ 3 + i * columns ] );
-        image.setSOPInstanceUID( resposta [ 4 + i * columns ] );
-        image.setImageName( resposta [ 5 + i * columns ] );
+        image.setStudyUID( reply [ 2 + i * columns ] );
+        image.setSeriesUID( reply [ 3 + i * columns ] );
+        image.setSOPInstanceUID( reply [ 4 + i * columns ] );
+        image.setImageName( reply [ 5 + i * columns ] );
 
         ls.insert( image );
         i++;
@@ -166,7 +166,7 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
 Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
 {
     int columns , rows , i = 0 , stateDatabase;
-    char **resposta = NULL , **error = NULL;
+    char **reply = NULL , **error = NULL;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
 
@@ -176,7 +176,7 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlCountImageNumber( &imageMask ) ) , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlCountImageNumber( &imageMask ) ) , &reply , &rows , &columns , error );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );
@@ -188,7 +188,7 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
     }
     i = 1;//ignorem les capçaleres
 
-    imageNumber = atoi( resposta [i] );
+    imageNumber = atoi( reply [i] );
 
    return state;
 }
@@ -196,7 +196,7 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
 Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 {
     int columns , rows , stateDatabase;
-    char **resposta = NULL , **error = NULL;
+    char **reply = NULL , **error = NULL;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
 
@@ -206,7 +206,7 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlSizeImage( &imageMask ) ) , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlSizeImage( &imageMask ) ) , &reply , &rows , &columns , error );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );
@@ -218,9 +218,9 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
         return state;
     }
 
-    if ( resposta[1] != NULL )
+    if ( reply[1] != NULL )
     {
-        size = atol( resposta [1] );
+        size = atol( reply [1] );
     }
     else size = 0;
 
@@ -230,7 +230,7 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
 {
     int columns , rows , stateDatabase;
-    char **resposta = NULL , **error = NULL;
+    char **reply = NULL , **error = NULL;
     QString sql;
     Status state;
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
@@ -241,7 +241,7 @@ Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlExistImage( &imageMask ) ) , &resposta , &rows , &columns , error );
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlExistImage( &imageMask ) ) , &reply , &rows , &columns , error );
     databaseConnection->releaseLock();
 
     state = databaseConnection->databaseStatus ( stateDatabase );
@@ -253,7 +253,7 @@ Status CacheImageDAL::existImage( DicomMask imageMask, bool & exist )
         return state;
     }
 
-    if ( resposta[1] != NULL )
+    if ( reply[1] != NULL )
     {
         exist = true;
     }

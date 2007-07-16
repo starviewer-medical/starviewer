@@ -353,7 +353,7 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , stateDatabase;
     DICOMStudy selectedStudy;
-    char **resposta = NULL , **error = NULL;
+    char **reply = NULL , **error = NULL;
     Status state;
     QString sqlSentence;
 
@@ -365,7 +365,7 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
     sqlSentence = "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum  from Study, Patient where Study.PatId = Patient.PatId ";
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence) , &resposta , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
+    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
     state = databaseConnection->databaseStatus( stateDatabase );
 
@@ -379,17 +379,17 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
     i = 1;//ignorem les capçaleres
     while ( i <= rows )
     {
-        selectedStudy.setPatientId( resposta [ 0 + i * columns ] );
-        selectedStudy.setPatientName( resposta [ 1 + i * columns ] );
-        selectedStudy.setPatientAge( resposta [ 2+ i * columns ] );
-        selectedStudy.setStudyId( resposta [ 3+ i * columns ] );
-        selectedStudy.setStudyDate( resposta [ 4+ i * columns ] );
-        selectedStudy.setStudyTime( resposta [ 5+ i * columns ] );
-        selectedStudy.setStudyDescription( resposta [ 6+ i * columns ] );
-        selectedStudy.setStudyUID( resposta [ 7+ i * columns ] );
-        selectedStudy.setAbsPath( resposta [ 8 + i * columns ] );
-        selectedStudy.setStudyModality( resposta [ 9 + i * columns ] );
-        selectedStudy.setAccessionNumber( resposta [ 10 + i * columns ] );
+        selectedStudy.setPatientId( reply [ 0 + i * columns ] );
+        selectedStudy.setPatientName( reply [ 1 + i * columns ] );
+        selectedStudy.setPatientAge( reply [ 2+ i * columns ] );
+        selectedStudy.setStudyId( reply [ 3+ i * columns ] );
+        selectedStudy.setStudyDate( reply [ 4+ i * columns ] );
+        selectedStudy.setStudyTime( reply [ 5+ i * columns ] );
+        selectedStudy.setStudyDescription( reply [ 6+ i * columns ] );
+        selectedStudy.setStudyUID( reply [ 7+ i * columns ] );
+        selectedStudy.setAbsPath( reply [ 8 + i * columns ] );
+        selectedStudy.setStudyModality( reply [ 9 + i * columns ] );
+        selectedStudy.setAccessionNumber( reply [ 10 + i * columns ] );
         ls.insert( selectedStudy );
         i++;
     }
