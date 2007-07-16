@@ -127,8 +127,8 @@ public:
     void setSpecular( bool specular );
     double getSpecularPower() const;
     void setSpecularPower( double specularPower );
-    signed char getUpdatePlane() const;
-    void setUpdatePlane( signed char updatePlane );
+    short getUpdatePlane() const;
+    void setUpdatePlane( short updatePlane );
     bool getCompute() const;
     void setCompute( bool compute );
 
@@ -168,7 +168,7 @@ private:
     int m_interpolation;
     bool m_specular;
     double m_specularPower;
-    signed char m_updatePlane;
+    short m_updatePlane;
     bool m_compute;
 
     double m_similarityThreshold;

@@ -329,12 +329,12 @@ void OptimalViewpointParameters::setSpecularPower( double specularPower )
 
 
 
-signed char OptimalViewpointParameters::getUpdatePlane() const
+short OptimalViewpointParameters::getUpdatePlane() const
 {
     return m_updatePlane;
 }
 
-void OptimalViewpointParameters::setUpdatePlane( signed char updatePlane )
+void OptimalViewpointParameters::setUpdatePlane( short updatePlane )
 {
     if ( m_updatePlane != updatePlane )
     {

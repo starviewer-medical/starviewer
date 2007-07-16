@@ -633,7 +633,7 @@ void OptimalViewpoint::setSpecularPower( double specularPower )
 
 
 
-void OptimalViewpoint::setUpdatePlane( signed char updatePlane )
+void OptimalViewpoint::setUpdatePlane( short updatePlane )
 {
     m_updatePlane = updatePlane;
 }
