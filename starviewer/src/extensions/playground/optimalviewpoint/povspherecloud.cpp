@@ -79,7 +79,7 @@ const QVector< Vector3 > & POVSphereCloud::getGeographicVertices() const
 
 void POVSphereCloud::createIcosahedronVertices()
 {
-    Vector3 v( ( 1.0 + sqrt( 5.0 ) ) / 2.0, 0.0, 1.0 );
+    Vector3 v( 1.0, 0.0, ( 1.0 + sqrt( 5.0 ) ) / 2.0 );
     v.normalize();
 
     const double ICOSAHEDRON_X = v.x;
@@ -250,7 +250,7 @@ void POVSphereCloud::createGeographicVertices()
         Vector3 gv;
         gv.x = v.length();
         // latitud
-        gv.y = 90.0 - acos( v.z / sqrt( gv.x ) ) * 180.0 / M_PI;
+        gv.y = 90.0 - acos( v.z / gv.x ) * 180.0 / M_PI;
         // longitud
         if ( v.x == 0.0 && v.y == 0.0 )
             gv.z = 0.0;
