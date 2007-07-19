@@ -814,14 +814,15 @@ unsigned char OptimalViewpointVolume::getRangeMax() const
 
 void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
 {
+    if ( m_renderCluster != renderCluster )
+    {
+        if ( renderCluster )
+            m_mainMapper->SetInput( m_clusterImage );
+        else
+            m_mainMapper->SetInput( m_image );
+    }
+
     m_renderCluster = renderCluster;
-
-    if ( m_renderCluster )
-        m_mainMapper->SetInput( m_clusterImage );
-    else
-        m_mainMapper->SetInput( m_image );
-
-    m_mainMapper->Update();
 }
 
 
