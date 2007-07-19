@@ -90,6 +90,9 @@ void QOptimalViewpointExtension::setInput( Volume * input )
 {
     m_parameters->setVolumeObject( input );
 //     m_optimalViewpointInputParametersForm->readParameter( OptimalViewpointParameters::VolumeObject );
+    int dims[3];
+    input->getDimensions( dims );
+    m_inputParametersWidget->setNumberOfSlices( dims[2] );
 }
 
 
@@ -166,6 +169,10 @@ void QOptimalViewpointExtension::execute()
             m_method->setUpdatePlane( m_parameters->getUpdatePlane() );
             m_method->setCompute( m_parameters->getCompute() );
             m_method->setSimilarityThreshold( m_parameters->getSimilarityThreshold() );
+
+            bool renderCluster = m_parameters->getCluster();
+            if ( renderCluster ) m_method->setClusterLimits( m_parameters->getClusterFirst(), m_parameters->getClusterLast() );
+            m_method->setRenderCluster( renderCluster );
 
 
 

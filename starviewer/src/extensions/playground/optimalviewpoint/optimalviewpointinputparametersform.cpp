@@ -55,6 +55,9 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
 
+    connect( m_clusterFirstSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterFirst(int) ) );
+    connect( m_clusterLastSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterLast(int) ) );
+
 
 
     m_applyPushButton->setDisabled( true );
@@ -184,6 +187,18 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
             case OptimalViewpointParameters::SimilarityThreshold:
                 m_similarityThresholdDoubleSpinBox->setValue( m_parameters->getSimilarityThreshold() );
                 break;
+
+            case OptimalViewpointParameters::Cluster:
+                m_clusterCheckBox->setChecked( m_parameters->getCluster() );
+                break;
+
+            case OptimalViewpointParameters::ClusterFirst:
+                m_clusterFirstSpinBox->setValue( m_parameters->getClusterFirst() );
+                break;
+
+            case OptimalViewpointParameters::ClusterLast:
+                m_clusterLastSpinBox->setValue( m_parameters->getClusterLast() );
+                break;
         }
     }
 }
@@ -229,6 +244,10 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         m_parameters->setUpdatePlane( m_updatePlaneSpinBox->value() );
         m_parameters->setCompute( m_computeCheckBox->isChecked() );
         m_parameters->setSimilarityThreshold( m_similarityThresholdDoubleSpinBox->value() );
+
+        m_parameters->setCluster( m_clusterCheckBox->isChecked() );
+        m_parameters->setClusterFirst( m_clusterFirstSpinBox->value() );
+        m_parameters->setClusterLast( m_clusterLastSpinBox->value() );
     }
 }
 
@@ -404,6 +423,27 @@ void OptimalViewpointInputParametersForm::saveTransferFunction()
     settings.endGroup();
 }
 
+
+void OptimalViewpointInputParametersForm::setClusterFirst( int slice )
+{
+    if ( m_clusterLastSpinBox->value() < slice )
+        m_clusterLastSpinBox->setValue( slice );
+}
+
+
+void OptimalViewpointInputParametersForm::setClusterLast( int slice )
+{
+    if ( m_clusterFirstSpinBox->value() > slice )
+        m_clusterFirstSpinBox->setValue( slice );
+}
+
+
+void OptimalViewpointInputParametersForm::setNumberOfSlices( unsigned short numberOfSlices )
+{
+    m_clusterFirstSpinBox->setMaximum( numberOfSlices );
+    m_clusterLastSpinBox->setMaximum( numberOfSlices - 1 );
+    m_clusterLastSpinBox->setValue( numberOfSlices - 1 );
+}
 
 
 }; // end namespace udg

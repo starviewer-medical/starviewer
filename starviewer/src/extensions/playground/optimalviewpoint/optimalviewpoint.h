@@ -136,6 +136,11 @@ public:
 
 
 
+    void setRenderCluster( bool renderCluster );
+    void setClusterLimits( unsigned short first, unsigned short last );
+
+
+
 
 private slots:
 

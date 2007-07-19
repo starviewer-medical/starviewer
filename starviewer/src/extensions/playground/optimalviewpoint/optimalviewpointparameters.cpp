@@ -373,4 +373,64 @@ double OptimalViewpointParameters::getSimilarityThreshold() const
 }
 
 
+void OptimalViewpointParameters::setCluster( bool cluster )
+{
+    if ( m_cluster != cluster )
+    {
+        m_cluster = cluster; emit changed( Cluster );
+    }
+}
+
+
+bool OptimalViewpointParameters::getCluster() const
+{
+    return m_cluster;
+}
+
+
+void OptimalViewpointParameters::setClusterFirst( unsigned short clusterFirst )
+{
+    if ( m_clusterFirst != clusterFirst )
+    {
+        m_clusterFirst = clusterFirst; emit changed( ClusterFirst );
+    }
+}
+
+
+unsigned short OptimalViewpointParameters::getClusterFirst() const
+{
+    return m_clusterFirst;
+}
+
+
+void OptimalViewpointParameters::setClusterLast( unsigned short clusterLast )
+{
+    if ( m_clusterLast != clusterLast )
+    {
+        m_clusterLast = clusterLast; emit changed( ClusterLast );
+    }
+}
+
+
+unsigned short OptimalViewpointParameters::getClusterLast() const
+{
+    return m_clusterLast;
+}
+
+
+// void OptimalViewpointParameters::setNumberOfSlices( unsigned short numberOfSlices )
+// {
+//     if ( m_numberOfSlices != numberOfSlices )
+//     {
+//         m_numberOfSlices = numberOfSlices; emit changed( NumberOfSlices );
+//     }
+// }
+// 
+// 
+// unsigned short OptimalViewpointParameters::getNumberOfSlices() const
+// {
+//     return m_numberOfSlices;
+// }
+
+
 }

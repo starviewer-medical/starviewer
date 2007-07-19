@@ -127,6 +127,11 @@ public:
 
 
 
+    void setRenderCluster( bool renderCluster );
+    void setClusterLimits( unsigned short first, unsigned short last );
+
+
+
 
 public slots:
 
@@ -167,6 +172,11 @@ private:
     vtkVolumeProperty * m_volumeProperty;
 
 
+    vtkImageData * m_clusterImage;
+    vtkVolume * m_clusterVolume;
+    vtkVolumeRayCastMapper * m_clusterMapper;
+
+
 
     unsigned char * m_data;
     unsigned char * m_labeledData;
@@ -182,6 +192,10 @@ private:
 
     /// Valors de propietat mínim i màxim del volum.
     unsigned char m_rangeMin, m_rangeMax;
+
+
+    bool m_renderCluster;
+    bool m_clusterFirst, m_clusterLast;
 
 
 signals:

@@ -12,6 +12,7 @@
 #include <QTextStream>
 
 #include <vtkColorTransferFunction.h>
+#include <vtkImageClip.h>
 #include <vtkImageData.h>
 #include <vtkImageShiftScale.h>
 #include <vtkPiecewiseFunction.h>
@@ -206,6 +207,14 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
     emit scalarRange( m_rangeMin, m_rangeMax );
+
+
+
+
+    m_renderCluster = false;
+    m_clusterImage = 0;
+    m_clusterVolume = 0;
+    m_clusterMapper = 0;
 }
 
 OptimalViewpointVolume::~OptimalViewpointVolume()
@@ -222,6 +231,8 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_image->Delete();
     m_labeledImage->Delete();
     m_segmentedImage->Delete();
+
+    if ( m_clusterImage ) m_clusterImage->Delete();
 }
 
 void OptimalViewpointVolume::setShade( bool on )
@@ -798,6 +809,39 @@ unsigned char OptimalViewpointVolume::getRangeMin() const
 unsigned char OptimalViewpointVolume::getRangeMax() const
 {
     return m_rangeMax;
+}
+
+
+void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
+{
+    m_renderCluster = renderCluster;
+
+    if ( m_renderCluster )
+        m_mainMapper->SetInput( m_clusterImage );
+    else
+        m_mainMapper->SetInput( m_image );
+
+    m_mainMapper->Update();
+}
+
+
+void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned short last )
+{
+    if ( m_clusterFirst != first || m_clusterLast != last )
+    {
+        vtkImageClip * clip = vtkImageClip::New();
+        clip->SetInput( m_image );
+        int dims[3];
+        m_image->GetDimensions( dims );
+        clip->SetOutputWholeExtent( 0, dims[0] - 1, 0, dims[1] - 1, first, last );
+        clip->ClipDataOn();
+        clip->Update();
+        if ( m_clusterImage ) m_clusterImage->Delete();
+        m_clusterImage = clip->GetOutput(); m_clusterImage->Register( 0 );
+        clip->Delete();
+    }
+
+    m_clusterFirst = first; m_clusterLast = last;
 }
 
 

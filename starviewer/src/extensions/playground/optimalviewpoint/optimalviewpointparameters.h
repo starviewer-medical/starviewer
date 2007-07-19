@@ -59,7 +59,9 @@ public:
         // nous paràmetres
         ComputeWithOpacity, Interpolation, Specular, SpecularPower, UpdatePlane,
         Compute,
-        SimilarityThreshold
+        SimilarityThreshold,
+        Cluster, ClusterFirst, ClusterLast,
+//         NumberOfSlices
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -135,6 +137,14 @@ public:
     void setSimilarityThreshold( double similarityThreshold );
     double getSimilarityThreshold() const;
 
+    void setCluster( bool cluster );
+    bool getCluster() const;
+    void setClusterFirst( unsigned short clusterFirst );
+    unsigned short getClusterFirst() const;
+    void setClusterLast( unsigned short clusterLast );
+    unsigned short getClusterLast() const;
+//     void setNumberOfSlices( unsigned short numberOfSlices );
+//     unsigned short getNumberOfSlices() const;
 
 
 
@@ -172,6 +182,11 @@ private:
     bool m_compute;
 
     double m_similarityThreshold;
+
+    bool m_cluster;
+    unsigned short m_clusterFirst;
+    unsigned short m_clusterLast;
+//     unsigned short m_numberOfSlices;
 
 
 

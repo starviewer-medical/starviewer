@@ -57,6 +57,8 @@ public slots:
     /// Assigna la funció de transferència actual.
     void setTransferFunction( const TransferFunction & transferFunction );
 
+    void setNumberOfSlices( unsigned short numberOfSlices );
+
 protected:
 
     /**
@@ -92,6 +94,8 @@ private slots:
     void requestSegmentation();
     void loadTransferFunction();
     void saveTransferFunction();
+    void setClusterFirst( int slice );
+    void setClusterLast( int slice );
 
 signals:
 

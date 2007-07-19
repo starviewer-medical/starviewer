@@ -5,16 +5,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>377</width>
-    <height>763</height>
+    <width>440</width>
+    <height>875</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>0</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
    </property>
    <item>
     <widget class="QGroupBox" name="m_segmentationGroupBox" >
@@ -22,11 +31,20 @@
       <string>Segmentation</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
+      </property>
+      <property name="leftMargin" >
+       <number>9</number>
+      </property>
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
       </property>
       <item>
        <widget class="QRadioButton" name="m_loadSegmentationRadioButton" >
@@ -41,11 +59,20 @@
       <item>
        <widget class="QWidget" native="1" name="m_loadSegmentationWidget" >
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <spacer>
@@ -66,9 +93,7 @@
          <item>
           <widget class="QLabel" name="m_segmentationFileLabel" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
              <horstretch>1</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -101,10 +126,22 @@
       <item>
        <widget class="QWidget" native="1" name="m_automaticSegmentationWidget" >
         <layout class="QGridLayout" >
-         <property name="margin" >
+         <property name="leftMargin" >
           <number>0</number>
          </property>
-         <property name="spacing" >
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
+         <property name="horizontalSpacing" >
+          <number>6</number>
+         </property>
+         <property name="verticalSpacing" >
           <number>6</number>
          </property>
          <item rowspan="3" row="0" column="0" >
@@ -125,18 +162,25 @@
          </item>
          <item row="1" column="1" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_labelSegmentationBlockLength" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -154,11 +198,11 @@
              <property name="statusTip" >
               <string>Block length (L) to compute excess entropy during segmentation</string>
              </property>
-             <property name="maximum" >
-              <number>6</number>
-             </property>
              <property name="minimum" >
               <number>2</number>
+             </property>
+             <property name="maximum" >
+              <number>6</number>
              </property>
              <property name="value" >
               <number>4</number>
@@ -169,18 +213,25 @@
          </item>
          <item row="0" column="1" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_labelSegmentationIterations" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -198,11 +249,11 @@
              <property name="statusTip" >
               <string>Number of iterations of the genetic algorithm</string>
              </property>
-             <property name="maximum" >
-              <number>500</number>
-             </property>
              <property name="minimum" >
               <number>1</number>
+             </property>
+             <property name="maximum" >
+              <number>500</number>
              </property>
              <property name="value" >
               <number>200</number>
@@ -213,18 +264,25 @@
          </item>
          <item row="0" column="2" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_labelSegmentationNoise" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -245,11 +303,11 @@
              <property name="decimals" >
               <number>1</number>
              </property>
-             <property name="maximum" >
-              <double>128.000000000000000</double>
-             </property>
              <property name="minimum" >
               <double>1.000000000000000</double>
+             </property>
+             <property name="maximum" >
+              <double>128.000000000000000</double>
              </property>
              <property name="value" >
               <double>32.000000000000000</double>
@@ -260,18 +318,25 @@
          </item>
          <item row="1" column="2" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_labelSegmentationImageSampleDistance" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -292,11 +357,11 @@
              <property name="decimals" >
               <number>1</number>
              </property>
-             <property name="maximum" >
-              <double>512.000000000000000</double>
-             </property>
              <property name="minimum" >
               <double>0.100000000000000</double>
+             </property>
+             <property name="maximum" >
+              <double>512.000000000000000</double>
              </property>
              <property name="singleStep" >
               <double>0.100000000000000</double>
@@ -310,18 +375,25 @@
          </item>
          <item row="2" column="1" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_labelSegmentationNumberOfClusters" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -339,11 +411,11 @@
              <property name="statusTip" >
               <string>Number of clusters (N) of the volume, including empty space</string>
              </property>
-             <property name="maximum" >
-              <number>6</number>
-             </property>
              <property name="minimum" >
               <number>2</number>
+             </property>
+             <property name="maximum" >
+              <number>6</number>
              </property>
              <property name="value" >
               <number>4</number>
@@ -354,18 +426,25 @@
          </item>
          <item row="2" column="2" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_labelSegmentationSampleDistance" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>7</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -386,11 +465,11 @@
              <property name="decimals" >
               <number>1</number>
              </property>
-             <property name="maximum" >
-              <double>512.000000000000000</double>
-             </property>
              <property name="minimum" >
               <double>0.100000000000000</double>
+             </property>
+             <property name="maximum" >
+              <double>512.000000000000000</double>
              </property>
              <property name="singleStep" >
               <double>0.100000000000000</double>
@@ -414,18 +493,25 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="m_numberOfClustersLabel" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
             <horstretch>1</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -447,9 +533,7 @@
    <item>
     <widget class="QGroupBox" name="m_groupBoxVisualization" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>3</vsizetype>
+      <sizepolicy vsizetype="MinimumExpanding" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -458,11 +542,20 @@
       <string>&amp;Visualization parameters</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
+      </property>
+      <property name="leftMargin" >
+       <number>9</number>
+      </property>
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
       </property>
       <item>
        <widget class="QPushButton" name="m_advancedControlsPushButton" >
@@ -483,19 +576,37 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>9</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
          </property>
+         <property name="leftMargin" >
+          <number>9</number>
+         </property>
+         <property name="topMargin" >
+          <number>9</number>
+         </property>
+         <property name="rightMargin" >
+          <number>9</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>9</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QCheckBox" name="m_checkBoxShade" >
@@ -518,11 +629,20 @@
          </item>
          <item>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_interpolationLabel" >
@@ -557,11 +677,20 @@
          </item>
          <item>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QCheckBox" name="m_specularCheckBox" >
@@ -572,11 +701,20 @@
            </item>
            <item>
             <layout class="QHBoxLayout" >
-             <property name="margin" >
-              <number>0</number>
-             </property>
              <property name="spacing" >
               <number>6</number>
+             </property>
+             <property name="leftMargin" >
+              <number>0</number>
+             </property>
+             <property name="topMargin" >
+              <number>0</number>
+             </property>
+             <property name="rightMargin" >
+              <number>0</number>
+             </property>
+             <property name="bottomMargin" >
+              <number>0</number>
              </property>
              <item>
               <widget class="QLabel" name="m_specularPowerLabel" >
@@ -604,11 +742,20 @@
          </item>
          <item>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_updatePlaneLabel" >
@@ -625,11 +772,11 @@
              <property name="specialValueText" >
               <string>All</string>
              </property>
-             <property name="maximum" >
-              <number>0</number>
-             </property>
              <property name="minimum" >
               <number>-1</number>
+             </property>
+             <property name="maximum" >
+              <number>0</number>
              </property>
              <property name="value" >
               <number>-1</number>
@@ -638,16 +785,60 @@
            </item>
           </layout>
          </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <item>
+            <widget class="QCheckBox" name="m_clusterCheckBox" >
+             <property name="text" >
+              <string>Cluster</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" >
+             <item>
+              <widget class="QLabel" name="m_clusterFirstLabel" >
+               <property name="text" >
+                <string>First</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_clusterFirstSpinBox" />
+             </item>
+             <item>
+              <widget class="QLabel" name="m_clusterLastLabel" >
+               <property name="text" >
+                <string>Last</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_clusterLastSpinBox" />
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
         </layout>
        </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="m_labelNumberOfPlanes" >
@@ -667,6 +858,11 @@
           <item>
            <property name="text" >
             <string>0</string>
+           </property>
+          </item>
+          <item>
+           <property name="text" >
+            <string>3</string>
            </property>
           </item>
           <item>
@@ -710,11 +906,20 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="m_labeVisualizationBlockLength" >
@@ -731,11 +936,11 @@
           <property name="statusTip" >
            <string>Block length (L) to compute excess entropy</string>
           </property>
-          <property name="maximum" >
-           <number>6</number>
-          </property>
           <property name="minimum" >
            <number>2</number>
+          </property>
+          <property name="maximum" >
+           <number>6</number>
           </property>
           <property name="value" >
            <number>4</number>
@@ -746,11 +951,20 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="m_labelVisualizationImageSampleDistance" >
@@ -770,11 +984,11 @@
           <property name="decimals" >
            <number>1</number>
           </property>
-          <property name="maximum" >
-           <double>512.000000000000000</double>
-          </property>
           <property name="minimum" >
            <double>0.100000000000000</double>
+          </property>
+          <property name="maximum" >
+           <double>512.000000000000000</double>
           </property>
           <property name="singleStep" >
            <double>0.100000000000000</double>
@@ -788,11 +1002,20 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="m_labelVisualizationSampleDistance" >
@@ -812,11 +1035,11 @@
           <property name="decimals" >
            <number>1</number>
           </property>
-          <property name="maximum" >
-           <double>512.000000000000000</double>
-          </property>
           <property name="minimum" >
            <double>0.100000000000000</double>
+          </property>
+          <property name="maximum" >
+           <double>512.000000000000000</double>
           </property>
           <property name="singleStep" >
            <double>0.100000000000000</double>
@@ -837,11 +1060,20 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="m_similarityThresholdLabel" >
@@ -874,11 +1106,20 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QPushButton" name="m_loadTransferFunctionPushButton" >
@@ -923,11 +1164,20 @@
         </property>
         <widget class="QWidget" name="page0" >
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="udg::QTransferFunctionEditorByGradient" native="1" name="m_gradientEditor" >
@@ -940,11 +1190,20 @@
         </widget>
         <widget class="QWidget" name="page1" >
          <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <property name="spacing" >
            <number>6</number>
+          </property>
+          <property name="leftMargin" >
+           <number>0</number>
+          </property>
+          <property name="topMargin" >
+           <number>0</number>
+          </property>
+          <property name="rightMargin" >
+           <number>0</number>
+          </property>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
           <item>
            <widget class="udg::QTransferFunctionEditorByValues" native="1" name="m_editorByValues" />

@@ -83,6 +83,7 @@ OptimalViewpoint::OptimalViewpoint()
     m_resultsChanged = false;
 
 
+
 }
 
 OptimalViewpoint::~OptimalViewpoint()
@@ -116,6 +117,7 @@ void OptimalViewpoint::setMainRenderer( vtkRenderer * mainRenderer )
 {
     m_renderer = mainRenderer; m_renderer->Register( 0 );
     m_renderer->SetActiveCamera( m_camera );
+    m_renderer->SetBackground( 0.5, 0.5, 0.5 );       // posem el fons gris
 }
 
 
@@ -199,8 +201,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
     if ( numberOfPlanes > m_numberOfPlanes )    // s'han d'afegir plans
     {
         // primer, plans creats prèviament
-//         for ( unsigned char i = 1 + m_numberOfPlanes; i < size && i <= numberOfPlanes; i++ )
-//             m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
+        for ( unsigned char i = 1 + m_numberOfPlanes; i < size && i <= numberOfPlanes; i++ )
+            m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
 
         // després, miralls nous
         if ( 1 + numberOfPlanes > size ) // s'hauran d'afegir plans
@@ -213,7 +215,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                 (*m_planes)[i] = new OptimalViewpointPlane( i, m_planeSize );
                 (*m_planes)[i]->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
                 (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
-//                 m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
+                m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
                 (*m_planes)[i]->setEntropyN( m_numberOfClusters );
                 connect( (*m_planes)[i], SIGNAL( excessEntropyComputed(double) ),
                          this, SLOT( newResults() ) );
@@ -249,6 +251,14 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
 
     switch ( m_numberOfPlanes )
     {
+        case 3:
+            for ( unsigned char i = 1; i <= 3; i++ )
+                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
+            (*m_planes)[1]->setLatitude( 0.0 ); (*m_planes)[1]->setLongitude( 180.0 );
+            (*m_planes)[2]->setLatitude( 0.0 ); (*m_planes)[2]->setLongitude( 90.0 );
+            (*m_planes)[3]->setLatitude( -90.0 ); (*m_planes)[3]->setLongitude( 0.0 );
+            break;
+
         case 4:
             for ( unsigned char i = 1; i <= 4; i++ )
                 (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
@@ -705,6 +715,18 @@ unsigned char OptimalViewpoint::doAutomaticSegmentation( unsigned short iteratio
 void OptimalViewpoint::setSimilarityThreshold( double similarityThreshold )
 {
     m_similarityThreshold = similarityThreshold;
+}
+
+
+void OptimalViewpoint::setRenderCluster( bool renderCluster )
+{
+    m_volume->setRenderCluster( renderCluster );
+}
+
+
+void OptimalViewpoint::setClusterLimits( unsigned short first, unsigned short last )
+{
+    m_volume->setClusterLimits( first, last );
 }
 
 
