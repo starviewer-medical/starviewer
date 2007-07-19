@@ -840,6 +840,8 @@ void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned sh
         if ( m_clusterImage ) m_clusterImage->Delete();
         m_clusterImage = clip->GetOutput(); m_clusterImage->Register( 0 );
         clip->Delete();
+        /// \todo Posar un booleà per fer això
+        m_renderCluster = false;    // perquè després es cridarà setRenderCluster i s'actualitzarà bé
     }
 
     m_clusterFirst = first; m_clusterLast = last;
