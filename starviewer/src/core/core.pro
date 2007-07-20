@@ -70,7 +70,8 @@ HEADERS += extensionfactory.h \
            shutterfilter.h \
            q2dviewerpresentationstateattacher.h  \
            sliceannotationcontroller.h \
-           image.h
+           image.h \
+           dicomtagreader.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -125,7 +126,8 @@ SOURCES += extensionmediator.cpp \
            shutterfilter.cpp \
            q2dviewerpresentationstateattacher.cpp  \
            sliceannotationcontroller.cpp \
-           image.cpp
+           image.cpp \
+           dicomtagreader.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

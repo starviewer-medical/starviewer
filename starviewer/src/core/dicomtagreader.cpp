@@ -1,0 +1,172 @@
+/***************************************************************************
+ *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/
+#include "dicomtagreader.h"
+#include "logging.h"
+
+#include <QStringList>
+
+//\TODO trobar perquè això és necessari amb les dcmtk
+#define HAVE_CONFIG_H 1
+#include "dcmtk/dcmdata/dcfilefo.h"
+
+namespace udg {
+
+DICOMTagReader::DICOMTagReader() : m_dicomData(0)
+{
+}
+
+DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
+{
+    this->setFile( filename );
+}
+
+DICOMTagReader::~DICOMTagReader()
+{
+}
+
+bool DICOMTagReader::setFile( QString filename )
+{
+    DcmFileFormat dicomFile;
+    OFCondition status = dicomFile.loadFile( qPrintable(filename) );
+    if( status.good() )
+    {
+        // eliminem l'objecte anterior si n'hi hagués
+        if( m_dicomData )
+            delete m_dicomData;
+
+        m_dicomData =  dicomFile.getAndRemoveDataset();
+        return true;
+    }
+    else
+    {
+        DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\n%2 ").arg( filename ).arg( status.text() ) );
+        return false;
+    }
+}
+
+bool DICOMTagReader::tagExists( DcmTagKey tag )
+{
+    if( m_dicomData )
+        return m_dicomData->tagExists( tag );
+    else
+    {
+        DEBUG_LOG("El m_dicomData no és vàlid");
+        return false;
+    }
+}
+
+bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
+{
+    return this->tagExists( DcmTagKey(group,element) );
+}
+
+QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int element )
+{
+    return this->getAttributeByName( DcmTagKey(group,element) );
+}
+
+QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
+{
+    QString result;
+    if( m_dicomData )
+    {
+        OFString value;
+        OFCondition status = m_dicomData->findAndGetOFStringArray( tag , value );
+        if( status.good() )
+        {
+            result = value.c_str();
+            DEBUG_LOG( QString("Tag %1 : Hem obtingut el valor %2").arg( tag.toString().c_str() ).arg(result) );
+        }
+        else
+        {
+            DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( tag.toString().c_str() ).arg( status.text() ) );
+        }
+    }
+    else
+        DEBUG_LOG("El m_dicomData no és vàlid");
+
+    return result;
+}
+
+QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element )
+{
+    return this->getSequenceAttributeByName( DcmTagKey(sequenceGroup,sequenceElement) , DcmTagKey(group,element) );
+}
+
+QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
+{
+    QList<DcmTagKey> embeddedSequenceList;
+    embeddedSequenceList << sequenceTag;
+    return this->getSequenceAttributeByName( embeddedSequenceList, attributeTag );
+}
+
+QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element )
+{
+    QList<DcmTagKey> embeddedSequenceList;
+    foreach( unsigned int *tagNumbers, embeddedSequencesTags )
+    {
+        embeddedSequenceList << DcmTagKey( tagNumbers[0], tagNumbers[1] );
+    }
+    return this->getSequenceAttributeByName( embeddedSequenceList, DcmTagKey( group, element ) );
+
+}
+
+QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )
+{
+    QStringList result;
+
+//\TODO per implementar. Aquesta part és una mica més fotuda.
+
+//     int i = 0;
+//     bool ok = true;
+//     DcmStack stack;
+//     DcmSequenceOfItems *sequence = NULL;
+//     while( i < embeddedSequencesTags.size() && ok )
+//     {
+//         OFCondition status = m_dicomData->search( embeddedSequencesTags.at(i), stack );
+//         if( status.good() )
+//         {
+//         }
+//         else
+//         {
+//         }
+//         sequence =
+//         i++;
+//     }
+//
+//     DcmStack stack;
+//     DcmSequenceOfItems *lutSequence = NULL;
+//     lutSequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
+//     DcmItem *item = lutSequence->getItem( 0 );
+//     // obtenim la descripció de la lut que ens especifica el format d'aquesta
+//     const Uint16 *lutDescriptor;
+//     OFCondition status = item->findAndGetUint16Array( DcmTagKey( DCM_LUTDescriptor ) , lutDescriptor  );
+//     if( status.good() )
+//     {
+//
+//         int numberOfEntries;
+//         if( lutDescriptor[0] == 0 )
+//             numberOfEntries = 65535;
+//         else
+//             numberOfEntries =  lutDescriptor[0];
+//         signed int firstStored;
+//         if( signedRepresentation )
+//             firstStored = static_cast<signed short>( lutDescriptor[1] );
+//         else
+//             firstStored = lutDescriptor[1];
+//
+//         DEBUG_LOG( QString("LUT Descriptor: %1\\%2\\%3")
+//         .arg( numberOfEntries )
+//         .arg( firstStored )
+//         .arg( lutDescriptor[2] )
+//         );
+//     }
+
+    return result;
+}
+
+}
