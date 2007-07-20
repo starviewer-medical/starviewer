@@ -15,6 +15,8 @@ class DcmDataset;
 
 namespace udg {
 
+class DICOMTagReader;
+
 /**
 Conté informació relacionada amb el volum, com per exemple dades del pacient.
 
@@ -293,6 +295,9 @@ private:
 
     /// info de dicom en format dcmtk
     DcmDataset *m_dicomData;
+
+    /// Lector d'informació DICOM
+    DICOMTagReader *m_dicomTagReader;
 
     ///Llegeix la informació sobre les dades de window level
     void readWindowLevelData();

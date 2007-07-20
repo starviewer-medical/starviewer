@@ -10,6 +10,8 @@
 #include "input.h"
 #include "volumesourceinformation.h"
 #include "logging.h"
+#include "dicomtagreader.h"
+
 //ITK
 #include <itkMetaDataDictionary.h>
 #include <itkMetaDataObject.h>
@@ -159,35 +161,6 @@ int Input::readSeries( QString dirPath )
     return readFiles( stdVectorOfStdStringToQStringList( filenames ) );
 }
 
-bool Input::queryTagAsString( QString tag , QString &result )
-{
-    bool ok = true;
-    typedef itk::MetaDataDictionary   DictionaryType;
-    const  DictionaryType & dictionary = m_gdcmIO->GetMetaDataDictionary();
-
-    typedef itk::MetaDataObject< std::string > MetaDataStringType;
-
-    DictionaryType::ConstIterator itr = dictionary.Begin();
-    DictionaryType::ConstIterator end = dictionary.End();
-
-    DictionaryType::ConstIterator tagItr = dictionary.Find( tag.toStdString() );
-
-    if( tagItr == end )
-    {
-        ok = false;
-    }
-    else
-    {
-        MetaDataStringType::ConstPointer entryvalue = dynamic_cast<const MetaDataStringType *>( tagItr->second.GetPointer() );
-
-        if( entryvalue )
-        {
-            result = entryvalue->GetMetaDataObjectValue().c_str();
-        }
-    }
-    return ok;
-}
-
 QString Input::getOrientation( double vector[3] )
 {
         char *orientation = new char[4];
@@ -228,14 +201,18 @@ QString Input::getOrientation( double vector[3] )
 
 void Input::setVolumeInformation()
 {
+    // obtenim el primer arxiu de tots. \TODO Això ara mateix no és correcte però és pràcticament el mateix que havíem fet fins ara.
+    QString filename = m_volumeData->getVolumeSourceInformation()->getFilenames().at(0);
+    DICOMTagReader tagReader;
+    tagReader.setFile( filename );
     QString value;
+
     //obtenim l'string amb la posició del pacient relativa a la màquina(series level). Obligatori per MR i CT. No ha d'estar present si Patient Orientation Code Sequence (0054,0410) hi és, altrament és camp obligatori.
-    if( queryTagAsString("0018|5100", value) )
-    {
-        m_volumeData->getVolumeSourceInformation()->setPatientPosition( value.trimmed() );
-    }
+    m_volumeData->getVolumeSourceInformation()->setPatientPosition( tagReader.getAttributeByTag( 0x0018, 0x5100 ).trimmed() );
+
     //obtenim la orientació de la imatge(image level). Això ens designarà la direcció anatòmica (R,L,P,A,H,F) dels pixels que van d'esquerra-dreta/dalt-abaix. És un camp requerit si l'imatge no requereix Image Orientation(0020,0037) i Image Position(0020,0032)
-    if( queryTagAsString( "0020|0020" , value ) )
+    value = tagReader.getAttributeByTag( 0x0020, 0x0020 );
+    if( !value.isEmpty() )
     {
         value.replace( QString( "\\" ) , QString( "," ) );
         m_volumeData->getVolumeSourceInformation()->setPatientOrientationString( value );
@@ -244,7 +221,8 @@ void Input::setVolumeInformation()
     {
         // si no tenim la informació directament l'haurem de deduir a partir dels direction cosines
         // l'Image Orientation
-        if( queryTagAsString( "0020|0037", value ) )
+        value = tagReader.getAttributeByTag( 0x0020,0x0037 );
+        if( !value.isEmpty() )
         {
             // passem de l'string als valors double
             double dirCosinesValuesX[3] , dirCosinesValuesY[3] , dirCosinesValuesZ[3];
@@ -285,10 +263,9 @@ void Input::setVolumeInformation()
         }
     }
     // nom de la institució on s'ha fet l'estudi
-    if( queryTagAsString( "0008|0080" , value ) )
-    {
+    value = tagReader.getAttributeByTag( 0x0008, 0x0080 );
+    if( !value.isEmpty() )
         m_volumeData->getVolumeSourceInformation()->setInstitutionName( value );
-    }
     else
     {
         // no tenim aquesta informació \TODO cal posar res?
@@ -296,7 +273,8 @@ void Input::setVolumeInformation()
     }
 
     // nom del pacient
-    if( queryTagAsString( "0010|0010" , value ) )
+    value = tagReader.getAttributeByTag( 0x0010,0x0010 );
+    if( !value.isEmpty() )
     {
         // pre-tractament per treure caràcters estranys com ^ que en alguns casos fan de separadors en comptes dels espais
         while( value.indexOf("^") >= 0 )
@@ -304,48 +282,25 @@ void Input::setVolumeInformation()
         m_volumeData->getVolumeSourceInformation()->setPatientName( value );
     }
     // ID del pacient
-    if( queryTagAsString( "0010|0020" , value ) )
-    {
-        m_volumeData->getVolumeSourceInformation()->setPatientID( value );
-    }
+    m_volumeData->getVolumeSourceInformation()->setPatientID( tagReader.getAttributeByTag( 0x0010,0x0020 ) );
 
-    // data de l'estudi
-    if( queryTagAsString( "0008|0020" , value ) )
-    {
-        // la data està en format YYYYMMDD
-        m_volumeData->getVolumeSourceInformation()->setStudyDate( value );
-    }
+    // data de l'estudi, la data està en format YYYYMMDD
+    m_volumeData->getVolumeSourceInformation()->setStudyDate( tagReader.getAttributeByTag( 0x0008,0x0020 ) );
 
-    // hora de l'estudi
-    if( queryTagAsString( "0008|0030" , value ) )
-    {
-        // l'hora està en format HHMMSS
-        m_volumeData->getVolumeSourceInformation()->setStudyTime( value );
-    }
+    // hora de l'estudi, format HHMMSS
+    m_volumeData->getVolumeSourceInformation()->setStudyTime( tagReader.getAttributeByTag( 0x0008,0x0030 ) );
 
     // accession number
-    if( queryTagAsString( "0008|0050" , value ) )
-    {
-        m_volumeData->getVolumeSourceInformation()->setAccessionNumber( value );
-    }
+    m_volumeData->getVolumeSourceInformation()->setAccessionNumber( tagReader.getAttributeByTag( 0x0008,0x0050 ) );
 
     // Protocol name
-    if( queryTagAsString( "0018|1030" , value ) )
-    {
-        m_volumeData->getVolumeSourceInformation()->setProtocolName( value );
-    }
+    m_volumeData->getVolumeSourceInformation()->setProtocolName( tagReader.getAttributeByTag( 0x0018,0x1030 ) );
 
     //Number of Phases, TAG PRIVAT PHILIPS
-    if( queryTagAsString( "2001|1017" , value ) )
-    {
-        m_volumeData->getVolumeSourceInformation()->setNumberOfPhases( value.toInt() );
-    }
+    m_volumeData->getVolumeSourceInformation()->setNumberOfPhases( tagReader.getAttributeByTag( 0x2001,0x1017 ).toInt() );
 
     //Number of Slices Per Phase, nombre de llesques per cada fase, TAG PRIVAT PHILIPS
-    if( queryTagAsString( "2001|1018" , value ) )
-    {
-        m_volumeData->getVolumeSourceInformation()->setNumberOfSlices( value.toInt() );
-    }
+    m_volumeData->getVolumeSourceInformation()->setNumberOfSlices( tagReader.getAttributeByTag( 0x2001,0x1018 ).toInt() );
 }
 
 

@@ -5,6 +5,9 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "volumesourceinformation.h"
+
+#include "dicomtagreader.h"
+
 #define HAVE_CONFIG_H 1
 // #include "dcmtk/dcmdata/dcdatset.h"
 #include "dcmtk/dcmdata/dcfilefo.h"
@@ -15,13 +18,11 @@
 
 namespace udg {
 
-VolumeSourceInformation::VolumeSourceInformation()
+VolumeSourceInformation::VolumeSourceInformation() : m_numberOfPhases(1), m_numberOfSlices(1), m_dicomData(0)
 {
     m_windowLevel[0] = 0.0;
     m_windowLevel[1] = 0.0;
-    m_numberOfPhases = 1;
-    m_numberOfSlices = 1;
-    m_dicomData = 0;
+    m_dicomTagReader = new DICOMTagReader();
 }
 
 VolumeSourceInformation::~VolumeSourceInformation()
@@ -146,6 +147,13 @@ void VolumeSourceInformation::getZDirectionCosines( double zCosines[3] )
 
 bool VolumeSourceInformation::loadDicomDataset( QString filename )
 {
+
+    m_dicomTagReader->setFile( filename );
+    this->collectSerieInformation();
+    this->readWindowLevelData();
+
+    // \TODO això ho mantenim per conveniència per què en alguns llocs és necessari obtenir el dicom data set. En un futur aquest codi desapareixerà i no es guardarà cap DcmDataset al VolumeSourceInformation
+
     if( !m_dicomData )
         m_dicomData = new DcmDataset;
 
@@ -154,8 +162,6 @@ bool VolumeSourceInformation::loadDicomDataset( QString filename )
     if( status.good() )
     {
         this->setDicomDataset( dicomFile.getAndRemoveDataset() );
-        // omplim la informació necessària
-        this->collectSerieInformation();
         return true;
     }
     else
@@ -167,23 +173,8 @@ bool VolumeSourceInformation::loadDicomDataset( QString filename )
 
 void VolumeSourceInformation::collectSerieInformation()
 {
-    if( m_dicomData )
-    {
-        // TODO ara només agafem aquesta informació, a la llarga hem de recolectar tota la informació que es recolecta a la classe Input quan fem un read.
-        const char *value = NULL;
-        if( m_dicomData->findAndGetString( DCM_SeriesDescription , value ).good() )
-        {
-            this->setSeriesDescription( value );
-        }
-        if( m_dicomData->findAndGetString( DCM_SeriesInstanceUID , value ).good() )
-        {
-            this->setSeriesInstanceUID( value );
-        }
-    }
-    else
-    {
-        DEBUG_LOG("No tenim un dicom dataset vàlid!");
-    }
+    this->setSeriesDescription( m_dicomTagReader->getAttributeByName( DCM_SeriesDescription ) );
+    this->setSeriesInstanceUID( m_dicomTagReader->getAttributeByName( DCM_SeriesInstanceUID ) );
 }
 
 void VolumeSourceInformation::setFilenames( QStringList filenames )
@@ -203,7 +194,6 @@ void VolumeSourceInformation::setFilenames( QString filename )
 void VolumeSourceInformation::setDicomDataset( DcmDataset *data )
 {
     m_dicomData = data;
-    readWindowLevelData();
 }
 
 DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
@@ -265,13 +255,7 @@ unsigned VolumeSourceInformation::getPhotometricInterpretation()
 QString VolumeSourceInformation::getPhotometricInterpretationAsString()
 {
     // \TODO es podria afegir una mica és de control a nivell de debug per si no es llegeix aquesta dada, perquè per exemple no existeix
-    const char *photoString = NULL;
-    if( m_dicomData )
-        m_dicomData->findAndGetString( DCM_PhotometricInterpretation , photoString );
-    else
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
-
-    return QString( photoString );
+    return m_dicomTagReader->getAttributeByName( DCM_PhotometricInterpretation );
 }
 
 bool VolumeSourceInformation::isMonochrome1()
@@ -281,96 +265,42 @@ bool VolumeSourceInformation::isMonochrome1()
 
 unsigned VolumeSourceInformation::getBitsStored()
 {
-    if( m_dicomData )
-    {
-        Uint16 stored;
-        m_dicomData->findAndGetUint16( DCM_BitsStored , stored );
-        return stored;
-    }
-    else
-    {
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
-        return 0;
-    }
+    return m_dicomTagReader->getAttributeByName( DCM_BitsStored ).toUInt();
 }
 
 unsigned VolumeSourceInformation::getBitsAllocated()
 {
-    if( m_dicomData )
-    {
-        Uint16 allocated;
-        m_dicomData->findAndGetUint16( DCM_BitsAllocated , allocated );
-        return allocated;
-    }
-    else
-    {
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
-        return 0;
-    }
+    return m_dicomTagReader->getAttributeByName( DCM_BitsAllocated ).toUInt();
 }
 
 unsigned VolumeSourceInformation::getPixelRepresentation()
 {
-    if( m_dicomData )
-    {
-        Uint16 representation;
-        m_dicomData->findAndGetUint16( DCM_PixelRepresentation , representation );
-        switch( representation )
-        {
-        case 0:
-            return UnsignedPixelRepresentation;
-        break;
-        case 1:
-            return SignedPixelRepresentation;
-        break;
-        }
-    }
-    else
-    {
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
-        return 0;
-    }
+    return m_dicomTagReader->getAttributeByName( DCM_PixelRepresentation ).toUInt();
 }
 
 bool VolumeSourceInformation::hasModalityRescale()
 {
-    if( m_dicomData )
-    {
-        return m_dicomData->tagExists( DCM_RescaleIntercept );
-    }
-    else
-        return false;
-
+    return m_dicomTagReader->tagExists( DCM_RescaleIntercept );
 }
 
 double VolumeSourceInformation::getRescaleSlope()
 {
-    if( m_dicomData )
-    {
-        Float64 value;
-        m_dicomData->findAndGetFloat64( DCM_RescaleSlope , value );
-        return value;
-    }
+    //comprovar abans si el valor és empty o no. Si és empty, lo correcte és tornar 1 (valor neutre), el valor corresponent altrament
+    QString value = m_dicomTagReader->getAttributeByName( DCM_RescaleSlope );
+    if( value.isEmpty() )
+        return 1.;
     else
-    {
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
-        return 1; // element neutre
-    }
+    return value.toDouble();
 }
 
 double VolumeSourceInformation::getRescaleIntercept()
 {
-    if( m_dicomData )
-    {
-        Float64 value;
-        m_dicomData->findAndGetFloat64( DCM_RescaleIntercept , value );
-        return value;
-    }
+    //comprovar abans si el valor és empty o no. Si és empty, lo correcte és tornar 0 (valor neutre), el valor corresponent altrament
+    QString value = m_dicomTagReader->getAttributeByName( DCM_RescaleIntercept );
+    if( value.isEmpty() )
+        return 0.0;
     else
-    {
-        DEBUG_LOG( "No hi ha m_dicomData creat" );
-        return 0; // element neutre
-    }
+    return value.toDouble();
 }
 
 int VolumeSourceInformation::getNumberOfWindowLevels()
@@ -450,94 +380,42 @@ QString VolumeSourceInformation::getWindowLevelDescription( int position )
 
 void VolumeSourceInformation::readWindowLevelData()
 {
-    if( m_dicomData )
-    {
-        DcmDecimalString windowLevelString(DCM_WindowCenter);
-        DcmDecimalString windowWidthString(DCM_WindowWidth);
-        DcmStack stack;
-        stack.clear();
-        if( EC_Normal == m_dicomData->search( DCM_WindowCenter, stack, ESM_fromHere, OFFalse) )
-        {
-            windowLevelString = *((DcmDecimalString *)(stack.top()));
-            m_dicomData->search( DCM_WindowWidth, stack, ESM_fromHere, OFFalse );
-            windowWidthString = *((DcmDecimalString *)(stack.top()));
-        }
-        double *wl;
-        for( unsigned int i = 0; i < windowLevelString.getVM(); i++ )
-        {
-            wl = new double[2];
-            windowWidthString.getFloat64( wl[0], i );
-            windowLevelString.getFloat64( wl[1], i );
-            m_windowLevelList.push_back( wl );
-        }
+    // primer llegim els valors dels window level
+    QString windowWidth = m_dicomTagReader->getAttributeByName( DCM_WindowWidth );
+    QStringList windowWidthList = windowWidth.split("\\");
+    QString windowLevel = m_dicomTagReader->getAttributeByName( DCM_WindowCenter );
+    QStringList windowLevelList = windowLevel.split("\\");
 
-        // i les descripcions
-        DcmLongString wlDescriptionString( DCM_WindowCenterWidthExplanation );
-        stack.clear();
-        if( EC_Normal == m_dicomData->search( DCM_WindowCenterWidthExplanation, stack, ESM_fromHere, OFFalse) )
-        {
-            wlDescriptionString = *((DcmLongString *)(stack.top()));
-            OFString value;
-            for( unsigned int i = 0; i < wlDescriptionString.getVM(); i++ )
-            {
-                wlDescriptionString.getOFString( value , i );
-                m_windowLevelDescriptions << value.c_str();
-            }
-        }
-    }
-    else
+    double *wl;
+    for( int i = 0; i < windowWidthList.size(); i++ )
     {
-        DEBUG_LOG("No s'ha pogut llegir la informació de window level. No hi ha un dicom dataset vàlid.");
+        wl = new double[2];
+        wl[0] = windowWidthList.at(i).toDouble();
+        wl[1] = windowLevelList.at(i).toDouble();
+        m_windowLevelList.push_back( wl );
+    }
+    // i després les respectives descripcions si n'hi ha
+    QString descriptions = m_dicomTagReader->getAttributeByName( DCM_WindowCenterWidthExplanation );
+    QStringList descriptionsList = descriptions.split("\\");
+    foreach( QString value , descriptionsList )
+    {
+        m_windowLevelDescriptions << value;
     }
 }
 
 bool VolumeSourceInformation::isMultiFrame()
 {
-    bool result = false;
-    if( m_dicomData )
-    {
-        if( m_dicomData->tagExists( DCM_NumberOfFrames ) )
-            result = true;
-    }
-    else
-    {
-        DEBUG_LOG("No hi ha un dicom dataset vàlid");
-    }
-    return result;
+    return m_dicomTagReader->tagExists( DCM_RescaleIntercept );
 }
 
 int VolumeSourceInformation::getNumberOfFrames()
 {
-    Sint32 frames = 0;
-    if( m_dicomData )
-    {
-        OFCondition status = m_dicomData->findAndGetSint32( DCM_NumberOfFrames, frames );
-        if( status.bad() )
-            DEBUG_LOG( QString("No s'han pogut llegir els frames: ") + status.text() );
-    }
-    else
-    {
-        DEBUG_LOG("No hi ha un dicom dataset vàlid");
-    }
-    return frames;
+    return m_dicomTagReader->getAttributeByName( DCM_NumberOfFrames ).toInt();
 }
 
 QString VolumeSourceInformation::getImageSOPInstanceUID( int index )
 {
-    QString result;
-    DcmDataset *dataset = this->getDicomDataset( index );
-    if( dataset )
-    {
-        const char *value;
-        dataset->findAndGetString( DCM_SOPInstanceUID, value );
-        result = QString( value );
-        DEBUG_LOG( QString("El valor del sop instance és %1 :: %2").arg(value).arg(result) );
-    }
-    else
-    {
-        ERROR_LOG("El dataset retornat és nul");
-    }
-    return result;
+    return m_dicomTagReader->getAttributeByName( DCM_SOPInstanceUID );
 }
 
 void VolumeSourceInformation::setPatientPosition( QString patientPosition )

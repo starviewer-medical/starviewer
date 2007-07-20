@@ -175,9 +175,6 @@ private:
     /// el generador dels noms dels fitxers DICOM d'un directori
     NamesGeneratorType::Pointer m_namesGenerator;
 
-    /// Demana per un tag DICOM que serà retornat en format string. Retorna true si es troba el tag al header DICOM
-    bool queryTagAsString( QString tag , QString &result );
-
     /// Es dedica a proporcionar al volum la informació que ens dóna el DICOM
     void setVolumeInformation();
 
