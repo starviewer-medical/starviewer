@@ -12,9 +12,6 @@
 #include "logging.h"
 #include "dicomtagreader.h"
 
-//ITK
-#include <itkMetaDataDictionary.h>
-#include <itkMetaDataObject.h>
 // QT
 #include <QStringList>
 #include <QFileInfo>
@@ -132,7 +129,6 @@ int Input::readFiles( QStringList filenames )
         {
             ImageType::Pointer imageData;
             imageData = m_seriesReader->GetOutput();
-            imageData->SetMetaDataDictionary( m_gdcmIO->GetMetaDataDictionary() );
             m_volumeData->setData( imageData );
             imageData->Delete();
 
@@ -143,8 +139,6 @@ int Input::readFiles( QStringList filenames )
     }
     else
     {
-        // això ho posem perquè quan es llegeix una sèrie d'una sola imatge pugui llegir la informació dicom. TODO potser caldria comprovar d'alguna manera si la imatge és dicom abans de res...
-        m_reader->SetImageIO( m_gdcmIO );
         this->openFile( filenames.at(0) );
     }
     return errorCode;
