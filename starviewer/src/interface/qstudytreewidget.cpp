@@ -492,16 +492,21 @@ void QStudyTreeWidget::selectedSeriesIcon( QString seriesUID )
 {
     QTreeWidgetItem *item , *current;
 
-    //busquem el pare (l'estudi principal),ja que pot estar seleccionada una serie
-    if ( m_studyTreeView->currentItem()->parent() == NULL )
-    {
+    /*busquem el pare (l'estudi principal), per saber quina sèrie hem d'assenyalar, en funcio
+     *de quin element està actualment seleccionat haurem de pujar diferents nivells per trobar l'estudi pare*/
+    if ( m_studyTreeView->currentItem()->text( 12 ) == "STUDY" )
+    {//ja tenim seleccionat l'estudi pare que conté les séries
             current = m_studyTreeView->currentItem();
     }
-    else
-    {
+    else if ( m_studyTreeView->currentItem()->text( 12 ) == "SERIES" )
+    {//es tracta d'una sèrie la que està seleccionada en aquests moments, pujem un nivell per trobar l'estudi pare
         current = m_studyTreeView->currentItem()->parent();
-    }
+    } //es tracta d'una imatge la que està seleccionada en aquests moments, pujem dos nivells per trobar l'estudi pare
+    else current = m_studyTreeView->currentItem()->parent()->parent();
 
+    /*Quan tenim l'estudi pare podem començar a recorre'l per assenyar la sèrie que ha estat seleccionada
+     *en el QSeriesListWidget
+     */
     for ( int i = 0; i < current->childCount(); i++ )
     {
         item = current->child( i );
