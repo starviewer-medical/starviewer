@@ -1,0 +1,184 @@
+Ressonància magnètica Philips
+
+
+Glossari : 
+
+Stack : Un stack és un conjunt d'imatges agrupades dins una mateixa sèrie,
+degut a que tenen algo en comú, com pot ser que s'han capturat en el mateix
+instant de temps, pertanyen a una mateixa localització, etc..
+
+
+
+
+
+
+PROTOCOLS
+
+	A continuació es detallarà quin són els protocols més utilitzats en
+ressonància magnètica al IDI de Girona. Però abans de tot direm que a Girona
+en ressonància magnètica s'utilitza una equip Philips intera amb la versió
+de software R11.
+
+ Començarem explicant algunes tècniques que utilitzen per capturar les
+imatges.
+
+CLEAR : Aquesta tècnica ens filtra la senyal per visualitzar millor la
+imatge. Les senyals grans les disminueix i les petites les amplia per no
+tenir punts foscos. D'aquesta manera reduint la senyal dels objectes més
+lluminosos i augmentant la dels foscos ( els detalls foscos es veuen millor)
+la qualitat de la imatge augmenta.
+SENSE : Per capturar imatges de forma més ràpida, calcula alguns valors en
+comptes de capturar-los, capturant les imatges més ràpidament
+
+	Inicialment tenim un primera divisió la majoria de seqüències solen
+ser un d'aquests dos tipus d'imatges :
+
+T1 : El contrast del color del reactiu es captura de color blanc.
+T2 : El contrast del color del reactiu es captura de color negre.
+
+
+Els protocols més utilitzats :
+
+
+DIN ( DYNAMIC ) : El dynamic consisteix en capturar les mateixes llesques en
+diferents instants de temps. És a dir imaginem que capturem una llesca a la
+posició 20 respecte el pacient,  aquesta llesca la capturarem pel temps 1, 2
+,3 .. etc. Totes les llesques es guarden en en la mateixa sèrie, i llesques
+d'un mateix instant estaran agrupades en un mateix stack. Quan tenim una
+sèrie de dynamic, probablement tindrem una segona sèrie que contindrà el
+protocol SDIN que és el dynamic havent-li tret el contrast a les imatges.
+
+DIFU : Conté diverses llesques però només s'ha de veure les ISOTRÒPIQUES
+
+DUAL : Són dos imatges d'una mateixa llesca capturades en temps d'instants
+molt petits, en diferents ECHOS. Les llesques s'agrupen per modalitat d'ECHO
+en dos stacks.
+
+CINE : Es captura un sola llesca en diferents instants de temps.
+
+
+
+
+
+RM PHILIPS A NIVELL DICOM
+
+
+STACK
+
+	Al C.7.6.16.2.2.4  del PS 3.3 de l'estàndard del DICOM especifica
+com està guarda la informació del stacks
+
+	Philips alhora de manipular els stacks no compleix l'estàndard
+DICOM, ho fa amb tags privats propis ( és molt important entendre que els
+tags que s'expliquen a continuació només serveixen per imatges philips).
+
+	A les imatges de Philips, tenim el tag privat (2001,1060 #Number of
+stacks) que ens indica el número d'stacks que conté la sèrie. Llavors en
+cada imatge trobem el tag privat (2001,105F #Stack Sequence), que conté la
+seqüència d'stacks. La seqüència  es repetirà tantes vegades com número
+d'stacks tinguem. Aquesta seqüència ens indica entre altres coses per cada
+stack a quina imatge comença cada stack en el tag privat (2001,1035 #Stack
+slice number),  el tipus d'stack en el tag privat (2001,1036 #Stack type ) i
+el número d'imatges que conté l'stack tag privat (2001,102d #Stack number of
+slices)  per més informació consultar la documentació de philips el Dicom
+Conformance del Intera R12 a la pàgina 139.  
+
+L'angle DI és el tag privat de philips (2005,1002) 
+
+Un exemple d'estudi d'stack és Carillo Espejo, Id estudi 235117159
+
+
+DYNAMIC
+
+ 	En un dinàmic es mostren les imatges agrupades per l'instant de
+temps que ha estat capturades.
+
+	Per les imatges produïdes en màquines Philips, per saber si una
+imatge és dynamic tenim el  tag privat  (2001,1012 #Dynamic series)  si la
+sèrie és dinàmica el tag està present a la imatge i té valor 'Y' indicant
+que la sèrie és dinàmica. 
+
+	El tag privat de philips (2001,1081 #Number of dynamics scans) ens
+indica el número de dynamics és a dir grups d'imatges capturades en
+diferents instants de temps que tenim, el tag públic (0020,0105 #Number of
+temporal position) que és un tag estàndard ens indica el mateix, que el tag
+de philips. El tag privat  (2001,100a #Slices Number MR)  és indica el
+número de llesca dins el dynamic ( per exemple ens indica que és la llesca
+20, aquest número de llesca la tindran 5 imatges la capturada a l'instant 0
+, 2, 5 ,8 i 10) 
+
+	El tag públic (0020,0100 #Temporal position identifier) ens indica
+el número de dynamic al que pertany la llesca ( aquest ens indica l'ordre de
+l'imatge dins les 5 llesques número 20, és a dir si aquí indica un 1 és la
+llesca 20 capturada al temps 0, si indica un 2 és la llesca 20 capturada al
+temps 2, i així successivament ). El tag privat (2001,1018 #Number of Slices
+MR)  ens indica el número de llesques per cada dynamic d'imatges
+
+Pel grup de llesques d'un dynamic tenim el tag públic (0008,0033 #Content
+Time), que indica a quina   hora s'ha capturat aquell dinàmic. 
+
+Un exemple de dynamic és BARCONS VISA MARIA Id d'estudi 235324504
+
+
+DUAL
+
+	Per saber que és un dual podem consultar el tag públic (0018,0086
+#Echo Number) que indica el número d'echos que s'han fet a la sèrie, si el
+seu valor és igual a dos es tracta d'un dual, llavors tenim el tag públic
+#(0018,0081 #Echo Time) que indica el temps d'echo
+
+Un exemple de dual és SALDANA MORENO ANTONIA Id d'estudi 236236974
+
+
+DIFU 
+
+	En les DIFU només s'han de mostrar les imatges ISOTRÒPIQUES que serà
+les que en tag privat (2001,1003 #B-Factor) hi tinguin valor 0.
+Si les volem mostrar totes tenim el tag públic (0020,0100 # Temporal
+Position Identifier) que ens indica el númeor de difu a la que pertany la
+llesca, i el tag privat (2001,100a #Slices Number MR) ens indica el número
+de llesca dins  la difu.
+Observem que són els mateixos tags que en un dynamic, per tant podríem
+utilitzar el mateix mètode que el dynamic per agrupar.
+
+Un exemple de difu és BARCONS VISA MARIA Id d'estudi 235324504
+
+
+CINE 
+
+	L'estàndard DICOM no contempla el cine per la MR, per tant tots els
+tags que contenen informació de cine, són privats de la philips. 
+
+	El tags privats de philips que ens permeten llegir cine són el tag
+privat (2001,1008 #Phase Number) que ens indica el número de phase a la que
+pertany la imatge, el tag privat (2001,100A #Slice Number MR) que ens indica
+el número de la llesca dins la phase, el tag privat (2001,1017 #Number of
+phases MR)  que ens indica el total de Phases que conté la sèrie i el
+(2001,1018 #Number of slices MR) número de llesques per cada phase. Els
+importans són el (2001,1008 #Phase Number) i el (2001,100a #Slice Number MR)
+que ens permet situar cada imatge en el seu lloc. Les imatges es troben
+agrupades per phases i dins les phases les hem d'ordenar pel tag privat
+(2001,100a #Slice Number MR). Cada phase és una animació.
+
+Un exemple de cine és la sèrie 601 de RAMOS RODRÍGUEZ RUBEN Id d'estudi
+235666424
+
+
+PERFU
+
+	Observant series que contenen una perfu, s'ha observat que una perfu
+és un estudi dinàmic, si mirem (2001,1012 #Dynamic series) ens indica que és
+un dynamic, per tant la manera de càrrega una perfu es farà igual que un
+dynamic.
+
+Un exemple de perfu és la sèrie 1001 de CEERRATO OSORIO ADILIA MARIA, Id
+estudi 236459721
+
+
+Bibliografia
+
+Dicom Conformance Statement del Intera R12 (Philips),  el document es pot
+trobar a http://www.medical.philips.com/main/company/connectivity/mri/
+
+DICOM PS 3.3Information Object Definitions , el document es pot trobar a
+http://www.dclunie.com/dicom-status/status.html
