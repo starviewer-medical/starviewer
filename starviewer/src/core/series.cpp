@@ -6,6 +6,11 @@
  ***************************************************************************/
 #include "series.h"
 
+#include "image.h"
+#include "logging.h"
+
+#include <QStringList>
+
 namespace udg {
 
 Series::Series(QObject *parent)
@@ -17,24 +22,14 @@ Series::~Series()
 {
 }
 
-void Series::setUID( QString uid )
+void Series::setInstanceUID( QString uid )
 {
-    m_seriesUID = uid;
-}
-
-void Series::setID( QString id )
-{
-    m_seriesID = id;
+    m_seriesInstanceUID = uid;
 }
 
 void Series::addImage( Image *image )
 {
-    // TODO implement-me!!!
-}
-
-void Series::setPatientOrientation( QString orientation )
-{
-    m_patientOrientation = orientation;
+    m_imageList.append( image );
 }
 
 void Series::setModality( QString modality )
@@ -55,11 +50,6 @@ void Series::setProtocolName( QString protocolName )
 void Series::setImagesPath( QString imagesPath )
 {
     m_imagesPath = imagesPath;
-}
-
-QString Series::getKey()
-{
-    return m_protocolName + QString(" ") + m_description;
 }
 
 bool Series::setDateTime( int day , int month , int year , int hour , int minute )
@@ -133,83 +123,20 @@ QString Series::getTimeAsString()
     return m_dateTime.time().toString( "hh:mm" );
 }
 
-void Series::setWindowLevel( double window , double level )
-{
-    m_window = window;
-    m_level = level;
-}
-
-double *Series::getWindowLevel()
-{
-    static double wl[2] = { m_window , m_level };
-    return wl;
-}
-
-void Series::setWindow( double window )
-{
-    m_window = window;
-}
-
-void Series::setLevel( double level )
-{
-    m_level = level;
-}
-
-void Series::setDimensions( double dimensions[3] )
-{
-    m_dimensions[0] = dimensions[0];
-    m_dimensions[1] = dimensions[1];
-    m_dimensions[2] = dimensions[2];
-}
-
-void Series::setDimensions( double x , double y , double z )
-{
-    m_dimensions[0] = x;
-    m_dimensions[1] = y;
-    m_dimensions[2] = z;
-}
-
-double *Series::getDimensions()
-{
-    return m_dimensions;
-}
-
-void Series::getDimensions( double dimensions[3] )
-{
-    dimensions[0] = m_dimensions[0];
-    dimensions[1] = m_dimensions[1];
-    dimensions[2] = m_dimensions[2];
-}
-
-void Series::setSpacing( double spacing[3] )
-{
-    m_spacing[0] = spacing[0];
-    m_spacing[1] = spacing[1];
-    m_spacing[2] = spacing[2];
-}
-
-void Series::setSpacing( double x , double y , double z )
-{
-    m_spacing[0] = x;
-    m_spacing[1] = y;
-    m_spacing[2] = z;
-}
-
-double *Series::getSpacing()
-{
-    return m_spacing;
-}
-
-void Series::getSpacing( double spacing[3] )
-{
-    m_spacing[0] = spacing[0];
-    m_spacing[1] = spacing[1];
-    m_spacing[2] = spacing[2];
-}
-
 void Series::setVolumeIdentifier( Identifier id )
 {
     m_volumeID = id;
+}
+
+QStringList Series::getImagesPathList()
+{
+    QStringList pathList;
+    foreach( Image *image, m_imageList )
+    {
+        pathList << image->getPath();
+    }
+
+    return pathList;
 }
 
 }

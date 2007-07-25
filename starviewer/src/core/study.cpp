@@ -18,9 +18,9 @@ Study::~Study()
 {
 }
 
-void Study::setUID( QString uid )
+void Study::setInstanceUID( QString uid )
 {
-    m_studyUID = uid;
+    m_studyInstanceUID = uid;
 }
 
 void Study::setID( QString id )
@@ -41,11 +41,6 @@ void Study::setDescription( QString description )
 void Study::setInstitutionName( QString institutionName )
 {
     m_institutionName = institutionName;
-}
-
-QString Study::getKey()
-{
-    return this->getDateTimeAsString() + QString(" ") + m_description;
 }
 
 bool Study::setDateTime( int day , int month , int year , int hour , int minute )
@@ -120,17 +115,44 @@ QString Study::getTimeAsString()
 
 void Study::addSeries( Series *series )
 {
-    m_seriesHash[ series->getKey() ] = series;
+    m_seriesHash[ series->getInstanceUID() ] = series;
 }
 
-void Study::removeSeries( QString key )
+void Study::removeSeries( QString uid )
 {
-    m_seriesHash.remove( key );
+    m_seriesHash.remove( uid );
 }
 
-Series *Study::getSeries( QString key )
+Series *Study::getSeries( QString uid )
 {
-    return m_seriesHash[ key ];
+    return m_seriesHash[ uid ];
+}
+
+QList<Series *> Study::getSelectedSeries()
+{
+    QList<Series *> seriesList;
+    foreach( Series *series, m_seriesHash )
+    {
+        if( series->isSelected() )
+            seriesList.append( series );
+    }
+    return seriesList;
+}
+
+Series *Study::getSeries( int index )
+{
+    int i = 0;
+    Series *series = 0;
+
+    QHashIterator<QString, Series *> iterator( m_seriesHash );
+    while( iterator.hasNext() && i < index )
+    {
+        if( i == index )
+            series = iterator.value();
+        iterator.next();
+        i++;
+    }
+    return series;
 }
 
 }

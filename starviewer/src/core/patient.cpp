@@ -38,69 +38,49 @@ QString Patient::getSurname()
     return m_surname;
 }
 
-QString Patient::getKey()
+void Patient::setBirthDate( int day , int month , int year )
 {
-    return m_surname + QString(" ") + m_name + QString(" ") + m_patientID;
+    m_birthDate.setYMD( year , month , day );
 }
 
-void Patient::setDateOfBirth( int day , int month , int year )
+QString Patient::getBirthDate()
 {
-    m_dateOfBirth.setYMD( year , month , day );
-}
-
-QString Patient::getDateOfBirth()
-{
-    return m_dateOfBirth.toString( "dd/MM/yyyy" );
+    return m_birthDate.toString( "dd/MM/yyyy" );
 }
 
 int Patient::getDayOfBirth()
 {
-    return m_dateOfBirth.day();
+    return m_birthDate.day();
 }
 
 int Patient::getMonthOfBirth()
 {
-    return m_dateOfBirth.month();
+    return m_birthDate.month();
 }
 
 int Patient::getYearOfBirth()
 {
-    return m_dateOfBirth.year();
-}
-
-int Patient::getAge()
-{
-    return QDate::currentDate().year() - m_dateOfBirth.year();
-}
-
-void Patient::setWeight( double weight )
-{
-    m_weight = weight;
-}
-
-void Patient::setHeight( double height )
-{
-    m_height = height;
+    return m_birthDate.year();
 }
 
 void Patient::addStudy( Study *study )
 {
-    m_studiesHash[ study->getKey() ] = study;
+    m_studiesHash[ study->getInstanceUID() ] = study;
 }
 
-void Patient::removeStudy( QString key )
+void Patient::removeStudy( QString uid )
 {
-    m_studiesHash.remove( key );
+    m_studiesHash.remove( uid );
 }
 
-Study *Patient::getStudy( QString key )
+Study *Patient::getStudy( QString uid )
 {
-    return m_studiesHash[ key ];
+    return m_studiesHash[ uid ];
 }
 
-bool Patient::studyExists( QString key )
+bool Patient::studyExists( QString uid )
 {
-    if( this->getStudy(key) )
+    if( this->getStudy(uid) )
         return true;
     else
         return false;
