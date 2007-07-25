@@ -12,6 +12,7 @@
 //\TODO trobar perquè això és necessari amb les dcmtk
 #define HAVE_CONFIG_H 1
 #include "dcmtk/dcmdata/dcfilefo.h"
+#include "dcmtk/dcmdata/dcsequen.h"
 
 namespace udg {
 
@@ -99,9 +100,45 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGrou
 
 QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
 {
-    QList<DcmTagKey> embeddedSequenceList;
-    embeddedSequenceList << sequenceTag;
-    return this->getSequenceAttributeByName( embeddedSequenceList, attributeTag );
+    QStringList result;
+    // obtenim els atributs de cada item d'una seqüència de "primer nivell"
+    if( m_dicomData )
+    {
+        DcmStack stack;
+
+        OFCondition status = m_dicomData->search( sequenceTag, stack );
+
+        if( status.good() )
+        {
+            OFString value;
+            DcmSequenceOfItems *sequence = NULL;
+            sequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
+            for( int i = 0; i < sequence->card(); i++ )
+            {
+                DcmItem *item = sequence->getItem( i );
+                status = item->findAndGetOFStringArray( attributeTag , value );
+                if( status.good() )
+                {
+                    result << value.c_str();
+                    DEBUG_LOG( QString("Tag %1 : Hem obtingut el valor %2").arg( attributeTag.toString().c_str() ).arg( value.c_str() ) );
+                }
+                else
+                {
+                    DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( attributeTag.toString().c_str() ).arg( status.text() ) );
+                }
+            }
+        }
+        else
+            DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( sequenceTag.toString().c_str() ).arg( status.text() ) );
+    }
+    else
+        DEBUG_LOG("El m_dicomData no és vàlid");
+
+    return result;
+// \TODO el que ve a continuació és com hauria de ser quan s'implementi el mètode amb seqüències "embedded"
+//     QList<DcmTagKey> embeddedSequenceList;
+//     embeddedSequenceList << sequenceTag;
+//     return this->getSequenceAttributeByName( embeddedSequenceList, attributeTag );
 }
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element )
@@ -118,8 +155,16 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> emb
 QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )
 {
     QStringList result;
-
+    DEBUG_LOG("DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )  == Crida a Mètode no implementat!");
 //\TODO per implementar. Aquesta part és una mica més fotuda.
+// aquí també es podria fer servir DcmItem::findAndGetElements, que torna un stack amb tot de DcmObjects que continguin l'atribut demanat. Fa un deep search per tant busca dins de les seqüències
+
+// l'altre opció és anar iterant sobre les seqüències i els seus ítems amb findAndGetSequenceItem
+
+// links que ens poden ajudar
+// http://forum.dcmtk.org/viewtopic.php?t=881&highlight=sequence
+// http://forum.dcmtk.org/viewtopic.php?t=698&highlight=sequence
+// http://forum.dcmtk.org/viewtopic.php?t=386&highlight=sequence en aquest expliquen i definexien molt bé com és un seqüència
 
 //     int i = 0;
 //     bool ok = true;
@@ -130,6 +175,9 @@ QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embedde
 //         OFCondition status = m_dicomData->search( embeddedSequencesTags.at(i), stack );
 //         if( status.good() )
 //         {
+//             sequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
+//             //\TODO ara només tenim en compte que la seqüència té un sol ítem. A
+//             DcmItem *item = sequence->getItem( 0 );
 //         }
 //         else
 //         {
