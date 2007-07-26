@@ -71,7 +71,10 @@ HEADERS += extensionfactory.h \
            q2dviewerpresentationstateattacher.h  \
            sliceannotationcontroller.h \
            image.h \
-           dicomtagreader.h
+           dicomtagreader.h \
+           patientfiller.h \
+           patientfillerstep.h \
+           patientfillerinput.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -127,7 +130,10 @@ SOURCES += extensionmediator.cpp \
            q2dviewerpresentationstateattacher.cpp  \
            sliceannotationcontroller.cpp \
            image.cpp \
-           dicomtagreader.cpp
+           dicomtagreader.cpp \
+           patientfiller.cpp \
+           patientfillerstep.cpp \
+           patientfillerinput.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
