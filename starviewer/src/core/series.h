@@ -95,6 +95,9 @@ public:
     /// Ens diu si la sèrie està marcada com a seleccionada o no
     inline bool isSelected() const { return m_selected; }
 
+    /// Mètode per afegir un sol volum a la llista de volums de la serie \TODO mètode de proves no definitiu
+    void setVolume( Volume * volume){ m_volumesList.push_back(volume);}
+
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
     void select(){ setSelectStatus( true ); };

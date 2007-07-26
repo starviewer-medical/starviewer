@@ -86,4 +86,22 @@ bool Patient::studyExists( QString uid )
         return false;
 }
 
+int Patient::getNumberOfStudies()
+{
+    return m_studiesHash.size();
+}
+
+QList<Study*> Patient::getStudies()
+{
+    QList< Study* > studyList;
+
+    QHashIterator<QString, Study *> iterator( m_studiesHash );
+    while( iterator.hasNext() )
+    {
+        studyList << iterator.value();
+        iterator.next();
+    }
+
+    return studyList;
+}
 }

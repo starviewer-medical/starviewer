@@ -88,6 +88,12 @@ public:
     /// Retorna la serie indexada per 0..n-1 (n=total de series). Retorna nul si l'índex està fora de rang \TODO ara mateix agafa a saco del hash, no es té ne compte cap criteri en l'ordre i l'índex
     Series *getSeries( int index );
 
+    /// Mètode per obtenir el nombre de series que conté l'estudi
+    int getNumberOfSeries();
+
+    /// Mètode per obtenir la llista de series de l'estudi
+    QList< Series* > getSeries();
+
 private:
     /// Informació comuna de l'estudi. C.7.2.1 General Study Module - PS 3.3.
 
