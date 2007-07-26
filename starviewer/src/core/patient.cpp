@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "patient.h"
+#include "logging.h"
 
 namespace udg {
 
