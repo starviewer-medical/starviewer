@@ -64,6 +64,14 @@ public:
     /// Mètode per obtenir la llista d'estudis del pacient
     QList< Study* > getStudies();
 
+    /// Operador de fusió de pacient. Amb aquest operador podrem unificar en un sol objecte Patient la informació de dos Patient sempre que siguin identificats com a el mateix pacient. Això seria equivalent a un operador de Unió de conjunts \TODO aquí caldria rumiar-se si es pot forçar la fusió encara que siguin pacients diferents aparentment.
+    Patient *operator+( const Patient *patient );
+    Patient *operator+=( const Patient *patient );
+
+    /// Operador de "resta" de pacient. Amb aquest operador podrem treure d'un objecte Patient la informació comuna entre dos Patient sempre que siguin identificats com a el mateix pacient. Per exemple els estudis comuns en ambdòs parts quedarien fora en el resultat, per tant el que s'esborraria seria la "intersecció" del seu conjunt d'estudis i/o sèries, imatges, etc
+    Patient *operator-( const Patient *patient );
+    Patient *operator-=( const Patient *patient );
+
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM. Aquests són atributs del pacient necessaris per a interpretació diagnòstica de les imatges del pacient i són comunes per a tots els estudis realitzats en el pacient. \TODO de moment no incloem cap atribut opcional
 
