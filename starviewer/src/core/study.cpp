@@ -155,4 +155,23 @@ Series *Study::getSeries( int index )
     return series;
 }
 
+int Study::getNumberOfSeries()
+{
+    return m_seriesHash.size();
+}
+
+QList< Series* > Study::getSeries()
+{
+    QList< Series* > seriesList;
+
+    QHashIterator<QString, Series *> iterator( m_seriesHash );
+    while( iterator.hasNext() )
+    {
+        seriesList << iterator.value();
+        iterator.next();
+    }
+
+    return seriesList;
+}
+
 }

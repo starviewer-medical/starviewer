@@ -58,6 +58,12 @@ public:
     /// Retorna cert si aquest pacient té assignat l'estudi amb l'UID donat, fals altrament
     bool studyExists( QString uid );
 
+    ///Mètode per obtenir el nombre d'estudis del pacient
+    int getNumberOfStudies();
+
+    /// Mètode per obtenir la llista d'estudis del pacient
+    QList< Study* > getStudies();
+
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM. Aquests són atributs del pacient necessaris per a interpretació diagnòstica de les imatges del pacient i són comunes per a tots els estudis realitzats en el pacient. \TODO de moment no incloem cap atribut opcional
 
