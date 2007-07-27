@@ -12,10 +12,13 @@ PatientFillerStep::PatientFillerStep() : m_input(0), m_priority( NormalPriority 
 {
 }
 
-
 PatientFillerStep::~PatientFillerStep()
 {
 }
 
+bool PatientFillerStep::isCandidate()
+{
+    // Comprovar si donats els flags de l'input i les pròpies flags és un candidat vàlid TODO per implementar
+}
 
 }

@@ -27,8 +27,61 @@ public:
 
     ~Image();
 
-    /// assigna l'instance number
+    /// assigna/obté el SOPInstanceUID de la imatge
+    void setSOPInstanceUID( QString uid ){ m_SOPInstanceUID = uid; }
+    QString getSOPInstanceUID() const { return m_SOPInstanceUID; }
+
+    /// assigna/obté l'instance number
     void setInstanceNumber( QString number ){ m_instanceNumber = number; }
+    QString getInstanceNumber() const { return m_instanceNumber; }
+
+    /// Assignar/Obtenir la orienatació del pacient en la imatge, també anomenat direction cosines. TODO implementar els "gets"
+    void setImageOrientation( double orientation[6] );
+
+    /// Assignar/Obtenir l'orientació del pacient
+    void setPatientOrientation( QString orientation );
+    QString getPatientOrientation() const { return m_patientOrientation; };
+
+    /// Assignar/Obtenir la data i hora d'adquisició de la imatge en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
+    bool setContentDateTime( int day , int month , int year , int hour , int minute );
+    bool setContentDateTime( QString date , QString time );
+    bool setContentDateTime( QString dateTime );
+    QDateTime getContentDateTime() const { return m_contentDateTime; };
+    QString getContentDateTimeAsString();
+    bool setContentDate( int day , int month , int year );
+    bool setContentDate( QString date );
+    bool setContentTime( int hour , int minute );
+    bool setContentTime( QString time );
+    QDate getContentDate();
+    QString getContentDateAsString();
+    QTime getContentTime();
+    QString getContentTimeAsString();
+
+    /// Assignar/Obtenir el numero d'imatges en l'adquisició
+    void setImagesInAcquisition( int images );
+    int getImagesInAcquisition() const { return m_imagesInAcquisition; };
+
+    /// Assignar/Obtenir els comentaris
+    void setComments( QString comments  );
+    QString getComments() const { return m_comments; };
+
+    /// Assignar/Obtenir la posició de la imatge. TODO falta implementar el get
+    void setImagePosition( double position[3] );
+//     QString getImagePosition() const { return m_; };
+
+    /// Assignar/Obtenir els samples per pixel
+    void setSamplesPerPixel( int samples );
+    int getSamplesPerPixel() const { return m_samplesPerPixel; };
+
+    /// Assignar/Obtenir la interpretació fotomètrica
+    void setPhotometricInterpretation( int value );
+    int getPhotometricInterpretation() const { return m_photometricInterpretation; };
+
+    /// Assignar/Obtenir files/columnes
+    void setRows( int rows  );
+    int getRows() const { return m_rows; };
+    void setColumns( int columns  );
+    int getColumns() const { return m_columns; };
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries( Series *series ){ m_parentSeries = series; };
@@ -42,6 +95,10 @@ public:
 
 private:
     /// Atributs DICOM
+
+    /// identificador de la imatge/arxiu. (0008,0018)
+    QString m_SOPInstanceUID;
+
     /// Informació general de la imatge. C.7.6 General Image Module - PS 3.3.
 
     /// Nombre que identifica la imatge. (0020,0013) Tipus 2
@@ -59,7 +116,7 @@ private:
     int m_imagesInAcquisition;
 
     /// comentaris sobre la imatges definits per l'usuari. (0020,4000) Tipus 3
-    QString m_commments;
+    QString m_comments;
 
     // \TODO Icon Image Sequence (0088,0200) Tipus 3. La següent imatge d'icona és representativa d'aquesta imatge. veure C.7.6.1.1.6
 

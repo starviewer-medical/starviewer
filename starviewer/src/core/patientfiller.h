@@ -8,10 +8,12 @@
 #define UDGPATIENTFILLER_H
 
 #include <QString>
+#include <QList>
 
 namespace udg {
 
 class PatientFillerInput;
+class PatientFillerStep;
 
 /**
 Classe encarregada de a partir d'un Patient i un conjunt d'arxius classificar-los dins de l'estructura Patient i omplir les dades corresponents segons el tipus d'arxiu que es tracti.
@@ -40,6 +42,9 @@ private:
 private:
     /// L'input a tractar
     PatientFillerInput *m_input;
+
+    /// Registre d'steps
+    QList<PatientFillerStep *> m_registeredSteps;
 };
 
 }

@@ -38,11 +38,6 @@ void Study::setDescription( QString description )
     m_description = description;
 }
 
-void Study::setInstitutionName( QString institutionName )
-{
-    m_institutionName = institutionName;
-}
-
 bool Study::setDateTime( int day , int month , int year , int hour , int minute )
 {
     m_dateTime.setDate( QDate( year , month , day ) );
@@ -116,6 +111,7 @@ QString Study::getTimeAsString()
 void Study::addSeries( Series *series )
 {
     m_seriesHash[ series->getInstanceUID() ] = series;
+    series->setParentStudy( this );
 }
 
 void Study::removeSeries( QString uid )

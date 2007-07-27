@@ -40,13 +40,29 @@ public:
 
     /// assigna l'estudi pare de la sèrie
     void setParentStudy( Study *study ){ m_parentStudy = study; };
+    Study *getParentStudy() const { return m_parentStudy; }
 
-    /// afegeix un objecte imatge
+    /// afegeix un objecte imatge i li assigna com a parent aquest objecte series
     void addImage( Image *image );
+
+    /// obté l'objecte imatge pel sopInstanceUID donat
+    Image *getImage( QString SOPInstanceUID );
 
     /// Assignar/Obtenir la modalitat de la sèrie
     void setModality( QString modality );
     QString getModality() const { return m_modality; };
+
+    /// Assignar/Obtenir el número de la sèrie
+    void setSeriesNumber( QString number );
+    QString getSeriesNumber() const { return m_seriesNumber; };
+
+    /// Assignar/Obtenir el FrameOfReferenceUID
+    void setFrameOfReferenceUID( QString uid  );
+    QString get() const { return m_frameOfReferenceUID; };
+
+    /// Assignar/Obtenir el PositionReferenceIndicator
+    void setPositionReferenceIndicator( QString position );
+    QString getPositionReferenceIndicator() const { return m_positionReferenceIndicator; };
 
     /// Assignar/Obtenir la descripció de la sèrie
     void setDescription( QString description );
@@ -78,6 +94,10 @@ public:
     QString getDateAsString();
     QTime getTime();
     QString getTimeAsString();
+
+    /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
+    void setInstitutionName( QString institutionName ){ m_institutionName = institutionName; };
+    QString getInstitutionName() const { return m_institutionName; };
 
     /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie \TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
     void setVolumeIdentifier( Identifier id );
@@ -118,6 +138,10 @@ private:
 
     /// Data i hora en la que s'ha començat la sèrie. (0008,0021),(0008,0031) Tipus 3. \TODO Tractar per separat o conjuntament?
     QDateTime m_dateTime;
+
+    //\TODO aquest tag està dins de l'Equipment IE module. Se suposa que és mes correcte posar-ho a nivell de sèrie. Llegir A.1.2.3 SERIES IE, apartat c., A.1.2.4 EQUIPMENT IE i C.7.5 Common Equipment IE Modules - PS 3.3
+    /// Nom de l'institució en la que s'ha fet
+    QString m_institutionName;
 
     /// Descriptor de la posició del pacient relativa a la màquina. Requerit per imatges CT i MR. No hi ha d'estar present si Patient Orientation Code Sequence (0054,0410) està present. Veure C.7.3.1.1.2 per termes definits i una explicació més profunda. (0018,5100) Tipus 2C
     QString m_patientPosition;
