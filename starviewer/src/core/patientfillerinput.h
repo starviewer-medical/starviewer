@@ -25,9 +25,20 @@ public:
 
     ~PatientFillerInput();
 
-    /// Assigna/Obté el pacient
-    void setPatient( Patient *patient ){ m_patient = patient; }
-    Patient *getPatient() const { return m_patient; }
+    /// Afegeix un pacient a la llista
+    void addPatient( Patient *patient );
+
+    /// Obté un pacient de la llista indexat. Si l'índex supera el nombre de membres de la llista es retorna NUL
+    Patient *getPatient( int index = 0 );
+
+    /// Obté un pacient identificat pel seu nom
+    Patient *getPatientByName( QString name );
+
+    /// Obté un pacient identificat pel seu ID
+    Patient *getPatientByID( QString id );
+
+    /// Retorna el nombre de pacients que tenim a la llista
+    unsigned int getNumberOfPatients();
 
     /// Obté la llista d'arxius
     QStringList getFilesList() const { return m_fileList; }
@@ -45,10 +56,10 @@ public:
     QStringList getLabelsFromSeries( QString seriesUID );
 
 private:
-    /// Pacient a omplir
-    Patient *m_patient;
+    /// Llista de pacients a omplir
+    QList<Patient *> m_patientList;
 
-    /// Llista d'arxius que cal tractar per omplir m_patient
+    /// Llista d'arxius que cal tractar per omplir la llista de pacients
     QStringList m_fileList;
 
     /// Llista d'etiquetes assignades a nivell global
