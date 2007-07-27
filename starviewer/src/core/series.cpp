@@ -30,6 +30,7 @@ void Series::setInstanceUID( QString uid )
 void Series::addImage( Image *image )
 {
     m_imageList.append( image );
+    image->setParentSeries( this );
 }
 
 void Series::setModality( QString modality )

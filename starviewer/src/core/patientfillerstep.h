@@ -27,11 +27,11 @@ public:
 
     ~PatientFillerStep();
 
-    /// Li assignem les dades d'entrada que li caldrà processar
-    void setInput( PatientFillerInput *input );
+    /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa. Es presuposa que aquest input mai serà NUL.
+    void setInput( PatientFillerInput *input ){ m_input = input; }
 
     /// Retorna la llista d'etiquetes que s'han de complir per poder processar aquest step.
-    QStringList getRequiredLabels() const { return m_requiredLabelsList; };
+    QStringList getRequiredLabels() const { return m_requiredLabelsList; }
 
     /// Retorna la prioritat que té assignada
     PriorityFlags getPriority() const { return m_priority; }
@@ -42,7 +42,7 @@ public:
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el que li toca retorna fals, true altrament
     virtual bool fill();
 
-private:
+protected:
     /// L'input a tractar
     PatientFillerInput *m_input;
 

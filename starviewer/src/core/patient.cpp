@@ -67,6 +67,7 @@ int Patient::getYearOfBirth()
 void Patient::addStudy( Study *study )
 {
     m_studiesHash[ study->getInstanceUID() ] = study;
+    study->setParentPatient( this );
 }
 
 void Patient::removeStudy( QString uid )

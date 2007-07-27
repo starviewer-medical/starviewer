@@ -55,14 +55,14 @@ public:
     void setSex( QString sex ){ m_sex = sex; }
     inline QString getSex() const { return m_sex; };
 
-    /// Afegeix un nou estudi
+    /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient
     void addStudy( Study *study );
 
     /// Li treu al pacient l'estudi amb l'UID donat
     void removeStudy( QString uid );
 
     /// Obté l'estudi amb l'UID donat
-    Study* getStudy( QString uid );
+    Study *getStudy( QString uid );
 
     /// Retorna cert si aquest pacient té assignat l'estudi amb l'UID donat, fals altrament
     bool studyExists( QString uid );
@@ -71,7 +71,7 @@ public:
     int getNumberOfStudies();
 
     /// Mètode per obtenir la llista d'estudis del pacient
-    QList< Study* > getStudies();
+    QList<Study *> getStudies();
 
     /// Operador de fusió de pacient. Amb aquest operador podrem unificar en un sol objecte Patient la informació de dos Patient sempre que siguin identificats com a el mateix pacient. Això seria equivalent a un operador de Unió de conjunts \TODO aquí caldria rumiar-se si es pot forçar la fusió encara que siguin pacients diferents aparentment.
     Patient *operator+( const Patient *patient );

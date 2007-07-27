@@ -30,6 +30,10 @@ public:
 
     ~Study();
 
+    /// Assigna/Obtè l'objecte Patient pare de l'estudi
+    void setParentPatient( Patient *patient ){ m_parentPatient = patient; }
+    Patient *getParentPatient() const { return m_parentPatient; }
+
     /// Assignar/Obtenir l'identificador universal de l'estudi
     void setInstanceUID( QString uid );
     QString getInstanceUID() const { return m_studyInstanceUID; };
@@ -46,9 +50,9 @@ public:
     void setDescription( QString description );
     QString getDescription() const { return m_description; };
 
-    /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
-    void setInstitutionName( QString institutionName );
-    QString getInstitutionName() const { return m_institutionName; };
+    /// Assignar/Obtenir el pes del pacient
+    void setPatientAge( short int age ){ m_age = age; }
+    short int getPatientAge() const { return m_age; }
 
     /// Assignar/Obtenir el pes del pacient
     void setWeight( double weight ){ m_weight = weight; };
@@ -73,7 +77,7 @@ public:
     QTime getTime();
     QString getTimeAsString();
 
-    /// Afegeix una nova sèrie
+    /// Afegeix una nova sèrie i li assigna com a parent aquest objecte study
     void addSeries( Series *series );
 
     /// Li treu a l'estudi la sèrie amb l'UID donat.
@@ -111,10 +115,6 @@ private:
 
     /// Descripció de l'estudi generada per la institució. (0008,1030) Tipus 3
     QString m_description;
-
-    //\TODO aquest tag està dins de l'Equipment IE module. No se sap si es mes correcte posar-ho a nivell de sèrie. Llegir A.1.2.3 SERIES IE, apartat c., A.1.2.4 EQUIPMENT IE i C.7.5 Common Equipment IE Modules - PS 3.3
-    /// Nom de l'institució en la que s'ha fet
-    QString m_institutionName;
 
     /// Informació del pacient, relacionada únicament amb aquest estudi. Aquesta és la informació que podem tenir d'un pacient en el moment en el que se li va fer l'estudi. C.7.2.2 Patient Study Module - PS 3.3.
 
