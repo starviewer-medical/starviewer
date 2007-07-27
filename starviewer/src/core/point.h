@@ -4,53 +4,82 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGPOINT_H
-#define UDGPOINT_H
+#ifndef UDGPOINTPRIMITIVE_H
+#define UDGPOINTPRIMITIVE_H
+
+#include "drawingprimitive.h"
 
 namespace udg {
 
 /**
-Classe que engloba un punt geomètric,\TODO fer template o fer que sempre per defecte sigui 3D-> fer 3D i ja està
-\TODO fer servir vtkCoordinate, ens proporciona diverses tranformacions per als punts segons si referenciem global, viewport, etc...
-vtkCoordinate
-The coordinate systems in vtk are as follows:
 
-  DISPLAY -             x-y pixel values in window
-  NORMALIZED DISPLAY -  x-y (0,1) normalized values
-  VIEWPORT -            x-y pixel values in viewport
-  NORMALIZED VIEWPORT - x-y (0,1) normalized value in viewport
-  VIEW -                x-y-z (-1,1) values in camera coordinates. (z is depth)
-  WORLD -               x-y-z global coordinate values
-  USERDEFINED -         x-y-z in User defined space
-
-etc etc, per més mirar documentació de la classe...
+Classe que implementa la primitiva gràfica de tipus Punt. Hereta de la classe DrawPrimitive.
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-class Point 
-{
-public:
-    Point();
-    Point( double points[3] );
-    Point( double x , double y , double z );
-    ~Point();
 
-    void setX( double x ){ m_x = x; }
-    void setY( double y ){ m_y = y; }
-    void setZ( double z ){ m_z = z; }
-    void setValues( double x , double y , double z );
-    void setValues( double points[3] );
+class Point : public DrawingPrimitive{
+Q_OBJECT
+public:
     
-    double getX(){ return m_x; }
-    double getY(){ return m_y; }
-    double getZ(){ return m_z; }
-    double distance( Point p );
+    /**propietats especials que aporten els punts:
+        -punt arrodonit o quadrat
+        -interior ple o buit
+     */
+    
+    ///constructor per defecte
+    Point();
+    
+    ///constructor amb paràmetres: passem la posició del punt 
+    Point( double position[3] );
+    
+    ~Point();
+    
+    ///permet canviar la posició del punt 
+    void setPosition( double point[3] );
+    
+    ///retorna la posició del punt
+    double* getPosition()
+    { return( m_position ); }
+    
+    ///Determinem que el punt es dibuixi en forma arrodonida
+    void rounded()
+    { m_rounded = true; }
+    
+    ///Determinem que el punt es dibuixi en forma quadrada
+    void squared()
+    { m_rounded = false; }
+    
+    bool isRounded()
+    { return( m_rounded ); }
+    
+    ///Determinem que el punt es dibuixi ple
+    void filledOn()
+    { m_filled = true; }
+    
+    ///Determinem que el punt es dibuixi buit
+    void filledOff()
+    { m_filled = false; }
+    
+    void filled( bool filled )
+    { m_filled = filled; }
+    
+    bool isFilled()
+    { return( m_filled ); }
     
 private:
-    /// Coordenades
-    double m_x, m_y, m_z;
+    
+    ///posició del punt
+    double m_position[3];
+    
+    ///Ens determina si el punt es dibuixarà arrodonit o no
+    bool m_rounded;
+    
+    ///determina si el punt és ple o no: si no és ple tindrà forma de disc
+    bool m_filled;
+
 };
 
-};  //  end  namespace udg 
+};  //  end  namespace udg
 
 #endif

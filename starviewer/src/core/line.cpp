@@ -5,34 +5,39 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "point.h"
+#include "line.h"
 
 namespace udg {
 
-Point::Point() : DrawingPrimitive()
+Line::Line() : DrawingPrimitive()
 {
-    setWidth( 2. );
-    rounded();
-    filledOn();
+    setWidth( 1. );
+    discontinuousOff();
 }
 
 
-Point::Point( double point[3] ) : DrawingPrimitive()
+Line::Line( double point1[3], double point2[3] ) : DrawingPrimitive()
 {
-    setPosition( point );
-    setWidth( 2. );
-    rounded();
-    filledOn();
+    setFirstPoint( point1 );
+    setSecondPoint( point2 );
+    setWidth( 1. );
+    discontinuousOff();
 }
    
-Point::~Point()
+Line::~Line()
 {}
     
-void Point::setPosition( double point[3] )
+void Line::setFirstPoint( double point[3] )
 {
     for ( int i = 0; i < 3; i++ )
-        m_position[i] = point[i];
+        m_firstPoint[i] = point[i];
 }
 
+void Line::setSecondPoint( double point[3] )
+{
+    for ( int i = 0; i < 3; i++ )
+        m_secondPoint[i] = point[i];
+}
+    
 };  // end namespace udg
 

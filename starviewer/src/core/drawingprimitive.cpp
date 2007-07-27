@@ -4,35 +4,17 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-#include "point.h"
+#include "drawingprimitive.h"
 
 namespace udg {
 
-Point::Point() : DrawingPrimitive()
+DrawingPrimitive::DrawingPrimitive( QObject *parent ) 
+    : QObject( parent ), DefaultColor( Qt::green ), m_primitiveColor( Qt::green )
 {
-    setWidth( 2. );
-    rounded();
-    filledOn();
-}
-
-
-Point::Point( double point[3] ) : DrawingPrimitive()
-{
-    setPosition( point );
-    setWidth( 2. );
-    rounded();
-    filledOn();
-}
-   
-Point::~Point()
-{}
-    
-void Point::setPosition( double point[3] )
-{
-    for ( int i = 0; i < 3; i++ )
-        m_position[i] = point[i];
+    //assignem els valors per defecte que ens interessen
+    setOpacity( 1. );
+    setCoordinatesSystem( "WORLD" );
+    visibilityOn();
 }
 
 };  // end namespace udg
-
