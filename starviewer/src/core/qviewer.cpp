@@ -41,8 +41,6 @@ QViewer::QViewer( QWidget *parent )
     // inicialitzem el punter del volum
     m_mainVolume = 0;
 
-    m_modelPointFromCursor.setValues( -1, -1 , -1 );
-
     // 2x buffer
     m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
 
