@@ -78,6 +78,7 @@ HEADERS += extensionfactory.h \
            patientfiller.h \
            patientfillerstep.h \
            patientfillerinput.h \
+	   dicomfileclassifierfillerstep.h \
            polygon.h \
            point.h 
 SOURCES += extensionmediator.cpp \
@@ -142,6 +143,7 @@ SOURCES += extensionmediator.cpp \
            patientfiller.cpp \
            patientfillerstep.cpp \
            patientfillerinput.cpp \
+	   dicomfileclassifierfillerstep.cpp \
            polygon.cpp \
            point.cpp 
 TEMPLATE = lib
