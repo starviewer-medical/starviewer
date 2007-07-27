@@ -28,6 +28,10 @@ public:
 
     ~Patient();
 
+    /// Assigna/Obté el nom complet del pacient
+    void setFullName( QString name ){ m_fullName = name; }
+    QString getFullName() const { return m_fullName; }
+
     /// Assigna/Obté nom del pacient
     void setName( QString name );
     QString getName();
@@ -35,6 +39,10 @@ public:
     /// Assigna/Obté cognom del pacient
     void setSurname( QString surname );
     QString getSurname();
+
+    /// Assigna/Obté l'ID del pacient
+    void setID( QString id ){ m_patientID = id; }
+    QString getID() const { return m_patientID; }
 
     /// Assigna/Obté data de naixement
     void setBirthDate( int day , int month , int year );
@@ -44,7 +52,8 @@ public:
     int getYearOfBirth();
 
     /// Assigna/Obté sexe del pacient
-    inline char getSex() const { return m_sex; };
+    void setSex( QString sex ){ m_sex = sex; }
+    inline QString getSex() const { return m_sex; };
 
     /// Afegeix un nou estudi
     void addStudy( Study *study );
@@ -89,7 +98,7 @@ private:
     QDate m_birthDate;
 
     /// Sexe. (0010,0040) Tipus 2. M = male, F = female, O = other
-    char m_sex;
+    QString m_sex;
 
     /// Indica si la identitat real del pacient s'ha tret dels atributs i de les dades. (0012,0062) Tipus 3. Considerem aquest paràmetre per si és necessari a l'hora d'anonimatitzar. Això ens obligaria a fer servir els tags (0012,0063) i (0012,0064) \TODO aquest atribut encara no es farà servir, però és per tenir-ho en compte per si calgués.
     bool m_identityIsRemoved;
