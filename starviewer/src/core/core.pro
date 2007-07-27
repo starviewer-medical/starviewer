@@ -21,7 +21,6 @@ HEADERS += extensionfactory.h \
            itkQtAdaptor.h \
            harddiskinformation.h \
            distance.h \
-           point.h \
            logging.h \
            deletedirectory.h \
            volume.h \
@@ -68,20 +67,25 @@ HEADERS += extensionfactory.h \
            q2dviewerblackboard.h \
            vtkAtamaiPolyDataToImageStencil2.h \
            shutterfilter.h \
-           q2dviewerpresentationstateattacher.h  \
+           q2dviewerpresentationstateattacher.h \
            sliceannotationcontroller.h \
            image.h \
            dicomtagreader.h \
+           line.h \
+           drawingprimitive.h \
+           drawer.h \
+           text.h \
            patientfiller.h \
            patientfillerstep.h \
-           patientfillerinput.h
+           patientfillerinput.h \
+           polygon.h \
+           point.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
            mathtools.cpp \
            harddiskinformation.cpp \
            distance.cpp \
-           point.cpp \
            deletedirectory.cpp \
            volume.cpp \
            volumerepository.cpp \
@@ -127,13 +131,19 @@ SOURCES += extensionmediator.cpp \
            q2dviewerblackboard.cpp \
            vtkAtamaiPolyDataToImageStencil2.cxx \
            shutterfilter.cpp \
-           q2dviewerpresentationstateattacher.cpp  \
+           q2dviewerpresentationstateattacher.cpp \
            sliceannotationcontroller.cpp \
            image.cpp \
            dicomtagreader.cpp \
+           line.cpp \
+           drawingprimitive.cpp \
+           drawer.cpp \
+           text.cpp \
            patientfiller.cpp \
            patientfillerstep.cpp \
-           patientfillerinput.cpp
+           patientfillerinput.cpp \
+           polygon.cpp \
+           point.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
