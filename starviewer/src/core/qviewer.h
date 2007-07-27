@@ -8,7 +8,6 @@
 #define UDGQVIEWER_H
 
 #include <QWidget>
-#include "point.h"
 // llista de captures de pantalla
 #include <list>
 #include <vtkImageData.h>
@@ -55,9 +54,6 @@ public:
 
     /// retorna el vtkRenderWindow
     vtkRenderWindow *getRenderWindow();
-
-    /// Ens retorna el punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
-    Point getModelPointFromCursor() const { return m_modelPointFromCursor; }
 
     /// Retorna la posició sobre la que es troba el cursor ( coordenades de mon )
     void getCurrentCursorPosition( double xyz[3] )
@@ -122,9 +118,6 @@ protected:
 
     /// El widget per poder mostrar una finestra vtk amb qt
     QVTKWidget* m_vtkWidget;
-
-    /// El punt del model que es correspon amb el punt de la finestra sobre el qual es troba el cursor desde l'últim event
-    Point m_modelPointFromCursor;
 
     /// Posició sobre la que es troba el ratolí
     double m_currentCursorPosition[3];
