@@ -232,4 +232,22 @@ Image *DICOMFileClassifierFillerStep::createImage()
     return image;
 }
 
+bool DICOMFileClassifierFillerStep::isImageSeries( Series *series )
+{
+    // TODO aquí caldria especificar quines són les modalitats que acceptem com a imatges
+    QStringList supportedModalitiesAsImage;
+    supportedModalitiesAsImage << "CT" << "MR" << "US" << "RT" << "DX" << "MG";
+    return supportedModalitiesAsImage.contains( series->getModality() );
+}
+
+bool DICOMFileClassifierFillerStep::isKeyImageNoteSeries( Series *series )
+{
+    return series->getModality() == "KO";
+}
+
+bool DICOMFileClassifierFillerStep::isPresentationStateSeries( Series *series )
+{
+    return series->getModality() == "PR";
+}
+
 }
