@@ -44,7 +44,7 @@ bool Series::addImage( Image *image )
     else if( m_imageSet.contains( uid ) )
     {
         ok = false;
-        DEBUG_LOG("Ja existeix una imatge amb aquest mateix SOPInstanceUID:: " + image->getSOPInstanceUID() );
+        DEBUG_LOG("Ja existeix una imatge amb aquest mateix SOPInstanceUID:: " + uid );
     }
     else
     {

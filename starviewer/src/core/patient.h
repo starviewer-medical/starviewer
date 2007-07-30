@@ -29,19 +29,11 @@ public:
     ~Patient();
 
     /// Assigna/Obté el nom complet del pacient
-    void setFullName( QString name ){ m_fullName = name; }
+    void setFullName( QString name );
     QString getFullName() const { return m_fullName; }
 
-    /// Assigna/Obté nom del pacient
-    void setName( QString name );
-    QString getName();
-
-    /// Assigna/Obté cognom del pacient
-    void setSurname( QString surname );
-    QString getSurname();
-
     /// Assigna/Obté l'ID del pacient
-    void setID( QString id ){ m_patientID = id; }
+    void setID( QString id );
     QString getID() const { return m_patientID; }
 
     /// Assigna/Obté data de naixement
@@ -52,16 +44,16 @@ public:
     int getYearOfBirth();
 
     /// Assigna/Obté sexe del pacient
-    void setSex( QString sex ){ m_sex = sex; }
+    void setSex( QString sex );
     inline QString getSex() const { return m_sex; };
 
-    /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient
-    void addStudy( Study *study );
+    /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient. Retorna fals si existeix un estudi ja amb el mateix uid
+    bool addStudy( Study *study );
 
     /// Li treu al pacient l'estudi amb l'UID donat
     void removeStudy( QString uid );
 
-    /// Obté l'estudi amb l'UID donat
+    /// Obté l'estudi amb l'UID donat. Si no n'hi ha cap amb aquest uid retorna nul
     Study *getStudy( QString uid );
 
     /// Retorna cert si aquest pacient té assignat l'estudi amb l'UID donat, fals altrament
@@ -86,10 +78,6 @@ private:
 
     /// Nom complet del pacient. (0010,0010) Tipus 2.
     QString m_fullName;
-    /// Nom del pacient
-    QString m_name;
-    /// Cognom del pacient
-    QString m_surname;
 
     /// Identificador primari donada al pacient per l'hospital. (0010,0020) Tipus 2.
     QString m_patientID;
@@ -104,8 +92,7 @@ private:
     bool m_identityIsRemoved;
 
     /// Taula de hash que conté els estudis del pacient
-    typedef QHash< QString , Study* > StudiesHashType;
-    StudiesHashType m_studiesHash;
+    QHash< QString , Study* > m_studiesSet;
 
 };
 
