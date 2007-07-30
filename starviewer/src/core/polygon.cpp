@@ -9,7 +9,7 @@
 
 namespace udg {
 
-Polygon::Polygon( QList< double* > points ) : DrawingPrimitive(),  DefaultBackgroundColor( Qt::darkGreen ), m_primitiveBackgroundColor( Qt::darkGreen ) 
+Polygon::Polygon( QList< double* > points ) : DrawingPrimitive()
 {
     disableBackground();
     setPoints( points );
@@ -22,7 +22,6 @@ int Polygon::getNumberOfPoints()
 {
     return( m_pointsList.count() );
 }
-    
 
 };  // end namespace udg
 

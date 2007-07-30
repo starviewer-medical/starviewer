@@ -90,7 +90,7 @@ public:
     void setCoordinatesSystem( QString coord )
     { m_coordinateSystem = coord; }
 
-    //
+    ///retorna el sistema de coordenades com a QString
     QString getCoordinatesSystemAsString()
     {     return( m_coordinateSystem ); }
     
@@ -125,9 +125,6 @@ protected:
     
     ///determina l'opacitat de la primitiva
     double m_opacity;
-    
-    ///ens determina si el fons de les primitives tancades s'ha de pintar o no.
-    bool m_backgroundEnabled;
     
     ///sistema de coordenades que utilitza la primitiva
     QString m_coordinateSystem;
