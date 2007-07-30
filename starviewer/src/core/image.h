@@ -28,11 +28,11 @@ public:
     ~Image();
 
     /// assigna/obté el SOPInstanceUID de la imatge
-    void setSOPInstanceUID( QString uid ){ m_SOPInstanceUID = uid; }
+    void setSOPInstanceUID( QString uid );
     QString getSOPInstanceUID() const { return m_SOPInstanceUID; }
 
     /// assigna/obté l'instance number
-    void setInstanceNumber( QString number ){ m_instanceNumber = number; }
+    void setInstanceNumber( QString number );
     QString getInstanceNumber() const { return m_instanceNumber; }
 
     /// Assignar/Obtenir la orienatació del pacient en la imatge, també anomenat direction cosines. TODO implementar els "gets"
@@ -43,18 +43,15 @@ public:
     QString getPatientOrientation() const { return m_patientOrientation; };
 
     /// Assignar/Obtenir la data i hora d'adquisició de la imatge en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
-    bool setContentDateTime( int day , int month , int year , int hour , int minute );
+    bool setContentDateTime( int day , int month , int year , int hour , int minute, int seconds = 0 );
     bool setContentDateTime( QString date , QString time );
-    bool setContentDateTime( QString dateTime );
-    QDateTime getContentDateTime() const { return m_contentDateTime; };
-    QString getContentDateTimeAsString();
     bool setContentDate( int day , int month , int year );
     bool setContentDate( QString date );
-    bool setContentTime( int hour , int minute );
+    bool setContentTime( int hour , int minute, int seconds = 0 );
     bool setContentTime( QString time );
-    QDate getContentDate();
+    QDate getContentDate() const { return m_contentDate; };
     QString getContentDateAsString();
-    QTime getContentTime();
+    QTime getContentTime() const { return m_contentTime; };
     QString getContentTimeAsString();
 
     /// Assignar/Obtenir el numero d'imatges en l'adquisició
@@ -65,9 +62,9 @@ public:
     void setComments( QString comments  );
     QString getComments() const { return m_comments; };
 
-    /// Assignar/Obtenir la posició de la imatge. TODO falta implementar el get
+    /// Assignar/Obtenir la posició de la imatge.
     void setImagePosition( double position[3] );
-//     QString getImagePosition() const { return m_; };
+    const double *getImagePosition() const { return m_imagePosition; };
 
     /// Assignar/Obtenir els samples per pixel
     void setSamplesPerPixel( int samples );
@@ -84,14 +81,11 @@ public:
     int getColumns() const { return m_columns; };
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
-    void setParentSeries( Series *series ){ m_parentSeries = series; };
+    void setParentSeries( Series *series );
 
     /// assigna/retorna el path de la imatge \TODO absolut/relatiu????
-    void setPath( QString path ){ m_path = path; };
+    void setPath( QString path );
     QString getPath() const { return m_path; }
-
-    /// omple la informació de cada atribut a partir dels fitxers. En el cas que sigui DICOM (el més comú) ho omplirà amb dcmtk. Retorna true si es pot llegir l'arxiu, fals altrament
-    bool fillInformationFromSource();
 
 private:
     /// Atributs DICOM
@@ -108,7 +102,8 @@ private:
     QString m_patientOrientation;
 
     /// La data i hora en que la imatge es va començar a generar. Requerit si la imatge és part d'una sèrie en que les imatges estan temporalment relacionades. (0008,0023)(0008,0033) Tipus 2C \TODO separar date i time per separat?
-    QDateTime m_contentDateTime;
+    QDate m_contentDate;
+    QTime m_contentTime;
 
     //\TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes, com un post-localizer per CT.
 
