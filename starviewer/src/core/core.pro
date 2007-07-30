@@ -80,7 +80,8 @@ HEADERS += extensionfactory.h \
            patientfillerinput.h \
 	   dicomfileclassifierfillerstep.h \
            polygon.h \
-           point.h 
+           point.h  \
+           ctfillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -145,7 +146,8 @@ SOURCES += extensionmediator.cpp \
            patientfillerinput.cpp \
 	   dicomfileclassifierfillerstep.cpp \
            polygon.cpp \
-           point.cpp 
+           point.cpp  \
+           ctfillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
