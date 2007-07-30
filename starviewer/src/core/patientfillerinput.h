@@ -65,7 +65,7 @@ private:
     /// Llista d'etiquetes assignades a nivell global
     QStringList m_globalLabels;
 
-    /// Llista d'etiquetes assignades a nivell de sèries. \TODO ara fem una associació Label-Series UID, però es podria fer també Label-Series*. Una altre alternativa seria ampliar l'estructura de Patient per tal que Series tingués els labels.
+    /// Llista d'etiquetes assignades a nivell de sèries. Per cada uid tenim vàries etiquetes \TODO ara fem una associació Series UID-Label, però es podria fer també Series*-Label. Una altre alternativa seria ampliar l'estructura de Patient per tal que Series tingués els labels.
     QMultiMap< QString, QString > m_seriesLabels;
 };
 
