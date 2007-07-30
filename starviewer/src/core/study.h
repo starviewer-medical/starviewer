@@ -31,7 +31,7 @@ public:
     ~Study();
 
     /// Assigna/Obtè l'objecte Patient pare de l'estudi
-    void setParentPatient( Patient *patient ){ m_parentPatient = patient; }
+    void setParentPatient( Patient *patient );
     Patient *getParentPatient() const { return m_parentPatient; }
 
     /// Assignar/Obtenir l'identificador universal de l'estudi
@@ -51,15 +51,15 @@ public:
     QString getDescription() const { return m_description; };
 
     /// Assignar/Obtenir el pes del pacient
-    void setPatientAge( short int age ){ m_age = age; }
+    void setPatientAge( short int age );
     short int getPatientAge() const { return m_age; }
 
     /// Assignar/Obtenir el pes del pacient
-    void setWeight( double weight ){ m_weight = weight; };
+    void setWeight( double weight );
     double getWeight() const { return m_weight; };
 
     /// Assignar/Obtenir l'aclçada del pacient
-    void setHeight( double height ){ m_height = height; };
+    void setHeight( double height );
     double getHeight() const { return m_height; };
 
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
@@ -77,10 +77,10 @@ public:
     QTime getTime();
     QString getTimeAsString();
 
-    /// Afegeix una nova sèrie i li assigna com a parent aquest objecte study
-    void addSeries( Series *series );
+    /// Afegeix una nova sèrie i li assigna com a parent aquest objecte study. Retorna fals si existeix una sèrie amb el mateix uid
+    bool addSeries( Series *series );
 
-    /// Li treu a l'estudi la sèrie amb l'UID donat.
+    /// Li treu a l'estudi la sèrie amb l'UID donat. Si no existeix cap amb aquest uid retorna nul.
     void removeSeries( QString uid );
 
     /// Obté la sèrie amb l'UID donat. NUL si no hi és
@@ -128,8 +128,7 @@ private:
     double m_weight;
 
     /// Taula de Hash que conté les sèries de l'estudi
-    typedef QHash< QString , Series* > SeriesHashType;
-    SeriesHashType m_seriesHash;
+    QHash< QString , Series* > m_seriesSet;
 
     /// L'entitat Patient a la qual pertany aquest estudi
     Patient *m_parentPatient;

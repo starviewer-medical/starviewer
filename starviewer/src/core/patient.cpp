@@ -16,27 +16,17 @@ Patient::Patient(QObject *parent)
 
 Patient::~Patient()
 {
-    m_studiesHash.clear();
+    m_studiesSet.clear();
 }
 
-void Patient::setName( QString name )
+void Patient::setFullName( QString name )
 {
-    m_name = name;
+    m_fullName = name;
 }
 
-QString Patient::getName()
+void Patient::setID( QString id )
 {
-    return m_name;
-}
-
-void Patient::setSurname( QString surname )
-{
-    m_surname = surname;
-}
-
-QString Patient::getSurname()
-{
-    return m_surname;
+    m_patientID = id;
 }
 
 void Patient::setBirthDate( int day , int month , int year )
@@ -64,20 +54,45 @@ int Patient::getYearOfBirth()
     return m_birthDate.year();
 }
 
-void Patient::addStudy( Study *study )
+void Patient::setSex( QString sex )
 {
-    m_studiesHash[ study->getInstanceUID() ] = study;
-    study->setParentPatient( this );
+    m_sex = sex;
+}
+
+bool Patient::addStudy( Study *study )
+{
+    bool ok = true;
+    QString uid = study->getInstanceUID();
+    if( uid.isEmpty() )
+    {
+        ok = false;
+        DEBUG_LOG("L'uid de l'estudi està buit! No el podem insertar per inconsistent");
+    }
+    else if( m_studiesSet.contains( uid ) )
+    {
+        ok = false;
+        DEBUG_LOG("Ja existeix un estudi amb aquest mateix UID:: " + uid );
+    }
+    else
+    {
+        m_studiesSet[ uid ] = study;
+        study->setParentPatient( this );
+    }
+
+    return ok;
 }
 
 void Patient::removeStudy( QString uid )
 {
-    m_studiesHash.remove( uid );
+    m_studiesSet.remove( uid );
 }
 
 Study *Patient::getStudy( QString uid )
 {
-    return m_studiesHash[ uid ];
+    if( m_studiesSet.contains( uid ) )
+        return m_studiesSet[ uid ];
+    else
+        return 0;
 }
 
 bool Patient::studyExists( QString uid )
@@ -90,14 +105,14 @@ bool Patient::studyExists( QString uid )
 
 int Patient::getNumberOfStudies()
 {
-    return m_studiesHash.size();
+    return m_studiesSet.size();
 }
 
 QList<Study*> Patient::getStudies()
 {
     QList< Study* > studyList;
 
-    QHashIterator<QString, Study *> iterator( m_studiesHash );
+    QHashIterator<QString, Study *> iterator( m_studiesSet );
     while( iterator.hasNext() )
     {
         studyList << iterator.value();
