@@ -108,14 +108,13 @@ void PatientFillerInput::addLabel( QString label )
 
 void PatientFillerInput::addLabelToSeries( QString label, QString seriesUID )
 {
-    // TODO implementa'm!
-    DEBUG_LOG("Mètode pendent d'implementar");
+    m_seriesLabels.insert( seriesUID , label );
 }
 
 QStringList PatientFillerInput::getLabelsFromSeries( QString seriesUID )
 {
-    // TODO implementa'm!
-    DEBUG_LOG("Mètode pendent d'implementar");
+    QStringList result = m_seriesLabels.values( seriesUID );
+    return result;
 }
 
 }
