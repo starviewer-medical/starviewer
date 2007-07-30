@@ -26,97 +26,143 @@ Image::~Image()
 {
 }
 
-bool Image::fillInformationFromSource()
+void Image::setSOPInstanceUID( QString uid )
 {
-    DcmDataset *dicomData = new DcmDataset;
+    m_SOPInstanceUID = uid;
+}
 
-    DcmFileFormat dicomFile;
-    OFCondition status = dicomFile.loadFile( qPrintable( m_path ) );
-    if( status.good() )
+void Image::setInstanceNumber( QString number )
+{
+    m_instanceNumber = number;
+}
+
+void Image::setPatientOrientation( QString orientation )
+{
+    m_patientOrientation = orientation;
+}
+
+bool Image::setContentDateTime( int day , int month , int year , int hour , int minute, int seconds )
+{
+    return this->setContentDate( day, month, year ) && this->setContentTime( hour, minute, seconds );
+}
+
+bool Image::setContentDateTime( QString date , QString time )
+{
+    return this->setContentDate( date ) && this->setContentTime( time );
+}
+
+bool Image::setContentDate( int day , int month , int year )
+{
+    bool ok = true;
+    if( !m_contentDate.setDate( year, month, day ) )
     {
-        dicomData = dicomFile.getAndRemoveDataset();
+        ok = false;
+        DEBUG_LOG("Error en el format de la data");
+    }
+    return ok;
+}
 
-        OFCondition status;
-        const char *value = NULL;
-        Float64 doubleValue;
-        Uint16 uint16Value;
-
-        // instance number
-        status = dicomData->findAndGetString( DCM_InstanceNumber , value );
-        if( status.good() )
-            this->setInstanceNumber( value );
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir l'instance number: error msg: %1").arg( status.text() ) );
-
-        // pixel spacing
-        status = dicomData->findAndGetString( DCM_PixelSpacing , value );
-        if( status.good() )
-        {
-            QStringList spacing( QString(value).split( "\\" ) );
-            for( int i = 0; i < spacing.size(); i++ )
-                m_pixelSpacing[i] = spacing.at(i).toDouble();
-        }
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir l'espaiat de pixel: error msg: %1").arg( status.text() ) );
-
-        // image orientation (direction cosines)
-        status = dicomData->findAndGetString( DCM_ImageOrientationPatient , value );
-        if( status.good() )
-        {
-            QStringList orientation = QString(value).split( "\\" );
-            for( int i = 0; i < orientation.size(); i++ )
-                m_imageOrientation[i] = orientation.at(i).toDouble();
-        }
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir l'orientació de pacient(direction cosines): error msg: %1").arg( status.text() ) );
-
-        // image position
-        status = dicomData->findAndGetString( DCM_ImagePositionPatient , value );
-        if( status.good() )
-        {
-            QStringList position = QString(value).split( "\\" );
-            for( int i = 0; i < position.size(); i++ )
-                m_imagePosition[i] = position.at(i).toDouble();
-        }
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir la posició de la imatge: error msg: %1").arg( status.text() ) );
-
-        // slice thickness
-        status = dicomData->findAndGetFloat64( DCM_SliceThickness , doubleValue );
-        if( status.good() )
-        {
-            m_sliceThickness = doubleValue;
-        }
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir l'slice thickness: error msg: %1").arg( status.text() ) );
-
-        // slice location
-        status = dicomData->findAndGetFloat64( DCM_SliceLocation , doubleValue );
-        if( status.good() )
-        {
-            m_sliceLocation = doubleValue;
-        }
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir l'slice location: error msg: %1").arg( status.text() ) );
-
-        // Image Pixel Module C.6.7.3
-
-        // samples per pixel
-        status = dicomData->findAndGetUint16( DCM_SamplesPerPixel , uint16Value );
-        if( status.good() )
-        {
-            m_samplesPerPixel = uint16Value;
-        }
-        else
-            DEBUG_LOG( QString("No s'ha pogut llegir el samples per pixel: error msg: %1").arg( status.text() ) );
-
-        return true;
+bool Image::setContentDate( QString date )
+{
+    QStringList split = date.split("/");
+    bool ok = false;
+    if( split.size() == 3 )
+    {
+        ok = this->setContentDate( split.at(0).toInt(), split.at(1).toInt(), split.at(2).toInt() );
     }
     else
+        DEBUG_LOG("La data està en un mal format-> " + date );
+
+    return ok;
+}
+
+bool Image::setContentTime( int hour , int minute, int seconds )
+{
+    bool ok = true;
+    if( !m_contentTime.setHMS( hour, minute, seconds ) )
     {
-        DEBUG_LOG( QString( "No s'ha pogut llegir l'arxiu %1\n Error dcmtk: %2 ").arg( qPrintable( m_path ) ).arg( status.text() ) );
-        return false;
+        ok = false;
+        DEBUG_LOG("Error en el format de la hora");
     }
+    return ok;
+}
+
+bool Image::setContentTime( QString time )
+{
+    QStringList split = time.split(":");
+    bool ok = false;
+    switch( split.size() )
+    {
+    case 2:
+        ok = this->setContentTime( split.at(0).toInt(), split.at(1).toInt() );
+    break;
+
+    case 3:
+        ok = this->setContentTime( split.at(0).toInt(), split.at(1).toInt(), split.at(2).toInt() );
+    break;
+
+    default:
+        DEBUG_LOG("La hora està en un mal format-> " + time );
+    break;
+    }
+
+    return ok;
+}
+
+QString Image::getContentDateAsString()
+{
+    return m_contentDate.toString("dd/MM/yyyy");
+}
+
+QString Image::getContentTimeAsString()
+{
+    return m_contentTime.toString("HH:mm:ss");
+}
+
+void Image::setImagesInAcquisition( int images )
+{
+    m_imagesInAcquisition = images;
+}
+
+void Image::setComments( QString comments  )
+{
+    m_comments = comments;
+}
+
+void Image::setImagePosition( double position[3] )
+{
+    for(int i = 0; i < 3; i++)
+        m_imagePosition[i] = position[i];
+}
+
+void Image::setSamplesPerPixel( int samples )
+{
+    m_samplesPerPixel = samples;
+}
+
+void Image::setPhotometricInterpretation( int value )
+{
+    m_photometricInterpretation = value;
+}
+
+void Image::setRows( int rows  )
+{
+    m_rows = rows;
+}
+
+void Image::setColumns( int columns  )
+{
+    m_columns = columns;
+}
+
+void Image::setParentSeries( Series *series )
+{
+    m_parentSeries = series;
+}
+
+void Image::setPath( QString path )
+{
+    m_path = path;
 }
 
 }
