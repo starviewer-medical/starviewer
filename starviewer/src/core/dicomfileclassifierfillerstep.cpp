@@ -57,6 +57,8 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
         QString seriesUID = m_dicomReader->getAttributeByName( DCM_SeriesInstanceUID );
         QString sopInstanceUID = m_dicomReader->getAttributeByName( DCM_SOPInstanceUID );
 
+        // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més ràpid o no? o és ben igual?
+        // obtenim el pacient si ja existeix, altrament el creem
         Patient *patient = getPatient( patientName, patientID );
         if( !patient )
         {
@@ -64,6 +66,7 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
             m_input->addPatient( patient );
         }
 
+        // obtenim l'estudi corresponent si ja existeix, altrament el creem
         Study *study = patient->getStudy( studyUID );
         if( !study )
         {
@@ -71,6 +74,7 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
             patient->addStudy( study );
         }
 
+        // obtenim la serie corresponent si ja existeix, altrament la creem
         Series *series = study->getSeries( seriesUID );
         if( !series )
         {
@@ -81,12 +85,17 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
         // Podrem tenir o bé Images, o bé KINs o bé PresentationStates
         if( isImageSeries(series) )
         {
+            // comprovem abans si existeix la imatge, altrament la creem
             Image *image = series->getImage( sopInstanceUID );
             if( !image )
             {
                 image = createImage();
                 image->setPath( file );
                 series->addImage( image );
+            }
+            else
+            {
+                // el tenim classificat però no sabem si s'ha llegit tota la info que volem TODO què fem? matxaquem sempre?
             }
         }
         else if( isKeyImageNoteSeries(series) )
@@ -103,9 +112,12 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
         {
             // TODO tipu de Sèrie no suportat/no sabem classificar
             DEBUG_LOG("tipu de serie no suportat/que no sabem classificar");
+            ok = false;
         }
 
     }
+    else
+        DEBUG_LOG("Error en llegir l'arxiu: " + file );
 
     return ok;
 }
