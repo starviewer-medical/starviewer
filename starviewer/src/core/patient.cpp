@@ -119,7 +119,7 @@ int Patient::getNumberOfStudies()
     return m_studiesSet.size();
 }
 
-QList<Study*> Patient::getStudies()
+QList<Study*> Patient::getStudies() const
 {
     QList< Study* > studyList;
 
@@ -135,14 +135,50 @@ QList<Study*> Patient::getStudies()
 
 Patient *Patient::operator +( const Patient *patient )
 {
-    // TODO implementa'm!
-    DEBUG_LOG("Mètode per implementar");
+    Patient *result = new Patient;
+    if( this->isSamePatient( patient ) )
+    {
+        // copiem informació estructural en el resultat
+        result->copyPatientInformation( patient );
+        result->m_studiesSet = this->m_studiesSet;
+
+        // ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
+        QList<Study *> studyListToAdd = patient->getStudies();
+        QString uid;
+        foreach( Study *study, studyListToAdd )
+        {
+            uid = study->getInstanceUID();
+            if( !result->studyExists(uid) )
+                result->addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
+        }
+    }
+    else
+    {
+        DEBUG_LOG("Els pacients no es poden fusionar perquè no s'identifiquen com el mateix");
+    }
+    return result;
 }
 
 Patient *Patient::operator +=( const Patient *patient )
 {
-    // TODO implementa'm!
-    DEBUG_LOG("Mètode per implementar");
+    // si coincideix nom o ID llavors es poden fusionar TODO mirar de definir aquest criteri
+    if( isSamePatient( patient ) )
+    {
+        // recorrem els estudis que té "l'altre pacient" per afegir-los al resultat (aquesta mateixa instància) si no els té ja
+        QList<Study *> studyListToAdd = patient->getStudies();
+        QString uid;
+        foreach( Study *study, studyListToAdd )
+        {
+            uid = study->getInstanceUID();
+            if( !this->studyExists(uid) )
+                this->addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
+        }
+    }
+    else
+    {
+        DEBUG_LOG("Els pacients no es poden fusionar perquè no comparteixen ni nom ni ID");
+    }
+    return this;
 }
 
 Patient *Patient::operator -( const Patient *patient )
@@ -155,6 +191,20 @@ Patient *Patient::operator -=( const Patient *patient )
 {
     // TODO implementa'm!
     DEBUG_LOG("Mètode per implementar");
+}
+
+bool Patient::isSamePatient( const Patient *patient )
+{
+    // si coincideix nom o ID llavors es poden considerar que són el mateix pacient TODO mirar de definir aquest criteri
+    return patient->m_fullName == this->m_fullName || patient->m_patientID == this->m_patientID;
+}
+
+void Patient::copyPatientInformation( const Patient *patient )
+{
+    this->m_fullName = patient->m_fullName;
+    this->m_patientID = patient->m_patientID;
+    this->m_birthDate = patient->m_birthDate;
+    this->m_sex = patient->m_sex;
 }
 
 }
