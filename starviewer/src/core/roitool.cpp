@@ -22,7 +22,6 @@
 #include "logging.h"
 
 
-//\TODO Poliline acaba de tancar??
 namespace udg {
 
 ROITool::ROITool( Q2DViewer *viewer , QObject *, const char * )
@@ -377,10 +376,10 @@ void ROITool::calculatePointsAccordingSelectedROI( double p1[3], double p2[3] )
                     yAxis2[0] = p1[0];
                     yAxis2[1] = p2[1];
                 
-                    xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
+                    xRadius = fabs( xAxis1[0] - xAxis2[0] );
                 
                     if ( m_ROIType == ELLIPSE )
-                        yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
+                        yRadius = fabs( yAxis1[1] - yAxis2[1] );
                     else
                         yRadius = xRadius;
                 
@@ -408,10 +407,10 @@ void ROITool::calculatePointsAccordingSelectedROI( double p1[3], double p2[3] )
                     yAxis2[0] = p1[2];
                     yAxis2[1] = p2[1];
                 
-                    xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
+                    xRadius = fabs( xAxis1[0] - xAxis2[0] );
                 
                     if ( m_ROIType == ELLIPSE )
-                        yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
+                        yRadius = fabs( yAxis1[1] - yAxis2[1] );
                     else
                         yRadius = xRadius;
                 
@@ -439,10 +438,10 @@ void ROITool::calculatePointsAccordingSelectedROI( double p1[3], double p2[3] )
                     yAxis2[0] = p1[2];
                     yAxis2[1] = p2[0];
                 
-                    xRadius = (fabs( xAxis1[0] - xAxis2[0] ) / 2.0);
+                    xRadius = fabs( xAxis1[0] - xAxis2[0] );
                 
                     if ( m_ROIType == ELLIPSE )
-                        yRadius = (fabs( yAxis1[1] - yAxis2[1] ) / 2.0);
+                        yRadius = fabs( yAxis1[1] - yAxis2[1] );
                     else
                         yRadius = xRadius;
                 
