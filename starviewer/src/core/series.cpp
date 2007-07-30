@@ -27,10 +27,40 @@ void Series::setInstanceUID( QString uid )
     m_seriesInstanceUID = uid;
 }
 
-void Series::addImage( Image *image )
+void Series::setParentStudy( Study *study )
 {
-    m_imageList.append( image );
-    image->setParentSeries( this );
+    m_parentStudy = study;
+}
+
+bool Series::addImage( Image *image )
+{
+    bool ok = true;
+    QString uid = image->getSOPInstanceUID();
+    if( uid.isEmpty() )
+    {
+        ok = false;
+        DEBUG_LOG("L'uid de la imatge està buit! No la podem insertar per inconsistent");
+    }
+    else if( m_imageSet.contains( uid ) )
+    {
+        ok = false;
+        DEBUG_LOG("Ja existeix una imatge amb aquest mateix SOPInstanceUID:: " + image->getSOPInstanceUID() );
+    }
+    else
+    {
+        m_imageSet[ uid ] = image;
+        image->setParentSeries( this );
+    }
+
+    return ok;
+}
+
+Image *Series::getImage( QString SOPInstanceUID )
+{
+    if( m_imageSet.contains( SOPInstanceUID ) )
+        return m_imageSet[ SOPInstanceUID ];
+    else
+        return 0;
 }
 
 void Series::setModality( QString modality )
@@ -38,9 +68,29 @@ void Series::setModality( QString modality )
     m_modality = modality;
 }
 
+void Series::setSeriesNumber( QString number )
+{
+    m_seriesNumber = number;
+}
+
+void Series::setFrameOfReferenceUID( QString uid )
+{
+    m_frameOfReferenceUID = uid;
+}
+
+void Series::setPositionReferenceIndicator( QString position )
+{
+    m_positionReferenceIndicator = position;
+}
+
 void Series::setDescription( QString description )
 {
     m_description = description;
+}
+
+void Series::setPatientPosition( QString position )
+{
+    m_patientPosition = position;
 }
 
 void Series::setProtocolName( QString protocolName )
@@ -64,20 +114,20 @@ bool Series::setDateTime( int day , int month , int year , int hour , int minute
 bool Series::setDateTime( QString date , QString time )
 {
     m_dateTime.setDate( QDate::fromString( date , "dd/MM/yyyy" ) );
-    m_dateTime.setTime( QTime::fromString( time , "hh:mm" ) );
+    m_dateTime.setTime( QTime::fromString( time , "HH:mm" ) );
 
     return m_dateTime.isValid();
 }
 
 bool Series::setDateTime( QString dateTime )
 {
-    m_dateTime.fromString( dateTime , "dd/MM/yyyy , hh:mm" );
+    m_dateTime.fromString( dateTime , "dd/MM/yyyy , HH:mm" );
     return m_dateTime.isValid();
 }
 
 QString Series::getDateTimeAsString()
 {
-    return m_dateTime.toString( "dd/MM/yyyy , hh:mm" );
+    return m_dateTime.toString( "dd/MM/yyyy , HH:mm" );
 }
 
 bool Series::setDate( int day , int month , int year )
@@ -100,7 +150,7 @@ bool Series::setTime( int hour , int minute )
 
 bool Series::setTime( QString time )
 {
-    m_dateTime.setTime( QTime::fromString( time , "hh:mm") );
+    m_dateTime.setTime( QTime::fromString( time , "HH:mm") );
     return m_dateTime.isValid();
 }
 
@@ -121,7 +171,12 @@ QTime Series::getTime()
 
 QString Series::getTimeAsString()
 {
-    return m_dateTime.time().toString( "hh:mm" );
+    return m_dateTime.time().toString( "HH:mm" );
+}
+
+void Series::setInstitutionName( QString institutionName )
+{
+    m_institutionName = institutionName;
 }
 
 void Series::setVolumeIdentifier( Identifier id )
@@ -132,7 +187,7 @@ void Series::setVolumeIdentifier( Identifier id )
 QStringList Series::getImagesPathList()
 {
     QStringList pathList;
-    foreach( Image *image, m_imageList )
+    foreach( Image *image, m_imageSet )
     {
         pathList << image->getPath();
     }

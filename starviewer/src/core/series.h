@@ -11,6 +11,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QImage>
+#include <QHash>
 #include "identifier.h"
 
 namespace udg {
@@ -39,13 +40,13 @@ public:
     QString getInstanceUID() const { return m_seriesInstanceUID; };
 
     /// assigna l'estudi pare de la sèrie
-    void setParentStudy( Study *study ){ m_parentStudy = study; };
+    void setParentStudy( Study *study );
     Study *getParentStudy() const { return m_parentStudy; }
 
-    /// afegeix un objecte imatge i li assigna com a parent aquest objecte series
-    void addImage( Image *image );
+    /// afegeix un objecte imatge a la sèrie i li assigna com a parent aquest objecte series. Si la imatge ja existeix al conjunt retorna fals, cert altrament
+    bool addImage( Image *image );
 
-    /// obté l'objecte imatge pel sopInstanceUID donat
+    /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
     Image *getImage( QString SOPInstanceUID );
 
     /// Assignar/Obtenir la modalitat de la sèrie
@@ -57,7 +58,7 @@ public:
     QString getSeriesNumber() const { return m_seriesNumber; };
 
     /// Assignar/Obtenir el FrameOfReferenceUID
-    void setFrameOfReferenceUID( QString uid  );
+    void setFrameOfReferenceUID( QString uid );
     QString get() const { return m_frameOfReferenceUID; };
 
     /// Assignar/Obtenir el PositionReferenceIndicator
@@ -69,7 +70,7 @@ public:
     QString getDescription() const { return m_description; };
 
     /// Assignar/Obtenir la posició del pacient relativa a la màquina
-    void setPatientPosition( QString position ){ m_patientPosition = position; }
+    void setPatientPosition( QString position );
     QString getPatientPosition() const { return m_patientPosition; }
 
     /// Assignar/Obtenir el protocol de la sèrie
@@ -96,8 +97,8 @@ public:
     QString getTimeAsString();
 
     /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
-    void setInstitutionName( QString institutionName ){ m_institutionName = institutionName; };
-    QString getInstitutionName() const { return m_institutionName; };
+    void setInstitutionName( QString institutionName );
+    QString getInstitutionName() const { return m_institutionName; }
 
     /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie \TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
     void setVolumeIdentifier( Identifier id );
@@ -116,7 +117,7 @@ public:
     inline bool isSelected() const { return m_selected; }
 
     /// Mètode per afegir un sol volum a la llista de volums de la serie \TODO mètode de proves no definitiu
-    void setVolume( Volume * volume){ m_volumesList.push_back(volume);}
+    void setVolume( Volume * volume ){ m_volumesList.push_back(volume); }
 
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
@@ -159,7 +160,6 @@ private:
     /// Part de l'anatomia del pacient usat com a referència. Veure C.7.4.1.1.2, només per propòsits d'annotació. (0020,1040) Tipus 2
     QString m_positionReferenceIndicator;
 
-
     /// Indica si la sèrie està marcada com a seleccionada o no
     bool m_selected;
 
@@ -175,8 +175,8 @@ private:
     /// Llista de volums que composen la sèrie. La sèrie es pot separar en diversos volums per diverses raons, com pot ser mides d'imatge diferent, sèries amb dinàmics o fases, stacks, etc.
     QList<Volume *> m_volumesList;
 
-    /// llista d'imatges que composen la sèrie
-    QList< Image *> m_imageList;
+    /// Hash que conté les imatges de la sèrie mapejades pel SOPInstanceUID
+    QHash<QString, Image *> m_imageSet;
 
     /// Estudi pare
     Study *m_parentStudy;
