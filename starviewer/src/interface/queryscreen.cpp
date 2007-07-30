@@ -44,6 +44,9 @@
 
 #include "importdicomdir.h"
 
+#include "patient.h"
+#include "study.h"
+
 namespace udg {
 
 QueryScreen::QueryScreen( QWidget *parent )
@@ -1132,6 +1135,13 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     StarviewerSettings settings;
     StudyVolum volume;
 
+    // Omplim en paral·lel la nova estructura
+    Patient *patient = new Patient;
+    Study *patientStudy = new Study;
+    PatientFillerInput fillerInput;
+
+    fillerInput.addPatient( patient );
+
     if ( studyUID == "" )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
@@ -1154,6 +1164,24 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     volume.setStudyId( study.getStudyId() );
     volume.setStudyTime( study.getStudyTime() );
     volume.setStudyUID( study.getStudyUID() );
+
+    // omplim la nova estructura
+    // informació de pacient
+    patient->setFullName( study.getPatientName() );
+    patient->setID( study.getPatientId() );
+    patient->setBirthDate( study.getPatientBirthDate() );
+    patient->setSex( study.getPatientSex() );
+    // informació d'estudi
+    patientStudy->setInstanceUID( study.getStudyUID() );
+    patientStudy->setDateTime( study.getStudyDate(), study.getStudyTime() );
+    patientStudy->setID( study.getStudyUID() );
+    patientStudy->setAccessionNumber( study.getAccessionNumber() );
+    patientStudy->setDescription( study.getStudyDescription() );
+    patientStudy->setPatientAge( study.getPatientAge().toInt() );
+    // \TODO falta pes i alçada
+//     patientStudy->setHeight( study.getPatientHeight() );
+//     patientStudy->setWeight( study.getPatientWeight() );
+    patient->addStudy( patientStudy );
 
     mask.setStudyUID( study.getStudyUID() );
 
@@ -1180,11 +1208,29 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 
         absSeriesPath = settings.getCacheImagePath();
         absSeriesPath += series.getSeriesPath();
-        seriesVol.setSeriesUID(series.getSeriesUID() );
+        seriesVol.setSeriesUID( series.getSeriesUID() );
         seriesVol.setStudyId( study.getStudyId() );
         seriesVol.setStudyUID( study.getStudyUID() );
         seriesVol.setSeriesPath( absSeriesPath );
         seriesVol.setSeriesModality( series.getSeriesModality() );
+
+        // omplim la nova estructura
+        // informació de series
+        Series *patientSeries = new Series;
+        patientSeries->setInstanceUID( series.getSeriesUID() );
+        patientSeries->setModality( series.getSeriesModality() );
+        patientSeries->setSeriesNumber( series.getSeriesNumber()  );
+        patientSeries->setDate( series.getSeriesDate() );
+        patientSeries->setTime( series.getSeriesTime() );
+        // TODO falten 4 atributs!
+//         patientSeries->setInstitutionName( series.getSeriesInstitution() );
+//         patientSeries->setPatientPosition( series.getSeriesPatientPosition() );
+        patientSeries->setProtocolName( series.getProtocolName() );
+        patientSeries->setDescription( series.getSeriesDescription() );
+//         patientSeries->setFrameOfReferenceUID( series.getSeriesFrameOfReference() );
+//         patientSeries->setPositionReferenceIndicator( series.getSeriesPositionReferenceIndicator() );
+
+        patientStudy->addSeries( patientSeries );
 
         mask.setSeriesUID(series.getSeriesUID() );
         mask.setSOPInstanceUID( sopInstanceUID );
@@ -1202,6 +1248,10 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
         while ( !imageList.end() )
         {
             seriesVol.addImage( imageList.getImage().getImagePath() );
+            // omplim la nova estructura
+            // no omplim la informació d'imatge, el que fem és anar afegint la llista de fitxers i prou
+            fillerInput.addFile( imageList.getImage().getImagePath() );
+
             imageList.nextImage();
         }
 
@@ -1217,6 +1267,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
     this->emitViewSignal(volume);
+    emit viewPatient( fillerInput );
 }
 
 void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QString sopInstanceUID )

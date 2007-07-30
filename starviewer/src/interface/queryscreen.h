@@ -19,6 +19,8 @@
 #include "imagelistsingleton.h"
 #include "dicommask.h"
 
+#include "patientfillerinput.h"
+
 namespace udg {
 
 class SeriesList;
@@ -191,6 +193,9 @@ signals :
      * @param Volum de l'estudi a visualitzar
      */
     void viewStudy( StudyVolum );
+
+    /// Signal similar a viewStudy(), però en aquest cas enviem tota la estructura PatientFillerInput que es continuarà processant per la classe que reculli aquest signal
+    void viewPatient( PatientFillerInput input );
 
     /// Signal cap a QSeriesListWidget, que neteja la llista de sèries del Widget
     void clearSeriesListWidget();
