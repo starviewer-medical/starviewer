@@ -18,6 +18,7 @@ namespace udg {
 class Point;
 class Line;
 class Text;
+class Polygon;
 class Q2DViewer;
 class DrawingPrimitive;
 
@@ -43,6 +44,8 @@ public:
     ///dibuixa text amb els atributs passats dins l'objecte passat per paràmetre
     void drawText( Text *text );
     
+    ///dibuixa el polígon passat per paràmetre
+    void drawPolygon( Polygon *polygon );
 private:
     ///Retorna el sistema de coordenades segons l'especificat per paràmetre 
     vtkCoordinate *getCoordinateSystem( QString coordinateSystem );

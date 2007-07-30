@@ -8,6 +8,7 @@
 #include "line.h"
 #include "text.h"
 #include "point.h"
+#include "polygon.h"
 #include "drawingprimitive.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -20,11 +21,22 @@
 #include <vtkDiskSource.h>
 #include <vtkCaptionActor2D.h>
 #include  <vtkTextProperty.h>
+#include  <vtkProperty.h>
 #include  <vtkTextActor.h>
+#include  <vtkPolygon.h>
+#include  <vtkPoints.h>
+#include  <vtkDataSetMapper.h>
+#include  <vtkUnstructuredGrid.h>
 #include <vtkRenderer.h>
 
 //includes Qt
 #include <QColor>
+#include <QList>
+
+/*\TODO els polígons, de moment, es reprepresenten amb la classe vtkPolygon, perquè sembla que és més fàcil que crear manualment el polydata. 
+El que no acaba d'agradar és que vtkPolygon s'ha de mapejar amb un vtkDataSetMapper i aquest no és acceptat per un actor 2D, per tant el representa
+com un actor 3d en un visor 2d. De moment no dóna problemes però pot ser que calgui canviar-ho.
+*/
 
 namespace udg {
 
@@ -240,6 +252,80 @@ void Drawer::drawText( Text *text )
     //esborrem els objectes auxiliars 
     textActor->Delete();
 }    
+
+void Drawer::drawPolygon( Polygon *polygon )
+{
+    //primer de tot mirem que el primer punt del polígon i l'últim no estiguin repetits ja que així ho requereix la classe específica de vtk.
+    //en aquest cas eliminarem l'últim punt per evitar repetits
+    double *firstPoint = polygon->getPoints().first();
+    double *lastPoint = polygon->getPoints().last();
+    
+    if ( ( firstPoint[0] == lastPoint[0] ) && ( firstPoint[1] == lastPoint[1] ) && ( firstPoint[2] == lastPoint[2] ) )
+    {
+        polygon->getPoints().removeLast();
+    }
+    
+    //afegim els punts del polígon
+    vtkPoints *polygonPoints = vtkPoints::New();
+    vtkPolygon *aPolygon = vtkPolygon::New();
+    
+    polygonPoints->SetNumberOfPoints( polygon->getNumberOfPoints() );
+    aPolygon->GetPointIds()->SetNumberOfIds( polygon->getNumberOfPoints() );
+    
+    int i = 0;
+    
+    foreach (double *point, polygon->getPoints() )
+    {
+        polygonPoints->InsertPoint( i, point[0], point[1], point[2] );
+        aPolygon->GetPointIds()->SetId( i, i );
+        i++;
+    }
+    
+    //creem la malla que representarà els punts del polígon
+    vtkUnstructuredGrid *aPolygonGrid = vtkUnstructuredGrid::New();
+    aPolygonGrid->Allocate( 1, 1 );
+    aPolygonGrid->InsertNextCell( aPolygon->GetCellType(), aPolygon->GetPointIds() );
+    aPolygonGrid->SetPoints( polygonPoints );
+    
+    vtkDataSetMapper *aPolygonMapper = vtkDataSetMapper::New();
+    aPolygonMapper->SetInput( aPolygonGrid );
+    
+    vtkActor *aPolygonActor = vtkActor::New();
+    aPolygonActor->SetMapper( aPolygonMapper );
+    
+    //Assignem discontinuïtat
+    if ( polygon->isDiscontinuous() )
+        aPolygonActor->GetProperty()->SetLineStipplePattern( 2000 );
+    else
+        aPolygonActor->GetProperty()->SetLineStipplePattern( 65535 );
+
+    //Assignem gruix de la línia        
+    aPolygonActor->GetProperty()->SetLineWidth( polygon->getWidth() );
+           
+    //Assignem opacitat de la línia  
+    aPolygonActor->GetProperty()->SetOpacity( polygon->getOpacity() );
+    
+    //mirem la visibilitat de l'actor
+    if ( !polygon->isVisible() )
+        aPolygonActor->VisibilityOff();
+    
+    //Assignem color
+    QColor color = polygon->getColor();
+    aPolygonActor->GetProperty()->SetDiffuseColor( color.redF(), color.greenF(), color.blueF() );
+            
+    //Mirem si cal dibuixar el background o no
+    if ( !polygon->isBackgroundEnabled() )        
+        aPolygonActor->GetProperty()->SetRepresentationToWireframe();
+            
+    m_2DViewer->getRenderer()->AddActor( aPolygonActor );
+    m_2DViewer->refresh();
+                    
+    polygonPoints->Delete();
+    aPolygon->Delete();
+    aPolygonGrid->Delete();
+    aPolygonMapper->Delete();
+    aPolygonActor->Delete();
+} 
     
 vtkCoordinate *Drawer::getCoordinateSystem( QString coordinateSystem )
 {
