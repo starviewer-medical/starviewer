@@ -31,11 +31,13 @@ bool DICOMFileClassifierFillerStep::fill()
     // processarem cadascun dels arxius de l'input i els anirem col·locant a Patient
     if( m_input )
     {
+        ok = true;
         QStringList fileList = m_input->getFilesList();
         foreach( QString file, fileList )
         {
             classifyFile( file );
         }
+        m_input->addLabel("DICOMClassifiedStep");
     }
     else
         DEBUG_LOG("No tenim input!");
