@@ -35,8 +35,9 @@ public:
     void setInstanceNumber( QString number );
     QString getInstanceNumber() const { return m_instanceNumber; }
 
-    /// Assignar/Obtenir la orienatació del pacient en la imatge, també anomenat direction cosines. TODO implementar els "gets"
+    /// Assignar/Obtenir la orienatació del pacient en la imatge, també anomenat direction cosines.
     void setImageOrientation( double orientation[6] );
+    const double *getImageOrientation() const { return m_imageOrientation; }
 
     /// Assignar/Obtenir l'orientació del pacient
     void setPatientOrientation( QString orientation );
@@ -83,7 +84,7 @@ public:
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries( Series *series );
 
-    /// assigna/retorna el path de la imatge \TODO absolut/relatiu????
+    /// assigna/retorna el path absolut de la imatge
     void setPath( QString path );
     QString getPath() const { return m_path; }
 
@@ -101,7 +102,7 @@ private:
     /// Direcció de les files i columnes de la imatge ( LR/AP/SI ). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
     QString m_patientOrientation;
 
-    /// La data i hora en que la imatge es va començar a generar. Requerit si la imatge és part d'una sèrie en que les imatges estan temporalment relacionades. (0008,0023)(0008,0033) Tipus 2C \TODO separar date i time per separat?
+    /// La data i hora en que la imatge es va començar a generar. Requerit si la imatge és part d'una sèrie en que les imatges estan temporalment relacionades. (0008,0023)(0008,0033) Tipus 2C
     QDate m_contentDate;
     QTime m_contentTime;
 
@@ -157,7 +158,7 @@ private:
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
 
-    /// el path de la imatge \TODO absolut/relatiu????
+    /// el path absolut de la imatge
     QString m_path;
 
     /// La sèrie pare
