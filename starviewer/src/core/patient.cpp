@@ -7,6 +7,8 @@
 #include "patient.h"
 #include "logging.h"
 
+#include <QStringList>
+
 namespace udg {
 
 Patient::Patient(QObject *parent)
@@ -32,6 +34,15 @@ void Patient::setID( QString id )
 void Patient::setBirthDate( int day , int month , int year )
 {
     m_birthDate.setYMD( year , month , day );
+}
+
+void Patient::setBirthDate( QString date )
+{
+    QStringList split = date.split("/");
+    if( split.size() == 3 )
+        this->setBirthDate( split.at(0).toInt(), split.at(1).toInt(), split.at(2).toInt() );
+    else
+        DEBUG_LOG( "Format de data incorrecte. Format esperat: dd/mm/yyyy. Això és el que hi havia: " + date );
 }
 
 QString Patient::getBirthDate()
