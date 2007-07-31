@@ -15,7 +15,6 @@ class DICOMTagReader;
 class Patient;
 class Study;
 class Series;
-class Image;
 
 /**
 Step del PatientFiller que s'encarrega de classificar arxius de tipus DICOM en l'estructura Patient en Studis, Series i Objectes de Sèries (Imatges, KIN's, Presentation states, Waveforms, etc)
@@ -47,7 +46,6 @@ private:
     Patient *createPatient();
     Study *createStudy();
     Series *createSeries();
-    Image *createImage();
 
 private:
     /// El lector de tags que anirem fent servir per analitzar les dades
