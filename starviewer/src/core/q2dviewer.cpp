@@ -10,17 +10,6 @@
 #include "volumesourceinformation.h"
 #include "logging.h"
 #include "sliceannotationcontroller.h"
-#include "point.h"
-#include "line.h"
-#include "text.h"
-#include "drawer.h"
-#include "ellipse.h"
-#include "polygon.h"
-
-
-#include <QList>
-
-
 
 // include's qt
 #include <QResizeEvent>
@@ -175,50 +164,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_rulerActorCollection = vtkActor2DCollection::New();
     m_rulerActorCollection->AddItem( m_bottomRuler );
     m_rulerActorCollection->AddItem( m_sideRuler );
-    
-    double p1[3], p2[3], p3[3], p4[3], p5[3], center[3];
-    p1[0] = 103.34;     p1[1] = -6.06;     p1[2] = 104.15;
-    p2[0] = 140.82;     p2[1] = 37.97;     p2[2] = 104.15;
-    p3[0] = 160.82;     p3[1] = 37.97;     p3[2] = 104.15;
-    p4[0] = 195.82;     p4[1] = 40.97;     p4[2] = 104.15;
-    p5[0] = 165.82;     p5[1] = 37.97;     p5[2] = 104.15;
-    
-    center[0] = (p3[0]+p1[0])/2;     center[1] = (p3[1]+p1[1])/2;     center[2] = 104.15;
-    
-    Point *p = new Point( p1 );
-    p->setColor( QColor( Qt::red ) );
-    Drawer *drawer = new Drawer( this );
-    drawer->drawPoint( p);
-    p->setColor( QColor( Qt::blue ) );
-    p->setPosition( p3 );
-    drawer->drawPoint( p);
-    p->setPosition( center );
-    p->setColor( QColor( Qt::yellow ) );
-    drawer->drawPoint( p);
-    
-//     Ellipse *ell = new Ellipse( p1, p3, "Ellipse" );
-//     Ellipse *el = new Ellipse( ell->getMinorRadius(), ell->getMajorRadius(), ell->getCenter(), "Ellipse" );
-//     el->setColor( QColor( Qt::red ) );
-    drawer->drawEllipse( p1, p3, QColor( Qt::magenta ), "Ellipse" );
-//     drawer->drawEllipse( p1, p3, QColor( Qt::yellow ), "Ellipse" );
-    
-    QList <double*> points;
-    
-    points.append(p1);
-    
-    p2[0] = p3[0];
-    p2[1] = p1[1];
-    p2[2] = p3[2];
-    points.append(p2);
-    points.append(p3);
-    p4[0] = p1[0];
-    p4[1] = p3[1];
-    p4[2] = p3[2];
-    points.append(p4);
-    
-    Polygon *pol = new Polygon(points);
-    pol->setColor( QColor( Qt::white ) );    
-    drawer->drawPolygon(pol);
 }
 
 Q2DViewer::~Q2DViewer()
