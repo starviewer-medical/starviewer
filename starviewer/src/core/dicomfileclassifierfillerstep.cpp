@@ -91,7 +91,8 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
             Image *image = series->getImage( sopInstanceUID );
             if( !image )
             {
-                image = createImage();
+                // creem l'objecte Image i li assignem l'arxiu únicament. És tasca d'un mòdul posterior omplir la informació específica d'imatge
+                image = new Image;
                 image->setPath( file );
                 series->addImage( image );
             }
@@ -198,52 +199,6 @@ Series *DICOMFileClassifierFillerStep::createSeries()
     series->setPositionReferenceIndicator( m_dicomReader->getAttributeByName( DCM_PositionReferenceIndicator ) );
 
     return series;
-}
-
-Image *DICOMFileClassifierFillerStep::createImage()
-{
-    Image *image = new Image;
-
-    image->setSOPInstanceUID( m_dicomReader->getAttributeByName( DCM_SOPInstanceUID ) );
-    image->setInstanceNumber( m_dicomReader->getAttributeByName( DCM_InstanceNumber ) );
-    image->setPatientOrientation( m_dicomReader->getAttributeByName( DCM_PatientOrientation ) );
-
-    QString value = m_dicomReader->getAttributeByName( DCM_ContentDate );
-    if( !value.isEmpty() )
-        image->setContentDate( value.mid(0,4).toInt(), value.mid(4,2).toInt(), value.mid(6,2).toInt() );
-    value = m_dicomReader->getAttributeByName( DCM_ContentTime );
-    if( !value.isEmpty() )
-        image->setContentTime( value.mid(0,2).toInt(), value.mid(2,2).toInt() );
-
-    image->setImagesInAcquisition( m_dicomReader->getAttributeByName( DCM_ImagesInAcquisition ).toInt() );
-    image->setComments( m_dicomReader->getAttributeByName( DCM_ImageComments ) );
-
-    value = m_dicomReader->getAttributeByName( DCM_ImageOrientationPatient );
-
-    QStringList list = value.split( "\\" );
-    if( list.size() == 6 )
-    {
-        double orientation[6];
-        for( int i = 0; i < 6; i++ )
-            orientation[ i ] = list.at( i ).toDouble();
-
-        image->setImageOrientation( orientation );
-    }
-
-    value = m_dicomReader->getAttributeByName( DCM_ImagePosition );
-    list = value.split("\\");
-    if( list.size() == 3 )
-    {
-        double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
-        image->setImagePosition( position );
-    }
-
-    image->setSamplesPerPixel( m_dicomReader->getAttributeByName( DCM_SamplesPerPixel ).toInt() );
-    image->setPhotometricInterpretation( m_dicomReader->getAttributeByName( DCM_PhotometricInterpretation ).toInt() );
-    image->setRows( m_dicomReader->getAttributeByName( DCM_Rows ).toInt() );
-    image->setColumns( m_dicomReader->getAttributeByName( DCM_Columns ).toInt() );
-
-    return image;
 }
 
 }
