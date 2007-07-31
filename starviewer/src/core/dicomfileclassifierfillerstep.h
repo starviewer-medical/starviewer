@@ -49,11 +49,6 @@ private:
     Series *createSeries();
     Image *createImage();
 
-    /// Ens diu si aquella sèrie és d'imatges, kin's o presentation states
-    bool isImageSeries( Series *series );
-    bool isKeyImageNoteSeries( Series *series );
-    bool isPresentationStateSeries( Series *series );
-
 private:
     /// El lector de tags que anirem fent servir per analitzar les dades
     DICOMTagReader *m_dicomReader;

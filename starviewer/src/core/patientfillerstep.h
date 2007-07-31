@@ -12,6 +12,7 @@
 namespace udg {
 
 class PatientFillerInput;
+class Series;
 
 /**
 Classe pare dels mòduls que omplen parts específiques de l'estructura Patient
@@ -28,7 +29,7 @@ public:
     ~PatientFillerStep();
 
     /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa. Es presuposa que aquest input mai serà NUL.
-    void setInput( PatientFillerInput *input ){ m_input = input; }
+    void setInput( PatientFillerInput *input );
 
     /// Retorna la llista d'etiquetes que s'han de complir per poder processar aquest step.
     QStringList getRequiredLabels() const { return m_requiredLabelsList; }
@@ -40,7 +41,14 @@ public:
     bool isCandidate();
 
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el que li toca retorna fals, true altrament
-    virtual bool fill();
+    virtual bool fill() = 0;
+
+protected:
+    /// mètodes de conveniència
+    /// Ens diu si aquella sèrie és d'imatges, kin's o presentation states
+    bool isImageSeries( Series *series );
+    bool isKeyImageNoteSeries( Series *series );
+    bool isPresentationStateSeries( Series *series );
 
 protected:
     /// L'input a tractar
