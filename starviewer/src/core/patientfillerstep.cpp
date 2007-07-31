@@ -5,6 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "patientfillerstep.h"
+#include "patientfillerinput.h"
+#include "series.h"
 
 namespace udg {
 
@@ -16,9 +18,32 @@ PatientFillerStep::~PatientFillerStep()
 {
 }
 
+void PatientFillerStep::setInput( PatientFillerInput *input )
+{
+    m_input = input;
+}
+
 bool PatientFillerStep::isCandidate()
 {
     // Comprovar si donats els flags de l'input i les pròpies flags és un candidat vàlid TODO per implementar
+}
+
+bool PatientFillerStep::isImageSeries( Series *series )
+{
+    // TODO aquí caldria especificar quines són les modalitats que acceptem com a imatges
+    QStringList supportedModalitiesAsImage;
+    supportedModalitiesAsImage << "CT" << "MR" << "US" << "RT" << "DX" << "MG";
+    return supportedModalitiesAsImage.contains( series->getModality() );
+}
+
+bool PatientFillerStep::isKeyImageNoteSeries( Series *series )
+{
+    return series->getModality() == "KO";
+}
+
+bool PatientFillerStep::isPresentationStateSeries( Series *series )
+{
+    return series->getModality() == "PR";
 }
 
 }

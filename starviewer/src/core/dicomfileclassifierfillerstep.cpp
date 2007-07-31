@@ -37,7 +37,7 @@ bool DICOMFileClassifierFillerStep::fill()
         {
             classifyFile( file );
         }
-        m_input->addLabel("DICOMClassifiedStep");
+        m_input->addLabel("DICOMFileClassifierFillerStep");
     }
     else
         DEBUG_LOG("No tenim input!");
@@ -244,24 +244,6 @@ Image *DICOMFileClassifierFillerStep::createImage()
     image->setColumns( m_dicomReader->getAttributeByName( DCM_Columns ).toInt() );
 
     return image;
-}
-
-bool DICOMFileClassifierFillerStep::isImageSeries( Series *series )
-{
-    // TODO aquí caldria especificar quines són les modalitats que acceptem com a imatges
-    QStringList supportedModalitiesAsImage;
-    supportedModalitiesAsImage << "CT" << "MR" << "US" << "RT" << "DX" << "MG";
-    return supportedModalitiesAsImage.contains( series->getModality() );
-}
-
-bool DICOMFileClassifierFillerStep::isKeyImageNoteSeries( Series *series )
-{
-    return series->getModality() == "KO";
-}
-
-bool DICOMFileClassifierFillerStep::isPresentationStateSeries( Series *series )
-{
-    return series->getModality() == "PR";
 }
 
 }
