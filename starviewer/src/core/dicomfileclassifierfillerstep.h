@@ -36,10 +36,12 @@ public:
     bool fill();
 
 private:
-    /// Donat un arxiu el classifica dins de pacient. Retorna fals si no el pot classificar, és a dir, no és un arxiu que es pugui parsejar com a DICOM, cert altrament.
+    /// Donat un arxiu el classifica dins de pacient.
+    /// Retorna fals si no el pot classificar, és a dir, no és un arxiu que es pugui parsejar com a DICOM, cert altrament.
     bool classifyFile( QString file );
 
-    /// Retorna el pacient que cumpleixi un dels dos paràmetres. \TODO quin seria el criteri adequat per identificar un mateix pacient? només pel nom? només per l'ID? la concatenació de nom i d'ID?
+    /// Retorna el pacient que cumpleixi un dels dos paràmetres.
+    /// \TODO quin seria el criteri adequat per identificar un mateix pacient? només pel nom? només per l'ID? la concatenació de nom i d'ID?
     Patient *getPatient( QString patientName, QString patientID );
 
     /// Crea un nou pacient/estudi/series/imatge a partir de les dades del fitxer que s'està tractant
