@@ -9,6 +9,7 @@
 #include "text.h"
 #include "point.h"
 #include "polygon.h"
+#include "ellipse.h"
 #include "drawingprimitive.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -20,18 +21,21 @@
 #include <vtkProperty2D.h>
 #include <vtkDiskSource.h>
 #include <vtkCaptionActor2D.h>
-#include  <vtkTextProperty.h>
-#include  <vtkProperty.h>
-#include  <vtkTextActor.h>
-#include  <vtkPolygon.h>
-#include  <vtkPoints.h>
-#include  <vtkDataSetMapper.h>
-#include  <vtkUnstructuredGrid.h>
+#include <vtkTextProperty.h>
+#include <vtkProperty.h>
+#include <vtkTextActor.h>
+#include <vtkPolygon.h>
+#include <vtkPoints.h>
+#include <vtkMath.h>
+#include <vtkCellArray.h>
+#include <vtkDataSetMapper.h>
+#include <vtkUnstructuredGrid.h>
 #include <vtkRenderer.h>
 
 //includes Qt
 #include <QColor>
 #include <QList>
+#include <QString>
 
 /*\TODO els polígons, de moment, es reprepresenten amb la classe vtkPolygon, perquè sembla que és més fàcil que crear manualment el polydata. 
 El que no acaba d'agradar és que vtkPolygon s'ha de mapejar amb un vtkDataSetMapper i aquest no és acceptat per un actor 2D, per tant el representa
@@ -312,7 +316,7 @@ void Drawer::drawPolygon( Polygon *polygon )
     //Assignem color
     QColor color = polygon->getColor();
     aPolygonActor->GetProperty()->SetDiffuseColor( color.redF(), color.greenF(), color.blueF() );
-            
+    
     //Mirem si cal dibuixar el background o no
     if ( !polygon->isBackgroundEnabled() )        
         aPolygonActor->GetProperty()->SetRepresentationToWireframe();
@@ -325,8 +329,153 @@ void Drawer::drawPolygon( Polygon *polygon )
     aPolygonGrid->Delete();
     aPolygonMapper->Delete();
     aPolygonActor->Delete();
-} 
+}
+ 
+void Drawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior )
+{
+    Ellipse *ellipse = new Ellipse( rectangleCoordinate1, rectangleCoordinate2, behavior );
+    ellipse->setColor( color );
+    drawEllipse( ellipse );
+}
+
+void Drawer::drawEllipse( Ellipse *ellipse )
+{
+    double intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius, *topLeft, *bottomRight, *center;
+    int i;
     
+    vtkPolyData *polydata = vtkPolyData::New();
+    vtkPoints *points = vtkPoints::New();
+    vtkCellArray *vertexs = vtkCellArray::New(); 
+
+    topLeft = ellipse->getTopLeftPoint();///\MIRAR si aquesta variable cal
+    
+    bottomRight = ellipse->getBottomRightPoint();
+    center = ellipse->getCenter();
+    
+    //especifiquem el nombre de vèrtexs que té l'el·lipse
+    vertexs->InsertNextCell( 61 );
+        
+    //tenim en compte les diferents vistes per a calcular els punts, ja que segons les projeccions tenim en compte uns eixos o uns altres
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            xAxis1[0] = center[0];
+            xAxis1[1] = center[1];
+            xAxis2[0] = bottomRight[0];
+            xAxis2[1] = center[1];
+            yAxis1[0] = center[0];
+            yAxis1[1] = center[1];
+            yAxis2[0] = center[0];
+            yAxis2[1] = bottomRight[1];
+        break;
+    
+        case Q2DViewer::Sagittal:
+            xAxis1[0] = center[2];
+            xAxis1[1] = center[1];
+            xAxis2[0] = bottomRight[2];
+            xAxis2[1] = center[1];
+            yAxis1[0] = center[2];
+            yAxis1[1] = center[1];
+            yAxis2[0] = center[2];
+            yAxis2[1] = bottomRight[1];
+        break;
+        
+        case Q2DViewer::Coronal:
+            xAxis1[0] = center[2];
+            xAxis1[1] = center[0];
+            xAxis2[0] = bottomRight[2];
+            xAxis2[1] = center[0];
+            yAxis1[0] = center[2];
+            yAxis1[1] = center[0];
+            yAxis2[0] = center[2];
+            yAxis2[1] = bottomRight[0];
+        break;
+            
+        default:
+            DEBUG_LOG( "Vista no reconeguda a l'intentar dibuixar una el·lipse!!" );
+            return;
+        break;
+    }
+    
+    //calculem els radis i la intersecció d'aquests, segons tractem una el·lipse o un cercle
+    xRadius = fabs( xAxis1[0] - xAxis2[0] );
+    
+    if ( ellipse->getBehavior() == "Ellipse" )
+        yRadius = fabs( yAxis1[1] - yAxis2[1] );
+    else
+        yRadius = xRadius;
+    
+    intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
+    intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
+    
+    //Calculem els punts de l'el·lipse
+    for ( i = 0; i < 60; i++ )
+    {
+        degrees = i*6*vtkMath::DoubleDegreesToRadians();
+        if ( m_2DViewer->getView() == Q2DViewer::Axial )
+        {
+            points->InsertPoint( i, cos( degrees )*xRadius + intersection[0], sin( degrees )*yRadius + intersection[1], .0 );
+        }
+        else if ( m_2DViewer->getView() == Q2DViewer::Sagittal )
+        {
+            points->InsertPoint( i, 0., sin( degrees )*yRadius + intersection[1],cos( degrees )*xRadius + intersection[0] );
+        }
+        else
+        {
+            points->InsertPoint( i, sin( degrees )*yRadius + intersection[1], 0., cos( degrees )*xRadius + intersection[0] );
+        }
+        vertexs->InsertCellPoint( i );
+    }
+    
+        //afegim l'últim punt per tancar la ROI
+    vertexs->InsertCellPoint( 0 );
+    
+    polydata->SetPoints( points );
+    polydata->SetLines( vertexs );
+    
+    vtkActor2D *actor = vtkActor2D::New();
+    vtkPolyDataMapper2D *mapper = vtkPolyDataMapper2D::New();   
+    
+    actor->SetMapper( mapper );
+    mapper->SetTransformCoordinate( getCoordinateSystem( ellipse->getCoordinatesSystemAsString() ) );
+    mapper->SetInput( polydata );
+
+    //Assignem discontinuïtat
+    if ( ellipse->isDiscontinuous() )
+        actor->GetProperty()->SetLineStipplePattern( 2000 );
+    else
+        actor->GetProperty()->SetLineStipplePattern( 65535 );
+
+    //Assignem gruix de la línia        
+    actor->GetProperty()->SetLineWidth( ellipse->getWidth() );
+           
+    //Assignem opacitat de la línia  
+    actor->GetProperty()->SetOpacity( ellipse->getOpacity() );
+    
+    //mirem la visibilitat de l'actor
+    if ( !ellipse->isVisible() )
+        actor->VisibilityOff();
+    
+    //Assignem color
+    QColor color = ellipse->getColor();
+    actor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+            
+    //Mirem si cal dibuixar el background o no
+//     if ( !ellipse->isBackgroundEnabled() )        
+//         actor->GetProperty()->SetRepresentationToWireframe();
+    
+    ///\TODO falta dibuixar el bckground en les el·lipses
+            
+    m_2DViewer->getRenderer()->AddActor( actor );
+    m_2DViewer->refresh();          
+    
+    actor->Delete();
+    mapper->Delete();
+    points->Delete();
+    vertexs->Delete();
+    polydata->Delete();
+}    
+
 vtkCoordinate *Drawer::getCoordinateSystem( QString coordinateSystem )
 {
     vtkCoordinate *coordinates = vtkCoordinate::New();

@@ -88,7 +88,7 @@ public:
 
     Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
-
+    
     virtual vtkRenderer *getRenderer();
     virtual void setInput( Volume* volume );
 

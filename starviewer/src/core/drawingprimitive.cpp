@@ -8,13 +8,19 @@
 
 namespace udg {
 
+/**
+ * 
+ * @param parent 
+ * @return 
+ */
 DrawingPrimitive::DrawingPrimitive( QObject *parent ) 
-    : QObject( parent ), DefaultColor( Qt::green ), m_primitiveColor( Qt::green )
+    : QObject( parent ) 
 {
     //assignem els valors per defecte que ens interessen
     setOpacity( 1. );
     setCoordinatesSystem( "WORLD" );
     visibilityOn();
+    setColor( QColor( Qt::green ) );
 }
 
 };  // end namespace udg
