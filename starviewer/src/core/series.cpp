@@ -63,6 +63,20 @@ Image *Series::getImage( QString SOPInstanceUID )
         return 0;
 }
 
+QList<Image *> Series::getImages()
+{
+    QList<Image *> imagesList;
+
+    QHashIterator<QString, Image *> iterator( m_imageSet );
+    while( iterator.hasNext() )
+    {
+        imagesList << iterator.value();
+        iterator.next();
+    }
+
+    return imagesList;
+}
+
 void Series::setModality( QString modality )
 {
     m_modality = modality;

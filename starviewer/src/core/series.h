@@ -49,6 +49,9 @@ public:
     /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
     Image *getImage( QString SOPInstanceUID );
 
+    /// Retorna una llista de totes les imatges de la sèrie
+    QList<Image *> getImages();
+
     /// Assignar/Obtenir la modalitat de la sèrie
     void setModality( QString modality );
     QString getModality() const { return m_modality; };
@@ -59,7 +62,7 @@ public:
 
     /// Assignar/Obtenir el FrameOfReferenceUID
     void setFrameOfReferenceUID( QString uid );
-    QString get() const { return m_frameOfReferenceUID; };
+    QString getFrameOfReferenceUID() const { return m_frameOfReferenceUID; };
 
     /// Assignar/Obtenir el PositionReferenceIndicator
     void setPositionReferenceIndicator( QString position );
