@@ -82,7 +82,10 @@ HEADERS += extensionfactory.h \
            polygon.h \
            point.h \
            ellipse.h \
-           ctfillerstep.h
+           ctfillerstep.h \
+           imagefillerstep.h \
+           presentationstatefillerstep.h \
+           keyimagenotefillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -149,7 +152,10 @@ SOURCES += extensionmediator.cpp \
            polygon.cpp \
            point.cpp \
            ellipse.cpp \
-           ctfillerstep.cpp
+           ctfillerstep.cpp \
+           imagefillerstep.cpp \
+           presentationstatefillerstep.cpp \
+           keyimagenotefillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
