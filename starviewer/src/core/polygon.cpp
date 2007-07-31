@@ -29,5 +29,10 @@ int Polygon::getNumberOfPoints()
     return( m_pointsList.count() );
 }
 
+void Polygon::addPoint( double newPoint[3] )
+{
+    m_pointsList << newPoint;
+}
+
 };  // end namespace udg
 

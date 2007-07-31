@@ -61,6 +61,9 @@ public:
     QList<double*> getPoints() const
     { return( m_pointsList ); }
     
+    ///ens permet afegir un punt al polígon: Compte, sempre l'afegeix com a últim punt
+    void addPoint( double newPoint[3] );
+    
     ///ens diu el nombre de punts que té el polígon
     int getNumberOfPoints();
     
