@@ -11,6 +11,9 @@
 
 namespace udg {
 
+class Patient;
+class Series;
+
 /**
 Mòdul que s'encarrega d'omplir la informació d'objectes KIN. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep. Les Series a processar han de de ser de modalitat KO.
 
@@ -23,6 +26,14 @@ public:
 
     ~KeyImageNoteFillerStep();
 
+    bool fill();
+
+private:
+    /// Mètodes per processar la informació específica de pacient,series i imatge
+    void processPatient( Patient *patient );
+    void processSeries( Series *series );
+    // TODO mètode per implementar
+    void processKeyImageNote();
 };
 
 }
