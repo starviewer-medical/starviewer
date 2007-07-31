@@ -58,10 +58,6 @@ public:
     QColor getColor() const
     { return m_primitiveColor; }
     
-    ///ens retorna el color per defecte de les primitives
-    QColor getDefaultColor() const
-    { return DefaultColor; }
-    
     ///ens retorna l'alçada de la primitiva
     double getHeight() const
     { return m_height; }
@@ -113,9 +109,6 @@ protected:
    
     ///color de la primitiva
     QColor m_primitiveColor;
-    
-    ///color, per defecte, d'una primitiva
-    const QColor DefaultColor;
     
     ///determina l'alçada de la primitiva
     double m_height;

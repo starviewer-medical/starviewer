@@ -5,88 +5,115 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "ellipse.h"
-#include "point.h"
-#include "polyline.h"
-#include <math.h>
-
-#include <iostream.h>
 
 namespace udg {
 
-Ellipse::Ellipse()
- : ROI()
+Ellipse::Ellipse( double minorRadius[3], double majorRadius[3], double center[3], QString behavior ) : Polygon()
 {
-    m_behavior = ELLIPSE;
+    disableBackground();
+    m_behavior = behavior;
+    
+    for( int i = 0; i < 3; i++ )
+    {
+        m_minorRadius[i] = minorRadius[i];
+        m_majorRadius[i] = majorRadius[i];
+        m_center[i] = center[i];
+    }
+    discontinuousOff();
+    computeRectanglePoints();
 }
 
+Ellipse::Ellipse( double topLeft[3], double bottomRight[3], QString behavior ) : Polygon()
+{
+    disableBackground();
+    m_behavior = behavior;
+    
+    for( int i = 0; i < 3; i++ )
+    {
+        m_topLeft[i] = topLeft[i];
+        m_bottomRight[i] = bottomRight[i];
+    }
+    discontinuousOff();
+    computeCenterAndRadius();
+}
 
 Ellipse::~Ellipse()
+{}
+
+void Ellipse::setMinorRadius( double p1[3] )
 {
+    for( int i = 0; i < 3; i++ )
+        m_minorRadius[i] = p1[i];
+    
+    computeRectanglePoints();
 }
 
-void Ellipse::setMinorRadius( Point p1 )
+void Ellipse::setMajorRadius( double p1[3] )
 {
-    m_minorRadius.setX( p1.getX() );
-    m_minorRadius.setY( p1.getY() );
+    for( int i = 0; i < 3; i++ )
+        m_majorRadius[i] = p1[i];
+    
+    computeRectanglePoints();
 }
 
-void Ellipse::setMajorRadius( Point p1 )
+void Ellipse::setCenter( double p1[3] )
 {
-    m_majorRadius.setX( p1.getX() );
-    m_majorRadius.setY( p1.getY() );
+    for( int i = 0; i < 3; i++ )
+        m_center[i] = p1[i];
+    
+    computeRectanglePoints();
 }
 
-Point Ellipse::getMinorRadius()
+void Ellipse::setTopLeftPoint( double point[3] )
 {
-    return (m_minorRadius);
-}
-
-Point Ellipse::getMajorRadius()
-{
-    return (m_majorRadius);
-}
-
-void Ellipse::setCenter( Point p1 )
-{
-    m_center.setX( p1.getX() );
-    m_center.setY( p1.getY() );
+    for( int i = 0; i < 3; i++ )
+        m_topLeft[i] = point[i];
+    
+    computeCenterAndRadius();
 }
     
-Point Ellipse::getCenter()
-{ 
-    return (m_center);
+void Ellipse::setBottomRightPoint( double point[3] )
+{
+    for( int i = 0; i < 3; i++ )
+        m_bottomRight[i] = point[i];
+    
+    computeCenterAndRadius();
 }
 
 void Ellipse::convertToCircle()
 {
     setMinorRadius( getMajorRadius() );
-    m_behavior = CIRCLE;
+    m_behavior = "Circle";
+    
+    computeRectanglePoints();
 }
 
-// void Ellipse::setWholeExtend()
-// {
-// 
-// }
-
-void Ellipse::computeArea()
+void Ellipse::computeCenterAndRadius()
 {
-    /*
-    Àrea d'una el·lipse= PI * radi major * radi menor
-    Àrea d'un cercle: pi * radi * radi
-    
-    Podem utilitzar la mateixa fòrmula tant per calcular l'àrea del cercle com la de l'el·lipse, ja que en el cas de cercle,
-    edls dos eixos coincideixen, i per tant es com si fessim radi al quadrat.
-    */
-    
-    Polyline minor;
-    Polyline major;
-    
-    minor.addPoint( m_minorRadius );
-    minor.addPoint( m_center );
-    
-    major.addPoint( m_majorRadius );
-    major.addPoint( m_center );
-
-    m_area = M_PI * ( minor.getDistance2D() ) * ( major.getDistance2D() ); 
+    m_center[0] = ( m_topLeft[0] + m_bottomRight[0] ) / 2;
+    m_center[1] = ( m_topLeft[1] + m_bottomRight[1] ) / 2;
+    m_center[2] = m_bottomRight[2]; //qualsevol z dels punts
+     
+    m_minorRadius[0] = m_center[0];
+    m_minorRadius[1] = m_topLeft[1];
+    m_minorRadius[2] = m_topLeft[2];
+     
+    m_majorRadius[0] = m_bottomRight[0];
+    m_majorRadius[1] = m_center[1];
+    m_majorRadius[2] = m_bottomRight[2];
 }
+
+void Ellipse::computeRectanglePoints()
+{
+    double diference = m_majorRadius[0] - m_center[0]; 
+    m_topLeft[0] = m_center[0] - diference; 
+    m_topLeft[1] = m_minorRadius[1];
+    m_topLeft[2] = m_minorRadius[2];
+  
+    diference = m_minorRadius[1] - m_center[1]; 
+    m_bottomRight[0] = m_majorRadius[0];
+    m_bottomRight[1] = m_center[1] - diference;
+    m_bottomRight[2] = m_majorRadius[2];
+}
+
 }

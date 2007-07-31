@@ -29,6 +29,9 @@ public:
         -continuitat / discontinuitat de la línia
      */
     
+    ///constructor per defecte
+    Polygon();
+    
     ///constructor amb paràmetres: passem els punts
     Polygon( QList< double* > points );
     

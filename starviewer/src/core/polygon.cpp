@@ -9,10 +9,16 @@
 
 namespace udg {
 
+Polygon::Polygon() : DrawingPrimitive()
+{
+    disableBackground();
+}
+
 Polygon::Polygon( QList< double* > points ) : DrawingPrimitive()
 {
     disableBackground();
     setPoints( points );
+    discontinuousOff();
 }
    
 Polygon::~Polygon()
