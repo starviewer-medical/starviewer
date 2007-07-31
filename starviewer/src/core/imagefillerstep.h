@@ -30,6 +30,7 @@ public:
     bool fill();
 
 private:
+    /// Mètodes per processar la informació específica de pacient,series i imatge
     void processPatient( Patient *patient );
     void processSeries( Series *series );
     void processImage( Image *image );
