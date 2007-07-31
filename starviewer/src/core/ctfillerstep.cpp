@@ -15,6 +15,7 @@ namespace udg {
 CTFillerStep::CTFillerStep()
  : PatientFillerStep()
 {
+    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
 }
 
 CTFillerStep::~CTFillerStep()
@@ -60,7 +61,7 @@ void CTFillerStep::processSeries( Series *series )
     {
         //TODO implementar el tractament específic per aquesta modalitat
         DEBUG_LOG("Cal implementar el tractament específic del CTFillerStep!");
-        m_input->addLabelToSeries("CTStep", series->getInstanceUID() );
+        m_input->addLabelToSeries("CTFillerStep", series->getInstanceUID() );
     }
     else
     {
