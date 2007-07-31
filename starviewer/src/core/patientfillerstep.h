@@ -28,7 +28,8 @@ public:
 
     ~PatientFillerStep();
 
-    /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa. Es presuposa que aquest input mai serà NUL.
+    /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa.
+    /// Es presuposa que aquest input mai serà NUL.
     void setInput( PatientFillerInput *input );
 
     /// Retorna la llista d'etiquetes que s'han de complir per poder processar aquest step.
@@ -40,7 +41,8 @@ public:
     /// Ens diu si és un bon candidat per processar l'input \TODO cal passar paràmetres adicionals?
     bool isCandidate();
 
-    /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el que li toca retorna fals, true altrament
+    /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
+    /// que li toca retorna fals, true altrament
     virtual bool fill() = 0;
 
 protected:
@@ -57,7 +59,8 @@ protected:
     /// Llista d'etiquetes necessàries per poder processar aquest step.
     QStringList m_requiredLabelsList;
 
-    /// prioritat de l'step. Per defecte tindrem prioritat normal en tots els steps, excepte en aquells que es defineixi alguna prioritat diferent.
+    /// prioritat de l'step. Per defecte tindrem prioritat normal en tots els steps, excepte en aquells que es defineixi
+    /// alguna prioritat diferent.
     PriorityFlags m_priority;
 
 };

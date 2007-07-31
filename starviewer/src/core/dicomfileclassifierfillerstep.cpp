@@ -59,7 +59,9 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
         QString seriesUID = m_dicomReader->getAttributeByName( DCM_SeriesInstanceUID );
         QString sopInstanceUID = m_dicomReader->getAttributeByName( DCM_SOPInstanceUID );
 
-        // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més ràpid o no? o és ben igual?
+        // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
+        // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
+        // ràpid o no? o és ben igual?
         // obtenim el pacient si ja existeix, altrament el creem
         Patient *patient = getPatient( patientName, patientID );
         if( !patient )
@@ -91,7 +93,8 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
             Image *image = series->getImage( sopInstanceUID );
             if( !image )
             {
-                // creem l'objecte Image i li assignem l'arxiu únicament. És tasca d'un mòdul posterior omplir la informació específica d'imatge
+                // creem l'objecte Image i li assignem l'arxiu únicament. És tasca d'un mòdul posterior omplir la informació
+                // específica d'imatge
                 image = new Image;
                 image->setPath( file );
                 series->addImage( image );
