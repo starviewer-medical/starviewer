@@ -259,76 +259,79 @@ void Drawer::drawText( Text *text )
 
 void Drawer::drawPolygon( Polygon *polygon )
 {
-    //primer de tot mirem que el primer punt del polígon i l'últim no estiguin repetits ja que així ho requereix la classe específica de vtk.
-    //en aquest cas eliminarem l'últim punt per evitar repetits
+    //Ens assegurem que el polígon és tancat, és a dir, que el primer punt coincideix amb el primer
     double *firstPoint = polygon->getPoints().first();
     double *lastPoint = polygon->getPoints().last();
     
-    if ( ( firstPoint[0] == lastPoint[0] ) && ( firstPoint[1] == lastPoint[1] ) && ( firstPoint[2] == lastPoint[2] ) )
+    if ( ( firstPoint[0] != lastPoint[0] ) || ( firstPoint[1] != lastPoint[1] ) || ( firstPoint[2] != lastPoint[2] ) )
     {
-        polygon->getPoints().removeLast();
+        polygon->addPoint( firstPoint );
     }
     
-    //afegim els punts del polígon
-    vtkPoints *polygonPoints = vtkPoints::New();
-    vtkPolygon *aPolygon = vtkPolygon::New();
+    vtkPolyData *polydata = vtkPolyData::New();
+    vtkPoints *points = vtkPoints::New();
+    vtkCellArray *vertexs = vtkCellArray::New(); 
     
-    polygonPoints->SetNumberOfPoints( polygon->getNumberOfPoints() );
-    aPolygon->GetPointIds()->SetNumberOfIds( polygon->getNumberOfPoints() );
-    
-    int i = 0;
-    
-    foreach (double *point, polygon->getPoints() )
+    //especifiquem el nombre de vèrtexs que té el polígon
+    vertexs->InsertNextCell( polygon->getNumberOfPoints() );
+    points->SetNumberOfPoints( polygon->getNumberOfPoints() );
+        
+    //Calculem els punts de l'el·lipse
+    for ( int i = 0; i < polygon->getNumberOfPoints(); i++ )
     {
-        polygonPoints->InsertPoint( i, point[0], point[1], point[2] );
-        aPolygon->GetPointIds()->SetId( i, i );
-        i++;
+        points->InsertPoint( i, polygon->getPoints().at( i ) );
+        vertexs->InsertCellPoint( i );
     }
     
-    //creem la malla que representarà els punts del polígon
-    vtkUnstructuredGrid *aPolygonGrid = vtkUnstructuredGrid::New();
-    aPolygonGrid->Allocate( 1, 1 );
-    aPolygonGrid->InsertNextCell( aPolygon->GetCellType(), aPolygon->GetPointIds() );
-    aPolygonGrid->SetPoints( polygonPoints );
+//     //afegim l'últim punt per tancar la ROI
+//     vertexs->InsertCellPoint( 0 );
     
-    vtkDataSetMapper *aPolygonMapper = vtkDataSetMapper::New();
-    aPolygonMapper->SetInput( aPolygonGrid );
+    polydata->SetPoints( points );
     
-    vtkActor *aPolygonActor = vtkActor::New();
-    aPolygonActor->SetMapper( aPolygonMapper );
+    if ( polygon->isBackgroundEnabled() )
+        polydata->SetPolys( vertexs );
+    else
+        polydata->SetLines( vertexs );
     
+    vtkActor2D *actor = vtkActor2D::New();
+    vtkPolyDataMapper2D *mapper = vtkPolyDataMapper2D::New();   
+    
+    actor->SetMapper( mapper );
+    mapper->SetTransformCoordinate( getCoordinateSystem( polygon->getCoordinatesSystemAsString() ) );
+    mapper->SetInput( polydata );
+
     //Assignem discontinuïtat
     if ( polygon->isDiscontinuous() )
-        aPolygonActor->GetProperty()->SetLineStipplePattern( 2000 );
+        actor->GetProperty()->SetLineStipplePattern( 2000 );
     else
-        aPolygonActor->GetProperty()->SetLineStipplePattern( 65535 );
+        actor->GetProperty()->SetLineStipplePattern( 65535 );
 
     //Assignem gruix de la línia        
-    aPolygonActor->GetProperty()->SetLineWidth( polygon->getWidth() );
+    actor->GetProperty()->SetLineWidth( polygon->getWidth() );
            
     //Assignem opacitat de la línia  
-    aPolygonActor->GetProperty()->SetOpacity( polygon->getOpacity() );
+    actor->GetProperty()->SetOpacity( polygon->getOpacity() );
     
     //mirem la visibilitat de l'actor
     if ( !polygon->isVisible() )
-        aPolygonActor->VisibilityOff();
+        actor->VisibilityOff();
     
     //Assignem color
     QColor color = polygon->getColor();
-    aPolygonActor->GetProperty()->SetDiffuseColor( color.redF(), color.greenF(), color.blueF() );
-    
-    //Mirem si cal dibuixar el background o no
-    if ( !polygon->isBackgroundEnabled() )        
-        aPolygonActor->GetProperty()->SetRepresentationToWireframe();
+    actor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
             
-    m_2DViewer->getRenderer()->AddActor( aPolygonActor );
-    m_2DViewer->refresh();
-                    
-    polygonPoints->Delete();
-    aPolygon->Delete();
-    aPolygonGrid->Delete();
-    aPolygonMapper->Delete();
-    aPolygonActor->Delete();
+    //Mirem si cal dibuixar el background o no
+//     if ( !ellipse->isBackgroundEnabled() )        
+//         actor->GetProperty()->SetRepresentationToWireframe();
+    
+    m_2DViewer->getRenderer()->AddActor( actor );
+    m_2DViewer->refresh();          
+    
+    actor->Delete();
+    mapper->Delete();
+    points->Delete();
+    vertexs->Delete();
+    polydata->Delete();
 }
  
 void Drawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior )
@@ -427,11 +430,15 @@ void Drawer::drawEllipse( Ellipse *ellipse )
         vertexs->InsertCellPoint( i );
     }
     
-        //afegim l'últim punt per tancar la ROI
+    //afegim l'últim punt per tancar la ROI
     vertexs->InsertCellPoint( 0 );
     
     polydata->SetPoints( points );
-    polydata->SetLines( vertexs );
+    
+    if ( ellipse->isBackgroundEnabled() )
+        polydata->SetPolys( vertexs );
+    else
+        polydata->SetLines( vertexs );
     
     vtkActor2D *actor = vtkActor2D::New();
     vtkPolyDataMapper2D *mapper = vtkPolyDataMapper2D::New();   
@@ -464,8 +471,6 @@ void Drawer::drawEllipse( Ellipse *ellipse )
 //     if ( !ellipse->isBackgroundEnabled() )        
 //         actor->GetProperty()->SetRepresentationToWireframe();
     
-    ///\TODO falta dibuixar el bckground en les el·lipses
-            
     m_2DViewer->getRenderer()->AddActor( actor );
     m_2DViewer->refresh();          
     
