@@ -121,16 +121,7 @@ int Patient::getNumberOfStudies()
 
 QList<Study*> Patient::getStudies() const
 {
-    QList< Study* > studyList;
-
-    QHashIterator<QString, Study *> iterator( m_studiesSet );
-    while( iterator.hasNext() )
-    {
-        studyList << iterator.value();
-        iterator.next();
-    }
-
-    return studyList;
+    return m_studiesSet.values();
 }
 
 Patient *Patient::operator +( const Patient *patient )
