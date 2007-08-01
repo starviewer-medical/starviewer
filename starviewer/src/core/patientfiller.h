@@ -26,23 +26,22 @@ public:
 
     ~PatientFiller();
 
-    /// Li assignem les dades d'entrada que li caldrà processar
-    void setInput( PatientFillerInput *input );
-
     /// Donat l'input i els steps disponibles omple l'estructura Patient
-    void fill();
+    void fill(PatientFillerInput *input);
 
     /// Ídem fill() però en aquest cas té un criteri d'aturada. Quan hagi conseguit l'etiqueta indicada s'aturarà i no processarà més mòduls
-    void fillUntil( QString label );
+    void fillUntil(PatientFillerInput *input, QString stopLabel);
 
 private:
-    /// S'encarrega de registrar els mòduls/steps que processaran l'input. \TODO això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
+    /// S'encarrega de registrar els mòduls/steps que processaran l'input.
+    // \TODO això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
     void registerSteps();
 
-private:
-    /// L'input a tractar
-    PatientFillerInput *m_input;
+    /// Processa un PatientFillerStep amb les dades d'input
+    void processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input);
 
+private:
+    const QString UntilEndLabel; //< Label que, teòricament, és impossible que sigui definida per un FillerStep
     /// Registre d'steps
     QList<PatientFillerStep *> m_registeredSteps;
 };

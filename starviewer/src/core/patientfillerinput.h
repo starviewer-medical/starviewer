@@ -43,17 +43,22 @@ public:
     /// Obté la llista d'arxius
     QStringList getFilesList() const { return m_fileList; }
 
-    /// Afegeix/esborra un arxiu a la llista \TODO què passa si un arxiu està repetit?
+    /// Afegeix/esborra un arxiu a la llista
+    // \TODO què passa si un arxiu està repetit?
     void addFile( QString filename );
     void removeFile( QString filename );
 
-    /// Afegim etiquetes a nivell global/Series \TODO a nivell de series podríem posar el paràmetre el propi punter a Series* que no pas l'UID-> s'ha d'aclarir
+    /// Afegim etiquetes a nivell global/Series
+    // \TODO a nivell de series podríem posar el paràmetre el propi punter a Series* que no pas l'UID-> s'ha d'aclarir
     void addLabel( QString label );
     void addLabelToSeries( QString label, QString seriesUID );
 
     /// Obtenim les etiquetes a nivell global/Series
     QStringList getLabels() const { return m_globalLabels; }
     QStringList getLabelsFromSeries( QString seriesUID );
+
+    /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
+    bool hasAllLabels(QStringList requiredLabelsList) const;
 
 private:
     /// Llista de pacients a omplir

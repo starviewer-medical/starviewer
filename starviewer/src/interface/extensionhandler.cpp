@@ -30,6 +30,8 @@
 #include "queryscreen.h"
 #include "seriesvolum.h"
 #include "input.h"
+#include "patientfiller.h"
+#include "patientfillerinput.h"
 
 namespace udg {
 
@@ -56,6 +58,7 @@ void ExtensionHandler::createConnections()
 {
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
+    connect( m_queryScreen, SIGNAL(viewPatient(PatientFillerInput)), this, SLOT(viewPatient(PatientFillerInput)));
 }
 
 void ExtensionHandler::registerExtensions()
@@ -192,6 +195,17 @@ void ExtensionHandler::onVolumeLoaded( Identifier id )
 {
     m_volumeID = id;
     request( 8 );
+}
+
+void ExtensionHandler::viewPatient(PatientFillerInput patientFillerInput)
+{
+    // Proves per comprovar que funciona el tema dels FilterSteps sense molestar a la resta de la gent.
+    // Descomentar per activar la càrrega de Patient
+//     PatientFiller patientFiller;
+//     patientFiller.fill( &patientFillerInput );
+//     DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
+//     DEBUG_LOG( "getNumberOfPatients: " + patientFillerInput.getNumberOfPatients());
+//     DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
 }
 
 void ExtensionHandler::viewStudy( StudyVolum study )

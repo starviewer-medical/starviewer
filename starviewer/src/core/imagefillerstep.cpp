@@ -60,12 +60,18 @@ void ImageFillerStep::processPatient( Patient *patient )
 
 void ImageFillerStep::processSeries( Series *series )
 {
+    // Podrem tenir o bé Images, o bé KINs o bé PresentationStates
     if( isImageSeries(series) )
     {
-        QList<Image *> imageList = series->getImages();
-        foreach( Image *image, imageList )
+        foreach (QString file, series->getFilesPathList())
         {
+            DEBUG_LOG("Afegim " + file);
+            Image *image = new Image;
+            image->setPath( file );
+
             processImage( image );
+
+            series->addImage( image );
         }
         m_input->addLabelToSeries("ImageFillerStep", series->getInstanceUID() );
     }
@@ -104,7 +110,7 @@ void ImageFillerStep::processImage( Image *image )
             for( int i = 0; i < 6; i++ )
                 orientation[ i ] = list.at( i ).toDouble();
 
-            image->setImageOrientation( orientation );
+            //image->setImageOrientation( orientation );
         }
 
         value = dicomReader.getAttributeByName( DCM_ImagePosition );

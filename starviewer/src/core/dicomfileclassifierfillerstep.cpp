@@ -85,45 +85,13 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
             series = createSeries();
             study->addSeries( series );
         }
-
-        // Podrem tenir o bé Images, o bé KINs o bé PresentationStates
-        if( isImageSeries(series) )
-        {
-            // comprovem abans si existeix la imatge, altrament la creem
-            Image *image = series->getImage( sopInstanceUID );
-            if( !image )
-            {
-                // creem l'objecte Image i li assignem l'arxiu únicament. És tasca d'un mòdul posterior omplir la informació
-                // específica d'imatge
-                image = new Image;
-                image->setPath( file );
-                series->addImage( image );
-            }
-            else
-            {
-                // el tenim classificat però no sabem si s'ha llegit tota la info que volem TODO què fem? matxaquem sempre?
-            }
-        }
-        else if( isKeyImageNoteSeries(series) )
-        {
-            // TODO crear objectes KIN
-            DEBUG_LOG("Cal crear objectes KIN");
-        }
-        else if( isPresentationStateSeries(series) )
-        {
-            // TODO crear objectes PresentationState
-            DEBUG_LOG("Cal crear objectes Presentation State");
-        }
-        else
-        {
-            // TODO tipu de Sèrie no suportat/no sabem classificar
-            DEBUG_LOG("tipu de serie no suportat/que no sabem classificar");
-            ok = false;
-        }
-
+        // \TODO Caldria acabar de veure si aquí és el lloc més adient. Seria lògic fer-ho en el queryscreen? Aquí s'hauria de tornar a fer?
+        series->addFilePath( file );
     }
     else
+    {
         DEBUG_LOG("Error en llegir l'arxiu: " + file );
+    }
 
     return ok;
 }

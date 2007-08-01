@@ -117,4 +117,14 @@ QStringList PatientFillerInput::getLabelsFromSeries( QString seriesUID )
     return result;
 }
 
+bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
+{
+    foreach (QString requiredLabel, requiredLabelsList)
+    {
+        if (!getLabels().contains(requiredLabel))
+            return false;
+    }
+    return true;
+}
+
 }

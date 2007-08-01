@@ -29,6 +29,8 @@ public:
 
     bool fill();
 
+    QString name() {  return "ImageFillerStep";  }
+
 private:
     /// Mètodes per processar la informació específica de pacient,series i imatge
     void processPatient( Patient *patient );

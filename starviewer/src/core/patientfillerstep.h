@@ -26,7 +26,7 @@ public:
 
     PatientFillerStep();
 
-    ~PatientFillerStep();
+    virtual ~PatientFillerStep();
 
     /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa.
     /// Es presuposa que aquest input mai serà NUL.
@@ -44,6 +44,9 @@ public:
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
     /// que li toca retorna fals, true altrament
     virtual bool fill() = 0;
+
+    /// Retorna el nom del Filler Step. Aquest no serà mai visible per l'usuari però ajuda a l'hora de debugar el sistema.
+    virtual QString name() = 0;
 
 protected:
     /// mètodes de conveniència
