@@ -31,14 +31,42 @@ void Image::setSOPInstanceUID( QString uid )
     m_SOPInstanceUID = uid;
 }
 
+QString Image::getSOPInstanceUID() const
+{
+    return m_SOPInstanceUID;
+}
+
 void Image::setInstanceNumber( QString number )
 {
     m_instanceNumber = number;
 }
 
+QString Image::getInstanceNumber() const
+{
+    return m_instanceNumber;
+}
+
+void Image::setImageOrientation( double orientation[6] )
+{
+    for(int i = 0; i < 6; i++)
+    {
+        m_imageOrientation[i] = orientation[i];
+    }
+}
+
+const double* Image::getImageOrientation() const
+{
+    return m_imageOrientation;
+}
+
 void Image::setPatientOrientation( QString orientation )
 {
     m_patientOrientation = orientation;
+}
+
+QString Image::getPatientOrientation() const
+{
+    return m_patientOrientation;
 }
 
 bool Image::setContentDateTime( int day , int month , int year , int hour , int minute, int seconds )
@@ -109,9 +137,19 @@ bool Image::setContentTime( QString time )
     return ok;
 }
 
+QDate Image::getContentDate() const
+{
+    return m_contentDate;
+}
+
 QString Image::getContentDateAsString()
 {
     return m_contentDate.toString("dd/MM/yyyy");
+}
+
+QTime Image::getContentTime() const
+{
+    return m_contentTime;
 }
 
 QString Image::getContentTimeAsString()
@@ -124,15 +162,28 @@ void Image::setImagesInAcquisition( int images )
     m_imagesInAcquisition = images;
 }
 
+int Image::getImagesInAcquisition() const
+{
+    return m_imagesInAcquisition;
+}
+
 void Image::setComments( QString comments  )
 {
     m_comments = comments;
 }
 
+QString Image::getComments() const
+{
+    return m_comments;
+}
+
 void Image::setImagePosition( double position[3] )
 {
-    for(int i = 0; i < 3; i++)
-        m_imagePosition[i] = position[i];
+}
+
+const double *Image::getImagePosition() const
+{
+    return m_imagePosition;
 }
 
 void Image::setSamplesPerPixel( int samples )
@@ -140,9 +191,19 @@ void Image::setSamplesPerPixel( int samples )
     m_samplesPerPixel = samples;
 }
 
+int Image::getSamplesPerPixel() const
+{
+    return m_samplesPerPixel;
+}
+
 void Image::setPhotometricInterpretation( int value )
 {
     m_photometricInterpretation = value;
+}
+
+int Image::getPhotometricInterpretation() const
+{
+    return m_photometricInterpretation;
 }
 
 void Image::setRows( int rows  )
@@ -150,9 +211,19 @@ void Image::setRows( int rows  )
     m_rows = rows;
 }
 
+int Image::getRows() const
+{
+    return m_rows;
+}
+
 void Image::setColumns( int columns  )
 {
     m_columns = columns;
+}
+
+int Image::getColumns() const
+{
+    return m_columns;
 }
 
 void Image::setParentSeries( Series *series )
@@ -163,6 +234,11 @@ void Image::setParentSeries( Series *series )
 void Image::setPath( QString path )
 {
     m_path = path;
+}
+
+QString Image::getPath() const
+{
+    return m_path;
 }
 
 }

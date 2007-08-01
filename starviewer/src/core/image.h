@@ -29,19 +29,19 @@ public:
 
     /// assigna/obté el SOPInstanceUID de la imatge
     void setSOPInstanceUID( QString uid );
-    QString getSOPInstanceUID() const { return m_SOPInstanceUID; }
+    QString getSOPInstanceUID() const;
 
     /// assigna/obté l'instance number
     void setInstanceNumber( QString number );
-    QString getInstanceNumber() const { return m_instanceNumber; }
+    QString getInstanceNumber() const;
 
     /// Assignar/Obtenir la orienatació del pacient en la imatge, també anomenat direction cosines.
     void setImageOrientation( double orientation[6] );
-    const double *getImageOrientation() const { return m_imageOrientation; }
+    const double *getImageOrientation() const;
 
     /// Assignar/Obtenir l'orientació del pacient
     void setPatientOrientation( QString orientation );
-    QString getPatientOrientation() const { return m_patientOrientation; };
+    QString getPatientOrientation() const;
 
     /// Assignar/Obtenir la data i hora d'adquisició de la imatge en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setContentDateTime( int day , int month , int year , int hour , int minute, int seconds = 0 );
@@ -50,43 +50,43 @@ public:
     bool setContentDate( QString date );
     bool setContentTime( int hour , int minute, int seconds = 0 );
     bool setContentTime( QString time );
-    QDate getContentDate() const { return m_contentDate; };
+    QDate getContentDate() const;
     QString getContentDateAsString();
-    QTime getContentTime() const { return m_contentTime; };
+    QTime getContentTime() const;
     QString getContentTimeAsString();
 
     /// Assignar/Obtenir el numero d'imatges en l'adquisició
     void setImagesInAcquisition( int images );
-    int getImagesInAcquisition() const { return m_imagesInAcquisition; };
+    int getImagesInAcquisition() const;
 
     /// Assignar/Obtenir els comentaris
     void setComments( QString comments  );
-    QString getComments() const { return m_comments; };
+    QString getComments() const;
 
     /// Assignar/Obtenir la posició de la imatge.
     void setImagePosition( double position[3] );
-    const double *getImagePosition() const { return m_imagePosition; };
+    const double *getImagePosition() const;
 
     /// Assignar/Obtenir els samples per pixel
     void setSamplesPerPixel( int samples );
-    int getSamplesPerPixel() const { return m_samplesPerPixel; };
+    int getSamplesPerPixel() const;
 
     /// Assignar/Obtenir la interpretació fotomètrica
     void setPhotometricInterpretation( int value );
-    int getPhotometricInterpretation() const { return m_photometricInterpretation; };
+    int getPhotometricInterpretation() const;
 
     /// Assignar/Obtenir files/columnes
     void setRows( int rows  );
-    int getRows() const { return m_rows; };
+    int getRows() const;
     void setColumns( int columns  );
-    int getColumns() const { return m_columns; };
+    int getColumns() const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries( Series *series );
 
     /// assigna/retorna el path absolut de la imatge
     void setPath( QString path );
-    QString getPath() const { return m_path; }
+    QString getPath() const;
 
 private:
     /// Atributs DICOM

@@ -9,6 +9,9 @@
 
 #include <QStringList>
 
+#include "image.h" //TODO Treure quan es refaci el toString
+#include "series.h" //TODO Treure quan es refaci el toString
+
 namespace udg {
 
 Patient::Patient(QObject *parent)
@@ -188,6 +191,56 @@ bool Patient::isSamePatient( const Patient *patient )
 {
     // si coincideix nom o ID llavors es poden considerar que són el mateix pacient TODO mirar de definir aquest criteri
     return patient->m_fullName == this->m_fullName || patient->m_patientID == this->m_patientID;
+}
+
+QString Patient::toString()
+{
+    QString result;
+
+    result += "- Patient\n";
+    result += "    FullName : " + getFullName() + "\n";
+    result += "    ID : " + getID() + "\n";
+
+    foreach (Study *study, getStudies())
+    {
+        result += "    - Study\n";
+        result += "        InstanceUID : " + study->getInstanceUID() + "\n";
+        result += "        Description : " + study->getDescription() + "\n";
+
+        foreach (Series *series, study->getSeries())
+        {
+            result += "        - Series\n";
+            result += "            SeriesNumber : " + series->getSeriesNumber() + "\n";
+            result += "            Modality : " + series->getModality() + "\n";
+            result += "            Description : " + series->getDescription() + "\n";
+            result += "            ProtocolName : " + series->getProtocolName() + "\n";
+
+            if (series->hasImages())
+            {
+                foreach (Image *image, series->getImages())
+                {
+                    result += "            - Image " + image->getPath() + "\n";
+                }
+            }
+            else
+            {
+                result += "            - No té imatges\n";
+            }
+/*
+            if (series->hasPresentationStates())
+            {
+                ....
+            }
+            else
+            {
+                result += "No té PresentationStates";
+            }
+            result += "\n";
+*/
+        }
+    }
+
+    return result;
 }
 
 void Patient::copyPatientInformation( const Patient *patient )

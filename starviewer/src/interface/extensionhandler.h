@@ -13,12 +13,15 @@
 #include "patient.h"
 #include "studyvolum.h"
 
+#include "patientfillerinput.h"
+
 namespace udg {
 
 // Fordward Declarations
 class VolumeRepository;
 class QApplicationMainWindow;
 class Volume;
+class PatientFillerInput;
 
 // Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
@@ -45,6 +48,9 @@ public slots:
 
     /// aplicació que s'executa per defecte quan carreguem un volum al repositori
     void onVolumeLoaded( Identifier id );
+
+    /// De moment, primera aproximació a arrencar el pacs de l'Starviewer.
+    void viewPatient(PatientFillerInput patientFillerInput);
 
     /// \TODO [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
     void viewStudy( StudyVolum study );

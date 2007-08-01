@@ -65,16 +65,12 @@ Image *Series::getImage( QString SOPInstanceUID )
 
 QList<Image *> Series::getImages()
 {
-    QList<Image *> imagesList;
+    return m_imageSet.values();
+}
 
-    QHashIterator<QString, Image *> iterator( m_imageSet );
-    while( iterator.hasNext() )
-    {
-        imagesList << iterator.value();
-        iterator.next();
-    }
-
-    return imagesList;
+bool Series::hasImages() const
+{
+    return ! m_imageSet.isEmpty();
 }
 
 void Series::setModality( QString modality )
@@ -196,6 +192,28 @@ void Series::setInstitutionName( QString institutionName )
 void Series::setVolumeIdentifier( Identifier id )
 {
     m_volumeID = id;
+}
+
+void Series::addFilePath(QString filePath)
+{
+    if (!m_filesPathList.contains(filePath))
+    {
+        m_filesPathList.append(filePath);
+    }
+}
+
+void Series::removeFilePath(QString filePath)
+{
+    int i = m_filesPathList.indexOf(filePath);
+    if (i != -1)
+    {
+        m_filesPathList.removeAt(i);
+    }
+}
+
+QStringList Series::getFilesPathList()
+{
+    return m_filesPathList;
 }
 
 QStringList Series::getImagesPathList()

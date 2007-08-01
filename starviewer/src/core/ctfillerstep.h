@@ -30,6 +30,8 @@ public:
 
     bool fill();
 
+    QString name() {  return "CTFillerStep";  }
+
 private:
     /// Donat un pacient, processa la seva informació
     void processPatient( Patient *patient );
