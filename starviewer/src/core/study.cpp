@@ -199,16 +199,7 @@ int Study::getNumberOfSeries()
 
 QList< Series* > Study::getSeries()
 {
-    QList< Series* > seriesList;
-
-    QHashIterator<QString, Series *> iterator( m_seriesSet );
-    while( iterator.hasNext() )
-    {
-        seriesList << iterator.value();
-        iterator.next();
-    }
-
-    return seriesList;
+    return m_seriesSet.values();
 }
 
 }
