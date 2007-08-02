@@ -25,7 +25,7 @@ RightMenuItem::RightMenuItem( QWidget *parent )
     QVBoxLayout * verticalLayout = new QVBoxLayout( auxiliar );
     QLabel * icon = new QLabel( auxiliar );
     verticalLayout->addWidget( icon );
-    icon->setPixmap( QPixmap( "/home/ester/starviewer/src/main/images/axial.png" ) );
+    icon->setPixmap( QPixmap( ":/images/axial.png" ) );
     QLabel * text = new QLabel( auxiliar );
     verticalLayout->addWidget( text );
     text->setText( "info_auxiliar ");
@@ -44,7 +44,7 @@ void RightMenuItem::enterEvent( QEvent * event )
 //     palette.setBrush(QPalette::Inactive, QPalette::Window, selected);
 //     setPalette(palette);
 //     show();
-// 
+//
 //     QList<QObject*> QObjectList = children();
 //     for ( int i = 0; i < QObjectList.size(); i++ )
 //     {
@@ -54,7 +54,7 @@ void RightMenuItem::enterEvent( QEvent * event )
 //             ( (QWidget *) QObjectList.value(i) )->show();
 //         }
 //     }
-// 
+//
 //     show();
 
     setFrameShape( QFrame::StyledPanel );
@@ -76,7 +76,7 @@ void RightMenuItem::leaveEvent( QEvent * event )
 //     selected.setStyle(Qt::SolidPattern);
 //     palette.setBrush(QPalette::Active, QPalette::Window, selected);
 //     setPalette(palette);
-    
+
     setFrameShape( QFrame::NoFrame );
     auxiliar->hide();
 }
