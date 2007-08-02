@@ -41,6 +41,13 @@ public:
 
     ~ExtensionHandler();
 
+signals:
+    /// Emet un senyal amb el segon volum per comparar
+    void secondInput( Volume* );
+
+    /// [temporal] Emet un senyal amb el volum de perfusió del mètode de difusió-perfusió.
+    void perfusionImage( Volume * volume );
+
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
     void request( int who );
@@ -71,21 +78,26 @@ public slots:
     void openSerieToCompare();
 
 private:
-    /// Punter a l'aplicació principal
-    QApplicationMainWindow *m_mainApp;
-
-    /// Entitat pacient que es controlarà des d'aquí
-    Patient m_patient;
-
     /// S'encarrega de fer el registre de totes les extensions amb el factory
     void registerExtensions();
 
     /// Crea les connexions de signals i slots
     void createConnections();
 
-    // :::::::::::::::::::::::::::::::::::::::::
-    // Recursos
-    // :::::::::::::::::::::::::::::::::::::::::
+    /// carrega una nova pestanya amb l'extensió de 2DViewer
+    void load2DViewerExtension();
+
+private slots:
+
+    /// Slot que es crida quan hem canviat d'una extensió a una altre
+    void extensionChanged( int index );
+
+private:
+    /// Punter a l'aplicació principal
+    QApplicationMainWindow *m_mainApp;
+
+    /// Entitat pacient que es controlarà des d'aquí
+    Patient m_patient;
 
     /// L'id del volum amb el que estem treballant
     Identifier m_volumeID;
@@ -96,32 +108,11 @@ private:
     /// El repository de volums
     VolumeRepository *m_volumeRepository;
 
-    // :::::::::::::::::::::::::::::::::::::::::
-    // Mini Aplicacions
-    // Aquí es declararan totes les mini-aplicacions que es faran servir
-    // :::::::::::::::::::::::::::::::::::::::::
-
     /// Importar models del sistema de fitxers al repositori de volums
     AppImportFile *m_importFileApp;
 
     /// La pantalla d'accés al pacs
     QueryScreen *m_queryScreen;
-
-    /// carrega una nova pestanya amb l'extensió de 2DViewer
-    void load2DViewerExtension();
-
-private slots:
-
-    /// Slot que es crida quan hem canviat d'una extensió a una altre
-    void extensionChanged( int index );
-
-signals:
-    /// Emet un senyal amb el segon volum per comparar
-    void secondInput( Volume* );
-
-    /// [temporal] Emet un senyal amb el volum de perfusió del mètode de difusió-perfusió.
-    void perfusionImage( Volume * volume );
-
 };
 
 };  //  end  namespace udg
