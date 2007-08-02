@@ -32,35 +32,35 @@ public:
 
     /// Assigna/Obtè l'objecte Patient pare de l'estudi
     void setParentPatient( Patient *patient );
-    Patient *getParentPatient() const { return m_parentPatient; }
+    Patient *getParentPatient() const;
 
     /// Assignar/Obtenir l'identificador universal de l'estudi
     void setInstanceUID( QString uid );
-    QString getInstanceUID() const { return m_studyInstanceUID; };
+    QString getInstanceUID() const;
 
     /// Assignar/Obtenir l'identificador de l'estudi
     void setID( QString id );
-    QString getID() const { return m_studyID; };
+    QString getID() const;
 
     /// Assignar/Obtenir l'accession number de l'estudi
     void setAccessionNumber( QString accessionNumber );
-    QString getAccesssionNumber() const { return m_accessionNumber; };
+    QString getAccesssionNumber() const;
 
     /// Assignar/Obtenir la descripció de l'estudi
     void setDescription( QString description );
-    QString getDescription() const { return m_description; };
+    QString getDescription() const;
 
     /// Assignar/Obtenir el pes del pacient
     void setPatientAge( short int age );
-    short int getPatientAge() const { return m_age; }
+    short int getPatientAge() const;
 
     /// Assignar/Obtenir el pes del pacient
     void setWeight( double weight );
-    double getWeight() const { return m_weight; };
+    double getWeight() const;
 
     /// Assignar/Obtenir l'aclçada del pacient
     void setHeight( double height );
-    double getHeight() const { return m_height; };
+    double getHeight() const;
 
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
