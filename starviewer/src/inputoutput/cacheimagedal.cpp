@@ -295,55 +295,45 @@ Status CacheImageDAL::deleteImages( QString studyUID )
 
 QString CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
 {
-    QString sql , whereClause = "";
+    QString sql , whereClause;
 
-    sql.insert( 0 , "select count(*) from image " );
+    sql = "select count(*) from image ";
 
     //si hi ha UID study
-    if ( imageMask->getStudyUID().length() > 0 )
+    if ( !imageMask->getStudyUID().isEmpty() )
     {
-        whereClause.insert( 0 , " where StuInsUID = '" );
-        whereClause.append( imageMask->getStudyUID() );
-        whereClause.append( "'" );
+        whereClause = QString(" where StuInsUID = '%1'" ).arg( imageMask->getStudyUID() );
     }
 
     //si hi ha UID de la sèrie
-    if ( imageMask->getSeriesUID().length() > 0 )
+    if ( !imageMask->getSeriesUID().isEmpty() )
     {
-        if ( whereClause.length() > 0 )
+        if ( !whereClause.isEmpty() )
         {
-            whereClause.append( " and SerInsUID = '" );
-            whereClause.append( imageMask->getSeriesUID() );
-            whereClause.append( "'" );
+            whereClause += QString(" and SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
         }
         else
         {
-            whereClause.insert( 0 , " where SerInsUID = '" );
-            whereClause.append( imageMask->getSeriesUID() );
-            whereClause.append( "'" );
+            whereClause = QString( " where SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
         }
     }
 
     //si hi ha número d'imatge
-    if ( imageMask->getImageNumber().length() > 0 )
+    if ( !imageMask->getImageNumber().isEmpty() )
     {
-        if ( whereClause.length() > 0 )
+        if ( !whereClause.isEmpty() )
         {
-            whereClause.append( " and ImgNum = '" );
-            whereClause.append( imageMask->getImageNumber() );
-            whereClause.append( "'" );
+            whereClause += QString( " and ImgNum = '%1'" ).arg( imageMask->getImageNumber() );
         }
         else
         {
-            whereClause.insert( 0 , " where ImgNum = '" );
-            whereClause.append( imageMask->getImageNumber() );
-            whereClause.append( "'" );
+            whereClause = QString(" where ImgNum = '%1'" ).arg( imageMask->getImageNumber() );
         }
     }
 
-    if ( whereClause.length() > 0 )
+    if ( !whereClause.isEmpty() )
     {
-        sql.append( whereClause );
+        sql += whereClause;
     }
 
     return sql;
@@ -351,55 +341,45 @@ QString CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
 
 QString CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
 {
-    QString sql , whereClause ="";
+    QString sql , whereClause;
 
-    sql.insert( 0 , "select sum(ImgSiz) from image " );
+    sql = "select sum(ImgSiz) from image ";
 
     //si hi ha UID study
-    if ( imageMask->getStudyUID().length() > 0 )
+    if ( !imageMask->getStudyUID().isEmpty() )
     {
-        whereClause.insert( 0 , " where StuInsUID = '" );
-        whereClause.append( imageMask->getStudyUID() );
-        whereClause.append( "'" );
+        whereClause = QString(" where StuInsUID = '%1'" ).arg( imageMask->getStudyUID() );
     }
 
     //si hi ha UID de la sèrie
-    if ( imageMask->getSeriesUID().length() > 0 )
+    if ( !imageMask->getSeriesUID().isEmpty() )
     {
-        if ( whereClause.length() > 0 )
+        if ( !whereClause.isEmpty() )
         {
-            whereClause.append( " and SerInsUID = '" );
-            whereClause.append( imageMask->getSeriesUID() );
-            whereClause.append( "'" );
+            whereClause += QString( " and SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
         }
         else
         {
-            whereClause.insert( 0 , " where SerInsUID = '" );
-            whereClause.append( imageMask->getSeriesUID() );
-            whereClause.append( "'" );
+            whereClause = QString( " where SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
         }
     }
 
     //si hi ha número d'imatge
-    if ( imageMask->getImageNumber().length() > 0 )
+    if ( !imageMask->getImageNumber().isEmpty() )
     {
-        if ( whereClause.length() > 0 )
+        if ( !whereClause.isEmpty() )
         {
-            whereClause.append( " and ImgNum = '" );
-            whereClause.append( imageMask->getImageNumber() );
-            whereClause.append( "'" );
+            whereClause += QString( " and ImgNum = '%1'" ).arg( imageMask->getImageNumber() );
         }
         else
         {
-            whereClause.insert( 0 , " where ImgNum = '" );
-            whereClause.append( imageMask->getImageNumber() );
-            whereClause.append( "'" );
+            whereClause = QString( " where ImgNum = '%1'" ).arg( imageMask->getImageNumber() );
         }
     }
 
-    if ( whereClause.length() > 0 )
+    if ( !whereClause.isEmpty() )
     {
-        sql.append( whereClause );
+        sql += whereClause;
     }
 
     return sql;
@@ -407,55 +387,45 @@ QString CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
 
 QString CacheImageDAL::buildSqlExistImage( DicomMask *imageMask )
 {
-    QString sql , whereClause ="";
+    QString sql , whereClause;
 
-    sql.insert( 0 , "select sum(ImgSiz) from image " );
+    sql = "select sum(ImgSiz) from image ";
 
     //si hi ha UID study
-    if ( imageMask->getStudyUID().length() > 0 )
+    if ( !imageMask->getStudyUID().isEmpty() )
     {
-        whereClause.insert( 0 , " where StuInsUID = '" );
-        whereClause.append( imageMask->getStudyUID() );
-        whereClause.append( "'" );
+        whereClause = QString(" where StuInsUID = '%1'" ).arg( imageMask->getStudyUID() );
     }
 
     //si hi ha UID de la sèrie
-    if ( imageMask->getSeriesUID().length() > 0 )
+    if ( !imageMask->getSeriesUID().isEmpty() )
     {
-        if ( whereClause.length() > 0 )
+        if ( !whereClause.isEmpty() )
         {
-            whereClause.append( " and SerInsUID = '" );
-            whereClause.append( imageMask->getSeriesUID() );
-            whereClause.append( "'" );
+            whereClause += QString( " and SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
         }
         else
         {
-            whereClause.insert( 0 , " where SerInsUID = '" );
-            whereClause.append( imageMask->getSeriesUID() );
-            whereClause.append( "'" );
+            whereClause = QString( " where SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
         }
     }
 
     //si hi ha SopInsUID
-    if ( imageMask->getSOPInstanceUID().length() > 0 )
+    if ( !imageMask->getSOPInstanceUID().isEmpty() )
     {
-        if ( whereClause.length() > 0 )
+        if ( !whereClause.isEmpty() )
         {
-            whereClause.append( " and SopInsUID = '" );
-            whereClause.append( imageMask->getSOPInstanceUID() );
-            whereClause.append( "'" );
+            whereClause += QString( " and SopInsUID = '%1'" ).arg( imageMask->getSOPInstanceUID() );
         }
         else
         {
-            whereClause.insert( 0 , " where SopInsUID = '" );
-            whereClause.append( imageMask->getSOPInstanceUID() );
-            whereClause.append( "'" );
+            whereClause = QString( " where SopInsUID = '%1'" ).arg( imageMask->getSOPInstanceUID() );
         }
     }
 
-    if ( whereClause.length() > 0 )
+    if ( !whereClause.isEmpty() )
     {
-        sql.append( whereClause );
+        sql += whereClause;
     }
 
     return sql;
@@ -465,36 +435,28 @@ QString CacheImageDAL::buildSqlQueryImages( DicomMask *imageMask )
 {
     QString sql  ,imgNum;
 
-    sql.insert( 0 , "select ImgNum , AbsPath , Image.StuInsUID , SerInsUID , SopInsUID , ImgNam from image , study where Image.StuInsUID = '" );
-    sql.append( imageMask->getStudyUID() );
-    sql.append( "'" );
+    sql = QString( "select ImgNum , AbsPath , Image.StuInsUID , SerInsUID , SopInsUID , ImgNam from image , study where Image.StuInsUID = '%1'" ).arg( imageMask->getStudyUID() );
 
-    if ( imageMask->getSeriesUID().length() > 0 )
+    if ( !imageMask->getSeriesUID().isEmpty() )
     {
-        sql.append( " and SerInsUID = '" );
-        sql.append( imageMask->getSeriesUID() );
-        sql.append( "'" );
+        sql += QString( " and SerInsUID = '%1'" ).arg( imageMask->getSeriesUID() );
     }
 
-    if ( imageMask->getSOPInstanceUID().length() > 0 )
+    if ( !imageMask->getSOPInstanceUID().isEmpty() )
     {
-        sql.append( " and SopInsUID = '" );
-        sql.append( imageMask->getSOPInstanceUID() );
-        sql.append( "'" );
+        sql += QString( " and SopInsUID = '%1'" ).arg( imageMask->getSOPInstanceUID() );
     }
 
-    sql.append( " and Study.StuInsUID = Image.StuInsUID " );
+    sql += " and Study.StuInsUID = Image.StuInsUID ";
 
     imgNum = imageMask->getImageNumber();
 
-    if ( imgNum.length() > 0 )
+    if ( !imgNum.isEmpty() )
     {
-        sql.append( " and ImgNum = " );
-        sql.append( imgNum );
-        sql.append( " " );
+        sql += QString( " and ImgNum = %1 " ).arg( imgNum );
     }
 
-    sql.append( " order by ImgNum" );
+    sql += " order by ImgNum";
 
     return sql;
 }

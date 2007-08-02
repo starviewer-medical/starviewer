@@ -768,13 +768,13 @@ QString CacheStudyDAL::buildSqlQueryStudy(DicomMask* studyMask)
     stuInsUID = studyMask->getStudyUID();
 
     //cognoms del pacient
-    if ( patientName.length() > 0 )
+    if ( !patientName.isEmpty() )
     {
         sqlSentence += QString(" and PatNam like '%1'").arg( patientName );
     }
 
     //Id del pacient
-    if ( patID != "*" && patID.length() > 0 )
+    if ( patID != "*" && !patID.isEmpty() )
     {
         sqlSentence += QString(" and Study.PatID like '%1'").arg( replaceAsterisk( patID ) );
     }
@@ -801,23 +801,23 @@ QString CacheStudyDAL::buildSqlQueryStudy(DicomMask* studyMask)
     }
 
     //id estudi
-    if ( stuID != "*" && stuID.length() > 0 )
+    if ( stuID != "*" && !stuID.isEmpty() )
     {
         sqlSentence += QString(" and StuID like '%1'").arg( replaceAsterisk( stuID ) );
     }
 
     //Accession Number
-    if ( accNum != "*" && accNum.length() > 0 )
+    if ( accNum != "*" && !accNum.isEmpty() )
     {
         sqlSentence += QString(" and AccNum = '%1'").arg( accNum );
     }
 
-    if ( stuInsUID != "*" && stuInsUID.length() > 0 )
+    if ( stuInsUID != "*" && !stuInsUID.isEmpty() )
     {
         sqlSentence += QString(" and StuInsUID = '%1'").arg( stuInsUID );
     }
 
-    if ( studyMask->getStudyModality() != "*" && studyMask->getStudyModality().length() > 0 )
+    if ( studyMask->getStudyModality() != "*" && !studyMask->getStudyModality().isEmpty() )
     {
         sqlSentence += buildSqlStudyModality( studyMask );
     }
@@ -872,7 +872,7 @@ QString CacheStudyDAL::buildSqlStudyModality( DicomMask *mask )
     QString sqlSentence;
     int index = 0;
 
-    if ( mask->getStudyModality().length() > 0 )
+    if ( !mask->getStudyModality().isEmpty() )
     {
         //inserim la primera modalitat
         //\TODO assumeixes que totes les modalitats són de 2 cràcters i no és veritat!!!!! hi ha modalitats com REG o SEG que en tenen 3!!! hauries de separar per les comes o el caràcter delimitador!
