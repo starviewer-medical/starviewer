@@ -24,9 +24,19 @@ void Study::setParentPatient( Patient *patient )
     m_parentPatient = patient;
 }
 
+Patient* Study::getParentPatient() const
+{
+    return m_parentPatient;
+}
+
 void Study::setInstanceUID( QString uid )
 {
     m_studyInstanceUID = uid;
+}
+
+QString Study::getInstanceUID() const
+{
+    return m_studyInstanceUID;
 }
 
 void Study::setID( QString id )
@@ -34,9 +44,19 @@ void Study::setID( QString id )
     m_studyID = id;
 }
 
+QString Study::getID() const
+{
+    return m_studyID;
+}
+
 void Study::setAccessionNumber( QString accessionNumber )
 {
     m_accessionNumber = accessionNumber;
+}
+
+QString Study::getAccesssionNumber() const
+{
+    return m_accessionNumber;
 }
 
 void Study::setDescription( QString description )
@@ -44,9 +64,19 @@ void Study::setDescription( QString description )
     m_description = description;
 }
 
+QString Study::getDescription() const
+{
+    return m_description;
+}
+
 void Study::setPatientAge( short int age )
 {
     m_age = age;
+}
+
+short int Study::getPatientAge() const
+{
+    return m_age;
 }
 
 void Study::setWeight( double weight )
@@ -54,9 +84,19 @@ void Study::setWeight( double weight )
     m_weight = weight;
 }
 
+double Study::getWeight() const
+{
+    return m_weight;
+}
+
 void Study::setHeight( double height )
 {
     m_height = height;
+}
+
+double Study::getHeight() const
+{
+    return m_height;
 }
 
 bool Study::setDateTime( int day , int month , int year , int hour , int minute )
