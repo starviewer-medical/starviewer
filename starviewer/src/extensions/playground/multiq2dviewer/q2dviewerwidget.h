@@ -31,7 +31,7 @@ public:
     void setInput( Volume *input );
 
 protected:
-    /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
+    /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
     void mousePressEvent ( QMouseEvent * event );
 
 private:

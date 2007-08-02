@@ -16,8 +16,21 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="1" column="0" >
-    <widget class="QWidget" native="1" name="m_workingArea" />
+   <item row="2" column="0" >
+    <widget class="udg::InteractiveWidget" native="1" name="m_volumePanel" >
+     <property name="minimumSize" >
+      <size>
+       <width>0</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>25</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" >
     <layout class="QHBoxLayout" >
@@ -595,29 +608,8 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0" >
-    <widget class="QWidget" native="1" name="m_volumePanel" >
-     <property name="minimumSize" >
-      <size>
-       <width>0</width>
-       <height>10</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>16777215</width>
-       <height>100</height>
-      </size>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-     </layout>
-    </widget>
+   <item row="1" column="0" >
+    <widget class="QWidget" native="1" name="m_workingArea" />
    </item>
   </layout>
  </widget>
@@ -627,6 +619,11 @@
    <class>QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::InteractiveWidget</class>
+   <extends>QWidget</extends>
+   <header>interactivewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>
