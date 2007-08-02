@@ -43,13 +43,6 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
-    /// Canvia el layout de visor singular/doble
-    void changeViewToSingle();
-    void changeViewToDouble();
-
-    /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
-    void setSecondInput( Volume *input );
-
     /// Carrega un Key Image Note
     void loadKeyImageNote(const QString &filename);
 
@@ -57,10 +50,11 @@ public slots:
     void loadPresentationState(const QString &filename);
 
     ///Canviar el nombre de files i columnes
-    void addColumn();
-    void addRow();
-    void removeColumn();
-    void removeRow();
+    void addColumns( int columns = 1 );
+    void addRows(  int rows = 1 );
+    void removeColumns( int columns = 1 );
+    void removeRows( int rows = 1 );
+    void setGrid( int rows, int columns );
 
 private:
     /// Tipus de vistes que podem tenir
@@ -75,9 +69,6 @@ private:
     /// El volum principal
     // TODO treue aquest volum quan estigui el visualitzador multiple
     Volume *m_mainVolume;
-
-    /// Membre temporal
-    Volume *m_secondaryVolume;
 
     /// Accions
     QAction *m_axialViewAction;
@@ -100,6 +91,7 @@ private:
     ToolsActionFactory *m_actionFactory;
 
     QAction *m_presentationStateAction;
+
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
 
@@ -119,7 +111,7 @@ private:
     int m_columns;
 
     /// Renderers que tenim
-    QVector<Q2DViewerWidget*> m_vectorViewers;
+    QVector<Q2DViewerWidget *> m_vectorViewers;
 
     /// Inicialitza els layouts
     void initLayouts();
@@ -127,7 +119,7 @@ private:
     /// Update del nombre de layouts
     void updateLayouts();
 
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]    
+    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
 
     /// Crea les connexions entre signals i slots
@@ -140,28 +132,13 @@ private:
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
-    Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher1, *m_keyImageNoteAttacher2;
+    Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher;
     KeyImageNote *m_keyImageNote;
 
     /// S'encarrega d'aplicar els presentation states
     Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
 
-//     void setViewerSelected( Q2DViewerWidget * viewer );
-//     void rotateClockWise();
-//     void rotateCounterClockWise();
-//     void setVoxelInformationCaptionEnabled(bool option);
-//     void horizontalFlip();
-//     void verticalFlip();
-//     void setWindowLevel(double wl1 ,double wl2);
-//     void resetWindowLevelToDefault();
-
 private slots:
-    /// sincronitza les llesques de les sèries que es visualitzen
-    void synchronizeSlices( bool ok );
-
-    /// ens permet escollir una nova sèrie per a comparar
-    void chooseNewSerie();
-
     /// activem o desactivem el presentation state
     void enablePresentationState( bool enable );
 
@@ -176,10 +153,6 @@ private slots:
     void verticalFlip();
     void setWindowLevel(double wl1 ,double wl2);
     void resetWindowLevelToDefault();
-
-signals:
-    /// Aquest senyal s'emetrà quan es vulgui canviar de sèrie per comparar
-    void newSerie();
 };
 
 } // end namespace udg
