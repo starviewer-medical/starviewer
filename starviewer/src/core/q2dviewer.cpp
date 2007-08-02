@@ -126,7 +126,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     // anotacions
     createAnnotations();
-    createActions();
     addActors();
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
@@ -188,15 +187,6 @@ vtkRenderer *Q2DViewer::getRenderer()
         return m_viewer->GetRenderer();
     else
         return NULL;
-}
-
-void Q2DViewer::createActions()
-{
-    m_resetAction = new QAction( this );
-    m_resetAction->setText(tr("&Reset"));
-    m_resetAction->setShortcut( tr("Ctrl+R") );
-    m_resetAction->setStatusTip(tr("Reset initial parameters"));
-    connect( m_resetAction, SIGNAL( triggered() ), this, SLOT( reset() ) );
 }
 
 void Q2DViewer::createAnnotations()
@@ -788,6 +778,10 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
         this->refresh();
     break;
 
+    case QVTKWidget::ContextMenuEvent:
+        this->contextMenuRelease();
+    break;
+
     default:
     break;
     }
@@ -795,27 +789,20 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     emit eventReceived( event );
 }
 
-void Q2DViewer::contextMenuRelease( vtkObject* object , unsigned long event, void *client_data, void *call_data, vtkCommand *command )
+void Q2DViewer::contextMenuRelease()
 {
     // Extret dels exemples de vtkEventQtSlotConnect
-    // get interactor
-    vtkRenderWindowInteractor* iren = vtkRenderWindowInteractor::SafeDownCast(object);
-    // consume event so the interactor style doesn't get it
-    command->AbortFlagOn();
-    // Obtenim la posició de l'event (moure el mouse, en aquest cas)
-    int eventPosition[2];
-    iren->GetEventPosition( eventPosition );
-    int* size = iren->GetSize();
-    // remember to flip y
-    QPoint pt = QPoint( eventPosition[0], size[1]-eventPosition[1]);
 
-    // aquesta posició no és del tot bona ja que no són les coordenades globals, sin o de finestra
-    QMenu contextMenu( this );
-    contextMenu.addAction( m_resetAction );
+    // Obtenim la posició de l'event
+    int eventPosition[2];
+    this->getInteractor()->GetEventPosition( eventPosition );
+    int* size = this->getInteractor()->GetSize();
+    // remember to flip y
+    QPoint point = QPoint( eventPosition[0], size[1]-eventPosition[1] );
 
     // map to global
-    QPoint global_pt = contextMenu.parentWidget()->mapToGlobal( pt );
-    contextMenu.exec( global_pt );
+    QPoint globalPoint = this->mapToGlobal( point );
+    emit showContentMenu( globalPoint );
 }
 
 void Q2DViewer::setupInteraction()
@@ -844,11 +831,6 @@ void Q2DViewer::setupInteraction()
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
 
-// menú contextual TODO el farem servir???
-//     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
-//                       QVTKWidget::ContextMenuEvent,//vtkCommand::RightButtonPressEvent,
-//                        this,
-//                        SLOT( contextMenuRelease(vtkObject*,unsigned long,void*, vtkCommand *) ) );
 }
 
 void Q2DViewer::setInput( Volume* volume )
