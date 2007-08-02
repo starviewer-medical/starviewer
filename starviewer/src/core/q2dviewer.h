@@ -88,7 +88,7 @@ public:
 
     Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
-    
+
     virtual vtkRenderer *getRenderer();
     virtual void setInput( Volume* volume );
 
@@ -237,7 +237,8 @@ public slots:
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int x , int y , int z );
 
-    void contextMenuRelease( vtkObject *object, unsigned long event, void *client_data, void *call_data, vtkCommand * command);
+    /// s'executa quan es rep un event de ContextMenu (click botó dret). Mapeja els punts rebuts per enviar una senyal amb el QPoint global que indica on s'ha de mostrar el menú o widget de contexte que necessiti la extensió on es trobi
+    void contextMenuRelease();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
@@ -300,12 +301,6 @@ protected:
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
 
-    /// Aquest mètode es fa servir perquè es mostri un menú contextual
-    //virtual void contextMenuEvent( QContextMenuEvent *event );
-
-    /// Acció temporal de proves. Simplement fa un reset mostrant la llesca central de nou
-    QAction *m_resetAction;
-
     /// per a les vistes 2D farem servir el vtkImageViewer2
     vtkImageViewer2 *m_viewer;
 
@@ -363,9 +358,6 @@ private:
 
     /// configuració de la interacció amb l'usuari
     void setupInteraction();
-
-    /// Crea i inicialitza totes les accions d'aquest widget
-    void createActions();
 
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
@@ -586,6 +578,8 @@ signals:
     /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
     void rotationDegreesChanged(double);
 
+    /// informa de la posició on s'ha de mostrar el menú de contexte
+    void showContentMenu( QPoint menuPoint );
 };
 
 };  //  end  namespace udg
