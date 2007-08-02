@@ -40,7 +40,9 @@ bool ImageFillerStep::fill()
         }
     }
     else
+    {
         DEBUG_LOG("No tenim input!");
+    }
 
     return ok;
 }
@@ -93,10 +95,11 @@ void ImageFillerStep::processImage( Image *image )
 
         QString value = dicomReader.getAttributeByName( DCM_ContentDate );
         if( !value.isEmpty() )
-            image->setContentDate( value.mid(0,4).toInt(), value.mid(4,2).toInt(), value.mid(6,2).toInt() );
+            image->setContentDate(value);
+
         value = dicomReader.getAttributeByName( DCM_ContentTime );
         if( !value.isEmpty() )
-            image->setContentTime( value.mid(0,2).toInt(), value.mid(2,2).toInt() );
+            image->setContentTime(value);
 
         image->setImagesInAcquisition( dicomReader.getAttributeByName( DCM_ImagesInAcquisition ).toInt() );
         image->setComments( dicomReader.getAttributeByName( DCM_ImageComments ) );
@@ -108,9 +111,11 @@ void ImageFillerStep::processImage( Image *image )
         {
             double orientation[6];
             for( int i = 0; i < 6; i++ )
+            {
                 orientation[ i ] = list.at( i ).toDouble();
+            }
 
-            //image->setImageOrientation( orientation );
+            image->setImageOrientation( orientation );
         }
 
         value = dicomReader.getAttributeByName( DCM_ImagePosition );
@@ -127,7 +132,9 @@ void ImageFillerStep::processImage( Image *image )
         image->setColumns( dicomReader.getAttributeByName( DCM_Columns ).toInt() );
     }
     else
+    {
         DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + image->getPath() );
+    }
 }
 
 }
