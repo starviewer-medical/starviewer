@@ -58,41 +58,41 @@ public:
 
     /// Assignar/Obtenir la modalitat de la sèrie
     void setModality( QString modality );
-    QString getModality() const { return m_modality; };
+    QString getModality() const;
 
     /// Assignar/Obtenir el número de la sèrie
     void setSeriesNumber( QString number );
-    QString getSeriesNumber() const { return m_seriesNumber; };
+    QString getSeriesNumber() const;
 
     /// Assignar/Obtenir el FrameOfReferenceUID
     void setFrameOfReferenceUID( QString uid );
-    QString getFrameOfReferenceUID() const { return m_frameOfReferenceUID; };
+    QString getFrameOfReferenceUID() const;
 
     /// Assignar/Obtenir el PositionReferenceIndicator
     void setPositionReferenceIndicator( QString position );
-    QString getPositionReferenceIndicator() const { return m_positionReferenceIndicator; };
+    QString getPositionReferenceIndicator() const;
 
     /// Assignar/Obtenir la descripció de la sèrie
     void setDescription( QString description );
-    QString getDescription() const { return m_description; };
+    QString getDescription() const;
 
     /// Assignar/Obtenir la posició del pacient relativa a la màquina
     void setPatientPosition( QString position );
-    QString getPatientPosition() const { return m_patientPosition; }
+    QString getPatientPosition() const;
 
     /// Assignar/Obtenir el protocol de la sèrie
     void setProtocolName( QString protocolName );
-    QString getProtocolName() const { return m_protocolName; };
+    QString getProtocolName() const;
 
     /// Assignar/Obtenir el path de les imatges de la sèrie
     void setImagesPath( QString imagesPath );
-    QString getImagesPath() const { return m_imagesPath; };
+    QString getImagesPath() const;
 
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
     bool setDateTime( int day , int month , int year , int hour , int minute );
     bool setDateTime( QString date , QString time );
     bool setDateTime( QString dateTime );
-    QDateTime getDateTime() const { return m_dateTime; };
+    QDateTime getDateTime() const;
     QString getDateTimeAsString();
     bool setDate( int day , int month , int year );
     bool setDate( QString date );
@@ -105,12 +105,12 @@ public:
 
     /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
     void setInstitutionName( QString institutionName );
-    QString getInstitutionName() const { return m_institutionName; }
+    QString getInstitutionName() const;
 
     /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie
     //\TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
     void setVolumeIdentifier( Identifier id );
-    Identifier getVolumeIdentifier() const { return m_volumeID; }
+    Identifier getVolumeIdentifier() const;
 
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
@@ -131,16 +131,16 @@ public:
     QStringList getImagesPathList();
 
     /// Ens diu si la sèrie està marcada com a seleccionada o no
-    inline bool isSelected() const { return m_selected; }
+    bool isSelected() const;
 
     /// Mètode per afegir un sol volum a la llista de volums de la serie \TODO mètode de proves no definitiu
-    void setVolume( Volume * volume ){ m_volumesList.push_back(volume); }
+    void setVolume(Volume * volume);
 
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
-    void select(){ setSelectStatus( true ); };
-    void unSelect(){ setSelectStatus( false ); };
-    void setSelectStatus( bool select ){ m_selected = select; };
+    void select();
+    void unSelect();
+    void setSelectStatus(bool select);
 
 private:
     /// Informació comuna de la sèrie. C.7.3.1 General Series Module - PS 3.3.
