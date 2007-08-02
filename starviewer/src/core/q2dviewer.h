@@ -579,7 +579,7 @@ signals:
     void rotationDegreesChanged(double);
 
     /// informa de la posició on s'ha de mostrar el menú de contexte
-    void showContentMenu( QPoint menuPoint );
+    void showContextMenu( QPoint menuPoint );
 };
 
 };  //  end  namespace udg

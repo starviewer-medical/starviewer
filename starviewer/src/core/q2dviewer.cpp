@@ -802,7 +802,7 @@ void Q2DViewer::contextMenuRelease()
 
     // map to global
     QPoint globalPoint = this->mapToGlobal( point );
-    emit showContentMenu( globalPoint );
+    emit showContextMenu( globalPoint );
 }
 
 void Q2DViewer::setupInteraction()
