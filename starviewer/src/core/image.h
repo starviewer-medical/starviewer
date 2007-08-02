@@ -43,13 +43,17 @@ public:
     void setPatientOrientation( QString orientation );
     QString getPatientOrientation() const;
 
-    /// Assignar/Obtenir la data i hora d'adquisició de la imatge en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
-    bool setContentDateTime( int day , int month , int year , int hour , int minute, int seconds = 0 );
-    bool setContentDateTime( QString date , QString time );
-    bool setContentDate( int day , int month , int year );
-    bool setContentDate( QString date );
-    bool setContentTime( int hour , int minute, int seconds = 0 );
-    bool setContentTime( QString time );
+    /// Assignar/Obtenir la data i hora d'adquisició de la imatge. El format de la data serà YYYYMMDD i el del
+    /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
+    ///  Retorna fals si hi ha algun error en el format
+    bool setContentDateTime(int day, int month, int year, int hour, int minute, int second = 0 );
+    bool setContentDateTime(QString date, QString time);
+    bool setContentDate(int day, int month, int year);
+    bool setContentDate(QString date);
+    bool setContentDate(QDate date);
+    bool setContentTime(int hour, int minute, int second = 0);
+    bool setContentTime(QString time);
+    bool setContentTime(QTime time);
     QDate getContentDate() const;
     QString getContentDateAsString();
     QTime getContentTime() const;

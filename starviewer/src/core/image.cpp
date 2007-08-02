@@ -69,72 +69,75 @@ QString Image::getPatientOrientation() const
     return m_patientOrientation;
 }
 
-bool Image::setContentDateTime( int day , int month , int year , int hour , int minute, int seconds )
+bool Image::setContentDateTime(int day, int month, int year, int hour, int minute, int second)
 {
-    return this->setContentDate( day, month, year ) && this->setContentTime( hour, minute, seconds );
+    return this->setContentDate( day, month, year ) && this->setContentTime( hour, minute, second );
 }
 
-bool Image::setContentDateTime( QString date , QString time )
+bool Image::setContentDateTime(QString date, QString time)
 {
     return this->setContentDate( date ) && this->setContentTime( time );
 }
 
-bool Image::setContentDate( int day , int month , int year )
+bool Image::setContentDate(int day, int month, int year)
 {
-    bool ok = true;
-    if( !m_contentDate.setDate( year, month, day ) )
-    {
-        ok = false;
-        DEBUG_LOG("Error en el format de la data");
-    }
-    return ok;
+    return setContentDate( QDate(year, month, day) );
 }
 
-bool Image::setContentDate( QString date )
+bool Image::setContentDate(QString date)
 {
-    QStringList split = date.split("/");
-    bool ok = false;
-    if( split.size() == 3 )
+    // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
+    return setContentDate( QDate::fromString(date.remove("."), "yyyyMMdd") );
+}
+
+bool Image::setContentDate(QDate date)
+{
+    if (date.isValid())
     {
-        ok = this->setContentDate( split.at(0).toInt(), split.at(1).toInt(), split.at(2).toInt() );
+        m_contentDate = date;
+        return true;
     }
     else
-        DEBUG_LOG("La data està en un mal format-> " + date );
-
-    return ok;
+    {
+        DEBUG_LOG("La data està en un mal format" );
+        return false;
+    }
 }
 
-bool Image::setContentTime( int hour , int minute, int seconds )
+bool Image::setContentTime(int hour, int minutes, int second)
 {
-    bool ok = true;
-    if( !m_contentTime.setHMS( hour, minute, seconds ) )
-    {
-        ok = false;
-        DEBUG_LOG("Error en el format de la hora");
-    }
-    return ok;
+    return setContentTime( QTime(hour, minutes, second) );
 }
 
 bool Image::setContentTime( QString time )
 {
-    QStringList split = time.split(":");
-    bool ok = false;
-    switch( split.size() )
+    // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
+    time = time.remove(":");
+
+    QStringList split = time.split(".");
+    QTime convertedTime = QTime::fromString(split[0], "hhmmss");
+
+    if (split.size() == 2) //té fracció al final
     {
-    case 2:
-        ok = this->setContentTime( split.at(0).toInt(), split.at(1).toInt() );
-    break;
-
-    case 3:
-        ok = this->setContentTime( split.at(0).toInt(), split.at(1).toInt(), split.at(2).toInt() );
-    break;
-
-    default:
-        DEBUG_LOG("La hora està en un mal format-> " + time );
-    break;
+        // Trunquem a milisegons i no a milionèssimes de segons
+        convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
     }
 
-    return ok;
+    return setContentTime( convertedTime );
+}
+
+bool Image::setContentTime(QTime time)
+{
+    if (time.isValid())
+    {
+        m_contentTime = time;
+        return true;
+    }
+    else
+    {
+        DEBUG_LOG("El time està en un mal format" );
+        return false;
+    }
 }
 
 QDate Image::getContentDate() const
@@ -144,7 +147,7 @@ QDate Image::getContentDate() const
 
 QString Image::getContentDateAsString()
 {
-    return m_contentDate.toString("dd/MM/yyyy");
+    return m_contentDate.toString(Qt::LocaleDate);
 }
 
 QTime Image::getContentTime() const
@@ -179,6 +182,10 @@ QString Image::getComments() const
 
 void Image::setImagePosition( double position[3] )
 {
+    for(int i = 0; i < 3; ++i)
+    {
+        m_imagePosition[i] = position[i];
+    }
 }
 
 const double *Image::getImagePosition() const
