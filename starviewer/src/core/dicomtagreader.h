@@ -40,15 +40,19 @@ public:
     bool tagExists( DcmTagKey tag );
     bool tagExists( unsigned int group, unsigned int element );
 
-    /// Obtenim el valor d'un atribut en un string fent el query pel seu tag o pel seu nom a través dels define's de dcmtk
+    /// Obtenim el valor d'un atribut en un string fent el query pel seu tag o pel seu nom a través dels define's de dcmtk.
+    /// Si no es troba o hi ha un error al llegir-lo, es retorna un QString buit.
     QString getAttributeByTag( unsigned int group, unsigned int element );
     QString getAttributeByName( DcmTagKey tag );
 
-    /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència. Tindrem tants valors d'aquell atribut com items tingui la seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
+    /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència. Tindrem tants valors d'aquell atribut com
+    /// items tingui la seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
     QStringList getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element );
     QStringList getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag );
 
-    /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència aniuada. Donem la llista aniuada de seqüències i l'atribut que volem de la última seqüència. Tindrem tants valors d'aquell atribut com items tingui la seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
+    /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència aniuada. Donem la llista aniuada de
+    /// seqüències i l'atribut que volem de la última seqüència. Tindrem tants valors d'aquell atribut com items tingui la
+    /// seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
     QStringList getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element );
     QStringList getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag );
 

@@ -78,9 +78,19 @@ void Series::setModality( QString modality )
     m_modality = modality;
 }
 
+QString Series::getModality() const
+{
+    return m_modality;
+}
+
 void Series::setSeriesNumber( QString number )
 {
     m_seriesNumber = number;
+}
+
+QString Series::getSeriesNumber() const
+{
+    return m_seriesNumber;
 }
 
 void Series::setFrameOfReferenceUID( QString uid )
@@ -88,9 +98,19 @@ void Series::setFrameOfReferenceUID( QString uid )
     m_frameOfReferenceUID = uid;
 }
 
+QString Series::getFrameOfReferenceUID() const
+{
+    return m_frameOfReferenceUID;
+}
+
 void Series::setPositionReferenceIndicator( QString position )
 {
     m_positionReferenceIndicator = position;
+}
+
+QString Series::getPositionReferenceIndicator() const
+{
+    return m_positionReferenceIndicator;
 }
 
 void Series::setDescription( QString description )
@@ -98,9 +118,19 @@ void Series::setDescription( QString description )
     m_description = description;
 }
 
+QString Series::getDescription() const
+{
+    return m_description;
+}
+
 void Series::setPatientPosition( QString position )
 {
     m_patientPosition = position;
+}
+
+QString Series::getPatientPosition() const
+{
+    return m_patientPosition;
 }
 
 void Series::setProtocolName( QString protocolName )
@@ -108,9 +138,19 @@ void Series::setProtocolName( QString protocolName )
     m_protocolName = protocolName;
 }
 
+QString Series::getProtocolName() const
+{
+    return m_protocolName;
+}
+
 void Series::setImagesPath( QString imagesPath )
 {
     m_imagesPath = imagesPath;
+}
+
+QString Series::getImagesPath() const
+{
+    return m_imagesPath;
 }
 
 bool Series::setDateTime( int day , int month , int year , int hour , int minute )
@@ -152,6 +192,11 @@ bool Series::setDate( QString date )
     return m_dateTime.isValid();
 }
 
+QDateTime Series::getDateTime() const
+{
+    return m_dateTime;
+}
+
 bool Series::setTime( int hour , int minute )
 {
     m_dateTime.setTime( QTime( hour , minute ) );
@@ -189,9 +234,19 @@ void Series::setInstitutionName( QString institutionName )
     m_institutionName = institutionName;
 }
 
+QString Series::getInstitutionName() const
+{
+    return m_institutionName;
+}
+
 void Series::setVolumeIdentifier( Identifier id )
 {
     m_volumeID = id;
+}
+
+Identifier Series::getVolumeIdentifier() const
+{
+    return m_volumeID;
 }
 
 void Series::addFilePath(QString filePath)
@@ -225,6 +280,32 @@ QStringList Series::getImagesPathList()
     }
 
     return pathList;
+}
+
+bool Series::isSelected() const
+{
+    return m_selected;
+}
+
+
+void Series::setVolume( Volume * volume )
+{
+    m_volumesList.push_back(volume);
+}
+
+void Series::select()
+{
+    setSelectStatus( true );
+}
+
+void Series::unSelect()
+{
+    setSelectStatus( false );
+}
+
+void Series::setSelectStatus( bool select )
+{
+    m_selected = select;
 }
 
 }

@@ -60,6 +60,7 @@ public:
     QString getContentTimeAsString();
 
     /// Assignar/Obtenir el numero d'imatges en l'adquisició
+    // TODO Aquest paràmetre és de categoria 3. Cal?? Si cal, caldria establir un mecanisme per preguntar per els tags "opcionals"
     void setImagesInAcquisition( int images );
     int getImagesInAcquisition() const;
 
