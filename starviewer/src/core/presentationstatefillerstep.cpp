@@ -64,10 +64,6 @@ void PresentationStateFillerStep::processSeries( Series *series )
         // TODO recopilar tots els elements presentation state i processar-los
         m_input->addLabelToSeries("PresentationStateFillerStep", series->getInstanceUID() );
     }
-    else
-    {
-        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no es processa perquè no és una sèrie de Presentation States. És de modalitat: " + series->getModality() );
-    }
 }
 
 void PresentationStateFillerStep::processPresentationState()

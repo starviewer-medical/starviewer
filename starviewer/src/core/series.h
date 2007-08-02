@@ -136,6 +136,8 @@ public:
     /// Mètode per afegir un sol volum a la llista de volums de la serie \TODO mètode de proves no definitiu
     void setVolume(Volume * volume);
 
+    QString toString(bool verbose = false);
+
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
     void select();

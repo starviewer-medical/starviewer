@@ -67,7 +67,6 @@ void ImageFillerStep::processSeries( Series *series )
     {
         foreach (QString file, series->getFilesPathList())
         {
-            DEBUG_LOG("Afegim " + file);
             Image *image = new Image;
             image->setPath( file );
 

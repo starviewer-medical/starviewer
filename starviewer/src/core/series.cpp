@@ -287,10 +287,32 @@ bool Series::isSelected() const
     return m_selected;
 }
 
-
 void Series::setVolume( Volume * volume )
 {
     m_volumesList.push_back(volume);
+}
+
+QString Series::toString(bool verbose)
+{
+    QString result;
+
+    result += "        - Series\n";
+    result += "            SeriesNumber : " + getSeriesNumber() + "\n";
+    result += "            Modality : " + getModality() + "\n";
+    result += "            Description : " + getDescription() + "\n";
+    result += "            ProtocolName : " + getProtocolName() + "\n";
+    result += "            Num.Images : " + QString::number( getImages().size() ) + "\n";
+
+    if (verbose)
+    {
+        foreach (Image *image, getImages())
+        {
+            result += "            - Image " + image->getPath() + "\n";
+        }
+    }
+    // TODO Idem per PS, KIN....
+
+    return result;
 }
 
 void Series::select()
