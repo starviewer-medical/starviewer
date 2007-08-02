@@ -286,6 +286,9 @@ void MultiQ2DViewerExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_viewer->setInput( m_mainVolume );
 
+    //TODO Mètode de proves
+    m_volumePanel->setVolume( input );
+
     // Omplim el combo amb tants window levels com tingui el volum
     double wl[2];
     int wlCount = m_mainVolume->getVolumeSourceInformation()->getNumberOfWindowLevels();
@@ -308,7 +311,7 @@ void MultiQ2DViewerExtension::setInput( Volume *input )
     }
     m_windowLevelComboBox->setCurrentIndex( 0 );
 
-    INFO_LOG("Q2DViewerExtension: Donem l'input principal")
+    INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 //     changeViewToAxial();
 
     //Update dels layouts
