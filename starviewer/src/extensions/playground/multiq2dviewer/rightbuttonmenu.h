@@ -28,14 +28,23 @@ Q_OBJECT
 public:
 
     RightButtonMenu( QWidget *parent = 0 );
-
     ~RightButtonMenu(){}
 
-    // Posem el pacient al widget
+    /// Posem el pacient al widget
     void setPatient( Patient * patient );
 
-private:
+signals:
+    /// senyal que envia la serie escollida per ser visualitzada
+    void selectedSeries( Series *series );
+    void selectedSeries( QString uid );
 
+public slots:
+    void showInformation( int y, QWidget * moreInformation );
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event);
+
+private:
     /// Creem un widget amb la informació bàsica d'un estudi
     QWidget * createStudyWidget( Study * study, QWidget * parent );
 
@@ -47,11 +56,6 @@ private:
 
     QMenu rightMenu;
 
-protected:
-    void contextMenuEvent(QContextMenuEvent *event);
-
-public slots:
-    void showInformation( int y, QWidget * moreInformation );
 };
 
 }
