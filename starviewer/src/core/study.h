@@ -99,6 +99,8 @@ public:
     /// Mètode per obtenir la llista de series de l'estudi
     QList< Series* > getSeries();
 
+    QString toString();
+
 private:
     /// Informació comuna de l'estudi. C.7.2.1 General Study Module - PS 3.3.
 

@@ -242,4 +242,20 @@ QList< Series* > Study::getSeries()
     return m_seriesSet.values();
 }
 
+QString Study::toString()
+{
+    QString result;
+
+    result += "    - Study\n";
+    result += "        InstanceUID : " + getInstanceUID() + "\n";
+    result += "        Description : " + getDescription() + "\n";
+
+    foreach (Series *series, getSeries())
+    {
+        result += series->toString();
+    }
+
+    return result;
+}
+
 }

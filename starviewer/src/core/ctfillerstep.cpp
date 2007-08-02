@@ -63,10 +63,6 @@ void CTFillerStep::processSeries( Series *series )
         DEBUG_LOG("Cal implementar el tractament específic del CTFillerStep!");
         m_input->addLabelToSeries("CTFillerStep", series->getInstanceUID() );
     }
-    else
-    {
-        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no es processa perquè no és un CT. És de modalitat: " + series->getModality() );
-    }
 }
 
 }

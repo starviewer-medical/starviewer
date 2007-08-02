@@ -9,9 +9,6 @@
 
 #include <QStringList>
 
-#include "image.h" //TODO Treure quan es refaci el toString
-#include "series.h" //TODO Treure quan es refaci el toString
-
 namespace udg {
 
 Patient::Patient(QObject *parent)
@@ -203,41 +200,7 @@ QString Patient::toString()
 
     foreach (Study *study, getStudies())
     {
-        result += "    - Study\n";
-        result += "        InstanceUID : " + study->getInstanceUID() + "\n";
-        result += "        Description : " + study->getDescription() + "\n";
-
-        foreach (Series *series, study->getSeries())
-        {
-            result += "        - Series\n";
-            result += "            SeriesNumber : " + series->getSeriesNumber() + "\n";
-            result += "            Modality : " + series->getModality() + "\n";
-            result += "            Description : " + series->getDescription() + "\n";
-            result += "            ProtocolName : " + series->getProtocolName() + "\n";
-
-            if (series->hasImages())
-            {
-                foreach (Image *image, series->getImages())
-                {
-                    result += "            - Image " + image->getPath() + "\n";
-                }
-            }
-            else
-            {
-                result += "            - No té imatges\n";
-            }
-/*
-            if (series->hasPresentationStates())
-            {
-                ....
-            }
-            else
-            {
-                result += "No té PresentationStates";
-            }
-            result += "\n";
-*/
-        }
+        result += study->toString();
     }
 
     return result;

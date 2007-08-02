@@ -84,7 +84,11 @@ QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
         }
         else
         {
-            DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( tag.toString().c_str() ).arg( status.text() ) );
+            if (QString(status.text()) != "Tag Not Found")
+            {
+                DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
+                                    .arg( tag.toString().c_str() ).arg( status.text() ) );
+            }
         }
     }
     else

@@ -64,10 +64,6 @@ void KeyImageNoteFillerStep::processSeries( Series *series )
         // TODO recollir tots els elements key image note i processar-los
         m_input->addLabelToSeries("KeyImageNoteFillerStep", series->getInstanceUID() );
     }
-    else
-    {
-        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no es processa perquè no és una sèrie de key image notes. És de modalitat: " + series->getModality() );
-    }
 }
 
 void KeyImageNoteFillerStep::processKeyImageNote()
