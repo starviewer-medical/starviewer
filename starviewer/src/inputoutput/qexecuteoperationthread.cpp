@@ -240,7 +240,8 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     HardDiskInformation hardDiskInformation;
     CachePool pool;
     StarviewerSettings settings;
-    unsigned int freePoolSpace, freeSystemSpace;
+    unsigned int freePoolSpace;
+    quint64 freeSystemSpace;
     Status state;
     CacheLayer cacheLayer;
     QString logMessage,stringMb;
