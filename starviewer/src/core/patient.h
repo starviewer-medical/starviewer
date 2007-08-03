@@ -70,6 +70,9 @@ public:
     /// Mètode per obtenir la llista d'estudis del pacient
     QList<Study *> getStudies() const;
 
+    /// Operador d'assignació
+    Patient & operator =( const Patient &patient );
+
     /// Operador de fusió de pacient. Amb aquest operador podrem unificar en un sol objecte Patient la informació de dos Patient
     /// sempre que siguin identificats com a el mateix pacient. Això seria equivalent a un operador de Unió de conjunts
     // \TODO aquí caldria rumiar-se si es pot forçar la fusió encara que siguin pacients diferents aparentment.
