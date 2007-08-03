@@ -183,7 +183,7 @@ bool Series::setDate( QDate date )
     }
     else
     {
-        DEBUG_LOG("La data està en un mal format" );
+        DEBUG_LOG("La data està en un mal format: " + date.toString( Qt::LocaleDate ) );
         return false;
     }
 }
