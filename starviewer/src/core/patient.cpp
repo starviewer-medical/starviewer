@@ -16,6 +16,18 @@ Patient::Patient(QObject *parent)
 {
 }
 
+Patient::Patient( const Patient &patient, QObject *parent )
+ : QObject( parent )
+{
+    m_fullName = patient.m_fullName;
+    m_patientID = patient.m_patientID;
+    m_birthDate = patient.m_birthDate;
+    m_sex = patient.m_sex;
+    m_identityIsRemoved = patient.m_identityIsRemoved;
+    m_studiesSet = patient.m_studiesSet;
+}
+
+
 Patient::~Patient()
 {
     m_studiesSet.clear();
@@ -120,23 +132,23 @@ QList<Study*> Patient::getStudies() const
     return m_studiesSet.values();
 }
 
-Patient *Patient::operator +( const Patient *patient )
+Patient Patient::operator +( const Patient &patient )
 {
-    Patient *result = new Patient;
-    if( this->isSamePatient( patient ) )
+    Patient result;
+    if( this->isSamePatient( &patient ) )
     {
         // copiem informació estructural en el resultat
-        result->copyPatientInformation( patient );
-        result->m_studiesSet = this->m_studiesSet;
+        result.copyPatientInformation( &patient );
+        result.m_studiesSet = this->m_studiesSet;
 
         // ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
-        QList<Study *> studyListToAdd = patient->getStudies();
+        QList<Study *> studyListToAdd = patient.getStudies();
         QString uid;
         foreach( Study *study, studyListToAdd )
         {
             uid = study->getInstanceUID();
-            if( !result->studyExists(uid) )
-                result->addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
+            if( !result.studyExists(uid) )
+                result.addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
         }
     }
     else
@@ -146,13 +158,13 @@ Patient *Patient::operator +( const Patient *patient )
     return result;
 }
 
-Patient *Patient::operator +=( const Patient *patient )
+Patient Patient::operator +=( const Patient &patient )
 {
     // si coincideix nom o ID llavors es poden fusionar TODO mirar de definir aquest criteri
-    if( isSamePatient( patient ) )
+    if( isSamePatient( &patient ) )
     {
         // recorrem els estudis que té "l'altre pacient" per afegir-los al resultat (aquesta mateixa instància) si no els té ja
-        QList<Study *> studyListToAdd = patient->getStudies();
+        QList<Study *> studyListToAdd = patient.getStudies();
         QString uid;
         foreach( Study *study, studyListToAdd )
         {
@@ -168,13 +180,13 @@ Patient *Patient::operator +=( const Patient *patient )
     return this;
 }
 
-Patient *Patient::operator -( const Patient *patient )
+Patient Patient::operator -( const Patient &patient )
 {
     // TODO implementa'm!
     DEBUG_LOG("Mètode per implementar");
 }
 
-Patient *Patient::operator -=( const Patient *patient )
+Patient Patient::operator -=( const Patient &patient )
 {
     // TODO implementa'm!
     DEBUG_LOG("Mètode per implementar");

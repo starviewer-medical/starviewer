@@ -26,6 +26,9 @@ Q_OBJECT
 public:
     Patient( QObject *parent = 0 );
 
+    /// constructor per còpia, necessari pels operadors +, +=, -, -=
+    Patient( const Patient &patient, QObject *parent = 0 );
+
     ~Patient();
 
     /// Assigna/Obté el nom complet del pacient
@@ -70,14 +73,14 @@ public:
     /// Operador de fusió de pacient. Amb aquest operador podrem unificar en un sol objecte Patient la informació de dos Patient
     /// sempre que siguin identificats com a el mateix pacient. Això seria equivalent a un operador de Unió de conjunts
     // \TODO aquí caldria rumiar-se si es pot forçar la fusió encara que siguin pacients diferents aparentment.
-    Patient *operator+( const Patient *patient );
-    Patient *operator+=( const Patient *patient );
+    Patient operator+( const Patient &patient );
+    Patient operator+=( const Patient &patient );
 
     /// Operador de "resta" de pacient. Amb aquest operador podrem treure d'un objecte Patient la informació comuna entre dos Patient
     /// sempre que siguin identificats com a el mateix pacient. Per exemple els estudis comuns en ambdòs parts quedarien fora en el resultat,
     /// per tant el que s'esborraria seria la "intersecció" del seu conjunt d'estudis i/o sèries, imatges, etc
-    Patient *operator-( const Patient *patient );
-    Patient *operator-=( const Patient *patient );
+    Patient operator-( const Patient &patient );
+    Patient operator-=( const Patient &patient );
 
     /// retorna cert si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
     /// No compara ni els estudis ni les sèries que conté, únicament la identificació
