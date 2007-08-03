@@ -1,7 +1,7 @@
 #include "neighborhoodconnected.h"
 #include "volume.h"
 #include <iostream.h>
-
+#include "logging.h"
 namespace udg {
 
 ///Constructor
@@ -30,7 +30,7 @@ NeighborhoodConnected::~NeighborhoodConnected()
 void NeighborhoodConnected::addSeed( int x, int y, int z )
 {		
     
-    std::cout<<"llavors a addSedd "<< x <<std::endl;
+    //std::cout<<"llavors a addSedd "<< x <<std::endl;
     VolumeImageIndexType seed;
     seed[0] = x;
     seed[1] = y;
@@ -101,19 +101,21 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     
         
     /// Executa la segmentaci�
-    std::cout << "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** " << std::endl;
+   // std::cout << "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** " << std::endl;
+    INFO_LOG( "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** ");
     try
     {
         m_casterOutput->Update();
     }
     catch( itk::ExceptionObject & e )
     {
-        std::cerr << "ERROR: No ha anat b� la segmentaci�. (NeighborhoodConnected)" << std::endl;
-        std::cerr << "Exception caught! " << std::endl;
-        std::cerr << e << std::endl;
+        //std::cerr << "ERROR: No ha anat b� la segmentaci�. (NeighborhoodConnected)" << std::endl;
+        //std::cerr << "Exception caught! " << std::endl;
+        //std::cerr << e << std::endl;
         return false;
     }
-    std::cout << "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** " << std::endl;
+     INFO_LOG( "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** ");
+    //std::cout << "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** " << std::endl;
      
     ///-------------------- Resultats ------------------
 

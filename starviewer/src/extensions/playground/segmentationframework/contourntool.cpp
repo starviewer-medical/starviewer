@@ -5,45 +5,36 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "contourntool.h"
-
 #include "volume.h"
-#include <QAction>
-
 #include "q2dviewer.h"
-#include "logging.h"
-#include <vtkCommand.h>
-#include <vtkSphereSource.h>
-#include <vtkActor.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkProperty.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkPolyData.h>
-#include <vtkSplineWidget.h>
 #include <determinatecontour.h>
+#include "logging.h"
+//QT
+#include <QAction>
+#include <QApplication>
+//VTK
+#include <vtkCommand.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkSplineWidget.h>
+
 
 namespace udg {
 
 ContournTool::ContournTool( Q2DViewer *viewer, Volume * seg,QObject *parent )
-// : Tool(parent)
+
 {
     m_state = NONE;
     m_2DViewer = viewer;
-    //m_seg = -1;
     m_seedSlice = -1;
     m_lastView= -1;
     m_con = 0;
     m_seg=seg;
-    //m_pointActor = vtkActor::New();
-    //m_poly = vtkPolyData::New();
     m_spline = vtkSplineWidget::New();
     m_calculat = false;
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
     connect( m_2DViewer , SIGNAL( viewChanged(int) ) , this , SLOT( viewChanged(int) ) );
     setContourn();
-    //connect(m_2DViewer, SIGNAL(vtkCommand::LeftButtonPressEvent),this,SLOT(setContourn());
-    //setContourn();
-
+    
     
 }
 
@@ -53,11 +44,7 @@ ContournTool::~ContournTool()
 
      m_spline->Off();
      m_spline->Delete();
-//     m_con->delete();
-//     m_seg->delete();
-    //m_splineY->Delete();
-    //m_splineZ->Delete();
-    //m_pointActor-> Delete();
+
 }
 
 /*void ContournTool::createAction()
@@ -69,7 +56,7 @@ void ContournTool::handleEvent( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-        setContourn();
+        //setContourn();
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -89,16 +76,18 @@ void ContournTool::setContourn( )
 {
 
     m_state=CONTOURING;
-   // m_seg=m_2DViewer->getOverlayInput();
+   
     xt=((ImageType*)m_seg->getItkData())->GetSpacing()[1];
     yt=((ImageType*)m_seg->getItkData())->GetSpacing()[2];
     zt=((ImageType*)m_seg->getItkData())->GetSpacing()[0];
-    bool trob;
-    int i;
     
-    //float xt =1;
-    //float yt =1;
-    if(!m_calculat){
+    m_spline->SetPriority(1.0);
+    m_spline->SetInteractor(m_2DViewer->getInteractor());
+    m_spline->ProjectToPlaneOn();
+
+
+     if(!m_calculat){
+     //QApplication::setOverrideCursor(Qt::WaitCursor);
 
      m_con3=new DeterminateContour((ImageType*)m_seg->getItkData(),1);
 
@@ -109,9 +98,8 @@ void ContournTool::setContourn( )
     
     m_calculat=true;
     }
-    m_spline->SetPriority(1.0);
-    m_spline->SetInteractor(m_2DViewer->getInteractor());
-    m_spline->ProjectToPlaneOn();
+    //QApplication::restoreOverrideCursor();
+    
     doContouring();
 
    
@@ -266,10 +254,6 @@ switch( m_2DViewer->getView() )
 
 }
 
-void ContournTool::endContouring( )
-{
-    //m_state = NONE;
-}
 
 void ContournTool::sliceChanged( int s )
 {
@@ -296,7 +280,7 @@ void ContournTool::viewChanged( int s )
         m_spline->Off();
         m_2DViewer->getInteractor()->Render();
         doContouring();
-        //setContourn();
+       
     }
     else{ m_2DViewer->getInteractor()->Render(); }
    

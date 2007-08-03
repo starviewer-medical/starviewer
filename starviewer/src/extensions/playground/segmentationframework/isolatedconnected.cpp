@@ -1,7 +1,7 @@
 #include "isolatedconnected.h"
 #include "volume.h"
 #include <iostream.h>
-
+#include "logging.h"
 namespace udg {
 
 ///Constructor
@@ -58,7 +58,7 @@ void IsolatedConnected::setInputVolume( Volume* v )
 
 
 
-/** Carrega els paràmetres necessaris per configurar el filtre de suavització
+/** Carrega els parï¿½metres necessaris per configurar el filtre de suavitzaciï¿½
    ( iteracions i TimeStep )*/
 void IsolatedConnected::setSmoothingParameters( )
 {
@@ -67,7 +67,7 @@ void IsolatedConnected::setSmoothingParameters( )
 }
 
 
-/** Carrega els paràmetres necessaris per configurar el filtre de segmentació
+/** Carrega els parï¿½metres necessaris per configurar el filtre de segmentaciï¿½
    ( lower )*/
 void IsolatedConnected::setIsolatedParameters( int lower )
 {
@@ -85,7 +85,7 @@ void IsolatedConnected::setIsolatedParameters( int lower )
 }
 
 
-/// Aplica el metode de segmentació
+/// Aplica el metode de segmentaciï¿½
 bool IsolatedConnected::applyMethod()
 {
 CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New();
@@ -100,21 +100,22 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     m_casterOutput->SetInput(m_isolated->GetOutput() );
 
         
-    /// Executa la segmentació
-    std::cout << "****START: SEGMENTACIO ISOLATED CONNECTED ****** " << std::endl;
+    /// Executa la segmentaciï¿½
+    //std::cout << "****START: SEGMENTACIO ISOLATED CONNECTED ****** " << std::endl;
+    INFO_LOG("****START: SEGMENTACIO ISOLATED CONNECTED ****** ");
     try
     {
         m_casterOutput->Update();
     }
     catch( itk::ExceptionObject & e )
     {
-        std::cerr << "ERROR: No ha anat bé la segmentació. (IsolatedConnected)" << std::endl;
-        std::cerr << "Exception caught! " << std::endl;
-        std::cerr << e << std::endl;
+       // std::cerr << "ERROR: No ha anat bï¿½ la segmentaciï¿½. (IsolatedConnected)" << std::endl;
+       // std::cerr << "Exception caught! " << std::endl;
+       // std::cerr << e << std::endl;
         return false;
     }
-    std::cout << "****END: SEGMENTACIO ISOLATED CONNECTED****** " << std::endl;
-     
+    //std::cout << "****END: SEGMENTACIO ISOLATED CONNECTED****** " << std::endl;
+     INFO_LOG("****END: SEGMENTACIO ISOLATED CONNECTED****** ");
     ///-------------------- Resultats ------------------
     
     m_segmentedImage = m_casterOutput->GetOutput();

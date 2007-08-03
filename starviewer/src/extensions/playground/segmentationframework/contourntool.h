@@ -11,8 +11,6 @@
 #include "vtkSplineWidget.h"
 #include "itkImage.h"
 
-class vtkActor;
-class vtkPolyData;
 
 namespace udg {
 
@@ -38,13 +36,8 @@ public:
 
     void handleEvent( unsigned long eventID );
 
-    double* getSeedPosition(){return m_seedPosition;}
-
-    int getSeedSlice(){return m_seedSlice;}
-
 private:
-    //M�tode deprecated
-    //void createAction();
+    
     typedef itk::Image<signed int,3>     ImageType;
     Q2DViewer *m_2DViewer;
     Volume *m_seg;
@@ -57,29 +50,20 @@ private:
     vtkSplineWidget*  m_spline;
     vtkSplineWidget*  m_splineY;
     vtkSplineWidget*  m_splineZ;
-    vtkPolyData* m_poly;
-    vtkActor *m_pointActor;
+       
     bool m_calculat;
     float xt;
     float yt;
     float zt;
 
-    /// Coordenades on s'ha posat la llavor
-    double m_seedPosition[3];
-
-
+   
 /// \TODO potser aquests m�todes slots passen a ser p�blics
 private slots:
-    /// Posem la llavor
+   
     void setContourn( );
-
-    /// Calcula la llesca que s'ha de moure
+   
     void doContouring();
 
-    /// Atura l'estat d'slicing
-    void endContouring();
-
-    /// Pinta/despinta la llavor
     void sliceChanged( int s );
 
     void viewChanged(int s);

@@ -103,9 +103,9 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     }
     catch( itk::ExceptionObject & e )
     {
-        std::cerr << "ERROR: No ha anat b� la segmentaci�. (ConfidenceConnected)" << std::endl;
-        std::cerr << "Exception caught! " << std::endl;
-        std::cerr << e << std::endl;
+        //std::cerr << "ERROR: No ha anat b� la segmentaci�. (ConfidenceConnected)" << std::endl;
+        //std::cerr << "Exception caught! " << std::endl;
+        //std::cerr << e << std::endl;
         return false;
     }
      INFO_LOG("****END: SEGMENTACIO CONFIDENCE CONNECTED****** ");

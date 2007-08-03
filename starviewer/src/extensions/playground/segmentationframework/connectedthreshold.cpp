@@ -93,7 +93,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
 
  
     /// Executa la segmentaci�
-    INFO_LOG("****START: SEGMENTACIO CONNECTED THRESHOLD****** ");
+    //DEBUG_LOG(QString("****START: SEGMENTACIO CONNECTED THRESHOLD****** "));
     //std::cout << "****START: SEGMENTACIO CONNECTED THRESHOLD****** " << std::endl;
     try
     {
@@ -101,12 +101,12 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     }
     catch( itk::ExceptionObject & e )
     {
-        std::cerr << "ERROR: No ha anat b� la segmentaci�. (ConnectedThreshold)" << std::endl;
-        std::cerr << "Exception caught! " << std::endl;
-        std::cerr << e << std::endl;
+        //std::cerr << "ERROR: No ha anat b� la segmentaci�. (ConnectedThreshold)" << std::endl;
+        //std::cerr << "Exception caught! " << std::endl;
+        //std::cerr << e << std::endl;
         return false;
     }
-    INFO_LOG("****END: SEGMENTACIO CONNECTED THRESHOLD****** ");
+    //DEBUG_LOG(QString("****END: SEGMENTACIO CONNECTED THRESHOLD****** "));
     //std::cout << "****END: SEGMENTACIO CONNECTED THRESHOLD****** " << std::endl;
      
     ///-------------------- Resultats ------------------
@@ -121,7 +121,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
 /// Retorna el volum segmentat
 udg::Volume* ConnectedThreshold::getSegmentedVolume()
 {
-    udg::Volume* volume = new udg::Volume();
+    Volume* volume = new Volume();
     volume->setData( m_segmentedImage );
     return volume;
 }
