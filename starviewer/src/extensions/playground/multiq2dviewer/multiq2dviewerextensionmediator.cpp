@@ -7,6 +7,7 @@
 #include "multiq2dviewerextensionmediator.h"
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg{
 
@@ -25,7 +26,7 @@ DisplayableID MultiQ2DViewerExtensionMediator::getExtensionID() const
     return DisplayableID("MultiQ2DViewerExtension",tr("MultiQ2DViewer"));
 }
 
-bool MultiQ2DViewerExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool MultiQ2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     MultiQ2DViewerExtension * multiq2dviewerExtension;
 
@@ -34,8 +35,7 @@ bool MultiQ2DViewerExtensionMediator::initializeExtension(QWidget* extension, Ex
         return false;
     }
 
-    VolumeRepository* volumeRepository = VolumeRepository::getRepository();
-    multiq2dviewerExtension->setInput(volumeRepository->getVolume( mainVolumeID ));
+    multiq2dviewerExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

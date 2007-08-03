@@ -12,7 +12,7 @@
 
 // #include "extensionhandler.h"
 #include "volumerepository.h"
-
+#include "extensioncontext.h"
 
 
 namespace udg {
@@ -39,8 +39,7 @@ DisplayableID OptimalViewpointExtensionMediator::getExtensionID() const
 
 
 
-bool OptimalViewpointExtensionMediator::initializeExtension(
-        QWidget * extension, ExtensionHandler * /*extensionHandler*/, Identifier mainVolumeID )
+bool OptimalViewpointExtensionMediator::initializeExtension(QWidget * extension, const ExtensionContext &extensionContext, ExtensionHandler * /*extensionHandler*/)
 {
     QOptimalViewpointExtension * optimalViewpointExtension;
 
@@ -49,8 +48,7 @@ bool OptimalViewpointExtensionMediator::initializeExtension(
         return false;
     }
 
-    VolumeRepository * volumeRepository = VolumeRepository::getRepository();
-    optimalViewpointExtension->setInput( volumeRepository->getVolume( mainVolumeID ) );
+    optimalViewpointExtension->setInput( VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ) );
 
     return true;
 }

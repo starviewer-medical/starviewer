@@ -19,6 +19,7 @@
 
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
+#include "extensioncontext.h"
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
@@ -123,7 +124,10 @@ void ExtensionHandler::request( const QString &who )
 
     if (mediator && extension)
     {
-        mediator->initializeExtension(extension, this, m_volumeID);
+        ExtensionContext extensionContext;
+        extensionContext.setMainVolumeID(m_volumeID);
+
+        mediator->initializeExtension(extension, extensionContext, this);
         m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
     }
     else

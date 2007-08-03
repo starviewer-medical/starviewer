@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -25,7 +26,7 @@ DisplayableID StrokeSegmentationExtensionMediator::getExtensionID() const
     return DisplayableID("StrokeSegmentationExtension",tr("Stroke Segmentation"));
 }
 
-bool StrokeSegmentationExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool StrokeSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QStrokeSegmentationExtension *strokeSegmentationExtension;
 
@@ -34,7 +35,7 @@ bool StrokeSegmentationExtensionMediator::initializeExtension(QWidget* extension
         return false;
     }
 
-    strokeSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( mainVolumeID ));
+    strokeSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

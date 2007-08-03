@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg{
 
@@ -26,7 +27,7 @@ DisplayableID DiffusionPerfusionSegmentationExtensionMediator::getExtensionID() 
     return DisplayableID("DiffusionPerfusionSegmentationExtension",tr("Diffusion-Perfusion Segmentation"));
 }
 
-bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QDifuPerfuSegmentationExtension *difuPerfuExtension;
 
@@ -36,7 +37,7 @@ bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidge
     }
 
     VolumeRepository* volumeRepository = VolumeRepository::getRepository();
-    difuPerfuExtension->setDiffusionInput(volumeRepository->getVolume( mainVolumeID ));
+    difuPerfuExtension->setDiffusionInput(volumeRepository->getVolume( extensionContext.getMainVolumeID() ));
 
     QObject::connect( difuPerfuExtension, SIGNAL( openPerfusionImage() ), extensionHandler, SLOT( openSerieToCompare() ) );
     QObject::connect( extensionHandler, SIGNAL( secondInput(Volume*) ), difuPerfuExtension, SLOT( setPerfusionInput(Volume*) ) );

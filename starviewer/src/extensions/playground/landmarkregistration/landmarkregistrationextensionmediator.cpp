@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -26,7 +27,7 @@ DisplayableID LandmarkRegistrationExtensionMediator::getExtensionID() const
     return DisplayableID("LandmarkRegistrationExtension",tr("Landmark Registration"));
 }
 
-bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QLandmarkRegistrationExtension *landmarkRegistrationExtension;
 
@@ -38,7 +39,7 @@ bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extensi
     connect( landmarkRegistrationExtension, SIGNAL( newSerie() ), extensionHandler, SLOT( openSerieToCompare() ) );
     connect( extensionHandler , SIGNAL( secondInput(Volume*) ) , landmarkRegistrationExtension , SLOT( setSecondInput(Volume*) ) );
 
-    landmarkRegistrationExtension->setInput(VolumeRepository::getRepository()->getVolume( mainVolumeID ));
+    landmarkRegistrationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -26,7 +27,7 @@ DisplayableID RectumSegmentationExtensionMediator::getExtensionID() const
     return DisplayableID("RectumSegmentationExtension",tr("Rectum Segmentation"));
 }
 
-bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QRectumSegmentationExtension *rectumSegmentationExtension;
 
@@ -35,7 +36,7 @@ bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension
         return false;
     }
 
-    rectumSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( mainVolumeID ));
+    rectumSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }
