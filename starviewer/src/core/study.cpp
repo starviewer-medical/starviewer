@@ -8,6 +8,8 @@
 #include "patient.h"
 #include "logging.h"
 
+#include <QStringList>
+
 namespace udg {
 
 Study::Study( Patient *parentPatient, QObject *parent )
@@ -99,74 +101,95 @@ double Study::getHeight() const
     return m_height;
 }
 
-bool Study::setDateTime( int day , int month , int year , int hour , int minute )
+bool Study::setDateTime( int day , int month , int year , int hour , int minute, int second )
 {
-    m_dateTime.setDate( QDate( year , month , day ) );
-    m_dateTime.setTime( QTime( hour , minute ) );
-    return m_dateTime.isValid();
+    return this->setDate( day, month, year ) && this->setTime( hour, minute, second );
 }
 
 bool Study::setDateTime( QString date , QString time )
 {
-    m_dateTime.setDate( QDate::fromString( date , "dd/MM/yyyy" ) );
-    m_dateTime.setTime( QTime::fromString( time , "HH:mm" ) );
-
-    return m_dateTime.isValid();
-}
-
-bool Study::setDateTime( QString dateTime )
-{
-    m_dateTime.fromString( dateTime , "dd/MM/yyyy , hh:mm" );
-    return m_dateTime.isValid();
-}
-
-QString Study::getDateTimeAsString()
-{
-    return m_dateTime.toString( "dd/MM/yyyy , hh:mm" );
+    return this->setDate( date ) && this->setTime( time );
 }
 
 bool Study::setDate( int day , int month , int year )
 {
-    m_dateTime.setDate( QDate( year , month , day ) );
-    return m_dateTime.isValid();
+    return this->setDate( QDate( year , month , day ) );
 }
 
 bool Study::setDate( QString date )
 {
-    m_dateTime.setDate( QDate::fromString( date , "dd/MM/yyyy") );
-    return m_dateTime.isValid();
+    // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
+    return this->setDate( QDate::fromString(date.remove("."), "yyyyMMdd") );
 }
 
-bool Study::setTime( int hour , int minute )
+bool Study::setDate( QDate date )
 {
-    m_dateTime.setTime( QTime( hour , minute ) );
-    return m_dateTime.isValid();
+    if( date.isValid() )
+    {
+        m_date = date;
+        return true;
+    }
+    else
+    {
+        DEBUG_LOG("La data està en un mal format" );
+        return false;
+    }
+}
+
+bool Study::setTime( int hour , int minute, int second )
+{
+    return this->setTime( QTime(hour, minute, second) );
 }
 
 bool Study::setTime( QString time )
 {
-    m_dateTime.setTime( QTime::fromString( time , "HH:mm") );
-    return m_dateTime.isValid();
+    // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
+    time = time.remove(":");
+
+    QStringList split = time.split(".");
+    QTime convertedTime = QTime::fromString(split[0], "hhmmss");
+
+    if (split.size() == 2) //té fracció al final
+    {
+        // Trunquem a milisegons i no a milionèssimes de segons
+        convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
+    }
+
+    return this->setTime( convertedTime );
+}
+
+bool Study::setTime(QTime time)
+{
+    if (time.isValid())
+    {
+        m_time = time;
+        return true;
+    }
+    else
+    {
+        DEBUG_LOG( "El time està en un mal format" );
+        return false;
+    }
 }
 
 QDate Study::getDate()
 {
-    return m_dateTime.date();
+    return m_date;
 }
 
 QString Study::getDateAsString()
 {
-    return m_dateTime.date().toString( "dd/MM/yyyy" );
+    return m_date.toString( Qt::LocaleDate );
 }
 
 QTime Study::getTime()
 {
-    return m_dateTime.time();
+    return m_time;
 }
 
 QString Study::getTimeAsString()
 {
-    return m_dateTime.time().toString( "HH:mm" );
+    return m_time.toString( "HH:mm:ss" );
 }
 
 bool Study::addSeries( Series *series )

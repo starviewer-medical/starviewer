@@ -62,16 +62,17 @@ public:
     void setHeight( double height );
     double getHeight() const;
 
-    /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
-    bool setDateTime( int day , int month , int year , int hour , int minute );
+    /// Assignar/Obtenir la data i hora d'adquisició de l'estudi. El format de la data serà YYYYMMDD i el del
+    /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
+    ///  Retorna fals si hi ha algun error en el format
+    bool setDateTime( int day , int month , int year , int hour , int minute, int second = 0 );
     bool setDateTime( QString date , QString time );
-    bool setDateTime( QString dateTime );
-    QDateTime getDateTime() const { return m_dateTime; };
-    QString getDateTimeAsString();
     bool setDate( int day , int month , int year );
     bool setDate( QString date );
-    bool setTime( int hour , int minute );
+    bool setDate( QDate date );
+    bool setTime( int hour , int minute, int second = 0 );
     bool setTime( QString time );
+    bool setTime( QTime time );
     QDate getDate();
     QString getDateAsString();
     QTime getTime();
@@ -107,8 +108,9 @@ private:
     /// Identificador únic de l'estudi. (0020,000D) Tipus 1.
     QString m_studyInstanceUID;
 
-    /// Data i hora en que l'estudi va començar. (0008,0020),(0008,0030) Tipus 2. \TODO mantenir aquesta info junta o separada?
-    QDateTime m_dateTime;
+    /// Data i hora en que l'estudi va començar. (0008,0020),(0008,0030) Tipus 2.
+    QDate m_date;
+    QTime m_time;
 
     /// Identificador de l'estudi generat per l'equipament o per l'usuari. (0020,0010) Tipus 2.
     QString m_studyID;
