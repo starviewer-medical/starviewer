@@ -358,23 +358,23 @@ void QApplicationMainWindow::switchToLanguage( int id )
 
 void QApplicationMainWindow::newFile()
 {
-    QString windowName;
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
+    QString windowName = "NewWindow[%1]";
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
     newMainWindow->show();
 }
 
 void QApplicationMainWindow::newAndOpen()
 {
-    QString windowName;
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
+    QString windowName = "NewWindow[%1]";
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
     newMainWindow->show();
     newMainWindow->m_openAction->trigger();
 }
 
 void QApplicationMainWindow::newAndOpenDir()
 {
-    QString windowName;
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" ,getCountQApplicationMainWindow() + 1 ) ) );
+    QString windowName = "NewWindow[%1]";
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
     newMainWindow->show();
     newMainWindow->m_openDirAction->trigger();
 }
@@ -397,18 +397,28 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 {
     writeSettings();
-    // \TODO aquí hauríem de controlar si l'aplicació està fent altres tasques pendents que s'haurien de finalitzar abans de tancar l'aplicació com per exemple imatges en descàrrega del PACS o similar
+    // \TODO aquí hauríem de controlar si l'aplicació està fent altres tasques pendents que s'haurien de finalitzar abans de tancar
+    // l'aplicació com per exemple imatges en descàrrega del PACS o similar
     event->accept();
 }
 
 void QApplicationMainWindow::about()
 {
     QMessageBox::about(this, tr("About Starviewer"),
-            tr("<h2>Starviewer 2006 </h2>"
-               "<p>Copyright &copy; 2006 Universitat de Girona"
-               "<p>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, ...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve)."
-               "<p>Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection (MIP)."
-               "<p>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.<p>Version : %1 </p>").arg( "0.3" )
+            tr("<h2>Starviewer</h2>"
+               "<p>Copyright &copy; 2005-2007 Grup de Gràfics Girona"
+               "<p align='justify'>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI,"
+               " CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is "
+               "fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images "
+               "transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, "
+               "STORE SCU - Service Class User, and Query/Retrieve)."
+               "<p align='justify'>Starviewer has been specifically designed for navigation and visualization of multimodality and"
+               " multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and"
+               " Maximum Intensity Projection(MIP)."
+               "<p align='justify'>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing"
+               " software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and"
+               " molecular imaging."
+               "<p>Version : %1 </p>").arg( "Pre 0.4.0 (devel)" )
                );
 }
 
