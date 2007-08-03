@@ -25,7 +25,7 @@ class Q2DViewerWidget : public QFrame, public Ui::Q2DViewerWidgetBase {
 Q_OBJECT
 public:
     Q2DViewerWidget(QWidget *parent = 0);
-    
+
     ~Q2DViewerWidget();
 
     void setInput( Volume *input );
@@ -51,8 +51,8 @@ public slots:
     void changeViewToCoronal();
 
 private slots:
-    /// Events en el visualitzador
-    void viewerEvent ( int );
+    /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
+    void emitSelectedViewer();
 };
 
 };
