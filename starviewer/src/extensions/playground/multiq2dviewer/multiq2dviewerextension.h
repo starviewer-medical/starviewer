@@ -56,6 +56,9 @@ public slots:
     void removeRows( int rows = 1 );
     void setGrid( int rows, int columns );
 
+    /// Mètode que mostra el menu amb el botó dret
+    void showMenu( QPoint point );
+
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
