@@ -19,9 +19,10 @@ namespace udg {
 RightButtonMenu::RightButtonMenu( QWidget *parent )
 {
     setupUi( this );
-    QMenu rightMenu(this);
-
     setWindowFlags(Qt::Popup);
+
+    setStyleSheet( "border-radius: 10px" );
+
 }
 
 
@@ -56,11 +57,6 @@ void RightButtonMenu::setPatient( Patient * patient )
         verticalLayout->addWidget(studyWidget,numberStudy,0);
     }
 
-}
-
-void RightButtonMenu::contextMenuEvent(QContextMenuEvent *event)
-{
-    rightMenu.exec(event->globalPos());
 }
 
 
@@ -116,15 +112,6 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
     horizontalLayout->addWidget( dateText );
     horizontalLayout->addWidget( descriptionText );
 
-    QAction * studyAction = new QAction(
-        tr("Study: Date: %1 Description: %2")
-        .arg( study->getDate().toString( "dd/MM/yyyy") )
-        .arg( study->getDescription() )
-        , this);
-    rightMenu.addAction(studyAction);
-    studyAction->setEnabled( false );
-    studyAction->setFont( QFont() );
-
     QGridLayout * gridLayout = new QGridLayout( studyWidget );
     QGridLayout * gridLayoutWidgets = new QGridLayout( );
     
@@ -166,14 +153,10 @@ RightMenuItem* RightButtonMenu::createSerieWidget( Series * serie, QWidget * par
     verticalLayout->addWidget( descriptionText, 2 );
     serieWidget->setLayout(verticalLayout);
 
-    QAction * serieAction = new QAction(
-        tr("Serie: \nModality: %1 \nDescription: %2")
-        .arg( serie->getModality() )
-        .arg( serie->getDescription() )
-        , this);
-    rightMenu.addAction(serieAction);
-
     connect( serieWidget , SIGNAL( isActive( int, QWidget * ) ) , this , SLOT( showInformation( int, QWidget * ) ) );
+
+    connect( serieWidget , SIGNAL( selectedSerie( Series * ) ) , this , SIGNAL( selectedSeries( Series * ) ) );
+
     return serieWidget;
 
 }
@@ -181,11 +164,6 @@ RightMenuItem* RightButtonMenu::createSerieWidget( Series * serie, QWidget * par
 void RightButtonMenu::showInformation( int y, QWidget * moreInformation )
 {
     moreInformation->setGeometry( this->x() + this->width(), this->y() , 100, 100 );
-
-}
-
-void RightButtonMenu::updateAdditionalWidget( Series * serie )
-{
 
 }
 

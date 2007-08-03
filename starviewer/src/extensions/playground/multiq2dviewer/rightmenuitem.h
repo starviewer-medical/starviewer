@@ -18,7 +18,7 @@ Widget per utilitzar com a item de menú. Pot representar diversos objectes i te
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class RightMenuItem : public QWidget, public Ui::RightMenuItemBase
+class RightMenuItem : public QFrame, public Ui::RightMenuItemBase
 {
 Q_OBJECT
 public:
@@ -37,6 +37,9 @@ protected:
      /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
     void leaveEvent( QEvent * event );
 
+    /// sobrecàrrega de l'event que esdevé quan es clica amb el mouse
+    void mousePressEvent( QMouseEvent * event );
+
     QWidget * m_auxiliar;
 
     Series * m_serie;
@@ -46,6 +49,8 @@ signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void isActive( int, QWidget * );
 
+    /// Aquest senyal s'emet quan s'escull una serie de l'item
+    void selectedSerie( Series * );
 };
 
 }

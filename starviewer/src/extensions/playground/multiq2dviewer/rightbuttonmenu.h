@@ -44,20 +44,12 @@ signals:
 public slots:
     void showInformation( int y, QWidget * moreInformation );
 
-protected:
-    void contextMenuEvent(QContextMenuEvent *event);
-
 private:
     /// Creem un widget amb la informació bàsica d'un estudi
     QWidget * createStudyWidget( Study * study, QWidget * parent );
 
     /// Creem un widget amb la informació bàsica d'una sèrie
     RightMenuItem * createSerieWidget( Series * serie, QWidget * parent );
-
-    /// Creem un widget auxiliar amb la informació avançada d'una sèrie
-    void updateAdditionalWidget( Series * serie );
-
-    QMenu rightMenu;
 
 };
 
