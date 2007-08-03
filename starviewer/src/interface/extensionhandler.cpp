@@ -91,7 +91,9 @@ void ExtensionHandler::request( int who )
             {
             // open dicom dir
                 if( m_importFileApp->openDirectory() )
+                {
                     m_mainApp->onVolumeLoaded( m_importFileApp->getVolumeIdentifier() );
+                }
             }
             else
             {
@@ -140,185 +142,21 @@ void ExtensionHandler::viewPatient(PatientFillerInput patientFillerInput)
 {
     // Proves per comprovar que funciona el tema dels FilterSteps sense molestar a la resta de la gent.
     // Descomentar per activar la càrrega de Patient
-    PatientFiller patientFiller;
-    patientFiller.fill( &patientFillerInput );
-    DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
-    DEBUG_LOG( "getNumberOfPatients: " + patientFillerInput.getNumberOfPatients());
-    DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
+    //PatientFiller patientFiller;
+    //patientFiller.fill( &patientFillerInput );
+    //DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
+    //DEBUG_LOG( "getNumberOfPatients: " + patientFillerInput.getNumberOfPatients());
+    //DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
 }
 
 void ExtensionHandler::viewStudy( StudyVolum study )
 {
-    Input *input = new Input;
-    QProgressDialog progressDialog( m_mainApp );
-    progressDialog.setModal( true );
-    progressDialog.setRange( 0 , 100 );
-    progressDialog.setMinimumDuration( 0 );
-    progressDialog.setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
-    progressDialog.setLabelText( tr("Loading, please wait...") );
-    progressDialog.setCancelButton( 0 );
-    connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
-
-    SeriesVolum serie;
-    bool found = false;
-    int i = 0;
-
-    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    while( i < study.getNumberOfSeries() && !found )
-    {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
-        {
-            found = true;
-            serie = study.getSeriesVolum(i);
-        }
-        i++;
-    }
-    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
-        serie = study.getSeriesVolum(0);
-
-    switch( input->readFiles( serie.getImagesPathList() ) )
-    {
-        case Input::NoError:
-        {
-            Volume *dummyVolume = input->getData();
-            if( !m_volumeID.isNull() )
-            {
-                Identifier id;
-                id = m_volumeRepository->addVolume( dummyVolume );
-                // obrir nova finestra
-                QString windowName;
-                QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, qPrintable(windowName.sprintf( "NewWindow[%d]" , m_mainApp->getCountQApplicationMainWindow() + 1 ) ) );
-                newMainWindow->show();
-                newMainWindow->onVolumeLoaded( id );
-                newMainWindow->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
-            }
-            else
-            {
-                m_volumeID = m_volumeRepository->addVolume( dummyVolume );
-                m_mainApp->onVolumeLoaded( m_volumeID );
-                m_mainApp->setWindowTitle( dummyVolume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + dummyVolume->getVolumeSourceInformation()->getPatientID() );
-            }
-            m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-        }
-        break;
-
-        case Input::InvalidFileName:
-            QMessageBox::critical( m_mainApp, tr("Error"), tr("Invalid path or filename/s") );
-            m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-            break;
-
-        case Input::SizeMismatch:
-            QMessageBox::critical( m_mainApp, tr("Error"), tr("Images of different size in the same serie. Open the images of the serie separately") );
-            m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-            break;
-    }
-
+    this->viewStudyInternal(study, "viewStudy");
 }
 
 void ExtensionHandler::viewStudyToCompare( StudyVolum study )
 {
-    Input *input = new Input;
-    QProgressDialog progressDialog;
-    progressDialog.setRange( 0 , 100 );
-    progressDialog.setMinimumDuration( 0 );
-    progressDialog.setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
-    progressDialog.setLabelText( tr("Loading, please wait...") );
-    progressDialog.setCancelButton( 0 );
-    connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
-
-    bool found = false;
-    int i = 0;
-    SeriesVolum serie;
-
-    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    while( i < study.getNumberOfSeries() && !found )
-    {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
-        {
-            found = true;
-            serie = study.getSeriesVolum(i);
-        }
-        i++;
-    }
-    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
-        serie = study.getSeriesVolum(0);
-
-    switch( input->readFiles( serie.getImagesPathList() ) )
-    {
-        case Input::NoError:
-        {
-            if( !m_compareVolumeID.isNull() )
-            {
-                m_volumeRepository->removeVolume( m_compareVolumeID );
-            }
-            Volume *dummyVolume = input->getData();
-            m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
-            m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-            emit secondInput( dummyVolume );
-            break;
-        }
-        case Input::InvalidFileName:
-            QMessageBox::critical( m_mainApp, tr("Error"), tr("Invalid path or filename/s") );
-            m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-            break;
-
-        case Input::SizeMismatch:
-            QMessageBox::critical( m_mainApp, tr("Error"), tr("Images of different size in the same serie. Open the images of the serie separately") );
-            m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-            break;
-
-        case Input::UnknownError:
-            break;
-    }
-}
-
-void ExtensionHandler::viewStudyForPerfusion( StudyVolum study )
-{
-    Input *input = new Input;
-    QProgressDialog progressDialog;
-    progressDialog.setRange( 0 , 100 );
-    progressDialog.setMinimumDuration( 0 );
-    progressDialog.setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
-    progressDialog.setLabelText( tr("Loading, please wait...") );
-    progressDialog.setCancelButton( 0 );
-    connect( input , SIGNAL( progress(int) ) , &progressDialog , SLOT( setValue(int) ) );
-
-    bool found = false;
-    int i = 0;
-    SeriesVolum serie;
-
-    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    while( i < study.getNumberOfSeries() && !found )
-    {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
-        {
-            found = true;
-            serie = study.getSeriesVolum(i);
-        }
-        i++;
-    }
-    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
-        serie = study.getSeriesVolum(0);
-
-    input->readFiles( serie.getImagesPathList() );
-    if( !m_compareVolumeID.isNull() )
-    {
-        m_volumeRepository->removeVolume( m_compareVolumeID );
-    }
-
-    Volume * dummyVolume = input->getData();
-    m_compareVolumeID = m_volumeRepository->addVolume( dummyVolume );
-    m_mainApp->setCursor( QCursor( Qt::ArrowCursor ) );
-
-    emit perfusionImage( dummyVolume );
-
-    disconnect( m_queryScreen , SIGNAL( viewStudy(StudyVolum) ),
-                this, SLOT( viewStudyForPerfusion(StudyVolum) ) );
-    connect( m_queryScreen, SIGNAL( viewStudy(StudyVolum) ),
-             this, SLOT( viewStudy(StudyVolum) ) );
+    this->viewStudyInternal(study, "viewStudyToCompare");
 }
 
 void ExtensionHandler::killBill()
@@ -331,16 +169,6 @@ void ExtensionHandler::killBill()
     {
         m_volumeRepository->removeVolume( m_compareVolumeID );
     }
-}
-
-void ExtensionHandler::openPerfusionImage()
-{
-    disconnect( m_queryScreen, SIGNAL( viewStudy(StudyVolum) ),
-                this, SLOT( viewStudy(StudyVolum) ) );
-    connect( m_queryScreen, SIGNAL( viewStudy(StudyVolum) ),
-             this, SLOT( viewStudyForPerfusion(StudyVolum) ) );
-
-    m_queryScreen->show();
 }
 
 void ExtensionHandler::openSerieToCompare()
@@ -383,6 +211,89 @@ void ExtensionHandler::extensionChanged( int index )
     // obtenir el widget ) en concret és la que tenim. Ho podríem fer mitjançant signals i slots. és a dir, quan es faci el canvi
     // d'extensió s'enviarà alguna senyal que farà que netejem la toolbar d¡extensions i que s'ompli amb els nous botons i eines
     m_mainApp->m_extensionWorkspace->setLastIndex( index );
+}
+
+QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input)
+{
+    QProgressDialog *progressDialog = new QProgressDialog( m_mainApp );
+    progressDialog->setModal( true );
+    progressDialog->setRange( 0 , 100 );
+    progressDialog->setMinimumDuration( 0 );
+    progressDialog->setWindowTitle( tr("Serie loading") );
+    // atenció: el missatge triga una miqueta a aparèixer...
+    progressDialog->setLabelText( tr("Loading, please wait...") );
+    progressDialog->setCancelButton( 0 );
+    connect( input , SIGNAL( progress(int) ) , progressDialog , SLOT( setValue(int) ) );
+
+    return progressDialog;
+}
+
+void ExtensionHandler::viewStudyInternal(StudyVolum study, QString callerName)
+{
+    Input *input = new Input;
+    QProgressDialog *progressDialog = this->activateProgressDialog(input);
+
+    SeriesVolum serie;
+    bool found = false;
+    int i = 0;
+
+    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
+    while( i < study.getNumberOfSeries() && !found )
+    {
+        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
+        {
+            found = true;
+            serie = study.getSeriesVolum(i);
+        }
+        i++;
+    }
+    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
+        serie = study.getSeriesVolum(0);
+
+    switch( input->readFiles( serie.getImagesPathList() ) )
+    {
+        case Input::NoError:
+        {
+            // TODO Aquí hi ha un bug, què passa si dues extensions obren volums diferents?
+            // No s'arregla perquè això desapareixerà amb lo de pacient.
+            if (callerName == "viewStudy")
+            {
+                QApplicationMainWindow *mainWindow;
+
+                mainWindow = m_volumeID.isNull() ? m_mainApp : m_mainApp->openNewWindow();
+
+                Volume *volume = input->getData();
+                Identifier volumeId = m_volumeRepository->addVolume( volume );
+
+                mainWindow->setWindowTitle( volume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + volume->getVolumeSourceInformation()->getPatientID() );
+
+                mainWindow->onVolumeLoaded(volumeId);
+            }
+            else 
+            {
+                if( !m_compareVolumeID.isNull() )
+                {
+                    m_volumeRepository->removeVolume( m_compareVolumeID );
+                }
+                Volume *volume = input->getData();
+                m_compareVolumeID = m_volumeRepository->addVolume( volume );
+
+                emit secondInput( volume );
+            }
+            break;
+        }
+
+        case Input::InvalidFileName:
+            QMessageBox::critical( m_mainApp, tr("Error"), tr("Invalid path or filename/s") );
+            break;
+
+        case Input::SizeMismatch:
+            QMessageBox::critical( m_mainApp, tr("Error"), tr("Images of different size in the same serie. Open the images of the serie separately") );
+            break;
+    }
+    m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
+
+    delete progressDialog;
 }
 
 };  // end namespace udg
