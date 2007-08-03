@@ -16,9 +16,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class SegmentationFrameworkMethod;
 class ToolsActionFactory;
-class vtkActor;
 class ConnectedThreshold;
 class IsolatedConnected;
 class NeighborhoodConnected;
@@ -49,9 +47,6 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
-    
-    
-
 private:
 
 
@@ -72,11 +67,6 @@ private:
      VolumCalculator* m_volumCalculatorY;
      VolumCalculator* m_volumCalculatorZ;
 
-   // typedef itk::Image<signed int, 3> ImageType;
-    //ContournTool* m_contourn;
-
-    
-
     /// Membres de classe
     float m_spacing[3];
     bool m_isSeed;
@@ -85,31 +75,21 @@ private:
     int m_howManySeeds;
     bool m_isLeftButtonPressed;
     ViewType m_currentView;
+    int m_minValue, m_maxValue;
+    int m_insideValue, m_outsideValue;
+   
+     ///Tool Contorn
+    ContournTool *m_contorn;
     vtkSplineWidget*  m_spline;
     vtkSplineWidget*  m_splineY;
     vtkSplineWidget*  m_splineZ;
-    //vtkActor *squareActor;
-    //int* m_activedCont;
-    //double m_volume;
-    //double* m_activedVolume;
-
-  /// tipus d'edició dels models
-    enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
-    int m_editorTool;
-
-    int m_minValue, m_maxValue;
-    int m_insideValue, m_outsideValue;
-
-    ///Tool Contorn
-    ContournTool *m_contorn;
-   
+    
     /// Accions
     QAction *m_slicingAction;
     QAction *m_windowLevelAction;
     QAction *m_zoomAction;
     QAction *m_moveAction;
     QAction *m_seedAction;
-    QAction *m_editorAction;
     QAction *m_voxelInformationAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_axialViewAction;
@@ -120,16 +100,14 @@ private:
     
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
-    QActionGroup *m_viewOverlayActionGroup;
-   
-
+    
     /// El volum principal
     Volume *m_mainVolume;
-
+    
     /// El volum on hi guardem el resultat de la segmentaciÓ
     Volume *m_maskVolume;
 
-///ACCIONS
+    ///ACCIONS
 
     void createActions();
     void createToolBars();
@@ -137,9 +115,7 @@ private:
 
 private slots:
 
-    void strokeEventHandler( unsigned long id );
     void setSeedPosition();
-    void leftButtonEventHandler( );
     void applyCT();
     void applyIC();
     void applyNC();
@@ -150,7 +126,6 @@ private slots:
     void VolumeCalculator();
     void setAreaSlice(int);
     void opacityChanged(int);
-    //void Contorn();
     void calculateContorn();
 
     

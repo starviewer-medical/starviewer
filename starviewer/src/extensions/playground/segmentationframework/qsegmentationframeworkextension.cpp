@@ -9,67 +9,35 @@
 #include "volume.h"
 #include "volumesourceinformation.h"
 #include "logging.h"
-#include "strokesegmentationmethod.h"
 #include "toolsactionfactory.h"
 #include "qwindowlevelcombobox.h"
-#include "qcustomwindowleveldialog.h"
+#include "q2dviewer.h"
+
 #include "connectedthreshold.h"
 #include "isolatedconnected.h"
 #include "neighborhoodconnected.h"
 #include "confidenceconnected.h"
 #include "volumcalculator.h"
-///DETERMINATE CONTOURN
-//#include "contourntool.h"
-
-
-//#include "qhistogram2d.h"
-#include "q2dviewer.h"
 #include "contourntool.h"
 
 //Qt
 #include <QString>
 #include <QAction>
 #include <QToolBar>
-#include <QSettings>
-#include <QMessageBox>
-#include <QFileDialog>
 #include <QTableWidgetItem>
 #include <QTableWidget>
 #include <QLineEdit>
 
 // VTK
 #include <vtkRenderer.h>
-#include <vtkImageMask.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkImageThreshold.h>
-#include <vtkSphereSource.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
-#include <vtkProperty.h>
-#include <vtkImageIterator.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkDataSetMapper.h>
-#include <vtkContourGrid.h>
 #include <vtkCommand.h>
-#include <vtkMetaImageWriter.h>
-#include <vtkPolyData.h>
 #include <vtkSplineWidget.h>
-/*#include <vtkDataSetMapper.h>
-#include <vtkThreshold.h>
-*/
+
 
 // ITK
-#include <itkPermuteAxesImageFilter.h>
-#include <itkBinaryThresholdImageFilter.h>
 #include <itkImage.h>
-// prova isomètric
-#include <itkLinearInterpolateImageFunction.h>
-#include <itkResampleImageFilter.h>
 
-//prova recte
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
-#include "itkExtractImageFilter.h"
 
 
 
@@ -296,22 +264,6 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     
     m_2DView->setInput( m_mainVolume );
     
-    /*
-
-    //Posem els nivells de dins i fora de la m�cara els valors l�its del w/l per tal que es vegi correcte
-    double wl[2];
-    m_2DView->getDefaultWindowLevel( wl );
-    m_insideValue  = (int) wl[0];
-    m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
-    //m_insideValue  = 255;
-    //m_outsideValue = 0;
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );    
-
-    QString aux = (m_mainVolume->getVolumeSourceInformation())->getPatientName();
-    m_patientNameLineEdit->insert(aux);
-
-    changeViewToAxial();*/
-
     m_2DView->setView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
@@ -326,13 +278,9 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
 
-    //Posem els nivells de dins i fora de la m�cara els valors l�its del w/l per tal que es vegi correcte
+    
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
-    m_insideValue  = (int) wl[0];
-    m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
-    m_insideValue  = 255;
-    m_outsideValue = 0;
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
 
 
@@ -340,7 +288,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     QString aux = (m_mainVolume->getVolumeSourceInformation())->getPatientName();
     m_patientNameLineEdit->insert(aux);
 
-    typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
+    /*typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
     ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
 
     m_minValue = iter.Get();
@@ -356,7 +304,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
         if ( value > m_maxValue ) { m_maxValue = value; }
 
         ++iter;
-    }
+    }*/
     
 
     m_2DView->render();
@@ -389,7 +337,6 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_sliceSpinBox->setMinimum( extent[0] );
     m_sliceSpinBox->setMaximum( extent[1] );
     m_sliceViewSlider->setMaximum( extent[1] );
-//     m_viewText->setText( tr("YZ : Sagital") );
     m_2DView->setViewToSagittal();
     INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
     m_2DView->render();
@@ -406,7 +353,6 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_sliceSpinBox->setMinimum( extent[2] );
     m_sliceSpinBox->setMaximum( extent[3] );
     m_sliceViewSlider->setMaximum( extent[3] );
-//     m_viewText->setText( tr("XZ : Coronal") );
     m_2DView->setViewToCoronal();
     INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
     m_2DView->render();
@@ -535,11 +481,7 @@ void QSegmentationFrameworkExtension::applyCT()
                     y = ((Y->text()).toDouble());
                     z = ((Z->text()).toDouble());
                     
-                   /* x = ((X->text()).toDouble());
-                    y = ((Y->text()).toDouble());
-                    z = ((Z->text()).toDouble());
-                    */
-                            
+                                              
                     m_method->addSeed((int)x,(int)y,(int)z);
     
             }
@@ -557,7 +499,7 @@ void QSegmentationFrameworkExtension::applyCT()
             
             ///Apliquem el m�tode                               
             if( m_method->applyMethod() )
-            {   //std::cout << "Arribem aqu�1?? " << std::endl;
+            {   
                 
                 ///Mostrem els resultats
                 m_maskVolume=m_method->getSegmentedVolume();
@@ -565,16 +507,16 @@ void QSegmentationFrameworkExtension::applyCT()
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                
+                QApplication::restoreOverrideCursor(); 
                 m_contournToolButton->setEnabled( true );
             }
             else
             {
-                std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Confidence " << std::endl;
+                //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Connected " << std::endl;
             }
         
     VolumeCalculator();
-    QApplication::restoreOverrideCursor(); 
+    
             
 
 }
@@ -638,16 +580,16 @@ void QSegmentationFrameworkExtension::applyIC()
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                
+                QApplication::restoreOverrideCursor(); 
                 m_contournToolButton->setEnabled( true );
             }
             else
-            {
-                std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Confidence " << std::endl;
+            {   
+                //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Isolated " << std::endl;
             }
         
            VolumeCalculator(); 
-            QApplication::restoreOverrideCursor(); 
+           
 
 }
 
@@ -705,16 +647,16 @@ void QSegmentationFrameworkExtension::applyCC()
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                
+                QApplication::restoreOverrideCursor(); 
                 m_contournToolButton->setEnabled( true );
             }
             else
             {
-                std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Confidence " << std::endl;
+                //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Confidence " << std::endl;
             }
         
           VolumeCalculator();
-          QApplication::restoreOverrideCursor(); 
+          
 }
 
 
@@ -772,16 +714,16 @@ void QSegmentationFrameworkExtension::applyNC()
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                
+                QApplication::restoreOverrideCursor(); 
                 m_contournToolButton->setEnabled( true );
             }
             else
             {
-                std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Confidence " << std::endl;
+                //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Neigborhood " << std::endl;
             }
         
             VolumeCalculator();
-            QApplication::restoreOverrideCursor(); 
+           
 }
 
 
@@ -898,30 +840,6 @@ m_2DView->getInteractor()->Render();
 
 }
 
-void QSegmentationFrameworkExtension::strokeEventHandler( unsigned long id )
-{
-    switch( id )
-    {
-    case vtkCommand::MouseMoveEvent:
-       // setPaintCursor();
-    break;
-
-    case vtkCommand::LeftButtonPressEvent:
-        //leftButtonEventHandler();
-    break;
-
-    case vtkCommand::LeftButtonReleaseEvent:
-        //setLeftButtonOff();
-    break;
-
-    case vtkCommand::RightButtonPressEvent:
-    break;
-
-    default:
-    break;
-    }
-
-}
 
 /*void QSegmentationFrameworkExtension::Contorn( )
 {
@@ -995,21 +913,6 @@ void QSegmentationFrameworkExtension::strokeEventHandler( unsigned long id )
     m_2DView->getInteractor()->Render();
 }
 */
-void QSegmentationFrameworkExtension::leftButtonEventHandler( )
-{
-   /* m_isLeftButtonPressed = true;
-
-    if(m_editorToolButton->isChecked())
-    {
-        //std::cout<<"Editor Tool"<<std::endl;
-        m_2DView->disableTools();
-        setEditorPoint(  );
-    }
-    else
-    {
-        m_2DView->enableTools();
-    }*/
-}
 
 void QSegmentationFrameworkExtension::calculateContorn( )
 {
