@@ -8,16 +8,10 @@
 // Qt
 #include <QAction>
 #include <QSignalMapper>
-#include <QFileDialog>
 #include <QSettings>
 #include <QMenuBar>
-#include <QToolBar>
-#include <QStatusBar>
 #include <QCloseEvent>
 #include <QMessageBox>
-#include <QFileInfo>
-#include <QCursor>
-#include <QProgressDialog>
 #include <QApplication>
 #include <QLocale>
 // els nostres widgets/elements de la plataforma
@@ -44,7 +38,6 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     this->setCentralWidget( m_extensionWorkspace );
 
     CacheInstallation cacheInstallation;
-
     cacheInstallation.checkInstallationCacheImagePath();
     cacheInstallation.checkInstallationCacheDatabase();
 
@@ -54,23 +47,12 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
 
     createActions();
     createMenus();
-    // \TODO es possible que prescindim de les toolbars i que aquesta desaparegui
-//     createToolBars();
-    createStatusBar();
 
-    // Llegim les configuracions de l'aplicació, estat de la finestra, posicio, últims
-    // arxius oberts etc amb QSettings
+    // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
     readSettings();
     // icona de l'aplicació
     this->setWindowIcon( QPixmap(":/images/starviewer.png") );
     this->setWindowTitle( tr("Starviewer") );
-//     m_exportFileFilters = tr("JPEG Images (*.jpg);;MetaIO Images (*.mhd);;DICOM Images (*.dcm);;All Files (*)");
-//     m_exportToJpegFilter = tr("JPEG Images (*.jpg)");
-//     m_exportToMetaIOFilter = tr("MetaIO Images (*.mhd)");
-//     m_exportToPngFilter = tr("PNG Images (*.png)");
-//     m_exportToTiffFilter = tr("TIFF Images (*.tiff)");
-//     m_exportToBmpFilter = tr("BMP Images (*.bmp)");
-//     m_exportToDicomFilter = tr("DICOM Images (*.dcm)");
 
     emit containsVolume( FALSE );
 }
@@ -248,33 +230,13 @@ void QApplicationMainWindow::switchFullScreen( bool full )
 
 void QApplicationMainWindow::createMenus()
 {
-    // Menú d'arxiu: aquest es correspondrà a l'accés directe al sistema de fitxers per adquirir un volum, com pot ser un arxiu *.mhd
+    // Menú d'arxiu
     m_fileMenu = menuBar()->addMenu( tr("&File") );
     m_fileMenu->addAction( m_newAction );
     m_fileMenu->addAction( m_openAction );
     m_fileMenu->addAction( m_openDirAction );
     m_fileMenu->addAction( m_pacsAction );
-
     m_fileMenu->addSeparator();
-
-//     m_importFilesMenu = m_fileMenu->addMenu( tr("&Import") );
-
-//     m_exportFilesMenu = m_fileMenu->addMenu( tr("&Export"));
-
-//     m_exportFilesMenu->addAction( m_exportToJpegAction );
-//     m_exportFilesMenu->addAction( m_exportToMetaIOAction );
-//     m_exportFilesMenu->addAction( m_exportToPngAction );
-//     m_exportFilesMenu->addAction( m_exportToBmpAction );
-    // \TODO l'export al tipus Tiff falla, pot ser cosa de les itk o del suport del sistema a aquest tipu de fitxer
-//     m_exportFilesMenu->addAction( m_exportToTiffAction );
-
-//     m_fileMenu->addSeparator();
-
-//     m_recentFilesMenu = m_fileMenu->addMenu( tr("&Recent files") );
-//     for (int i = 0; i < MaxRecentFiles; ++i)
-//         m_recentFilesMenu->addAction( m_recentFileActions[i]);
-
-//     m_fileMenu->addSeparator();
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );
 
@@ -394,20 +356,6 @@ void QApplicationMainWindow::switchToLanguage( int id )
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect after restarting the application") );
 }
 
-void QApplicationMainWindow::createToolBars()
-{
-    this->setIconSize( QSize(32,32) );
-    m_fileToolBar = addToolBar( tr("File") );
-    m_fileToolBar->addAction( m_newAction );
-    m_fileToolBar->addAction( m_openAction );
-    m_fileToolBar->addAction( m_openDirAction );
-    m_fileToolBar->addAction( m_pacsAction );
-}
-
-void QApplicationMainWindow::createStatusBar()
-{
-}
-
 void QApplicationMainWindow::newFile()
 {
     QString windowName;
@@ -479,14 +427,10 @@ void QApplicationMainWindow::onVolumeLoaded( Identifier id )
 void QApplicationMainWindow::writeSettings()
 {
     QSettings settings;
-
     settings.beginGroup("Starviewer");
 
     settings.setValue( "position", pos() );
     settings.setValue( "size", size() );
-//     settings.setValue( "recentFiles" , m_recentFiles );
-    settings.setValue( "workingDirectory" , m_workingDirectory );
-    settings.setValue( "exportWorkingDirectory" , m_exportWorkingDirectory );
 
     settings.endGroup();
 }
@@ -499,170 +443,7 @@ void QApplicationMainWindow::readSettings()
     move( settings.value( "position", QPoint(200, 200)).toPoint() );
     resize( settings.value( "size", QSize(400, 400)).toSize() );
 
-//     m_recentFiles = settings.value("recentFiles").toStringList();
-//     updateRecentFileActions();
-
-    m_workingDirectory = settings.value( "workingDirectory" , "." ).toString();
-    m_exportWorkingDirectory = settings.value( "exportWorkingDirectory" , "." ).toString();
-
     settings.endGroup();
 }
-
-// void QApplicationMainWindow::exportFile( int type )
-// {
-//     switch( type )
-//     {
-//     case QApplicationMainWindow::JpegExport:
-//         exportToJpeg();
-//     break;
-//     case QApplicationMainWindow::MetaIOExport:
-//         exportToMetaIO();
-//     break;
-//     case QApplicationMainWindow::PngExport:
-//         exportToPng();
-//     break;
-//     case QApplicationMainWindow::TiffExport:
-//         exportToTiff();
-//     break;
-//     case QApplicationMainWindow::BmpExport:
-//         exportToBmp();
-//     break;
-//     }
-// }
-//
-// void QApplicationMainWindow::exportToJpeg( )
-// {
-//     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToJpegFilter );
-//     if ( !fileName.isEmpty() )
-//     {
-//         if( QFileInfo( fileName ).suffix() != "jpg" )
-//         {
-//             fileName += ".jpg";
-//         }
-//
-//         Output *out = new Output();
-//         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
-//         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
-//         out->saveSeries( fileName.toLatin1() );
-//         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
-//     }
-//
-// }
-//
-// void QApplicationMainWindow::exportToPng( )
-// {
-//     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToPngFilter );
-//     if ( !fileName.isEmpty() )
-//     {
-//         if( QFileInfo( fileName ).suffix() != "png" )
-//         {
-//             fileName += ".png";
-//         }
-//         Output *out = new Output();
-//         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
-//         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
-//         out->saveSeries( fileName.toLatin1() );
-//         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
-//     }
-// }
-//
-// void QApplicationMainWindow::exportToTiff( )
-// {
-//     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToTiffFilter );
-//
-//     if ( !fileName.isEmpty() )
-//     {
-//         if( QFileInfo( fileName ).suffix() != "tiff" )
-//         {
-//             fileName += ".tiff";
-//         }
-//
-//         Output *out = new Output();
-//         // aquí cladria recòrrer les llesques per guardar per separat en un fitxer cadascuna
-//         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
-//         out->saveSeries( fileName.toLatin1() );
-//         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
-//     }
-// }
-//
-// void QApplicationMainWindow::exportToBmp( )
-// {
-//     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToBmpFilter );
-//
-//     if ( !fileName.isEmpty() )
-//     {
-//         if( QFileInfo( fileName ).suffix() != "bmp" )
-//         {
-//             fileName += ".bmp";
-//         }
-//
-//         Output *out = new Output();
-//         // aquí caldria recòrrer les llesques per guardar per separat en un fitxer cadascuna
-//         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
-//         out->saveSeries( fileName.toLatin1() );
-//         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
-//     }
-// }
-//
-// void QApplicationMainWindow::exportToMetaIO( )
-// {
-//     QString fileName = QFileDialog::getSaveFileName( this , tr("Choose an image filename") , m_exportWorkingDirectory, m_exportToMetaIOFilter );
-//
-//     if (!fileName.isEmpty())
-//     {
-//         if( QFileInfo( fileName ).suffix() != "mhd" )
-//         {
-//             fileName += ".mhd";
-//         }
-//         Output *out = new Output();
-//         out->setInput( m_volumeRepository->getVolume( this->getVolumeID() ) );
-//         out->saveFile( fileName.toLatin1() );
-//         m_exportWorkingDirectory = QFileInfo( fileName ).absolutePath();
-//     }
-// }
-
-// void QApplicationMainWindow::setCurrentFile(const QString &fileName)
-// {
-//     m_currentFile = fileName;
-//     if ( m_currentFile.isEmpty() )
-//         setWindowTitle(tr("Starviewer"));
-//     else
-//         setWindowTitle(tr("%1 - %2").arg( QFileInfo( m_currentFile ).fileName() )
-//                                     .arg( tr("Starviewer") ) );
-//     m_recentFiles.removeAll( fileName );
-//     m_recentFiles.prepend(fileName);
-//     while ( m_recentFiles.size() > MaxRecentFiles )
-//         m_recentFiles.removeLast();
-//
-//     foreach ( QWidget *widget, QApplication::topLevelWidgets() )
-//     {
-//         QApplicationMainWindow *mainWin = qobject_cast<QApplicationMainWindow *>(widget);
-//         if (mainWin)
-//             mainWin->updateRecentFileActions();
-//     }
-// }
-
-// void QApplicationMainWindow::updateRecentFileActions()
-// {
-//     int numRecentFiles = qMin(m_recentFiles.size(), (int)MaxRecentFiles);
-//
-//     for (int i = 0; i < numRecentFiles; ++i)
-//     {
-//         QString text = tr("&%1 %2").arg(i + 1).arg( QFileInfo(m_recentFiles[i]).fileName() );
-//         m_recentFileActions[i]->setText(text);
-//         m_recentFileActions[i]->setData(m_recentFiles[i]);
-//         m_recentFileActions[i]->setVisible(true);
-//     }
-//     for (int j = numRecentFiles; j < MaxRecentFiles; ++j)
-//         m_recentFileActions[j]->setVisible(false);
-//
-// }
-
-// void QApplicationMainWindow::openRecentFile()
-// {
-//     QAction *action = qobject_cast<QAction *>( sender() );
-//     if ( action )
-//         loadFile( action->data().toString() );
-// }
 
 }; // end namespace udg
