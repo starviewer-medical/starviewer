@@ -15,36 +15,49 @@
 namespace udg {
 
 RightMenuItem::RightMenuItem( QWidget *parent )
-: QFrame(parent)
+: QWidget(parent)
 {
     setupUi( this );
-    auxiliar = new QWidget( 0, Qt::Widget );
-    auxiliar->setWindowFlags(Qt::Popup);
-    auxiliar->hide();
+    setAutoFillBackground( true );
+}
 
-    QVBoxLayout * verticalLayout = new QVBoxLayout( auxiliar );
-    QLabel * icon = new QLabel( auxiliar );
+void RightMenuItem::setSerie( Series * serie )
+{
+    m_serie = serie;
+
+    // Informació auxiliar de la serie
+
+    m_auxiliar = new QWidget( );
+    m_auxiliar->setWindowFlags(Qt::Popup);
+    m_auxiliar->hide();
+
+    QVBoxLayout * verticalLayout = new QVBoxLayout( m_auxiliar );
+    QLabel * icon = new QLabel( m_auxiliar );
     verticalLayout->addWidget( icon );
-    icon->setPixmap( QPixmap( ":/images/axial.png" ) );
-    QLabel * text = new QLabel( auxiliar );
+
+//     QPixmap pixmap;
+//     pixmap = QPixmax.fromImage( m_serie-> ?? )
+
+    icon->setPixmap( QPixmap( "/home/ester/starviewer/src/main/images/axial.png" ) );
+    QLabel * text = new QLabel( m_auxiliar );
     verticalLayout->addWidget( text );
     text->setText( "info_auxiliar ");
     text->show();
     icon->show();
-}
 
+}
 
 void RightMenuItem::enterEvent( QEvent * event )
 {
-//     QPalette palette = this->palette();
-//     QBrush selected(QColor(0, 0, 0 , 255));
-//     selected.setStyle(Qt::SolidPattern);
-//     palette.setBrush(QPalette::Active, QPalette::Window, selected);
-//     palette.setBrush(QPalette::Disabled, QPalette::Window, selected);
-//     palette.setBrush(QPalette::Inactive, QPalette::Window, selected);
-//     setPalette(palette);
+    QPalette palette = this->palette();
+    QBrush selected( QColor( 85, 160, 255, 255 ) );
+    selected.setStyle( Qt::SolidPattern );
+    palette.setBrush( QPalette::Active, QPalette::Window, selected );
+    palette.setBrush( QPalette::Disabled, QPalette::Window, selected );
+    palette.setBrush( QPalette::Inactive, QPalette::Window, selected );
+    setPalette( palette );
 //     show();
-//
+// 
 //     QList<QObject*> QObjectList = children();
 //     for ( int i = 0; i < QObjectList.size(); i++ )
 //     {
@@ -54,31 +67,24 @@ void RightMenuItem::enterEvent( QEvent * event )
 //             ( (QWidget *) QObjectList.value(i) )->show();
 //         }
 //     }
-//
+// 
 //     show();
 
-    setFrameShape( QFrame::StyledPanel );
-    setFrameShadow( QFrame::Raised );
+    emit isActive( this->geometry().y(), m_auxiliar );
 
-    emit isActive( this->geometry().y(), auxiliar );
-
-    DEBUG_LOG( QString( "%1").arg(this->geometry().y() ) );
-    DEBUG_LOG( QString( this->y() ) );
-
-    auxiliar->show();
+    m_auxiliar->show();
 
 }
 
 void RightMenuItem::leaveEvent( QEvent * event )
 {
-//     QPalette palette = this->palette();
-//     QBrush selected(QColor(239, 243, 247, 255));
-//     selected.setStyle(Qt::SolidPattern);
-//     palette.setBrush(QPalette::Active, QPalette::Window, selected);
-//     setPalette(palette);
+    QPalette palette = this->palette();
+    QBrush selected(QColor(239, 243, 247, 255));
+    selected.setStyle(Qt::SolidPattern);
+    palette.setBrush(QPalette::Active, QPalette::Window, selected);
+    setPalette(palette);
 
-    setFrameShape( QFrame::NoFrame );
-    auxiliar->hide();
+    m_auxiliar->hide();
 }
 
 

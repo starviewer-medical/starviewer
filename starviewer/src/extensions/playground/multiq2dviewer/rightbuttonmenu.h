@@ -33,6 +33,9 @@ public:
     /// Posem el pacient al widget
     void setPatient( Patient * patient );
 
+    /// Assignem una posició al menú
+    void setPosition( QPoint point );
+
 signals:
     /// senyal que envia la serie escollida per ser visualitzada
     void selectedSeries( Series *series );

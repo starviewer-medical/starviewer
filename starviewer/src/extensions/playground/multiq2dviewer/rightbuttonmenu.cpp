@@ -16,19 +16,10 @@
 
 namespace udg {
 
-RightButtonMenu::RightButtonMenu( QWidget *parent)
+RightButtonMenu::RightButtonMenu( QWidget *parent )
 {
     setupUi( this );
     QMenu rightMenu(this);
-
-    QPalette palette = rightMenu.palette();
-    QBrush black(QColor(0, 0, 0, 255));
-    black.setStyle(Qt::SolidPattern);
-    palette.setBrush(QPalette::Disabled, QPalette::WindowText, black);
-    palette.setBrush(QPalette::Disabled, QPalette::Text, black);
-    palette.setBrush(QPalette::Disabled, QPalette::Button, black);
-    palette.setBrush(QPalette::Disabled, QPalette::ButtonText, black);
-    rightMenu.setPalette(palette);
 
     setWindowFlags(Qt::Popup);
 }
@@ -62,7 +53,6 @@ void RightButtonMenu::setPatient( Patient * patient )
     {
         study = studies.value( numberStudy );
         studyWidget = createStudyWidget( study, this );
-        studyWidget->show();
         verticalLayout->addWidget(studyWidget,numberStudy,0);
     }
 
@@ -90,18 +80,36 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
 //     infoStudyWidget->show();
     
     QHBoxLayout * horizontalLayout = new QHBoxLayout( );
+    horizontalLayout->setSpacing( 0 );
+    horizontalLayout->setMargin( 0 );
 //     infoStudyWidget->setLayout( horizontalLayout );
 
     QLabel * studyText = new QLabel( studyWidget );
-    studyText->setText("Study");
-    studyText->show();
+    studyText->setText(" Study ");
+    studyText->setAutoFillBackground( true );
+
+    QPalette palette( studyText->palette() );
+    QBrush studyBackground( QColor( 85, 160, 255, 255 ) );
+    studyBackground.setStyle(Qt::SolidPattern);
+    palette.setBrush(QPalette::Active, QPalette::Window, studyBackground);
+
+//     palette.setColor(studyText->backgroundRole(), Qt::black);
+    studyText->setPalette(palette);
+
+//     studyText->setStyleSheet( "QLabel { background: blue }" );
+
+//     studyText->show();
 
     QLabel * dateText = new QLabel( studyWidget );
-    dateText->setText( tr("Date: %1").arg( study->getDate().toString( "dd/MM/yyyy") ) );
+    dateText->setText( tr(" Date: %1 ").arg( study->getDate().toString( "dd/MM/yyyy") ) );
+    dateText->setAutoFillBackground( true );
+    dateText->setPalette(palette);
     dateText->show();
 
     QLabel * descriptionText = new QLabel( studyWidget );
-    descriptionText->setText( tr("Description: %1").arg( study->getDescription() ) );
+    descriptionText->setText( tr(" Description: %1 ").arg( study->getDescription() ) );
+    descriptionText->setAutoFillBackground( true );
+    descriptionText->setPalette(palette);
     descriptionText->show();
 
     horizontalLayout->addWidget( studyText );
@@ -128,7 +136,6 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
     for( numberSerie = 0; numberSerie < study->getNumberOfSeries(); numberSerie++ )
     {
         serieWidget = createSerieWidget( series.value( numberSerie ), studyWidget );
-        serieWidget->show();
         gridLayoutWidgets->addWidget( serieWidget, 0, numberSerie );
     }
 
@@ -138,6 +145,7 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
 RightMenuItem* RightButtonMenu::createSerieWidget( Series * serie, QWidget * parent )
 {
     RightMenuItem * serieWidget = new RightMenuItem( parent );
+    serieWidget->setSerie( serie );
 
     QLabel * serieText = new QLabel( serieWidget );
     serieText->setText("Serie ");
@@ -172,7 +180,7 @@ RightMenuItem* RightButtonMenu::createSerieWidget( Series * serie, QWidget * par
 
 void RightButtonMenu::showInformation( int y, QWidget * moreInformation )
 {
-    moreInformation->setGeometry( this->x() + this->width(), y , 100, 100 );
+    moreInformation->setGeometry( this->x() + this->width(), this->y() , 100, 100 );
 
 }
 
@@ -181,5 +189,9 @@ void RightButtonMenu::updateAdditionalWidget( Series * serie )
 
 }
 
+void RightButtonMenu::setPosition( QPoint point )
+{
+    move( point );
+}
 
 }
