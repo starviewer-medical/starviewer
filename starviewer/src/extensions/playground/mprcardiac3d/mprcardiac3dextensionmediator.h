@@ -15,7 +15,7 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class MPRCardiac3DExtensionMediator : public ExtensionMediator
 {
@@ -24,7 +24,7 @@ public:
 
     ~MPRCardiac3DExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID);
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler);
 
     virtual DisplayableID getExtensionID() const;
 };

@@ -14,7 +14,7 @@
 namespace udg{
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class MultiQ2DViewerExtensionMediator: public ExtensionMediator
 {
@@ -23,7 +23,7 @@ public:
 
     ~MultiQ2DViewerExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID);
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler);
 
     virtual DisplayableID getExtensionID() const;
 };

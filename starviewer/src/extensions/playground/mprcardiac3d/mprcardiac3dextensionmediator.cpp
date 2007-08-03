@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -26,7 +27,7 @@ DisplayableID MPRCardiac3DExtensionMediator::getExtensionID() const
     return DisplayableID("MPRCardiac3DExtension",tr("3D Cardiac MPR"));
 }
 
-bool MPRCardiac3DExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool MPRCardiac3DExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QMPRCardiac3DExtension *mprCardiac3DExtension;
 
@@ -35,7 +36,7 @@ bool MPRCardiac3DExtensionMediator::initializeExtension(QWidget* extension, Exte
         return false;
     }
 
-    mprCardiac3DExtension->setInput(VolumeRepository::getRepository()->getVolume( mainVolumeID ));
+    mprCardiac3DExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

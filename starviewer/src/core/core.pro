@@ -85,6 +85,7 @@ HEADERS += extensionfactory.h \
            ctfillerstep.h \
            imagefillerstep.h \
            presentationstatefillerstep.h \
+           extensioncontext.h \
            keyimagenotefillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -155,6 +156,7 @@ SOURCES += extensionmediator.cpp \
            ctfillerstep.cpp \
            imagefillerstep.cpp \
            presentationstatefillerstep.cpp \
+           extensioncontext.cpp \
            keyimagenotefillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \

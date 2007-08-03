@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg{
 
@@ -26,7 +27,7 @@ DisplayableID MPR3DExtensionMediator::getExtensionID() const
     return DisplayableID("MPR3DExtension",tr("MPR 3D"));
 }
 
-bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QMPR3DExtension *mpr3dExtension;
 
@@ -35,8 +36,7 @@ bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, ExtensionHa
         return false;
     }
 
-    VolumeRepository* volumeRepository = VolumeRepository::getRepository();
-    mpr3dExtension->setInput(volumeRepository->getVolume( mainVolumeID ));
+    mpr3dExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

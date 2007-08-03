@@ -15,7 +15,7 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class StrokeSegmentationExtensionMediator : public ExtensionMediator
 {
@@ -25,7 +25,7 @@ public:
 
     ~StrokeSegmentationExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID);
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler);
 
     virtual DisplayableID getExtensionID() const;
 };

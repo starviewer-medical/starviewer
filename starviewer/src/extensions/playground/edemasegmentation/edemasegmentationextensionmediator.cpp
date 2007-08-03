@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -26,7 +27,7 @@ DisplayableID EdemaSegmentationExtensionMediator::getExtensionID() const
     return DisplayableID("EdemaSegmentationExtension",tr("Edema Segmentation"));
 }
 
-bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QEdemaSegmentationExtension *edemaSegmentationExtension;
 
@@ -35,7 +36,7 @@ bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension,
         return false;
     }
 
-    edemaSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( mainVolumeID ));
+    edemaSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

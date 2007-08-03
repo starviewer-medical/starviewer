@@ -7,6 +7,7 @@
 
 #include "volume3dviewtestingextensionmediator.h"
 #include "volumerepository.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -24,7 +25,7 @@ DisplayableID Volume3DViewTestingExtensionMediator::getExtensionID() const
     return DisplayableID( "Volume3DViewTestingExtension", tr("Volume 3D View Testing") );
 }
 
-bool Volume3DViewTestingExtensionMediator::initializeExtension( QWidget * extension, ExtensionHandler * /*extensionHandler*/, Identifier mainVolumeID )
+bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QVolume3DViewTestingExtension * volume3DViewTestingExtension;
 
@@ -33,8 +34,7 @@ bool Volume3DViewTestingExtensionMediator::initializeExtension( QWidget * extens
         return false;
     }
 
-    VolumeRepository * volumeRepository = VolumeRepository::getRepository();
-    volume3DViewTestingExtension->setInput( volumeRepository->getVolume( mainVolumeID ) );
+    volume3DViewTestingExtension->setInput( VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ) );
 
     return true;
 }

@@ -8,6 +8,7 @@
 
 #include "volumerepository.h"
 #include "extensionhandler.h"
+#include "extensioncontext.h"
 
 namespace udg {
 
@@ -26,7 +27,7 @@ DisplayableID Cardiac2DViewerExtensionMediator::getExtensionID() const
     return DisplayableID("Cardiac2dViewerExtension",tr("2D Cardiac Viewer"));
 }
 
-bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID)
+bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
     QCardiac2DViewerExtension *cardiac2DViewerExtension;
 
@@ -35,7 +36,7 @@ bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, E
         return false;
     }
 
-    cardiac2DViewerExtension->setInput(VolumeRepository::getRepository()->getVolume( mainVolumeID ));
+    cardiac2DViewerExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
 
     return true;
 }

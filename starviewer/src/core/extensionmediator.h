@@ -14,6 +14,7 @@
 namespace udg{
 
 class ExtensionHandler;
+class ExtensionContext;
 
 /**
 Classe abstracta que fa de pont entre l'starviewer i una extensió. D'aquesta classe hauran d'heredar tots 
@@ -37,12 +38,12 @@ public:
     virtual ~ExtensionMediator();
 
     /**
-     * Mètode que ens serveix per, un cop creada l'extensió, inicialitzar-la amb els paràmetres necessàris.
+     * Mètode que ens serveix per, un cop creada l'extensió, inicialitzar-la amb els paràmetres necessàris a partir del seu contexte.
      * Per poder tractar l'extensió, el primer que caldrà serà realitzar un cast de QWidget a la classe concreta
      * del widget que se'ns passa.
      * @return Retorna false en el supòsit que hi hagi alguna cosa que impedeixi inicialitzar-la, true en la resta de casos
      */
-    virtual bool initializeExtension(QWidget* extension, ExtensionHandler* extensionHandler, Identifier mainVolumeID) = 0;
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler) = 0;
 
     ///Retorna l'identificador de la classe Extension amb qui dialoga
     virtual DisplayableID getExtensionID() const = 0;

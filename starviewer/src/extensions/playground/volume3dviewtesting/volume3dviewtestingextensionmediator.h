@@ -26,7 +26,7 @@ public:
 
     virtual DisplayableID getExtensionID() const;
 
-    virtual bool initializeExtension( QWidget * extension, ExtensionHandler * extensionHandler, Identifier mainVolumeID );
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler);
 
 };
 
