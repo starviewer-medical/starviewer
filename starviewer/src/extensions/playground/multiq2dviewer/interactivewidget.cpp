@@ -24,8 +24,8 @@ InteractiveWidget::InteractiveWidget( QWidget *parent)
     setAlternatingRowColors( true );
     setMinimumHeight( 25 );
     setMaximumHeight( 25 );
-    buttonMenu = new RightButtonMenu();
-    buttonMenu->show();
+//     buttonMenu = new RightButtonMenu();
+//     buttonMenu->show();
 }
 
 InteractiveWidget::~InteractiveWidget()
@@ -163,8 +163,9 @@ void InteractiveWidget::setVolume( Volume * volume)
 
     this->setModel( patientModel->getModel() );
 
-    buttonMenu->setPatient( patient );
-    buttonMenu->setPosition( QPoint( 200,200 ) );
+//     buttonMenu->setPatient( patient );
+//     buttonMenu->setPosition( QPoint( 200,200 ) );
+
 
 //     QStandardItem * patientData = root->child( 1 );
 //     QVariant variant = (patientData->data(Qt::DisplayRole));

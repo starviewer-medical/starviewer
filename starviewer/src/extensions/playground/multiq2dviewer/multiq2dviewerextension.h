@@ -113,6 +113,9 @@ private:
     int m_rows;
     int m_columns;
 
+    /// Menú del botó dret
+    RightButtonMenu * buttonMenu;
+
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;
 
@@ -121,6 +124,9 @@ private:
 
     /// Update del nombre de layouts
     void updateLayouts();
+
+    /// Creació del menú del botó dret
+    void createMenu();
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
