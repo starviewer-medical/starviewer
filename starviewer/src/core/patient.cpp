@@ -132,6 +132,17 @@ QList<Study*> Patient::getStudies() const
     return m_studiesSet.values();
 }
 
+Patient & Patient::operator =( const Patient &patient )
+{
+    m_fullName = patient.m_fullName;
+    m_patientID = patient.m_patientID;
+    m_birthDate = patient.m_birthDate;
+    m_sex = patient.m_sex;
+    m_identityIsRemoved = patient.m_identityIsRemoved;
+    m_studiesSet = patient.m_studiesSet;
+    return *this;
+}
+
 Patient Patient::operator +( const Patient &patient )
 {
     Patient result;
