@@ -15,6 +15,8 @@
 
 #include "patientfillerinput.h"
 
+class QProgressDialog;
+
 namespace udg {
 
 // Fordward Declarations
@@ -22,6 +24,7 @@ class VolumeRepository;
 class QApplicationMainWindow;
 class Volume;
 class PatientFillerInput;
+class Input;
 
 // Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
@@ -65,14 +68,8 @@ public slots:
     /// \TODO [apanyo] Slot que afegeix al 2n visor una sèrie escollida per comparar-> és un mètode moooolt temporal.
     void viewStudyToCompare( StudyVolum study );
 
-    /// \TODO [apanyo] Obre la imatge de perfusió del mètode de difusió-perfusió.
-    void viewStudyForPerfusion( StudyVolum study );
-
     /// cridat quan l'aplicació mor
     void killBill();
-
-    /// \TODO [temporal] Llança el diàleg per obrir la imatge de perfusió del mètode de difusió-perfusió.
-    void openPerfusionImage();
 
     /// \TODO [temporal] Obre una sèrie per comparar en el visor per defecte
     void openSerieToCompare();
@@ -86,6 +83,12 @@ private:
 
     /// carrega una nova pestanya amb l'extensió de 2DViewer
     void load2DViewerExtension();
+
+    /// Crea el diàleg de progrés al carregar un Volume.
+    QProgressDialog* activateProgressDialog(Input *input);
+
+    /// Crida per intentar reduir els [apanyo] i [temporal] \TODO Amb l'estructura Pacient establerta desapareixerà
+    void viewStudyInternal(StudyVolum study, QString callerName);
 
 private slots:
 

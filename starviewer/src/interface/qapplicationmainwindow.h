@@ -41,6 +41,9 @@ public:
     void newAndOpen();
     void newAndOpenDir();
 
+    /// Crea una nova finestra i la mostra
+    QApplicationMainWindow* openNewWindow();
+
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
 

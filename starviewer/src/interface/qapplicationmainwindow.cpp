@@ -166,48 +166,6 @@ void QApplicationMainWindow::createActions()
     m_exitAction->setStatusTip(tr("Exit the application"));
     m_exitAction->setIcon( QIcon(":/images/exit.png") );
     connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
-
-//     m_exportToJpegAction = new QAction( this );
-//     m_exportToJpegAction->setText(tr("Export to JPEG"));
-//     m_exportToJpegAction->setShortcut( 0 );
-//     m_exportToJpegAction->setStatusTip( tr("Export the volume to jpeg format") );
-//     connect( m_exportToJpegAction , SIGNAL( triggered() ) , this , SLOT( exportToJpeg() ) );
-//     connect( this , SIGNAL( containsVolume(bool) ), m_exportToJpegAction, SLOT( setEnabled(bool) ) );
-//
-//     m_exportToMetaIOAction = new QAction( this );
-//     m_exportToMetaIOAction->setText(tr("Export to MetaIO"));
-//     m_exportToMetaIOAction->setShortcut( 0 );
-//     m_exportToMetaIOAction->setStatusTip( tr("Export the volume to MetaIO format") );
-//     connect( m_exportToMetaIOAction , SIGNAL( triggered() ) , this , SLOT( exportToMetaIO() ) );
-//     connect( this , SIGNAL( containsVolume(bool) ), m_exportToMetaIOAction, SLOT( setEnabled(bool) ) );
-//
-//     m_exportToPngAction = new QAction( this );
-//     m_exportToPngAction->setText(tr("Export to PNG"));
-//     m_exportToPngAction->setShortcut( 0 );
-//     m_exportToPngAction->setStatusTip( tr("Export the volume to png format") );
-//     connect( m_exportToPngAction , SIGNAL( triggered() ) , this , SLOT( exportToPng() ) );
-//     connect( this , SIGNAL( containsVolume(bool) ), m_exportToPngAction, SLOT( setEnabled(bool) ) );
-//
-//     m_exportToTiffAction = new QAction( this );
-//     m_exportToTiffAction->setText(tr("Export to TIFF"));
-//     m_exportToTiffAction->setShortcut( 0 );
-//     m_exportToTiffAction->setStatusTip( tr("Export the volume to tiff format") );
-//     connect( m_exportToTiffAction , SIGNAL( triggered() ) , this , SLOT( exportToTiff() ) );
-//     connect( this , SIGNAL( containsVolume(bool) ), m_exportToTiffAction, SLOT( setEnabled(bool) ) );
-//
-//     m_exportToBmpAction = new QAction( this );
-//     m_exportToBmpAction->setText(tr("Export to BMP"));
-//     m_exportToBmpAction->setShortcut( 0 );
-//     m_exportToBmpAction->setStatusTip( tr("Export the volume to bmp format") );
-//     connect( m_exportToBmpAction , SIGNAL( triggered() ) , this , SLOT( exportToBmp() ) );
-//     connect( this , SIGNAL( containsVolume(bool) ), m_exportToBmpAction, SLOT( setEnabled(bool) ) );
-
-//     for (int i = 0; i < MaxRecentFiles; ++i)
-//     {
-//         m_recentFileActions[i] = new QAction( this );
-//         m_recentFileActions[i]->setVisible( false );
-//         connect( m_recentFileActions[i], SIGNAL( triggered() ), this, SLOT( openRecentFile() ) );
-//     }
 }
 
 void QApplicationMainWindow::switchFullScreen( bool full )
@@ -358,25 +316,25 @@ void QApplicationMainWindow::switchToLanguage( int id )
 
 void QApplicationMainWindow::newFile()
 {
-    QString windowName = "NewWindow[%1]";
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
-    newMainWindow->show();
+    openNewWindow();
 }
 
 void QApplicationMainWindow::newAndOpen()
 {
-    QString windowName = "NewWindow[%1]";
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
-    newMainWindow->show();
-    newMainWindow->m_openAction->trigger();
+    openNewWindow()->m_openAction->trigger();
 }
 
 void QApplicationMainWindow::newAndOpenDir()
 {
+    openNewWindow()->m_openDirAction->trigger();
+}
+
+QApplicationMainWindow* QApplicationMainWindow::openNewWindow()
+{
     QString windowName = "NewWindow[%1]";
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
     newMainWindow->show();
-    newMainWindow->m_openDirAction->trigger();
+    return newMainWindow;
 }
 
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
