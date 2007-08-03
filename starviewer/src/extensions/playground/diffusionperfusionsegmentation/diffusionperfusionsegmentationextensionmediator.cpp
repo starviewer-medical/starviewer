@@ -38,8 +38,8 @@ bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidge
     VolumeRepository* volumeRepository = VolumeRepository::getRepository();
     difuPerfuExtension->setDiffusionInput(volumeRepository->getVolume( mainVolumeID ));
 
-    QObject::connect( difuPerfuExtension, SIGNAL( openPerfusionImage() ), extensionHandler, SLOT( openPerfusionImage() ) );
-    QObject::connect( extensionHandler, SIGNAL( perfusionImage(Volume*) ), difuPerfuExtension, SLOT( setPerfusionInput(Volume*) ) );
+    QObject::connect( difuPerfuExtension, SIGNAL( openPerfusionImage() ), extensionHandler, SLOT( openSerieToCompare() ) );
+    QObject::connect( extensionHandler, SIGNAL( secondInput(Volume*) ), difuPerfuExtension, SLOT( setPerfusionInput(Volume*) ) );
 
     return true;
 }
