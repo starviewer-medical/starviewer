@@ -785,6 +785,19 @@ void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_
     default:
     break;
     }
+
+    // quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
+    switch( event )
+    {
+    case QVTKWidget::ContextMenuEvent:
+    case vtkCommand::LeftButtonPressEvent:
+    case vtkCommand::RightButtonPressEvent:
+    case vtkCommand::MiddleButtonPressEvent:
+    case vtkCommand::MouseWheelForwardEvent:
+    case vtkCommand::MouseWheelBackwardEvent:
+        emit selected();
+    break;
+    }
     // fer el que calgui per cada tipus d'event
     emit eventReceived( event );
 }

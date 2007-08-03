@@ -5,10 +5,10 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q2dviewerwidget.h"
-
-#include <QAction>
 #include "volume.h"
 #include "logging.h"
+
+#include <QAction>
 
 namespace udg {
 
@@ -28,7 +28,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
     connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
-    connect( m_2DView, SIGNAL (sliceChanged( int )), this, SLOT ( viewerEvent ( int )));
+    connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
 }
 
 void Q2DViewerWidget::setInput( Volume *input )
@@ -39,23 +39,14 @@ void Q2DViewerWidget::setInput( Volume *input )
     m_2DView->render();
 }
 
-void Q2DViewerWidget::mousePressEvent ( QMouseEvent * event )
+void Q2DViewerWidget::mousePressEvent( QMouseEvent * event )
 {
-        emit selected( this );
-} 
+    emit selected( this );
+}
 
-void Q2DViewerWidget::viewerEvent ( int )
+void Q2DViewerWidget::emitSelectedViewer()
 {
-//     switch( event )
-//     {
-//     case vtkCommand::LeftButtonPressEvent:
-//     case vtkCommand::MiddleButtonPressEvent:
-//     case vtkCommand::RightButtonPressEvent:
-        emit selected( this );
-//         break;
-//     default:
-//     break;
-//     }
+    emit selected( this );
 }
 
 void Q2DViewerWidget::changeViewToAxial()

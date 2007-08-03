@@ -580,6 +580,9 @@ signals:
 
     /// informa de la posició on s'ha de mostrar el menú de contexte
     void showContextMenu( QPoint menuPoint );
+
+    /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
+    void selected( void );
 };
 
 };  //  end  namespace udg
