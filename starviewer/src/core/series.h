@@ -88,16 +88,17 @@ public:
     void setImagesPath( QString imagesPath );
     QString getImagesPath() const;
 
-    /// Assignar/Obtenir la data i hora d'adquisició de la sèrie en format DD/MM/AAAA HH:MM. Retorna fals si hi ha algun error en el format
-    bool setDateTime( int day , int month , int year , int hour , int minute );
+    /// Assignar/Obtenir la data i hora d'adquisició de la sèrie. El format de la data serà YYYYMMDD i el del
+    /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
+    ///  Retorna fals si hi ha algun error en el format
+    bool setDateTime( int day , int month , int year , int hour , int minute, int second = 0 );
     bool setDateTime( QString date , QString time );
-    bool setDateTime( QString dateTime );
-    QDateTime getDateTime() const;
-    QString getDateTimeAsString();
     bool setDate( int day , int month , int year );
     bool setDate( QString date );
-    bool setTime( int hour , int minute );
+    bool setDate( QDate date );
+    bool setTime( int hour , int minute, int second = 0 );
     bool setTime( QString time );
+    bool setTime( QTime time );
     QDate getDate();
     QString getDateAsString();
     QTime getTime();
@@ -157,8 +158,9 @@ private:
     /// Nombre que identifica la sèrie. (0020,0011) Tipus 2
     QString m_seriesNumber;
 
-    /// Data i hora en la que s'ha començat la sèrie. (0008,0021),(0008,0031) Tipus 3. \TODO Tractar per separat o conjuntament?
-    QDateTime m_dateTime;
+    /// Data i hora en la que s'ha començat la sèrie. (0008,0021),(0008,0031) Tipus 3.
+    QDate m_date;
+    QTime m_time;
 
     //\TODO aquest tag està dins de l'Equipment IE module. Se suposa que és mes correcte posar-ho a nivell de sèrie.
     //Llegir A.1.2.3 SERIES IE, apartat c., A.1.2.4 EQUIPMENT IE i C.7.5 Common Equipment IE Modules - PS 3.3

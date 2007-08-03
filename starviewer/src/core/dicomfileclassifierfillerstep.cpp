@@ -111,13 +111,7 @@ Patient *DICOMFileClassifierFillerStep::createPatient()
 
     patient->setFullName( m_dicomReader->getAttributeByName( DCM_PatientsName ) );
     patient->setID( m_dicomReader->getAttributeByName( DCM_PatientID ) );
-
-    QString value = m_dicomReader->getAttributeByName( DCM_PatientsBirthDate );
-    if( !value.isEmpty() )
-    {
-        patient->setBirthDate( value.mid(0,4).toInt(), value.mid(4,2).toInt(), value.mid(6,2).toInt() );
-    }
-
+    patient->setBirthDate( m_dicomReader->getAttributeByName( DCM_PatientsBirthDate ) );
     patient->setSex( m_dicomReader->getAttributeByName( DCM_PatientsSex ) );
 
     return patient;
@@ -128,15 +122,8 @@ Study *DICOMFileClassifierFillerStep::createStudy()
     Study *study = new Study;
 
     study->setInstanceUID( m_dicomReader->getAttributeByName( DCM_StudyInstanceUID ) );
-
-    QString value = m_dicomReader->getAttributeByName( DCM_StudyDate );
-    if( !value.isEmpty() )
-        study->setDate( value.mid(0,4).toInt(), value.mid(4,2).toInt(), value.mid(6,2).toInt() );
-
-    value = m_dicomReader->getAttributeByName( DCM_StudyTime );
-    if( !value.isEmpty() )
-        study->setTime( value.mid(0,2).toInt(), value.mid(2,2).toInt() ); // precissió d'hores i minuts
-
+    study->setDate( m_dicomReader->getAttributeByName( DCM_StudyDate ) );
+    study->setTime( m_dicomReader->getAttributeByName( DCM_StudyTime ) );
     study->setID( m_dicomReader->getAttributeByName( DCM_StudyID ) );
     study->setAccessionNumber( m_dicomReader->getAttributeByName( DCM_AccessionNumber ) );
     study->setDescription( m_dicomReader->getAttributeByName( DCM_StudyDescription ) );
@@ -154,14 +141,8 @@ Series *DICOMFileClassifierFillerStep::createSeries()
     series->setInstanceUID( m_dicomReader->getAttributeByName( DCM_StudyInstanceUID ) );
     series->setModality( m_dicomReader->getAttributeByName( DCM_Modality ) );
     series->setSeriesNumber( m_dicomReader->getAttributeByName( DCM_SeriesNumber ) );
-
-    QString value = m_dicomReader->getAttributeByName( DCM_SeriesDate );
-    if( !value.isEmpty() )
-        series->setDate( value.mid(0,4).toInt(), value.mid(4,2).toInt(), value.mid(6,2).toInt() );
-    value = m_dicomReader->getAttributeByName( DCM_SeriesTime );
-    if( !value.isEmpty() )
-        series->setTime( value.mid(0,2).toInt(), value.mid(2,2).toInt() );
-
+    series->setDate( m_dicomReader->getAttributeByName( DCM_SeriesDate ) );
+    series->setTime( m_dicomReader->getAttributeByName( DCM_SeriesTime ) );
     series->setInstitutionName( m_dicomReader->getAttributeByName( DCM_InstitutionName ) );
     series->setPatientPosition( m_dicomReader->getAttributeByName( DCM_PatientPosition ) );
     series->setProtocolName( m_dicomReader->getAttributeByName( DCM_ProtocolName ) );

@@ -38,16 +38,12 @@ void Patient::setBirthDate( int day , int month , int year )
 
 void Patient::setBirthDate( QString date )
 {
-    QStringList split = date.split("/");
-    if( split.size() == 3 )
-        this->setBirthDate( split.at(0).toInt(), split.at(1).toInt(), split.at(2).toInt() );
-    else
-        DEBUG_LOG( "Format de data incorrecte. Format esperat: dd/mm/yyyy. Això és el que hi havia: " + date );
+    m_birthDate = QDate::fromString( date.remove("."), "yyyyMMdd" );
 }
 
 QString Patient::getBirthDate()
 {
-    return m_birthDate.toString( "dd/MM/yyyy" );
+    return m_birthDate.toString( Qt::LocaleDate );
 }
 
 int Patient::getDayOfBirth()

@@ -1142,7 +1142,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 
     fillerInput.addPatient( patient );
 
-    if ( studyUID == "" )
+    if ( studyUID.isEmpty() )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
         return;
@@ -1173,7 +1173,8 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     patient->setSex( study.getPatientSex() );
     // informació d'estudi
     patientStudy->setInstanceUID( study.getStudyUID() );
-    patientStudy->setDateTime( study.getStudyDate(), study.getStudyTime() );
+    patientStudy->setDate( study.getStudyDate() );
+    patientStudy->setTime( study.getStudyTime() );
     patientStudy->setID( study.getStudyUID() );
     patientStudy->setAccessionNumber( study.getAccessionNumber() );
     patientStudy->setDescription( study.getStudyDescription() );
@@ -1195,7 +1196,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     seriesList.firstSeries();
 
     //si es buit indiquem que per defecte es visualitza la primera serie
-    if ( seriesUID == "" )
+    if ( seriesUID.isEmpty() )
     {
         volume.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
     }
@@ -1232,7 +1233,7 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 
         patientStudy->addSeries( patientSeries );
 
-        mask.setSeriesUID(series.getSeriesUID() );
+        mask.setSeriesUID( series.getSeriesUID() );
         mask.setSOPInstanceUID( sopInstanceUID );
         imageList.clear();
         state = cacheImageDAL.queryImages( mask , imageList );
