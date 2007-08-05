@@ -1267,8 +1267,8 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
     {
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
-    this->emitViewSignal(volume);
     emit viewPatient( fillerInput );
+    this->emitViewSignal(volume);
 }
 
 void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QString sopInstanceUID )

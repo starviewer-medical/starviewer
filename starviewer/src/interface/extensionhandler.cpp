@@ -32,7 +32,6 @@
 #include "seriesvolum.h"
 #include "input.h"
 #include "patientfiller.h"
-#include "patientfillerinput.h"
 
 namespace udg {
 
@@ -126,6 +125,7 @@ void ExtensionHandler::request( const QString &who )
     {
         ExtensionContext extensionContext;
         extensionContext.setMainVolumeID(m_volumeID);
+        extensionContext.setPatient(m_patient);
 
         mediator->initializeExtension(extension, extensionContext, this);
         m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
@@ -146,11 +146,22 @@ void ExtensionHandler::viewPatient(PatientFillerInput patientFillerInput)
 {
     // Proves per comprovar que funciona el tema dels FilterSteps sense molestar a la resta de la gent.
     // Descomentar per activar la càrrega de Patient
-    //PatientFiller patientFiller;
-    //patientFiller.fill( &patientFillerInput );
-    //DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
-    //DEBUG_LOG( "getNumberOfPatients: " + patientFillerInput.getNumberOfPatients());
-    //DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
+    QProgressDialog progressDialog( m_mainApp );
+    progressDialog.setModal( true );
+    progressDialog.setRange( 0 , 100 );
+    progressDialog.setMinimumDuration( 0 );
+    progressDialog.setWindowTitle( tr("Patient loading") );
+    progressDialog.setLabelText( tr("Loading, please wait...") );
+    progressDialog.setCancelButton( 0 );
+
+    PatientFiller patientFiller;
+    connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
+    patientFiller.fill( &patientFillerInput );
+    DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
+    DEBUG_LOG( "getNumberOfPatients: " + patientFillerInput.getNumberOfPatients());
+    DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
+
+    m_patient = patientFillerInput.getPatient(0);
 }
 
 void ExtensionHandler::viewStudy( StudyVolum study )
