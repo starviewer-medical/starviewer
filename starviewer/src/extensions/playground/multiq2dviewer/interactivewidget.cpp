@@ -186,6 +186,14 @@ void InteractiveWidget::setVolume( Volume * volume)
 //     }
 
 }
+
+void InteractiveWidget::setPatient(Patient * patient)
+{
+    PatientItemModel * patientModel = new PatientItemModel( patient );
+
+    this->setModel( patientModel->getModel() );
+}
+
 /*
 void InteractiveWidget::setModel( QStandardItemModel * model )
 {

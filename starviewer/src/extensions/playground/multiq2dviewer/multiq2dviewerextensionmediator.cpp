@@ -36,6 +36,7 @@ bool MultiQ2DViewerExtensionMediator::initializeExtension(QWidget* extension, co
     }
 
     multiq2dviewerExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    multiq2dviewerExtension->setPatient( extensionContext.getPatient() );
 
     return true;
 }

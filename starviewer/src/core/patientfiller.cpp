@@ -6,9 +6,10 @@
  ***************************************************************************/
 #include "patientfiller.h"
 
+#include <QApplication>
+
 #include "patientfillerinput.h"
 #include "logging.h"
-#include <QDebug>
 
 // TODO Include's temporals mentre no tenim un registre:
 #include "keyimagenotefillerstep.h"
@@ -21,7 +22,7 @@ namespace udg {
 
 const QString UntilEndLabel = "UntilEndLabel1234|@#~";
 
-PatientFiller::PatientFiller()
+PatientFiller::PatientFiller(QObject * parent) :QObject(parent)
 {
     registerSteps();
 }
@@ -47,6 +48,10 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
 
     DEBUG_LOG("Entrem a fillUntil amb stopLabel = " + stopLabel);
 
+    int totalFillerSteps = m_registeredSteps.size();
+
+    emit progress(0);
+    qApp->processEvents();
     while (!input->getLabels().contains(stopLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
     {
         QList<PatientFillerStep*> fillerStepsToProcess;
@@ -67,7 +72,10 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
         {
             processPatientFillerStep(fillerStep, input);
         }
+        emit progress(totalFillerSteps - candidatesFillerSteps.size());
+        qApp->processEvents();
     }
+    emit progress(100);
 }
 
 void PatientFiller::registerSteps()
