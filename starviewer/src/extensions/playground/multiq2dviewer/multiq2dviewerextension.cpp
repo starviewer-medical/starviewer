@@ -31,9 +31,10 @@ MultiQ2DViewerExtension::MultiQ2DViewerExtension( QWidget *parent )
  : QWidget( parent ), m_presentationStateAttacher(0)
 {
     setupUi( this );
-    m_mainVolume = 0;
+    m_mainVolume = NULL;
     m_keyImageNoteAttacher = NULL;
     m_keyImageNote = NULL;
+    m_patient = NULL;
     m_viewer = new Q2DViewerWidget( m_workingArea );
     m_selectedViewer = m_viewer;
     readSettings();
@@ -41,7 +42,6 @@ MultiQ2DViewerExtension::MultiQ2DViewerExtension( QWidget *parent )
     createConnections();
 
     initLayouts();
-    createMenu();
 }
 
 MultiQ2DViewerExtension::~MultiQ2DViewerExtension()
@@ -251,62 +251,13 @@ void MultiQ2DViewerExtension::initLayouts()
 void MultiQ2DViewerExtension::createMenu()
 {
     buttonMenu = new RightButtonMenu();
-
-    // Creació de l'estructura pacient->study->series
-    Patient *patient = new Patient();
-    patient->setFullName( "Pacient de proves" );
-
-    Study *study = new Study(patient);
-    study->setInstanceUID( "1" );
-    study->setDate( 1,1,1111);
-    study->setDescription( "study_1_description" );
-    patient->addStudy( study );
-    Study *study_2 = new Study(patient);
-    study_2->setInstanceUID( "2" );
-    study_2->setDate( 2,2,2222);
-    study_2->setDescription( "study_2_description" );
-    patient->addStudy( study_2 );
-
-    Series *series = new Series();
-    series->setInstanceUID( "1_1" );
-    series->setProtocolName( "serie_protocolName" );
-    series->setDescription( "serie_description" );
-    series->setModality( "serie_modality" );
-    series->setVolume( m_mainVolume );
-    study->addSeries( series );
-    Series *series_2 = new Series();
-    series_2->setInstanceUID( "1_2" );
-    series_2->setProtocolName( "serie_2_protocolName" );
-    series_2->setDescription( "serie_2_description" );
-    series_2->setModality( "serie_2_modality" );
-    series_2->setVolume( m_mainVolume );
-    study->addSeries( series_2 );
-
-    Series *series_3 = new Series();
-    series_3->setInstanceUID( "2_1" );
-    series_3->setProtocolName( "serie_3_protocolName" );
-    series_3->setDescription( "serie_3_description" );
-    series_3->setModality( "serie_3_modality" );
-    series_3->setVolume( m_mainVolume );
-    study_2->addSeries( series_3 );
-    Series *series_4 = new Series();
-    series_4->setInstanceUID( "2_2" );
-    series_4->setProtocolName( "serie_4_protocolName" );
-    series_4->setDescription( "serie_4_description" );
-    series_4->setModality( "serie_4_modality" );
-    series_4->setVolume( m_mainVolume );
-    study_2->addSeries( series_4 );
-
-    buttonMenu->setPatient( patient );
+    buttonMenu->setPatient( m_patient );
 }
 
 void MultiQ2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_viewer->setInput( m_mainVolume );
-
-    //TODO Mètode de proves
-    m_volumePanel->setVolume( input );
 
     // Omplim el combo amb tants window levels com tingui el volum
     double wl[2];
@@ -586,4 +537,17 @@ void MultiQ2DViewerExtension::showMenu( QPoint point )
     buttonMenu->show();
 }
 
+Patient* MultiQ2DViewerExtension::getPatient() const
+{
+    return m_patient;
 }
+
+void MultiQ2DViewerExtension::setPatient( Patient *patient )
+{
+    m_patient = patient;
+    createMenu();
+    m_volumePanel->setPatient( patient );
+}
+
+}
+

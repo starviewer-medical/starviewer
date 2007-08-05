@@ -63,9 +63,6 @@ void RightButtonMenu::setPatient( Patient * patient )
 QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
 {
     QWidget * studyWidget = new QWidget( parent );
-    QWidget * serieWidget;
-    QList<Series*> series;
-    int numberSerie;
 
 //     QWidget * infoStudyWidget = new QWidget();
 //     QPalette palette( studyWidget->palette() );
@@ -97,7 +94,7 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
 //     studyText->show();
 
     QLabel * dateText = new QLabel( studyWidget );
-    dateText->setText( tr(" Date: %1 ").arg( study->getDate().toString( "dd/MM/yyyy") ) );
+    dateText->setText( tr(" Date: %1 ").arg( study->getDateAsString() ) );
     dateText->setAutoFillBackground( true );
     dateText->setPalette(palette);
     dateText->show();
@@ -118,12 +115,19 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
     gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
     gridLayout->addLayout(gridLayoutWidgets, 1, 0, 1, 1);
 
-    series = study->getSeries();
+    QList<Series*> seriesToAdd = study->getSeries();
+    int maxColumns = 4;
+    int row = 0;
 
-    for( numberSerie = 0; numberSerie < study->getNumberOfSeries(); numberSerie++ )
+    while (!seriesToAdd.isEmpty())
     {
-        serieWidget = createSerieWidget( series.value( numberSerie ), studyWidget );
-        gridLayoutWidgets->addWidget( serieWidget, 0, numberSerie );
+        int column = 0;
+        while ( column < maxColumns && !seriesToAdd.isEmpty())
+        {
+            gridLayoutWidgets->addWidget( createSerieWidget( seriesToAdd.takeFirst(), studyWidget ), row, column );
+            ++column;
+        }
+        ++row;
     }
 
     return studyWidget;

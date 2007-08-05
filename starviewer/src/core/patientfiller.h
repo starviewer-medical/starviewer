@@ -7,6 +7,7 @@
 #ifndef UDGPATIENTFILLER_H
 #define UDGPATIENTFILLER_H
 
+#include <QObject>
 #include <QString>
 #include <QList>
 
@@ -20,9 +21,10 @@ Classe encarregada de a partir d'un Patient i un conjunt d'arxius classificar-lo
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientFiller{
+class PatientFiller : public QObject {
+    Q_OBJECT
 public:
-    PatientFiller();
+    PatientFiller(QObject * parent = 0);
 
     ~PatientFiller();
 
@@ -31,6 +33,10 @@ public:
 
     /// Ídem fill() però en aquest cas té un criteri d'aturada. Quan hagi conseguit l'etiqueta indicada s'aturarà i no processarà més mòduls
     void fillUntil(PatientFillerInput *input, QString stopLabel);
+
+signals:
+    /// Senyal que s'emet regularment al fer un fill o fillUntil indicant el % realitzat.
+    void progress(int);
 
 private:
     /// S'encarrega de registrar els mòduls/steps que processaran l'input.

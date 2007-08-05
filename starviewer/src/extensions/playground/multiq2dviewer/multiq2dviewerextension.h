@@ -59,6 +59,9 @@ public slots:
     /// Mètode que mostra el menu amb el botó dret
     void showMenu( QPoint point );
 
+    void setPatient( Patient *patient );
+    Patient* getPatient() const;
+
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
@@ -146,6 +149,9 @@ private:
 
     /// S'encarrega d'aplicar els presentation states
     Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
+
+    /// Patient principal
+    Patient* m_patient;
 
 private slots:
     /// activem o desactivem el presentation state

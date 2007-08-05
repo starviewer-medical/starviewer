@@ -37,6 +37,8 @@ public:
     void setVolume( Volume * volume);
 //     void setModel( QStandardItemModel * model );
 
+    void setPatient(Patient * patient);
+
     RightButtonMenu * buttonMenu;
 
 protected:
