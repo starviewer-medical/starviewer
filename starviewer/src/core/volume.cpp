@@ -24,7 +24,6 @@
 
 namespace udg {
 
-
 Volume::Volume()
 {
     init();
@@ -147,10 +146,7 @@ void Volume::getDimensions( int dims[3] )
 
 Volume *Volume::getSubVolume( int index  )
 {
-
     int slices = this->getVolumeSourceInformation()->getNumberOfSlices();
-
-
     int *size = this->getWholeExtent();
 
     vtkExtractVOI * extractedVolume = vtkExtractVOI::New();
@@ -186,7 +182,6 @@ Volume * Volume::orderSlices()
     index[1] = 0;
     index[2] = 0;
 
-
     phases = this->getVolumeSourceInformation()->getNumberOfPhases();
     slices = this->getVolumeSourceInformation()->getNumberOfSlices();
 
@@ -195,7 +190,6 @@ Volume * Volume::orderSlices()
 
     typedef itk::ExtractImageFilter< ItkImageType3D , ItkImageType2D > ExtractImageType;
     typedef itk::TileImageFilter< ItkImageType2D , ItkImageType3D  > TileFilterType;
-
 
     ExtractImageType::Pointer extractFilter = ExtractImageType::New();
     extractFilter->SetInput( this->getItkData() );

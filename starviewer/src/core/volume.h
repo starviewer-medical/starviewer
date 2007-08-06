@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #ifndef UDGVOLUME_H
 #define UDGVOLUME_H
 
@@ -20,6 +19,7 @@ class vtkImageData;
 namespace udg {
 
 class VolumeSourceInformation;
+
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. Ens donarà mètodes per poder obtenir les dades en el format que volguem: ITK, VTK, etc.
 
@@ -28,13 +28,9 @@ class VolumeSourceInformation;
 
     @author Grup de Gràfics de Girona  ( GGG )
 */
-
-class Volume
-{
-
+class Volume{
 public:
-
-    // Tipus d'imatge intern per defecte d'itk
+    /// Tipus d'imatge intern per defecte d'itk
     typedef signed int ItkPixelType;
     static const unsigned int VDimension = 3;
 
