@@ -47,7 +47,6 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     m_queryScreen = new QueryScreen( m_mainApp );
 
     createConnections();
-    registerExtensions();
 }
 
 ExtensionHandler::~ExtensionHandler()
@@ -142,7 +141,7 @@ void ExtensionHandler::onVolumeLoaded( Identifier id )
     request( 8 );
 }
 
-void ExtensionHandler::viewPatient(PatientFillerInput patientFillerInput)
+void ExtensionHandler::viewPatient( PatientFillerInput patientFillerInput )
 {
     // Proves per comprovar que funciona el tema dels FilterSteps sense molestar a la resta de la gent.
     // Descomentar per activar la càrrega de Patient
@@ -193,10 +192,6 @@ void ExtensionHandler::openSerieToCompare()
     queryScreen->show();
 }
 
-void ExtensionHandler::registerExtensions()
-{
-}
-
 void ExtensionHandler::createConnections()
 {
     connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
@@ -228,7 +223,7 @@ void ExtensionHandler::extensionChanged( int index )
     m_mainApp->m_extensionWorkspace->setLastIndex( index );
 }
 
-QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input)
+QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input )
 {
     QProgressDialog *progressDialog = new QProgressDialog( m_mainApp );
     progressDialog->setModal( true );
@@ -243,7 +238,7 @@ QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input)
     return progressDialog;
 }
 
-void ExtensionHandler::viewStudyInternal(StudyVolum study, QString callerName)
+void ExtensionHandler::viewStudyInternal( StudyVolum study, QString callerName )
 {
     Input *input = new Input;
     QProgressDialog *progressDialog = this->activateProgressDialog(input);
@@ -284,7 +279,7 @@ void ExtensionHandler::viewStudyInternal(StudyVolum study, QString callerName)
 
                 mainWindow->onVolumeLoaded(volumeId);
             }
-            else 
+            else
             {
                 if( !m_compareVolumeID.isNull() )
                 {

@@ -46,10 +46,7 @@ public:
 
 signals:
     /// Emet un senyal amb el segon volum per comparar
-    void secondInput( Volume* );
-
-    /// [temporal] Emet un senyal amb el volum de perfusió del mètode de difusió-perfusió.
-    void perfusionImage( Volume * volume );
+    void secondInput( Volume * );
 
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
@@ -60,7 +57,7 @@ public slots:
     void onVolumeLoaded( Identifier id );
 
     /// De moment, primera aproximació a arrencar el pacs de l'Starviewer.
-    void viewPatient(PatientFillerInput patientFillerInput);
+    void viewPatient( PatientFillerInput patientFillerInput );
 
     /// \TODO [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
     void viewStudy( StudyVolum study );
@@ -75,9 +72,6 @@ public slots:
     void openSerieToCompare();
 
 private:
-    /// S'encarrega de fer el registre de totes les extensions amb el factory
-    void registerExtensions();
-
     /// Crea les connexions de signals i slots
     void createConnections();
 
@@ -85,13 +79,12 @@ private:
     void load2DViewerExtension();
 
     /// Crea el diàleg de progrés al carregar un Volume.
-    QProgressDialog* activateProgressDialog(Input *input);
+    QProgressDialog* activateProgressDialog( Input *input );
 
     /// Crida per intentar reduir els [apanyo] i [temporal] \TODO Amb l'estructura Pacient establerta desapareixerà
-    void viewStudyInternal(StudyVolum study, QString callerName);
+    void viewStudyInternal( StudyVolum study, QString callerName );
 
 private slots:
-
     /// Slot que es crida quan hem canviat d'una extensió a una altre
     void extensionChanged( int index );
 
