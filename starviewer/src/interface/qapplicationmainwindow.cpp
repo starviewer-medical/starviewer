@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 // Qt
 #include <QAction>
 #include <QSignalMapper>
@@ -335,6 +334,28 @@ QApplicationMainWindow* QApplicationMainWindow::openNewWindow()
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
     newMainWindow->show();
     return newMainWindow;
+}
+
+void QApplicationMainWindow::addPatient( const Patient &patient )
+{
+    if( m_patient.isSamePatient( &patient ) )
+    {
+        m_patient += patient;
+    }
+    else
+    {
+        // si té estudis llavors hem de crear una nova finestra i donar-li aquest input
+        if( m_patient.getNumberOfStudies() > 0 )
+        {
+            //crear finestra i donar-li input
+            QApplicationMainWindow *newMainWindow = openNewWindow();
+            newMainWindow->addPatient( patient );
+        }
+        else // altrament aquest pacient serà assignat d'aquesta finestra
+        {
+            m_patient = patient;
+        }
+    }
 }
 
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
