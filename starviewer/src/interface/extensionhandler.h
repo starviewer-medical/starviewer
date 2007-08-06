@@ -92,9 +92,6 @@ private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
 
-    /// Entitat pacient que es controlarà des d'aquí
-    Patient *m_patient;
-
     /// L'id del volum amb el que estem treballant
     Identifier m_volumeID;
 
