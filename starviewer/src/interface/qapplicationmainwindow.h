@@ -12,6 +12,7 @@
 #include <QStringList>
 
 #include "identifier.h"
+#include "patient.h"
 
 // Forward declarations
 class QAction;
@@ -40,6 +41,9 @@ public:
     /// Mètode de conveniència per sortir del pas de mentres. Es crida quan tenim ja un model obert i volem obri-ne un de nou
     void newAndOpen();
     void newAndOpenDir();
+
+    /// Donat un pacient, segons el pacient que tinguem, afegirem les dades, crearem una nova instància de la main window, etc
+    void addPatient( const Patient &patient );
 
     /// Crea una nova finestra i la mostra
     QApplicationMainWindow* openNewWindow();
@@ -121,6 +125,9 @@ private:
 
     /// Per veure els logs
     QLogViewer *m_logViewer;
+
+    /// El pacient que li correspon a aquesta instància
+    Patient m_patient;
 };
 
 }; // fi namespace udg
