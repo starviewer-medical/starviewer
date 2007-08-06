@@ -45,6 +45,9 @@ public:
     /// Donat un pacient, segons el pacient que tinguem, afegirem les dades, crearem una nova instància de la main window, etc
     void addPatient( const Patient &patient );
 
+    /// Ens retorna el punter al pacient que té ara
+    Patient *getCurrentPatient();
+
     /// Crea una nova finestra i la mostra
     QApplicationMainWindow* openNewWindow();
 
