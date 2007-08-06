@@ -124,7 +124,7 @@ void ExtensionHandler::request( const QString &who )
     {
         ExtensionContext extensionContext;
         extensionContext.setMainVolumeID(m_volumeID);
-        extensionContext.setPatient(m_patient);
+        extensionContext.setPatient( m_mainApp->getCurrentPatient() );
 
         mediator->initializeExtension(extension, extensionContext, this);
         m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
@@ -153,14 +153,19 @@ void ExtensionHandler::viewPatient( PatientFillerInput patientFillerInput )
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
 
+    unsigned int numberOfPatients = patientFillerInput.getNumberOfPatients();
+
     PatientFiller patientFiller;
     connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
     patientFiller.fill( &patientFillerInput );
     DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
-    DEBUG_LOG( "getNumberOfPatients: " + patientFillerInput.getNumberOfPatients());
+    DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
     DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
 
-    m_patient = patientFillerInput.getPatient(0);
+    for( int i = 0; i < numberOfPatients; i++ )
+    {
+        m_mainApp->addPatient( *patientFillerInput.getPatient(i) );
+    }
 }
 
 void ExtensionHandler::viewStudy( StudyVolum study )
