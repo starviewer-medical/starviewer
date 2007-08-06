@@ -358,6 +358,11 @@ void QApplicationMainWindow::addPatient( const Patient &patient )
     }
 }
 
+Patient *QApplicationMainWindow::getCurrentPatient()
+{
+    return &m_patient;
+}
+
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 {
     QWidgetList list( QApplication::topLevelWidgets() );
