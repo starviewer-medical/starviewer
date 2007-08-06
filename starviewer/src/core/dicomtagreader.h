@@ -40,9 +40,15 @@ public:
     bool tagExists( DcmTagKey tag );
     bool tagExists( unsigned int group, unsigned int element );
 
-    /// Obtenim el valor d'un atribut en un string fent el query pel seu tag o pel seu nom a través dels define's de dcmtk.
-    /// Si no es troba o hi ha un error al llegir-lo, es retorna un QString buit.
+    /// Obtenim el valor d'un atribut en un string fent el query pel seu tag en hexadecimal.
+    /// Exemple: getAttributeByTag(0x0020, 0x0020);
+    /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByTag( unsigned int group, unsigned int element );
+
+    /// Mètode igual que l'anterior però es cerca pel nom a través dels define's de dcmtk. Aquests defines
+    /// es poden trobar a /usr/include/dcmtk/dcmdata/dcdeftag.h
+    /// Exemple: getAttributeByName(DCM_PatientOrientation);  //Seria equivalent a l'anterior
+    /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByName( DcmTagKey tag );
 
     /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència. Tindrem tants valors d'aquell atribut com

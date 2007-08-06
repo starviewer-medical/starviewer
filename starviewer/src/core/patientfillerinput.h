@@ -41,7 +41,7 @@ public:
     unsigned int getNumberOfPatients();
 
     /// Obté la llista d'arxius
-    QStringList getFilesList() const { return m_fileList; }
+    QStringList getFilesList() const;
 
     /// Afegeix/esborra un arxiu a la llista
     // \TODO què passa si un arxiu està repetit?
@@ -54,8 +54,8 @@ public:
     void addLabelToSeries( QString label, QString seriesUID );
 
     /// Obtenim les etiquetes a nivell global/Series
-    QStringList getLabels() const { return m_globalLabels; }
-    QStringList getLabelsFromSeries( QString seriesUID );
+    QStringList getLabels() const;
+    QStringList getLabelsBySeries( QString seriesUID );
 
     /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
     bool hasAllLabels(QStringList requiredLabelsList) const;
@@ -70,7 +70,9 @@ private:
     /// Llista d'etiquetes assignades a nivell global
     QStringList m_globalLabels;
 
-    /// Llista d'etiquetes assignades a nivell de sèries. Per cada uid tenim vàries etiquetes \TODO ara fem una associació Series UID-Label, però es podria fer també Series*-Label. Una altre alternativa seria ampliar l'estructura de Patient per tal que Series tingués els labels.
+    /// Llista d'etiquetes assignades a nivell de sèries. Per cada uid tenim vàries etiquetes
+    // \TODO ara fem una associació Series UID-Label, però es podria fer també Series*-Label.
+    // Una altre alternativa seria ampliar l'estructura de Patient per tal que Series tingués els labels.
     QMultiMap< QString, QString > m_seriesLabels;
 };
 

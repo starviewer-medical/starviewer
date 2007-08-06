@@ -82,6 +82,11 @@ unsigned int PatientFillerInput::getNumberOfPatients()
     return m_patientList.size();
 }
 
+QStringList PatientFillerInput::getFilesList() const
+{
+    return m_fileList;
+}
+
 void PatientFillerInput::addFile( QString filename )
 {
     m_fileList << filename;
@@ -111,7 +116,12 @@ void PatientFillerInput::addLabelToSeries( QString label, QString seriesUID )
     m_seriesLabels.insert( seriesUID , label );
 }
 
-QStringList PatientFillerInput::getLabelsFromSeries( QString seriesUID )
+QStringList PatientFillerInput::getLabels() const
+{
+    return m_globalLabels;
+}
+
+QStringList PatientFillerInput::getLabelsBySeries( QString seriesUID )
 {
     QStringList result = m_seriesLabels.values( seriesUID );
     return result;
