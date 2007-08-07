@@ -62,7 +62,7 @@ void PresentationStateFillerStep::processSeries( Series *series )
     if( isPresentationStateSeries(series) )
     {
         // TODO recopilar tots els elements presentation state i processar-los
-        m_input->addLabelToSeries("PresentationStateFillerStep", series->getInstanceUID() );
+        m_input->addLabelToSeries("PresentationStateFillerStep", series );
     }
 }
 

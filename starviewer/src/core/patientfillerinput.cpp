@@ -89,7 +89,8 @@ QStringList PatientFillerInput::getFilesList() const
 
 void PatientFillerInput::addFile( QString filename )
 {
-    m_fileList << filename;
+    if( !m_fileList.contains(filename) )
+        m_fileList << filename;
 }
 
 void PatientFillerInput::removeFile( QString filename )
@@ -111,20 +112,14 @@ void PatientFillerInput::addLabel( QString label )
     m_globalLabels << label;
 }
 
-void PatientFillerInput::addLabelToSeries( QString label, QString seriesUID )
+void PatientFillerInput::addLabelToSeries( QString label, Series *series )
 {
-    m_seriesLabels.insert( seriesUID , label );
+    m_seriesLabels.insert( series, label );
 }
 
 QStringList PatientFillerInput::getLabels() const
 {
     return m_globalLabels;
-}
-
-QStringList PatientFillerInput::getLabelsBySeries( QString seriesUID )
-{
-    QStringList result = m_seriesLabels.values( seriesUID );
-    return result;
 }
 
 bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
@@ -135,6 +130,31 @@ bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
             return false;
     }
     return true;
+}
+
+QList<Series *> PatientFillerInput::getSeriesWithLabels( QStringList labels )
+{
+    QList<Series *> resultSeries;
+    bool ok;
+    foreach( Series *series, m_seriesLabels.uniqueKeys() )
+    {
+        QStringList currentSeriesLabelList = m_seriesLabels.values( series );
+        ok = true;
+        foreach( QString value, labels ) // en comptes de fer un foreach seria millor fer un while i quan la condició no es dóna aturar
+        {
+            if( !currentSeriesLabelList.contains(value) )
+            {
+                ok = false;
+                break;
+            }
+        }
+        if( ok )
+        {
+            // afegir la sèrie a la llista
+            resultSeries << series;
+        }
+    }
+    return resultSeries;
 }
 
 }

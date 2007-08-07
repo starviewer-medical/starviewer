@@ -13,6 +13,7 @@
 namespace udg {
 
 class Patient;
+class Series;
 
 /**
 Classe que encapsula els paràmetres d'input que es faran servir a PatientFiller
@@ -43,22 +44,22 @@ public:
     /// Obté la llista d'arxius
     QStringList getFilesList() const;
 
-    /// Afegeix/esborra un arxiu a la llista
-    // \TODO què passa si un arxiu està repetit?
+    /// Afegeix/esborra un arxiu a la llista. No hi haurà elements repetits a la llista ja qu es comprova abans d0afegir
     void addFile( QString filename );
     void removeFile( QString filename );
 
     /// Afegim etiquetes a nivell global/Series
-    // \TODO a nivell de series podríem posar el paràmetre el propi punter a Series* que no pas l'UID-> s'ha d'aclarir
     void addLabel( QString label );
-    void addLabelToSeries( QString label, QString seriesUID );
+    void addLabelToSeries( QString label, Series *series );
 
     /// Obtenim les etiquetes a nivell global/Series
     QStringList getLabels() const;
-    QStringList getLabelsBySeries( QString seriesUID );
 
     /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
     bool hasAllLabels(QStringList requiredLabelsList) const;
+
+    /// Retorna les series que continguin almenys les etiquetes contingudes en la llista d'etiquetes que li passem
+    QList<Series *> getSeriesWithLabels( QStringList labels );
 
 private:
     /// Llista de pacients a omplir
@@ -70,10 +71,8 @@ private:
     /// Llista d'etiquetes assignades a nivell global
     QStringList m_globalLabels;
 
-    /// Llista d'etiquetes assignades a nivell de sèries. Per cada uid tenim vàries etiquetes
-    // \TODO ara fem una associació Series UID-Label, però es podria fer també Series*-Label.
-    // Una altre alternativa seria ampliar l'estructura de Patient per tal que Series tingués els labels.
-    QMultiMap< QString, QString > m_seriesLabels;
+    /// Llista d'etiquetes assignades a nivell de sèries. Per cada Series tenim vàries etiquetes
+    QMultiMap<Series *, QString> m_seriesLabels;
 };
 
 }
