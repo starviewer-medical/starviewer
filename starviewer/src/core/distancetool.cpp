@@ -385,8 +385,6 @@ void DistanceTool::setDistanceColor( AssemblyAndLineObject *assembly, QColor col
             caption->GetCaptionTextProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
         }
     }
-    else
-        DEBUG_LOG( "Assembly buit!" );
 }
 
 AssemblyAndLineObject* DistanceTool::getNearestAssembly( double point3D[3] )
