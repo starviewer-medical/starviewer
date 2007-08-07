@@ -12,8 +12,13 @@
   <property name="windowTitle" >
    <string>Form</string>
   </property>
+  <property name="styleSheet" >
+   <string>"border-style: outset;border-width: 2px;border-radius: 10px;border-color: beige;background-color: rgb(239, 243, 247);"
+                    "background-origin: padding;"
+                    "min-width: 10em;padding: 6px;"</string>
+  </property>
   <property name="frameShape" >
-   <enum>QFrame::StyledPanel</enum>
+   <enum>QFrame::NoFrame</enum>
   </property>
   <property name="frameShadow" >
    <enum>QFrame::Plain</enum>

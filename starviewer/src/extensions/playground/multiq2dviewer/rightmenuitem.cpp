@@ -21,15 +21,8 @@ RightMenuItem::RightMenuItem( QWidget *parent )
     setupUi( this );
     setAutoFillBackground( true );
 
-//     setStyleSheet(  "border-style: outset;"
-//                     "border-width: 2px;"
-//                     "border-radius: 10px;"
-//                     "border-color: beige;"
-//                     "background-color: rgb(239, 243, 247);"
-//                     "background-origin: padding;"
-//                     "min-width: 10em;"
-//                     "padding: 6px;");
-    
+//     setStyleSheet( "background-color: rgba(239, 243, 247,255)" );
+//     setStyleSheet( "background-color: rgb(255,0,0)" );
 }
 
 void RightMenuItem::setSerie( Series * serie )
@@ -49,78 +42,70 @@ void RightMenuItem::setSerie( Series * serie )
 //     QPixmap pixmap;
 //     pixmap = QPixmax.fromImage( m_serie-> ?? )
 
-    icon->setPixmap( QPixmap( "/home/ester/starviewer/src/main/images/axial.png" ) );
+    icon->setPixmap( QPixmap( ":/images/axial.png" ) );
     QLabel * text = new QLabel( m_auxiliar );
     verticalLayout->addWidget( text );
-    text->setText( "info_auxiliar ");
+    text->setText( m_serie->getDescription() );
     text->show();
     icon->show();
 
 }
 
-void RightMenuItem::enterEvent( QEvent * event )
+void RightMenuItem::focusInEvent( QFocusEvent * event )
 {
-//     QPalette palette = this->palette();
-//     QBrush selected( QColor( 85, 160, 255, 255 ) );
-//     selected.setStyle( Qt::SolidPattern );
-//     palette.setBrush( QPalette::Active, QPalette::Window, selected );
-//     palette.setBrush( QPalette::Disabled, QPalette::Window, selected );
-//     palette.setBrush( QPalette::Inactive, QPalette::Window, selected );
-//     setPalette( palette );
 
-//     setStyleSheet( "border-radius: 10px; color: rgb(85, 160, 255)" );
+    DEBUG_LOG( QString( " ¡¡¡¡¡¡¡¡¡focusInEvent!!!!!!! " ) );
 
-    setStyleSheet(  "border-style: outset;"
-                    "border-width: 2px;"
-                    "border-radius: 10px;"
-                    "border-color: beige;"
-                    "background-color: rgb(85, 160, 255);"
-                    "background-origin: padding;"
-                    "min-width: 10em;"
-                    "padding: 6px;");
-     
-//     QList<QObject*> QObjectList = children();
-//     for ( int i = 0; i < QObjectList.size(); i++ )
-//     {
-//         if ( QObjectList.value(i)->isWidgetType() )
-//         {
-//             ( (QWidget *) QObjectList.value(i) )->setPalette( palette );
-//             ( (QWidget *) QObjectList.value(i) )->show();
-//         }
-//     }
-// 
-//     show();
+    QPalette palette = this->palette();
+    QBrush selected( QColor( 85, 160, 255, 128 ) );
+    selected.setStyle( Qt::SolidPattern );
+    palette.setBrush( QPalette::Active, QPalette::Window, selected );
+    setPalette( palette );
+
+//     update();
+//     setStyleSheet( "background-color: rgb(85, 160, 255)" );
 
     emit isActive( this->geometry().y(), m_auxiliar );
 
-//     m_auxiliar->show();
+    m_auxiliar->show();
 
+//     this->setFocus( Qt::MouseFocusReason );
 }
 
-void RightMenuItem::leaveEvent( QEvent * event )
+void RightMenuItem::focusOutEvent( QFocusEvent * event )
 {
-//     QPalette palette = this->palette();
-//     QBrush selected(QColor(239, 243, 247, 255));
-//     selected.setStyle(Qt::SolidPattern);
-//     palette.setBrush(QPalette::Active, QPalette::Window, selected);
-//     setPalette(palette);
+    QPalette palette = this->palette();
+    QBrush selected(QColor(239, 243, 247, 255));
+    selected.setStyle(Qt::SolidPattern);
+    palette.setBrush(QPalette::Active, QPalette::Window, selected);
+    setPalette(palette);
 
-    setStyleSheet(  "border-style: outset;"
-                    "border-width: 2px;"
-                    "border-radius: 10px;"
-                    "border-color: beige;"
-                    "background-color: rgb(239, 243, 247);"
-                    "background-origin: padding;"
-                    "min-width: 10em;"
-                    "padding: 6px;");
+//     setStyleSheet(  "border-style: outset;"
+//                     "border-width: 2px;"
+//                     "border-radius: 10px;"
+//                     "border-color: beige;"
+//                     "background-color: rgb(239, 243, 247);"
+//                     "background-origin: padding;"
+//                     "min-width: 10em;"
+//                     "padding: 6px;");
 
     m_auxiliar->hide();
 }
 
-void RightMenuItem::mousePressEvent ( QMouseEvent * event )
+void RightMenuItem::mousePressEvent( QMouseEvent * event )
 {
-    if (event->button() == Qt::LeftButton) {
-        emit selectedSerie( m_serie );
+
+    DEBUG_LOG( QString( " ¡¡¡¡¡¡mousePressEvent!!!!!!! %1" ).arg( event->button(),16) );
+
+
+    QPalette palette = this->palette();
+    QBrush selected( QColor( 255, 0, 0, 255 ) );
+    selected.setStyle( Qt::SolidPattern );
+    palette.setBrush( QPalette::Active, QPalette::Window, selected );
+    setPalette( palette );
+
+    if( event->button() == Qt::LeftButton ) {
+//         emit selectedSerie( m_serie );
     }
 }
 
