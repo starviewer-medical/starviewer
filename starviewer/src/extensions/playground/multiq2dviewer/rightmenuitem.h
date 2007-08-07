@@ -32,16 +32,18 @@ public:
 protected:
 
     /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
-    void enterEvent( QEvent * event );
+    void focusInEvent( QFocusEvent * event );
 
      /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
-    void leaveEvent( QEvent * event );
+    void focusOutEvent( QFocusEvent * event );
 
-    /// sobrecàrrega de l'event que esdevé quan es clica amb el mouse
+    /// Sobrecàrrega de l'event que esdevé quan es clica amb el mouse
     void mousePressEvent( QMouseEvent * event );
 
+    /// Widget amb la informació addicional que es mostra al situar el mouse sobre l'item
     QWidget * m_auxiliar;
 
+    /// Serie que representa l'item
     Series * m_serie;
 
 signals:

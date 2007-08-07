@@ -51,6 +51,9 @@ private:
     /// Creem un widget amb la informació bàsica d'una sèrie
     RightMenuItem * createSerieWidget( Series * serie, QWidget * parent );
 
+private slots:
+    void emitSelected( Series * serie );
+
 };
 
 }
