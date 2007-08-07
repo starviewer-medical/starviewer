@@ -109,12 +109,14 @@ void PatientFillerInput::removeFile( QString filename )
 
 void PatientFillerInput::addLabel( QString label )
 {
-    m_globalLabels << label;
+    if( !m_globalLabels.contains(label) )
+        m_globalLabels << label;
 }
 
 void PatientFillerInput::addLabelToSeries( QString label, Series *series )
 {
-    m_seriesLabels.insert( series, label );
+    if( !m_seriesLabels.values( series ).contains( label ) )
+        m_seriesLabels.insert( series, label );
 }
 
 QStringList PatientFillerInput::getLabels() const
