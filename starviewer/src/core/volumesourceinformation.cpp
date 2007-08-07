@@ -7,18 +7,11 @@
 #include "volumesourceinformation.h"
 
 #include "dicomtagreader.h"
-
-#define HAVE_CONFIG_H 1
-// #include "dcmtk/dcmdata/dcdatset.h"
-#include "dcmtk/dcmdata/dcfilefo.h"
-#include "dcmtk/dcmdata/dcdeftag.h"
-#include "dcmtk/dcmdata/dcvrds.h" // DcmDecimalString
-#include "dcmtk/dcmdata/dcvrlo.h" // DcmLongString
 #include "logging.h"
 
 namespace udg {
 
-VolumeSourceInformation::VolumeSourceInformation() : m_numberOfPhases(1), m_numberOfSlices(1), m_dicomData(0)
+VolumeSourceInformation::VolumeSourceInformation() : m_numberOfPhases(1), m_numberOfSlices(1)
 {
     m_windowLevel[0] = 0.0;
     m_windowLevel[1] = 0.0;
@@ -147,28 +140,9 @@ void VolumeSourceInformation::getZDirectionCosines( double zCosines[3] )
 
 bool VolumeSourceInformation::loadDicomDataset( QString filename )
 {
-
     m_dicomTagReader->setFile( filename );
     this->collectSerieInformation();
     this->readWindowLevelData();
-
-    // \TODO això ho mantenim per conveniència per què en alguns llocs és necessari obtenir el dicom data set. En un futur aquest codi desapareixerà i no es guardarà cap DcmDataset al VolumeSourceInformation
-
-    if( !m_dicomData )
-        m_dicomData = new DcmDataset;
-
-    DcmFileFormat dicomFile;
-    OFCondition status = dicomFile.loadFile( qPrintable(filename) );
-    if( status.good() )
-    {
-        this->setDicomDataset( dicomFile.getAndRemoveDataset() );
-        return true;
-    }
-    else
-    {
-        DEBUG_LOG( QString( "algo falla::: %1\nARXIU: %2 ").arg( status.text() ).arg( filename ) );
-        return false;
-    }
 }
 
 void VolumeSourceInformation::collectSerieInformation()
@@ -189,38 +163,6 @@ void VolumeSourceInformation::setFilenames( QStringList filenames )
 void VolumeSourceInformation::setFilenames( QString filename )
 {
     this->setFilenames( QStringList( filename ) );
-}
-
-void VolumeSourceInformation::setDicomDataset( DcmDataset *data )
-{
-    m_dicomData = data;
-}
-
-DcmDataset *VolumeSourceInformation::getDicomDataset( int index )
-{
-    if( index == 0 )
-        return m_dicomData;
-    else if( index > 0 && index < m_filenamesList.size() )
-    {
-        DcmFileFormat dicomFile;
-        OFCondition status = dicomFile.loadFile( qPrintable( m_filenamesList.at(index) ) );
-        if( status.good() )
-        {
-            DcmDataset *dataset = NULL;
-            dataset = dicomFile.getAndRemoveDataset();
-            return dataset;
-        }
-        else
-        {
-            ERROR_LOG( QString("No s'ha pogut carregar arxiu dicom [%1]. Missatge d'error:[%2] ").arg( status.text() ).arg(m_filenamesList.at(index)) );
-            return false;
-        }
-    }
-    else
-    {
-        ERROR_LOG("S'ha demanat una imatge fora de rang");
-        return 0;
-    }
 }
 
 unsigned VolumeSourceInformation::getPhotometricInterpretation()

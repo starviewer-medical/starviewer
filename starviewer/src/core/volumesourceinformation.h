@@ -186,10 +186,6 @@ public:
     void getYDirectionCosines( double yCosines[3] );
     void getZDirectionCosines( double zCosines[3] );
 
-    /// Assigna/Obté les dades dicom en format dcmtk. \TODO revisar aquest set, perquè en principi no s'hauria de poder fer
-    void setDicomDataset( DcmDataset *data );
-    DcmDataset *getDicomDataset( int index = 0 );
-
     /// Indiquem la llista de fitxers que formen el volum i es carrega el dicomdataset (privat)
     void setFilenames( QStringList filenames );
     void setFilenames( QString filename ); // ho sobrecarreguem per quan només es tracti d'un sol arxiu
@@ -292,9 +288,6 @@ private:
 
     /// Vector amb els noms dels fitxers que conformen el volum
     QStringList m_filenamesList;
-
-    /// info de dicom en format dcmtk
-    DcmDataset *m_dicomData;
 
     /// Lector d'informació DICOM
     DICOMTagReader *m_dicomTagReader;
