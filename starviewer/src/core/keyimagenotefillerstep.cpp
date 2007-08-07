@@ -62,7 +62,7 @@ void KeyImageNoteFillerStep::processSeries( Series *series )
     if( isKeyImageNoteSeries(series) )
     {
         // TODO recollir tots els elements key image note i processar-los
-        m_input->addLabelToSeries("KeyImageNoteFillerStep", series->getInstanceUID() );
+        m_input->addLabelToSeries("KeyImageNoteFillerStep", series );
     }
 }
 

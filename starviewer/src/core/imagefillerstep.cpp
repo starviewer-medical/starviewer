@@ -74,7 +74,7 @@ void ImageFillerStep::processSeries( Series *series )
 
             series->addImage( image );
         }
-        m_input->addLabelToSeries("ImageFillerStep", series->getInstanceUID() );
+        m_input->addLabelToSeries("ImageFillerStep", series );
     }
     else
     {
