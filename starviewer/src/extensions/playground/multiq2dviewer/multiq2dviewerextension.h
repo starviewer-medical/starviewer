@@ -117,7 +117,7 @@ private:
     int m_columns;
 
     /// Menú del botó dret
-    RightButtonMenu * buttonMenu;
+    PatientBrowserMenu * buttonMenu;
 
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;

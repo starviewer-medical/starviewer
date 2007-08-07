@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "rightbuttonmenu.h"
+#include "patientbrowsermenu.h"
 
 #include <QHashIterator>
 #include <QLabel>
@@ -18,7 +18,7 @@
 
 namespace udg {
 
-RightButtonMenu::RightButtonMenu( QWidget *parent )
+PatientBrowserMenu::PatientBrowserMenu( QWidget *parent )
 {
     setupUi( this );
     setWindowFlags(Qt::Popup);
@@ -31,7 +31,7 @@ RightButtonMenu::RightButtonMenu( QWidget *parent )
 //     
 // }
 
-void RightButtonMenu::setPatient( Patient * patient )
+void PatientBrowserMenu::setPatient( Patient * patient )
 {
 
     DEBUG_LOG( QString( "Inici mètode setPatient " ) );
@@ -57,7 +57,7 @@ void RightButtonMenu::setPatient( Patient * patient )
 }
 
 
-QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
+QWidget * PatientBrowserMenu::createStudyWidget( Study * study, QWidget * parent )
 {
     QWidget * studyWidget = new QWidget( parent );
     
@@ -116,9 +116,9 @@ QWidget * RightButtonMenu::createStudyWidget( Study * study, QWidget * parent )
     return studyWidget;
 }
 
-RightMenuItem* RightButtonMenu::createSerieWidget( Series * serie, QWidget * parent )
+PatientBrowserMenuBasicItem* PatientBrowserMenu::createSerieWidget( Series * serie, QWidget * parent )
 {
-    RightMenuItem * serieWidget = new RightMenuItem( parent );
+    PatientBrowserMenuBasicItem * serieWidget = new PatientBrowserMenuBasicItem( parent );
     serieWidget->setSerie( serie );
 
     QLabel * serieText = new QLabel( serieWidget );
@@ -148,7 +148,7 @@ RightMenuItem* RightButtonMenu::createSerieWidget( Series * serie, QWidget * par
 
 }
 
-void RightButtonMenu::showInformation( int y, QWidget * moreInformation )
+void PatientBrowserMenu::showInformation( int y, QWidget * moreInformation )
 {
 
     int x;
@@ -163,7 +163,7 @@ void RightButtonMenu::showInformation( int y, QWidget * moreInformation )
     moreInformation->move( x, this->y() );
 }
 
-void RightButtonMenu::setPosition( QPoint point )
+void PatientBrowserMenu::setPosition( QPoint point )
 {
     // Calcular si el menu hi cap a la pantalla
     int x = point.x();
@@ -186,7 +186,7 @@ void RightButtonMenu::setPosition( QPoint point )
     move( QPoint(x,y) );
 }
 
-void RightButtonMenu::emitSelected( Series * serie )
+void PatientBrowserMenu::emitSelected( Series * serie )
 {
     emit selectedSeries( serie );
     hide();

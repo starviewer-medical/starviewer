@@ -4,10 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGRIGHTMENUITEM_H
-#define UDGRIGHTMENUITEM_H
+#ifndef UDGPATIENTBROWSERMENUBASICITEM_H
+#define UDGPATIENTBROWSERMENUBASICITEM_H
 
-#include <ui_rightmenuitembase.h>
+#include <ui_patientbrowsermenubasicitembase.h>
 #include <series.h>
 #include <QObject>
 
@@ -18,14 +18,14 @@ Widget per utilitzar com a item de menú. Pot representar diversos objectes i te
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class RightMenuItem : public QFrame, public Ui::RightMenuItemBase
+class PatientBrowserMenuBasicItem : public QFrame, public Ui::PatientBrowserMenuBasicItemBase
 {
 Q_OBJECT
 public:
 
-    RightMenuItem( QWidget *parent = 0 );
+    PatientBrowserMenuBasicItem( QWidget *parent = 0 );
 
-    ~RightMenuItem(){}
+    ~PatientBrowserMenuBasicItem(){}
 
     void setSerie( Series * serie );
 

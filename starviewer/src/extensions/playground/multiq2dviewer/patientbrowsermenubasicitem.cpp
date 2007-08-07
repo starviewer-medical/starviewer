@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "rightmenuitem.h"
+#include "patientbrowsermenubasicitem.h"
 #include "QPalette"
 #include "QListWidgetItem"
 #include "QLabel"
@@ -15,7 +15,7 @@
 
 namespace udg {
 
-RightMenuItem::RightMenuItem( QWidget *parent )
+PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem( QWidget *parent )
 : QFrame(parent)
 {
     setupUi( this );
@@ -25,7 +25,7 @@ RightMenuItem::RightMenuItem( QWidget *parent )
 //     setStyleSheet( "background-color: rgb(255,0,0)" );
 }
 
-void RightMenuItem::setSerie( Series * serie )
+void PatientBrowserMenuBasicItem::setSerie( Series * serie )
 {
     m_serie = serie;
 
@@ -51,7 +51,7 @@ void RightMenuItem::setSerie( Series * serie )
 
 }
 
-void RightMenuItem::focusInEvent( QFocusEvent * event )
+void PatientBrowserMenuBasicItem::focusInEvent( QFocusEvent * event )
 {
 
     DEBUG_LOG( QString( " ¡¡¡¡¡¡¡¡¡focusInEvent!!!!!!! " ) );
@@ -72,7 +72,7 @@ void RightMenuItem::focusInEvent( QFocusEvent * event )
 //     this->setFocus( Qt::MouseFocusReason );
 }
 
-void RightMenuItem::focusOutEvent( QFocusEvent * event )
+void PatientBrowserMenuBasicItem::focusOutEvent( QFocusEvent * event )
 {
     QPalette palette = this->palette();
     QBrush selected(QColor(239, 243, 247, 255));
@@ -92,7 +92,7 @@ void RightMenuItem::focusOutEvent( QFocusEvent * event )
     m_auxiliar->hide();
 }
 
-void RightMenuItem::mousePressEvent( QMouseEvent * event )
+void PatientBrowserMenuBasicItem::mousePressEvent( QMouseEvent * event )
 {
 
     DEBUG_LOG( QString( " ¡¡¡¡¡¡mousePressEvent!!!!!!! %1" ).arg( event->button(),16) );

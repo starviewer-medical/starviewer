@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>udg::RightMenuItemBase</class>
- <widget class="QFrame" name="udg::RightMenuItemBase" >
+ <class>udg::PatientBrowserMenuBasicItemBase</class>
+ <widget class="QFrame" name="udg::PatientBrowserMenuBasicItemBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
