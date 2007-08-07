@@ -250,7 +250,7 @@ void MultiQ2DViewerExtension::initLayouts()
 
 void MultiQ2DViewerExtension::createMenu()
 {
-    buttonMenu = new RightButtonMenu();
+    buttonMenu = new PatientBrowserMenu();
     buttonMenu->setPatient( m_patient );
 }
 

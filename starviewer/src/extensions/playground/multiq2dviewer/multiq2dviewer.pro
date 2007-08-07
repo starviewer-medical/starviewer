@@ -1,29 +1,29 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/multiq2dviewer
-# L'objectiu és una biblioteca:  
+# L'objectiu ï¿½ una biblioteca:  
 
 FORMS += multiq2dviewerextensionbase.ui \
          interactivewidgetbase.ui \
          q2dviewerwidgetbase.ui \
-         rightbuttonmenubase.ui \
-         rightmenuitembase.ui 
+         patientbrowsermenubase.ui \
+         patientbrowsermenubasicitembase.ui 
 HEADERS += multiq2dviewerextensionmediator.h \
            multiq2dviewerextension.h \
            q2dviewerwidget.h \
            patientitemmodel.h \
            patientitem.h \
            interactivewidget.h \
-           rightbuttonmenu.h \
-           rightmenuitem.h 
+           patientbrowsermenu.h \
+           patientbrowsermenubasicitem.h 
 SOURCES += multiq2dviewerextensionmediator.cpp \
            multiq2dviewerextension.cpp \
            q2dviewerwidget.cpp \
            patientitemmodel.cpp \
            patientitem.cpp \
            interactivewidget.cpp \
-           rightbuttonmenu.cpp \
-           rightmenuitem.cpp 
+           patientbrowsermenu.cpp \
+           patientbrowsermenubasicitem.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a

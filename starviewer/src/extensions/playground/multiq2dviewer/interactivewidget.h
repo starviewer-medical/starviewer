@@ -9,7 +9,7 @@
 
 #include <ui_interactivewidgetbase.h>
 #include "patientitemmodel.h"
-#include "rightbuttonmenu.h"
+#include "patientbrowsermenu.h"
 #include <QTreeView>
 #include <QTableView>
 #include <QListView>
@@ -39,7 +39,7 @@ public:
 
     void setPatient(Patient * patient);
 
-    RightButtonMenu * buttonMenu;
+    PatientBrowserMenu * buttonMenu;
 
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
