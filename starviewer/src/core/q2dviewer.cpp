@@ -75,6 +75,7 @@
 // dcmtk:
 //\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
 #define HAVE_CONFIG_H 1
+#include "dcmtk/dcmdata/dcfilefo.h"
 #include "dcmtk/dcmdata/dcdatset.h"
 #include "dcmtk/dcmdata/dcdeftag.h" // DcmTagKey
 #include "dcmtk/dcmdata/dcsequen.h" // DcmSequenceOfItems
@@ -2576,13 +2577,33 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
     break;
     }
     DcmStack stack;
+    DcmDataset *dataset = new DcmDataset;
+
     bool ok = true;
 
-    DcmDataset *data = m_mainVolume->getVolumeSourceInformation()->getDicomDataset();
-    if( data->search( lutType, stack ).bad() )
+    QStringList list = m_mainVolume->getVolumeSourceInformation()->getFilenames();
+    if( list.isEmpty() )
         ok = false;
-    else
-        DEBUG_LOG( QString("Parsing [%1] from dicom dataset").arg( lutDescription ) );
+    if( ok )
+    {
+
+        DcmFileFormat dicomFile;
+
+        OFCondition status = dicomFile.loadFile( qPrintable( list.at(0) ) );
+        if( status.bad() )
+        {
+            DEBUG_LOG( QString( "algo falla::: %1\nARXIU: %2 ").arg( status.text() ).arg( list.at(0) ) );
+            ok = false;
+        }
+    }
+
+    if( ok )
+    {
+        if( dataset->search( lutType, stack ).bad() )
+            ok = false;
+        else
+            DEBUG_LOG( QString("Parsing [%1] from dicom dataset").arg( lutDescription ) );
+    }
 
     if( ok )
     {
