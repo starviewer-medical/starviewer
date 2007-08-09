@@ -101,19 +101,22 @@ public:
     /// TODO: Repassar: això no hauria d'anar així.
     /// Retorna un nou Volume on la Data és només del sub volume indicat
     Volume *getSubVolume( int index );
-
+    /// Reordena les llesques: específic CardiacMPRExtension
     Volume *orderSlices();
+
+private:
+    /// Mètode d'inicialització d'objectes comuns per als constructors
+    void init();
 
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter< ItkImageType > ItkToVtkFilterType;
     typedef itk::VTKImageToImageFilter< ItkImageType > VtkToItkFilterType;
 
-    /// Mètode d'inicialització d'objectes comuns per als constructors
-    void init();
-
+    /// Les dades en format vtk
     VtkImageTypePointer m_imageDataVTK;
 
+    /// Filtres per passar de vtk a itk
     ItkToVtkFilterType::Pointer m_itkToVtkFilter;
     VtkToItkFilterType::Pointer m_vtkToItkFilter;
 
