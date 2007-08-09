@@ -106,9 +106,6 @@ void ExtensionHandler::request( int who )
 
     /// Default viewer: 2D Viewer
         case 8:
-            this->load2DViewerExtension();
-            break;
-
         default:
             this->load2DViewerExtension();
             break;
