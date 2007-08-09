@@ -103,7 +103,7 @@ void DcmDatasetCache::activateAutoclearTimer(int seconds)
     {
         killAutoclearTimer();
     }
-    m_autoclearTimer = startTimer(seconds);
+    m_autoclearTimer = startTimer(seconds*1000);
 }
 
 void DcmDatasetCache::killAutoclearTimer()
