@@ -15,6 +15,8 @@
 #include "dcmtk/dcmdata/dctagkey.h"
 #include "dcmtk/dcmdata/dcdeftag.h"
 
+#include "dcmdatasetcache.h"
+
 class DcmDataset;
 
 namespace udg {
@@ -68,6 +70,8 @@ private:
 
     /// Objecte dcmtk a través del qual obtenim la informació DICOM
     DcmDataset *m_dicomData;
+
+    static DcmDatasetCache m_cache;
 };
 
 }

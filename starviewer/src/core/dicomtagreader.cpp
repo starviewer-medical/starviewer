@@ -16,6 +16,9 @@
 
 namespace udg {
 
+// Inicialitzem l'autoclear a 300 segons.
+DcmDatasetCache DICOMTagReader::m_cache(300);
+
 DICOMTagReader::DICOMTagReader() : m_dicomData(0)
 {
 }
@@ -27,32 +30,44 @@ DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
 
 DICOMTagReader::~DICOMTagReader()
 {
+    delete m_dicomData;
 }
 
 bool DICOMTagReader::setFile( QString filename )
 {
     DcmFileFormat dicomFile;
-    OFCondition status = dicomFile.loadFile( qPrintable(filename) );
-    if( status.good() )
+    DcmDataset *dataset = m_cache.find(filename);
+    if (! dataset)
     {
-        // eliminem l'objecte anterior si n'hi hagués
-        if( m_dicomData )
-            delete m_dicomData;
+        OFCondition status = dicomFile.loadFile( qPrintable(filename) );
+        if( status.good() )
+        {
+            // eliminem l'objecte anterior si n'hi hagués
+            if( m_dicomData )
+            {
+                delete m_dicomData;
+                m_dicomData = NULL;
+            }
 
-        m_dicomData =  dicomFile.getAndRemoveDataset();
-        return true;
+            dataset =  dicomFile.getAndRemoveDataset();
+            m_cache.insert( filename, dynamic_cast<DcmDataset*>(dataset->clone()) );
+        }
+        else
+        {
+            DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\n%2 ").arg( filename ).arg( status.text() ) );
+            return false;
+        }
     }
-    else
-    {
-        DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\n%2 ").arg( filename ).arg( status.text() ) );
-        return false;
-    }
+    m_dicomData = dataset;
+    return true;
 }
 
 bool DICOMTagReader::tagExists( DcmTagKey tag )
 {
     if( m_dicomData )
+    {
         return m_dicomData->tagExists( tag );
+    }
     else
     {
         DEBUG_LOG("El m_dicomData no és vàlid");
@@ -117,7 +132,7 @@ QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, D
             OFString value;
             DcmSequenceOfItems *sequence = NULL;
             sequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
-            for( int i = 0; i < sequence->card(); i++ )
+            for(unsigned int i = 0; i < sequence->card(); i++ )
             {
                 DcmItem *item = sequence->getItem( i );
                 status = item->findAndGetOFStringArray( attributeTag , value );
