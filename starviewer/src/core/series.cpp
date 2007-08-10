@@ -345,4 +345,14 @@ void Series::setSelectStatus( bool select )
     m_selected = select;
 }
 
+void Series::setThumbnail( QPixmap thumbnail )
+{
+    m_previewImage = thumbnail;
+}
+
+QPixmap Series::getThumbnail() const
+{
+    return m_previewImage;
+}
+
 }

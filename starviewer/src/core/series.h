@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QString>
 #include <QDateTime>
-#include <QImage>
+#include <QPixmap>
 #include <QHash>
 #include "identifier.h"
 
@@ -139,6 +139,10 @@ public:
 
     QString toString(bool verbose = false);
 
+    /// Assigna/Obté la imatge de previsualització de la sèrie
+    void setThumbnail( QPixmap thumb );
+    QPixmap getThumbnail() const;
+
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
     void select();
@@ -194,7 +198,7 @@ private:
     QString m_imagesPath;
 
     /// Imatge de previsualització associada a la sèrie
-    QImage m_previewImage;
+    QPixmap m_previewImage;
 
     /// Identificador del volum al repositori
     Identifier m_volumeID;
