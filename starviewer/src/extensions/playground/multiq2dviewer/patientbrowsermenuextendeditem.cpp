@@ -43,11 +43,11 @@ void PatientBrowserMenuExtendedItem::createInitialWidget()
     hide();
 }
 
-void PatientBrowserMenuExtendedItem::setSerie( Series * serie)
+void PatientBrowserMenuExtendedItem::setSerie( Series *serie )
 {
     m_serie = serie;
-    
-    m_icon->setPixmap( QPixmap( ":/images/axial.png" ) );
+
+    m_icon->setPixmap( serie->getThumbnail() );
     m_text->setText( QString( tr("%1 \n%2 \n%3")
                     .arg( m_serie->getDescription().trimmed() )
                     .arg( serie->getModality().trimmed() )
