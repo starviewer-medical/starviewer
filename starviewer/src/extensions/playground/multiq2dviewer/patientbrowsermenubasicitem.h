@@ -27,21 +27,16 @@ public:
 
     ~PatientBrowserMenuBasicItem(){}
 
+    /// Posem la serie a representar
     void setSerie( Series * serie );
+
+    /// Obtenim la serie que es representa
+    Series *  getSerie();
 
 protected:
 
-    /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
-    void focusInEvent( QFocusEvent * event );
-
-     /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
-    void focusOutEvent( QFocusEvent * event );
-
-    /// Sobrecàrrega de l'event que esdevé quan es clica amb el mouse
-    void mousePressEvent( QMouseEvent * event );
-
-    /// Widget amb la informació addicional que es mostra al situar el mouse sobre l'item
-    QWidget * m_auxiliar;
+    /// Sobrecàrrega del mètode que tracta tots els events
+    bool event( QEvent * event);
 
     /// Serie que representa l'item
     Series * m_serie;
@@ -49,7 +44,10 @@ protected:
 signals:
 
     /// Aquest senyal s'emetrà quan el mouse entri al widget
-    void isActive( int, QWidget * );
+    void isActive( int, Series * );
+
+    /// Aquest senyal s'emetrà quan el mouse entri al widget
+    void isNotActive();
 
     /// Aquest senyal s'emet quan s'escull una serie de l'item
     void selectedSerie( Series * );
