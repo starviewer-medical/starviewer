@@ -60,7 +60,6 @@ void PatientBrowserMenuExtendedItem::showSerie( int y , Series * serie )
 {
     setSerie( serie );
     emit setPosition( this, y );
-    show();
 }
 
 }

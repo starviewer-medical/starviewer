@@ -52,14 +52,18 @@ void PatientBrowserMenu::showInformation( PatientBrowserMenuExtendedItem * exten
     int x;
     int screen_x= qApp->desktop()->availableGeometry().width();
 
-    // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre
-    if( (m_patientBasicList->x() + m_patientBasicList->width() + extendedWidget->width() ) > screen_x )
-        x = m_patientBasicList->x() - extendedWidget->width();
-    else
-        x =  m_patientBasicList->x() + m_patientBasicList->width();
+    extendedWidget->show();// Si no fem el show en aquest punt, les mides que s'obtenen no són correctes.
 
+    // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
+    if( (m_patientBasicList->x() + m_patientBasicList->width() + extendedWidget->width() ) > screen_x )
+    {
+        x = ( m_patientBasicList->geometry().x() ) - ( extendedWidget->width() );
+    }
+    else
+    {
+        x =  m_patientBasicList->x() + m_patientBasicList->width();
+    }
     extendedWidget->move( x, m_patientBasicList->y() );
-    
 }
 
 void PatientBrowserMenu::setPosition( QPoint point )
@@ -70,6 +74,8 @@ void PatientBrowserMenu::setPosition( QPoint point )
     
     int screen_x = qApp->desktop()->availableGeometry().width();
     int screen_y = qApp->desktop()->availableGeometry().height();
+
+    m_patientBasicList->show();// Si no fem el show en aquest punt, les mides obtingudes no son correctes.
 
     if ( ( x + m_patientBasicList->width() ) > screen_x )
     {
