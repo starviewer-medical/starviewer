@@ -20,93 +20,64 @@ PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem( QWidget *parent )
 {
     setupUi( this );
     setAutoFillBackground( true );
-
-//     setStyleSheet( "background-color: rgba(239, 243, 247,255)" );
-//     setStyleSheet( "background-color: rgb(255,0,0)" );
 }
 
 void PatientBrowserMenuBasicItem::setSerie( Series * serie )
 {
     m_serie = serie;
 
-    // Informació auxiliar de la serie
-
-    m_auxiliar = new QWidget( );
-    m_auxiliar->setWindowFlags(Qt::Popup);
-    m_auxiliar->hide();
-
-    QVBoxLayout * verticalLayout = new QVBoxLayout( m_auxiliar );
-    QLabel * icon = new QLabel( m_auxiliar );
-    verticalLayout->addWidget( icon );
-
-//     QPixmap pixmap;
-//     pixmap = QPixmax.fromImage( m_serie-> ?? )
-
-    icon->setPixmap( QPixmap( ":/images/axial.png" ) );
-    QLabel * text = new QLabel( m_auxiliar );
-    verticalLayout->addWidget( text );
-    text->setText( m_serie->getDescription() );
-    text->show();
-    icon->show();
+    QLabel * serieText = new QLabel( this );
+    serieText->setText( tr(" Serie %1 ").arg( serie->getProtocolName().trimmed() ) );
+    serieText->show();
+    QVBoxLayout *verticalLayout = new QVBoxLayout;
+    verticalLayout->setMargin(0);
+    verticalLayout->addWidget( serieText, 0 );
+    this->setLayout( verticalLayout );
 
 }
 
-void PatientBrowserMenuBasicItem::focusInEvent( QFocusEvent * event )
+Series *  PatientBrowserMenuBasicItem::getSerie()
 {
-
-    DEBUG_LOG( QString( " ¡¡¡¡¡¡¡¡¡focusInEvent!!!!!!! " ) );
-
-    QPalette palette = this->palette();
-    QBrush selected( QColor( 85, 160, 255, 128 ) );
-    selected.setStyle( Qt::SolidPattern );
-    palette.setBrush( QPalette::Active, QPalette::Window, selected );
-    setPalette( palette );
-
-//     update();
-//     setStyleSheet( "background-color: rgb(85, 160, 255)" );
-
-    emit isActive( this->geometry().y(), m_auxiliar );
-
-    m_auxiliar->show();
-
-//     this->setFocus( Qt::MouseFocusReason );
+    return m_serie;
 }
 
-void PatientBrowserMenuBasicItem::focusOutEvent( QFocusEvent * event )
-{
-    QPalette palette = this->palette();
-    QBrush selected(QColor(239, 243, 247, 255));
-    selected.setStyle(Qt::SolidPattern);
-    palette.setBrush(QPalette::Active, QPalette::Window, selected);
-    setPalette(palette);
-
-//     setStyleSheet(  "border-style: outset;"
-//                     "border-width: 2px;"
-//                     "border-radius: 10px;"
-//                     "border-color: beige;"
-//                     "background-color: rgb(239, 243, 247);"
-//                     "background-origin: padding;"
-//                     "min-width: 10em;"
-//                     "padding: 6px;");
-
-    m_auxiliar->hide();
-}
-
-void PatientBrowserMenuBasicItem::mousePressEvent( QMouseEvent * event )
+bool PatientBrowserMenuBasicItem::event( QEvent * event )
 {
 
-    DEBUG_LOG( QString( " ¡¡¡¡¡¡mousePressEvent!!!!!!! %1" ).arg( event->button(),16) );
-
-
-    QPalette palette = this->palette();
-    QBrush selected( QColor( 255, 0, 0, 255 ) );
-    selected.setStyle( Qt::SolidPattern );
-    palette.setBrush( QPalette::Active, QPalette::Window, selected );
-    setPalette( palette );
-
-    if( event->button() == Qt::LeftButton ) {
-//         emit selectedSerie( m_serie );
+    if ( event->type() == QEvent::Enter )
+    {
+        QPalette palette = this->palette();
+        QBrush selected( QColor( 85, 160, 255, 128 ) );
+        selected.setStyle( Qt::SolidPattern );
+        palette.setBrush( QPalette::Active, QPalette::Window, selected );
+        setPalette( palette );
+        emit isActive( this->geometry().y(), m_serie );
+        return true;
     }
-}
+    else if ( event->type() == QEvent::MouseButtonPress )
+    {
+        QPalette palette = this->palette();
+        QBrush selected( QColor( 255, 0, 0, 255 ) );
+        selected.setStyle( Qt::SolidPattern );
+        palette.setBrush( QPalette::Active, QPalette::Window, selected );
+        setPalette( palette );
+        emit selectedSerie( m_serie );
+        return true;
+    }
+    else if ( event->type() == QEvent::Leave )
+    {
+        QPalette palette = this->palette();
+        QBrush selected( QColor(239, 243, 247, 255) );
+        selected.setStyle( Qt::SolidPattern );
+        palette.setBrush( QPalette::Active, QPalette::Window, selected );
+        setPalette( palette );
+        emit isNotActive( );
+        return true;
+    }
+    else
+    {
+        return QWidget::event( event );
+    }
 
+}
 }

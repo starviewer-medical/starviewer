@@ -534,7 +534,6 @@ void MultiQ2DViewerExtension::resetWindowLevelToDefault()
 void MultiQ2DViewerExtension::showMenu( QPoint point )
 {
     buttonMenu->setPosition( point );
-    buttonMenu->show();
 }
 
 Patient* MultiQ2DViewerExtension::getPatient() const

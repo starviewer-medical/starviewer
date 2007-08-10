@@ -7,8 +7,6 @@
 #include "patientbrowsermenu.h"
 
 #include <QHashIterator>
-#include <QLabel>
-#include <QGridLayout>
 #include <QHashIterator>
 #include <QSplitter>
 #include <logging.h>
@@ -16,151 +14,52 @@
 #include <QDesktopWidget>
 #include <QRect>
 
+
 namespace udg {
 
-PatientBrowserMenu::PatientBrowserMenu( QWidget *parent )
+PatientBrowserMenu::PatientBrowserMenu( )
 {
-    setupUi( this );
-    setWindowFlags(Qt::Popup);
+    m_patientExtendedWidget = new PatientBrowserMenuExtendedItem();
+    m_patientExtendedWidget->hide();
+    m_patientBasicList = 0;
 }
-
-// RightButtonMenu::setModel( QStandardItemModel * model )
-// {
-//     QStandardItem * patient = model->item( 0,0 );
-//     
-//     
-// }
 
 void PatientBrowserMenu::setPatient( Patient * patient )
 {
+    // 1.-Eliminar la informació actual
+    if( m_patientBasicList != 0 ) delete m_patientBasicList;
+    m_patientBasicList = new PatientBrowserMenuList();
+    m_patientExtendedWidget->hide();
 
-    DEBUG_LOG( QString( "Inici mètode setPatient " ) );
+    // 2.- Crear el menu amb el nou pacient
+    m_patientBasicList->setPatient( patient );
+    m_patientBasicList->hide();
 
-    QWidget * studyWidget;
-    Study * study;
-    int numberStudy;
-    QList< Study* > studies = patient->getStudies();
+    // 3.- Creem les connexions
+    connect( m_patientBasicList , SIGNAL( isActive( int, Series * ) ) , m_patientExtendedWidget , SLOT( showSerie( int , Series * ) ) );
 
-    this->setWindowTitle( patient->getFullName() );
+    connect( m_patientBasicList , SIGNAL( isNotActive() ) , m_patientExtendedWidget , SLOT( hide() ) );
 
-    QVBoxLayout *verticalLayout = new QVBoxLayout;
-    verticalLayout->setMargin(0);
-    this->setLayout(verticalLayout);
+    connect( m_patientExtendedWidget , SIGNAL( setPosition( PatientBrowserMenuExtendedItem * , int ) ) , this, SLOT ( showInformation( PatientBrowserMenuExtendedItem * , int ) ) );
 
-    for( numberStudy = 0; numberStudy < patient->getNumberOfStudies(); numberStudy++ )
-    {
-        study = studies.value( numberStudy );
-        studyWidget = createStudyWidget( study, this );
-        verticalLayout->addWidget(studyWidget,numberStudy,0);
-    }
+    connect( m_patientBasicList , SIGNAL( selectedSerie( Series * ) ) , this , SLOT ( emitSelected( Series * ) ) );
 
 }
 
-
-QWidget * PatientBrowserMenu::createStudyWidget( Study * study, QWidget * parent )
-{
-    QWidget * studyWidget = new QWidget( parent );
-    
-    QHBoxLayout * horizontalLayout = new QHBoxLayout( );
-    horizontalLayout->setSpacing( 0 );
-    horizontalLayout->setMargin( 0 );
-
-    QLabel * studyText = new QLabel( studyWidget );
-    studyText->setText(" Study ");
-    studyText->setAutoFillBackground( true );
-
-    QPalette palette( studyText->palette() );
-    QBrush studyBackground( QColor( 85, 160, 255, 255 ) );
-    studyBackground.setStyle(Qt::SolidPattern);
-    palette.setBrush(QPalette::Active, QPalette::Window, studyBackground);
-
-    studyText->setPalette(palette);
-
-    QLabel * dateText = new QLabel( studyWidget );
-    dateText->setText( tr(" Date: %1 ").arg( study->getDateAsString() ) );
-    dateText->setAutoFillBackground( true );
-    dateText->setPalette(palette);
-    dateText->show();
-
-    QLabel * descriptionText = new QLabel( studyWidget );
-    descriptionText->setText( tr(" Description: %1 ").arg( study->getDescription() ) );
-    descriptionText->setAutoFillBackground( true );
-    descriptionText->setPalette(palette);
-    descriptionText->show();
-
-    horizontalLayout->addWidget( studyText );
-    horizontalLayout->addWidget( dateText );
-    horizontalLayout->addWidget( descriptionText );
-
-    QGridLayout * gridLayout = new QGridLayout( studyWidget );
-    QGridLayout * gridLayoutWidgets = new QGridLayout( );
-    
-    gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
-    gridLayout->addLayout(gridLayoutWidgets, 1, 0, 1, 1);
-
-    QList<Series*> seriesToAdd = study->getSeries();
-    int maxColumns = 4;
-    int row = 0;
-
-    while (!seriesToAdd.isEmpty())
-    {
-        int column = 0;
-        while ( column < maxColumns && !seriesToAdd.isEmpty())
-        {
-            gridLayoutWidgets->addWidget( createSerieWidget( seriesToAdd.takeFirst(), studyWidget ), row, column );
-            ++column;
-        }
-        ++row;
-    }
-
-    return studyWidget;
-}
-
-PatientBrowserMenuBasicItem* PatientBrowserMenu::createSerieWidget( Series * serie, QWidget * parent )
-{
-    PatientBrowserMenuBasicItem * serieWidget = new PatientBrowserMenuBasicItem( parent );
-    serieWidget->setSerie( serie );
-
-    QLabel * serieText = new QLabel( serieWidget );
-    serieText->setText("Serie ");
-    serieText->show();
-
-    QLabel * modalityText = new QLabel( serieWidget );
-    modalityText->setText( tr("Modality: %1").arg( serie->getModality() ) );
-    modalityText->show();
-
-    QLabel * descriptionText = new QLabel( serieWidget );
-    descriptionText->setText( tr("Description: %1").arg( serie->getDescription() ) );
-    descriptionText->show();
-
-    QVBoxLayout *verticalLayout = new QVBoxLayout;
-    verticalLayout->setMargin(0);
-    verticalLayout->addWidget( serieText, 0 );
-    verticalLayout->addWidget( modalityText, 1 );
-    verticalLayout->addWidget( descriptionText, 2 );
-    serieWidget->setLayout(verticalLayout);
-
-    connect( serieWidget , SIGNAL( isActive( int, QWidget * ) ) , this , SLOT( showInformation( int, QWidget * ) ) );
-
-    connect( serieWidget , SIGNAL( selectedSerie( Series * ) ) , this , SLOT ( emitSelected( Series * ) ) );
-
-    return serieWidget;
-
-}
-
-void PatientBrowserMenu::showInformation( int y, QWidget * moreInformation )
+void PatientBrowserMenu::showInformation( PatientBrowserMenuExtendedItem * extendedWidget , int y )
 {
 
     int x;
     int screen_x= qApp->desktop()->availableGeometry().width();
 
     // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre
-    if( (this->x() + this->width() + moreInformation->width() ) > screen_x )
-        x = this->x() - moreInformation->width();
+    if( (m_patientBasicList->x() + m_patientBasicList->width() + extendedWidget->width() ) > screen_x )
+        x = m_patientBasicList->x() - extendedWidget->width();
     else
-        x =  this->x() + this->width();
+        x =  m_patientBasicList->x() + m_patientBasicList->width();
 
-    moreInformation->move( x, this->y() );
+    extendedWidget->move( x, m_patientBasicList->y() );
+    
 }
 
 void PatientBrowserMenu::setPosition( QPoint point )
@@ -172,24 +71,26 @@ void PatientBrowserMenu::setPosition( QPoint point )
     int screen_x = qApp->desktop()->availableGeometry().width();
     int screen_y = qApp->desktop()->availableGeometry().height();
 
-    if ( ( x + this->width() ) > screen_x )
+    if ( ( x + m_patientBasicList->width() ) > screen_x )
     {
-        x = screen_x - this->width() - 5;
+        x = screen_x - m_patientBasicList->width() - 5;
     }
 
-    if ( ( y + this->height() ) > screen_y )
+    if ( ( y + m_patientBasicList->height() ) > screen_y )
     {
-        y = screen_y - this->height() - 5;
+        y = screen_y - m_patientBasicList->height() - 5;
     }
 
     // moure la finestra del menu al punt que toca
-    move( QPoint(x,y) );
+    m_patientBasicList->move( QPoint(x,y) );
+    m_patientBasicList->show();
+
 }
 
 void PatientBrowserMenu::emitSelected( Series * serie )
 {
     emit selectedSeries( serie );
-    hide();
+    m_patientBasicList->hide();
 }
 
 }
