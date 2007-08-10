@@ -8,6 +8,7 @@
 #define UDGPATIENTBROWSERMENUEXTENDEDITEM_H
 
 #include <QWidget>
+#include <QFrame>
 #include <series.h>
 #include <QLabel>
 
@@ -19,14 +20,14 @@ Classe per mostrar la informació addicional referent a una serie d'un estudi d'
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenuExtendedItem : public QWidget
+class PatientBrowserMenuExtendedItem : public QFrame
 {
 Q_OBJECT
 public:
 
-    PatientBrowserMenuExtendedItem( QWidget *parent = 0 );
+    PatientBrowserMenuExtendedItem( QFrame *parent = 0 );
 
-    PatientBrowserMenuExtendedItem( Series * serie, QWidget *parent = 0 );
+    PatientBrowserMenuExtendedItem( Series * serie, QFrame *parent = 0 );
 
     ~PatientBrowserMenuExtendedItem();
 

@@ -12,14 +12,14 @@
 
 namespace udg {
 
-PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem( QWidget *parent )
-: QWidget(parent)
+PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem( QFrame *parent )
+: QFrame(parent)
 {
     createInitialWidget();
 }
 
-PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem( Series * serie, QWidget *parent )
-: QWidget(parent)
+PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem( Series * serie, QFrame *parent )
+: QFrame(parent)
 {
     setSerie( serie );
     createInitialWidget();
@@ -39,6 +39,7 @@ void PatientBrowserMenuExtendedItem::createInitialWidget()
 
     m_text = new QLabel( this );
     verticalLayout->addWidget( m_text );
+
     hide();
 }
 
@@ -47,7 +48,7 @@ void PatientBrowserMenuExtendedItem::setSerie( Series * serie)
     m_serie = serie;
     
     m_icon->setPixmap( QPixmap( ":/images/axial.png" ) );
-    m_text->setText( QString( tr("%1 \n%2 ")
+    m_text->setText( QString( tr("%1 \n%2 \n%3")
                     .arg( m_serie->getDescription().trimmed() )
                     .arg( serie->getModality().trimmed() )
                     .arg( serie->getProtocolName().trimmed() )

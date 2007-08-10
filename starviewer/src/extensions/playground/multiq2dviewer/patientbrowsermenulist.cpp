@@ -58,6 +58,7 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     QLabel * studyText = new QLabel( studyWidget );
     studyText->setText( " Study " );
     studyText->setAutoFillBackground( true );
+    studyText->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
 
     QPalette palette( studyText->palette() );
     QBrush studyBackground( QColor( 85, 160, 255, 255 ) );
