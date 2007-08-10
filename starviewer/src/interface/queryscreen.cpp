@@ -1237,6 +1237,9 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 //         patientSeries->setFrameOfReferenceUID( series.getSeriesFrameOfReference() );
 //         patientSeries->setPositionReferenceIndicator( series.getSeriesPositionReferenceIndicator() );
 
+        // TODO el thumbnail s'hauria de crear d'alguna altre manera, això es temporal
+        patientSeries->setThumbnail( QPixmap( absSeriesPath + "scaled.pgm" ) );
+
         patientStudy->addSeries( patientSeries );
 
         mask.setSeriesUID( series.getSeriesUID() );
@@ -1395,6 +1398,9 @@ void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QStri
         patientSeries->setDescription( series.getSeriesDescription() );
 //         patientSeries->setFrameOfReferenceUID( series.getSeriesFrameOfReference() );
 //         patientSeries->setPositionReferenceIndicator( series.getSeriesPositionReferenceIndicator() );
+
+        // TODO el thumbnail s'hauria de crear d'alguna altre manera, això es temporal
+        patientSeries->setThumbnail( QPixmap( absSeriesPath + "scaled.pgm" ) );
 
         patientStudy->addSeries( patientSeries );
 
