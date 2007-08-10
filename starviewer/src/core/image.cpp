@@ -18,7 +18,7 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent)
+ : QObject(parent), m_sliceThickness(1.0)
 {
 }
 
@@ -180,6 +180,27 @@ QString Image::getComments() const
     return m_comments;
 }
 
+void Image::setPixelSpacing( double x, double y )
+{
+    m_pixelSpacing[0] = x;
+    m_pixelSpacing[1] = y;
+}
+
+const double *Image::getPixelSpacing() const
+{
+    return m_pixelSpacing;
+}
+
+void Image::setSliceThickness( double z )
+{
+    m_sliceThickness = z;
+}
+
+double Image::getSliceThickness() const
+{
+    return m_sliceThickness;
+}
+
 void Image::setImagePosition( double position[3] )
 {
     for(int i = 0; i < 3; ++i)
@@ -233,9 +254,34 @@ int Image::getColumns() const
     return m_columns;
 }
 
+void Image::setBitsAllocated( int bits )
+{
+    m_bitsAllocated = bits;
+}
+
+int Image::getBitsAllocated() const
+{
+    return m_bitsAllocated;
+}
+
+void Image::setBitsStored( int bits )
+{
+    m_bitsStored = bits;
+}
+
+int Image::getBitsStored() const
+{
+    return m_bitsStored;
+}
+
 void Image::setParentSeries( Series *series )
 {
     m_parentSeries = series;
+}
+
+Series *Image::getParentSeries() const
+{
+    return m_parentSeries;
 }
 
 void Image::setPath( QString path )
