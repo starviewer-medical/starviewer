@@ -56,7 +56,7 @@ void Study::setAccessionNumber( QString accessionNumber )
     m_accessionNumber = accessionNumber;
 }
 
-QString Study::getAccesssionNumber() const
+QString Study::getAccessionNumber() const
 {
     return m_accessionNumber;
 }
@@ -237,22 +237,6 @@ QList<Series *> Study::getSelectedSeries()
             seriesList.append( series );
     }
     return seriesList;
-}
-
-Series *Study::getSeries( int index )
-{
-    int i = 0;
-    Series *series = 0;
-
-    QHashIterator<QString, Series *> iterator( m_seriesSet );
-    while( iterator.hasNext() && i < index )
-    {
-        if( i == index )
-            series = iterator.value();
-        iterator.next();
-        i++;
-    }
-    return series;
 }
 
 int Study::getNumberOfSeries()

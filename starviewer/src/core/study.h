@@ -44,7 +44,7 @@ public:
 
     /// Assignar/Obtenir l'accession number de l'estudi
     void setAccessionNumber( QString accessionNumber );
-    QString getAccesssionNumber() const;
+    QString getAccessionNumber() const;
 
     /// Assignar/Obtenir la descripció de l'estudi
     void setDescription( QString description );
@@ -90,15 +90,11 @@ public:
     /// retorna una llista de les sèries marcades com a seleccionades
     QList<Series *> getSelectedSeries();
 
-    /// Retorna la serie indexada per 0..n-1 (n=total de series). Retorna nul si l'índex està fora de rang
-    // \TODO ara mateix agafa a saco del hash, no es té en compte cap criteri en l'ordre i l'índex
-    Series *getSeries( int index );
-
     /// Mètode per obtenir el nombre de series que conté l'estudi
     int getNumberOfSeries();
 
     /// Mètode per obtenir la llista de series de l'estudi
-    QList< Series* > getSeries();
+    QList<Series *> getSeries();
 
     QString toString();
 
