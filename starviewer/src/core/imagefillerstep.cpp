@@ -103,9 +103,19 @@ void ImageFillerStep::processImage( Image *image )
         image->setImagesInAcquisition( dicomReader.getAttributeByName( DCM_ImagesInAcquisition ).toInt() );
         image->setComments( dicomReader.getAttributeByName( DCM_ImageComments ) );
 
-        value = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
-
+        value = dicomReader.getAttributeByName( DCM_PixelSpacing );
         QStringList list = value.split( "\\" );
+        if( list.size() == 2 )
+            image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
+        else
+            DEBUG_LOG("Error a l'obtenir el pixel spacing")
+
+        value = dicomReader.getAttributeByName( DCM_SliceThickness );
+        if( !value.isEmpty() )
+            image->setSliceThickness( value.toDouble() );
+
+        value = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
+        list = value.split( "\\" );
         if( list.size() == 6 )
         {
             double orientation[6];
@@ -129,6 +139,8 @@ void ImageFillerStep::processImage( Image *image )
         image->setPhotometricInterpretation( dicomReader.getAttributeByName( DCM_PhotometricInterpretation ).toInt() );
         image->setRows( dicomReader.getAttributeByName( DCM_Rows ).toInt() );
         image->setColumns( dicomReader.getAttributeByName( DCM_Columns ).toInt() );
+        image->setBitsAllocated( dicomReader.getAttributeByName( DCM_BitsAllocated ).toInt() );
+        image->setBitsStored( dicomReader.getAttributeByName( DCM_BitsStored ).toInt() );
     }
     else
     {
