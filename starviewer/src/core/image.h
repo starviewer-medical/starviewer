@@ -68,6 +68,14 @@ public:
     void setComments( QString comments  );
     QString getComments() const;
 
+    /// Assignar/Obtenir l'espaiat dels pixels
+    void setPixelSpacing( double x, double y );
+    const double *getPixelSpacing() const;
+
+    /// Assignar/Obtenir l'slice thickness, aka espaiat de les Z
+    void setSliceThickness( double z );
+    double getSliceThickness() const;
+
     /// Assignar/Obtenir la posició de la imatge.
     void setImagePosition( double position[3] );
     const double *getImagePosition() const;
@@ -81,13 +89,22 @@ public:
     int getPhotometricInterpretation() const;
 
     /// Assignar/Obtenir files/columnes
-    void setRows( int rows  );
+    void setRows( int rows );
     int getRows() const;
-    void setColumns( int columns  );
+    void setColumns( int columns );
     int getColumns() const;
+
+    /// Assignar/Obtenir els bits allotjats
+    void setBitsAllocated( int bits );
+    int getBitsAllocated() const;
+
+    /// Assignar/Obtenir els bits emmagatzemats
+    void setBitsStored( int bits );
+    int getBitsStored() const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries( Series *series );
+    Series *getParentSeries() const;
 
     /// assigna/retorna el path absolut de la imatge
     void setPath( QString path );
