@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>udg::PatientBrowserMenuBase</class>
- <widget class="QWidget" name="udg::PatientBrowserMenuBase" >
+ <class>udg::PatientBrowserMenuListBase</class>
+ <widget class="QWidget" name="udg::PatientBrowserMenuListBase" >
   <property name="windowModality" >
    <enum>Qt::NonModal</enum>
   </property>

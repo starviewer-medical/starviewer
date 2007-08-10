@@ -7,7 +7,7 @@
 #ifndef UDGPATIENTBROWSERMENULIST_H
 #define UDGPATIENTBROWSERMENULIST_H
 
-#include <ui_patientbrowsermenubase.h>
+#include <ui_patientbrowsermenulistbase.h>
 
 #include "patient.h"
 #include "study.h"
@@ -23,7 +23,7 @@ Widget per representar visualment en un menú les dades bàsiques de l'estructur
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenuList : public QWidget, public Ui::PatientBrowserMenuBase
+class PatientBrowserMenuList : public QWidget, public Ui::PatientBrowserMenuListBase
 {
 Q_OBJECT
 public:
