@@ -113,6 +113,14 @@ public:
     void setVolumeIdentifier( Identifier id );
     Identifier getVolumeIdentifier() const;
 
+    /// Assignar/Obtenir el número de fases
+    void setNumberOfPhases( int phases );
+    int getNumberOfPhases() const;
+
+    /// Assignar/Obtenir el número de llesques per fases
+    void setNumberOfSlices( int slices );
+    int getNumberOfSlices() const;
+
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
 
@@ -214,6 +222,9 @@ private:
 
     /// Estudi pare
     Study *m_parentStudy;
+
+    /// Número de fases i número de llesques per fase per poder tractar sèries dinàmiques
+    int m_numberOfPhases, m_numberOfSlices;
 };
 
 }
