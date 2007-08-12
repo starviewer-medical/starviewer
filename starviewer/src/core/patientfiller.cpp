@@ -17,6 +17,7 @@
 #include "dicomfileclassifierfillerstep.h"
 #include "ctfillerstep.h"
 #include "presentationstatefillerstep.h"
+#include "temporaldimensionfillerstep.h"
 
 namespace udg {
 
@@ -85,6 +86,7 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new DICOMFileClassifierFillerStep() );
     m_registeredSteps.append(new CTFillerStep() );
     m_registeredSteps.append(new PresentationStateFillerStep() );
+    m_registeredSteps.append(new TemporalDimensionFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)

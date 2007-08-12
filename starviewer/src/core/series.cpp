@@ -355,4 +355,25 @@ QPixmap Series::getThumbnail() const
     return m_previewImage;
 }
 
+void Series::setNumberOfPhases( int phases )
+{
+    m_numberOfPhases = phases;
+}
+
+int Series::getNumberOfPhases() const
+{
+    return m_numberOfPhases;
+}
+
+void Series::setNumberOfSlices( int slices )
+{
+    m_numberOfSlices = slices;
+}
+
+int Series::getNumberOfSlices() const
+{
+    return m_numberOfSlices;
+}
+
+
 }
