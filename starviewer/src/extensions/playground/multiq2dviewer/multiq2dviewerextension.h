@@ -56,6 +56,9 @@ public slots:
     void removeRows( int rows = 1 );
     void setGrid( int rows, int columns );
 
+    /// Mostrar menu per seleccionar grid predefinit
+    void showPredefinedGrid();
+
     /// Mètode que mostra el menu amb el botó dret
     void showMenu( QPoint point );
 

@@ -25,6 +25,9 @@
 #include "q2dviewerwidget.h"
 #include <QColor>
 
+// Menu
+#include "menugridwidget.h"
+
 namespace udg {
 
 MultiQ2DViewerExtension::MultiQ2DViewerExtension( QWidget *parent )
@@ -204,6 +207,7 @@ void MultiQ2DViewerExtension::createConnections()
     connect( m_verticalMinus , SIGNAL( clicked ( bool ) ) , this , SLOT( removeColumns() ) );
     connect( m_horizontalPlus , SIGNAL( clicked ( bool ) ) , this , SLOT( addRows() ) );
     connect( m_horizontalMinus , SIGNAL( clicked ( bool ) ) , this , SLOT( removeRows() ) );
+    connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedGrid() ) );
 
     // window level combo box
 //     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_selectedViewer->m_2DView , SLOT( setWindowLevel(double,double) ) );
@@ -380,6 +384,7 @@ void MultiQ2DViewerExtension::writeSettings()
 
 void MultiQ2DViewerExtension::addColumns( int columns )
 {
+
     QVector<QHBoxLayout*>::Iterator it = m_qHorizontalLayoutVector.begin();
     int posViewer = m_columns;
     Q2DViewerWidget * newViewer;
@@ -546,6 +551,17 @@ void MultiQ2DViewerExtension::setPatient( Patient *patient )
     m_patient = patient;
     createMenu();
     m_volumePanel->setPatient( patient );
+}
+
+void MultiQ2DViewerExtension::showPredefinedGrid()
+{
+    MenuGridWidget * menuGrid = new MenuGridWidget();
+//     menuGrid->show();
+    menuGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    menuGrid->show();
+
+    connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+    
 }
 
 }

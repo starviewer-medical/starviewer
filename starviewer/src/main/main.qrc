@@ -64,5 +64,7 @@
         <file>images/view_left_right.png</file>
         <file>images/view_top_bottom.png</file>
         <file>images/verticalWidget.png</file>
+        <file>images/grid.png</file>
+        <file>images/down.png</file>
     </qresource>
 </RCC>
