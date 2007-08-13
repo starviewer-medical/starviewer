@@ -20,7 +20,6 @@ TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 : PatientFillerStep()
 {
     m_requiredLabelsList << "DICOMFileClassifierFillerStep";
-    //m_requiredLabelsList << "ImageFillerStep";
 }
 
 TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
@@ -30,8 +29,8 @@ TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
 bool TemporalDimensionFillerStep::fill()
 {
     bool ok = false;
-// processarem cadascun dels pacients que hi hagi en l'input i per cadascun totes les sèries que siguin de tipus imatge
-if( m_input )
+    // processarem cadascun dels pacients que hi hagi en l'input i per cadascun totes les sèries que siguin de tipus imatge
+    if( m_input )
     {
         unsigned int i = 0;
         while( i < m_input->getNumberOfPatients() )
@@ -64,7 +63,6 @@ void TemporalDimensionFillerStep::processPatient( Patient *patient )
 
 void TemporalDimensionFillerStep::processSeries( Series *series )
 {
-
     if( isImageSeries(series) )
     {
         bool found = false;
@@ -77,8 +75,6 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
         while ( !found && phases < list.count() )
         {
             dicomReader.setFile( list[phases] );
-//             std::cout << list[phases].toStdString() << std::endl;
-//             std::cout << dicomReader.getAttributeByName( DCM_SliceLocation ).toStdString() << std::endl;
             if ( sliceLocation == dicomReader.getAttributeByName( DCM_SliceLocation ) )
             {
                 phases++;
@@ -92,11 +88,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
         slices = list.count() / phases;
 
         series->setNumberOfPhases( phases );
-        series->setNumberOfSlices( slices );
-
-//         std::cout << "slices: " << slices << std::endl;
-//         std::cout << "phases: " << phases << std::endl;
-
+        series->setNumberOfSlicesPerPhase( slices );
         if ( phases > 1 ) // és dinàmic
         {
             m_input->addLabelToSeries("TemporalDimensionFillerStep", series );
@@ -112,6 +104,5 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
         DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no es processa perquè no és una sèrie d'Imatges. És de modalitat: " + series->getModality() );
     }
 }
-
 
 }

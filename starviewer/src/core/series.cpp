@@ -365,14 +365,14 @@ int Series::getNumberOfPhases() const
     return m_numberOfPhases;
 }
 
-void Series::setNumberOfSlices( int slices )
+void Series::setNumberOfSlicesPerPhase( int slices )
 {
-    m_numberOfSlices = slices;
+    m_numberOfSlicesPerPhase = slices;
 }
 
-int Series::getNumberOfSlices() const
+int Series::getNumberOfSlicesPerPhase() const
 {
-    return m_numberOfSlices;
+    return m_numberOfSlicesPerPhase;
 }
 
 
