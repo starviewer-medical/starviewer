@@ -1,0 +1,33 @@
+<ui version="4.0" >
+ <class>udg::GridIconBase</class>
+ <widget class="QFrame" name="udg::GridIconBase" >
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <property name="frameShape" >
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="m_icon" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../../../main/main.qrc" >:/images/axial.png</pixmap>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../main/main.qrc" />
+ </resources>
+ <connections/>
+</ui>
