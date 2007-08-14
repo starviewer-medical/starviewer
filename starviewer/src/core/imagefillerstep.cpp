@@ -13,6 +13,7 @@
 #include "series.h"
 #include "image.h"
 
+#include <vtkMath.h> // pel ::Cross()
 namespace udg {
 
 ImageFillerStep::ImageFillerStep()
@@ -90,7 +91,6 @@ void ImageFillerStep::processImage( Image *image )
     {
         image->setSOPInstanceUID( dicomReader.getAttributeByName( DCM_SOPInstanceUID ) );
         image->setInstanceNumber( dicomReader.getAttributeByName( DCM_InstanceNumber ) );
-        image->setPatientOrientation( dicomReader.getAttributeByName( DCM_PatientOrientation ) );
 
         QString value = dicomReader.getAttributeByName( DCM_ContentDate );
         if( !value.isEmpty() )
@@ -114,19 +114,42 @@ void ImageFillerStep::processImage( Image *image )
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
-        value = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
-        list = value.split( "\\" );
-        if( list.size() == 6 )
+        // cerquem l'string amb la orientació del pacient
+        value = dicomReader.getAttributeByName( DCM_PatientOrientation );
+        if( !value.isEmpty() )
+            image->setPatientOrientation( value );
+        else // si no tenim aquest valor, el calculem a partir dels direction cosines
         {
-            double orientation[6];
-            for( int i = 0; i < 6; i++ )
+            value = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
+            list = value.split( "\\" );
+            if( list.size() == 6 )
             {
-                orientation[ i ] = list.at( i ).toDouble();
+                double orientation[6];
+                for( int i = 0; i < 6; i++ )
+                {
+                    orientation[ i ] = list.at( i ).toDouble();
+                }
+                image->setImageOrientation( orientation );
+
+                double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
+                for ( int i = 0; i < 3; i++ )
+                {
+                    dirCosinesX[ i ] = list.at( i ).toDouble();
+                    dirCosinesY[ i ] = list.at( i+3 ).toDouble();
+                }
+                // calculem la Z
+                vtkMath::Cross( dirCosinesX , dirCosinesY , dirCosinesZ );
+                // I ara ens disposem a crear l'string amb l'orientació del pacient
+                QString patientOrientationString;
+                // \TODO potser el delimitador hauria de ser '\' en comptes de ','
+                patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
+                patientOrientationString += ",";
+                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
+                patientOrientationString += ",";
+                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
+                image->setPatientOrientation( patientOrientationString );
             }
-
-            image->setImageOrientation( orientation );
         }
-
         value = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
         list = value.split("\\");
         if( list.size() == 3 )
@@ -146,6 +169,44 @@ void ImageFillerStep::processImage( Image *image )
     {
         DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + image->getPath() );
     }
+}
+
+QString ImageFillerStep::mapDirectionCosinesToOrientationString( double vector[3] )
+{
+    char *orientation = new char[4];
+    char *optr = orientation;
+    *optr='\0';
+
+    char orientationX = vector[0] < 0 ? 'R' : 'L';
+    char orientationY = vector[1] < 0 ? 'A' : 'P';
+    char orientationZ = vector[2] < 0 ? 'I' : 'S';
+
+    double absX = fabs( vector[0] );
+    double absY = fabs( vector[1] );
+    double absZ = fabs( vector[2] );
+
+    int i;
+    for ( i = 0; i < 3; ++i )
+    {
+        if ( absX > .0001 && absX > absY && absX > absZ )
+        {
+            *optr++= orientationX;
+            absX = 0;
+        }
+        else if ( absY > .0001 && absY > absX && absY > absZ )
+        {
+            *optr++= orientationY;
+            absY = 0;
+        }
+        else if ( absZ > .0001 && absZ > absX && absZ > absY )
+        {
+            *optr++= orientationZ;
+            absZ = 0;
+        }
+        else break;
+        *optr='\0';
+    }
+    return QString( orientation );
 }
 
 }
