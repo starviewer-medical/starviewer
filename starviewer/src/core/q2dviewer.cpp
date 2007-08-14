@@ -9,7 +9,6 @@
 #include "volume.h"
 #include "volumesourceinformation.h"
 #include "logging.h"
-#include "sliceannotationcontroller.h"
 
 // include's qt
 #include <QResizeEvent>
@@ -112,10 +111,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     }
     m_sideRuler = 0;
     m_bottomRuler = 0;
-
-    m_sliceAnnotationController = new SliceAnnotationController(this);
-    connect( this, SIGNAL( sliceChanged(int) ), m_sliceAnnotationController, SLOT( setCurrentSlice(int) ) );
-    connect( this, SIGNAL( viewChanged(int) ), m_sliceAnnotationController, SLOT( setCurrentView(int) ) );
 
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -737,11 +732,6 @@ Tool *Q2DViewer::getTool( QString toolName )
 QString Q2DViewer::getCurrentToolName()
 {
     return m_toolManager->getCurrentToolName();
-}
-
-void Q2DViewer::addSliceAnnotation( vtkProp *actor, int slice, int view )
-{
-    m_sliceAnnotationController->addActor( actor, slice, view );
 }
 
 void Q2DViewer::setEnableTools( bool enable )
