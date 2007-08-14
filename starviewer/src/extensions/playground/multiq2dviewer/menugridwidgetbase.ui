@@ -5,31 +5,52 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>177</height>
+    <width>274</width>
+    <height>199</height>
    </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>0</hsizetype>
+    <vsizetype>0</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>9</number>
+  <widget class="QPushButton" name="m_selectCustomGridButton" >
+   <property name="geometry" >
+    <rect>
+     <x>9</x>
+     <y>164</y>
+     <width>256</width>
+     <height>26</height>
+    </rect>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="text" >
+    <string>Select custom grid</string>
    </property>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="m_selectCustomGridButton" >
-     <property name="text" >
-      <string>Select custom grid</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QWidget" native="1" name="m_predefinedGrids" />
-   </item>
-  </layout>
+  </widget>
+  <widget class="QWidget" native="1" name="m_predefinedGrids" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>251</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="sizePolicy" >
+    <sizepolicy>
+     <hsizetype>0</hsizetype>
+     <vsizetype>0</vsizetype>
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

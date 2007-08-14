@@ -33,7 +33,6 @@ void PatientBrowserMenuBasicItem::setSerie( Series * serie )
     verticalLayout->setMargin(0);
     verticalLayout->addWidget( serieText, 0 );
     this->setLayout( verticalLayout );
-
 }
 
 Series *  PatientBrowserMenuBasicItem::getSerie()
@@ -66,8 +65,12 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
         selected.setStyle( Qt::SolidPattern );
         palette.setBrush( QPalette::Active, QPalette::Window, selected );
         setPalette( palette );
-        emit isNotActive( );
         return true;
+    }
+    else if ( event->type() == QEvent::Hide || event->type() == QEvent::Close )
+    {
+        emit isNotActive();
+        return QWidget::event( event );
     }
     else
     {
