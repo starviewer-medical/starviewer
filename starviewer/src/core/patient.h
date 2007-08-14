@@ -70,6 +70,9 @@ public:
     /// Mètode per obtenir la llista d'estudis del pacient
     QList<Study *> getStudies() const;
 
+    /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
+    Series *getSeries( QString uid );
+
     /// Operador d'assignació
     Patient & operator =( const Patient &patient );
 
