@@ -127,7 +127,7 @@ void ImageFillerStep::processImage( Image *image )
             image->setImageOrientation( orientation );
         }
 
-        value = dicomReader.getAttributeByName( DCM_ImagePosition );
+        value = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
         list = value.split("\\");
         if( list.size() == 3 )
         {
