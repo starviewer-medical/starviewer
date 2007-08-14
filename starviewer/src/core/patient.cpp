@@ -132,6 +132,19 @@ QList<Study*> Patient::getStudies() const
     return m_studiesSet.values();
 }
 
+Series *Patient::getSeries( QString uid )
+{
+    Series *result = NULL;
+    QList<Study *> studyList = this->getStudies();
+    foreach( Study *study, studyList )
+    {
+        result = study->getSeries( uid );
+        if( result )
+            break;
+    }
+    return result;
+}
+
 Patient & Patient::operator =( const Patient &patient )
 {
     m_fullName = patient.m_fullName;
