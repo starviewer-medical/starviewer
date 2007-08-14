@@ -95,8 +95,9 @@ void PatientBrowserMenu::setPosition( QPoint point )
 
 void PatientBrowserMenu::emitSelected( Series * serie )
 {
-    emit selectedSeries( serie );
     m_patientBasicList->hide();
+    m_patientExtendedWidget->hide();
+    emit selectedSeries( serie );
 }
 
 }

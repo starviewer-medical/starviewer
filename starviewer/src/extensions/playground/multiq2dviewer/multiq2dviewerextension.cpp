@@ -556,7 +556,6 @@ void MultiQ2DViewerExtension::setPatient( Patient *patient )
 void MultiQ2DViewerExtension::showPredefinedGrid()
 {
     MenuGridWidget * menuGrid = new MenuGridWidget();
-//     menuGrid->show();
     menuGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
     menuGrid->show();
 

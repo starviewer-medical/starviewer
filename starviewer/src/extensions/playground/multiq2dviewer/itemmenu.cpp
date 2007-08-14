@@ -16,6 +16,7 @@ ItemMenu::ItemMenu( QWidget * parent )
 
 ItemMenu::~ItemMenu()
 {
+
 }
 
 bool ItemMenu::event( QEvent * event )

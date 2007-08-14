@@ -24,6 +24,8 @@
       <group pattern="*.ui" name="User Interface" />
       <group pattern="*.png" name="Icons" />
       <group pattern="*" name="Others" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
@@ -78,16 +80,16 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell></dbgshell>
+      <dbgshell/>
       <breakpoints/>
-      <programargs></programargs>
+      <programargs/>
       <gdbpath>/usr/bin/</gdbpath>
       <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
-      <configGdbScript></configGdbScript>
-      <runShellScript></runShellScript>
-      <runGdbScript></runGdbScript>
+      <configGdbScript/>
+      <runShellScript/>
+      <runGdbScript/>
     </general>
     <display>
       <staticmembers>false</staticmembers>
@@ -99,7 +101,7 @@
   <kdevtrollproject>
     <run>
       <mainprogram>bin/starviewer</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
@@ -107,7 +109,7 @@
       <envvars/>
     </run>
     <general>
-      <activedir>src</activedir>
+      <activedir>src/extensions/playground/multiq2dviewer</activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>
@@ -174,7 +176,7 @@
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments></customArguments>
-    <customTagfilePath></customTagfilePath>
+    <customArguments/>
+    <customTagfilePath/>
   </ctagspart>
 </kdevelop>

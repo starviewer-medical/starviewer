@@ -97,13 +97,13 @@ bool MenuGridWidget::event( QEvent * event )
         int rows = 3;
         int columns = 3;
 
-        QWidget * selectedOption = childAt( QPoint( ( (QMouseEvent *)event )->globalX(), ( (QMouseEvent *)event )->globalY() ) );
-        QPalette palette = selectedOption->palette();
-        QBrush selected( QColor(255, 0, 0, 255) );
-        selected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, selected );
-        selectedOption->setPalette( palette );
+        QWidget * selectedOption = childAt( QPoint( ( (QMouseEvent *)event )->x(), ( (QMouseEvent *)event )->y() ) );
 
+//         QPalette palette = selectedOption->palette();
+//         QBrush selected( QColor(255, 0, 0, 255) );
+//         selected.setStyle( Qt::SolidPattern );
+//         palette.setBrush( QPalette::Active, QPalette::Window, selected );
+//         selectedOption->setPalette( palette );
 
 //         emit selectedGrid( rows, columns );
         hide();
