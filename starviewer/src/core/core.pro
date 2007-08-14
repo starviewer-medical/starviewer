@@ -68,7 +68,6 @@ HEADERS += extensionfactory.h \
            vtkAtamaiPolyDataToImageStencil2.h \
            shutterfilter.h \
            q2dviewerpresentationstateattacher.h \
-           sliceannotationcontroller.h \
            image.h \
            dicomtagreader.h \
            line.h \
@@ -141,7 +140,6 @@ SOURCES += extensionmediator.cpp \
            vtkAtamaiPolyDataToImageStencil2.cxx \
            shutterfilter.cpp \
            q2dviewerpresentationstateattacher.cpp \
-           sliceannotationcontroller.cpp \
            image.cpp \
            dicomtagreader.cpp \
            line.cpp \

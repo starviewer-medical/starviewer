@@ -30,7 +30,6 @@ class vtkScalarBarActor;
 class vtkInteractorStyleImage;
 class vtkImageBlend;
 class vtkImageActor;
-class vtkProp;
 
 /// tractament múltiples vistes
 class vtkPropCollection;
@@ -71,7 +70,6 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 class Volume;
 class Q2DViewerToolManager;
 class Tool;
-class SliceAnnotationController;
 
 class Q2DViewer : public QViewer{
 Q_OBJECT
@@ -148,9 +146,6 @@ public:
 
     /// Retorna el nom de la tool activa
     QString getCurrentToolName();
-
-    /// A través d'aquest mètode afegirem actors associats a llesca i vista que seran visibles segons la vista i llesca en la que es trobin \TODO de moment aquest mètode és un "HELPER METHOD". Segurament aquesta funcionalitat acabarà a passar a ser competència de la futura classe Drawer destinada a pintar annotacions
-    void addSliceAnnotation( vtkProp *actor, int slice, int view );
 
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
@@ -336,9 +331,6 @@ protected:
 
     /// Per controlar l'espaiat en que presentem la imatge
     double m_presentationPixelSpacing[2];
-
-    /// Controlador d'annotacions per llesca
-    SliceAnnotationController *m_sliceAnnotationController;
 
     /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent( QResizeEvent* resize );
