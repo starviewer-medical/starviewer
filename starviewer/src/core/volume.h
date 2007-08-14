@@ -12,6 +12,7 @@
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
 #include <QString>
+#include <QList>
 
 // FWD declarations
 class vtkImageData;
@@ -19,6 +20,8 @@ class vtkImageData;
 namespace udg {
 
 class VolumeSourceInformation;
+class Image;
+class Series;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. Ens donarà mètodes per poder obtenir les dades en el format que volguem: ITK, VTK, etc.
@@ -39,6 +42,9 @@ public:
 
     /// tipus de punter de dades vtk
     typedef vtkImageData *VtkImageTypePointer;
+
+    /// Aquests enums indiquem quin criteri escollim per ordenar les imatges
+    enum ImageOrderType{ OrderImageByNumber, OrderImageBySliceLocation, OrderImageByTemporalDimension };
 
     Volume();
     Volume( ItkImageTypePointer itkImage );
@@ -104,9 +110,40 @@ public:
     /// Reordena les llesques: específic CardiacMPRExtension
     Volume *orderSlices();
 
+    /// Assignar/Obtenir el criteri d'ordenació de les imatges
+    void setImageOrderCriteria( unsigned int orderCriteria );
+    unsigned int getImageOrderCriteria() const;
+
+    /// Afegim una imatge al conjunt d'imatges que composen el volum
+    void addImage( Image *image );
+
+    /// Assignem directament el conjunt d'imatges que composen aquest volum
+    void setImages( const QList<Image *> &imageList );
+
+    /// Mètode ràpid per obtenir la series a la que pertany aquest volum
+    Series *getSeries();
+
 private:
     /// Mètode d'inicialització d'objectes comuns per als constructors
     void init();
+
+    /// Mètodes de prova per tractar diferents models de càrrega de dades "lazy"
+    /// Carrega fent servir el vtkImageAppend
+    void loadWithAppends();
+    /// Allotja l'espai a memòria primer, després va inserint les imatges una a una
+    void loadWithPreAllocateAndInsert();
+
+    /// carrega la llesca actual directament llegint de les vtk, el reader dicom de vtk
+    void loadSliceWithDcmtk();
+    void loadSliceWithDcmtk2();
+    void loadSliceWithVtkDICOMReader();
+    void loadSliceWithInput();
+
+    /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim
+    void allocateImageData();
+
+    /// Mètode de conveniència ja que encara es depen del VolumeSourceInformation
+    void fillVolumeSourceInformationFromImages();
 
 private:
     /// Filtres per importar/exportar
@@ -122,6 +159,16 @@ private:
 
     /// Dades relacionades amb el pacient i el volum
     VolumeSourceInformation* m_volumeInformation;
+
+    /// Ens diu si les dades han estat carregades ja en memòria o no.
+    /// Aquest membre el farem servir per aplicar el lazy loading
+    bool m_dataLoaded;
+
+    /// Criteri d'ordenació de les imatges
+    unsigned int m_imageOrderCriteria;
+
+    /// Conjunt d'imatges que composen el volum
+    QList<Image *> m_imageSet;
 };
 
 };  // end namespace udg
