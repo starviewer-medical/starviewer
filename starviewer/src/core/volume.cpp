@@ -311,7 +311,7 @@ void Volume::allocateImageData()
     m_imageDataVTK->SetSpacing( spacing );
     m_imageDataVTK->SetDimensions( m_imageSet.at(0)->getRows(), m_imageSet.at(0)->getColumns(), m_imageSet.size() );
     //\TODO de moment assumim que sempre seran ints i ho mapejem així,potser més endavant podria canviar, però és el tipus que tenim fixat desde les itk
-    m_imageDataVTK->SetScalarTypeToUnsignedShort();
+    m_imageDataVTK->SetScalarTypeToShort();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
 }
@@ -325,8 +325,7 @@ void Volume::loadWithPreAllocateAndInsert()
     if( !m_imageSet.isEmpty() )
     {
         this->allocateImageData();
-//         this->loadSlices(1); // 0: DcmFileFormat, 1: DicomImage, 2: vtkDICOMImageReader, 3: Input, 4: Appends?
-        readLikeVtk();
+        this->loadSlices(2); // 0: DcmFileFormat, 1: DicomImage, 2: vtkDICOMImageReader
         m_imageDataVTK->Update();
         m_dataLoaded = true;
     }
@@ -377,8 +376,7 @@ void Volume::loadSlices( int method )
                 if( dicomImage->getStatus() == EIS_Normal )
                 {
                     dicomImage->setMinMaxWindow();
-//                     dicomImage->writePPM( qPrintable(QString("/home/chus/prova%1.ppm").arg(zSlice) ) );
-                    imageBuffer = (bufferDataType)dicomImage->getOutputData(16);
+                    imageBuffer = (bufferDataType)dicomImage->getOutputData();
                     bytes = dicomImage->getOutputDataSize();
                 }
                 else
@@ -396,15 +394,6 @@ void Volume::loadSlices( int method )
         }
         break;
 
-        case 3: // Input
-        {
-            Input *input = new Input;
-            input->openFile( image->getPath() );
-            imageBuffer = (bufferDataType)input->getData()->getVtkData()->GetScalarPointer();
-            bytes = m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*2;
-        }
-        break;
-
         default:
             DEBUG_LOG("Mètode de lectura erroni");
             return;
@@ -419,44 +408,6 @@ void Volume::loadSlices( int method )
 
         DEBUG_LOG( QString("Valor d'un pixel del mig(vtkBuffer): %1, valor del mateix del buffer d'imatge: %2, nombre de bytes que copiem: %3").arg( vtkBuffer[256*256+256]).arg( imageBuffer[256*256+256] ).arg( bytes ) );
         zSlice++;
-    }
-}
-
-void Volume::readLikeVtk()
-{
-    void *buffer = m_imageDataVTK->GetScalarPointer();
-    foreach( Image *image, m_imageSet )
-    {
-        void* imgData = NULL;
-        unsigned long imageDataLengthInBytes;
-        DicomImage *dicomImage = new DicomImage( qPrintable( image->getPath() ) );
-        if( dicomImage != NULL )
-        {
-            if( dicomImage->getStatus() == EIS_Normal )
-            {
-                dicomImage->setMinMaxWindow();
-                imgData = (void *)dicomImage->getOutputData();
-                imageDataLengthInBytes = dicomImage->getOutputDataSize();
-            }
-            else
-                DEBUG_LOG( QString( "Error en carregar la DicomImage. Error: %1 ").arg( DicomImage::getString( dicomImage->getStatus() ) ) );
-        }
-
-        // DICOM stores the upper left pixel as the first pixel in an
-        // image. VTK stores the lower left pixel as the first pixel in
-        // an image.  Need to flip the data.
-        vtkIdType rowLength;
-        rowLength = m_imageDataVTK->GetIncrements()[1];
-        unsigned char *b = (unsigned char *)buffer;
-        unsigned char *iData = (unsigned char *)imgData;
-        iData += (imageDataLengthInBytes - rowLength); // beginning of last row
-        for (int i=0; i < m_imageDataVTK->GetDimensions()[1]; ++i)
-        {
-            memcpy(b, iData, rowLength);
-            b += rowLength;
-            iData -= rowLength;
-        }
-        buffer = ((char*) buffer) + imageDataLengthInBytes;
     }
 }
 

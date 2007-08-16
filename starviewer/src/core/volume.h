@@ -135,7 +135,6 @@ private:
 
     /// carrega les llesques a partir dels objectes Image
     void loadSlices( int method );
-    void readLikeVtk();
 
     /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim
     void allocateImageData();
