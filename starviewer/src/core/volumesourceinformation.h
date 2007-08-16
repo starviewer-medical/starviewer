@@ -11,8 +11,6 @@
 #include <QStringList>
 #include <vector>
 
-class DcmDataset;
-
 namespace udg {
 
 class DICOMTagReader;
@@ -260,6 +258,13 @@ public:
     {
         return m_patientPosition;
     }
+
+private:
+    /// Carrega les dades dicom d'un arxiu
+    bool loadDicomData( QString filename );
+
+    /// a partir dels direction cosines d'un eix ens dóna l'orientació referent al pacient en string
+    QString getOrientation( double vector[3] );
 private:
 
     QString m_patientName;
@@ -291,15 +296,6 @@ private:
 
     /// Lector d'informació DICOM
     DICOMTagReader *m_dicomTagReader;
-
-    ///Llegeix la informació sobre les dades de window level
-    void readWindowLevelData();
-
-    /// Carrega les dades dicom d'un arxiu
-    bool loadDicomDataset( QString filename );
-
-    /// Recull la informació de la sèrie que ens interessa
-    void collectSerieInformation();
 };
 
 };  //  end  namespace udg

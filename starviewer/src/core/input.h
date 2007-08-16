@@ -8,6 +8,7 @@
 #define UDGINPUT_H
 
 #include "volume.h"
+#include "image.h"
 #include "logging.h"
 // qt
 #include <QObject>
@@ -138,6 +139,15 @@ public:
     /// Retorna un Volum
     Volume* getData() const { return m_volumeData; };
 
+
+    /**
+     * Donada una llista d'imatges ens carrega el corresponent volum. Aquest mètode es ajuda en la transició
+     * per incorporar l'entitat Patient
+     * @param imageList
+     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
+     */
+    int readImages( QList<Image *> imageList );
+
     // Això fa petar aplicació
     //itk::QtSignalAdaptor *m_progressSignalAdaptor;
 public slots:
@@ -174,12 +184,6 @@ private:
 
     /// el generador dels noms dels fitxers DICOM d'un directori
     NamesGeneratorType::Pointer m_namesGenerator;
-
-    /// Es dedica a proporcionar al volum la informació que ens dóna el DICOM
-    void setVolumeInformation();
-
-    /// a partir dels direction cosines d'un eix ens dóna l'orientació referent al pacient en string
-    QString getOrientation( double vector[3] );
 
     /// converteix un std::vector< std::string > en un QStringList i viceversa
     static QStringList stdVectorOfStdStringToQStringList( std::vector< std::string > vector );
