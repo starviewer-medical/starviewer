@@ -7,8 +7,10 @@
 #include "patientbrowsermenulist.h"
 
 #include <QLabel>
+#include <QVBoxLayout>
 #include <QGridLayout>
-#include <logging.h>
+
+#include "logging.h"
 
 namespace udg {
 
@@ -26,7 +28,7 @@ PatientBrowserMenuList::~PatientBrowserMenuList()
 void PatientBrowserMenuList::setPatient( Patient * patient )
 {
 
-    DEBUG_LOG( QString( "Inici mètode setPatient " ) );
+    DEBUG_LOG("Inici mètode setPatient");
 
     QWidget * studyWidget;
     Study * study;
@@ -50,49 +52,26 @@ void PatientBrowserMenuList::setPatient( Patient * patient )
 QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * parent )
 {
     QWidget * studyWidget = new QWidget( parent );
-    
-    QHBoxLayout * horizontalLayout = new QHBoxLayout( );
-    horizontalLayout->setSpacing( 0 );
-    horizontalLayout->setMargin( 0 );
 
-    QLabel * studyText = new QLabel( studyWidget );
-    studyText->setText( " Study " );
-    studyText->setAutoFillBackground( true );
-    studyText->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    QLabel *studyText = new QLabel(studyWidget);
+    studyText->setText(tr("Study %1 %2").arg( study->getDateAsString() ).arg( study->getDescription() ));
+    studyText->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    studyText->setFrameShape(QFrame::StyledPanel);
+    // TODO Hi ha un bug en les Qt 4.2 que fa que els border-radius no retallin el fons, per això fem la xapussa de fer el primer
+    // gradient del color del fons i molt petit (dona una mica més sensació de rounded). Bug arreglat a les Qt 4.3
+    // TODO En Qt 4.2 (sí en 4.3) no es suporta escollir un color de la palette, per tant, s'ha d'anar a buscar bucejant en la palette.
+    QString backgroundColor = studyText->palette().color( studyText->backgroundRole() ).name();
+    studyText->setStyleSheet("border: 2px solid #3E73B9;"
+                             "border-radius: 5;"
+                             "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
+                             "stop: 0 " + backgroundColor +
+                             ", stop: 0.1 #91C1FF, stop: 0.4 #8EBCF9, stop: 0.5 #86B2EC, stop: 1 #759CCF);");
 
-    QPalette palette( studyText->palette() );
-    QBrush studyBackground( QColor( 85, 160, 255, 255 ) );
-    studyBackground.setStyle(Qt::SolidPattern);
-    palette.setBrush(QPalette::Active, QPalette::Window, studyBackground);
-    QFont font = studyText->font();
-    font.setBold( true );
-
-    studyText->setPalette(palette);
-    studyText->setFont( font );
-
-    QLabel * dateText = new QLabel( studyWidget );
-    dateText->setText( tr(" %1 ").arg( study->getDateAsString() ) );
-    dateText->setAutoFillBackground( true );
-    dateText->setPalette( palette );
-    dateText->setFont( font );
-    dateText->show();
-
-    QLabel * descriptionText = new QLabel( studyWidget );
-    descriptionText->setText( tr(" %1 ").arg( study->getDescription() ) );
-    descriptionText->setAutoFillBackground( true );
-    descriptionText->setPalette(palette);
-    descriptionText->setFont( font );
-    descriptionText->show();
-
-    horizontalLayout->addWidget( studyText );
-    horizontalLayout->addWidget( dateText );
-    horizontalLayout->addWidget( descriptionText );
-
-    QGridLayout * gridLayout = new QGridLayout( studyWidget );
+    QVBoxLayout * gridLayout = new QVBoxLayout( studyWidget );
     QGridLayout * gridLayoutWidgets = new QGridLayout( );
-    
-    gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
-    gridLayout->addLayout(gridLayoutWidgets, 1, 0, 1, 1);
+
+    gridLayout->addWidget(studyText);
+    gridLayout->addLayout(gridLayoutWidgets);
 
     QList<Series*> seriesToAdd = study->getSeries();
     int maxColumns = 2;
