@@ -133,17 +133,12 @@ private:
     /// Allotja l'espai a memòria primer, després va inserint les imatges una a una
     void loadWithPreAllocateAndInsert();
 
-    /// carrega la llesca actual directament llegint de les vtk, el reader dicom de vtk
-    void loadSliceWithDcmtk();
-    void loadSliceWithDcmtk2();
-    void loadSliceWithVtkDICOMReader();
-    void loadSliceWithInput();
+    /// carrega les llesques a partir dels objectes Image
+    void loadSlices( int method );
+    void readLikeVtk();
 
     /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim
     void allocateImageData();
-
-    /// Mètode de conveniència ja que encara es depen del VolumeSourceInformation
-    void fillVolumeSourceInformationFromImages();
 
 private:
     /// Filtres per importar/exportar
