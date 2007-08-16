@@ -11,6 +11,7 @@
 
 #define HAVE_CONFIG_H 1
 #include <dcfilefo.h> //obre un fitxer dicom
+#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -95,9 +96,7 @@ public:
     ~ImageDicomInformation();
 
 private :
-
-    DcmFileFormat *m_dicomFile;
-    DcmDataset *m_dataset;
+    DICOMTagReader m_dicomTagReader;
 };
 
 }
