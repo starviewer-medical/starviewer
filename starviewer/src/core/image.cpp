@@ -10,11 +10,6 @@
 
 #include <QStringList>
 
-#define HAVE_CONFIG_H 1
-#include "dcmtk/dcmdata/dcdatset.h"
-#include "dcmtk/dcmdata/dcfilefo.h"
-#include "dcmtk/dcmdata/dcdeftag.h"
-
 namespace udg {
 
 Image::Image(QObject *parent)
