@@ -22,7 +22,8 @@ HEADERS += multiq2dviewerextensionmediator.h \
            patientbrowsermenulist.h \
            gridicon.h \
            menugridwidget.h \
-           itemmenu.h 
+           itemmenu.h \
+           tablemenu.h 
 SOURCES += multiq2dviewerextensionmediator.cpp \
            multiq2dviewerextension.cpp \
            q2dviewerwidget.cpp \
@@ -35,7 +36,8 @@ SOURCES += multiq2dviewerextensionmediator.cpp \
            patientbrowsermenulist.cpp \
            gridicon.cpp \
            menugridwidget.cpp \
-           itemmenu.cpp 
+           itemmenu.cpp \
+           tablemenu.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a
