@@ -171,17 +171,12 @@ public slots:
      */
     void queryImagePacs( QString StudyUID , QString SeriesUID , QString PacsAETitle );
 
-    /** Cerca les imatges d'una sèrie al DICOMDIR
-     * @param StudyUID uid de l'estudi
-     * @param SeriesUID  uid de la sèrie
+    /** Cerca les imatges d'una sèrie a la font indicada (Cache,DICOMDIR)
+     * @param studyUID uid de l'estudi
+     * @param seriesUID  uid de la sèrie
+     * @param source  font de dades on consultar (Cache,DICOMDIR)
      */
-    void queryImageDicomdir( QString StudyUID , QString SeriesUID  );
-
-    /** Cerca les imatges d'una sèrie a la cache
-     * @param StudyUID uid de l'estudi
-     * @param SeriesUID  uid de la sèrie
-     */
-    void queryImageCache(QString studyUID, QString seriesUID );
+    void queryImage(QString studyUID, QString seriesUID, QString source );
 
     /** Slot que s'activa quan s'ha editat el m_textOtherModality, en cas que el text sigui <> "" deselecciona totes les modalitats, i en cas que sigui = "" selecciona la modalitat checkAll
      */
@@ -225,9 +220,7 @@ struct retrieveParameters
 
     retrieveParameters retParam;
     StudyListSingleton *m_studyListSingleton; //aquest es utilitzat per buscar estudis al pacs
-    StudyList m_studyListCache;//aquest es utilitzat per buscar estudis a la cache
     SeriesListSingleton *m_seriesListSingleton;
-    SeriesList m_seriesListCache;
     ImageListSingleton *m_imageListSingleton;
     ProcessImageSingleton *m_piSingleton;
 
@@ -297,28 +290,24 @@ struct retrieveParameters
     /// Cerca als pacs seleccionats
     void queryStudyPacs();
 
-    /// Busca un estudi a la cache local
-    void queryStudyCache();
-
-    ///Cerca un estudi en el dicomdir obert en aquells moment
-    void queryStudyDicomdir();
+    /**
+     * Cerca un estudi a la font indicada (Cache,DICOMDIR)
+     * @param source la font que volem interrogar
+     */
+    void queryStudy( QString source );
 
     /** Busca la informació d'una sèrie en el PACS i la mostra en la interfície
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      * @param show Si es verdader mostra les dades de la sèrie per pantalla, pot ser que no les volguem mostrar, per exemple el cas que volem la informació per guardar-la en la caché al descarragar-nos una imatge
      */
-    void QuerySeriesPacs( QString , QString , bool );
+    void querySeriesPacs( QString , QString , bool );
 
-    /** Cerca les sèries d'un estudi a la Cache local
-     * @param StudyUID UID de l'estudi a cercar
+    /** Cerca les sèries d'un estudi a la font indicada (Cache,DICOMDIR)
+     * @param studyUID UID de l'estudi a cercar
+     * @param source
      */
-    void QuerySeriesCache( QString );
-
-    /** Cerca les sèries d'un estudi al Dicomdir
-     * @param StudyUID UID de l'estudi a cercar
-     */
-    void querySeriesDicomdir( QString studyUID);
+    void querySeries( QString studyUID, QString source );
 
     /// esborra els estudis vells de la cache
     void deleteOldStudies();
