@@ -27,6 +27,7 @@
 
 // Menu
 #include "menugridwidget.h"
+#include "tablemenu.h"
 
 namespace udg {
 
@@ -208,6 +209,7 @@ void MultiQ2DViewerExtension::createConnections()
     connect( m_horizontalPlus , SIGNAL( clicked ( bool ) ) , this , SLOT( addRows() ) );
     connect( m_horizontalMinus , SIGNAL( clicked ( bool ) ) , this , SLOT( removeRows() ) );
     connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedGrid() ) );
+    connect( m_buttonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveTable() ) );
 
     // window level combo box
 //     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_selectedViewer->m_2DView , SLOT( setWindowLevel(double,double) ) );
@@ -561,6 +563,14 @@ void MultiQ2DViewerExtension::showPredefinedGrid()
 
     connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
     
+}
+
+void MultiQ2DViewerExtension::showInteractiveTable()
+{
+    TableMenu * tableMenu = new TableMenu();
+    tableMenu->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    tableMenu->show();
+
 }
 
 }

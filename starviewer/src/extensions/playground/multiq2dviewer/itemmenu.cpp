@@ -9,7 +9,7 @@
 namespace udg {
 
 ItemMenu::ItemMenu( QWidget * parent )
- : QWidget( parent )
+ : QFrame( parent )
 {
     setAutoFillBackground( true );
 }
@@ -29,6 +29,7 @@ bool ItemMenu::event( QEvent * event )
         selected.setStyle( Qt::SolidPattern );
         palette.setBrush( QPalette::Active, QPalette::Window, selected );
         setPalette( palette );
+        emit isActive( this );
         return true;
     }
     else if ( event->type() == QEvent::MouseButtonPress )

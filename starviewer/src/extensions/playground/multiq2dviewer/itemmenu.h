@@ -7,7 +7,7 @@
 #ifndef UDGITEMMENU_H
 #define UDGITEMMENU_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QVariant>
 #include <QEvent>
 
@@ -16,8 +16,9 @@ namespace udg {
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ItemMenu : public QWidget
+class ItemMenu : public QFrame
 {
+Q_OBJECT
 public:
     ItemMenu( QWidget * parent = 0);
 
@@ -27,7 +28,7 @@ public:
     void setData( QVariant * data ){ m_data = data; }
 
     /// Obtenir les dades
-    QVariant getData( ){ return m_data; }
+    QVariant * getData( ){ return m_data; }
 
 protected:
 
@@ -36,6 +37,11 @@ protected:
 
     /// Dades que pot guardar el widget
     QVariant * m_data;
+
+signals:
+
+    /// Signal que s'emet al entrar el mouse al widget
+    void isActive( ItemMenu * );
 };
 
 }

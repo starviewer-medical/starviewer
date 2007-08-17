@@ -317,15 +317,21 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="m_buttonGrid" >
-         <property name="toolTip" >
-          <string/>
-         </property>
+        <widget class="QToolButton" name="m_buttonGrid" >
          <property name="text" >
-          <string/>
+          <string>...</string>
          </property>
-         <property name="pixmap" >
-          <pixmap resource="../../../main/main.qrc" >:/images/grid.png</pixmap>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -627,7 +633,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc" />
   <include location="../../../main/main.qrc" />
  </resources>
  <connections/>

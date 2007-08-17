@@ -59,6 +59,9 @@ public slots:
     /// Mostrar menu per seleccionar grid predefinit
     void showPredefinedGrid();
 
+    /// Mostrar el menu de la taula per seleccionar grids
+    void showInteractiveTable();
+
     /// Mètode que mostra el menu amb el botó dret
     void showMenu( QPoint point );
 
