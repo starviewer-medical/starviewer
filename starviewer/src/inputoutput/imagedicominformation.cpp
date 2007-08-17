@@ -4,10 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-#define HAVE_CONFIG_H 1
-
-#include <dcdeftag.h> //conte els Tags DICOM
 #include "imagedicominformation.h"
 #include "status.h"
 

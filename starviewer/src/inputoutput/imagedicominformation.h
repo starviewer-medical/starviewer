@@ -8,9 +8,6 @@
 #define UDGIMAGEDICOMINFORMATION_H
 
 #include <QString>
-
-#define HAVE_CONFIG_H 1
-#include <dcfilefo.h> //obre un fitxer dicom
 #include "dicomtagreader.h"
 
 namespace udg {
@@ -18,7 +15,6 @@ namespace udg {
 /** Aquesta classe retorna els tags DICOM sollicitats d'una imatge
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-
 class Status;
 
 class ImageDicomInformation{
