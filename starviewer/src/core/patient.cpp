@@ -145,6 +145,21 @@ Series *Patient::getSeries( QString uid )
     return result;
 }
 
+bool Patient::hasFile( QString filename )
+{
+    QList<Study *> studyList = this->getStudies();
+    foreach( Study *study, studyList )
+    {
+        QList<Series *> seriesList = study->getSeries();
+        foreach( Series *series, seriesList )
+        {
+            if( series->getFilesPathList().contains( filename ) )
+                return true;
+        }
+    }
+    return false;
+}
+
 Patient & Patient::operator =( const Patient &patient )
 {
     m_fullName = patient.m_fullName;
