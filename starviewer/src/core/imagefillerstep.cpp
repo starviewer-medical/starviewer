@@ -100,9 +100,6 @@ void ImageFillerStep::processImage( Image *image )
         if( !value.isEmpty() )
             image->setContentTime(value);
 
-        image->setImagesInAcquisition( dicomReader.getAttributeByName( DCM_ImagesInAcquisition ).toInt() );
-        image->setComments( dicomReader.getAttributeByName( DCM_ImageComments ) );
-
         value = dicomReader.getAttributeByName( DCM_PixelSpacing );
         QStringList list = value.split( "\\" );
         if( list.size() == 2 )
