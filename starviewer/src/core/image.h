@@ -59,15 +59,6 @@ public:
     QTime getContentTime() const;
     QString getContentTimeAsString();
 
-    /// Assignar/Obtenir el numero d'imatges en l'adquisició
-    // TODO Aquest paràmetre és de categoria 3. Cal?? Si cal, caldria establir un mecanisme per preguntar per els tags "opcionals"
-    void setImagesInAcquisition( int images );
-    int getImagesInAcquisition() const;
-
-    /// Assignar/Obtenir els comentaris
-    void setComments( QString comments  );
-    QString getComments() const;
-
     /// Assignar/Obtenir l'espaiat dels pixels
     void setPixelSpacing( double x, double y );
     const double *getPixelSpacing() const;
@@ -129,12 +120,6 @@ private:
     QTime m_contentTime;
 
     //\TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes, com un post-localizer per CT.
-
-    /// Nombre d'imatges que han resultat d'aquesta adquisició de dades. (0020,1002) Tipus 3
-    int m_imagesInAcquisition;
-
-    /// comentaris sobre la imatges definits per l'usuari. (0020,4000) Tipus 3
-    QString m_comments;
 
     // \TODO Icon Image Sequence (0088,0200) Tipus 3. La següent imatge d'icona és representativa d'aquesta imatge. veure C.7.6.1.1.6
 

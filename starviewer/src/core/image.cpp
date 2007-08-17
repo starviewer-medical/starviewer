@@ -160,26 +160,6 @@ QString Image::getContentTimeAsString()
     return m_contentTime.toString("HH:mm:ss");
 }
 
-void Image::setImagesInAcquisition( int images )
-{
-    m_imagesInAcquisition = images;
-}
-
-int Image::getImagesInAcquisition() const
-{
-    return m_imagesInAcquisition;
-}
-
-void Image::setComments( QString comments  )
-{
-    m_comments = comments;
-}
-
-QString Image::getComments() const
-{
-    return m_comments;
-}
-
 void Image::setPixelSpacing( double x, double y )
 {
     m_pixelSpacing[0] = x;
