@@ -9,9 +9,7 @@
 
 #include <QString>
 
-#define HAVE_CONFIG_H 1
-#include <dimse.h> // provide the structure DcmDataSet
-#include <dcdeftag.h> //provide the information for the tags
+class DcmDataset;
 
 namespace udg {
 
