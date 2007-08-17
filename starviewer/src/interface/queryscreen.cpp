@@ -1044,7 +1044,7 @@ Status QueryScreen::insertStudyCache( DICOMStudy stu )
 
 void QueryScreen::studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
-    retrieveCache( studyUID , seriesUID , sopInstanceUID );
+    retrieve( studyUID , seriesUID , sopInstanceUID, "Cache" );
 }
 
 void QueryScreen::tabChanged( int index )
@@ -1087,7 +1087,7 @@ void QueryScreen::view()
     switch ( m_tab->currentIndex() )
     {
         case 0 :
-            retrieveCache( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID() );
+            retrieve( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
             break;
         case 1 :
             switch( QMessageBox::information( this , tr( "Starviewer" ) ,
@@ -1101,7 +1101,7 @@ void QueryScreen::view()
             }
            break;
         case 2 :
-            retrieveDicomdir( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID() );
+            retrieve( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
             break;
         default :
             break;
@@ -1118,7 +1118,7 @@ void QueryScreen::view()
     }
 }
 
-void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString sopInstanceUID )
+void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopInstanceUID, QString source )
 {
     CacheStudyDAL cacheStudyDAL;
     CacheSeriesDAL cacheSeriesDAL;
@@ -1149,10 +1149,32 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 
     INFO_LOG( "Es visualitza l'estudi " + studyUID );
 
-    state = cacheStudyDAL.queryStudy( studyUID , study ); //cerquem la informació de l'estudi
-    if ( !state.good() )
+    //busquem informacio de l'estudi
+    if( source == "Cache" )
     {
-        databaseError( &state );
+        state = cacheStudyDAL.queryStudy( studyUID , study ); //cerquem la informació de l'estudi
+        if ( !state.good() )
+        {
+            databaseError( &state );
+            return;
+        }
+    }
+    else if( source == "DICOMDIR" )
+    {
+        mask.setStudyUID( studyUID );
+        state = m_readDicomdir.readStudies( studyList , mask );
+        if ( !state.good() )
+        {
+            ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
+            return;
+        }
+
+        studyList.firstStudy();//tenim la informació de l'estudi
+        study = studyList.getStudy();
+    }
+    else
+    {
+        DEBUG_LOG("Unrecognized source: " + source);
         return;
     }
 
@@ -1183,26 +1205,34 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 //     patientStudy->setWeight( study.getPatientWeight() );
     patient->addStudy( patientStudy );
 
-    mask.setStudyUID( study.getStudyUID() );
-
-    cacheSeriesDAL.querySeries( mask ,seriesList );
-    if ( !state.good() )
+    //busquem les series
+    if( source == "Cache" )
     {
-        databaseError( &state );
-        return;
-    }
+        mask.setStudyUID( study.getStudyUID() );
+        cacheSeriesDAL.querySeries( mask ,seriesList );
+        if ( !state.good() )
+        {
+            databaseError( &state );
+            return;
+        }
 
+    }
+    else if( source == "DICOMDIR" )
+    {
+        state = m_readDicomdir.readSeries( studyUID , "" , seriesList );//"" pq no busquem cap serie en concreet
+        if ( !state.good() )
+        {
+            ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR : " + state.text() );
+            return;
+        }
+    }
     seriesList.firstSeries();
 
     //si es buit indiquem que per defecte es visualitza la primera serie
     if( seriesUID.isEmpty() )
-    {
         volume.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
-    }
     else
-    {
         volume.setDefaultSeriesUID( seriesUID );
-    }
 
     while( !seriesList.end() )
     {
@@ -1242,17 +1272,28 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
 
         patientStudy->addSeries( patientSeries );
 
-        mask.setSeriesUID( series.getSeriesUID() );
-        mask.setSOPInstanceUID( sopInstanceUID );
         imageList.clear();
-        state = cacheImageDAL.queryImages( mask , imageList );
-
-        if ( !state.good() )
+        if( source == "Cache" )
         {
-            databaseError( &state );
-            return;
-        }
+            mask.setSeriesUID( series.getSeriesUID() );
+            mask.setSOPInstanceUID( sopInstanceUID );
+            state = cacheImageDAL.queryImages( mask , imageList );
 
+            if ( !state.good() )
+            {
+                databaseError( &state );
+                return;
+            }
+        }
+        else if( source == "DICOMDIR" )
+        {
+            state = m_readDicomdir.readImages( series.getSeriesUID() , sopInstanceUID , imageList );//accedim a llegir la informació de les imatges per cada serie
+            if ( !state.good() )
+            {
+                ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
+                return;
+            }
+        }
         imageList.firstImage();
 
         QString filename;
@@ -1272,173 +1313,16 @@ void QueryScreen::retrieveCache( QString studyUID , QString seriesUID , QString 
         seriesList.nextSeries();
     }
 
-    cacheStudyDAL.updateStudyAccTime( studyUID );
+    if( source == "Cache" )
+        cacheStudyDAL.updateStudyAccTime( studyUID );
+    else if( source == "DICOMDIR" )
+        INFO_LOG( "Ha finalitzat la càrrega de l'estudi des del dicomdir" );
 
     this->close();//s'amaga per poder visualitzar la serie
     if ( m_OperationStateScreen->isVisible() )
     {
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
-    emit viewPatient( fillerInput );
-    this->emitViewSignal(volume);
-}
-
-void QueryScreen::retrieveDicomdir( QString studyUID , QString seriesUID , QString sopInstanceUID )
-{
-    ImageList imageList;
-    Status state;
-    StudyList studyList;
-    DicomMask studyMask;
-    DICOMStudy study;
-    SeriesList seriesList;
-    DICOMSeries series;
-    QString absSeriesPath;
-    StudyVolum volume;
-
-    // Omplim en paral·lel la nova estructura
-    Patient *patient = new Patient;
-    Study *patientStudy = new Study;
-    PatientFillerInput fillerInput;
-
-    fillerInput.addPatient( patient );
-
-    if ( studyUID.isEmpty() )
-    {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
-        return;
-    }
-
-    INFO_LOG( "Es visualitza l'estudi  " + studyUID + " guardat en el dicomdir" );
-
-    //busquem informacio de l'estudi
-    studyMask.setStudyUID( studyUID );
-    state = m_readDicomdir.readStudies( studyList , studyMask );
-    if ( !state.good() )
-    {
-        ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
-        return;
-    }
-
-    studyList.firstStudy();//tenim la informació de l'estudi
-    study = studyList.getStudy();
-
-    volume.setPatientId( study.getPatientId() );//Carreguem la informacio de l'estudi al volume
-    volume.setPatientName( study.getPatientName() );
-    volume.setStudyDate( study.getStudyDate() );
-    volume.setStudyId( study.getStudyId() );
-    volume.setStudyUID( study.getStudyUID() );
-
-    // omplim la nova estructura
-    // informació de pacient
-    patient->setFullName( study.getPatientName() );
-    patient->setID( study.getPatientId() );
-    patient->setBirthDate( study.getPatientBirthDate() );
-    patient->setSex( study.getPatientSex() );
-    // informació d'estudi
-    patientStudy->setInstanceUID( study.getStudyUID() );
-    patientStudy->setDate( study.getStudyDate() );
-    patientStudy->setTime( study.getStudyTime() );
-    patientStudy->setID( study.getStudyUID() );
-    patientStudy->setAccessionNumber( study.getAccessionNumber() );
-    patientStudy->setDescription( study.getStudyDescription() );
-    patientStudy->setPatientAge( study.getPatientAge().toInt() );
-    // \TODO falta pes i alçada
-//     patientStudy->setHeight( study.getPatientHeight() );
-//     patientStudy->setWeight( study.getPatientWeight() );
-    patient->addStudy( patientStudy );
-
-    //busquem les series
-    state = m_readDicomdir.readSeries( studyUID , "" , seriesList );//"" pq no busquem cap serie en concreet
-    if ( !state.good() )
-    {
-        ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR : " + state.text() );
-        return;
-    }
-    seriesList.firstSeries();
-
-    //si es buit indiquem que per defecte es visualitza la primera serie
-    if ( seriesUID.isEmpty() )
-    {
-        volume.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
-    }
-    else
-        volume.setDefaultSeriesUID( seriesUID );
-
-    while ( !seriesList.end() )
-    {
-        SeriesVolum seriesVol;
-        series = seriesList.getSeries();
-
-        //com que el path de les series és relatiu, hi hem d'afegir el del dicomdir per fer-lo absoluts();
-        absSeriesPath = m_readDicomdir.getDicomdirPath();//obtenim el path del dicomdir
-        absSeriesPath.append( "/" );
-        absSeriesPath.append( series.getSeriesPath() ); //afegim el path relatiu de les series
-        seriesVol.setSeriesUID( series.getSeriesUID() );
-        seriesVol.setStudyId( study.getStudyId() );
-        seriesVol.setStudyUID( study.getStudyUID() );
-        seriesVol.setSeriesPath( absSeriesPath );
-        seriesVol.setSeriesModality( series.getSeriesModality() );
-
-        // omplim la nova estructura
-        // informació de series
-        Series *patientSeries = new Series;
-        // si s'ha indicat una sèrie en concret per visualitzar la marquem com a seleccionada \TODO passa res si no n'hi cap de seleccionada? per defecte veurem la primera segurament
-        if( seriesUID == series.getSeriesUID() )
-            patientSeries->select();
-
-        patientSeries->setInstanceUID( series.getSeriesUID() );
-        patientSeries->setModality( series.getSeriesModality() );
-        patientSeries->setSeriesNumber( series.getSeriesNumber()  );
-        patientSeries->setDate( series.getSeriesDate() );
-        patientSeries->setTime( series.getSeriesTime() );
-        // TODO falten 4 atributs!
-//         patientSeries->setInstitutionName( series.getSeriesInstitution() );
-//         patientSeries->setPatientPosition( series.getSeriesPatientPosition() );
-        patientSeries->setProtocolName( series.getProtocolName() );
-        patientSeries->setDescription( series.getSeriesDescription() );
-//         patientSeries->setFrameOfReferenceUID( series.getSeriesFrameOfReference() );
-//         patientSeries->setPositionReferenceIndicator( series.getSeriesPositionReferenceIndicator() );
-
-        // TODO el thumbnail s'hauria de crear d'alguna altre manera, això es temporal
-        patientSeries->setThumbnail( QPixmap( absSeriesPath + "scaled.pgm" ) );
-
-        patientStudy->addSeries( patientSeries );
-
-        imageList.clear();
-        state = m_readDicomdir.readImages( series.getSeriesUID() , sopInstanceUID , imageList );//accedim a llegir la informació de les imatges per cada serie
-        if ( !state.good() )
-        {
-            ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
-            return;
-        }
-
-        imageList.firstImage();
-
-        while ( !imageList.end() )
-        {
-            QString filename = imageList.getImage().getImagePath();
-            seriesVol.addImage( filename );
-
-            // omplim la nova estructura
-            // no omplim la informació d'imatge, el que fem és anar afegint la llista de fitxers i prou
-            fillerInput.addFile( filename );
-            patientSeries->addFilePath( filename );
-
-            imageList.nextImage();
-        }
-
-        volume.addSeriesVolum( seriesVol );
-        seriesList.nextSeries();
-    }
-
-    this->close();//s'amaga per poder visualitzar la serie
-    if ( m_OperationStateScreen->isVisible() )
-    {
-        m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
-    }
-
-    INFO_LOG( "Ha finalitzat la càrrega de l'estudi des del dicomdir" );
-
     emit viewPatient( fillerInput );
     this->emitViewSignal(volume);
 }
