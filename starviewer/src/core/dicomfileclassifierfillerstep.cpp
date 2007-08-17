@@ -47,8 +47,19 @@ bool DICOMFileClassifierFillerStep::fill()
 
 bool DICOMFileClassifierFillerStep::classifyFile( QString file )
 {
-    bool ok = false;
+    // comprovem primer que l'arxiu no estigui ja dins de l'estructura, el qual vol dir que ja l'han classificat
+    bool found = false;
+    int i = 0;
+    while( i < m_input->getNumberOfPatients() && !found )
+    {
+        found = m_input->getPatient( i )->hasFile( file );
+        i++;
+    }
+    if( found )
+        return true;
 
+    // no està classificat per tal l'hem de tractar
+    bool ok = false;
     ok = m_dicomReader->setFile( file );
     if( ok )
     {
