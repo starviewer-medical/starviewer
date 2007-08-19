@@ -7,18 +7,18 @@
 #ifndef UDGPATIENTBROWSERMENUBASICITEM_H
 #define UDGPATIENTBROWSERMENUBASICITEM_H
 
-#include <ui_patientbrowsermenubasicitembase.h>
-#include <series.h>
-#include <QObject>
+#include <QLabel>
 
 namespace udg {
+
+class Series;
 
 /**
 Widget per utilitzar com a item de menú. Pot representar diversos objectes i te la funcionalitat de canviar l'aparença al situar-se el mouse sobre l'element.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenuBasicItem : public QFrame, public Ui::PatientBrowserMenuBasicItemBase
+class PatientBrowserMenuBasicItem : public QLabel
 {
 Q_OBJECT
 public:

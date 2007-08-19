@@ -6,8 +6,6 @@
 FORMS += multiq2dviewerextensionbase.ui \
          interactivewidgetbase.ui \
          q2dviewerwidgetbase.ui \
-         patientbrowsermenulistbase.ui \
-         patientbrowsermenubasicitembase.ui \
          gridiconbase.ui \
          menugridwidgetbase.ui 
 HEADERS += multiq2dviewerextensionmediator.h \

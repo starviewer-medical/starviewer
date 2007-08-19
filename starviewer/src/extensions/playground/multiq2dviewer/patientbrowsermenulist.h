@@ -7,23 +7,21 @@
 #ifndef UDGPATIENTBROWSERMENULIST_H
 #define UDGPATIENTBROWSERMENULIST_H
 
-#include <ui_patientbrowsermenulistbase.h>
-
-#include "patient.h"
-#include "study.h"
-#include "series.h"
-#include <QLabel>
-#include <patientbrowsermenubasicitem.h>
-
+#include <QWidget>
 
 namespace udg {
+
+class Patient;
+class Study;
+class Series;
+class PatientBrowserMenuBasicItem;
 
 /**
 Widget per representar visualment en un menú les dades bàsiques de l'estructura Pacient -> Estudy -> Serie mitjançant widgets seleccionables (PatientBrowserMenuBasicItem).
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenuList : public QWidget, public Ui::PatientBrowserMenuListBase
+class PatientBrowserMenuList : public QWidget
 {
 Q_OBJECT
 public:

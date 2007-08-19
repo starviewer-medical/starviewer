@@ -10,13 +10,16 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 
+#include "patient.h"
+#include "study.h"
+#include "series.h"
+#include "patientbrowsermenubasicitem.h"
 #include "logging.h"
 
 namespace udg {
 
-PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent )
+PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent ) : QWidget(parent)
 {
-    setupUi( this );
     setWindowFlags(Qt::Popup);
 }
 
