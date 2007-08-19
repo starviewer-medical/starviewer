@@ -7,15 +7,13 @@
 #ifndef UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 #define UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 
-#include <qobject.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <QString>
 
 #include "processimage.h"
 
 namespace udg {
 
-class Status;
 class DICOMImage;
 class DICOMSeries;
 
@@ -79,8 +77,9 @@ private :
 
     /** Retorna la informació de la sèrie de la imatge que es troba al path del paràmetre
      * @param path de la imatge d'on obtenir la informació de la sèrie
+     * @return true en el cas que s'hagi obtingut la informació, false en el cas contrari
      */
-    Status getSeriesInformation( QString imagePath , DICOMSeries &serie );
+    bool getSeriesInformation( QString imagePath , DICOMSeries &serie );
 
     /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     void setError();
@@ -88,9 +87,9 @@ private :
 
     /** insereix una nova sèrie a la base de dades
      * @param newImage imatge de la qual hem d'inserir la informació de la sèrie
-     * @return estat del procés
+     * @return true si ha anat correctament, false si no.
      */
-    Status insertSerie(DICOMImage *newImage);
+    bool insertSerie(DICOMImage *newImage);
 };
 
 };

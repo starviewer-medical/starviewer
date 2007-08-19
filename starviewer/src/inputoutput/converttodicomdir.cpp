@@ -137,16 +137,15 @@ Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, recordDeviceDico
     Status state, stateNotDicomConformance;
 
     createDicomdir.setDevice( selectedDevice );
-    state = createDicomdir.create( m_dicomDirPath );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
+    state = createDicomdir.create( dicomdirPath );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     if ( !state.good() )//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
     {
         createDicomdir.setStrictMode( false );
-        state = createDicomdir.create( m_dicomDirPath );
+        state = createDicomdir.create( dicomdirPath );
 
         if ( state.good() )
         {
-            return stateNotDicomConformance.setStatus("Alguna de les imatges no complia, l'estàndard DICOM" , false , 4001 );
-
+            return stateNotDicomConformance.setStatus("Alguna de les imatges no complia l'estàndard DICOM" , false , 4001 );
         }
     }
 

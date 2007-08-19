@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 #include "starviewerprocessimageretrieved.h"
-#include "imagedicominformation.h"
+#include "dicomtagreader.h"
 #include "dicomseries.h"
 #include "starviewersettings.h"
 #include "status.h"
@@ -44,8 +44,7 @@ void StarviewerProcessImageRetrieved::process( DICOMImage *image )
         //inserim serie
         insertSerie( image );
 
-        state = getSeriesInformation ( createImagePath( image  ), serie );
-        if ( !state.good() ) m_error = true;
+        m_error = ! getSeriesInformation(createImagePath(image), serie);
 
         m_studyUID = image->getStudyUID();
     }
@@ -53,8 +52,7 @@ void StarviewerProcessImageRetrieved::process( DICOMImage *image )
     //inserim la nova sèrie que es descarrega
     if ( !m_addedSeriesList.contains( image->getSeriesUID() ) )
     {
-        state = insertSerie( image );
-        if ( state.good() || ( !state.good() && state.code() == 2019 ) ) // 2019, cas en que ja existia la serie a la base de dades, en aquest cas s'esta tornant a baixar la sèrie
+        if ( insertSerie(image) )
         {
             emit( seriesRetrieved( image->getStudyUID() ) );
 
@@ -75,27 +73,29 @@ void StarviewerProcessImageRetrieved::process( DICOMImage *image )
     emit( imageRetrieved( image->getStudyUID(),m_downloadedImages ) );
 }
 
-Status StarviewerProcessImageRetrieved::insertSerie(DICOMImage *newImage)
+bool StarviewerProcessImageRetrieved::insertSerie(DICOMImage *newImage)
 {
     DICOMSeries serie;
-    Status state;
-    CacheSeriesDAL cacheSeriesDAL;
+    bool ok = false;
 
     //inserim serie
-    state = getSeriesInformation ( createImagePath( newImage ) , serie );
-
-    if ( state.good() )
+    if ( getSeriesInformation(createImagePath(newImage), serie) )
     {
-        state = cacheSeriesDAL.insertSeries( &serie );
+        CacheSeriesDAL cacheSeriesDAL;
+        Status status = cacheSeriesDAL.insertSeries( &serie );
         //Podria ser que la sèrie estigués parcialment baixada, per tant si ja existeix ignorem l'errorProcessImage() de que ja existeix la sèrie a la base de dades
-        if ( !state.good() && state.code() != 2019)
+        if ( status.good() || status.code() == 2019 )
+        {
+            m_addedSeriesList.push_back( serie.getSeriesUID() );
+            ok = true;
+        }
+        else
         {
             m_error = true;
         }
-        else m_addedSeriesList.push_back( serie.getSeriesUID() );
     }
 
-    return state;
+    return ok;
 }
 
 /* Ara per ara per la configuració de les dcmtk no he descober com cancel·lar la descarrega d'imatges despres de produir-se un error, l'únic solució possible ara mateix i que m'han aconsellat als forums es matar el thread però aquesta idea no m'agrada perquè si matem el thread no desconnectem del PACS, no destruim les senyals amb el QRetreiveScreen i no esborrem el thread de la llista retrieveThreads, per tant de moment el que es farà es donar el error quant hagi finalitzat la descarrega
@@ -115,38 +115,35 @@ bool StarviewerProcessImageRetrieved::getError()
     return m_error || m_downloadedImages == 0;
 }
 
-Status StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath , DICOMSeries &serie )
+bool StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath, DICOMSeries &serie )
 {
-    Status state;
-    QString path;
+    DICOMTagReader dicomFile;
 
-    ImageDicomInformation dInfo;
-
-    state = dInfo.openDicomFile( imagePath );
-
-    serie.setStudyUID( dInfo.getStudyUID() );
-    serie.setSeriesUID( dInfo.getSeriesUID() );
-    serie.setSeriesNumber( dInfo.getSeriesNumber() );
-    serie.setSeriesModality( dInfo.getSeriesModality() );
-    serie.setSeriesDescription( dInfo.getSeriesDescription() );
-    serie.setBodyPartExaminated( dInfo.getSeriesBodyPartExamined() );
-    serie.setProtocolName( dInfo.getSeriesProtocolName() );
-    serie.setSeriesTime( dInfo.getSeriesTime() );
-    serie.setSeriesDate( dInfo.getSeriesDate() );
-
-    //calculem el path de la serie
-    path = dInfo.getStudyUID();
-    path.append( "/" );
-    path.append( dInfo.getSeriesUID() );
-    path.append( "/" );
-
-    serie.setSeriesPath( path );
-
-    if ( !state.good() )
+    if ( dicomFile.setFile(imagePath) )
     {
-        ERROR_LOG( QString( "Error obtenint informació de la sèrie. Número d'error %1 ERROR: %2" ).arg( state.code() ).arg( state.text() ) );
+        serie.setStudyUID( dicomFile.getAttributeByName(DCM_StudyInstanceUID) );
+        serie.setSeriesUID( dicomFile.getAttributeByName(DCM_SeriesInstanceUID) );
+        serie.setSeriesNumber( dicomFile.getAttributeByName(DCM_SeriesNumber) );
+        serie.setSeriesModality( dicomFile.getAttributeByName(DCM_Modality) );
+        serie.setSeriesDescription( dicomFile.getAttributeByName(DCM_SeriesDescription) );
+        serie.setBodyPartExaminated( dicomFile.getAttributeByName(DCM_BodyPartExamined) );
+        serie.setProtocolName( dicomFile.getAttributeByName(DCM_ProtocolName) );
+        serie.setSeriesTime( dicomFile.getAttributeByName(DCM_SeriesTime) );
+        serie.setSeriesDate( dicomFile.getAttributeByName(DCM_SeriesDate) );
+
+        //calculem el path de la serie
+        QString seriesPath;
+        seriesPath  = dicomFile.getAttributeByName(DCM_StudyID) + "/";
+        seriesPath += dicomFile.getAttributeByName(DCM_SeriesInstanceUID) + "/";
+
+        serie.setSeriesPath(seriesPath);
+
+        return true;
     }
-    return state;
+    else
+    {
+        return false;
+    }
 }
 
 QString StarviewerProcessImageRetrieved::createImagePath( DICOMImage *image )

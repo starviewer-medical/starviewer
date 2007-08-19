@@ -35,7 +35,6 @@ HEADERS += const.h \
            operation.h \
            queueoperationlist.h \
            cacheinstallation.h \
-           imagedicominformation.h \
            qexecuteoperationthread.h \
            cachelayer.h \
            cacheimagedal.h \
@@ -83,7 +82,6 @@ SOURCES += databaseconnection.cpp \
            operation.cpp \
            queueoperationlist.cpp \
            cacheinstallation.cpp \
-           imagedicominformation.cpp \
            qexecuteoperationthread.cpp \
            cachelayer.cpp \
            cacheimagedal.cpp \
