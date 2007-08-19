@@ -7,14 +7,17 @@
 #ifndef UDGPATIENTBROWERMENU_H
 #define UDGPATIENTBROWERMENU_H
 
-#include "patient.h"
-#include "patientbrowsermenuextendeditem.h"
-#include "patientbrowsermenulist.h"
-#include "study.h"
-#include "series.h"
-#include <QMenu>
+#include <QObject>
+
+class QPoint;
 
 namespace udg {
+
+class Patient;
+class PatientBrowserMenuExtendedItem;
+class PatientBrowserMenuList;
+class Study;
+class Series;
 
 /**
 Classe que correspon al widget que es mostra al pulsar el botó dret del ratolí.
@@ -29,7 +32,7 @@ public:
     ~PatientBrowserMenu(){}
 
     /// Assignem una posició al menú
-    void setPosition( QPoint point );
+    void setPosition( const QPoint &point );
 
     /// Assignem un pacient per representar al menu
     void setPatient( Patient * patient );

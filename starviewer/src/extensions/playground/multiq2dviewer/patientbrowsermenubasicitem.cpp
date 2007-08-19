@@ -5,34 +5,29 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "patientbrowsermenubasicitem.h"
-#include "QPalette"
-#include "QListWidgetItem"
-#include "QLabel"
-#include "QPixmap"
+
+#include <QPalette>
+#include <QListWidgetItem>
+#include <QPixmap>
+#include <QVBoxLayout>
+#include <QMouseEvent>
+
+#include "series.h"
 #include "logging.h"
-#include "QVBoxLayout"
-#include "QMouseEvent"
 
 namespace udg {
 
 PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem( QWidget *parent )
-: QFrame(parent)
+: QLabel(parent)
 {
-    setupUi( this );
-    setAutoFillBackground( true );
+    setFrameShape(QFrame::StyledPanel);
 }
 
 void PatientBrowserMenuBasicItem::setSerie( Series * serie )
 {
     m_serie = serie;
 
-    QLabel * serieText = new QLabel( this );
-    serieText->setText( tr(" Serie %1 ").arg( serie->getProtocolName().trimmed() ) );
-    serieText->show();
-    QVBoxLayout *verticalLayout = new QVBoxLayout;
-    verticalLayout->setMargin(0);
-    verticalLayout->addWidget( serieText, 0 );
-    this->setLayout( verticalLayout );
+    setText( tr(" Serie %1 ").arg( serie->getProtocolName().trimmed() ) );
 }
 
 Series *  PatientBrowserMenuBasicItem::getSerie()
@@ -45,11 +40,7 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
 
     if ( event->type() == QEvent::Enter )
     {
-        QPalette palette = this->palette();
-        QBrush selected( QColor( 85, 160, 255, 128 ) );
-        selected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, selected );
-        setPalette( palette );
+        setStyleSheet("background-color: rgba(85, 160, 255, 128);");
         emit isActive( this->geometry().y(), m_serie );
         return true;
     }
@@ -60,11 +51,7 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     }
     else if ( event->type() == QEvent::Leave )
     {
-        QPalette palette = this->palette();
-        QBrush selected( QColor(239, 243, 247, 255) );
-        selected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, selected );
-        setPalette( palette );
+        setStyleSheet("");
         return true;
     }
     else if ( event->type() == QEvent::Hide || event->type() == QEvent::Close )

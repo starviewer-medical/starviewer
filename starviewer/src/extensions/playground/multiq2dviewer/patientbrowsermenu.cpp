@@ -6,14 +6,14 @@
  ***************************************************************************/
 #include "patientbrowsermenu.h"
 
-#include <QHashIterator>
-#include <QHashIterator>
-#include <QSplitter>
-#include <logging.h>
-#include <QContextMenuEvent>
 #include <QDesktopWidget>
-#include <QRect>
+#include <QApplication>
 
+#include "patient.h"
+#include "patientbrowsermenuextendeditem.h"
+#include "patientbrowsermenulist.h"
+#include "series.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -66,7 +66,7 @@ void PatientBrowserMenu::showInformation( PatientBrowserMenuExtendedItem * exten
     extendedWidget->move( x, m_patientBasicList->y() );
 }
 
-void PatientBrowserMenu::setPosition( QPoint point )
+void PatientBrowserMenu::setPosition( const QPoint &point )
 {
     // Calcular si el menu hi cap a la pantalla
     int x = point.x();
