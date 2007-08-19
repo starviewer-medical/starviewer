@@ -20,7 +20,7 @@
 #define PATTERN_MATCHING_AVAILABLE
 #endif
 
-#include "imagedicominformation.h"
+#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -149,21 +149,18 @@ Status CreateDicomdir::create( QString dicomdirPath )
 void CreateDicomdir::errorConvertingFile( QString imagePath )
 {
     QString logMessage;
-    Status state;
-    ImageDicomInformation dInfo;
+    DICOMTagReader dicomFile;
 
-    state = dInfo.openDicomFile( imagePath );
-
-    if ( state.good() )
+    if ( dicomFile.setFile(imagePath) )
     {
         logMessage = "Error al convertir a DICOMDIR el fitxer : ";
-        logMessage.append( dInfo.getStudyUID() );
+        logMessage.append( dicomFile.getAttributeByName(DCM_StudyInstanceUID) );
         logMessage.append( "/" );
-        logMessage.append( dInfo.getSeriesUID() );
+        logMessage.append( dicomFile.getAttributeByName(DCM_SeriesInstanceUID) );
         logMessage.append( "/" );
-        logMessage.append( dcmSOPClassUIDToModality( qPrintable(dInfo.getSOPClassUID()) ) );
+        logMessage.append( dcmSOPClassUIDToModality( qPrintable(dicomFile.getAttributeByName(DCM_SOPClassUID)) ) );
         logMessage.append( "." );
-        logMessage.append( dInfo.getSOPInstanceUID() );
+        logMessage.append( dicomFile.getAttributeByName(DCM_SOPInstanceUID) );
     }
     else
     {
