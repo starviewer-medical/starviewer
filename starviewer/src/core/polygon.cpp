@@ -12,6 +12,7 @@ namespace udg {
 Polygon::Polygon() : DrawingPrimitive()
 {
     disableBackground();
+    setWidth( 1. );
 }
 
 Polygon::Polygon( QList< double* > points ) : DrawingPrimitive()
@@ -19,6 +20,7 @@ Polygon::Polygon( QList< double* > points ) : DrawingPrimitive()
     disableBackground();
     setPoints( points );
     discontinuousOff();
+    setWidth( 1. );
 }
    
 Polygon::~Polygon()
