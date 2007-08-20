@@ -73,7 +73,7 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     study = studyList.getStudy();
     study.setAbsPath( studyPath );
 
-    state = cacheStudyDAL.insertStudyDicomdir( &study );
+    state = cacheStudyDAL.insertStudy( &study, "DICOMDIR" );
 
     if ( state.code() == 2019 )
     {
