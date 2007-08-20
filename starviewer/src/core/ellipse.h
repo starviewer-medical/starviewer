@@ -85,6 +85,9 @@ public:
     ///donant a l'eix menor els valors de l'eix major i determina el comportament com a cercle
     ///Cal tenir en compte que s'agafa el valor de l'EIX MAJOR.
     void convertToCircle();
+    
+    QString getPrimitiveType()
+    { return( "Ellipse" ); }
         
 private:
     ///calcula els punts del rectangle que inscriu una el·lipse a partir del centre i els radis

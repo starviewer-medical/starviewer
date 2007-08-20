@@ -67,6 +67,9 @@ public:
     bool isFilled()
     { return( m_filled ); }
     
+    QString getPrimitiveType()
+    { return( "Point" ); }
+    
 private:
     
     ///posició del punt

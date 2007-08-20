@@ -83,6 +83,9 @@ public:
     bool isDiscontinuous()
     { return m_discontinuousPrimitive; }
     
+    QString getPrimitiveType()
+    { return( "Polygon" ); }
+    
 private:
     
     ///conjunt de punts que formaran el polígon
