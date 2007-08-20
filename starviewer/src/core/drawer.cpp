@@ -15,32 +15,25 @@
 #include "q2dviewer.h"
 
 //includes vtk
+#include <vtkProp.h>
 #include <vtkActor2D.h>
 #include <vtkLineSource.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
-#include <vtkDiskSource.h>
+#include <vtkRegularPolygonSource.h>
 #include <vtkCaptionActor2D.h>
 #include <vtkTextProperty.h>
 #include <vtkProperty.h>
 #include <vtkTextActor.h>
-#include <vtkPolygon.h>
 #include <vtkPoints.h>
 #include <vtkMath.h>
 #include <vtkCellArray.h>
-#include <vtkDataSetMapper.h>
-#include <vtkUnstructuredGrid.h>
 #include <vtkRenderer.h>
 
 //includes Qt
 #include <QColor>
 #include <QList>
 #include <QString>
-
-/*\TODO els polígons, de moment, es reprepresenten amb la classe vtkPolygon, perquè sembla que és més fàcil que crear manualment el polydata. 
-El que no acaba d'agradar és que vtkPolygon s'ha de mapejar amb un vtkDataSetMapper i aquest no és acceptat per un actor 2D, per tant el representa
-com un actor 3d en un visor 2d. De moment no dóna problemes però pot ser que calgui canviar-ho.
-*/
 
 namespace udg {
 
@@ -52,64 +45,56 @@ Drawer::Drawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent )
 Drawer::~Drawer()
 {}
 
-void Drawer::drawPoint( Point *point )
-{
-    //Definim el punt i les seves propietats
-    vtkDiskSource *pointSource = vtkDiskSource::New();
-    
-    //determinem si el punt s'ha de mostrar ple o no
-    if ( point->isFilled() )
-        pointSource->SetInnerRadius( 0. );
-    else
-        pointSource->SetInnerRadius( ( point->getWidth() - ( point->getWidth() / 3 ) ) );
-    
-    
-    pointSource->SetOuterRadius( point->getWidth() );
-    pointSource->SetRadialResolution( 1 );
-    
-    //mirem quina forma ha de tenir
-    if ( point->isRounded() )
-        pointSource->SetCircumferentialResolution( 20 );
-    else
-        pointSource->SetCircumferentialResolution( 4 );
-        
-    vtkActor2D *pointSourceActor = vtkActor2D::New();
-    vtkPolyDataMapper2D *pointSourceMapper = vtkPolyDataMapper2D::New();
-    
-    //Assignem el tipus de coordenades seleccionades
-    setCoordinateSystem( point->getCoordinatesSystemAsString(), pointSourceActor->GetPositionCoordinate() );
-    setCoordinateSystem( point->getCoordinatesSystemAsString(), pointSourceActor->GetActualPositionCoordinate() );
-    
-    pointSourceMapper->SetInputConnection( pointSource->GetOutputPort() );
-    pointSourceActor->SetMapper( pointSourceMapper );
+///\TODO crear struct, maps i afegir
 
-    //Assignem les propietats al punt
-    vtkProperty2D *properties = pointSourceActor->GetProperty();
+void Drawer::drawPoint( Point *point, int slice, int view )
+{
+    validateCoordinates( point->getPosition(), view ); 
     
-    //Assignem color
-    QColor pointSourceColor = point->getColor();
-    properties->SetColor( pointSourceColor.redF(), pointSourceColor.greenF(), pointSourceColor.blueF() );
-           
+    vtkRegularPolygonSource *circle = vtkRegularPolygonSource::New();
+    circle->SetRadius( point->getWidth() );
+    
+    if ( point->isRounded() )
+        circle->SetNumberOfSides( 60 );
+    else
+        circle->SetNumberOfSides( 4 );
+    
+    //assignem posició
+    circle->SetCenter( point->getPosition()[0], point->getPosition()[1], point->getPosition()[2] );
+    
+    //mirem si s'a de pintar ple o buit
+    circle->SetGeneratePolygon( point->isFilled() );
+    
+    vtkPolyDataMapper2D *polyMapper = vtkPolyDataMapper2D::New();
+    polyMapper->SetInput( circle->GetOutput() ) ;
+    
+    polyMapper->SetTransformCoordinate( getCoordinateSystem( point->getCoordinatesSystemAsString() ) );
+    vtkActor2D *actor = vtkActor2D::New();
+    actor->SetMapper( polyMapper );
+    
+     //Assignem les propietats al punt
+    vtkProperty2D *properties = actor->GetProperty();
+    
     //Assignem opacitat del punt
     properties->SetOpacity( point->getOpacity() );
-            
-    //assignem la posició al punt
-    pointSourceActor->SetPosition( point->getPosition() );
     
     //mirem la visibilitat de l'actor
     if ( !point->isVisible() )
-        pointSourceActor->VisibilityOff();
+        actor->VisibilityOff();
     
-    m_2DViewer->getRenderer()->AddActor( pointSourceActor );
-    m_2DViewer->refresh();
+     //Assignem color
+    QColor pointColor = point->getColor();
+    actor->GetProperty()->SetColor( pointColor.redF(), pointColor.greenF(), pointColor.blueF() );
+    
+    addActorAndRefresh( actor, point, slice, view );
     
     //esborrem els objectes auxiliars 
-    pointSourceActor->Delete();
-    pointSource->Delete();
-    pointSourceMapper->Delete();
+    actor->Delete();
+    circle->Delete();
+    polyMapper->Delete();
 }
 
-void Drawer::drawLine( Line *line )
+void Drawer::drawLine( Line *line, int slice, int view )
 {
     vtkActor2D *lineActor = vtkActor2D::New();
     vtkLineSource *lineSource = vtkLineSource::New();
@@ -150,8 +135,7 @@ void Drawer::drawLine( Line *line )
     if ( !line->isVisible() )
         lineActor->VisibilityOff();
     
-    m_2DViewer->getRenderer()->AddActor( lineActor );
-    m_2DViewer->refresh();
+    addActorAndRefresh( lineActor, line, slice, view );
     
     //esborrem els objectes auxiliars 
     lineActor->Delete();
@@ -159,7 +143,7 @@ void Drawer::drawLine( Line *line )
     lineMapper->Delete();
 }
     
-void Drawer::drawText( Text *text )
+void Drawer::drawText( Text *text, int slice, int view )
 {
     vtkCaptionActor2D *textActor = vtkCaptionActor2D::New();
     
@@ -192,6 +176,7 @@ void Drawer::drawText( Text *text )
     
     //deshabilitem la línia que va des del punt de situació al text
     textActor->LeaderOff();
+    textActor->ThreeDimensionalLeaderOff();
     
     if ( text->hasShadow() )
         textActor->GetCaptionTextProperty()->ShadowOn();
@@ -202,13 +187,13 @@ void Drawer::drawText( Text *text )
         textActor->GetCaptionTextProperty()->ItalicOn();
     else
         textActor->GetCaptionTextProperty()->ItalicOff();
-    
+
     //Assignem el tipus de font al text
     if ( text->getFontFamily() == "Arial" )
         textActor->GetCaptionTextProperty()->SetFontFamilyToArial();
-    if ( text->getFontFamily() == "Courier" )
+    else if ( text->getFontFamily() == "Courier" )
         textActor->GetCaptionTextProperty()->SetFontFamilyToCourier();
-    if ( text->getFontFamily() == "Times" )
+    else if ( text->getFontFamily() == "Times" )
         textActor->GetCaptionTextProperty()->SetFontFamilyToTimes();
     else
         DEBUG_LOG( "Tipus de font no reconegut a l'intentar crear text!!" );
@@ -219,9 +204,9 @@ void Drawer::drawText( Text *text )
     //Assignem el tipus de justificació horitzontal
     if ( text->getHorizontalJustification() == "Left" )
         textActor->GetCaptionTextProperty()->SetJustificationToLeft();
-    if ( text->getHorizontalJustification() == "Centered" )
+    else if ( text->getHorizontalJustification() == "Centered" )
         textActor->GetCaptionTextProperty()->SetJustificationToCentered();
-    if ( text->getHorizontalJustification() == "Right" )
+    else if ( text->getHorizontalJustification() == "Right" )
         textActor->GetCaptionTextProperty()->SetJustificationToRight();
     else
     {
@@ -231,9 +216,9 @@ void Drawer::drawText( Text *text )
     //Assignem el tipus de justificació vertical
     if ( text->getVerticalJustification() == "Top" )
         textActor->GetCaptionTextProperty()->SetVerticalJustificationToTop();
-    if ( text->getVerticalJustification() == "Centered" )
+    else if ( text->getVerticalJustification() == "Centered" )
         textActor->GetCaptionTextProperty()->SetVerticalJustificationToCentered();
-    if ( text->getVerticalJustification() == "Bottom" )
+    else if ( text->getVerticalJustification() == "Bottom" )
         textActor->GetCaptionTextProperty()->SetVerticalJustificationToBottom();
     else
     {
@@ -250,14 +235,13 @@ void Drawer::drawText( Text *text )
     if ( !text->isVisible() )
         textActor->VisibilityOff();
     
-    m_2DViewer->getRenderer()->AddActor( textActor );
-    m_2DViewer->refresh();
+    addActorAndRefresh( textActor, text, slice, view );
     
     //esborrem els objectes auxiliars 
     textActor->Delete();
 }    
 
-void Drawer::drawPolygon( Polygon *polygon )
+void Drawer::drawPolygon( Polygon *polygon, int slice, int view )
 {
     //Ens assegurem que el polígon és tancat, és a dir, que el primer punt coincideix amb el primer
     double *firstPoint = polygon->getPoints().first();
@@ -282,10 +266,7 @@ void Drawer::drawPolygon( Polygon *polygon )
         points->InsertPoint( i, polygon->getPoints().at( i ) );
         vertexs->InsertCellPoint( i );
     }
-    
-//     //afegim l'últim punt per tancar la ROI
-//     vertexs->InsertCellPoint( 0 );
-    
+    //assignem els punts al polydata
     polydata->SetPoints( points );
     
     if ( polygon->isBackgroundEnabled() )
@@ -320,12 +301,7 @@ void Drawer::drawPolygon( Polygon *polygon )
     QColor color = polygon->getColor();
     actor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
             
-    //Mirem si cal dibuixar el background o no
-//     if ( !ellipse->isBackgroundEnabled() )        
-//         actor->GetProperty()->SetRepresentationToWireframe();
-    
-    m_2DViewer->getRenderer()->AddActor( actor );
-    m_2DViewer->refresh();          
+    addActorAndRefresh( actor, polygon, slice, view );
     
     actor->Delete();
     mapper->Delete();
@@ -333,72 +309,95 @@ void Drawer::drawPolygon( Polygon *polygon )
     vertexs->Delete();
     polydata->Delete();
 }
- 
-void Drawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior )
+
+void Drawer::addActorAndRefresh( vtkProp *prop, DrawingPrimitive *drawingPrimitive, int slice, int view )
 {
+    m_2DViewer->getRenderer()->AddActor( prop );
+    
+    //creem l'objecte PrimitivePropAssociation per introduir al mapa
+    PrimitivePropAssociation association;
+    association.primitive = drawingPrimitive;
+    association.actor = prop;
+    
+    //introduïm l'associació al mapa corresponent
+    addPrimitive( association, slice, view );
+    
+    m_2DViewer->refresh();          
+}
+ 
+void Drawer::validateCoordinates( double coordinates[3], int view )
+{
+    double aux;
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+            //no cal fer res perquè les coordenades ja són les desitjades
+            break;
+    
+        case Q2DViewer::Sagittal:
+            aux = coordinates[2];
+            coordinates[2] = coordinates[0];
+            coordinates[0] = aux;
+            break;
+        
+        case Q2DViewer::Coronal:
+            aux = coordinates[1];
+            coordinates[1] = coordinates[2];
+            coordinates[2] = aux;
+            break;
+            
+        default:
+            DEBUG_LOG( "Vista no reconeguda a l'intentar dibuixar una el·lipse!!" );
+            return;
+            break;
+    }
+} 
+ 
+void Drawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior, int slice, int view )
+{    
     Ellipse *ellipse = new Ellipse( rectangleCoordinate1, rectangleCoordinate2, behavior );
     ellipse->setColor( color );
-    drawEllipse( ellipse );
+    drawEllipse( ellipse, slice, view );
 }
 
-void Drawer::drawEllipse( Ellipse *ellipse )
+void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
 {
-    double intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius, *topLeft, *bottomRight, *center;
+    double intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius, *topLeft, *bottomRight, *center, *minor, *major;
     int i;
+    
+    //validem les coordenades segons la vista en la que estem
+    topLeft = ellipse->getTopLeftPoint();
+    bottomRight = ellipse->getBottomRightPoint();
+    
+    //validem les coordenades
+    validateCoordinates( topLeft, view );
+    validateCoordinates( bottomRight, view );
+    
+    //assignem les noves coordenades corretgides
+    ellipse->setTopLeftPoint( topLeft );
+    ellipse->setBottomRightPoint( bottomRight );
     
     vtkPolyData *polydata = vtkPolyData::New();
     vtkPoints *points = vtkPoints::New();
     vtkCellArray *vertexs = vtkCellArray::New(); 
 
-    topLeft = ellipse->getTopLeftPoint();///\MIRAR si aquesta variable cal
-    
+    topLeft = ellipse->getTopLeftPoint();
     bottomRight = ellipse->getBottomRightPoint();
     center = ellipse->getCenter();
+    minor = ellipse->getMinorRadius();
+    major = ellipse->getMajorRadius();
     
     //especifiquem el nombre de vèrtexs que té l'el·lipse
     vertexs->InsertNextCell( 61 );
         
-    //tenim en compte les diferents vistes per a calcular els punts, ja que segons les projeccions tenim en compte uns eixos o uns altres
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            xAxis1[0] = center[0];
-            xAxis1[1] = center[1];
-            xAxis2[0] = bottomRight[0];
-            xAxis2[1] = center[1];
-            yAxis1[0] = center[0];
-            yAxis1[1] = center[1];
-            yAxis2[0] = center[0];
-            yAxis2[1] = bottomRight[1];
-        break;
-    
-        case Q2DViewer::Sagittal:
-            xAxis1[0] = center[2];
-            xAxis1[1] = center[1];
-            xAxis2[0] = bottomRight[2];
-            xAxis2[1] = center[1];
-            yAxis1[0] = center[2];
-            yAxis1[1] = center[1];
-            yAxis2[0] = center[2];
-            yAxis2[1] = bottomRight[1];
-        break;
-        
-        case Q2DViewer::Coronal:
-            xAxis1[0] = center[2];
-            xAxis1[1] = center[0];
-            xAxis2[0] = bottomRight[2];
-            xAxis2[1] = center[0];
-            yAxis1[0] = center[2];
-            yAxis1[1] = center[0];
-            yAxis2[0] = center[2];
-            yAxis2[1] = bottomRight[0];
-        break;
-            
-        default:
-            DEBUG_LOG( "Vista no reconeguda a l'intentar dibuixar una el·lipse!!" );
-            return;
-        break;
-    }
+    xAxis1[0] = center[0];
+    xAxis1[1] = center[1];
+    xAxis2[0] = bottomRight[0];
+    xAxis2[1] = center[1];
+    yAxis1[0] = center[0];
+    yAxis1[1] = center[1];
+    yAxis2[0] = center[0];
+    yAxis2[1] = bottomRight[1];
     
     //calculem els radis i la intersecció d'aquests, segons tractem una el·lipse o un cercle
     xRadius = fabs( xAxis1[0] - xAxis2[0] );
@@ -467,12 +466,7 @@ void Drawer::drawEllipse( Ellipse *ellipse )
     QColor color = ellipse->getColor();
     actor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
             
-    //Mirem si cal dibuixar el background o no
-//     if ( !ellipse->isBackgroundEnabled() )        
-//         actor->GetProperty()->SetRepresentationToWireframe();
-    
-    m_2DViewer->getRenderer()->AddActor( actor );
-    m_2DViewer->refresh();          
+    addActorAndRefresh( actor, ellipse, slice, view );         
     
     actor->Delete();
     mapper->Delete();
@@ -520,5 +514,150 @@ void Drawer::setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coord
     else
         DEBUG_LOG( "Sistema de coordenades no esperat!!" );
 }  
+
+Drawer::PrimitivesList Drawer::getPrimitivesList( int slice, int view )
+{
+    PrimitivesList list;
+    list.clear();
+    
+    switch( view )
+    {
+        case Q2DViewer::Axial: 
+            list = m_axialPrimitives.values( slice );
+            break;
+
+        case Q2DViewer::Sagittal:
+            list = m_sagitalPrimitives.values( slice );
+            break;
+
+        case Q2DViewer::Coronal: 
+            list = m_coronalPrimitives.values( slice );
+            break;
+
+        default:
+            DEBUG_LOG( "Valor no esperat" );
+            break;
+    }
+    return list;
+}
+
+void Drawer::addPrimitive( PrimitivePropAssociation primitive, int slice, int view )
+{
+    bool ok = true;
+    switch( view )
+    {
+        case Q2DViewer::Axial: 
+            m_axialPrimitives.insert( slice, primitive );
+            break;
+
+        case Q2DViewer::Sagittal: 
+            m_sagitalPrimitives.insert( slice, primitive );
+            break;
+
+        case Q2DViewer::Coronal:    
+            m_coronalPrimitives.insert( slice, primitive );
+            break;
+
+        default:
+            DEBUG_LOG( "Valor no esperat" );
+            ok = false;
+            break;
+    }
+    if( ok )
+    {
+        // si la primitiva l'estem afegint en la llesca i vista actuals serà per defecte visible, altrament no
+        if( slice == m_currentSlice && view == m_currentSlice )
+            setVisibility( primitive, true );
+        else
+            setVisibility( primitive, false );
+    }
+}
+
+void Drawer::setVisibility( PrimitivePropAssociation primitivePropAssociation, bool visibility )
+{
+    if( visibility )
+    {
+        primitivePropAssociation.primitive->visibilityOn();
+        primitivePropAssociation.actor->VisibilityOn();
+    }
+    else
+    {
+        primitivePropAssociation.primitive->visibilityOff();
+        primitivePropAssociation.actor->VisibilityOff();
+    }    
+}
+
+void Drawer::hidePrimitivesFrom( int slice, int view )
+{
+    PrimitivesList listToHide = this->getPrimitivesList( slice, view );
+    
+    foreach( PrimitivePropAssociation primitive, listToHide )
+    {
+        setVisibility( primitive, false );
+    }
+    //actualitzem el Q2DViewer
+    m_2DViewer->refresh();
+}
+
+void Drawer::showPrimitivesFrom( int slice, int view )
+{
+    PrimitivesList listToShow = this->getPrimitivesList( slice, view );
+    
+    foreach( PrimitivePropAssociation primitive, listToShow )
+    {
+        setVisibility( primitive, true );
+    }
+    //actualitzem el Q2DViewer
+    m_2DViewer->refresh();
+}
+
+void Drawer::setCurrentSlice( int slice )
+{
+    // Primer fem insvisibles els de la llesca en la que ens trobàvem fins ara, en la corresponent vista
+    hidePrimitivesFrom( m_currentSlice, m_currentView );
+    // I ara fem visibles els de la nova llesca, en la corresponent vista
+    showPrimitivesFrom( slice, m_currentView );
+    // actualitzem la llesca
+    m_currentSlice = slice;
+}
+
+void Drawer::setCurrentView( int view )
+{
+    if( m_currentView != view )
+    {
+        // s'ha canviat de vista, per tant cal netejar la última vista. Quan es faci el set slice de la nova vista, ja es faran visibles els que toquin
+        showPrimitivesFrom( m_currentSlice, m_currentView );
+        //actualitzem la nova vista
+        m_currentView = view;
+    }
+    //else: continuem a la mateixa vista, per tant no cal fer res
+}
+
+void Drawer::removeAllPrimitives()
+{
+    // recorrem cadscun dels maps, primer retirem l'actor de l'escena i després l'esborrem de la llista
+    foreach( PrimitivePropAssociation primitiveAssociation, m_axialPrimitives )
+    {
+        m_2DViewer->getRenderer()->RemoveActor( primitiveAssociation.actor );
+    }
+    
+    foreach( PrimitivePropAssociation primitiveAssociation, m_sagitalPrimitives )
+    {
+        m_2DViewer->getRenderer()->RemoveActor( primitiveAssociation.actor );
+    }
+    
+    foreach( PrimitivePropAssociation primitiveAssociation, m_coronalPrimitives )
+    {
+        m_2DViewer->getRenderer()->RemoveActor( primitiveAssociation.actor );
+    }
+    
+    //Esborrem el contingut dels maps
+    m_axialPrimitives.clear();
+    m_sagitalPrimitives.clear();
+    m_coronalPrimitives.clear();
+            
+    // refresquem l'escena
+    m_2DViewer->refresh();
+}
   
 };  // end namespace udg
