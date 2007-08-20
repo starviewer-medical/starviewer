@@ -14,6 +14,8 @@ class Status;
 class StudyList;
 class DicomMask;
 
+class Study;
+
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -40,18 +42,24 @@ public:
      *                                  - Status
      *  La resta d'informació no estarà disponible fins que les imatges estiguin descarregades,
      *
-     * @param Study[in]  Informació de l'estudi
-     * @return retorna l'estat de l'inserció
+     * @param study estudi a inserir en la cache
+     * @param source indiquem si la font és un PACS o un DICOMDIR. Per defecte serà pacs
+     * @return estat de l'operació
      */
-    Status insertStudy( DICOMStudy * );
+    Status insertStudy( DICOMStudy *study, QString source = "PACS" );
 
-     /*  Insereix estudi
-     *
-     * @param Study[in]  Informació de l'estudi
-     * @return retorna l'estat de l'inserció
+    /**
+     * Mètode genèric que consulta la base de dades i ens retorna els resultats en una llista on cada element és
+     * una "row" i aquesta conté els atributs pels que hem fet el query en una string list
+     * TODO aquest hauria de ser un mètode que proporcionés la pròpia entitat de base de dades
+     * @param query La consulta en sql que volem fer a la base de dades
+     * @param results Llista de resultats. Cada element de la llista equival a un "row" del resultat del query.
+     * A cada "row"(element de la llista), tenim les columnes, és a dir una llista d'strings, on cadascun
+     * es correspon amb els atributs que hem demanat en la query
+     * @return Status de la operació
      */
-    Status insertStudyDicomdir( DICOMStudy * );
-
+    Status queryDatabase( QString query , QList<QStringList> &results );
+    Status queryDatabase( DicomMask maskQuery , QList<QStringList> &results );
 
     /** Cerca els estudis que compleixen la màscara a la caché
      * @param Màscara de la cerca
@@ -60,12 +68,29 @@ public:
      */
     Status queryStudy( DicomMask mask , StudyList &list );
 
-    /** Cerca l'estudi que compleix amb la màscara de cerca. Cerca ens els estudis que estan en estat Retrived o Retrieving
-     * @param  Màscara de  la cerca
-     * @param  StudyList amb els resultats
+    /** Omple l'estudi amb l'uid donat.
+     * @param  studyUID identificador de l'estudi
+     * @param  study que té aquest identificador
      * @return retorna estat del mètode
      */
     Status queryStudy( QString studyUID , DICOMStudy &study );
+
+    /**
+     * Cerca l'estudi amb uid studyUID i l'omple. Si no troba aquest estudi no omplirà res
+     * Mètode transitori per introduir l'estructura Study en detriment de DICOMStudy
+     * @param studyUID uid de l'estudi que volem consultar
+     * @param study estudi que omplirem amb les dades
+     * @return
+     */
+    Status queryStudy( QString studyUID , Study *study );
+
+    /** Ens retorna les dades del pacient que té l'estudi amb uid studyUID. Només omple la informació de pacient i prou,
+     * no omple la informació dels estudis, ni series, etc..
+     * @param  studyUID identificador de l'estudi
+     * @param  patient que té aquest estudi amb aquest uid
+     * @return retorna estat del mètode
+     */
+//     Status queryPatientWithStudy( QString studyUID , Patient *patient );
 
     /** Selecciona els estudis vells que no han estat visualitzats des de una data inferior a la que es passa per parametre
      * @param Data a partir de la qual es seleccionaran els estudis vells

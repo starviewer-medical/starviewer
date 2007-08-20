@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include <sqlite3.h>
 #include <QString>
 
@@ -17,6 +16,8 @@
 #include "logging.h"
 #include "dicommask.h"
 
+#include "study.h"
+
 namespace udg {
 
 CacheStudyDAL::CacheStudyDAL()
@@ -27,25 +28,17 @@ CacheStudyDAL::~CacheStudyDAL()
 {
 }
 
-Status CacheStudyDAL::insertStudy( DICOMStudy *study )
+Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     QString sqlSentence;
-    int stateDatabase;
+    int databaseState;
     Status state;
 
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
         return databaseConnection->databaseStatus( 50 );
     }
-
-    // Hi ha noms del pacients que depenent de la màquina tenen el nom format per cognoms^Nom, en aquest cas substituim ^ per espai
-    /*patientName = study->getPatientName();
-
-    while ( patientName.find( '^' ) != QString::npos )
-    {
-        patientName.replace( patientName.find( '^' ) , 1 , " " , 1 );
-    }*/
 
     sqlSentence = QString("Insert into Patient ( PatId , PatNam , PatBirDat , PatSex ) values ( '%1' , '%2' , '%3' , '%4' )")
         .arg( study->getPatientId() )
@@ -54,12 +47,12 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study )
         .arg( study->getPatientSex() );
 
     databaseConnection->getLock(); //s'insereix el pacient
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , qPrintable( sqlSentence ) , 0 , 0 , 0 ) ;
+    databaseState = sqlite3_exec( databaseConnection->getConnection() , qPrintable( sqlSentence ) , 0 , 0 , 0 ) ;
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
-    //si l'stateDatabase de l'operació és fals, però l'error és el 2019, significa que el pacient, ja existia a la bdd, per tant
+    //si el databaseState de l'operació és fals, però l'error és el 2019, significa que el pacient, ja existia a la bdd, per tant
     //continuem inserint l'estudi, si es provoca qualsevol altre error parem
     if ( !state.good() && state.code() != 2019 )
     {
@@ -68,35 +61,51 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study )
         return state;
     }
 
-    //crem el el sqlSentence per inserir l'estudi ,al final fem un select per assignar a l'estudi l'id del PACS al que pertany
+    //creem  el sqlSentence per inserir l'estudi
+    QString pacsAETitle;
+    if( source == "PACS" )
+    {
+        // fem un select per assignar a l'estudi l'id del PACS al que pertany
+        pacsAETitle = QString("( select PacsID from PacsList where AETitle = '%1' )").arg( study->getPacsAETitle() );
+    }
+    else if( source == "DICOMDIR" )
+    {
+        pacsAETitle = "99999";
+    }
+    else
+    {
+        DEBUG_LOG("Unrecognized source: " + source);
+        return state.setStatus( "Unrecognized source: " + source, false, 0 );
+    }
+
     sqlSentence = QString( "Insert into Study"
-    "( PatId , StuInsUID , StuID , StuDat , StuTim , RefPhyNam , AccNum , StuDes , Modali , "
-    " OpeNam , Locati , AccDat , AccTim , AbsPath , Status , PacsID , PatAge ) "
-    "Values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' , '%11' , %12 , %13 , '%14' , '%15' , "
-    "( select PacsID from PacsList where AETitle = '%16' ) , '%17')" ) //busquem l'id del PACS
-    .arg( study->getPatientId() ) // 1
-    .arg( study->getStudyUID() ) // 2
-    .arg( study->getStudyId() ) // 3
-    .arg( study->getStudyDate() ) // 4
-    .arg( study->getStudyTime() ) // 5
-    .arg( QString() ) // 6 Referring Physician Name
-    .arg( study->getAccessionNumber() ) // 7
-    .arg( study->getStudyDescription() ) // 8
-    .arg( study->getStudyModality() ) // 9
-    .arg( QString() ) // 10 Operator Name
-    .arg( QString() ) // 11 Location
-    .arg( getDate() ) // 12
-    .arg( getTime() ) // 13
-    .arg( study->getAbsPath() ) // 14
-    .arg( "PENDING" ) // 15 stateDatabase pendent perquè la descarrega de l'estudi encara no està completa
-    .arg( study->getPacsAETitle() ) // 16
-    .arg( study->getPatientAge()  ); // 17
+        "( PatId , StuInsUID , StuID , StuDat , StuTim , RefPhyNam , AccNum , StuDes , Modali , "
+        " OpeNam , Locati , AccDat , AccTim , AbsPath , Status , PacsID , PatAge ) "
+        "Values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' , '%11' , %12 , %13 , '%14' , '%15' , "
+        "%16 , '%17')" )
+        .arg( study->getPatientId() ) // 1
+        .arg( study->getStudyUID() ) // 2
+        .arg( study->getStudyId() ) // 3
+        .arg( study->getStudyDate() ) // 4
+        .arg( study->getStudyTime() ) // 5
+        .arg( QString() ) // 6 Referring Physician Name
+        .arg( study->getAccessionNumber() ) // 7
+        .arg( study->getStudyDescription() ) // 8
+        .arg( study->getStudyModality() ) // 9
+        .arg( QString() ) // 10 Operator Name
+        .arg( QString() ) // 11 Location
+        .arg( getDate() ) // 12
+        .arg( getTime() ) // 13
+        .arg( study->getAbsPath() ) // 14
+        .arg( "PENDING" ) // 15 databaseState pendent perquè la descarrega de l'estudi encara no està completa
+        .arg( pacsAETitle ) // 16
+        .arg( study->getPatientAge()  ); // 17
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 ) ;
+    databaseState = sqlite3_exec( databaseConnection->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 ) ;
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -112,11 +121,11 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study )
     return state;
 }
 
-Status CacheStudyDAL::insertStudyDicomdir( DICOMStudy *study )
+Status CacheStudyDAL::queryDatabase( QString query, QList<QStringList> &results )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    QString sqlSentence;
-    int stateDatabase;
+    int columns, rows, databaseState;
+    char **reply = NULL , **error = NULL;
     Status state;
 
     if ( !databaseConnection->connected() )
@@ -124,74 +133,45 @@ Status CacheStudyDAL::insertStudyDicomdir( DICOMStudy *study )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("Insert into Patient ( PatId , PatNam , PatBirDat , PatSex ) values ( '%1' , '%2' , '%3' , '%4' )")
-        .arg( study->getPatientId() )
-        .arg( study->getPatientName() )
-        .arg( study->getPatientBirthDate() )
-        .arg( study->getPatientSex() );
-
-    databaseConnection->getLock(); //s'insereix el pacient
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 ) ;
+    databaseConnection->getLock();
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( query ), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
+    state = databaseConnection->databaseStatus( databaseState );
 
-    state = databaseConnection->databaseStatus( stateDatabase );
-
-    //si l'stateDatabase de l'operació és fals, però l'error és el 2019, significa que el pacient, ja existia a la bdd, per tant
-    //continuem inserint l'estudi, si es provoca qualsevol altre error parem
-    if ( !state.good() && state.code() != 2019 )
+    if ( !state.good() )
     {
-        ERROR_LOG( QString("Error a la cache número %1 ").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
+        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
+        ERROR_LOG( query );
         return state;
     }
 
-    //crem el el sqlSentence per inserir l'estudi ,al final fem un select per assignar a l'estudi l'id del PACS al que pertany
-    sqlSentence = QString( "Insert into Study "
-        "( PatId , StuInsUID , StuID , StuDat , StuTim , RefPhyNam , AccNum , StuDes , Modali , "
-        " OpeNam , Locati , AccDat , AccTim , AbsPath , Status , PacsID , PatAge ) "
-        " Values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' , '%11' , %12 , %13 , '%14' , 'PENDING',"//stateDatabase pendent perquè la descarrega de l'estudi encara no està completa
-        " %15  , '%16') " //busquem l'id del PACS
-    )
-        .arg( study->getPatientId() )
-        .arg( study->getStudyUID() )
-        .arg( study->getStudyId() )
-        .arg( study->getStudyDate() )
-        .arg( study->getStudyTime() )
-        .arg( QString() ) //Referring Physician Name
-        .arg( study->getAccessionNumber() )
-        .arg( study->getStudyDescription() )
-        .arg( study->getStudyModality() )
-        .arg( QString() ) //Operator Name
-        .arg( QString() ) //Location
-        .arg( getDate() )
-        .arg( getTime() )
-        .arg( study->getAbsPath() )
-        .arg( "99999" )
-        .arg( study->getPatientAge() );
-
-    databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 ) ;
-    databaseConnection->releaseLock();
-
-    state = databaseConnection->databaseStatus( stateDatabase );
-    if ( !state.good() )
+    int j;
+    int i = 1;//ignorem les capçaleres
+    while ( i <= rows )
     {
-        if ( state.code() != 2019 )
+        QStringList rowResults;
+        j = 0;
+        while( j < columns )
         {
-            ERROR_LOG( QString("Error a la cache número %1 ").arg( state.code() ) );
-            ERROR_LOG( sqlSentence );
+            rowResults << reply[j+i*columns];
+            j++;
         }
-        else
-            INFO_LOG( QString("L'estudi %1 ja existeix a la base de dades").arg(study->getStudyUID()) );
+        results << rowResults;
+        i++;
     }
 
     return state;
+}
+
+Status CacheStudyDAL::queryDatabase( DicomMask maskQuery, QList<QStringList> &results )
+{
+    return this->queryDatabase( buildSqlQueryStudy(&maskQuery), results );
 }
 
 Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int columns , rows , i = 0 , stateDatabase;
+    int columns , rows , i = 0 , databaseState;
     DICOMStudy stu;
     char **reply = NULL , **error = NULL;
     Status state;
@@ -202,9 +182,9 @@ Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlQueryStudy( &studyMask ) ), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( buildSqlQueryStudy( &studyMask ) ), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -238,7 +218,7 @@ Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
 Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int columns , rows , i = 0 , stateDatabase;
+    int columns , rows , i = 0 , databaseState;
     DICOMStudy stu;
     QString sqlSentence;
 
@@ -257,9 +237,9 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -289,7 +269,7 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
 Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int columns , rows , i = 0 , stateDatabase;
+    int columns , rows , i = 0 , databaseState;
     char **reply = NULL , **error = NULL;
     Status state;
     QString sqlSentence;
@@ -307,10 +287,10 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
     }
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -336,8 +316,8 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
     }
     else
     {
-        stateDatabase = 99; //no trobat
-        state = databaseConnection->databaseStatus( stateDatabase );
+        databaseState = 99; //no trobat
+        state = databaseConnection->databaseStatus( databaseState );
         if ( !state.good() )
         {
             ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
@@ -348,10 +328,35 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
     return state;
 }
 
+Status CacheStudyDAL::queryStudy( QString studyUID , Study *study )
+{
+    QString sqlSentence = QString( "select StuID, StuDat, StuTim, StuDes, StuInsUID "
+            " from Study,PacsList "
+            " where Status in ( 'RETRIEVED' , 'RETRIEVING' ) "
+            " and StuInsUID = '%1'")
+        .arg( studyUID );
+
+    Status state;
+    QList<QStringList> results;
+    state = queryDatabase(sqlSentence,results);
+    if( state.good() )
+    {
+        foreach( QStringList list, results )
+        {
+            study->setID( list.at(0) );
+            study->setDate( list.at(1) );
+            study->setTime( list.at(2) );
+            study->setDescription( list.at(3) );
+            study->setInstanceUID( list.at(4) );
+        }
+    }
+    return state;
+}
+
 Status CacheStudyDAL::queryAllStudies( StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int columns , rows , i = 0 , stateDatabase;
+    int columns , rows , i = 0 , databaseState;
     DICOMStudy selectedStudy;
     char **reply = NULL , **error = NULL;
     Status state;
@@ -365,9 +370,9 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
     sqlSentence = "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum  from Study, Patient where Study.PatId = Patient.PatId ";
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,reply, numero de files,numero de cols.
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,reply, numero de files,numero de cols.
     databaseConnection->releaseLock();
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -397,12 +402,11 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
     return state;
 }
 
-
 Status CacheStudyDAL::delStudy( QString studyUID )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     Status state;
-    int stateDatabase;
+    int databaseState;
     char **reply = NULL , **error = NULL;
     int columns , rows , studySize;
     QString absPathStudy, sqlSentence;
@@ -415,13 +419,13 @@ Status CacheStudyDAL::delStudy( QString studyUID )
 
     /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna sentencia sqlSentence fer un rollback, i així deixa la taula en estat estable, no deixem anar el candau fins al final */
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );
+    databaseState = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );
      //comencem la transacció
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
 
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
@@ -431,13 +435,13 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     //sqlSentence per saber el directori on es guarda l'estudi
     sqlSentence = QString("select AbsPath from study where StuInsUID = '%1'").arg(studyUID);
 
-    stateDatabase = sqlite3_get_table(databaseConnection->getConnection(), qPrintable( sqlSentence ), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de columnss.
+    databaseState = sqlite3_get_table(databaseConnection->getConnection(), qPrintable( sqlSentence ), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de columnss.
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
@@ -445,7 +449,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     }
     else if (  rows == 0 )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
 
         state = databaseConnection->databaseStatus( 99 );//error 99 registre no trobat
@@ -462,12 +466,12 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     sqlSentence = QString( "select count(*) from study where PatID in (select PatID from study where StuInsUID = '%1')").arg(studyUID);
 
 
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de columnss.
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de columnss.
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
@@ -475,7 +479,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     }
     else if( rows == 0 )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         state = databaseConnection->databaseStatus( 99 );//error 99 registre no trobat
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
@@ -489,12 +493,12 @@ Status CacheStudyDAL::delStudy( QString studyUID )
 
         sqlSentence = QString("delete from Patient where PatID in (select PatID from study where StuInsUID = '%1')").arg(studyUID);
 
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+        databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
-        state = databaseConnection->databaseStatus( stateDatabase );
+        state = databaseConnection->databaseStatus( databaseState );
         if ( !state.good() )
         {
-            stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+            databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
             databaseConnection->releaseLock();
             ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
             ERROR_LOG( sqlSentence );
@@ -505,12 +509,12 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     //esborrem de la taula estudi
     sqlSentence = QString("delete from study where StuInsUID= '%1'").arg( studyUID );
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
@@ -519,12 +523,12 @@ Status CacheStudyDAL::delStudy( QString studyUID )
 
     sqlSentence = QString("delete from series where StuInsUID= '%1'").arg(studyUID);
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
@@ -534,12 +538,12 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     //calculem el que ocupava l'estudi per actualitzar l'espai actualitzat
     sqlSentence = QString("select sum(ImgSiz) from image where StuInsUID= '%1'").arg(studyUID);
 
-    stateDatabase = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error );
+    databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error );
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
@@ -555,12 +559,12 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     //esborrem de la taula image
     sqlSentence = QString("delete from image where StuInsUID= '%1'").arg( studyUID );
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
@@ -569,22 +573,22 @@ Status CacheStudyDAL::delStudy( QString studyUID )
 
     sqlSentence = QString("Update Pool Set Space = Space - %1 where Param = 'USED'").arg( studySize );
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
+        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
         databaseConnection->releaseLock();
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
         ERROR_LOG( sqlSentence );
         return state;
     }
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
+    databaseState = sqlite3_exec( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
      //fem commit
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
@@ -603,7 +607,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
 Status CacheStudyDAL::setStudyRetrieved( QString studyUID )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int stateDatabase;
+    int databaseState;
     Status state;
     QString sqlSentence;
 
@@ -615,10 +619,10 @@ Status CacheStudyDAL::setStudyRetrieved( QString studyUID )
     sqlSentence = QString("update study set Status = 'RETRIEVED' where StuInsUID= '%1'").arg( studyUID );
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -632,7 +636,7 @@ Status CacheStudyDAL::setStudyRetrieved( QString studyUID )
 Status CacheStudyDAL::setStudyRetrieving( QString studyUID )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int stateDatabase;
+    int databaseState;
     Status state;
     QString sqlSentence;
 
@@ -644,10 +648,10 @@ Status CacheStudyDAL::setStudyRetrieving( QString studyUID )
     sqlSentence = QString("update study set Status = 'RETRIEVING' where StuInsUID= '%1'").arg(studyUID);
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
 
     if ( !state.good() )
     {
@@ -661,7 +665,7 @@ Status CacheStudyDAL::setStudyRetrieving( QString studyUID )
 Status CacheStudyDAL::updateStudyAccTime( QString studyUID )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int stateDatabase;
+    int databaseState;
     Status state;
     QString sqlSentence;
 
@@ -676,10 +680,10 @@ Status CacheStudyDAL::updateStudyAccTime( QString studyUID )
         .arg( studyUID );
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
@@ -692,7 +696,7 @@ Status CacheStudyDAL::updateStudyAccTime( QString studyUID )
 Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
-    int stateDatabase;
+    int databaseState;
     Status state;
     QString sqlSentence;
 
@@ -720,10 +724,10 @@ Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
     .arg( updateStudy.getStudyUID() );
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
@@ -740,10 +744,10 @@ Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
         .arg( updateStudy.getPatientId() );
 
     databaseConnection->getLock();
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
+    databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
     databaseConnection->releaseLock();
 
-    state = databaseConnection->databaseStatus( stateDatabase );
+    state = databaseConnection->databaseStatus( databaseState );
     if ( !state.good() )
     {
         ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
