@@ -8,11 +8,6 @@
 
 namespace udg {
 
-/**
- * 
- * @param parent 
- * @return 
- */
 DrawingPrimitive::DrawingPrimitive( QObject *parent ) 
     : QObject( parent ) 
 {
