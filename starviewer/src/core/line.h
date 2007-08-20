@@ -64,6 +64,9 @@ public:
     bool isDiscontinuous()
     { return m_discontinuousPrimitive; }
     
+    QString getPrimitiveType()
+    { return( "Line" ); }
+    
 private:
     
     ///primer punt de la línia

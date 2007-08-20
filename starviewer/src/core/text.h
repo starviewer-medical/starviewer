@@ -177,6 +177,9 @@ public:
     bool isTextScaled()
     { return( m_scaledText ); }
     
+    QString getPrimitiveType()
+    { return( "Text" ); }
+    
 private:
     
     ///Text que contindrà
