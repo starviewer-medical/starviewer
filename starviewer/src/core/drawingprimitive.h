@@ -105,6 +105,9 @@ public:
     ///ens diu si la primitiva és visible o no
     bool isVisible()
     { return( m_visible ); }
+    
+    ///ens diu el tipus de primitiva que és. (reimplementat en les sub-classes)
+    virtual QString getPrimitiveType() = 0;
 protected:
    
     ///color de la primitiva
