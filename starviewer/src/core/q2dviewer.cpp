@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#include "drawer.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "volumesourceinformation.h"
@@ -159,6 +160,9 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_rulerActorCollection = vtkActor2DCollection::New();
     m_rulerActorCollection->AddItem( m_bottomRuler );
     m_rulerActorCollection->AddItem( m_sideRuler );
+    
+    //creem el drawer, passant-li com a visor l'objecte this   
+    m_drawer = new Drawer( this );
 }
 
 Q2DViewer::~Q2DViewer()
@@ -175,6 +179,7 @@ Q2DViewer::~Q2DViewer()
     m_picker->Delete();
     m_viewer->Delete();
     m_vtkQtConnections->Delete();
+    delete m_drawer;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()

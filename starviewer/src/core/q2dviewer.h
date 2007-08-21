@@ -70,6 +70,7 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 class Volume;
 class Q2DViewerToolManager;
 class Tool;
+class Drawer;
 
 class Q2DViewer : public QViewer{
 Q_OBJECT
@@ -194,6 +195,10 @@ public:
 
     /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
     void setMagnificationFactor( double factor );
+    
+    ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
+    Drawer* getDrawer()
+    { return m_drawer; }
 
 public slots:
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
@@ -488,6 +493,9 @@ private:
 
     /// Rangs de dades que ens seran força útils a l'hora de controlar el pipeline de grayscale
     double m_modalityRange[2];
+    
+    ///Punter a l'objecte especialista de dibuixat de primitives
+    Drawer *m_drawer;
 
     /// Fa els càlculs del pipeline de l'escala de grisos del volum d'entrada. És a dir calcularà la modality lut, voi lut i presentation lut però no l'aplicarà
     void computeInputGrayscalePipeline();
