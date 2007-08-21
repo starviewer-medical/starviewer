@@ -55,9 +55,9 @@ bool DCMTKDICOMImageReader::load()
                 else
                     DEBUG_LOG( QString( "Error en carregar la DicomImage. Error: %1 ").arg( DicomImage::getString( dicomImage->getStatus() ) ) );
 
-                m_imageBuffer += m_sliceByteIncrement; //
                 // copiem les dades del buffer d'imatge cap a vtk
                 memcpy( m_imageBuffer, dicomBuffer, m_sliceByteIncrement );
+                m_imageBuffer += m_sliceByteIncrement;
                 slice++;
                 emit progress( slice / total );
             }

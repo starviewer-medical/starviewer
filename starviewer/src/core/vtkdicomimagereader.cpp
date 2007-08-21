@@ -41,9 +41,9 @@ bool vtkDICOMImageReader::load()
             reader->SetFileName( qPrintable( image->getPath() ) );
             reader->Update();
             dicomBuffer = (unsigned char *)reader->GetOutput()->GetScalarPointer();
-            m_imageBuffer += m_sliceByteIncrement;
             // copiem les dades del buffer d'imatge cap a vtk
             memcpy( m_imageBuffer, dicomBuffer, m_sliceByteIncrement );
+            m_imageBuffer += m_sliceByteIncrement;
             slice++;
             emit progress( slice / total );
         }
