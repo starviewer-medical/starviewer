@@ -40,6 +40,10 @@ namespace udg {
 Drawer::Drawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent ) 
 {
     m_2DViewer = m_viewer;
+    
+    //Creem les connexions entre el Q2DViewer i el drawer
+    connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( setCurrentSlice( int ) ) );
+    connect( m_2DViewer , SIGNAL( viewChanged(int) ) , this , SLOT( setCurrentView( int ) ) );
 }
 
 Drawer::~Drawer()
@@ -566,7 +570,7 @@ void Drawer::addPrimitive( PrimitivePropAssociation primitive, int slice, int vi
     if( ok )
     {
         // si la primitiva l'estem afegint en la llesca i vista actuals serà per defecte visible, altrament no
-        if( slice == m_currentSlice && view == m_currentSlice )
+        if( slice == m_currentSlice && view == m_currentView )
             setVisibility( primitive, true );
         else
             setVisibility( primitive, false );
