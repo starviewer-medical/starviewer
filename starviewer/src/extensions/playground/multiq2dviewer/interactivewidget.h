@@ -7,15 +7,12 @@
 #ifndef UDGINTERACTIVEWIDGET_H
 #define UDGINTERACTIVEWIDGET_H
 
-#include "patientitemmodel.h"
-#include "patientbrowsermenu.h"
 #include <QTreeView>
-#include <QTableView>
-#include <QListView>
-
-#include <QStandardItemModel>
 
 namespace udg {
+
+class PatientBrowserMenu;
+class Patient;
 
 /**
 Classe que representa una vista de model/view programming de les qt's per tal de representar les dades dels estudis dels pacients a partir d'un widget més interactiu.
@@ -45,9 +42,6 @@ protected:
     void enterEvent( QEvent * event );
      /// Sobrecàrrega de l'event que s'emet quan el mouse entra dins l'àmbit de l'objecte
     void leaveEvent( QEvent * event );
-
-    /// Mètode de proves
-//     void mousePressEvent(QMouseEvent *event);
 };
 
 }
