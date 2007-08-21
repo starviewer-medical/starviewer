@@ -39,6 +39,12 @@ public:
     void setBufferPointer( const void *buffer );
 
     /**
+     * Li diem quin és el nombre de bytes que hi ha d'haver entre llesca i llesca
+     * @param increment
+     */
+    void setSliceByteIncrement( unsigned int increment );
+
+    /**
      * Carrega les imatges d'entrada al buffer proporcionat.
      * @return Fals en cas que hi hagi algun error
      */
@@ -53,8 +59,18 @@ signals:
     void finished();
 
 protected:
+    /**
+     * Comprova si tenim els inputs necessaris i correctes per poder carregar les imatges
+     * @return Cert si tot està a punt, fals altrament
+     */
+    bool readyToLoad();
+
+protected:
     /// Buffer on es copiaran les dades que anem llegint
-    void *m_imageBuffer;
+    unsigned char *m_imageBuffer;
+
+    /// Nombre de bytes entre llesca i llesca
+    unsigned int m_sliceByteIncrement;
 
     /// llista d'imatges que carregarem
     QList<Image *> m_inputImageList;
