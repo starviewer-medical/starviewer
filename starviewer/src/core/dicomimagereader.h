@@ -52,7 +52,7 @@ public:
 
 signals:
     /**
-     * Senyals que que s'envien per indicar el progrés de la lectura
+     * Senyals que que s'envien per indicar el progrés de la lectura. L'escala de progrés va de 0 a 100
      */
     void started();
     void progress(int);
