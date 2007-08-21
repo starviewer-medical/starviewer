@@ -6,6 +6,11 @@
  ***************************************************************************/
 #include "vtkdicomimagereader.h"
 
+#include "image.h"
+
+#include <vtkDICOMImageReader.h>
+#include <vtkImageData.h>
+
 namespace udg {
 
 vtkDICOMImageReader::vtkDICOMImageReader(QObject *parent)
@@ -13,10 +18,39 @@ vtkDICOMImageReader::vtkDICOMImageReader(QObject *parent)
 {
 }
 
-
 vtkDICOMImageReader::~vtkDICOMImageReader()
 {
 }
 
+bool vtkDICOMImageReader::load()
+{
+    bool ok = readyToLoad();
+
+    if( ok )
+    {
+        // buffer on colocarem la llesca que hem llegit
+        unsigned char *dicomBuffer = NULL;
+        // imatges totals i comptador per calcular el progrés
+        int total = m_inputImageList.size();
+        int slice = 0;
+        emit started();
+        // Per cada imatge
+        foreach( Image *image, m_inputImageList )
+        {
+            ::vtkDICOMImageReader *reader = ::vtkDICOMImageReader::New();
+            reader->SetFileName( qPrintable( image->getPath() ) );
+            reader->Update();
+            dicomBuffer = (unsigned char *)reader->GetOutput()->GetScalarPointer();
+            m_imageBuffer += m_sliceByteIncrement;
+            // copiem les dades del buffer d'imatge cap a vtk
+            memcpy( m_imageBuffer, dicomBuffer, m_sliceByteIncrement );
+            slice++;
+            emit progress( slice / total );
+        }
+        emit finished();
+    }
+
+    return ok;
+}
 
 }
