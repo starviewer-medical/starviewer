@@ -24,6 +24,7 @@ public:
 
     ~itkGDCMDICOMImageReader();
 
+    virtual bool load();
 };
 
 }
