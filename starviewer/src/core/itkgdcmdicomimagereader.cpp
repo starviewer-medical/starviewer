@@ -14,22 +14,23 @@
 
 namespace udg {
 
-itkGDCMDICOMImageReader::itkGDCMDICOMImageReader(QObject *parent)
+itkGdcmDICOMImageReader::itkGdcmDICOMImageReader(QObject *parent)
  : DICOMImageReader(parent)
 {
 }
 
-itkGDCMDICOMImageReader::~itkGDCMDICOMImageReader()
+itkGdcmDICOMImageReader::~itkGdcmDICOMImageReader()
 {
 }
 
-bool itkGDCMDICOMImageReader::load()
+bool itkGdcmDICOMImageReader::load()
 {
     bool ok = readyToLoad();
 
     if( ok )
     {
-        typedef itk::Image<unsigned char, 3> ImageType;
+        // preparem els paràmetres de lectura
+        typedef itk::Image<signed short, 3> ImageType;
         typedef itk::ImageFileReader< ImageType >  ReaderType;
         typedef itk::GDCMImageIO GDCMImageIOType;
 
@@ -39,8 +40,6 @@ bool itkGDCMDICOMImageReader::load()
         // assignem al lector quin és el tipus de lector que volem
         reader->SetImageIO( gdcmIO );
 
-        // nombre de bytes que copiem->debug
-        unsigned long bytes = 0;
         // buffer on colocarem la llesca que hem llegit
         unsigned char *dicomBuffer = NULL;
         // imatges totals i comptador per calcular el progrés
@@ -62,7 +61,7 @@ bool itkGDCMDICOMImageReader::load()
                         .arg( e.GetDescription() )
                         );
             }
-            dicomBuffer = reader->GetOutput()->GetPixelContainer()->GetBufferPointer();
+            dicomBuffer = (unsigned char *)reader->GetOutput()->GetPixelContainer()->GetBufferPointer();
             // copiem les dades del buffer d'imatge cap a vtk
             memcpy( m_imageBuffer, dicomBuffer, m_sliceByteIncrement );
             m_imageBuffer += m_sliceByteIncrement;

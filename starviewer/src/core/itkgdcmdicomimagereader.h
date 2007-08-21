@@ -12,17 +12,17 @@
 namespace udg {
 
 /**
-Lector d'imatges DICOM que fa servir la interfície d'itk sobre GDCM
+Lector d'imatges DICOM que fa servir la interfície d'itk sobre Gdcm
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class itkGDCMDICOMImageReader : public DICOMImageReader
+class itkGdcmDICOMImageReader : public DICOMImageReader
 {
 Q_OBJECT
 public:
-    itkGDCMDICOMImageReader(QObject *parent = 0);
+    itkGdcmDICOMImageReader(QObject *parent = 0);
 
-    ~itkGDCMDICOMImageReader();
+    ~itkGdcmDICOMImageReader();
 
     virtual bool load();
 };
