@@ -12,6 +12,7 @@
 #include "study.h"
 #include "series.h"
 #include "logging.h"
+#include "patientbrowsermenu.h"
 
 #include <QtGui>
 #include <QStringListModel>
@@ -23,8 +24,6 @@ InteractiveWidget::InteractiveWidget( QWidget *parent) : QTreeView(parent)
     setAlternatingRowColors( true );
     setMinimumHeight( 25 );
     setMaximumHeight( 25 );
-//     buttonMenu = new RightButtonMenu();
-//     buttonMenu->show();
 }
 
 InteractiveWidget::~InteractiveWidget()
@@ -42,15 +41,6 @@ void InteractiveWidget::leaveEvent( QEvent * event )
     setMinimumHeight( 25 );
     setMaximumHeight( 25 );
 }
-
-/*
-void InteractiveWidget::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::RightButton) {
-        buttonMenu->show();
-    }
-}
-*/
 
 void InteractiveWidget::setVolume( Volume * volume)
 { 
@@ -161,10 +151,6 @@ void InteractiveWidget::setVolume( Volume * volume)
     PatientItemModel * patientModel = new PatientItemModel( patient );
 
     this->setModel( patientModel->getModel() );
-
-//     buttonMenu->setPatient( patient );
-//     buttonMenu->setPosition( QPoint( 200,200 ) );
-
 
 //     QStandardItem * patientData = root->child( 1 );
 //     QVariant variant = (patientData->data(Qt::DisplayRole));

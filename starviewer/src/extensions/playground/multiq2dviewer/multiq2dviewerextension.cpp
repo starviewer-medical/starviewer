@@ -28,6 +28,7 @@
 // Menu
 #include "menugridwidget.h"
 #include "tablemenu.h"
+#include "patientbrowsermenu.h"
 
 namespace udg {
 
@@ -256,8 +257,8 @@ void MultiQ2DViewerExtension::initLayouts()
 
 void MultiQ2DViewerExtension::createMenu()
 {
-    buttonMenu = new PatientBrowserMenu();
-    buttonMenu->setPatient( m_patient );
+    m_patientMenu = new PatientBrowserMenu();
+    m_patientMenu->setPatient( m_patient );
 }
 
 void MultiQ2DViewerExtension::setInput( Volume *input )
@@ -540,7 +541,7 @@ void MultiQ2DViewerExtension::resetWindowLevelToDefault()
 
 void MultiQ2DViewerExtension::showMenu( QPoint point )
 {
-    buttonMenu->setPosition( point );
+    m_patientMenu->setPosition( point );
 }
 
 Patient* MultiQ2DViewerExtension::getPatient() const

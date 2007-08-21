@@ -21,6 +21,7 @@ class Q2DViewerKeyImageNoteAttacher;
 class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
 class Q2DViewerWidget;
+class PatientBrowserMenu;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -123,7 +124,7 @@ private:
     int m_columns;
 
     /// Menú del botó dret
-    PatientBrowserMenu * buttonMenu;
+    PatientBrowserMenu * m_patientMenu;
 
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;
