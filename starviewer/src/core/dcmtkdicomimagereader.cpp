@@ -15,16 +15,16 @@
 
 namespace udg {
 
-DCMTKDICOMImageReader::DCMTKDICOMImageReader(QObject *parent)
+dcmtkDICOMImageReader::dcmtkDICOMImageReader(QObject *parent)
  : DICOMImageReader(parent)
 {
 }
 
-DCMTKDICOMImageReader::~DCMTKDICOMImageReader()
+dcmtkDICOMImageReader::~dcmtkDICOMImageReader()
 {
 }
 
-bool DCMTKDICOMImageReader::load()
+bool dcmtkDICOMImageReader::load()
 {
     bool ok = readyToLoad();
 
