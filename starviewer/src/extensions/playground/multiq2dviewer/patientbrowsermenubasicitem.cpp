@@ -37,32 +37,24 @@ Series *  PatientBrowserMenuBasicItem::getSerie()
 
 bool PatientBrowserMenuBasicItem::event( QEvent * event )
 {
-
     if ( event->type() == QEvent::Enter )
     {
         setStyleSheet("background-color: rgba(85, 160, 255, 128);");
         emit isActive( this->geometry().y(), m_serie );
-        return true;
     }
     else if ( event->type() == QEvent::MouseButtonPress )
     {
         emit selectedSerie( m_serie );
-        return true;
     }
     else if ( event->type() == QEvent::Leave )
     {
         setStyleSheet("");
-        return true;
     }
     else if ( event->type() == QEvent::Hide || event->type() == QEvent::Close )
     {
         emit isNotActive();
-        return QWidget::event( event );
-    }
-    else
-    {
-        return QWidget::event( event );
     }
 
+    return QLabel::event(event);
 }
 }
