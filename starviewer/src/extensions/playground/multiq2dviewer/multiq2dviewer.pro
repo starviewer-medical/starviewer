@@ -4,7 +4,6 @@
 # L'objectiu és una biblioteca:  
 
 FORMS += multiq2dviewerextensionbase.ui \
-         interactivewidgetbase.ui \
          q2dviewerwidgetbase.ui \
          gridiconbase.ui \
          menugridwidgetbase.ui 

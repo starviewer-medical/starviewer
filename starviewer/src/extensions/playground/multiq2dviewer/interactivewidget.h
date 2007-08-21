@@ -7,7 +7,6 @@
 #ifndef UDGINTERACTIVEWIDGET_H
 #define UDGINTERACTIVEWIDGET_H
 
-#include <ui_interactivewidgetbase.h>
 #include "patientitemmodel.h"
 #include "patientbrowsermenu.h"
 #include <QTreeView>
@@ -27,7 +26,7 @@ Classe que representa una vista de model/view programming de les qt's per tal de
 class Volume;
 
 
-class InteractiveWidget : public Ui::InteractiveWidgetBase, public QTreeView
+class InteractiveWidget : public QTreeView
 {
 public:
     InteractiveWidget( QWidget *parent = 0 );
