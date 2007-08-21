@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu �s una biblioteca:  
+# L'objectiu Ã¯Â¿Â½s una biblioteca:  
 
 FORMS += qlogviewerbase.ui 
 HEADERS += extensionfactory.h \
@@ -87,7 +87,11 @@ HEADERS += extensionfactory.h \
            extensioncontext.h \
            keyimagenotefillerstep.h \
            dcmdatasetcache.h \
-           temporaldimensionfillerstep.h
+           temporaldimensionfillerstep.h \
+           dicomimagereader.h \
+           itkgdcmdicomimagereader.h \
+           vtkdicomimagereader.h \
+           dcmtkdicomimagereader.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -159,7 +163,11 @@ SOURCES += extensionmediator.cpp \
            extensioncontext.cpp \
            keyimagenotefillerstep.cpp \
            dcmdatasetcache.cpp \
-           temporaldimensionfillerstep.cpp
+           temporaldimensionfillerstep.cpp \
+           dicomimagereader.cpp \
+           itkgdcmdicomimagereader.cpp \
+           vtkdicomimagereader.cpp \
+           dcmtkdicomimagereader.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
