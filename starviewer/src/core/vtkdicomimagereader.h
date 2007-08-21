@@ -24,6 +24,7 @@ public:
 
     ~vtkDICOMImageReader();
 
+    virtual bool load();
 };
 
 }
