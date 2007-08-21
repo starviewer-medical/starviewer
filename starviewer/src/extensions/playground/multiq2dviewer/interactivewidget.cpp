@@ -18,9 +18,8 @@
 
 namespace udg {
 
-InteractiveWidget::InteractiveWidget( QWidget *parent)
+InteractiveWidget::InteractiveWidget( QWidget *parent) : QTreeView(parent)
 {
-    setupUi( this );
     setAlternatingRowColors( true );
     setMinimumHeight( 25 );
     setMaximumHeight( 25 );
