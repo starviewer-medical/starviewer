@@ -10,8 +10,9 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              mprcardiac3d \
              cardiac2dviewer \
              multiq2dviewer \
-             segmentationframework
-
+             segmentationframework \
+             registrationframework
+             
 #CONTRIB_EXTENSIONS =
 
 MAIN_EXTENSIONS = mpr \
