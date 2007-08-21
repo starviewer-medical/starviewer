@@ -29,6 +29,11 @@ void DICOMImageReader::setBufferPointer( const void *buffer )
     m_imageBuffer = (unsigned char *)buffer;
 }
 
+void DICOMImageReader::setSliceByteIncrement( unsigned int increment )
+{
+    m_sliceByteIncrement = increment;
+}
+
 bool DICOMImageReader::readyToLoad()
 {
     bool ok = true;
