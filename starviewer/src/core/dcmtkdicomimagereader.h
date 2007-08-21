@@ -24,6 +24,7 @@ public:
 
     ~DCMTKDICOMImageReader();
 
+    virtual bool load();
 };
 
 }
