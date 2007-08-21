@@ -7,6 +7,11 @@
 #ifndef UDGVOLUME_CPP
 #define UDGVOLUME_CPP
 
+#include "dicomimagereader.h"
+#include "vtkdicomimagereader.h"
+#include "dcmtkdicomimagereader.h"
+#include "itkgdcmdicomimagereader.h"
+
 // VTK
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
@@ -14,8 +19,6 @@
 #include <vtkDICOMImageReader.h>
 
 // ITK
-#include <itkMetaDataDictionary.h>
-#include <itkMetaDataObject.h>
 #include <itkExtractImageFilter.h>
 #include <itkTileImageFilter.h>
 
@@ -282,6 +285,15 @@ void Volume::setImages( const QList<Image *> &imageList )
     m_dataLoaded = false;
 }
 
+void Volume::setImagesFromSeries( Series *series )
+{
+    //\TODO hauria de ser com setImages, però encara no ens interessa que torni a carregar les dades, només volem la informació i prou
+    m_imageSet.clear();
+    m_imageSet = series->getImages();
+    // perquè s'ompli la informació DICOM
+    m_volumeInformation->setFilenames( m_imageSet.at(0)->getPath() );
+}
+
 Series *Volume::getSeries()
 {
     if( !m_imageSet.isEmpty() )
@@ -316,16 +328,13 @@ void Volume::allocateImageData()
     m_imageDataVTK->AllocateScalars();
 }
 
-void Volume::loadWithAppends()
-{
-}
-
 void Volume::loadWithPreAllocateAndInsert()
 {
     if( !m_imageSet.isEmpty() )
     {
         this->allocateImageData();
-        this->loadSlices(2); // 0: DcmFileFormat, 1: DicomImage, 2: vtkDICOMImageReader
+//         this->loadSlices(2); // 0: DcmFileFormat, 1: DicomImage, 2: vtkDICOMImageReader
+        this->loadSlicesWithReaders(0); // 0: vtk, 1: dcmtk, 2: itkGdcm
         m_imageDataVTK->Update();
         m_dataLoaded = true;
     }
@@ -387,7 +396,7 @@ void Volume::loadSlices( int method )
 
         case 2: // vtkDICOMImageReader
         {
-            vtkDICOMImageReader *reader = vtkDICOMImageReader::New();
+            ::vtkDICOMImageReader *reader = ::vtkDICOMImageReader::New();
             reader->SetFileName( qPrintable( image->getPath() ) );
             reader->Update();
             imageBuffer = (bufferDataType)reader->GetOutput()->GetScalarPointer();
@@ -409,6 +418,32 @@ void Volume::loadSlices( int method )
         DEBUG_LOG( QString("Valor d'un pixel del mig(vtkBuffer): %1, valor del mateix del buffer d'imatge: %2, nombre de bytes que copiem: %3").arg( vtkBuffer[256*256+256]).arg( imageBuffer[256*256+256] ).arg( bytes ) );
         zSlice++;
     }
+}
+
+void Volume::loadSlicesWithReaders( int method )
+{
+    DICOMImageReader *reader;
+    switch( method )
+    {
+    case 0: // vtk
+        reader = new vtkDICOMImageReader;
+        break;
+
+    case 1: // dcmtk
+        reader = new dcmtkDICOMImageReader;
+        break;
+
+    case 2: // itkGDCM
+        reader = new itkGdcmDICOMImageReader;
+        break;
+
+    default:
+        break;
+    }
+    reader->setInputImages( m_imageSet );
+    reader->setBufferPointer( m_imageDataVTK->GetScalarPointer() );
+    reader->setSliceByteIncrement( m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*2 );
+    reader->load();
 }
 
 };
