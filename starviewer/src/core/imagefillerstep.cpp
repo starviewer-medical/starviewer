@@ -121,7 +121,7 @@ void ImageFillerStep::processImage( Image *image )
             {
                 orientation[ i ] = list.at( i ).toDouble();
             }
-            image->setImageOrientation( orientation );
+            image->setImageOrientationPatient( orientation );
         }
         else
             DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6!");
@@ -133,7 +133,7 @@ void ImageFillerStep::processImage( Image *image )
         else // si no tenim aquest valor, el calculem a partir dels direction cosines
         {
             // I ara ens disposem a crear l'string amb l'orientació del pacient
-            double *orientation = (double *)image->getImageOrientation();
+            double *orientation = (double *)image->getImageOrientationPatient();
             double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
             for( int i = 0; i < 3; i++ )
             {
@@ -156,7 +156,7 @@ void ImageFillerStep::processImage( Image *image )
         if( list.size() == 3 )
         {
             double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
-            image->setImagePosition( position );
+            image->setImagePositionPatient( position );
         }
 
         image->setSamplesPerPixel( dicomReader.getAttributeByName( DCM_SamplesPerPixel ).toInt() );
