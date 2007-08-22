@@ -41,15 +41,15 @@ bool Series::addImage( Image *image )
         ok = false;
         DEBUG_LOG("L'uid de la imatge està buit! No la podem insertar per inconsistent");
     }
-    else if( m_imageSet.contains( uid ) )
+    else if( this->imageExists(uid) )
     {
         ok = false;
         DEBUG_LOG("Ja existeix una imatge amb aquest mateix SOPInstanceUID:: " + uid );
     }
     else
     {
-        m_imageSet[ uid ] = image;
         image->setParentSeries( this );
+        this->insertImage( image );
     }
 
     return ok;
@@ -57,15 +57,24 @@ bool Series::addImage( Image *image )
 
 Image *Series::getImage( QString SOPInstanceUID )
 {
-    if( m_imageSet.contains( SOPInstanceUID ) )
-        return m_imageSet[ SOPInstanceUID ];
+    int index = this->findImageIndex(SOPInstanceUID);
+    if( index != -1 )
+        return m_imageSet.at( index );
     else
-        return 0;
+        return NULL;
 }
 
-QList<Image *> Series::getImages()
+bool Series::imageExists( QString sopInstanceUID )
 {
-    return m_imageSet.values();
+    if( this->findImageIndex(sopInstanceUID) != -1 )
+        return true;
+    else
+        return false;
+}
+
+QList<Image *> Series::getImages() const
+{
+    return m_imageSet;
 }
 
 bool Series::hasImages() const
@@ -375,5 +384,31 @@ int Series::getNumberOfSlicesPerPhase() const
     return m_numberOfSlicesPerPhase;
 }
 
+void Series::insertImage( Image *image )
+{
+    int i = 0;
+    while( i < m_imageSet.size() && m_imageSet.at(i)->getInstanceNumber().toInt() < image->getInstanceNumber().toInt() )
+    {
+        i++;
+    }
+    m_imageSet.insert( i, image );
+}
+
+int Series::findImageIndex( QString sopInstanceUID )
+{
+    int i = 0;
+    bool found = false;
+    while( i < m_imageSet.size() && !found )
+    {
+        if( m_imageSet.at(i)->getSOPInstanceUID() == sopInstanceUID )
+            found = true;
+        else
+            i++;
+    }
+    if( !found )
+        i = -1;
+
+    return i;
+}
 
 }

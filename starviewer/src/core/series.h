@@ -11,7 +11,6 @@
 #include <QString>
 #include <QDateTime>
 #include <QPixmap>
-#include <QHash>
 #include "identifier.h"
 
 namespace udg {
@@ -50,8 +49,15 @@ public:
     /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
     Image *getImage( QString SOPInstanceUID );
 
+    /**
+     * Ens diu si existeix una imatge amb aquest sopInstanceUID a la llista
+     * @param sopInstanceUID l'uid que busquem
+     * @return Cert si existeix, fals altrament
+     */
+    bool imageExists( QString sopInstanceUID );
+
     /// Retorna una llista de totes les imatges de la sèrie
-    QList<Image *> getImages();
+    QList<Image *> getImages() const;
 
     /// Indica si una sèrie té imatges
     bool hasImages() const;
@@ -158,6 +164,22 @@ public slots:
     void setSelectStatus(bool select);
 
 private:
+    /**
+     * Inserta una imatge a la llista d'imatges ordenat pel criteri d'ordenació d'imatges
+     * TODO falta definir quina és l'estrategia d'ordenació per defecte
+     * Pre: se presuposa que s'ha comprovat anteriorment que la imatge no existeix a la llista
+     * @param image
+     */
+    void insertImage( Image *image );
+
+    /**
+     * Troba l'índex de la imatge amb el sopInstanceUID donat a la llista d'imatges
+     * @param sopInstanceUID l'uid de la imatge que volem trobar
+     * @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell uid.
+     */
+    int findImageIndex( QString sopInstanceUID );
+
+private:
     /// Informació comuna de la sèrie. C.7.3.1 General Series Module - PS 3.3.
 
     /// Tipus d'equipament que originalment va adquirir les dades per crear les imatges creades en aquesta sèrie.
@@ -215,8 +237,9 @@ private:
     /// com pot ser mides d'imatge diferent, sèries amb dinàmics o fases, stacks, etc.
     QList<Volume *> m_volumesList;
 
-    /// Hash que conté les imatges de la sèrie mapejades pel SOPInstanceUID
-    QHash<QString, Image *> m_imageSet;
+    /// Llista de les Image de la serie ordenades per criteris d'ordenació com SliceLocation,InstanceNumber, etc
+    /// TODO falta definir quina és l'estrategia d'ordenació per defecte
+    QList<Image *> m_imageSet;
 
     QList<QString> m_filesPathList;
 
