@@ -25,10 +25,7 @@ class ToolData : public QObject{
 public:
     
     ToolData( QObject *parent = 0 );
-    ~ToolData(){}
-    
-protected:
-   
+    ~ToolData();
 };
 
 };  
