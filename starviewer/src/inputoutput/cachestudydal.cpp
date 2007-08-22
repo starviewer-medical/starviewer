@@ -275,7 +275,7 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
     QString sqlSentence;
 
     sqlSentence = QString( "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali "
-            " from Patient,Study,PacsList "
+            " from Patient,Study "
             " where Study.PatID=Patient.PatId "
             " and Status in ( 'RETRIEVED' , 'RETRIEVING' ) "
             " and StuInsUID = '%1'")
@@ -331,7 +331,7 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
 Status CacheStudyDAL::queryStudy( QString studyUID , Study *study )
 {
     QString sqlSentence = QString( "select StuID, StuDat, StuTim, StuDes, StuInsUID "
-            " from Study,PacsList "
+            " from Study "
             " where Status in ( 'RETRIEVED' , 'RETRIEVING' ) "
             " and StuInsUID = '%1'")
         .arg( studyUID );
