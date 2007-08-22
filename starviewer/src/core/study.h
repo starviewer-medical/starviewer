@@ -10,7 +10,6 @@
 #include <QObject>
 #include <QString>
 #include <QDateTime>
-#include <QHash>
 #include "series.h"
 
 namespace udg {
@@ -88,6 +87,13 @@ public:
     /// Obté la sèrie amb l'UID donat. NUL si no hi és
     Series *getSeries( QString uid );
 
+    /**
+     * Ens diu si existeix una serie amb aquest uid a la llista
+     * @param uid l'uid que busquem
+     * @return Cert si existeix, fals altrament
+     */
+    bool seriesExists( QString uid );
+
     /// retorna una llista de les sèries marcades com a seleccionades
     QList<Series *> getSelectedSeries();
 
@@ -98,6 +104,21 @@ public:
     QList<Series *> getSeries();
 
     QString toString();
+
+private:
+    /**
+     * Inserta una serie a la llista de series ordenat per SeriesNumber.
+     * Pre: se presuposa que s'ha comprovat anteriorment que la serie no existeix a la llista
+     * @param serie
+     */
+    void insertSeries( Series *series );
+
+    /**
+     * Troba l'índex de la serie amb l'uid donat a la llista de series
+     * @param uid L'uid de la seri que volem trobar
+     * @return L'índex d'aquella serie dins de la llista, -1 si no existeix la serie amb aquell uid.
+     */
+    int findSeriesIndex( QString uid );
 
 private:
     /// Informació comuna de l'estudi. C.7.2.1 General Study Module - PS 3.3.
@@ -129,8 +150,8 @@ private:
     /// Pes ( en Kg. ) del pacient (0010,1030) Tipus 3
     double m_weight;
 
-    /// Taula de Hash que conté les sèries de l'estudi
-    QHash< QString , Series* > m_seriesSet;
+    /// Llista de les Series de l'estudi ordenades per número de serie
+    QList<Series *> m_seriesSet;
 
     /// L'entitat Patient a la qual pertany aquest estudi
     Patient *m_parentPatient;
