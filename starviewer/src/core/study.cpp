@@ -192,6 +192,11 @@ QString Study::getTimeAsString()
     return m_time.toString( "HH:mm:ss" );
 }
 
+QDateTime Study::getDateTime()
+{
+    return QDateTime( m_date, m_time );
+}
+
 bool Study::addSeries( Series *series )
 {
     bool ok = true;

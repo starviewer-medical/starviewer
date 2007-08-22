@@ -10,7 +10,6 @@
 #include <QObject>
 #include <QString>
 #include <QDate>
-#include <QHash>
 #include "study.h"
 
 namespace udg {
@@ -52,7 +51,7 @@ public:
     inline QString getSex() const { return m_sex; };
 
     /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient.
-    /// Retorna fals si existeix un estudi ja amb el mateix uid
+    /// Retorna fals si existeix un estudi ja amb el mateix uid o l'uid és buit
     bool addStudy( Study *study );
 
     /// Li treu al pacient l'estudi amb l'UID donat
@@ -103,6 +102,20 @@ private:
     /// La informació es matxaca i no es fa cap mena de comprovació.
     void copyPatientInformation( const Patient *patient );
 
+    /**
+     * Inserta un estudi a la llista d'estudis ordenat per data.
+     * Pre: se presuposa que s'ha comprovat anteriorment que l'estudi no existeix a la llista
+     * @param study
+     */
+    void insertStudy( Study *study );
+
+    /**
+     * Troba l'índex de l'estudi amb l'uid donat a la llista d'estudis
+     * @param uid L'uid d'estudi que volem trobar
+     * @return L'índex d'aquell estudi dins de la llista, -1 si no existeix l'estudi amb aquell uid.
+     */
+    int findStudyIndex( QString uid );
+
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.
     /// Aquests són atributs del pacient necessaris per a interpretació diagnòstica de les imatges del pacient i són comunes per
@@ -125,8 +138,8 @@ private:
     // \TODO aquest atribut encara no es farà servir, però és per tenir-ho en compte per si calgués.
     bool m_identityIsRemoved;
 
-    /// Taula de hash que conté els estudis del pacient
-    QHash< QString , Study* > m_studiesSet;
+    /// Llista que conté els estudis del pacient ordenats per data
+    QList<Study *> m_studiesSet;
 
 };
 
