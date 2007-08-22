@@ -87,7 +87,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 {
     m_enabledAnnotations = Q2DViewer::AllAnnotation;
     m_lastView = Q2DViewer::Axial;
-    m_currentSlice = 0;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
@@ -141,7 +140,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     m_rows = 1;
     m_columns = 1;
-    m_currentSlice = 0;
 
     m_sliceActorCollection = vtkPropCollection::New();
     m_rendererCollection = vtkRendererCollection::New();
@@ -160,8 +158,8 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_rulerActorCollection = vtkActor2DCollection::New();
     m_rulerActorCollection->AddItem( m_bottomRuler );
     m_rulerActorCollection->AddItem( m_sideRuler );
-    
-    //creem el drawer, passant-li com a visor l'objecte this   
+
+    //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
 }
 
@@ -1161,16 +1159,13 @@ void Q2DViewer::resetCamera()
         break;
         }
         this->refresh();
-        // cada cop que canviem de llesca posarem per defecte la llesca a 0 si té més d'una fase i la del mig si només en té 1
-        if( m_numberOfPhases > 1 )
-        {
-            setSlice( 0 );
-        }
-        else
+        //  Si no tenim dimensions temporals ens quedem amb el màxim de llesques
+        if( m_numberOfPhases == 1 )
         {
             m_maxSliceValue = m_viewer->GetSliceRange()[1];
-            setSlice( m_viewer->GetSliceRange()[1] /2  );
         }
+        // sempre començarem a visualitzar des de la llesca 0
+        setSlice(0);
         mapOrientationStringToAnnotation();
         updateRulers();
         this->updateDisplayExtent();
