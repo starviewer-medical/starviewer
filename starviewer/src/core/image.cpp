@@ -10,6 +10,8 @@
 
 #include <QStringList>
 
+#include <vtkMath.h> // pel ::Cross()
+
 namespace udg {
 
 Image::Image(QObject *parent)
@@ -43,10 +45,30 @@ QString Image::getInstanceNumber() const
 
 void Image::setImageOrientation( double orientation[6] )
 {
-    for(int i = 0; i < 6; i++)
-    {
-        m_imageOrientation[i] = orientation[i];
-    }
+    memcpy( m_imageOrientation, orientation, 6*sizeof(double) );
+
+    double normal[3];
+    // calculem la Z
+    vtkMath::Cross( &orientation[0] , &orientation[3] , normal );
+
+    memcpy( &m_imageOrientation[6], normal, 3*sizeof(double) );
+
+    for( int i = 0; i < 9; i++ )
+        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientation[i] ) );
+}
+
+void Image::setImageOrientation( double xVector[3], double yVector[3] )
+{
+    memcpy( m_imageOrientation, xVector, 3*sizeof(double) );
+    memcpy( &m_imageOrientation[3], yVector, 3*sizeof(double) );
+    double normal[3];
+    // calculem la Z
+    vtkMath::Cross( xVector , yVector , normal );
+
+    memcpy( &m_imageOrientation[6], normal, 3*sizeof(double) );
+
+    for( int i = 0; i < 9; i++ )
+        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientation[i] ) );
 }
 
 const double* Image::getImageOrientation() const
