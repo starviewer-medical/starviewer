@@ -115,7 +115,7 @@ private:
 
     /**
      * Troba l'índex de la serie amb l'uid donat a la llista de series
-     * @param uid L'uid de la seri que volem trobar
+     * @param uid L'uid de la serie que volem trobar
      * @return L'índex d'aquella serie dins de la llista, -1 si no existeix la serie amb aquell uid.
      */
     int findSeriesIndex( QString uid );
