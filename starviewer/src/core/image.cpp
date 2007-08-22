@@ -52,9 +52,6 @@ void Image::setImageOrientationPatient( double orientation[6] )
     vtkMath::Cross( &orientation[0] , &orientation[3] , normal );
 
     memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
-
-    for( int i = 0; i < 9; i++ )
-        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientationPatient[i] ) );
 }
 
 void Image::setImageOrientationPatient( double xVector[3], double yVector[3] )
@@ -66,9 +63,6 @@ void Image::setImageOrientationPatient( double xVector[3], double yVector[3] )
     vtkMath::Cross( xVector , yVector , normal );
 
     memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
-
-    for( int i = 0; i < 9; i++ )
-        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientationPatient[i] ) );
 }
 
 const double* Image::getImageOrientationPatient() const
