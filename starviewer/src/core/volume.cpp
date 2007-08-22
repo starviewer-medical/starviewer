@@ -271,9 +271,11 @@ unsigned int Volume::getImageOrderCriteria() const
 
 void Volume::addImage( Image *image )
 {
-    //\TODO tenir en compte el criteri d'ordenació aquí?
     if( !m_imageSet.contains(image) )
+    {
         m_imageSet << image;
+        m_dataLoaded = false;
+    }
 }
 
 void Volume::setImages( const QList<Image *> &imageList )
@@ -312,9 +314,9 @@ void Volume::allocateImageData()
 
     // Inicialitzem les dades
     double origin[3];
-    origin[0] = m_imageSet.at(0)->getImagePosition()[0];
-    origin[1] = m_imageSet.at(0)->getImagePosition()[1];
-    origin[2] = m_imageSet.at(0)->getImagePosition()[2];
+    origin[0] = m_imageSet.at(0)->getImagePositionPatient()[0];
+    origin[1] = m_imageSet.at(0)->getImagePositionPatient()[1];
+    origin[2] = m_imageSet.at(0)->getImagePositionPatient()[2];
     m_imageDataVTK->SetOrigin( origin );
     double spacing[3];
     spacing[0] = m_imageSet.at(0)->getPixelSpacing()[0];
@@ -334,7 +336,7 @@ void Volume::loadWithPreAllocateAndInsert()
     {
         this->allocateImageData();
 //         this->loadSlices(2); // 0: DcmFileFormat, 1: DicomImage, 2: vtkDICOMImageReader
-        this->loadSlicesWithReaders(0); // 0: vtk, 1: dcmtk, 2: itkGdcm
+        this->loadSlicesWithReaders(2); // 0: vtk, 1: dcmtk, 2: itkGdcm
         m_imageDataVTK->Update();
         m_dataLoaded = true;
     }
@@ -440,9 +442,16 @@ void Volume::loadSlicesWithReaders( int method )
     default:
         break;
     }
+    DEBUG_LOG( QString("Scalar size: %1\nIncrements: %2,%3,%4\n Bytes per slice: %5 ")
+        .arg( m_imageDataVTK->GetScalarSize() )
+        .arg( m_imageDataVTK->GetIncrements()[0] )
+        .arg( m_imageDataVTK->GetIncrements()[1] )
+        .arg( m_imageDataVTK->GetIncrements()[2] )
+        .arg( m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*m_imageDataVTK->GetScalarSize() )
+    );
     reader->setInputImages( m_imageSet );
     reader->setBufferPointer( m_imageDataVTK->GetScalarPointer() );
-    reader->setSliceByteIncrement( m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*2 );
+    reader->setSliceByteIncrement( m_imageDataVTK->GetIncrements()[2]*m_imageDataVTK->GetScalarSize() );
     reader->load();
 }
 
