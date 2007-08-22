@@ -18,6 +18,7 @@
 #include "ctfillerstep.h"
 #include "presentationstatefillerstep.h"
 #include "temporaldimensionfillerstep.h"
+#include "volumegeneratorstep.h"
 
 namespace udg {
 
@@ -87,6 +88,7 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new CTFillerStep() );
     m_registeredSteps.append(new PresentationStateFillerStep() );
     m_registeredSteps.append(new TemporalDimensionFillerStep() );
+    m_registeredSteps.append(new VolumeGeneratorStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
