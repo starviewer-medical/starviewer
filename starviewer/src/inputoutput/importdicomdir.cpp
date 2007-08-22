@@ -59,7 +59,6 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     ScaleStudy scaleDicomStudy;
 
     studyPath.insert( 0 , starviewerSettings.getCacheImagePath() );
-    studyPath.append( "/" );
     studyPath.append( studyUID );
     studyPath.append( "/" );
 
@@ -75,11 +74,14 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
 
     state = cacheStudyDAL.insertStudy( &study, "DICOMDIR" );
 
-    if ( state.code() == 2019 )
+    if ( state.code() == 2019 ) // si ja existeix l'estudi actualitzem la informació
     {
         cacheStudyDAL.updateStudy( study );
     }
-    else ERROR_LOG( state.text() );
+    else
+    {
+        if ( !state.good() ) ERROR_LOG( state.text() );
+    }
 
     m_readDicomdir.readSeries( studyUID , seriesUID , seriesList );
 
