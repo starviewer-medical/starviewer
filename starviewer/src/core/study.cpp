@@ -206,15 +206,15 @@ bool Study::addSeries( Series *series )
         ok = false;
         DEBUG_LOG("L'uid de la sèrie està buida! No la podem insertar per inconsistent");
     }
-    else if( m_seriesSet.contains( uid ) )
+    else if( this->seriesExists(uid) )
     {
         ok = false;
         DEBUG_LOG("Ja existeix una sèrie amb aquest mateix UID:: " + uid );
     }
     else
     {
-        m_seriesSet[ uid ] = series;
         series->setParentStudy( this );
+        this->insertSeries( series );
     }
 
     return ok;
@@ -222,15 +222,26 @@ bool Study::addSeries( Series *series )
 
 void Study::removeSeries( QString uid )
 {
-    m_seriesSet.remove( uid );
+    int index = this->findSeriesIndex(uid);
+    if( index != -1 )
+        m_seriesSet.removeAt( index );
 }
 
 Series *Study::getSeries( QString uid )
 {
-    if( m_seriesSet.contains( uid ) )
-        return m_seriesSet[ uid ];
+    int index = this->findSeriesIndex(uid);
+    if( index != -1 )
+        return m_seriesSet.at( index );
     else
-        return 0;
+        return NULL;
+}
+
+bool Study::seriesExists( QString uid )
+{
+    if( this->findSeriesIndex(uid) != -1 )
+        return true;
+    else
+        return false;
 }
 
 QList<Series *> Study::getSelectedSeries()
@@ -251,7 +262,7 @@ int Study::getNumberOfSeries()
 
 QList< Series* > Study::getSeries()
 {
-    return m_seriesSet.values();
+    return m_seriesSet;
 }
 
 QString Study::toString()
@@ -268,6 +279,33 @@ QString Study::toString()
     }
 
     return result;
+}
+
+void Study::insertSeries( Series *series )
+{
+    int i = 0;
+    while( i < m_seriesSet.size() && m_seriesSet.at(i)->getSeriesNumber().toInt() < series->getSeriesNumber().toInt() )
+    {
+        i++;
+    }
+    m_seriesSet.insert( i, series );
+}
+
+int Study::findSeriesIndex( QString uid )
+{
+    int i = 0;
+    bool found = false;
+    while( i < m_seriesSet.size() && !found )
+    {
+        if( m_seriesSet.at(i)->getInstanceUID() == uid )
+            found = true;
+        else
+            i++;
+    }
+    if( !found )
+        i = -1;
+
+    return i;
 }
 
 }
