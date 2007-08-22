@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGDREPRESENTATION_H
-#define UDGDREPRESENTATION_H
+#ifndef UDGTOOLDATA_H
+#define UDGTOOLDATA_H
 
 #include <QObject>
 
