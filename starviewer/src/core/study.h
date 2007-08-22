@@ -77,6 +77,7 @@ public:
     QString getDateAsString();
     QTime getTime();
     QString getTimeAsString();
+    QDateTime getDateTime();
 
     /// Afegeix una nova sèrie i li assigna com a parent aquest objecte study. Retorna fals si existeix una sèrie amb el mateix uid
     bool addSeries( Series *series );

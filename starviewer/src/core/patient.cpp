@@ -87,15 +87,15 @@ bool Patient::addStudy( Study *study )
         ok = false;
         DEBUG_LOG("L'uid de l'estudi està buit! No el podem insertar per inconsistent");
     }
-    else if( m_studiesSet.contains( uid ) )
+    else if( this->studyExists(uid) )
     {
         ok = false;
         DEBUG_LOG("Ja existeix un estudi amb aquest mateix UID:: " + uid );
     }
     else
     {
-        m_studiesSet[ uid ] = study;
         study->setParentPatient( this );
+        this->insertStudy( study );
     }
 
     return ok;
@@ -103,20 +103,23 @@ bool Patient::addStudy( Study *study )
 
 void Patient::removeStudy( QString uid )
 {
-    m_studiesSet.remove( uid );
+    int index = this->findStudyIndex(uid);
+    if( index != -1 )
+        m_studiesSet.removeAt( index );
 }
 
 Study *Patient::getStudy( QString uid )
 {
-    if( m_studiesSet.contains( uid ) )
-        return m_studiesSet[ uid ];
+    int index = this->findStudyIndex(uid);
+    if( index != -1 )
+        return m_studiesSet.at( index );
     else
-        return 0;
+        return NULL;
 }
 
 bool Patient::studyExists( QString uid )
 {
-    if( this->getStudy(uid) )
+    if( this->findStudyIndex(uid) != -1 )
         return true;
     else
         return false;
@@ -127,16 +130,15 @@ int Patient::getNumberOfStudies()
     return m_studiesSet.size();
 }
 
-QList<Study*> Patient::getStudies() const
+QList<Study *> Patient::getStudies() const
 {
-    return m_studiesSet.values();
+    return m_studiesSet;
 }
 
 Series *Patient::getSeries( QString uid )
 {
     Series *result = NULL;
-    QList<Study *> studyList = this->getStudies();
-    foreach( Study *study, studyList )
+    foreach( Study *study, m_studiesSet )
     {
         result = study->getSeries( uid );
         if( result )
@@ -259,6 +261,33 @@ void Patient::copyPatientInformation( const Patient *patient )
     this->m_patientID = patient->m_patientID;
     this->m_birthDate = patient->m_birthDate;
     this->m_sex = patient->m_sex;
+}
+
+void Patient::insertStudy( Study *study )
+{
+    int i = 0;
+    while( i < m_studiesSet.size() && m_studiesSet.at(i)->getDateTime() < study->getDateTime() )
+    {
+        i++;
+    }
+    m_studiesSet.insert( i, study );
+}
+
+int Patient::findStudyIndex( QString uid )
+{
+    int i = 0;
+    bool found = false;
+    while( i < m_studiesSet.size() && !found )
+    {
+        if( m_studiesSet.at(i)->getInstanceUID() == uid )
+            found = true;
+        else
+            i++;
+    }
+    if( !found )
+        i = -1;
+
+    return i;
 }
 
 }
