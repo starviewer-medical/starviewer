@@ -14,6 +14,7 @@ namespace udg {
 
 class Text;
 class Line;
+class DistanceToolData;
 
 /**
 Classe que implementa una especialització de la classe representation, especial per a les distàncies.
@@ -25,11 +26,8 @@ class DistanceRepresentation : public Representation{
 Q_OBJECT
 public:
     
-    ///constructor per defecte
-    DistanceRepresentation();
-    
     ///constructor amb paràmetres
-    DistanceRepresentation( Line *line, Text *text );
+    DistanceRepresentation( DistanceToolData *dtd );
     
     ~DistanceRepresentation();
     
@@ -41,13 +39,19 @@ public:
     void setText( Text *text ); 
     
     ///assignem un objecte de tipus Line
-    void setLine( Line *line ); 
+    void setLine( Line *line );
+     
+    ///assignem un objecte de tipus DistanceToolData
+    void setDistanceToolData( DistanceToolData *dtd );
     
     ///ens retorna l'atribut de tipus Text
     Text* getText(); 
     
     ///retorna l'atribut de tipus Line
     Line* getLine(); 
+    
+    ///ens retorna l'atribut de tipus DistanceToolData
+    DistanceToolData* getDistanceToolData();
     
 private:
     
@@ -56,6 +60,16 @@ private:
     
     ///atribut del tipus primitiva de línia
     Line *m_line;
+    
+    ///atribut del tipus DistanceToolData per tal de guardar dades referents a la distància
+    DistanceToolData *m_distanceToolData;
+
+private slots:
+    ///actualitza el primer punt de la línia i com a conseqüència també el text i la seva posició
+    void updateFirstPointLine();
+    
+    ///actualitza el segon punt de la línia i com a conseqüència també el text i la seva posició
+    void updateSecondPointLine();
 };
 
 };  //  end  namespace udg
