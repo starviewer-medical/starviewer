@@ -12,4 +12,6 @@ ToolData::ToolData( QObject *parent )
     : QObject( parent ) 
 {}
 
+ToolData::~ToolData(){}
+
 };  // end namespace udg
