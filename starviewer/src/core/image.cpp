@@ -43,37 +43,37 @@ QString Image::getInstanceNumber() const
     return m_instanceNumber;
 }
 
-void Image::setImageOrientation( double orientation[6] )
+void Image::setImageOrientationPatient( double orientation[6] )
 {
-    memcpy( m_imageOrientation, orientation, 6*sizeof(double) );
+    memcpy( m_imageOrientationPatient, orientation, 6*sizeof(double) );
 
     double normal[3];
     // calculem la Z
     vtkMath::Cross( &orientation[0] , &orientation[3] , normal );
 
-    memcpy( &m_imageOrientation[6], normal, 3*sizeof(double) );
+    memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
 
     for( int i = 0; i < 9; i++ )
-        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientation[i] ) );
+        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientationPatient[i] ) );
 }
 
-void Image::setImageOrientation( double xVector[3], double yVector[3] )
+void Image::setImageOrientationPatient( double xVector[3], double yVector[3] )
 {
-    memcpy( m_imageOrientation, xVector, 3*sizeof(double) );
-    memcpy( &m_imageOrientation[3], yVector, 3*sizeof(double) );
+    memcpy( m_imageOrientationPatient, xVector, 3*sizeof(double) );
+    memcpy( &m_imageOrientationPatient[3], yVector, 3*sizeof(double) );
     double normal[3];
     // calculem la Z
     vtkMath::Cross( xVector , yVector , normal );
 
-    memcpy( &m_imageOrientation[6], normal, 3*sizeof(double) );
+    memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
 
     for( int i = 0; i < 9; i++ )
-        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientation[i] ) );
+        DEBUG_LOG( QString("Dir cosines %1: %2").arg(i).arg( m_imageOrientationPatient[i] ) );
 }
 
-const double* Image::getImageOrientation() const
+const double* Image::getImageOrientationPatient() const
 {
-    return m_imageOrientation;
+    return m_imageOrientationPatient;
 }
 
 void Image::setPatientOrientation( QString orientation )
@@ -198,17 +198,14 @@ double Image::getSliceThickness() const
     return m_sliceThickness;
 }
 
-void Image::setImagePosition( double position[3] )
+void Image::setImagePositionPatient( double position[3] )
 {
-    for(int i = 0; i < 3; ++i)
-    {
-        m_imagePosition[i] = position[i];
-    }
+    memcpy( m_imagePositionPatient, position, 3 );
 }
 
-const double *Image::getImagePosition() const
+const double *Image::getImagePositionPatient() const
 {
-    return m_imagePosition;
+    return m_imagePositionPatient;
 }
 
 void Image::setSamplesPerPixel( int samples )
