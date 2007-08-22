@@ -13,7 +13,8 @@
 #include "series.h"
 #include "image.h"
 
-#include <vtkMath.h> // pel ::Cross()
+#include <cmath> // pel fabs
+
 namespace udg {
 
 ImageFillerStep::ImageFillerStep()
@@ -111,42 +112,45 @@ void ImageFillerStep::processImage( Image *image )
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
+        value = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
+        list = value.split( "\\" );
+        if( list.size() == 6 )
+        {
+            double orientation[6];
+            for( int i = 0; i < 6; i++ )
+            {
+                orientation[ i ] = list.at( i ).toDouble();
+            }
+            image->setImageOrientation( orientation );
+        }
+        else
+            DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6!");
+
         // cerquem l'string amb la orientació del pacient
         value = dicomReader.getAttributeByName( DCM_PatientOrientation );
         if( !value.isEmpty() )
             image->setPatientOrientation( value );
         else // si no tenim aquest valor, el calculem a partir dels direction cosines
         {
-            value = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
-            list = value.split( "\\" );
-            if( list.size() == 6 )
+            // I ara ens disposem a crear l'string amb l'orientació del pacient
+            double *orientation = (double *)image->getImageOrientation();
+            double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
+            for( int i = 0; i < 3; i++ )
             {
-                double orientation[6];
-                for( int i = 0; i < 6; i++ )
-                {
-                    orientation[ i ] = list.at( i ).toDouble();
-                }
-                image->setImageOrientation( orientation );
-
-                double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
-                for ( int i = 0; i < 3; i++ )
-                {
-                    dirCosinesX[ i ] = list.at( i ).toDouble();
-                    dirCosinesY[ i ] = list.at( i+3 ).toDouble();
-                }
-                // calculem la Z
-                vtkMath::Cross( dirCosinesX , dirCosinesY , dirCosinesZ );
-                // I ara ens disposem a crear l'string amb l'orientació del pacient
-                QString patientOrientationString;
-                // \TODO potser el delimitador hauria de ser '\' en comptes de ','
-                patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
-                patientOrientationString += ",";
-                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
-                patientOrientationString += ",";
-                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
-                image->setPatientOrientation( patientOrientationString );
+                dirCosinesX[i] = orientation[i];
+                dirCosinesY[i] = orientation[3+i];
+                dirCosinesZ[i] = orientation[6+i];
             }
+            QString patientOrientationString;
+            // \TODO potser el delimitador hauria de ser '\' en comptes de ','
+            patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
+            patientOrientationString += ",";
+            patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
+            patientOrientationString += ",";
+            patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
+            image->setPatientOrientation( patientOrientationString );
         }
+
         value = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
         list = value.split("\\");
         if( list.size() == 3 )

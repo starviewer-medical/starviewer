@@ -35,11 +35,17 @@ public:
     void setInstanceNumber( QString number );
     QString getInstanceNumber() const;
 
-    /// Assignar/Obtenir la orienatació del pacient en la imatge, també anomenat direction cosines.
+    /**
+     * Assignar/Obtenir la orientació del pla de la imatge, també anomenat direction cosines.
+     * Els valors són els vectors que formen el pla d'imatge.
+     * A partir d'aquests dos vectors, es calcula la normal del pla d'imatge
+     * @param orientation[] Els valors dels vectors que defineixen el pla d'imatge.
+     */
     void setImageOrientation( double orientation[6] );
+    void setImageOrientation( double xVector[3], double yVector[3] );
     const double *getImageOrientation() const;
 
-    /// Assignar/Obtenir l'orientació del pacient
+    /// Assignar/Obtenir l'string d'orientació del pacient
     void setPatientOrientation( QString orientation );
     QString getPatientOrientation() const;
 
@@ -127,8 +133,8 @@ private:
     /// Distància física entre el centre de cada píxel (row,column) en mm. Veure 10.7.1.3. (0028,0030) Tipus 1
     double m_pixelSpacing[2];
 
-    /// Orientació de la imatge. Els direction cosines de la primera fila i de la primera columna respecte al pacient. Veure C.6.7.2.1.1. (020,0037) Tipus 1
-    double m_imageOrientation[6];
+    /// Orientació de la imatge. Els direction cosines de la primera fila(0,1,2) i de la primera columna(3,4,5) respecte al pacient. Veure C.6.7.2.1.1. (020,0037) Tipus 1. Adicionalment hi guardmem el vector normal del pla (6,7,8)
+    double m_imageOrientation[9];
 
     /// posició de la imatge. Les coordenades x,y,z la cantonada superior esquerre (primer pixel transmés) de la imatge, en mm. Veure C.6.7.2.1.1. (0020,0032) Tipus 1. \TODO aka origen?.
     double m_imagePosition[3];
