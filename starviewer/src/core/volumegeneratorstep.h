@@ -31,8 +31,7 @@ public:
     QString name() {  return "VolumeGeneratorStep";  }
 
 private:
-    /// Mètodes per processar la informació específica de pacient,series i imatge
-    void processPatient( Patient *patient );
+    /// Mètode per processar la informació específica de la serie
     void processSeries( Series *series );
 
 };
