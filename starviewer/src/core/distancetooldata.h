@@ -50,6 +50,9 @@ public:
     QString getDistanceText()
     { return( m_text ); }
     
+    ///Mètode per calcular el la distància entre els dos punts, per tant el text que contindrà la distància i la posició
+    void calculateDistance();
+    
 private:
     
     ///atributs corresponents als punts de la distància
@@ -61,9 +64,6 @@ private:
     
     ///atribut corresponent a la posició del text de la distància
     double m_textPosition[3];
-    
-    ///Mètode per calcular el la distància entre els dos punts, per tant el text que contindrà la distància i la posició
-    void calculateDistance();
     
 signals:
     
