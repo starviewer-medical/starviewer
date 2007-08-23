@@ -27,7 +27,13 @@ void PatientBrowserMenuBasicItem::setSerie( Series * serie )
 {
     m_serie = serie;
 
-    setText( tr(" Serie %1 ").arg( serie->getProtocolName().trimmed() ) );
+    setText( tr(" Serie %1: %2 %3 %4 %5")
+        .arg( serie->getSeriesNumber().trimmed() )
+        .arg( serie->getProtocolName().trimmed() )
+        .arg( serie->getDescription().trimmed() )
+        .arg( serie->getBodyPartExamined() )
+        .arg( serie->getViewPosition() )
+        );
 }
 
 Series *  PatientBrowserMenuBasicItem::getSerie()
