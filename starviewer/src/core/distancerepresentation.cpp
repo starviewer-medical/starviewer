@@ -16,6 +16,8 @@ DistanceRepresentation::DistanceRepresentation( DistanceToolData *dtd ) : Repres
     m_line = new Line( dtd->getFirstPoint(), dtd->getSecondPoint() );
     m_text = new Text( dtd->getTextPosition(), dtd->getDistanceText() );
     
+    m_distanceToolData = dtd;
+    
     //creem les connexions entre aquest objecte i els seu atribut DistanceToolData
     connect( m_distanceToolData, SIGNAL( firstPointChanged() ), this , SLOT( updateFirstPointLine() ) );
     connect( m_distanceToolData, SIGNAL( secondPointChanged() ), this , SLOT( updateSecondPointLine() ) );
@@ -61,15 +63,18 @@ DistanceToolData* DistanceRepresentation::getDistanceToolData()
 void DistanceRepresentation::updateFirstPointLine()
 {
     m_line->setFirstPoint( m_distanceToolData->getFirstPoint() );
-    m_text->setText( m_distanceToolData->getDistanceText() );
-    m_text->setAttatchmentPoint( m_distanceToolData->getTextPosition() );
 }
 
 void DistanceRepresentation::updateSecondPointLine()
 {
     m_line->setSecondPoint( m_distanceToolData->getSecondPoint() );
+}
+
+void DistanceRepresentation::calculateTextAndPositionOfDistance()
+{
+    m_distanceToolData->calculateDistance();
     m_text->setText( m_distanceToolData->getDistanceText() );
-    m_text->setAttatchmentPoint( m_distanceToolData->getTextPosition() );
+    m_text->setAttatchmentPoint( m_distanceToolData->getTextPosition() );    
 }
 
 };  // end namespace udg

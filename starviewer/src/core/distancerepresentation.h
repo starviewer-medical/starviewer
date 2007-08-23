@@ -9,11 +9,11 @@
 
 #include "representation.h"
 #include <QString>
+#include "line.h"
+#include "text.h"
 
 namespace udg {
 
-class Text;
-class Line;
 class DistanceToolData;
 
 /**
@@ -52,6 +52,16 @@ public:
     
     ///ens retorna l'atribut de tipus DistanceToolData
     DistanceToolData* getDistanceToolData();
+    
+    ///permet avisar per tal de refrescar la línia
+    void refreshLine()
+    { m_line->refreshLine(); }
+    
+    ///permet avisar per tal de refrescar el text
+    void refreshText(){}
+    
+    ///fa que l'atribut DistanceToolData calculi el text de la distància i la posició del mateix
+    void calculateTextAndPositionOfDistance();
     
 private:
     

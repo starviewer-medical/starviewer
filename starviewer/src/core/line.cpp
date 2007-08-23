@@ -18,8 +18,12 @@ Line::Line() : DrawingPrimitive()
 
 Line::Line( double point1[3], double point2[3] ) : DrawingPrimitive()
 {
-    setFirstPoint( point1 );
-    setSecondPoint( point2 );
+    for ( int i = 0; i < 3; i++ )
+    {
+        m_firstPoint[i] = point1[i];
+        m_secondPoint[i] = point2[i];
+    }
+    
     setWidth( 1. );
     discontinuousOff();
 }
@@ -37,6 +41,11 @@ void Line::setSecondPoint( double point[3] )
 {
     for ( int i = 0; i < 3; i++ )
         m_secondPoint[i] = point[i];
+}
+
+void Line::refreshLine()
+{
+    emit  lineChanged( this );
 }
     
 };  // end namespace udg
