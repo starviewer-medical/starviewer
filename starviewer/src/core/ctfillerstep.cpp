@@ -15,7 +15,7 @@ namespace udg {
 CTFillerStep::CTFillerStep()
  : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
+    m_requiredLabelsList << "DICOMFileClassifierFillerStep" << "ImageFillerStep";
 }
 
 CTFillerStep::~CTFillerStep()
@@ -28,31 +28,19 @@ bool CTFillerStep::fill()
     // processarem cadascun dels pacients que hi hagi en l'input i per cadascun totes les sèries que siguin CT
     if( m_input )
     {
-        unsigned int i = 0;
-        while( i < m_input->getNumberOfPatients() )
+        QStringList requiredLabels;
+        requiredLabels << "ImageFillerStep";
+        QList<Series *> seriesToProcess = m_input->getSeriesWithLabels( requiredLabels );
+        foreach( Series *series, seriesToProcess )
         {
-            Patient *patient = m_input->getPatient( i );
-            this->processPatient( patient );
-            i++;
+            processSeries( series );
         }
+        ok = true;
     }
     else
         DEBUG_LOG("No tenim input!");
 
     return ok;
-}
-
-void CTFillerStep::processPatient( Patient *patient )
-{
-    QList<Study *> studyList = patient->getStudies();
-    foreach( Study *study, studyList )
-    {
-        QList<Series *> seriesList = study->getSeries();
-        foreach( Series *series, seriesList )
-        {
-            this->processSeries( series );
-        }
-    }
 }
 
 void CTFillerStep::processSeries( Series *series )
