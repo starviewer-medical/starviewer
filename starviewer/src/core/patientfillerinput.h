@@ -52,7 +52,10 @@ public:
     void addLabel( QString label );
     void addLabelToSeries( QString label, Series *series );
 
-    /// Obtenim les etiquetes a nivell global/Series
+    /**
+     * Obtenim totes les etiquetes que s'han aplicat fins al moment, tant a nivell global com a nivell de sèries
+     * @return Una llista composada per les etiquetes globals i de series
+     */
     QStringList getLabels() const;
 
     /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
@@ -71,6 +74,10 @@ private:
     /// Llista d'etiquetes assignades a nivell global
     QStringList m_globalLabels;
 
+    /// Llista que té totes les labels aplicades sense repeticions de labels globals i de series.
+    /// Aquesta variable la tenim per ser més àgils en el getLabels per ser una mica més ràpids.
+    QStringList m_allLabels;
+    
     /// Llista d'etiquetes assignades a nivell de sèries. Per cada Series tenim vàries etiquetes
     QMultiMap<Series *, QString> m_seriesLabels;
 };
