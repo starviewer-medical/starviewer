@@ -1185,7 +1185,7 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     SeriesList seriesList;
     DICOMSeries series;
     ImageList imageList;
-    QString absSeriesPath;
+    QString absoluteSeriesPath;
     StarviewerSettings settings;
     StudyVolum volume;
 
@@ -1294,12 +1294,11 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
         SeriesVolum seriesVol;
         series = seriesList.getSeries();
 
-        absSeriesPath = settings.getCacheImagePath();
-        absSeriesPath += series.getSeriesPath();
+        absoluteSeriesPath = settings.getCacheImagePath() + study.getStudyUID() + "/" + series.getSeriesUID() + "/";
         seriesVol.setSeriesUID( series.getSeriesUID() );
         seriesVol.setStudyId( study.getStudyId() );
         seriesVol.setStudyUID( study.getStudyUID() );
-        seriesVol.setSeriesPath( absSeriesPath );
+        seriesVol.setSeriesPath( absoluteSeriesPath );
         seriesVol.setSeriesModality( series.getSeriesModality() );
 
         // omplim la nova estructura
@@ -1323,7 +1322,7 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
 //         patientSeries->setPositionReferenceIndicator( series.getSeriesPositionReferenceIndicator() );
 
         // TODO el thumbnail s'hauria de crear d'alguna altre manera, això es temporal
-        patientSeries->setThumbnail( QPixmap( absSeriesPath + "scaled.pgm" ) );
+        patientSeries->setThumbnail( QPixmap( absoluteSeriesPath + "scaled.pgm" ) );
 
         patientStudy->addSeries( patientSeries );
 
