@@ -134,12 +134,8 @@ bool StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath, D
         serie.setSeriesTime( dicomFile.getAttributeByName(DCM_SeriesTime) );
         serie.setSeriesDate( dicomFile.getAttributeByName(DCM_SeriesDate) );
 
-        //calculem el path de la serie
-        QString seriesPath;
-        seriesPath  = dicomFile.getAttributeByName(DCM_StudyID) + "/";
-        seriesPath += dicomFile.getAttributeByName(DCM_SeriesInstanceUID) + "/";
-
-        serie.setSeriesPath(seriesPath);
+        //calculem el path de la serie que es crea a partir de l'StudyInstanceUID+SeriesInstanceUID
+        serie.setSeriesPath( dicomFile.getAttributeByName(DCM_StudyInstanceUID) + "/" + dicomFile.getAttributeByName(DCM_SeriesInstanceUID) + "/" );
 
         return true;
     }
