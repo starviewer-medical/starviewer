@@ -110,18 +110,26 @@ void PatientFillerInput::removeFile( QString filename )
 void PatientFillerInput::addLabel( QString label )
 {
     if( !m_globalLabels.contains(label) )
+    {
         m_globalLabels << label;
+        m_allLabels << label; // afegim a la llista de tots també
+    }
+    
 }
 
 void PatientFillerInput::addLabelToSeries( QString label, Series *series )
 {
     if( !m_seriesLabels.values( series ).contains( label ) )
         m_seriesLabels.insert( series, label );
+
+    // aquí ho separem perquè podria ser que la serie que especifiquem no tingui aquella label i una altre sí i s'hagi afegit ja abans
+    if( !m_allLabels.contains(label) )
+        m_allLabels << label;
 }
 
 QStringList PatientFillerInput::getLabels() const
 {
-    return m_globalLabels;
+    return m_allLabels;
 }
 
 bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
