@@ -61,6 +61,18 @@ public:
     void setHeight( double height );
     double getHeight() const;
 
+    /**
+     * Retorna les modalitats que conté l'estudi.
+     * @return la llista de modalitats en un string delimitades pel caràcter '/'
+     */
+    QString getModalitiesAsSingleString() const;
+
+    /**
+     * Retorna les modalitats que conté l'estudi. 
+     * @return una llista d'strings
+     */
+    QStringList getModalities() const;
+    
     /// Assignar/Obtenir la data i hora d'adquisició de l'estudi. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
     ///  Retorna fals si hi ha algun error en el format
@@ -126,6 +138,9 @@ private:
     /// Identificador únic de l'estudi. (0020,000D) Tipus 1.
     QString m_studyInstanceUID;
 
+    /// Llista de les modalitats de l'estudi
+    QStringList m_modalities;
+    
     /// Data i hora en que l'estudi va començar. (0008,0020),(0008,0030) Tipus 2.
     QDate m_date;
     QTime m_time;

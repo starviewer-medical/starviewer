@@ -27,9 +27,19 @@ void Series::setInstanceUID( QString uid )
     m_seriesInstanceUID = uid;
 }
 
+QString Series::getInstanceUID() const
+{
+    return m_seriesInstanceUID;
+}
+
 void Series::setParentStudy( Study *study )
 {
     m_parentStudy = study;
+}
+
+Study *Series::getParentStudy() const
+{
+    return m_parentStudy;
 }
 
 bool Series::addImage( Image *image )
@@ -75,6 +85,11 @@ bool Series::imageExists( QString sopInstanceUID )
 QList<Image *> Series::getImages() const
 {
     return m_imageSet;
+}
+
+int Series::getNumberOfImages()
+{
+    return m_imageSet.size();
 }
 
 bool Series::hasImages() const
@@ -263,6 +278,26 @@ QString Series::getInstitutionName() const
     return m_institutionName;
 }
 
+void Series::setBodyPartExamined( QString bodyPart )
+{
+    m_bodyPartExamined = bodyPart;
+}
+
+QString Series::getBodyPartExamined() const
+{
+    return m_bodyPartExamined;
+}
+
+void Series::setViewPosition( QString viewPosition )
+{
+    m_viewPosition = viewPosition;
+}
+
+QString Series::getViewPosition() const
+{
+    return m_viewPosition;
+}
+    
 void Series::setVolumeIdentifier( Identifier id )
 {
     m_volumeID = id;

@@ -36,31 +36,7 @@ public:
 
     /// Assignar/Obtenir l'identificador universal de la sèrie
     void setInstanceUID( QString uid );
-    QString getInstanceUID() const { return m_seriesInstanceUID; };
-
-    /// assigna l'estudi pare de la sèrie
-    void setParentStudy( Study *study );
-    Study *getParentStudy() const { return m_parentStudy; }
-
-    /// afegeix un objecte imatge a la sèrie i li assigna com a parent aquest objecte series.
-    /// Si la imatge ja existeix al conjunt retorna fals, cert altrament
-    bool addImage( Image *image );
-
-    /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
-    Image *getImage( QString SOPInstanceUID );
-
-    /**
-     * Ens diu si existeix una imatge amb aquest sopInstanceUID a la llista
-     * @param sopInstanceUID l'uid que busquem
-     * @return Cert si existeix, fals altrament
-     */
-    bool imageExists( QString sopInstanceUID );
-
-    /// Retorna una llista de totes les imatges de la sèrie
-    QList<Image *> getImages() const;
-
-    /// Indica si una sèrie té imatges
-    bool hasImages() const;
+    QString getInstanceUID() const;
 
     /// Assignar/Obtenir la modalitat de la sèrie
     void setModality( QString modality );
@@ -89,11 +65,7 @@ public:
     /// Assignar/Obtenir el protocol de la sèrie
     void setProtocolName( QString protocolName );
     QString getProtocolName() const;
-
-    /// Assignar/Obtenir el path de les imatges de la sèrie
-    void setImagesPath( QString imagesPath );
-    QString getImagesPath() const;
-
+    
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
     ///  Retorna fals si hi ha algun error en el format
@@ -114,11 +86,18 @@ public:
     void setInstitutionName( QString institutionName );
     QString getInstitutionName() const;
 
-    /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie
-    //\TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
-    void setVolumeIdentifier( Identifier id );
-    Identifier getVolumeIdentifier() const;
+    /**
+     * Assigna/Retorna la part del cos examinada
+     */
+    void setBodyPartExamined( QString bodyPart );
+    QString getBodyPartExamined() const;
 
+    /**
+     * Assigna/Retorna la vista radiogràfica associada amb la posició del pacient
+     */
+    void setViewPosition( QString viewPosition );
+    QString getViewPosition() const;
+    
     /// Assignar/Obtenir el número de fases
     void setNumberOfPhases( int phases );
     int getNumberOfPhases() const;
@@ -126,6 +105,45 @@ public:
     /// Assignar/Obtenir el número de llesques per fases
     void setNumberOfSlicesPerPhase( int slices );
     int getNumberOfSlicesPerPhase() const;
+
+    /// assigna l'estudi pare de la sèrie
+    void setParentStudy( Study *study );
+    Study *getParentStudy() const;
+
+    /// afegeix un objecte imatge a la sèrie i li assigna com a parent aquest objecte series.
+    /// Si la imatge ja existeix al conjunt retorna fals, cert altrament
+    bool addImage( Image *image );
+
+    /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
+    Image *getImage( QString SOPInstanceUID );
+
+    /**
+     * Ens diu si existeix una imatge amb aquest sopInstanceUID a la llista
+     * @param sopInstanceUID l'uid que busquem
+     * @return Cert si existeix, fals altrament
+     */
+    bool imageExists( QString sopInstanceUID );
+
+    /// Retorna una llista de totes les imatges de la sèrie
+    QList<Image *> getImages() const;
+
+    /**
+     * Ens diu quantes imatges té aquesta sèrie
+     * @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
+     */
+    int getNumberOfImages();
+    
+    /// Indica si una sèrie té imatges
+    bool hasImages() const;
+
+    /// Assignar/Obtenir el path de les imatges de la sèrie
+    void setImagesPath( QString imagesPath );
+    QString getImagesPath() const;
+
+    /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie
+    //\TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
+    void setVolumeIdentifier( Identifier id );
+    Identifier getVolumeIdentifier() const;
 
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
@@ -248,6 +266,12 @@ private:
 
     /// Número de fases i número de llesques per fase per poder tractar sèries dinàmiques
     int m_numberOfPhases, m_numberOfSlicesPerPhase;
+
+    /// Part del cos examinada. (0018,015). Tipus 2/3, segons modalitat
+    QString m_bodyPartExamined;
+
+    /// Vista radiogràfica associada amb la posició del pacient[(0018,5101)]. (0018,5101). Tipus 2/3, segons modalitat
+    QString m_viewPosition;
 };
 
 }

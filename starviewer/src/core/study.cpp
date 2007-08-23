@@ -101,6 +101,16 @@ double Study::getHeight() const
     return m_height;
 }
 
+QString Study::getModalitiesAsSingleString() const
+{
+    return m_modalities.join("/");
+}
+    
+QStringList Study::getModalities() const
+{
+    return m_modalities;
+}
+
 bool Study::setDateTime( int day , int month , int year , int hour , int minute, int second )
 {
     return this->setDate( day, month, year ) && this->setTime( hour, minute, second );
@@ -288,6 +298,9 @@ void Study::insertSeries( Series *series )
     {
         i++;
     }
+    if( !m_modalities.contains( series->getModality() ) )
+        m_modalities << series->getModality();
+        
     m_seriesSet.insert( i, series );
 }
 
