@@ -23,21 +23,18 @@ PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent ) : QWidget(par
     setWindowFlags(Qt::Popup);
 }
 
-
 PatientBrowserMenuList::~PatientBrowserMenuList()
 {
 }
 
 void PatientBrowserMenuList::setPatient( Patient * patient )
 {
-
-    DEBUG_LOG("Inici mètode setPatient");
-
     QWidget * studyWidget;
     Study * study;
     int numberStudy;
     QList< Study* > studies = patient->getStudies();
 
+    //TODO aquesta informació no es veu, ja que al ser un frame no té la barra de títol
     this->setWindowTitle( patient->getFullName() );
 
     QVBoxLayout *verticalLayout = new QVBoxLayout;
@@ -57,7 +54,12 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     QWidget * studyWidget = new QWidget( parent );
 
     QLabel *studyText = new QLabel(studyWidget);
-    studyText->setText(tr("Study %1 %2").arg( study->getDateAsString() ).arg( study->getDescription() ));
+    studyText->setText( tr("Study %1 : %2 [%3] %4")
+            .arg( study->getDateAsString() )
+            .arg( study->getTimeAsString() )
+            .arg( study->getModalitiesAsSingleString() )
+            .arg( study->getDescription() )
+        );
     studyText->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     studyText->setFrameShape(QFrame::StyledPanel);
     // TODO Hi ha un bug en les Qt 4.2 que fa que els border-radius no retallin el fons, per això fem la xapussa de fer el primer

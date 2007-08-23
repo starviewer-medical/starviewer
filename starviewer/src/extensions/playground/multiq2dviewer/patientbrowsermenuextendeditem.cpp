@@ -35,9 +35,11 @@ void PatientBrowserMenuExtendedItem::createInitialWidget()
 
     QVBoxLayout * verticalLayout = new QVBoxLayout( this );
     m_icon = new QLabel( this );
+    m_icon->setAlignment( Qt::AlignCenter );
     verticalLayout->addWidget( m_icon );
 
     m_text = new QLabel( this );
+    m_text->setAlignment( Qt::AlignCenter );
     verticalLayout->addWidget( m_text );
 
     hide();
@@ -48,11 +50,12 @@ void PatientBrowserMenuExtendedItem::setSerie( Series *serie )
     m_serie = serie;
 
     m_icon->setPixmap( serie->getThumbnail() );
-    m_text->setText( QString( tr("%1 \n%2 \n%3")
+    m_text->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
                     .arg( m_serie->getDescription().trimmed() )
                     .arg( serie->getModality().trimmed() )
                     .arg( serie->getProtocolName().trimmed() )
-                    ) );
+                    .arg( serie->getNumberOfImages() )
+                    );
     m_text->show();
     m_icon->show();
 }
