@@ -33,9 +33,6 @@ public:
     QString name() {  return "CTFillerStep";  }
 
 private:
-    /// Donat un pacient, processa la seva informació
-    void processPatient( Patient *patient );
-
     /// Donada una serie, processa la seva informació si es tracta d'un CT
     void processSeries( Series *series );
 };
