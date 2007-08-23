@@ -64,8 +64,12 @@ public:
     bool isDiscontinuous()
     { return m_discontinuousPrimitive; }
     
+    ///ens retorna el tipus de primitiva que és
     QString getPrimitiveType()
     { return( "Line" ); }
+    
+    ///ens emet el senyal per que es refresqui la línia
+    void refreshLine();
     
 private:
     
@@ -77,8 +81,11 @@ private:
     
     ///determina si la primitiva es dibuixa discontínua o no.
     bool m_discontinuousPrimitive;
-
-
+    
+signals:
+        
+    ///s'emet quan canvia un dels atributs de la línia
+    void lineChanged( Line *line );
 };
 
 };  //  end  namespace udg
