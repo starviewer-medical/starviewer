@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QList>
 
 namespace udg {
 
@@ -107,6 +108,22 @@ public:
     void setPath( QString path );
     QString getPath() const;
 
+    /// afegeix un objecte imatge a la imatge
+    void addReferencedImage( Image *image );
+
+    /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
+    Image *getReferencedImage( QString SOPInstanceUID );
+
+    /// Retorna una llista de totes les imatges relacionades amb la imatge
+    QList<Image *> getReferencedImages();
+
+    /// Indica si una imatge té imatges relacionades
+    bool hasReferencedImages() const;
+
+    /// Ens indica si aquesta imatge és un localitzador sempre que la modalitat sigui CT
+    void setCTLocalizer( bool localizer );
+    bool isCTLocalizer() const;
+
 private:
     /// Atributs DICOM
 
@@ -176,6 +193,12 @@ private:
 
     /// La sèrie pare
     Series *m_parentSeries;
+
+    /// Llista de les imatges relacionades amb l'actual. Estan ordenades amb el mateix ordre que estan al DICOM
+    QList<Image *> m_referencedImageSequence;
+
+    /// Ens indica si aquesta imatge és un localitzador sempre que la modalitat sigui CT
+    bool m_CTLocalizer;
 };
 
 }
