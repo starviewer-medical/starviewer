@@ -66,6 +66,22 @@ public slots:
     void setPatient( Patient *patient );
     Patient* getPatient() const;
 
+private slots:
+    /// activem o desactivem el presentation state
+    void enablePresentationState( bool enable );
+
+    /// posem el widget seleccionat com a actual
+    void setViewerSelected( Q2DViewerWidget * viewer );
+
+    /// Slots per canviar rotacions al widget seleccionat
+    void rotateClockWise();
+    void rotateCounterClockWise();
+    void setVoxelInformationCaptionEnabled(bool option);
+    void horizontalFlip();
+    void verticalFlip();
+    void setWindowLevel(double wl1 ,double wl2);
+    void resetWindowLevelToDefault();
+
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
@@ -73,6 +89,26 @@ private:
     /// canvia la vista actual
     void setView( ViewType view );
 
+    /// Inicialitza els layouts
+    void initLayouts();
+
+    /// Update del nombre de layouts
+    void updateLayouts();
+
+    /// Creació del menú del botó dret
+    void createMenu();
+
+    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
+    void createActions();
+
+    /// Crea les connexions entre signals i slots
+    void createConnections();
+
+    /// Llegir/Escriure la configuració de l'aplicació
+    void readSettings();
+    void writeSettings();
+
+private:
     /// La vista actual amb la que estem treballant
     ViewType m_currentView;
 
@@ -126,25 +162,6 @@ private:
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;
 
-    /// Inicialitza els layouts
-    void initLayouts();
-
-    /// Update del nombre de layouts
-    void updateLayouts();
-
-    /// Creació del menú del botó dret
-    void createMenu();
-
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
-    void createActions();
-
-    /// Crea les connexions entre signals i slots
-    void createConnections();
-
-    /// Llegir/Escriure la configuració de l'aplicació
-    void readSettings();
-    void writeSettings();
-
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
@@ -156,22 +173,6 @@ private:
 
     /// Patient principal
     Patient* m_patient;
-
-private slots:
-    /// activem o desactivem el presentation state
-    void enablePresentationState( bool enable );
-
-    /// posem el widget seleccionat com a actual
-    void setViewerSelected( Q2DViewerWidget * viewer );
-
-    /// Slots per canviar rotacions al widget seleccionat
-    void rotateClockWise();
-    void rotateCounterClockWise();
-    void setVoxelInformationCaptionEnabled(bool option);
-    void horizontalFlip();
-    void verticalFlip();
-    void setWindowLevel(double wl1 ,double wl2);
-    void resetWindowLevelToDefault();
 };
 
 } // end namespace udg
