@@ -96,7 +96,8 @@ HEADERS += extensionfactory.h \
            itkgdcmdicomimagereader.h \
            vtkdicomimagereader.h \
            dcmtkdicomimagereader.h \
-           volumegeneratorstep.h
+           volumegeneratorstep.h \
+           referencelinesfillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -177,7 +178,8 @@ SOURCES += extensionmediator.cpp \
            itkgdcmdicomimagereader.cpp \
            vtkdicomimagereader.cpp \
            dcmtkdicomimagereader.cpp \
-           volumegeneratorstep.cpp
+           volumegeneratorstep.cpp \
+           referencelinesfillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
