@@ -20,6 +20,7 @@ TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 : PatientFillerStep()
 {
     m_requiredLabelsList << "DICOMFileClassifierFillerStep";
+    m_requiredLabelsList << "ImageFillerStep";
 }
 
 TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
@@ -29,15 +30,14 @@ TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
 bool TemporalDimensionFillerStep::fill()
 {
     bool ok = false;
-    // processarem cadascun dels pacients que hi hagi en l'input i per cadascun totes les sèries que siguin de tipus imatge
     if( m_input )
     {
-        unsigned int i = 0;
-        while( i < m_input->getNumberOfPatients() )
+        QStringList requiredLabels;
+        requiredLabels << "ImageFillerStep";
+        QList<Series *> seriesList = m_input->getSeriesWithLabels( requiredLabels );
+        foreach( Series *series, seriesList )
         {
-            Patient *patient = m_input->getPatient( i );
-            this->processPatient( patient );
-            i++;
+            this->processSeries( series );
         }
     }
     else
@@ -48,61 +48,43 @@ bool TemporalDimensionFillerStep::fill()
     return ok;
 }
 
-void TemporalDimensionFillerStep::processPatient( Patient *patient )
-{
-    QList<Study *> studyList = patient->getStudies();
-    foreach( Study *study, studyList )
-    {
-        QList<Series *> seriesList = study->getSeries();
-        foreach( Series *series, seriesList )
-        {
-            this->processSeries( series );
-        }
-    }
-}
-
 void TemporalDimensionFillerStep::processSeries( Series *series )
 {
-    if( isImageSeries(series) )
+    bool found = false;
+    int phases = 1;
+    int slices = 0;
+    QStringList list = series->getFilesPathList();
+    DICOMTagReader dicomReader( list[0] );
+    QString sliceLocation = dicomReader.getAttributeByName( DCM_SliceLocation );
+
+    while ( !found && phases < list.count() )
     {
-        bool found = false;
-        int phases = 1;
-        int slices = 0;
-        QStringList list = series->getFilesPathList();
-        DICOMTagReader dicomReader( list[0] );
-        QString sliceLocation = dicomReader.getAttributeByName( DCM_SliceLocation );
-
-        while ( !found && phases < list.count() )
+        dicomReader.setFile( list[phases] );
+        if ( sliceLocation == dicomReader.getAttributeByName( DCM_SliceLocation ) )
         {
-            dicomReader.setFile( list[phases] );
-            if ( sliceLocation == dicomReader.getAttributeByName( DCM_SliceLocation ) )
-            {
-                phases++;
-            }
-            else
-            {
-                found = true;
-            }
-        }
-
-        slices = list.count() / phases;
-
-        series->setNumberOfPhases( phases );
-        series->setNumberOfSlicesPerPhase( slices );
-        if ( phases > 1 ) // és dinàmic
-        {
-            m_input->addLabelToSeries("TemporalDimensionFillerStep", series );
-            DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " és dinàmica." );
+            phases++;
         }
         else
         {
-            DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica." );
+            found = true;
         }
+    }
+
+    slices = list.count() / phases;
+
+    series->setNumberOfPhases( phases );
+    series->setNumberOfSlicesPerPhase( slices );
+
+    if ( phases > 1 ) // és dinàmic
+    {
+        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " és dinàmica." );
     }
     else
     {
-        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no es processa perquè no és una sèrie d'Imatges. És de modalitat: " + series->getModality() );
+        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica." );
     }
+
+    m_input->addLabelToSeries("TemporalDimensionFillerStep", series );
 }
 
 }

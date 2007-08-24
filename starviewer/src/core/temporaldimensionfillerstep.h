@@ -32,8 +32,7 @@ public:
     QString name() {  return "TemporalDimensionFillerStep";  }
 
 private:
-/// Mètodes per processar la informació específica de pacient i series
-    void processPatient( Patient *patient );
+    /// Mètodes per processar la informació específica de series
     void processSeries( Series *series );
 };
 
