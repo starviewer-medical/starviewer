@@ -251,14 +251,14 @@ void MultiQ2DViewerExtension::initLayouts()
     m_workingArea->setLayout(m_gridLayout);
 
     m_selectedViewer->setFrameShape( QFrame::Box );
-
-    connect( m_viewer->m_2DView , SIGNAL( showContextMenu( QPoint) ) , this , SLOT( showMenu( QPoint ) ) );
 }
 
 void MultiQ2DViewerExtension::createMenu()
 {
-    m_patientMenu = new PatientBrowserMenu();
+    m_patientMenu = new PatientBrowserMenu(this);
     m_patientMenu->setPatient( m_patient );
+
+    connect(m_viewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
 }
 
 void MultiQ2DViewerExtension::setInput( Volume *input )
@@ -403,7 +403,7 @@ void MultiQ2DViewerExtension::addColumns( int columns )
             (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
             connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
             connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-            connect( newViewer->m_2DView , SIGNAL( showContextMenu( QPoint) ) , this , SLOT( showMenu( QPoint ) ) );
+            connect(newViewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
             (*it)->addWidget(newViewer);
             m_vectorViewers.insert(posViewer,newViewer);
             posViewer += m_columns;
@@ -433,7 +433,7 @@ void MultiQ2DViewerExtension::addRows( int rows )
             (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
             connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
             connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-            connect( newViewer->m_2DView , SIGNAL( showContextMenu( QPoint) ) , this , SLOT( showMenu( QPoint ) ) );
+            connect(newViewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
             horizontal->addWidget(newViewer);
             m_vectorViewers.push_back(newViewer);
         }
@@ -537,11 +537,6 @@ void MultiQ2DViewerExtension::setWindowLevel(double wl1 ,double wl2)
 void MultiQ2DViewerExtension::resetWindowLevelToDefault()
 {
     (m_selectedViewer->m_2DView)->resetWindowLevelToDefault();
-}
-
-void MultiQ2DViewerExtension::showMenu( QPoint point )
-{
-    m_patientMenu->setPosition( point );
 }
 
 Patient* MultiQ2DViewerExtension::getPatient() const

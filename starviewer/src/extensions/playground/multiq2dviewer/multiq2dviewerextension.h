@@ -63,9 +63,6 @@ public slots:
     /// Mostrar el menu de la taula per seleccionar grids
     void showInteractiveTable();
 
-    /// Mètode que mostra el menu amb el botó dret
-    void showMenu( QPoint point );
-
     void setPatient( Patient *patient );
     Patient* getPatient() const;
 

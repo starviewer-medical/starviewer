@@ -46,7 +46,7 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     if ( event->type() == QEvent::Enter )
     {
         setStyleSheet("background-color: rgba(85, 160, 255, 128);");
-        emit isActive( this->geometry().y(), m_serie );
+        emit isActive(m_serie);
     }
     else if ( event->type() == QEvent::MouseButtonPress )
     {

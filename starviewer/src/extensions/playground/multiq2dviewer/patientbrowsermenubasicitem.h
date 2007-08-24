@@ -33,24 +33,23 @@ public:
     /// Obtenim la serie que es representa
     Series *  getSerie();
 
-protected:
-
-    /// Sobrecàrrega del mètode que tracta tots els events
-    bool event( QEvent * event);
-
-    /// Serie que representa l'item
-    Series * m_serie;
-
 signals:
-
     /// Aquest senyal s'emetrà quan el mouse entri al widget
-    void isActive( int, Series * );
+    void isActive(Series*);
 
-    /// Aquest senyal s'emetrà quan el mouse entri al widget
+    /// Aquest senyal s'emetrà quan el mouse surti del widget
     void isNotActive();
 
     /// Aquest senyal s'emet quan s'escull una serie de l'item
     void selectedSerie( Series * );
+
+protected:
+    /// Sobrecàrrega del mètode que tracta tots els events
+    bool event( QEvent * event);
+
+private:
+    /// Serie que representa l'item
+    Series * m_serie;
 };
 
 }
