@@ -8,21 +8,24 @@
 
 #include <QVBoxLayout>
 #include <QPixmap>
-#include <logging.h>
+#include <QPainter>
+
+#include "logging.h"
 
 namespace udg {
 
-PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem( QFrame *parent )
+PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem(QWidget *parent)
 : QFrame(parent)
 {
+    m_series = 0;
     createInitialWidget();
 }
 
-PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem( Series * serie, QFrame *parent )
+PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem(Series * series, QWidget *parent)
 : QFrame(parent)
 {
-    setSerie( serie );
     createInitialWidget();
+    setSeries( series );
 }
 
 PatientBrowserMenuExtendedItem::~PatientBrowserMenuExtendedItem()
@@ -31,39 +34,41 @@ PatientBrowserMenuExtendedItem::~PatientBrowserMenuExtendedItem()
 
 void PatientBrowserMenuExtendedItem::createInitialWidget()
 {
-    setWindowFlags(Qt::ToolTip);
-
     QVBoxLayout * verticalLayout = new QVBoxLayout( this );
     m_icon = new QLabel( this );
+    m_icon->setPixmap( this->makeEmptyThumbnail() );
     m_icon->setAlignment( Qt::AlignCenter );
     verticalLayout->addWidget( m_icon );
 
     m_text = new QLabel( this );
+    m_text->setText(tr("No Series Selected"));
     m_text->setAlignment( Qt::AlignCenter );
     verticalLayout->addWidget( m_text );
-
-    hide();
 }
 
-void PatientBrowserMenuExtendedItem::setSerie( Series *serie )
+void PatientBrowserMenuExtendedItem::setSeries( Series *series )
 {
-    m_serie = serie;
+    m_series = series;
 
-    m_icon->setPixmap( serie->getThumbnail() );
+    m_icon->setPixmap( series->getThumbnail() );
     m_text->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
-                    .arg( m_serie->getDescription().trimmed() )
-                    .arg( serie->getModality().trimmed() )
-                    .arg( serie->getProtocolName().trimmed() )
-                    .arg( serie->getNumberOfImages() )
+                    .arg( series->getDescription().trimmed() )
+                    .arg( series->getModality().trimmed() )
+                    .arg( series->getProtocolName().trimmed() )
+                    .arg( series->getNumberOfImages() )
                     );
-    m_text->show();
-    m_icon->show();
 }
 
-void PatientBrowserMenuExtendedItem::showSerie( int y , Series * serie )
+QPixmap PatientBrowserMenuExtendedItem::makeEmptyThumbnail()
 {
-    setSerie( serie );
-    emit setPosition( this, y );
+    QPixmap pixmap(100,100);
+    pixmap.fill(Qt::black);
+
+    QPainter painter(&pixmap);
+    painter.setPen(Qt::white);
+    painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, tr("No Series Selected"));
+
+    return pixmap;
 }
 
 }

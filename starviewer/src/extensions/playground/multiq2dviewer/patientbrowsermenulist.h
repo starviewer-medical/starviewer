@@ -43,7 +43,7 @@ private:
 signals:
 
     /// Senyal que s'emet quan el mouse entra en el widget que representa a una serie
-    void isActive( int, Series * );
+    void isActive(Series*);
 
     /// Senyal que s'emet quan no hi ha cap serie activada
     void isNotActive();

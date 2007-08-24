@@ -20,7 +20,6 @@ namespace udg {
 
 PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent ) : QWidget(parent)
 {
-    setWindowFlags(Qt::Popup);
 }
 
 PatientBrowserMenuList::~PatientBrowserMenuList()
@@ -29,23 +28,18 @@ PatientBrowserMenuList::~PatientBrowserMenuList()
 
 void PatientBrowserMenuList::setPatient( Patient * patient )
 {
-    QWidget * studyWidget;
-    Study * study;
-    int numberStudy;
-    QList< Study* > studies = patient->getStudies();
-
-    //TODO aquesta informació no es veu, ja que al ser un frame no té la barra de títol
-    this->setWindowTitle( patient->getFullName() );
-
-    QVBoxLayout *verticalLayout = new QVBoxLayout;
-    verticalLayout->setMargin(0);
-    this->setLayout(verticalLayout);
-
-    for( numberStudy = 0; numberStudy < patient->getNumberOfStudies(); numberStudy++ )
+    if ( this->layout() )
     {
-        study = studies.value( numberStudy );
-        studyWidget = createStudyWidget( study, this );
-        verticalLayout->addWidget(studyWidget,numberStudy,0);
+        // Si ens canvien el pacient, ens carreguem els widgets de l'anterior
+        delete this->layout();
+    }
+
+    QVBoxLayout *verticalLayout = new QVBoxLayout(this);
+    verticalLayout->setMargin(0);
+
+    foreach (Study *study, patient->getStudies())
+    {
+        verticalLayout->addWidget( createStudyWidget(study, this) );
     }
 }
 
@@ -62,6 +56,7 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
         );
     studyText->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     studyText->setFrameShape(QFrame::StyledPanel);
+
     // TODO Hi ha un bug en les Qt 4.2 que fa que els border-radius no retallin el fons, per això fem la xapussa de fer el primer
     // gradient del color del fons i molt petit (dona una mica més sensació de rounded). Bug arreglat a les Qt 4.3
     // TODO En Qt 4.2 (sí en 4.3) no es suporta escollir un color de la palette, per tant, s'ha d'anar a buscar bucejant en la palette.
@@ -87,7 +82,7 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
         int column = 0;
         while ( column < maxColumns && !seriesToAdd.isEmpty())
         {
-            gridLayoutWidgets->addWidget( createSerieWidget( seriesToAdd.takeFirst(), studyWidget ), row, column );
+            gridLayoutWidgets->addWidget( createSerieWidget(seriesToAdd.takeFirst(), studyWidget), row, column );
             ++column;
         }
         ++row;
@@ -100,9 +95,10 @@ PatientBrowserMenuBasicItem* PatientBrowserMenuList::createSerieWidget( Series *
 {
     PatientBrowserMenuBasicItem * seriebasicWidget = new PatientBrowserMenuBasicItem( parent );
     seriebasicWidget->setSerie( serie );
+    seriebasicWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
     connect( seriebasicWidget , SIGNAL( selectedSerie( Series *) ) , this , SIGNAL( selectedSerie( Series * ) ) );
-    connect( seriebasicWidget , SIGNAL( isActive( int, Series *) ) , this , SIGNAL( isActive( int, Series *) ) );
+    connect( seriebasicWidget , SIGNAL( isActive(Series *) ) , this , SIGNAL( isActive(Series *) ) );
     connect( seriebasicWidget , SIGNAL( isNotActive() ) , this , SIGNAL( isNotActive() ) );
 
     return seriebasicWidget;

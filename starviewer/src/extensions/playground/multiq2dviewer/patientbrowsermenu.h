@@ -7,7 +7,7 @@
 #ifndef UDGPATIENTBROWERMENU_H
 #define UDGPATIENTBROWERMENU_H
 
-#include <QObject>
+#include <QWidget>
 
 class QPoint;
 
@@ -24,40 +24,36 @@ Classe que correspon al widget que es mostra al pulsar el botó dret del ratolí
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenu : public QObject
+class PatientBrowserMenu : public QWidget
 {
 Q_OBJECT
 public:
-    PatientBrowserMenu();
-    ~PatientBrowserMenu(){}
-
-    /// Assignem una posició al menú
-    void setPosition( const QPoint &point );
+    PatientBrowserMenu(QWidget *parent = 0);
+    ~PatientBrowserMenu();
 
     /// Assignem un pacient per representar al menu
     void setPatient( Patient * patient );
 
+public slots:
+    /// Fem que es mostri el menú en la posició indicada
+    void popup(const QPoint &point);
+
 signals:
     /// senyal que envia la serie escollida per ser visualitzada
     void selectedSeries( Series *series );
-    void selectedSeries( QString uid );
-
-public slots:
-    /// Slot per actualitzar la posició a on es mostrara la informació auxiliar
-    void showInformation( PatientBrowserMenuExtendedItem * extendedWidget , int y );
 
 protected:
-
-    /// Atribut que guarda el punter al menú basic que representa al pacient
-    PatientBrowserMenuList * m_patientBasicList;
-
-    /// Atribut que guarda el punter al menú amb informació addicional de la serie seleccionada
-    PatientBrowserMenuExtendedItem * m_patientExtendedWidget;
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private slots:
-
     void emitSelected( Series * serie );
 
+private:
+    /// Atribut que guarda el punter al menú basic que representa al pacient
+    PatientBrowserMenuList * m_patientBrowserList;
+
+    /// Atribut que guarda el punter al menú amb informació addicional de la serie seleccionada
+    PatientBrowserMenuExtendedItem * m_patientAdditionalInfo;
 };
 
 }
