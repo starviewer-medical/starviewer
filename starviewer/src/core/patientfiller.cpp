@@ -7,6 +7,7 @@
 #include "patientfiller.h"
 
 #include <QApplication>
+#include <QTime>
 
 #include "patientfillerinput.h"
 #include "logging.h"
@@ -95,9 +96,11 @@ void PatientFiller::registerSteps()
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
 {
+    QTime time;
     patientFillerStep->setInput(input);
-    DEBUG_LOG("Es fa un fill de " + patientFillerStep->name());
+    time.start();
     patientFillerStep->fill();
+    DEBUG_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
 }
 
 }
