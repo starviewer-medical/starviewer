@@ -76,7 +76,7 @@ Volume::~Volume()
 
 Volume::ItkImageTypePointer Volume::getItkData()
 {
-    m_vtkToItkFilter->SetInput( m_imageDataVTK );
+    m_vtkToItkFilter->SetInput( this->getVtkData() );
     try
     {
         m_vtkToItkFilter->GetImporter()->Update();
@@ -173,7 +173,7 @@ Volume *Volume::getSubVolume( int index  )
     vtkExtractVOI * extractedVolume = vtkExtractVOI::New();
     vtkImageChangeInformation * vtkChange = vtkImageChangeInformation::New();
 
-    extractedVolume->SetInput( m_imageDataVTK );
+    extractedVolume->SetInput( this->getVtkData() );
     extractedVolume->SetVOI( size[0] , size[1] , size[2] , size[3] , ( index * slices ) ,  ( ( index * slices ) + slices - 1 ) );
 
     vtkChange->SetInput( extractedVolume->GetOutput() );
