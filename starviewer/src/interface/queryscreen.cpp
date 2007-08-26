@@ -12,6 +12,8 @@
 #include <QDateTime>
 #include <QFileDialog>
 
+#include <QTimer>
+
 #include "processimagesingleton.h"
 #include "pacsparameters.h"
 #include "pacsconnection.h"
@@ -1311,6 +1313,7 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
         patientSeries->setInstanceUID( series.getSeriesUID() );
         patientSeries->setModality( series.getSeriesModality() );
         patientSeries->setSeriesNumber( series.getSeriesNumber()  );
+        DEBUG_LOG("Time: " + series.getSeriesTime() + "; Date: " + series.getSeriesDate());
         patientSeries->setDate( series.getSeriesDate() );
         patientSeries->setTime( series.getSeriesTime() );
         // TODO falten 4 atributs!
@@ -1377,8 +1380,13 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     {
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
+    QTime time;
+    time.start();
     emit viewPatient( fillerInput );
+    DEBUG_LOG( QString("viewPatient: %1 ").arg( time.elapsed() ));
+    time.restart();
     this->emitViewSignal(volume);
+    DEBUG_LOG( QString("emitViewSignal: %1 ").arg( time.elapsed() ));
 }
 
 void QueryScreen::importDicomdir()
