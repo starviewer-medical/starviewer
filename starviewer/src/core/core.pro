@@ -97,6 +97,10 @@ HEADERS += extensionfactory.h \
            vtkdicomimagereader.h \
            dcmtkdicomimagereader.h \
            volumegeneratorstep.h \
+           patientbrowsermenu.h \
+           patientbrowsermenubasicitem.h \
+           patientbrowsermenuextendeditem.h \
+           patientbrowsermenulist.h \
            referencelinesfillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -179,6 +183,10 @@ SOURCES += extensionmediator.cpp \
            vtkdicomimagereader.cpp \
            dcmtkdicomimagereader.cpp \
            volumegeneratorstep.cpp \
+           patientbrowsermenu.cpp \
+           patientbrowsermenubasicitem.cpp \
+           patientbrowsermenuextendeditem.cpp \
+           patientbrowsermenulist.cpp \
            referencelinesfillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \

@@ -26,6 +26,8 @@
 #include "extensionfactory.h"
 #include "extensionmediatorfactory.h"
 
+#include <QDebug>
+
 namespace udg{
 
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
@@ -376,6 +378,11 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
         }
     }
     return count;
+}
+
+QApplicationMainWindow* QApplicationMainWindow::getActiveApplicationMainWindow()
+{
+    return qobject_cast<QApplicationMainWindow*>( QApplication::activeWindow() );
 }
 
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)

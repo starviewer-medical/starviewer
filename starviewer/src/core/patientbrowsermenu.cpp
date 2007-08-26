@@ -35,6 +35,7 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
 
 PatientBrowserMenu::~PatientBrowserMenu()
 {
+    DEBUG_LOG("Em destrueixo!");
 }
 
 void PatientBrowserMenu::setPatient( Patient * patient )

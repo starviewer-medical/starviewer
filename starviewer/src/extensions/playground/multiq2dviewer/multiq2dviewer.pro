@@ -13,10 +13,6 @@ HEADERS += multiq2dviewerextensionmediator.h \
            patientitemmodel.h \
            patientitem.h \
            interactivewidget.h \
-           patientbrowsermenu.h \
-           patientbrowsermenubasicitem.h \
-           patientbrowsermenuextendeditem.h \
-           patientbrowsermenulist.h \
            gridicon.h \
            menugridwidget.h \
            itemmenu.h \
@@ -27,10 +23,6 @@ SOURCES += multiq2dviewerextensionmediator.cpp \
            patientitemmodel.cpp \
            patientitem.cpp \
            interactivewidget.cpp \
-           patientbrowsermenu.cpp \
-           patientbrowsermenubasicitem.cpp \
-           patientbrowsermenuextendeditem.cpp \
-           patientbrowsermenulist.cpp \
            gridicon.cpp \
            menugridwidget.cpp \
            itemmenu.cpp \
