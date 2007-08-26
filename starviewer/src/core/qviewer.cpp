@@ -6,9 +6,15 @@
  ***************************************************************************/
 #include "qviewer.h"
 #include "volume.h"
+#include "series.h"
+#include "patientbrowsermenu.h"
+
+//TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
+#include "../interface/qapplicationmainwindow.h"
 
 // Qt
 #include <QHBoxLayout>
+#include <QContextMenuEvent>
 
 // include's vtk
 #include <QVTKWidget.h>
@@ -179,6 +185,28 @@ void QViewer::grabCurrentView()
     vtkImageData *image = vtkImageData::New();
     image->ShallowCopy( m_windowToImageFilter->GetOutput() );
     m_grabList.push_back( image );
+}
+
+void QViewer::setSeries(Series *series)
+{
+    setInput( series->getFirstVolume() );
+    render();
+}
+
+void QViewer::contextMenuEvent(QContextMenuEvent *event)
+{
+    // TODO: Passar a membre configurable: a l'espera de si aquest mètode es queda aquí o no..
+    bool m_contextMenuActive = true;
+    if (m_contextMenuActive)
+    {
+        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
+        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
+        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+
+        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), this, SLOT( setSeries(Series*) ));
+
+        patientMenu->popup( event->pos() ); //->globalPos() ?
+    }
 }
 
 };  // end namespace udg

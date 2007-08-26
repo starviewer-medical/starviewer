@@ -28,9 +28,6 @@
 // Menu
 #include "menugridwidget.h"
 #include "tablemenu.h"
-#include "patientbrowsermenu.h"
-#include "series.h"
-#include "volumerepository.h"
 
 namespace udg {
 
@@ -255,14 +252,6 @@ void MultiQ2DViewerExtension::initLayouts()
     m_selectedViewer->setFrameShape( QFrame::Box );
 }
 
-void MultiQ2DViewerExtension::createMenu()
-{
-    m_patientMenu = new PatientBrowserMenu(this);
-    m_patientMenu->setPatient( m_patient );
-
-    connect(m_viewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
-}
-
 void MultiQ2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
@@ -440,15 +429,8 @@ Q2DViewerWidget* MultiQ2DViewerExtension::getNewQ2DViewerWidget()
     (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
     connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-    connect(newViewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
-    connect(m_patientMenu, SIGNAL( selectedSeries(Series*) ), this, SLOT( setSeriesSelectedViewer(Series*) ));
 
     return newViewer;
-}
-
-void MultiQ2DViewerExtension::setSeriesSelectedViewer(Series *series)
-{
-    m_selectedViewer->setInput( series->getFirstVolume() );
 }
 
 void MultiQ2DViewerExtension::removeColumns( int columns )
@@ -557,7 +539,6 @@ Patient* MultiQ2DViewerExtension::getPatient() const
 void MultiQ2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
-    createMenu();
     m_volumePanel->setPatient( patient );
 }
 

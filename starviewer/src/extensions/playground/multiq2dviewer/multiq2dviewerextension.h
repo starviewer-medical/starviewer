@@ -21,8 +21,6 @@ class Q2DViewerKeyImageNoteAttacher;
 class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
 class Q2DViewerWidget;
-class PatientBrowserMenu;
-class Series;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -83,8 +81,6 @@ private slots:
     void setWindowLevel(double wl1 ,double wl2);
     void resetWindowLevelToDefault();
 
-    void setSeriesSelectedViewer(Series *series);
-
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
@@ -97,9 +93,6 @@ private:
 
     /// Update del nombre de layouts
     void updateLayouts();
-
-    /// Creació del menú del botó dret
-    void createMenu();
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
@@ -161,9 +154,6 @@ private:
     /// Nombre de files i columnes per els layouts
     int m_rows;
     int m_columns;
-
-    /// Menú del botó dret
-    PatientBrowserMenu * m_patientMenu;
 
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;

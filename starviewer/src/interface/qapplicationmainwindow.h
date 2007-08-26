@@ -54,6 +54,9 @@ public:
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
 
+    /// Retorna la finestra activa actual
+    static QApplicationMainWindow* getActiveApplicationMainWindow();
+
 signals:
     /// senyal emesa que indica si la finestra conté un volum o no
     void containsVolume( bool );

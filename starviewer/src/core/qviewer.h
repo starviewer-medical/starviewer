@@ -30,6 +30,7 @@ Classe base per a totes les finestres de visualització
 
 // Fordward declarations
 class Volume;
+class Series;
 
 class QViewer : public QWidget{
 Q_OBJECT
@@ -108,9 +109,14 @@ public slots:
     /// Crida que re-inicia a l'estat incial el visor
     virtual void reset() = 0;
 
+    void setSeries(Series *series);
+
 signals:
     /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
     void eventReceived( unsigned long eventID );
+
+protected:
+    virtual void contextMenuEvent(QContextMenuEvent *event);
 
 protected:
     /// El volum a visualitzar
