@@ -140,16 +140,24 @@ public:
     void setImagesPath( QString imagesPath );
     QString getImagesPath() const;
 
-    /// Assignar/Obtenir identificador del volum al repositori corresponent a la sèrie
-    //\TODO estem assumint que un volum = una sèrie i això no és del tot cert. L'id, en tot cas, hauria d'anar relacionat amb el subvolum
-    void setVolumeIdentifier( Identifier id );
-    Identifier getVolumeIdentifier() const;
-
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
 
-    /// Retorna el subvolum amb índex 'index', per defecte, el 0
-    Volume *getVolume( int index = 0 );
+    /// Retorna el Volume amb identificador id
+    /// Retorna NULL en cas que no hi hagi cap volum amb aquest id.
+    Volume *getVolume(Identifier id);
+
+    /// Mètode per conveniència que serveix per retornar el "primer" volum. En el 90% dels casos (de moment el 100%)
+    /// tindrem que per cada sèrie només hi haurà un sol volum. Aquest mètode retorna aquest o, en cas de més d'un, el primer.
+    /// Retorna NULL en cas que no hi hagi cap volum.
+    Volume *getFirstVolume();
+
+    /// Mètode per afegir un sol volum a la llista de volums de la serie. Retorna l'id amb el que s'ha guardat al repositori
+    /// de volums.
+    Identifier addVolume(Volume *volume);
+
+    /// Retorna una llista amb tots els volums de la sèrie.
+    QList<Volume*> getVolumesList();
 
     /// Afegeix un fitxer a la sèrie
     void addFilePath(QString filePath);
@@ -165,9 +173,6 @@ public:
 
     /// Ens diu si la sèrie està marcada com a seleccionada o no
     bool isSelected() const;
-
-    /// Mètode per afegir un sol volum a la llista de volums de la serie \TODO mètode de proves no definitiu
-    void setVolume(Volume * volume);
 
     QString toString(bool verbose = false);
 
@@ -248,12 +253,9 @@ private:
     /// Imatge de previsualització associada a la sèrie
     QPixmap m_previewImage;
 
-    /// Identificador del volum al repositori
-    Identifier m_volumeID;
-
-    /// Llista de volums que composen la sèrie. La sèrie es pot separar en diversos volums per diverses raons,
+    /// Llista d'id's de volums que composen la sèrie. La sèrie es pot separar en diversos volums per diverses raons,
     /// com pot ser mides d'imatge diferent, sèries amb dinàmics o fases, stacks, etc.
-    QList<Volume *> m_volumesList;
+    QList<Identifier> m_volumesList;
 
     /// Llista de les Image de la serie ordenades per criteris d'ordenació com SliceLocation,InstanceNumber, etc
     /// TODO falta definir quina és l'estrategia d'ordenació per defecte

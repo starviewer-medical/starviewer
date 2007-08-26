@@ -8,6 +8,7 @@
 
 #include "image.h"
 #include "logging.h"
+#include "volumerepository.h"
 
 #include <QStringList>
 
@@ -297,15 +298,38 @@ QString Series::getViewPosition() const
 {
     return m_viewPosition;
 }
-    
-void Series::setVolumeIdentifier( Identifier id )
+
+int Series::getNumberOfVolumes()
 {
-    m_volumeID = id;
+    return m_volumesList.size();
 }
 
-Identifier Series::getVolumeIdentifier() const
+Volume* Series::getVolume(Identifier id)
 {
-    return m_volumeID;
+    int index = m_volumesList.indexOf(id);
+    return index != -1 ? VolumeRepository::getRepository()->getVolume(m_volumesList[index]) : NULL;
+}
+
+Volume* Series::getFirstVolume()
+{
+    return m_volumesList.isEmpty() ? NULL : this->getVolume(m_volumesList[0]);
+}
+
+Identifier Series::addVolume(Volume *volume)
+{
+    Identifier volumeID = VolumeRepository::getRepository()->addVolume(volume);
+    m_volumesList.append(volumeID);
+    return volumeID;
+}
+
+QList<Volume*> Series::getVolumesList()
+{
+    QList<Volume*> volumesList;
+    foreach (Identifier id, m_volumesList)
+    {
+        volumesList << VolumeRepository::getRepository()->getVolume(id);
+    }
+    return volumesList;
 }
 
 void Series::addFilePath(QString filePath)
@@ -344,11 +368,6 @@ QStringList Series::getImagesPathList()
 bool Series::isSelected() const
 {
     return m_selected;
-}
-
-void Series::setVolume( Volume * volume )
-{
-    m_volumesList.push_back(volume);
 }
 
 QString Series::toString(bool verbose)

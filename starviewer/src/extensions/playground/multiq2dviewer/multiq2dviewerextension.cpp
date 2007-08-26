@@ -29,6 +29,8 @@
 #include "menugridwidget.h"
 #include "tablemenu.h"
 #include "patientbrowsermenu.h"
+#include "series.h"
+#include "volumerepository.h"
 
 namespace udg {
 
@@ -398,12 +400,7 @@ void MultiQ2DViewerExtension::addColumns( int columns )
         // Afegim un widget a cada fila per tenir una columna més
         while( it != m_qHorizontalLayoutVector.end() )
         {
-            newViewer = new Q2DViewerWidget( m_workingArea );
-            newViewer->setInput ( m_mainVolume );
-            (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
-            connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
-            connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-            connect(newViewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
+            newViewer = getNewQ2DViewerWidget();
             (*it)->addWidget(newViewer);
             m_vectorViewers.insert(posViewer,newViewer);
             posViewer += m_columns;
@@ -428,17 +425,30 @@ void MultiQ2DViewerExtension::addRows( int rows )
         //Afegim tants widgets com columnes
         for(i = 0; i < m_columns; i++)
         {
-            newViewer = new Q2DViewerWidget( m_workingArea );
-            newViewer->setInput ( m_mainVolume );
-            (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
-            connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
-            connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-            connect(newViewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
+            newViewer = getNewQ2DViewerWidget();
             horizontal->addWidget(newViewer);
             m_vectorViewers.push_back(newViewer);
         }
         rows--;
     }
+}
+
+Q2DViewerWidget* MultiQ2DViewerExtension::getNewQ2DViewerWidget()
+{
+    Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
+    newViewer->setInput ( m_mainVolume );
+    (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
+    connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
+    connect(newViewer->m_2DView, SIGNAL( showContextMenu(QPoint) ), m_patientMenu, SLOT( popup(QPoint) ));
+    connect(m_patientMenu, SIGNAL( selectedSeries(Series*) ), this, SLOT( setSeriesSelectedViewer(Series*) ));
+
+    return newViewer;
+}
+
+void MultiQ2DViewerExtension::setSeriesSelectedViewer(Series *series)
+{
+    m_selectedViewer->setInput( series->getFirstVolume() );
 }
 
 void MultiQ2DViewerExtension::removeColumns( int columns )
@@ -558,7 +568,6 @@ void MultiQ2DViewerExtension::showPredefinedGrid()
     menuGrid->show();
 
     connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
-    
 }
 
 void MultiQ2DViewerExtension::showInteractiveTable()
@@ -566,7 +575,6 @@ void MultiQ2DViewerExtension::showInteractiveTable()
     TableMenu * tableMenu = new TableMenu();
     tableMenu->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
     tableMenu->show();
-
 }
 
 }

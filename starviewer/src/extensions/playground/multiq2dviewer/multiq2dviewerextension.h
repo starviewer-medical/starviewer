@@ -22,6 +22,7 @@ class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
 class Q2DViewerWidget;
 class PatientBrowserMenu;
+class Series;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -82,6 +83,8 @@ private slots:
     void setWindowLevel(double wl1 ,double wl2);
     void resetWindowLevelToDefault();
 
+    void setSeriesSelectedViewer(Series *series);
+
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
@@ -107,6 +110,9 @@ private:
     /// Llegir/Escriure la configuració de l'aplicació
     void readSettings();
     void writeSettings();
+
+    /// Retorna un nou widget Q2DViewerWidget per poder-lo inserir a una nova fila o columna
+    Q2DViewerWidget *getNewQ2DViewerWidget();
 
 private:
     /// La vista actual amb la que estem treballant
