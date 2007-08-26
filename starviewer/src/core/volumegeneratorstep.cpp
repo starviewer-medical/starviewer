@@ -50,8 +50,7 @@ void VolumeGeneratorStep::processSeries( Series *series )
     // TODO ara el que fem és que 1 Series equival a 1 Volume, més endavant es podrien fer un tracte més elaborat
     Volume *volume = new Volume;
     volume->setImages( series->getImages() );
-    Identifier volumeID = VolumeRepository::getRepository()->addVolume( volume );
-    series->setVolumeIdentifier( volumeID );
+    series->addVolume(volume);
     m_input->addLabelToSeries("VolumeGeneratorStep", series );
     DEBUG_LOG("Generem un volum");
 }
