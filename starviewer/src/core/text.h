@@ -180,6 +180,13 @@ public:
     QString getPrimitiveType()
     { return( "Text" ); }
     
+    ///ens emet el senyal per que es refresqui el text
+    void refreshText();
+
+signals:
+    ///s'emet quan canvia un dels atributs del text
+    void textChanged( Text *text );
+    
 private:
     
     ///Text que contindrà

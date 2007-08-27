@@ -46,6 +46,8 @@ void DistanceToolData::calculateDistance()
     m_textPosition[0] = ( m_firstPoint[0] + m_secondPoint[0] ) / 2;
     m_textPosition[1] = ( m_firstPoint[1] + m_secondPoint[1] ) / 2;
     m_textPosition[2] = ( m_firstPoint[2] + m_secondPoint[2] ) / 2;
+    
+    emit distanceTextChanged();
 }
     
 };  // end namespace udg

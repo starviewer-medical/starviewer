@@ -72,6 +72,9 @@ signals:
     
     ///s'emet quan canvia el segon punt de la distància
     void secondPointChanged();
+    
+    ///s'emet quan canvia el text de la distància
+    void distanceTextChanged();
 };
 
 };  //  end  namespace udg
