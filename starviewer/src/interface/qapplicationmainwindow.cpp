@@ -343,6 +343,7 @@ void QApplicationMainWindow::addPatient( const Patient &patient )
     if( m_patient.isSamePatient( &patient ) )
     {
         m_patient += patient;
+        enableExtensions();
     }
     else
     {
@@ -356,6 +357,7 @@ void QApplicationMainWindow::addPatient( const Patient &patient )
         else // altrament aquest pacient serà assignat d'aquesta finestra
         {
             m_patient = patient;
+            enableExtensions();
         }
     }
 }
@@ -415,13 +417,7 @@ void QApplicationMainWindow::about()
 
 void QApplicationMainWindow::onVolumeLoaded( Identifier id )
 {
-    m_2DViewerAction->setEnabled( true );
-
-    foreach(QAction *action, m_actionsList)
-    {
-        action->setEnabled( true );
-    }
-
+    enableExtensions();
     m_extensionHandler->onVolumeLoaded( id );
 }
 
@@ -434,6 +430,16 @@ void QApplicationMainWindow::writeSettings()
     settings.setValue( "size", size() );
 
     settings.endGroup();
+}
+
+void QApplicationMainWindow::enableExtensions()
+{
+    m_2DViewerAction->setEnabled( true );
+
+    foreach(QAction *action, m_actionsList)
+    {
+        action->setEnabled( true );
+    }
 }
 
 void QApplicationMainWindow::readSettings()
