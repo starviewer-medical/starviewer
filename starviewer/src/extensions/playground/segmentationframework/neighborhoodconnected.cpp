@@ -102,7 +102,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
         
     /// Executa la segmentaci�
    // std::cout << "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** " << std::endl;
-    INFO_LOG( "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** ");
+    //INFO_LOG( "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** ");
     try
     {
         m_casterOutput->Update();
@@ -114,7 +114,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
         //std::cerr << e << std::endl;
         return false;
     }
-     INFO_LOG( "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** ");
+    //INFO_LOG( "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** ");
     //std::cout << "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** " << std::endl;
      
     ///-------------------- Resultats ------------------

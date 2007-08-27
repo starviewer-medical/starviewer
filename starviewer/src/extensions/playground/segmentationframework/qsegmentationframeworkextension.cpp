@@ -27,18 +27,21 @@
 #include <QTableWidgetItem>
 #include <QTableWidget>
 #include <QLineEdit>
+#include <QStringList>
 
 // VTK
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 #include <vtkSplineWidget.h>
-
-
+#include <vtkPolyData.h>
+#include <vtkTriangleFilter.h>
+#include <vtkTriangleStrip.h>
+#include <vtkQuadricDecimation.h>
 // ITK
 #include <itkImage.h>
 
-
+//#include <iostream.h>
 
 
 namespace udg {
@@ -53,6 +56,7 @@ QSegmentationFrameworkExtension::QSegmentationFrameworkExtension( QWidget *paren
     //m_maskVolume = 0;
     m_isSeed=false;
     m_isMask=false;
+    m_isCont=false;
    // m_seed = new QTableWidget(5, 3, this);
     m_seed->setRowCount(5);
     m_seed->setColumnCount(3);
@@ -251,6 +255,8 @@ void QSegmentationFrameworkExtension::createConnections()
 
     connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
 
+    //connect( m_contorn , SIGNAL( setLenght(double) ) , this , SLOT( setSplineLength(double) ) );
+
 }
 
 
@@ -305,9 +311,51 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
 
         ++iter;
     }*/
+    /*
+    vtkPolyData *poly=vtkPolyData::New();
+    vtkPolyData *newpoly=vtkPolyData::New();
     
+    vtkTriangleFilter *tri=vtkTriangleFilter::New();
+    vtkSplineWidget *m_spline = vtkSplineWidget::New();
+    //vtkTriangleStrip *Strip=vtkTriangleStrip::New();
+    vtkQuadricDecimation *qua=vtkQuadricDecimation::New();
 
+    m_spline->SetPriority(1.0);
+    m_spline->SetInteractor(m_2DView->getInteractor());
+    m_spline->ProjectToPlaneOn();
+//    prop->SetPointSize(0.05);
+    //prop->SetOpacity(0.2);
+  //  prop->SetColor(1,0,0);
+    //m_spline->SetHandleProperty(prop);    
+    m_spline->SetProjectionPosition(m_2DView->getSlice()-1);
+    m_spline->SetProjectionNormal(2);
+    m_spline->SetNumberOfHandles(5);
+    m_spline->SetHandlePosition(0,54,161,0);
+    m_spline->SetHandlePosition(1,127,159,0);
+    m_spline->SetHandlePosition(2,140,107,0);
+    m_spline->SetHandlePosition(3,111,51,0);
+    m_spline->SetHandlePosition(4,38,57,0);
+    m_spline->On();
+    m_spline->ClosedOn();
+
+    m_spline->GetPolyData(poly);
+    tri->SetInput(poly);
+//tri->SetInput(Strip);
+    tri->Update();
+    //qua->SetInput(tri->GetOutput());
+    //qua->Update();
+    newpoly=tri->GetOutput();
+    //int i=newpoly->GetDataObjectType();
+    newpoly->BuildLinks();
+    int i,j;
+    j=newpoly->GetNumberOfVerts();
+    i= newpoly->IsTriangle(0,3,2);
+    std::cout<<"la i és :"<<i<<std::endl;
+    std::cout<<"la j és :"<<j<<std::endl;*/
+    //newpoly->SetInteractor(m_2DView->getInteractor());
     m_2DView->render();
+    //m_2DView->getInteractor()->Render();
+
 
 
 }
@@ -323,7 +371,7 @@ void QSegmentationFrameworkExtension::changeViewToAxial()
     m_sliceSpinBox->setMaximum( extent[5] );
     m_sliceViewSlider->setMaximum( extent[5] );
     m_2DView->setViewToAxial();
-    INFO_LOG("Visor per defecte: Canviem a vista Axial (Vista 1)")
+    //INFO_LOG("Visor per defecte: Canviem a vista Axial (Vista 1)")
     m_2DView->render();
 
 }
@@ -338,7 +386,7 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_sliceSpinBox->setMaximum( extent[1] );
     m_sliceViewSlider->setMaximum( extent[1] );
     m_2DView->setViewToSagittal();
-    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
+   // INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
     m_2DView->render();
 }
 
@@ -354,7 +402,7 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_sliceSpinBox->setMaximum( extent[3] );
     m_sliceViewSlider->setMaximum( extent[3] );
     m_2DView->setViewToCoronal();
-    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
+    //INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
     m_2DView->render();
 
 }
@@ -435,7 +483,7 @@ void QSegmentationFrameworkExtension::setSeedPosition( )
             Z->setTextAlignment(Qt::AlignHCenter);
             m_seed->setItem(m_howManySeeds,2,Z);
             
-        
+            
             m_howManySeeds=m_howManySeeds+1;
             m_selectOutSeed->setEnabled(true);
             m_isSeed=true;
@@ -729,21 +777,53 @@ void QSegmentationFrameworkExtension::applyNC()
 
 void QSegmentationFrameworkExtension::clearAll()
 {
+QStringList llista;
+llista <<"X"<<"Y"<<"Z";
 
 m_seed->clear();
+m_seed->setHorizontalHeaderLabels(llista);
 m_isSeed=false;
 m_howManySeeds=0;
 m_ApplyCT->setEnabled(false);
 m_ApplyCC->setEnabled(false);
 m_ApplyNC->setEnabled(false);
 m_ApplyIC->setEnabled(false);
-
+//llista->delete();
 
 
 }
 
 void QSegmentationFrameworkExtension::clearSelected()
 {
+bool trobat =false;
+int i=0;
+
+while((!trobat)&&(i<m_howManySeeds)){
+   
+   
+    
+         if(m_seed->isItemSelected((m_seed->item(i,0))))
+         {
+        
+            m_seed->removeRow(i);
+            if(m_howManySeeds>m_seed->rowCount())
+            {
+                m_howManySeeds=m_seed->rowCount();
+                m_seed->insertRow(m_seed->rowCount());
+            }else{
+                m_seed->insertRow(m_seed->rowCount());
+                m_howManySeeds=m_howManySeeds-1;
+            }
+            
+           trobat=true;
+    
+    }
+    i++;
+
+}
+
+
+
 }
 
 void QSegmentationFrameworkExtension::VolumeCalculator()
@@ -819,9 +899,12 @@ void QSegmentationFrameworkExtension::setAreaSlice(int Sli)
             break;
             }
 
-
+        //std::cout<<"res és : "<<res<<std::endl;
         m_sliceArea->setText(tr(tempchar));
-
+        if(m_isCont)
+        {
+        setSplineLength(m_contorn->getLength());
+        }
 
     }
 
@@ -917,10 +1000,30 @@ m_2DView->getInteractor()->Render();
 void QSegmentationFrameworkExtension::calculateContorn( )
 {
   m_contorn = new ContournTool( m_2DView , m_maskVolume );
+  m_isCont=true;
+ //
+
+    setSplineLength(m_contorn->getLength());
+    /* char* tempchar = new char[20];
+
+  sprintf(tempchar,"%.2f",m_contorn->getLength());//el volum de la llesca en mm quadrats
+
+  m_newArea->setText(tr(tempchar));*/
+
 
 }
 
+void QSegmentationFrameworkExtension::setSplineLength(double area)
+{
 
+  char* tempchar = new char[20];
+
+  sprintf(tempchar,"%.2f",area);//el volum de la llesca en mm quadrats
+
+  m_newArea->setText(tr(tempchar));
+
+
+}
 
 
 }

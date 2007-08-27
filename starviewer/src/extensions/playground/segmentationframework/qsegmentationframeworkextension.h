@@ -72,6 +72,7 @@ private:
     bool m_isSeed;
     bool m_outSeed;
     bool m_isMask;
+    bool m_isCont;
     int m_howManySeeds;
     bool m_isLeftButtonPressed;
     ViewType m_currentView;
@@ -127,6 +128,7 @@ private slots:
     void setAreaSlice(int);
     void opacityChanged(int);
     void calculateContorn();
+    void setSplineLength(double);
 
     
 

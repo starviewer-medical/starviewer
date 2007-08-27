@@ -9,6 +9,7 @@
 #include "q2dviewer.h"
 #include <determinatecontour.h>
 #include "logging.h"
+#include "areaspline.h"
 //QT
 #include <QAction>
 #include <QApplication>
@@ -16,6 +17,7 @@
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkSplineWidget.h>
+#include <vtkProperty.h>
 
 
 namespace udg {
@@ -30,6 +32,7 @@ ContournTool::ContournTool( Q2DViewer *viewer, Volume * seg,QObject *parent )
     m_con = 0;
     m_seg=seg;
     m_spline = vtkSplineWidget::New();
+    m_areaSpline=new AreaSpline();
     m_calculat = false;
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
     connect( m_2DViewer , SIGNAL( viewChanged(int) ) , this , SLOT( viewChanged(int) ) );
@@ -74,9 +77,9 @@ void ContournTool::handleEvent( unsigned long eventID )
 
 void ContournTool::setContourn( )
 {
-
+    vtkProperty *prop=vtkProperty::New();
     m_state=CONTOURING;
-   
+    
     xt=((ImageType*)m_seg->getItkData())->GetSpacing()[1];
     yt=((ImageType*)m_seg->getItkData())->GetSpacing()[2];
     zt=((ImageType*)m_seg->getItkData())->GetSpacing()[0];
@@ -84,15 +87,20 @@ void ContournTool::setContourn( )
     m_spline->SetPriority(1.0);
     m_spline->SetInteractor(m_2DViewer->getInteractor());
     m_spline->ProjectToPlaneOn();
-
+    
+    prop->SetPointSize(0.05);
+    //prop->SetOpacity(0.2);
+    prop->SetColor(1,0,0);
+    m_spline->SetHandleProperty(prop);
+    //m_spline->AddObserver(vtkCommand::InteractionEvent,
 
      if(!m_calculat){
      //QApplication::setOverrideCursor(Qt::WaitCursor);
-
+    ///SAGITAL
      m_con3=new DeterminateContour((ImageType*)m_seg->getItkData(),1);
-
+    ///AXIAL
      m_con2=new DeterminateContour((ImageType*)m_seg->getItkData(),2);
-        
+     ///CORONAL 
      m_con=new DeterminateContour((ImageType*)m_seg->getItkData(),0);
      
     
@@ -143,11 +151,11 @@ switch( m_2DViewer->getView() )
 			}
 		i++;
 		}
-            
+            //emit (setLenght(m_spline->GetSummedLength()));
             //m_spline->ClosedOn();
             m_spline->On();
             m_2DViewer->getInteractor()->Render();
-
+            
 
 
 
@@ -197,7 +205,7 @@ switch( m_2DViewer->getView() )
             //m_spline->ClosedOn();
             m_spline->On();
             m_2DViewer->getInteractor()->Render();
-
+            //emit setLenght(m_spline->GetSummedLength());
             /*
             m_seedSlice=m_2DViewer->getSlice();
             m_lastView=m_2DViewer->getView();
@@ -245,11 +253,15 @@ switch( m_2DViewer->getView() )
             
             m_spline->On();
             m_2DViewer->getInteractor()->Render();
-                     
+            
 
             break;
             }
-
+m_spline->ClosedOn();
+//m_spline->SetResolution(1);
+//m_spline->SetNumberOfHandles(2);
+//double lenght=m_spline->GetSummedLength();
+//emit setLenght(lenght);
 }
 
 }
@@ -286,7 +298,16 @@ void ContournTool::viewChanged( int s )
    
 }
 
-
+double ContournTool::getLength( )
+{
+    double area=0;
+    
+    m_areaSpline->CalculateArea(m_spline,m_lastView);
+    area=m_areaSpline->getArea();
+    return(area);
+  //return ( m_spline->GetSummedLength());
+   
+}
 
 
 
