@@ -16,7 +16,6 @@
 #include "keyimagenotefillerstep.h"
 #include "imagefillerstep.h"
 #include "dicomfileclassifierfillerstep.h"
-#include "ctfillerstep.h"
 #include "presentationstatefillerstep.h"
 #include "temporaldimensionfillerstep.h"
 #include "volumegeneratorstep.h"
@@ -87,7 +86,6 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new KeyImageNoteFillerStep() );
     m_registeredSteps.append(new ImageFillerStep() );
     m_registeredSteps.append(new DICOMFileClassifierFillerStep() );
-    m_registeredSteps.append(new CTFillerStep() );
     m_registeredSteps.append(new PresentationStateFillerStep() );
     m_registeredSteps.append(new TemporalDimensionFillerStep() );
     m_registeredSteps.append(new VolumeGeneratorStep() );
