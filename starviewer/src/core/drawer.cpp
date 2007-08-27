@@ -141,6 +141,9 @@ void Drawer::drawLine( Line *line, int slice, int view )
     
     addActorAndRefresh( lineActor, line, slice, view );
     
+    //connectem la línia amb el drawer per quan s'actualitzi algun dels seus atributs
+    connect( line, SIGNAL( lineChanged( Line* ) ), this, SLOT( updateChangedLine( Line* ) ) );
+    
     //esborrem els objectes auxiliars 
     lineActor->Delete();
     lineSource->Delete();
@@ -241,6 +244,9 @@ void Drawer::drawText( Text *text, int slice, int view )
     
     addActorAndRefresh( textActor, text, slice, view );
     
+    //connectem el text amb el drawer per quan s'actualitzi algun dels seus atributs
+    connect( text, SIGNAL( textChanged( Text* ) ), this, SLOT( updateChangedText( Text* ) ) );
+    
     //esborrem els objectes auxiliars 
     textActor->Delete();
 }    
@@ -316,15 +322,16 @@ void Drawer::drawPolygon( Polygon *polygon, int slice, int view )
 
 void Drawer::addActorAndRefresh( vtkProp *prop, DrawingPrimitive *drawingPrimitive, int slice, int view )
 {
+    //afegim l'actor al renderer del visor
     m_2DViewer->getRenderer()->AddActor( prop );
     
-    //creem l'objecte PrimitivePropAssociation per introduir al mapa
-    PrimitivePropAssociation association;
-    association.primitive = drawingPrimitive;
-    association.actor = prop;
+    //creem l'objecte PrimitiveActorPair per introduir al mapa
+    PrimitiveActorPair pair;
+    pair.first = drawingPrimitive;
+    pair.second = prop;
     
     //introduïm l'associació al mapa corresponent
-    addPrimitive( association, slice, view );
+    addPrimitive( pair, slice, view );
     
     m_2DViewer->refresh();          
 }
@@ -527,15 +534,15 @@ Drawer::PrimitivesList Drawer::getPrimitivesList( int slice, int view )
     switch( view )
     {
         case Q2DViewer::Axial: 
-            list = m_axialPrimitives.values( slice );
+            list = m_axialPairs.values( slice );
             break;
 
         case Q2DViewer::Sagittal:
-            list = m_sagitalPrimitives.values( slice );
+            list = m_sagittalPairs.values( slice );
             break;
 
         case Q2DViewer::Coronal: 
-            list = m_coronalPrimitives.values( slice );
+            list = m_coronalPairs.values( slice );
             break;
 
         default:
@@ -545,21 +552,21 @@ Drawer::PrimitivesList Drawer::getPrimitivesList( int slice, int view )
     return list;
 }
 
-void Drawer::addPrimitive( PrimitivePropAssociation primitive, int slice, int view )
+void Drawer::addPrimitive( PrimitiveActorPair primitive, int slice, int view )
 {
     bool ok = true;
     switch( view )
     {
         case Q2DViewer::Axial: 
-            m_axialPrimitives.insert( slice, primitive );
+            m_axialPairs.insert( slice, primitive );
             break;
 
         case Q2DViewer::Sagittal: 
-            m_sagitalPrimitives.insert( slice, primitive );
+            m_sagittalPairs.insert( slice, primitive );
             break;
 
         case Q2DViewer::Coronal:    
-            m_coronalPrimitives.insert( slice, primitive );
+            m_coronalPairs.insert( slice, primitive );
             break;
 
         default:
@@ -577,17 +584,17 @@ void Drawer::addPrimitive( PrimitivePropAssociation primitive, int slice, int vi
     }
 }
 
-void Drawer::setVisibility( PrimitivePropAssociation primitivePropAssociation, bool visibility )
+void Drawer::setVisibility( PrimitiveActorPair pair, bool visibility )
 {
     if( visibility )
     {
-        primitivePropAssociation.primitive->visibilityOn();
-        primitivePropAssociation.actor->VisibilityOn();
+        pair.first->visibilityOn();
+        pair.second->VisibilityOn();
     }
     else
     {
-        primitivePropAssociation.primitive->visibilityOff();
-        primitivePropAssociation.actor->VisibilityOff();
+        pair.first->visibilityOff();
+        pair.second->VisibilityOff();
     }    
 }
 
@@ -595,19 +602,57 @@ void Drawer::hidePrimitivesFrom( int slice, int view )
 {
     PrimitivesList listToHide = this->getPrimitivesList( slice, view );
     
-    foreach( PrimitivePropAssociation primitive, listToHide )
+    foreach( PrimitiveActorPair pair, listToHide )
     {
-        setVisibility( primitive, false );
+        setVisibility( pair, false );
     }
     //actualitzem el Q2DViewer
     m_2DViewer->refresh();
+}
+
+void Drawer::hidePrimitivesOfView( int view )
+{
+    QList<PrimitiveActorPair> allPairsOfSelectedView; 
+    
+    bool ok = true;
+    switch( view )
+    {
+        case Q2DViewer::Axial: 
+            allPairsOfSelectedView = m_axialPairs.values();
+            break;
+
+        case Q2DViewer::Sagittal: 
+            allPairsOfSelectedView = m_sagittalPairs.values();
+            break;
+
+        case Q2DViewer::Coronal:   
+            allPairsOfSelectedView = m_coronalPairs.values();
+            break;
+
+        default:
+            DEBUG_LOG( "Valor no esperat" );
+            
+            ok = false;
+            break;
+    }
+    if( ok )
+    {
+        
+       // fem invisibles totes les primitives
+        foreach ( PrimitiveActorPair pair, allPairsOfSelectedView )
+        {
+            setVisibility( pair, false );
+        } 
+    }
+    
+    
 }
 
 void Drawer::showPrimitivesFrom( int slice, int view )
 {
     PrimitivesList listToShow = this->getPrimitivesList( slice, view );
     
-    foreach( PrimitivePropAssociation primitive, listToShow )
+    foreach( PrimitiveActorPair primitive, listToShow )
     {
         setVisibility( primitive, true );
     }
@@ -619,49 +664,204 @@ void Drawer::setCurrentSlice( int slice )
 {
     // Primer fem insvisibles els de la llesca en la que ens trobàvem fins ara, en la corresponent vista
     hidePrimitivesFrom( m_currentSlice, m_currentView );
-    // I ara fem visibles els de la nova llesca, en la corresponent vista
-    showPrimitivesFrom( slice, m_currentView );
+    
     // actualitzem la llesca
     m_currentSlice = slice;
+    
+    // I ara fem visibles els de la nova llesca, en la corresponent vista
+    showPrimitivesFrom( slice, m_currentView );
 }
 
 void Drawer::setCurrentView( int view )
 {
     if( m_currentView != view )
     {
-        // s'ha canviat de vista, per tant cal netejar la última vista. Quan es faci el set slice de la nova vista, ja es faran visibles els que toquin
-        showPrimitivesFrom( m_currentSlice, m_currentView );
+        //cal fer invisible les primitives de la vista actual abans d'actualitzar a la nova vista
+        hidePrimitivesOfView( m_currentView );
+        
         //actualitzem la nova vista
         m_currentView = view;
+        
+        // s'ha canviat de vista, per tant cal netejar la última vista. Quan es faci el set slice de la nova vista, ja es faran visibles els que toquin
+        showPrimitivesFrom( m_currentSlice, m_currentView );
     }
-    //else: continuem a la mateixa vista, per tant no cal fer res
 }
 
 void Drawer::removeAllPrimitives()
 {
     // recorrem cadscun dels maps, primer retirem l'actor de l'escena i després l'esborrem de la llista
-    foreach( PrimitivePropAssociation primitiveAssociation, m_axialPrimitives )
+    foreach( PrimitiveActorPair pair, m_axialPairs )
     {
-        m_2DViewer->getRenderer()->RemoveActor( primitiveAssociation.actor );
+        m_2DViewer->getRenderer()->RemoveActor( pair.second );
     }
     
-    foreach( PrimitivePropAssociation primitiveAssociation, m_sagitalPrimitives )
+    foreach( PrimitiveActorPair pair, m_sagittalPairs )
     {
-        m_2DViewer->getRenderer()->RemoveActor( primitiveAssociation.actor );
+        m_2DViewer->getRenderer()->RemoveActor( pair.second );
     }
     
-    foreach( PrimitivePropAssociation primitiveAssociation, m_coronalPrimitives )
+    foreach( PrimitiveActorPair pair, m_coronalPairs )
     {
-        m_2DViewer->getRenderer()->RemoveActor( primitiveAssociation.actor );
+        m_2DViewer->getRenderer()->RemoveActor( pair.second );
     }
     
     //Esborrem el contingut dels maps
-    m_axialPrimitives.clear();
-    m_sagitalPrimitives.clear();
-    m_coronalPrimitives.clear();
+    m_axialPairs.clear();
+    m_sagittalPairs.clear();
+    m_coronalPairs.clear();
             
     // refresquem l'escena
     m_2DViewer->refresh();
 }
+
+Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive, int slice, int view )
+{
+    PrimitiveActorPair desiredPrimitiveActorPair;
+    PrimitivesList list =  getPrimitivesList( slice, view );
+    
+    bool found = false;
+    
+    for ( int i = 0; i < (list.size()) && !found ; i++ )
+    {
+        desiredPrimitiveActorPair = list.at( i );
+        
+        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+            found = true;
+    }
+    
+    if ( !found )
+    {
+        ERROR_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
+        desiredPrimitiveActorPair.first = NULL;
+        desiredPrimitiveActorPair.second = NULL;
+    }
+        
+    return desiredPrimitiveActorPair;
+} 
+
+Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive )
+{
+    int i;
+    PrimitiveActorPair desiredPrimitiveActorPair;
+    PrimitivesList axialList = m_axialPairs.values();
+    PrimitivesList sagitalList = m_sagittalPairs.values();
+    PrimitivesList coronalList = m_coronalPairs.values();
+    
+    bool found = false;
+    
+    //mirem per a cadascuna de les llistes si hem trobat la primitiva
+    for ( i = 0; ( i < axialList.size() ) && !found ; i++ )
+    {
+        desiredPrimitiveActorPair = axialList.at( i );
+        
+        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+            found = true;
+    }
+    
+    for ( i = 0; ( i < sagitalList.size() ) && !found ; i++ )
+    {
+        desiredPrimitiveActorPair = sagitalList.at( i );
+        
+        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+            found = true;
+    }
+    
+    for ( i = 0; ( i < coronalList.size() ) && !found ; i++ )
+    {
+        desiredPrimitiveActorPair = coronalList.at( i );
+        
+        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+            found = true;
+    }
+    
+    if ( !found )
+    {
+        ERROR_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
+        desiredPrimitiveActorPair.first = NULL;
+        desiredPrimitiveActorPair.second = NULL;
+    }
+        
+    return desiredPrimitiveActorPair;
+}
+       
+bool Drawer::isValid( PrimitiveActorPair association )
+{
+    return( association.first != NULL && association.second != NULL );
+}
+  
+void Drawer::updateChangedLine( Line *line )
+{
+    PrimitiveActorPair pair = this->findPrimitiveActorPair( line );
+    
+    if ( isValid( pair ) )
+    {
+        ///|TODO mirar si hi ha una manera més correcta de trobar el vtkLineSource
+        vtkActor2D *lineActor = vtkActor2D::SafeDownCast( pair.second );
+        
+        Line *line = static_cast<Line*> ( pair.first );
+        
+        vtkPolyDataMapper2D *lineMapper = vtkPolyDataMapper2D::SafeDownCast( lineActor->GetMapper() );
+        
+        vtkLineSource *lineSource = vtkLineSource::New();
+        ///\TODO mirar perquè el següent mètode dóna errors (no greus) però els dóna
+        lineSource->SetInputConnection( lineMapper->GetOutputPort() ); //lineMapper->GetInputConnection(0,0)
+        
+        //assignem els punts a la línia
+        lineSource->SetPoint1( line->getFirstPoint() );
+        lineSource->SetPoint2( line->getSecondPoint() );
+
+        lineMapper->SetInputConnection( lineSource->GetOutputPort() );
+        
+    /*
+    //Assignem el tipus de coordenades seleccionades
+        lineMapper->SetTransformCoordinate( getCoordinateSystem( line->getCoordinatesSystemAsString() ) );
+    
+        
+        lineActor->SetMapper( lineMapper );
+
+    //Assignem les propietats a la línia
+        vtkProperty2D *properties = lineActor->GetProperty();
+    
+        lineSource->SetResolution ( 2 );
+    
+    //Assignem color
+        QColor lineColor = line->getColor();
+        properties->SetColor( lineColor.redF(), lineColor.greenF(), lineColor.blueF() );
+    
+    //Assignem discontinuïtat
+        if ( line->isDiscontinuous() )
+            properties->SetLineStipplePattern( 2000 );
+        else
+            properties->SetLineStipplePattern( 65535 );
+
+    //Assignem gruix de la línia        
+        properties->SetLineWidth( line->getWidth() );
+           
+    //Assignem opacitat de la línia  
+        properties->SetOpacity( line->getOpacity() );
+            
+    
+    
+    //mirem la visibilitat de l'actor
+        if ( !line->isVisible() )
+            lineActor->VisibilityOff();
+    
+        addActorAndRefresh( lineActor, line, slice, view );
+    
+    //connectem la línia amb el drawer per quan s'actualitzi algun dels seus atributs
+        connect( line, SIGNAL( lineChanged( Line* ) ), this SLOT( updateChangedLine( Line* ) ) );
+    
+    //esborrem els objectes auxiliars 
+        lineActor->Delete();
+        lineSource->Delete();
+        lineMapper->Delete();*/
+//         m_2DViewer->refresh();
+        
+        lineSource->Delete();
+    }
+} 
+ 
+void Drawer::updateChangedText( Text *text )
+{}
   
 };  // end namespace udg
