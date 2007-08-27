@@ -102,7 +102,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
         
     /// Executa la segmentaci�
     //std::cout << "****START: SEGMENTACIO ISOLATED CONNECTED ****** " << std::endl;
-    INFO_LOG("****START: SEGMENTACIO ISOLATED CONNECTED ****** ");
+    //INFO_LOG("****START: SEGMENTACIO ISOLATED CONNECTED ****** ");
     try
     {
         m_casterOutput->Update();
@@ -115,7 +115,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
         return false;
     }
     //std::cout << "****END: SEGMENTACIO ISOLATED CONNECTED****** " << std::endl;
-     INFO_LOG("****END: SEGMENTACIO ISOLATED CONNECTED****** ");
+    // INFO_LOG("****END: SEGMENTACIO ISOLATED CONNECTED****** ");
     ///-------------------- Resultats ------------------
     
     m_segmentedImage = m_casterOutput->GetOutput();

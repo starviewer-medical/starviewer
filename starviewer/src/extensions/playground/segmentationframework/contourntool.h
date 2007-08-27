@@ -17,6 +17,7 @@ namespace udg {
 class Q2DViewer;
 class Volume;
 class DeterminateContour;
+class AreaSpline;
 
 /**
 Tool que serveix per posar llavors en un visor 2D
@@ -36,6 +37,12 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+    double getLength( );
+
+signals:
+
+    void setLenght(double);
+
 private:
     
     typedef itk::Image<signed int,3>     ImageType;
@@ -50,7 +57,9 @@ private:
     vtkSplineWidget*  m_spline;
     vtkSplineWidget*  m_splineY;
     vtkSplineWidget*  m_splineZ;
-       
+    ViewType vista;
+    AreaSpline* m_areaSpline;    
+
     bool m_calculat;
     float xt;
     float yt;
