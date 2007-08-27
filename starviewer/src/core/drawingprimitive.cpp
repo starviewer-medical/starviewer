@@ -16,6 +16,8 @@ DrawingPrimitive::DrawingPrimitive( QObject *parent )
     setCoordinatesSystem( "WORLD" );
     visibilityOn();
     setColor( QColor( Qt::green ) );
+    setHighlightColor( QColor( Qt::yellow ) );
+    highlightOff();
 }
 
 };  // end namespace udg
