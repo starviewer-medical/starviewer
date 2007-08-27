@@ -95,7 +95,6 @@ void ReferenceLinesFillerStep::processImage( Image *image )
             if (referencedImage != 0 )
             {
                 image->addReferencedImage( referencedImage );
-                DEBUG_LOG("La imatge " + image->getSOPInstanceUID() + " està referenciada amb la imatge " + referencedUID);
             }
             else
             {
