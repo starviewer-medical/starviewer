@@ -95,7 +95,6 @@ QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
         if( status.good() )
         {
             result = value.c_str();
-            //DEBUG_LOG( QString("Tag %1 : Hem obtingut el valor %2").arg( tag.toString().c_str() ).arg(result) );
         }
         else
         {
@@ -139,15 +138,14 @@ QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, D
                 if( status.good() )
                 {
                     result << value.c_str();
-                    DEBUG_LOG( QString("Tag %1 : Hem obtingut el valor %2").arg( attributeTag.toString().c_str() ).arg( value.c_str() ) );
                 }
-                else
+                else if( QString(status.text()) != "Tag Not Found" )
                 {
                     DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( attributeTag.toString().c_str() ).arg( status.text() ) );
                 }
             }
         }
-        else
+        else if( QString(status.text()) != "Tag Not Found" )
             DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( sequenceTag.toString().c_str() ).arg( status.text() ) );
     }
     else
