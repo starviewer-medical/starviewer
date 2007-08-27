@@ -41,7 +41,9 @@ public:
     /// Retorna el nombre de pacients que tenim a la llista
     unsigned int getNumberOfPatients();
 
-    /// Obté la llista d'arxius
+    /// Assigna/Obté la llista d'arxius. A l'assignar els arxius, s'esborren les dades de pacient que hi puguin haver-hi
+    /// ja que es considera que donar tota la llista d'arxius és com un 'reset'
+    void setFilesList( QStringList files );
     QStringList getFilesList() const;
 
     /// Afegeix/esborra un arxiu a la llista. No hi haurà elements repetits a la llista ja qu es comprova abans d0afegir
@@ -77,7 +79,7 @@ private:
     /// Llista que té totes les labels aplicades sense repeticions de labels globals i de series.
     /// Aquesta variable la tenim per ser més àgils en el getLabels per ser una mica més ràpids.
     QStringList m_allLabels;
-    
+
     /// Llista d'etiquetes assignades a nivell de sèries. Per cada Series tenim vàries etiquetes
     QMultiMap<Series *, QString> m_seriesLabels;
 };

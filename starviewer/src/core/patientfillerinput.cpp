@@ -82,6 +82,19 @@ unsigned int PatientFillerInput::getNumberOfPatients()
     return m_patientList.size();
 }
 
+void PatientFillerInput::setFilesList( QStringList files )
+{
+    if( !files.isEmpty() )
+    {
+        // si hi ha dades de pacients buidem la llista
+        if( !m_patientList.isEmpty() )
+            m_patientList.clear();
+
+        m_fileList = files;
+    }
+
+}
+
 QStringList PatientFillerInput::getFilesList() const
 {
     return m_fileList;
@@ -114,7 +127,7 @@ void PatientFillerInput::addLabel( QString label )
         m_globalLabels << label;
         m_allLabels << label; // afegim a la llista de tots també
     }
-    
+
 }
 
 void PatientFillerInput::addLabelToSeries( QString label, Series *series )
@@ -150,13 +163,14 @@ QList<Series *> PatientFillerInput::getSeriesWithLabels( QStringList labels )
     {
         QStringList currentSeriesLabelList = m_seriesLabels.values( series );
         ok = true;
-        foreach( QString value, labels ) // en comptes de fer un foreach seria millor fer un while i quan la condició no es dóna aturar
+        int i = 0;
+        while( i < labels.size() && ok )
         {
-            if( !currentSeriesLabelList.contains(value) )
+            if( !currentSeriesLabelList.contains( labels.at(i) ) )
             {
                 ok = false;
-                break;
             }
+            i++;
         }
         if( ok )
         {
