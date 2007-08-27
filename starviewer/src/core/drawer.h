@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QString>
 #include <QMultiMap>
+#include <QPair>
 
 //Foreward declarations
 class vtkCoordinate;
@@ -27,7 +28,6 @@ class Text;
 class Polygon;
 class Ellipse;
 class Q2DViewer;
-class DrawingPrimitive;
 
 /**
 Classe experta en dibuixar totes les primitives gràfiques que podem representar en un visualitzador 2D i s'encarrega d'emmagatzemar-les per tal de controlar la visibilitat d'aquestes segons les vistes axial, sagital i coronal. Conté tres mapes (un per cada vista) que relacionen la llesca amb les annotacions contingudes per un visualitzador 2D.
@@ -39,23 +39,24 @@ class Drawer : public QObject{
     Q_OBJECT
             
     private:
-    ///definició de l'struct per a guardar primitives i vtkProps
-        struct PrimitivePropAssociation
-        {
-            DrawingPrimitive *primitive;
-            vtkProp *actor;
-        };
     
+        /// Tipus definit:  parella de primitiva actor per tenir aquests dos tipus d'objectes relacionats: 
+        ///PrimitiveActorPair.first serà la DrawingPrimitive i PrimitiveActorPair.second el vtkProp
+        typedef QPair< DrawingPrimitive*, vtkProp* > PrimitiveActorPair;
+        
+         /// Tipus definit:  map on hi guardem les vinculacions de les llesques amb els actors i primitives creades
+        typedef QMultiMap< int, PrimitiveActorPair > PrimitivesMap;
+        
+        /// llista de representacions que ens retornarà el QMultiMap
+        typedef QList< PrimitiveActorPair > PrimitivesList;
+        
      /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
-        QMultiMap< int, PrimitivePropAssociation > m_axialPrimitives;
-        QMultiMap< int, PrimitivePropAssociation > m_sagitalPrimitives;
-        QMultiMap< int, PrimitivePropAssociation > m_coronalPrimitives;
+        PrimitivesMap m_axialPairs;
+        PrimitivesMap m_sagittalPairs;
+        PrimitivesMap m_coronalPairs;
     
     ///visor 2D
         Q2DViewer *m_2DViewer;
-
-    /// llista de representacions que ens retornarà el QMultiMap
-        typedef QList< PrimitivePropAssociation > PrimitivesList;
 
     /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
         PrimitivesList getPrimitivesList( int slice, int view );
@@ -81,7 +82,7 @@ class Drawer : public QObject{
         void showPrimitivesFrom( int slice, int view );
     
     ///Fa invisible/visible l'associació primitiva/actor passada per paràmetre
-        void setVisibility( PrimitivePropAssociation primitive, bool visibility );
+        void setVisibility( PrimitiveActorPair primitive, bool visibility );
         
     ///Valida les coordenades segons la vista que es determina
         void validateCoordinates( double coordinates[3], int view );
@@ -111,18 +112,37 @@ public:
     void drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior, int slice, int view );
 
     /// Afegeix una associació de primitiva/actor a la llesca i vista indicades
-    void addPrimitive( PrimitivePropAssociation primitive, int slice, int view );
+    void addPrimitive( PrimitiveActorPair primitive, int slice, int view );
     
     ///afegeix l'actor passat per paràmetre al visor i al mapa corresponent segons la vista i actualitza el visor.
     void addActorAndRefresh( vtkProp *actor, DrawingPrimitive *primitive, int slice, int view );
     
+    ///cerca un objecte PrimitiveActorPair dins del map especificat segons la vista i en la llesca determinada
+    PrimitiveActorPair findPrimitiveActorPair( DrawingPrimitive *primitive, int slice, int view );
+    
+    ///cerca un objecte PrimitiveActorPair dins dels 3 maps, si és el cas en que no sabem la vista ni la llesca en que l'hem creat.
+    PrimitiveActorPair findPrimitiveActorPair( DrawingPrimitive *primitive );
+    
+    ///ens diu si les dades que conté són vàlides (NULL o no ). Aquest mètode ens servirà per saber si l'objecte retornat pel mètode findPrimitiveActorPair conté valors vàlids.
+    bool isValid( PrimitiveActorPair primitive );
+    
+    ///fa invisible totes les primitives d'una determinada vista
+    void hidePrimitivesOfView( int view );
+    
 public slots:
     /// Elimina totes les annotacions dels multimaps
-        void removeAllPrimitives();    
+    void removeAllPrimitives();    
+    
+    /// Actualitza la llesca/vista actual en la que es troba el visor 2D associat i els actors corresponents que cal visualitzar
+    void setCurrentSlice( int slice );
+    void setCurrentView( int view );
         
-         /// Actualitza la llesca/vista actual en la que es troba el visor 2D associat i els actors corresponents que cal visualitzar
-        void setCurrentSlice( int slice );
-        void setCurrentView( int view );
+private slots:
+    ///cerca la línia que ha invocat el signal i n'actualitza els atributs gràfics
+    void updateChangedLine( Line *line );    
+    
+    ///cerca el que ha invocat el signal i n'actualitza els atributs gràfics
+    void updateChangedText( Text *text );    
 };
 
 };  
