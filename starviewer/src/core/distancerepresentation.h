@@ -58,7 +58,7 @@ public:
     { m_line->refreshLine(); }
     
     ///permet avisar per tal de refrescar el text
-    void refreshText(){}
+    void refreshText();
     
     ///fa que l'atribut DistanceToolData calculi el text de la distància i la posició del mateix
     void calculateTextAndPositionOfDistance();
@@ -75,11 +75,14 @@ private:
     DistanceToolData *m_distanceToolData;
 
 private slots:
-    ///actualitza el primer punt de la línia i com a conseqüència també el text i la seva posició
+    ///actualitza el primer punt de la línia 
     void updateFirstPointLine();
     
-    ///actualitza el segon punt de la línia i com a conseqüència també el text i la seva posició
+    ///actualitza el segon punt de la línia
     void updateSecondPointLine();
+    
+    ///actualitza el text de la distància. L'actualització del text de la distància no es realitza cada cop que canvia un punt, ja que és innecessari perquè podem estar movent un punt de la distància i mentre s'està editant no volem que es vegi el text. El text es mostra en el moment en que la distància ha estat fixada.
+    void updateText();
 };
 
 };  //  end  namespace udg

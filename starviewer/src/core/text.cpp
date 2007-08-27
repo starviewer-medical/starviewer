@@ -32,5 +32,10 @@ void Text::setAttatchmentPoint( double point[3] )
         m_attatchmentPoint[i] = point[i];
 }
 
+void Text::refreshText()
+{
+    emit  textChanged( this );
+}
+
 };  // end namespace udg
 
