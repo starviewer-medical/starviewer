@@ -10,7 +10,7 @@
 namespace udg {
 
 Text::Text() 
-    : DrawingPrimitive(), m_borderEnabled( false ), m_padding( 0 ), m_fontFamily( "Arial" ), m_fontSize( 4 ), m_bold( false ), m_italic( false ), m_shadow( false ), m_scaledText( true ), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" )
+    : DrawingPrimitive(), m_borderEnabled( false ), m_padding( 0 ), m_fontFamily( "Arial" ), m_fontSize( 12 ), m_bold( false ), m_italic( false ), m_shadow( false ), m_scaledText( false ), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" )
 {
     setHeight( 0.05 );
     setWidth( 0.09 );
@@ -18,7 +18,7 @@ Text::Text()
 
 
 Text::Text( double point[3], QString text ) 
-    : DrawingPrimitive(), m_borderEnabled( false ), m_padding( 0 ), m_fontFamily( "Arial" ), m_fontSize( 4 ), m_bold( false ), m_italic( false ), m_shadow( false ), m_scaledText( true ), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" )
+    : DrawingPrimitive(), m_borderEnabled( false ), m_padding( 0 ), m_fontFamily( "Arial" ), m_fontSize( 12 ), m_bold( false ), m_italic( false ), m_shadow( false ), m_scaledText( false ), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" )
 { 
     setAttatchmentPoint( point );
     setHeight( 0.05 );
