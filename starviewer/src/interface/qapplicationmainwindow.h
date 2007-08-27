@@ -85,6 +85,12 @@ private:
     /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
     void writeSettings();
 
+    /**
+     * Fa accessibles les extensions a través dels menús. S'hauria de cridar quan ja
+     * tenim un input vàlid i es poden carregar volums
+     */
+    void enableExtensions();
+
 private slots:
     /// Obre una nova finestra
     void newFile();
