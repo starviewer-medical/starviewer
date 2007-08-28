@@ -58,14 +58,6 @@ public:
     QColor getColor() const
     { return m_primitiveColor; }
     
-    ///permet assignar el color de highlight de la primitiva
-    void setHighlightColor( QColor color )
-    { m_primitiveHighlightColor = color; }
-    
-    ///ens retorna el color de highlight de la primitiva
-    QColor getHighlightColor() const
-    { return m_primitiveColor; }
-    
     ///ens retorna l'alçada de la primitiva
     double getHeight() const
     { return m_height; }
@@ -110,6 +102,10 @@ public:
     void visibility( bool visibility )
     { m_visible = visibility; } 
     
+     ///ens diu si la primitiva és visible o no
+    bool isVisible()
+    { return( m_visible ); }
+    
     ///Fem highlight la primitiva
     void highlightOn()
     { highlight( true ); }
@@ -122,9 +118,9 @@ public:
     void highlight( bool highlight )
     { m_highlight = highlight; } 
     
-    ///ens diu si la primitiva és visible o no
-    bool isVisible()
-    { return( m_visible ); }
+    ///ens diu si la primitiva està highlighted o no
+    bool isHighlighted()
+    { return( m_highlight ); }
     
     ///ens diu el tipus de primitiva que és. (reimplementat en les sub-classes)
     virtual QString getPrimitiveType() = 0;
@@ -132,9 +128,6 @@ protected:
    
     ///color de la primitiva
     QColor m_primitiveColor;
-    
-    ///color de la primitiva
-    QColor m_primitiveHighlightColor;
     
     ///determina l'alçada de la primitiva
     double m_height;
