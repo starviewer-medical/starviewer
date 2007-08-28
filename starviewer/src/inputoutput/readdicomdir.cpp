@@ -169,6 +169,10 @@ Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesLi
                 seriesRecord->findAndGetOFStringArray( DCM_Modality , text );
                 series.setSeriesModality( text.c_str() );
 
+                //Protocol Name
+                seriesRecord->findAndGetOFStringArray( DCM_ProtocolName , text );
+                series.setProtocolName( text.c_str() );
+
                 //Per obtenir el directori de les series, no hi ha cap més manera que accedir. a la primera imatge de la serie i consultar-ne el directori
 
                 DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 );
