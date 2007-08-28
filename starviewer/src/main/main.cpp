@@ -29,6 +29,7 @@ void configureLogging()
         configurationFile = QDir::currentPath() + "/bin/log.conf";
     }
     LOGGER_INIT( configurationFile.toStdString() );
+    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
 }
 
 int main(int argc, char *argv[])
