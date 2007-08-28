@@ -7,6 +7,8 @@
 #include "extensioncontext.h"
 
 #include "patient.h"
+#include "volumerepository.h"
+#include "volume.h"
 //#include "extensionhandler.h"
 
 namespace udg {
@@ -41,6 +43,26 @@ void ExtensionContext::setPatient(Patient *patient)
     m_patient = patient;
 }
 
+void ExtensionContext::setDefaultSelectedStudies( QStringList selectedStudies )
+{
+    m_defaultSelectedStudies = selectedStudies;
+}
+
+QStringList ExtensionContext::getDefaultSelectedStudies() const
+{
+    return m_defaultSelectedStudies;
+}
+
+void ExtensionContext::setDefaultSelectedSeries( QStringList selectedSeries )
+{
+    m_defaultSelectedSeries = selectedSeries;
+}
+
+QStringList ExtensionContext::getDefaultSelectedSeries() const
+{
+    return m_defaultSelectedSeries;
+}
+
 Identifier ExtensionContext::getMainVolumeID() const
 {
     return m_mainVolumeID;
@@ -49,6 +71,33 @@ Identifier ExtensionContext::getMainVolumeID() const
 void ExtensionContext::setMainVolumeID(Identifier identifier)
 {
     m_mainVolumeID = identifier;
+}
+
+Volume *ExtensionContext::getDefaultVolume() const
+{
+    Volume *defaultVolume = NULL;
+
+    QString studyUID = m_defaultSelectedStudies.at(0);
+    QString seriesUID = m_defaultSelectedSeries.at(0);
+
+    if( !m_patient )
+    {
+        defaultVolume = VolumeRepository::getRepository()->getVolume( m_mainVolumeID );
+    }
+    else
+    {
+        Study *study = m_patient->getStudy( studyUID );
+        if( !study )// si no trobem l'uid demanat, agafem el primer
+            study = m_patient->getStudies().at(0);
+
+        Series *series = study->getSeries( seriesUID );
+        if( !series ) // si no trobem l'uid demanat, agafem el primer
+            series = study->getSeries().at(0);
+
+        defaultVolume = series->getFirstVolume();
+    }
+
+    return defaultVolume;
 }
 
 }
