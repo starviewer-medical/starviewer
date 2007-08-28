@@ -120,9 +120,6 @@ public:
     /// Assignem directament el conjunt d'imatges que composen aquest volum
     void setImages( const QList<Image *> &imageList );
 
-    /// \TODO Mètode de conveniència. Les imatges que farà servir seran totes les de la sèrie donada. Ara només ens encarreguem de quedar-nos amb les imatges per poder tenir accès a Series, Study, etc
-    void setImagesFromSeries( Series *series );
-
     /// Mètode ràpid per obtenir la series a la que pertany aquest volum
     Series *getSeries();
 
@@ -135,8 +132,6 @@ private:
     void loadWithPreAllocateAndInsert();
 
     /// carrega les llesques a partir dels objectes Image
-    void loadSlices( int method );
-    /// ídem anterior per provar el DICOMImageReader i els seus fills
     void loadSlicesWithReaders( int method );
 
     /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim

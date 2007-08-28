@@ -30,7 +30,8 @@ bool itkGdcmDICOMImageReader::load()
     if( ok )
     {
         // preparem els paràmetres de lectura
-        typedef itk::Image<signed short, 3> ImageType;
+//         typedef itk::Image<signed short, 3> ImageType;
+        typedef itk::Image<int, 3> ImageType;
         typedef itk::ImageFileReader< ImageType >  ReaderType;
         typedef itk::GDCMImageIO GDCMImageIOType;
 

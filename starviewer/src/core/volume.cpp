@@ -287,15 +287,6 @@ void Volume::setImages( const QList<Image *> &imageList )
     m_dataLoaded = false;
 }
 
-void Volume::setImagesFromSeries( Series *series )
-{
-    //\TODO hauria de ser com setImages, però encara no ens interessa que torni a carregar les dades, només volem la informació i prou
-    m_imageSet.clear();
-    m_imageSet = series->getImages();
-    // perquè s'ompli la informació DICOM
-    m_volumeInformation->setFilenames( m_imageSet.at(0)->getPath() );
-}
-
 Series *Volume::getSeries()
 {
     if( !m_imageSet.isEmpty() )
@@ -325,7 +316,8 @@ void Volume::allocateImageData()
     m_imageDataVTK->SetSpacing( spacing );
     m_imageDataVTK->SetDimensions( m_imageSet.at(0)->getRows(), m_imageSet.at(0)->getColumns(), m_imageSet.size() );
     //\TODO de moment assumim que sempre seran ints i ho mapejem així,potser més endavant podria canviar, però és el tipus que tenim fixat desde les itk
-    m_imageDataVTK->SetScalarTypeToShort();
+//     m_imageDataVTK->SetScalarTypeToShort();
+    m_imageDataVTK->SetScalarTypeToInt();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
 }
@@ -335,7 +327,6 @@ void Volume::loadWithPreAllocateAndInsert()
     if( !m_imageSet.isEmpty() )
     {
         this->allocateImageData();
-//         this->loadSlices(2); // 0: DcmFileFormat, 1: DicomImage, 2: vtkDICOMImageReader
         this->loadSlicesWithReaders(2); // 0: vtk, 1: dcmtk, 2: itkGdcm
         m_imageDataVTK->Update();
         m_dataLoaded = true;
@@ -343,82 +334,6 @@ void Volume::loadWithPreAllocateAndInsert()
     else
     {
         DEBUG_LOG("No tenim cap imatge per carregar");
-    }
-}
-
-void Volume::loadSlices( int method )
-{
-    typedef unsigned char * bufferDataType;
-    // llesca Z
-    int zSlice = 0;
-    // punter on copiarem les dades d'imatge. Apunta al buffer vtk
-    bufferDataType vtkBuffer = NULL;
-    // buffer on colocarem la llesca que hem llegit
-    bufferDataType imageBuffer = NULL;
-    // nombre de bytes que copiem
-    unsigned long bytes = 0;
-    // Per cada imatge
-    foreach( Image *image, m_imageSet )
-    {
-        DEBUG_LOG( QString("Llesca que vull carregar: %1").arg( zSlice ) );
-        bytes = m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*2;
-        switch( method )
-        {
-        case 0: // dcmtk, DcmFileFormat
-        {
-            DcmFileFormat dicomFile;
-            OFCondition status = dicomFile.loadFile( qPrintable( image->getPath() ) );
-            if( status.good() )
-            {
-                status = dicomFile.getDataset()->findAndGetUint16Array(DCM_PixelData, (const Uint16 *&)imageBuffer);
-                if( !status.good() )
-                    DEBUG_LOG( QString( "Error en llegir les dades dels pixels. Error: %1 ").arg( status.text() ) );
-            }
-            else
-                DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\n%2 ").arg( image->getPath() ).arg( status.text() ) );
-        }
-        break;
-
-        case 1: // dcmtk DicomImage
-        {
-            DicomImage *dicomImage = new DicomImage( qPrintable( image->getPath() ) );
-            if( dicomImage != NULL )
-            {
-                if( dicomImage->getStatus() == EIS_Normal )
-                {
-                    dicomImage->setMinMaxWindow();
-                    imageBuffer = (bufferDataType)dicomImage->getOutputData();
-                    bytes = dicomImage->getOutputDataSize();
-                }
-                else
-                    DEBUG_LOG( QString( "Error en carregar la DicomImage. Error: %1 ").arg( DicomImage::getString( dicomImage->getStatus() ) ) );
-            }
-        }
-        break;
-
-        case 2: // vtkDICOMImageReader
-        {
-            ::vtkDICOMImageReader *reader = ::vtkDICOMImageReader::New();
-            reader->SetFileName( qPrintable( image->getPath() ) );
-            reader->Update();
-            imageBuffer = (bufferDataType)reader->GetOutput()->GetScalarPointer();
-        }
-        break;
-
-        default:
-            DEBUG_LOG("Mètode de lectura erroni");
-            return;
-        break;
-        }
-
-        vtkBuffer = (unsigned char *)m_imageDataVTK->GetScalarPointer(0,0,zSlice);
-
-        // copiem les dades del buffer d'imatge cap a vtk
-        memcpy( vtkBuffer, imageBuffer, bytes  );
-
-
-        DEBUG_LOG( QString("Valor d'un pixel del mig(vtkBuffer): %1, valor del mateix del buffer d'imatge: %2, nombre de bytes que copiem: %3").arg( vtkBuffer[256*256+256]).arg( imageBuffer[256*256+256] ).arg( bytes ) );
-        zSlice++;
     }
 }
 
