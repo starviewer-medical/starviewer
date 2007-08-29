@@ -182,7 +182,7 @@ public slots:
      */
     void textOtherModalityEdited();
 
-signals :
+signals:
 
     /** Signal que s'emet quan es vol visualtizar un estudi cap a ExtensionHandler
      * @param Volum de l'estudi a visualitzar
@@ -201,16 +201,22 @@ signals :
     /// Signal que s'emet quan s'escull veure un Presentation State. Es passa el path d'aquest
     void viewPresentationState( const QString & path);
 
-protected :
+    /**
+     * Envia un senyal amb els fitxers que s'han de processar per a carregar les dades
+     * @param files Llista d'arxius a processar
+     * @param defaultStudyUID estudi que es voldrà veure per defecte
+     * @param defaultSeriesUID serie que es voldrà veure per defecte
+     * @param defaultImageInstance imatge que es voldrà veure per defecte
+     */
+    void processFiles( QStringList files, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
 
+protected :
     /** Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
     void closeEvent( QCloseEvent* ce );
 
 private:
-
-
 //estructura necessària per passar els paràmetres al thread que descarregarrà les imatges
 struct retrieveParameters
      {

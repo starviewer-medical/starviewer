@@ -140,41 +140,6 @@ void ExtensionHandler::onVolumeLoaded( Identifier id )
     request( 8 );
 }
 
-void ExtensionHandler::viewPatient( PatientFillerInput *patientFillerInput, QString studyUID, QString seriesUID )
-{
-    m_defaultStudyUID = studyUID;
-    m_defaultSeriesUID = seriesUID;
-    // Proves per comprovar que funciona el tema dels FilterSteps sense molestar a la resta de la gent.
-    // Descomentar per activar la càrrega de Patient
-    QProgressDialog progressDialog( m_mainApp );
-    progressDialog.setModal( true );
-    progressDialog.setRange( 0 , 100 );
-    progressDialog.setMinimumDuration( 0 );
-    progressDialog.setWindowTitle( tr("Patient loading") );
-    progressDialog.setLabelText( tr("Loading, please wait...") );
-    progressDialog.setCancelButton( 0 );
-
-    DEBUG_LOG( "BEFORE: Labels: " + patientFillerInput->getLabels().join("; "));
-    DEBUG_LOG( QString("BEFORE:  getNumberOfPatients: %1").arg( patientFillerInput->getNumberOfPatients() ) );
-    DEBUG_LOG( patientFillerInput->getPatient(0)->toString() );
-
-    PatientFiller patientFiller;
-    connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
-    patientFiller.fill( patientFillerInput );
-
-    unsigned int numberOfPatients = patientFillerInput->getNumberOfPatients();
-
-    DEBUG_LOG( "Labels: " + patientFillerInput->getLabels().join("; "));
-    DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
-    DEBUG_LOG( patientFillerInput->getPatient(0)->toString() );
-
-    for( int i = 0; i < numberOfPatients; i++ )
-    {
-        m_mainApp->addPatient( patientFillerInput->getPatient(i) );
-    }
-    load2DViewerExtension();
-}
-
 void ExtensionHandler::killBill()
 {
     if( !m_volumeID.isNull() )
@@ -187,6 +152,8 @@ void ExtensionHandler::createConnections()
 {
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
     connect( m_queryScreen, SIGNAL(viewPatient(PatientFillerInput *,QString,QString)), this, SLOT(viewPatient(PatientFillerInput *,QString,QString)));
+    // proves
+    connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), this, SLOT(processInput(QStringList,QString,QString,QString)) );
 }
 
 void ExtensionHandler::load2DViewerExtension()
@@ -232,10 +199,13 @@ QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input )
     return progressDialog;
 }
 
-void ExtensionHandler::processInput( QStringList inputFiles )
+void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
 {
-    PatientFillerInput fillerInput;
-    fillerInput.setFilesList( inputFiles );
+    m_defaultStudyUID = defaultStudyUID;
+    m_defaultSeriesUID = defaultSeriesUID;
+
+    PatientFillerInput *fillerInput = new PatientFillerInput;
+    fillerInput->setFilesList( inputFiles );
 
     QProgressDialog progressDialog( m_mainApp );
     progressDialog.setModal( true );
@@ -247,17 +217,17 @@ void ExtensionHandler::processInput( QStringList inputFiles )
 
     PatientFiller patientFiller;
     connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
-    patientFiller.fill( &fillerInput );
+    patientFiller.fill( fillerInput );
 
-    unsigned int numberOfPatients = fillerInput.getNumberOfPatients();
+    unsigned int numberOfPatients = fillerInput->getNumberOfPatients();
 
-    DEBUG_LOG( "Labels: " + fillerInput.getLabels().join("; "));
+    DEBUG_LOG( "Labels: " + fillerInput->getLabels().join("; "));
     DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
 
     for( int i = 0; i < numberOfPatients; i++ )
     {
-        DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput.getPatient(i)->toString() ) );
-        this->addPatientData( fillerInput.getPatient(i) );
+        DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput->getPatient(i)->toString() ) );
+        this->addPatientData( fillerInput->getPatient(i) );
     }
 }
 
@@ -265,6 +235,17 @@ void ExtensionHandler::addPatientData( Patient *patient )
 {
     // TODO decidir que fem aquí, si mostrar diàlegs, etc
     m_mainApp->addPatient( patient );
+}
+
+void ExtensionHandler::openDefaultExtension()
+{
+    if( m_mainApp->getCurrentPatient() )
+    {
+        // TODO de moment simplement cridem el load2DViewerExtension
+        load2DViewerExtension();
+    }
+    else
+        DEBUG_LOG("No hi ha dades de pacient!");
 }
 
 };  // end namespace udg

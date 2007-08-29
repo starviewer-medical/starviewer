@@ -345,12 +345,13 @@ void QApplicationMainWindow::addPatient( Patient *patient )
     {
         m_patient = patient;
         enableExtensions();
+        // si són les primeres dades que es carreguen, cal obrir l'extensió per defecte
+        m_extensionHandler->openDefaultExtension();
         DEBUG_LOG("No teníem cap pacient, assignem el que ens donen");
     }
     else if( m_patient->isSamePatient( patient ) )
     {
         *m_patient += *patient;
-        enableExtensions();
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
     }
     else
