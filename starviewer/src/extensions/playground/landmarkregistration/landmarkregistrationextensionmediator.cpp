@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "landmarkregistrationextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ LandmarkRegistrationExtensionMediator::LandmarkRegistrationExtensionMediator(QOb
  : ExtensionMediator(parent)
 {
 }
-
 
 LandmarkRegistrationExtensionMediator::~LandmarkRegistrationExtensionMediator()
 {
@@ -36,10 +34,7 @@ bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extensi
         return false;
     }
 
-    connect( landmarkRegistrationExtension, SIGNAL( newSerie() ), extensionHandler, SLOT( openSerieToCompare() ) );
-    connect( extensionHandler , SIGNAL( secondInput(Volume*) ) , landmarkRegistrationExtension , SLOT( setSecondInput(Volume*) ) );
-
-    landmarkRegistrationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    landmarkRegistrationExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

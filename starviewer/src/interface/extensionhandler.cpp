@@ -122,6 +122,8 @@ void ExtensionHandler::request( const QString &who )
         ExtensionContext extensionContext;
         extensionContext.setMainVolumeID(m_volumeID);
         extensionContext.setPatient( m_mainApp->getCurrentPatient() );
+        extensionContext.setDefaultSelectedStudies( QStringList(m_defaultStudyUID) );
+        extensionContext.setDefaultSelectedSeries( QStringList(m_defaultSeriesUID) );
 
         mediator->initializeExtension(extension, extensionContext, this);
         m_mainApp->m_extensionWorkspace->addApplication(extension, mediator->getExtensionID().getLabel() );
@@ -138,8 +140,10 @@ void ExtensionHandler::onVolumeLoaded( Identifier id )
     request( 8 );
 }
 
-void ExtensionHandler::viewPatient( PatientFillerInput patientFillerInput )
+void ExtensionHandler::viewPatient( PatientFillerInput *patientFillerInput, QString studyUID, QString seriesUID )
 {
+    m_defaultStudyUID = studyUID;
+    m_defaultSeriesUID = seriesUID;
     // Proves per comprovar que funciona el tema dels FilterSteps sense molestar a la resta de la gent.
     // Descomentar per activar la càrrega de Patient
     QProgressDialog progressDialog( m_mainApp );
@@ -150,29 +154,25 @@ void ExtensionHandler::viewPatient( PatientFillerInput patientFillerInput )
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
 
-    unsigned int numberOfPatients = patientFillerInput.getNumberOfPatients();
+    DEBUG_LOG( "BEFORE: Labels: " + patientFillerInput->getLabels().join("; "));
+    DEBUG_LOG( QString("BEFORE:  getNumberOfPatients: %1").arg( patientFillerInput->getNumberOfPatients() ) );
+    DEBUG_LOG( patientFillerInput->getPatient(0)->toString() );
 
     PatientFiller patientFiller;
     connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
-    patientFiller.fill( &patientFillerInput );
-    DEBUG_LOG( "Labels: " + patientFillerInput.getLabels().join("; )"));
+    patientFiller.fill( patientFillerInput );
+
+    unsigned int numberOfPatients = patientFillerInput->getNumberOfPatients();
+
+    DEBUG_LOG( "Labels: " + patientFillerInput->getLabels().join("; "));
     DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
-    DEBUG_LOG( patientFillerInput.getPatient(0)->toString() );
+    DEBUG_LOG( patientFillerInput->getPatient(0)->toString() );
 
     for( int i = 0; i < numberOfPatients; i++ )
     {
-        m_mainApp->addPatient( *patientFillerInput.getPatient(i) );
+        m_mainApp->addPatient( patientFillerInput->getPatient(i) );
     }
-}
-
-void ExtensionHandler::viewStudy( StudyVolum study )
-{
-    this->viewStudyInternal(study, "viewStudy");
-}
-
-void ExtensionHandler::viewStudyToCompare( StudyVolum study )
-{
-    this->viewStudyInternal(study, "viewStudyToCompare");
+    load2DViewerExtension();
 }
 
 void ExtensionHandler::killBill()
@@ -181,34 +181,26 @@ void ExtensionHandler::killBill()
     {
         m_volumeRepository->removeVolume( m_volumeID );
     }
-    if( !m_compareVolumeID.isNull() )
-    {
-        m_volumeRepository->removeVolume( m_compareVolumeID );
-    }
-}
-
-void ExtensionHandler::openSerieToCompare()
-{
-    QueryScreen *queryScreen = new QueryScreen( m_mainApp );
-    connect( queryScreen , SIGNAL( viewStudy(StudyVolum) ) , this , SLOT( viewStudyToCompare(StudyVolum) ) );
-    queryScreen->show();
 }
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_queryScreen , SIGNAL(viewStudy(StudyVolum)) , this , SLOT(viewStudy(StudyVolum)) );
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
-    connect( m_queryScreen, SIGNAL(viewPatient(PatientFillerInput)), this, SLOT(viewPatient(PatientFillerInput)));
+    connect( m_queryScreen, SIGNAL(viewPatient(PatientFillerInput *,QString,QString)), this, SLOT(viewPatient(PatientFillerInput *,QString,QString)));
 }
 
 void ExtensionHandler::load2DViewerExtension()
 {
+    ExtensionContext extensionContext;
+    extensionContext.setMainVolumeID( m_volumeID );
+    extensionContext.setPatient( m_mainApp->getCurrentPatient() );
+    extensionContext.setDefaultSelectedStudies( QStringList(m_defaultStudyUID) );
+    extensionContext.setDefaultSelectedSeries( QStringList(m_defaultSeriesUID) );
+
     Q2DViewerExtension *defaultViewerExtension = new Q2DViewerExtension;
-    defaultViewerExtension->setInput( m_volumeRepository->getVolume( m_volumeID ) );
+    defaultViewerExtension->setInput( extensionContext.getDefaultVolume() );
     m_mainApp->m_extensionWorkspace->addApplication( defaultViewerExtension , tr("2D Viewer"));
-    // defaultViewerExtension->populateToolBar( m_mainApp->getExtensionsToolBar() );
-    connect( defaultViewerExtension , SIGNAL( newSerie() ) , this , SLOT( openSerieToCompare() ) );
-    connect( this , SIGNAL( secondInput(Volume*) ) , defaultViewerExtension , SLOT( setSecondInput(Volume*) ) );
+
     connect( m_queryScreen, SIGNAL(viewKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
     connect( m_queryScreen, SIGNAL(viewPresentationState(const QString &)),
              defaultViewerExtension, SLOT(loadPresentationState(const QString &) ));
@@ -240,72 +232,39 @@ QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input )
     return progressDialog;
 }
 
-void ExtensionHandler::viewStudyInternal( StudyVolum study, QString callerName )
+void ExtensionHandler::processInput( QStringList inputFiles )
 {
-    Input *input = new Input;
-    QProgressDialog *progressDialog = this->activateProgressDialog(input);
+    PatientFillerInput fillerInput;
+    fillerInput.setFilesList( inputFiles );
 
-    SeriesVolum serie;
-    bool found = false;
-    int i = 0;
+    QProgressDialog progressDialog( m_mainApp );
+    progressDialog.setModal( true );
+    progressDialog.setRange( 0 , 100 );
+    progressDialog.setMinimumDuration( 0 );
+    progressDialog.setWindowTitle( tr("Patient loading") );
+    progressDialog.setLabelText( tr("Loading, please wait...") );
+    progressDialog.setCancelButton( 0 );
 
-    m_mainApp->setCursor( QCursor(Qt::WaitCursor) );
-    while( i < study.getNumberOfSeries() && !found )
+    PatientFiller patientFiller;
+    connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
+    patientFiller.fill( &fillerInput );
+
+    unsigned int numberOfPatients = fillerInput.getNumberOfPatients();
+
+    DEBUG_LOG( "Labels: " + fillerInput.getLabels().join("; "));
+    DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
+
+    for( int i = 0; i < numberOfPatients; i++ )
     {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
-        {
-            found = true;
-            serie = study.getSeriesVolum(i);
-        }
-        i++;
+        DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput.getPatient(i)->toString() ) );
+        this->addPatientData( fillerInput.getPatient(i) );
     }
-    if( !found ) //si no l'hem trobat per defecte mostrarem la primera serie
-        serie = study.getSeriesVolum(0);
+}
 
-    switch( input->readFiles( serie.getImagesPathList() ) )
-    {
-        case Input::NoError:
-        {
-            // TODO Aquí hi ha un bug, què passa si dues extensions obren volums diferents?
-            // No s'arregla perquè això desapareixerà amb lo de pacient.
-            if (callerName == "viewStudy")
-            {
-                QApplicationMainWindow *mainWindow;
-
-                mainWindow = m_volumeID.isNull() ? m_mainApp : m_mainApp->openNewWindow();
-
-                Volume *volume = input->getData();
-                Identifier volumeId = m_volumeRepository->addVolume( volume );
-
-                mainWindow->setWindowTitle( volume->getVolumeSourceInformation()->getPatientName() + QString( " : " ) + volume->getVolumeSourceInformation()->getPatientID() );
-
-                mainWindow->onVolumeLoaded(volumeId);
-            }
-            else
-            {
-                if( !m_compareVolumeID.isNull() )
-                {
-                    m_volumeRepository->removeVolume( m_compareVolumeID );
-                }
-                Volume *volume = input->getData();
-                m_compareVolumeID = m_volumeRepository->addVolume( volume );
-
-                emit secondInput( volume );
-            }
-            break;
-        }
-
-        case Input::InvalidFileName:
-            QMessageBox::critical( m_mainApp, tr("Error"), tr("Invalid path or filename/s") );
-            break;
-
-        case Input::SizeMismatch:
-            QMessageBox::critical( m_mainApp, tr("Error"), tr("Images of different size in the same serie. Open the images of the serie separately") );
-            break;
-    }
-    m_mainApp->setCursor( QCursor(Qt::ArrowCursor) );
-
-    delete progressDialog;
+void ExtensionHandler::addPatientData( Patient *patient )
+{
+    // TODO decidir que fem aquí, si mostrar diàlegs, etc
+    m_mainApp->addPatient( patient );
 }
 
 };  // end namespace udg

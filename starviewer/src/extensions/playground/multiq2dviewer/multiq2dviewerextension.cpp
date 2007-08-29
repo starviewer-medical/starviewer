@@ -29,6 +29,8 @@
 #include "menugridwidget.h"
 #include "tablemenu.h"
 
+#include "patient.h"
+
 namespace udg {
 
 MultiQ2DViewerExtension::MultiQ2DViewerExtension( QWidget *parent )
@@ -274,12 +276,10 @@ void MultiQ2DViewerExtension::setInput( Volume *input )
     }
     else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
     {
-//         m_2DView2_1->getDefaultWindowLevel( wl );
         m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
     }
     m_windowLevelComboBox->setCurrentIndex( 0 );
 
-    INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 //     changeViewToAxial();
 
     //Update dels layouts

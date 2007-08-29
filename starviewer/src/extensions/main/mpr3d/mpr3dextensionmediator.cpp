@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "mpr3dextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ MPR3DExtensionMediator::MPR3DExtensionMediator(QObject *parent)
  : ExtensionMediator(parent)
 {
 }
-
 
 MPR3DExtensionMediator::~MPR3DExtensionMediator()
 {
@@ -36,7 +34,7 @@ bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, const Exten
         return false;
     }
 
-    mpr3dExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    mpr3dExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

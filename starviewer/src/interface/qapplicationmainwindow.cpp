@@ -19,6 +19,7 @@
 #include "extensionworkspace.h"
 #include "logging.h"
 #include "qlogviewer.h"
+#include "patient.h"
 
 // Mini - aplicacions
 #include "cacheinstallation.h"
@@ -31,7 +32,7 @@
 namespace udg{
 
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
-    : QMainWindow( parent )
+    : QMainWindow( parent ), m_patient(0)
 {
     this->setAttribute( Qt::WA_DeleteOnClose );
     this->setObjectName( name );
@@ -338,33 +339,33 @@ QApplicationMainWindow* QApplicationMainWindow::openNewWindow()
     return newMainWindow;
 }
 
-void QApplicationMainWindow::addPatient( const Patient &patient )
+void QApplicationMainWindow::addPatient( Patient *patient )
 {
-    if( m_patient.isSamePatient( &patient ) )
+    if( !m_patient )
     {
-        m_patient += patient;
+        m_patient = patient;
         enableExtensions();
+        DEBUG_LOG("No teníem cap pacient, assignem el que ens donen");
+    }
+    else if( m_patient->isSamePatient( patient ) )
+    {
+        *m_patient += *patient;
+        enableExtensions();
+        DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
     }
     else
     {
-        // si té estudis llavors hem de crear una nova finestra i donar-li aquest input
-        if( m_patient.getNumberOfStudies() > 0 )
-        {
-            //crear finestra i donar-li input
-            QApplicationMainWindow *newMainWindow = openNewWindow();
-            newMainWindow->addPatient( patient );
-        }
-        else // altrament aquest pacient serà assignat d'aquesta finestra
-        {
-            m_patient = patient;
-            enableExtensions();
-        }
+        // és un pacient diferent, cal obrir-lo apart
+        //crear finestra i donar-li input
+        QApplicationMainWindow *newMainWindow = openNewWindow();
+        newMainWindow->addPatient( patient );
+        DEBUG_LOG("Creem nou pacient");
     }
 }
 
 Patient *QApplicationMainWindow::getCurrentPatient()
 {
-    return &m_patient;
+    return m_patient;
 }
 
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()

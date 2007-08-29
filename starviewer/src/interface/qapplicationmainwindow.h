@@ -12,7 +12,6 @@
 #include <QStringList>
 
 #include "identifier.h"
-#include "patient.h"
 
 // Forward declarations
 class QAction;
@@ -25,6 +24,7 @@ namespace udg{
 class ExtensionWorkspace;
 class ExtensionHandler;
 class QLogViewer;
+class Patient;
 
 class QApplicationMainWindow : public QMainWindow
 {
@@ -43,7 +43,7 @@ public:
     void newAndOpenDir();
 
     /// Donat un pacient, segons el pacient que tinguem, afegirem les dades, crearem una nova instància de la main window, etc
-    void addPatient( const Patient &patient );
+    void addPatient( Patient *patient );
 
     /// Ens retorna el punter al pacient que té ara
     Patient *getCurrentPatient();
@@ -139,7 +139,7 @@ private:
     QLogViewer *m_logViewer;
 
     /// El pacient que li correspon a aquesta instància
-    Patient m_patient;
+    Patient *m_patient;
 };
 
 }; // fi namespace udg

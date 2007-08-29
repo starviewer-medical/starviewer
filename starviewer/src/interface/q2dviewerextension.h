@@ -42,13 +42,6 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
-    /// Canvia el layout de visor singular/doble
-    void changeViewToSingle();
-    void changeViewToDouble();
-
-    /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
-    void setSecondInput( Volume *input );
-
     /// Carrega un Key Image Note
     void loadKeyImageNote(const QString &filename);
 
@@ -75,8 +68,6 @@ private:
     QAction *m_axialViewAction;
     QAction *m_sagitalViewAction;
     QAction *m_coronalViewAction;
-    QAction *m_singleViewAction;
-    QAction *m_doubleViewAction;
     QAction *m_slicingAction;
     QAction *m_windowLevelAction;
     QAction *m_zoomAction;
@@ -108,25 +99,16 @@ private:
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
-    Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher1, *m_keyImageNoteAttacher2;
+    Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher;
     KeyImageNote *m_keyImageNote;
 
     /// S'encarrega d'aplicar els presentation states
     Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
 
 private slots:
-    /// sincronitza les llesques de les sèries que es visualitzen
-    void synchronizeSlices( bool ok );
-
-    /// ens permet escollir una nova sèrie per a comparar
-    void chooseNewSerie();
-
     /// activem o desactivem el presentation state
     void enablePresentationState( bool enable );
 
-signals:
-    /// Aquest senyal s'emetrà quan es vulgui canviar de sèrie per comparar
-    void newSerie();
 };
 
 } // end namespace udg

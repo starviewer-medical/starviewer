@@ -40,9 +40,6 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
-
-
-
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
@@ -62,13 +59,10 @@ private:
     int m_nextStep;
     QBasicTimer *m_timer;
 
-
     /// Accions
     QAction *m_axialViewAction;
     QAction *m_sagitalViewAction;
     QAction *m_coronalViewAction;
-//     QAction *m_singleViewAction;
-//     QAction *m_doubleViewAction;
     QAction *m_slicingAction;
     QAction *m_windowLevelAction;
     QAction *m_zoomAction;
@@ -89,7 +83,6 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-
     /// Llegir/Escriure la configuració de l'aplicació
     void readSettings();
     void writeSettings();
@@ -98,7 +91,6 @@ private:
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
 private slots:
-
     /// Fa la reproducció de la llesca
     void playImages();
 
@@ -122,13 +114,6 @@ private slots:
 
     /// Fixa el final de l'interval de reproducció
     void finishInterval( bool checked );
-
-    /// ens permet escollir una nova sèrie per a comparar
-    void chooseNewSerie();
-
-signals:
-    /// Aquest senyal s'emetrà quan es vulgui canviar de sèrie per comparar
-    void newSerie();
 
 protected:
     void timerEvent(QTimerEvent *event);

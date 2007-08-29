@@ -489,11 +489,6 @@ void QCardiac2DViewerExtension::finishInterval( bool checked )
     m_slider->setMaximum( m_lastSliceInterval );
 }
 
-void QCardiac2DViewerExtension::chooseNewSerie()
-{
-    emit newSerie();
-}
-
 void QCardiac2DViewerExtension::readSettings()
 {
     QSettings settings;

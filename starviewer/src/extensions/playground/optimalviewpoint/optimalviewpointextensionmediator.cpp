@@ -5,39 +5,24 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-
-
 #include "optimalviewpointextensionmediator.h"
-
-
-// #include "extensionhandler.h"
-#include "volumerepository.h"
 #include "extensioncontext.h"
 
-
 namespace udg {
-
-
 
 OptimalViewpointExtensionMediator::OptimalViewpointExtensionMediator( QObject * parent )
     : ExtensionMediator( parent )
 {
 }
 
-
-
 OptimalViewpointExtensionMediator::~OptimalViewpointExtensionMediator()
 {
 }
-
-
 
 DisplayableID OptimalViewpointExtensionMediator::getExtensionID() const
 {
     return DisplayableID( "OptimalViewpointExtension", tr("Optimal Viewpoint") );
 }
-
-
 
 bool OptimalViewpointExtensionMediator::initializeExtension(QWidget * extension, const ExtensionContext &extensionContext, ExtensionHandler * /*extensionHandler*/)
 {
@@ -48,7 +33,7 @@ bool OptimalViewpointExtensionMediator::initializeExtension(QWidget * extension,
         return false;
     }
 
-    optimalViewpointExtension->setInput( VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ) );
+    optimalViewpointExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

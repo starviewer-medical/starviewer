@@ -11,9 +11,6 @@
 #include <QString>
 #include "identifier.h"
 #include "patient.h"
-#include "studyvolum.h"
-
-#include "patientfillerinput.h"
 
 class QProgressDialog;
 
@@ -44,10 +41,6 @@ public:
 
     ~ExtensionHandler();
 
-signals:
-    /// Emet un senyal amb el segon volum per comparar
-    void secondInput( Volume * );
-
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
     void request( int who );
@@ -57,19 +50,24 @@ public slots:
     void onVolumeLoaded( Identifier id );
 
     /// De moment, primera aproximació a arrencar el pacs de l'Starviewer.
-    void viewPatient( PatientFillerInput patientFillerInput );
-
-    /// \TODO [apanyo] es crida quan es demana un studi descarregat, es veu la pimera serie
-    void viewStudy( StudyVolum study );
-
-    /// \TODO [apanyo] Slot que afegeix al 2n visor una sèrie escollida per comparar-> és un mètode moooolt temporal.
-    void viewStudyToCompare( StudyVolum study );
+    void viewPatient( PatientFillerInput *patientFillerInput, QString studyUID, QString seriesUID );
 
     /// cridat quan l'aplicació mor
     void killBill();
 
-    /// \TODO [temporal] Obre una sèrie per comparar en el visor per defecte
-    void openSerieToCompare();
+    /**
+     * Processa un conjunt d'arxius d'input i els processa per decidir què fer amb aquests, com per exemple
+     * crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
+     * @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
+     */
+    void processInput( QStringList inputFiles );
+
+    /**
+     * Donada una estructura de pacient decideix que fer amb aquesta, com por exemple fusionar les dades si ja tenim
+     * dades d'aquest mateix pacient, obrir finestres noves, alertar a l'usuari de les noves dades, etc.
+     * @param patient L'estructura de pacient que volem afegir a l'aplicació
+     */
+    void addPatientData( Patient *patient );
 
 private:
     /// Crea les connexions de signals i slots
@@ -81,9 +79,6 @@ private:
     /// Crea el diàleg de progrés al carregar un Volume.
     QProgressDialog* activateProgressDialog( Input *input );
 
-    /// Crida per intentar reduir els [apanyo] i [temporal] \TODO Amb l'estructura Pacient establerta desapareixerà
-    void viewStudyInternal( StudyVolum study, QString callerName );
-
 private slots:
     /// Slot que es crida quan hem canviat d'una extensió a una altre
     void extensionChanged( int index );
@@ -92,11 +87,8 @@ private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
 
-    /// L'id del volum amb el que estem treballant
+    /// L'id del volum amb el que estem treballant TODO tendirà a desaparèixer en breu
     Identifier m_volumeID;
-
-    /// \TODO aquest ha de ser temporal
-    Identifier m_compareVolumeID;
 
     /// El repository de volums
     VolumeRepository *m_volumeRepository;
@@ -106,6 +98,9 @@ private:
 
     /// La pantalla d'accés al pacs
     QueryScreen *m_queryScreen;
+
+    /// Membres de conveniència per saber quin estudi i series es volen veure per defecte
+    QString m_defaultStudyUID, m_defaultSeriesUID;
 };
 
 };  //  end  namespace udg

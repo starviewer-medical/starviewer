@@ -6,7 +6,6 @@
  ***************************************************************************/
 
 #include "volume3dviewtestingextensionmediator.h"
-#include "volumerepository.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -34,7 +33,7 @@ bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extensio
         return false;
     }
 
-    volume3DViewTestingExtension->setInput( VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ) );
+    volume3DViewTestingExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

@@ -66,13 +66,6 @@ void QMPR3D2DExtension::setInput( Volume *input )
 {
     m_volume = input;
 
-    //\TODO Això s'ha d'entendre com un parxe. L'mpr hauria de funcionar bé sense aplicar aquesta transformació. Aquesta transformació s'hauria de tenir en compte en els plans que construim
-    vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
-    changeFilter->SetInput( m_volume->getVtkData() );
-    changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    m_volume->setData( changeFilter->GetOutput() );
-
-    INFO_LOG( "QMPR3D2DExtensions:: Ens donen l'input" );
     m_mpr3DView->setInput( m_volume );
 
     m_axial2DView->setInput( m_mpr3DView->getAxialResliceOutput() );
