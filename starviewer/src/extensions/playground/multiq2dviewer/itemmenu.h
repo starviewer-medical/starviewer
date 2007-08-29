@@ -30,6 +30,12 @@ public:
     /// Obtenir les dades
     QVariant * getData( ){ return m_data; }
 
+    /// Mètode per fixar que les caselles es quedin seleccionades o es deseleccionin al marxar el mouse
+    void setFixed( bool option );
+
+    /// Mètode per fixar l'element com a seleccionat o no seleccionat
+    void setSelected( bool option );
+
 protected:
 
     /// Sobrecàrrega del mètode que tracta tots els events
@@ -38,10 +44,16 @@ protected:
     /// Dades que pot guardar el widget
     QVariant * m_data;
 
+    /// Atribut que informa si s'ha de quedar seleccionat o s'ha de deseleccionar
+    bool m_fixed;
+
 signals:
 
     /// Signal que s'emet al entrar el mouse al widget
     void isActive( ItemMenu * );
+
+    /// Signal que s'emet al seleccionar l'item
+    void isSelected( ItemMenu * );
 };
 
 }
