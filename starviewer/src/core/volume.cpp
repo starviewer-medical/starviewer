@@ -92,7 +92,26 @@ Volume::VtkImageTypePointer Volume::getVtkData()
 {
     if( !m_dataLoaded )
     {
-        this->loadWithPreAllocateAndInsert();
+        if( !m_imageSet.isEmpty() ) // si li hem donat com a input una llista d'imatges llegim les imatges
+        {
+            this->loadWithPreAllocateAndInsert();
+        }
+        else if( !m_fileList.isEmpty() ) // si li hem donat com a input un conjunt d'arxius, llegim aquests arxius amb Input
+        {
+            Input *input = new Input;
+            switch( input->readFiles( m_fileList ) )
+            {
+                case Input::NoError:
+                    this->setData( input->getData()->getVtkData() );
+                    break;
+
+                case Input::InvalidFileName:
+                    break;
+
+                case Input::SizeMismatch:
+                    break;
+            }
+        }
     }
     return m_imageDataVTK;
 }
@@ -280,10 +299,24 @@ void Volume::addImage( Image *image )
 
 void Volume::setImages( const QList<Image *> &imageList )
 {
+//     m_imageSet.clear();
+//     m_imageSet = imageList;
+//     // perquè s'ompli la informació DICOM
+//     m_volumeInformation->setFilenames( m_imageSet.at(0)->getPath() );
+//     m_dataLoaded = false;
+    //TODO hauria de ser tal i com està comentat, però de moment serà així perquè tenim problemes
+    // al accedir a algunes llistes d'imatges, ja que sembla que d'avegades apunten a memòria no allotjada
+    // és un problema que cal investigar. Així de moment deixem això que és estable i funciona
     m_imageSet.clear();
-    m_imageSet = imageList;
+    this->setInputFiles( imageList.at(0)->getParentSeries()->getFilesPathList() );
+}
+
+void Volume::setInputFiles( const QStringList &filenames )
+{
+    m_fileList.clear();
+    m_fileList = filenames;
     // perquè s'ompli la informació DICOM
-    m_volumeInformation->setFilenames( m_imageSet.at(0)->getPath() );
+    m_volumeInformation->setFilenames( m_fileList );
     m_dataLoaded = false;
 }
 

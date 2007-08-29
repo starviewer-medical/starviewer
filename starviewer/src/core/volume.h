@@ -11,8 +11,7 @@
 // Els filtres per passar itk<=>vtk: InsightApplications/auxiliary/vtk --> ho tenim a /tools
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
-#include <QString>
-#include <QList>
+#include <QStringList>
 
 // FWD declarations
 class vtkImageData;
@@ -120,6 +119,9 @@ public:
     /// Assignem directament el conjunt d'imatges que composen aquest volum
     void setImages( const QList<Image *> &imageList );
 
+    /// Mètode de conveniència en el que li assignem els arxius que tindrà d'input
+    void setInputFiles( const QStringList &filenames );
+
     /// Mètode ràpid per obtenir la series a la que pertany aquest volum
     Series *getSeries();
 
@@ -161,6 +163,9 @@ private:
 
     /// Conjunt d'imatges que composen el volum
     QList<Image *> m_imageSet;
+
+    /// Conjunt d'arxius que conformen la imatge. Membre de conveniència, relacionat amb el mètode setInputFiles
+    QStringList m_fileList;
 };
 
 };  // end namespace udg
