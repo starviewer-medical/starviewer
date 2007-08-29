@@ -13,7 +13,10 @@ namespace udg {
 
 AreaSpline::AreaSpline(){
 m_area=0;
-m_spline=0;}
+m_spline=0;
+m_factor1=0;
+m_factor2=0;
+}
 
 AreaSpline::~AreaSpline(){}
 
@@ -50,7 +53,7 @@ m_factor1=0;
 m_factor2=0;
 switch (vista){
 
-    case 0:
+    case 0:///Axial
 
         for(int k=0;k<points-1;k++){
     
@@ -62,46 +65,73 @@ switch (vista){
             
         }
         
-        m_spline->GetHandlePosition(0,pinici);
-        m_spline->GetHandlePosition(points-1,pseg);
+        m_spline->GetHandlePosition(0,pseg);
+        m_spline->GetHandlePosition(points-1,pinici);
         m_factor1=m_factor1+(pinici[0]*pseg[1]);
         m_factor2=m_factor2+(pinici[1]*pseg[0]);
         //m_area =m_area + (pinici[0]*pseg[1] - pinici[1]*pseg[0])/2 ;
         m_area=(m_factor1-m_factor2)/2;
         //m_area = m_area/2;
     break;
-    case 1:
+    case 1:///Sagital
 
         for(int k=0;k<points-1;k++){
-    
+
             m_spline->GetHandlePosition(k,pinici);
             m_spline->GetHandlePosition(k+1,pseg);
+            m_factor1=m_factor1+(pinici[0]*pseg[2]);
+            m_factor2=m_factor2+(pinici[2]*pseg[0]);
+
+    
+        /*    m_spline->GetHandlePosition(k,pinici);
+            m_spline->GetHandlePosition(k+1,pseg);
             
-            m_area =m_area + ((pinici[0]*pseg[2]) - (pinici[2]*pseg[0]))/2 ;
+            m_area =m_area + ((pinici[0]*pseg[2]) - (pinici[2]*pseg[0]))/2 ;*/
         
         }
         
-        m_spline->GetHandlePosition(0,pinici);
+        /*m_spline->GetHandlePosition(0,pinici);
         m_spline->GetHandlePosition(points-1,pseg);
         m_area =m_area + ((pinici[0]*pseg[2]) - (pinici[2]*pseg[0]))/2 ;
-        //m_area = m_area/2;
+        //m_area = m_area/2;*/
+
+        m_spline->GetHandlePosition(0,pseg);
+        m_spline->GetHandlePosition(points-1,pinici);
+        m_factor1=m_factor1+(pinici[0]*pseg[2]);
+        m_factor2=m_factor2+(pinici[2]*pseg[0]);
+        //m_area =m_area + (pinici[0]*pseg[1] - pinici[1]*pseg[0])/2 ;
+        m_area=(m_factor1-m_factor2)/2;
+
         
     break;
-    case 2:
+    case 2:///Coronal
         
         for(int k=0;k<points-1;k++){
     
             m_spline->GetHandlePosition(k,pinici);
             m_spline->GetHandlePosition(k+1,pseg);
+            m_factor1=m_factor1+(pinici[1]*pseg[2]);
+            m_factor2=m_factor2+(pinici[2]*pseg[1]);
+
+
+            /*m_spline->GetHandlePosition(k,pinici);
+            m_spline->GetHandlePosition(k+1,pseg);
             
-            m_area =m_area + ((pinici[1]*pseg[2]) - (pinici[2]*pseg[1]))/2 ;
+            m_area =m_area + ((pinici[1]*pseg[2]) - (pinici[2]*pseg[1]))/2 ;*/
         
         }
         
-        m_spline->GetHandlePosition(0,pinici);
+        m_spline->GetHandlePosition(0,pseg);
+        m_spline->GetHandlePosition(points-1,pinici);
+        m_factor1=m_factor1+(pinici[1]*pseg[2]);
+        m_factor2=m_factor2+(pinici[2]*pseg[1]);
+        //m_area =m_area + (pinici[0]*pseg[1] - pinici[1]*pseg[0])/2 ;
+        m_area=(m_factor1-m_factor2)/2;
+
+        /*m_spline->GetHandlePosition(0,pinici);
         m_spline->GetHandlePosition(points-1,pseg);
         m_area =m_area + ((pinici[1]*pseg[2]) - (pinici[2]*pseg[1]))/2 ;
-        //m_area = m_area/2;
+        //m_area = m_area/2;*/
 
 
     break;

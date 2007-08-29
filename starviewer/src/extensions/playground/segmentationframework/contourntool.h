@@ -16,7 +16,8 @@ namespace udg {
 
 class Q2DViewer;
 class Volume;
-class DeterminateContour;
+//class DeterminateContour;
+class LlescaContorn;
 class AreaSpline;
 
 /**
@@ -39,6 +40,9 @@ public:
 
     double getLength( );
 
+    void doContouring(int slice );
+    void getCoords();
+    
 signals:
 
     void setLenght(double);
@@ -50,9 +54,15 @@ private:
     Volume *m_seg;
     int m_seedSlice;
     int m_lastView;
-    DeterminateContour *m_con;
-    DeterminateContour *m_con2;
-    DeterminateContour *m_con3;
+
+     double m_seedPosition[3];
+   // DeterminateContour *m_con;
+    //DeterminateContour *m_con2;
+    //DeterminateContour *m_con3;
+    
+    LlescaContorn *m_conAxial;
+    LlescaContorn *m_conCoronal;
+    LlescaContorn *m_conSagital;
     ///Actor que dibuixa la llavor
     vtkSplineWidget*  m_spline;
     vtkSplineWidget*  m_splineY;
@@ -64,6 +74,8 @@ private:
     float xt;
     float yt;
     float zt;
+    
+    
 
    
 /// \TODO potser aquests m�todes slots passen a ser p�blics
@@ -71,7 +83,7 @@ private slots:
    
     void setContourn( );
    
-    void doContouring();
+    void DibuixaSpline();
 
     void sliceChanged( int s );
 

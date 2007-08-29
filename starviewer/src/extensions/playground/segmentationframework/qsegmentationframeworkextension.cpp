@@ -38,6 +38,18 @@
 #include <vtkTriangleFilter.h>
 #include <vtkTriangleStrip.h>
 #include <vtkQuadricDecimation.h>
+#include <vtkImageData.h>
+#include <vtkContourFilter.h>
+#include <vtkPolyDataNormals.h>
+#include <vtkStripper.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkProperty.h>
+//#include <vtkContourRepresentation.h>
+//#include <vtkContourWidget.h>
+//#include <vtkSplineFilter.h>
+//#include <vtkContourWidget.h>
+
 // ITK
 #include <itkImage.h>
 
@@ -255,6 +267,8 @@ void QSegmentationFrameworkExtension::createConnections()
 
     connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
 
+    connect( m_2DView, SIGNAL(sliceChanged(int)), m_sliceViewSlider , SLOT (setValue(int)));
+
     //connect( m_contorn , SIGNAL( setLenght(double) ) , this , SLOT( setSplineLength(double) ) );
 
 }
@@ -275,15 +289,16 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
     m_currentView = Axial;
-
+    
     int* dim;
     dim = m_mainVolume->getDimensions();
+    m_2DView->setSlice((dim[2]-1)/2);
     m_sliceViewSlider->setMinimum(0);
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-
+    //m_sliceViewSlider->setValue((dim[2]-1)/2);
     
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
@@ -371,6 +386,8 @@ void QSegmentationFrameworkExtension::changeViewToAxial()
     m_sliceSpinBox->setMaximum( extent[5] );
     m_sliceViewSlider->setMaximum( extent[5] );
     m_2DView->setViewToAxial();
+    m_2DView->setSlice(extent[5]/2);
+    m_sliceViewSlider->setValue(m_2DView->getSlice());
     //INFO_LOG("Visor per defecte: Canviem a vista Axial (Vista 1)")
     m_2DView->render();
 
@@ -386,6 +403,8 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_sliceSpinBox->setMaximum( extent[1] );
     m_sliceViewSlider->setMaximum( extent[1] );
     m_2DView->setViewToSagittal();
+    m_2DView->setSlice(extent[1]/2);
+    m_sliceViewSlider->setValue(m_2DView->getSlice());
    // INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
     m_2DView->render();
 }
@@ -402,6 +421,8 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_sliceSpinBox->setMaximum( extent[3] );
     m_sliceViewSlider->setMaximum( extent[3] );
     m_2DView->setViewToCoronal();
+    m_2DView->setSlice(extent[3]/2);
+    m_sliceViewSlider->setValue(m_2DView->getSlice());
     //INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
     m_2DView->render();
 
@@ -457,7 +478,7 @@ void QSegmentationFrameworkExtension::setSeedPosition( )
 
     m_outSeed=false;
     m_ApplyIC->setEnabled(true);
-    m_selectOutSeed->setEnabled(false);
+    //m_selectOutSeed->setEnabled(false);
 
     }else{
         QTableWidgetItem* X = new QTableWidgetItem();
@@ -564,7 +585,7 @@ void QSegmentationFrameworkExtension::applyCT()
             }
         
     VolumeCalculator();
-    
+   // Contorn(m_maskVolume->getVtkData());
             
 
 }
@@ -999,11 +1020,14 @@ m_2DView->getInteractor()->Render();
 
 void QSegmentationFrameworkExtension::calculateContorn( )
 {
+  if(!m_isCont){
   m_contorn = new ContournTool( m_2DView , m_maskVolume );
   m_isCont=true;
- //
+  }
+    
+  //m_contorn->doContouring(m_2DView->getSlice() );
 
-    setSplineLength(m_contorn->getLength());
+  //setSplineLength(m_contorn->getLength());
     /* char* tempchar = new char[20];
 
   sprintf(tempchar,"%.2f",m_contorn->getLength());//el volum de la llesca en mm quadrats
@@ -1024,6 +1048,55 @@ void QSegmentationFrameworkExtension::setSplineLength(double area)
 
 
 }
+
+void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
+
+
+    vtkContourFilter *skinExtractor = vtkContourFilter::New();
+    skinExtractor->SetInput(segmentat);
+    skinExtractor->SetNumberOfContours(1);
+    skinExtractor->SetValue(0, 255);
+    vtkPolyDataNormals *skinNormals = vtkPolyDataNormals::New();
+    skinNormals->SetInputConnection(skinExtractor->GetOutputPort());
+    skinNormals->SetFeatureAngle(60.0);
+    
+    /*vtkSplineFilter *spline = vtkSplineFilter::New();
+    spline->SetInput(skinExtractor->GetOutput());
+    vtkSplineWidget *widget = vtkSplineWidget::New();
+    widget->SetInput(spline->GetOutput());*/
+   // vtkStripper *skinStripper = vtkStripper::New();
+    //skinStripper->SetInputConnection(skinNormals->GetOutputPort());
+    vtkPolyDataMapper *skinMapper = vtkPolyDataMapper::New();
+    //vtkContourWidget *conWidget = vtkContourWidget::New();
+    //conWidget->Initialize(skinExtractor->GetOutput());
+    //vtkPolyData * poly= vtkPolyData::New();
+    //widget->GetPolyData(poly);
+    //skinMapper->SetInputConnection(skinStripper->GetOutputPort());
+    //skinMapper->SetInput(poly);
+    //skinMapper->SetInputConnection(skinExtractor->GetOutputPort());
+    vtkSplineWidget *widget = vtkSplineWidget::New();
+
+    skinMapper->SetInputConnection(skinNormals->GetOutputPort());
+    vtkPolyData * poly= vtkPolyData::New();
+    //widget->GetPolyData(poly);
+    
+    poly=skinMapper->GetInput();
+    //int i=widget->GetNumberOfHandles();
+    //std::cout<<"Tenim tants punts: "<<i<<endl;
+    //skinMapper->ScalarVisibilityOff();
+    vtkActor *skin = vtkActor::New();
+    skin->SetMapper(skinMapper);
+    skin->GetProperty()->SetDiffuseColor(1, .49, .25);
+    skin->GetProperty()->SetSpecular(.3);
+    skin->GetProperty()->SetSpecularPower(20);
+    skin->VisibilityOn();
+
+    m_2DView->getRenderer()-> AddActor( skin );
+    m_2DView->getInteractor()->Render();
+}
+
+
+
 
 
 }
