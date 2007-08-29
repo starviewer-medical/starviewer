@@ -12,8 +12,6 @@
 #include "QPalette"
 #include "QMouseEvent"
 
-#include "menuselectgrid.h"
-
 #include "logging.h"
 
 namespace udg {
@@ -28,11 +26,6 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     m_maxColumns = 4;
     createPredefinedGrids( m_predefinedGridsList );
 
-    MenuSelectGrid * menu = new MenuSelectGrid();
-    menu->hide();
-
-    connect( m_selectCustomGridButton, SIGNAL( clicked() ), menu, SLOT( show() ) );
-    connect( menu, SIGNAL( selectedGrid( int, int ) ), this, SIGNAL( selectedGrid( int, int ) ) );
 }
 
 MenuGridWidget::~MenuGridWidget()

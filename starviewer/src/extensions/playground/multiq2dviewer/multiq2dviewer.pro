@@ -1,13 +1,13 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/multiq2dviewer
-# L'objectiu és una biblioteca:  
+# L'objectiu ï¿½s una biblioteca:  
 
 FORMS += multiq2dviewerextensionbase.ui \
          q2dviewerwidgetbase.ui \
          gridiconbase.ui \
-         menugridwidgetbase.ui \
-         menuselectgridbase.ui 
+         menugridwidgetbase.ui
+         
 HEADERS += multiq2dviewerextensionmediator.h \
            multiq2dviewerextension.h \
            q2dviewerwidget.h \
@@ -17,8 +17,7 @@ HEADERS += multiq2dviewerextensionmediator.h \
            gridicon.h \
            menugridwidget.h \
            itemmenu.h \
-           tablemenu.h \
-           menuselectgrid.h 
+           tablemenu.h 
 SOURCES += multiq2dviewerextensionmediator.cpp \
            multiq2dviewerextension.cpp \
            q2dviewerwidget.cpp \
@@ -28,8 +27,7 @@ SOURCES += multiq2dviewerextensionmediator.cpp \
            gridicon.cpp \
            menugridwidget.cpp \
            itemmenu.cpp \
-           tablemenu.cpp \
-           menuselectgrid.cpp 
+           tablemenu.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a
