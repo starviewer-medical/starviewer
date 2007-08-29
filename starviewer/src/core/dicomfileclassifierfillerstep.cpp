@@ -96,7 +96,6 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
             series = createSeries();
             study->addSeries( series );
         }
-        // \TODO Caldria acabar de veure si aquí és el lloc més adient. Seria lògic fer-ho en el queryscreen? Aquí s'hauria de tornar a fer?
         series->addFilePath( file );
     }
     else
@@ -149,7 +148,7 @@ Series *DICOMFileClassifierFillerStep::createSeries()
 {
     Series *series = new Series;
 
-    series->setInstanceUID( m_dicomReader->getAttributeByName( DCM_StudyInstanceUID ) );
+    series->setInstanceUID( m_dicomReader->getAttributeByName( DCM_SeriesInstanceUID ) );
     series->setModality( m_dicomReader->getAttributeByName( DCM_Modality ) );
     series->setSeriesNumber( m_dicomReader->getAttributeByName( DCM_SeriesNumber ) );
     series->setDate( m_dicomReader->getAttributeByName( DCM_SeriesDate ) );
