@@ -92,7 +92,6 @@ void PatientFillerInput::setFilesList( QStringList files )
 
         m_fileList = files;
     }
-
 }
 
 QStringList PatientFillerInput::getFilesList() const
@@ -127,7 +126,6 @@ void PatientFillerInput::addLabel( QString label )
         m_globalLabels << label;
         m_allLabels << label; // afegim a la llista de tots també
     }
-
 }
 
 void PatientFillerInput::addLabelToSeries( QString label, Series *series )
