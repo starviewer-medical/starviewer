@@ -151,8 +151,6 @@ void ExtensionHandler::killBill()
 void ExtensionHandler::createConnections()
 {
     connect( m_mainApp->m_extensionWorkspace , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
-    connect( m_queryScreen, SIGNAL(viewPatient(PatientFillerInput *,QString,QString)), this, SLOT(viewPatient(PatientFillerInput *,QString,QString)));
-    // proves
     connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), this, SLOT(processInput(QStringList,QString,QString,QString)) );
 }
 
