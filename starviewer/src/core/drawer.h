@@ -11,6 +11,8 @@
 #include <QString>
 #include <QMultiMap>
 #include <QPair>
+#include <QSet>
+#include "colorpalette.h"
 
 //Foreward declarations
 class vtkCoordinate;
@@ -27,6 +29,7 @@ class Line;
 class Text;
 class Polygon;
 class Ellipse;
+class Representation;
 class Q2DViewer;
 
 /**
@@ -39,7 +42,6 @@ class Drawer : public QObject{
     Q_OBJECT
             
     private:
-    
         /// Tipus definit:  parella de primitiva actor per tenir aquests dos tipus d'objectes relacionats: 
         ///PrimitiveActorPair.first serà la DrawingPrimitive i PrimitiveActorPair.second el vtkProp
         typedef QPair< DrawingPrimitive*, vtkProp* > PrimitiveActorPair;
@@ -48,43 +50,55 @@ class Drawer : public QObject{
         typedef QMultiMap< int, PrimitiveActorPair > PrimitivesMap;
         
         /// llista de representacions que ens retornarà el QMultiMap
-        typedef QList< PrimitiveActorPair > PrimitivesList;
+        typedef QList< PrimitiveActorPair > PrimitivesPairsList;
         
-     /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
+        /// definim un tipus que representa un conjunt per guardar primitives relacionades entre sí, com per exemple, una línia i un text d'una determinada distància.
+        typedef QList< DrawingPrimitive* > PrimitivesSet;
+        
+        /// llista de conjunts de primitives relacionades entre sí. Ens permetrà controlar totes les relacions entre les diferents primitives.
+        typedef QList< PrimitivesSet > PrimitivesSetList;
+        
+        /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
         PrimitivesMap m_axialPairs;
         PrimitivesMap m_sagittalPairs;
         PrimitivesMap m_coronalPairs;
     
-    ///visor 2D
+        ///Llista on guardarem els conjunts de primitives relacionades entre sí.
+        PrimitivesSetList m_primitivesSetList;
+        
+        ///visor 2D
         Q2DViewer *m_2DViewer;
 
-    /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
-        PrimitivesList getPrimitivesList( int slice, int view );
+        /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
+        PrimitivesPairsList getPrimitivesPairsList( int slice, int view );
     
-    /// llesca sobre la que es troba el visor 2D associat
+        /// llesca sobre la que es troba el visor 2D associat
         int m_currentSlice;
 
-    /// vista actual del visor 2D associat
+        /// vista actual del visor 2D associat
         int m_currentView;
+        
+        /// paleta de colors que fa servir el Drawer
+        ColorPalette *m_colorPalette;
     
-    ///Retorna el sistema de coordenades segons l'especificat per paràmetre 
+        ///Retorna el sistema de coordenades segons l'especificat per paràmetre 
         vtkCoordinate *getCoordinateSystem( QString coordinateSystem );
     
-    ///permet assignar un determinat sistema de coordenades a un objecte vtkCoordinate.
+        ///permet assignar un determinat sistema de coordenades a un objecte vtkCoordinate.
         void setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coordinates );
     
-    ///retorna les coordenades adaptades segons la vista on estem treballant: representem els objectes amb actors 2D i això implica una selecció de coordenades
-    ///segons la vista on es dibuixi l'objecte.
+        ///retorna les coordenades adaptades segons la vista on estem treballant: representem els objectes amb actors 2D i això implica una selecció de coordenades
+        ///segons la vista on es dibuixi l'objecte.
         double* adaptCoordinatesToCurrentView( double *coordinates, int view );
     
-    /// Fa invisibles/visibles els actors d'una llesca i vista donats
+        /// Fa invisibles/visibles els actors d'una llesca i vista donats
         void hidePrimitivesFrom( int slice, int view );
         void showPrimitivesFrom( int slice, int view );
     
-    ///Fa invisible/visible l'associació primitiva/actor passada per paràmetre
+        ///Fa invisible/visible l'associació primitiva/actor passada per paràmetre
         void setVisibility( PrimitiveActorPair primitive, bool visibility );
         
-    ///Valida les coordenades segons la vista que es determina
+        ///Valida les coordenades segons la vista que es determina
         void validateCoordinates( double coordinates[3], int view );
             
 public:
@@ -92,6 +106,10 @@ public:
     Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
     ~Drawer();
     ///MÈTODES REFERENTS AL DIBUIXAT DE PRIMITIVES
+    
+    ///ens retorna el nombre de primitives que ha dibuixat el drawer
+    int getNumberOfDrawedPrimitives();
+    
     ///dibuixa un punt amb els atributs passats dins l'objecte passat per paràmetre
     void drawPoint( Point *point, int slice, int view );
     
@@ -128,6 +146,19 @@ public:
     
     ///fa invisible totes les primitives d'una determinada vista
     void hidePrimitivesOfView( int view );
+    
+    ///fa el resaltat de les primitives més properes 
+    void highlightNearestPrimitives();
+    
+    ///ens retorna la llista de les parelles més properes al punt donat i segons la vista i llesca on estem
+    PrimitivesPairsList getNearestPrimitivesPairs( double point[3] );
+    
+    ///ens retorna la paleta de colors
+    ColorPalette* getColorPalette()
+    { return ( m_colorPalette ); }
+    
+    ///ens permet afegir un nou conjunt de primitives associades a la llista, a partir d'una representació
+    void addSetOfPrimitives( Representation *representation );
     
 public slots:
     /// Elimina totes les annotacions dels multimaps
