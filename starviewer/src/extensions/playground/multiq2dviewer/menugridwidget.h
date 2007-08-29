@@ -42,8 +42,10 @@ protected:
     /// Nombre de columnes a mostrar
     int m_maxColumns;
 
-    /// Sobrecarrega del metde event de widget
-    bool event( QEvent * event );
+public slots:
+
+    /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
+    void emitSelected( ItemMenu * selected );
 
 signals:
     
