@@ -387,6 +387,7 @@ void MultiQ2DViewerExtension::addColumns( int columns )
     while( columns > 0 )
     {
         it = m_qHorizontalLayoutVector.begin();
+        m_columns += 1;
         // Afegim un widget a cada fila per tenir una columna més
         while( it != m_qHorizontalLayoutVector.end() )
         {
@@ -396,7 +397,6 @@ void MultiQ2DViewerExtension::addColumns( int columns )
             posViewer += m_columns;
             it++;
         }
-        m_columns += 1;
         posViewer = m_columns;
         columns--;
     }
@@ -503,6 +503,12 @@ void MultiQ2DViewerExtension::setGrid( int rows, int columns )
     if( m_columns > columns ) removeColumns( m_columns - columns );
     else if ( m_columns < columns ) addColumns( columns - m_columns );
 
+
+    /// Proves
+    for( int i =  0; i <  m_vectorViewers.size(); i ++)
+    {
+         ( m_vectorViewers.value(i)->m_2DView )->setSlice(i);
+    }
 }
 
 void MultiQ2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )

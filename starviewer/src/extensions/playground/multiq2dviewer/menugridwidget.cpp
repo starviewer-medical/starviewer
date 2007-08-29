@@ -12,6 +12,10 @@
 #include "QPalette"
 #include "QMouseEvent"
 
+#include "menuselectgrid.h"
+
+#include "logging.h"
+
 namespace udg {
 
 MenuGridWidget::MenuGridWidget( QWidget *parent )
@@ -20,9 +24,15 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     setupUi( this );
     setWindowFlags(Qt::Popup);
 
-    m_predefinedGridsList  << "1x1" << "2x2" << "1x2" << "2x3" << "3x3";
+    m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4";
     m_maxColumns = 4;
     createPredefinedGrids( m_predefinedGridsList );
+
+    MenuSelectGrid * menu = new MenuSelectGrid();
+    menu->hide();
+
+    connect( m_selectCustomGridButton, SIGNAL( clicked() ), menu, SLOT( show() ) );
+    connect( menu, SIGNAL( selectedGrid( int, int ) ), this, SIGNAL( selectedGrid( int, int ) ) );
 }
 
 MenuGridWidget::~MenuGridWidget()
@@ -65,6 +75,7 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 {
     ItemMenu * icon = new ItemMenu( this );
+    icon->setData( (QVariant *) new QString( tr("%1,%2").arg( rows ).arg( columns ) ) );
     int numberRows;
     int numberColumns;
     GridIcon* newIcon;
@@ -81,6 +92,7 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
             gridLayout->addWidget( newIcon, numberRows, numberColumns );
         }
     }
+    connect( icon , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
     return icon;
 }
 
@@ -89,33 +101,17 @@ void MenuGridWidget::setMaxColumns( int columns )
     m_maxColumns = columns;
 }
 
-bool MenuGridWidget::event( QEvent * event )
+void MenuGridWidget::emitSelected( ItemMenu * selected )
 {
 
-    if ( event->type() == QEvent::MouseButtonPress )
-    {
-        int rows = 3;
-        int columns = 3;
+    QStringList values = ((QString *) selected->getData())->split( "," );
+    int rows = values.value( 0 ).toInt();
+    int columns = values.value( 1 ).toInt();
 
-        QWidget * selectedOption = childAt( QPoint( ( (QMouseEvent *)event )->x(), ( (QMouseEvent *)event )->y() ) );
+    DEBUG_LOG( QString( tr("Graella seleccionada: %1x%2").arg(rows).arg(columns) ) );
 
-//         QPalette palette = selectedOption->palette();
-//         QBrush selected( QColor(255, 0, 0, 255) );
-//         selected.setStyle( Qt::SolidPattern );
-//         palette.setBrush( QPalette::Active, QPalette::Window, selected );
-//         selectedOption->setPalette( palette );
-
-//         emit selectedGrid( rows, columns );
-        hide();
-        return true;
-    }
-    else
-    {
-        return QWidget::event( event );
-    }
-
-
-    
+    emit selectedGrid( rows, columns );
+    hide();
 
 }
 

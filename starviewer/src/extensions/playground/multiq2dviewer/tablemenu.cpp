@@ -33,6 +33,7 @@ TableMenu::TableMenu()
     m_oldSelected = firstItem;
     m_information->setText("1x1");
     connect( firstItem , SIGNAL( isActive( ItemMenu * ) ) , this , SLOT( verifySelected( ItemMenu * ) ) );
+    connect( firstItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
 }
 
 TableMenu::~TableMenu()

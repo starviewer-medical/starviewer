@@ -6,7 +6,8 @@
 FORMS += multiq2dviewerextensionbase.ui \
          q2dviewerwidgetbase.ui \
          gridiconbase.ui \
-         menugridwidgetbase.ui 
+         menugridwidgetbase.ui \
+         menuselectgridbase.ui 
 HEADERS += multiq2dviewerextensionmediator.h \
            multiq2dviewerextension.h \
            q2dviewerwidget.h \
@@ -16,7 +17,8 @@ HEADERS += multiq2dviewerextensionmediator.h \
            gridicon.h \
            menugridwidget.h \
            itemmenu.h \
-           tablemenu.h 
+           tablemenu.h \
+           menuselectgrid.h 
 SOURCES += multiq2dviewerextensionmediator.cpp \
            multiq2dviewerextension.cpp \
            q2dviewerwidget.cpp \
@@ -26,7 +28,8 @@ SOURCES += multiq2dviewerextensionmediator.cpp \
            gridicon.cpp \
            menugridwidget.cpp \
            itemmenu.cpp \
-           tablemenu.cpp 
+           tablemenu.cpp \
+           menuselectgrid.cpp 
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a
