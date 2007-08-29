@@ -70,7 +70,7 @@ Image *Series::getImage( QString SOPInstanceUID )
 {
     int index = this->findImageIndex(SOPInstanceUID);
     if( index != -1 )
-        return m_imageSet.at( index );
+        return m_imageSet[index];
     else
         return NULL;
 }
@@ -206,7 +206,7 @@ bool Series::setDate( QDate date )
         m_date = date;
         return true;
     }
-    else
+    else if( !date.isNull() )
     {
         DEBUG_LOG("La data està en un mal format: " + date.toString( Qt::LocaleDate ) );
         return false;
@@ -242,7 +242,7 @@ bool Series::setTime(QTime time)
         m_time = time;
         return true;
     }
-    else
+    else if( !time.isNull() )
     {
         DEBUG_LOG( "El time està en un mal format" );
         return false;

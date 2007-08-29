@@ -49,7 +49,7 @@ Patient *PatientFillerInput::getPatientByName( QString name )
     {
         if( m_patientList.at(i)->getFullName() == name )
         {
-            patient = m_patientList.at(i);
+            patient = m_patientList[i];
             found = true;
         }
         i++;
@@ -68,7 +68,7 @@ Patient *PatientFillerInput::getPatientByID( QString id )
     {
         if( m_patientList.at(i)->getID() == id )
         {
-            patient = m_patientList.at(i);
+            patient = m_patientList[i];
             found = true;
         }
         i++;
