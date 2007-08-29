@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "multiq2dviewerextensionmediator.h"
-#include "volumerepository.h"
+#include "volume.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -35,8 +35,8 @@ bool MultiQ2DViewerExtensionMediator::initializeExtension(QWidget* extension, co
         return false;
     }
 
-    multiq2dviewerExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
     multiq2dviewerExtension->setPatient( extensionContext.getPatient() );
+    multiq2dviewerExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "diffusionperfusionsegmentationextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ DiffusionPerfusionSegmentationExtensionMediator::DiffusionPerfusionSegmentationE
  : ExtensionMediator(parent)
 {
 }
-
 
 DiffusionPerfusionSegmentationExtensionMediator::~DiffusionPerfusionSegmentationExtensionMediator()
 {
@@ -36,11 +34,7 @@ bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidge
         return false;
     }
 
-    VolumeRepository* volumeRepository = VolumeRepository::getRepository();
-    difuPerfuExtension->setDiffusionInput(volumeRepository->getVolume( extensionContext.getMainVolumeID() ));
-
-    QObject::connect( difuPerfuExtension, SIGNAL( openPerfusionImage() ), extensionHandler, SLOT( openSerieToCompare() ) );
-    QObject::connect( extensionHandler, SIGNAL( secondInput(Volume*) ), difuPerfuExtension, SLOT( setPerfusionInput(Volume*) ) );
+    difuPerfuExtension->setDiffusionInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

@@ -709,12 +709,6 @@ void QMPRExtension::setInput( Volume *input )
 {
     m_volume = input;
 
-    //\TODO Això s'ha d'entendre com un parxe. L'mpr hauria de funcionar bé sense aplicar aquesta transformació. Aquesta transformació s'hauria de tenir en compte en els plans que construim
-    vtkImageChangeInformation* changeFilter = vtkImageChangeInformation::New();
-    changeFilter->SetInput( m_volume->getVtkData() );
-    changeFilter->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    m_volume->setData( changeFilter->GetOutput() );
-
     m_volume->updateInformation();
     m_volume->getSpacing( m_axialSpacing );
 
@@ -723,6 +717,7 @@ void QMPRExtension::setInput( Volume *input )
 
     // faltaria refrescar l'input dels 3 mpr
     m_axial2DView->setInput( m_volume );
+
     double wl[2];
     m_axial2DView->getDefaultWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
@@ -742,7 +737,6 @@ void QMPRExtension::setInput( Volume *input )
 
     // posta a punt dels planeSource
     initOrientation();
-    m_axial2DView->render();
 
     Volume *sagitalResliced = new Volume( m_sagitalReslice->GetOutput() );
     sagitalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
@@ -757,6 +751,7 @@ void QMPRExtension::setInput( Volume *input )
     m_coronal2DView->setViewToAxial();
     m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation );
 
+    m_axial2DView->render();
     m_sagital2DView->render();
     m_coronal2DView->render();
 
@@ -774,15 +769,6 @@ void QMPRExtension::initOrientation()
     En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
 
 */
-    // This method must be called _after_ setInput
-    //
-    m_volume->setData( vtkImageData::SafeDownCast( m_coronalReslice->GetInput()) );
-    if ( ! m_volume->getVtkData() )
-    {
-        WARN_LOG( "SetInput() before setting plane orientation." );
-        return;
-    }
-
     m_volume->updateInformation();
     int extent[6];
     m_volume->getWholeExtent(extent);

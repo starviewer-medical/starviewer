@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "strokesegmentationextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -35,7 +34,7 @@ bool StrokeSegmentationExtensionMediator::initializeExtension(QWidget* extension
         return false;
     }
 
-    strokeSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    strokeSegmentationExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "registrationframeworkextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -35,7 +34,7 @@ bool RegistrationFrameworkExtensionMediator::initializeExtension(QWidget* extens
         return false;
     }
 
-    registrationFrameworkExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    registrationFrameworkExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

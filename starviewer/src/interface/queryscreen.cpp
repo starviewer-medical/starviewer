@@ -1194,9 +1194,9 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     // Omplim en paral·lel la nova estructura
     Patient *patient = new Patient;
     Study *patientStudy = new Study;
-    PatientFillerInput fillerInput;
+    PatientFillerInput *fillerInput = new PatientFillerInput;
 
-    fillerInput.addPatient( patient );
+    fillerInput->addPatient( patient );
 
     if ( studyUID.isEmpty() )
     {
@@ -1360,7 +1360,7 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
             seriesVol.addImage( filename );
             // omplim la nova estructura
             // no omplim la informació d'imatge, el que fem és anar afegint la llista de fitxers i prou
-            fillerInput.addFile( filename );
+            fillerInput->addFile( filename );
             patientSeries->addFilePath( filename );
 
             imageList.nextImage();
@@ -1382,11 +1382,8 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     }
     QTime time;
     time.start();
-    emit viewPatient( fillerInput );
+    emit viewPatient( fillerInput, studyUID, seriesUID );
     DEBUG_LOG( QString("viewPatient: %1 ").arg( time.elapsed() ));
-    time.restart();
-    this->emitViewSignal(volume);
-    DEBUG_LOG( QString("emitViewSignal: %1 ").arg( time.elapsed() ));
 }
 
 void QueryScreen::importDicomdir()

@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "segmentationframeworkextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -35,7 +34,7 @@ bool SegmentationFrameworkExtensionMediator::initializeExtension(QWidget* extens
         return false;
     }
 
-    segmentationFrameworkExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    segmentationFrameworkExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

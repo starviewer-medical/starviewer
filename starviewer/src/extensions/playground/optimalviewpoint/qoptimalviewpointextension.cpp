@@ -121,7 +121,7 @@ void QOptimalViewpointExtension::execute()
 //                 m_method->setImage( volume->getVtkData() );
 // //                 m_method->setImageFileName( repository->getVolume( volumeId )->getFileName() );
 //                 m_method->setSegmentationFileName( m_parameters->getSegmentationFileName() );
-// 
+//
 //                 // segmentació del model
 //                 unsigned char n = m_method->segmentateImage(
 //                         m_parameters->getSegmentationIterations(),
@@ -130,7 +130,7 @@ void QOptimalViewpointExtension::execute()
 //                         m_parameters->getSegmentationNoise(),
 //                         m_parameters->getSegmentationImageSampleDistance(),
 //                         m_parameters->getSegmentationSampleDistance() );
-// 
+//
 //                 // funció de transferència ajustada
 //                 m_parameters->setAdjustedTransferFunction( m_method->getAdjustedTransferFunction() );
 //                 m_parameters->setNumberOfClusters( n );

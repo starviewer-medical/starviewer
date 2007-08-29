@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "rectumsegmentationextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ RectumSegmentationExtensionMediator::RectumSegmentationExtensionMediator(QObject
  : ExtensionMediator(parent)
 {
 }
-
 
 RectumSegmentationExtensionMediator::~RectumSegmentationExtensionMediator()
 {
@@ -36,7 +34,7 @@ bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension
         return false;
     }
 
-    rectumSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    rectumSegmentationExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

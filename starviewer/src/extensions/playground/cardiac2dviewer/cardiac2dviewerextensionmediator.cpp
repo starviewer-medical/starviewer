@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "cardiac2dviewerextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ Cardiac2DViewerExtensionMediator::Cardiac2DViewerExtensionMediator(QObject *pare
  : ExtensionMediator(parent)
 {
 }
-
 
 Cardiac2DViewerExtensionMediator::~Cardiac2DViewerExtensionMediator()
 {
@@ -36,7 +34,7 @@ bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, c
         return false;
     }
 
-    cardiac2DViewerExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    cardiac2DViewerExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

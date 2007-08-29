@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "mprcardiac3dextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ MPRCardiac3DExtensionMediator::MPRCardiac3DExtensionMediator(QObject *parent)
  : ExtensionMediator(parent)
 {
 }
-
 
 MPRCardiac3DExtensionMediator::~MPRCardiac3DExtensionMediator()
 {
@@ -36,7 +34,7 @@ bool MPRCardiac3DExtensionMediator::initializeExtension(QWidget* extension, cons
         return false;
     }
 
-    mprCardiac3DExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    mprCardiac3DExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "edemasegmentationextensionmediator.h"
 
-#include "volumerepository.h"
 #include "extensionhandler.h"
 #include "extensioncontext.h"
 
@@ -16,7 +15,6 @@ EdemaSegmentationExtensionMediator::EdemaSegmentationExtensionMediator(QObject *
  : ExtensionMediator(parent)
 {
 }
-
 
 EdemaSegmentationExtensionMediator::~EdemaSegmentationExtensionMediator()
 {
@@ -36,7 +34,7 @@ bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension,
         return false;
     }
 
-    edemaSegmentationExtension->setInput(VolumeRepository::getRepository()->getVolume( extensionContext.getMainVolumeID() ));
+    edemaSegmentationExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
 }
