@@ -112,7 +112,7 @@ Study *Patient::getStudy( QString uid )
 {
     int index = this->findStudyIndex(uid);
     if( index != -1 )
-        return m_studiesSet.at( index );
+        return m_studiesSet[index];
     else
         return NULL;
 }

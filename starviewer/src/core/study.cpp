@@ -105,7 +105,7 @@ QString Study::getModalitiesAsSingleString() const
 {
     return m_modalities.join("/");
 }
-    
+
 QStringList Study::getModalities() const
 {
     return m_modalities;
@@ -139,7 +139,7 @@ bool Study::setDate( QDate date )
         m_date = date;
         return true;
     }
-    else
+    else if( !date.isNull() )
     {
         DEBUG_LOG("La data està en un mal format" );
         return false;
@@ -175,7 +175,7 @@ bool Study::setTime(QTime time)
         m_time = time;
         return true;
     }
-    else
+    else if( !time.isNull() )
     {
         DEBUG_LOG( "El time està en un mal format" );
         return false;
@@ -241,7 +241,7 @@ Series *Study::getSeries( QString uid )
 {
     int index = this->findSeriesIndex(uid);
     if( index != -1 )
-        return m_seriesSet.at( index );
+        return m_seriesSet[index];
     else
         return NULL;
 }
@@ -300,7 +300,7 @@ void Study::insertSeries( Series *series )
     }
     if( !m_modalities.contains( series->getModality() ) )
         m_modalities << series->getModality();
-        
+
     m_seriesSet.insert( i, series );
 }
 
