@@ -431,13 +431,20 @@
         </item>
         <item>
          <widget class="QSlider" name="m_sliceViewSlider" >
+          <property name="singleStep" >
+           <number>2</number>
+          </property>
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="m_sliceSpinBox" />
+         <widget class="QSpinBox" name="m_sliceSpinBox" >
+          <property name="singleStep" >
+           <number>2</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -1884,14 +1891,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>udg::Q2DViewer</class>
-   <extends>QWidget</extends>
-   <header>q2dviewer.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -2069,6 +2076,38 @@
     <hint type="destinationlabel" >
      <x>277</x>
      <y>398</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_sliceViewSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_sliceSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>1153</x>
+     <y>843</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>1199</x>
+     <y>845</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_sliceSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>m_sliceViewSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>1210</x>
+     <y>835</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>1024</x>
+     <y>847</y>
     </hint>
    </hints>
   </connection>

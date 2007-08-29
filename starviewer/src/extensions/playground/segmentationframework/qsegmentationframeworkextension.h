@@ -11,6 +11,7 @@
 #include "itkImage.h" 
 
 class vtkSplineWidget;
+class vtkImageData;
 
 namespace udg {
 
@@ -113,6 +114,7 @@ private:
     void createActions();
     void createToolBars();
     void createConnections();
+    void Contorn(vtkImageData*);
 
 private slots:
 

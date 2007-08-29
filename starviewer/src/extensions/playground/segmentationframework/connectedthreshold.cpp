@@ -80,7 +80,7 @@ void ConnectedThreshold::setConnectedParameters( int lower, int upper )
 /// Aplica el metode de segmentaci�
 bool ConnectedThreshold::applyMethod()
 {
-CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New();
+//CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New();
 
     
     /// Crea la PIPELINE
@@ -101,9 +101,9 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     }
     catch( itk::ExceptionObject & e )
     {
-        //std::cerr << "ERROR: No ha anat b� la segmentaci�. (ConnectedThreshold)" << std::endl;
-        //std::cerr << "Exception caught! " << std::endl;
-        //std::cerr << e << std::endl;
+        std::cerr << "ERROR: No ha anat b� la segmentaci�. (ConnectedThreshold)" << std::endl;
+        std::cerr << "Exception caught! " << std::endl;
+        std::cerr << e << std::endl;
         return false;
     }
     //DEBUG_LOG(QString("****END: SEGMENTACIO CONNECTED THRESHOLD****** "));
