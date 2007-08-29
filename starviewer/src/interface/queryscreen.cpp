@@ -1187,24 +1187,12 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     SeriesList seriesList;
     DICOMSeries series;
     ImageList imageList;
-    QString absoluteSeriesPath;
-    StarviewerSettings settings;
-    StudyVolum volume;
-
-    // Omplim en paral·lel la nova estructura
-    Patient *patient = new Patient;
-    Study *patientStudy = new Study;
-    PatientFillerInput *fillerInput = new PatientFillerInput;
-
-    fillerInput->addPatient( patient );
 
     if ( studyUID.isEmpty() )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
         return;
     }
-
-    INFO_LOG( "Es visualitza l'estudi " + studyUID );
 
     //busquem informacio de l'estudi
     if( source == "Cache" )
@@ -1225,7 +1213,6 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
             ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
             return;
         }
-
         studyList.firstStudy();//tenim la informació de l'estudi
         study = studyList.getStudy();
     }
@@ -1234,33 +1221,6 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
         DEBUG_LOG("Unrecognized source: " + source);
         return;
     }
-
-    volume.setPatientAge( study.getPatientAge() );
-    volume.setPatientId( study.getPatientId() );
-    volume.setPatientName( study.getPatientName() );
-    volume.setStudyDate( study.getStudyDate() );
-    volume.setStudyId( study.getStudyId() );
-    volume.setStudyTime( study.getStudyTime() );
-    volume.setStudyUID( study.getStudyUID() );
-
-    // omplim la nova estructura
-    // informació de pacient
-    patient->setFullName( study.getPatientName() );
-    patient->setID( study.getPatientId() );
-    patient->setBirthDate( study.getPatientBirthDate() );
-    patient->setSex( study.getPatientSex() );
-    // informació d'estudi
-    patientStudy->setInstanceUID( study.getStudyUID() );
-    patientStudy->setDate( study.getStudyDate() );
-    patientStudy->setTime( study.getStudyTime() );
-    patientStudy->setID( study.getStudyUID() );
-    patientStudy->setAccessionNumber( study.getAccessionNumber() );
-    patientStudy->setDescription( study.getStudyDescription() );
-    patientStudy->setPatientAge( study.getPatientAge().toInt() );
-    // \TODO falta pes i alçada
-//     patientStudy->setHeight( study.getPatientHeight() );
-//     patientStudy->setWeight( study.getPatientWeight() );
-    patient->addStudy( patientStudy );
 
     //busquem les series
     if( source == "Cache" )
@@ -1272,7 +1232,6 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
             databaseError( &state );
             return;
         }
-
     }
     else if( source == "DICOMDIR" )
     {
@@ -1283,59 +1242,18 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
             return;
         }
     }
+
+    QStringList files;
     seriesList.firstSeries();
-
-    //si es buit indiquem que per defecte es visualitza la primera serie
-    if( seriesUID.isEmpty() )
-        volume.setDefaultSeriesUID( seriesList.getSeries().getSeriesUID() );
-    else
-        volume.setDefaultSeriesUID( seriesUID );
-
     while( !seriesList.end() )
     {
-        SeriesVolum seriesVol;
         series = seriesList.getSeries();
-
-        absoluteSeriesPath = settings.getCacheImagePath() + study.getStudyUID() + "/" + series.getSeriesUID() + "/";
-        seriesVol.setSeriesUID( series.getSeriesUID() );
-        seriesVol.setStudyId( study.getStudyId() );
-        seriesVol.setStudyUID( study.getStudyUID() );
-        seriesVol.setSeriesPath( absoluteSeriesPath );
-        seriesVol.setSeriesModality( series.getSeriesModality() );
-
-        // omplim la nova estructura
-        // informació de series
-        Series *patientSeries = new Series;
-        // si s'ha indicat una sèrie en concret per visualitzar la marquem com a seleccionada \TODO passa res si no n'hi cap de seleccionada? per defecte veurem la primera segurament
-        if( seriesUID == series.getSeriesUID() )
-            patientSeries->select();
-
-        patientSeries->setInstanceUID( series.getSeriesUID() );
-        patientSeries->setModality( series.getSeriesModality() );
-        patientSeries->setSeriesNumber( series.getSeriesNumber()  );
-        DEBUG_LOG("Time: " + series.getSeriesTime() + "; Date: " + series.getSeriesDate());
-        patientSeries->setDate( series.getSeriesDate() );
-        patientSeries->setTime( series.getSeriesTime() );
-        // TODO falten 4 atributs!
-//         patientSeries->setInstitutionName( series.getSeriesInstitution() );
-//         patientSeries->setPatientPosition( series.getSeriesPatientPosition() );
-        patientSeries->setProtocolName( series.getProtocolName() );
-        patientSeries->setDescription( series.getSeriesDescription() );
-//         patientSeries->setFrameOfReferenceUID( series.getSeriesFrameOfReference() );
-//         patientSeries->setPositionReferenceIndicator( series.getSeriesPositionReferenceIndicator() );
-
-        // TODO el thumbnail s'hauria de crear d'alguna altre manera, això es temporal
-        patientSeries->setThumbnail( QPixmap( absoluteSeriesPath + "scaled.pgm" ) );
-
-        patientStudy->addSeries( patientSeries );
-
         imageList.clear();
         if( source == "Cache" )
         {
             mask.setSeriesUID( series.getSeriesUID() );
             mask.setSOPInstanceUID( sopInstanceUID );
             state = cacheImageDAL.queryImages( mask , imageList );
-
             if ( !state.good() )
             {
                 databaseError( &state );
@@ -1353,20 +1271,11 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
         }
         imageList.firstImage();
 
-        QString filename;
         while ( !imageList.end() )
         {
-            filename = imageList.getImage().getImagePath();
-            seriesVol.addImage( filename );
-            // omplim la nova estructura
-            // no omplim la informació d'imatge, el que fem és anar afegint la llista de fitxers i prou
-            fillerInput->addFile( filename );
-            patientSeries->addFilePath( filename );
-
+            files << imageList.getImage().getImagePath();
             imageList.nextImage();
         }
-
-        volume.addSeriesVolum( seriesVol );
         seriesList.nextSeries();
     }
 
@@ -1380,10 +1289,9 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     {
         m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
-    QTime time;
-    time.start();
-    emit viewPatient( fillerInput, studyUID, seriesUID );
-    DEBUG_LOG( QString("viewPatient: %1 ").arg( time.elapsed() ));
+
+    // enviem la informació a processar
+    emit processFiles( files, studyUID, seriesUID, sopInstanceUID );
 }
 
 void QueryScreen::importDicomdir()
