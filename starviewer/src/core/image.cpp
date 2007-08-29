@@ -9,8 +9,16 @@
 #include "logging.h"
 
 #include <QStringList>
+#include <QPainter>
+#include <QBuffer>
 
 #include <vtkMath.h> // pel ::Cross()
+
+// fem servir dcmtk per l'escalat de les imatges dicom
+//\TODO trobar perquè això és necessari amb les dcmtk
+#define HAVE_CONFIG_H 1
+#include "dcmtk/dcmimgle/dcmimage.h"
+#include "dcmtk/ofstd/ofbmanip.h"
 
 namespace udg {
 
@@ -331,6 +339,108 @@ void Image::setCTLocalizer( bool localizer )
 bool Image::isCTLocalizer() const
 {
     return m_CTLocalizer;
+}
+
+QPixmap Image::getThumbnail( int resolution )
+{
+    if( m_thumbnail.isNull() )
+    {
+        createThumbnail( resolution );
+    }
+    return m_thumbnail;
+}
+
+void Image::createThumbnail( int resolution )
+{
+    bool ok = false;
+
+    //TODO atenció! això està fet partint de la classe ScaleImage. No s'ha fet servir ScaleImage per no dependre de l'inputoutput des del core
+
+    //carreguem el fitxer dicom a escalar
+    DicomImage *dicomImage = new DicomImage( qPrintable( getPath() ) );
+
+    if( dicomImage == NULL )
+    {
+        ok = false;
+        DEBUG_LOG("Memòria insuficient");
+    }
+    else if( dicomImage->getStatus() == EIS_Normal )
+    {
+        dicomImage->hideAllOverlays();
+        dicomImage->setMinMaxWindow(1);
+        //escalem l'imatge
+        DicomImage *scaledImage;
+        //Escalem pel cantó més gran
+        unsigned long width, height;
+        if( dicomImage->getWidth() < dicomImage->getHeight() )
+        {
+            width = 0;
+            height = resolution;
+        }
+        else
+        {
+            width = resolution;
+            height = 0;
+        }
+        scaledImage = dicomImage->createScaledImage( width,height, 1, 1 );
+        if( scaledImage == NULL )
+        {
+            ok = false;
+            DEBUG_LOG("La imatge escalada s'ha retornat com a nul");
+        }
+        else if( scaledImage->getStatus() == EIS_Normal )
+        {
+            // el següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
+            // obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
+            // get image extension
+            const int width = (int)(scaledImage->getWidth());
+            const int height = (int)(scaledImage->getHeight());
+            char header[32];
+            // create PGM header
+            sprintf(header, "P5\n%i %i\n255\n", width, height);
+            const int offset = strlen(header);
+            const unsigned int length = width * height + offset;
+            // create output buffer for DicomImage class
+            Uint8 *buffer = new Uint8[length];
+            if (buffer != NULL)
+            {
+                // copy PGM header to buffer
+                OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
+                if( scaledImage->getOutputData((void *)(buffer + offset), length, 8))
+                {
+                    if( m_thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM", Qt::AvoidDither) )
+                    {
+                        ok = true;
+                    }
+                    else
+                        DEBUG_LOG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Ha fallat :(");
+
+                }
+                // delete temporary pixel buffer
+                delete[] buffer;
+            }
+        }
+        else
+        {
+            ok = false;
+            DEBUG_LOG( QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus() ) ) );
+        }
+    }
+    else
+    {
+        ok = false;
+        DEBUG_LOG( QString( "Error en carregar la DicomImage. Error: %1 ").arg( DicomImage::getString( dicomImage->getStatus() ) ) );
+    }
+
+    if( !ok ) // no hem pogut generar el thumbnail, creem un de buit
+    {
+        m_thumbnail = QPixmap(resolution,resolution);
+        m_thumbnail.fill(Qt::black);
+
+        QPainter painter( &m_thumbnail );
+        painter.setPen(Qt::white);
+        painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, tr("No Image Available"));
+    }
 }
 
 }

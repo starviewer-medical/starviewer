@@ -76,6 +76,16 @@ void ImageFillerStep::processSeries( Series *series )
 
             series->addImage( image );
         }
+        // li afegim el thumbnail a la sèrie partir de la imatge central
+        Image *imageToScale = series->getImages()[ series->getImages().size()/2 ];
+        if( imageToScale )
+        {
+            series->setThumbnail( imageToScale->getThumbnail() );
+        }
+        else
+        {
+            DEBUG_LOG("La imatge retornada és NUL");
+        }
         m_input->addLabelToSeries("ImageFillerStep", series );
     }
     else

@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QList>
+#include <QPixmap>
 
 namespace udg {
 
@@ -124,6 +125,21 @@ public:
     void setCTLocalizer( bool localizer );
     bool isCTLocalizer() const;
 
+    /**
+     * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
+     * @param resolution La resolució amb la que volem el thumbnail
+     * @return Un QPixmap amb el thumnail
+     */
+    QPixmap getThumbnail( int resolution = 100 );
+
+private:
+
+    /**
+     * Mètode encarregat de fer el thumbnail de la imatge.
+     * @return Un QPixmap amb la imatge
+     */
+    void createThumbnail( int resolution );
+
 private:
     /// Atributs DICOM
 
@@ -199,6 +215,9 @@ private:
 
     /// Ens indica si aquesta imatge és un localitzador sempre que la modalitat sigui CT
     bool m_CTLocalizer;
+
+    /// Imatge de previsualització
+    QPixmap m_thumbnail;
 };
 
 }
