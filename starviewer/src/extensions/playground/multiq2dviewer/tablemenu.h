@@ -9,6 +9,7 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <QLabel>
 
 #include <itemmenu.h>
 
@@ -27,6 +28,11 @@ public:
 
     ~TableMenu();
 
+protected:
+
+    /// Sobrecàrrega del mètode que tracta tots els events
+    bool event( QEvent * event);
+
 private:
 
     /// Nombre de columnes actuals
@@ -38,6 +44,15 @@ private:
     /// Grid per mostrar els elements de la taula
     QGridLayout * m_gridLayout;
 
+    /// Label que informa de les files i columnes seleccionades
+    QLabel * m_information;
+
+    /// Llista dels items
+    QList<ItemMenu *> * m_itemList;
+
+    /// Ultim element seleccionat
+    ItemMenu * m_oldSelected;
+
     /// Afegir una columna a la taula
     void addColumn();
 
@@ -46,8 +61,16 @@ private:
 
 public slots:
 
-    /// Mètode que cada vegada que es seleccioni un dels items comprova si cal afegir files o columnes
+    /// Mètode que cada vegada que el mouse es situi sobre items comprova si cal afegir files o columnes
     void verifySelected( ItemMenu * selected );
+
+    /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
+    void emitSelected( ItemMenu * selected );
+
+signals:
+    
+    /// Emet que s'ha escollit un grid
+    void selectedGrid( int , int );
 
 };
 
