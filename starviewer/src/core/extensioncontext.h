@@ -7,7 +7,6 @@
 #ifndef UDGEXTENSIONCONTEXT_H
 #define UDGEXTENSIONCONTEXT_H
 
-#include "identifier.h"
 #include <QStringList>
 
 namespace udg {
@@ -65,10 +64,6 @@ public:
      */
     QStringList getDefaultSelectedSeries() const;
 
-    /// get/set del pacient amb el que ha de treballar l'extensió. És un mètode que està destinat a desaparèixer.
-    Identifier getMainVolumeID() const;
-    void setMainVolumeID(Identifier identifier);
-
     /// Mètode de conveniència que ens dóna un volum per defecte a partir del contexte assignat.
     /// Això ens servirà per obtenir un volum a partir tant del pacient o si no
     /// tenim pacient (cas mhd's) fer-ho amb el volumeIdentifier
@@ -76,7 +71,6 @@ public:
 
 private:
     //ExtensionHandler* m_extensionHandler;
-    Identifier m_mainVolumeID;
     Patient* m_patient;
 
     QStringList m_defaultSelectedStudies;
