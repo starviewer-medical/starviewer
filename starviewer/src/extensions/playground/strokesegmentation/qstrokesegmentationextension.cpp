@@ -211,9 +211,6 @@ void QStrokeSegmentationExtension::setInput( Volume *input )
     m_insideValue  = (int) wl[0];
     m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
 
-    QString aux = (m_mainVolume->getVolumeSourceInformation())->getPatientName();
-    m_patientNameLineEdit->insert(aux);
-
     typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
     ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
 

@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>QStrokeSegmentationExtensionBase</class>
  <widget class="QWidget" name="QStrokeSegmentationExtensionBase" >
   <property name="geometry" >
@@ -61,7 +58,7 @@
              <string>...</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -86,7 +83,7 @@
              <string>window level</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -108,7 +105,7 @@
              <string>zoom</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -130,7 +127,7 @@
              <string>move</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -152,7 +149,7 @@
              <string>...</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -171,7 +168,7 @@
              <string>...</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/pencil.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -196,7 +193,7 @@
              <string>voxel information</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -218,7 +215,7 @@
              <string>...</string>
             </property>
             <property name="icon" >
-             <iconset resource="../main/main.qrc" >:/images/seed.png</iconset>
+             <iconset/>
             </property>
             <property name="iconSize" >
              <size>
@@ -373,26 +370,6 @@
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item>
-         <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="label_5" >
-            <property name="text" >
-             <string>Patient Name:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="m_patientNameLineEdit" />
-          </item>
-         </layout>
-        </item>
         <item>
          <layout class="QVBoxLayout" >
           <property name="margin" >
@@ -604,7 +581,7 @@
               <rect>
                <x>20</x>
                <y>30</y>
-               <width>268</width>
+               <width>321</width>
                <height>30</height>
               </rect>
              </property>
@@ -632,7 +609,7 @@
                  <string/>
                 </property>
                 <property name="icon" >
-                 <iconset resource="../main/main.qrc" >:/images/eraser.png</iconset>
+                 <iconset/>
                 </property>
                 <property name="flat" >
                  <bool>false</bool>
@@ -656,7 +633,7 @@
                  <string/>
                 </property>
                 <property name="icon" >
-                 <iconset resource="../main/main.qrc" >:/images/airbrush.png</iconset>
+                 <iconset/>
                 </property>
                 <property name="checkable" >
                  <bool>false</bool>
@@ -678,7 +655,7 @@
                  <string/>
                 </property>
                 <property name="icon" >
-                 <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+                 <iconset/>
                 </property>
                </widget>
               </item>
@@ -723,7 +700,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="udg::Q2DViewer" name="m_2DView" >
+        <widget class="udg::Q2DViewer" native="1" name="m_2DView" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -773,14 +750,11 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <resources>
