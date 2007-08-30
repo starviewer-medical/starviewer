@@ -9,7 +9,6 @@
 
 #include <QObject>
 #include <QString>
-#include "identifier.h"
 #include "patient.h"
 
 class QProgressDialog;
@@ -46,9 +45,6 @@ public slots:
     void request( int who );
     void request( const QString &who );
 
-    /// aplicació que s'executa per defecte quan carreguem un volum al repositori
-    void onVolumeLoaded( Identifier id );
-
     /// cridat quan l'aplicació mor
     void killBill();
 
@@ -60,7 +56,7 @@ public slots:
      * @param defaultSeriesUID Serie que es vol veure per defecte
      * @param defaultImageInstance Imatge que es vol per defecte
      */
-    void processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
+    void processInput( QStringList inputFiles, QString defaultStudyUID = QString(), QString  defaultSeriesUID = QString(), QString defaultImageInstance = QString() );
 
     /**
      * Donada una estructura de pacient decideix que fer amb aquesta, com por exemple fusionar les dades si ja tenim
@@ -91,9 +87,6 @@ private slots:
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
-
-    /// L'id del volum amb el que estem treballant TODO tendirà a desaparèixer en breu
-    Identifier m_volumeID;
 
     /// El repository de volums
     VolumeRepository *m_volumeRepository;
