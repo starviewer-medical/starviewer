@@ -53,7 +53,7 @@ class Drawer : public QObject{
         typedef QList< PrimitiveActorPair > PrimitivesPairsList;
         
         /// definim un tipus que representa un conjunt per guardar primitives relacionades entre sí, com per exemple, una línia i un text d'una determinada distància.
-        typedef QList< DrawingPrimitive* > PrimitivesSet;
+        typedef QSet< DrawingPrimitive* > PrimitivesSet;
         
         /// llista de conjunts de primitives relacionades entre sí. Ens permetrà controlar totes les relacions entre les diferents primitives.
         typedef QList< PrimitivesSet > PrimitivesSetList;
@@ -100,7 +100,24 @@ class Drawer : public QObject{
         
         ///Valida les coordenades segons la vista que es determina
         void validateCoordinates( double coordinates[3], int view );
-            
+        
+        ///mètode per retornar-nos l'índex de la primitiva única de tipus \a primitiveType que contindrà la llista \a nearestPairslist de primitives més properes.       
+        int getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType );
+        
+        ///mètode que ens diu si la llista \a list conté alguna primitiva de tipus \a primitiveType 
+        bool hasPrimitiveOfType( PrimitivesPairsList list, QString primitiveType );
+        
+        ///Ens retorna una llista de parelles de totes les primitives del tipus especificat d'un determinat mapa segons la vista
+        PrimitivesPairsList getAllPrimitivesOfType( QString primitiveType );
+        
+        ///Ens retorna el conjunt de primitives de la llista \a m_primitivesSetList que conté la primitiva passada per paràmetre
+        PrimitivesSet getSetOf( DrawingPrimitive *primitive );
+        
+        ///ens permet assignar el color de highlight a la parella passada per paràmetre
+        void setHighlightColor( PrimitiveActorPair pair );
+        
+        ///ens permet assignar el color de normal a la parella passada per paràmetre
+        void setNormalColor( PrimitiveActorPair pair );
 public:
     
     Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
@@ -150,8 +167,8 @@ public:
     ///fa el resaltat de les primitives més properes 
     void highlightNearestPrimitives();
     
-    ///ens retorna la llista de les parelles més properes al punt donat i segons la vista i llesca on estem
-    PrimitivesPairsList getNearestPrimitivesPairs( double point[3] );
+    ///ens retorna la parella més propera al punt donat i segons la vista i llesca on estem
+    PrimitiveActorPair getNearestPrimitivePair( double point[3] );
     
     ///ens retorna la paleta de colors
     ColorPalette* getColorPalette()
