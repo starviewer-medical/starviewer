@@ -84,8 +84,8 @@ public:
     int getSamplesPerPixel() const;
 
     /// Assignar/Obtenir la interpretació fotomètrica
-    void setPhotometricInterpretation( int value );
-    int getPhotometricInterpretation() const;
+    void setPhotometricInterpretation( QString value );
+    QString getPhotometricInterpretation() const;
 
     /// Assignar/Obtenir files/columnes
     void setRows( int rows );
@@ -183,7 +183,7 @@ private:
     int m_samplesPerPixel;
 
     /// interpretació fotomètrica (monocrom,color...). Veure C.6.7.3.1.2. (0028,0004) Tipus 1.
-    int m_photometricInterpretation;
+    QString m_photometricInterpretation;
 
     /// files i columnes de la imatge. (0028,0010),(0028,0011) Tipus 1
     int m_rows;

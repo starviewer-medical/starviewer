@@ -220,12 +220,12 @@ int Image::getSamplesPerPixel() const
     return m_samplesPerPixel;
 }
 
-void Image::setPhotometricInterpretation( int value )
+void Image::setPhotometricInterpretation( QString value )
 {
     m_photometricInterpretation = value;
 }
 
-int Image::getPhotometricInterpretation() const
+QString Image::getPhotometricInterpretation() const
 {
     return m_photometricInterpretation;
 }

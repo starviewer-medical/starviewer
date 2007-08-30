@@ -170,7 +170,7 @@ void ImageFillerStep::processImage( Image *image )
         }
 
         image->setSamplesPerPixel( dicomReader.getAttributeByName( DCM_SamplesPerPixel ).toInt() );
-        image->setPhotometricInterpretation( dicomReader.getAttributeByName( DCM_PhotometricInterpretation ).toInt() );
+        image->setPhotometricInterpretation( dicomReader.getAttributeByName( DCM_PhotometricInterpretation ) );
         image->setRows( dicomReader.getAttributeByName( DCM_Rows ).toInt() );
         image->setColumns( dicomReader.getAttributeByName( DCM_Columns ).toInt() );
         image->setBitsAllocated( dicomReader.getAttributeByName( DCM_BitsAllocated ).toInt() );
