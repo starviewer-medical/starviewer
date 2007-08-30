@@ -112,7 +112,7 @@ public:
     /// Tipus d'error que podem tenir
     enum { NoError = 1, SizeMismatch, InvalidFileName, UnknownError };
 
-    Input();
+    Input( QObject *parent = 0 );
     ~Input();
 
     /**
@@ -139,7 +139,6 @@ public:
     /// Retorna un Volum
     Volume* getData() const { return m_volumeData; };
 
-
     /**
      * Donada una llista d'imatges ens carrega el corresponent volum. Aquest mètode es ajuda en la transició
      * per incorporar l'entitat Patient
@@ -147,6 +146,13 @@ public:
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
     int readImages( QList<Image *> imageList );
+
+    /**
+     * Ens retorna la llista d'arxius DICOM agrupables en series d'un directori
+     * @param directory Nom del directori on es troben els arxius
+     * @return La llista de noms de fitxers ordenada
+     */
+    QStringList generateFilenames( QString dirPath );
 
     // Això fa petar aplicació
     //itk::QtSignalAdaptor *m_progressSignalAdaptor;

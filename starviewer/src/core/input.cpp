@@ -19,7 +19,8 @@
 
 namespace udg {
 
-Input::Input()
+Input::Input( QObject *parent )
+ : QObject( parent )
 {
     m_reader = ReaderType::New();
     m_seriesReader = SeriesReaderType::New();
@@ -145,10 +146,7 @@ int Input::readSeries( QString dirPath )
 //     SeriesProgressCommand::Pointer observer = SeriesProgressCommand::New();
 //     m_seriesReader->AddObserver( itk::ProgressEvent(), observer );
 
-    m_namesGenerator->SetInputDirectory( qPrintable(dirPath) );
-
-    const SeriesReaderType::FileNamesContainer &filenames = m_namesGenerator->GetInputFileNames();
-    return readFiles( stdVectorOfStdStringToQStringList( filenames ) );
+    return readFiles( generateFilenames(dirPath) );
 }
 
 int Input::readImages( QList<Image *> imageList )
@@ -157,6 +155,13 @@ int Input::readImages( QList<Image *> imageList )
     foreach( Image *image, imageList )
         filenames << image->getPath();
     return this->readFiles( filenames );
+}
+
+QStringList Input::generateFilenames( QString dirPath )
+{
+    m_namesGenerator->SetInputDirectory( qPrintable(dirPath) );
+    const SeriesReaderType::FileNamesContainer &filenames = m_namesGenerator->GetInputFileNames();
+    return stdVectorOfStdStringToQStringList( filenames );
 }
 
 QStringList Input::stdVectorOfStdStringToQStringList( std::vector< std::string > vector )
