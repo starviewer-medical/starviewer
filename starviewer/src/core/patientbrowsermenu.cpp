@@ -43,6 +43,7 @@ void PatientBrowserMenu::setPatient( Patient * patient )
     m_patientBrowserList->setPatient( patient );
 
     connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), m_patientAdditionalInfo, SLOT( setSeries(Series*) ));
+    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), this, SLOT( updatePosition() ));
     connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), this, SLOT ( emitSelected(Series*) ));
 }
 
@@ -107,6 +108,28 @@ void PatientBrowserMenu::emitSelected( Series * serie )
     m_patientBrowserList->hide();
     m_patientAdditionalInfo->hide();
     emit selectedSeries( serie );
+}
+
+void PatientBrowserMenu::updatePosition()
+{
+    int x;
+
+    //Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
+    int screen_x = qApp->desktop()->availableGeometry( m_patientBrowserList->pos() ).width();
+
+    QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
+
+    // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
+    if( (m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width() ) > screen_x )
+    {
+        x = ( m_patientBrowserList->geometry().x() ) -( patientAdditionalInfoSize.width() );
+    }
+    else
+    {
+        x =  m_patientBrowserList->x() + m_patientBrowserList->width();
+    }
+    m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
+    m_patientAdditionalInfo->show();
 }
 
 }
