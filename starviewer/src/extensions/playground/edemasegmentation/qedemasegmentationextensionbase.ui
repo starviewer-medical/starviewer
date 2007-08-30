@@ -691,7 +691,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -716,7 +716,7 @@
             <string>window level</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -738,7 +738,7 @@
             <string>zoom</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -760,7 +760,7 @@
             <string>move</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -782,7 +782,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -801,7 +801,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/pencil.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -826,7 +826,7 @@
             <string>voxel information</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -848,7 +848,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/seed.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -949,7 +949,7 @@
               <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/airbrush.png</iconset>
+              <iconset/>
              </property>
             </widget>
            </item>
@@ -962,7 +962,7 @@
               <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/eraser.png</iconset>
+              <iconset/>
              </property>
             </widget>
            </item>
@@ -975,7 +975,7 @@
               <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+              <iconset/>
              </property>
             </widget>
            </item>
@@ -988,7 +988,7 @@
               <string>...</string>
              </property>
              <property name="icon" >
-              <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+              <iconset/>
              </property>
             </widget>
            </item>
@@ -1025,16 +1025,6 @@
            <property name="spacing" >
             <number>6</number>
            </property>
-           <item>
-            <widget class="QLabel" name="label_5" >
-             <property name="text" >
-              <string>Patient Name:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="m_patientNameLineEdit" />
-           </item>
            <item>
             <spacer>
              <property name="orientation" >

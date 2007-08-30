@@ -89,7 +89,7 @@ QSegmentationFrameworkExtension::QSegmentationFrameworkExtension( QWidget *paren
 QSegmentationFrameworkExtension::~QSegmentationFrameworkExtension()
 {
 
-   
+
     if(m_maskVolume != 0)
     {
         delete m_maskVolume;
@@ -206,7 +206,7 @@ void QSegmentationFrameworkExtension::createActions()
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
 
-      
+
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -220,7 +220,7 @@ void QSegmentationFrameworkExtension::createActions()
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_seedAction->trigger();
 
-    
+
 }
 
 void QSegmentationFrameworkExtension::createToolBars()
@@ -231,23 +231,23 @@ void QSegmentationFrameworkExtension::createConnections()
 {
 
     connect(m_ApplyCT,SIGNAL(clicked()), this, SLOT(applyCT()));
-    
+
     connect(m_ApplyIC,SIGNAL(clicked()), this, SLOT(applyIC()));
-    
+
     connect(m_ApplyCC,SIGNAL(clicked()), this, SLOT(applyCC()));
-    
+
     connect(m_ApplyNC,SIGNAL(clicked()), this, SLOT(applyNC()));
-    
+
     connect(m_clear,SIGNAL(clicked()), this, SLOT(clearSelected()));
-    
+
     connect(m_clearAll,SIGNAL(clicked()), this, SLOT(clearAll()));
 
     //connect(m_contournBotton,SIGNAL(clicked()), this, SLOT(Contorn()));
-    
+
     connect(m_selectOutSeed,SIGNAL(clicked()), this, SLOT(SelectOutSeed()));
-    
+
     connect(m_sliceViewSlider, SIGNAL(valueChanged(int)),this, SLOT(setAreaSlice(int)));
-    
+
     connect(m_opacity, SIGNAL(valueChanged(int)),this, SLOT(opacityChanged(int)));
 
 
@@ -277,19 +277,19 @@ void QSegmentationFrameworkExtension::createConnections()
 
 
 void QSegmentationFrameworkExtension::setInput( Volume *input )
-{	
+{
     m_mainVolume = new Volume();
     m_mainVolume = input;
-    
-    
+
+
     m_2DView->setInput( m_mainVolume );
-    
+
     m_2DView->setView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
     m_currentView = Axial;
-    
+
     int* dim;
     dim = m_mainVolume->getDimensions();
     m_2DView->setSlice((dim[2]-1)/2);
@@ -299,15 +299,10 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
     //m_sliceViewSlider->setValue((dim[2]-1)/2);
-    
+
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
-
-
-
-    QString aux = (m_mainVolume->getVolumeSourceInformation())->getPatientName();
-    m_patientNameLineEdit->insert(aux);
 
     /*typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
     ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
@@ -329,7 +324,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     /*
     vtkPolyData *poly=vtkPolyData::New();
     vtkPolyData *newpoly=vtkPolyData::New();
-    
+
     vtkTriangleFilter *tri=vtkTriangleFilter::New();
     vtkSplineWidget *m_spline = vtkSplineWidget::New();
     //vtkTriangleStrip *Strip=vtkTriangleStrip::New();
@@ -341,7 +336,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
 //    prop->SetPointSize(0.05);
     //prop->SetOpacity(0.2);
   //  prop->SetColor(1,0,0);
-    //m_spline->SetHandleProperty(prop);    
+    //m_spline->SetHandleProperty(prop);
     m_spline->SetProjectionPosition(m_2DView->getSlice()-1);
     m_spline->SetProjectionNormal(2);
     m_spline->SetNumberOfHandles(5);
@@ -487,31 +482,31 @@ void QSegmentationFrameworkExtension::setSeedPosition( )
 
         ///Li passem els paràmetres
         if (m_howManySeeds<=m_seed->rowCount()){
-            
-    
+
+
             aux = QString("%1").arg(pos[0], 0, 'f', 1);
             X->setText(aux);
             X->setTextAlignment(Qt::AlignHCenter);
             m_seed->setItem(m_howManySeeds,0,X);
-            
+
             aux = QString("%1").arg(pos[1], 0, 'f', 1);
             Y->setText(aux);
             Y->setTextAlignment(Qt::AlignHCenter);
             m_seed->setItem(m_howManySeeds,1,Y);
-        
+
             aux = QString("%1").arg(pos[2], 0, 'f', 1);
             Z->setText(aux);
             Z->setTextAlignment(Qt::AlignHCenter);
             m_seed->setItem(m_howManySeeds,2,Z);
-            
-            
+
+
             m_howManySeeds=m_howManySeeds+1;
             m_selectOutSeed->setEnabled(true);
             m_isSeed=true;
             m_selectOutSeed->setEnabled(true);
-        
+
         }
-        
+
         m_isSeed=true;
         if(m_isSeed)
         {
@@ -532,61 +527,61 @@ void QSegmentationFrameworkExtension::applyCT()
             QTableWidgetItem* Y = new QTableWidgetItem();
             QTableWidgetItem* Z = new QTableWidgetItem();
             m_method = new ConnectedThreshold();
-            		 
+
             /// obtenim el volum a treballar
-                      
+
             m_method->setInputVolume( m_mainVolume );
-            
+
 	    ///Obtenim les llavors de la llista i les afegitm al m�tode
-	
+
 
             for (int i=0;i<m_howManySeeds;i++){
-            
+
                     X = m_seed->item(i,0);
                     Y = m_seed->item(i,1);
                     Z = m_seed->item(i,2);
-                    
+
                     x = ((X->text()).toDouble());
                     y = ((Y->text()).toDouble());
                     z = ((Z->text()).toDouble());
-                    
-                                              
+
+
                     m_method->addSeed((int)x,(int)y,(int)z);
-    
+
             }
 
-               
-            
-            /// li indiquem al m�tode els par�metres necessaris     
+
+
+            /// li indiquem al m�tode els par�metres necessaris
             m_method->setSmoothingParameters();
-             
+
             m_method->setConnectedParameters( m_lower->value(),
-	    				      m_upper->value()                                          
+	    				      m_upper->value()
                                      );
             ///Posem el cursor en espera!
             QApplication::setOverrideCursor(Qt::WaitCursor);
-            
-            ///Apliquem el m�tode                               
+
+            ///Apliquem el m�tode
             if( m_method->applyMethod() )
-            {   
-                
+            {
+
                 ///Mostrem els resultats
                 m_maskVolume=m_method->getSegmentedVolume();
                 m_2DView->setOverlayToBlend();
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                QApplication::restoreOverrideCursor(); 
+                QApplication::restoreOverrideCursor();
                 m_contournToolButton->setEnabled( true );
             }
             else
             {
                 //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Connected " << std::endl;
             }
-        
+
     VolumeCalculator();
    // Contorn(m_maskVolume->getVtkData());
-            
+
 
 }
 
@@ -600,32 +595,32 @@ void QSegmentationFrameworkExtension::applyIC()
             QTableWidgetItem* Y = new QTableWidgetItem();
             QTableWidgetItem* Z = new QTableWidgetItem();
             m_methodIC = new IsolatedConnected();
-            		 
+
             /// obtenim el volum a treballar
-                      
+
             m_methodIC->setInputVolume( m_mainVolume );
-            
+
 	    ///Obtenim les llavors de la llista i les afegitm al m�tode
-	
-            
+
+
             for (int i=0;i<m_howManySeeds;i++){
-            
+
                     X = m_seed->item(i,0);
                     Y = m_seed->item(i,1);
                     Z = m_seed->item(i,2);
-    
+
                     x = ((X->text()).toDouble());
                     y = ((Y->text()).toDouble());
                     z = ((Z->text()).toDouble());
-                    
-                            
+
+
                     m_methodIC->addSeed((int)x,(int)y,(int)z);
-    
+
             }
 
-               
-            
-            /// li indiquem al m�tode els par�metres necessaris     
+
+
+            /// li indiquem al m�tode els par�metres necessaris
             m_methodIC->setSmoothingParameters();
             x2=(m_OutSeedX->text()).toInt();
             y2=(m_OutSeedY->text()).toInt();
@@ -638,27 +633,27 @@ void QSegmentationFrameworkExtension::applyIC()
             m_methodIC->setIsolatedParameters( m_lowerIsolated->value() );
             ///Posem el cursor en espera!
             QApplication::setOverrideCursor(Qt::WaitCursor);
-            
-            ///Apliquem el m�tode                               
+
+            ///Apliquem el m�tode
             if( m_methodIC->applyMethod() )
             {   //std::cout << "Arribem aqu�1?? " << std::endl;
-                
+
                 ///Mostrem els resultats
                 m_maskVolume=m_methodIC->getSegmentedVolume();
                 m_2DView->setOverlayToBlend();
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                QApplication::restoreOverrideCursor(); 
+                QApplication::restoreOverrideCursor();
                 m_contournToolButton->setEnabled( true );
             }
             else
-            {   
+            {
                 //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Isolated " << std::endl;
             }
-        
-           VolumeCalculator(); 
-           
+
+           VolumeCalculator();
+
 
 }
 
@@ -671,61 +666,61 @@ void QSegmentationFrameworkExtension::applyCC()
             QTableWidgetItem* Y = new QTableWidgetItem();
             QTableWidgetItem* Z = new QTableWidgetItem();
             m_methodCC = new ConfidenceConnected();
-            		 
+
             /// obtenim el volum a treballar
-                      
+
             m_methodCC->setInputVolume( m_mainVolume );
-            
+
 	    ///Obtenim les llavors de la llista i les afegitm al m�tode
-	
+
 
             for (int i=0;i<m_howManySeeds;i++){
-            
+
                     X = m_seed->item(i,0);
                     Y = m_seed->item(i,1);
                     Z = m_seed->item(i,2);
-    
+
                     x = ((X->text()).toDouble());
                     y = ((Y->text()).toDouble());
                     z = ((Z->text()).toDouble());
-                    
-                            
+
+
                     m_methodCC->addSeed((int)x,(int)y,(int)z);
-    
+
             }
 
-               
-            
-            /// li indiquem al m�tode els par�metres necessaris     
+
+
+            /// li indiquem al m�tode els par�metres necessaris
             m_methodCC->setSmoothingParameters();
-             
+
             m_methodCC->setConfidenceParameters( m_radius->value(),
 	    				       (float)m_multiplier->value(),
-					       m_iterations->value() 
-                                             ); 
+					       m_iterations->value()
+                                             );
             ///Posem el cursor en espera!
             QApplication::setOverrideCursor(Qt::WaitCursor);
-            
-            ///Apliquem el m�tode                               
+
+            ///Apliquem el m�tode
             if( m_methodCC->applyMethod() )
             {   //std::cout << "Arribem aqu�1?? " << std::endl;
-                
+
                 ///Mostrem els resultats
                 m_maskVolume=m_methodCC->getSegmentedVolume();
                 m_2DView->setOverlayToBlend();
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                QApplication::restoreOverrideCursor(); 
+                QApplication::restoreOverrideCursor();
                 m_contournToolButton->setEnabled( true );
             }
             else
             {
                 //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Confidence " << std::endl;
             }
-        
+
           VolumeCalculator();
-          
+
 }
 
 
@@ -738,61 +733,61 @@ void QSegmentationFrameworkExtension::applyNC()
             QTableWidgetItem* Y = new QTableWidgetItem();
             QTableWidgetItem* Z = new QTableWidgetItem();
             m_methodNC = new NeighborhoodConnected();
-            		 
+
             /// obtenim el volum a treballar
-                      
+
             m_methodNC->setInputVolume( m_mainVolume );
-            
+
 	    ///Obtenim les llavors de la llista i les afegitm al m�tode
-	
+
 
             for (int i=0;i<m_howManySeeds;i++){
-            
+
                     X = m_seed->item(i,0);
                     Y = m_seed->item(i,1);
                     Z = m_seed->item(i,2);
-    
+
                     x = ((X->text()).toDouble());
                     y = ((Y->text()).toDouble());
                     z = ((Z->text()).toDouble());
-                    
-                            
+
+
                     m_methodNC->addSeed((int)x,(int)y,(int)z);
-    
+
             }
 
-               
-            
-            /// li indiquem al m�tode els par�metres necessaris     
+
+
+            /// li indiquem al m�tode els par�metres necessaris
             m_methodNC->setSmoothingParameters();
-             
+
             m_methodNC->setNeighborhoodParameters( m_lowerNeig->value(),
 	    				         m_upperNeig->value(),
                                                  m_radiusNeig->value()
                                                 );
             ///Posem el cursor en espera!
             QApplication::setOverrideCursor(Qt::WaitCursor);
-            
-            ///Apliquem el m�tode                               
+
+            ///Apliquem el m�tode
             if( m_methodNC->applyMethod() )
             {   //std::cout << "Arribem aqu�1?? " << std::endl;
-                
+
                 ///Mostrem els resultats
                 m_maskVolume=m_methodNC->getSegmentedVolume();
                 m_2DView->setOverlayToBlend();
                 m_2DView->setOpacityOverlay(0.5);
                 m_2DView->setOverlayInput(m_maskVolume);
                 m_isMask=true;
-                QApplication::restoreOverrideCursor(); 
+                QApplication::restoreOverrideCursor();
                 m_contournToolButton->setEnabled( true );
             }
             else
             {
                 //std::cerr << " No s'ha pogut aplicar el m�tode de segmentaci� Neigborhood " << std::endl;
             }
-        
+
             VolumeCalculator();
-           
+
 }
 
 
@@ -820,12 +815,12 @@ bool trobat =false;
 int i=0;
 
 while((!trobat)&&(i<m_howManySeeds)){
-   
-   
-    
+
+
+
          if(m_seed->isItemSelected((m_seed->item(i,0))))
          {
-        
+
             m_seed->removeRow(i);
             if(m_howManySeeds>m_seed->rowCount())
             {
@@ -835,9 +830,9 @@ while((!trobat)&&(i<m_howManySeeds)){
                 m_seed->insertRow(m_seed->rowCount());
                 m_howManySeeds=m_howManySeeds-1;
             }
-            
+
            trobat=true;
-    
+
     }
     i++;
 
@@ -851,24 +846,24 @@ void QSegmentationFrameworkExtension::VolumeCalculator()
 {
 
     char* tempchar = new char[20];
-    
+
     float res;
 
     /** *********CALCUL DEL VOLUM***********   */
 
-       
+
     m_spacing[0] = ((ImageType*)(m_mainVolume->getItkData()))->GetSpacing()[0];//x
     m_spacing[1] = ((ImageType*)(m_mainVolume->getItkData()))->GetSpacing()[1];//y
     m_spacing[2] = ((ImageType*)(m_mainVolume->getItkData()))->GetSpacing()[2];//z
 
-        
+
     m_volumCalculatorY = new VolumCalculator((ImageType*)(m_maskVolume->getItkData()),0);
     m_volumCalculatorZ = new VolumCalculator((ImageType*)(m_maskVolume->getItkData()),1);
     m_volumCalculatorX = new VolumCalculator((ImageType*)(m_maskVolume->getItkData()),2);
-      
-  
-  
-    sprintf(tempchar,"%.2f",m_volumCalculatorX->GetPixelS()*(m_spacing[0]*m_spacing[1]*m_spacing[2]));//el volum 
+
+
+
+    sprintf(tempchar,"%.2f",m_volumCalculatorX->GetPixelS()*(m_spacing[0]*m_spacing[1]*m_spacing[2]));//el volum
     m_totalVolume->setText(tr(tempchar));//atencio
 
         switch( m_currentView )
@@ -893,10 +888,10 @@ void QSegmentationFrameworkExtension::VolumeCalculator()
 
        /** ***********FI CALCUL VOLUM*****************/
 
-   
 
 
- } 
+
+ }
 
 void QSegmentationFrameworkExtension::setAreaSlice(int Sli)
 {
@@ -957,14 +952,14 @@ m_2DView->getInteractor()->Render();
     m_spline->SetInteractor(m_2DView->getInteractor());
     m_spline->ProjectToPlaneOn();
     m_spline->SetNumberOfHandles(3);
-   
+
 
     m_splineY = vtkSplineWidget::New();
     m_splineY->SetPriority(1.0);
     m_splineY->SetInteractor(m_2DView->getInteractor());
     m_splineY->ProjectToPlaneOn();
     m_splineY->SetNumberOfHandles(3);
-   
+
 
 
     m_splineZ = vtkSplineWidget::New();
@@ -972,7 +967,7 @@ m_2DView->getInteractor()->Render();
     m_splineZ->SetInteractor(m_2DView->getInteractor());
     m_splineZ->ProjectToPlaneOn();
     m_splineZ->SetNumberOfHandles(3);
-   
+
 
     switch( m_currentView )
             {
@@ -1011,9 +1006,9 @@ m_2DView->getInteractor()->Render();
 
             break;
             }
-   
-    
-    
+
+
+
     m_2DView->getInteractor()->Render();
 }
 */
@@ -1024,7 +1019,7 @@ void QSegmentationFrameworkExtension::calculateContorn( )
   m_contorn = new ContournTool( m_2DView , m_maskVolume );
   m_isCont=true;
   }
-    
+
   //m_contorn->doContouring(m_2DView->getSlice() );
 
   //setSplineLength(m_contorn->getLength());
@@ -1059,7 +1054,7 @@ void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
     vtkPolyDataNormals *skinNormals = vtkPolyDataNormals::New();
     skinNormals->SetInputConnection(skinExtractor->GetOutputPort());
     skinNormals->SetFeatureAngle(60.0);
-    
+
     /*vtkSplineFilter *spline = vtkSplineFilter::New();
     spline->SetInput(skinExtractor->GetOutput());
     vtkSplineWidget *widget = vtkSplineWidget::New();
@@ -1079,7 +1074,7 @@ void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
     skinMapper->SetInputConnection(skinNormals->GetOutputPort());
     vtkPolyData * poly= vtkPolyData::New();
     //widget->GetPolyData(poly);
-    
+
     poly=skinMapper->GetInput();
     //int i=widget->GetNumberOfHandles();
     //std::cout<<"Tenim tants punts: "<<i<<endl;

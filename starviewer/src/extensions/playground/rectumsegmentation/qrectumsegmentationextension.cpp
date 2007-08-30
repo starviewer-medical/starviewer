@@ -367,9 +367,6 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_insideValue  = 255;
     m_outsideValue = 0;
 
-    QString aux = (m_mainVolume->getVolumeSourceInformation())->getPatientName();
-    m_patientNameLineEdit->insert(aux);
-
     typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
     ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
 
