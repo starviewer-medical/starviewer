@@ -40,18 +40,21 @@
 
 namespace udg {
 
-Volume::Volume()
+Volume::Volume( QObject *parent )
+: QObject( parent )
 {
     init();
 }
 
-Volume::Volume( ItkImageTypePointer itkImage )
+Volume::Volume( ItkImageTypePointer itkImage, QObject *parent )
+ : QObject( parent )
 {
     init();
     this->setData( itkImage );
 }
 
-Volume::Volume( VtkImageTypePointer vtkImage )
+Volume::Volume( VtkImageTypePointer vtkImage, QObject *parent )
+ : QObject( parent )
 {
     init();
     this->setData( vtkImage );
@@ -99,6 +102,7 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         else if( !m_fileList.isEmpty() ) // si li hem donat com a input un conjunt d'arxius, llegim aquests arxius amb Input
         {
             Input *input = new Input;
+            connect( input, SIGNAL( progress(int) ), this, SIGNAL( progress(int) ) );
             switch( input->readFiles( m_fileList ) )
             {
                 case Input::NoError:

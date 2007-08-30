@@ -30,7 +30,9 @@ class Series;
 
     @author Grup de Gràfics de Girona  ( GGG )
 */
-class Volume{
+class Volume : public QObject
+{
+Q_OBJECT
 public:
     /// Tipus d'imatge intern per defecte d'itk
     typedef signed int ItkPixelType;
@@ -45,9 +47,9 @@ public:
     /// Aquests enums indiquem quin criteri escollim per ordenar les imatges
     enum ImageOrderType{ OrderImageByNumber, OrderImageBySliceLocation, OrderImageByTemporalDimension };
 
-    Volume();
-    Volume( ItkImageTypePointer itkImage );
-    Volume( VtkImageTypePointer vtkImage );
+    Volume( QObject *parent = 0 );
+    Volume( ItkImageTypePointer itkImage, QObject *parent = 0 );
+    Volume( VtkImageTypePointer vtkImage, QObject *parent = 0 );
     ~Volume();
 
     /**
@@ -124,6 +126,13 @@ public:
 
     /// Mètode ràpid per obtenir la series a la que pertany aquest volum
     Series *getSeries();
+
+signals:
+    /**
+     * Emet l'estat del progrés en el que es troba la càrrega de dades del volum
+     * @param progress progrés de la càrrega en una escala de 1 a 100
+     */
+    void progress( int );
 
 private:
     /// Mètode d'inicialització d'objectes comuns per als constructors
