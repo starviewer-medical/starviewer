@@ -22,7 +22,7 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     setupUi( this );
     setWindowFlags(Qt::Popup);
 
-    m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4";
+    m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
     m_maxColumns = 4;
     createPredefinedGrids( m_predefinedGridsList );
 
@@ -69,13 +69,26 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 {
     ItemMenu * icon = new ItemMenu( this );
     icon->setData( (QVariant *) new QString( tr("%1,%2").arg( rows ).arg( columns ) ) );
+    icon->setGeometry ( 0, 0, 32, 32 );
+    icon->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
+
     int numberRows;
     int numberColumns;
     GridIcon* newIcon;
 
-    QGridLayout * gridLayout = new QGridLayout( icon );
+    QLabel * sizeText = new QLabel();
+    sizeText->setText( QString( tr("%1x%2").arg(columns).arg(rows) ) );
+    sizeText->setAlignment( Qt::AlignHCenter );
+
+    QGridLayout * gridLayout = new QGridLayout();
     gridLayout->setSpacing( 0 );
-    gridLayout->setMargin( 0 );
+    gridLayout->setMargin( 2 );
+
+    QGridLayout * verticalLayout = new QGridLayout( icon );
+    verticalLayout->setSpacing( 0 );
+    verticalLayout->setMargin( 0 );
+    verticalLayout->addLayout( gridLayout,0,0 );
+    verticalLayout->addWidget( sizeText,1,0 );
 
     for( numberRows = 0; numberRows < rows; numberRows++ )
     {
@@ -85,6 +98,7 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
             gridLayout->addWidget( newIcon, numberRows, numberColumns );
         }
     }
+
     connect( icon , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
     return icon;
 }

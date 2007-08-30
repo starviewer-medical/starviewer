@@ -378,8 +378,6 @@ void MultiQ2DViewerExtension::writeSettings()
 
 void MultiQ2DViewerExtension::addColumns( int columns )
 {
-    DEBUG_LOG( QString( tr("Afegeixo %1 columnes").arg(columns) ) );
-
     QVector<QHBoxLayout*>::Iterator it;
     int posViewer = m_columns;
     Q2DViewerWidget * newViewer;
@@ -404,9 +402,6 @@ void MultiQ2DViewerExtension::addColumns( int columns )
 
 void MultiQ2DViewerExtension::addRows( int rows )
 {
-
-    DEBUG_LOG( QString( tr("Afegeixo %1 files").arg(rows) ) );
-
     QHBoxLayout *horizontal;
     Q2DViewerWidget *newViewer;
     int i;
@@ -441,8 +436,6 @@ Q2DViewerWidget* MultiQ2DViewerExtension::getNewQ2DViewerWidget()
 
 void MultiQ2DViewerExtension::removeColumns( int columns )
 {
-    DEBUG_LOG( QString( tr("Elimino %1 columnes").arg(columns) ) );
-
     QVector<QHBoxLayout*>::Iterator it = m_qHorizontalLayoutVector.begin();
     int posViewer = m_columns-1;
     Q2DViewerWidget * oldViewer;
@@ -450,7 +443,7 @@ void MultiQ2DViewerExtension::removeColumns( int columns )
     while( columns > 0 && m_columns > 1 )
     {
         it = m_qHorizontalLayoutVector.begin();
-        /// Eliminem un widget de cada fila per tenir una columna menys
+        // Eliminem un widget de cada fila per tenir una columna menys
         while (it != m_qHorizontalLayoutVector.end())
         {
             oldViewer = m_vectorViewers.value(posViewer);
@@ -470,8 +463,6 @@ void MultiQ2DViewerExtension::removeColumns( int columns )
 
 void MultiQ2DViewerExtension::removeRows( int rows )
 {
-    DEBUG_LOG( QString( tr("Elimino %1 files").arg(rows) ) );
-
     int i;
     m_verticalLayout->removeItem(m_verticalLayout->itemAt(m_verticalLayout->count()));
     int posViewer = m_vectorViewers.count()-1;
@@ -503,12 +494,6 @@ void MultiQ2DViewerExtension::setGrid( int rows, int columns )
     if( m_columns > columns ) removeColumns( m_columns - columns );
     else if ( m_columns < columns ) addColumns( columns - m_columns );
 
-
-    /// Proves
-    for( int i =  0; i <  m_vectorViewers.size(); i ++)
-    {
-         ( m_vectorViewers.value(i)->m_2DView )->setSlice(i);
-    }
 }
 
 void MultiQ2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
