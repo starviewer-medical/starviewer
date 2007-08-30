@@ -205,7 +205,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
 
         connect(patientMenu, SIGNAL( selectedSeries(Series*) ), this, SLOT( setSeries(Series*) ));
 
-        patientMenu->popup( event->pos() ); //->globalPos() ?
+        patientMenu->popup( event->globalPos() ); //->globalPos() ?
     }
 }
 
