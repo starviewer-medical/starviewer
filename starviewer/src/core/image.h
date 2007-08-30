@@ -101,6 +101,10 @@ public:
     void setBitsStored( int bits );
     int getBitsStored() const;
 
+    /// Assignar/Obtenir la representació dels pixels
+    void setPixelRepresentation( int representation );
+    int getPixelRepresentation() const;
+
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries( Series *series );
     Series *getParentSeries() const;
