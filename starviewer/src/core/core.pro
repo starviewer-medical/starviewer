@@ -102,7 +102,8 @@ HEADERS += extensionfactory.h \
            patientbrowsermenuextendeditem.h \
            patientbrowsermenulist.h \
            referencelinesfillerstep.h \
-           colorpalette.h 
+           colorpalette.h  \
+           mhdfileclassifierstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -189,7 +190,8 @@ SOURCES += extensionmediator.cpp \
            patientbrowsermenuextendeditem.cpp \
            patientbrowsermenulist.cpp \
            referencelinesfillerstep.cpp \
-           colorpalette.cpp 
+           colorpalette.cpp  \
+           mhdfileclassifierstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
