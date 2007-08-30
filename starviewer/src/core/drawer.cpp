@@ -41,6 +41,8 @@
 #include <QList>
 #include <QString>
 ///\TODO tenir en compte el tipus de pantalla per a determinar la paleta
+
+///\TODO treure mètodes que no es fan servir
 namespace udg {
 
 Drawer::Drawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent ) 
@@ -652,8 +654,6 @@ void Drawer::hidePrimitivesOfView( int view )
             setVisibility( pair, false );
         } 
     }
-    
-    
 }
 
 void Drawer::showPrimitivesFrom( int slice, int view )
@@ -823,7 +823,6 @@ void Drawer::updateChangedLine( Line *line )
 
         lineMapper->SetInputConnection( lineSource->GetOutputPort() );
         
-    
         //Assignem el tipus de coordenades seleccionades
         lineMapper->SetTransformCoordinate( getCoordinateSystem( line->getCoordinatesSystemAsString() ) );
 
@@ -851,7 +850,7 @@ void Drawer::updateChangedLine( Line *line )
         else
             properties->SetColor( lineColor.redF(), lineColor.greenF(), lineColor.blueF() );
     
-    //mirem la visibilitat de l'actor
+        //mirem la visibilitat de l'actor
         if ( !line->isVisible() )
             lineActor->VisibilityOff();
         
@@ -868,6 +867,26 @@ int Drawer::getNumberOfDrawedPrimitives()
     return( m_axialPairs.count() + m_sagittalPairs.count() + m_coronalPairs.count() );
 }  
   
+Drawer::PrimitivesSet Drawer::getSetOf( DrawingPrimitive *primitive )
+{
+    PrimitivesSet set;
+    bool notFound = true;
+    
+    for ( int i = 0; ( i < m_primitivesSetList.count() ) && notFound; i++ )
+    {
+        if ( m_primitivesSetList[i].contains( primitive ) )
+        {
+            set = m_primitivesSetList[i];
+            notFound = false;
+        }
+    }
+    
+    if ( notFound )
+        ERROR_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
+    
+    return( set );
+}
+  
 void Drawer::highlightNearestPrimitives()
 {
     double point[3] = { .0, .0, .0 };
@@ -877,7 +896,6 @@ void Drawer::highlightNearestPrimitives()
     double toWorld[4];
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
 
-    //tornem a l'estat d'unhighlight totes les possible primitives que poden estar-hi ( posarem a aquest estat les primitives de la vista actual per no haver de recòrrer els tres contenidors de parells de primitives).
     PrimitivesMap currentViewMap;
     
     switch( m_2DViewer->getView() )
@@ -901,60 +919,122 @@ void Drawer::highlightNearestPrimitives()
             DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
             break;
     }
+    //la llista de totes les primitives de la vista actual
+    PrimitivesPairsList list = currentViewMap.values();
     
-    PrimitivesPairsList list;
-    
-    //treiem l'estat de hightlight de les primitives de la vista
-    list = currentViewMap.values();
-    
-    foreach( PrimitiveActorPair pair, list )
-    {
-        QColor normalColor = m_colorPalette->getNormalColor();
-        
-        pair.first->highlightOff();
-        pair.first->setColor( normalColor );
-        
-        if ( pair.first->getPrimitiveType() == "Line" )
-        {
-            vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
-            vtkProperty2D *properties = actor->GetProperty();
-            properties->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
-        }
-        else if ( pair.first->getPrimitiveType() == "Text" )
-        {
-            vtkCaptionActor2D *actor = vtkCaptionActor2D::SafeDownCast( pair.second );
-            actor->GetCaptionTextProperty()->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
-        }
-    }
-    
-    list = getNearestPrimitivesPairs( point );
+    //agafem la primitiva més propera
+    PrimitivesSet nearestSet = getSetOf( getNearestPrimitivePair( point ).first );
     
     foreach( PrimitiveActorPair pair, list )
     {
-        pair.first->highlightOn();
-        QColor highlightColor = m_colorPalette->getHighlightColor();
-        pair.first->setColor( highlightColor );
-        
-        if ( pair.first->getPrimitiveType() == "Line" )
+        if ( nearestSet.contains( pair.first ) )
         {
-            vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
-            vtkProperty2D *properties = actor->GetProperty();
-            properties->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+            setHighlightColor( pair );
+            pair.first->highlightOn();
         }
-        else if ( pair.first->getPrimitiveType() == "Text" )
+        else
         {
-            vtkCaptionActor2D *actor = vtkCaptionActor2D::SafeDownCast( pair.second );
-            actor->GetCaptionTextProperty()->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+            setNormalColor( pair );
+            pair.first->highlightOff();
         }
     }
     m_2DViewer->refresh();    
 }
 
-Drawer::PrimitivesPairsList Drawer::getNearestPrimitivesPairs( double point[3] )
+void Drawer::setHighlightColor( PrimitiveActorPair pair )
+{
+    QColor highlightColor = m_colorPalette->getHighlightColor();
+    
+    if ( pair.first->getPrimitiveType() == "Line" )
+    {
+        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
+        vtkProperty2D *properties = actor->GetProperty();
+        properties->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+    }
+    else if ( pair.first->getPrimitiveType() == "Text" )
+    {
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
+        vtkTextProperty *property = textActor->GetCaptionTextProperty();
+        property->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+    }
+}
+
+void Drawer::setNormalColor( PrimitiveActorPair pair )
+{
+    QColor normalColor = m_colorPalette->getNormalColor();
+    
+    if ( pair.first->getPrimitiveType() == "Line" )
+    {
+        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
+        vtkProperty2D *properties = actor->GetProperty();
+        properties->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
+    }
+    else if ( pair.first->getPrimitiveType() == "Text" )
+    {
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
+        vtkTextProperty *property = textActor->GetCaptionTextProperty();
+        property->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
+    }
+}
+
+Drawer::PrimitivesPairsList Drawer::getAllPrimitivesOfType( QString primitiveType )
+{
+    PrimitivesPairsList result;
+    PrimitivesMap map;
+    
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            map = m_axialPairs;
+            break;
+        case Q2DViewer::Sagittal:
+            map = m_sagittalPairs;
+            break;
+        case Q2DViewer::Coronal:
+            map = m_coronalPairs;
+            break;
+        default:
+            ERROR_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
+            break;
+    }    
+    
+    foreach( PrimitiveActorPair pair, map )
+    {
+        if ( pair.first->getPrimitiveType() == primitiveType )
+            result << pair;
+    }
+    return( result );
+}
+
+int Drawer::getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType )
+{
+    int index, i = 0;
+    
+    foreach( PrimitiveActorPair pair, nearestPairslist )
+    {
+        if ( pair.first->getPrimitiveType() == primitiveType )
+            index = i;
+        
+        i++;
+    }
+    return( index );
+}
+
+bool Drawer::hasPrimitiveOfType( PrimitivesPairsList nearestPairslist, QString primitiveType )
+{
+    bool response = false;
+    foreach( PrimitiveActorPair pair, nearestPairslist )
+    {
+        if ( pair.first->getPrimitiveType() == primitiveType )
+            response = true;
+    }
+    return( response );
+}
+
+Drawer::PrimitiveActorPair Drawer::getNearestPrimitivePair( double point[3] )
 {
     PrimitivesPairsList list;
-    PrimitivesPairsList nearestPairslist;
-
+    PrimitiveActorPair nearestPair;
     int coordinateToZero;
 
     switch( m_2DViewer->getView() )
@@ -982,10 +1062,8 @@ Drawer::PrimitivesPairsList Drawer::getNearestPrimitivesPairs( double point[3] )
             break;
     }
 
-//     double minDistance = VTK_DOUBLE_MAX;
-    double *p1, *p2;
-    double distance;
-
+    double minDistanceLine = VTK_DOUBLE_MAX;
+    double *p1, *p2, distance;
     ///\TODO tenir en compte tots els tipus de primitives
     
     foreach( PrimitiveActorPair pair, list )
@@ -1001,24 +1079,16 @@ Drawer::PrimitivesPairsList Drawer::getNearestPrimitivesPairs( double point[3] )
             p2[coordinateToZero] = 0.0;
             distance = vtkLine::DistanceToLine( point , p1 , p2 );
             
-            if( distance < 20.0 )
-                nearestPairslist << pair;
-        }
-        else if( primitive->getPrimitiveType() == "Text" )
-        {
-            Text *text = static_cast<Text*> ( primitive ); 
-            double *textPosition = text->getAttatchmentPoint();
-            
-            Distance d( point, textPosition );
-            
-            cout << "distancia entre el punt i el text: " << d.getDistance2D() << endl;
-            
-            if ( d.getDistance2D() < 20 )
-                nearestPairslist << pair;
+            if ( ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) ) || ( distance < 20.0 )  )
+            {
+                    minDistanceLine = distance;
+                    nearestPair = pair;
+            }
         }
     }
-    return nearestPairslist;
+    return nearestPair;
 }
+
 void Drawer::addSetOfPrimitives( Representation *representation )
 {
     PrimitivesSet set;
