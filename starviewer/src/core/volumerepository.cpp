@@ -12,8 +12,6 @@
 #include "volume.h"
 #include "logging.h"
 
-#include <iostream>
-
 namespace udg {
 
 VolumeRepository::VolumeRepository()
