@@ -425,10 +425,6 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
         qWarning() << "setDiffusionInput: second input has no effect";
         return;
     }
-
-    QString patientName = input->getVolumeSourceInformation()->getPatientName();
-    m_patientNameLineEdit->setText( patientName );
-
     m_diffusionInputVolume = input;
 
     ItkImageType::Pointer inputImage = input->getItkData();
