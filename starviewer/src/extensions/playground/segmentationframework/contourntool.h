@@ -16,10 +16,9 @@ namespace udg {
 
 class Q2DViewer;
 class Volume;
-//class DeterminateContour;
 class LlescaContorn;
 class AreaSpline;
-
+class llenca;
 /**
 Tool que serveix per posar llavors en un visor 2D
 
@@ -40,12 +39,20 @@ public:
 
     double getLength( );
 
-    void doContouring(int slice );
+    void doContouring(int slice);
     void getCoords();
     
 signals:
 
     void setLenght(double);
+
+    void splineChanged(double);
+
+    void actualspline(double);
+    
+    void originalspline(double,int);
+    
+    void changeOriginalSpline();
 
 private:
     
@@ -55,11 +62,8 @@ private:
     int m_seedSlice;
     int m_lastView;
 
-     double m_seedPosition[3];
-   // DeterminateContour *m_con;
-    //DeterminateContour *m_con2;
-    //DeterminateContour *m_con3;
-    
+    double m_seedPosition[3];
+       
     LlescaContorn *m_conAxial;
     LlescaContorn *m_conCoronal;
     LlescaContorn *m_conSagital;
@@ -69,6 +73,7 @@ private:
     vtkSplineWidget*  m_splineZ;
     ViewType vista;
     AreaSpline* m_areaSpline;    
+    llenca *l;
 
     bool m_calculat;
     float xt;
@@ -89,6 +94,7 @@ private slots:
 
     void viewChanged(int s);
 
+    void changespline(double j);
 };
 
 }

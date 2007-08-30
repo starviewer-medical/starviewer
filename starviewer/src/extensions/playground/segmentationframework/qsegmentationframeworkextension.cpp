@@ -28,6 +28,7 @@
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QStringList>
+#include <QPushButton>
 
 // VTK
 #include <vtkRenderer.h>
@@ -53,7 +54,7 @@
 // ITK
 #include <itkImage.h>
 
-//#include <iostream.h>
+#include <iostream.h>
 
 
 namespace udg {
@@ -69,6 +70,7 @@ QSegmentationFrameworkExtension::QSegmentationFrameworkExtension( QWidget *paren
     m_isSeed=false;
     m_isMask=false;
     m_isCont=false;
+    m_isFirst=true;
    // m_seed = new QTableWidget(5, 3, this);
     m_seed->setRowCount(5);
     m_seed->setColumnCount(3);
@@ -269,8 +271,9 @@ void QSegmentationFrameworkExtension::createConnections()
 
     connect( m_2DView, SIGNAL(sliceChanged(int)), m_sliceViewSlider , SLOT (setValue(int)));
 
-    //connect( m_contorn , SIGNAL( setLenght(double) ) , this , SLOT( setSplineLength(double) ) );
-
+    connect(m_reset,SIGNAL(clicked()), this, SLOT(reset()));
+    
+    
 }
 
 
@@ -364,7 +367,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     std::cout<<"la j és :"<<j<<std::endl;*/
     //newpoly->SetInteractor(m_2DView->getInteractor());
     m_2DView->render();
-    //m_2DView->getInteractor()->Render();
+   
 
 
 
@@ -383,7 +386,7 @@ void QSegmentationFrameworkExtension::changeViewToAxial()
     m_2DView->setViewToAxial();
     m_2DView->setSlice(extent[5]/2);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-    //INFO_LOG("Visor per defecte: Canviem a vista Axial (Vista 1)")
+    
     m_2DView->render();
 
 }
@@ -400,7 +403,7 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_2DView->setViewToSagittal();
     m_2DView->setSlice(extent[1]/2);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-   // INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
+   
     m_2DView->render();
 }
 
@@ -418,7 +421,7 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_2DView->setViewToCoronal();
     m_2DView->setSlice(extent[3]/2);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-    //INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
+    
     m_2DView->render();
 
 }
@@ -580,7 +583,7 @@ void QSegmentationFrameworkExtension::applyCT()
             }
 
     VolumeCalculator();
-   // Contorn(m_maskVolume->getVtkData());
+   
 
 
 }
@@ -804,7 +807,7 @@ m_ApplyCT->setEnabled(false);
 m_ApplyCC->setEnabled(false);
 m_ApplyNC->setEnabled(false);
 m_ApplyIC->setEnabled(false);
-//llista->delete();
+
 
 
 }
@@ -1017,43 +1020,119 @@ void QSegmentationFrameworkExtension::calculateContorn( )
 {
   if(!m_isCont){
   m_contorn = new ContournTool( m_2DView , m_maskVolume );
+  connect( m_contorn , SIGNAL( actualspline(double ) ) , this , SLOT( setSplineLength(double) ) );
+  connect( m_contorn , SIGNAL( originalspline(double, int ) ) , this , SLOT( setOriginalLength(double, int) ) );
   m_isCont=true;
   }
 
-  //m_contorn->doContouring(m_2DView->getSlice() );
-
-  //setSplineLength(m_contorn->getLength());
-    /* char* tempchar = new char[20];
-
-  sprintf(tempchar,"%.2f",m_contorn->getLength());//el volum de la llesca en mm quadrats
-
-  m_newArea->setText(tr(tempchar));*/
+  m_reset->setEnabled(true);
+  
 
 
 }
 
 void QSegmentationFrameworkExtension::setSplineLength(double area)
 {
-
+  double total=0;
   char* tempchar = new char[20];
-
-  sprintf(tempchar,"%.2f",area);//el volum de la llesca en mm quadrats
-
+  m_newSpline=0;
+  
+  if(m_originalSpline<area){
+  
+  m_newSpline=area-m_originalSpline;
+  total=m_novaArea+m_newSpline;
+  sprintf(tempchar,"%.2f",(total));//el volum de la llesca en mm quadrats
   m_newArea->setText(tr(tempchar));
+  total=m_nouVolum+m_newSpline;
+  sprintf(tempchar,"%.2f",(total));
+  m_newVolume->setText(tr(tempchar));
+  }
+  else{
+  
+  m_newSpline=m_originalSpline-area;
+  total=m_novaArea-m_newSpline;
+  sprintf(tempchar,"%.2f",(total));//el volum de la llesca en mm quadrats
+  m_newArea->setText(tr(tempchar));
+  total=m_nouVolum-m_newSpline;
+  sprintf(tempchar,"%.2f",(total));
+  m_newVolume->setText(tr(tempchar));
+
+  }
+
+}
+
+void QSegmentationFrameworkExtension::setOriginalLength(double area, int llesca)
+{
+    ///SI ho executem per primera vegada simplement posem els valors trobats en els resultats
+    if(m_isFirst){
+    m_newArea->setText(m_sliceArea->text());
+    m_newVolume->setText(m_totalVolume->text());
+    m_novaArea=m_sliceArea->text().toDouble();
+    m_nouVolum=m_totalVolume->text().toDouble();
+    m_originalSpline=area;
+    m_llescaactual=llesca;
+    m_isFirst=false;
+  
+    ///Si ho executem per 2ona o + vegades
+    }else{
+
+    
+    if (llesca==m_llescaactual){
+        if(m_originalSpline==area){
+        ///Si és la mateixa llesca i la mateixa spline, el que fem és tronar als valors originals
+            m_newArea->setText(m_sliceArea->text());
+            m_newVolume->setText(m_totalVolume->text());
+            m_novaArea=m_sliceArea->text().toDouble();
+            m_nouVolum=m_totalVolume->text().toDouble();
+        }else{
+        ///Si és la mateixa llesca però no la mateixa spline, mantenim com a originals els valors que 
+        ///que hem obtingut del manipular el contorn anterior.
+        m_originalSpline=area;
+        m_novaArea=m_newArea->text().toDouble();
+        m_nouVolum=m_newVolume->text().toDouble();
+
+        }
+    }
+    else{
+        ///Si canviem de llesca, només mantenim el valor del nou volum
+        m_originalSpline=area;
+        m_nouVolum=m_newVolume->text().toDouble();
+        m_novaArea=m_sliceArea->text().toDouble();
+        m_newArea->setText(m_sliceArea->text());
+        m_llescaactual=llesca;
+
+    }
+
+
+
+    }
+   
+
+}
+
+
+void QSegmentationFrameworkExtension::reset(){
+
+m_newArea->setText(m_sliceArea->text());
+m_newVolume->setText(m_totalVolume->text());
+   // m_originalSpline=area;
+
+
 
 
 }
 
+
 void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
 
 
-    vtkContourFilter *skinExtractor = vtkContourFilter::New();
+    /*vtkContourFilter *skinExtractor = vtkContourFilter::New();
     skinExtractor->SetInput(segmentat);
     skinExtractor->SetNumberOfContours(1);
     skinExtractor->SetValue(0, 255);
     vtkPolyDataNormals *skinNormals = vtkPolyDataNormals::New();
     skinNormals->SetInputConnection(skinExtractor->GetOutputPort());
-    skinNormals->SetFeatureAngle(60.0);
+    skinNormals->SetFeatureAngle(60.0);*/
 
     /*vtkSplineFilter *spline = vtkSplineFilter::New();
     spline->SetInput(skinExtractor->GetOutput());
@@ -1061,7 +1140,7 @@ void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
     widget->SetInput(spline->GetOutput());*/
    // vtkStripper *skinStripper = vtkStripper::New();
     //skinStripper->SetInputConnection(skinNormals->GetOutputPort());
-    vtkPolyDataMapper *skinMapper = vtkPolyDataMapper::New();
+    //vtkPolyDataMapper *skinMapper = vtkPolyDataMapper::New();
     //vtkContourWidget *conWidget = vtkContourWidget::New();
     //conWidget->Initialize(skinExtractor->GetOutput());
     //vtkPolyData * poly= vtkPolyData::New();
@@ -1069,17 +1148,17 @@ void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
     //skinMapper->SetInputConnection(skinStripper->GetOutputPort());
     //skinMapper->SetInput(poly);
     //skinMapper->SetInputConnection(skinExtractor->GetOutputPort());
-    vtkSplineWidget *widget = vtkSplineWidget::New();
+    //vtkSplineWidget *widget = vtkSplineWidget::New();
 
-    skinMapper->SetInputConnection(skinNormals->GetOutputPort());
-    vtkPolyData * poly= vtkPolyData::New();
+    //skinMapper->SetInputConnection(skinNormals->GetOutputPort());
+    //vtkPolyData * poly= vtkPolyData::New();
     //widget->GetPolyData(poly);
 
-    poly=skinMapper->GetInput();
+    //poly=skinMapper->GetInput();
     //int i=widget->GetNumberOfHandles();
     //std::cout<<"Tenim tants punts: "<<i<<endl;
     //skinMapper->ScalarVisibilityOff();
-    vtkActor *skin = vtkActor::New();
+    /*vtkActor *skin = vtkActor::New();
     skin->SetMapper(skinMapper);
     skin->GetProperty()->SetDiffuseColor(1, .49, .25);
     skin->GetProperty()->SetSpecular(.3);
@@ -1087,7 +1166,7 @@ void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
     skin->VisibilityOn();
 
     m_2DView->getRenderer()-> AddActor( skin );
-    m_2DView->getInteractor()->Render();
+    m_2DView->getInteractor()->Render();*/
 }
 
 
