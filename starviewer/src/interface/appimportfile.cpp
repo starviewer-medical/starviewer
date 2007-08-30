@@ -9,10 +9,8 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QFileInfo>
-#include <QProgressDialog>
-#include <QMessageBox>
+
 // recursos
-#include "volumerepository.h"
 #include "input.h"
 #include "logging.h"
 
@@ -22,19 +20,7 @@ AppImportFile::AppImportFile(QObject *parent, QString name)
  : QObject( parent )
 {
     this->setObjectName( name );
-
-    m_volumeRepository = udg::VolumeRepository::getRepository();
     m_inputReader = new udg::Input;
-
-    m_progressDialog = new QProgressDialog;
-    m_progressDialog->setRange( 0 , 100 );
-    m_progressDialog->setMinimumDuration( 0 );
-    m_progressDialog->setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
-    m_progressDialog->setLabelText( tr("Loading, please wait...") );
-    m_progressDialog->setCancelButton( 0 );
-    connect( m_inputReader , SIGNAL( progress(int) ) , m_progressDialog , SLOT( setValue(int) ) );
-
     readSettings();
 }
 
@@ -63,19 +49,12 @@ bool AppImportFile::open()
         INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
         if (imagesFilter.contains(selectedFilter))
         {
-            if( loadFile( fileName ) )
-            {
-                // cal informar a l'aplicació de l'id del volum
-                // la utilitat
-                m_lastOpenedFilename = fileName;
-                openedImage = true;
-            }
-            else
-            {
-                QMessageBox::critical( 0, tr("Error"), tr("Cannot read this File or File Format is wrong") );
-            }
+            QStringList files;
+            files << fileName;
+            emit selectedFiles( files );
+            openedImage = true;
         }
-        else if (selectedFilter == KeyImageNoteFilter)
+        else if (selectedFilter == KeyImageNoteFilter) // TODO aquest dos els mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller
         {
             emit openKeyImageNote(fileName);
         }
@@ -101,58 +80,15 @@ bool AppImportFile::openDirectory()
     QString directoryName = QFileDialog::getExistingDirectory( 0 , tr("Choose a directory") , m_workingDicomDirectory , QFileDialog::ShowDirsOnly );
     if ( !directoryName.isEmpty() )
     {
-        if( loadDirectory( directoryName ) )
-        {
-            m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
-            writeSettings();
-            INFO_LOG( "S'obre el directori: " + directoryName );
-        }
-        else
-            ok = false;
+        emit selectedFiles( m_inputReader->generateFilenames( directoryName ) );
+        m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
+        writeSettings();
+        INFO_LOG( "S'obre el directori: " + directoryName );
     }
     else
         ok = false;
 
     return ok;
-}
-
-int AppImportFile::loadFile( QString fileName )
-{
-    int errorCode;
-    errorCode = m_inputReader->openFile( fileName.toLatin1() );
-    switch( errorCode )
-    {
-    case Input::NoError:
-        m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
-        break;
-    case Input::InvalidFileName:
-        break;
-    case Input::SizeMismatch:
-        break;
-    }
-    return errorCode;
-}
-
-int AppImportFile::loadDirectory( QString directoryName )
-{
-    int errorCode;
-    errorCode = m_inputReader->readSeries( directoryName.toLatin1() );
-    switch( errorCode )
-    {
-    case Input::NoError:
-        m_volumeID = m_volumeID = m_volumeRepository->addVolume( m_inputReader->getData() );
-        break;
-    case Input::InvalidFileName:
-        break;
-    case Input::SizeMismatch:
-        break;
-    }
-    return errorCode;
-}
-
-QString AppImportFile::getLastOpenedFilename()
-{
-    return m_lastOpenedFilename;
 }
 
 void AppImportFile::readSettings()

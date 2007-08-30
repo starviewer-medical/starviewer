@@ -11,8 +11,6 @@
 #include <QMainWindow>
 #include <QStringList>
 
-#include "identifier.h"
-
 // Forward declarations
 class QAction;
 class QMenu;
@@ -38,32 +36,17 @@ public:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
 
-    /// Mètode de conveniència per sortir del pas de mentres. Es crida quan tenim ja un model obert i volem obri-ne un de nou
-    void newAndOpen();
-    void newAndOpenDir();
-
     /// Donat un pacient, segons el pacient que tinguem, afegirem les dades, crearem una nova instància de la main window, etc
     void addPatient( Patient *patient );
 
     /// Ens retorna el punter al pacient que té ara
     Patient *getCurrentPatient();
 
-    /// Crea una nova finestra i la mostra
-    QApplicationMainWindow* openNewWindow();
-
     /// Retorna el numero de finestres amb diferents models que tenim obertes, el num. de QApplicationMainWindow
     unsigned int getCountQApplicationMainWindow();
 
     /// Retorna la finestra activa actual
     static QApplicationMainWindow* getActiveApplicationMainWindow();
-
-signals:
-    /// senyal emesa que indica si la finestra conté un volum o no
-    void containsVolume( bool );
-
-public slots:
-    /// Fa les tasques que cal quan s'ha carregat un volum
-    void onVolumeLoaded( Identifier id );
 
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
@@ -92,8 +75,11 @@ private:
     void enableExtensions();
 
 private slots:
-    /// Obre una nova finestra
-    void newFile();
+    /**
+     * Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
+     * @param patient El pacient que volem que contingui la nova finestra
+     */
+    void openNewWindow( Patient *patient = 0 );
 
     /// mostra el formulari d'about
     void about();

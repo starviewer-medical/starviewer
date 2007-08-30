@@ -55,8 +55,6 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     // icona de l'aplicació
     this->setWindowIcon( QPixmap(":/images/starviewer.png") );
     this->setWindowTitle( tr("Starviewer") );
-
-    emit containsVolume( FALSE );
 }
 
 QApplicationMainWindow::~QApplicationMainWindow()
@@ -76,7 +74,7 @@ void QApplicationMainWindow::createActions()
     m_newAction->setShortcut( tr("Ctrl+N") );
     m_newAction->setStatusTip(tr("Open a new working window") );
     m_newAction->setIcon( QIcon(":/images/new.png") );
-    connect( m_newAction , SIGNAL( triggered() ), this, SLOT( newFile() ) );
+    connect( m_newAction , SIGNAL( triggered() ), this, SLOT( openNewWindow() ) );
 
     m_openAction = new QAction( this );
     m_openAction->setText( tr("&Open...") );
@@ -160,7 +158,6 @@ void QApplicationMainWindow::createActions()
     m_closeAction->setStatusTip(tr("Close the current extension page"));
     m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
     connect( m_closeAction, SIGNAL( triggered() ), m_extensionWorkspace , SLOT( closeCurrentApplication() ) );
-    connect( this , SIGNAL( containsVolume(bool) ), m_closeAction, SLOT( setEnabled(bool) ) );
 
     m_exitAction = new QAction( this );
     m_exitAction->setText( tr("E&xit") );
@@ -316,34 +313,35 @@ void QApplicationMainWindow::switchToLanguage( int id )
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect after restarting the application") );
 }
 
-void QApplicationMainWindow::newFile()
+void QApplicationMainWindow::openNewWindow( Patient *patient )
 {
-    openNewWindow();
-}
+    QString windowName;
+    if( patient )
+    {
+        windowName = patient->getID() + " : " + patient->getFullName();
+    }
+    else
+    {
+        windowName = QString("No Patient Data [%1]").arg( getCountQApplicationMainWindow() + 1 );
+    }
 
-void QApplicationMainWindow::newAndOpen()
-{
-    openNewWindow()->m_openAction->trigger();
-}
-
-void QApplicationMainWindow::newAndOpenDir()
-{
-    openNewWindow()->m_openDirAction->trigger();
-}
-
-QApplicationMainWindow* QApplicationMainWindow::openNewWindow()
-{
-    QString windowName = "NewWindow[%1]";
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName.arg( getCountQApplicationMainWindow() + 1 ) );
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName );
+    newMainWindow->addPatient( patient );
     newMainWindow->show();
-    return newMainWindow;
 }
 
 void QApplicationMainWindow::addPatient( Patient *patient )
 {
+    if( !patient ) // si les dades de pacient són nules, no fem res
+    {
+        DEBUG_LOG("NULL Patient, maybe creating a blank new window");
+        return;
+    }
+
     if( !m_patient )
     {
         m_patient = patient;
+        this->setWindowTitle( m_patient->getID() + " : " + m_patient->getFullName() );
         enableExtensions();
         // si són les primeres dades que es carreguen, cal obrir l'extensió per defecte
         m_extensionHandler->openDefaultExtension();
@@ -356,10 +354,8 @@ void QApplicationMainWindow::addPatient( Patient *patient )
     }
     else
     {
-        // és un pacient diferent, cal obrir-lo apart
-        //crear finestra i donar-li input
-        QApplicationMainWindow *newMainWindow = openNewWindow();
-        newMainWindow->addPatient( patient );
+        // és un pacient diferent, cal obrir-lo apart en una nova finestra
+        openNewWindow( patient );
         DEBUG_LOG("Creem nou pacient");
     }
 }
@@ -415,12 +411,6 @@ void QApplicationMainWindow::about()
                " molecular imaging."
                "<p>Version : %1 </p>").arg( "Pre 0.4.0 (devel)" )
                );
-}
-
-void QApplicationMainWindow::onVolumeLoaded( Identifier id )
-{
-    enableExtensions();
-    m_extensionHandler->onVolumeLoaded( id );
 }
 
 void QApplicationMainWindow::writeSettings()
