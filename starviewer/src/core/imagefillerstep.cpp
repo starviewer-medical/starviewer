@@ -175,6 +175,7 @@ void ImageFillerStep::processImage( Image *image )
         image->setColumns( dicomReader.getAttributeByName( DCM_Columns ).toInt() );
         image->setBitsAllocated( dicomReader.getAttributeByName( DCM_BitsAllocated ).toInt() );
         image->setBitsStored( dicomReader.getAttributeByName( DCM_BitsStored ).toInt() );
+        image->setPixelRepresentation( dicomReader.getAttributeByName( DCM_PixelRepresentation ).toInt() );
     }
     else
     {

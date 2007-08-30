@@ -270,6 +270,16 @@ int Image::getBitsStored() const
     return m_bitsStored;
 }
 
+void Image::setPixelRepresentation( int representation )
+{
+    m_pixelRepresentation = representation;
+}
+
+int Image::getPixelRepresentation() const
+{
+    return m_pixelRepresentation;
+}
+
 void Image::setParentSeries( Series *series )
 {
     m_parentSeries = series;
