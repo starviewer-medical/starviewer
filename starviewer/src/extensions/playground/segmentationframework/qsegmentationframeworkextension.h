@@ -74,11 +74,16 @@ private:
     bool m_outSeed;
     bool m_isMask;
     bool m_isCont;
+    bool m_isFirst;
+    int m_llescaactual;
+    double m_novaArea;
+    double m_nouVolum;
     int m_howManySeeds;
     bool m_isLeftButtonPressed;
     ViewType m_currentView;
     int m_minValue, m_maxValue;
     int m_insideValue, m_outsideValue;
+    double m_originalSpline, m_newSpline;
    
      ///Tool Contorn
     ContournTool *m_contorn;
@@ -131,7 +136,8 @@ private slots:
     void opacityChanged(int);
     void calculateContorn();
     void setSplineLength(double);
-
+    void setOriginalLength(double, int);
+    void reset();
     
 
 };
