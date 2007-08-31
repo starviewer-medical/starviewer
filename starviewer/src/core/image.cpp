@@ -308,7 +308,7 @@ void Image::addWindowLevel( double window, double level )
 
 QPair<double,double> Image::getWindowLevel( int index ) const
 {
-    if( index > 0 && index < m_windowLevelList.size() )
+    if( index >= 0 && index < m_windowLevelList.size() )
         return m_windowLevelList.at(index);
     else
     {
@@ -344,7 +344,7 @@ void Image::setWindowLevelExplanations( const QStringList &explanations )
 
 QString Image::getWindowLevelExplanation( int index ) const
 {
-    if( index > 0 && index < m_windowLevelExplanationList.size() )
+    if( index >= 0 && index < m_windowLevelExplanationList.size() )
         return m_windowLevelExplanationList.at(index);
     else
     {
