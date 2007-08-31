@@ -55,7 +55,7 @@ Drawer::Drawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent )
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( setCurrentSlice( int ) ) );
     connect( m_2DViewer , SIGNAL( viewChanged(int) ) , this , SLOT( setCurrentView( int ) ) );
 }
-
+    
 Drawer::~Drawer()
 {
     delete m_colorPalette;
@@ -167,11 +167,6 @@ void Drawer::drawText( Text *text, int slice, int view )
     //Assignem el tipus de coordenades seleccionades
     setCoordinateSystem( text->getCoordinatesSystemAsString(), textActor->GetAttachmentPointCoordinate() );
     
-    if ( text->isBorderEnabled() )
-        textActor->BorderOn();
-    else
-        textActor->BorderOff();
-
     //mirem si s'ha d'escalar el text
     if ( text->isTextScaled() )
         textActor->GetTextActor()->ScaledTextOn();
@@ -248,6 +243,13 @@ void Drawer::drawText( Text *text, int slice, int view )
     //Assignem la posició en pantalla
     textActor->SetAttachmentPoint( text->getAttatchmentPoint() );
     
+textActor->BorderOff();
+
+      //mirem si el text té fons o no
+    if ( /*text->isBorderEnabled()*/true )
+        drawTextBorder( text, slice, view );
+    
+    
     //mirem la visibilitat de l'actor
     if ( !text->isVisible() )
         textActor->VisibilityOff();
@@ -280,7 +282,7 @@ void Drawer::drawPolygon( Polygon *polygon, int slice, int view )
     vertexs->InsertNextCell( polygon->getNumberOfPoints() );
     points->SetNumberOfPoints( polygon->getNumberOfPoints() );
         
-    //Calculem els punts de l'el·lipse
+    //Calculem els punts 
     for ( int i = 0; i < polygon->getNumberOfPoints(); i++ )
     {
         points->InsertPoint( i, polygon->getPoints().at( i ) );
@@ -368,7 +370,35 @@ void Drawer::validateCoordinates( double coordinates[3], int view )
             break;
             
         default:
-            DEBUG_LOG( "Vista no reconeguda a l'intentar dibuixar una el·lipse!!" );
+            DEBUG_LOG( "Vista no reconeguda!!" );
+            return;
+            break;
+    }
+} 
+
+void Drawer::adaptCoordinatesToCurrentView( double *coordinates, int view )
+{
+    double aux;
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+            //no cal fer res perquè les coordenades ja són les desitjades
+            break;
+    
+        case Q2DViewer::Sagittal:
+            aux = coordinates[2];
+            coordinates[2] = coordinates[0];
+            coordinates[0] = aux;
+            break;
+        
+        case Q2DViewer::Coronal:
+            aux = coordinates[1];
+            coordinates[1] = coordinates[2];
+            coordinates[2] = aux;
+            break;
+            
+        default:
+            DEBUG_LOG( "Vista no reconeguda!!" );
             return;
             break;
     }
@@ -1103,6 +1133,84 @@ void Drawer::addSetOfPrimitives( Representation *representation )
     //afegim el conjunt a la llista si realment s'ha emplenat
     if ( set.count() > 0 )
         m_primitivesSetList << set;
+}
+
+void Drawer::drawTextBorder( Text *text, int slice, int view )
+{
+    QList<double* > points;
+    double *attachPoint = text->getAttatchmentPoint();
+    double *attachPoint1 = new double[3];
+    double *attachPoint2 = new double[3];
+    double *attachPoint3 = new double[3];
+    double *attachPoint4 = new double[3];
+    
+    for ( int i = 0; i < 3; i++ )
+    { 
+        attachPoint1[i] = attachPoint[i];
+        attachPoint2[i] = attachPoint[i];
+        attachPoint3[i] = attachPoint[i];
+        attachPoint4[i] = attachPoint[i];
+    }
+    
+//     adaptCoordinatesToCurrentView( attachPoint1, view );
+//     adaptCoordinatesToCurrentView( attachPoint2, view );
+//     adaptCoordinatesToCurrentView( attachPoint3, view );
+//     adaptCoordinatesToCurrentView( attachPoint4, view );
+    
+    switch( view ){
+    case Q2DViewer::Axial:
+        attachPoint1[0] -= 15;
+        attachPoint1[1] -= 2;
+    
+        attachPoint2[0] += 15;
+        attachPoint2[1] -= 2;
+    
+        attachPoint3[0] += 15;
+        attachPoint3[1] += 3;
+    
+        attachPoint4[0] -= 15;
+        attachPoint4[1] += 3;
+    break;
+    case Q2DViewer::Sagittal:
+        attachPoint1[1] -= 15;
+        attachPoint1[2] -= 2.5;
+    
+        attachPoint2[1] += 15;
+        attachPoint2[2] -= 2.5;
+    
+        attachPoint3[1] += 15;
+        attachPoint3[2] += 2.5;
+    
+        attachPoint4[1] -= 15;
+        attachPoint4[2] += 2.5;
+    break;
+    case Q2DViewer::Coronal:
+        attachPoint1[0] -= 15;
+        attachPoint1[2] -= 2.5;
+    
+        attachPoint2[0] += 15;
+        attachPoint2[2] -= 2.5;
+    
+        attachPoint3[0] += 15;
+        attachPoint3[2] += 2.5;
+    
+        attachPoint4[0] -= 15;
+        attachPoint4[2] += 2.5;
+    break;
+    default:
+        ERROR_LOG( "Vista no esperada!!!" );
+    break;
+    }
+
+    points << attachPoint1;
+    points << attachPoint2;
+    points << attachPoint3;
+    points << attachPoint4;
+    
+    Polygon *polygon = new Polygon( points );
+    polygon->enableBackground();
+    polygon->setColor( QColor( 0, 0, 0 ) );
+    drawPolygon( polygon, slice, view );
 }
 
 };  // end namespace udg
