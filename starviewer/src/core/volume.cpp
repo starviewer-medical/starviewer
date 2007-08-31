@@ -95,11 +95,8 @@ Volume::VtkImageTypePointer Volume::getVtkData()
 {
     if( !m_dataLoaded )
     {
-        if( !m_imageSet.isEmpty() ) // si li hem donat com a input una llista d'imatges llegim les imatges
-        {
-            this->loadWithPreAllocateAndInsert();
-        }
-        else if( !m_fileList.isEmpty() ) // si li hem donat com a input un conjunt d'arxius, llegim aquests arxius amb Input
+        // ara mateix tenen preferència els arxius
+        if( !m_fileList.isEmpty() ) // si li hem donat com a input un conjunt d'arxius, llegim aquests arxius amb Input
         {
             Input *input = new Input;
             connect( input, SIGNAL( progress(int) ), this, SIGNAL( progress(int) ) );
@@ -116,6 +113,12 @@ Volume::VtkImageTypePointer Volume::getVtkData()
                     break;
             }
         }
+        else if( !m_imageSet.isEmpty() ) // si li hem donat com a input una llista d'imatges llegim les imatges
+        {
+            this->loadWithPreAllocateAndInsert();
+        }
+
+
     }
     return m_imageDataVTK;
 }
@@ -190,7 +193,7 @@ void Volume::getDimensions( int dims[3] )
 
 Volume *Volume::getSubVolume( int index  )
 {
-    int slices = this->getVolumeSourceInformation()->getNumberOfSlices();
+    int slices = this->getSeries()->getNumberOfSlicesPerPhase();
     int *size = this->getWholeExtent();
 
     vtkExtractVOI * extractedVolume = vtkExtractVOI::New();
@@ -226,8 +229,8 @@ Volume * Volume::orderSlices()
     index[1] = 0;
     index[2] = 0;
 
-    phases = this->getVolumeSourceInformation()->getNumberOfPhases();
-    slices = this->getVolumeSourceInformation()->getNumberOfSlices();
+    phases = this->getSeries()->getNumberOfPhases();
+    slices = this->getSeries()->getNumberOfSlicesPerPhase();
 
     typedef ItkImageType ItkImageType3D;
     typedef itk::Image<ItkPixelType, 2 > ItkImageType2D;
@@ -312,7 +315,13 @@ void Volume::setImages( const QList<Image *> &imageList )
     // al accedir a algunes llistes d'imatges, ja que sembla que d'avegades apunten a memòria no allotjada
     // és un problema que cal investigar. Així de moment deixem això que és estable i funciona
     m_imageSet.clear();
+    m_imageSet = imageList;
     this->setInputFiles( imageList.at(0)->getParentSeries()->getFilesPathList() );
+}
+
+QList<Image *> Volume::getImages() const
+{
+    return m_imageSet;
 }
 
 void Volume::setInputFiles( const QStringList &filenames )
@@ -324,11 +333,36 @@ void Volume::setInputFiles( const QStringList &filenames )
     m_dataLoaded = false;
 }
 
+QStringList Volume::getInputFiles() const
+{
+    return m_fileList;
+}
+
 Series *Volume::getSeries()
 {
     if( !m_imageSet.isEmpty() )
     {
         return m_imageSet.at(0)->getParentSeries();
+    }
+    else
+        return NULL;
+}
+
+Study *Volume::getStudy()
+{
+    if( this->getSeries() )
+    {
+        return this->getSeries()->getParentStudy();
+    }
+    else
+        return NULL;
+}
+
+Patient *Volume::getPatient()
+{
+    if( this->getStudy() )
+    {
+        return this->getStudy()->getParentPatient();
     }
     else
         return NULL;
