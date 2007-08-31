@@ -41,83 +41,87 @@ Classe experta en dibuixar totes les primitives gràfiques que podem representar
 class Drawer : public QObject{
     Q_OBJECT
             
-    private:
-        /// Tipus definit:  parella de primitiva actor per tenir aquests dos tipus d'objectes relacionats: 
-        ///PrimitiveActorPair.first serà la DrawingPrimitive i PrimitiveActorPair.second el vtkProp
-        typedef QPair< DrawingPrimitive*, vtkProp* > PrimitiveActorPair;
-        
-         /// Tipus definit:  map on hi guardem les vinculacions de les llesques amb els actors i primitives creades
-        typedef QMultiMap< int, PrimitiveActorPair > PrimitivesMap;
-        
-        /// llista de representacions que ens retornarà el QMultiMap
-        typedef QList< PrimitiveActorPair > PrimitivesPairsList;
-        
-        /// definim un tipus que representa un conjunt per guardar primitives relacionades entre sí, com per exemple, una línia i un text d'una determinada distància.
-        typedef QSet< DrawingPrimitive* > PrimitivesSet;
-        
-        /// llista de conjunts de primitives relacionades entre sí. Ens permetrà controlar totes les relacions entre les diferents primitives.
-        typedef QList< PrimitivesSet > PrimitivesSetList;
-        
-        /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
-        PrimitivesMap m_axialPairs;
-        PrimitivesMap m_sagittalPairs;
-        PrimitivesMap m_coronalPairs;
+private:
+    /// Tipus definit:  parella de primitiva actor per tenir aquests dos tipus d'objectes relacionats: 
+    ///PrimitiveActorPair.first serà la DrawingPrimitive i PrimitiveActorPair.second el vtkProp
+    typedef QPair< DrawingPrimitive*, vtkProp* > PrimitiveActorPair;
     
-        ///Llista on guardarem els conjunts de primitives relacionades entre sí.
-        PrimitivesSetList m_primitivesSetList;
-        
-        ///visor 2D
-        Q2DViewer *m_2DViewer;
+        /// Tipus definit:  map on hi guardem les vinculacions de les llesques amb els actors i primitives creades
+    typedef QMultiMap< int, PrimitiveActorPair > PrimitivesMap;
+    
+    /// llista de representacions que ens retornarà el QMultiMap
+    typedef QList< PrimitiveActorPair > PrimitivesPairsList;
+    
+    /// definim un tipus que representa un conjunt per guardar primitives relacionades entre sí, com per exemple, una línia i un text d'una determinada distància.
+    typedef QSet< DrawingPrimitive* > PrimitivesSet;
+    
+    /// llista de conjunts de primitives relacionades entre sí. Ens permetrà controlar totes les relacions entre les diferents primitives.
+    typedef QList< PrimitivesSet > PrimitivesSetList;
+    
+    /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
+    PrimitivesMap m_axialPairs;
+    PrimitivesMap m_sagittalPairs;
+    PrimitivesMap m_coronalPairs;
 
-        /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
-        PrimitivesPairsList getPrimitivesPairsList( int slice, int view );
+    ///Llista on guardarem els conjunts de primitives relacionades entre sí.
+    PrimitivesSetList m_primitivesSetList;
     
-        /// llesca sobre la que es troba el visor 2D associat
-        int m_currentSlice;
+    ///visor 2D
+    Q2DViewer *m_2DViewer;
 
-        /// vista actual del visor 2D associat
-        int m_currentView;
-        
-        /// paleta de colors que fa servir el Drawer
-        ColorPalette *m_colorPalette;
+    /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
+    PrimitivesPairsList getPrimitivesPairsList( int slice, int view );
+
+    /// llesca sobre la que es troba el visor 2D associat
+    int m_currentSlice;
+
+    /// vista actual del visor 2D associat
+    int m_currentView;
     
-        ///Retorna el sistema de coordenades segons l'especificat per paràmetre 
-        vtkCoordinate *getCoordinateSystem( QString coordinateSystem );
+    /// paleta de colors que fa servir el Drawer
+    ColorPalette *m_colorPalette;
+
+    ///Retorna el sistema de coordenades segons l'especificat per paràmetre 
+    vtkCoordinate *getCoordinateSystem( QString coordinateSystem );
+
+    ///permet assignar un determinat sistema de coordenades a un objecte vtkCoordinate.
+    void setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coordinates );
+
+    ///retorna les coordenades adaptades segons la vista on estem treballant: representem els objectes amb actors 2D i això implica una selecció de coordenades
+    ///segons la vista on es dibuixi l'objecte.
+    void adaptCoordinatesToCurrentView( double *coordinates, int view );
+
+    /// Fa invisibles/visibles els actors d'una llesca i vista donats
+    void hidePrimitivesFrom( int slice, int view );
+    void showPrimitivesFrom( int slice, int view );
+
+    ///Fa invisible/visible l'associació primitiva/actor passada per paràmetre
+    void setVisibility( PrimitiveActorPair primitive, bool visibility );
     
-        ///permet assignar un determinat sistema de coordenades a un objecte vtkCoordinate.
-        void setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coordinates );
+    ///Valida les coordenades segons la vista que es determina
+    void validateCoordinates( double coordinates[3], int view );
     
-        ///retorna les coordenades adaptades segons la vista on estem treballant: representem els objectes amb actors 2D i això implica una selecció de coordenades
-        ///segons la vista on es dibuixi l'objecte.
-        double* adaptCoordinatesToCurrentView( double *coordinates, int view );
+    ///mètode per retornar-nos l'índex de la primitiva única de tipus \a primitiveType que contindrà la llista \a nearestPairslist de primitives més properes.     
+    int getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType );
     
-        /// Fa invisibles/visibles els actors d'una llesca i vista donats
-        void hidePrimitivesFrom( int slice, int view );
-        void showPrimitivesFrom( int slice, int view );
+    ///mètode que ens diu si la llista \a list conté alguna primitiva de tipus \a primitiveType 
+    bool hasPrimitiveOfType( PrimitivesPairsList list, QString primitiveType );
     
-        ///Fa invisible/visible l'associació primitiva/actor passada per paràmetre
-        void setVisibility( PrimitiveActorPair primitive, bool visibility );
-        
-        ///Valida les coordenades segons la vista que es determina
-        void validateCoordinates( double coordinates[3], int view );
-        
-        ///mètode per retornar-nos l'índex de la primitiva única de tipus \a primitiveType que contindrà la llista \a nearestPairslist de primitives més properes.       
-        int getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType );
-        
-        ///mètode que ens diu si la llista \a list conté alguna primitiva de tipus \a primitiveType 
-        bool hasPrimitiveOfType( PrimitivesPairsList list, QString primitiveType );
-        
-        ///Ens retorna una llista de parelles de totes les primitives del tipus especificat d'un determinat mapa segons la vista
-        PrimitivesPairsList getAllPrimitivesOfType( QString primitiveType );
-        
-        ///Ens retorna el conjunt de primitives de la llista \a m_primitivesSetList que conté la primitiva passada per paràmetre
-        PrimitivesSet getSetOf( DrawingPrimitive *primitive );
-        
-        ///ens permet assignar el color de highlight a la parella passada per paràmetre
-        void setHighlightColor( PrimitiveActorPair pair );
-        
-        ///ens permet assignar el color de normal a la parella passada per paràmetre
-        void setNormalColor( PrimitiveActorPair pair );
+    ///Ens retorna una llista de parelles de totes les primitives del tipus especificat d'un determinat mapa segons la vista
+    PrimitivesPairsList getAllPrimitivesOfType( QString primitiveType );
+    
+    ///Ens retorna el conjunt de primitives de la llista \a m_primitivesSetList que conté la primitiva passada per paràmetre
+    PrimitivesSet getSetOf( DrawingPrimitive *primitive );
+    
+    ///ens permet assignar el color de highlight a la parella passada per paràmetre
+    void setHighlightColor( PrimitiveActorPair pair );
+    
+    ///ens permet assignar el color de normal a la parella passada per paràmetre
+    void setNormalColor( PrimitiveActorPair pair );
+
+    ///Ens dibuixa el fons d'un determinat text
+    void drawTextBorder( Text *text, int slice, int view );
+
 public:
     
     Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
