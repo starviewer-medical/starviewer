@@ -46,6 +46,13 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     if ( event->type() == QEvent::Enter )
     {
         setStyleSheet("background-color: rgba(85, 160, 255, 128);");
+
+//         QPalette palette = this->palette();
+//         QBrush selected( QColor( 85, 160, 255, 128 ) );
+//         selected.setStyle( Qt::SolidPattern );
+//         palette.setBrush( QPalette::Active, QPalette::Window, selected );
+//         setPalette( palette );
+
         emit isActive(m_serie);
     }
     else if ( event->type() == QEvent::MouseButtonPress )
@@ -55,6 +62,12 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     else if ( event->type() == QEvent::Leave )
     {
         setStyleSheet("");
+
+//         QPalette palette = this->palette();
+//         QBrush selected( QColor(239, 243, 247, 255) );
+//         selected.setStyle( Qt::SolidPattern );
+//         palette.setBrush( QPalette::Active, QPalette::Window, selected );
+//         setPalette( palette );
     }
     else if ( event->type() == QEvent::Hide || event->type() == QEvent::Close )
     {
