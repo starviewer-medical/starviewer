@@ -118,11 +118,12 @@ void PatientBrowserMenu::updatePosition()
     int screen_x = qApp->desktop()->availableGeometry( m_patientBrowserList->pos() ).width();
 
     QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
+    m_patientAdditionalInfo->resize( patientAdditionalInfoSize );
 
     // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
     if( (m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width() ) > screen_x )
     {
-        x = ( m_patientBrowserList->geometry().x() ) -( patientAdditionalInfoSize.width() );
+        x = ( m_patientBrowserList->x() ) -( m_patientAdditionalInfo->frameGeometry().width() );
     }
     else
     {
