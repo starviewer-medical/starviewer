@@ -185,6 +185,9 @@ void ImageFillerStep::processImage( Image *image )
             image->addWindowLevel( windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble() );
         // i després les respectives descripcions si n'hi ha
         image->setWindowLevelExplanations( dicomReader.getAttributeByName( DCM_WindowCenterWidthExplanation ).split("\\") );
+
+        int frames = dicomReader.getAttributeByName( DCM_NumberOfFrames ).toInt();
+        image->setNumberOfFrames( frames ? frames : 1 );
     }
     else
     {

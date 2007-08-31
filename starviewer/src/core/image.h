@@ -119,6 +119,13 @@ public:
     double getWindowWidth( int index = 0 ) const;
     QPair<double,double> getWindowLevel( int index = 0 ) const;
 
+    /// Ens retorna el nombre de window levels que tenim
+    int getNumberOfWindowLevels();
+
+    /// Assigna/Obté el nombre de frames de la imatge
+    void setNumberOfFrames( int frames );
+    int getNumberOfFrames() const;
+
     /// Assignar/Obtenir textes descriptius dels window level
     void addWindowLevelExplanation( QString explanation );
     void setWindowLevelExplanations( const QStringList &explanations );
@@ -233,6 +240,9 @@ private:
 
     /// "Explicació" dels window levels, texte descriptiu.(0028,1055) Tipus 3.
     QStringList m_windowLevelExplanationList;
+
+    /// Nombre de frames de la imatge. (0028,0008) Tipus 1
+    int m_numberOfFrames;
 
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
