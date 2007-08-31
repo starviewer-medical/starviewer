@@ -33,12 +33,18 @@ public:
     /// Posem el pacient al widget
     void setPatient( Patient * patient );
 
+    /// Posem una serie com a seleccionada
+    void setSelectedSerie( QString serieUID );
+
 private:
     /// Creem un widget amb la informació bàsica d'un estudi
     QWidget * createStudyWidget( Study * study, QWidget * parent );
 
     /// Creem un widget amb la informació bàsica d'una sèrie
     PatientBrowserMenuBasicItem * createSerieWidget( Series * serie, QWidget * parent );
+
+    /// Llista dels items de les series que formen la llista
+    QList< PatientBrowserMenuBasicItem *> * m_seriesList;
 
 signals:
 

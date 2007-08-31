@@ -36,7 +36,7 @@ public:
 
 public slots:
     /// Fem que es mostri el menú en la posició indicada
-    void popup(const QPoint &point);
+    void popup(const QPoint &point, QString serieUID);
 
 signals:
     /// senyal que envia la serie escollida per ser visualitzada

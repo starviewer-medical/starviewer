@@ -47,7 +47,7 @@ void PatientBrowserMenu::setPatient( Patient * patient )
     connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), this, SLOT ( emitSelected(Series*) ));
 }
 
-void PatientBrowserMenu::popup(const QPoint &point)
+void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
 {
     // Calcular si el menu hi cap a la pantalla
     int x = point.x();
@@ -56,6 +56,8 @@ void PatientBrowserMenu::popup(const QPoint &point)
     //Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
     int screen_x = qApp->desktop()->availableGeometry(point).width();
     int screen_y = qApp->desktop()->availableGeometry(point).height();
+
+    m_patientBrowserList->setSelectedSerie( serieUID );
 
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 

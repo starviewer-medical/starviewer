@@ -20,6 +20,7 @@ namespace udg {
 
 PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent ) : QWidget(parent)
 {
+    m_seriesList = new QList< PatientBrowserMenuBasicItem * >();
 }
 
 PatientBrowserMenuList::~PatientBrowserMenuList()
@@ -101,7 +102,27 @@ PatientBrowserMenuBasicItem* PatientBrowserMenuList::createSerieWidget( Series *
     connect( seriebasicWidget , SIGNAL( isActive(Series *) ) , this , SIGNAL( isActive(Series *) ) );
     connect( seriebasicWidget , SIGNAL( isNotActive() ) , this , SIGNAL( isNotActive() ) );
 
+    m_seriesList->push_back( seriebasicWidget );
+
     return seriebasicWidget;
+}
+
+void PatientBrowserMenuList::setSelectedSerie( QString serieUID )
+{
+    int i = 0;
+    bool find = 0;
+
+    while( i < m_seriesList->size() && !find )
+    {
+        if( m_seriesList->value( i )->getSerie()->getInstanceUID() == serieUID )
+        {
+            find = true;
+            QFont font = ( m_seriesList->value( i )->font() );
+            font.setBold( true );
+            m_seriesList->value( i )->setFont( font );
+        }
+        i++;
+    }
 }
 
 }
