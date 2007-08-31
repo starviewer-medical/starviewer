@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QList>
+#include <QPair>
 #include <QPixmap>
 
 namespace udg {
@@ -104,6 +105,24 @@ public:
     /// Assignar/Obtenir la representació dels pixels
     void setPixelRepresentation( int representation );
     int getPixelRepresentation() const;
+
+    /// Assignar/Obtenir els valors del rescalat de la MODALITY LUT que s'apliquen sobre la imatge
+    /// la fòrmula és f(x) = a*x + b, on 'x' és el valor del pixel de la imatge, 'a' l'Slope i 'b' l'Intercept
+    void setRescaleSlope( double slope );
+    double getRescaleSlope() const;
+    void setRescaleIntercept( double intercept );
+    double getRescaleIntercept() const;
+
+    /// Assignar/Obtenir els valors del rescalat de la VOI LUT que s'apliquen sobre la imatge
+    void addWindowLevel( double window, double level );
+    double getWindowCenter( int index = 0 ) const;
+    double getWindowWidth( int index = 0 ) const;
+    QPair<double,double> getWindowLevel( int index = 0 ) const;
+
+    /// Assignar/Obtenir textes descriptius dels window level
+    void addWindowLevelExplanation( QString explanation );
+    void setWindowLevelExplanations( const QStringList &explanations );
+    QString getWindowLevelExplanation( int index = 0 ) const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries( Series *series );
@@ -204,6 +223,16 @@ private:
 
     /// Representació de cada mostra. Valors enumerats 0000H=unsigned integer, 0001H=complement a 2. (0028,0103) Tipus 1
     int m_pixelRepresentation;
+
+    /// Valors de rescalat de la MODALITY LUT. (0028,1053),(0028,1054). Tipus 1
+    double m_rescaleSlope, m_rescaleIntercept;
+
+    /// Valors de rescalat de la VOI LUT. (0028,1050),(0028,1051) Tipus 1C, present si no hi ha VOI LUT Sequence
+    /// Com que podem tenir més d'un tindrem una llista
+    QList< QPair< double, double > > m_windowLevelList;
+
+    /// "Explicació" dels window levels, texte descriptiu.(0028,1055) Tipus 3.
+    QStringList m_windowLevelExplanationList;
 
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
