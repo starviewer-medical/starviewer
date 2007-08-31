@@ -280,6 +280,64 @@ int Image::getPixelRepresentation() const
     return m_pixelRepresentation;
 }
 
+void Image::setRescaleSlope( double slope )
+{
+    m_rescaleSlope = slope;
+}
+
+double Image::getRescaleSlope() const
+{
+    return m_rescaleSlope;
+}
+
+void Image::setRescaleIntercept( double intercept )
+{
+    m_rescaleIntercept = intercept;
+}
+
+double Image::getRescaleIntercept() const
+{
+    return m_rescaleIntercept;
+}
+
+void Image::addWindowLevel( double window, double level )
+{
+    QPair<double, double> windowLevel( window, level );
+    m_windowLevelList << windowLevel;
+}
+
+QPair<double,double> Image::getWindowLevel( int index ) const
+{
+    if( index > 0 && index < m_windowLevelList.size() )
+        return m_windowLevelList.at(index);
+    else
+    {
+        DEBUG_LOG("Index out of range");
+        return QPair<double,double>();
+    }
+}
+
+void Image::addWindowLevelExplanation( QString explanation )
+{
+    m_windowLevelExplanationList << explanation;
+}
+
+void Image::setWindowLevelExplanations( const QStringList &explanations )
+{
+    m_windowLevelExplanationList = explanations;
+}
+
+QString Image::getWindowLevelExplanation( int index ) const
+{
+    if( index > 0 && index < m_windowLevelExplanationList.size() )
+        return m_windowLevelExplanationList.at(index);
+    else
+    {
+        DEBUG_LOG("Index out of range");
+        return QString();
+    }
+}
+
 void Image::setParentSeries( Series *series )
 {
     m_parentSeries = series;

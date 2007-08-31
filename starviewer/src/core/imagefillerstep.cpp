@@ -176,6 +176,15 @@ void ImageFillerStep::processImage( Image *image )
         image->setBitsAllocated( dicomReader.getAttributeByName( DCM_BitsAllocated ).toInt() );
         image->setBitsStored( dicomReader.getAttributeByName( DCM_BitsStored ).toInt() );
         image->setPixelRepresentation( dicomReader.getAttributeByName( DCM_PixelRepresentation ).toInt() );
+        image->setRescaleSlope( dicomReader.getAttributeByName( DCM_RescaleSlope ).toDouble() );
+        image->setRescaleIntercept( dicomReader.getAttributeByName( DCM_RescaleIntercept ).toDouble() );
+        // llegim els window levels
+        QStringList windowWidthList = dicomReader.getAttributeByName( DCM_WindowWidth ).split("\\");
+        QStringList windowLevelList = dicomReader.getAttributeByName( DCM_WindowCenter ).split("\\");
+        for( int i = 0; i < windowWidthList.size(); i++ )
+            image->addWindowLevel( windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble() );
+        // i després les respectives descripcions si n'hi ha
+        image->setWindowLevelExplanations( dicomReader.getAttributeByName( DCM_WindowCenterWidthExplanation ).split("\\") );
     }
     else
     {
