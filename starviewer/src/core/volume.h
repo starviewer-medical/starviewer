@@ -21,6 +21,8 @@ namespace udg {
 class VolumeSourceInformation;
 class Image;
 class Series;
+class Study;
+class Patient;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. Ens donarà mètodes per poder obtenir les dades en el format que volguem: ITK, VTK, etc.
@@ -121,11 +123,17 @@ public:
     /// Assignem directament el conjunt d'imatges que composen aquest volum
     void setImages( const QList<Image *> &imageList );
 
+    /// Retorna les imatges que composen el volum
+    QList<Image *> getImages() const;
+
     /// Mètode de conveniència en el que li assignem els arxius que tindrà d'input
     void setInputFiles( const QStringList &filenames );
+    QStringList getInputFiles() const;
 
-    /// Mètode ràpid per obtenir la series a la que pertany aquest volum
+    /// Mètodes ràpids per obtenir la series/estudis/pacient a les que pertany aquest volum
     Series *getSeries();
+    Study *getStudy();
+    Patient *getPatient();
 
 signals:
     /**
