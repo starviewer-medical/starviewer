@@ -953,20 +953,61 @@ void Drawer::highlightNearestPrimitives()
     PrimitivesPairsList list = currentViewMap.values();
     
     //agafem la primitiva més propera
-    PrimitivesSet nearestSet = getSetOf( getNearestPrimitivePair( point ).first );
+    m_nearestSet = getSetOf( getNearestPrimitivePair( point ).first );
     
     foreach( PrimitiveActorPair pair, list )
     {
-        if ( nearestSet.contains( pair.first ) )
+        if ( m_nearestSet.contains( pair.first ) )
         {
-            setHighlightColor( pair );
-            pair.first->highlightOn();
-        }
+            if ( m_nearestSet != m_selectedSet ) //cal que el més proper no sigui el seleccionat perquè li treuria el color de seleccionat i no ho volem
+            {
+                setHighlightColor( pair );
+                pair.first->highlightOn();
+            } 
+       }
         else
         {
-            setNormalColor( pair );
-            pair.first->highlightOff();
+            if ( !m_selectedSet.contains( pair.first ) ) //el pintem de com a normal si no és el seleccionat, ja que si ho és cal que es mantingui la selecció
+            {
+                setNormalColor( pair );
+                pair.first->highlightOff();
+            }
         }
+    }
+    m_2DViewer->refresh();    
+}
+
+void Drawer::selectNearestSet()
+{
+    m_selectedSet = m_nearestSet;
+
+    PrimitivesMap currentViewMap;
+    
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            currentViewMap = m_axialPairs;
+            break;
+        case Q2DViewer::Sagittal:
+            currentViewMap = m_sagittalPairs;
+            break;
+        case Q2DViewer::Coronal:
+            currentViewMap = m_coronalPairs;
+            break;
+        default:
+            DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
+            break;
+    }
+    
+    //la llista de totes les primitives de la vista actual
+    PrimitivesPairsList list = currentViewMap.values();
+    
+    foreach( PrimitiveActorPair pair, list )
+    {
+        if ( m_selectedSet.contains( pair.first ) )
+            setSelectedColor( pair );
+        else
+            setNormalColor( pair );
     }
     m_2DViewer->refresh();    
 }
@@ -986,6 +1027,24 @@ void Drawer::setHighlightColor( PrimitiveActorPair pair )
         vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+    }
+}
+
+void Drawer::setSelectedColor( PrimitiveActorPair pair )
+{
+    QColor selectedColor = m_colorPalette->getSelectionColor();
+    
+    if ( pair.first->getPrimitiveType() == "Line" )
+    {
+        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
+        vtkProperty2D *properties = actor->GetProperty();
+        properties->SetColor( selectedColor.redF(), selectedColor.greenF(), selectedColor.blueF() );
+    }
+    else if ( pair.first->getPrimitiveType() == "Text" )
+    {
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
+        vtkTextProperty *property = textActor->GetCaptionTextProperty();
+        property->SetColor( selectedColor.redF(), selectedColor.greenF(), selectedColor.blueF() );
     }
 }
 
