@@ -17,8 +17,6 @@
       <language>C</language>
     </secondaryLanguages>
     <versioncontrol>kdevsubversion</versioncontrol>
-    <projectname>starviewer</projectname>
-    <defaultencoding/>
   </general>
   <kdevfileview>
     <groups>
@@ -26,8 +24,6 @@
       <group pattern="*.ui" name="User Interface" />
       <group pattern="*.png" name="Icons" />
       <group pattern="*" name="Others" />
-      <hidenonprojectfiles>false</hidenonprojectfiles>
-      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidenonprojectfiles>false</hidenonprojectfiles>
@@ -82,16 +78,16 @@
   </kdevdoctreeview>
   <kdevdebugger>
     <general>
-      <dbgshell/>
+      <dbgshell></dbgshell>
       <breakpoints/>
-      <programargs/>
-      <gdbpath>/usr/bin/gdb</gdbpath>
+      <programargs></programargs>
+      <gdbpath>/usr/bin/</gdbpath>
       <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
     </general>
     <display>
       <staticmembers>false</staticmembers>
@@ -102,21 +98,16 @@
   </kdevdebugger>
   <kdevtrollproject>
     <run>
-      <mainprogram>/home/chus/devel/starviewer/bin/starviewer</mainprogram>
-      <programargs/>
+      <mainprogram>bin/starviewer</mainprogram>
+      <programargs></programargs>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
       <terminal>false</terminal>
       <autocompile>false</autocompile>
       <envvars/>
-      <globaldebugarguments/>
-      <globalcwd>/home/chus/devel/starviewer</globalcwd>
-      <useglobalprogram>true</useglobalprogram>
-      <autoinstall>false</autoinstall>
-      <autokdesu>false</autokdesu>
     </run>
     <general>
-      <activedir>src/core</activedir>
+      <activedir>src</activedir>
     </general>
     <make>
       <abortonerror>true</abortonerror>
@@ -128,11 +119,6 @@
       <runmultiplejobs>false</runmultiplejobs>
     </make>
     <subclassing/>
-    <qmake>
-      <savebehaviour>2</savebehaviour>
-      <replacePaths>false</replacePaths>
-      <disableDefaultOpts>true</disableDefaultOpts>
-    </qmake>
   </kdevtrollproject>
   <workspace>
     <openfiles/>
@@ -159,31 +145,11 @@
       <codeCompletionDelay>250</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
-      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
-      <completionBoxItemOrder>0</completionBoxItemOrder>
-      <howEvaluationContextMenu>true</howEvaluationContextMenu>
-      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
-      <statusBarTypeEvaluation>false</statusBarTypeEvaluation>
-      <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std</namespaceAliases>
-      <processPrimaryTypes>true</processPrimaryTypes>
-      <processFunctionArguments>false</processFunctionArguments>
-      <preProcessAllHeaders>false</preProcessAllHeaders>
-      <parseMissingHeaders>false</parseMissingHeaders>
-      <resolveIncludePaths>true</resolveIncludePaths>
-      <alwaysParseInBackground>true</alwaysParseInBackground>
-      <usePermanentCaching>true</usePermanentCaching>
-      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
-      <includePaths>.;</includePaths>
     </codecompletion>
     <qt>
       <used>true</used>
       <version>4</version>
       <root>/usr/lib/qt4/</root>
-      <includestyle>3</includestyle>
-      <designerintegration>ExternalDesigner</designerintegration>
-      <qmake>/usr/bin/qmake</qmake>
-      <designer>/usr/lib/qt3//bin/designer</designer>
-      <designerpluginpaths/>
     </qt>
     <creategettersetter>
       <prefixGet>get</prefixGet>
@@ -193,11 +159,6 @@
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
-    <splitheadersource>
-      <enabled>false</enabled>
-      <synchronize>true</synchronize>
-      <orientation>Vertical</orientation>
-    </splitheadersource>
   </kdevcppsupport>
   <cppsupportpart>
     <filetemplates>
@@ -213,8 +174,7 @@
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments/>
-    <customTagfilePath>/home/chus/devel/starviewer/tags</customTagfilePath>
-    <activeTagsFiles/>
+    <customArguments></customArguments>
+    <customTagfilePath></customTagfilePath>
   </ctagspart>
 </kdevelop>
