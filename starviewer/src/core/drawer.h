@@ -66,6 +66,12 @@ private:
     ///Llista on guardarem els conjunts de primitives relacionades entre sí.
     PrimitivesSetList m_primitivesSetList;
     
+    ///conjunt de primitives més proper (candidat a highlight)
+    PrimitivesSet m_nearestSet;
+
+    ///conjunt de primitives seleccionat
+    PrimitivesSet m_selectedSet;
+
     ///visor 2D
     Q2DViewer *m_2DViewer;
 
@@ -115,6 +121,9 @@ private:
     
     ///ens permet assignar el color de highlight a la parella passada per paràmetre
     void setHighlightColor( PrimitiveActorPair pair );
+
+    ///ens permet assignar el color de selecció a la parella passada per paràmetre
+    void setSelectedColor( PrimitiveActorPair pair );
     
     ///ens permet assignar el color de normal a la parella passada per paràmetre
     void setNormalColor( PrimitiveActorPair pair );
@@ -180,6 +189,21 @@ public:
     
     ///ens permet afegir un nou conjunt de primitives associades a la llista, a partir d'una representació
     void addSetOfPrimitives( Representation *representation );
+
+    ///retorna el conjunt més proper a la posició del mouse
+    PrimitivesSet getNearestSet()
+    { return( m_nearestSet ); }
+
+    ///retorna el conjunt de primitives seleccionat
+    PrimitivesSet getSelectedSet()
+    { return( m_selectedSet ); }
+
+    ///passa a conjunt en estat seleccionat el que està com a més proper: highlight -> Selected. A més li canvia el color.
+    void selectNearestSet();
+
+    ///ens diu si hi ha algun conjunt marcat com el més proper
+    bool hasNearestSet()
+    { return( !m_nearestSet.isEmpty() ); }
     
 public slots:
     /// Elimina totes les annotacions dels multimaps
