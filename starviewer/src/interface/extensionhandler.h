@@ -80,10 +80,6 @@ private:
     /// Crea el diàleg de progrés al carregar un Volume.
     QProgressDialog* activateProgressDialog( Input *input );
 
-private slots:
-    /// Slot que es crida quan hem canviat d'una extensió a una altre
-    void extensionChanged( int index );
-
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;

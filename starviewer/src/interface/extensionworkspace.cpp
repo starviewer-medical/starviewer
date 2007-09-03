@@ -46,7 +46,6 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     INFO_LOG( "Afegint extensió: " + caption );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
-    m_lastIndex = this->currentIndex();
 }
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
@@ -57,10 +56,11 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
         this->removeTab( this->indexOf( application ) );
         if( this->count() < 1 )
             m_closeTabButton->hide();
-        m_lastIndex = this->currentIndex();
     }
     else
+    {
         DEBUG_LOG( "S'ha donat una widget nul per eliminar" );
+    }
 }
 
 void ExtensionWorkspace::closeCurrentApplication()
