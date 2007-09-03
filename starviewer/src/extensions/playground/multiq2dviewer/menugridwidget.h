@@ -31,10 +31,13 @@ public:
     /// Màxim nombre de columnes a mostrar els grids predefinits
     void setMaxColumns( int columns );
 
-protected:
+    /// Mètode que omple el widget amb les els grids predefinits
+    void createPredefinedGrids( int numberSeries );
 
     /// Mètode que omple el widget amb les els grids predefinits
     void createPredefinedGrids( QStringList list );
+
+protected:
 
     /// Mètode que crea una icona de rows x columns
     ItemMenu * createIcon( int rows, int columns );

@@ -30,6 +30,8 @@ public:
 
     void setInput( Volume *input );
 
+    void setSelected( bool option );
+
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
     void mousePressEvent ( QMouseEvent * event );

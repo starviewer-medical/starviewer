@@ -12,6 +12,8 @@
 #include "QPalette"
 #include "QMouseEvent"
 
+#include <math.h>
+
 #include "logging.h"
 
 namespace udg {
@@ -22,10 +24,9 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     setupUi( this );
     setWindowFlags(Qt::Popup);
 
-    m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
+//     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
     m_maxColumns = 4;
-    createPredefinedGrids( m_predefinedGridsList );
-
+//     createPredefinedGrids( m_predefinedGridsList );
 }
 
 MenuGridWidget::~MenuGridWidget()
@@ -65,10 +66,38 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     }
 }
 
+void MenuGridWidget::createPredefinedGrids( int numSeries )
+{
+    int i = 0;
+
+    int maxRowColumn =  ceil ( sqrt( numSeries/2.0) );
+    int row = 1;
+    int column = 1;
+
+    DEBUG_LOG( QString( tr( "MaxRowCol: %1" ).arg( maxRowColumn ) ) );
+
+    m_predefinedGridsList.clear();
+
+    while( i <= maxRowColumn && i < m_maxColumns )
+    {
+        column = row;
+
+        m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
+        column++;
+        m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
+        
+        row++;
+
+        i++;
+    }
+
+    createPredefinedGrids( m_predefinedGridsList );
+}
+
 ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 {
     ItemMenu * icon = new ItemMenu( this );
-    icon->setData( (QVariant *) new QString( tr("%1,%2").arg( rows ).arg( columns ) ) );
+    icon->setData( (QVariant *) new QString( tr( "%1,%2" ).arg( rows ).arg( columns ) ) );
     icon->setGeometry ( 0, 0, 32, 32 );
     icon->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
 
@@ -77,7 +106,7 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
     GridIcon* newIcon;
 
     QLabel * sizeText = new QLabel();
-    sizeText->setText( QString( tr("%1x%2").arg(columns).arg(rows) ) );
+    sizeText->setText( QString( tr( "%1x%2" ).arg( columns ).arg( rows ) ) );
     sizeText->setAlignment( Qt::AlignHCenter );
 
     QGridLayout * gridLayout = new QGridLayout();
@@ -111,11 +140,9 @@ void MenuGridWidget::setMaxColumns( int columns )
 void MenuGridWidget::emitSelected( ItemMenu * selected )
 {
 
-    QStringList values = ((QString *) selected->getData())->split( "," );
+    QStringList values = ( (QString *) selected->getData() )->split( "," );
     int rows = values.value( 0 ).toInt();
     int columns = values.value( 1 ).toInt();
-
-    DEBUG_LOG( QString( tr("Graella seleccionada: %1x%2").arg(rows).arg(columns) ) );
 
     emit selectedGrid( rows, columns );
     hide();
