@@ -20,14 +20,12 @@ namespace udg {
 PatientItemModel::PatientItemModel( Patient * patient, QObject *parent )
  : QAbstractItemModel ( parent )
 {
-    DEBUG_LOG( QString("Constructor PatientItemModel") );
     m_modelPatient = createModel( patient );
 //     setupModelData(patient, rootItem);
 }
 
 PatientItemModel::~PatientItemModel()
 {
-    DEBUG_LOG( QString("Destructor PatientItemModel") );
 }
 
 QVariant PatientItemModel::data(const QModelIndex &index, int role) const
@@ -49,15 +47,11 @@ QVariant PatientItemModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags PatientItemModel::flags(const QModelIndex &index) const
 {
-    DEBUG_LOG( QString("Inici mètode flags") );
 }
 
 QVariant PatientItemModel::headerData(int section, Qt::Orientation orientation, int role ) const
 {
-    DEBUG_LOG( QString("Inici mètode headerData") );
-
     return ( QStringList() << tr("Tipus") << tr("Data") << tr("Modalitat") << tr("Descripcio") );
-
 }
 
 QModelIndex PatientItemModel::index(int row, int column, const QModelIndex &parent ) const
@@ -74,14 +68,10 @@ QModelIndex PatientItemModel::index(int row, int column, const QModelIndex &pare
          return createIndex(row, column, childItem);
      else
          return QModelIndex();
-
-    DEBUG_LOG( QString("Inici mètode index") );
 }
 
 QModelIndex PatientItemModel::parent(const QModelIndex &index) const
 {
-    DEBUG_LOG( QString("Inici mètode parent") );
-
     if (!index.isValid())
          return QModelIndex();
 
@@ -96,14 +86,11 @@ QModelIndex PatientItemModel::parent(const QModelIndex &index) const
 
 int PatientItemModel::rowCount(const QModelIndex &parent) const
 {   
-    DEBUG_LOG( QString("Inici mètode rowCount") );
     return m_modelPatient->rowCount();
 }   
 
 int PatientItemModel::columnCount(const QModelIndex &parent) const
 {
-    DEBUG_LOG( QString("Inici mètode columnCount") );
-
     return m_modelPatient->columnCount();
 
     if (parent.isValid())

@@ -91,9 +91,6 @@ private:
     /// Inicialitza els layouts
     void initLayouts();
 
-    /// Update del nombre de layouts
-    void updateLayouts();
-
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
 

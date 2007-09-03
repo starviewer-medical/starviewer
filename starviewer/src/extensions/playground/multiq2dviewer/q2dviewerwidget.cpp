@@ -9,6 +9,7 @@
 #include "logging.h"
 
 #include <QAction>
+#include <QPalette>
 
 namespace udg {
 
@@ -17,6 +18,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
 {
     setupUi( this );
     createConnections();
+    setAutoFillBackground( true );
 }
 
 Q2DViewerWidget::~Q2DViewerWidget()
@@ -25,9 +27,9 @@ Q2DViewerWidget::~Q2DViewerWidget()
 
 void Q2DViewerWidget::createConnections()
 {
-    connect( m_slider , SIGNAL( valueChanged(int) ) , m_spinBox , SLOT( setValue(int) ) );
-    connect( m_spinBox , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-    connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
+    connect( m_slider , SIGNAL( valueChanged( int ) ) , m_spinBox , SLOT( setValue( int ) ) );
+    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
+    connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
 }
 
@@ -72,11 +74,11 @@ void Q2DViewerWidget::changeViewToSagital()
     m_spinBox->setMinimum( extent[0] );
     m_spinBox->setMaximum( extent[1] );
     m_slider->setMaximum( extent[1] );
-    m_viewText->setText( tr("XY : Sagital") );
+    m_viewText->setText( tr( "XY : Sagital" ) );
     m_2DView->setViewToSagittal();
     m_2DView->render();
 
-    INFO_LOG("Visor per defecte: Canviem a vista sagital");
+    INFO_LOG( "Visor per defecte: Canviem a vista sagital" );
 }
 
 void Q2DViewerWidget::changeViewToCoronal()
@@ -87,11 +89,32 @@ void Q2DViewerWidget::changeViewToCoronal()
     m_spinBox->setMinimum( extent[2] );
     m_spinBox->setMaximum( extent[3] );
     m_slider->setMaximum( extent[3] );
-    m_viewText->setText( tr("XY : Coronal") );
+    m_viewText->setText( tr( "XY : Coronal" ) );
     m_2DView->setViewToCoronal();
     m_2DView->render();
 
-    INFO_LOG("Visor per defecte: Canviem a vista coronal");
+    INFO_LOG( "Visor per defecte: Canviem a vista coronal" );
+}
+
+void Q2DViewerWidget::setSelected( bool option )
+{
+    
+    if( option )
+    {
+        QPalette palette = this->palette();
+        QBrush selected( QColor( 85, 160, 255, 128 ) );
+        selected.setStyle( Qt::SolidPattern );
+        palette.setBrush( QPalette::Active, QPalette::Window, selected );
+        setPalette( palette );
+    }
+    else
+    {
+        QPalette palette = this->palette();
+        QBrush noSelected( QColor(239, 243, 247, 255) );
+        noSelected.setStyle( Qt::SolidPattern );
+        palette.setBrush( QPalette::Active, QPalette::Window, noSelected );
+        setPalette( palette );
+    }
 }
 
 }

@@ -12,7 +12,7 @@
 namespace udg {
 
 /**
-Classe que representa un element del tipus icona per poder crear una graella de visualitzadors
+Classe que representa un element del tipus icona per poder crear un menu per escollir una graella de visualitzadors
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */

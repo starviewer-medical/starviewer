@@ -15,7 +15,7 @@ class PatientBrowserMenu;
 class Patient;
 
 /**
-Classe que representa una vista de model/view programming de les qt's per tal de representar les dades dels estudis dels pacients a partir d'un widget més interactiu.
+Classe que representa una vista de model/view programming de les qt's per tal de representar les dades dels estudis dels pacients a partir d'un widget més interactiu, que s'amaga automàticament.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
