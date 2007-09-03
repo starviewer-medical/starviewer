@@ -33,9 +33,6 @@ public:
 
     ~QApplicationMainWindow();
 
-    /// L'àrea de mini-aplicacions
-    ExtensionWorkspace *m_extensionWorkspace;
-
     /// Donat un pacient, segons el pacient que tinguem, afegirem les dades, crearem una nova instància de la main window, etc
     void addPatient( Patient *patient );
 
@@ -47,6 +44,9 @@ public:
 
     /// Retorna la finestra activa actual
     static QApplicationMainWindow* getActiveApplicationMainWindow();
+
+    /// Mètode que retorna el workspace a on poder afegir extensions
+    ExtensionWorkspace* getExtensionWorkspace();
 
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
@@ -91,6 +91,9 @@ private slots:
     void switchFullScreen( bool full );
 
 private:
+    /// L'àrea de mini-aplicacions
+    ExtensionWorkspace *m_extensionWorkspace;
+
     /// Gestor de serveis i miniaplicacions
     ExtensionHandler *m_extensionHandler;
 

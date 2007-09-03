@@ -385,6 +385,11 @@ QApplicationMainWindow* QApplicationMainWindow::getActiveApplicationMainWindow()
     return qobject_cast<QApplicationMainWindow*>( QApplication::activeWindow() );
 }
 
+ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
+{
+    return m_extensionWorkspace;
+}
+
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 {
     writeSettings();
