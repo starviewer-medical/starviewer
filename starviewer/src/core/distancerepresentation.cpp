@@ -5,9 +5,9 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "distancerepresentation.h"
-#include "text.h"
-#include "line.h"
 #include "distancetooldata.h"
+#include "q2dviewer.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -15,6 +15,7 @@ DistanceRepresentation::DistanceRepresentation( DistanceToolData *dtd ) : Repres
 { 
     m_line = new Line( dtd->getFirstPoint(), dtd->getSecondPoint() );
     m_text = new Text( dtd->getTextPosition(), dtd->getDistanceText() );
+    m_polygon = new Polygon();
     
     m_distanceToolData = dtd;
     
@@ -41,6 +42,11 @@ void DistanceRepresentation::setLine( Line *line )
     m_line = line;
 }
 
+void DistanceRepresentation::setPolygon( Polygon *polygon )
+{
+    m_polygon = polygon;
+}
+
 void DistanceRepresentation::setDistanceToolData( DistanceToolData *dtd )
 {
     m_distanceToolData = dtd;
@@ -54,6 +60,11 @@ Text* DistanceRepresentation::getText()
 Line* DistanceRepresentation::getLine()
 {
     return( m_line );
+} 
+
+Polygon* DistanceRepresentation::getPolygon()
+{
+    return( m_polygon );
 } 
 
 DistanceToolData* DistanceRepresentation::getDistanceToolData()
@@ -77,17 +88,85 @@ void DistanceRepresentation::updateText()
     m_text->setAttatchmentPoint( m_distanceToolData->getTextPosition() );
 }
 
-void DistanceRepresentation::calculateTextAndPositionOfDistance()
+void DistanceRepresentation::calculateTextAndPositionOfDistance( int view )
 {
     m_distanceToolData->calculateDistance();
     m_text->setText( m_distanceToolData->getDistanceText() );
     m_text->setAttatchmentPoint( m_distanceToolData->getTextPosition() );    
+
+    //ara que tenim la posició del text podem calcular les coordenades del fons del text
+    QList<double* > points;
+    double *attachPoint = m_text->getAttatchmentPoint();
+    double *attachPoint1 = new double[3];
+    double *attachPoint2 = new double[3];
+    double *attachPoint3 = new double[3];
+    double *attachPoint4 = new double[3];
+    
+    for ( int i = 0; i < 3; i++ )
+    { 
+        attachPoint1[i] = attachPoint[i];
+        attachPoint2[i] = attachPoint[i];
+        attachPoint3[i] = attachPoint[i];
+        attachPoint4[i] = attachPoint[i];
+    }
+    
+    switch( view ){
+    case Q2DViewer::Axial:
+        attachPoint1[0] -= 15;
+        attachPoint1[1] -= 2;
+    
+        attachPoint2[0] += 15;
+        attachPoint2[1] -= 2;
+    
+        attachPoint3[0] += 15;
+        attachPoint3[1] += 3;
+    
+        attachPoint4[0] -= 15;
+        attachPoint4[1] += 3;
+    break;
+    case Q2DViewer::Sagittal:
+        attachPoint1[1] -= 12;
+        attachPoint1[2] -= 2.5;
+    
+        attachPoint2[1] += 12;
+        attachPoint2[2] -= 2.5;
+    
+        attachPoint3[1] += 12;
+        attachPoint3[2] += 2.5;
+    
+        attachPoint4[1] -= 12;
+        attachPoint4[2] += 2.5;
+    break;
+    case Q2DViewer::Coronal:
+        attachPoint1[0] -= 12;
+        attachPoint1[2] -= 3;
+    
+        attachPoint2[0] += 12;
+        attachPoint2[2] -= 3;
+    
+        attachPoint3[0] += 12;
+        attachPoint3[2] += 2;
+    
+        attachPoint4[0] -= 12;
+        attachPoint4[2] += 2;
+    break;
+    default:
+        ERROR_LOG( "Vista no esperada!!!" );
+    break;
+    }
+
+    points << attachPoint1;
+    points << attachPoint2;
+    points << attachPoint3;
+    points << attachPoint4;
+
+    m_polygon->setPoints( points );
 }
 
-void DistanceRepresentation::refreshText()
+void DistanceRepresentation::refreshText( int view )
 { 
     //primer calculem el text de la distància i la seva posició
-    calculateTextAndPositionOfDistance();
+    calculateTextAndPositionOfDistance( view );
     
     //refresquem el text
     m_text->refreshText();

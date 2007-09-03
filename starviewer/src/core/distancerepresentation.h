@@ -11,6 +11,7 @@
 #include <QString>
 #include "line.h"
 #include "text.h"
+#include "polygon.h"
 
 namespace udg {
 
@@ -40,6 +41,9 @@ public:
     
     ///assignem un objecte de tipus Line
     void setLine( Line *line );
+
+    ///assignem el polígon
+    void setPolygon( Polygon *polygon );
      
     ///assignem un objecte de tipus DistanceToolData
     void setDistanceToolData( DistanceToolData *dtd );
@@ -49,6 +53,9 @@ public:
     
     ///retorna l'atribut de tipus Line
     Line* getLine(); 
+
+    ///retornem l'atribut de tipus polígon
+    Polygon* getPolygon();
     
     ///ens retorna l'atribut de tipus DistanceToolData
     DistanceToolData* getDistanceToolData();
@@ -57,11 +64,11 @@ public:
     void refreshLine()
     { m_line->refreshLine(); }
     
-    ///permet avisar per tal de refrescar el text
-    void refreshText();
+    ///permet avisar per tal de refrescar el text i el voltant del text
+    void refreshText( int view );
     
     ///fa que l'atribut DistanceToolData calculi el text de la distància i la posició del mateix
-    void calculateTextAndPositionOfDistance();
+    void calculateTextAndPositionOfDistance( int view );
     
 private:
     
@@ -70,6 +77,9 @@ private:
     
     ///atribut del tipus primitiva de línia
     Line *m_line;
+
+    ///atribut que representa el voltant del text de la distància
+    Polygon *m_polygon;
     
     ///atribut del tipus DistanceToolData per tal de guardar dades referents a la distància
     DistanceToolData *m_distanceToolData;

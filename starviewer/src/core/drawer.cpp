@@ -243,11 +243,11 @@ void Drawer::drawText( Text *text, int slice, int view )
     //Assignem la posició en pantalla
     textActor->SetAttachmentPoint( text->getAttatchmentPoint() );
     
-textActor->BorderOff();
+    textActor->BorderOff();
 
       //mirem si el text té fons o no
-    if ( /*text->isBorderEnabled()*/true )
-        drawTextBorder( text, slice, view );
+//     if ( text->isBorderEnabled() )
+//         drawTextBorder( text, slice, view );
     
     
     //mirem la visibilitat de l'actor
@@ -1128,6 +1128,15 @@ void Drawer::addSetOfPrimitives( Representation *representation )
         DistanceRepresentation *distanceRepresentation = static_cast<DistanceRepresentation*> ( representation ); 
         set << distanceRepresentation->getLine();
         set << distanceRepresentation->getText() ;
+        set << distanceRepresentation->getPolygon();
+
+        //li diem que dibuixi el polígon que representa el voltant del text. 
+        distanceRepresentation->getPolygon()->enableBackground();
+        distanceRepresentation->getPolygon()->setColor( QColor( 0, 0, 0 ) );
+        drawPolygon( distanceRepresentation->getPolygon(), m_2DViewer->getSlice(), m_2DViewer->getView() );
+
+        //li diem al drawer que dibuixi el text de la distància
+        drawText( distanceRepresentation->getText(), m_2DViewer->getSlice(), m_2DViewer->getView() );
     }
     
     //afegim el conjunt a la llista si realment s'ha emplenat
