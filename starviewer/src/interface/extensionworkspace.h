@@ -26,35 +26,27 @@ public:
 
     ~ExtensionWorkspace();
 
-    /// Afegeix una nova aplicació \TODO: paràmetre de recursos?, afegir un id d'aplicació per poder-la referenciar, afegir una label/nom, +altres possibles paràmetres
+    /// Afegeix una nova aplicació
+    //\TODO: paràmetre de recursos?, afegir un id d'aplicació per poder-la referenciar, afegir una label/nom, +altres possibles paràmetres
     void addApplication( QWidget *application , QString caption );
 
     /// Treu una aplicació de l'espai de mini-aplicacions \TODO: fer també per id?
     void removeApplication( QWidget *application );
 
-    /// Obté/Assigna l'índex de la pàgina actual
-    int getLastIndex() const { return m_lastIndex; }
-    void setLastIndex( int index ){ m_lastIndex = index; }
-
 public slots:
-
     /// Per tancar l'aplicació que està oberta en aquell moment
     void closeCurrentApplication();
 
 private:
+    /// Crea les connexions de signals i slots
+    void createConnections();
 
+private:
     /// Botó per tancar la pestanya actual
     QToolButton *m_closeTabButton;
 
     /// Acció associada al tancar la pestanya
     QAction *m_closeTabAction;
-
-    /// Índex de la página actual que tractem
-    int m_lastIndex;
-
-    /// Crea les connexions de signals i slots
-    void createConnections();
-
 };
 
 };  //  end  namespace udg

@@ -107,7 +107,6 @@ void ExtensionHandler::killBill()
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_mainApp->getExtensionWorkspace() , SIGNAL( currentChanged(int) ) , this , SLOT( extensionChanged(int) ) );
     connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), this, SLOT(processInput(QStringList,QString,QString,QString)) );
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
@@ -130,14 +129,6 @@ void ExtensionHandler::load2DViewerExtension()
     connect( m_importFileApp, SIGNAL(openKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
     connect( m_importFileApp, SIGNAL(openPresentationState( const QString& )),
              defaultViewerExtension, SLOT(loadPresentationState( const QString& )));
-}
-
-void ExtensionHandler::extensionChanged( int index )
-{
-    // quan canvia una extensió hem de canviar les toolbars, per tan hem de mirar com fer-ho perque no sabem quina extensió ( sí podem
-    // obtenir el widget ) en concret és la que tenim. Ho podríem fer mitjançant signals i slots. és a dir, quan es faci el canvi
-    // d'extensió s'enviarà alguna senyal que farà que netejem la toolbar d¡extensions i que s'ompli amb els nous botons i eines
-    m_mainApp->getExtensionWorkspace()->setLastIndex( index );
 }
 
 QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input )
