@@ -105,7 +105,6 @@ private:
     QMenu *m_helpMenu;
 
     /// Accions
-    QAction *m_2DViewerAction;
     QAction *m_pacsAction;
 
     QAction *m_newAction;

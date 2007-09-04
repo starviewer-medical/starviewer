@@ -100,13 +100,6 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_pacsAction , 7 );
     connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
-    m_2DViewerAction = new QAction( this );
-    m_2DViewerAction->setText( tr("2&D Viewer") );
-    m_2DViewerAction->setStatusTip( tr("Open the 2D Viewer Application") );
-    m_2DViewerAction->setEnabled( false );
-    m_signalMapper->setMapping( m_2DViewerAction , 8 );
-    connect( m_2DViewerAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-
     QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
     foreach(QString name, extensionsMediatorNames)
     {
@@ -199,7 +192,7 @@ void QApplicationMainWindow::createMenus()
 
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
-    m_visualizationMenu->addAction( m_2DViewerAction );
+//     m_visualizationMenu->addAction( m_2DViewerAction );
 
     foreach(QAction *action, m_actionsList)
     {
@@ -431,8 +424,6 @@ void QApplicationMainWindow::writeSettings()
 
 void QApplicationMainWindow::enableExtensions()
 {
-    m_2DViewerAction->setEnabled( true );
-
     foreach(QAction *action, m_actionsList)
     {
         action->setEnabled( true );

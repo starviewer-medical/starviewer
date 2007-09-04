@@ -8,7 +8,6 @@ FORMS += qconfigurationscreenbase.ui \
          qpacslistbase.ui \
          qstudytreewidgetbase.ui \
          qserieslistwidgetbase.ui \
-         q2dviewerextensionbase.ui \
          qcustomwindowleveldialogbase.ui \
          qcreatedicomdirbase.ui \
          qoperationstatescreenbase.ui \
@@ -25,7 +24,6 @@ HEADERS += qapplicationmainwindow.h \
            queryscreen.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
-           q2dviewerextension.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            qcreatedicomdir.h \
@@ -40,7 +38,6 @@ SOURCES += qapplicationmainwindow.cpp \
            queryscreen.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
-           q2dviewerextension.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp \

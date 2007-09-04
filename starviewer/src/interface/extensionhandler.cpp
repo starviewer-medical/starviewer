@@ -21,7 +21,6 @@
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
-#include "q2dviewerextension.h"
 
 // Fi de l'espai reservat pels include de les mini-apps
 
@@ -65,12 +64,6 @@ void ExtensionHandler::request( int who )
         case 7:
             m_queryScreen->show();
             break;
-
-    /// Default viewer: 2D Viewer
-        case 8:
-        default:
-            this->load2DViewerExtension();
-            break;
     }
 }
 
@@ -104,26 +97,6 @@ void ExtensionHandler::createConnections()
 {
     connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), this, SLOT(processInput(QStringList,QString,QString,QString)) );
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
-}
-
-void ExtensionHandler::load2DViewerExtension()
-{
-    ExtensionContext extensionContext;
-    extensionContext.setPatient( m_mainApp->getCurrentPatient() );
-    extensionContext.setDefaultSelectedStudies( QStringList(m_defaultStudyUID) );
-    extensionContext.setDefaultSelectedSeries( QStringList(m_defaultSeriesUID) );
-
-    Q2DViewerExtension *defaultViewerExtension = new Q2DViewerExtension;
-    defaultViewerExtension->setInput( extensionContext.getDefaultVolume() );
-    m_mainApp->getExtensionWorkspace()->addApplication( defaultViewerExtension , tr("2D Viewer"));
-
-    // TODO aquestes connexions les mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller que ja s'encarregaran de fer el necessari
-    connect( m_queryScreen, SIGNAL(viewKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
-    connect( m_queryScreen, SIGNAL(viewPresentationState(const QString &)),
-             defaultViewerExtension, SLOT(loadPresentationState(const QString &) ));
-    connect( m_importFileApp, SIGNAL(openKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
-    connect( m_importFileApp, SIGNAL(openPresentationState( const QString& )),
-             defaultViewerExtension, SLOT(loadPresentationState( const QString& )));
 }
 
 void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
@@ -169,7 +142,7 @@ void ExtensionHandler::openDefaultExtension()
     if( m_mainApp->getCurrentPatient() )
     {
         // TODO de moment simplement cridem el load2DViewerExtension
-        load2DViewerExtension();
+        request("Q2DViewerExtension");
     }
     else
         DEBUG_LOG("No hi ha dades de pacient!");
