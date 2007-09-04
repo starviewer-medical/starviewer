@@ -71,9 +71,6 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
-    /// carrega una nova pestanya amb l'extensió de 2DViewer
-    void load2DViewerExtension();
-
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;

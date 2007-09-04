@@ -17,7 +17,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
 
 MAIN_EXTENSIONS = mpr \
                   mpr3d \
-                  mpr3d2d
+                  mpr3d2d \
+		  q2dviewer
 
 for(dir, PLAYGROUND_EXTENSIONS) {
     exists(../extensions/playground/$$dir) {
