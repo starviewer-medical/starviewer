@@ -136,6 +136,9 @@ public:
     /// retorna la llesca actual
     int getSlice( void ){ return m_currentSlice; }
 
+    /// retorna el nombre de llesques
+    int getNumberOfSlices();
+
     /// Obté el window/level original
     void getDefaultWindowLevel( double wl[2] );
 
@@ -161,7 +164,6 @@ public:
     void setColumns( int columns );
     void addColumns( int columns );
     void removeColumns( int columns );
-    void setGrid( int rows, int columns );
     /// Donada una llesca, li diem en quantes files i columnes volem dividir les seves fases
     void setPhaseRows( int slice, int rows );
     void addPhaseRows( int slice, int rows );
@@ -201,6 +203,10 @@ public:
     { return m_drawer; }
 
 public slots:
+
+    /// Assignar/afegir files i columnes
+    void setGrid( int rows, int columns );
+
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
 
     /// Habilita/deshabilita que es vegi la info de voxel
