@@ -338,9 +338,9 @@ void Drawer::addActorAndRefresh( vtkProp *prop, DrawingPrimitive *drawingPrimiti
     m_2DViewer->getRenderer()->AddActor( prop );
     
     //creem l'objecte PrimitiveActorPair per introduir al mapa
-    PrimitiveActorPair pair;
-    pair.first = drawingPrimitive;
-    pair.second = prop;
+    PrimitiveActorPair *pair = new PrimitiveActorPair;
+    pair->first = drawingPrimitive;
+    pair->second = prop;
     
     //introduïm l'associació al mapa corresponent
     addPrimitive( pair, slice, view );
@@ -592,21 +592,21 @@ Drawer::PrimitivesPairsList Drawer::getPrimitivesPairsList( int slice, int view 
     return list;
 }
 
-void Drawer::addPrimitive( PrimitiveActorPair primitive, int slice, int view )
+void Drawer::addPrimitive( PrimitiveActorPair *pair, int slice, int view )
 {
     bool ok = true;
     switch( view )
     {
         case Q2DViewer::Axial: 
-            m_axialPairs.insert( slice, primitive );
+            m_axialPairs.insert( slice, pair );
             break;
 
         case Q2DViewer::Sagittal: 
-            m_sagittalPairs.insert( slice, primitive );
+            m_sagittalPairs.insert( slice, pair );
             break;
 
         case Q2DViewer::Coronal:    
-            m_coronalPairs.insert( slice, primitive );
+            m_coronalPairs.insert( slice, pair );
             break;
 
         default:
@@ -618,23 +618,23 @@ void Drawer::addPrimitive( PrimitiveActorPair primitive, int slice, int view )
     {
         // si la primitiva l'estem afegint en la llesca i vista actuals serà per defecte visible, altrament no
         if( slice == m_currentSlice && view == m_currentView )
-            setVisibility( primitive, true );
+            setVisibility( pair, true );
         else
-            setVisibility( primitive, false );
+            setVisibility( pair, false );
     }
 }
 
-void Drawer::setVisibility( PrimitiveActorPair pair, bool visibility )
+void Drawer::setVisibility( PrimitiveActorPair *pair, bool visibility )
 {
-    if( visibility )
+    if( visibility && pair )
     {
-        pair.first->visibilityOn();
-        pair.second->VisibilityOn();
+        pair->first->visibilityOn();
+        pair->second->VisibilityOn();
     }
     else
     {
-        pair.first->visibilityOff();
-        pair.second->VisibilityOff();
+        pair->first->visibilityOff();
+        pair->second->VisibilityOff();
     }    
 }
 
@@ -642,7 +642,7 @@ void Drawer::hidePrimitivesFrom( int slice, int view )
 {
     PrimitivesPairsList listToHide = this->getPrimitivesPairsList( slice, view );
     
-    foreach( PrimitiveActorPair pair, listToHide )
+    foreach( PrimitiveActorPair *pair, listToHide )
     {
         setVisibility( pair, false );
     }
@@ -652,7 +652,7 @@ void Drawer::hidePrimitivesFrom( int slice, int view )
 
 void Drawer::hidePrimitivesOfView( int view )
 {
-    QList<PrimitiveActorPair> allPairsOfSelectedView; 
+    QList< PrimitiveActorPair* > allPairsOfSelectedView; 
     
     bool ok = true;
     switch( view )
@@ -679,9 +679,10 @@ void Drawer::hidePrimitivesOfView( int view )
     {
         
        // fem invisibles totes les primitives
-        foreach ( PrimitiveActorPair pair, allPairsOfSelectedView )
+        foreach ( PrimitiveActorPair *pair, allPairsOfSelectedView )
         {
             setVisibility( pair, false );
+            pair->first->highlightOff();
         } 
     }
 }
@@ -690,9 +691,11 @@ void Drawer::showPrimitivesFrom( int slice, int view )
 {
     PrimitivesPairsList listToShow = this->getPrimitivesPairsList( slice, view );
     
-    foreach( PrimitiveActorPair primitive, listToShow )
+    foreach( PrimitiveActorPair *pair, listToShow )
     {
-        setVisibility( primitive, true );
+        setVisibility( pair, true );
+        setNormalColor( pair );
+        pair->first->highlightOff();
     }
     //actualitzem el Q2DViewer
     m_2DViewer->refresh();
@@ -700,7 +703,11 @@ void Drawer::showPrimitivesFrom( int slice, int view )
 
 void Drawer::setCurrentSlice( int slice )
 {
-    // Primer fem insvisibles els de la llesca en la que ens trobàvem fins ara, en la corresponent vista
+    //diem que no hi ha cap conjunt proper ni seleccionat
+    m_nearestSet = NULL;
+    m_selectedSet = NULL;
+               
+     // Primer fem insvisibles els de la llesca en la que ens trobàvem fins ara, en la corresponent vista
     hidePrimitivesFrom( m_currentSlice, m_currentView );
     
     // actualitzem la llesca
@@ -714,6 +721,10 @@ void Drawer::setCurrentView( int view )
 {
     if( m_currentView != view )
     {
+        //diem que no hi ha cap conjunt proper ni seleccionat
+        m_nearestSet = NULL;
+        m_selectedSet = NULL;
+
         //cal fer invisible les primitives de la vista actual abans d'actualitzar a la nova vista
         hidePrimitivesOfView( m_currentView );
         
@@ -728,19 +739,19 @@ void Drawer::setCurrentView( int view )
 void Drawer::removeAllPrimitives()
 {
     // recorrem cadscun dels maps, primer retirem l'actor de l'escena i després l'esborrem de la llista
-    foreach( PrimitiveActorPair pair, m_axialPairs )
+    foreach( PrimitiveActorPair *pair, m_axialPairs )
     {
-        m_2DViewer->getRenderer()->RemoveActor( pair.second );
+        m_2DViewer->getRenderer()->RemoveActor( pair->second );
     }
     
-    foreach( PrimitiveActorPair pair, m_sagittalPairs )
+    foreach( PrimitiveActorPair *pair, m_sagittalPairs )
     {
-        m_2DViewer->getRenderer()->RemoveActor( pair.second );
+        m_2DViewer->getRenderer()->RemoveActor( pair->second );
     }
     
-    foreach( PrimitiveActorPair pair, m_coronalPairs )
+    foreach( PrimitiveActorPair *pair, m_coronalPairs )
     {
-        m_2DViewer->getRenderer()->RemoveActor( pair.second );
+        m_2DViewer->getRenderer()->RemoveActor( pair->second );
     }
     
     //Esborrem la llista que conté les associacions entre primitives
@@ -755,9 +766,9 @@ void Drawer::removeAllPrimitives()
     m_2DViewer->refresh();
 }
 
-Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive, int slice, int view )
+Drawer::PrimitiveActorPair* Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive, int slice, int view )
 {
-    PrimitiveActorPair desiredPrimitiveActorPair;
+    PrimitiveActorPair *desiredPrimitiveActorPair;
     PrimitivesPairsList list =  getPrimitivesPairsList( slice, view );
     
     bool found = false;
@@ -766,24 +777,24 @@ Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *dra
     {
         desiredPrimitiveActorPair = list.at( i );
         
-        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+        if ( desiredPrimitiveActorPair->first == drawingPrimitive )
             found = true;
     }
     
     if ( !found )
     {
         ERROR_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
-        desiredPrimitiveActorPair.first = NULL;
-        desiredPrimitiveActorPair.second = NULL;
+        desiredPrimitiveActorPair->first = NULL;
+        desiredPrimitiveActorPair->second = NULL;
     }
         
     return desiredPrimitiveActorPair;
 } 
 
-Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive )
+Drawer::PrimitiveActorPair* Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive )
 {
     int i;
-    PrimitiveActorPair desiredPrimitiveActorPair;
+    PrimitiveActorPair *desiredPrimitiveActorPair;
     PrimitivesPairsList axialList = m_axialPairs.values();
     PrimitivesPairsList sagitalList = m_sagittalPairs.values();
     PrimitivesPairsList coronalList = m_coronalPairs.values();
@@ -795,7 +806,7 @@ Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *dra
     {
         desiredPrimitiveActorPair = axialList.at( i );
         
-        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+        if ( desiredPrimitiveActorPair->first == drawingPrimitive )
             found = true;
     }
     
@@ -803,7 +814,7 @@ Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *dra
     {
         desiredPrimitiveActorPair = sagitalList.at( i );
         
-        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+        if ( desiredPrimitiveActorPair->first == drawingPrimitive )
             found = true;
     }
     
@@ -811,35 +822,35 @@ Drawer::PrimitiveActorPair Drawer::findPrimitiveActorPair( DrawingPrimitive *dra
     {
         desiredPrimitiveActorPair = coronalList.at( i );
         
-        if ( desiredPrimitiveActorPair.first == drawingPrimitive )
+        if ( desiredPrimitiveActorPair->first == drawingPrimitive )
             found = true;
     }
     
     if ( !found )
     {
         ERROR_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
-        desiredPrimitiveActorPair.first = NULL;
-        desiredPrimitiveActorPair.second = NULL;
+        desiredPrimitiveActorPair->first = NULL;
+        desiredPrimitiveActorPair->second = NULL;
     }
         
     return desiredPrimitiveActorPair;
 }
        
-bool Drawer::isValid( PrimitiveActorPair association )
+bool Drawer::isValid( PrimitiveActorPair *pair )
 {
-    return( association.first != NULL && association.second != NULL );
+    return( pair->first != NULL && pair->second != NULL );
 }
   
 void Drawer::updateChangedLine( Line *line )
 {
-    PrimitiveActorPair pair = this->findPrimitiveActorPair( line );
+    PrimitiveActorPair *pair = this->findPrimitiveActorPair( line );
     
     if ( isValid( pair ) )
     {
         ///|TODO mirar si hi ha una manera més correcta de trobar el vtkLineSource
-        vtkActor2D *lineActor = vtkActor2D::SafeDownCast( pair.second );
+        vtkActor2D *lineActor = vtkActor2D::SafeDownCast( pair->second );
         
-        Line *line = static_cast<Line*> ( pair.first );
+        Line *line = static_cast<Line*> ( pair->first );
         
         vtkPolyDataMapper2D *lineMapper = vtkPolyDataMapper2D::SafeDownCast( lineActor->GetMapper() );
         
@@ -897,14 +908,14 @@ int Drawer::getNumberOfDrawedPrimitives()
     return( m_axialPairs.count() + m_sagittalPairs.count() + m_coronalPairs.count() );
 }  
   
-Drawer::PrimitivesSet Drawer::getSetOf( DrawingPrimitive *primitive )
+Drawer::PrimitivesSet* Drawer::getSetOf( DrawingPrimitive *primitive )
 {
-    PrimitivesSet set;
+    PrimitivesSet *set;
     bool notFound = true;
     
     for ( int i = 0; ( i < m_primitivesSetList.count() ) && notFound; i++ )
     {
-        if ( m_primitivesSetList[i].contains( primitive ) )
+        if ( m_primitivesSetList[i]->contains( primitive ) )
         {
             set = m_primitivesSetList[i];
             notFound = false;
@@ -912,8 +923,10 @@ Drawer::PrimitivesSet Drawer::getSetOf( DrawingPrimitive *primitive )
     }
     
     if ( notFound )
-        ERROR_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
-    
+    {    
+//         ERROR_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
+        set = NULL;
+    }
     return( set );
 }
   
@@ -953,24 +966,32 @@ void Drawer::highlightNearestPrimitives()
     PrimitivesPairsList list = currentViewMap.values();
     
     //agafem la primitiva més propera
-    m_nearestSet = getSetOf( getNearestPrimitivePair( point ).first );
+    m_nearestSet = getSetOf( getNearestPrimitivePair( point )->first );
     
-    foreach( PrimitiveActorPair pair, list )
+    foreach( PrimitiveActorPair *pair, list )
     {
-        if ( m_nearestSet.contains( pair.first ) )
+        if ( m_nearestSet && m_nearestSet->contains( pair->first ) )
         {
             if ( m_nearestSet != m_selectedSet ) //cal que el més proper no sigui el seleccionat perquè li treuria el color de seleccionat i no ho volem
             {
                 setHighlightColor( pair );
-                pair.first->highlightOn();
+                pair->first->highlightOn();
             } 
        }
         else
         {
-            if ( !m_selectedSet.contains( pair.first ) ) //el pintem de com a normal si no és el seleccionat, ja que si ho és cal que es mantingui la selecció
+            if ( m_selectedSet ) //el pintem de com a normal si no és el seleccionat, ja que si ho és cal que es mantingui la selecció
             {
-                setNormalColor( pair );
-                pair.first->highlightOff();
+                if ( !m_selectedSet->contains( pair->first ) )
+                {
+                    setNormalColor( pair );
+                    pair->first->highlightOff();
+                }
+            }
+            else
+            {
+                    setNormalColor( pair );
+                    pair->first->highlightOff();
             }
         }
     }
@@ -1002,9 +1023,9 @@ void Drawer::selectNearestSet()
     //la llista de totes les primitives de la vista actual
     PrimitivesPairsList list = currentViewMap.values();
     
-    foreach( PrimitiveActorPair pair, list )
+    foreach( PrimitiveActorPair *pair, list )
     {
-        if ( m_selectedSet.contains( pair.first ) )
+        if ( m_selectedSet->contains( pair->first ) )
             setSelectedColor( pair );
         else
             setNormalColor( pair );
@@ -1012,55 +1033,55 @@ void Drawer::selectNearestSet()
     m_2DViewer->refresh();    
 }
 
-void Drawer::setHighlightColor( PrimitiveActorPair pair )
+void Drawer::setHighlightColor( PrimitiveActorPair *pair )
 {
     QColor highlightColor = m_colorPalette->getHighlightColor();
     
-    if ( pair.first->getPrimitiveType() == "Line" )
+    if ( pair->first->getPrimitiveType() == "Line" )
     {
-        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
+        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair->second );
         vtkProperty2D *properties = actor->GetProperty();
         properties->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
     }
-    else if ( pair.first->getPrimitiveType() == "Text" )
+    else if ( pair->first->getPrimitiveType() == "Text" )
     {
-        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
     }
 }
 
-void Drawer::setSelectedColor( PrimitiveActorPair pair )
+void Drawer::setSelectedColor( PrimitiveActorPair *pair )
 {
     QColor selectedColor = m_colorPalette->getSelectionColor();
     
-    if ( pair.first->getPrimitiveType() == "Line" )
+    if ( pair->first->getPrimitiveType() == "Line" )
     {
-        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
+        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair->second );
         vtkProperty2D *properties = actor->GetProperty();
         properties->SetColor( selectedColor.redF(), selectedColor.greenF(), selectedColor.blueF() );
     }
-    else if ( pair.first->getPrimitiveType() == "Text" )
+    else if ( pair->first->getPrimitiveType() == "Text" )
     {
-        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( selectedColor.redF(), selectedColor.greenF(), selectedColor.blueF() );
     }
 }
 
-void Drawer::setNormalColor( PrimitiveActorPair pair )
+void Drawer::setNormalColor( PrimitiveActorPair *pair )
 {
     QColor normalColor = m_colorPalette->getNormalColor();
     
-    if ( pair.first->getPrimitiveType() == "Line" )
+    if ( pair->first->getPrimitiveType() == "Line" )
     {
-        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair.second );
+        vtkActor2D *actor = vtkActor2D::SafeDownCast( pair->second );
         vtkProperty2D *properties = actor->GetProperty();
         properties->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
     }
-    else if ( pair.first->getPrimitiveType() == "Text" )
+    else if ( pair->first->getPrimitiveType() == "Text" )
     {
-        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair.second );
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
     }
@@ -1087,9 +1108,9 @@ Drawer::PrimitivesPairsList Drawer::getAllPrimitivesOfType( QString primitiveTyp
             break;
     }    
     
-    foreach( PrimitiveActorPair pair, map )
+    foreach( PrimitiveActorPair *pair, map )
     {
-        if ( pair.first->getPrimitiveType() == primitiveType )
+        if ( pair->first->getPrimitiveType() == primitiveType )
             result << pair;
     }
     return( result );
@@ -1099,9 +1120,9 @@ int Drawer::getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QStr
 {
     int index, i = 0;
     
-    foreach( PrimitiveActorPair pair, nearestPairslist )
+    foreach( PrimitiveActorPair *pair, nearestPairslist )
     {
-        if ( pair.first->getPrimitiveType() == primitiveType )
+        if ( pair->first->getPrimitiveType() == primitiveType )
             index = i;
         
         i++;
@@ -1112,18 +1133,18 @@ int Drawer::getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QStr
 bool Drawer::hasPrimitiveOfType( PrimitivesPairsList nearestPairslist, QString primitiveType )
 {
     bool response = false;
-    foreach( PrimitiveActorPair pair, nearestPairslist )
+    foreach( PrimitiveActorPair *pair, nearestPairslist )
     {
-        if ( pair.first->getPrimitiveType() == primitiveType )
+        if ( pair->first->getPrimitiveType() == primitiveType )
             response = true;
     }
     return( response );
 }
 
-Drawer::PrimitiveActorPair Drawer::getNearestPrimitivePair( double point[3] )
+Drawer::PrimitiveActorPair* Drawer::getNearestPrimitivePair( double point[3] )
 {
     PrimitivesPairsList list;
-    PrimitiveActorPair nearestPair;
+    PrimitiveActorPair *nearestPair;
     int coordinateToZero;
 
     switch( m_2DViewer->getView() )
@@ -1155,9 +1176,9 @@ Drawer::PrimitiveActorPair Drawer::getNearestPrimitivePair( double point[3] )
     double *p1, *p2, distance;
     ///\TODO tenir en compte tots els tipus de primitives
     
-    foreach( PrimitiveActorPair pair, list )
+    foreach( PrimitiveActorPair *pair, list )
     {
-        DrawingPrimitive *primitive = pair.first;
+        DrawingPrimitive *primitive = pair->first;
         if ( primitive->getPrimitiveType() == "Line" )
         {
             Line *line = static_cast<Line*> ( primitive ); 
@@ -1180,14 +1201,14 @@ Drawer::PrimitiveActorPair Drawer::getNearestPrimitivePair( double point[3] )
 
 void Drawer::addSetOfPrimitives( Representation *representation )
 {
-    PrimitivesSet set;
+    PrimitivesSet *set = new PrimitivesSet;
     
     if ( representation->getRepresentationType() == "DistanceRepresentation" )
     {
         DistanceRepresentation *distanceRepresentation = static_cast<DistanceRepresentation*> ( representation ); 
-        set << distanceRepresentation->getLine();
-        set << distanceRepresentation->getText() ;
-        set << distanceRepresentation->getPolygon();
+        set->insert( distanceRepresentation->getLine() );
+        set->insert( distanceRepresentation->getText() );
+        set->insert( distanceRepresentation->getPolygon() );
 
         //li diem que dibuixi el polígon que representa el voltant del text. 
         distanceRepresentation->getPolygon()->enableBackground();
@@ -1199,8 +1220,8 @@ void Drawer::addSetOfPrimitives( Representation *representation )
     }
     
     //afegim el conjunt a la llista si realment s'ha emplenat
-    if ( set.count() > 0 )
-        m_primitivesSetList << set;
+    if ( set->count() > 0 )
+        m_primitivesSetList.append( set );
 }
 
 void Drawer::drawTextBorder( Text *text, int slice, int view )
