@@ -35,6 +35,9 @@ bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidge
     }
 
     difuPerfuExtension->setDiffusionInput( extensionContext.getDefaultVolume() );
+    // TODO per evitar segmentation faults. S'hauria de fer un tracte més intel·ligent a l'hora de
+    // donar l'input de difu i perfu, examninar els estudis, etc
+    difuPerfuExtension->setPerfusionInput( extensionContext.getDefaultVolume() );
 
     return true;
 }

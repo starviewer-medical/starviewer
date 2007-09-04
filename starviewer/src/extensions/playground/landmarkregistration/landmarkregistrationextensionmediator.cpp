@@ -35,6 +35,8 @@ bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extensi
     }
 
     landmarkRegistrationExtension->setInput( extensionContext.getDefaultVolume() );
+    // TODO per evitar segmentation faults.
+    landmarkRegistrationExtension->setSecondInput( extensionContext.getDefaultVolume() );
 
     return true;
 }
