@@ -8,7 +8,6 @@
 #define UDGINPUT_CPP
 
 #include "input.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
 #include "dicomtagreader.h"
 
