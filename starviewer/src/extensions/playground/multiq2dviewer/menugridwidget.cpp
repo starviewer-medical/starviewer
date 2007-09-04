@@ -82,8 +82,6 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
 {
-
-//     int maxRowColumn =  ceil ( sqrt( numSeries ) );
     int row = 1;
     int column = 1;
     bool opt = true;

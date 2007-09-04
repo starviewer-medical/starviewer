@@ -62,6 +62,12 @@ public slots:
     /// Mostrar el menu de la taula per seleccionar grids
     void showInteractiveTable();
 
+    /// Mostrar menu per seleccionar grid predefinit dins una serie
+    void showPredefinedImageGrid();
+
+    /// Mostrar el menu de la taula per seleccionar grids dins una serie
+    void showInteractiveImageTable();
+
     void setPatient( Patient *patient );
     Patient* getPatient() const;
 
