@@ -26,6 +26,7 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
 
 //     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
     m_maxColumns = 4;
+
 //     createPredefinedGrids( m_predefinedGridsList );
 }
 
@@ -35,6 +36,21 @@ MenuGridWidget::~MenuGridWidget()
 
 void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList )
 {
+
+    int width;
+    int height;
+
+    if( listPredefinedGridsList.size() >= m_maxColumns ) width = 70 * m_maxColumns;
+    else
+    {
+        width = 70 * listPredefinedGridsList.size();
+    }
+
+    height = 100 *  ( ceil ( listPredefinedGridsList.size()/( m_maxColumns*1.0 ) ) );
+
+    m_predefinedGrids->resize( width, height );
+    this->resize( width, height+10 );
+
     int rows;
     int columns;
     int numberPredefined;
@@ -54,7 +70,6 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
         columns = values.value( 1 ).toInt();
         icon = createIcon( rows, columns );
         gridLayout->addWidget( icon, positionRow, positionColumn );
-
         positionColumn ++;
 
         if( positionColumn == m_maxColumns )
@@ -62,34 +77,37 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
             positionColumn = 0;
             positionRow ++;
         }
-
     }
 }
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
 {
-    int i = 0;
 
-    int maxRowColumn =  ceil ( sqrt( numSeries/2.0) );
+//     int maxRowColumn =  ceil ( sqrt( numSeries ) );
     int row = 1;
     int column = 1;
-
-    DEBUG_LOG( QString( tr( "MaxRowCol: %1" ).arg( maxRowColumn ) ) );
+    bool opt = true;
 
     m_predefinedGridsList.clear();
 
-    while( i <= maxRowColumn && i < m_maxColumns )
+    while( row*column < numSeries )
     {
-        column = row;
-
         m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
-        column++;
-        m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
-        
-        row++;
 
-        i++;
+        // Primer augmentem una columna i despres una fila
+        if( opt )
+        {
+            column++;
+            opt = false;
+        }
+        else
+        {
+            row++;
+            opt = true;
+        }
     }
+    // Afegim la ultima opcio on algun widget pot quedar buit
+    m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
 
     createPredefinedGrids( m_predefinedGridsList );
 }

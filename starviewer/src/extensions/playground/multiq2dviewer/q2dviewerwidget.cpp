@@ -31,6 +31,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
+    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( setInput( Volume *) ) );
 }
 
 void Q2DViewerWidget::setInput( Volume *input )
@@ -98,7 +99,6 @@ void Q2DViewerWidget::changeViewToCoronal()
 
 void Q2DViewerWidget::setSelected( bool option )
 {
-    
     if( option )
     {
         QPalette palette = this->palette();
