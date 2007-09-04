@@ -10,12 +10,12 @@ IsolatedConnected::IsolatedConnected()
 
     m_inputVolume       = new udg::Volume();
     m_segmentedImage    = VolumeImageType::New();
-        
+
     m_casterInput       = CastingFilterTypeIn::New();
     m_casterOutput      = CastingFilterTypeOut::New();
-    
+
     m_smoothing         = CurvatureFlowImageFilterType::New();
-    m_isolated         = IsolatedConnectedFilterType::New();  
+    m_isolated         = IsolatedConnectedFilterType::New();
 
 
 
@@ -29,24 +29,24 @@ IsolatedConnected::~IsolatedConnected()
 /// Afegeix una llavor al vector de llavors, l'atribut m_seedsVector
 void IsolatedConnected::addSeed( int x, int y, int z )
 {
-    
+
     VolumeImageIndexType seed;
     seed[0] = x;
     seed[1] = y;
     seed[2] = z;
     m_seedsVector.push_back( seed );
-    
+
 }
 ///Afageix la segona llavor dins el vector de llavors 2, m_seedsVector2
 void IsolatedConnected::addSeed2( int x2, int y2, int z2 )
 {
-    
+
     VolumeImageIndexType seed;
     seed[0] = x2;
     seed[1] = y2;
     seed[2] = z2;
     m_seedsVector2.push_back( seed );
-    
+
 }
 
 
@@ -75,12 +75,12 @@ void IsolatedConnected::setIsolatedParameters( int lower )
     m_isolated->SetReplaceValue( 255 );
     m_isolated->SetSeed1( m_seedsVector[0] );
     m_isolated->SetSeed2( m_seedsVector2[0] );
-    
+
     for (unsigned int i=1; i<m_seedsVector.size(); i++)
     {
 	m_isolated->AddSeed1( m_seedsVector[i] );
     }
-   
+
     m_seedsVector.clear();
 }
 
@@ -90,7 +90,7 @@ bool IsolatedConnected::applyMethod()
 {
 CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New();
 
-    
+
     /// Crea la PIPELINE
     m_casterInput->SetInput( m_inputVolume->getItkData() );
     m_smoothing->SetInput( m_casterInput->GetOutput() );
@@ -99,7 +99,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     //m_casterOutput->SetInput( smooth->GetOutput() );
     m_casterOutput->SetInput(m_isolated->GetOutput() );
 
-        
+
     /// Executa la segmentaci�
     //std::cout << "****START: SEGMENTACIO ISOLATED CONNECTED ****** " << std::endl;
     //INFO_LOG("****START: SEGMENTACIO ISOLATED CONNECTED ****** ");
@@ -117,11 +117,11 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     //std::cout << "****END: SEGMENTACIO ISOLATED CONNECTED****** " << std::endl;
     // INFO_LOG("****END: SEGMENTACIO ISOLATED CONNECTED****** ");
     ///-------------------- Resultats ------------------
-    
+
     m_segmentedImage = m_casterOutput->GetOutput();
     m_segmentedImage->Update();
-  
-    return true; 
+
+    return true;
 }
 
 
@@ -130,6 +130,8 @@ udg::Volume* IsolatedConnected::getSegmentedVolume()
 {
     udg::Volume* volume = new udg::Volume();
     volume->setData( m_segmentedImage );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    volume->setImages( m_inputVolume->getImages() );
     return volume;
 }
 

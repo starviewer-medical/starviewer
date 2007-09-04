@@ -27,7 +27,7 @@ class ToolsActionFactory;
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QLandmarkRegistrationExtension : public QWidget , private ::Ui::QLandmarkRegistrationExtensionBase 
+class QLandmarkRegistrationExtension : public QWidget , private ::Ui::QLandmarkRegistrationExtensionBase
 {
 Q_OBJECT
 public:
@@ -43,14 +43,14 @@ public:
 
     /// Omple la ToolBar amb les eines de l'extensió \TODO 'pujar' al pare com a mètode com a Extensions?
     void populateToolBar( QToolBar *toolbar );
-    
+
 public slots:
 
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
 
 private:
-    
+
     /// El volum principal
     Volume *m_firstVolume;
 
@@ -62,14 +62,14 @@ private:
 
     /// Mètode de registre
     LandmarkRegistrator::Pointer m_registrationMethod;
-    typedef itk::Point<double,3> PointType;  
-    itk::VectorContainer<int, PointType>::Pointer m_seedSet1; 
-    itk::VectorContainer<int, PointType>::Pointer m_seedSet2; 
+    typedef itk::Point<double,3> PointType;
+    itk::VectorContainer<int, PointType>::Pointer m_seedSet1;
+    itk::VectorContainer<int, PointType>::Pointer m_seedSet2;
     //LandmarkRegistrator::LandmarkSetType  m_seedSet1;
     //LandmarkRegistrator::LandmarkSetType  m_seedSet2;
 
     typedef LandmarkRegistrator::TransformType LandmarkRegTransformType;
-    
+
     LandmarkRegTransformType::Pointer landmarkRegTransform;
 
     ///Listes de les llavors
@@ -93,7 +93,7 @@ private:
     std::list<std::vector<double> >::iterator m_itListSelected;
 
     /// La ToolBar de les eines de l'extensió \TODO 'pujar' al pare com a membre com a Extensions? [hauria de ser protected]
-    QToolBar *m_toolsToolBar; 
+    QToolBar *m_toolsToolBar;
 
     /// Accions
     QAction *m_slicingAction;
@@ -111,13 +111,13 @@ private:
 
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createActions();
-    
+
     /// Crea la ToolBar d'eines i altres si n'hi ha \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createToolBars();
-    
+
     /// Crea les connexions entre signals i slots
     void createConnections();
-    
+
     /// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
@@ -140,9 +140,6 @@ private slots:
     /// gestiona els events del botó dret
     void rightButtonPressEventHandler( int idVolume );
     void rightButtonReleaseEventHandler( int idVolume );
-
-    /// Obre el segon model
-    void chooseNewSerie();
 
     /// Aplica el mètode de registre
     void applyMethod();
@@ -173,12 +170,6 @@ private slots:
 
     ///Reinicialitza l'extensió
     void restore(  );
-
-  signals:
-    /// Aquest senyal s'emetrà quan es vulgui canviar de sèrie per comparar
-    void newSerie();
-
-
 };
 
 }

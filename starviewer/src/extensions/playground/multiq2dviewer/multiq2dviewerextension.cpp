@@ -7,6 +7,7 @@
 #include "multiq2dviewerextension.h"
 
 #include "volume.h"
+#include "image.h"
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
@@ -247,27 +248,20 @@ void MultiQ2DViewerExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_viewer->setInput( m_mainVolume );
 
-    // Omplim el combo amb tants window levels com tingui el volum
-    double wl[2];
-    int wlCount = m_mainVolume->getVolumeSourceInformation()->getNumberOfWindowLevels();
+    int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
     if( wlCount )
     {
         for( int i = 0; i < wlCount; i++ )
         {
-            m_mainVolume->getVolumeSourceInformation()->getWindowLevel( wl, i );
-            QString description = m_mainVolume->getVolumeSourceInformation()->getWindowLevelDescription( i );
+            QPair<double, double> windowLevel = m_mainVolume->getImages().at(0)->getWindowLevel( i );
+            QString description = m_mainVolume->getImages().at(0)->getWindowLevelExplanation( i );
             if( !description.isEmpty() )
-                m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], i, description );
+                m_windowLevelComboBox->insertWindowLevelPreset( windowLevel.first, windowLevel.second, i, description );
             else
-                m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], i, tr("Default %1").arg( i ) );
+                m_windowLevelComboBox->insertWindowLevelPreset( windowLevel.first, windowLevel.second, i, tr("Default %1").arg(i) );
         }
     }
-    else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
-    {
-        m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
-    }
     m_windowLevelComboBox->setCurrentIndex( 0 );
-
 }
 
 

@@ -97,16 +97,6 @@ public:
     int *getDimensions();
     void getDimensions( int dims[3] );
 
-    /// Assigna/Retorna la classe que conté tota la informació del volum
-    void setVolumeSourceInformation( VolumeSourceInformation* information )
-    {
-        m_volumeInformation = information;
-    }
-    VolumeSourceInformation* getVolumeSourceInformation()
-    {
-        return m_volumeInformation;
-    }
-
     /// TODO: Repassar: això no hauria d'anar així.
     /// Retorna un nou Volume on la Data és només del sub volume indicat
     Volume *getSubVolume( int index );
@@ -167,9 +157,6 @@ private:
     /// Filtres per passar de vtk a itk
     ItkToVtkFilterType::Pointer m_itkToVtkFilter;
     VtkToItkFilterType::Pointer m_vtkToItkFilter;
-
-    /// Dades relacionades amb el pacient i el volum
-    VolumeSourceInformation* m_volumeInformation;
 
     /// Ens diu si les dades han estat carregades ja en memòria o no.
     /// Aquest membre el farem servir per aplicar el lazy loading

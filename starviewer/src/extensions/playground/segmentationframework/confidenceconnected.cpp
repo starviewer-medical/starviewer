@@ -10,14 +10,14 @@ ConfidenceConnected::ConfidenceConnected()
 
     m_inputVolume       = new udg::Volume();
     m_segmentedImage    = VolumeImageType::New();
-        
+
     m_casterInput       = CastingFilterTypeIn::New();
     m_casterOutput      = CastingFilterTypeOut::New();
-    
- 
+
+
     m_smoothing         = CurvatureFlowImageFilterType::New();
-    m_confidence         = ConfidenceConnectedImageFilterType::New();  
-  
+    m_confidence         = ConfidenceConnectedImageFilterType::New();
+
 
 }
 
@@ -29,13 +29,13 @@ ConfidenceConnected::~ConfidenceConnected()
 /// Afegeix una llavor al vector de llavors, l'atribut m_seedsVector
 void ConfidenceConnected::addSeed( int x, int y, int z )
 {
-    
+
     VolumeImageIndexType seed;
     seed[0] = x;
     seed[1] = y;
     seed[2] = z;
     m_seedsVector.push_back( seed );
-    
+
 }
 
 
@@ -59,23 +59,23 @@ void ConfidenceConnected::setSmoothingParameters( )
    ( radi, multi,itera)*/
 void ConfidenceConnected::setConfidenceParameters( int radius, float multi, int itera )
 {
-    
+
     m_confidence->SetMultiplier( multi );
     m_confidence->SetNumberOfIterations( itera );
     m_confidence->SetInitialNeighborhoodRadius(radius);
     m_confidence->SetReplaceValue( 255 );
     m_confidence->SetSeed( m_seedsVector[0] );
-    
+
 
     for (unsigned int i=1; i<m_seedsVector.size(); i++)
     {
-	
+
 
         m_confidence->AddSeed( m_seedsVector[i] );
     }
 
 	m_seedsVector.clear();
-    
+
 }
 
 
@@ -84,7 +84,7 @@ bool ConfidenceConnected::applyMethod()
 {
 CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New();
 
-    
+
     /// Crea la PIPELINE
     m_casterInput->SetInput( m_inputVolume->getItkData() );
     m_smoothing->SetInput( m_casterInput->GetOutput() );
@@ -110,13 +110,13 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     }
     // INFO_LOG("****END: SEGMENTACIO CONFIDENCE CONNECTED****** ");
     //std::cout << "****END: SEGMENTACIO CONFIDENCE CONNECTED****** " << std::endl;
-     
+
     ///-------------------- Resultats ------------------
-    
+
     m_segmentedImage = m_casterOutput->GetOutput();
     m_segmentedImage->Update();
-  
-    return true; 
+
+    return true;
 }
 
 
@@ -125,6 +125,8 @@ udg::Volume* ConfidenceConnected::getSegmentedVolume()
 {
     udg::Volume* volume = new udg::Volume();
     volume->setData( m_segmentedImage );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    volume->setImages( m_inputVolume->getImages() );
     //std::cout << "GetSegmented1 Ok " << std::endl;
     return volume;
 }

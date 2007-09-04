@@ -4,18 +4,12 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-
-
 #include "qdifuperfuextension.h"
-
 
 // Qt
 #include <QMessageBox>
 #include <QSettings>
 #include <QtDebug>
-
-
 // VTK
 #include <vtkActor.h>
 #include <vtkCellType.h>
@@ -33,42 +27,19 @@
 #include <vtkRenderer.h>
 #include <vtkUnstructuredGrid.h>
 
-
 #include "strokesegmentationmethod.h"
 #include "toolsactionfactory.h"
 #include "volumecalculator.h"
-#include "volumesourceinformation.h"
-
-
-
-
-
-
-
 
 //prova recte
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "itkExtractImageFilter.h"
-
-
-
 #include "itkRegistre3DAffine.h"
 #include "udgPerfusionEstimator.h"
 #include "udgBinaryMaker.h"
 
-
-
-// PROVES!!!!
-// #include "q2dviewerextension.h"
-// PROVES!!!!
-
-
-
-
 namespace udg {
-
-
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * parent )
  : QWidget( parent )
@@ -534,17 +505,14 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     delete m_diffusionMainVolume;
     m_diffusionMainVolume = new Volume();
     m_diffusionMainVolume->setData( diffusionImage );
-
-    //Posem la informació de la imatge original, ja que tot el tema de DICOM (orientació, w/l,...) serà el mateix
-    m_diffusionMainVolume->setVolumeSourceInformation( m_diffusionInputVolume->getVolumeSourceInformation() );
-
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_diffusionMainVolume->setImages( m_diffusionInputVolume->getImages() );
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
     m_diffusion2DView->setView( Q2DViewer::Axial );
     m_diffusion2DView->removeAnnotation( Q2DViewer::NoAnnotation );
     m_diffusion2DView->resetWindowLevelToDefault();
-
 
     int * dim = m_diffusionMainVolume->getDimensions();
     m_diffusionSliceSlider->setMinimum( 0 );
@@ -689,10 +657,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     delete m_perfusionMainVolume;
     m_perfusionMainVolume = new Volume();
     m_perfusionMainVolume->setData( perfusionImage );
-
-    //Posem la informació de la imatge original, ja que tot el tema de DICOM (orientació, w/l,...) serà el mateix
-    m_perfusionMainVolume->setVolumeSourceInformation( m_perfusionInputVolume->getVolumeSourceInformation() );
-
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_perfusionMainVolume->setImages( m_perfusionInputVolume->getImages() );
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_perfusion2DView->setInput( m_perfusionMainVolume );
@@ -796,6 +762,8 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     imageThreshold->Update();
 
     m_strokeMaskVolume->setData( imageThreshold->GetOutput() );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_strokeMaskVolume->setImages( m_diffusionInputVolume->getImages() );
 
     m_diffusion2DView->setOverlayToBlend();
     m_diffusion2DView->setOpacityOverlay( m_diffusionOpacitySlider->value() / 100.0 );
@@ -914,7 +882,8 @@ void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
     imageThreshold->Update();
 
     m_ventriclesMaskVolume->setData( imageThreshold->GetOutput() );
-
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_ventriclesMaskVolume->setImages( m_diffusionInputVolume->getImages() );
 
     m_ventriclesViewAction->setEnabled( true );
     m_ventriclesViewAction->trigger();
@@ -990,8 +959,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if ( !m_perfusionRescaledVolume ) m_perfusionRescaledVolume = new Volume();
 
         m_perfusionRescaledVolume->setData( rescalerPerfusion->GetOutput() );
-        m_perfusionRescaledVolume->setVolumeSourceInformation( m_perfusionInputVolume->getVolumeSourceInformation() );
-
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_perfusionRescaledVolume->setImages( m_perfusionInputVolume->getImages() );
 
         RescaleFilterType::Pointer rescalerDiffusion = RescaleFilterType::New();
         rescalerDiffusion->SetInput( m_diffusionMainVolume->getItkData() );
@@ -1002,7 +971,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if ( !m_diffusionRescaledVolume ) m_diffusionRescaledVolume = new Volume();
 
         m_diffusionRescaledVolume->setData( rescalerDiffusion->GetOutput() );
-        m_diffusionRescaledVolume->setVolumeSourceInformation( m_diffusionInputVolume->getVolumeSourceInformation() );
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_perfusionRescaledVolume->setImages( m_perfusionInputVolume->getImages() );
 
         m_perfusion2DView->setInput( m_perfusionRescaledVolume );
         m_perfusion2DView->resetWindowLevelToDefault();
@@ -1121,6 +1091,8 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
     m_blackpointEstimatedVolume = new Volume();
     m_blackpointEstimatedVolume->setData( perfuEstimatorImageResult );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_blackpointEstimatedVolume->setImages( m_perfusionInputVolume->getImages() );
 
 
 

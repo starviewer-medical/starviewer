@@ -9,7 +9,6 @@
 #include "strokesegmentationmethod.h"
 #include "toolsactionfactory.h"
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
 //#include "qhistogram2d.h"
 #include "q2dviewer.h"
@@ -796,7 +795,9 @@ void QStrokeSegmentationExtension::viewThresholds()
     imageThreshold->SetOutValue( m_outsideValue );
     imageThreshold->Update();
 
-    m_maskVolume->setData(imageThreshold->GetOutput());
+    m_maskVolume->setData(imageThreshold->GetOutput() );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_maskVolume->setImages( m_mainVolume->getImages() );
 
     m_2DView->setOverlayToBlend();
     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);

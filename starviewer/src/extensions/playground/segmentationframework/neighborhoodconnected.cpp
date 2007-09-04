@@ -10,12 +10,12 @@ NeighborhoodConnected::NeighborhoodConnected()
 
     m_inputVolume       = new udg::Volume();
     m_segmentedImage    = VolumeImageType::New();
-        
+
     m_casterInput       = CastingFilterTypeIn::New();
     m_casterOutput      = CastingFilterTypeOut::New();
-   
+
     m_smoothing         = CurvatureFlowImageFilterType::New();
-    m_connected         = NeighborhoodConnectedImageFilterType::New();  
+    m_connected         = NeighborhoodConnectedImageFilterType::New();
 
 
 
@@ -28,15 +28,15 @@ NeighborhoodConnected::~NeighborhoodConnected()
 
 /// Afegeix una llavor al vector de llavors, l'atribut m_seedsVector
 void NeighborhoodConnected::addSeed( int x, int y, int z )
-{		
-    
+{
+
     //std::cout<<"llavors a addSedd "<< x <<std::endl;
     VolumeImageIndexType seed;
     seed[0] = x;
     seed[1] = y;
     seed[2] = z;
     m_seedsVector.push_back( seed );
-    
+
 }
 
 
@@ -61,7 +61,7 @@ void NeighborhoodConnected::setSmoothingParameters( )
 void NeighborhoodConnected::setNeighborhoodParameters( int lower, int upper, double radi )
 {
     InternalImageType::SizeType   radius;
- 
+
     m_connected->SetLower( lower );
     m_connected->SetUpper( upper );
     m_connected->SetReplaceValue( 255 );
@@ -73,13 +73,13 @@ void NeighborhoodConnected::setNeighborhoodParameters( int lower, int upper, dou
 
 
     m_connected->SetSeed( m_seedsVector[0] );
-   
+
 
     for (unsigned int i=1; i<m_seedsVector.size(); i++)
     {
 	m_connected->AddSeed( m_seedsVector[i] );
     }
-    
+
 	m_seedsVector.clear();
 
 }
@@ -90,7 +90,7 @@ bool NeighborhoodConnected::applyMethod()
 {
 CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New();
 
-    
+
     /// Crea la PIPELINE
     m_casterInput->SetInput( m_inputVolume->getItkData() );
     m_smoothing->SetInput( m_casterInput->GetOutput() );
@@ -98,8 +98,8 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     //smooth->SetInput(m_connected->GetOutput() );
     //m_casterOutput->SetInput( smooth->GetOutput() );
     m_casterOutput->SetInput(m_connected->GetOutput() );
-    
-        
+
+
     /// Executa la segmentaci�
    // std::cout << "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** " << std::endl;
     //INFO_LOG( "****START: SEGMENTACIO NEIGHBORHOOD CONNECTED ****** ");
@@ -116,13 +116,13 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
     }
     //INFO_LOG( "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** ");
     //std::cout << "****END: SEGMENTACIO NEIGHBORHOOD CONNECTED****** " << std::endl;
-     
+
     ///-------------------- Resultats ------------------
 
     m_segmentedImage = m_casterOutput->GetOutput();
     m_segmentedImage->Update();
-  
-    return true; 
+
+    return true;
 }
 
 
@@ -131,6 +131,8 @@ udg::Volume* NeighborhoodConnected::getSegmentedVolume()
 {
     udg::Volume* volume = new udg::Volume();
     volume->setData( m_segmentedImage );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    volume->setImages( m_inputVolume->getImages() );
     return volume;
 }
 

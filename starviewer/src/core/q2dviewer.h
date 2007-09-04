@@ -197,7 +197,7 @@ public:
 
     /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
     void setMagnificationFactor( double factor );
-    
+
     ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
     Drawer* getDrawer()
     { return m_drawer; }
@@ -386,6 +386,12 @@ private:
     /// Afegeix tots els actors a l'escena
     void addActors();
 
+    /// Helper method, donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
+    /// Per exemple, si l'etiqueta que ens donen és RPI (Right-Posterior,Inferior), el valor retornat seria LAS (Left-Anterior-Superior)
+    /// Les etiquetes vàlides i els seus oposats són les següents:
+    /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
+    static QString getOppositeOrientationLabel( QString label );
+
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
@@ -499,7 +505,7 @@ private:
 
     /// Rangs de dades que ens seran força útils a l'hora de controlar el pipeline de grayscale
     double m_modalityRange[2];
-    
+
     ///Punter a l'objecte especialista de dibuixat de primitives
     Drawer *m_drawer;
 

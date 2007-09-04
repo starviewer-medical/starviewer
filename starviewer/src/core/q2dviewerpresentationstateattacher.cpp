@@ -8,10 +8,11 @@
 
 #include "logging.h"
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "q2dviewer.h"
 #include "q2dviewerblackboard.h"
 #include "shutterfilter.h"
+#include "series.h"
+#include "image.h"
 
 // vtk
 #include <vtkPoints.h>
@@ -114,12 +115,8 @@ bool Q2DViewerPresentationStateAttacher::attach()
                             .arg( filesetID.c_str() )
                             .arg( filesetUID.c_str() )
                             );
-                    DEBUG_LOG( QString("Vol UID: %1\nReferenced Vol UID: %2\n")
-                        .arg( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() )
-                        .arg( m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() )
-                        );
                     // comprovem si aquest presentation state fa referència al volum actual
-                    if( !isThisReferenced && m_viewerInput->getVolumeSourceInformation()->getSeriesInstanceUID() == QString( seriesUID.c_str() ) )
+                    if( !isThisReferenced && m_viewerInput->getSeries()->getInstanceUID() == QString( seriesUID.c_str() ) )
                         isThisReferenced = true;
                 }
                 if( isThisReferenced )
@@ -131,7 +128,7 @@ bool Q2DViewerPresentationStateAttacher::attach()
                     DEBUG_LOG( "WARNING! This volume IS NOT referenced by the current presentation state" );
                 }
                 // carreguem la llista d'imatges que adjuntarem en un moment o altre segons convingui al presentation state
-                QStringList fileList = m_viewerInput->getVolumeSourceInformation()->getFilenames();
+                QStringList fileList = m_viewerInput->getInputFiles();
                 int images = fileList.size();
                 DcmFileFormat *dicomSlice = NULL;
                 for( int i = 0; i < images; i++ )
@@ -248,6 +245,8 @@ void Q2DViewerPresentationStateAttacher::applyShutterTransformation()
 
     ShutterFilter *shutter = new ShutterFilter;
     Volume *dummy = new Volume( m_2DViewer->getWindowLevelMapper()->GetOutput() );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    dummy->setImages( m_viewerInput->getImages() );
     shutter->setInput( dummy );
     shutter->setPresentationStateShutters( qPrintable( m_presentationStateFilename ) );
     vtkImageData *output = shutter->getOutput();
@@ -268,7 +267,7 @@ void Q2DViewerPresentationStateAttacher::applyGrayscaleTransformPipeline()
     // quan la imatge és MONOCHROME1 caldrà invertir els valors de sortida de la VOI lut. Quan tenim un presentation state en principi no cal fer cas de la Photometric Interpretation ja que el PS redefineix per sí sol totes les transformacions grayscale i la Photom. Int. afecta a la imatge només. El problema és si les gdcm transformen MONOCHROME1 a MONOCHROME2 caldrà actuar una mica diferent.
     applyPresentationLUT();
 
-    if( m_viewerInput->getVolumeSourceInformation()->isMonochrome1() )
+    if( m_viewerInput->getImages().at(0)->getPhotometricInterpretation() == "MONOCHROME1" )
     {
         DEBUG_LOG("La imatge és MONOCHROME1: ¿invertim les dades després de la VOI LUT i abans de la presentation LUT?... Si hi ha presentation state això no s'hauria de fer!");
         if( m_presentationLut )
@@ -321,16 +320,16 @@ void Q2DViewerPresentationStateAttacher::applyModalityLUT()
             m_presentationStateData->findAndGetFloat64( DcmTagKey(DCM_RescaleIntercept) , rescaleIntercept );
 
             m_modalityLUTRescale = vtkImageShiftScale::New();
-            switch( m_viewerInput->getVolumeSourceInformation()->getBitsStored() )
+            switch( m_viewerInput->getImages().at(0)->getBitsStored() )
             {
             case 8:
-                if( m_viewerInput->getVolumeSourceInformation()->getPixelRepresentation() == 0 )
+                if( m_viewerInput->getImages().at(0)->getPixelRepresentation() == 0 )
                     m_modalityLUTRescale->SetOutputScalarTypeToUnsignedChar();
                 else
                     m_modalityLUTRescale->SetOutputScalarTypeToChar();
             break;
             case 16:
-                if( m_viewerInput->getVolumeSourceInformation()->getPixelRepresentation() == 0 )
+                if( m_viewerInput->getImages().at(0)->getPixelRepresentation() == 0 )
                     m_modalityLUTRescale->SetOutputScalarTypeToUnsignedInt();
                 else
                     m_modalityLUTRescale->SetOutputScalarTypeToInt();
@@ -549,7 +548,7 @@ vtkWindowLevelLookupTable *Q2DViewerPresentationStateAttacher::parseLookupTable(
     vtkWindowLevelLookupTable *vtkLut = 0;
     QString lutDescription;
     bool signedRepresentation = false;
-    if( m_viewerInput->getVolumeSourceInformation()->getPixelRepresentation() == VolumeSourceInformation::SignedPixelRepresentation )
+    if( m_viewerInput->getImages().at(0)->getPixelRepresentation() == 0 ) // signed
             signedRepresentation = true;
     switch( type )
     {

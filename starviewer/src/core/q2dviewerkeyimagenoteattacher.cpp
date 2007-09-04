@@ -12,8 +12,8 @@
 #include "keyimagenote.h"
 #include "q2dviewer.h"
 #include "q2dviewerblackboard.h"
-#include "volumesourceinformation.h"
 #include "volume.h"
+#include "image.h"
 #include "logging.h"
 
 namespace udg {
@@ -39,8 +39,6 @@ void Q2DViewerKeyImageNoteAttacher::attach()
 
     m_board = new Q2DViewerBlackBoard( m_viewer );
 
-    VolumeSourceInformation *volumeInformation = m_viewer->getInput()->getVolumeSourceInformation();
-
     // Si s'ha marcat perquè té problemes de qualitat es posa vermell la marca, si no, verda.
     QColor color;
     if (m_keyImageNote->hasDocumentTitleQualityReasons() )
@@ -59,7 +57,8 @@ void Q2DViewerKeyImageNoteAttacher::attach()
     QString SOPClass;
     for(int slice = 0; slice <= maxSlice; ++slice )
     {
-        SOPClass = volumeInformation->getImageSOPInstanceUID(slice);
+//         SOPClass = volumeInformation->getImageSOPInstanceUID(slice);
+        SOPClass = m_viewer->getInput()->getImages()[slice]->getSOPInstanceUID();
         if (seriesReferenced.contains( SOPClass ))
         {
             DEBUG_LOG( QString("Llegit KIN que conté referencia a %1 en la llesca %2").arg(SOPClass).arg(slice) );

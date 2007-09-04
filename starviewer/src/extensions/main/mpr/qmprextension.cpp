@@ -273,8 +273,11 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
             connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mipViewer , SLOT( setTool(QString) ) );
             m_mipViewer->setRenderFunctionToMIP3D();
         }
-        // \TODO: aquesta manera de declarar el volum farà que es malgasti memòria o ja s'allibera sol?
-        m_mipViewer->setInput( new Volume( m_coronalReslice->GetOutput() ) );
+        Volume *mipInput = new Volume;
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        mipInput->setImages( m_volume->getImages() );
+        mipInput->setData( m_coronalReslice->GetOutput() );
+        m_mipViewer->setInput( mipInput );
         m_mipViewer->render();
         m_mipViewer->show();
         // disposem la distribució de widgets
@@ -738,12 +741,17 @@ void QMPRExtension::setInput( Volume *input )
     // posta a punt dels planeSource
     initOrientation();
 
-    Volume *sagitalResliced = new Volume( m_sagitalReslice->GetOutput() );
-    sagitalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
+    Volume *sagitalResliced = new Volume;
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    sagitalResliced->setImages( m_volume->getImages() );
+    sagitalResliced->setData( m_sagitalReslice->GetOutput() );
+
     m_sagital2DView->setInput( sagitalResliced );
 
-    Volume *coronalResliced = new Volume( m_coronalReslice->GetOutput() );
-    coronalResliced->setVolumeSourceInformation( m_volume->getVolumeSourceInformation() );
+    Volume *coronalResliced = new Volume;
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    coronalResliced->setImages( m_volume->getImages() );
+    coronalResliced->setData( m_coronalReslice->GetOutput() );
     m_coronal2DView->setInput( coronalResliced );
 
     m_sagital2DView->setViewToAxial();

@@ -9,7 +9,6 @@
 #include "rectumSegmentationMethod.h"
 #include "toolsactionfactory.h"
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
 //#include "qhistogram2d.h"
 #include "q2dviewer.h"
@@ -531,6 +530,9 @@ void QRectumSegmentationExtension::ApplyVentriclesMethod( )
     m_imageThreshold->Update();
 
     m_ventriclesMaskVolume->setData(m_imageThreshold->GetOutput());
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_ventriclesMaskVolume->setImages(m_mainVolume->getImages());
+
     m_ventriclesViewAction->setEnabled( true );
     m_ventriclesViewAction->trigger( );
     this->viewVentriclesOverlay();
@@ -998,6 +1000,8 @@ void QRectumSegmentationExtension::viewThresholds()
     imageThreshold->Update();
 
     m_lesionMaskVolume->setData(imageThreshold->GetOutput());
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_lesionMaskVolume->setImages(m_mainVolume->getImages());
 
     this->viewLesionOverlay();
 

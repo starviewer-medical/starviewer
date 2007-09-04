@@ -8,7 +8,6 @@
 
 #include "toolsactionfactory.h"
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
 #include "q2dviewer.h"
 #include "reglandmark.h"
@@ -130,7 +129,7 @@ void QLandmarkRegistrationExtension::createActions()
 
     m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
- 
+
     m_seedAction = new QAction( 0 );
     m_seedAction->setText( tr("SeedTool") );
     m_seedAction->setStatusTip( tr("Enable/Disable seeding tool") );
@@ -189,7 +188,7 @@ void QLandmarkRegistrationExtension::createConnections()
 
 void QLandmarkRegistrationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-LandmarkRegistration");    
+    QSettings settings("GGG", "StarViewer-App-LandmarkRegistration");
     settings.beginGroup("StarViewer-App-LandmarkRegistration");
 
     m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
@@ -205,14 +204,14 @@ void QLandmarkRegistrationExtension::writeSettings()
 
     settings.setValue("verticalSplitter" , m_verticalSplitter->saveState() );
     settings.setValue("verticalSplitter2", m_verticalSplitter2->saveState() );
-    
+
     settings.endGroup();
 }
 
 
 void QLandmarkRegistrationExtension::setInput( Volume *input )
 {
-    
+
     m_firstVolume = input;
 
 
@@ -231,7 +230,7 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     m_sliceViewSlider->setValue(m_2DView->getSlice());
 
     //std::cout<<"setInput: NumSlices:"<<dim[2]-1<<std::endl;
-    /*m_actionFactory = new ToolsActionFactory( 0 ); 
+    /*m_actionFactory = new ToolsActionFactory( 0 );
     m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView , SLOT( setTool(QString) ) );
     m_2DView->enableTools();
@@ -240,15 +239,12 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     m_2DView->setCursor(Qt::CrossCursor);
     m_2DView_2->setCursor(Qt::CrossCursor);
     m_2DView->render();
-
-    this->chooseNewSerie();
-
 }
 
 void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
 {
     m_secondVolume = input;
-    
+
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
     m_2DView_2->setView( Q2DViewer::Axial );
@@ -270,11 +266,6 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
     */
 
     m_2DView_2->render();
-}
-
-void QLandmarkRegistrationExtension::chooseNewSerie()
-{
-    emit newSerie();
 }
 
 void QLandmarkRegistrationExtension::applyMethod()
@@ -300,7 +291,7 @@ void QLandmarkRegistrationExtension::applyMethod()
     catch( itk::ExceptionObject &e )
     {
         std::cout << "ha petat aixo!! " << std::endl;
-    }    
+    }
 //    std::cout<<"Final Transform: "<< m_registrationMethod->GetFinalParameters()<<std::endl;
 
   // Agafem la transformació final que s'ha aplicat sobre la imatge mòbil
@@ -311,28 +302,28 @@ void QLandmarkRegistrationExtension::applyMethod()
 
     typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
     typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleImageFilterType;
-    
+
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     ResampleImageFilterType::Pointer resampleFilter = ResampleImageFilterType::New();
-    
-//     //Resample el 2n al 1r    
+
+//     //Resample el 2n al 1r
 //     typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
 //     ConstIterator iter( m_secondVolume->getItkData(), m_secondVolume->getItkData()->GetBufferedRegion() );
 //     iter.GoToBegin();
 //     Volume::ItkPixelType minValue = iter.Get();
 //     Volume::ItkPixelType maxValue = minValue;
 //     Volume::ItkPixelType value;
-//     
+//
 //     while ( !iter.IsAtEnd() )
 //     {
 //         value = iter.Get();
-//         
+//
 //         if ( value < minValue ) { minValue = value; }
 //         if ( value > maxValue ) { maxValue = value; }
-//     
+//
 //         ++iter;
 //     }
-//     double wl1[2], wl2[2]; 
+//     double wl1[2], wl2[2];
 //     m_2DView->getCurrentWindowLevel( wl1 );
 //     m_2DView_2->getCurrentWindowLevel( wl2 );
 //     typedef itk::RescaleIntensityImageFilter< Volume::ItkImageType , Volume::ItkImageType > RescaleFilterType;
@@ -346,42 +337,42 @@ void QLandmarkRegistrationExtension::applyMethod()
 //     //     std::cout<<"outputMin: "<<outputMinimum<<", outputMaximum: "<<outputMaximum<<std::endl;
 //     rescaler->SetOutputMinimum( outputMinimum );
 //     rescaler->SetOutputMaximum( outputMaximum );
-// 
+//
 //     rescaler->Update();
-// 
-//     //interpolator->SetInputImage(m_secondVolume->getItkData());   
-//     //resampleFilter->SetInput(m_secondVolume->getItkData()); 
-//     //interpolator->SetInputImage(rescaler->GetOutput());   
-//     resampleFilter->SetInput(rescaler->GetOutput()); 
-//     resampleFilter->SetInterpolator(interpolator.GetPointer());  
+//
+//     //interpolator->SetInputImage(m_secondVolume->getItkData());
+//     //resampleFilter->SetInput(m_secondVolume->getItkData());
+//     //interpolator->SetInputImage(rescaler->GetOutput());
+//     resampleFilter->SetInput(rescaler->GetOutput());
+//     resampleFilter->SetInterpolator(interpolator.GetPointer());
 //     resampleFilter->SetSize(m_firstVolume->getItkData()->GetLargestPossibleRegion().GetSize());
 //     resampleFilter->SetOutputOrigin(m_firstVolume->getItkData()->GetOrigin());
 //     resampleFilter->SetOutputSpacing(m_firstVolume->getItkData()->GetSpacing());
 //     resampleFilter->SetDefaultPixelValue( 100 );
-//     
+//
 //     //prova!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //     std::cout<<landmarkRegTransform<<std::endl;
 //     //landmarkRegTransform->SetIdentity();
-// 
-// 
+//
+//
 //     LandmarkRegTransformType::Pointer landmarkRegInverseTransform =LandmarkRegTransformType::New();
 //     landmarkRegTransform->GetInverse(landmarkRegInverseTransform);
 //     std::cout<<"Inverse: "<< landmarkRegInverseTransform<<std::endl;
-//     resampleFilter->SetTransform(landmarkRegTransform);  
-//     //resampleFilter->SetTransform(landmarkRegInverseTransform);  
+//     resampleFilter->SetTransform(landmarkRegTransform);
+//     //resampleFilter->SetTransform(landmarkRegInverseTransform);
 //     try
 //     {
-//         resampleFilter->Update();      
-//         //rescalerFilter->Update();      
+//         resampleFilter->Update();
+//         //rescalerFilter->Update();
 //     }
 //     catch( itk::ExceptionObject &e )
 //     {
 //         std::cerr << "ha petat aixo!! " << e << std::endl;
-//     }    
-//     
+//     }
+//
 //     m_registeredVolume = new Volume();
 //     m_registeredVolume->setData( resampleFilter->GetOutput() );
-//     
+//
 
 
     //Resample 1r al 2n
@@ -391,17 +382,17 @@ void QLandmarkRegistrationExtension::applyMethod()
     Volume::ItkPixelType minValue = iter.Get();
     Volume::ItkPixelType maxValue = minValue;
     Volume::ItkPixelType value;
-    
+
     while ( !iter.IsAtEnd() )
     {
         value = iter.Get();
-        
+
         if ( value < minValue ) { minValue = value; }
         if ( value > maxValue ) { maxValue = value; }
-    
+
         ++iter;
     }
-    double wl1[2], wl2[2]; 
+    double wl1[2], wl2[2];
     m_2DView->getCurrentWindowLevel( wl1 );
     m_2DView_2->getCurrentWindowLevel( wl2 );
     typedef itk::RescaleIntensityImageFilter< Volume::ItkImageType , Volume::ItkImageType > RescaleFilterType;
@@ -418,16 +409,16 @@ void QLandmarkRegistrationExtension::applyMethod()
 
     rescaler->Update();
 
-    //interpolator->SetInputImage(m_secondVolume->getItkData());   
-    //resampleFilter->SetInput(m_secondVolume->getItkData()); 
-    //interpolator->SetInputImage(rescaler->GetOutput());   
-    resampleFilter->SetInput(rescaler->GetOutput()); 
-    resampleFilter->SetInterpolator(interpolator.GetPointer());  
+    //interpolator->SetInputImage(m_secondVolume->getItkData());
+    //resampleFilter->SetInput(m_secondVolume->getItkData());
+    //interpolator->SetInputImage(rescaler->GetOutput());
+    resampleFilter->SetInput(rescaler->GetOutput());
+    resampleFilter->SetInterpolator(interpolator.GetPointer());
     resampleFilter->SetSize(m_secondVolume->getItkData()->GetLargestPossibleRegion().GetSize());
     resampleFilter->SetOutputOrigin(m_secondVolume->getItkData()->GetOrigin());
     resampleFilter->SetOutputSpacing(m_secondVolume->getItkData()->GetSpacing());
     resampleFilter->SetDefaultPixelValue( 100 );
-    
+
     //prova!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     std::cout<<landmarkRegTransform<<std::endl;
     //landmarkRegTransform->SetIdentity();
@@ -437,22 +428,25 @@ void QLandmarkRegistrationExtension::applyMethod()
     landmarkRegTransform->GetInverse(landmarkRegInverseTransform);
     std::cout<<"Inverse: "<< landmarkRegInverseTransform<<std::endl;
     //Ara toca l'original --> no inversa!!!
-    resampleFilter->SetTransform(landmarkRegTransform);  
-    //resampleFilter->SetTransform(landmarkRegInverseTransform);  
+    resampleFilter->SetTransform(landmarkRegTransform);
+    //resampleFilter->SetTransform(landmarkRegInverseTransform);
     try
     {
-        resampleFilter->Update();      
-        //rescalerFilter->Update();      
+        resampleFilter->Update();
+        //rescalerFilter->Update();
     }
     catch( itk::ExceptionObject &e )
     {
         std::cerr << "ha petat aixo!! " << e << std::endl;
-    }    
-    
+    }
+
     m_registeredVolume = new Volume();
     m_registeredVolume->setData( resampleFilter->GetOutput() );
-    
-    
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_registeredVolume->setImages( m_firstVolume->getImages() );
+
+
+
 //----------------------------------------------------------------------
 /*        std::cout << "Init transform!! " << std::endl;
     Volume::ItkImageType::Pointer estimatedImage = Volume::ItkImageType::New();
@@ -467,16 +461,16 @@ void QLandmarkRegistrationExtension::applyMethod()
     typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
     Iterator it( estimatedImage, estimatedImage->GetBufferedRegion() );
     it.GoToBegin();
-    itk::Point<double,3> inputPoint, transformedPoint;  
-    
+    itk::Point<double,3> inputPoint, transformedPoint;
+
     while ( !it.IsAtEnd() )
     {
         index = it.GetIndex();
 
         estimatedImage->TransformIndexToPhysicalPoint(index, inputPoint);
-                    
+
         transformedPoint = landmarkRegInverseTransform->TransformPoint(inputPoint);
-                
+
         if ( interpolatorResample->IsInsideBuffer(transformedPoint) )
         {
             it.Set(interpolatorResample->Evaluate(transformedPoint));
@@ -493,39 +487,39 @@ void QLandmarkRegistrationExtension::applyMethod()
         std::cout << "End transform!! " << std::endl;
 */
 //----------------------------------------------------------------------
-    itk::Point<double,3> point;  
-    itk::Point<double,3> pointMoved;  
+    itk::Point<double,3> point;
+    itk::Point<double,3> pointMoved;
     std::vector<double> cpFixed;
     double pos[3];
     std::list<std::vector<double> >::iterator it2;
     it2 = m_seedList2.begin();
     while(it2 != m_seedList2.end())
-    { 
+    {
         cpFixed  = (*it2);
 
-        point[0] = (double) cpFixed[0];   
-        point[1] = (double) cpFixed[1]; 
-        point[2] = (double) cpFixed[2]; 
-        
+        point[0] = (double) cpFixed[0];
+        point[1] = (double) cpFixed[1];
+        point[2] = (double) cpFixed[2];
+
         pointMoved = landmarkRegTransform->TransformPoint(point);
 
-        pos[0] = (double) pointMoved[0];   
-        pos[1] = (double) pointMoved[1]; 
-        pos[2] = (double) pointMoved[2]; 
+        pos[0] = (double) pointMoved[0];
+        pos[1] = (double) pointMoved[1];
+        pos[2] = (double) pointMoved[2];
         //std::cout<<pos[0]<<", "<<pos[1]<<", "<<pos[2]<<std::endl;
         pos[2] = (double) ((int)(pos[2]/m_firstVolume->getSpacing()[2])+ 0.5) * m_firstVolume->getSpacing()[2];
 
         vtkSphereSource *point = vtkSphereSource::New();
         point->SetRadius(1);
         point-> SetCenter(pos);
-    
+
         vtkActor *pointActor = vtkActor::New();
         pointActor -> GetProperty()->SetColor(0.14, 0.13, 0.91);
         vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
         pointMapper->SetInput( point->GetOutput() );
         pointActor->SetMapper( pointMapper );
         pointActor->VisibilityOn();
-    
+
         pointMapper -> Delete();
         point       -> Delete();
 
@@ -542,7 +536,7 @@ void QLandmarkRegistrationExtension::applyMethod()
     it  = m_seedSliceVector1.begin();
     std::cout<<"1"<<std::endl;
     while(it2 != m_seedList1.end())
-    { 
+    {
         cpFixed  = (*it2);
         std::cout<<cpFixed[0]<<", "<<cpFixed[1]<<", "<<cpFixed[2]<<std::endl;
         std::cout<<(int)(cpFixed[2]/m_firstVolume->getSpacing()[2])<<std::endl;
@@ -575,32 +569,32 @@ void QLandmarkRegistrationExtension::applyMethod()
 }
 
 void QLandmarkRegistrationExtension::setLandmarks()
-{   
+{
     std::vector<double> cpFixed;
     std::vector<double> cpMoving;
-    
+
     std::list<std::vector<double> >::iterator it;
     std::list<std::vector<double> >::iterator it2;
-    
-    itk::Point<double,3> pointFixed;  
-    itk::Point<double,3> pointMoving;  
-    
+
+    itk::Point<double,3> pointFixed;
+    itk::Point<double,3> pointMoving;
+
     it  = m_seedList1.begin();
     it2 = m_seedList2.begin();
     int contador = 0;
     while(it != m_seedList1.end())
-    { 
+    {
         cpFixed  = (*it);
         cpMoving = (*it2);
 
-        pointFixed[0] = (double) cpFixed[0];   pointMoving[0] = (double) cpMoving[0];  
+        pointFixed[0] = (double) cpFixed[0];   pointMoving[0] = (double) cpMoving[0];
         pointFixed[1] = (double) cpFixed[1];   pointMoving[1] = (double) cpMoving[1];
         pointFixed[2] = (double) cpFixed[2];   pointMoving[2] = (double) cpMoving[2];
-        
-        m_seedSet1->InsertElement(contador, pointFixed);     
-        m_seedSet2->InsertElement(contador, pointMoving);     
-        
-        it++;   
+
+        m_seedSet1->InsertElement(contador, pointFixed);
+        m_seedSet2->InsertElement(contador, pointMoving);
+
+        it++;
         it2++;
         contador++;
     }
@@ -610,58 +604,58 @@ void QLandmarkRegistrationExtension::landmarkEventHandler( unsigned long id )
 {
     switch( id )
     {
-    case vtkCommand::MouseMoveEvent: 
+    case vtkCommand::MouseMoveEvent:
         mouseMoveEventHandler( 1 );
     break;
 
     case vtkCommand::LeftButtonPressEvent:
-        leftButtonEventHandler( 1 );    
+        leftButtonEventHandler( 1 );
     break;
 
-    case vtkCommand::LeftButtonReleaseEvent:    
+    case vtkCommand::LeftButtonReleaseEvent:
     break;
 
-    case vtkCommand::RightButtonPressEvent:    
+    case vtkCommand::RightButtonPressEvent:
         rightButtonPressEventHandler( 1 );
     break;
 
-    case vtkCommand::RightButtonReleaseEvent:    
+    case vtkCommand::RightButtonReleaseEvent:
         rightButtonReleaseEventHandler( 1 );
     break;
 
     default:
     break;
     }
-    
+
 }
 
 void QLandmarkRegistrationExtension::landmarkEventHandler2( unsigned long id )
 {
     switch( id )
     {
-    case vtkCommand::MouseMoveEvent: 
+    case vtkCommand::MouseMoveEvent:
         mouseMoveEventHandler( 2 );
     break;
 
     case vtkCommand::LeftButtonPressEvent:
-        leftButtonEventHandler( 2 );    
+        leftButtonEventHandler( 2 );
     break;
 
-    case vtkCommand::LeftButtonReleaseEvent:    
+    case vtkCommand::LeftButtonReleaseEvent:
     break;
 
-    case vtkCommand::RightButtonPressEvent:    
+    case vtkCommand::RightButtonPressEvent:
         rightButtonPressEventHandler( 2 );
     break;
 
-    case vtkCommand::RightButtonReleaseEvent:    
+    case vtkCommand::RightButtonReleaseEvent:
         rightButtonReleaseEventHandler( 2 );
     break;
 
     default:
     break;
     }
-    
+
 }
 
 void QLandmarkRegistrationExtension::mouseMoveEventHandler( int idVolume )
@@ -677,13 +671,13 @@ void QLandmarkRegistrationExtension::mouseMoveEventHandler( int idVolume )
         {
             m_2DView_2->getCurrentCursorPosition(pos);
         }
-    
+
         std::vector<double> posVect(3);
         QString auxX;
         QString auxY;
         QString auxZ;
             //std::cout<<"pos: "<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<std::endl;
-    
+
         posVect[0]=pos[0];
         posVect[1]=pos[1];
         posVect[2]=pos[2];
@@ -693,7 +687,7 @@ void QLandmarkRegistrationExtension::mouseMoveEventHandler( int idVolume )
         QTableWidgetItem *newItem = new QTableWidgetItem(auxX);
         QTableWidgetItem *newItem2 = new QTableWidgetItem(auxY);
         QTableWidgetItem *newItem3 = new QTableWidgetItem(auxZ);
-    
+
         vtkSphereSource* sphere = static_cast<vtkSphereSource*> (m_selectedActor->GetMapper()->GetInput()->GetProducerPort()->GetProducer());
         sphere->SetCenter(pos);
         m_selectedActor-> GetProperty()->SetColor(0.85, 0.13, 0.66);
@@ -721,7 +715,7 @@ void QLandmarkRegistrationExtension::leftButtonEventHandler( int idVolume )
         //std::cout<<"Seed Tool"<<std::endl;
         m_2DView->disableTools();
         m_2DView_2->disableTools();
-        setNewSeedPosition( idVolume );    
+        setNewSeedPosition( idVolume );
     }
     else
     {
@@ -761,21 +755,21 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
         QTableWidgetItem *newItem = new QTableWidgetItem(auxX);
         QTableWidgetItem *newItem2 = new QTableWidgetItem(auxY);
         QTableWidgetItem *newItem3 = new QTableWidgetItem(auxZ);
-    
+
         vtkSphereSource *point = vtkSphereSource::New();
         point->SetRadius(1.5);
         point-> SetCenter(pos);
-    
+
         //m_seedSlice = m_2DViewer->getSlice( );
-    
+
         vtkActor *pointActor = vtkActor::New();
         pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
         vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
         pointMapper->SetInput( point->GetOutput() );
         pointActor->SetMapper( pointMapper );
         pointActor->VisibilityOn();
-        
-    
+
+
         if( idVolume == 1 )
         {
             m_seedList1.push_back(posVect);
@@ -783,13 +777,13 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 0, newItem);
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 1, newItem2);
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 2, newItem3);
-        
+
             m_2DView->getRenderer()-> AddActor( pointActor );
             m_seedActorVector1.push_back(pointActor);
             m_2DView->getInteractor()->Render();
-        
+
             //connect( m_2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
-        
+
         }
         else    // idVolume == 2
         {
@@ -798,7 +792,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 0, newItem);
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 1, newItem2);
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 2, newItem3);
-        
+
             m_2DView_2->getRenderer()-> AddActor( pointActor );
             m_seedActorVector2.push_back(pointActor);
             m_2DView_2->getInteractor()->Render();
@@ -886,7 +880,7 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
         }
         m_2DView_2->getInteractor()->Render();
     }
-} 
+}
 
 void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolume )
 {
@@ -906,7 +900,7 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_2DView_2->getCurrentCursorPosition(pos);
         }
             //std::cout<<"pos: "<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<std::endl;
-    
+
         posVect[0]=pos[0];
         posVect[1]=pos[1];
         posVect[2]=pos[2];
@@ -919,7 +913,7 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
         QTableWidgetItem *newItem = new QTableWidgetItem(auxX);
         QTableWidgetItem *newItem2 = new QTableWidgetItem(auxY);
         QTableWidgetItem *newItem3 = new QTableWidgetItem(auxZ);
-    
+
         vtkSphereSource *point = vtkSphereSource::New();
         point->SetRadius(1.5);
         point-> SetCenter(pos);
@@ -929,10 +923,10 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
         pointMapper->SetInput( point->GetOutput() );
         pointActor->SetMapper( pointMapper );
         pointActor->VisibilityOn();
-        
+
         //((vtkSphereSource*)(m_selectedActor->GetMapper()->GetInput()))->SetCenter(pos);
         //m_selectedActor-> GetProperty()->SetColor(0.85, 0.13, 0.66);
-        
+
         if( idVolume == 1 )
         {
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 0, newItem);
@@ -1143,22 +1137,22 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         for(unsigned int i=0;i<3;i++)
         {
             fin>>center[i];
-        }            
+        }
         landmarkRegTransform->SetCenter(center);
-        
+
         fin.close();
         //std::cout<<landmarkRegTransform;
         std::cout<<landmarkRegTransform->GetParameters()<<std::endl;
         std::cout<<landmarkRegTransform->GetCenter()[0]<<" "<<landmarkRegTransform->GetCenter()[1]<<" "<<landmarkRegTransform->GetCenter()[2] <<"  "<<std::endl;
-           
+
 
         typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
         typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleImageFilterType;
-        
+
         InterpolatorType::Pointer interpolator = InterpolatorType::New();
         ResampleImageFilterType::Pointer resampleFilter = ResampleImageFilterType::New();
-        
-        
+
+
         //Resample 1r al 2n
         typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
         ConstIterator iter( m_firstVolume->getItkData(), m_firstVolume->getItkData()->GetBufferedRegion() );
@@ -1166,17 +1160,17 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         Volume::ItkPixelType minValue = iter.Get();
         Volume::ItkPixelType maxValue = minValue;
         Volume::ItkPixelType value;
-        
+
         while ( !iter.IsAtEnd() )
         {
             value = iter.Get();
-            
+
             if ( value < minValue ) { minValue = value; }
             if ( value > maxValue ) { maxValue = value; }
-        
+
             ++iter;
         }
-        double wl1[2], wl2[2]; 
+        double wl1[2], wl2[2];
         m_2DView->getCurrentWindowLevel( wl1 );
         m_2DView_2->getCurrentWindowLevel( wl2 );
         typedef itk::RescaleIntensityImageFilter< Volume::ItkImageType , Volume::ItkImageType > RescaleFilterType;
@@ -1186,38 +1180,40 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         Volume::ItkPixelType outputMaximum = (int)((wl2[0]/wl1[0])*((double) maxValue - wl1[1]) + wl2[1]);
         rescaler->SetOutputMinimum( outputMinimum );
         rescaler->SetOutputMaximum( outputMaximum );
-        
+
         rescaler->Update();
-        
-        resampleFilter->SetInput(rescaler->GetOutput()); 
-        resampleFilter->SetInterpolator(interpolator.GetPointer());  
+
+        resampleFilter->SetInput(rescaler->GetOutput());
+        resampleFilter->SetInterpolator(interpolator.GetPointer());
         resampleFilter->SetSize(m_secondVolume->getItkData()->GetLargestPossibleRegion().GetSize());
         resampleFilter->SetOutputOrigin(m_secondVolume->getItkData()->GetOrigin());
         resampleFilter->SetOutputSpacing(m_secondVolume->getItkData()->GetSpacing());
         resampleFilter->SetDefaultPixelValue( 100 );
-        
-        
-        resampleFilter->SetTransform(landmarkRegTransform);  
-        
+
+
+        resampleFilter->SetTransform(landmarkRegTransform);
+
         try
         {
-            resampleFilter->Update();      
+            resampleFilter->Update();
         }
         catch( itk::ExceptionObject &e )
         {
             std::cerr << "ha petat aixo!! " << e << std::endl;
-        }    
-        
+        }
+
         m_registeredVolume = new Volume();
         m_registeredVolume->setData( resampleFilter->GetOutput() );
-    
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_registeredVolume->setImages( m_firstVolume->getImages() );
+
         m_2DView_2->setOverlayToBlend();
         m_2DView_2->setOpacityOverlay(((double)m_opacityOverlaySlider->value())/100.0);
         m_2DView_2->setOverlayInput(m_registeredVolume);
         m_opacityOverlaySlider->setEnabled(true);
         m_opacityLabel->setEnabled(true);
         m_2DView_2->getInteractor()->Render();
-    
+
         QApplication::restoreOverrideCursor();
         std::cout<<"EndApply"<<std::endl;
 
@@ -1272,7 +1268,7 @@ void QLandmarkRegistrationExtension::restore(  )
 
     m_2DView->getInteractor()->Render();
     m_2DView_2->getInteractor()->Render();
-    
+
 }
 
 }

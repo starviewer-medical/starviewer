@@ -81,8 +81,6 @@ int Input::openFile( QString fileName )
         imageData = m_reader->GetOutput();
         m_volumeData->setData( imageData );
         imageData->Delete();
-
-        m_volumeData->getVolumeSourceInformation()->setFilenames( fileName );
         emit progress( 100 );
     }
     return errorCode;
@@ -129,8 +127,6 @@ int Input::readFiles( QStringList filenames )
             imageData = m_seriesReader->GetOutput();
             m_volumeData->setData( imageData );
             imageData->Delete();
-
-            m_volumeData->getVolumeSourceInformation()->setFilenames( filenames );
             emit progress( 100 );
         }
     }

@@ -67,9 +67,6 @@ void Volume::init()
 
     m_itkToVtkFilter = ItkToVtkFilterType::New();
     m_vtkToItkFilter = VtkToItkFilterType::New();
-
-    m_volumeInformation = new VolumeSourceInformation;
-
     m_dataLoaded = false;
 }
 
@@ -207,7 +204,6 @@ Volume *Volume::getSubVolume( int index  )
     vtkChange->SetOutputExtentStart( 0 , 0 , 0 );
 
     Volume *subVolume = new Volume( vtkChange->GetOutput() );
-    subVolume->setVolumeSourceInformation( m_volumeInformation );
     subVolume->getVtkData()->Update();
 
     return subVolume;
@@ -279,7 +275,6 @@ Volume * Volume::orderSlices()
     tileFilter->Update();
 
     orderedVolume = new Volume( tileFilter->GetOutput() );
-    orderedVolume->setVolumeSourceInformation( m_volumeInformation );
     //orderedVolume->getVtkData()->Update();
 
     return orderedVolume;
@@ -328,8 +323,6 @@ void Volume::setInputFiles( const QStringList &filenames )
 {
     m_fileList.clear();
     m_fileList = filenames;
-    // perquè s'ompli la informació DICOM
-    m_volumeInformation->setFilenames( m_fileList );
     m_dataLoaded = false;
 }
 
