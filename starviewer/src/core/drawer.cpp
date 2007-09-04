@@ -1033,6 +1033,38 @@ void Drawer::selectNearestSet()
     m_2DViewer->refresh();    
 }
 
+void Drawer::unselectSet()
+{
+    m_selectedSet = NULL;
+
+    PrimitivesMap currentViewMap;
+    
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            currentViewMap = m_axialPairs;
+            break;
+        case Q2DViewer::Sagittal:
+            currentViewMap = m_sagittalPairs;
+            break;
+        case Q2DViewer::Coronal:
+            currentViewMap = m_coronalPairs;
+            break;
+        default:
+            DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
+            break;
+    }
+    
+    //la llista de totes les primitives de la vista actual
+    PrimitivesPairsList list = currentViewMap.values();
+    
+    foreach( PrimitiveActorPair *pair, list )
+    {
+            setNormalColor( pair );
+    }
+    m_2DViewer->refresh();    
+}
+
 void Drawer::setHighlightColor( PrimitiveActorPair *pair )
 {
     QColor highlightColor = m_colorPalette->getHighlightColor();
