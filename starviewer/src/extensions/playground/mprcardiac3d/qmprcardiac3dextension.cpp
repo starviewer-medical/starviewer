@@ -8,7 +8,7 @@
 #include "qcardiac3dmprviewer.h"
 
 #include "volume.h"
-#include "volumesourceinformation.h"
+#include "series.h"
 #include "logging.h"
 #include "toolsactionfactory.h"
 #include <QToolButton>
@@ -124,7 +124,7 @@ void QMPRCardiac3DExtension::setInput( Volume *input )
     INFO_LOG("QMPRCardiac3DExtension:: Donem Input ");
 
     m_firstSliceInterval = 0;
-    m_lastSliceInterval = m_volume->getVolumeSourceInformation()->getNumberOfPhases() - 1;
+    m_lastSliceInterval = m_volume->getSeries()->getNumberOfPhases() - 1;
 
     m_slider->setMinimum( m_firstSliceInterval );
     m_slider->setMaximum( m_lastSliceInterval );
@@ -154,7 +154,7 @@ void QMPRCardiac3DExtension::pauseImages()
 void QMPRCardiac3DExtension::recordVideo()
 {
 
-    int phases = m_volume->getVolumeSourceInformation()->getNumberOfPhases();
+    int phases = m_volume->getSeries()->getNumberOfPhases();
     int currentSubVolume = m_slider->value();
     std::vector< vtkImageData * > frames;
 
@@ -349,7 +349,7 @@ void QMPRCardiac3DExtension::finishInterval( bool checked )
     }
     else
     {
-        m_lastSliceInterval = m_volume->getVolumeSourceInformation()->getNumberOfPhases() - 1;
+        m_lastSliceInterval = m_volume->getSeries()->getNumberOfPhases() - 1;
     }
     m_slider->setMaximum( m_lastSliceInterval );
 }

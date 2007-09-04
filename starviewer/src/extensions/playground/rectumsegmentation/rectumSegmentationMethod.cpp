@@ -299,6 +299,8 @@ double rectumSegmentationMethod::applyMethod()
     std::cout<<"Size: "<<sizeOut<<std::endl;
 
     m_Mask->setData( maskAux );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_Mask->setImages( m_Volume->getImages() );
     m_Mask->getVtkData()->Update();
 
     if(m_cont!=0){
@@ -620,7 +622,9 @@ double rectumSegmentationMethod::applyCleanSkullMethod()
     //std::cout<<"End volume calc!!"<<std::endl;
 
     //m_Mask->setData( outcaster->GetOutput());
-    m_Mask->setData( volumeCalc->GetOutput());
+    m_Mask->setData( volumeCalc->GetOutput() );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_Mask->setImages( m_Volume->getImages() );
     //m_Mask->setData( binaryDilate->GetOutput());
     //m_Volume->setData( maskAux );
     //m_Mask->setData( maskAux );
@@ -676,6 +680,8 @@ void rectumSegmentationMethod::applyFilter(Volume* output)
     }
 
     output->setData( outcaster->GetOutput());
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    output->setImages(m_Volume->getImages());
     output->getVtkData()->Update();
 
     return;
@@ -1089,6 +1095,8 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     std::cout<<"Mask Set!!"<<std::endl;
     //lesionMask->setData( thresholder->GetOutput());
     lesionMask->setData( resampleMaskFilter2->GetOutput());
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    lesionMask->setImages(m_Volume->getImages());
 
   VolumeWriterType::Pointer maskWriter2 = VolumeWriterType::New();
   maskWriter2->SetInput( resampleMaskFilter2->GetOutput() );
@@ -1226,7 +1234,9 @@ double rectumSegmentationMethod::applyVentriclesMethod()
     m_volume = volumeCalc->GetVolume();
     m_cont = volumeCalc->GetVolumeCount();
 
-    m_Mask->setData( volumeCalc->GetOutput());
+    m_Mask->setData( volumeCalc->GetOutput() );
+    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+    m_Mask->setImages(m_Volume->getImages());
     m_Mask->getVtkData()->Update();
 
     return m_volume;

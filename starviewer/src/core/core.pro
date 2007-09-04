@@ -28,7 +28,6 @@ HEADERS += extensionfactory.h \
            identifier.h \
            repositorybase.h \
            repository.h \
-           volumesourceinformation.h \
            q2dviewer.h \
            q3dmprviewer.h \
            q3dviewer.h \
@@ -116,7 +115,6 @@ SOURCES += extensionmediator.cpp \
            identifier.cpp \
            repositorybase.cpp \
            repository.cpp \
-           volumesourceinformation.cpp \
            q2dviewer.cpp \
            q3dmprviewer.cpp \
            q3dviewer.cpp \

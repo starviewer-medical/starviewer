@@ -7,7 +7,6 @@
 
 #include "qsegmentationframeworkextension.h"
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
 #include "toolsactionfactory.h"
 #include "qwindowlevelcombobox.h"
@@ -272,8 +271,8 @@ void QSegmentationFrameworkExtension::createConnections()
     connect( m_2DView, SIGNAL(sliceChanged(int)), m_sliceViewSlider , SLOT (setValue(int)));
 
     connect(m_reset,SIGNAL(clicked()), this, SLOT(reset()));
-    
-    
+
+
 }
 
 
@@ -367,7 +366,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     std::cout<<"la j és :"<<j<<std::endl;*/
     //newpoly->SetInteractor(m_2DView->getInteractor());
     m_2DView->render();
-   
+
 
 
 
@@ -386,7 +385,7 @@ void QSegmentationFrameworkExtension::changeViewToAxial()
     m_2DView->setViewToAxial();
     m_2DView->setSlice(extent[5]/2);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-    
+
     m_2DView->render();
 
 }
@@ -403,7 +402,7 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_2DView->setViewToSagittal();
     m_2DView->setSlice(extent[1]/2);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-   
+
     m_2DView->render();
 }
 
@@ -421,7 +420,7 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_2DView->setViewToCoronal();
     m_2DView->setSlice(extent[3]/2);
     m_sliceViewSlider->setValue(m_2DView->getSlice());
-    
+
     m_2DView->render();
 
 }
@@ -583,7 +582,7 @@ void QSegmentationFrameworkExtension::applyCT()
             }
 
     VolumeCalculator();
-   
+
 
 
 }
@@ -1026,7 +1025,7 @@ void QSegmentationFrameworkExtension::calculateContorn( )
   }
 
   m_reset->setEnabled(true);
-  
+
 
 
 }
@@ -1036,9 +1035,9 @@ void QSegmentationFrameworkExtension::setSplineLength(double area)
   double total=0;
   char* tempchar = new char[20];
   m_newSpline=0;
-  
+
   if(m_originalSpline<area){
-  
+
   m_newSpline=area-m_originalSpline;
   total=m_novaArea+m_newSpline;
   sprintf(tempchar,"%.2f",(total));//el volum de la llesca en mm quadrats
@@ -1048,7 +1047,7 @@ void QSegmentationFrameworkExtension::setSplineLength(double area)
   m_newVolume->setText(tr(tempchar));
   }
   else{
-  
+
   m_newSpline=m_originalSpline-area;
   total=m_novaArea-m_newSpline;
   sprintf(tempchar,"%.2f",(total));//el volum de la llesca en mm quadrats
@@ -1072,11 +1071,11 @@ void QSegmentationFrameworkExtension::setOriginalLength(double area, int llesca)
     m_originalSpline=area;
     m_llescaactual=llesca;
     m_isFirst=false;
-  
+
     ///Si ho executem per 2ona o + vegades
     }else{
 
-    
+
     if (llesca==m_llescaactual){
         if(m_originalSpline==area){
         ///Si és la mateixa llesca i la mateixa spline, el que fem és tronar als valors originals
@@ -1085,7 +1084,7 @@ void QSegmentationFrameworkExtension::setOriginalLength(double area, int llesca)
             m_novaArea=m_sliceArea->text().toDouble();
             m_nouVolum=m_totalVolume->text().toDouble();
         }else{
-        ///Si és la mateixa llesca però no la mateixa spline, mantenim com a originals els valors que 
+        ///Si és la mateixa llesca però no la mateixa spline, mantenim com a originals els valors que
         ///que hem obtingut del manipular el contorn anterior.
         m_originalSpline=area;
         m_novaArea=m_newArea->text().toDouble();
@@ -1106,7 +1105,7 @@ void QSegmentationFrameworkExtension::setOriginalLength(double area, int llesca)
 
 
     }
-   
+
 
 }
 

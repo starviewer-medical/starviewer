@@ -7,7 +7,7 @@
 #include "qcardiac2dviewerextension.h"
 
 #include "volume.h"
-#include "volumesourceinformation.h"
+#include "series.h"
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
@@ -185,7 +185,7 @@ void QCardiac2DViewerExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
 
     m_firstSliceInterval = 0;
-    m_lastSliceInterval = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases() - 1;
+    m_lastSliceInterval = m_mainVolume->getSeries()->getNumberOfPhases() - 1;
 
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
@@ -201,7 +201,7 @@ void QCardiac2DViewerExtension::changeViewToAxial()
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
-    m_slider->setMaximum( m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases() - 1 );
+    m_slider->setMaximum( m_mainVolume->getSeries()->getNumberOfPhases() - 1 );
 //    m_viewText->setText( tr("XY : Axial") );
     m_2DView->setViewToAxial();
     INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
@@ -281,8 +281,7 @@ void QCardiac2DViewerExtension::pauseImages()
 
 void QCardiac2DViewerExtension::recordVideo()
 {
-
-    int phases = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases();
+    int phases = m_mainVolume->getSeries()->getNumberOfPhases();
     int currentSlice = m_slider->value();
     std::vector< vtkImageData * > frames;
 
@@ -484,7 +483,7 @@ void QCardiac2DViewerExtension::finishInterval( bool checked )
     }
     else
     {
-        m_lastSliceInterval = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases() - 1;
+        m_lastSliceInterval = m_mainVolume->getSeries()->getNumberOfPhases() - 1;
     }
     m_slider->setMaximum( m_lastSliceInterval );
 }

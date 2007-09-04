@@ -8,8 +8,11 @@
 #include "drawer.h"
 #include "q2dviewer.h"
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
+#include "image.h"
+#include "series.h"
+#include "study.h"
+#include "patient.h"
 
 // include's qt
 #include <QResizeEvent>
@@ -507,34 +510,31 @@ void Q2DViewer::setPresentationLUT( vtkWindowLevelLookupTable *lut )
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     //\TODO Cal comprovar que els flips siguin correctes
-    QString orientation = m_mainVolume->getVolumeSourceInformation()->getPatientOrientationString() ;
-    QString reversedOrientation = m_mainVolume->getVolumeSourceInformation()->getRevertedPatientOrientationString() ;
-
+    QString orientation = m_mainVolume->getImages().at(m_currentSlice)->getPatientOrientation() ;
     QStringList list = orientation.split(",");
-    QStringList reversedList = reversedOrientation.split(",");
 
     if( list.size() > 1 )
     {
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(0) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
             m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
             m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(1) ) );
+            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
         }
         else if( m_lastView == Sagittal )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(1) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
             m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(2) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
             m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         else if( m_lastView == Coronal )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(0) ) );
+            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
             m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( reversedList.at(2) ) );
+            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
             m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         if( m_isImageFlipped )
@@ -607,35 +607,52 @@ void Q2DViewer::addActors()
     }
 }
 
+QString Q2DViewer::getOppositeOrientationLabel( QString label )
+{
+    int i = 0;
+    QString oppositeLabel;
+    while( i < label.size() )
+    {
+        if( label.at( i ) == 'L' )
+            oppositeLabel += "R";
+        else if( label.at( i ) == 'R' )
+            oppositeLabel += "L";
+        else if( label.at( i ) == 'A' )
+            oppositeLabel += "P";
+        else if( label.at( i ) == 'P' )
+            oppositeLabel += "A";
+        else if( label.at( i ) == 'S' )
+            oppositeLabel += "I";
+        else if( label.at( i ) == 'I' )
+            oppositeLabel += "S";
+        else if( label.at( i ) == 'H' )
+            oppositeLabel += "F";
+        else if( label.at( i ) == 'F' )
+            oppositeLabel += "H";
+        else
+            oppositeLabel += "?";
+        i++;
+    }
+    return oppositeLabel;
+}
+
 void Q2DViewer::initTextAnnotations()
 {
     if( m_mainVolume )
     {
         // informació fixa
         m_upperRightText = tr("%1")
-                        .arg( m_mainVolume->getVolumeSourceInformation()->getPatientName() );
-        // formatat de la data i hora de l'estudi
-        QString studyDate = m_mainVolume->getVolumeSourceInformation()->getStudyDate();
-        QString year = studyDate.mid( 0 , 4 );
-        QString month = studyDate.mid( 4 , 2 );
-        QString day = studyDate.mid( 6 , 2 );
-        studyDate = day + QString( "/" ) + month + QString( "/" ) + year;
-
-        QString studyTime = m_mainVolume->getVolumeSourceInformation()->getStudyTime();
-        QString hour = studyTime.mid( 0 , 2 );
-        QString minute = studyTime.mid( 2 , 2 );
-        QString second = studyTime.mid( 4 , 2 );
-        studyTime = hour + QString( ":" ) + minute + QString( ":" ) + second;
+            .arg( m_mainVolume->getPatient()->getFullName() );
 
         m_upperRightText += tr("\n%1\n%2\n%3\nAcc:\n%4\n%5")
-                    .arg( m_mainVolume->getVolumeSourceInformation()->getInstitutionName() )
-                    .arg( m_mainVolume->getVolumeSourceInformation()->getPatientID() )
-                    .arg( m_mainVolume->getVolumeSourceInformation()->getAccessionNumber() )
-                    .arg( studyDate )
-                    .arg( studyTime );
+                    .arg( m_mainVolume->getSeries()->getInstitutionName() )
+                    .arg( m_mainVolume->getPatient()->getID() )
+                    .arg( m_mainVolume->getStudy()->getAccessionNumber() )
+                    .arg( m_mainVolume->getStudy()->getDateAsString() )
+                    .arg( m_mainVolume->getStudy()->getTimeAsString() );
 
         m_lowerRightText = tr("%1")
-                        .arg( m_mainVolume->getVolumeSourceInformation()->getProtocolName() );
+            .arg( m_mainVolume->getSeries()->getProtocolName() );
 
         m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
         m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );
@@ -847,17 +864,6 @@ void Q2DViewer::setInput( Volume* volume )
         return;
     m_mainVolume = volume;
 
-//     m_viewer->SetInput( m_mainVolume->getVtkData() );
-//     // ajustem el window Level per defecte
-//     m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
-//     m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
-//     if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
-//     {
-//         double * range = m_mainVolume->getVtkData()->GetScalarRange();
-//         m_defaultWindow = fabs( range[1] - range[0] );
-//         m_defaultLevel = ( range[1] + range[0] )/ 2.0;
-//     }
-
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
     this->computeInputGrayscalePipeline();
@@ -879,9 +885,9 @@ void Q2DViewer::setInput( Volume* volume )
 //     m_picker->PickFromListOn();
 //     m_picker->AddPickList( m_viewer->GetImageActor() );
 
-    m_numberOfPhases = m_mainVolume->getVolumeSourceInformation()->getNumberOfPhases();
+    m_numberOfPhases = m_mainVolume->getSeries()->getNumberOfPhases();
     if( m_numberOfPhases > 1 )
-        m_maxSliceValue = m_mainVolume->getVolumeSourceInformation()->getNumberOfSlices() - 1;
+        m_maxSliceValue = m_mainVolume->getSeries()->getNumberOfSlicesPerPhase() - 1;
     else
     {
         m_maxSliceValue = m_viewer->GetSliceMax();
@@ -890,7 +896,7 @@ void Q2DViewer::setInput( Volume* volume )
 
     if( m_numberOfPhases > 1 )
     {
-        DEBUG_LOG( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases).arg( m_maxSliceValue) );
+        DEBUG_LOG( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases ).arg( m_maxSliceValue) );
     }
 
     updateGrid();
@@ -2295,18 +2301,18 @@ void Q2DViewer::applyGrayscalePipeline()
 {
     DEBUG_LOG( "*** Grayscale Transform Pipeline Begin ***" );
     DEBUG_LOG( QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
-    .arg( m_mainVolume->getVolumeSourceInformation()->getBitsAllocated() )
-    .arg( m_mainVolume->getVolumeSourceInformation()->getBitsStored() )
+    .arg( m_mainVolume->getImages()[m_currentSlice]->getBitsAllocated() )
+    .arg( m_mainVolume->getImages()[m_currentSlice]->getBitsStored() )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[0] )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[1] )
-    .arg( m_mainVolume->getVolumeSourceInformation()->getPixelRepresentation() )
-    .arg( m_mainVolume->getVolumeSourceInformation()->getPhotometricInterpretationAsString() )
+    .arg( m_mainVolume->getImages().at(0)->getPixelRepresentation() )
+    .arg( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() )
                      );
 
 
 //\TODO Això s'ha d'aplicar enfunció de si tenim presentationm state o no? mirar si s'ha de fer aquí o al presentation state attacher...
 
-//     if( m_mainVolume->getVolumeSourceInformation()->isMonochrome1() && m_presentationStateFilename != NULL )
+//     if( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() =="MONOCHROME1" && m_presentationStateFilename != NULL )
 //     {
 //         DEBUG_LOG("La imatge és MONOCHROME1: ¿invertim les dades després de la VOI LUT i abans de la presentation LUT?... Si hi ha presentation state això no s'hauria de fer!");
 //         if( m_presentationLut )
@@ -2469,8 +2475,8 @@ void Q2DViewer::computeModalityLUT()
     {
         // mirar el de la imatge, només per curiositat perquè les itk ja l'apliquen directament
         DEBUG_LOG( QString("Image Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
-        .arg( m_mainVolume->getVolumeSourceInformation()->getRescaleSlope() )
-        .arg( m_mainVolume->getVolumeSourceInformation()->getRescaleIntercept() )
+        .arg( m_mainVolume->getImages().at(0)->getRescaleSlope() )
+        .arg( m_mainVolume->getImages().at(0)->getRescaleIntercept() )
          );
         if( m_modalityLUTRescale )
         {
@@ -2524,11 +2530,11 @@ void Q2DViewer::computeVOILUT()
     {
         // només mirem el del nostre propi volum
 
-        if( m_mainVolume->getVolumeSourceInformation()->hasWindowLevel() )
+        if( m_mainVolume->getImages().at(0)->getNumberOfWindowLevels() > 0 )
         {
             // Encara que en tingui més d'un window level, agafarem el primer i prou. Si n'hi ha més s'escolliran desde l'extensió adequada
-            m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
-            m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+            m_defaultWindow = m_mainVolume->getImages().at(0)->getWindowLevel().first;
+            m_defaultLevel = m_mainVolume->getImages().at(0)->getWindowLevel().second;
             DEBUG_LOG( QString("Image VOI Adjustment: Window: %1, Level: %2")
                 .arg( m_defaultWindow )
                 .arg( m_defaultLevel )
@@ -2553,7 +2559,7 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
     vtkWindowLevelLookupTable *vtkLut = 0;
     QString lutDescription;
     bool signedRepresentation = false;
-    if( m_mainVolume->getVolumeSourceInformation()->getPixelRepresentation() == VolumeSourceInformation::SignedPixelRepresentation )
+    if( m_mainVolume->getImages().at(0)->getPixelRepresentation() == 0 )// Signed
             signedRepresentation = true;
     switch( type )
     {
@@ -2577,12 +2583,11 @@ vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
 
     bool ok = true;
 
-    QStringList list = m_mainVolume->getVolumeSourceInformation()->getFilenames();
+    QStringList list = m_mainVolume->getInputFiles();
     if( list.isEmpty() )
         ok = false;
     if( ok )
     {
-
         DcmFileFormat dicomFile;
 
         OFCondition status = dicomFile.loadFile( qPrintable( list.at(0) ) );

@@ -30,7 +30,7 @@
 
 //includes propis
 #include "volume.h"
-#include "volumesourceinformation.h"
+#include "image.h"
 #include "logging.h"
 
 namespace udg {
@@ -80,41 +80,30 @@ void QCardiac3DMPRViewer::updatePlanesData()
 {
     if( m_mainVolume )
     {
-        cout << "inici" << endl;
         m_axialImagePlaneWidget->SetInput( m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData() );
 
         if( !m_axialResliced )
-        {
             m_axialResliced = new Volume( m_axialImagePlaneWidget->GetResliceOutput() );
-        }
         else
-        {
             m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
-        }
-        m_axialResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_axialResliced->setImages( m_mainVolume->getImages() );
 
         m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData() );
         if( !m_sagitalResliced )
-        {
             m_sagitalResliced = new Volume( m_sagitalImagePlaneWidget->GetResliceOutput() );
-        }
         else
-        {
             m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
-        }
-        m_sagitalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_sagitalResliced->setImages( m_mainVolume->getImages() );
 
         m_coronalImagePlaneWidget->SetInput( m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData() );
         if( !m_coronalResliced )
-        {
             m_coronalResliced = new Volume( m_coronalImagePlaneWidget->GetResliceOutput() );
-        }
         else
-        {
             m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
-        }
-        m_coronalResliced->setVolumeSourceInformation( m_mainVolume->getVolumeSourceInformation() );
-        cout << "fi" << endl;
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_coronalResliced->setImages( m_mainVolume->getImages() );
     }
     else
     {
@@ -158,8 +147,8 @@ void QCardiac3DMPRViewer::initializeWindowLevel()
 {
     if( m_mainVolume )
     {
-        m_defaultWindow = m_mainVolume->getVolumeSourceInformation()->getWindow();
-        m_defaultLevel = m_mainVolume->getVolumeSourceInformation()->getLevel();
+        m_defaultWindow = m_mainVolume->getImages().at(0)->getWindowLevel().first;
+        m_defaultLevel = m_mainVolume->getImages().at(0)->getWindowLevel().second;
         if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
         {
             double *range = m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData()->GetScalarRange();
