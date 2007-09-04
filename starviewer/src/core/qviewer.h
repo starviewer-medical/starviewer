@@ -115,6 +115,9 @@ signals:
     /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
     void eventReceived( unsigned long eventID );
 
+    /// Signal que s'emet quan s'escull una altra serie per l'input
+    void volumeChanged( Volume * );
+
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
