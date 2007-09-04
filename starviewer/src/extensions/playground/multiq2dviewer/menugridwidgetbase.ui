@@ -5,17 +5,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
-    <height>202</height>
+    <width>274</width>
+    <height>198</height>
    </rect>
-  </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
@@ -28,14 +20,6 @@
      <width>271</width>
      <height>181</height>
     </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy>
-     <hsizetype>0</hsizetype>
-     <vsizetype>0</vsizetype>
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
    </property>
   </widget>
  </widget>

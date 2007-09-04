@@ -28,8 +28,6 @@ public:
 
     ~Q2DViewerWidget();
 
-    void setInput( Volume *input );
-
     void setSelected( bool option );
 
 protected:
@@ -48,6 +46,7 @@ signals:
     void selected(Q2DViewerWidget * viewer);
 
 public slots:
+    void setInput( Volume *input );
     void changeViewToAxial();
     void changeViewToSagital();
     void changeViewToCoronal();
