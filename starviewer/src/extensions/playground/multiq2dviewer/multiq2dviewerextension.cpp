@@ -11,7 +11,6 @@
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
-#include "volumesourceinformation.h"
 #include <QAction>
 #include <QSettings>
 // EXTRA!!! \TODO es temporal
