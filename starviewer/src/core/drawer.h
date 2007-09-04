@@ -201,9 +201,16 @@ public:
     ///passa a conjunt en estat seleccionat el que està com a més proper: highlight -> Selected. A més li canvia el color.
     void selectNearestSet();
 
+    ///deselecciona el conjunt que està en estat de selecció
+    void unselectSet();
+
+    ///ens diu si hi ha algun conjunt seleccionat
+    bool hasSelectedSet()
+    { return( m_selectedSet != NULL ); }
+
     ///ens diu si hi ha algun conjunt marcat com el més proper
     bool hasNearestSet()
-    { return( !m_nearestSet->isEmpty() ); }
+    { return( m_nearestSet && !m_nearestSet->isEmpty() ); }
     
 public slots:
     /// Elimina totes les annotacions dels multimaps
