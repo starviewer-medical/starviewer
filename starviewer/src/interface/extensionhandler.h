@@ -16,11 +16,8 @@ class QProgressDialog;
 namespace udg {
 
 // Fordward Declarations
-class VolumeRepository;
 class QApplicationMainWindow;
-class Volume;
 class PatientFillerInput;
-class Input;
 
 // Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
@@ -77,15 +74,9 @@ private:
     /// carrega una nova pestanya amb l'extensió de 2DViewer
     void load2DViewerExtension();
 
-    /// Crea el diàleg de progrés al carregar un Volume.
-    QProgressDialog* activateProgressDialog( Input *input );
-
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
-
-    /// El repository de volums
-    VolumeRepository *m_volumeRepository;
 
     /// Importar models del sistema de fitxers al repositori de volums
     AppImportFile *m_importFileApp;

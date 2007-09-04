@@ -10,12 +10,10 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QProgressDialog>
-#include <QMessageBox>
 // recursos
-#include "volumerepository.h"
+#include "logging.h"
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
-#include "volumesourceinformation.h"
 
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
@@ -29,8 +27,6 @@
 
 // PACS --------------------------------------------
 #include "queryscreen.h"
-#include "seriesvolum.h"
-#include "input.h"
 #include "patientfiller.h"
 
 namespace udg {
@@ -39,7 +35,6 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
  : QObject(parent )
 {
     this->setObjectName( name );
-    m_volumeRepository = VolumeRepository::getRepository();
     m_mainApp = mainApp;
 
     // Aquí en principi només farem l'inicialització
@@ -129,21 +124,6 @@ void ExtensionHandler::load2DViewerExtension()
     connect( m_importFileApp, SIGNAL(openKeyImageNote( const QString& )), defaultViewerExtension, SLOT(loadKeyImageNote( const QString& )));
     connect( m_importFileApp, SIGNAL(openPresentationState( const QString& )),
              defaultViewerExtension, SLOT(loadPresentationState( const QString& )));
-}
-
-QProgressDialog* ExtensionHandler::activateProgressDialog( Input *input )
-{
-    QProgressDialog *progressDialog = new QProgressDialog( m_mainApp );
-    progressDialog->setModal( true );
-    progressDialog->setRange( 0 , 100 );
-    progressDialog->setMinimumDuration( 0 );
-    progressDialog->setWindowTitle( tr("Serie loading") );
-    // atenció: el missatge triga una miqueta a aparèixer...
-    progressDialog->setLabelText( tr("Loading, please wait...") );
-    progressDialog->setCancelButton( 0 );
-    connect( input , SIGNAL( progress(int) ) , progressDialog , SLOT( setValue(int) ) );
-
-    return progressDialog;
 }
 
 void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
