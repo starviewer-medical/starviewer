@@ -1178,6 +1178,11 @@ void Q2DViewer::resetCamera()
     }
 }
 
+int Q2DViewer::getNumberOfSlices()
+{
+    return m_viewer->GetSliceMax();
+}
+
 void Q2DViewer::setSlice( int value )
 {
     if( value < 0 )
