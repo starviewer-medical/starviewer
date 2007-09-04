@@ -318,6 +318,9 @@
        </item>
        <item>
         <widget class="QToolButton" name="m_buttonGrid" >
+         <property name="toolTip" >
+          <string>Series layout</string>
+         </property>
          <property name="text" >
           <string>...</string>
          </property>
@@ -338,7 +341,7 @@
        <item>
         <widget class="QToolButton" name="m_downButtonGrid" >
          <property name="toolTip" >
-          <string>Add Column</string>
+          <string>Series layout</string>
          </property>
          <property name="text" >
           <string>...</string>
@@ -361,147 +364,51 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2" >
+        <widget class="QToolButton" name="m_imageGrid" >
          <property name="toolTip" >
-          <string/>
+          <string>Image layout</string>
          </property>
          <property name="text" >
-          <string/>
+          <string>...</string>
          </property>
-         <property name="pixmap" >
-          <pixmap resource="../../../main/main.qrc" >:/images/verticalWidget.png</pixmap>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
+        <widget class="QToolButton" name="m_downImageGrid" >
+         <property name="toolTip" >
+          <string>Image layout</string>
          </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="m_verticalPlus" >
-           <property name="toolTip" >
-            <string>Add Column</string>
-           </property>
-           <property name="text" >
-            <string>...</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/viewmag+.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>12</width>
-             <height>12</height>
-            </size>
-           </property>
-           <property name="checkable" >
-            <bool>false</bool>
-           </property>
-           <property name="autoRaise" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="m_verticalMinus" >
-           <property name="toolTip" >
-            <string>Remove Column</string>
-           </property>
-           <property name="text" >
-            <string>...</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/viewmag-.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>12</width>
-             <height>12</height>
-            </size>
-           </property>
-           <property name="checkable" >
-            <bool>false</bool>
-           </property>
-           <property name="autoRaise" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3" >
          <property name="text" >
-          <string/>
+          <string>...</string>
          </property>
-         <property name="pixmap" >
-          <pixmap resource="../../../main/main.qrc" >:/images/view_top_bottom.png</pixmap>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/down.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>12</width>
+           <height>12</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="m_horizontalPlus" >
-           <property name="toolTip" >
-            <string>Add Row</string>
-           </property>
-           <property name="text" >
-            <string>...</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/viewmag+.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>12</width>
-             <height>12</height>
-            </size>
-           </property>
-           <property name="checkable" >
-            <bool>false</bool>
-           </property>
-           <property name="autoRaise" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="m_horizontalMinus" >
-           <property name="toolTip" >
-            <string>Remove Row</string>
-           </property>
-           <property name="text" >
-            <string>...</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/viewmag-.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>12</width>
-             <height>12</height>
-            </size>
-           </property>
-           <property name="checkable" >
-            <bool>false</bool>
-           </property>
-           <property name="autoRaise" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <widget class="QToolButton" name="m_voxelInformationToolButton" >

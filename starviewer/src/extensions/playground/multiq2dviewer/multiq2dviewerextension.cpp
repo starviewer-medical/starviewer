@@ -197,12 +197,10 @@ void MultiQ2DViewerExtension::createConnections()
     connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
     connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
 
-    connect( m_verticalPlus , SIGNAL( clicked ( bool ) ) , this , SLOT( addColumns() ) );
-    connect( m_verticalMinus , SIGNAL( clicked ( bool ) ) , this , SLOT( removeColumns() ) );
-    connect( m_horizontalPlus , SIGNAL( clicked ( bool ) ) , this , SLOT( addRows() ) );
-    connect( m_horizontalMinus , SIGNAL( clicked ( bool ) ) , this , SLOT( removeRows() ) );
     connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedGrid() ) );
     connect( m_buttonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveTable() ) );
+    connect( m_downImageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedImageGrid() ) );
+    connect( m_imageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveImageTable() ) );
 
     // window level combo box
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , this , SLOT( setWindowLevel(double,double) ) );
@@ -529,9 +527,20 @@ void MultiQ2DViewerExtension::setPatient( Patient *patient )
 
 void MultiQ2DViewerExtension::showPredefinedGrid()
 {
+    int i;
+    int numberSeries = 0;
+
     MenuGridWidget * menuGrid = new MenuGridWidget();
     menuGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
-    menuGrid->createPredefinedGrids( ((m_patient->getStudies()).value( 0 ))->getNumberOfSeries() );
+
+    QList<Study *> listStudies = m_patient->getStudies();
+
+    for( i = 0; i < listStudies.size(); i++ )
+    {
+        numberSeries += listStudies.value( i )->getNumberOfSeries();
+    }
+
+    menuGrid->createPredefinedGrids( numberSeries );
     menuGrid->show();
 
     connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
@@ -544,6 +553,25 @@ void MultiQ2DViewerExtension::showInteractiveTable()
     tableMenu->show();
 
     connect( tableMenu , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+}
+
+void MultiQ2DViewerExtension::showPredefinedImageGrid()
+{
+    MenuGridWidget * menuGrid = new MenuGridWidget();
+    menuGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    menuGrid->createPredefinedGrids( m_selectedViewer->m_2DView->getNumberOfSlices() );
+    menuGrid->show();
+
+    connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+}
+
+void MultiQ2DViewerExtension::showInteractiveImageTable()
+{
+    TableMenu * tableMenu = new TableMenu();
+    tableMenu->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    tableMenu->show();
+
+    connect( tableMenu , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
 }
 
 }
