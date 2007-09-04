@@ -29,7 +29,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 {
     setupUi( this );
     m_mainVolume = 0;
-    m_secondaryVolume = 0;
     m_keyImageNoteAttacher = NULL;
     m_keyImageNote = NULL;
 
@@ -229,12 +228,6 @@ void Q2DViewerExtension::changeViewToAxial()
     m_currentView = Axial;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-    int secondExtent[6];
-    if( m_secondaryVolume )
-        m_secondaryVolume->getWholeExtent( secondExtent );
-    else
-        m_mainVolume->getWholeExtent( secondExtent );
-
     m_spinBox2_1->setMinimum( extent[4] );
     m_spinBox2_1->setMaximum( extent[5] );
     m_slider2_1->setMaximum( extent[5] );
@@ -249,12 +242,6 @@ void Q2DViewerExtension::changeViewToSagital()
     m_currentView = Sagital;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-    int secondExtent[6];
-    if( m_secondaryVolume )
-        m_secondaryVolume->getWholeExtent( secondExtent );
-    else
-        m_mainVolume->getWholeExtent( secondExtent );
-
     m_spinBox2_1->setMinimum( extent[0] );
     m_spinBox2_1->setMaximum( extent[1] );
     m_slider2_1->setMaximum( extent[1] );
@@ -269,12 +256,6 @@ void Q2DViewerExtension::changeViewToCoronal()
     m_currentView = Coronal;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-    int secondExtent[6];
-    if( m_secondaryVolume )
-        m_secondaryVolume->getWholeExtent( secondExtent );
-    else
-        m_mainVolume->getWholeExtent( secondExtent );
-
     m_spinBox2_1->setMinimum( extent[2] );
     m_spinBox2_1->setMaximum( extent[3] );
     m_slider2_1->setMaximum( extent[3] );

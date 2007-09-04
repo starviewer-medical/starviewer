@@ -61,9 +61,6 @@ private:
     /// El volum principal
     Volume *m_mainVolume;
 
-    /// Membre temporal
-    Volume *m_secondaryVolume;
-
     /// Accions
     QAction *m_axialViewAction;
     QAction *m_sagitalViewAction;
