@@ -23,7 +23,6 @@
 #include <itkTileImageFilter.h>
 
 #include "volume.h"
-#include "volumesourceinformation.h"
 #include "logging.h"
 #include "image.h"
 #include "series.h"
