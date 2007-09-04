@@ -149,14 +149,6 @@ int Input::readSeries( QString dirPath )
     return readFiles( generateFilenames(dirPath) );
 }
 
-int Input::readImages( QList<Image *> imageList )
-{
-    QStringList filenames;
-    foreach( Image *image, imageList )
-        filenames << image->getPath();
-    return this->readFiles( filenames );
-}
-
 QStringList Input::generateFilenames( QString dirPath )
 {
     m_namesGenerator->SetInputDirectory( qPrintable(dirPath) );

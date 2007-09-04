@@ -140,14 +140,6 @@ public:
     Volume* getData() const { return m_volumeData; };
 
     /**
-     * Donada una llista d'imatges ens carrega el corresponent volum. Aquest mètode es ajuda en la transició
-     * per incorporar l'entitat Patient
-     * @param imageList
-     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
-     */
-    int readImages( QList<Image *> imageList );
-
-    /**
      * Ens retorna la llista d'arxius DICOM agrupables en series d'un directori
      * @param directory Nom del directori on es troben els arxius
      * @return La llista de noms de fitxers ordenada
