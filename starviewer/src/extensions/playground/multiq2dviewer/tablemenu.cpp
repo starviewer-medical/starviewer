@@ -22,6 +22,7 @@ TableMenu::TableMenu()
     m_information->setAlignment( Qt::AlignHCenter );
     verticalLayout->addLayout( m_gridLayout,0,0 );
     verticalLayout->addWidget( m_information,1,0 );
+
     ItemMenu * firstItem = new ItemMenu( this );
     firstItem->setFrameShape( QFrame::StyledPanel );
     firstItem->setMinimumSize( 30, 30 );
@@ -30,10 +31,10 @@ TableMenu::TableMenu()
     firstItem->setFixed( true );
     m_itemList->insert( 0, firstItem );
     m_gridLayout->addWidget( firstItem, m_columns, m_rows );
-    m_oldSelected = firstItem;
-    m_information->setText("1x1");
     connect( firstItem , SIGNAL( isActive( ItemMenu * ) ) , this , SLOT( verifySelected( ItemMenu * ) ) );
     connect( firstItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
+
+    m_information->setText("1x1");
 }
 
 TableMenu::~TableMenu()
@@ -86,63 +87,35 @@ void TableMenu::addRow()
 
 void TableMenu::verifySelected( ItemMenu * selected )
 {
-
     ItemMenu * item;
+    int numRow;
+    int numColumn;
 
     QStringList values = ((QString *) selected->getData())->split( "," );
     int rows = values.value( 0 ).toInt();
     int columns = values.value( 1 ).toInt();
 
-    QStringList oldValues = ((QString *) m_oldSelected->getData())->split( "," );
-    int oldRows = oldValues.value( 0 ).toInt();
-    int oldColumns = oldValues.value( 1 ).toInt();
-
     if( rows == m_rows ) addRow(); // Hem d'afegir una fila a la graella
-
-    if( oldRows < rows )
-    {
-        // Marcar com a seleccionades les anteriors
-        int numColumn;
-        for( numColumn = 0; numColumn < columns; numColumn++ )
-        {
-            item = m_itemList->value( rows*(m_columns+1) + numColumn );
-            item->setSelected( true );
-        }
-    }
-    else if( oldRows > rows )// Hem de desmarcar una fila d'elements
-    {
-        int numColumn;
-        for( numColumn = 0; numColumn < m_columns; numColumn++ )
-        {
-            item = m_itemList->value( oldRows*(m_columns+1) + numColumn );
-            item->setSelected( false );
-        }
-    }
-
     if( columns == m_columns ) addColumn(); // Hem d'afegir una columna a la graella
 
-    if( oldColumns < columns )
+    // Marquem i desmarquem les caselles segons la seleccio actual
+    for( numRow = 0; numRow < m_rows; numRow++ ) 
     {
-        // Marcar com a seleccionades les anteriors
-        int numRow;
-        for( numRow = 0; numRow < rows; numRow++ )
+        for( numColumn = 0; numColumn < m_columns; numColumn++ )
         {
-            item = m_itemList->value( numRow*(m_columns+1) + columns );
-            item->setSelected( true );
-        }
-    }
-    else if( oldColumns > columns )// Hem de desmarcar una columna d'elements
-    {
-        int numRow;
-        for( numRow = 0; numRow < m_rows; numRow++ )
-        {
-            item = m_itemList->value( numRow*(m_columns+1) + oldColumns );
-            item->setSelected( false );
-        }
-    }
+            item = m_itemList->value( numRow*(m_columns+1) + numColumn );
 
+            if( numRow <= rows && numColumn <= columns )
+            {
+                item->setSelected( true );
+            }
+            else
+            {
+                item->setSelected( false );
+            }
+        }
+    }
     m_information->setText( QString( tr("%1x%2").arg(columns+1).arg(rows+1) ) );
-    m_oldSelected = selected;
 }
 
 
@@ -168,7 +141,6 @@ void TableMenu::emitSelected( ItemMenu * selected )
 
     emit selectedGrid( rows+1, columns+1 );
     hide();
-
 }
 
 }

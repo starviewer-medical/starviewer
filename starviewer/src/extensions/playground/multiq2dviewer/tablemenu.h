@@ -50,9 +50,6 @@ private:
     /// Llista dels items
     QList<ItemMenu *> * m_itemList;
 
-    /// Ultim element seleccionat
-    ItemMenu * m_oldSelected;
-
     /// Afegir una columna a la taula
     void addColumn();
 
