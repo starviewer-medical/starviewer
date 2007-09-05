@@ -7,87 +7,81 @@ namespace udg {
 
 DeterminateContour::DeterminateContour(ImageType* rea, int proj){
 
-      
+
 	inputImage = rea;
-	
+
 	RegionType reg = inputImage->GetLargestPossibleRegion();
 	SizeType   siz   = reg.GetSize();
-	//std::cout<<"tamanyx,y,y"<<siz[0]<<"y"<<siz[1]<<"z"<<siz[2]<<std::endl;
-	std::cout<<"0"<<std::endl;
-	
-	/*matriu=(int ***)malloc(siz[1]*sizeof(int **)); 
-          for (i=0; i<siz[1]+1; i++){ 
-               matriu[i]=(int **)malloc(siz[2]*sizeof(int *)); 
+
+
+	/*matriu=(int ***)malloc(siz[1]*sizeof(int **));
+          for (i=0; i<siz[1]+1; i++){
+               matriu[i]=(int **)malloc(siz[2]*sizeof(int *));
 		for(j=0;j<siz[2]+1;j++)
 		   matriu[i][j]=(int *)malloc(siz[0]*sizeof(int));
-		} 
+		}
 	*/
 	c = new contorn;
-	
+
 	pSegSli = new float[siz[0]];
 	//atencio amb la direcci�
 	projectionDirection = static_cast<unsigned int>( proj );
 	for (i = 0, j = 0; i < 3; ++i )
 	{
-		
+
 		if (i != projectionDirection)
 		{
 		direction[j] = i;
 		j++;
 		}
 	}
-	
-	
+
+
 	requestedRegion = inputImage->GetRequestedRegion();
-	
-        std::cout<<"1"<<std::endl;
 
 
 	index[ direction[0] ]    = requestedRegion.GetIndex()[ direction[0] ];
 	index[ 1- direction[0] ] = requestedRegion.GetIndex()[ direction[1] ];
 	size[ direction[0] ]     = requestedRegion.GetSize()[  direction[0] ];
 	size[ 1- direction[0] ]  = requestedRegion.GetSize()[  direction[1] ];
-	
+
 	region.SetSize( size );
 	region.SetIndex( index );
-	
-	std::cout<<"2"<<std::endl;
-	
+
 	SliceIteratorType  inputIt(  inputImage,  inputImage->GetRequestedRegion() );
 	inputIt.SetFirstDirection(  direction[1] );
 	inputIt.SetSecondDirection( direction[0] );
-	
+
 	inputIt.GoToBegin();
-	
+
 	float total=0,pixelseg=0,pixelsegsli=0;
 	int x=0,y=0;
 	int slice=0;
         maxX=0;
         maxY=0;
-	
-	std::cout<<"3"<<std::endl;
+
 	while( !inputIt.IsAtEnd() )
 	{
-            //std::cout<<"1. Slice= "<<slice<<std::endl;
+
 
 		while ( !inputIt.IsAtEndOfSlice() )
 		{
 
-                   // std::cout<<"2. X= "<<x<<std::endl;
+
 			while ( !inputIt.IsAtEndOfLine() )
 			{
-                        //std::cout<<"3. Y= "<<y<<std::endl;
+
 			total++;
-                        
+
 			if(inputIt.Get()==255){//255
-		
+
 				matriu[x][y][slice]=1;
 				pixelseg++;
 				pixelsegsli++;
 				}
 			else{matriu[x][y][slice]=0;
 			}
-			//std::cout<<"pixel["<<x<<","<<y<<","<<slice<<"]:"<<inputIt.Get();
+
 			++inputIt;
 			y++;
 			}
@@ -96,68 +90,50 @@ DeterminateContour::DeterminateContour(ImageType* rea, int proj){
 		inputIt.NextLine();
 		x++;
 		}
-		//std::cout<<"DeterminateContour::DeterminateContour-->llesca"<<slice<<std::endl;
+
 	maxX=x;
 	x=0;
 	pSegSli[slice] = pixelsegsli;
 	pixelsegsli = 0;
 	inputIt.NextSlice();
 	slice++;
-	
+
 	}
 
-        std::cout<<"4"<<std::endl;
+
 	pTotals = total;
 	pSegmen = pixelseg;
 	maxSlices = slice;
-	//std::cout<<"DeterminateContour::Entraconstructor,maxslices"<<maxSlices<<"PixelsSeg:"<<pSegmen<<std::endl;
+
 	slice=0;
 	y=0;
 	x=0;
 	bool trobat=false;
 	quanteslices=0;
-	
-        std::cout<<"maxSlices: "<<maxSlices<<std::endl;
-        std::cout<<"maxY: "<<maxY<<std::endl;
-        std::cout<<"maxX: "<<maxX<<std::endl;
+
 
 	while(slice<maxSlices){
 		while((y<=maxY)&&(!trobat)){
-		//std::cout<<"matriu[X,"<<y<<","<<slice<<"]=";
+
 			while((x<=maxX)&&(!trobat)){
-			//std::cout<<"entra:x"<<x<<"y:"<<y<<"slice"<<slice<<std::endl;
+
 				if(matriu[x][y][slice]==1){
 					trobat=true;
 				}
 			         x++;
-                               //PROVA
-                                /*if(quanteslices>16){
-                                std::cout<<"X: "<<x<<std::endl;
-                                }*/
 			}
-		
+
 		if(!trobat){
 			x=0;
-		}	
-		//std::cout<<std::endl;	
+		}
+
 		y++;
 	        }
 	        if(!trobat)y=0;
 	        else{
-                //ferreseguit(x,y,slice);
-            // if(quantes<2){
-                // std::cout<<"Trobat:x:"<<x<<",y:"<<y<<",z:"<<slice<<std::endl;
-                    //std::cout<<"QuantesSlice: "<<slice<<std::endl;
                     ferreseguit(x-1,y-1,slice);
-                    //std::cout<<"acaba"<<std::endl;
-                    /*for(int i=0;i<100;i++){
-                            std::cout<<"deter3trobat["<<i<<"][0]:"<<c->npslice[i][0]<<std::endl;
-                            std::cout<<"deter3trobat["<<i<<"][1]:"<<c->npslice[i][1]<<std::endl;
-                    }*/
                     quanteslices++;
-                    //std::cout<<"QuantesSlice: "<<quanteslices<<std::endl;
-                //}
-                    
+
                 x=0;
                 y=0;
                 trobat=false;
@@ -165,39 +141,30 @@ DeterminateContour::DeterminateContour(ImageType* rea, int proj){
 	        slice++;
 	}
 
-        std::cout<<"5"<<std::endl;
+
 	npuntstot=0;
 	c->np=quanteslices;
-	
-		  
-	//destruim la matriu  
-	/*for (i=0; i<siz[1]+1; i++){ 
-              for(j=0;j<siz[2]+1;j++){
-		   delete matriu[i][j];
-		   }
-		delete matriu[i]; 
-	}
-	delete matriu;
-	*/
+
+
 }
 DeterminateContour::~ DeterminateContour(){
 }
 float DeterminateContour::GetPixelT(){
-	//std::cout<<"DeterminateContour::GetPixelT-->Totals:"<<pTotals<<std::endl;
+
 	return pTotals;
 }
 
 float DeterminateContour::GetPixelS(){
 	return pSegmen;
 }
-  
+
 float DeterminateContour::GetPixelSSli(int ind){
 	if(ind<maxSlices)
 		return pSegSli[ind];
 	else
 		return -1;
-		
-	
+
+
 }
 void DeterminateContour::ferreseguit(int x, int y, int slice){
 
@@ -210,23 +177,10 @@ void DeterminateContour::ferreseguit(int x, int y, int slice){
 	int aux=0,npunts=0;
 	int comencament=npuntstot;
 	int prova=0;
-	//int k,l;
-	////////////////////////
-	/*for(k=0;k<=maxY;k++){
-		for(l=0;l<=maxX;l++){
-			std::cout<<matriu[l][k][slice];
-		if(matriu[l][k][slice]!=0){
-			std::cout<<"x:"<<l<<"y:"<<k<<std::endl;
-			}
-		}
-		std::cout<<std::endl;
-	}*/
-	
-	///////////////////////////////
-	//std::cout<<"inicial:0->"<<inicial[0]<<":1->"<<inicial[1]<<std::endl;
+
 	do{
 		if(anterior==1){//dins
-			
+
 			if(movant[0]==1){
 				movant[1]++;
 			}
@@ -235,30 +189,29 @@ void DeterminateContour::ferreseguit(int x, int y, int slice){
 				movant[1]=0;
 			}
 			if(movant[1]==2){
-			      //std::cout<<"recte->"<<direccio<<std::endl;
+
 				switch(direccio){
 				case 1:
 					actual[1]=actual[1]-1;
-					
+
 				break;
 				case 2:
 					actual[0]=actual[0]+1;
-					
+
 				break;
 				case 3:
 					actual[1]=actual[1]+1;
-					
+
 				break;
 				case 4:
 					actual[0]=actual[0]-1;
-				
+
 				break;
 				}
 				movant[1]=0;
 			}
 			else{
-			//std::cout<<"giresquerra"<<std::endl;
-				
+
 			switch(direccio){
 				case 1:
 					actual[0]=actual[0]-1;
@@ -280,8 +233,8 @@ void DeterminateContour::ferreseguit(int x, int y, int slice){
 			}
 		}
 		else{
-		
-		
+
+
 			if(movant[0]==0){
 				movant[1]++;
 			}
@@ -290,29 +243,27 @@ void DeterminateContour::ferreseguit(int x, int y, int slice){
 				movant[1]=0;
 			}
 			if(movant[1]==2){
-			//std::cout<<"recte"<<direccio<<std::endl;
 				switch(direccio){
 				case 1:
 					actual[1]=actual[1]-1;
-					
+
 				break;
 				case 2:
 					actual[0]=actual[0]+1;
-					
+
 				break;
 				case 3:
 					actual[1]=actual[1]+1;
-					
+
 				break;
 				case 4:
 					actual[0]=actual[0]-1;
-				
+
 				break;
 				}
 				movant[1]=0;
-			}     
+			}
 			else{
-			//std::cout<<"girdreta"<<std::endl;
 			switch(direccio){
 					case 1:
 						actual[0]=actual[0]+1;
@@ -332,45 +283,39 @@ void DeterminateContour::ferreseguit(int x, int y, int slice){
 					break;
 				}
 			}
-	
-			
+
+
 		}
-		//std::cout<<"actual:0->"<<actual[0]<<":1->"<<actual[1]<<":slice"<<slice<<"valor:"<<matriu[actual[0]][actual[1]][slice]<<std::endl;
-		
+
+
                 if(((anterior==0)&&(matriu[actual[0]][actual[1]][slice]==1))||((anterior==1)&&(matriu[actual[0]][actual[1]][slice]==1))){
-			//std::cout<<"afegirm actual["<<npuntstot<<"]-x:"<<actual[0]<<"y:"<<actual[1]<<"z:"<<slice<<std::endl;
-		        c->x[npuntstot]=actual[0];
+        c->x[npuntstot]=actual[0];
 			c->y[npuntstot]=actual[1];
 			c->z[npuntstot]=slice;
 			npuntstot++;
 			npunts++;
-			
+
 		}
 		anterior=matriu[actual[0]][actual[1]][slice];
-		//std::cout<<"Estat:"<<anterior<<"x:"<<actual[0]<<"y:"<<actual[1]<<std::endl;
+
 		aux++;
 		if(aux==2){
 			evitabucleinf[0]=x;
 			evitabucleinf[1]=y-1;
 		}
-	
+
         prova++;
-       /* if(slice>=82){
-        std::cout<<"SLICE: "<<slice<<std::endl;
-        //std::cout<<"Prova: "<<prova<<std::endl;
-        std::cout<<"actual: "<<actual[0]<<","<<actual[1]<<std::endl;
-        }*/
 
 
-        //}while((((actual[0]!=inicial[0])||(actual[1]!=inicial[1]))&&((actual[0]!=evitabucleinf[0])||(actual[1]!=evitabucleinf[1]))));//&&(npuntstot<20000)
-        }while((((actual[0]!=inicial[0])||(actual[1]!=inicial[1]))&&((actual[0]!=evitabucleinf[0])||(actual[1]!=evitabucleinf[1]))/*&&((actual[0]<181)||(actual[1]<181)||(slice<83))*/));//&&(npuntstot<20000)
+
+
+        }while((((actual[0]!=inicial[0])||(actual[1]!=inicial[1]))&&((actual[0]!=evitabucleinf[0])||(actual[1]!=evitabucleinf[1]))
+        ));
 	c->npslice[quanteslices][0]=npunts;
 	c->npslice[quanteslices][1]=slice;
 	c->npslice[quanteslices][2]=comencament;
-	//std::cout<<"slice:"<<slice<<"punts:"<<npunts<<"quanteslices:"<<quanteslices<<std::endl;
-	//std::cout<<"trobatslices"<<c->npslice[quanteslices][0]<<std::endl;
-	
-	
+
+
 }
 
 

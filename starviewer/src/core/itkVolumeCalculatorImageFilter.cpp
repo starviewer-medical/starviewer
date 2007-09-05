@@ -151,7 +151,6 @@ VolumeCalculatorImageFilter<TInputImage>
 
   // support progress methods/callbacks
   ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  std::cout<<"Num pixels region:" << outputRegionForThread.GetNumberOfPixels()<<std::endl;
 
   // do the work
   while (!it.IsAtEnd())

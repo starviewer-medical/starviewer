@@ -38,6 +38,7 @@
 #include "itkRegistre3DAffine.h"
 #include "udgPerfusionEstimator.h"
 #include "udgBinaryMaker.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -409,7 +410,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
 
 void QDifuPerfuSegmentationExtension::moveViewerSplitterToLeft(  )
 {
-    std::cout<<"Move L"<<std::endl;
+    DEBUG_LOG("Move L");
     QList<int> splitterSize = m_viewerSplitter->sizes();
     int suma = splitterSize[0]+splitterSize[1];
     splitterSize[0]=0;
@@ -419,7 +420,7 @@ void QDifuPerfuSegmentationExtension::moveViewerSplitterToLeft(  )
 
 void QDifuPerfuSegmentationExtension::moveViewerSplitterToRight(  )
 {
-    std::cout<<"Move R"<<std::endl;
+    DEBUG_LOG("Move R");
     QList<int> splitterSize = m_viewerSplitter->sizes();
     int suma = splitterSize[0]+splitterSize[1];
     splitterSize[0]=suma;
@@ -429,7 +430,7 @@ void QDifuPerfuSegmentationExtension::moveViewerSplitterToRight(  )
 
 void QDifuPerfuSegmentationExtension::moveViewerSplitterToCenter(  )
 {
-    std::cout<<"Move C"<<std::endl;
+    DEBUG_LOG("Move C");
     QList<int> splitterSize = m_viewerSplitter->sizes();
     int suma = splitterSize[0]+splitterSize[1];
     splitterSize[0]=suma/2;
@@ -455,16 +456,16 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     ItkImageType::RegionType region = inputImage->GetLargestPossibleRegion();
     ItkImageType::RegionType::SizeType size = region.GetSize();
     size[2] /= total;
-//     std::cout << "size: " << size << std::endl;
-//     std::cout << "region: " << region << std::endl;
+//     DEBUG_LOG( "size: " << size );
+//     DEBUG_LOG( "region: " << region );
     region.SetSize( size );
 
     /// \warning Posem l'espaiat en Z a 7!!
     ItkImageType::SpacingType spacing = inputImage->GetSpacing();
-//     std::cout << "spacing before: " << spacing << std::endl;
+//     DEBUG_LOG( "spacing before: " << spacing );
 //     spacing[2] *= total;
     spacing[2] = 7.0;
-//     std::cout << "spacing after: " << spacing << std::endl;
+//     DEBUG_LOG( "spacing after: " << spacing );
 
 
     ItkImageType::Pointer diffusionImage = ItkImageType::New();
@@ -623,8 +624,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     ItkImageType::RegionType region = inputImage->GetLargestPossibleRegion();
     ItkImageType::RegionType::SizeType size = region.GetSize();
     size[2] /= total;
-//     std::cout << "size: " << size << std::endl;
-//     std::cout << "region: " << region << std::endl;
+//     DEBUG_LOG( "size: " << size );
+//     DEBUG_LOG( "region: " << region );
     region.SetSize( size );
 
 
@@ -905,9 +906,9 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
     ItkImageType::Pointer movingImage = m_perfusionMainVolume->getItkData();
 
 //     ItkImageType::SpacingType fixedSpacing = fixedImage->GetSpacing();
-//     std::cout << "fixed spacing = " << fixedSpacing << std::endl;
+//     DEBUG_LOG( "fixed spacing = " << fixedSpacing );
 //     ItkImageType::SpacingType movingSpacing = movingImage->GetSpacing();
-//     std::cout << "moving spacing = " << movingSpacing << std::endl;
+//     DEBUG_LOG( "moving spacing = " << movingSpacing );
 
     itkRegistre3DAffine< ItkImageType, ItkImageType > registre;
     registre.SetInputImages( fixedImage, movingImage );
@@ -1078,15 +1079,15 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
     blackpointEstimator.SetPerfuImage( m_perfusionRescaledVolume->getItkData() );
     blackpointEstimator.SetVentricleMask( rescaler2->GetOutput() );
     blackpointEstimator.SetStrokeMask( rescaler3->GetOutput() );
-    std::cout << "pas1" << std::endl;
+    DEBUG_LOG( "pas1" );
 
     // Aquí apliquem la transformació que ens ha donat el registre
     blackpointEstimator.SetTransform( m_registerTransform );
-    std::cout << "pas2" << std::endl;
+    DEBUG_LOG( "pas2" );
     blackpointEstimator.ComputeEstimation();
-    std::cout << "pas3" << std::endl;
+    DEBUG_LOG( "pas3" );
     Volume::ItkImageTypePointer perfuEstimatorImageResult = blackpointEstimator.GetEstimatedImage();
-    std::cout << "pas4" << std::endl;
+    DEBUG_LOG( "pas4" );
 
 
     m_blackpointEstimatedVolume = new Volume();
@@ -1105,15 +1106,15 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
 
 //     Volume * resultat = new Volume();
-//     std::cout << "volum creat" << std::endl;
+//     DEBUG_LOG( "volum creat" );
 //     resultat->setData( perfuEstimatorImageResult );
-//     std::cout << "data set" << std::endl;
+//     DEBUG_LOG( "data set" );
 //     Q2DViewerExtension * win = new Q2DViewerExtension();
-//     std::cout << "extensió creada" << std::endl;
+//     DEBUG_LOG( "extensió creada" );
 //     win->setInput( resultat );
-//     std::cout << "input set" << std::endl;
+//     DEBUG_LOG( "input set" );
 //     win->show();
-//     std::cout << "showed" << std::endl;
+//     DEBUG_LOG( "showed" );
 
     QApplication::restoreOverrideCursor();
 
@@ -1130,8 +1131,7 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     ItkImageType::PointType seedPoint( m_seedPosition );
     ItkImageType::IndexType seedIndex;
     m_blackpointEstimatedVolume->getItkData()->TransformPhysicalPointToIndex( seedPoint, seedIndex );
-    std::cout << "seedPosition: [" << m_seedPosition[0] << ", " << m_seedPosition[1] << ", "
-              << m_seedPosition[2] << "]" << std::endl;
+    DEBUG_LOG( QString("seedPosition: [%1,%2,%3]").arg(m_seedPosition[0]).arg(m_seedPosition[1]).arg(m_seedPosition[2]) );
     std::cout << "seedPoint: " << seedPoint << std::endl;
     std::cout << "seedIndex: " << seedIndex << std::endl;
 
@@ -1228,7 +1228,7 @@ void QDifuPerfuSegmentationExtension::leftButtonEventHandler( )
 
     if(m_editorToolButton->isChecked())
     {
-        //std::cout<<"Editor Tool"<<std::endl;
+        //DEBUG_LOG("Editor Tool");
         m_diffusion2DView->disableTools();
         setEditorPoint(  );
     }
@@ -1488,7 +1488,7 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask()
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
     index[2]=m_diffusion2DView->getSlice();
-    //std::cout<<"Esborrant llesca "<<index[2]<<std::endl;
+    //DEBUG_LOG("Esborrant llesca "<<index[2]);
     for(i=ext[0];i<=ext[1];i++)
     {
         for(j=ext[2];j<=ext[3];j++)
@@ -1537,7 +1537,7 @@ void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int
         int* value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
         if ((*value) != m_diffusionMinValue)
         {
-            //std::cout<<m_outsideValue<<" "<<m_insideValue<<"->"<<(*value)<<std::endl;
+            //DEBUG_LOG(m_outsideValue<<" "<<m_insideValue<<"->"<<(*value));
             (*value)= m_diffusionMinValue;
             //(*m_activedCont)--;
             eraseRegionMaskRecursive( a+1, b, c);

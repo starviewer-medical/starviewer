@@ -43,7 +43,7 @@
 #include "itkResampleImageFilter.h"
 #include "itkAffineTransform.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
-
+#include "logging.h"
 
 namespace udg {
 
@@ -129,9 +129,9 @@ double StrokeSegmentationMethod::applyMethod()
     m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
     connectedThreshold->SetSeed( seedIndex );
 
-    std::cout<<"Init filter"<<std::endl;
+    DEBUG_LOG("Init filter");
     std::cout<<"Parameters: "<<seedIndex<<std::endl;
-    std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
+    DEBUG_LOG( QString("Histogram parameters: %1,%2").arg(m_lowerThreshold).arg(m_upperThreshold) );
 
     typedef itk::VolumeCalculatorImageFilter< Volume::ItkImageType > VolumeCalcFilterType;
     VolumeCalcFilterType::Pointer volumeCalc= VolumeCalcFilterType::New();
@@ -151,7 +151,7 @@ double StrokeSegmentationMethod::applyMethod()
 
     m_volume = volumeCalc->GetVolume();
     m_cont = volumeCalc->GetVolumeCount();
-    std::cout<<"MCONT>"<<m_cont<<std::endl;
+    DEBUG_LOG( QString("MCONT>%1").arg(m_cont) );
 
     //m_Mask->setData( outcaster->GetOutput());
     m_Mask->setData( volumeCalc->GetOutput() );
@@ -174,7 +174,7 @@ double StrokeSegmentationMethod::applyMethodVTK()
     imageThreshold->ThresholdBetween( m_lowerThreshold,  m_upperThreshold);
     imageThreshold->SetInValue( m_insideMaskValue-100 );
     imageThreshold->SetOutValue( m_outsideMaskValue );
-    std::cout<<"min: "<<m_insideMaskValue<<", mout: "<<m_outsideMaskValue<<std::endl;
+    DEBUG_LOG( QString("min: %1, mout: %2").arg(m_insideMaskValue).arg(m_outsideMaskValue) );
     imageThreshold->Update();
     vtkImageData* imMask = imageThreshold->GetOutput();
 
@@ -183,11 +183,11 @@ double StrokeSegmentationMethod::applyMethodVTK()
     index[0]=(int)(((double)m_px-origin[0])/spacing[0]);
     index[1]=(int)(((double)m_py-origin[1])/spacing[1]);
     index[2]=(int)(((double)m_pz-origin[2])/spacing[2]);
-    std::cout<<"Tractant llesca "<<index[2]<<std::endl;
+    DEBUG_LOG(QString("Tractant llesca %1").arg(index[2]));
 
     applyMethodVTKRecursive(imMask, index[0],index[1],index[2], 0);
 
-    std::cout<<"Tractant llesca "<<index[2]<<std::endl;
+    DEBUG_LOG(QString("Tractant llesca %1").arg(index[2]));
 
     m_Mask->setData(imMask);
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
@@ -220,7 +220,7 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
 
 double StrokeSegmentationMethod::applyCleanSkullMethod()
 {
-    std::cout<<"Clean Skull!!"<<std::endl;
+    DEBUG_LOG("Clean Skull!!");
   typedef itk::BinaryThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType >  ThresholdFilterType;
   typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType,Volume::VDimension> StructuringElementType;
   typedef itk::BinaryErodeImageFilter<Volume::ItkImageType,Volume::ItkImageType,StructuringElementType > ErodeFilterType;
