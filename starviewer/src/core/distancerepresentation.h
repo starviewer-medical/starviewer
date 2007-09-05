@@ -67,6 +67,10 @@ public:
     ///permet avisar per tal de refrescar el text i el voltant del text
     void refreshText( int view );
     
+    ///permet avisar per tal de refrescar el polígon
+    void refreshPolygon()
+    { m_polygon->refreshPolygon(); }
+    
     ///fa que l'atribut DistanceToolData calculi el text de la distància i la posició del mateix
     void calculateTextAndPositionOfDistance( int view );
     

@@ -170,6 +170,9 @@ void DistanceRepresentation::refreshText( int view )
     
     //refresquem el text
     m_text->refreshText();
+    
+    //refresquem el fons del text
+    m_polygon->refreshPolygon();
 }
 
 };  // end namespace udg
