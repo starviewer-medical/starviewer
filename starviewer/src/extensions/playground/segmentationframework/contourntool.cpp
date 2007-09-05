@@ -8,7 +8,6 @@
 #include "volume.h"
 #include "q2dviewer.h"
 #include "iostream.h"
-//#include <determinatecontour.h>
 #include <llescacontorn.h>
 #include <llenca.h>
 #include "logging.h"
@@ -23,7 +22,6 @@
 #include <vtkProperty.h>
 #include <vtkPolyData.h>
 
-
 namespace udg {
 
 class vtkSWCallback : public vtkCommand
@@ -31,27 +29,20 @@ class vtkSWCallback : public vtkCommand
 
 public:
   static vtkSWCallback *New()
-    { return new vtkSWCallback; 
-    
+    { return new vtkSWCallback;
+
     }
   virtual void Execute(vtkObject *caller, unsigned long, void*)
     {
       vtkSplineWidget *spline = reinterpret_cast<vtkSplineWidget*>(caller);
       ll->fesllenca(spline->GetSummedLength());
-     
-    
-
-
     }
   vtkSWCallback():Poly(0){};
   vtkPolyData* Poly;
   llenca* ll;
 };
 
-
-
 ContournTool::ContournTool( Q2DViewer *viewer, Volume * seg,QObject *parent )
-
 {
     m_state = NONE;
     m_2DViewer = viewer;
@@ -62,26 +53,18 @@ ContournTool::ContournTool( Q2DViewer *viewer, Volume * seg,QObject *parent )
     m_spline = vtkSplineWidget::New();
     m_areaSpline=new AreaSpline();
     m_calculat = false;
-    
-    
+
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
     connect( m_2DViewer , SIGNAL( viewChanged(int) ) , this , SLOT( viewChanged(int) ) );
     connect( m_2DViewer , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleEvent(unsigned long) ) );
-    
-    setContourn();
-    
-    
-}
 
+    setContourn();
+}
 
 ContournTool::~ContournTool()
 {
 
-     //m_spline->Off();
-     //m_spline->Delete();
-
 }
-
 
 void ContournTool::handleEvent( unsigned long eventID )
 {
@@ -89,15 +72,12 @@ void ContournTool::handleEvent( unsigned long eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
         getCoords();
-        //std::cout<<"HE FET CLICK"<<std::endl;
     break;
 
     case vtkCommand::MouseMoveEvent:
-        //doContouring();
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        //endContouring();
     break;
 
     default:
@@ -105,38 +85,31 @@ void ContournTool::handleEvent( unsigned long eventID )
     }
 }
 
-void ContournTool::getCoords(){
+void ContournTool::getCoords()
+{
+    m_2DViewer->getCurrentCursorPosition(m_seedPosition);
 
-m_2DViewer->getCurrentCursorPosition(m_seedPosition);
-
-int slice=m_2DViewer->getSlice();
-doContouring(slice);
-
+    int slice=m_2DViewer->getSlice();
+    doContouring(slice);
 }
-
-
-
-
-
-
 
 void ContournTool::setContourn( )
 {
-   
+
     m_state=CONTOURING;
-    
+
     xt=((ImageType*)m_seg->getItkData())->GetSpacing()[1];
     yt=((ImageType*)m_seg->getItkData())->GetSpacing()[2];
     zt=((ImageType*)m_seg->getItkData())->GetSpacing()[0];
-    
+
 
     vtkProperty *prop=vtkProperty::New();
     m_spline->SetPriority(1.0);
     m_spline->SetInteractor(m_2DViewer->getInteractor());
     m_spline->ProjectToPlaneOn();
-    
+
     prop->SetPointSize(0.05);
-    
+
     prop->SetColor(1,0,0);
     m_spline->SetHandleProperty(prop);
 
@@ -144,15 +117,15 @@ void ContournTool::setContourn( )
     m_spline->GetPolyData(poly);
     l = new llenca();
     connect(l,SIGNAL(e(double)),this,SLOT(changespline(double )));
-    
-  
+
+
     vtkSWCallback* swcb =vtkSWCallback::New();
     swcb->Poly = poly;
     swcb->ll = l;
 
     m_spline->AddObserver(vtkCommand::InteractionEvent,swcb);
 
-  
+
 
      if(!m_calculat){
      QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -160,7 +133,7 @@ void ContournTool::setContourn( )
      m_conSagital=new LlescaContorn((ImageType*)m_seg->getItkData(),1);
       ///AXIAL
      m_conAxial=new LlescaContorn((ImageType*)m_seg->getItkData(),2);
-     ///CORONAL 
+     ///CORONAL
      m_conCoronal = new LlescaContorn((ImageType*)m_seg->getItkData(),0);
      m_calculat=true;
      QApplication::restoreOverrideCursor();
@@ -182,23 +155,23 @@ switch( m_2DViewer->getView() )
             m_conAxial->ObtenirContorn(slice , (int) m_seedPosition[0], (int) m_seedPosition[1]);
             if(m_conAxial->ItsFinish()){
             DibuixaSpline();
-            }else{std::cout<<"no estic"<<std::endl;}
-           
-          
+            }
+
+
             break;
             case Sagital:
 
             m_seedSlice=slice;
             m_conSagital->ObtenirContorn(slice , (int) m_seedPosition[0], (int) m_seedPosition[2]);
             DibuixaSpline();
-            
+
             break;
             case Coronal:
 
             m_seedSlice=slice;
             m_conCoronal->ObtenirContorn(slice , (int) m_seedPosition[1], (int) m_seedPosition[2]);
             DibuixaSpline();
-            
+
 
             break;
             }
@@ -215,50 +188,50 @@ m_2DViewer->getInteractor()->Render();
 switch( m_2DViewer->getView() )
             {
             case Axial:
-            
+
             m_lastView=m_2DViewer->getView();
             m_spline->SetProjectionPosition(m_seedSlice-1);
             m_spline->SetProjectionNormal(2);
 
             if(m_conAxial->c->puntsContorn>=3){
-                                
+
 					m_spline->SetNumberOfHandles(m_conAxial->c->puntsContorn);
-                         
+
 					for(int j=0;j<m_conAxial->c->puntsContorn;j++){
-						
+
                                                 m_spline->SetHandlePosition(j,(m_conAxial->c->x[j])*zt,(m_conAxial->c->y[j])*xt,0);//spacing
-						
+
 					}
 				}
             m_spline->On();
             m_spline->ClosedOn();
             m_2DViewer->getInteractor()->Render();
 
-          
-          
+
+
             break;
             case Sagital:
 
-           
+
             m_lastView=m_2DViewer->getView();
             m_spline->SetProjectionPosition(m_seedSlice-1);
             m_spline->SetProjectionNormal(1);
 
             if(m_conSagital->c->puntsContorn>=3){
-                                
+
 					m_spline->SetNumberOfHandles(m_conSagital->c->puntsContorn);
-                         
+
 					for(int j=0;j<m_conSagital->c->puntsContorn;j++){
 						//m_spline->SetHandlePosition(k,0,(m_con->c->x[j])*m_con->c->xt,(m_con->c->y[j])*m_con->c->yt);//spacing
                                                 m_spline->SetHandlePosition(j,(m_conSagital->c->x[j])*zt,0,(m_conSagital->c->y[j])*xt);//spacing
-						
+
 					}
 				}
             m_spline->On();
             m_spline->ClosedOn();
             m_2DViewer->getInteractor()->Render();
-            
-          
+
+
             break;
             case Coronal:
 
@@ -267,18 +240,18 @@ switch( m_2DViewer->getView() )
             m_spline->SetProjectionNormal(0);
 
             if(m_conCoronal->c->puntsContorn>=3){
-                                
+
 					m_spline->SetNumberOfHandles(m_conCoronal->c->puntsContorn);
-                      
+
 					for(int j=0;j<m_conCoronal->c->puntsContorn;j++){
 						//m_spline->SetHandlePosition(k,0,(m_con->c->x[j])*m_con->c->xt,(m_con->c->y[j])*m_con->c->yt);//spacing
                                                 m_spline->SetHandlePosition(j,0,(m_conCoronal->c->x[j])*zt,(m_conCoronal->c->y[j])*xt);//spacing
-						
+
 					}
 				}
             m_spline->On();
             m_spline->ClosedOn();
-            m_2DViewer->getInteractor()->Render(); 
+            m_2DViewer->getInteractor()->Render();
             break;
             }
 
@@ -300,7 +273,7 @@ void ContournTool::sliceChanged( int s )
         m_spline->Off();
         m_2DViewer->getInteractor()->Render();
         doContouring();
-        
+
     }*/
 
 }
@@ -310,30 +283,30 @@ void ContournTool::viewChanged( int s )
 {
     /*if(m_lastView!=s)
     {
-        
+
         m_spline->Off();
         m_2DViewer->getInteractor()->Render();
         doContouring();
-       
+
     }
     else{ m_2DViewer->getInteractor()->Render(); }*/
-   
+
 }
 
 double ContournTool::getLength( )
 {
     double area=0;
-    
+
     m_areaSpline->CalculateArea(m_spline,m_lastView);
     area=m_areaSpline->getArea();
-    
+
     return(area);
-  
-   
+
+
 }
 
 void ContournTool::changespline(double j){
-        
+
         double length=getLength();
         emit actualspline(length);
 }

@@ -96,7 +96,7 @@ CurvatureFlowImageFilterType::Pointer smooth = CurvatureFlowImageFilterType::New
 
     /// Execuci� de la segmentaci�
     //INFO_LOG("****START: SEGMENTACIO CONFIDENCE CONNECTED****** ");
-    //std::cout << "****START: SEGMENTACIO CONFIDENCE CONNECTED****** " << std::endl;
+
     try
     {
         m_casterOutput->Update();

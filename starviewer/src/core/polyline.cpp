@@ -23,8 +23,7 @@ Polyline::~Polyline()
 
 void Polyline::addPoint( Point point )
 {
-    
-//     cout<<point.getX()<<" " << point.getY()<<" " << point.getZ()<<endl;
+
     m_polylinePoints.push_back( point );
 }
 
@@ -37,73 +36,73 @@ void Polyline::removeLastPoint()
 {
     m_polylinePoints.pop_back();
 }
-    
+
 void Polyline::removeFirstPoint()
 {
     m_polylinePoints.erase( m_polylinePoints.begin() );
 }
-    
+
 void Polyline::removePointOfPosition( unsigned int index )
-{    
+{
     if ( index < m_polylinePoints.size()-1 )
     {
         it = m_polylinePoints.begin();
-        
+
         for (unsigned int i = 0; i < index; i++)
             it++;
-        
+
         m_polylinePoints.erase( it );
     }
-}    
+}
 
 Point Polyline::getFirstPoint()
 {
-    it = m_polylinePoints.begin();  
+    it = m_polylinePoints.begin();
     return ( *it );
 }
-    
+
 Point Polyline::getLastPoint()
 {
-    it = m_polylinePoints.end();  
+    it = m_polylinePoints.end();
     return ( *it );
 }
-    
+
 Point Polyline::getPointOfPosition( unsigned int index )
 {
     if (index < m_polylinePoints.size())
     {
         it = m_polylinePoints.begin();
-        
+
         for (unsigned int i = 0; i < index; i++)
             it++;
-        
+
         return (*it);
     }
-    else 
+    else
         return 0;
 }
 
 void Polyline::goToBegin()
 {
-    it = m_polylinePoints.begin(); 
-}    
+    it = m_polylinePoints.begin();
+}
 
 void Polyline::goToEnd()
 {
-    it = m_polylinePoints.end(); 
-}    
+    it = m_polylinePoints.end();
+}
 
 void Polyline::next()
 {
     if ( it < m_polylinePoints.end() )
         it++;
-}   
+}
 
 void Polyline::previous()
 {
     if ( it > m_polylinePoints.begin() )
         it--;
-}    
+}
 
 Point Polyline::getCurrentPoint()
 {
@@ -125,14 +124,14 @@ double Polyline::getDistance2D()
     double valor = 0;
     double xx;
     double yy;
-    
-    if ( m_polylinePoints.size() == 2 ) 
+
+    if ( m_polylinePoints.size() == 2 )
     {
         xx = ( getPointOfPosition( 1 ).getX() - getPointOfPosition( 0 ).getX() );
         yy = ( getPointOfPosition( 1 ).getY() - getPointOfPosition( 0 ).getY() );
         valor = pow( xx, 2 ) + pow( yy, 2 );
     }
-    else if ( m_polylinePoints.size() > 2 ) 
+    else if ( m_polylinePoints.size() > 2 )
     {
         //per cada parell de punts calculem la distància euclidiana i incrementem la variable valor
         for ( unsigned int i = 1; i < m_polylinePoints.size()-1; i++ )
@@ -141,7 +140,7 @@ double Polyline::getDistance2D()
             yy = ( getPointOfPosition( i ).getY() - getPointOfPosition( i-1 ).getY() );
             valor += pow( xx, 2 ) + pow( yy, 2 );
         }
-    }    
+    }
     return ( sqrt( valor ) );
 }
 
@@ -150,16 +149,16 @@ double Polyline::getDistance3D()
     double valor = 0;
     double xx;
     double yy;
-    double zz; 
-    
-    if ( m_polylinePoints.size() == 2 ) 
+    double zz;
+
+    if ( m_polylinePoints.size() == 2 )
     {
         xx = ( getPointOfPosition( 1 ).getX() - getPointOfPosition( 0 ).getX() );
         yy = ( getPointOfPosition( 1 ).getY() - getPointOfPosition( 0 ).getY() );
 //         zz = ( getPointOfPosition( 1 ).getZ() - getPointOfPosition( 0 ).getZ() );
         valor = pow( xx, 2 ) + pow( yy, 2 );// + pow( zz, 2 );
     }
-    else if ( m_polylinePoints.size() > 2 ) 
+    else if ( m_polylinePoints.size() > 2 )
     {
         //per cada parell de punts calculem la distància euclidiana i incrementem la variable valor
         for ( unsigned int i = 1; i < m_polylinePoints.size()-1; i++ )
@@ -169,7 +168,7 @@ double Polyline::getDistance3D()
 //             zz = ( getPointOfPosition( i ).getZ() - getPointOfPosition( i-1 ).getZ() );
             valor += pow( xx, 2 ) + pow( yy, 2 );// + pow( zz, 2 );
         }
-    }    
+    }
     return ( sqrt( valor ) );
 }
 

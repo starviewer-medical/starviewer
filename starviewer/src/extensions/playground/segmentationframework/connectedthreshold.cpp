@@ -94,7 +94,6 @@ bool ConnectedThreshold::applyMethod()
 
     /// Executa la segmentaci�
     //DEBUG_LOG(QString("****START: SEGMENTACIO CONNECTED THRESHOLD****** "));
-    //std::cout << "****START: SEGMENTACIO CONNECTED THRESHOLD****** " << std::endl;
     try
     {
         m_casterOutput->Update();
@@ -107,7 +106,6 @@ bool ConnectedThreshold::applyMethod()
         return false;
     }
     //DEBUG_LOG(QString("****END: SEGMENTACIO CONNECTED THRESHOLD****** "));
-    //std::cout << "****END: SEGMENTACIO CONNECTED THRESHOLD****** " << std::endl;
 
     ///-------------------- Resultats ------------------
 
