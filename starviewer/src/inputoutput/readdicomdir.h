@@ -31,6 +31,7 @@ class ReadDicomdir{
 public:
 
     ReadDicomdir();
+    ~ReadDicomdir();
 
     /** Obre un directori domcidr
      * @param dicomdirPath directori on es troba el dicomdir
@@ -64,7 +65,13 @@ public:
      */
     QString getDicomdirPath();
 
-    ~ReadDicomdir();
+    /**
+     * Ens retorna tots els arxius que formen aquell estudi
+     * TODO mètode de conveniència per no haver de fer bucles raros a queryscreen i treure una dependència més de DICOMSeries/Study, etc
+     * @param studyUID UID de l'estudi del qual volem els arxius
+     * @return Una llista amb els paths absoluts dels arxius en qüestió
+     */
+    QStringList getFiles( QString studyUID );
 
 private :
 
@@ -121,6 +128,7 @@ private :
     bool matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber );
 
     /** canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas de linux les hem de passar a '/'
+     * TODO aquest mètode es pot substituir per QDir::toNativeSeparators() o similar que retornarà els separadors adequats al sistema
      * @param original path original
      * @return path amb '/'
      */

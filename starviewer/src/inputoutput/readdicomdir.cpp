@@ -19,12 +19,18 @@
 #include "dicomimage.h"
 #include "imagelist.h"
 
+#include "logging.h"
+#include <QStringList>
+
 namespace udg {
 
 ReadDicomdir::ReadDicomdir()
 {
     m_dicomdir = NULL;
+}
 
+ReadDicomdir::~ReadDicomdir()
+{
 }
 
 Status ReadDicomdir::open( QString dicomdirPath )
@@ -111,7 +117,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , DicomMask studyMask )
     return state.setStatus( m_dicomdir->error() );
 }
 
-//Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada trobat, podrem accedir a la seva informacio de la sèrie
+//Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada found, podrem accedir a la seva informacio de la sèrie
 Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesList &seriesList )
 {
     Status state;
@@ -124,14 +130,14 @@ Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesLi
     OFString text;
     DICOMSeries series;
     QString studyUIDRecord , seriesPath;
-    bool trobat = false;
+    bool found = false;
 
     //Accedim a nivell de pacient
-    while ( patientRecord != NULL && !trobat )
+    while ( patientRecord != NULL && !found )
     {
         studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
 
-        while (  studyRecord != NULL && !trobat )
+        while (  studyRecord != NULL && !found )
         {
             text.clear();
             studyUIDRecord.clear();
@@ -139,15 +145,15 @@ Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesLi
             studyUIDRecord = text.c_str();
             if ( studyUIDRecord == studyUID ) //busquem l'estudi que continguin el mateix UID
             {
-                trobat = true;
+                found = true;
             }
             else studyRecord = patientRecord->nextSub( studyRecord );//si no trobem accedim al seguent estudi del pacient
         }
 
-        if ( !trobat ) patientRecord = root->nextSub( patientRecord ); //accedim al següent pacient
+        if ( !found ) patientRecord = root->nextSub( patientRecord ); //accedim al següent pacient
     }
 
-    if ( trobat )//si hem trobat l'estudi amb el UID que cercàvem
+    if ( found )//si hem found l'estudi amb el UID que cercàvem
     {
         DcmDirectoryRecord *seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
 
@@ -206,18 +212,18 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
     OFString text;
     DICOMSeries series;
     QString studyUIDRecord , seriesUIDRecord, imagePath;
-    bool trobat = false;
+    bool found = false;
     DICOMImage image;
 
     //Accedim a nivell de pacient
-    while ( patientRecord != NULL && !trobat )
+    while ( patientRecord != NULL && !found )
     {
         studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
 
-        while (  studyRecord != NULL && !trobat )//accedim a nivell estudi
+        while (  studyRecord != NULL && !found )//accedim a nivell estudi
         {
             seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
-            while ( seriesRecord != NULL && !trobat )//accedim a nivell
+            while ( seriesRecord != NULL && !found )//accedim a nivell
             {
                 //UID Serie
                 text.clear();
@@ -226,7 +232,7 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
                 seriesUIDRecord.insert( 0 , text.c_str() );
                 if ( seriesUIDRecord == seriesUID ) //busquem la sèrie amb les imatges
                 {
-                    trobat = true;
+                    found = true;
                     image.setSeriesUID( seriesUIDRecord );//indiquem el seriesUID
                     studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
                     image.setStudyUID( text.c_str() );//Indiquem el studyUID de la imatge
@@ -236,10 +242,10 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
             studyRecord = patientRecord->nextSub( studyRecord );//si no trobem accedim al seguent estudi del pacient
         }
 
-        if ( !trobat ) patientRecord = root->nextSub( patientRecord ); //accedim al següent pacient
+        if ( !found ) patientRecord = root->nextSub( patientRecord ); //accedim al següent pacient
     }
 
-    if ( trobat )//si hem trobat la sèrie amb el UID que cercàvem
+    if ( found )//si hem found la sèrie amb el UID que cercàvem
     {
         DcmDirectoryRecord *imageRecord = seriesRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
 
@@ -277,6 +283,70 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
 QString ReadDicomdir::getDicomdirPath()
 {
     return m_dicomdirAbsolutePath;
+}
+
+QStringList ReadDicomdir::getFiles( QString studyUID )
+{
+    QStringList files;
+    Status state;
+
+    if ( m_dicomdir == NULL )
+    {
+        DEBUG_LOG("Error: Not open dicomfile");
+        return files;
+    }
+
+    DcmDirectoryRecord *root = &( m_dicomdir->getRootRecord() );//accedim a l'estructura d'abres del dicomdir
+    DcmDirectoryRecord *patientRecord = root->getSub( 0 );//accedim al primer pacient
+    DcmDirectoryRecord *studyRecord, *seriesRecord, *imageRecord;
+
+    QString studyUIDRecord , seriesUIDRecord, imagePath;
+    bool found = false;
+
+    // trobem primer l'estudi que volem
+    while ( patientRecord != NULL && !found )
+    {
+        studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
+        while ( studyRecord != NULL && !found )//accedim a nivell estudi
+        {
+            OFString text;
+            studyUIDRecord.clear();
+            studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
+            studyUIDRecord = text.c_str();
+            if( studyUIDRecord == studyUID ) //és l'estudi que volem?
+            {
+                found = true;
+            }
+            else
+                studyRecord = patientRecord->nextSub( studyRecord );//si no trobem accedim al seguent estudi del pacient
+        }
+        if( !found )
+            patientRecord = root->nextSub( patientRecord ); //accedim al següent pacient
+    }
+
+    if( found ) // si hem trobat l'uid que es demanava podem continuar amb la cerca dels arxius
+    {
+        found = false;
+        seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
+        while ( seriesRecord != NULL && !found )//llegim totes les seves sèries
+        {
+            imageRecord = seriesRecord->getSub( 0 ); //seleccionem cada imatge de la series
+            while ( imageRecord != NULL )
+            {
+                OFString text;
+                //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '\' (format windows)
+                imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
+                files << m_dicomdirAbsolutePath + "/" + replaceBarra( text.c_str() );
+                imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
+            }
+            seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi
+        }
+    }
+    else
+    {
+        DEBUG_LOG("No s'ha trobat cap estudi amb aquest uid: " + studyUID + " al dicomdir");
+    }
+    return files;
 }
 
 //Per fer el match seguirem els criteris del PACS
@@ -463,10 +533,6 @@ QString ReadDicomdir::replaceBarra( QString original )
         ret.replace( ret.indexOf("\\") , 1 , "/" );
 
     return ret;
-}
-
-ReadDicomdir::~ReadDicomdir()
-{
 }
 
 }

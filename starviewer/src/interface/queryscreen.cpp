@@ -1178,15 +1178,6 @@ void QueryScreen::view()
 void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopInstanceUID, QString source )
 {
     CacheStudyDAL cacheStudyDAL;
-    CacheSeriesDAL cacheSeriesDAL;
-    CacheImageDAL cacheImageDAL;
-    Status state;
-    StudyList studyList;
-    DICOMStudy study;
-    DicomMask mask;
-    SeriesList seriesList;
-    DICOMSeries series;
-    ImageList imageList;
 
     if ( studyUID.isEmpty() )
     {
@@ -1194,95 +1185,21 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
         return;
     }
 
-    //busquem informacio de l'estudi
+    QStringList files;
     if( source == "Cache" )
     {
-        state = cacheStudyDAL.queryStudy( studyUID , study ); //cerquem la informació de l'estudi
-        if ( !state.good() )
-        {
-            databaseError( &state );
-            return;
-        }
+        files = cacheStudyDAL.getFiles( studyUID );
+        cacheStudyDAL.updateStudyAccTime( studyUID );
     }
     else if( source == "DICOMDIR" )
     {
-        mask.setStudyUID( studyUID );
-        state = m_readDicomdir.readStudies( studyList , mask );
-        if ( !state.good() )
-        {
-            ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
-            return;
-        }
-        studyList.firstStudy();//tenim la informació de l'estudi
-        study = studyList.getStudy();
+        files = m_readDicomdir.getFiles( studyUID );
     }
     else
     {
-        DEBUG_LOG("Unrecognized source: " + source);
+        DEBUG_LOG("Unrecognized source: " + source );
         return;
     }
-
-    //busquem les series
-    if( source == "Cache" )
-    {
-        mask.setStudyUID( study.getStudyUID() );
-        cacheSeriesDAL.querySeries( mask ,seriesList );
-        if ( !state.good() )
-        {
-            databaseError( &state );
-            return;
-        }
-    }
-    else if( source == "DICOMDIR" )
-    {
-        state = m_readDicomdir.readSeries( studyUID , "" , seriesList );//"" pq no busquem cap serie en concreet
-        if ( !state.good() )
-        {
-            ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR : " + state.text() );
-            return;
-        }
-    }
-
-    QStringList files;
-    seriesList.firstSeries();
-    while( !seriesList.end() )
-    {
-        series = seriesList.getSeries();
-        imageList.clear();
-        if( source == "Cache" )
-        {
-            mask.setSeriesUID( series.getSeriesUID() );
-            mask.setSOPInstanceUID( sopInstanceUID );
-            state = cacheImageDAL.queryImages( mask , imageList );
-            if ( !state.good() )
-            {
-                databaseError( &state );
-                return;
-            }
-        }
-        else if( source == "DICOMDIR" )
-        {
-            state = m_readDicomdir.readImages( series.getSeriesUID() , sopInstanceUID , imageList );//accedim a llegir la informació de les imatges per cada serie
-            if ( !state.good() )
-            {
-                ERROR_LOG( "Error al cercar l'estudi al dicomdir ERROR :" + state.text() );
-                return;
-            }
-        }
-        imageList.firstImage();
-
-        while ( !imageList.end() )
-        {
-            files << imageList.getImage().getImagePath();
-            imageList.nextImage();
-        }
-        seriesList.nextSeries();
-    }
-
-    if( source == "Cache" )
-        cacheStudyDAL.updateStudyAccTime( studyUID );
-    else if( source == "DICOMDIR" )
-        INFO_LOG( "Ha finalitzat la càrrega de l'estudi des del dicomdir" );
 
     this->close();//s'amaga per poder visualitzar la serie
     if ( m_OperationStateScreen->isVisible() )
