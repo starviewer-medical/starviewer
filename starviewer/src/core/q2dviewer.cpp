@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "drawer.h"
 #include "q2dviewer.h"
 #include "volume.h"
@@ -86,7 +85,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_serieInformationAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_currentPhase(0), m_numberOfSlicesWindows(1), m_currentSlice(0), m_overlayVolume(0), m_rotateFactor(0), m_voxelInformationCaption(0), m_applyFlip(false), m_isImageFlipped(false), m_scalarBar(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0), m_toolManager(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
+ : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0), m_voxelInformationCaption(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
     m_enabledAnnotations = Q2DViewer::AllAnnotation;
     m_lastView = Q2DViewer::Axial;
@@ -94,26 +93,17 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
     updateCursor( -1, -1, -1, -1 );
-    m_rotateFactor = 0; // per defecte no hi ha cap rotació adicional
 
     // inicialitzacions d'objectes
     // visor
     m_viewer = vtkImageViewer2::New();
     // preparem el picker
     m_picker = vtkPropPicker::New();
-    // preparem el picker
-    m_blender = 0;
 
-    m_overlayVolume = 0;
-    m_voxelInformationCaption = 0;
-    m_scalarBar = 0;
-    m_toolManager = 0;
     for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = 0;
     }
-    m_sideRuler = 0;
-    m_bottomRuler = 0;
 
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -133,7 +123,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     // grayscale pipeline
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
 
-    m_modalityLUTRescale = 0; //vtkImageShiftScale::New();
+    m_modalityLUTRescale = 0;
 
     // inicialització viewport de les llesques
     m_slicesViewportExtent[0]=.0;
@@ -987,6 +977,21 @@ void Q2DViewer::setView( ViewType view )
     resetCamera();
 }
 
+void Q2DViewer::setViewToAxial()
+{
+    setView( Q2DViewer::Axial );
+}
+
+void Q2DViewer::setViewToCoronal()
+{
+    setView( Q2DViewer::Coronal );
+}
+
+void Q2DViewer::setViewToSagittal()
+{
+    setView( Q2DViewer::Sagittal );
+}
+
 void Q2DViewer::updateCamera()
 {
     if( m_viewer->GetInput() )
@@ -1184,6 +1189,11 @@ void Q2DViewer::resetCamera()
     }
 }
 
+vtkImageMapToWindowLevelColors *Q2DViewer::getWindowLevelMapper() const
+{
+    return m_windowLevelLUTMapper;
+}
+
 int Q2DViewer::getNumberOfSlices()
 {
     return m_viewer->GetSliceMax();
@@ -1256,6 +1266,34 @@ void Q2DViewer::setPhase( int value )
     m_currentPhase = value;
 
     this->updateDisplayExtent();
+}
+
+void Q2DViewer::setOverlay( OverlayType overlay )
+{
+    m_overlay = overlay;
+}
+
+void Q2DViewer::setOverlayToBlend()
+{
+    setOverlay( Q2DViewer::Blend );
+}
+
+void Q2DViewer::setOverlayToCheckerBoard()
+{
+    setOverlay( Q2DViewer::CheckerBoard );
+}
+
+void Q2DViewer::setOverlayToRectilinearWipe()
+{
+    setOverlay( Q2DViewer::RectilinearWipe );
+}
+
+void Q2DViewer::updateCursor( double x, double y , double z , double value )
+{
+    m_currentCursorPosition[0] = x;
+    m_currentCursorPosition[1] = y;
+    m_currentCursorPosition[2] = z;
+    m_currentImageValue = value;
 }
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
@@ -1332,6 +1370,11 @@ double Q2DViewer::getCurrentColorLevel()
     }
 }
 
+int Q2DViewer::getSlice()
+{
+    return m_currentSlice;
+}
+
 void Q2DViewer::resetWindowLevelToDefault()
 {
     // això ens dóna un level/level "maco" per defecte
@@ -1349,6 +1392,11 @@ void Q2DViewer::resetWindowLevelToDefault()
     {
         DEBUG_LOG( "::resetWindowLevelToDefault() : No tenim input" );
     }
+}
+
+void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
+{
+    m_modalityLUTRescale = rescale;
 }
 
 vtkImageActor *Q2DViewer::getImageActor()
@@ -1499,11 +1547,26 @@ void Q2DViewer::setMagnificationFactor( double factor )
     }
 }
 
+Drawer *Q2DViewer::getDrawer() const
+{
+    return m_drawer;
+}
+
 void Q2DViewer::updateWindowLevelAnnotation()
 {
     updateInformation();
     emit windowLevelChanged( m_windowLevelLUTMapper->GetWindow() , m_windowLevelLUTMapper->GetLevel() );
     updateScalarBar();
+}
+
+Q2DViewer::ViewType Q2DViewer::getView() const
+{
+    return m_lastView;
+}
+
+vtkImageViewer2 *Q2DViewer::getImageViewer() const
+{
+    return m_viewer;
 }
 
 void Q2DViewer::reset()
@@ -2287,6 +2350,12 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
 void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
 {
     enableAnnotation( annotation, false );
+}
+
+void Q2DViewer::setDefaultWindowLevel( double window, double level )
+{
+    m_defaultWindow = window;
+    m_defaultLevel = level;
 }
 
 void Q2DViewer::computeInputGrayscalePipeline()

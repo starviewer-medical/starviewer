@@ -96,18 +96,18 @@ public:
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
     void setView( ViewType view );
-    void setViewToAxial(){ setView( Q2DViewer::Axial ); }
-    void setViewToCoronal(){ setView( Q2DViewer::Coronal ); }
-    void setViewToSagittal(){ setView( Q2DViewer::Sagittal ); }
+    void setViewToAxial();
+    void setViewToCoronal();
+    void setViewToSagittal();
 
     /// Actualització d'anotacions vàries
     void updateWindowLevelAnnotation();
 
     /// ens retorna la vista que tenim en aquells moments del volum
-    ViewType getView() const { return m_lastView; }
+    ViewType getView() const;
 
     /// Ens retorna l'ImageViewer
-    vtkImageViewer2* getImageViewer(){ return m_viewer; }
+    vtkImageViewer2 *getImageViewer() const;
 
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );
@@ -134,7 +134,7 @@ public:
     double getCurrentColorLevel();
 
     /// retorna la llesca actual
-    int getSlice( void ){ return m_currentSlice; }
+    int getSlice();
 
     /// retorna el nombre de llesques
     int getNumberOfSlices();
@@ -177,7 +177,7 @@ public:
     void updateInformation();
 
     /// Mètodes de conveniència pels presentation state
-    void setModalityRescale( vtkImageShiftScale *rescale ){ m_modalityLUTRescale = rescale; };
+    void setModalityRescale( vtkImageShiftScale *rescale );
     vtkImageActor *getImageActor();
 
     //
@@ -199,10 +199,16 @@ public:
     void setMagnificationFactor( double factor );
 
     ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
-    Drawer* getDrawer()
-    { return m_drawer; }
+    Drawer* getDrawer() const;
 
 public slots:
+
+    virtual void render();
+    void reset();
+    void setTool( QString toolName );
+    void setEnableTools( bool enable );
+    void enableTools();
+    void disableTools();
 
     /// Assignar/afegir files i columnes
     void setGrid( int rows, int columns );
@@ -221,23 +227,13 @@ public slots:
     void setPhase( int value );
 
     /// indica el tipu de solapament dels volums, per defecte checkerboard
-    void setOverlay( OverlayType overlay ){ m_overlay = overlay; }
-    void setOverlayToBlend(){ setOverlay( Q2DViewer::Blend ); };
-    void setOverlayToCheckerBoard(){ setOverlay( Q2DViewer::CheckerBoard ); };
-    void setOverlayToRectilinearWipe(){ setOverlay( Q2DViewer::RectilinearWipe ); };
+    void setOverlay( OverlayType overlay );
+    void setOverlayToBlend();
+    void setOverlayToCheckerBoard();
+    void setOverlayToRectilinearWipe();
 
     /// Actualitza els valors on apunta el cursor
-    void updateCursor( double x, double y , double z , double value )
-    {
-        m_currentCursorPosition[0] = x;
-        m_currentCursorPosition[1] = y;
-        m_currentCursorPosition[2] = z;
-        m_currentImageValue = value;
-    }
-
-    virtual void render();
-
-    void reset();
+    void updateCursor( double x, double y , double z , double value );
 
     // Mètodes específics checkerboard
     /// Indiquem el nombre de divisions del checkerboard
@@ -251,11 +247,7 @@ public slots:
     void removeAnnotation( AnnotationFlags annotation );
 
     /// Ajusta els ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
-    void setDefaultWindowLevel( double window, double level )
-    {
-        m_defaultWindow = window;
-        m_defaultLevel = level;
-    };
+    void setDefaultWindowLevel( double window, double level );
 
     /// Ajusta el window/level
     void setWindowLevel( double window , double level );
@@ -265,12 +257,6 @@ public slots:
 
     /// Actualitza la informació del voxel que hi ha per sota del cursor
     void updateVoxelInformation();
-
-    void setTool( QString toolName );
-
-    void setEnableTools( bool enable );
-    void enableTools();
-    void disableTools();
 
     /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
     void setSeedPosition( double pos[3] );
@@ -292,7 +278,7 @@ public slots:
     void resetCamera();
 
     ///Mètode de conveniència pel tractament dels presentation states
-    vtkImageMapToWindowLevelColors *getWindowLevelMapper() const { return m_windowLevelLUTMapper; }
+    vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
 
     ///
     void setModalityRescale( double slope, double intercept );
@@ -302,6 +288,155 @@ public slots:
 
     /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat. Això permet que el càlcul s'hagi fet en un presentation state, per exemple
     void applyGrayscalePipeline();
+
+signals:
+    /// envia la nova llesca en la que ens trobem
+    void sliceChanged(int);
+
+    /// envia la nova vista en la que ens trobem
+    void viewChanged(int);
+
+    /// indica el nou window level
+    void windowLevelChanged( double window , double level );
+
+    /// Senyal que s'envia quan la llavor s'ha canviat \TODO mirar de treure-ho i posar-ho en la tool SeedTool
+    void seedChanged();
+
+    /// informa del valor del m_rotateFactor. S'emetrà quan la rotació de la càmera s'hagi fet efectiva
+    void rotationFactorChanged(int);
+
+    /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
+    void rotationDegreesChanged(double);
+
+    /// informa de la posició on s'ha de mostrar el menú de contexte
+    void showContextMenu( QPoint menuPoint );
+
+    /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
+    void selected( void );
+
+protected:
+    /// Processem l'event de resize de la finestra Qt
+    virtual void resizeEvent( QResizeEvent* resize );
+
+private:
+    /// Refresca les anotacions que s'han de veure i les que no \TODO no fa res
+    void updateAnnotations();
+
+    /// inicialitza les annotacions de texte
+    void initTextAnnotations();
+
+    /// configuració de la interacció amb l'usuari
+    void setupInteraction();
+
+    /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
+    void createAnnotations();
+
+    /// crea els indicadors d'escala
+    void createRulers();
+
+    /// Actualitza els rulers
+    void updateRulers();
+
+    /// Crea la barra de valors
+    vtkScalarBarActor * createScalarBar();
+
+    /// Actualitza la barra de valors
+    void updateScalarBar();
+
+    /// crea els actors necessaris per mostrar la llegenda flotant amb la informació de voxel
+    void createVoxelInformationCaption();
+
+    /// crea les anotacions de l'orientació del pacient
+    void createOrientationAnnotations();
+
+    /// Afegeix tots els actors a l'escena
+    void addActors();
+
+    /// Helper method, donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
+    /// Per exemple, si l'etiqueta que ens donen és RPI (Right-Posterior,Inferior), el valor retornat seria LAS (Left-Anterior-Superior)
+    /// Les etiquetes vàlides i els seus oposats són les següents:
+    /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
+    static QString getOppositeOrientationLabel( QString label );
+
+    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
+    void mapOrientationStringToAnnotation();
+
+    /**
+        Membres pel tractament de múltiples vistes
+    */
+    /// Afegeix/Eliminia un nou renderer amb imatge, actors, etc
+    void addRenderScene();
+    void removeRenderScene();
+
+    /// actualitza la distibució de files i columnes (a nivell de llesques)
+    void updateGrid();
+
+    /// actualitza la distibució de files i columnes (a nivell de fases)
+    void updatePhaseGrid( int slice );
+
+    /// actualitza la distribució de viewports
+    void updateViewports();
+
+    /// Actualitza les característiques dels actors dels viewports
+    void updateDisplayExtent();
+
+    /// crea i retorna un ruler stàndar
+    vtkAxisActor2D* createRuler();
+
+    /// Fa els càlculs del pipeline de l'escala de grisos del volum d'entrada. És a dir calcularà la modality lut, voi lut i presentation lut però no l'aplicarà
+    void computeInputGrayscalePipeline();
+
+    /**
+     * Aplica la transformació de modalitat sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
+     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
+
+        1.1. La imatge original té una modality LUT. La llegim i l'apliquem al principi del pipeline. El seu input són les dades originals del volum.
+
+        1.2. La imatge original conté rescale slope i rescale intercept. No cal fer res, el lector d'itk (GDCM) ja aplica aquesta transformació automàticament quan llegim el volum.
+
+        1.3. No hi ha cap informació referent a modality LUTs. No cal fer res. Aplicar transformació identitat
+
+     2.- En en cas que tinguem un presentation state associat, pot passar el següent
+
+        2.1. El PS té una modality LUT. ídem 1.1
+
+        2.2. El PS conté rescale slope i rescale intercept. Cal aplicar un filtre de rescale (vtImageShiftScale). \TODO Com que la imatge que llegim ja té aplicat el rescale/intercept de la imatge, no sabem si cal contrestar primer la transformació que ens vé de "gratis".
+
+        2.3. ídem 1.3 \TODO però no sabem si en el cas que tinguem un rescalat de "gratis" caldria desfer-lo, és a dir, donar els raw pixels!
+
+    Els canvis de la modality LUT s'apliquen a totes les imatges contingudes en el volum
+     */
+    void computeModalityLUT();
+    ///
+    void applyMaskSubstraction();
+
+    /**
+     *  Aplica l'ajustament de finestra sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
+
+     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
+
+        1.1. La imatge original té una VOI LUT. La llegim i l'apliquem com a input del window level mapper. \TODO problema: no sabem ben bé què passa si abans teníem una modality LUT. En principi hauríem de fer servir el mapeig sobre l'anterior lut.
+
+        1.2. La imatge original conté valors de window level. Apliquem aquests valors sobre el window level mapper.
+
+        1.3. No hi ha cap informació referent a VOI LUTs. No cal fer res. Aplicar transformació identitat, és a dir el window serà el rang de dades i el level el window/2.
+
+     2.- En en cas que tinguem un presentation state associat, actuem igual que en 1.x. Els valors del presentation state prevalen sobre els de la imatge.
+
+    Es pot tenir més d'una VOI LUT (ja sigui en format de LUT o de window level). Això significa que tenim diverses opcions de presentació. Es pot agafar una per defecte però l'aplicació hauria de mostrar la possiblitat d'escollir entre aquestes.
+
+    Els canvis de la VOI LUT es poden aplicar a sub-conjunts d'imatges referenciades. Això es donarà en el cas d'imatges multi-frame.
+
+    De cares al connectathon només es tracta una sola VOI LUT i imatges mono-frame, però hem de tenir en compte que l'estàndar DICOM contempla les possibilitats abans mencionades.
+     */
+    void computeVOILUT();
+
+    /// Aquest mètode s'encarrega de donar-nos en format vtk el tipu de lookup table de la grayscale pipeline que ens ofereix el presentation state actualment assignat. type: 0 -> modality lut, 1-> VOI lut, 2-> presentation lut  \TODO mètode temporal
+    vtkWindowLevelLookupTable *parseLookupTable( int type );
+
+private slots:
+    /// Actualitza les transformacions de càmera ( de moment rotació i flip )
+    void updateCamera();
 
 protected:
     /// Connector d'events vtk i slots qt
@@ -343,63 +478,18 @@ protected:
     /// Per controlar l'espaiat en que presentem la imatge
     double m_presentationPixelSpacing[2];
 
-    /// Processem l'event de resize de la finestra Qt
-    virtual void resizeEvent( QResizeEvent* resize );
-
 private:
     /// flag que ens indica quines anotacions es veuran per la finestra
     unsigned int m_enabledAnnotations;
 
-    /// Refresca les anotacions que s'han de veure i les que no \TODO no fa res
-    void updateAnnotations();
-
-    /// inicialitza les annotacions de texte
-    void initTextAnnotations();
-
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
-
-    /// configuració de la interacció amb l'usuari
-    void setupInteraction();
-
-    /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
-    void createAnnotations();
-
-    /// crea els indicadors d'escala
-    void createRulers();
-
-    /// Actualitza els rulers
-    void updateRulers();
-
-    /// Crea la barra de valors
-    vtkScalarBarActor * createScalarBar();
-
-    /// Actualitza la barra de valors
-    void updateScalarBar();
-
-    /// crea els actors necessaris per mostrar la llegenda flotant amb la informació de voxel
-    void createVoxelInformationCaption();
-
-    /// crea les anotacions de l'orientació del pacient
-    void createOrientationAnnotations();
-
-    /// Afegeix tots els actors a l'escena
-    void addActors();
-
-    /// Helper method, donada una etiqueta d'orientació, ens retorna aquesta etiqueta però amb els valors oposats.
-    /// Per exemple, si l'etiqueta que ens donen és RPI (Right-Posterior,Inferior), el valor retornat seria LAS (Left-Anterior-Superior)
-    /// Les etiquetes vàlides i els seus oposats són les següents:
-    /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
-    static QString getOppositeOrientationLabel( QString label );
 
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
     /// Aquest string indica les anotacions que ens donen les referències del pacient ( Right,Left,Posterior,Anterior,Inferior,Superior)
     QString m_patientOrientationText[4];
-
-    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
-    void mapOrientationStringToAnnotation();
 
     /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler , *m_bottomRuler;
@@ -436,29 +526,6 @@ private:
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
-
-    /**
-        Membres pel tractament de múltiples vistes
-    */
-
-    /// Afegeix/Eliminia un nou renderer amb imatge, actors, etc
-    void addRenderScene();
-    void removeRenderScene();
-
-    /// actualitza la distibució de files i columnes (a nivell de llesques)
-    void updateGrid();
-
-    /// actualitza la distibució de files i columnes (a nivell de fases)
-    void updatePhaseGrid( int slice );
-
-    /// actualitza la distribució de viewports
-    void updateViewports();
-
-    /// Actualitza les característiques dels actors dels viewports
-    void updateDisplayExtent();
-
-    /// crea i retorna un ruler stàndar
-    vtkAxisActor2D* createRuler();
 
     /// controla el nombre de files i columnes en que es distribueix el visor
     int m_columns, m_rows;
@@ -509,54 +576,6 @@ private:
     ///Punter a l'objecte especialista de dibuixat de primitives
     Drawer *m_drawer;
 
-    /// Fa els càlculs del pipeline de l'escala de grisos del volum d'entrada. És a dir calcularà la modality lut, voi lut i presentation lut però no l'aplicarà
-    void computeInputGrayscalePipeline();
-
-    /**
-     * Aplica la transformació de modalitat sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
-     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
-
-        1.1. La imatge original té una modality LUT. La llegim i l'apliquem al principi del pipeline. El seu input són les dades originals del volum.
-
-        1.2. La imatge original conté rescale slope i rescale intercept. No cal fer res, el lector d'itk (GDCM) ja aplica aquesta transformació automàticament quan llegim el volum.
-
-        1.3. No hi ha cap informació referent a modality LUTs. No cal fer res. Aplicar transformació identitat
-
-     2.- En en cas que tinguem un presentation state associat, pot passar el següent
-
-        2.1. El PS té una modality LUT. ídem 1.1
-
-        2.2. El PS conté rescale slope i rescale intercept. Cal aplicar un filtre de rescale (vtImageShiftScale). \TODO Com que la imatge que llegim ja té aplicat el rescale/intercept de la imatge, no sabem si cal contrestar primer la transformació que ens vé de "gratis".
-
-        2.3. ídem 1.3 \TODO però no sabem si en el cas que tinguem un rescalat de "gratis" caldria desfer-lo, és a dir, donar els raw pixels!
-
-    Els canvis de la modality LUT s'apliquen a totes les imatges contingudes en el volum
-     */
-    void computeModalityLUT();
-    ///
-    void applyMaskSubstraction();
-
-    /**
-     *  Aplica l'ajustament de finestra sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
-
-     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
-
-        1.1. La imatge original té una VOI LUT. La llegim i l'apliquem com a input del window level mapper. \TODO problema: no sabem ben bé què passa si abans teníem una modality LUT. En principi hauríem de fer servir el mapeig sobre l'anterior lut.
-
-        1.2. La imatge original conté valors de window level. Apliquem aquests valors sobre el window level mapper.
-
-        1.3. No hi ha cap informació referent a VOI LUTs. No cal fer res. Aplicar transformació identitat, és a dir el window serà el rang de dades i el level el window/2.
-
-     2.- En en cas que tinguem un presentation state associat, actuem igual que en 1.x. Els valors del presentation state prevalen sobre els de la imatge.
-
-    Es pot tenir més d'una VOI LUT (ja sigui en format de LUT o de window level). Això significa que tenim diverses opcions de presentació. Es pot agafar una per defecte però l'aplicació hauria de mostrar la possiblitat d'escollir entre aquestes.
-
-    Els canvis de la VOI LUT es poden aplicar a sub-conjunts d'imatges referenciades. Això es donarà en el cas d'imatges multi-frame.
-
-    De cares al connectathon només es tracta una sola VOI LUT i imatges mono-frame, però hem de tenir en compte que l'estàndar DICOM contempla les possibilitats abans mencionades.
-     */
-    void computeVOILUT();
-
     /// objectes per a les transformacions en el pipeline d'escala de grisos
     vtkImageMapToWindowLevelColors *m_windowLevelLUTMapper;
     vtkImageShiftScale *m_modalityLUTRescale;
@@ -564,37 +583,6 @@ private:
     /// Les diferents look up tables que ens podem trobar durant tot el procés.
     vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
 
-    /// Aquest mètode s'encarrega de donar-nos en format vtk el tipu de lookup table de la grayscale pipeline que ens ofereix el presentation state actualment assignat. type: 0 -> modality lut, 1-> VOI lut, 2-> presentation lut  \TODO mètode temporal
-    vtkWindowLevelLookupTable *parseLookupTable( int type );
-
-private slots:
-    /// Actualitza les transformacions de càmera ( de moment rotació i flip )
-    void updateCamera();
-
-signals:
-    /// envia la nova llesca en la que ens trobem
-    void sliceChanged(int);
-
-    /// envia la nova vista en la que ens trobem
-    void viewChanged(int);
-
-    /// indica el nou window level
-    void windowLevelChanged( double window , double level );
-
-    /// Senyal que s'envia quan la llavor s'ha canviat \TODO mirar de treure-ho i posar-ho en la tool SeedTool
-    void seedChanged();
-
-    /// informa del valor del m_rotateFactor. S'emetrà quan la rotació de la càmera s'hagi fet efectiva
-    void rotationFactorChanged(int);
-
-    /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
-    void rotationDegreesChanged(double);
-
-    /// informa de la posició on s'ha de mostrar el menú de contexte
-    void showContextMenu( QPoint menuPoint );
-
-    /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
-    void selected( void );
 };
 
 };  //  end  namespace udg
