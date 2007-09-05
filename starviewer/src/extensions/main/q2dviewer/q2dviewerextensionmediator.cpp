@@ -34,6 +34,7 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
         return false;
     }
 
+    q2dviewerExtension->setPatient( extensionContext.getPatient() );
     q2dviewerExtension->setInput( extensionContext.getDefaultVolume() );
 
     return true;
