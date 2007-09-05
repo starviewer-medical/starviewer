@@ -24,7 +24,7 @@ DisplayableID Volume3DViewTestingExtensionMediator::getExtensionID() const
     return DisplayableID( "Volume3DViewTestingExtension", tr("Volume 3D View Testing") );
 }
 
-bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QVolume3DViewTestingExtension * volume3DViewTestingExtension;
 

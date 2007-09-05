@@ -13,7 +13,6 @@
 
 namespace udg{
 
-class ExtensionHandler;
 class ExtensionContext;
 
 /**
@@ -43,7 +42,7 @@ public:
      * del widget que se'ns passa.
      * @return Retorna false en el supòsit que hi hagi alguna cosa que impedeixi inicialitzar-la, true en la resta de casos
      */
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler) = 0;
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext) = 0;
 
     ///Retorna l'identificador de la classe Extension amb qui dialoga
     virtual DisplayableID getExtensionID() const = 0;

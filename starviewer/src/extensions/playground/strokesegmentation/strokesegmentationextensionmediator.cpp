@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "strokesegmentationextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID StrokeSegmentationExtensionMediator::getExtensionID() const
     return DisplayableID("StrokeSegmentationExtension",tr("Stroke Segmentation"));
 }
 
-bool StrokeSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool StrokeSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QStrokeSegmentationExtension *strokeSegmentationExtension;
 

@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "q2dviewerextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg{
@@ -25,7 +24,7 @@ DisplayableID Q2DViewerExtensionMediator::getExtensionID() const
     return DisplayableID("Q2DViewerExtension",tr("2D Viewer"));
 }
 
-bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     Q2DViewerExtension *q2dviewerExtension;
 

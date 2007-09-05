@@ -8,7 +8,6 @@ FORMS += qconfigurationscreenbase.ui \
          qpacslistbase.ui \
          qstudytreewidgetbase.ui \
          qserieslistwidgetbase.ui \
-         qcustomwindowleveldialogbase.ui \
          qcreatedicomdirbase.ui \
          qoperationstatescreenbase.ui \
          qchooseoneobjectdialogbase.ui
@@ -24,8 +23,6 @@ HEADERS += qapplicationmainwindow.h \
            queryscreen.h \
            qstudytreewidget.h \
            qserieslistwidget.h \
-           qcustomwindowleveldialog.h \
-           qwindowlevelcombobox.h \
            qcreatedicomdir.h \
            qoperationstatescreen.h \
            qchooseoneobjectdialog.h 
@@ -38,8 +35,6 @@ SOURCES += qapplicationmainwindow.cpp \
            queryscreen.cpp \
            qstudytreewidget.cpp \
            qserieslistwidget.cpp \
-           qcustomwindowleveldialog.cpp \
-           qwindowlevelcombobox.cpp \
            qcreatedicomdir.cpp \
            qoperationstatescreen.cpp \
            qchooseoneobjectdialog.cpp 

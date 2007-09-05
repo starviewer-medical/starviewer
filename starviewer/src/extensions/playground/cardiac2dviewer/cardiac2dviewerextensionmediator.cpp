@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "cardiac2dviewerextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID Cardiac2DViewerExtensionMediator::getExtensionID() const
     return DisplayableID("Cardiac2dViewerExtension",tr("2D Cardiac Viewer"));
 }
 
-bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QCardiac2DViewerExtension *cardiac2DViewerExtension;
 

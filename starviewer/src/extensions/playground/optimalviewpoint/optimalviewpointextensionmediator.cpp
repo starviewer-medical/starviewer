@@ -24,7 +24,7 @@ DisplayableID OptimalViewpointExtensionMediator::getExtensionID() const
     return DisplayableID( "OptimalViewpointExtension", tr("Optimal Viewpoint") );
 }
 
-bool OptimalViewpointExtensionMediator::initializeExtension(QWidget * extension, const ExtensionContext &extensionContext, ExtensionHandler * /*extensionHandler*/)
+bool OptimalViewpointExtensionMediator::initializeExtension(QWidget * extension, const ExtensionContext &extensionContext)
 {
     QOptimalViewpointExtension * optimalViewpointExtension;
 

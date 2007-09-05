@@ -10,15 +10,9 @@ HEADERS += qrectumsegmentationextension.h \
 SOURCES += qrectumsegmentationextension.cpp \
            rectumsegmentationextensionmediator.cpp \
            rectumSegmentationMethod.cpp 
-TARGETDEPS += ../../../core/libcore.a \
-../../../inputoutput/libinputoutput.a \
-../../../interface/libinterface.a
-LIBS += ../../../inputoutput/libinputoutput.a \
-../../../core/libcore.a \
-../../../interface/libinterface.a
-INCLUDEPATH += ../../../inputoutput \
-../../../core \
-../../../interface
+TARGETDEPS += ../../../core/libcore.a
+LIBS += ../../../core/libcore.a
+INCLUDEPATH += ../../../core
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
 OBJECTS_DIR = ../../../../tmp/obj

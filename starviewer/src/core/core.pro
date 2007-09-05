@@ -3,7 +3,9 @@
 # Subdir relative project main directory: ./src/core
 # Target is a library:  
 
-FORMS += qlogviewerbase.ui 
+FORMS += qlogviewerbase.ui \
+         qcustomwindowleveldialogbase.ui
+
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
@@ -102,6 +104,8 @@ HEADERS += extensionfactory.h \
            patientbrowsermenulist.h \
            referencelinesfillerstep.h \
            colorpalette.h  \
+           qcustomwindowleveldialog.h \
+           qwindowlevelcombobox.h \
            mhdfileclassifierstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -189,6 +193,8 @@ SOURCES += extensionmediator.cpp \
            patientbrowsermenulist.cpp \
            referencelinesfillerstep.cpp \
            colorpalette.cpp  \
+           qcustomwindowleveldialog.cpp \
+           qwindowlevelcombobox.cpp \
            mhdfileclassifierstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \

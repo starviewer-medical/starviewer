@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "edemasegmentationextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID EdemaSegmentationExtensionMediator::getExtensionID() const
     return DisplayableID("EdemaSegmentationExtension",tr("Edema Segmentation"));
 }
 
-bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QEdemaSegmentationExtension *edemaSegmentationExtension;
 

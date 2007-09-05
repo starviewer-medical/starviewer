@@ -8,17 +8,9 @@ HEADERS += qregistrationframeworkextension.h \
 SOURCES += qregistrationframeworkextension.cpp \
            registrationframeworkextensionmediator.cpp 
 
-TARGETDEPS += ../../../core/libcore.a \
-            ../../../interface/libinterface.a \  
-            ../../../inputoutput/libinputoutput.a
-            
-LIBS += ../../../core/libcore.a \
-        ../../../interface/libinterface.a \
-        ../../../inputoutput/libinputoutput.a
-
-INCLUDEPATH += ../../../core \
-            ../../../interface \
-            ../../../inputoutput
+TARGETDEPS += ../../../core/libcore.a
+LIBS += ../../../core/libcore.a
+INCLUDEPATH += ../../../core
 
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui

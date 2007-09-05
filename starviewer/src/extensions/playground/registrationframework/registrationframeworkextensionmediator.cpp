@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "registrationframeworkextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID RegistrationFrameworkExtensionMediator::getExtensionID() const
     return DisplayableID("RegistrationFrameworkExtension",tr("Registration Framework"));
 }
 
-bool RegistrationFrameworkExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool RegistrationFrameworkExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QRegistrationFrameworkExtension *registrationFrameworkExtension;
 

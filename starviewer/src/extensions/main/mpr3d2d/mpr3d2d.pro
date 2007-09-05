@@ -11,15 +11,9 @@ HEADERS += qmpr3d2dextension.h \
 SOURCES += qmpr3d2dextension.cpp \
            mpr3d2dextensionmediator.cpp
 
-TARGETDEPS += ../../../interface/libinterface.a \
-              ../../../core/libcore.a \
-              ../../../inputoutput/libinputoutput.a
-LIBS += ../../../interface/libinterface.a \
-        ../../../core/libcore.a \
-        ../../../inputoutput/libinputoutput.a
-INCLUDEPATH += ../../../interface \
-               ../../../core \
-               ../../../inputoutput
+TARGETDEPS += ../../../core/libcore.a
+LIBS += ../../../core/libcore.a
+INCLUDEPATH += ../../../core
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
 OBJECTS_DIR = ../../../../tmp/obj
