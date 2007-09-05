@@ -11,7 +11,6 @@
 
 namespace udg {
 
-//class ExtensionHandler;
 class Patient;
 class Volume;
 
@@ -26,12 +25,6 @@ public:
 
     ~ExtensionContext();
 
-/*   TODO Per temes de dependències de directoris, no es pot fer dependre de ExtensionHandler. Es deixa el codi per
-     quan es tregui la dependència.
-    /// get/set del extensionhandler. És un mètode que està destinat a desaparèixer.
-    ExtensionHandler* getExtensionHandler() const;
-    ExtensionHandler* setExtensionHandler(ExtensionHandler *extensionHandler);
-*/
     /// get/set del pacient amb el que ha de treballar l'extensió.
     Patient* getPatient() const;
     void setPatient(Patient *patient);
@@ -70,7 +63,6 @@ public:
     Volume *getDefaultVolume() const;
 
 private:
-    //ExtensionHandler* m_extensionHandler;
     Patient* m_patient;
 
     QStringList m_defaultSelectedStudies;
