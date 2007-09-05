@@ -21,6 +21,9 @@
 // VTK
 #include <vtkRenderer.h>
 #include "slicing2dtool.h"
+// Menu
+#include "menugridwidget.h"
+#include "tablemenu.h"
 
 namespace udg {
 
@@ -32,9 +35,14 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_keyImageNoteAttacher = NULL;
     m_keyImageNote = NULL;
 
+    m_patient = NULL;
+    m_viewer = new Q2DViewerWidget( m_workingArea );
+    m_selectedViewer = m_viewer;
+
     readSettings();
     createActions();
     createConnections();
+    initLayouts();
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -82,7 +90,7 @@ void Q2DViewerExtension::createActions()
     m_voxelInformationAction->setCheckable( true );
     m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
 
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , this , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
@@ -91,7 +99,7 @@ void Q2DViewerExtension::createActions()
     m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , this , SLOT( rotateClockWise() ) );
 
     m_rotateCounterClockWiseAction = new QAction( 0 );
     m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
@@ -100,7 +108,7 @@ void Q2DViewerExtension::createActions()
     m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
 
-    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
+    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , this , SLOT( rotateCounterClockWise() ) );
 
     m_flipHorizontalAction = new QAction(0);
     m_flipHorizontalAction->setText( tr("Flip Horizontal") );
@@ -108,7 +116,7 @@ void Q2DViewerExtension::createActions()
     m_flipHorizontalAction->setIcon( QIcon(":/images/flipHorizontal.png") );
     m_flipHorizontalToolButton->setDefaultAction( m_flipHorizontalAction );
 
-    connect( m_flipHorizontalAction , SIGNAL( triggered() ) , m_2DView , SLOT( horizontalFlip() ) );
+    connect( m_flipHorizontalAction , SIGNAL( triggered() ) , this , SLOT( horizontalFlip() ) );
 
     m_flipVerticalAction = new QAction(0);
     m_flipVerticalAction->setText( tr("Flip Vertical") );
@@ -116,7 +124,7 @@ void Q2DViewerExtension::createActions()
     m_flipVerticalAction->setIcon( QIcon(":/images/flipVertical.png") );
     m_flipVerticalToolButton->setDefaultAction( m_flipVerticalAction );
 
-    connect( m_flipVerticalAction , SIGNAL( triggered() ) , m_2DView , SLOT( verticalFlip() ) );
+    connect( m_flipVerticalAction , SIGNAL( triggered() ) , this , SLOT( verticalFlip() ) );
 
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
@@ -142,7 +150,7 @@ void Q2DViewerExtension::createActions()
     m_roiToolButton->setDefaultAction( m_roiAction );
     m_roiAction->setIcon( QIcon(":/images/roi.png") );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_viewer->m_2DView, SLOT( setTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -173,19 +181,23 @@ void Q2DViewerExtension::enablePresentationState(bool enable)
 
 void Q2DViewerExtension::createConnections()
 {
-    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
-    connect( m_slider2_1 , SIGNAL( valueChanged(int) ) , m_spinBox2_1 , SLOT( setValue(int) ) );
-    connect( m_spinBox2_1 , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-    connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider2_1 , SLOT( setValue(int) ) );
+    connect( m_viewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
 
+    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
     connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
     connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
     connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
 
-    // window level combo box
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
+    // Menus
+    connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedGrid() ) );
+    connect( m_buttonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveTable() ) );
+    connect( m_downImageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedImageGrid() ) );
+    connect( m_imageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveImageTable() ) );
 
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView , SLOT( resetWindowLevelToDefault() ) );
+    // window level combo box
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , this , SLOT( setWindowLevel(double,double) ) );
+
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , this , SLOT( resetWindowLevelToDefault() ) );
 
     // EXTRA!!!!!\TODO es temporal
     // enable/disable presentation states
@@ -195,7 +207,7 @@ void Q2DViewerExtension::createConnections()
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    m_2DView->setInput( m_mainVolume );
+    m_viewer->setInput( m_mainVolume );
 
     // Omplim el combo amb tants window levels com tingui el volum
     int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
@@ -214,7 +226,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
     {
         double wl[2];
-        m_2DView->getDefaultWindowLevel( wl );
+        m_viewer->m_2DView->getDefaultWindowLevel( wl );
         m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
     }
     m_windowLevelComboBox->setCurrentIndex( 0 );
@@ -226,43 +238,19 @@ void Q2DViewerExtension::setInput( Volume *input )
 void Q2DViewerExtension::changeViewToAxial()
 {
     m_currentView = Axial;
-    int extent[6];
-    m_mainVolume->getWholeExtent( extent );
-    m_spinBox2_1->setMinimum( extent[4] );
-    m_spinBox2_1->setMaximum( extent[5] );
-    m_slider2_1->setMaximum( extent[5] );
-    m_viewText2_1->setText( tr("XY : Axial") );
-    m_2DView->setViewToAxial();
-    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
-    m_2DView->render();
+    m_selectedViewer->changeViewToAxial();
 }
 
 void Q2DViewerExtension::changeViewToSagital()
 {
     m_currentView = Sagital;
-    int extent[6];
-    m_mainVolume->getWholeExtent( extent );
-    m_spinBox2_1->setMinimum( extent[0] );
-    m_spinBox2_1->setMaximum( extent[1] );
-    m_slider2_1->setMaximum( extent[1] );
-    m_viewText2_1->setText( tr("YZ : Sagital") );
-    m_2DView->setViewToSagittal();
-    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
-    m_2DView->render();
+    m_selectedViewer->changeViewToSagital();
 }
 
 void Q2DViewerExtension::changeViewToCoronal()
 {
     m_currentView = Coronal;
-    int extent[6];
-    m_mainVolume->getWholeExtent( extent );
-    m_spinBox2_1->setMinimum( extent[2] );
-    m_spinBox2_1->setMaximum( extent[3] );
-    m_slider2_1->setMaximum( extent[3] );
-    m_viewText2_1->setText( tr("XZ : Coronal") );
-    m_2DView->setViewToCoronal();
-    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
-    m_2DView->render();
+    m_selectedViewer->changeViewToCoronal();
 }
 
 void Q2DViewerExtension::setView( ViewType view )
@@ -299,8 +287,8 @@ void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
     {
         delete m_keyImageNoteAttacher;
     }
-    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher(m_2DView, m_keyImageNote);
-    m_keyImageNoteAttacher->setVisibleAdditionalInformation(true);
+    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher( m_viewer->m_2DView, m_keyImageNote );
+    m_keyImageNoteAttacher->setVisibleAdditionalInformation( true );
     m_keyImageNoteAttacher->attach();
 }
 
@@ -311,9 +299,263 @@ void Q2DViewerExtension::loadPresentationState(const QString &filename)
     {
         delete m_presentationStateAttacher;
     }
-    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_2DView, qPrintable(filename) );
+    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_viewer->m_2DView, qPrintable(filename) );
     m_presentationStateAction->setEnabled( true );
     m_presentationStateAction->setChecked( true );
+}
+
+void Q2DViewerExtension::initLayouts()
+{
+    m_rows = 1;
+    m_columns = 1;
+
+    m_gridLayout = new QGridLayout();
+    m_gridLayout->setSpacing(0);
+    m_gridLayout->setMargin(0);
+
+    m_verticalLayout = new QVBoxLayout();
+    m_verticalLayout->setSpacing(0);
+    m_verticalLayout->setMargin(0);
+
+    QHBoxLayout *horizontal = new QHBoxLayout();
+    horizontal->setSpacing(0);
+    horizontal->setMargin(0);
+
+    horizontal->addWidget( m_viewer );
+    m_verticalLayout->addLayout( horizontal,0 );
+    m_gridLayout->addLayout( m_verticalLayout,0,0 );
+
+    m_qHorizontalLayoutVector.push_back( horizontal );
+    m_vectorViewers.push_back( m_viewer );
+    m_workingArea->setLayout(m_gridLayout);
+
+    m_selectedViewer->setSelected( true );
+}
+
+void Q2DViewerExtension::addColumns( int columns )
+{
+    QVector<QHBoxLayout*>::Iterator it;
+    int posViewer = m_columns;
+    Q2DViewerWidget * newViewer;
+
+    while( columns > 0 )
+    {
+        it = m_qHorizontalLayoutVector.begin();
+        m_columns += 1;
+        // Afegim un widget a cada fila per tenir una columna més
+        while( it != m_qHorizontalLayoutVector.end() )
+        {
+            newViewer = getNewQ2DViewerWidget();
+            (*it)->addWidget( newViewer );
+            m_vectorViewers.insert( posViewer,newViewer );
+            posViewer += m_columns;
+            it++;
+        }
+        posViewer = m_columns;
+        columns--;
+    }
+}
+
+void Q2DViewerExtension::addRows( int rows )
+{
+    QHBoxLayout *horizontal;
+    Q2DViewerWidget *newViewer;
+    int i;
+
+    while( rows > 0 )
+    {
+        horizontal = new QHBoxLayout();
+        m_verticalLayout->addLayout( horizontal,0 );
+        m_qHorizontalLayoutVector.push_back( horizontal );
+        m_rows += 1;
+        //Afegim tants widgets com columnes
+        for(i = 0; i < m_columns; i++)
+        {
+            newViewer = getNewQ2DViewerWidget();
+            horizontal->addWidget( newViewer );
+            m_vectorViewers.push_back( newViewer );
+        }
+        rows--;
+    }
+}
+
+void Q2DViewerExtension::removeColumns( int columns )
+{
+    QVector<QHBoxLayout*>::Iterator it = m_qHorizontalLayoutVector.begin();
+    int posViewer = m_columns-1;
+    Q2DViewerWidget * oldViewer;
+
+    while( columns > 0 && m_columns > 1 )
+    {
+        it = m_qHorizontalLayoutVector.begin();
+        // Eliminem un widget de cada fila per tenir una columna menys
+        while (it != m_qHorizontalLayoutVector.end())
+        {
+            oldViewer = m_vectorViewers.value(posViewer);
+            ( *it )->removeWidget( oldViewer );
+            m_vectorViewers.remove( posViewer );
+            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_viewer );
+            delete oldViewer;
+            posViewer += (m_columns-1);
+            it++;
+        }
+        m_columns--;
+        posViewer = m_columns-1;
+        columns--;
+    }
+
+}
+
+void Q2DViewerExtension::removeRows( int rows )
+{
+    int i;
+    m_verticalLayout->removeItem(m_verticalLayout->itemAt(m_verticalLayout->count()));
+    int posViewer = m_vectorViewers.count()-1;
+    Q2DViewerWidget * oldViewer;
+
+    while( rows > 0 && m_rows > 1 )
+    {
+         m_qHorizontalLayoutVector.pop_back();
+        //Eliminem tants widgets com columnes
+        for(i = 0; i < m_columns; i++)
+        {
+            oldViewer = m_vectorViewers.value(posViewer);
+            m_vectorViewers.remove(posViewer);
+            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_viewer );
+            delete oldViewer;
+            posViewer -= 1;
+        }
+        m_rows--;
+        rows--;
+    }
+}
+
+Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
+{
+    Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
+    newViewer->setInput ( m_mainVolume );
+    (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
+    connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
+
+    return newViewer;
+}
+
+void Q2DViewerExtension::setGrid( int rows, int columns )
+{
+
+    if( m_rows > rows ) removeRows( m_rows - rows);
+    else if ( m_rows < rows ) addRows( rows - m_rows );
+
+    if( m_columns > columns ) removeColumns( m_columns - columns );
+    else if ( m_columns < columns ) addColumns( columns - m_columns );
+
+}
+
+void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
+{
+    if ( viewer != m_selectedViewer )
+    {
+
+        m_selectedViewer->setSelected( false );
+        m_selectedViewer = viewer;
+        m_selectedViewer->setSelected( true );
+
+    }
+}
+
+void Q2DViewerExtension::rotateClockWise()
+{
+    ( m_selectedViewer->m_2DView )->rotateClockWise();
+}
+
+void Q2DViewerExtension::rotateCounterClockWise()
+{
+    ( m_selectedViewer->m_2DView )->rotateCounterClockWise();
+}
+
+void Q2DViewerExtension::setVoxelInformationCaptionEnabled(bool option)
+{
+    ( m_selectedViewer->m_2DView )->setVoxelInformationCaptionEnabled( option );
+}
+
+void Q2DViewerExtension::horizontalFlip()
+{
+    ( m_selectedViewer->m_2DView )->horizontalFlip();
+}
+
+void Q2DViewerExtension::verticalFlip()
+{
+    ( m_selectedViewer->m_2DView )->verticalFlip();
+}
+
+void Q2DViewerExtension::setWindowLevel(double wl1 ,double wl2)
+{
+    ( m_selectedViewer->m_2DView )->setWindowLevel( wl1, wl2 );
+}
+
+void Q2DViewerExtension::resetWindowLevelToDefault()
+{
+    ( m_selectedViewer->m_2DView )->resetWindowLevelToDefault();
+}
+
+void Q2DViewerExtension::showPredefinedGrid()
+{
+    int i;
+    int numberSeries = 0;
+
+    MenuGridWidget * menuGrid = new MenuGridWidget();
+    menuGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+
+    QList<Study *> listStudies = m_patient->getStudies();
+
+    for( i = 0; i < listStudies.size(); i++ )
+    {
+        numberSeries += listStudies.value( i )->getNumberOfSeries();
+    }
+
+    menuGrid->createPredefinedGrids( numberSeries );
+    menuGrid->show();
+
+    connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+}
+
+void Q2DViewerExtension::showInteractiveTable()
+{
+    TableMenu * tableMenu = new TableMenu();
+    tableMenu->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    tableMenu->show();
+
+    connect( tableMenu , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+}
+
+void Q2DViewerExtension::showPredefinedImageGrid()
+{
+    MenuGridWidget * menuGrid = new MenuGridWidget();
+    menuGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    menuGrid->createPredefinedGrids( m_selectedViewer->m_2DView->getNumberOfSlices() );
+    menuGrid->show();
+
+    connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+}
+
+void Q2DViewerExtension::showInteractiveImageTable()
+{
+    TableMenu * tableMenu = new TableMenu();
+    tableMenu->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    tableMenu->show();
+
+    connect( tableMenu , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+}
+
+Patient* Q2DViewerExtension::getPatient() const
+{
+    return m_patient;
+}
+
+void Q2DViewerExtension::setPatient( Patient *patient )
+{
+    m_patient = patient;
 }
 
 void Q2DViewerExtension::readSettings()

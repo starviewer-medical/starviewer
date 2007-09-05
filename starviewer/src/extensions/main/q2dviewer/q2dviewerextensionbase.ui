@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1301</width>
-    <height>529</height>
+    <width>901</width>
+    <height>391</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -38,7 +38,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -63,7 +63,7 @@
           <string>window level</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -85,7 +85,7 @@
           <string>zoom</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -107,7 +107,7 @@
           <string>zoom</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/distance.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -129,7 +129,7 @@
           <string>zoom</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/roi.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -151,7 +151,7 @@
           <string>move</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -173,7 +173,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -192,7 +192,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/sagital.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -211,7 +211,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/coronal.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -230,7 +230,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -249,7 +249,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/rotateCounterClockWise.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -268,7 +268,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/flipHorizontal.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -287,7 +287,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/flipVertical.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -301,12 +301,106 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="m_buttonGrid" >
+         <property name="toolTip" >
+          <string>Series layout</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_downButtonGrid" >
+         <property name="toolTip" >
+          <string>Series layout</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/down.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>12</width>
+           <height>12</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_imageGrid" >
+         <property name="toolTip" >
+          <string>Image layout</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_downImageGrid" >
+         <property name="toolTip" >
+          <string>Image layout</string>
+         </property>
+         <property name="text" >
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/down.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>12</width>
+           <height>12</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="m_voxelInformationToolButton" >
          <property name="text" >
           <string>voxel information</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -328,7 +422,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/photo.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -412,67 +506,12 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="udg::Q2DViewer" native="1" name="m_2DView" />
-     </item>
-     <item>
-      <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="m_viewText2_1" >
-         <property name="text" >
-          <string>XY : Axial</string>
-         </property>
-         <property name="scaledContents" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="m_slider2_1" >
-         <property name="focusPolicy" >
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="maximum" >
-          <number>0</number>
-         </property>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="m_spinBox2_1" >
-         <property name="maximum" >
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    <widget class="QWidget" native="1" name="m_workingArea" />
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
-  <customwidget>
-   <class>udg::Q2DViewer</class>
-   <extends>QWidget</extends>
-   <header>q2dviewer.h</header>
-  </customwidget>
   <customwidget>
    <class>QWindowLevelComboBox</class>
    <extends>QComboBox</extends>

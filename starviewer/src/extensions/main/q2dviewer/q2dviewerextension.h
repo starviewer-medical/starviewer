@@ -8,6 +8,10 @@
 #define UDGQ2DVIEWEREXTENSION_H
 
 #include "ui_q2dviewerextensionbase.h"
+//Estructura pacient
+#include "patient.h"
+//Visualitzador
+#include "q2dviewerwidget.h"
 
 // FWD declarations
 class QAction;
@@ -36,6 +40,12 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
+    /// Mètode per assignar un pacient
+    void setPatient( Patient *patient );
+
+    /// Mètode per obtenir el pacient
+    Patient* getPatient() const;
+
 public slots:
     /// Canvia a la vista axial, sagital o coronal
     void changeViewToAxial();
@@ -47,6 +57,62 @@ public slots:
 
     /// Carrega un Presentation State
     void loadPresentationState(const QString &filename);
+
+    ///Canviar el nombre de files i columnes
+    void addColumns( int columns = 1 );
+    void addRows(  int rows = 1 );
+    void removeColumns( int columns = 1 );
+    void removeRows( int rows = 1 );
+    void setGrid( int rows, int columns );
+
+    /// Mostrar menu per seleccionar grid predefinit
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop 
+    void showPredefinedGrid();
+
+    /// Mostrar el menu de la taula per seleccionar grids
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    void showInteractiveTable();
+
+    /// Mostrar menu per seleccionar grid predefinit dins una serie
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    void showPredefinedImageGrid();
+
+    /// Mostrar el menu de la taula per seleccionar grids dins una serie
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    void showInteractiveImageTable();
+
+private slots:
+    /// activem o desactivem el presentation state
+    void enablePresentationState( bool enable );
+
+    /// Inicialitza els layouts
+    void initLayouts();
+
+    /// Posem el widget seleccionat com a actual
+    void setViewerSelected( Q2DViewerWidget * viewer );
+
+    /// Slots per canviar rotacions al widget seleccionat
+    void rotateClockWise();
+    void rotateCounterClockWise();
+    void setVoxelInformationCaptionEnabled(bool option);
+    void horizontalFlip();
+    void verticalFlip();
+    void setWindowLevel(double wl1 ,double wl2);
+    void resetWindowLevelToDefault();
+
+private:
+    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
+    void createActions();
+
+    /// Crea les connexions entre signals i slots
+    void createConnections();
+
+    /// Llegir/Escriure la configuració de l'aplicació
+    void readSettings();
+    void writeSettings();
+
+    /// Retorna un nou widget Q2DViewerWidget per poder-lo inserir a una nova fila o columna
+    Q2DViewerWidget *getNewQ2DViewerWidget();
 
 private:
     /// Tipus de vistes que podem tenir
@@ -83,16 +149,6 @@ private:
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
 
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
-    void createActions();
-
-    /// Crea les connexions entre signals i slots
-    void createConnections();
-
-    /// Llegir/Escriure la configuració de l'aplicació
-    void readSettings();
-    void writeSettings();
-
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
@@ -102,10 +158,26 @@ private:
     /// S'encarrega d'aplicar els presentation states
     Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
 
-private slots:
-    /// activem o desactivem el presentation state
-    void enablePresentationState( bool enable );
+    /// Grids per mostrar diferents q2dviewers alhora.
+    QGridLayout * m_gridLayout;
+    QVBoxLayout * m_verticalLayout;
+    QVector<QHBoxLayout*> m_qHorizontalLayoutVector;
 
+    /// Visualitzador, sempre en tindrem un
+    Q2DViewerWidget * m_viewer;
+
+    /// Visualitzador seleccionat, també sempre en tindrem un
+    Q2DViewerWidget * m_selectedViewer;
+
+    /// Nombre de files i columnes per els layouts
+    int m_rows;
+    int m_columns;
+
+    /// Renderers que tenim
+    QVector<Q2DViewerWidget *> m_vectorViewers;
+
+    /// Pacient que estem tractant
+    Patient *m_patient;
 };
 
 } // end namespace udg
