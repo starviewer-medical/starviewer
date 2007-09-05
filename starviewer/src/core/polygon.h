@@ -86,6 +86,13 @@ public:
     QString getPrimitiveType()
     { return( "Polygon" ); }
     
+    ///ens emet el senyal per que es refresqui el polígon
+    void refreshPolygon();
+    
+signals:
+    ///s'emet quan canvia un dels atributs del polígon
+    void polygonChanged( Polygon *polygon );
+    
 private:
     
     ///conjunt de punts que formaran el polígon

@@ -36,5 +36,10 @@ void Polygon::addPoint( double newPoint[3] )
     m_pointsList << newPoint;
 }
 
+void Polygon::refreshPolygon()
+{
+    emit  polygonChanged( this );
+}
+
 };  // end namespace udg
 
