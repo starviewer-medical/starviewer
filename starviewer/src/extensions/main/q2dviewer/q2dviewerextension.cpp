@@ -39,6 +39,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_viewer = new Q2DViewerWidget( m_workingArea );
     m_selectedViewer = m_viewer;
 
+    createProgressDialog();
     readSettings();
     createActions();
     createConnections();
@@ -556,6 +557,32 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
+    foreach( Study *study, m_patient->getStudies() )
+    {
+        foreach( Series *series, study->getSeries() )
+        {
+            foreach( Volume *volume, series->getVolumesList() )
+            {
+                connect( volume, SIGNAL(progress(int)), this, SLOT( updateVolumeLoadProgressNotification(int) ) );
+            }
+        }
+    }
+}
+
+void Q2DViewerExtension::updateVolumeLoadProgressNotification(int progress)
+{
+    m_progressDialog->setValue(progress);
+}
+
+void Q2DViewerExtension::createProgressDialog()
+{
+    m_progressDialog = new QProgressDialog( this );
+    m_progressDialog->setModal( false );
+    m_progressDialog->setRange( 0 , 100 );
+    m_progressDialog->setMinimumDuration( 0 );
+    m_progressDialog->setWindowTitle( tr("Loading") );
+    m_progressDialog->setLabelText( tr("Loading data, please wait...") );
+    m_progressDialog->setCancelButton( 0 );
 }
 
 void Q2DViewerExtension::readSettings()
