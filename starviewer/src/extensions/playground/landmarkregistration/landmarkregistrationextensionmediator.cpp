@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "landmarkregistrationextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID LandmarkRegistrationExtensionMediator::getExtensionID() const
     return DisplayableID("LandmarkRegistrationExtension",tr("Landmark Registration"));
 }
 
-bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QLandmarkRegistrationExtension *landmarkRegistrationExtension;
 

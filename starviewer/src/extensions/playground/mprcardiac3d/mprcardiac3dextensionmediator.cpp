@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "mprcardiac3dextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID MPRCardiac3DExtensionMediator::getExtensionID() const
     return DisplayableID("MPRCardiac3DExtension",tr("3D Cardiac MPR"));
 }
 
-bool MPRCardiac3DExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool MPRCardiac3DExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QMPRCardiac3DExtension *mprCardiac3DExtension;
 

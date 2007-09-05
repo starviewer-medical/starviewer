@@ -26,7 +26,7 @@ public:
 
     virtual DisplayableID getExtensionID() const;
 
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler);
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
 
 };
 

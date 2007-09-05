@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "mpr3dextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg{
@@ -25,7 +24,7 @@ DisplayableID MPR3DExtensionMediator::getExtensionID() const
     return DisplayableID("MPR3DExtension",tr("MPR 3D"));
 }
 
-bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QMPR3DExtension *mpr3dExtension;
 

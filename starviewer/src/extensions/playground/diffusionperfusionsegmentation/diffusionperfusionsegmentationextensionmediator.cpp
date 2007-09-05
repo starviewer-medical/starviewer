@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "diffusionperfusionsegmentationextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg{
@@ -25,7 +24,7 @@ DisplayableID DiffusionPerfusionSegmentationExtensionMediator::getExtensionID() 
     return DisplayableID("DiffusionPerfusionSegmentationExtension",tr("Diffusion-Perfusion Segmentation"));
 }
 
-bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QDifuPerfuSegmentationExtension *difuPerfuExtension;
 

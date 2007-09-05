@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "rectumsegmentationextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID RectumSegmentationExtensionMediator::getExtensionID() const
     return DisplayableID("RectumSegmentationExtension",tr("Rectum Segmentation"));
 }
 
-bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QRectumSegmentationExtension *rectumSegmentationExtension;
 

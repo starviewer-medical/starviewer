@@ -25,7 +25,7 @@ public:
 
     ~SegmentationFrameworkExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler);
+    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
 
     virtual DisplayableID getExtensionID() const;
 };

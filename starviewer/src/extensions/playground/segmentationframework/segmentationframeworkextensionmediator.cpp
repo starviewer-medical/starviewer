@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "segmentationframeworkextensionmediator.h"
 
-#include "extensionhandler.h"
 #include "extensioncontext.h"
 
 namespace udg {
@@ -25,7 +24,7 @@ DisplayableID SegmentationFrameworkExtensionMediator::getExtensionID() const
     return DisplayableID("SegmentationFrameworkExtension",tr("Segmentation Framework"));
 }
 
-bool SegmentationFrameworkExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
+bool SegmentationFrameworkExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
     QSegmentationFrameworkExtension *segmentationFrameworkExtension;
 
