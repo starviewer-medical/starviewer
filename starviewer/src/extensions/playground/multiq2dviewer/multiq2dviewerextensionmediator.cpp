@@ -28,15 +28,14 @@ DisplayableID MultiQ2DViewerExtensionMediator::getExtensionID() const
 
 bool MultiQ2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext, ExtensionHandler* extensionHandler)
 {
-    MultiQ2DViewerExtension * multiq2dviewerExtension;
+    InteractiveWidget *interactiveWidgetExtension;
 
-    if ( !(multiq2dviewerExtension = qobject_cast<MultiQ2DViewerExtension*>(extension)) )
+    if ( !(interactiveWidgetExtension = qobject_cast<InteractiveWidget*>(extension)) )
     {
         return false;
     }
 
-    multiq2dviewerExtension->setPatient( extensionContext.getPatient() );
-    multiq2dviewerExtension->setInput( extensionContext.getDefaultVolume() );
+    interactiveWidgetExtension->setPatient( extensionContext.getPatient() );
 
     return true;
 }
