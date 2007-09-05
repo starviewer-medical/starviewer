@@ -14,7 +14,7 @@
 #include "logging.h"
 #include "extensionworkspace.h"
 #include "qapplicationmainwindow.h"
-
+#include "volumerepository.h" // per esborrar els volums
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
 #include "extensioncontext.h"
@@ -79,7 +79,7 @@ void ExtensionHandler::request( const QString &who )
         extensionContext.setDefaultSelectedStudies( QStringList(m_defaultStudyUID) );
         extensionContext.setDefaultSelectedSeries( QStringList(m_defaultSeriesUID) );
 
-        mediator->initializeExtension(extension, extensionContext, this);
+        mediator->initializeExtension(extension, extensionContext);
         m_mainApp->getExtensionWorkspace()->addApplication(extension, mediator->getExtensionID().getLabel() );
     }
     else
@@ -91,6 +91,17 @@ void ExtensionHandler::request( const QString &who )
 void ExtensionHandler::killBill()
 {
     // TODO descarregar tots els volums que tingui el pacient en aquesta finestra
+    // quan ens destruim alliberem tots els volums que hi hagi a memòria
+    foreach( Study *study, m_mainApp->getCurrentPatient()->getStudies() )
+    {
+        foreach( Series *series, study->getSeries() )
+        {
+            foreach( Identifier id, series->getVolumesIDList()  )
+            {
+                VolumeRepository::getRepository()->removeVolume( id );
+            }
+        }
+    }
 }
 
 void ExtensionHandler::createConnections()
