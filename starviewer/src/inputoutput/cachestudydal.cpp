@@ -353,6 +353,27 @@ Status CacheStudyDAL::queryStudy( QString studyUID , Study *study )
     return state;
 }
 
+QStringList CacheStudyDAL::getFiles( QString studyUID )
+{
+    QStringList files;
+    QString sqlSentence = QString( "select AbsPath , SerInsUID , ImgNam "
+            " from image , study "
+            " where Image.StuInsUID = '%1' and study.StuInsUID = '%1'" )
+            .arg(studyUID);
+
+    Status state;
+    QList<QStringList> results;
+    state = queryDatabase(sqlSentence,results);
+    if( state.good() )
+    {
+        foreach( QStringList list, results )
+        {
+            files << list.at(0) + list.at(1) + "/" + list.at(2);
+        }
+    }
+    return files;
+}
+
 Status CacheStudyDAL::queryAllStudies( StudyList &ls )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();

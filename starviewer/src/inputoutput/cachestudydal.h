@@ -84,13 +84,13 @@ public:
      */
     Status queryStudy( QString studyUID , Study *study );
 
-    /** Ens retorna les dades del pacient que té l'estudi amb uid studyUID. Només omple la informació de pacient i prou,
-     * no omple la informació dels estudis, ni series, etc..
-     * @param  studyUID identificador de l'estudi
-     * @param  patient que té aquest estudi amb aquest uid
-     * @return retorna estat del mètode
+    /**
+     * Ens retorna tots els arxius que formen aquell estudi
+     * TODO mètode de conveniència per no haver de fer bucles raros a queryscreen i treure una dependència més de DICOMSeries/Study, etc
+     * @param studyUID UID de l'estudi del qual volem els arxius
+     * @return Una llista amb els paths absoluts dels arxius en qüestió
      */
-//     Status queryPatientWithStudy( QString studyUID , Patient *patient );
+    QStringList getFiles( QString studyUID );
 
     /** Selecciona els estudis vells que no han estat visualitzats des de una data inferior a la que es passa per parametre
      * @param Data a partir de la qual es seleccionaran els estudis vells
