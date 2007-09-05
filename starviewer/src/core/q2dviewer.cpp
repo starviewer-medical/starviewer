@@ -14,7 +14,6 @@
 #include "patient.h"
 
 // include's qt
-#include <QProgressDialog>
 #include <QResizeEvent>
 #include <QSize>
 #include <QMenu>
@@ -854,16 +853,6 @@ void Q2DViewer::setInput( Volume* volume )
     if( volume == 0 )
         return;
     m_mainVolume = volume;
-
-    // TODO Mostra el progrés. Sistema provisional perquè l'usuari no es quedi amb cara de tonto amb la pantalla congelada
-    QProgressDialog progressDialog( this );
-    progressDialog.setModal( true );
-    progressDialog.setRange( 0 , 100 );
-    progressDialog.setMinimumDuration( 0 );
-    progressDialog.setWindowTitle( tr("Loading") );
-    progressDialog.setLabelText( tr("Loading data, please wait...") );
-    progressDialog.setCancelButton( 0 );
-    connect( m_mainVolume, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
 
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador

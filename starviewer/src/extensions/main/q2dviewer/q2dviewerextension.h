@@ -13,6 +13,7 @@
 //Visualitzador
 #include "q2dviewerwidget.h"
 
+#include <QProgressDialog>
 // FWD declarations
 class QAction;
 
@@ -66,7 +67,7 @@ public slots:
     void setGrid( int rows, int columns );
 
     /// Mostrar menu per seleccionar grid predefinit
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop 
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showPredefinedGrid();
 
     /// Mostrar el menu de la taula per seleccionar grids
@@ -100,6 +101,13 @@ private slots:
     void setWindowLevel(double wl1 ,double wl2);
     void resetWindowLevelToDefault();
 
+    /**
+     * Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
+     * com per exemple un QProgressDialog o en un label
+     * @param progress valor del progrés de càrrega
+     */
+    void updateVolumeLoadProgressNotification(int progress);
+
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();
@@ -113,6 +121,8 @@ private:
 
     /// Retorna un nou widget Q2DViewerWidget per poder-lo inserir a una nova fila o columna
     Q2DViewerWidget *getNewQ2DViewerWidget();
+
+    void createProgressDialog();
 
 private:
     /// Tipus de vistes que podem tenir
@@ -178,6 +188,8 @@ private:
 
     /// Pacient que estem tractant
     Patient *m_patient;
+
+    QProgressDialog *m_progressDialog;
 };
 
 } // end namespace udg
