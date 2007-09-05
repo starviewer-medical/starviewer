@@ -151,6 +151,11 @@ QStringList Input::generateFilenames( QString dirPath )
     return stdVectorOfStdStringToQStringList( filenames );
 }
 
+void Input::slotProgress()
+{
+    emit progress( (int)( m_seriesReader->GetProgress() * 100 ) );
+}
+
 QStringList Input::stdVectorOfStdStringToQStringList( std::vector< std::string > vector )
 {
     QStringList list;
