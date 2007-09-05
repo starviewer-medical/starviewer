@@ -332,6 +332,11 @@ QList<Volume*> Series::getVolumesList()
     return volumesList;
 }
 
+QList<Identifier> Series::getVolumesIDList() const
+{
+    return m_volumesList;
+}
+
 void Series::addFilePath(QString filePath)
 {
     if (!m_filesPathList.contains(filePath))

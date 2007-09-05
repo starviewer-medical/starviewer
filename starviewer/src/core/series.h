@@ -65,7 +65,7 @@ public:
     /// Assignar/Obtenir el protocol de la sèrie
     void setProtocolName( QString protocolName );
     QString getProtocolName() const;
-    
+
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
     ///  Retorna fals si hi ha algun error en el format
@@ -97,7 +97,7 @@ public:
      */
     void setViewPosition( QString viewPosition );
     QString getViewPosition() const;
-    
+
     /// Assignar/Obtenir el número de fases
     void setNumberOfPhases( int phases );
     int getNumberOfPhases() const;
@@ -132,7 +132,7 @@ public:
      * @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
      */
     int getNumberOfImages();
-    
+
     /// Indica si una sèrie té imatges
     bool hasImages() const;
 
@@ -158,6 +158,9 @@ public:
 
     /// Retorna una llista amb tots els volums de la sèrie.
     QList<Volume*> getVolumesList();
+
+    /// Retorna la llista d'identificadors de volum
+    QList<Identifier> getVolumesIDList() const;
 
     /// Afegeix un fitxer a la sèrie
     void addFilePath(QString filePath);
