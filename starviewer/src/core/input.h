@@ -150,10 +150,7 @@ public:
     //itk::QtSignalAdaptor *m_progressSignalAdaptor;
 public slots:
     /// emet el progrés de lectura d'una sèrie d'arxius
-    void slotProgress()
-    {
-        emit progress( (int)( m_seriesReader->GetProgress() * 100 ) );
-    }
+    void slotProgress();
 
 signals:
     /// Indica el progrés en % de la lectura del fitxer
