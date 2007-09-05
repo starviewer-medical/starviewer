@@ -7,6 +7,7 @@
 #include "vtkdicomimagereader.h"
 
 #include "image.h"
+#include <QApplication> // pel "processEvents()"
 
 #include <vtkDICOMImageReader.h>
 #include <vtkImageData.h>
@@ -45,7 +46,8 @@ bool vtkDICOMImageReader::load()
             memcpy( m_imageBuffer, dicomBuffer, m_sliceByteIncrement );
             m_imageBuffer += m_sliceByteIncrement;
             slice++;
-            emit progress( slice / total );
+            qApp->processEvents();
+            emit progress( (int)floor( (double)slice/(double)total * 100 ) );
         }
         emit finished();
     }

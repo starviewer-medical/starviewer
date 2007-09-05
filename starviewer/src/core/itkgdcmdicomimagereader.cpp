@@ -8,7 +8,8 @@
 
 #include "logging.h"
 #include "image.h"
-
+#include "volume.h" // pel tipus d'imatge itk
+#include <QApplication> // pel "processEvents()"
 #include <itkImageFileReader.h>
 #include <itkGDCMImageIO.h>
 
@@ -31,8 +32,7 @@ bool itkGdcmDICOMImageReader::load()
     {
         // preparem els paràmetres de lectura
 //         typedef itk::Image<signed short, 3> ImageType;
-        typedef itk::Image<int, 3> ImageType;
-        typedef itk::ImageFileReader< ImageType >  ReaderType;
+        typedef itk::ImageFileReader< Volume::ItkImageType >  ReaderType;
         typedef itk::GDCMImageIO GDCMImageIOType;
 
         ReaderType::Pointer reader = ReaderType::New();
@@ -67,7 +67,8 @@ bool itkGdcmDICOMImageReader::load()
             memcpy( m_imageBuffer, dicomBuffer, m_sliceByteIncrement );
             m_imageBuffer += m_sliceByteIncrement;
             slice++;
-            emit progress( slice / total );
+            qApp->processEvents();
+            emit progress( (int)floor( (double)slice/(double)total * 100 ) );
         }
         emit finished();
     }
