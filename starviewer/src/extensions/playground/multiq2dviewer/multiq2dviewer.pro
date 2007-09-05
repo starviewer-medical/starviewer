@@ -3,31 +3,14 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/multiq2dviewer
 # L'objectiu �s una biblioteca:  
 
-FORMS += multiq2dviewerextensionbase.ui \
-         q2dviewerwidgetbase.ui \
-         gridiconbase.ui \
-         menugridwidgetbase.ui
-         
 HEADERS += multiq2dviewerextensionmediator.h \
-           multiq2dviewerextension.h \
-           q2dviewerwidget.h \
            patientitemmodel.h \
            patientitem.h \
-           interactivewidget.h \
-           gridicon.h \
-           menugridwidget.h \
-           itemmenu.h \
-           tablemenu.h 
+           interactivewidget.h
 SOURCES += multiq2dviewerextensionmediator.cpp \
-           multiq2dviewerextension.cpp \
-           q2dviewerwidget.cpp \
            patientitemmodel.cpp \
            patientitem.cpp \
-           interactivewidget.cpp \
-           gridicon.cpp \
-           menugridwidget.cpp \
-           itemmenu.cpp \
-           tablemenu.cpp 
+           interactivewidget.cpp
 TARGETDEPS += ../../../interface/libinterface.a \
 ../../../core/libcore.a \
 ../../../inputoutput/libinputoutput.a

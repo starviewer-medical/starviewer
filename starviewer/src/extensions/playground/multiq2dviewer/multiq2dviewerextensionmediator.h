@@ -9,7 +9,7 @@
 #include "extensionmediator.h"
 
 #include "installextension.h"
-#include "multiq2dviewerextension.h"
+#include "interactivewidget.h"
 
 namespace udg{
 
@@ -28,7 +28,7 @@ public:
     virtual DisplayableID getExtensionID() const;
 };
 
-static InstallExtension<MultiQ2DViewerExtension, MultiQ2DViewerExtensionMediator> registerMultiQ2DViewerExtension;
+static InstallExtension<InteractiveWidget, MultiQ2DViewerExtensionMediator> registerMultiQ2DViewerExtension;
 
 
 } //udg namespace
