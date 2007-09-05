@@ -8,7 +8,6 @@
 
 #include "patient.h"
 #include "volume.h"
-//#include "extensionhandler.h"
 
 namespace udg {
 
@@ -20,17 +19,6 @@ ExtensionContext::~ExtensionContext()
 {
 }
 
-/*
-ExtensionHandler* ExtensionContext::getExtensionHandler() const
-{
-    return m_extensionHandler;
-}
-
-void ExtensionContext::setExtensionHandler(ExtensionHandler *extensionHandler)
-{
-    m_extensionHandler = extensionHandler;
-}
-*/
 Patient* ExtensionContext::getPatient() const
 {
     return m_patient;
