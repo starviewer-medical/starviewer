@@ -18,6 +18,7 @@ HEADERS += q2dviewerextensionmediator.h \
 
 SOURCES += q2dviewerextensionmediator.cpp \
 	   q2dviewerextension.cpp \
+           q2dviewerwidget.cpp \
 	   gridicon.cpp \
 	   tablemenu.cpp \
 	   itemmenu.cpp \
