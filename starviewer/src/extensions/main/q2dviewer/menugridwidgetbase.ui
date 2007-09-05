@@ -1,0 +1,28 @@
+<ui version="4.0" >
+ <class>udg::MenuGridWidgetBase</class>
+ <widget class="QWidget" name="udg::MenuGridWidgetBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>274</width>
+    <height>198</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" native="1" name="m_predefinedGrids" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>271</width>
+     <height>181</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
