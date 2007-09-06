@@ -92,13 +92,16 @@ void ExtensionHandler::killBill()
 {
     // TODO descarregar tots els volums que tingui el pacient en aquesta finestra
     // quan ens destruim alliberem tots els volums que hi hagi a memòria
-    foreach( Study *study, m_mainApp->getCurrentPatient()->getStudies() )
+    if (m_mainApp->getCurrentPatient() != NULL)
     {
-        foreach( Series *series, study->getSeries() )
+        foreach( Study *study, m_mainApp->getCurrentPatient()->getStudies() )
         {
-            foreach( Identifier id, series->getVolumesIDList()  )
+            foreach( Series *series, study->getSeries() )
             {
-                VolumeRepository::getRepository()->removeVolume( id );
+                foreach( Identifier id, series->getVolumesIDList()  )
+                {
+                    VolumeRepository::getRepository()->removeVolume( id );
+                }
             }
         }
     }
