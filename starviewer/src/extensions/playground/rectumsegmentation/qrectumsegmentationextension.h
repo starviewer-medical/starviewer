@@ -39,9 +39,6 @@ public:
 
     ~QRectumSegmentationExtension();
 
-    /// Li assigna el volum principal
-    void setInput( Volume *input );
-
     /// Obtenim la ToolBar d'eines de l'extensi?\TODO 'pujar' al pare com a m?ode com a Extensions?
     QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
 
@@ -49,6 +46,9 @@ public:
     //void populateToolBar( QToolBar *toolbar );
 
 public slots:
+
+    /// Li assigna el volum principal
+    void setInput( Volume *input );
 
     /// Executa l'algorisme de segmetnaci�
     void ApplyMethod();

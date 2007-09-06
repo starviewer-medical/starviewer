@@ -26,6 +26,8 @@ public:
 
     double getVolume();
 
+    int getVoxels();
+
 private:
 
     void calculateInsideValue();

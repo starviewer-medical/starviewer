@@ -505,9 +505,9 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 
     delete m_diffusionMainVolume;
     m_diffusionMainVolume = new Volume();
-    m_diffusionMainVolume->setData( diffusionImage );
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     m_diffusionMainVolume->setImages( m_diffusionInputVolume->getImages() );
+    m_diffusionMainVolume->setData( diffusionImage );
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
@@ -657,9 +657,10 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 
     delete m_perfusionMainVolume;
     m_perfusionMainVolume = new Volume();
-    m_perfusionMainVolume->setData( perfusionImage );
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     m_perfusionMainVolume->setImages( m_perfusionInputVolume->getImages() );
+
+    m_perfusionMainVolume->setData( perfusionImage );
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_perfusion2DView->setInput( m_perfusionMainVolume );
@@ -763,8 +764,6 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     imageThreshold->Update();
 
     m_strokeMaskVolume->setData( imageThreshold->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_strokeMaskVolume->setImages( m_diffusionInputVolume->getImages() );
 
     m_diffusion2DView->setOverlayToBlend();
     m_diffusion2DView->setOpacityOverlay( m_diffusionOpacitySlider->value() / 100.0 );
@@ -883,8 +882,6 @@ void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
     imageThreshold->Update();
 
     m_ventriclesMaskVolume->setData( imageThreshold->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_ventriclesMaskVolume->setImages( m_diffusionInputVolume->getImages() );
 
     m_ventriclesViewAction->setEnabled( true );
     m_ventriclesViewAction->trigger();
@@ -959,9 +956,10 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
         if ( !m_perfusionRescaledVolume ) m_perfusionRescaledVolume = new Volume();
 
-        m_perfusionRescaledVolume->setData( rescalerPerfusion->GetOutput() );
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_perfusionRescaledVolume->setImages( m_perfusionInputVolume->getImages() );
+
+        m_perfusionRescaledVolume->setData( rescalerPerfusion->GetOutput() );
 
         RescaleFilterType::Pointer rescalerDiffusion = RescaleFilterType::New();
         rescalerDiffusion->SetInput( m_diffusionMainVolume->getItkData() );
@@ -971,9 +969,9 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
         if ( !m_diffusionRescaledVolume ) m_diffusionRescaledVolume = new Volume();
 
-        m_diffusionRescaledVolume->setData( rescalerDiffusion->GetOutput() );
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_perfusionRescaledVolume->setImages( m_perfusionInputVolume->getImages() );
+        m_diffusionRescaledVolume->setImages( m_diffusionInputVolume->getImages() );
+        m_diffusionRescaledVolume->setData( rescalerDiffusion->GetOutput() );
 
         m_perfusion2DView->setInput( m_perfusionRescaledVolume );
         m_perfusion2DView->resetWindowLevelToDefault();
@@ -1091,9 +1089,10 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
 
     m_blackpointEstimatedVolume = new Volume();
-    m_blackpointEstimatedVolume->setData( perfuEstimatorImageResult );
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     m_blackpointEstimatedVolume->setImages( m_perfusionInputVolume->getImages() );
+
+    m_blackpointEstimatedVolume->setData( perfuEstimatorImageResult );
 
 
 

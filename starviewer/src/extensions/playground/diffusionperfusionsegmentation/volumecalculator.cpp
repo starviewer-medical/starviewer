@@ -62,6 +62,34 @@ double VolumeCalculator::getVolume()
     return volumeCalc->GetVolume();
 }
 
+int VolumeCalculator::getVoxels()
+{
+    if ( !m_mask )
+    {
+        std::cerr << "Error: L'input no està definit" << std::endl;
+        return 0.0;
+    }
+
+    if ( !m_insideValueSet ) calculateInsideValue();
+
+    typedef itk::VolumeCalculatorImageFilter< Volume::ItkImageType > VolumeCalcFilterType;
+    VolumeCalcFilterType::Pointer volumeCalc = VolumeCalcFilterType::New();
+    volumeCalc->SetInput( m_mask->getItkData() );
+    volumeCalc->SetInsideValue( m_insideValue );
+
+    try
+    {
+        volumeCalc->Update();
+    }
+    catch( itk::ExceptionObject & excep )
+    {
+        std::cerr << "Exception caught !" << std::endl;
+        std::cerr << excep << std::endl;
+    }
+
+    return volumeCalc->GetVolumeCount();
+}
+
 void VolumeCalculator::calculateInsideValue()
 {
     Volume::ItkImageTypePointer maskItk = m_mask->getItkData();
