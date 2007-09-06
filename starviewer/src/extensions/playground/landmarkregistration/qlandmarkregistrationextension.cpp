@@ -441,9 +441,9 @@ void QLandmarkRegistrationExtension::applyMethod()
     }
 
     m_registeredVolume = new Volume();
-    m_registeredVolume->setData( resampleFilter->GetOutput() );
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     m_registeredVolume->setImages( m_firstVolume->getImages() );
+    m_registeredVolume->setData( resampleFilter->GetOutput() );
 
 
 
@@ -1201,9 +1201,9 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         }
 
         m_registeredVolume = new Volume();
-        m_registeredVolume->setData( resampleFilter->GetOutput() );
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_registeredVolume->setImages( m_firstVolume->getImages() );
+        m_registeredVolume->setData( resampleFilter->GetOutput() );
 
         m_2DView_2->setOverlayToBlend();
         m_2DView_2->setOpacityOverlay(((double)m_opacityOverlaySlider->value())/100.0);

@@ -97,7 +97,6 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
 {
     writeSettings();
     delete m_segMethod;
-    //delete m_lesionMaskVolume;//TODO descomentar aix�per tal d'alliberar el m_lesionMaskVolume (ara peta)
     //pointActor  -> Delete();
     squareActor -> Delete();
     if(m_filteredVolume != 0)
@@ -301,6 +300,8 @@ void QRectumSegmentationExtension::createConnections()
 
   connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
 
+  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
+
   connect( m_saveMaskPushButton, SIGNAL( clicked() ) , this , SLOT( saveActivedMaskVolume() ) );
 }
 
@@ -419,6 +420,8 @@ void QRectumSegmentationExtension::ApplyFilterMainImage( )
         QApplication::setOverrideCursor(Qt::WaitCursor);
         m_segMethod->setVolume(m_mainVolume);
         m_filteredVolume = new Volume();
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        m_filteredVolume->setImages( m_mainVolume->getImages() );
         m_segMethod->applyFilter(m_filteredVolume);
         m_segMethod->setVolume(m_filteredVolume);
         m_2DView->setInput( m_filteredVolume );
@@ -473,11 +476,12 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_volume = m_segMethod->applyMethod();
     m_cont = m_segMethod->getNumberOfVoxels();
 
-     std::cout<<"FI Apply filter!!"<<std::endl;
+    std::cout<<"FI Apply filter!!"<<std::endl;
 
-    m_2DView->setOverlayToBlend();
-    m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
-    m_2DView->setOverlayInput(m_lesionMaskVolume);
+    this->viewLesionOverlay();
+//     m_2DView->setOverlayToBlend();
+//     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+//     m_2DView->setOverlayInput(m_lesionMaskVolume);
 
     m_resultsLineEdit->clear();
     m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
@@ -530,8 +534,6 @@ void QRectumSegmentationExtension::ApplyVentriclesMethod( )
     m_imageThreshold->Update();
 
     m_ventriclesMaskVolume->setData(m_imageThreshold->GetOutput());
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_ventriclesMaskVolume->setImages(m_mainVolume->getImages());
 
     m_ventriclesViewAction->setEnabled( true );
     m_ventriclesViewAction->trigger( );
@@ -1000,8 +1002,6 @@ void QRectumSegmentationExtension::viewThresholds()
     imageThreshold->Update();
 
     m_lesionMaskVolume->setData(imageThreshold->GetOutput());
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_lesionMaskVolume->setImages(m_mainVolume->getImages());
 
     this->viewLesionOverlay();
 
@@ -1019,8 +1019,8 @@ void QRectumSegmentationExtension::viewRectumOverlay()
         m_activedMaskVolume = m_rectumMaskVolume;
         m_activedCont = &m_rectumCont;
         m_activedVolume = &m_rectumVolume;
-        m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+        m_2DView->setOverlayToBlend();
         m_2DView->setOverlayInput(m_rectumMaskVolume);
         m_2DView->getInteractor()->Render();
     }
@@ -1033,8 +1033,8 @@ void QRectumSegmentationExtension::viewLesionOverlay()
         m_activedMaskVolume = m_lesionMaskVolume;
         m_activedCont = &m_cont;
         m_activedVolume = &m_volume;
-        m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+        m_2DView->setOverlayToBlend();
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->getInteractor()->Render();
     }

@@ -105,6 +105,7 @@ double rectumSegmentationMethod::applyMethod()
     seedPoint[2] = m_pz;
     m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
 
+    std::cout<<"Seed Index: "<<seedIndex<<endl;
     incaster->SetInput( m_Volume->getItkData() );
     extracter->SetInput( incaster->GetOutput() );
     connectedThreshold->SetInput( extracter->GetOutput() );
@@ -299,8 +300,6 @@ double rectumSegmentationMethod::applyMethod()
     std::cout<<"Size: "<<sizeOut<<std::endl;
 
     m_Mask->setData( maskAux );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
     m_Mask->getVtkData()->Update();
 
     if(m_cont!=0){
@@ -462,32 +461,34 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
         unsigned int i,j,k;
         IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
         std::cout<<sizeOut<<std::endl;
-        for(k=0;k<sizeOut[2];k++){
-            for(j=0;j<sizeOut[1];j++){
-                for(i=0;i<sizeOut[0];i++){
-                        if(k==slice){
-                        if(itSeg.Get()==m_insideMaskValue){
-                            itMask.Set(m_insideMaskValue);
-                            m_cont++;
-                        }else{
-                            itMask.Set(m_outsideMaskValue);
-                        }
-                        ++itSeg;
-                    }
-                    ++itMask;
+        itk::ImageRegionIterator< Volume::ItkImageType >::IndexType indexMask;
+        indexMask[0]=0;
+        indexMask[1]=0;
+        indexMask[2]=slice;
+        itMask.SetIndex(indexMask);
+        for(j=0;j<sizeOut[1];j++){
+            for(i=0;i<sizeOut[0];i++){
+                if(itSeg.Get()==m_insideMaskValue){
+                    itMask.Set(m_insideMaskValue);
+                    m_cont++;
                 }
+                ++itSeg;
+                ++itMask;
             }
         }
+
         Volume::ItkImageType::SpacingType sp = m_Volume->getItkData()->GetSpacing();
         m_volume = m_cont*sp[0]*sp[1]*sp[2];
 
         std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<" voxels)"<<std::endl;
         std::cout<<"Size: "<<sizeOut<<std::endl;
+        std::cout<<"Mask features: "<<m_Mask<<std::endl;
 
         m_Mask->getVtkData()->Update();
-
-        this->applyMethodNextSlice(slice + step, step, xmax, ymax);
-
+        if((slice + step)>0 && (slice + step) < sizeOut[2])
+        {
+            this->applyMethodNextSlice(slice + step, step, xmax, ymax);
+        }
     }else{
         std::cout<<"End for step "<<step<<" in slice "<<slice<<std::endl;
     }
@@ -623,8 +624,6 @@ double rectumSegmentationMethod::applyCleanSkullMethod()
 
     //m_Mask->setData( outcaster->GetOutput());
     m_Mask->setData( volumeCalc->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
     //m_Mask->setData( binaryDilate->GetOutput());
     //m_Volume->setData( maskAux );
     //m_Mask->setData( maskAux );
@@ -679,9 +678,10 @@ void rectumSegmentationMethod::applyFilter(Volume* output)
         std::cerr << excep << std::endl;
     }
 
-    output->setData( outcaster->GetOutput());
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     output->setImages(m_Volume->getImages());
+
+    output->setData( outcaster->GetOutput());
     output->getVtkData()->Update();
 
     return;
@@ -1095,8 +1095,6 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     std::cout<<"Mask Set!!"<<std::endl;
     //lesionMask->setData( thresholder->GetOutput());
     lesionMask->setData( resampleMaskFilter2->GetOutput());
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    lesionMask->setImages(m_Volume->getImages());
 
   VolumeWriterType::Pointer maskWriter2 = VolumeWriterType::New();
   maskWriter2->SetInput( resampleMaskFilter2->GetOutput() );
@@ -1235,8 +1233,6 @@ double rectumSegmentationMethod::applyVentriclesMethod()
     m_cont = volumeCalc->GetVolumeCount();
 
     m_Mask->setData( volumeCalc->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages(m_Volume->getImages());
     m_Mask->getVtkData()->Update();
 
     return m_volume;

@@ -306,7 +306,7 @@ void QEdemaSegmentationExtension::createConnections()
 
 void QEdemaSegmentationExtension::setInput( Volume *input )
 {
-    m_mainVolume = new Volume();
+    //m_mainVolume = new Volume();
     //Prova pel mètode de FastMarching
 /*    typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
     typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleImageFilterType;
@@ -531,8 +531,6 @@ void QEdemaSegmentationExtension::ApplyVentriclesMethod( )
     m_imageThreshold->Update();
 
     m_ventriclesMaskVolume->setData(m_imageThreshold->GetOutput());
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_ventriclesMaskVolume->setImages( m_mainVolume->getImages() );
     m_ventriclesViewAction->setEnabled( true );
     m_ventriclesViewAction->trigger( );
     this->viewVentriclesOverlay();
@@ -1001,8 +999,6 @@ void QEdemaSegmentationExtension::viewThresholds()
     imageThreshold->Update();
 
     m_lesionMaskVolume->setData(imageThreshold->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_lesionMaskVolume->setImages( m_mainVolume->getImages() );
 
     this->viewLesionOverlay();
 

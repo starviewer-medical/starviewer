@@ -796,8 +796,6 @@ void QStrokeSegmentationExtension::viewThresholds()
     imageThreshold->Update();
 
     m_maskVolume->setData(imageThreshold->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_maskVolume->setImages( m_mainVolume->getImages() );
 
     m_2DView->setOverlayToBlend();
     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);

@@ -131,12 +131,14 @@ private:
 
     /// Stroke segmentation
     StrokeSegmentationMethod * m_strokeSegmentationMethod;
+    int m_strokeCont;
     double m_strokeVolume;
 
     /// Registration
     TransformType::Pointer m_registerTransform;
 
     /// Penombra segmentation
+    int m_penombraCont;
     double m_penombraVolume;
 
     double m_seedPosition[3];
