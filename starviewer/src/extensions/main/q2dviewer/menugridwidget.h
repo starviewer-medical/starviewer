@@ -10,6 +10,7 @@
 #include <ui_menugridwidgetbase.h>
 #include <itemmenu.h>
 #include <QWidget>
+#include <QGridLayout>
 
 namespace udg {
 
@@ -40,6 +41,9 @@ public:
     /// Mètode que omple el widget amb les els grids predefinits
     void createPredefinedGrids( QStringList list );
 
+    /// Elimina tot el contingut del widget
+    void dropContent();
+
 protected:
 
     /// Mètode que crea una icona de rows x columns
@@ -50,6 +54,12 @@ protected:
 
     /// Màxim nombre d'elements a mostrar;
     int m_maxElements;
+
+    /// Grid per mostrar els elements predefinits
+    QGridLayout * m_gridLayout;
+
+    /// Llista dels items
+    QList<ItemMenu *> * m_itemList;
 
 public slots:
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -12,6 +12,9 @@
 #include "patient.h"
 //Visualitzador
 #include "q2dviewerwidget.h"
+// Menus
+#include "menugridwidget.h"
+#include "tablemenu.h"
 
 #include <QProgressDialog>
 // FWD declarations
@@ -27,9 +30,9 @@ class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
 
 /**
-Extensió que s'executarà per defecte a l'obrir un model
+ExtensiÃ³ que s'executarÃ  per defecte a l'obrir un model
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de GrÃ fics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Q2DViewerExtension : public QWidget , private Ui::Q2DViewerExtensionBase {
 Q_OBJECT
@@ -41,10 +44,10 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
-    /// Mètode per assignar un pacient
+    /// MÃ¨tode per assignar un pacient
     void setPatient( Patient *patient );
 
-    /// Mètode per obtenir el pacient
+    /// MÃ¨tode per obtenir el pacient
     Patient* getPatient() const;
 
 public slots:
@@ -67,19 +70,19 @@ public slots:
     void setGrid( int rows, int columns );
 
     /// Mostrar menu per seleccionar grid predefinit
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    ///TODO S'ha de canviar el mÃ¨tode per tal que no es crei l'objecte cada cop 
     void showPredefinedGrid();
 
     /// Mostrar el menu de la taula per seleccionar grids
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    ///TODO S'ha de canviar el mÃ¨tode per tal que no es crei l'objecte cada cop
     void showInteractiveTable();
 
     /// Mostrar menu per seleccionar grid predefinit dins una serie
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    ///TODO S'ha de canviar el mÃ¨tode per tal que no es crei l'objecte cada cop
     void showPredefinedImageGrid();
 
     /// Mostrar el menu de la taula per seleccionar grids dins una serie
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
+    ///TODO S'ha de canviar el mÃ¨tode per tal que no es crei l'objecte cada cop
     void showInteractiveImageTable();
 
 private slots:
@@ -102,20 +105,20 @@ private slots:
     void resetWindowLevelToDefault();
 
     /**
-     * Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
+     * MÃ¨tode genÃ¨ric que s'assabenta del progrÃ©s de cÃ rrega d'un volum i el notifica d'alguna manera en l'interfÃ­cie
      * com per exemple un QProgressDialog o en un label
-     * @param progress valor del progrés de càrrega
+     * @param progress valor del progrÃ©s de cÃ rrega
      */
     void updateVolumeLoadProgressNotification(int progress);
 
 private:
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
+    /// crea les accions \TODO 'pujar' al pare com a mÃ¨tode virtual comÃº a Extensions? [hauria de ser protected]
     void createActions();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-    /// Llegir/Escriure la configuració de l'aplicació
+    /// Llegir/Escriure la configuraciÃ³ de l'aplicaciÃ³
     void readSettings();
     void writeSettings();
 
@@ -159,7 +162,7 @@ private:
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
 
-    /// El diàleg per escollir un window level ajustat per l'usuari
+    /// El diÃ leg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
     Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher;
@@ -173,10 +176,7 @@ private:
     QVBoxLayout * m_verticalLayout;
     QVector<QHBoxLayout*> m_qHorizontalLayoutVector;
 
-    /// Visualitzador, sempre en tindrem un
-    Q2DViewerWidget * m_viewer;
-
-    /// Visualitzador seleccionat, també sempre en tindrem un
+    /// Visualitzador seleccionat, tambÃ© sempre en tindrem un
     Q2DViewerWidget * m_selectedViewer;
 
     /// Nombre de files i columnes per els layouts
@@ -188,6 +188,14 @@ private:
 
     /// Pacient que estem tractant
     Patient *m_patient;
+
+    /// MenÃºs per seleccionar el grid de series( predefinits + taula )
+    MenuGridWidget * m_predefinedSeriesGrid;
+    TableMenu * m_seriesTableGrid;
+
+    /// MenÃºs per seleccionar el grid de les llesques d'una serie ( predefinits + taula )
+    MenuGridWidget * m_predefinedSlicesGrid;
+    TableMenu * m_sliceTableGrid;
 
     QProgressDialog *m_progressDialog;
 };

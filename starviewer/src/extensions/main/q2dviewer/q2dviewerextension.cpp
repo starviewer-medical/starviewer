@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -21,9 +21,6 @@
 // VTK
 #include <vtkRenderer.h>
 #include "slicing2dtool.h"
-// Menu
-#include "menugridwidget.h"
-#include "tablemenu.h"
 
 namespace udg {
 
@@ -36,8 +33,13 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_keyImageNote = NULL;
 
     m_patient = NULL;
-    m_viewer = new Q2DViewerWidget( m_workingArea );
-    m_selectedViewer = m_viewer;
+    m_selectedViewer = new Q2DViewerWidget( m_workingArea );
+    m_selectedViewer->m_2DView->render();
+
+    m_predefinedSeriesGrid = new MenuGridWidget();
+    m_seriesTableGrid = new TableMenu();
+    m_predefinedSlicesGrid = new MenuGridWidget();
+    m_sliceTableGrid = new TableMenu();
 
     createProgressDialog();
     readSettings();
@@ -82,7 +84,7 @@ void Q2DViewerExtension::createActions()
     m_presentationStateAction->setEnabled(false);
     m_presentationStateAction->setChecked(false);
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
+    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, perÃ² potser que mÃ©s endavant sÃ­
     m_voxelInformationAction = new QAction( 0 );
     m_voxelInformationAction->setText( tr("Voxel Information") );
     m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
@@ -147,11 +149,11 @@ void Q2DViewerExtension::createActions()
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
 
+    connect( m_actionFactory , SIGNAL( triggeredTool( QString ) ) , m_selectedViewer->m_2DView , SLOT( setTool( QString ) ) );
+
     m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
     m_roiToolButton->setDefaultAction( m_roiAction );
     m_roiAction->setIcon( QIcon(":/images/roi.png") );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_viewer->m_2DView, SLOT( setTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -163,7 +165,7 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_distanceAction );
     m_toolsActionGroup->addAction( m_roiAction );
 
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
+    //activem per defecte una tool. \TODO podrÃ­em posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
 }
 
@@ -182,9 +184,7 @@ void Q2DViewerExtension::enablePresentationState(bool enable)
 
 void Q2DViewerExtension::createConnections()
 {
-    connect( m_viewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-
-    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
+    // adicionals, \TODO ara es fa "a saco" perÃ² s'ha de millorar
     connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
     connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
     connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
@@ -200,15 +200,23 @@ void Q2DViewerExtension::createConnections()
 
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , this , SLOT( resetWindowLevelToDefault() ) );
 
+    // Connexions del menu
+    connect( m_predefinedSeriesGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+    connect( m_seriesTableGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+
     // EXTRA!!!!!\TODO es temporal
     // enable/disable presentation states
     connect( m_presentationStateAction, SIGNAL( toggled(bool) ), this, SLOT( enablePresentationState(bool) ) );
+
+    // Connexions necessaries pel primer visualitzador
+    connect( m_selectedViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
+
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    m_viewer->setInput( m_mainVolume );
+    m_vectorViewers.value( 0 )->setInput( m_mainVolume );
 
     // Omplim el combo amb tants window levels com tingui el volum
     int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
@@ -227,7 +235,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
     {
         double wl[2];
-        m_viewer->m_2DView->getDefaultWindowLevel( wl );
+        m_vectorViewers.value( 0 )->m_2DView->getDefaultWindowLevel( wl );
         m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
     }
     m_windowLevelComboBox->setCurrentIndex( 0 );
@@ -288,19 +296,19 @@ void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
     {
         delete m_keyImageNoteAttacher;
     }
-    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher( m_viewer->m_2DView, m_keyImageNote );
+    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher( m_vectorViewers.value( 0 )->m_2DView, m_keyImageNote );
     m_keyImageNoteAttacher->setVisibleAdditionalInformation( true );
     m_keyImageNoteAttacher->attach();
 }
 
 void Q2DViewerExtension::loadPresentationState(const QString &filename)
 {
-    // Es carrega l'attacher per el viewer principal només
+    // Es carrega l'attacher per el viewer principal nomÃ©s
     if( m_presentationStateAttacher != NULL )
     {
         delete m_presentationStateAttacher;
     }
-    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_viewer->m_2DView, qPrintable(filename) );
+    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_vectorViewers.value( 0 )->m_2DView, qPrintable(filename) );
     m_presentationStateAction->setEnabled( true );
     m_presentationStateAction->setChecked( true );
 }
@@ -322,12 +330,12 @@ void Q2DViewerExtension::initLayouts()
     horizontal->setSpacing(0);
     horizontal->setMargin(0);
 
-    horizontal->addWidget( m_viewer );
+    horizontal->addWidget( m_selectedViewer );
     m_verticalLayout->addLayout( horizontal,0 );
     m_gridLayout->addLayout( m_verticalLayout,0,0 );
 
     m_qHorizontalLayoutVector.push_back( horizontal );
-    m_vectorViewers.push_back( m_viewer );
+    m_vectorViewers.push_back( m_selectedViewer );
     m_workingArea->setLayout(m_gridLayout);
 
     m_selectedViewer->setSelected( true );
@@ -343,7 +351,7 @@ void Q2DViewerExtension::addColumns( int columns )
     {
         it = m_qHorizontalLayoutVector.begin();
         m_columns += 1;
-        // Afegim un widget a cada fila per tenir una columna més
+        // Afegim un widget a cada fila per tenir una columna mÃ©s
         while( it != m_qHorizontalLayoutVector.end() )
         {
             newViewer = getNewQ2DViewerWidget();
@@ -395,7 +403,7 @@ void Q2DViewerExtension::removeColumns( int columns )
             oldViewer = m_vectorViewers.value(posViewer);
             ( *it )->removeWidget( oldViewer );
             m_vectorViewers.remove( posViewer );
-            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_viewer );
+            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
             delete oldViewer;
             posViewer += (m_columns-1);
             it++;
@@ -422,7 +430,7 @@ void Q2DViewerExtension::removeRows( int rows )
         {
             oldViewer = m_vectorViewers.value(posViewer);
             m_vectorViewers.remove(posViewer);
-            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_viewer );
+            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
             delete oldViewer;
             posViewer -= 1;
         }
@@ -434,8 +442,8 @@ void Q2DViewerExtension::removeRows( int rows )
 Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
-    newViewer->setInput ( m_mainVolume );
-    (newViewer->m_2DView)->setTool( (m_viewer->m_2DView)->getCurrentToolName() );
+    newViewer->m_2DView->render();
+    (newViewer->m_2DView)->setTool( (m_vectorViewers.value( 0 )->m_2DView)->getCurrentToolName() );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
     connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
 
@@ -457,11 +465,17 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
 {
     if ( viewer != m_selectedViewer )
     {
+        ///TODO canviar aquestes connexions i desconnexions per dos mètodes el qual
+        /// enviin el senyal al visualitzador que toca.
+        disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+        disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
 
         m_selectedViewer->setSelected( false );
         m_selectedViewer = viewer;
         m_selectedViewer->setSelected( true );
 
+        connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+        connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
     }
 }
 
@@ -505,8 +519,7 @@ void Q2DViewerExtension::showPredefinedGrid()
     int i;
     int numberSeries = 0;
 
-    MenuGridWidget * menuGrid = new MenuGridWidget();
-    menuGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    m_predefinedSeriesGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
 
     QList<Study *> listStudies = m_patient->getStudies();
 
@@ -515,38 +528,27 @@ void Q2DViewerExtension::showPredefinedGrid()
         numberSeries += listStudies.value( i )->getNumberOfSeries();
     }
 
-    menuGrid->createPredefinedGrids( numberSeries );
-    menuGrid->show();
-
-    connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+    m_predefinedSeriesGrid->createPredefinedGrids( numberSeries );
+    m_predefinedSeriesGrid->show();
 }
 
 void Q2DViewerExtension::showInteractiveTable()
 {
-    TableMenu * tableMenu = new TableMenu();
-    tableMenu->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
-    tableMenu->show();
-
-    connect( tableMenu , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+    m_seriesTableGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    m_seriesTableGrid->show();
 }
 
 void Q2DViewerExtension::showPredefinedImageGrid()
 {
-    MenuGridWidget * menuGrid = new MenuGridWidget();
-    menuGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
-    menuGrid->createPredefinedGrids( m_selectedViewer->m_2DView->getNumberOfSlices() );
-    menuGrid->show();
-
-    connect( menuGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+    m_predefinedSlicesGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->m_2DView->getNumberOfSlices() );
+    m_predefinedSlicesGrid->show();
 }
 
 void Q2DViewerExtension::showInteractiveImageTable()
 {
-    TableMenu * tableMenu = new TableMenu();
-    tableMenu->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
-    tableMenu->show();
-
-    connect( tableMenu , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+    m_sliceTableGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    m_sliceTableGrid->show();
 }
 
 Patient* Q2DViewerExtension::getPatient() const
