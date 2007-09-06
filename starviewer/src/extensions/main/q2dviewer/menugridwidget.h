@@ -31,6 +31,9 @@ public:
     /// Màxim nombre de columnes a mostrar els grids predefinits
     void setMaxColumns( int columns );
 
+    /// Màxim nombre d'elements a mostrar
+    void setMaxElements( int elements );
+
     /// Mètode que omple el widget amb les els grids predefinits
     void createPredefinedGrids( int numberSeries );
 
@@ -44,6 +47,9 @@ protected:
 
     /// Nombre de columnes a mostrar
     int m_maxColumns;
+
+    /// Màxim nombre d'elements a mostrar;
+    int m_maxElements;
 
 public slots:
 

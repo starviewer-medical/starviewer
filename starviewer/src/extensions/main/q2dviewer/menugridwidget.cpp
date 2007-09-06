@@ -26,6 +26,7 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
 
 //     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
     m_maxColumns = 4;
+    m_maxElements = 16;
 
 //     createPredefinedGrids( m_predefinedGridsList );
 }
@@ -85,10 +86,11 @@ void MenuGridWidget::createPredefinedGrids( int numSeries )
     int row = 1;
     int column = 1;
     bool opt = true;
+    int numberElements = 1;
 
     m_predefinedGridsList.clear();
 
-    while( row*column < numSeries )
+    while( row*column < numSeries && numberElements < m_maxElements )
     {
         m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
 
@@ -103,6 +105,7 @@ void MenuGridWidget::createPredefinedGrids( int numSeries )
             row++;
             opt = true;
         }
+        numberElements++;
     }
     // Afegim la ultima opcio on algun widget pot quedar buit
     m_predefinedGridsList << QString( tr( "%1x%2" ).arg( row ).arg( column ) );
@@ -151,6 +154,11 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 void MenuGridWidget::setMaxColumns( int columns )
 {
     m_maxColumns = columns;
+}
+
+void MenuGridWidget::setMaxElements( int elements )
+{
+    m_maxElements = elements;
 }
 
 void MenuGridWidget::emitSelected( ItemMenu * selected )
