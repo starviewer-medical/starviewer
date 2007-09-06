@@ -35,7 +35,7 @@ Q2DViewerBlackBoard::Q2DViewerBlackBoard( Q2DViewer *viewer, QObject *parent )
     m_2DViewer = viewer;
     if( m_2DViewer )
     {
-        m_lastSlice = m_2DViewer->getSlice();
+        m_lastSlice = m_2DViewer->getCurrentSlice();
         m_lastView = m_2DViewer->getView();
 
         connect( m_2DViewer, SIGNAL( sliceChanged(int) ), this, SLOT( refreshObjects(int) ) );
@@ -355,7 +355,7 @@ void Q2DViewerBlackBoard::addActor( vtkActor2D *actor, int slice, int view )
     {
         actor->VisibilityOff();
         m_2DViewer->getRenderer()->AddActor( actor );
-        this->refreshObjects( m_2DViewer->getSlice() );
+        this->refreshObjects( m_2DViewer->getCurrentSlice() );
     }
 }
 

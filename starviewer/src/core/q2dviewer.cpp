@@ -671,6 +671,9 @@ void Q2DViewer::disableVoxelInformationCaption()
 
 void Q2DViewer::updateVoxelInformation()
 {
+    if( !m_mainVolume )
+        return;
+
     vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
     m_picker->PickProp( interactor->GetEventPosition()[0], interactor->GetEventPosition()[1], m_viewer->GetRenderer() );
@@ -966,6 +969,7 @@ void Q2DViewer::render()
     }
     else
     {
+        this->refresh();
         DEBUG_LOG( "::render() : No hi ha cap volum per visualitzar" );
     }
 }
@@ -1370,9 +1374,14 @@ double Q2DViewer::getCurrentColorLevel()
     }
 }
 
-int Q2DViewer::getSlice()
+int Q2DViewer::getCurrentSlice() const
 {
     return m_currentSlice;
+}
+
+int Q2DViewer::getCurrentPhase() const
+{
+    return m_currentPhase;
 }
 
 void Q2DViewer::resetWindowLevelToDefault()
@@ -2229,12 +2238,15 @@ void Q2DViewer::updateViewports()
 
 void Q2DViewer::updateDisplayExtent()
 {
+    vtkImageData *input = m_viewer->GetInput();
+    if( !input )
+        return;
+
     int i = 0;
     int rendererIndex = 0;
     int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
     vtkRenderer *renderer;
     vtkImageActor *imageActor;
-    vtkImageData *input = m_viewer->GetInput();
     vtkCornerAnnotation *sliceAnnotation;
     int *wholeExtent = input->GetWholeExtent();
     QString lowerLeftText;

@@ -30,12 +30,6 @@ public:
 
     void handleEvent( unsigned long eventID );
 
-private:
-    Q2DViewer *m_2DViewer;
-
-    /// Coordenades per calcular el moviment del mouse que determina com incrmentar o decrementar l'slicing
-    int m_startPosition[2], m_currentPosition[2];
-
 /// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
     /// Comença l'slicing
@@ -46,6 +40,30 @@ private slots:
 
     /// Atura l'estat d'slicing
     void endSlicing();
+
+private:
+    /**
+     * Canvia el mode d'slicing tenint en compte l'actual
+     */
+    void switchSlicingMode();
+
+    /**
+     * Actualitza el valor de la llesca/fase, en funció del mode en que estem
+     * @param value nou valor de la llesca/fase
+     */
+    void updateIncrement(int increment);
+
+private:
+    enum { SliceMode, PhaseMode };
+
+    Q2DViewer *m_2DViewer;
+
+    /// Coordenades per calcular el moviment del mouse que determina com incrmentar o decrementar l'slicing
+    int m_startPosition[2], m_currentPosition[2];
+
+    /// El mode en que movem les llesques.
+    /// De moment podrà tenir els valors SliceMode o PhaseMode, per defecte SliceMode
+    int m_slicingMode;
 
 };
 

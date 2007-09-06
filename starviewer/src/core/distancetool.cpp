@@ -52,7 +52,7 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
 
     if( m_2DViewer )
     {
-        m_currentSlice = m_2DViewer->getSlice();
+        m_currentSlice = m_2DViewer->getCurrentSlice();
         m_lastView = m_2DViewer->getView();
     }
     else
@@ -247,13 +247,13 @@ void DistanceTool::endDistanceAnnotation()
     switch ( m_2DViewer->getView() )
     {
     case Q2DViewer::Axial:
-        m_distancesOfAxialViewMap.insert( m_2DViewer->getSlice(), assemblyAndLine );
+        m_distancesOfAxialViewMap.insert( m_2DViewer->getCurrentSlice(), assemblyAndLine );
         break;
     case Q2DViewer::Sagittal:
-        m_distancesOfSagittalViewMap.insert( m_2DViewer->getSlice(), assemblyAndLine );
+        m_distancesOfSagittalViewMap.insert( m_2DViewer->getCurrentSlice(), assemblyAndLine );
         break;
     case Q2DViewer::Coronal:
-        m_distancesOfCoronalViewMap.insert( m_2DViewer->getSlice(), assemblyAndLine );
+        m_distancesOfCoronalViewMap.insert( m_2DViewer->getCurrentSlice(), assemblyAndLine );
         break;
     default:
         DEBUG_LOG( "El visor no té cap vista assignada encara" );
@@ -396,19 +396,19 @@ AssemblyAndLineObject* DistanceTool::getNearestAssembly( double point3D[3] )
     switch( m_2DViewer->getView() )
     {
     case Q2DViewer::Axial:
-        actorsList = m_distancesOfAxialViewMap.values( m_2DViewer->getSlice() );
+        actorsList = m_distancesOfAxialViewMap.values( m_2DViewer->getCurrentSlice() );
         //la coordenada que s'ha de deixar a 0 és la z.
         coordinateToZero = 2;
     break;
 
     case Q2DViewer::Sagittal:
-        actorsList = m_distancesOfSagittalViewMap.values( m_2DViewer->getSlice() );
+        actorsList = m_distancesOfSagittalViewMap.values( m_2DViewer->getCurrentSlice() );
         //la coordenada que s'ha de deixar a 0 és la x.
         coordinateToZero = 0;
     break;
 
     case Q2DViewer::Coronal:
-        actorsList = m_distancesOfCoronalViewMap.values( m_2DViewer->getSlice() );
+        actorsList = m_distancesOfCoronalViewMap.values( m_2DViewer->getCurrentSlice() );
         //la coordenada que s'ha de deixar a 0 és la y.
         coordinateToZero = 1;
     break;

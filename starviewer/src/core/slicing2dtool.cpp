@@ -16,6 +16,7 @@
 namespace udg {
 
 Slicing2DTool::Slicing2DTool( Q2DViewer *viewer, QObject *parent )
+ : m_slicingMode(SliceMode)
 {
     m_state = NONE;
     m_startPosition[0] = 0;
@@ -48,15 +49,19 @@ void Slicing2DTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MouseWheelForwardEvent:
-        m_2DViewer->setSlice( m_2DViewer->getSlice() + 1 );
+        this->updateIncrement( 1 );
         //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
         m_2DViewer->updateVoxelInformation();
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
-        m_2DViewer->setSlice( m_2DViewer->getSlice() - 1 );
+        this->updateIncrement( -1 );
         //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
         m_2DViewer->updateVoxelInformation();
+    break;
+
+    case vtkCommand::MiddleButtonPressEvent:
+        switchSlicingMode();
     break;
 
     default:
@@ -89,7 +94,7 @@ void Slicing2DTool::doSlicing()
             int value = 0;
             if( dy )
                 value = dy/abs(dy);
-            m_2DViewer->setSlice( m_2DViewer->getSlice() + value );
+            this->updateIncrement( value );
         }
     }
     else
@@ -102,6 +107,28 @@ void Slicing2DTool::endSlicing()
         m_state = NONE;
     else
         DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
+}
+
+void Slicing2DTool::switchSlicingMode()
+{
+    if( m_slicingMode == SliceMode )
+        m_slicingMode = PhaseMode;
+    else
+        m_slicingMode = SliceMode;
+}
+
+void Slicing2DTool::updateIncrement(int increment)
+{
+    switch( m_slicingMode )
+    {
+        case SliceMode:
+            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() + increment );
+            break;
+
+        case PhaseMode:
+            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + increment );
+            break;
+    }
 }
 
 }

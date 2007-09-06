@@ -227,7 +227,7 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
     m_sliceSpinBox->setMaximum(dim[2]-1);
-    m_sliceViewSlider->setValue(m_2DView->getSlice());
+    m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
     //std::cout<<"setInput: NumSlices:"<<dim[2]-1<<std::endl;
     /*m_actionFactory = new ToolsActionFactory( 0 );
@@ -257,7 +257,7 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
     m_sliceViewSlider_2->setMaximum(dim[2]-1);
     m_sliceSpinBox_2->setMinimum(0);
     m_sliceSpinBox_2->setMaximum(dim[2]-1);
-    m_sliceViewSlider_2->setValue(m_2DView_2->getSlice());
+    m_sliceViewSlider_2->setValue(m_2DView_2->getCurrentSlice());
 
     /*m_windowLevelAction_2 = m_actionFactory->getActionFrom( "WindowLevelTool" );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setTool(QString) ) );
@@ -760,8 +760,6 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
         point->SetRadius(1.5);
         point-> SetCenter(pos);
 
-        //m_seedSlice = m_2DViewer->getSlice( );
-
         vtkActor *pointActor = vtkActor::New();
         pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
         vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
@@ -773,7 +771,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
         if( idVolume == 1 )
         {
             m_seedList1.push_back(posVect);
-            m_seedSliceVector1.push_back(m_2DView->getSlice());
+            m_seedSliceVector1.push_back(m_2DView->getCurrentSlice());
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 0, newItem);
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 1, newItem2);
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 2, newItem3);
@@ -788,7 +786,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
         else    // idVolume == 2
         {
             m_seedList2.push_back(posVect);
-            m_seedSliceVector2.push_back(m_2DView_2->getSlice());
+            m_seedSliceVector2.push_back(m_2DView_2->getCurrentSlice());
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 0, newItem);
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 1, newItem2);
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 2, newItem3);
@@ -812,12 +810,12 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
     if( idVolume == 1 )
     {
         m_2DView->getCurrentCursorPosition(pos);
-        s = m_2DView->getSlice();
+        s = m_2DView->getCurrentSlice();
     }
     else        // idVolume == 2
     {
         m_2DView_2->getCurrentCursorPosition(pos);
-        s = m_2DView_2->getSlice();
+        s = m_2DView_2->getCurrentSlice();
     }
         //std::cout<<"pos: "<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<std::endl;
 

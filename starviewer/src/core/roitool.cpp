@@ -59,7 +59,7 @@ ROITool::ROITool( Q2DViewer *viewer , QObject *, const char * )
 
     if( m_2DViewer )
     {
-        m_currentSlice = m_2DViewer->getSlice();
+        m_currentSlice = m_2DViewer->getCurrentSlice();
         m_lastView = m_2DViewer->getView();
     }
     else
@@ -687,13 +687,13 @@ void ROITool::saveIntoAList( ROIAssembly* roi )
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
-            m_ROIsOfAxialViewMap.insert( m_2DViewer->getSlice(), roi );
+            m_ROIsOfAxialViewMap.insert( m_2DViewer->getCurrentSlice(), roi );
             break;
         case Q2DViewer::Sagittal:
-            m_ROIsOfSagittalViewMap.insert( m_2DViewer->getSlice(), roi );
+            m_ROIsOfSagittalViewMap.insert( m_2DViewer->getCurrentSlice(), roi );
             break;
         case Q2DViewer::Coronal:
-            m_ROIsOfCoronalViewMap.insert( m_2DViewer->getSlice(), roi );
+            m_ROIsOfCoronalViewMap.insert( m_2DViewer->getCurrentSlice(), roi );
             break;
         default:
             DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
@@ -1103,19 +1103,19 @@ ROIAssembly* ROITool::getNearestROI( double point3D[3] )
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
-            ROIList = m_ROIsOfAxialViewMap.values( m_2DViewer->getSlice() );
+            ROIList = m_ROIsOfAxialViewMap.values( m_2DViewer->getCurrentSlice() );
             //la coordenada que s'ha de deixar a 0 és la z.
             coordinateToZero = 'z';
             break;
 
         case Q2DViewer::Sagittal:
-            ROIList = m_ROIsOfSagittalViewMap.values( m_2DViewer->getSlice() );
+            ROIList = m_ROIsOfSagittalViewMap.values( m_2DViewer->getCurrentSlice() );
             //la coordenada que s'ha de deixar a 0 és la x.
             coordinateToZero = 'x';
             break;
 
         case Q2DViewer::Coronal:
-            ROIList = m_ROIsOfCoronalViewMap.values( m_2DViewer->getSlice() );
+            ROIList = m_ROIsOfCoronalViewMap.values( m_2DViewer->getCurrentSlice() );
             //la coordenada que s'ha de deixar a 0 és la y.
             coordinateToZero = 'y';
             break;

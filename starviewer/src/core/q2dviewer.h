@@ -133,8 +133,9 @@ public:
     double getCurrentColorWindow();
     double getCurrentColorLevel();
 
-    /// retorna la llesca actual
-    int getSlice();
+    /// retorna la llesca/fase actual
+    int getCurrentSlice() const;
+    int getCurrentPhase() const;
 
     /// retorna el nombre de llesques
     int getNumberOfSlices();

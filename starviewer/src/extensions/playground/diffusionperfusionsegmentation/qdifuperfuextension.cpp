@@ -521,7 +521,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     m_diffusionSliceSpinBox->setMinimum( 0 );
     m_diffusionSliceSpinBox->setMaximum( dim[2] - 1 );
 
-    m_diffusionSliceSlider->setValue( m_diffusion2DView->getSlice() );
+    m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
 
 
     // Trobem els valors de propietat mínim i màxim
@@ -674,7 +674,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     m_perfusionSliceSpinBox->setMinimum( 0 );
     m_perfusionSliceSpinBox->setMaximum( dim[2] - 1 );
 
-    m_perfusionSliceSlider->setValue( m_perfusion2DView->getSlice() );
+    m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
 
 
     // Trobem els valors de propietat mínim i màxim
@@ -1418,7 +1418,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size)
     centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_diffusion2DView->getSlice();
+    index[2]=m_diffusion2DView->getCurrentSlice();
 
     for(i=-size;i<=size;i++)
     {
@@ -1452,7 +1452,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size)
     centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_diffusion2DView->getSlice();
+    index[2]=m_diffusion2DView->getCurrentSlice();
     for(i=-size;i<=size;i++)
     {
         for(j=-size;j<=size;j++)
@@ -1487,7 +1487,7 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask()
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_diffusion2DView->getSlice();
+    index[2]=m_diffusion2DView->getCurrentSlice();
     //DEBUG_LOG("Esborrant llesca "<<index[2]);
     for(i=ext[0];i<=ext[1];i++)
     {
@@ -1520,7 +1520,7 @@ void QDifuPerfuSegmentationExtension::eraseRegionMask()
     m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    index[2]=m_diffusion2DView->getSlice();
+    index[2]=m_diffusion2DView->getCurrentSlice();
     eraseRegionMaskRecursive(index[0],index[1],index[2]);
 }
 
