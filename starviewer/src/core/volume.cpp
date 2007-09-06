@@ -308,6 +308,8 @@ void Volume::setImages( const QList<Image *> &imageList )
     //TODO hauria de ser tal i com està comentat, però de moment serà així perquè tenim problemes
     // al accedir a algunes llistes d'imatges, ja que sembla que d'avegades apunten a memòria no allotjada
     // és un problema que cal investigar. Així de moment deixem això que és estable i funciona
+    //Update: Doncs sembla que continua sense funcionar, així continua donant seg. faults. Provar amb
+    //el pacient RAMOS RODRIGUEZ RUBEN, 21-06-2007, Sèrie 301
     m_imageSet.clear();
     m_imageSet = imageList;
     this->setInputFiles( imageList.at(0)->getParentSeries()->getFilesPathList() );
