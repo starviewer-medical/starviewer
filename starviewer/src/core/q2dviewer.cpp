@@ -856,7 +856,8 @@ void Q2DViewer::setInput( Volume* volume )
     if( volume == 0 )
         return;
     m_mainVolume = volume;
-
+    m_currentSlice = 0;
+    m_currentPhase = 0;
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
     this->computeInputGrayscalePipeline();
