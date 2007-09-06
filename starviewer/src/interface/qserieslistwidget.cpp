@@ -10,7 +10,7 @@
 #include <QIcon>
 
 #include "dicomseries.h"
-#include "starviewersettings.h"
+#include "scalestudy.h"
 
 namespace udg {
 
@@ -36,8 +36,7 @@ void QSeriesListWidget::createConnections()
 
 void QSeriesListWidget::insertSeries( DICOMSeries *serie )
 {
-    QString text,num,pathImage,nameClass;
-    StarviewerSettings settings;
+    QString text,num;
     QListWidgetItem *item = new QListWidgetItem( m_seriesListWidget );
     QString statusTip;
 
@@ -60,17 +59,7 @@ void QSeriesListWidget::insertSeries( DICOMSeries *serie )
         text.append( '\n' );
     }
 
-    nameClass.insert( 0 , this->objectName() );
-    if ( nameClass == "m_seriesListWidgetCache" )
-    {
-        pathImage.insert( 0 , settings.getCacheImagePath() );
-        pathImage.append(serie->getStudyUID() );
-        pathImage.append( "/" );
-        pathImage.append( serie->getSeriesUID() );
-        pathImage.append( "/scaled.pgm" );
-    }
-
-    QIcon   icon(pathImage);
+    QIcon   icon( ScaleStudy::getScaledImagePath(serie) );
 
     item->setText(text);
     item->setIcon(icon);

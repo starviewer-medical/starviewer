@@ -12,6 +12,8 @@
 
 #include <QStringList>
 
+#include <QDebug>
+
 namespace udg {
 
 Series::Series(QObject *parent)
@@ -413,14 +415,9 @@ void Series::setSelectStatus( bool select )
     m_selected = select;
 }
 
-void Series::setThumbnail( QPixmap thumbnail )
-{
-    m_previewImage = thumbnail;
-}
-
 QPixmap Series::getThumbnail() const
 {
-    return m_previewImage;
+    return getImages()[ getImages().size() / 2 ]->getThumbnail();;
 }
 
 void Series::setNumberOfPhases( int phases )

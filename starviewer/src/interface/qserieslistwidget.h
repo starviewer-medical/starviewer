@@ -7,7 +7,6 @@
 #ifndef UDGSERIESLISTWIDGET_H
 #define UDGSERIESLISTWIDGET_H
 
-// #include "qseriesiconviewbase.h"
 #include "ui_qserieslistwidgetbase.h"
 #include <QWidget>
 

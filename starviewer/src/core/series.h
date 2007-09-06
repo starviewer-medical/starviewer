@@ -179,8 +179,7 @@ public:
 
     QString toString(bool verbose = false);
 
-    /// Assigna/Obté la imatge de previsualització de la sèrie
-    void setThumbnail( QPixmap thumb );
+    /// Obté la imatge de previsualització de la sèrie. Serà la imatge del mig.
     QPixmap getThumbnail() const;
 
 public slots:
@@ -252,9 +251,6 @@ private:
 
     /// Directori sota el qual ens trobem les imatges
     QString m_imagesPath;
-
-    /// Imatge de previsualització associada a la sèrie
-    QPixmap m_previewImage;
 
     /// Llista d'id's de volums que composen la sèrie. La sèrie es pot separar en diversos volums per diverses raons,
     /// com pot ser mides d'imatge diferent, sèries amb dinàmics o fases, stacks, etc.
