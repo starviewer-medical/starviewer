@@ -901,7 +901,102 @@ void Drawer::updateChangedLine( Line *line )
 } 
  
 void Drawer::updateChangedText( Text *text )
-{}
+{
+    PrimitiveActorPair *pair = this->findPrimitiveActorPair( text );
+    
+    if ( isValid( pair ) )
+    {
+        //obtenim l'actor de text
+        vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
+        
+        //fem la conversió estàtica per a poder executar els mètodes de la primitiva de text
+        Text *text = static_cast<Text*> ( pair->first );
+    
+        //mirem si s'ha d'escalar el text
+        if ( text->isTextScaled() )
+            textActor->GetTextActor()->ScaledTextOn();
+        else
+            textActor->GetTextActor()->ScaledTextOff();
+        
+        //mirem l'opacitat
+        textActor->GetCaptionTextProperty()->SetOpacity( text->getOpacity() );
+        
+        //Assignem color
+        QColor textColor = text->getColor();
+        textActor->GetCaptionTextProperty()->SetColor( textColor.redF(), textColor.greenF(), textColor.blueF() );
+        
+        textActor->SetPadding( text->getPadding() );
+        
+        textActor->SetPosition( -1.0 , -1.0 );
+        textActor->SetHeight( text->getHeight() );
+        textActor->SetWidth( text->getWidth() );
+        
+        //deshabilitem la línia que va des del punt de situació al text
+        textActor->LeaderOff();
+        textActor->ThreeDimensionalLeaderOff();
+        
+        if ( text->hasShadow() )
+            textActor->GetCaptionTextProperty()->ShadowOn();
+        else
+            textActor->GetCaptionTextProperty()->ShadowOff();
+        
+        if ( text->isItalic() )
+            textActor->GetCaptionTextProperty()->ItalicOn();
+        else
+            textActor->GetCaptionTextProperty()->ItalicOff();
+    
+        //Assignem el tipus de font al text
+        if ( text->getFontFamily() == "Arial" )
+            textActor->GetCaptionTextProperty()->SetFontFamilyToArial();
+        else if ( text->getFontFamily() == "Courier" )
+            textActor->GetCaptionTextProperty()->SetFontFamilyToCourier();
+        else if ( text->getFontFamily() == "Times" )
+            textActor->GetCaptionTextProperty()->SetFontFamilyToTimes();
+        else
+            DEBUG_LOG( "Tipus de font no reconegut a l'intentar crear text!!" );
+        
+        //Assignem el tamany de la font
+        textActor->GetCaptionTextProperty()->SetFontSize( text->getFontSize() );
+        
+        //Assignem el tipus de justificació horitzontal
+        if ( text->getHorizontalJustification() == "Left" )
+            textActor->GetCaptionTextProperty()->SetJustificationToLeft();
+        else if ( text->getHorizontalJustification() == "Centered" )
+            textActor->GetCaptionTextProperty()->SetJustificationToCentered();
+        else if ( text->getHorizontalJustification() == "Right" )
+            textActor->GetCaptionTextProperty()->SetJustificationToRight();
+        else
+        {
+            DEBUG_LOG( "Tipus de justificació horitzontal no reconegut a l'intentar crear text!!" );
+        }
+        
+        //Assignem el tipus de justificació vertical
+        if ( text->getVerticalJustification() == "Top" )
+            textActor->GetCaptionTextProperty()->SetVerticalJustificationToTop();
+        else if ( text->getVerticalJustification() == "Centered" )
+            textActor->GetCaptionTextProperty()->SetVerticalJustificationToCentered();
+        else if ( text->getVerticalJustification() == "Bottom" )
+            textActor->GetCaptionTextProperty()->SetVerticalJustificationToBottom();
+        else
+        {
+            DEBUG_LOG( "Tipus de justificació vertical no reconegut a l'intentar crear text!!" );
+        }
+        
+        //Assignem el text
+        textActor->SetCaption( qPrintable ( text->getText() ) );
+        
+        //Assignem la posició en pantalla
+        textActor->SetAttachmentPoint( text->getAttatchmentPoint() );
+        
+        textActor->BorderOff();
+        
+        //mirem la visibilitat de l'actor
+        if ( !text->isVisible() )
+            textActor->VisibilityOff();
+        
+        m_2DViewer->refresh();
+    }
+}
   
 int Drawer::getNumberOfDrawedPrimitives()
 {
@@ -972,12 +1067,17 @@ void Drawer::highlightNearestPrimitives()
     {
         if ( m_nearestSet && m_nearestSet->contains( pair->first ) )
         {
-            if ( m_nearestSet != m_selectedSet ) //cal que el més proper no sigui el seleccionat perquè li treuria el color de seleccionat i no ho volem
+            if ( m_nearestSet != m_selectedSet )//cal que el més proper no sigui el seleccionat perquè li treuria el color de seleccionat i no ho volem
             {
                 setHighlightColor( pair );
                 pair->first->highlightOn();
             } 
-       }
+            else
+            {
+                setSelectedColor( pair );
+                pair->first->highlightOff();
+            }
+        }
         else
         {
             if ( m_selectedSet ) //el pintem de com a normal si no és el seleccionat, ja que si ho és cal que es mantingui la selecció
@@ -1074,12 +1174,14 @@ void Drawer::setHighlightColor( PrimitiveActorPair *pair )
         vtkActor2D *actor = vtkActor2D::SafeDownCast( pair->second );
         vtkProperty2D *properties = actor->GetProperty();
         properties->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+        pair->first->setColor( highlightColor );
     }
     else if ( pair->first->getPrimitiveType() == "Text" )
     {
         vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+        pair->first->setColor( highlightColor );
     }
 }
 
@@ -1092,12 +1194,14 @@ void Drawer::setSelectedColor( PrimitiveActorPair *pair )
         vtkActor2D *actor = vtkActor2D::SafeDownCast( pair->second );
         vtkProperty2D *properties = actor->GetProperty();
         properties->SetColor( selectedColor.redF(), selectedColor.greenF(), selectedColor.blueF() );
+        pair->first->setColor( selectedColor );
     }
     else if ( pair->first->getPrimitiveType() == "Text" )
     {
         vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( selectedColor.redF(), selectedColor.greenF(), selectedColor.blueF() );
+        pair->first->setColor( selectedColor );
     }
 }
 
@@ -1110,12 +1214,14 @@ void Drawer::setNormalColor( PrimitiveActorPair *pair )
         vtkActor2D *actor = vtkActor2D::SafeDownCast( pair->second );
         vtkProperty2D *properties = actor->GetProperty();
         properties->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
+        pair->first->setColor( normalColor );
     }
     else if ( pair->first->getPrimitiveType() == "Text" )
     {
         vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
         vtkTextProperty *property = textActor->GetCaptionTextProperty();
         property->SetColor( normalColor.redF(), normalColor.greenF(), normalColor.blueF() );
+        pair->first->setColor( normalColor );
     }
 }
 
