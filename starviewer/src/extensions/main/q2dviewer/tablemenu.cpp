@@ -13,8 +13,7 @@ TableMenu::TableMenu()
  : QWidget()
 {
     setWindowFlags(Qt::Popup);
-    m_columns = 0;
-    m_rows = 0;
+
     m_itemList = new QList<ItemMenu *>();
     QGridLayout * verticalLayout = new QGridLayout( this );
     m_gridLayout = new QGridLayout( );
@@ -22,6 +21,18 @@ TableMenu::TableMenu()
     m_information->setAlignment( Qt::AlignHCenter );
     verticalLayout->addLayout( m_gridLayout,0,0 );
     verticalLayout->addWidget( m_information,1,0 );
+
+    initializeTable();
+}
+
+TableMenu::~TableMenu()
+{
+}
+
+void TableMenu::initializeTable()
+{
+    m_columns = 0;
+    m_rows = 0;
 
     ItemMenu * firstItem = new ItemMenu( this );
     firstItem->setFrameShape( QFrame::StyledPanel );
@@ -35,10 +46,6 @@ TableMenu::TableMenu()
     connect( firstItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
 
     m_information->setText("1x1");
-}
-
-TableMenu::~TableMenu()
-{
 }
 
 void TableMenu::addColumn()
@@ -123,6 +130,8 @@ bool TableMenu::event( QEvent * event )
 {
     if ( event->type() == QEvent::Leave )
     {
+        dropTable();
+        initializeTable();
         hide();
         return true;
     }
@@ -140,7 +149,25 @@ void TableMenu::emitSelected( ItemMenu * selected )
     int columns = values.value( 1 ).toInt();
 
     emit selectedGrid( rows+1, columns+1 );
+
+    dropTable();
+    initializeTable();
     hide();
+}
+
+void TableMenu::dropTable()
+{
+    int i;
+    ItemMenu * item;
+
+    for( i = 0; i < m_itemList->size(); i++ )
+    {
+        item = m_itemList->value( i );
+        m_gridLayout->removeWidget( item );
+        delete item;
+    }
+
+    m_itemList->clear();
 }
 
 }

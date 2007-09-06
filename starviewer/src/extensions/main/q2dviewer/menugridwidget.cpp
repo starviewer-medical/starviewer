@@ -7,11 +7,9 @@
 #include "menugridwidget.h"
 
 #include "gridicon.h"
-#include "QGridLayout"
 #include "QFrame"
 #include "QPalette"
 #include "QMouseEvent"
-
 #include <math.h>
 
 #include "logging.h"
@@ -23,12 +21,18 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
 {
     setupUi( this );
     setWindowFlags(Qt::Popup);
-
-//     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
     m_maxColumns = 4;
     m_maxElements = 16;
 
+    m_gridLayout = new QGridLayout( m_predefinedGrids );
+    m_gridLayout->setSpacing( 6 );
+    m_gridLayout->setMargin( 6 );
+
+    m_itemList = new QList<ItemMenu *>();
+
+//     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
 //     createPredefinedGrids( m_predefinedGridsList );
+
 }
 
 MenuGridWidget::~MenuGridWidget()
@@ -37,9 +41,17 @@ MenuGridWidget::~MenuGridWidget()
 
 void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList )
 {
-
     int width;
     int height;
+    int rows;
+    int columns;
+    int numberPredefined;
+    QStringList values;
+    ItemMenu * icon;
+    int positionRow = 0;
+    int positionColumn = 0;
+
+    dropContent();
 
     if( listPredefinedGridsList.size() >= m_maxColumns ) width = 70 * m_maxColumns;
     else
@@ -52,25 +64,14 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     m_predefinedGrids->resize( width, height );
     this->resize( width, height+10 );
 
-    int rows;
-    int columns;
-    int numberPredefined;
-    QStringList values;
-    ItemMenu * icon;
-    int positionRow = 0;
-    int positionColumn = 0;
-
-    QGridLayout * gridLayout = new QGridLayout( m_predefinedGrids );
-    gridLayout->setSpacing( 6 );
-    gridLayout->setMargin( 6 );
-
     for( numberPredefined = 0; numberPredefined < listPredefinedGridsList.size(); numberPredefined++ )
     {
         values = listPredefinedGridsList.at( numberPredefined ).split( "x" );
         rows = values.value( 0 ).toInt();
         columns = values.value( 1 ).toInt();
         icon = createIcon( rows, columns );
-        gridLayout->addWidget( icon, positionRow, positionColumn );
+        m_gridLayout->addWidget( icon, positionRow, positionColumn );
+        m_itemList->push_back( icon );
         positionColumn ++;
 
         if( positionColumn == m_maxColumns )
@@ -171,6 +172,20 @@ void MenuGridWidget::emitSelected( ItemMenu * selected )
     emit selectedGrid( rows, columns );
     hide();
 
+}
+
+void MenuGridWidget::dropContent()
+{
+    int i;
+    ItemMenu * item;
+
+    for( i = 0; i < m_itemList->size(); i++ )
+    {
+        item = m_itemList->value( i );
+        m_gridLayout->removeWidget( item );
+        delete item;
+    }
+    m_itemList->clear();
 }
 
 
