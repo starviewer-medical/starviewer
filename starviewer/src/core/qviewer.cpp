@@ -205,8 +205,12 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
         connect(patientMenu, SIGNAL( selectedSeries(Series*) ), this, SLOT( setSeries(Series*) ));
-        
-        patientMenu->popup( event->globalPos(), m_mainVolume->getSeries()->getInstanceUID() ); //->globalPos() ?
+
+        QString seriesUID;
+        if( m_mainVolume )
+            seriesUID = m_mainVolume->getSeries()->getInstanceUID();
+        patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
+
     }
 }
 
