@@ -8,6 +8,7 @@
 
 #include <QApplication>
 #include <QTime>
+#include <QtAlgorithms>
 
 #include "patientfillerinput.h"
 #include "logging.h"
@@ -59,6 +60,7 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
     while (!input->getLabels().contains(stopLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
     {
         QList<PatientFillerStep*> fillerStepsToProcess;
+        QList<PatientFillerStep*> newCandidatesFillerSteps;
         continueIterating = false;
 
         for (int i = 0; i < candidatesFillerSteps.size(); ++i)
@@ -66,11 +68,16 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
             if (input->hasAllLabels( candidatesFillerSteps.at(i)->getRequiredLabels() ))
             {
                 fillerStepsToProcess.append( candidatesFillerSteps.at(i) );
-                candidatesFillerSteps.removeAt(i);
-
                 continueIterating = true;
             }
+            else
+            {
+                newCandidatesFillerSteps.append( candidatesFillerSteps.at(i) );
+            }
         }
+        candidatesFillerSteps = newCandidatesFillerSteps;
+
+        qSort(fillerStepsToProcess); // Ordenem segons la seva prioritat
 
         foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
         {

@@ -28,6 +28,11 @@ bool PatientFillerStep::isCandidate()
     // Comprovar si donats els flags de l'input i les pròpies flags és un candidat vàlid TODO per implementar
 }
 
+bool PatientFillerStep::operator<(const PatientFillerStep &patientFillerStep) const
+{
+    return m_priority < patientFillerStep.getPriority();
+}
+
 bool PatientFillerStep::isImageSeries( Series *series )
 {
     // TODO aquí caldria especificar quines són les modalitats que acceptem com a imatges
