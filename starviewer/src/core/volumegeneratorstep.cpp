@@ -15,7 +15,8 @@ namespace udg {
 VolumeGeneratorStep::VolumeGeneratorStep()
  : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep" << "TemporalDimensionFillerStep" << "ImageFillerStep";
+    m_requiredLabelsList << "ImageFillerStep";
+    m_priority = LowPriority;
 }
 
 VolumeGeneratorStep::~VolumeGeneratorStep()
@@ -29,7 +30,7 @@ bool VolumeGeneratorStep::fill()
     if( m_input )
     {
         QStringList requiredLabels;
-        requiredLabels << "TemporalDimensionFillerStep" << "ImageFillerStep"; 
+        requiredLabels << "ImageFillerStep";
         QList<Series *> seriesToProcess = m_input->getSeriesWithLabels( requiredLabels );
         foreach( Series *series, seriesToProcess )
         {

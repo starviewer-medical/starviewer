@@ -22,7 +22,7 @@ Classe pare dels mòduls que omplen parts específiques de l'estructura Patient
 class PatientFillerStep{
 public:
     /// Flags que defineixen les diferents prioritats que poden tenir els Steps
-    enum PriorityFlags{ LowPriority, NormalPriority, HighPriority };
+    enum PriorityFlags{ LowPriority = 2, NormalPriority = 1, HighPriority = 0 };
 
     PatientFillerStep();
 
@@ -47,6 +47,9 @@ public:
 
     /// Retorna el nom del Filler Step. Aquest no serà mai visible per l'usuari però ajuda a l'hora de debugar el sistema.
     virtual QString name() = 0;
+
+    /// Operador que serveix per saber, de dos PatientFillerSteps, quin és el que té una prioritat més gran
+    bool operator<(const PatientFillerStep &patientFillerStep) const;
 
 protected:
     /// mètodes de conveniència

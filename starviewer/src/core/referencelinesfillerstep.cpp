@@ -18,7 +18,6 @@ namespace udg {
 ReferenceLinesFillerStep::ReferenceLinesFillerStep()
 : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
     m_requiredLabelsList << "ImageFillerStep";
 }
 

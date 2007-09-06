@@ -19,7 +19,6 @@ namespace udg {
 TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
     m_requiredLabelsList << "ImageFillerStep";
 }
 
