@@ -1263,13 +1263,13 @@ void Q2DViewer::setSlice( int value )
 
 void Q2DViewer::setPhase( int value )
 {
+    // comprovació de rang
     if( value < 0 )
         value = 0;
-    else if( value > m_numberOfPhases )
-        value = m_numberOfPhases;
+    else if( value > m_numberOfPhases - 1 )
+        value = m_numberOfPhases - 1;
 
     m_currentPhase = value;
-
     this->updateDisplayExtent();
 }
 
