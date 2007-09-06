@@ -299,7 +299,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
     m_sliceSpinBox->setMaximum(dim[2]-1);
-    m_sliceViewSlider->setValue(m_2DView->getSlice());
+    m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
     //m_sliceViewSlider->setValue((dim[2]-1)/2);
 
     double wl[2];
@@ -339,7 +339,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
     //prop->SetOpacity(0.2);
   //  prop->SetColor(1,0,0);
     //m_spline->SetHandleProperty(prop);
-    m_spline->SetProjectionPosition(m_2DView->getSlice()-1);
+    m_spline->SetProjectionPosition(m_2DView->getCurrentSlice()-1);
     m_spline->SetProjectionNormal(2);
     m_spline->SetNumberOfHandles(5);
     m_spline->SetHandlePosition(0,54,161,0);
@@ -384,7 +384,7 @@ void QSegmentationFrameworkExtension::changeViewToAxial()
     m_sliceViewSlider->setMaximum( extent[5] );
     m_2DView->setViewToAxial();
     m_2DView->setSlice(extent[5]/2);
-    m_sliceViewSlider->setValue(m_2DView->getSlice());
+    m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
     m_2DView->render();
 
@@ -401,7 +401,7 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_sliceViewSlider->setMaximum( extent[1] );
     m_2DView->setViewToSagittal();
     m_2DView->setSlice(extent[1]/2);
-    m_sliceViewSlider->setValue(m_2DView->getSlice());
+    m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
     m_2DView->render();
 }
@@ -419,7 +419,7 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_sliceViewSlider->setMaximum( extent[3] );
     m_2DView->setViewToCoronal();
     m_2DView->setSlice(extent[3]/2);
-    m_sliceViewSlider->setValue(m_2DView->getSlice());
+    m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
     m_2DView->render();
 
@@ -974,7 +974,7 @@ m_2DView->getInteractor()->Render();
     switch( m_currentView )
             {
             case Axial:
-            m_spline->SetProjectionPosition(m_2DView->getSlice()+1);
+            m_spline->SetProjectionPosition(m_2DView->getCurrentSlice()+1);
             m_spline->SetProjectionNormal(3);
             m_spline->SetHandlePosition(0,58*xt,133*yt,0);
             m_spline->SetHandlePosition(1,162*xt,77*yt,0);
@@ -985,7 +985,7 @@ m_2DView->getInteractor()->Render();
             m_splineY->Off();
             break;
             case Sagital:
-            m_splineY->SetProjectionPosition(m_2DView->getSlice()+1);
+            m_splineY->SetProjectionPosition(m_2DView->getCurrentSlice()+1);
             m_splineY->SetProjectionNormal(0);
             m_splineY->SetHandlePosition(0,0,58*xt,133*yt);
             m_splineY->SetHandlePosition(1,0,162*xt,77*yt);
@@ -996,7 +996,7 @@ m_2DView->getInteractor()->Render();
             m_splineY->On();
             break;
             case Coronal:
-            m_splineZ->SetProjectionPosition(m_2DView->getSlice()-1);
+            m_splineZ->SetProjectionPosition(m_2DView->getCurrentSlice()-1);
             m_splineZ->SetProjectionNormal(1);
             m_splineZ->SetHandlePosition(0,58*xt,0,133*yt);
             m_splineZ->SetHandlePosition(1,162*xt,0,77*yt);

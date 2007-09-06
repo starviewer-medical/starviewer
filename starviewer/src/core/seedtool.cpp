@@ -71,7 +71,7 @@ void SeedTool::setSeed( )
     point->SetRadius(2);
     point-> SetCenter(m_seedPosition);
 
-    m_seedSlice = m_2DViewer->getSlice( );
+    m_seedSlice = m_2DViewer->getCurrentSlice();
 
     m_pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
     vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
@@ -100,7 +100,7 @@ void SeedTool::doSeeding( )
         point->SetRadius(2);
         point-> SetCenter(m_seedPosition);
 
-        m_seedSlice = m_2DViewer->getSlice( );
+        m_seedSlice = m_2DViewer->getCurrentSlice();
 
         m_pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
         vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();

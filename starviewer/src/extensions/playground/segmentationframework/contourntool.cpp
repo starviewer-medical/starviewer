@@ -89,7 +89,7 @@ void ContournTool::getCoords()
 {
     m_2DViewer->getCurrentCursorPosition(m_seedPosition);
 
-    int slice=m_2DViewer->getSlice();
+    int slice=m_2DViewer->getCurrentSlice();
     doContouring(slice);
 }
 

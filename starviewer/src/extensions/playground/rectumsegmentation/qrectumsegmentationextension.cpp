@@ -356,7 +356,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
     m_sliceSpinBox->setMaximum(dim[2]-1);
-    m_sliceViewSlider->setValue(m_2DView->getSlice());
+    m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
     //Posem els nivells de dins i fora de la m�cara els valors l�its del w/l per tal que es vegi correcte
     double wl[2];
@@ -840,7 +840,7 @@ void QRectumSegmentationExtension::eraseMask(int size)
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_2DView->getSlice();
+    index[2]=m_2DView->getCurrentSlice();
 
     for(i=-size;i<=size;i++)
     {
@@ -876,7 +876,7 @@ void QRectumSegmentationExtension::paintMask(int size)
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_2DView->getSlice();
+    index[2]=m_2DView->getCurrentSlice();
     for(i=-size;i<=size;i++)
     {
         for(j=-size;j<=size;j++)
@@ -912,7 +912,7 @@ void QRectumSegmentationExtension::eraseSliceMask()
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_2DView->getSlice();
+    index[2]=m_2DView->getCurrentSlice();
     //std::cout<<"Esborrant llesca "<<index[2]<<std::endl;
     for(i=ext[0];i<=ext[1];i++)
     {
@@ -946,7 +946,7 @@ void QRectumSegmentationExtension::eraseRegionMask()
     index[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     index[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_2DView->getSlice();
+    index[2]=m_2DView->getCurrentSlice();
     //std::cout<<"Esborrant llesca "<<index[2]<<std::endl;
     //eraseRegionMaskRecursive(index[0], index[1], index[2]);
     eraseRegionMaskRecursive(index[0],index[1],index[2]);
