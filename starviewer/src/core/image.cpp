@@ -11,6 +11,7 @@
 #include <QStringList>
 #include <QPainter>
 #include <QBuffer>
+#include <QPixmap>
 
 #include <vtkMath.h> // pel ::Cross()
 
@@ -424,20 +425,20 @@ bool Image::isCTLocalizer() const
     return m_CTLocalizer;
 }
 
-QPixmap Image::getThumbnail( int resolution )
+QPixmap Image::getThumbnail(int resolution)
 {
-    if( m_thumbnail.isNull() )
-    {
-        createThumbnail( resolution );
-    }
-    return m_thumbnail;
+    return QPixmap::fromImage( createThumbnail(resolution) );
 }
 
-void Image::createThumbnail( int resolution )
+QImage Image::createThumbnail(int resolution)
 {
-    bool ok = false;
+    if(! m_thumbnail.isNull() )
+    {
+        return m_thumbnail;
+    }
 
-    //TODO atenció! això està fet partint de la classe ScaleImage. No s'ha fet servir ScaleImage per no dependre de l'inputoutput des del core
+    QImage thumbnail;
+    bool ok = false;
 
     //carreguem el fitxer dicom a escalar
     DicomImage *dicomImage = new DicomImage( qPrintable( getPath() ) );
@@ -491,7 +492,7 @@ void Image::createThumbnail( int resolution )
                 OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
                 if( scaledImage->getOutputData((void *)(buffer + offset), length, 8))
                 {
-                    if( m_thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM", Qt::AvoidDither) )
+                    if( thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM") )
                     {
                         ok = true;
                     }
@@ -517,13 +518,15 @@ void Image::createThumbnail( int resolution )
 
     if( !ok ) // no hem pogut generar el thumbnail, creem un de buit
     {
-        m_thumbnail = QPixmap(resolution,resolution);
-        m_thumbnail.fill(Qt::black);
+        thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
+        thumbnail.fill(Qt::black);
 
-        QPainter painter( &m_thumbnail );
+        QPainter painter( &thumbnail );
         painter.setPen(Qt::white);
         painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, tr("No Image Available"));
     }
+    m_thumbnail = thumbnail;
+    return thumbnail;
 }
 
 }

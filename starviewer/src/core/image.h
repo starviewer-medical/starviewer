@@ -11,6 +11,8 @@
 #include <QDateTime>
 #include <QList>
 #include <QPair>
+#include <QStringList>
+#include <QImage>
 #include <QPixmap>
 
 namespace udg {
@@ -158,17 +160,17 @@ public:
     /**
      * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
      * @param resolution La resolució amb la que volem el thumbnail
-     * @return Un QPixmap amb el thumnail
+     * @return Un QPixmap amb el thumbnail
      */
-    QPixmap getThumbnail( int resolution = 100 );
-
-private:
+    QPixmap getThumbnail(int resolution = 100);
 
     /**
-     * Mètode encarregat de fer el thumbnail de la imatge.
-     * @return Un QPixmap amb la imatge
+     * Mètode encarregat de fer el thumbnail de la imatge. Es retorna a partir d'un QImage de manera que es pugui generar en
+     * threads que no siguin el del GUI.
+     * \TODO Aquest mètode hauria de desaparèixer, ara es manté ja que es necessita per crear les previsualitzacions del queryscreen.
+     * @return Un QImage amb la imatge del thumbnail
      */
-    void createThumbnail( int resolution );
+    QImage createThumbnail(int resolution = 100);
 
 private:
     /// Atributs DICOM
@@ -259,8 +261,8 @@ private:
     /// Ens indica si aquesta imatge és un localitzador sempre que la modalitat sigui CT
     bool m_CTLocalizer;
 
-    /// Imatge de previsualització
-    QPixmap m_thumbnail;
+    /// Cache de la imatge de previsualització
+    QImage m_thumbnail;
 };
 
 }

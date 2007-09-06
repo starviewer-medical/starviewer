@@ -12,9 +12,12 @@
 #include "dicomimage.h"
 #include "imagelist.h"
 #include "starviewersettings.h"
-#include "scaleimage.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
+
+#include "image.h" // per scalar l'imatge
+#include "dicomseries.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -31,7 +34,6 @@ void ScaleStudy::scale( QString studyUID )
     char imgNumX[6];
     QString absPath , relPath, absPathScal;
     StarviewerSettings settings;
-    ScaleImage scaleImg;
     state = getSeriesOfStudy( studyUID,seriesList ); //busquem les sèries de l'estudi
 
     seriesList.firstSeries();
@@ -58,16 +60,23 @@ void ScaleStudy::scale( QString studyUID )
         }
         absPath = settings.getCacheImagePath() + relPath; //creem el path absolut a la imatge a la imatge
 
-        //creem el nom de la imatge resultant escalada
-        absPathScal = QString("%1%2/%3/scaled.pgm")
-            .arg( settings.getCacheImagePath() )
-            .arg( studyUID )
-            .arg( seriesList.getSeries().getSeriesUID() );
+        Image image;
+        image.setPath(absPath);
+        QImage thumbnail = image.createThumbnail();
 
-        scaleImg.dicom2lpgm( absPath, absPathScal, 100 );//creem la imatge escalada
+        if (!thumbnail.save( this->getScaledImagePath( &seriesList.getSeries() )))
+        {
+            ERROR_LOG("No s'ha pogut guardar el thumbnail a " + this->getScaledImagePath( &seriesList.getSeries() ));
+        }
 
         seriesList.nextSeries();
     }
+}
+
+QString ScaleStudy::getScaledImagePath(DICOMSeries* series)
+{
+    StarviewerSettings settings;
+    return settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png";
 }
 
 Status ScaleStudy::getSeriesOfStudy( QString studyUID , SeriesList &seriesList )

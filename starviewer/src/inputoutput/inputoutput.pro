@@ -28,7 +28,6 @@ HEADERS += const.h \
            seriesvolum.h \
            studyvolum.h \
            cachepool.h \
-           scaleimage.h \
            scalestudy.h \
            multiplequerystudy.h \
            qquerystudythread.h \
@@ -75,7 +74,6 @@ SOURCES += databaseconnection.cpp \
            seriesvolum.cpp \
            studyvolum.cpp \
            cachepool.cpp \
-           scaleimage.cpp \
            scalestudy.cpp \
            multiplequerystudy.cpp \
            qquerystudythread.cpp \
