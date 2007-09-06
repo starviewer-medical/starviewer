@@ -14,7 +14,7 @@
 namespace udg {
 
 Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
- : QFrame(parent)
+ : QFrame(parent), m_mainVolume(0)
 {
     setupUi( this );
     createConnections();
@@ -54,6 +54,9 @@ void Q2DViewerWidget::emitSelectedViewer()
 
 void Q2DViewerWidget::changeViewToAxial()
 {
+    if( !m_mainVolume )
+        return;
+
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
@@ -69,6 +72,9 @@ void Q2DViewerWidget::changeViewToAxial()
 
 void Q2DViewerWidget::changeViewToSagital()
 {
+    if( !m_mainVolume )
+        return;
+
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
@@ -84,6 +90,9 @@ void Q2DViewerWidget::changeViewToSagital()
 
 void Q2DViewerWidget::changeViewToCoronal()
 {
+    if( !m_mainVolume )
+        return;
+
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
