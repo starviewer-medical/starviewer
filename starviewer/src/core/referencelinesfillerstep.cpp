@@ -38,7 +38,7 @@ bool ReferenceLinesFillerStep::fill()
         {
             this->processSeries( series );
         }
-        m_cacheImageSet.clear();
+        this->emptyCache();
     }
     else
     {
@@ -62,16 +62,16 @@ void ReferenceLinesFillerStep::processSeries( Series *series )
 void ReferenceLinesFillerStep::processImage( Image *image )
 {
     DICOMTagReader dicomReader;
-    bool ok = dicomReader.setFile( image->getPath() );
-    if( ok )
+
+    if( dicomReader.setFile(image->getPath()) )
     {
 
         // Tractament del ReferencedImageSequence
         Study * study = image->getParentSeries()->getParentStudy();
         Image * referencedImage = 0;
-        QStringList referecedUIDList = dicomReader.getSequenceAttributeByName(DCM_ReferencedImageSequence, DCM_ReferencedSOPInstanceUID);
+        QStringList referencedUIDList = dicomReader.getSequenceAttributeByName(DCM_ReferencedImageSequence, DCM_ReferencedSOPInstanceUID);
 
-        foreach( QString referencedUID, referecedUIDList )
+        foreach( QString referencedUID, referencedUIDList )
         {
             //Buscar la imatge a la que fa referència:
             // 1- Buscar-la dins les imatges ja cercades
@@ -135,6 +135,14 @@ Image *ReferenceLinesFillerStep::findImageIn( Study *study, QString SOPInstanceU
             i++;
     }
     return image;
+}
+
+void ReferenceLinesFillerStep::emptyCache()
+{
+    foreach (QString key, m_cacheImageSet.keys())
+    {
+        m_cacheImageSet.take(key);
+    }
 }
 
 }

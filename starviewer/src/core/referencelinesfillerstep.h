@@ -24,25 +24,29 @@ namespace udg {
  */
 class ReferenceLinesFillerStep : public PatientFillerStep
 {
-    public:
-        ReferenceLinesFillerStep();
+public:
+    ReferenceLinesFillerStep();
 
-        ~ReferenceLinesFillerStep();
+    ~ReferenceLinesFillerStep();
 
-        bool fill();
+    bool fill();
 
-        QString name() {  return "ReferenceLinesFillerStep";  }
+    QString name() {  return "ReferenceLinesFillerStep";  }
 
-    private:
-        /// Mètodes per processar la informació específica de pacient,series i imatge
-        void processSeries( Series *series );
-        void processImage( Image *image );
-        /// Metode per buscar una imatge relacionada dins del study en qüestió.
-        /// Retorna NUL si la imatge no s'ha trobat
-        Image *findImageIn( Study *study , QString SOPInstanceUID );
+private:
+    /// Mètodes per processar la informació específica de pacient,series i imatge
+    void processSeries( Series *series );
+    void processImage( Image *image );
+    /// Metode per buscar una imatge relacionada dins del study en qüestió.
+    /// Retorna NUL si la imatge no s'ha trobat
+    Image *findImageIn( Study *study , QString SOPInstanceUID );
 
-        /// Caché d'imatges mapejades pel SOPInstanceUID. Es neteja a cada estudi.
-        QCache<QString, Image> m_cacheImageSet;
+    /// Mètode que buida la cache sense eliminar-ne els elements
+    void emptyCache();
+
+private:
+    /// Caché d'imatges mapejades pel SOPInstanceUID. Es neteja a cada estudi.
+    QCache<QString, Image> m_cacheImageSet;
 };
 
 }
