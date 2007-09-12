@@ -3,6 +3,14 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/inputoutput
 # L'objectiu és una biblioteca:  
 
+FORMS += qconfigurationscreenbase.ui \
+         qpacslistbase.ui \
+         qstudytreewidgetbase.ui \
+         qserieslistwidgetbase.ui \
+         qcreatedicomdirbase.ui \
+         qoperationstatescreenbase.ui \
+         qchooseoneobjectdialogbase.ui \
+         queryscreenbase.ui
 HEADERS += const.h \
            databaseconnection.h \
            dicomimage.h \
@@ -50,7 +58,15 @@ HEADERS += const.h \
            imagelistsingleton.h \
            querypacs.h \
            dicommask.h \
-           importdicomdir.h 
+           importdicomdir.h \
+           qconfigurationscreen.h \
+           qpacslist.h \
+           qstudytreewidget.h \
+           qserieslistwidget.h \
+           qcreatedicomdir.h \
+           qoperationstatescreen.h \
+           qchooseoneobjectdialog.h \
+           queryscreen.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            imagelist.cpp \
@@ -96,7 +112,15 @@ SOURCES += databaseconnection.cpp \
            imagelistsingleton.cpp \
            querypacs.cpp \
            dicommask.cpp \
-           importdicomdir.cpp 
+           importdicomdir.cpp \
+           qconfigurationscreen.cpp \
+           qpacslist.cpp \
+           qstudytreewidget.cpp \
+           qserieslistwidget.cpp \
+           qcreatedicomdir.cpp \
+           qoperationstatescreen.cpp \
+           qchooseoneobjectdialog.cpp \
+           queryscreen.cpp
 TARGETDEPS += ../core/libcore.a
 LIBS += ../../src/core/libcore.a
 INCLUDEPATH += ../../src/core
