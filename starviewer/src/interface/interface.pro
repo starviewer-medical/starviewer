@@ -3,41 +3,17 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/interface
 # L'objectiu és una biblioteca:  
 
-FORMS += qconfigurationscreenbase.ui \
-         queryscreenbase.ui \
-         qpacslistbase.ui \
-         qstudytreewidgetbase.ui \
-         qserieslistwidgetbase.ui \
-         qcreatedicomdirbase.ui \
-         qoperationstatescreenbase.ui \
-         qchooseoneobjectdialogbase.ui
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
 HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
            extensionhandler.h \
-           extensionworkspace.h \
-           qconfigurationscreen.h \
-           qpacslist.h \
-           queryscreen.h \
-           qstudytreewidget.h \
-           qserieslistwidget.h \
-           qcreatedicomdir.h \
-           qoperationstatescreen.h \
-           qchooseoneobjectdialog.h 
+           extensionworkspace.h
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
            extensionhandler.cpp \
-           extensionworkspace.cpp \
-           qconfigurationscreen.cpp \
-           qpacslist.cpp \
-           queryscreen.cpp \
-           qstudytreewidget.cpp \
-           qserieslistwidget.cpp \
-           qcreatedicomdir.cpp \
-           qoperationstatescreen.cpp \
-           qchooseoneobjectdialog.cpp 
+           extensionworkspace.cpp
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../inputoutput/libinputoutput.a \
