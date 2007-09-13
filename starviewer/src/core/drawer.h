@@ -107,7 +107,7 @@ private:
     ///Valida les coordenades segons la vista que es determina
     void validateCoordinates( double coordinates[3], int view );
     
-    ///mètode per retornar-nos l'índex de la primitiva única de tipus \a primitiveType que contindrà la llista \a nearestPairslist de primitives més properes.     
+    ///mètode per retornar-nos l'índex de la primitiva única de tipus \a primitiveType que contindrà la llista \a nearestPairslist de primitives més properes.  
     int getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType );
     
     ///mètode que ens diu si la llista \a list conté alguna primitiva de tipus \a primitiveType 
@@ -128,13 +128,12 @@ private:
     ///ens permet assignar el color de normal a la parella passada per paràmetre
     void setNormalColor( PrimitiveActorPair *pair );
 
-    ///Ens dibuixa el fons d'un determinat text
-    void drawTextBorder( Text *text, int slice, int view );
-
 public:
     
     Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
+    
     ~Drawer();
+    
     ///MÈTODES REFERENTS AL DIBUIXAT DE PRIMITIVES
     
     ///ens retorna el nombre de primitives que ha dibuixat el drawer
@@ -207,6 +206,9 @@ public:
     ///ens diu si hi ha algun conjunt seleccionat
     bool hasSelectedSet()
     { return( m_selectedSet != NULL ); }
+    
+    ///ens esborra el conjunt de primitives seleccionat
+    void removeSelectedSet();
 
     ///ens diu si hi ha algun conjunt marcat com el més proper
     bool hasNearestSet()
