@@ -856,7 +856,7 @@ void Drawer::updateChangedLine( Line *line )
 
         vtkLineSource *lineSource = vtkLineSource::New();
         ///\TODO mirar perquè el següent mètode dóna errors (no greus) però els dóna
-        lineSource->SetInputConnection( lineMapper->GetOutputPort() ); //lineMapper->GetInputConnection(0,0)
+        lineSource->SetInputConnection( lineMapper->GetOutputPort() ); 
 
         //assignem els punts a la línia
         lineSource->SetPoint1( line->getFirstPoint() );
@@ -885,9 +885,12 @@ void Drawer::updateChangedLine( Line *line )
         //mirem si la línia està en estat de resaltat o no. Segons això assignem el color
         QColor lineColor = line->getColor();
         QColor highlightColor = m_colorPalette->getHighlightColor();
+        QColor selectionColor = m_colorPalette->getSelectionColor();
 
         if ( line->isHighlighted() )
             properties->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+        else if ( line->isSelected() )
+            properties->SetColor( selectionColor.redF(), selectionColor.greenF(), selectionColor.blueF() );
         else
             properties->SetColor( lineColor.redF(), lineColor.greenF(), lineColor.blueF() );
 
@@ -923,7 +926,16 @@ void Drawer::updateChangedText( Text *text )
         
         //Assignem color
         QColor textColor = text->getColor();
-        textActor->GetCaptionTextProperty()->SetColor( textColor.redF(), textColor.greenF(), textColor.blueF() );
+        QColor highlightColor = m_colorPalette->getHighlightColor();
+        QColor selectionColor = m_colorPalette->getSelectionColor();
+        
+        if ( text->isHighlighted() )
+            textActor->GetCaptionTextProperty()->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+        else if ( text->isSelected() )
+            textActor->GetCaptionTextProperty()->SetColor( selectionColor.redF(), selectionColor.greenF(), selectionColor.blueF() );
+        else
+            textActor->GetCaptionTextProperty()->SetColor( textColor.redF(), textColor.greenF(), textColor.blueF() );
+        
         
         textActor->SetPadding( text->getPadding() );
         
@@ -993,7 +1005,9 @@ void Drawer::updateChangedText( Text *text )
         //mirem la visibilitat de l'actor
         if ( !text->isVisible() )
             textActor->VisibilityOff();
-        
+        else
+            textActor->VisibilityOn();
+            
         m_2DViewer->refresh();
     }
 }
@@ -1061,21 +1075,28 @@ void Drawer::highlightNearestPrimitives()
     PrimitivesPairsList list = currentViewMap.values();
 
     //agafem la primitiva més propera
-    m_nearestSet = getSetOf( getNearestPrimitivePair( point )->first );
+    PrimitiveActorPair *nearestPair = getNearestPrimitivePair( point );
+    
+    if ( !isValid( nearestPair ) )
+    {
+        DEBUG_LOG( "No hi ha primitiva propera vàlida!!" );
+        return;
+    }    
+    m_nearestSet = getSetOf( nearestPair->first );
 
     foreach( PrimitiveActorPair *pair, list )
     {
         if ( m_nearestSet && m_nearestSet->contains( pair->first ) )
         {
-            if ( m_nearestSet != m_selectedSet )//cal que el més proper no sigui el seleccionat perquè li treuria el color de seleccionat i no ho volem
+            if ( !pair->first->isSelected() )//cal que el més proper no sigui el seleccionat perquè li treuria el color de seleccionat i no ho volem
             {
                 setHighlightColor( pair );
                 pair->first->highlightOn();
             }
-            else
+            else /*if ( pair->first->isSelected() )*/
             {
                 setSelectedColor( pair );
-                pair->first->highlightOff();
+                pair->first->selectedOn();
             }
         }
         else
@@ -1085,13 +1106,13 @@ void Drawer::highlightNearestPrimitives()
                 if ( !m_selectedSet->contains( pair->first ) )
                 {
                     setNormalColor( pair );
-                    pair->first->highlightOff();
+                    pair->first->selectedOff();
                 }
             }
             else
             {
-                    setNormalColor( pair );
-                    pair->first->highlightOff();
+                setNormalColor( pair );
+                pair->first->selectedOff();
             }
         }
     }
@@ -1126,16 +1147,24 @@ void Drawer::selectNearestSet()
     foreach( PrimitiveActorPair *pair, list )
     {
         if ( m_selectedSet->contains( pair->first ) )
+        {
             setSelectedColor( pair );
+            pair->first->selectedOn();
+        }
         else
+        {
             setNormalColor( pair );
+            pair->first->selectedOff();
+        }
     }
+    
     m_2DViewer->refresh();
 }
 
 void Drawer::unselectSet()
 {
     m_selectedSet = NULL;
+    m_nearestSet  = NULL;
 
     PrimitivesMap currentViewMap;
 
@@ -1161,6 +1190,7 @@ void Drawer::unselectSet()
     foreach( PrimitiveActorPair *pair, list )
     {
             setNormalColor( pair );
+            pair->first->selectedOff();
     }
     m_2DViewer->refresh();
 }
@@ -1362,82 +1392,58 @@ void Drawer::addSetOfPrimitives( Representation *representation )
         m_primitivesSetList.append( set );
 }
 
-void Drawer::drawTextBorder( Text *text, int slice, int view )
+void Drawer::removeSelectedSet()
 {
-    QList<double* > points;
-    double *attachPoint = text->getAttatchmentPoint();
-    double *attachPoint1 = new double[3];
-    double *attachPoint2 = new double[3];
-    double *attachPoint3 = new double[3];
-    double *attachPoint4 = new double[3];
-
-    for ( int i = 0; i < 3; i++ )
+    if ( hasSelectedSet() )
     {
-        attachPoint1[i] = attachPoint[i];
-        attachPoint2[i] = attachPoint[i];
-        attachPoint3[i] = attachPoint[i];
-        attachPoint4[i] = attachPoint[i];
+        //agafem la posició on es troba aquest conjunt dins de la llista
+        int position = m_primitivesSetList.indexOf( m_selectedSet );
+
+        //obtenim la llista dels elements que estan dins del conjunt.
+        QList< DrawingPrimitive *> listOfPrimitives = m_selectedSet->values();
+        
+        PrimitiveActorPair *pair;
+        
+        QMutableMapIterator< int , PrimitiveActorPair* > *iterator = NULL;
+        switch( m_currentView )
+        {
+        case Q2DViewer::Axial:
+            iterator = new QMutableMapIterator< int , PrimitiveActorPair* >( m_axialPairs );
+        break;
+
+        case Q2DViewer::Sagittal:
+            iterator = new QMutableMapIterator< int , PrimitiveActorPair* >( m_sagittalPairs );
+        break;
+
+        case Q2DViewer::Coronal:
+            iterator = new QMutableMapIterator< int , PrimitiveActorPair* >( m_coronalPairs );
+        break;
+
+        default:
+            DEBUG_LOG( "Valor inesperat" );
+        break;
+        }
+        
+        if ( iterator )
+        {
+            foreach( DrawingPrimitive *primitive, listOfPrimitives )
+            {
+                pair = findPrimitiveActorPair( primitive );
+            
+                iterator->toFront();
+                if( iterator->findNext( pair ) )
+                {
+                    iterator->remove();
+                    m_2DViewer->getRenderer()->RemoveActor( pair->second );
+                    delete pair->first;
+                    
+                }
+            }
+            m_primitivesSetList.removeAt( position );
+            m_selectedSet = NULL;
+            m_nearestSet = NULL;
+            m_2DViewer->refresh();
+        }   
     }
-
-//     adaptCoordinatesToCurrentView( attachPoint1, view );
-//     adaptCoordinatesToCurrentView( attachPoint2, view );
-//     adaptCoordinatesToCurrentView( attachPoint3, view );
-//     adaptCoordinatesToCurrentView( attachPoint4, view );
-
-    switch( view ){
-    case Q2DViewer::Axial:
-        attachPoint1[0] -= 15;
-        attachPoint1[1] -= 2;
-
-        attachPoint2[0] += 15;
-        attachPoint2[1] -= 2;
-
-        attachPoint3[0] += 15;
-        attachPoint3[1] += 3;
-
-        attachPoint4[0] -= 15;
-        attachPoint4[1] += 3;
-    break;
-    case Q2DViewer::Sagittal:
-        attachPoint1[1] -= 15;
-        attachPoint1[2] -= 2.5;
-
-        attachPoint2[1] += 15;
-        attachPoint2[2] -= 2.5;
-
-        attachPoint3[1] += 15;
-        attachPoint3[2] += 2.5;
-
-        attachPoint4[1] -= 15;
-        attachPoint4[2] += 2.5;
-    break;
-    case Q2DViewer::Coronal:
-        attachPoint1[0] -= 15;
-        attachPoint1[2] -= 2.5;
-
-        attachPoint2[0] += 15;
-        attachPoint2[2] -= 2.5;
-
-        attachPoint3[0] += 15;
-        attachPoint3[2] += 2.5;
-
-        attachPoint4[0] -= 15;
-        attachPoint4[2] += 2.5;
-    break;
-    default:
-        ERROR_LOG( "Vista no esperada!!!" );
-    break;
-    }
-
-    points << attachPoint1;
-    points << attachPoint2;
-    points << attachPoint3;
-    points << attachPoint4;
-
-    Polygon *polygon = new Polygon( points );
-    polygon->enableBackground();
-    polygon->setColor( QColor( 0, 0, 0 ) );
-    drawPolygon( polygon, slice, view );
 }
-
 };  // end namespace udg
