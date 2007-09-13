@@ -26,6 +26,9 @@ Classe base per a totes les primitives gràfiques que podem representar en un vi
 class DrawingPrimitive : public QObject{
     Q_OBJECT
 public:
+
+/// enumeració per saber quin estat té la primitiva
+    enum { NORMAL, HIGHLIGHTED, SELECTED };
     
      /**Tipus de coordenades que podem tenir:
         DISPLAY -             x-y pixel values in window
@@ -108,22 +111,38 @@ public:
     
     ///Fem highlight la primitiva
     void highlightOn()
-    { highlight( true ); }
+    { m_state = HIGHLIGHTED; }
     
     ///Fem unhighlight la primitiva
     void highlightOff()
-    { highlight( false ); }
-    
-    ///assignem el highlight amb un paràmetre
-    void highlight( bool highlight )
-    { m_highlight = highlight; } 
+    { m_state = NORMAL; }
     
     ///ens diu si la primitiva està highlighted o no
     bool isHighlighted()
-    { return( m_highlight ); }
+    { return( m_state == HIGHLIGHTED ); }
+    
+     ///Fem selecció de la primitiva
+    void selectedOn()
+    { m_state = SELECTED; }
+    
+    ///Fem deselecció de la primitiva
+    void selectedOff()
+    { m_state = NORMAL; }
+    
+    ///ens diu si la primitiva està seleccionada o no
+    bool isSelected()
+    { return( m_state == SELECTED ); }
+    
+     ///ens diu si la primitiva està en estat normal
+    bool isNormal()
+    { return( m_state == NORMAL ); }
     
     ///ens diu el tipus de primitiva que és. (reimplementat en les sub-classes)
     virtual QString getPrimitiveType() = 0;
+    
+    ///ens retorna l'estat
+    int getState()
+    { return( m_state ); }
 protected:
    
     ///color de la primitiva
@@ -144,8 +163,8 @@ protected:
     ///visibilitat de la primitiva
     bool m_visible;
     
-    ///controla si està en estat de highlight o no
-    bool m_highlight;
+    ///estat de la primitiva
+    int m_state;
 };
 
 };  

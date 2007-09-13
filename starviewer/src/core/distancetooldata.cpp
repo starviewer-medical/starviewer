@@ -24,7 +24,7 @@ void DistanceToolData::setFirstPoint( double p1[3] )
     for ( int i = 0; i < 3; i++ )
         m_firstPoint[i] = p1[i];
     
-    calculateDistance();
+//     calculateDistance();
     emit firstPointChanged();
 }
     
@@ -33,7 +33,7 @@ void DistanceToolData::setSecondPoint( double p2[3] )
     for ( int i = 0; i < 3; i++ )
         m_secondPoint[i] = p2[i];
     
-    calculateDistance();
+//     calculateDistance();
     emit secondPointChanged();
 }
 
