@@ -40,6 +40,8 @@ void DistanceRepresentation::setText( Text *text )
 void DistanceRepresentation::setLine( Line *line )
 {
     m_line = line;
+    m_distanceToolData->setFirstPoint( m_line->getFirstPoint() );
+    m_distanceToolData->setSecondPoint( m_line->getSecondPoint() );
 }
 
 void DistanceRepresentation::setPolygon( Polygon *polygon )
