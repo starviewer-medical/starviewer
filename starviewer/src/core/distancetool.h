@@ -91,6 +91,9 @@ private:
     ///ens permet conèixer si s'han obtingut primitives correctes com a distància seleccionada
     bool m_correctData;
     
+    ///ens permetrà controlar si la tecla Ctrl per a seleccionar distàncies està polsada o no.
+    bool m_isCtrlPressed;
+    
 private slots:
     /// Comença l'anotació de la distància
     void startDistanceAnnotation();

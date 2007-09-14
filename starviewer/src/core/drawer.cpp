@@ -243,12 +243,11 @@ void Drawer::drawText( Text *text, int slice, int view )
     //Assignem la posició en pantalla
     textActor->SetAttachmentPoint( text->getAttatchmentPoint() );
 
-    textActor->BorderOff();
-
-      //mirem si el text té fons o no
-//     if ( text->isBorderEnabled() )
-//         drawTextBorder( text, slice, view );
-
+    //mirem si el text té fons o no
+    if ( text->isBorderEnabled() )
+         textActor->BorderOn();
+     else
+         textActor->BorderOff();
 
     //mirem la visibilitat de l'actor
     if ( !text->isVisible() )
@@ -936,7 +935,6 @@ void Drawer::updateChangedText( Text *text )
         else
             textActor->GetCaptionTextProperty()->SetColor( textColor.redF(), textColor.greenF(), textColor.blueF() );
         
-        
         textActor->SetPadding( text->getPadding() );
         
         textActor->SetPosition( -1.0 , -1.0 );
@@ -1000,8 +998,12 @@ void Drawer::updateChangedText( Text *text )
         //Assignem la posició en pantalla
         textActor->SetAttachmentPoint( text->getAttatchmentPoint() );
         
-        textActor->BorderOff();
-        
+        //mirem si el text té fons o no
+        if ( text->isBorderEnabled() )
+             textActor->BorderOn();
+         else
+             textActor->BorderOff();
+         
         //mirem la visibilitat de l'actor
         if ( !text->isVisible() )
             textActor->VisibilityOff();
