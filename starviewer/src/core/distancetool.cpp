@@ -24,8 +24,6 @@
 namespace udg {
 
 DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
-// : HighlightColor( Qt::darkGreen ), NormalColor( Qt::green ), SelectedColor( Qt::darkGreen )
-
 {
     m_nearestPoint = NOTHINGSELECTED;
     m_state = NONE;
@@ -82,15 +80,12 @@ void DistanceTool::handleEvent( unsigned long eventID )
                     m_selectedDistanceRepresentation->getText()->visibilityOn();                                                    
                     m_selectedDistanceToolData->calculateDistance();
                     m_selectedDistanceRepresentation->refreshText( m_2DViewer->getView() );
-                    m_selectedDistanceRepresentation->refreshPolygon();
+//                     m_selectedDistanceRepresentation->refreshPolygon();
                     
                     m_state = NONE;
                 }
                 else
                 {
-                    //assignem els atributs als objectes DistanceTooldata i DistanceRepresentation
-//                     createSelectedDistanceData( m_2DViewer->getDrawer()->getSelectedSet() );
-                    
                     //determinem quin és el punt més proper si les dades han estat les esperades
                     if ( m_correctData )
                     {
@@ -177,8 +172,6 @@ void DistanceTool::createSelectedDistanceData( DistanceTool::PrimitivesSet *prim
         if ( primitive->getPrimitiveType() == "Line" )
         {
             Line *line = static_cast<Line*> ( primitive );  
-//             m_selectedDistanceToolData->setFirstPoint( line->getFirstPoint() );
-//             m_selectedDistanceToolData->setSecondPoint( line->getSecondPoint() );
             m_selectedDistanceRepresentation->setLine( line );
             numberOfPrimitives++;
         }
@@ -188,15 +181,15 @@ void DistanceTool::createSelectedDistanceData( DistanceTool::PrimitivesSet *prim
             m_selectedDistanceRepresentation->setText( text );
             numberOfPrimitives++;
         }
-        else if ( primitive->getPrimitiveType() == "Polygon" )
-        {
-            Polygon *polygon = static_cast<Polygon*> ( primitive );  
-            m_selectedDistanceRepresentation->setPolygon( polygon );
-            numberOfPrimitives++;
-        }
+//         else if ( primitive->getPrimitiveType() == "Polygon" )
+//         {
+//             Polygon *polygon = static_cast<Polygon*> ( primitive );  
+//             m_selectedDistanceRepresentation->setPolygon( polygon );
+//             numberOfPrimitives++;
+//         }
     }
     
-    if ( numberOfPrimitives == 3 )
+    if ( numberOfPrimitives == 2/*3*/ )
         m_correctData = true;
 }
 

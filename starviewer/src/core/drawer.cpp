@@ -1033,7 +1033,7 @@ Drawer::PrimitivesSet* Drawer::getSetOf( DrawingPrimitive *primitive )
 
     if ( notFound )
     {
-//         ERROR_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
+        ERROR_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
         set = NULL;
     }
     return( set );
@@ -1376,12 +1376,12 @@ void Drawer::addSetOfPrimitives( Representation *representation )
         DistanceRepresentation *distanceRepresentation = static_cast<DistanceRepresentation*> ( representation );
         set->insert( distanceRepresentation->getLine() );
         set->insert( distanceRepresentation->getText() );
-        set->insert( distanceRepresentation->getPolygon() );
-
-        //li diem que dibuixi el polígon que representa el voltant del text.
-        distanceRepresentation->getPolygon()->enableBackground();
-        distanceRepresentation->getPolygon()->setColor( QColor( 0, 0, 0 ) );
-        drawPolygon( distanceRepresentation->getPolygon(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
+//         set->insert( distanceRepresentation->getPolygon() );
+// 
+//         //li diem que dibuixi el polígon que representa el voltant del text.
+//         distanceRepresentation->getPolygon()->enableBackground();
+//         distanceRepresentation->getPolygon()->setColor( QColor( 0, 0, 0 ) );
+//         drawPolygon( distanceRepresentation->getPolygon(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
 
         //li diem al drawer que dibuixi el text de la distància
         drawText( distanceRepresentation->getText(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
