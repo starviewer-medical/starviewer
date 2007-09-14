@@ -317,6 +317,8 @@ void Q2DViewerExtension::initLayouts()
 {
     m_rows = 1;
     m_columns = 1;
+    m_totalRows = 1;
+    m_totalColumns = 1;
 
     m_gridLayout = new QGridLayout();
     m_gridLayout->setSpacing(0);
@@ -351,7 +353,9 @@ void Q2DViewerExtension::addColumns( int columns )
     {
         it = m_qHorizontalLayoutVector.begin();
         m_columns += 1;
+        m_totalColumns += 1;
         // Afegim un widget a cada fila per tenir una columna mÃ©s
+        int i = 0;
         while( it != m_qHorizontalLayoutVector.end() )
         {
             newViewer = getNewQ2DViewerWidget();
@@ -359,6 +363,9 @@ void Q2DViewerExtension::addColumns( int columns )
             m_vectorViewers.insert( posViewer,newViewer );
             posViewer += m_columns;
             it++;
+            if( i >= m_rows ) newViewer->hide();
+            i++;
+
         }
         posViewer = m_columns;
         columns--;
@@ -377,12 +384,14 @@ void Q2DViewerExtension::addRows( int rows )
         m_verticalLayout->addLayout( horizontal,0 );
         m_qHorizontalLayoutVector.push_back( horizontal );
         m_rows += 1;
+        m_totalRows += 1;
         //Afegim tants widgets com columnes
-        for(i = 0; i < m_columns; i++)
+        for(i = 0; i < m_totalColumns; i++)
         {
             newViewer = getNewQ2DViewerWidget();
             horizontal->addWidget( newViewer );
             m_vectorViewers.push_back( newViewer );
+            if( i >= m_columns) newViewer->hide();
         }
         rows--;
     }
@@ -412,7 +421,6 @@ void Q2DViewerExtension::removeColumns( int columns )
         posViewer = m_columns-1;
         columns--;
     }
-
 }
 
 void Q2DViewerExtension::removeRows( int rows )
@@ -452,13 +460,46 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 
 void Q2DViewerExtension::setGrid( int rows, int columns )
 {
+    // Mirem si les tenim amagades i mostrem totes les necessaries
+    int windowsToShow = 0;
+    int windowsToCreate = 0;
+    int windowsToHide = 0;
 
-    if( m_rows > rows ) removeRows( m_rows - rows);
-    else if ( m_rows < rows ) addRows( rows - m_rows );
+    if( rows > m_rows )
+    {
+        int hideWindows = m_totalRows - m_rows;
+    
+        if( hideWindows < (rows - m_rows) ) windowsToShow = hideWindows;
+        else windowsToShow = rows-m_rows;
+        showRows( windowsToShow );
 
-    if( m_columns > columns ) removeColumns( m_columns - columns );
-    else if ( m_columns < columns ) addColumns( columns - m_columns );
+        if( rows > m_totalRows ) windowsToCreate = rows - m_totalRows;
+        addRows( windowsToCreate );
+    }
+    else if( rows < m_rows )
+    {
+        hideRows( m_rows - rows );
+    }
 
+    windowsToShow = 0;
+    windowsToCreate = 0;
+    windowsToHide = 0;
+
+    if( columns > m_columns )
+    {
+        int hideWindows = m_totalColumns - m_columns;
+    
+        if( hideWindows < (columns - m_columns) ) windowsToShow = hideWindows;
+        else windowsToShow = columns-m_columns;
+        showColumns( windowsToShow );
+
+        if( columns > m_totalColumns ) windowsToCreate = columns - m_totalColumns;
+        addColumns( windowsToCreate );
+    }
+    else if( columns < m_columns )
+    {
+        hideColumns( m_columns - columns );
+    }
 }
 
 void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
@@ -585,6 +626,77 @@ void Q2DViewerExtension::createProgressDialog()
     m_progressDialog->setWindowTitle( tr("Loading") );
     m_progressDialog->setLabelText( tr("Loading data, please wait...") );
     m_progressDialog->setCancelButton( 0 );
+}
+
+void Q2DViewerExtension::showRows( int rows )
+{
+    Q2DViewerWidget *viewer;
+    int numColumn;
+
+    while( rows > 0 )
+    {
+        for( numColumn = 0; numColumn < m_columns; numColumn++ )
+        {
+
+            viewer = m_vectorViewers.value( ( m_totalColumns*m_rows ) + numColumn );
+            viewer->show();
+        }
+        m_rows++;
+        rows--;
+    }
+}
+
+void Q2DViewerExtension::hideRows( int rows )
+{
+    Q2DViewerWidget *viewer;
+    int numColumn;
+
+    while( rows > 0 )
+    {
+        m_rows--;
+        for( numColumn = 0; numColumn < m_columns; numColumn++ )
+        {
+            viewer = m_vectorViewers.value( ( ( m_totalColumns*m_rows ) + numColumn ) );
+            viewer->hide();
+            if ( m_selectedViewer == viewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
+        }
+        rows--;
+    }
+}
+
+void Q2DViewerExtension::showColumns( int columns )
+{
+    Q2DViewerWidget *viewer;
+    int numRow;
+
+    while( columns > 0 )
+    {
+        for( numRow = 0; numRow < m_rows; numRow++ )
+        {
+            viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
+            viewer->show();
+        }
+        m_columns++;
+        columns--;
+    }
+}
+
+void Q2DViewerExtension::hideColumns( int columns )
+{
+    Q2DViewerWidget *viewer;
+    int numRow;
+
+    while( columns > 0 )
+    {
+        m_columns--;
+        for( numRow = 0; numRow < m_rows; numRow++ )
+        {
+            viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
+            viewer->hide();
+            if ( m_selectedViewer == viewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
+        }
+        columns--;
+    }
 }
 
 void Q2DViewerExtension::readSettings()
