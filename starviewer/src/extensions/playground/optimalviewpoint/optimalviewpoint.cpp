@@ -82,7 +82,7 @@ OptimalViewpoint::OptimalViewpoint()
     m_numberOfPlanes = 0;  // inicialment cap mirall
     m_resultsChanged = false;
 
-
+    m_readExtentFromFile = false;
 
 }
 
@@ -532,6 +532,7 @@ void OptimalViewpoint::updatePlanes()
             slicer.setInput( m_volume->getImage() );
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+            slicer.setReadExtentFromFile( m_readExtentFromFile );
             slicer.reslice();
             slicer.computeSmi();
             slicer.method1A( m_similarityThreshold );
@@ -727,6 +728,12 @@ void OptimalViewpoint::setRenderCluster( bool renderCluster )
 void OptimalViewpoint::setClusterLimits( unsigned short first, unsigned short last )
 {
     m_volume->setClusterLimits( first, last );
+}
+
+
+void OptimalViewpoint::setReadExtentFromFile( bool readExtentFromFile )
+{
+    m_readExtentFromFile = readExtentFromFile;
 }
 
 

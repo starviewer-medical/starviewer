@@ -61,6 +61,9 @@ public:
     /// Aplica el reslice per generar la nova imatge.
     void reslice();
 
+    /// Estableix si s'ha de llegir l'extent des d'un fitxer (sinó, es calcula sobre les dades)
+    void setReadExtentFromFile( bool readExtentFromFile );
+
     /**
      * Calcula la mesura SMI (Slice Mutual Information). Escriu els resultats
      * per pantalla i en un fitxer anomenat smiID.txt al directori temporal.
@@ -108,6 +111,9 @@ private:
     double m_xSpacing, m_ySpacing, m_zSpacing;
     /// Valor de propietat del background afegit pel reslice.
     unsigned char m_newBackground;
+
+    /// Indica si s'ha de llegir l'extent des d'un fitxer (sinó, es calcula sobre les dades)
+    bool m_readExtentFromFile;
 
     /// Nova imatge.
     vtkImageData * m_reslicedImage;

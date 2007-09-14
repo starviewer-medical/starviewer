@@ -673,6 +673,13 @@
            </item>
           </layout>
          </item>
+         <item>
+          <widget class="QCheckBox" name="m_readExtentFromFileCheckBox" >
+           <property name="text" >
+            <string>Read extent from file</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

@@ -174,6 +174,8 @@ void QOptimalViewpointExtension::execute()
             if ( renderCluster ) m_method->setClusterLimits( m_parameters->getClusterFirst(), m_parameters->getClusterLast() );
             m_method->setRenderCluster( renderCluster );
 
+            m_method->setReadExtentFromFile( m_parameters->getReadExtentFromFile() );
+
 
 
             m_method->updatePlanes();
