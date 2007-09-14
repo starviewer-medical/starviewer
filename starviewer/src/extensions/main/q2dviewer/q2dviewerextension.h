@@ -68,6 +68,10 @@ public slots:
     void removeColumns( int columns = 1 );
     void removeRows( int rows = 1 );
     void setGrid( int rows, int columns );
+    void showRows( int rows );
+    void hideRows( int rows );
+    void showColumns( int columns );
+    void hideColumns( int columns );
 
     /// Mostrar menu per seleccionar grid predefinit
     ///TODO S'ha de canviar el mÃ¨tode per tal que no es crei l'objecte cada cop 
@@ -182,6 +186,8 @@ private:
     /// Nombre de files i columnes per els layouts
     int m_rows;
     int m_columns;
+    int m_totalRows;
+    int m_totalColumns;
 
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;
