@@ -199,6 +199,10 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
             case OptimalViewpointParameters::ClusterLast:
                 m_clusterLastSpinBox->setValue( m_parameters->getClusterLast() );
                 break;
+
+            case OptimalViewpointParameters::ReadExtentFromFile:
+                m_readExtentFromFileCheckBox->setChecked( m_parameters->getReadExtentFromFile() );
+                break;
         }
     }
 }
@@ -248,6 +252,8 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         m_parameters->setCluster( m_clusterCheckBox->isChecked() );
         m_parameters->setClusterFirst( m_clusterFirstSpinBox->value() );
         m_parameters->setClusterLast( m_clusterLastSpinBox->value() );
+
+        m_parameters->setReadExtentFromFile( m_readExtentFromFileCheckBox->isChecked() );
     }
 }
 

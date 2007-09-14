@@ -138,6 +138,7 @@ public:
 
     void setRenderCluster( bool renderCluster );
     void setClusterLimits( unsigned short first, unsigned short last );
+    void setReadExtentFromFile( bool readExtentFromFile );
 
 
 
@@ -170,6 +171,8 @@ private:
     short m_updatePlane;
     bool m_compute;
     double m_similarityThreshold;
+
+    bool m_readExtentFromFile;
 
 
 }; // end class OptimalViewpoint

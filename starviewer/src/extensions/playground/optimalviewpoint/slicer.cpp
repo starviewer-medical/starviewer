@@ -34,6 +34,8 @@ Slicer::Slicer( unsigned char id )
     m_input = 0;
     m_matrix = vtkMatrix4x4::New();
 
+    m_readExtentFromFile = false;
+
     m_reslicedImage = 0;
 }
 
@@ -106,9 +108,36 @@ void Slicer::reslice()
     int dims[3];
     resliced->GetDimensions( dims );
     int minX, maxX, minY, maxY, minZ, maxZ;
-    findExtent( data, dims[0], dims[1], dims[2], increments[0], increments[1], increments[2], minX, maxX );
-    findExtent( data, dims[1], dims[0], dims[2], increments[1], increments[0], increments[2], minY, maxY );
-    findExtent( data, dims[2], dims[0], dims[1], increments[2], increments[0], increments[1], minZ, maxZ );
+    bool hasExtent = false;
+
+    if ( m_readExtentFromFile )
+    {
+        // llegim l'extent d'un fitxer
+        QFile inFileExtent( QDir::tempPath().append( QString( "/extent%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+        if ( inFileExtent.open( QFile::ReadOnly ) )
+        {
+            QTextStream in( &inFileExtent );
+            in >> minX >> maxX >> minY >> maxY >> minZ >> maxZ;
+            inFileExtent.close();
+            hasExtent = true;
+        }
+    }
+
+    if ( !hasExtent)
+    {
+        findExtent( data, dims[0], dims[1], dims[2], increments[0], increments[1], increments[2], minX, maxX );
+        findExtent( data, dims[1], dims[0], dims[2], increments[1], increments[0], increments[2], minY, maxY );
+        findExtent( data, dims[2], dims[0], dims[1], increments[2], increments[0], increments[1], minZ, maxZ );
+
+        // guardem l'extent en un fitxer
+        QFile outFileExtent( QDir::tempPath().append( QString( "/extent%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+        if ( outFileExtent.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFileExtent );
+            out << minX << " " << maxX << " " << minY << " " << maxY << " " << minZ << " " << maxZ;
+            outFileExtent.close();
+        }
+    }
     DEBUG_LOG( QString( "minX = %1, maxX = %2" ).arg( minX ).arg( maxX ) );
     DEBUG_LOG( QString( "minY = %1, maxY = %2" ).arg( minY ).arg( maxY ) );
     DEBUG_LOG( QString( "minZ = %1, maxZ = %2" ).arg( minZ ).arg( maxZ ) );
@@ -593,6 +622,12 @@ void Slicer::setRightGroup( QVector< unsigned short > & rightGroups, unsigned sh
     if ( slice > 0 && rightGroups[slice-1] == rightGroups[slice] )
         setRightGroup( rightGroups, slice - 1, group );
     rightGroups[slice] = group;
+}
+
+
+void Slicer::setReadExtentFromFile( bool readExtentFromFile )
+{
+    m_readExtentFromFile = readExtentFromFile;
 }
 
 

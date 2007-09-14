@@ -433,4 +433,19 @@ unsigned short OptimalViewpointParameters::getClusterLast() const
 // }
 
 
+bool OptimalViewpointParameters::getReadExtentFromFile() const
+{
+    return m_readExtentFromFile;
+}
+
+
+void OptimalViewpointParameters::setReadExtentFromFile( bool readExtentFromFile )
+{
+    if ( m_readExtentFromFile != readExtentFromFile )
+    {
+        m_readExtentFromFile = readExtentFromFile; emit changed( ReadExtentFromFile );
+    }
+}
+
+
 }

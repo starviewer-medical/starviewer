@@ -61,7 +61,9 @@ public:
         Compute,
         SimilarityThreshold,
         Cluster, ClusterFirst, ClusterLast,
-//         NumberOfSlices
+//         NumberOfSlices,
+
+        ReadExtentFromFile
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -147,6 +149,10 @@ public:
 //     unsigned short getNumberOfSlices() const;
 
 
+    bool getReadExtentFromFile() const;
+    void setReadExtentFromFile( bool readExtentFromFile );
+
+
 
 private:
 
@@ -188,6 +194,7 @@ private:
     unsigned short m_clusterLast;
 //     unsigned short m_numberOfSlices;
 
+    bool m_readExtentFromFile;
 
 
 signals:
