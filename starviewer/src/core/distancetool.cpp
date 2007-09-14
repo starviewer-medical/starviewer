@@ -28,10 +28,11 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
     m_nearestPoint = NOTHINGSELECTED;
     m_state = NONE;
     m_2DViewer = viewer;
+    m_isCtrlPressed = false;
     
     //de moment no hem recuperat dades correctes del Drawer
     m_correctData = false;
-
+    
     //Creem aquests objectes per quan seleccionem una distància poder treballar amb les dades i la representació. Es creem amb paràmetres qualssevol perquè 
     //ara no importa el que continguin, perquè no s'han d'utilitzar encara.
     m_selectedDistanceToolData = new DistanceToolData( m_distanceStartPosition, m_distanceStartPosition );
@@ -68,13 +69,27 @@ void DistanceTool::handleEvent( unsigned long eventID )
         case vtkCommand::LeftButtonPressEvent:
             if ( !m_2DViewer->getDrawer()->hasSelectedSet() ) //cas en que no hi ha cap conjunt de primitives (distància) seleccionat.
             {
-                if ( m_state == NONE )
+                if ( m_isCtrlPressed )
+                {
+                    cout << "NO HI HA SELECCIO" << endl;
+                    if ( m_2DViewer->getDrawer()->hasNearestSet() && m_2DViewer->getDrawer()->getNumberOfDrawedPrimitives() > 0 ) 
+                    {
+                 cout << "SELECCIONO" << endl;   
+                        m_2DViewer->getDrawer()->selectNearestSet();
+                        createSelectedDistanceData( m_2DViewer->getDrawer()->getSelectedSet() );
+                    }
+                 }
+                else if ( m_state == NONE )
+                {
                     this->startDistanceAnnotation();
+                }
                 else if ( m_state == ANNOTATING )
+                {
                     this->endDistanceAnnotation();
+                }
             }
             else
-            {                
+            {
                 if ( m_state == MOVINGPOINT )
                 {    
                     m_selectedDistanceRepresentation->getText()->visibilityOn();                                                    
@@ -84,6 +99,12 @@ void DistanceTool::handleEvent( unsigned long eventID )
                     
                     m_state = NONE;
                 }
+                else if (  m_isCtrlPressed )
+                 {
+                     m_2DViewer->getDrawer()->unselectSet();
+                     //com que hem deseleccionat una distància, diem que no tenim dades correctes, per evitar la manipulació errònia de distàncies
+                     m_correctData = false;
+                 }
                 else
                 {
                     //determinem quin és el punt més proper si les dades han estat les esperades
@@ -128,24 +149,13 @@ void DistanceTool::handleEvent( unsigned long eventID )
             }
             break;
 
-        //click amb el botó dret: volem que si l'element clickat és una distància, quedi seleccionat.
-        case vtkCommand::MiddleButtonPressEvent:
-             if ( m_2DViewer->getDrawer()->hasSelectedSet() )
-             {
-                 m_2DViewer->getDrawer()->unselectSet();
-                 //com que hem deseleccionat una distància, diem que no tenim dades correctes, per evitar la manipulació errònia de distàncies
-                 m_correctData = false;
-             }
-             else
-             {
-                if ( m_2DViewer->getDrawer()->hasNearestSet() ) 
-                    m_2DViewer->getDrawer()->selectNearestSet();
-                    createSelectedDistanceData( m_2DViewer->getDrawer()->getSelectedSet() );
-             }
-            break;
-
         case vtkCommand::KeyPressEvent:
                 this->answerToKeyEvent();
+            break;
+        
+        case vtkCommand::KeyReleaseEvent:
+            if ( ((int)( m_2DViewer->getInteractor()->GetKeyCode() ) ) == 0 ) // s'ha alliberat el Ctrl
+                m_isCtrlPressed = false;
             break;
 
         default:
@@ -213,6 +223,9 @@ void DistanceTool::startDistanceAnnotation()
     
     //creem la representació de la distància actual
     m_distanceRepresentation = new DistanceRepresentation( distanceData );
+    
+    //li diem a la representació que estableixi el text amb ombra
+    m_distanceRepresentation->getText()->shadowOn();
     
     //li diem al drawer del nostre q2dviewer que dibuixi 
     m_2DViewer->getDrawer()->drawLine( m_distanceRepresentation->getLine(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
@@ -311,15 +324,19 @@ void DistanceTool::moveSecondPoint()
 void DistanceTool::answerToKeyEvent()
 {
     //responem a la intenció d'esborrar una distància, sempre que hi hagi una distància seleccionada i
-    //s'hagi polsat la tecla adequada (tecla sup)
+    //s'hagi polsat la tecla adequada (tecla sup) o seleccionar una distància amb el Ctrl i un botó del mouse
 
     char keyChar = m_2DViewer->getInteractor()->GetKeyCode();
     int keyInt = (int)keyChar;
 
-    if ( keyInt == 127 )
+    if ( keyInt == 127 ) //s'ha polsat el Sup
     {
         m_2DViewer->getDrawer()->removeSelectedSet();
         m_state = NONE;
+    }
+    else if ( keyInt == 0 ) // s'ha polsat el Ctrl
+    {
+        m_isCtrlPressed = true;
     }
 }
 
