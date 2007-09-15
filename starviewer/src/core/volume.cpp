@@ -91,12 +91,13 @@ Volume::VtkImageTypePointer Volume::getVtkData()
 {
     if( !m_dataLoaded )
     {
-        // ara mateix tenen preferència els arxius
-        if( !m_fileList.isEmpty() ) // si li hem donat com a input un conjunt d'arxius, llegim aquests arxius amb Input
+        // TODO Ara mateix llegim a partir de Input. Més endavant s'haurà de llegir a partir de les classes DICOMImageReader
+        QStringList fileList = getInputFiles();
+        if( !fileList.isEmpty() )
         {
             Input *input = new Input;
             connect( input, SIGNAL( progress(int) ), this, SIGNAL( progress(int) ) );
-            switch( input->readFiles( m_fileList ) )
+            switch( input->readFiles( fileList ) )
             {
                 case Input::NoError:
                     this->setData( input->getData()->getVtkData() );
@@ -109,12 +110,12 @@ Volume::VtkImageTypePointer Volume::getVtkData()
                     break;
             }
         }
-        else if( !m_imageSet.isEmpty() ) // si li hem donat com a input una llista d'imatges llegim les imatges
+        /* TODO Descomentar per llegir amb classes DICOMImageReader
+        if( !m_imageSet.isEmpty() )
         {
             this->loadWithPreAllocateAndInsert();
         }
-
-
+        */
     }
     return m_imageDataVTK;
 }
@@ -306,19 +307,9 @@ void Volume::addImage( Image *image )
 
 void Volume::setImages( const QList<Image *> &imageList )
 {
-//     m_imageSet.clear();
-//     m_imageSet = imageList;
-//     // perquè s'ompli la informació DICOM
-//     m_volumeInformation->setFilenames( m_imageSet.at(0)->getPath() );
-//     m_dataLoaded = false;
-    //TODO hauria de ser tal i com està comentat, però de moment serà així perquè tenim problemes
-    // al accedir a algunes llistes d'imatges, ja que sembla que d'avegades apunten a memòria no allotjada
-    // és un problema que cal investigar. Així de moment deixem això que és estable i funciona
-    //Update: Doncs sembla que continua sense funcionar, així continua donant seg. faults. Provar amb
-    //el pacient RAMOS RODRIGUEZ RUBEN, 21-06-2007, Sèrie 301
     m_imageSet.clear();
     m_imageSet = imageList;
-    this->setInputFiles( imageList.at(0)->getParentSeries()->getFilesPathList() );
+    m_dataLoaded = false;
 }
 
 QList<Image *> Volume::getImages() const
@@ -326,16 +317,15 @@ QList<Image *> Volume::getImages() const
     return m_imageSet;
 }
 
-void Volume::setInputFiles( const QStringList &filenames )
-{
-    m_fileList.clear();
-    m_fileList = filenames;
-    m_dataLoaded = false;
-}
-
 QStringList Volume::getInputFiles() const
 {
-    return m_fileList;
+    QStringList filepaths;
+    foreach (Image *image, this->getImages())
+    {
+        filepaths << image->getPath();
+    }
+
+    return filepaths;
 }
 
 Series *Volume::getSeries()
