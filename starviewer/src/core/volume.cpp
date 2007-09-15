@@ -202,7 +202,10 @@ Volume *Volume::getSubVolume( int index  )
     vtkChange->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
     vtkChange->SetOutputExtentStart( 0 , 0 , 0 );
 
-    Volume *subVolume = new Volume( vtkChange->GetOutput() );
+    //\TODO Això és una solució temporal. S'ha de mirar com fer-ho perquè el nou volum només tingui la llista d'imatges del subvolum que desitgem extreure.
+    Volume *subVolume = new Volume(  );
+    subVolume->setImages( this->getImages() );
+    subVolume->setData( vtkChange->GetOutput() );
     subVolume->getVtkData()->Update();
 
     return subVolume;
@@ -273,7 +276,10 @@ Volume * Volume::orderSlices()
 
     tileFilter->Update();
 
-    orderedVolume = new Volume( tileFilter->GetOutput() );
+    //\TODO Això és una solució temporal. S'ha de mirar com fer-ho perquè el nou volum tingui les imatges en el seu ordre correcte ja que ara només es reordena el model.
+    orderedVolume = new Volume(  );
+    orderedVolume->setImages( this->getImages() );
+    orderedVolume->setData( tileFilter->GetOutput() );
     //orderedVolume->getVtkData()->Update();
 
     return orderedVolume;
