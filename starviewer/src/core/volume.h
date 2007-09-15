@@ -116,8 +116,8 @@ public:
     /// Retorna les imatges que composen el volum
     QList<Image *> getImages() const;
 
-    /// Mètode de conveniència en el que li assignem els arxius que tindrà d'input
-    void setInputFiles( const QStringList &filenames );
+    /// Mètode de conveniència en el que obtenim la llista de fitxers a partir de totes les imatges.
+    /// \deprecated TODO Es manté per dependència amb codi que ha de canviar
     QStringList getInputFiles() const;
 
     /// Mètodes ràpids per obtenir la series/estudis/pacient a les que pertany aquest volum
@@ -167,9 +167,6 @@ private:
 
     /// Conjunt d'imatges que composen el volum
     QList<Image *> m_imageSet;
-
-    /// Conjunt d'arxius que conformen la imatge. Membre de conveniència, relacionat amb el mètode setInputFiles
-    QStringList m_fileList;
 };
 
 };  // end namespace udg
