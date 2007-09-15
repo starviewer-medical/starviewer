@@ -62,6 +62,8 @@ private:
     /// Crea el menú per escollir l'idioma de l'aplicació
     void createLanguageMenu();
 
+    QAction *createLanguageAction(const QString &language, const QString &locale);
+
     /// Llegeix la configuració inicial amb la que engega el programa
     void readSettings();
 
@@ -85,7 +87,7 @@ private slots:
     void about();
 
     /// canvia a l'idioma indicat
-    void switchToLanguage( int id );
+    void switchToLanguage(QString locale);
 
     /// canvia a pantalla completa o no
     void switchFullScreen( bool full );
@@ -115,9 +117,6 @@ private:
     QAction *m_aboutAction;
     QAction *m_fullScreenAction;
     QAction *m_logViewerAction;
-    QAction *m_catalanAction;
-    QAction *m_spanishAction;
-    QAction *m_englishAction;
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
