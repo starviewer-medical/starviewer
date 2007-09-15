@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="ca">
 <context>
     <name>udg::AppImportFile</name>
     <message>
@@ -214,13 +214,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="412"/>
-        <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gr&#xc3;&#xa0;fics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
+        <location filename="qapplicationmainwindow.cpp" line="308"/>
+        <source>The changes will take effect the next time you startup the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="308"/>
-        <source>The changes will take effect the next time you startup the application</source>
+        <location filename="qapplicationmainwindow.cpp" line="412"/>
+        <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gr&#xc3;&#xa0;fics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
