@@ -1,4 +1,5 @@
-<RCC>
+<!DOCTYPE RCC>
+<RCC version="1.0">
     <qresource prefix="/" >
         <file>cache/database.sql</file>
         <file>images/addViewRight.png</file>
@@ -56,9 +57,15 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
-        <file>translations/interface_ca_ES.qm</file>
-        <file>translations/interface_en_GB.qm</file>
-        <file>translations/interface_es_ES.qm</file>
+        <file>../interface/interface_ca_ES.qm</file>
+        <file>../interface/interface_en_GB.qm</file>
+        <file>../interface/interface_es_ES.qm</file>
+        <file>../core/core_ca_ES.qm</file>
+        <file>../core/core_en_GB.qm</file>
+        <file>../core/core_es_ES.qm</file>
+        <file>../inputoutput/inputoutput_ca_ES.qm</file>
+        <file>../inputoutput/inputoutput_en_GB.qm</file>
+        <file>../inputoutput/inputoutput_es_ES.qm</file>
         <file>images/viewmag+.png</file>
         <file>images/viewmag-.png</file>
         <file>images/view_left_right.png</file>

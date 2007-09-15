@@ -44,7 +44,13 @@ public:
      */
     virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext) = 0;
 
-    ///Retorna l'identificador de la classe Extension amb qui dialoga
+    /**
+     * Retorna l'identificador de la classe Extension amb qui dialoga.
+     * Aquest identificador també serveix per identificar els resources (.qrc) de l'extensió.
+     * Per exemple, si l'extensió té un getExtensionID().getID() com a "MyExtension" al fitxer resources s'hi haurà de posar
+     *  <qresource prefix="/extensions/MyExtension" >
+     * i per accedir-hi: QIcon *icon = new QIcon(":/extensions/MyExtension/images/icon.png");
+     */
     virtual DisplayableID getExtensionID() const = 0;
 };
 
