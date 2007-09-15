@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="es">
 <context>
     <name>udg::Image</name>
     <message>
@@ -97,29 +97,29 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="13"/>
-        <source>Custom Window Level Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
         <source>Window Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraste</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="61"/>
         <source>Window Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Brillo</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="117"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>Aceptar</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="124"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="qcustomwindowleveldialogbase.ui" line="13"/>
+        <source>Custom Window Level Settings</source>
+        <translation>Ajustes personalizados de contraste</translation>
     </message>
 </context>
 <context>
@@ -168,62 +168,62 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="51"/>
         <source>CT Bone</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Óseo</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="52"/>
         <source>CT Lung</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Pulmonar</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="53"/>
         <source>CT Soft Tissues, Non Contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, Sin Contraste</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="54"/>
         <source>CT Liver, Non Contrast</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, Sin Contraste</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="55"/>
         <source>CT Soft Tissues, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Tejidos Blandos, Contraste Medio</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="56"/>
         <source>CT Liver, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Hígado, Contraste Medio</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="57"/>
         <source>CT Neck, Contrast Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>CT Cuello,  Contraste Medio</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="58"/>
         <source>Angiography</source>
-        <translation type="unfinished"></translation>
+        <translation>Angiografía</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="59"/>
         <source>Osteoporosis</source>
-        <translation type="unfinished"></translation>
+        <translation>Osteoporosis</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="60"/>
         <source>Emphysema</source>
-        <translation type="unfinished"></translation>
+        <translation>Emfisema</translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="61"/>
         <source>Petrous Bone</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qwindowlevelcombobox.cpp" line="83"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalizado</translation>
     </message>
 </context>
 <context>
@@ -264,7 +264,7 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="toolsactionfactory.cpp" line="27"/>
         <source>Window Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Brillo</translation>
     </message>
     <message>
         <location filename="toolsactionfactory.cpp" line="28"/>
@@ -284,7 +284,7 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="toolsactionfactory.cpp" line="43"/>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mover</translation>
     </message>
     <message>
         <location filename="toolsactionfactory.cpp" line="44"/>

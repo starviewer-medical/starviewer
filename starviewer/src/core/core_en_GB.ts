@@ -97,11 +97,6 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="13"/>
-        <source>Custom Window Level Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
         <source>Window Width</source>
         <translation type="unfinished"></translation>
@@ -119,6 +114,11 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="124"/>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcustomwindowleveldialogbase.ui" line="13"/>
+        <source>Custom Window Level Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

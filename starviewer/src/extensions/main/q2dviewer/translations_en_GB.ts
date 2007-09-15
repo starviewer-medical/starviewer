@@ -77,16 +77,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="81"/>
-        <source>PS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="82"/>
-        <source>Enable/Disable the current attached</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="q2dviewerextension.cpp" line="89"/>
         <source>Voxel Information</source>
         <translation type="unfinished"></translation>
@@ -119,6 +109,16 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="110"/>
         <source>Rotate the image in counter clockwise direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="81"/>
+        <source>PS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="82"/>
+        <source>Enable/Disable the current attached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -165,6 +165,11 @@
 <context>
     <name>udg::Q2DViewerExtensionBase</name>
     <message>
+        <location filename="q2dviewerextensionbase.ui" line="480"/>
+        <source>WW/WL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="q2dviewerextensionbase.ui" line="422"/>
         <source>...</source>
         <translation type="unfinished"></translation>
@@ -185,16 +190,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="328"/>
-        <source>Series layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="375"/>
-        <source>Image layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="q2dviewerextensionbase.ui" line="400"/>
         <source>voxel information</source>
         <translation type="unfinished"></translation>
@@ -205,8 +200,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="480"/>
-        <source>WW/WL</source>
+        <location filename="q2dviewerextensionbase.ui" line="328"/>
+        <source>Series layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="375"/>
+        <source>Image layout</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

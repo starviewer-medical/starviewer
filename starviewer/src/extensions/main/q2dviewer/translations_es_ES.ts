@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="es">
 <context>
     <name>udg::GridIconBase</name>
     <message>
@@ -34,47 +34,82 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="59"/>
         <source>&amp;Axial View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista &amp;Axial</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="60"/>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="61"/>
         <source>Change Current View To Axial</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar vista actual a Axial</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="66"/>
         <source>&amp;Sagital View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista &amp;Sagital</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="67"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="68"/>
         <source>Change Current View To Sagital</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar vista actual a Sagital</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="73"/>
         <source>&amp;Coronal View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista &amp;Coronal</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="74"/>
         <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="75"/>
         <source>Change Current View To Coronal</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar Vista Actual a Coronal</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="89"/>
+        <source>Voxel Information</source>
+        <translation>Información de voxel</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="90"/>
+        <source>Ctrl+I</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="91"/>
+        <source>Enable voxel information over cursor</source>
+        <translation>Habilitar la información de voxel sobre el cursor</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="99"/>
+        <source>Rotate Clockwise</source>
+        <translation>Rotar en sentido horario</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="101"/>
+        <source>Rotate the image in clockwise direction</source>
+        <translation>Rota la imagen en sentido horario</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="108"/>
+        <source>Rotate Counter Clockwise</source>
+        <translation>Rotar en sentido anti-horario</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="110"/>
+        <source>Rotate the image in counter clockwise direction</source>
+        <translation>Rota la imagen en sentido anti-horario</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="81"/>
@@ -84,41 +119,6 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="82"/>
         <source>Enable/Disable the current attached</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="89"/>
-        <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="90"/>
-        <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="91"/>
-        <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="99"/>
-        <source>Rotate Clockwise</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="101"/>
-        <source>Rotate the image in clockwise direction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="108"/>
-        <source>Rotate Counter Clockwise</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="110"/>
-        <source>Rotate the image in counter clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -149,7 +149,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="239"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Por defecto</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="626"/>
@@ -165,23 +165,38 @@
 <context>
     <name>udg::Q2DViewerExtensionBase</name>
     <message>
+        <location filename="q2dviewerextensionbase.ui" line="480"/>
+        <source>WW/WL</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="q2dviewerextensionbase.ui" line="422"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="63"/>
         <source>window level</source>
-        <translation type="unfinished"></translation>
+        <translation>Brillo/Contraste</translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="129"/>
         <source>zoom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="151"/>
         <source>move</source>
+        <translation>Mover</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="400"/>
+        <source>voxel information</source>
+        <translation>Información de voxel</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="462"/>
+        <source>PS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -194,28 +209,13 @@
         <source>Image layout</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="400"/>
-        <source>voxel information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="462"/>
-        <source>PS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="480"/>
-        <source>WW/WL</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::Q2DViewerExtensionMediator</name>
     <message>
         <location filename="q2dviewerextensionmediator.cpp" line="24"/>
         <source>2D Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Visor 2D</translation>
     </message>
 </context>
 <context>
