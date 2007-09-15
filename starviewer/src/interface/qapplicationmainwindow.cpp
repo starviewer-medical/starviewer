@@ -114,6 +114,8 @@ void QApplicationMainWindow::createActions()
             m_signalMapper->setMapping( action , mediator->getExtensionID().getID() );
             connect( action , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
             m_actionsList.append(action);
+
+            delete mediator;
         }
         else
         {
@@ -220,7 +222,7 @@ void QApplicationMainWindow::createLanguageMenu()
 {
     QSettings settings;
     settings.beginGroup("Starviewer-Language");
-    QString defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
+    QString defaultLocale = settings.value( "languageLocale", QLocale::system().name() ).toString();
     settings.endGroup();
 
     QSignalMapper* signalMapper = new QSignalMapper( this );
@@ -230,7 +232,7 @@ void QApplicationMainWindow::createLanguageMenu()
     m_catalanAction->setText( "Català" );
     m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
     m_catalanAction->setCheckable( true );
-    if( defaultLocale == QString("interface_ca_ES") )
+    if( defaultLocale == QString("ca_ES") )
         m_catalanAction->setChecked( true );
     else
         m_catalanAction->setChecked( false );
@@ -242,7 +244,7 @@ void QApplicationMainWindow::createLanguageMenu()
     m_spanishAction->setText( "Castellano" );
     m_spanishAction->setStatusTip( tr("Switch to Spanish Language") );
     m_spanishAction->setCheckable( true );
-    if( defaultLocale == QString("interface_es_ES") )
+    if( defaultLocale == QString("es_ES") )
         m_spanishAction->setChecked( true );
     else
         m_spanishAction->setChecked( false );
@@ -253,7 +255,7 @@ void QApplicationMainWindow::createLanguageMenu()
     m_englishAction->setText( "English" );
     m_englishAction->setStatusTip( tr("Switch to English Language") );
     m_englishAction->setCheckable( true );
-    if( defaultLocale == QString("interface_en_GB") )
+    if( defaultLocale == QString("en_GB") )
         m_englishAction->setChecked( true );
     else
         m_englishAction->setChecked( false );
@@ -267,26 +269,26 @@ void QApplicationMainWindow::createLanguageMenu()
 
 void QApplicationMainWindow::switchToLanguage( int id )
 {
-    QString locale = "interface_";
+    QString locale;
 
     switch( id )
     {
     case 0:
-        locale += "ca_ES";
+        locale = "ca_ES";
         m_catalanAction->setChecked( true );
         m_spanishAction->setChecked( false );
         m_englishAction->setChecked( false );
     break;
 
     case 1:
-        locale += "es_ES";
+        locale = "es_ES";
         m_catalanAction->setChecked( false );
         m_spanishAction->setChecked( true );
         m_englishAction->setChecked( false );
     break;
 
     case 2:
-        locale += "en_GB";
+        locale = "en_GB";
         m_catalanAction->setChecked( false );
         m_spanishAction->setChecked( false );
         m_englishAction->setChecked( true );
@@ -303,7 +305,7 @@ void QApplicationMainWindow::switchToLanguage( int id )
         settings.setValue( "languageLocale", locale );
         settings.endGroup();
     }
-    QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect after restarting the application") );
+    QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
 
 void QApplicationMainWindow::openNewWindow( Patient *patient )

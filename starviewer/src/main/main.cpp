@@ -15,6 +15,7 @@
 #include <QTextCodec>
 #include "logging.h"
 #include "extensions.h"
+#include "extensionmediatorfactory.h"
 
 void configureLogging()
 {
@@ -25,7 +26,8 @@ void configureLogging()
         // creem el directori
         logDir.mkpath( QDir::homePath() + "/.starviewer/log/" );
     }
-    // \TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric; està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
+    // \TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
+    // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
     QString configurationFile = "/etc/starviewer/log.conf";
     if( ! QFile::exists(configurationFile) )
     {
@@ -39,6 +41,60 @@ void configureLogging()
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
 }
 
+void drawDir(QDir *dir)
+{
+    foreach (QFileInfo file, dir->entryInfoList())
+    {
+        DEBUG_LOG(file.absoluteFilePath());
+        if (file.isDir() && file.absoluteFilePath() != ":/trolltech")
+            drawDir( new QDir( file.absoluteFilePath() ));
+    }
+}
+
+void loadTranslator(QApplication &app, QString pathTranslator)
+{
+    QTranslator *translator = new QTranslator(&app);
+    if (translator->load( pathTranslator ))
+    {
+        app.installTranslator( translator );
+    }
+    else
+    {
+        ERROR_LOG("No s'ha pogut carregar el translator " + pathTranslator);
+    }
+}
+
+void initializeTranslations(QApplication &app)
+{
+    QSettings settings;
+    settings.beginGroup("Starviewer-Language");
+    QString m_defaultLocale = settings.value( "languageLocale", QLocale::system().name() ).toString();
+    settings.endGroup();
+
+    loadTranslator(app, ":/core/core_" + m_defaultLocale);
+    loadTranslator(app, ":/interface/interface_" + m_defaultLocale);
+    loadTranslator(app, ":/inputoutput/inputoutput_" + m_defaultLocale);
+
+    initExtensionsResources();
+    INFO_LOG("Locales = " + m_defaultLocale);
+
+    QList<QString> extensionsMediatorNames = udg::ExtensionMediatorFactory::instance()->getFactoryNamesList();
+    foreach(QString mediatorName, extensionsMediatorNames)
+    {
+        udg::ExtensionMediator* mediator = udg::ExtensionMediatorFactory::instance()->create(mediatorName);
+
+        if (mediator)
+        {
+            loadTranslator(app, ":/extensions/" + mediator->getExtensionID().getID() + "/translations_" + m_defaultLocale);
+            delete mediator;
+        }
+        else
+        {
+            ERROR_LOG( "Error carregant el mediator de " + mediatorName );
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -47,19 +103,12 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("trueta.udg.cat");
     app.setApplicationName("Starviewer");
 
-    // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ). Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
+    // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ).
+    // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
 
     configureLogging();
-    // translation
-    QSettings settings;
-    settings.beginGroup("Starviewer-Language");
-    QString m_defaultLocale = settings.value( "languageLocale", "interface_" + QLocale::system().name() ).toString();
-    settings.endGroup();
-
-    QTranslator m_applicationTranslator;
-    m_applicationTranslator.load( QString(":/translations/") + m_defaultLocale );
-    app.installTranslator( &m_applicationTranslator );
+    initializeTranslations(app);
 
     QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
     splash->show();
@@ -72,6 +121,9 @@ int main(int argc, char *argv[])
                       &app, SLOT( quit() ));
     splash->finish( mainWin );
     delete splash;
+
+    QDir dir(":/");
+    drawDir(&dir);
 
     return app.exec();
 }

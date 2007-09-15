@@ -3,6 +3,10 @@
 # Subdir relative project main directory: ./src/core
 # Target is a library:  
 
+TRANSLATIONS += core_ca_ES.ts \
+                core_es_ES.ts \
+                core_en_GB.ts 
+
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui
 
@@ -213,3 +217,5 @@ include(../itk.inc)
 include(../vtk.inc)
 include(../dcmtk.inc)
 include(../compilationtype.inc)
+include(../translations.inc)
+

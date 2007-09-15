@@ -3,6 +3,9 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/inputoutput
 # L'objectiu és una biblioteca:  
 
+TRANSLATIONS += inputoutput_ca_ES.ts \
+                inputoutput_es_ES.ts \
+                inputoutput_en_GB.ts 
 FORMS += qconfigurationscreenbase.ui \
          qpacslistbase.ui \
          qstudytreewidgetbase.ui \

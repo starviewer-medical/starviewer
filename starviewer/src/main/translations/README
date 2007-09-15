@@ -1,5 +1,0 @@
-Directori on van les traduccions. Per tal de generar-les i que el projecte
-compili s'ha d'executar el programa lrelease que ve amb les qt. A dia d'avui
-s'ha d'executar en el directori interface així:
-lrelease interface.pro
-Després cal copiar els fitxers *.qm generats a aquest directori.

@@ -1,31 +1,14 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/edemasegmentation
-# L'objectiu és una biblioteca:  
+# L'objectiu ï¿½ una biblioteca:  
 
 FORMS += qedemasegmentationextensionbase.ui 
 HEADERS += qedemasegmentationextension.h \
            edemasegmentationextensionmediator.h 
 SOURCES += qedemasegmentationextension.cpp \
            edemasegmentationextensionmediator.cpp 
-TARGETDEPS += ../../../core/libcore.a
-LIBS += ../../../core/libcore.a
-INCLUDEPATH += ../../../core
-MOC_DIR = ../../../../tmp/moc
-UI_DIR = ../../../../tmp/ui
-OBJECTS_DIR = ../../../../tmp/obj
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-CONFIG += warn_on \
-qt \
-opengl \
-thread \
-x11 \
-staticlib \
-exceptions \
-stl
-TEMPLATE = lib
-include(../../../vtk.inc)
-include(../../../itk.inc)
-include(../../../dcmtk.inc)
-include(../../../compilationtype.inc)
+
+RESOURCES += edemasegmentation.qrc
+
+include(../../basicconfextensions.inc)
