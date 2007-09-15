@@ -41,16 +41,6 @@ void configureLogging()
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
 }
 
-void drawDir(QDir *dir)
-{
-    foreach (QFileInfo file, dir->entryInfoList())
-    {
-        DEBUG_LOG(file.absoluteFilePath());
-        if (file.isDir() && file.absoluteFilePath() != ":/trolltech")
-            drawDir( new QDir( file.absoluteFilePath() ));
-    }
-}
-
 void loadTranslator(QApplication &app, QString pathTranslator)
 {
     QTranslator *translator = new QTranslator(&app);
@@ -121,9 +111,6 @@ int main(int argc, char *argv[])
                       &app, SLOT( quit() ));
     splash->finish( mainWin );
     delete splash;
-
-    QDir dir(":/");
-    drawDir(&dir);
 
     return app.exec();
 }
