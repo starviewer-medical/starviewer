@@ -119,7 +119,7 @@ void QApplicationMainWindow::createActions()
         }
         else
         {
-            DEBUG_LOG( "Error carregant el mediator de " + name );
+            ERROR_LOG( "Error carregant el mediator de " + name );
         }
     }
 
@@ -220,91 +220,49 @@ void QApplicationMainWindow::createMenus()
 
 void QApplicationMainWindow::createLanguageMenu()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-Language");
-    QString defaultLocale = settings.value( "languageLocale", QLocale::system().name() ).toString();
-    settings.endGroup();
+    QMap<QString, QString> languages;
+    languages.insert("ca_ES", tr("Catalan") );
+    languages.insert("es_ES", tr("Spanish") );
+    languages.insert("en_GB", tr("English") );
 
     QSignalMapper* signalMapper = new QSignalMapper( this );
-    connect( signalMapper, SIGNAL( mapped(int) ), this , SLOT( switchToLanguage(int) ) );
+    connect( signalMapper, SIGNAL( mapped(QString) ), this , SLOT( switchToLanguage(QString) ) );
 
-    m_catalanAction = new QAction( this );
-    m_catalanAction->setText( "Català" );
-    m_catalanAction->setStatusTip( tr("Switch to Catalan Language") );
-    m_catalanAction->setCheckable( true );
-    if( defaultLocale == QString("ca_ES") )
-        m_catalanAction->setChecked( true );
-    else
-        m_catalanAction->setChecked( false );
+    QActionGroup *actionGroup = new QActionGroup(this);
 
-    signalMapper->setMapping( m_catalanAction , 0 );
-    connect( m_catalanAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+    QMapIterator<QString, QString> i(languages);
+    while (i.hasNext())
+    {
+        i.next();
 
-    m_spanishAction = new QAction( this );
-    m_spanishAction->setText( "Castellano" );
-    m_spanishAction->setStatusTip( tr("Switch to Spanish Language") );
-    m_spanishAction->setCheckable( true );
-    if( defaultLocale == QString("es_ES") )
-        m_spanishAction->setChecked( true );
-    else
-        m_spanishAction->setChecked( false );
-    signalMapper->setMapping( m_spanishAction , 1 );
-    connect( m_spanishAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
+        QAction *action = createLanguageAction(i.value(), i.key());
+        signalMapper->setMapping(action, i.key());
+        connect(action, SIGNAL( triggered() ), signalMapper, SLOT( map() ));
 
-    m_englishAction = new QAction( this );
-    m_englishAction->setText( "English" );
-    m_englishAction->setStatusTip( tr("Switch to English Language") );
-    m_englishAction->setCheckable( true );
-    if( defaultLocale == QString("en_GB") )
-        m_englishAction->setChecked( true );
-    else
-        m_englishAction->setChecked( false );
-    signalMapper->setMapping( m_englishAction , 2 );
-    connect( m_englishAction , SIGNAL( triggered() ) , signalMapper , SLOT( map() ) );
-
-    m_languageMenu->addAction( m_catalanAction );
-    m_languageMenu->addAction( m_spanishAction );
-    m_languageMenu->addAction( m_englishAction );
+        actionGroup->addAction(action);
+        m_languageMenu->addAction(action);
+    }
 }
 
-void QApplicationMainWindow::switchToLanguage( int id )
+QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
-    QString locale;
+    QSettings settings;
+    QString defaultLocale = settings.value("Starviewer-Language/languageLocale", QLocale::system().name()).toString();
 
-    switch( id )
-    {
-    case 0:
-        locale = "ca_ES";
-        m_catalanAction->setChecked( true );
-        m_spanishAction->setChecked( false );
-        m_englishAction->setChecked( false );
-    break;
+    QAction *action = new QAction(this);
+    action->setText(language);
+    action->setStatusTip( tr("Switch to %1 Language").arg(language) );
+    action->setCheckable(true);
+    action->setChecked( defaultLocale == locale );
 
-    case 1:
-        locale = "es_ES";
-        m_catalanAction->setChecked( false );
-        m_spanishAction->setChecked( true );
-        m_englishAction->setChecked( false );
-    break;
+    return action;
+}
 
-    case 2:
-        locale = "en_GB";
-        m_catalanAction->setChecked( false );
-        m_spanishAction->setChecked( false );
-        m_englishAction->setChecked( true );
-    break;
+void QApplicationMainWindow::switchToLanguage(QString locale)
+{
+    QSettings settings;
+    settings.setValue("Starviewer-Language/languageLocale", locale);
 
-    default:
-    break;
-    }
-
-    if( id < 3 && id > -1 )
-    {
-        QSettings settings;
-        settings.beginGroup("Starviewer-Language");
-        settings.setValue( "languageLocale", locale );
-        settings.endGroup();
-    }
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
 
