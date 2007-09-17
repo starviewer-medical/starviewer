@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
+ *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -85,7 +85,7 @@ void Q2DViewerExtension::createActions()
     m_presentationStateAction->setEnabled(false);
     m_presentationStateAction->setChecked(false);
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, perÃ² potser que mÃ©s endavant sÃ­
+    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
     m_voxelInformationAction = new QAction( 0 );
     m_voxelInformationAction->setText( tr("Voxel Information") );
     m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
@@ -166,7 +166,7 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_distanceAction );
     m_toolsActionGroup->addAction( m_roiAction );
 
-    //activem per defecte una tool. \TODO podrÃ­em posar algun mecanisme especial per escollir la tool per defecte?
+    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_slicingAction->trigger();
 }
 
@@ -304,7 +304,7 @@ void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
 
 void Q2DViewerExtension::loadPresentationState(const QString &filename)
 {
-    // Es carrega l'attacher per el viewer principal nomÃ©s
+    // Es carrega l'attacher per el viewer principal només
     if( m_presentationStateAttacher != NULL )
     {
         delete m_presentationStateAttacher;
@@ -355,7 +355,7 @@ void Q2DViewerExtension::addColumns( int columns )
         it = m_qHorizontalLayoutVector.begin();
         m_columns += 1;
         m_totalColumns += 1;
-        // Afegim un widget a cada fila per tenir una columna mÃ©s
+        // Afegim un widget a cada fila per tenir una columna més
         int i = 0;
         while( it != m_qHorizontalLayoutVector.end() )
         {
