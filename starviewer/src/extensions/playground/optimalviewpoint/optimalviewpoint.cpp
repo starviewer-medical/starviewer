@@ -59,6 +59,11 @@
 #include "transferfunctionio.h"
 #include "slicer.h"
 
+#include "optimalviewpointparameters.h"
+#include "volume.h"
+
+#include "logging.h"
+
 
 namespace udg {
 
@@ -658,29 +663,29 @@ void OptimalViewpoint::setCompute( bool compute )
 
 
 
-signed char OptimalViewpoint::loadSegmentationFromFile( const QString & segmentationFileName )
+bool OptimalViewpoint::loadSegmentationFromFile()
 {
-    m_numberOfClusters = m_volume->loadSegmentationFromFile( segmentationFileName );
-    return m_numberOfClusters;
+    m_numberOfClusters = m_volume->loadSegmentationFromFile( m_parameters->getSegmentationFileName() );
+    if ( m_numberOfClusters > 0 )
+    {
+        m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );
+        m_parameters->setNumberOfClusters( m_numberOfClusters );
+    }
+    return m_numberOfClusters > 0;
 }
 
 
 
-unsigned char OptimalViewpoint::doAutomaticSegmentation( unsigned short iterations,
-                                                         unsigned char blockLength,
-                                                         unsigned char numberOfClusters,
-                                                         double noise,
-                                                         double imageSampleDistance,
-                                                         double sampleDistance )
+void OptimalViewpoint::doAutomaticSegmentation()
 {
-    m_volume->setImageSampleDistance( imageSampleDistance );
-    m_volume->setSampleDistance( sampleDistance );
+    m_volume->setImageSampleDistance( m_parameters->getSegmentationImageSampleDistance() );
+    m_volume->setSampleDistance( m_parameters->getSegmentationSampleDistance() );
 
     OptimalViewpointPlane * plane = new OptimalViewpointPlane( 0, m_planeSize );
     plane->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
     plane->setDistance( m_volume->getMainVolume()->GetLength() );
-    plane->setEntropyL( blockLength );
-    plane->setEntropyN( numberOfClusters );
+    plane->setEntropyL( m_parameters->getSegmentationBlockLength() );
+    plane->setEntropyN( m_parameters->getSegmentationNumberOfClusters() );
 
     QObject::connect( m_volume, SIGNAL( needsExcessEntropy() ),
                       plane, SLOT( updateAndRecompute() ) );
@@ -694,7 +699,9 @@ unsigned char OptimalViewpoint::doAutomaticSegmentation( unsigned short iteratio
                       m_volume, SLOT( setExcessEntropy(double) ) );
 
     m_volume->setComputing( true );
-    m_numberOfClusters = m_volume->segmentateVolume( iterations, numberOfClusters, noise );
+    m_numberOfClusters = m_volume->segmentateVolume( m_parameters->getSegmentationIterations(),
+                                                     m_parameters->getSegmentationNumberOfClusters(),
+                                                     m_parameters->getSegmentationNoise() );
     m_volume->setComputing( false );
 
     QObject::disconnect( m_volume, SIGNAL( needsExcessEntropy() ),
@@ -708,8 +715,8 @@ unsigned char OptimalViewpoint::doAutomaticSegmentation( unsigned short iteratio
 
     delete plane;
 
-//     m_numberOfClusters = numberOfClusters;
-    return m_numberOfClusters;
+    m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );
+    m_parameters->setNumberOfClusters( m_numberOfClusters );
 }
 
 
@@ -734,6 +741,28 @@ void OptimalViewpoint::setClusterLimits( unsigned short first, unsigned short la
 void OptimalViewpoint::setReadExtentFromFile( bool readExtentFromFile )
 {
     m_readExtentFromFile = readExtentFromFile;
+}
+
+
+void OptimalViewpoint::setParameters( OptimalViewpointParameters * parameters )
+{
+    m_parameters = parameters;
+    connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );
+}
+
+
+void OptimalViewpoint::readParameter( int parameter )
+{
+    DEBUG_LOG( "readParameter" );
+    switch ( parameter )
+    {
+        case OptimalViewpointParameters::VolumeObject:
+            setImage( m_parameters->getVolumeObject()->getVtkData() );
+            break;
+        case OptimalViewpointParameters::NumberOfPlanes:
+            setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
+            break;
+    }
 }
 
 

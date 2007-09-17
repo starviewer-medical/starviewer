@@ -1,45 +1,48 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "optimalviewpointinputparametersform.h"
 
-#include <iostream>
+#include "optimalviewpointinputparametersform.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
 
-
-// #include "optimalviewpoint.h"
 #include "optimalviewpointparameters.h"
 #include "transferfunctionio.h"
 
+#include <iostream>
 
 
 namespace udg {
 
+
 OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidget * parent )
     : QInputParameters( parent )
 {
-    setupUi( this );    // heredat d'Ui::OptimalViewpointInputParametersFormBase
+    setupUi( this );
 
-    m_advancedControlsFrame->hide();
     m_automaticSegmentationWidget->hide();
+    m_advancedControlsFrame->hide();
+    m_applyPushButton->setDisabled( true );
 
     m_parameters = 0;
-//     m_transferFunction << QGradientStop( 0, QColor( 0, 0, 0, 0 ) )
-//                        << QGradientStop( 1, QColor( 255, 255, 255, 255 ) );
+
+    m_segmentationFileChosen = false;
+
     m_transferFunction.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
     m_transferFunction.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
     m_inited = false;
 
-    m_segmentationFileChosen = false;
-
     this->disableIndividualSincronization();
+
+    connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( requestSegmentation() ) );
 
 //     connect( m_gradientEditor, SIGNAL( gradientStopsChanged(const QGradientStops &) ),
 //              this, SLOT( setTransferFunction(const QGradientStops &) ) );
@@ -47,35 +50,33 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
              this, SLOT( setNumberOfPlanes(const QString &) ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( writeAllParameters() ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SIGNAL( executionRequested() ) );
-    connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
+    
 
-    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
-    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( requestSegmentation() ) );
+
 
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
 
     connect( m_clusterFirstSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterFirst(int) ) );
     connect( m_clusterLastSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterLast(int) ) );
-
-
-
-    m_applyPushButton->setDisabled( true );
 }
+
 
 OptimalViewpointInputParametersForm::~OptimalViewpointInputParametersForm()
 {
 }
 
-/// Assigna l'objecte que guardarà els paràmetres.
+
+// millor comprovar que només tingui efecte la primera vegada
 void OptimalViewpointInputParametersForm::setParameters( OptimalViewpointParameters * parameters )
 {
-    if ( m_parameters != parameters )
+    if ( m_parameters != parameters )   // per evitar múltiples connexions
     {
-        delete m_parameters;
+        disconnect( this, SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
         m_parameters = parameters;
+        connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );
         connect( m_parameters, SIGNAL( signalAdjustedTransferFunction(const TransferFunction&) ),
-                 this, SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
+                 SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
     }
 }
 
@@ -367,11 +368,16 @@ void OptimalViewpointInputParametersForm::requestSegmentation()
 {
     if ( m_loadSegmentationRadioButton->isChecked() )
     {
-        if ( m_segmentationFileChosen ) emit loadSegmentationRequested();
+        m_parameters->setSegmentation( OptimalViewpointParameters::LoadSegmentation );
+        if ( m_segmentationFileChosen ) emit segmentationRequested();
         else QMessageBox::warning( this, tr("No segmentation file chosen"),
                                    tr("Please, choose a segmentation file or do an automatic segmentation.") );
     }
-    else emit automaticSegmentationRequested();
+    else
+    {
+        m_parameters->setSegmentation( OptimalViewpointParameters::AutomaticSegmentation );
+        emit segmentationRequested();
+    }
 }
 
 
@@ -452,4 +458,4 @@ void OptimalViewpointInputParametersForm::setNumberOfSlices( unsigned short numb
 }
 
 
-}; // end namespace udg
+};

@@ -51,6 +51,7 @@ namespace udg {
 // class OptimalViewpointHelper;
 class OptimalViewpointVolume;
 class OptimalViewpointPlane;
+class OptimalViewpointParameters;
 
 /**
  * Aquesta classe encapsula el mètode de visualització del Punt de Vista Òptim
@@ -125,14 +126,9 @@ public:
 
 
     /// Carrega la segmentació del volum des dun fitxer de text.
-    signed char loadSegmentationFromFile( const QString & segmentationFileName );
+    bool loadSegmentationFromFile();
     /// Fa una segmentació automàtica del volum.
-    unsigned char doAutomaticSegmentation( unsigned short iterations,
-                                           unsigned char blockLength,
-                                           unsigned char numberOfClusters,
-                                           double noise,
-                                           double imageSampleDistance,
-                                           double sampleDistance );
+    void doAutomaticSegmentation();
 
 
 
@@ -140,6 +136,7 @@ public:
     void setClusterLimits( unsigned short first, unsigned short last );
     void setReadExtentFromFile( bool readExtentFromFile );
 
+    void setParameters( OptimalViewpointParameters * parameters );
 
 
 
@@ -147,6 +144,7 @@ private slots:
 
     void newResults();
     void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
+    void readParameter( int parameter );
 
 private:
 
@@ -173,6 +171,9 @@ private:
     double m_similarityThreshold;
 
     bool m_readExtentFromFile;
+
+
+    OptimalViewpointParameters * m_parameters;
 
 
 }; // end class OptimalViewpoint

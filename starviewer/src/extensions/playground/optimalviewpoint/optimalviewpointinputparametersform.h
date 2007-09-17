@@ -1,17 +1,18 @@
 /***************************************************************************
- *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
 #ifndef UDGOPTIMALVIEWPOINTINPUTPARAMETERSFORM_H
 #define UDGOPTIMALVIEWPOINTINPUTPARAMETERSFORM_H
+
 
 #include "qinputparameters.h"
 #include "ui_optimalviewpointinputparametersformbase.h"
 
-// #include "optimalviewpoint.h"
 #include "transferfunction.h"
 
 namespace udg {
@@ -23,8 +24,8 @@ class Volume;
  * Interfície per definir tots els paràmetres del mètode de visualització del
  * Punt de Vista Òptim.
  */
-class OptimalViewpointInputParametersForm : public udg::QInputParameters, private ::Ui::OptimalViewpointInputParametersFormBase
-{
+class OptimalViewpointInputParametersForm
+    : public udg::QInputParameters, private ::Ui::OptimalViewpointInputParametersFormBase {
 
     Q_OBJECT
 
@@ -68,23 +69,6 @@ protected:
      */
     virtual void showEvent( QShowEvent * event );
 
-private:
-
-    /// Objecte que guardarà els paràmetres.
-    OptimalViewpointParameters * m_parameters;
-
-    /// Identificador del volum tractat.
-//     Identifier m_volumeId;
-
-    /// Funció de transferència actual.
-    TransferFunction m_transferFunction;
-
-    /// Cert si s'ha inicialitzat la funció de transferència i fals altrament.
-    bool m_inited;
-
-    /// Serà cert quan l'usuari hagi triat el fitxer de segmentació.
-    bool m_segmentationFileChosen;
-
 private slots:
 
     void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
@@ -99,14 +83,33 @@ private slots:
 
 signals:
 
+    /// Demana que es faci la segmentació.
+    void segmentationRequested();
+
     /// Demana que es carregui la segmentació des d'un fitxer.
     void loadSegmentationRequested();
     /// Demana que s'executi la segmentació automàtica.
     void automaticSegmentationRequested();
     void executionRequested();
 
-}; // end class OptimalViewpointInputParametersForm
+private:
 
-}; // end namespace udg
+    /// Objecte que guardarà els paràmetres.
+    OptimalViewpointParameters * m_parameters;
 
-#endif // UDGOPTIMALVIEWPOINTINPUTPARAMETERSFORM_H
+    /// Serà cert quan l'usuari hagi triat el fitxer de segmentació.
+    bool m_segmentationFileChosen;
+
+    /// Funció de transferència actual.
+    TransferFunction m_transferFunction;
+
+    /// Cert si s'ha inicialitzat la funció de transferència i fals altrament.
+    bool m_inited;
+
+};
+
+
+};
+
+
+#endif
