@@ -7,7 +7,8 @@
 #ifndef UDGGRIDICON_H
 #define UDGGRIDICON_H
 
-#include <ui_gridiconbase.h>
+#include <QLabel>
+#include <QGridLayout>
 
 namespace udg {
 
@@ -16,13 +17,18 @@ Classe que representa un element del tipus icona per poder crear un menu per esc
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class GridIcon : public QFrame, private Ui::GridIconBase {
+class GridIcon : public QFrame {
 Q_OBJECT
 public:
 
     GridIcon( QWidget *parent = 0 );
 
     ~GridIcon();
+
+private:
+
+    /// Label on posarem la icona
+    QLabel *label;
 
 };
 

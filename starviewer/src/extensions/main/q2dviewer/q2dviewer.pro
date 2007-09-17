@@ -4,9 +4,7 @@
 # L'objectiu �s una biblioteca:  
 
 FORMS += q2dviewerextensionbase.ui \
-	 q2dviewerwidgetbase.ui \
-	 gridiconbase.ui \
-	 menugridwidgetbase.ui
+	 q2dviewerwidgetbase.ui
 
 HEADERS += q2dviewerextensionmediator.h \
 	   q2dviewerextension.h \
