@@ -21,6 +21,7 @@
 #include <QMutableMapIterator>
 // Tools
 #include "q2dviewertoolmanager.h"
+#include "voxelinformationtool.h"
 
 // include's bàsics vtk
 #include <QVTKWidget.h>
@@ -56,7 +57,6 @@
 // voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
-#include <vtkCaptionActor2D.h>
 #include <vtkPropPicker.h>
 
 #include <vtkPropCollection.h>
@@ -85,14 +85,13 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0), m_voxelInformationCaption(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
+ : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0),  m_scalarBar(0), m_rotateFactor(0), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
     m_enabledAnnotations = Q2DViewer::AllAnnotation;
     m_lastView = Q2DViewer::Axial;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
-    updateCursor( -1, -1, -1, -1 );
 
     // inicialitzacions d'objectes
     // visor
@@ -112,13 +111,14 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     setupInteraction();
     m_toolManager = new Q2DViewerToolManager( this );
     this->enableTools();
+    m_voxelInformationTool = new VoxelInformationTool(this);
+    disableVoxelInformationCaption();
 
     // anotacions
     createAnnotations();
     addActors();
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-    disableVoxelInformationCaption();
 
     // grayscale pipeline
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
@@ -159,7 +159,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 Q2DViewer::~Q2DViewer()
 {
     m_scalarBar->Delete();
-    m_voxelInformationCaption->Delete();
     m_patientOrientationTextActor[0]->Delete();
     m_patientOrientationTextActor[1]->Delete();
     m_patientOrientationTextActor[2]->Delete();
@@ -193,31 +192,8 @@ void Q2DViewer::createAnnotations()
     m_scalarBar = createScalarBar();
     // anotacions de l'orientació del pacient
     createOrientationAnnotations();
-    // Llegenda amb informació del voxel
-    createVoxelInformationCaption();
     // Marcadors d'escala
     createRulers();
-}
-
-void Q2DViewer::createVoxelInformationCaption()
-{
-    m_voxelInformationCaption = vtkCaptionActor2D::New();
-    m_voxelInformationCaption->GetAttachmentPointCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->SetAttachmentPoint( m_currentCursorPosition );
-    m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->BorderOff();
-    m_voxelInformationCaption->LeaderOff();
-    m_voxelInformationCaption->ThreeDimensionalLeaderOff();
-    m_voxelInformationCaption->GetProperty()->SetColor( 1.0 , 0 , 0 );
-    m_voxelInformationCaption->SetPadding( 0 );
-    m_voxelInformationCaption->SetPosition( -1.0 , -1.0 );
-    m_voxelInformationCaption->SetHeight( 0.05 );
-    m_voxelInformationCaption->SetWidth( 0.3 );
-    // propietats del texte
-    m_voxelInformationCaption->GetCaptionTextProperty()->SetColor( 1. , 0.7 , 0.0 );
-    m_voxelInformationCaption->GetCaptionTextProperty()->ShadowOn();
-    m_voxelInformationCaption->GetCaptionTextProperty()->ItalicOff();
-    m_voxelInformationCaption->GetCaptionTextProperty()->BoldOff();
 }
 
 void Q2DViewer::createOrientationAnnotations()
@@ -555,15 +531,6 @@ void Q2DViewer::addActors()
     this->getRenderer()->AddActor2D( sliceAnnotation );
     m_sliceAnnotationsCollection->AddItem( sliceAnnotation );
 
-    if( m_voxelInformationCaption )
-    {
-        this->getRenderer()->AddActor( m_voxelInformationCaption );
-    }
-    else
-    {
-        DEBUG_LOG( "No s'ha creat l'actor d'informació de voxel; no es pot afegir a l'escena" );
-    }
-
     if( m_patientOrientationTextActor[0] )
     {
         this->getRenderer()->AddActor( m_patientOrientationTextActor[0] );
@@ -660,67 +627,12 @@ void Q2DViewer::setVoxelInformationCaptionEnabled( bool enable )
 
 void Q2DViewer::enableVoxelInformationCaption()
 {
-    m_voxelInformationEnabled = true;
+    m_voxelInformationTool->enable();
 }
 
 void Q2DViewer::disableVoxelInformationCaption()
 {
-    m_voxelInformationEnabled = false;
-    m_voxelInformationCaption->VisibilityOff();
-}
-
-void Q2DViewer::updateVoxelInformation()
-{
-    if( !m_mainVolume )
-        return;
-
-    vtkRenderWindowInteractor* interactor = m_vtkWidget->GetRenderWindow()->GetInteractor();
-    // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
-    m_picker->PickProp( interactor->GetEventPosition()[0], interactor->GetEventPosition()[1], m_viewer->GetRenderer() );
-    // calculem el pixel trobat
-    double q[3], imageValue;
-    m_picker->GetPickPosition( q );
-    int found = 0;
-    // quan dona una posició de (0,0,0) és que estem fora de l'actor
-    if( !( q[0] == 0 && q[1] == 0 && q[2] == 0) )
-    {
-        double tolerance;
-        int subCellId;
-        double parametricCoordinates[3], interpolationWeights[8];
-
-        vtkPointData *pointData = m_mainVolume->getVtkData()->GetPointData();
-        vtkPointData* outPointData = vtkPointData::New();
-        outPointData->InterpolateAllocate( pointData , 1 , 1 );
-
-        // Use tolerance as a function of size of source data
-        tolerance = m_mainVolume->getVtkData()->GetLength();
-        tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-
-        // Find the cell that contains q and get it
-        vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( q , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
-        if ( cell )
-        {
-            // Interpolate the point data
-            outPointData->InterpolatePoint( pointData , 0 , cell->PointIds , interpolationWeights );
-            imageValue = outPointData->GetScalars()->GetTuple1(0);
-            found = 1;
-        }
-        outPointData->Delete();
-    }
-    if( !found )
-    {
-        updateCursor( -1, -1, -1, -1 );
-        m_voxelInformationCaption->VisibilityOff();
-    }
-    else
-    {
-        updateCursor( q[0], q[1], q[2], imageValue );
-        if( m_voxelInformationEnabled )
-            m_voxelInformationCaption->VisibilityOn();
-        m_voxelInformationCaption->SetAttachmentPoint( q );
-        m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(m_currentCursorPosition[0],0,'f',2).arg(m_currentCursorPosition[1],0,'f',2).arg(m_currentCursorPosition[2],0,'f',2).arg(m_currentImageValue) ) );
-    }
-    this->refresh();
+    m_voxelInformationTool->enable(false);
 }
 
 void Q2DViewer::setTool( QString toolName )
@@ -768,20 +680,9 @@ void Q2DViewer::disableTools()
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
     updateRulers();
+    m_voxelInformationTool->handleEvent(event);
     switch( event )
     {
-    case vtkCommand::MouseMoveEvent:
-        updateVoxelInformation();
-    break;
-
-    case vtkCommand::EnterEvent:
-    break;
-
-    case vtkCommand::LeaveEvent:
-        m_voxelInformationCaption->VisibilityOff();
-        this->refresh();
-    break;
-
     case QVTKWidget::ContextMenuEvent:
         this->contextMenuRelease();
     break;
@@ -1293,14 +1194,6 @@ void Q2DViewer::setOverlayToRectilinearWipe()
     setOverlay( Q2DViewer::RectilinearWipe );
 }
 
-void Q2DViewer::updateCursor( double x, double y , double z , double value )
-{
-    m_currentCursorPosition[0] = x;
-    m_currentCursorPosition[1] = y;
-    m_currentCursorPosition[2] = z;
-    m_currentImageValue = value;
-}
-
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
     //\TODO l'única info que cal actualitzar és la mida de finestra/viewport
@@ -1560,6 +1453,89 @@ void Q2DViewer::setMagnificationFactor( double factor )
 Drawer *Q2DViewer::getDrawer() const
 {
     return m_drawer;
+}
+
+bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
+{
+    bool found = false;
+    if( !m_mainVolume )
+        return found;
+
+    vtkRenderWindowInteractor* interactor = this->getInteractor();
+    // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
+    m_picker->PickProp( interactor->GetEventPosition()[0], interactor->GetEventPosition()[1], m_viewer->GetRenderer() );
+    // calculem el pixel trobat
+    m_picker->GetPickPosition( xyz );
+
+    // quan dona una posició de (0,0,0) és que estem fora de l'actor
+    if( !( xyz[0] == 0 && xyz[1] == 0 && xyz[2] == 0) )
+    {
+        double tolerance;
+        int subCellId;
+        double parametricCoordinates[3], interpolationWeights[8];
+
+        // Use tolerance as a function of size of source data
+        tolerance = m_mainVolume->getVtkData()->GetLength();
+        tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
+
+        // Find the cell that contains q and get it
+        vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( xyz , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
+        if ( cell )
+        {
+            found = true;
+        }
+    }
+    if( !found )
+    {
+        xyz[0] = -1;
+        xyz[1] = -1;
+        xyz[2] = -1;
+    }
+    else
+    {
+    }
+    return found;
+}
+
+double Q2DViewer::getCurrentImageValue()
+{
+    double xyz[3];
+    bool found = false;
+    double imageValue;
+    if( this->getCurrentCursorPosition(xyz) )
+    {
+        double tolerance;
+        int subCellId;
+        double parametricCoordinates[3], interpolationWeights[8];
+
+        vtkPointData *pointData = m_mainVolume->getVtkData()->GetPointData();
+        vtkPointData* outPointData = vtkPointData::New();
+        outPointData->InterpolateAllocate( pointData , 1 , 1 );
+
+        // Use tolerance as a function of size of source data
+        tolerance = m_mainVolume->getVtkData()->GetLength();
+        tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
+
+        // Find the cell that contains q and get it
+        vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( xyz , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
+        if ( cell )
+        {
+            // Interpolate the point data
+            outPointData->InterpolatePoint( pointData , 0 , cell->PointIds , interpolationWeights );
+            imageValue = outPointData->GetScalars()->GetTuple1(0);
+            found = true;
+        }
+        outPointData->Delete();
+    }
+    if( !found )
+    {
+        DEBUG_LOG("No s'ha trobat valor");
+        return -1.;
+    }
+    else
+    {
+        return imageValue;
+    }
 }
 
 void Q2DViewer::updateWindowLevelAnnotation()

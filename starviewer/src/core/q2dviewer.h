@@ -25,7 +25,6 @@ class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkCoordinate;
-class vtkCaptionActor2D;
 class vtkScalarBarActor;
 class vtkInteractorStyleImage;
 class vtkImageBlend;
@@ -70,6 +69,7 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 class Volume;
 class Q2DViewerToolManager;
 class Tool;
+class VoxelInformationTool;
 class Drawer;
 
 class Q2DViewer : public QViewer{
@@ -202,6 +202,9 @@ public:
     ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
     Drawer* getDrawer() const;
 
+    bool getCurrentCursorPosition( double xyz[3] );
+    double getCurrentImageValue();
+
 public slots:
 
     virtual void render();
@@ -233,9 +236,6 @@ public slots:
     void setOverlayToCheckerBoard();
     void setOverlayToRectilinearWipe();
 
-    /// Actualitza els valors on apunta el cursor
-    void updateCursor( double x, double y , double z , double value );
-
     // Mètodes específics checkerboard
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int x , int y , int z );
@@ -255,9 +255,6 @@ public slots:
 
     /// Reseteja el window level al que tingui per defecte el volum
     void resetWindowLevelToDefault();
-
-    /// Actualitza la informació del voxel que hi ha per sota del cursor
-    void updateVoxelInformation();
 
     /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
     void setSeedPosition( double pos[3] );
@@ -343,9 +340,6 @@ private:
 
     /// Actualitza la barra de valors
     void updateScalarBar();
-
-    /// crea els actors necessaris per mostrar la llegenda flotant amb la informació de voxel
-    void createVoxelInformationCaption();
 
     /// crea les anotacions de l'orientació del pacient
     void createOrientationAnnotations();
@@ -510,9 +504,6 @@ private:
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
-    /// Llegenda que segueix el cursor amb el valor del voxel
-    vtkCaptionActor2D *m_voxelInformationCaption;
-
     /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
     vtkScalarBarActor *m_scalarBar;
 
@@ -521,9 +512,6 @@ private:
 
     ///Informació de la posició de la seed
     double m_seedPosition[3];
-
-    /// per controlar si la info de voxel està habilitada o no
-    bool m_voxelInformationEnabled;
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
@@ -584,6 +572,8 @@ private:
     /// Les diferents look up tables que ens podem trobar durant tot el procés.
     vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
 
+    /// Tool per mostrar un caption amb la informació del voxel sota el cursor (posició i valor)
+    VoxelInformationTool *m_voxelInformationTool;
 };
 
 };  //  end  namespace udg

@@ -50,12 +50,6 @@ QViewer::QViewer( QWidget *parent )
     // 2x buffer
     m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
 
-    m_currentCursorPosition[0] = 0;
-    m_currentCursorPosition[1] = 0;
-    m_currentCursorPosition[2] = 0;
-
-    m_currentImageValue = -1;
-
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     this->setMouseTracking( true );
 
