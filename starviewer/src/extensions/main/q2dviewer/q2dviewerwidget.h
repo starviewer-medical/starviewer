@@ -21,7 +21,7 @@ Aquesta classe és la interfície genèrica d'un Q2DViewer juntament amb el seu 
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Q2DViewerWidget : public QFrame, public Ui::Q2DViewerWidgetBase {
+class Q2DViewerWidget : public QFrame, private Ui::Q2DViewerWidgetBase {
 Q_OBJECT
 public:
     Q2DViewerWidget(QWidget *parent = 0);
@@ -29,6 +29,8 @@ public:
     ~Q2DViewerWidget();
 
     void setSelected( bool option );
+
+    Q2DViewer * getViewer();
 
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
