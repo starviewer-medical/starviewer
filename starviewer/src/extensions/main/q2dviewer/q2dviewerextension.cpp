@@ -13,6 +13,7 @@
 #include "toolsactionfactory.h"
 #include <QAction>
 #include <QSettings>
+#include <QPoint>
 // EXTRA!!! \TODO es temporal
 #include <QFileDialog>
 #include "keyimagenote.h"
@@ -560,7 +561,8 @@ void Q2DViewerExtension::showPredefinedGrid()
     int i;
     int numberSeries = 0;
 
-    m_predefinedSeriesGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    QPoint point = m_buttonGrid->mapToGlobal( QPoint(0,0) );
+    m_predefinedSeriesGrid->move( point.x(),( point.y() + m_buttonGrid->frameGeometry().height() ) );
 
     QList<Study *> listStudies = m_patient->getStudies();
 
@@ -571,24 +573,28 @@ void Q2DViewerExtension::showPredefinedGrid()
 
     m_predefinedSeriesGrid->createPredefinedGrids( numberSeries );
     m_predefinedSeriesGrid->show();
+
 }
 
 void Q2DViewerExtension::showInteractiveTable()
 {
-    m_seriesTableGrid->move( m_buttonGrid->x(),( m_buttonGrid->y() + 95 ) );
+    QPoint point = m_buttonGrid->mapToGlobal( QPoint(0,0) );
+    m_seriesTableGrid->move( point.x(),( point.y() + m_buttonGrid->frameGeometry().height() ) );
     m_seriesTableGrid->show();
 }
 
 void Q2DViewerExtension::showPredefinedImageGrid()
 {
-    m_predefinedSlicesGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
+    m_predefinedSlicesGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
     m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->m_2DView->getNumberOfSlices() );
     m_predefinedSlicesGrid->show();
 }
 
 void Q2DViewerExtension::showInteractiveImageTable()
 {
-    m_sliceTableGrid->move( m_imageGrid->x(),( m_imageGrid->y() + 95 ) );
+    QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
+    m_sliceTableGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
     m_sliceTableGrid->show();
 }
 
