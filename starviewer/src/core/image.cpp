@@ -203,7 +203,7 @@ double Image::getSliceThickness() const
 
 void Image::setImagePositionPatient( double position[3] )
 {
-    memcpy( m_imagePositionPatient, position, 3 );
+    memcpy( m_imagePositionPatient, position, 3*sizeof(double) );
 }
 
 const double *Image::getImagePositionPatient() const
