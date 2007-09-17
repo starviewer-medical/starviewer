@@ -47,6 +47,7 @@ public:
     enum OptimalViewpointParametersNames
     {
         VolumeObject,
+        Segmentation,
         SegmentationFileName,
         SegmentationIterations, SegmentationBlockLength,
             SegmentationNumberOfClusters, SegmentationNoise,
@@ -65,6 +66,8 @@ public:
 
         ReadExtentFromFile
     };
+
+    enum SegmentationType { LoadSegmentation, AutomaticSegmentation };
 
     OptimalViewpointParameters( QObject * parent = 0 );
     ~OptimalViewpointParameters();
@@ -153,6 +156,8 @@ public:
     void setReadExtentFromFile( bool readExtentFromFile );
 
 
+    SegmentationType getSegmentation() const;
+    void setSegmentation( SegmentationType segmentation );
 
 private:
 
@@ -195,6 +200,8 @@ private:
 //     unsigned short m_numberOfSlices;
 
     bool m_readExtentFromFile;
+
+    SegmentationType m_segmentation;
 
 
 signals:

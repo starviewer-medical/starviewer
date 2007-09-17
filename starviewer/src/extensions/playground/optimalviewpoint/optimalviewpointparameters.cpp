@@ -18,6 +18,7 @@ namespace udg {
 OptimalViewpointParameters::OptimalViewpointParameters( QObject * parent )
     : Parameters( parent )
 {
+    m_volumeObject = 0;
 }
 
 
@@ -444,6 +445,21 @@ void OptimalViewpointParameters::setReadExtentFromFile( bool readExtentFromFile 
     if ( m_readExtentFromFile != readExtentFromFile )
     {
         m_readExtentFromFile = readExtentFromFile; emit changed( ReadExtentFromFile );
+    }
+}
+
+
+OptimalViewpointParameters::SegmentationType OptimalViewpointParameters::getSegmentation() const
+{
+    return m_segmentation;
+}
+
+
+void OptimalViewpointParameters::setSegmentation( SegmentationType segmentation )
+{
+    if ( m_segmentation != segmentation )
+    {
+        m_segmentation = segmentation; emit changed( Segmentation );
     }
 }
 
