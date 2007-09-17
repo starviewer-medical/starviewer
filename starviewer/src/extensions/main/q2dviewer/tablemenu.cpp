@@ -38,7 +38,7 @@ void TableMenu::initializeTable()
     firstItem->setFrameShape( QFrame::StyledPanel );
     firstItem->setMinimumSize( 30, 30 );
     firstItem->setMaximumSize( 30, 30 );
-    firstItem->setData( ( QVariant * ) new QString( tr("%1,%2").arg( m_rows ).arg( m_columns ) ) );
+    firstItem->setData( new QString( tr("%1,%2").arg( m_rows ).arg( m_columns ) ) );
     firstItem->setFixed( true );
     m_itemList->insert( 0, firstItem );
     m_gridLayout->addWidget( firstItem, m_columns, m_rows );
@@ -59,7 +59,7 @@ void TableMenu::addColumn()
     {
         newItem = new ItemMenu( this );
         newItem->setFrameShape( QFrame::StyledPanel );
-        newItem->setData( (QVariant *) new QString( tr("%1,%2").arg( numRow ).arg( m_columns ) ) );
+        newItem->setData( new QString( tr("%1,%2").arg( numRow ).arg( m_columns ) ) );
         newItem->setMinimumSize( 30, 30 );
         newItem->setMaximumSize( 30, 30 );
         newItem->setFixed( true );
@@ -81,7 +81,7 @@ void TableMenu::addRow()
     {
         newItem = new ItemMenu( this );
         newItem->setFrameShape( QFrame::StyledPanel );
-        newItem->setData( (QVariant * ) new QString( tr("%1,%2").arg( m_rows ).arg( numColumn ) ) );
+        newItem->setData( new QString( tr("%1,%2").arg( m_rows ).arg( numColumn ) ) );
         newItem->setMinimumSize( 30, 30 );
         newItem->setMaximumSize( 30, 30 );
         newItem->setFixed( true );
@@ -98,7 +98,7 @@ void TableMenu::verifySelected( ItemMenu * selected )
     int numRow;
     int numColumn;
 
-    QStringList values = ((QString *) selected->getData())->split( "," );
+    QStringList values = ( selected->getData())->split( "," );
     int rows = values.value( 0 ).toInt();
     int columns = values.value( 1 ).toInt();
 
@@ -144,7 +144,7 @@ bool TableMenu::event( QEvent * event )
 void TableMenu::emitSelected( ItemMenu * selected )
 {
 
-    QStringList values = ((QString *) selected->getData())->split( "," );
+    QStringList values = ( selected->getData())->split( "," );
     int rows = values.value( 0 ).toInt();
     int columns = values.value( 1 ).toInt();
 

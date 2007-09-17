@@ -117,7 +117,7 @@ void MenuGridWidget::createPredefinedGrids( int numSeries )
 ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 {
     ItemMenu * icon = new ItemMenu( this );
-    icon->setData( (QVariant *) new QString( tr( "%1,%2" ).arg( rows ).arg( columns ) ) );
+    icon->setData( new QString( tr( "%1,%2" ).arg( rows ).arg( columns ) ) );
     icon->setGeometry ( 0, 0, 32, 32 );
     icon->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
 
@@ -165,7 +165,7 @@ void MenuGridWidget::setMaxElements( int elements )
 void MenuGridWidget::emitSelected( ItemMenu * selected )
 {
 
-    QStringList values = ( (QString *) selected->getData() )->split( "," );
+    QStringList values = ( selected->getData() )->split( "," );
     int rows = values.value( 0 ).toInt();
     int columns = values.value( 1 ).toInt();
 
