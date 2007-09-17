@@ -8,8 +8,7 @@ TRANSLATIONS += core_ca_ES.ts \
                 core_en_GB.ts 
 
 FORMS += qlogviewerbase.ui \
-         qcustomwindowleveldialogbase.ui \
-         q2dvieweroptionswidgetbase.ui
+         qcustomwindowleveldialogbase.ui
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
