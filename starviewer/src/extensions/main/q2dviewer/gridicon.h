@@ -16,7 +16,7 @@ Classe que representa un element del tipus icona per poder crear un menu per esc
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class GridIcon : public QFrame, public Ui::GridIconBase {
+class GridIcon : public QFrame, private Ui::GridIconBase {
 Q_OBJECT
 public:
 

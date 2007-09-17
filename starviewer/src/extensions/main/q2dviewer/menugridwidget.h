@@ -19,7 +19,7 @@ Classe que representa el menu desplegable per seleccionar el grid, amb opcions d
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class MenuGridWidget : public QWidget, public Ui::MenuGridWidgetBase {
+class MenuGridWidget : public QWidget, private Ui::MenuGridWidgetBase {
 Q_OBJECT
 public:
     MenuGridWidget( QWidget *parent = 0 );
