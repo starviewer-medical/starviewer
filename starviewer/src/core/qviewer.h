@@ -56,17 +56,6 @@ public:
     /// retorna el vtkRenderWindow
     vtkRenderWindow *getRenderWindow();
 
-    /// Retorna la posició sobre la que es troba el cursor ( coordenades de mon )
-    void getCurrentCursorPosition( double xyz[3] )
-    {
-        xyz[0] = m_currentCursorPosition[0];
-        xyz[1] = m_currentCursorPosition[1];
-        xyz[2] = m_currentCursorPosition[2];
-    }
-
-    /// Retorna el valor de la imatge que hi ha sota el cursor
-    double getCurrentImageValue() const { return m_currentImageValue; }
-
     /// Passa coordenades de display a coordenades de món i viceversa \TODO aquest metode haurioa de ser virtual al pare
     static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] );
     static void computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] );
@@ -127,12 +116,6 @@ protected:
 
     /// El widget per poder mostrar una finestra vtk amb qt
     QVTKWidget* m_vtkWidget;
-
-    /// Posició sobre la que es troba el ratolí
-    double m_currentCursorPosition[3];
-
-    /// Valor de la imatge corresponent a la posició on es troba el ratolí. Quan la posició està fora del model li assignarem un valor "d'invalidesa" \TODO definir aquest valor, de moment fem servir -1 ( erròniament )
-    double m_currentImageValue;
 
     typedef std::list< vtkImageData * > GrabListType;
 

@@ -464,7 +464,6 @@ void QStrokeSegmentationExtension::setEditorPoint(  )
     double pos[3];
     if(m_isErase || m_isEraseSlice || m_isPaint)
     {
-        m_2DView->updateVoxelInformation();
         m_2DView->getCurrentCursorPosition(pos);
 
         // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor

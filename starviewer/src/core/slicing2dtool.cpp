@@ -50,14 +50,12 @@ void Slicing2DTool::handleEvent( unsigned long eventID )
 
     case vtkCommand::MouseWheelForwardEvent:
         this->updateIncrement( 1 );
-        //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
-        m_2DViewer->updateVoxelInformation();
+        // TODO si tenim l'eina VoxelInformationTool activada cal refrescar les dades
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
         this->updateIncrement( -1 );
-        //\TODO mirar si podem fer una manera més atomàtica per actualitzar la informació de voxel
-        m_2DViewer->updateVoxelInformation();
+        // TODO si tenim l'eina VoxelInformationTool activada cal refrescar les dades
     break;
 
     case vtkCommand::MiddleButtonPressEvent:

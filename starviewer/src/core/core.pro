@@ -8,8 +8,8 @@ TRANSLATIONS += core_ca_ES.ts \
                 core_en_GB.ts 
 
 FORMS += qlogviewerbase.ui \
-         qcustomwindowleveldialogbase.ui
-
+         qcustomwindowleveldialogbase.ui \
+         q2dvieweroptionswidgetbase.ui
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
@@ -110,7 +110,8 @@ HEADERS += extensionfactory.h \
            colorpalette.h  \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
-           mhdfileclassifierstep.h
+           mhdfileclassifierstep.h \
+           voxelinformationtool.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -199,7 +200,8 @@ SOURCES += extensionmediator.cpp \
            colorpalette.cpp  \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
-           mhdfileclassifierstep.cpp
+           mhdfileclassifierstep.cpp \
+           voxelinformationtool.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

@@ -1244,7 +1244,6 @@ void QDifuPerfuSegmentationExtension::setEditorPoint(  )
     double pos[3];
     if(m_editorTool != QDifuPerfuSegmentationExtension::NoEditor)
     {
-        m_diffusion2DView->updateVoxelInformation();
         m_diffusion2DView->getCurrentCursorPosition(pos);
 
         // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor

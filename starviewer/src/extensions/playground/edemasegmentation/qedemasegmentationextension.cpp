@@ -650,7 +650,6 @@ void QEdemaSegmentationExtension::setEditorPoint(  )
     double pos[3];
     if(m_editorTool != QEdemaSegmentationExtension::NoEditor)
     {
-        m_2DView->updateVoxelInformation();
         m_2DView->getCurrentCursorPosition(pos);
 
         // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
