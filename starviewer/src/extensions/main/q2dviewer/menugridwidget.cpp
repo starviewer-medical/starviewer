@@ -19,7 +19,9 @@ namespace udg {
 MenuGridWidget::MenuGridWidget( QWidget *parent )
  : QWidget( parent )
 {
-    setupUi( this );
+    m_predefinedGrids = new QWidget( this );
+    m_predefinedGrids->setGeometry(QRect(0, 10, 271, 181));
+
     setWindowFlags(Qt::Popup);
     m_maxColumns = 4;
     m_maxElements = 16;

@@ -7,7 +7,6 @@
 #ifndef UDGMENUGRIDWIDGET_H
 #define UDGMENUGRIDWIDGET_H
 
-#include <ui_menugridwidgetbase.h>
 #include <itemmenu.h>
 #include <QWidget>
 #include <QGridLayout>
@@ -19,7 +18,7 @@ Classe que representa el menu desplegable per seleccionar el grid, amb opcions d
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class MenuGridWidget : public QWidget, private Ui::MenuGridWidgetBase {
+class MenuGridWidget : public QWidget {
 Q_OBJECT
 public:
     MenuGridWidget( QWidget *parent = 0 );
@@ -45,6 +44,8 @@ public:
     void dropContent();
 
 protected:
+    /// Widget on posarem tots els items
+    QWidget * m_predefinedGrids;
 
     /// Mètode que crea una icona de rows x columns
     ItemMenu * createIcon( int rows, int columns );
