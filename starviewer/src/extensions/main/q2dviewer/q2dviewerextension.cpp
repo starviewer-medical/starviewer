@@ -35,7 +35,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     m_patient = NULL;
     m_selectedViewer = new Q2DViewerWidget( m_workingArea );
-    m_selectedViewer->m_2DView->render();
+    m_selectedViewer->getViewer()->render();
 
     m_predefinedSeriesGrid = new MenuGridWidget();
     m_seriesTableGrid = new TableMenu();
@@ -150,7 +150,7 @@ void Q2DViewerExtension::createActions()
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool( QString ) ) , m_selectedViewer->m_2DView , SLOT( setTool( QString ) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool( QString ) ) , m_selectedViewer->getViewer() , SLOT( setTool( QString ) ) );
 
     m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
     m_roiToolButton->setDefaultAction( m_roiAction );
@@ -236,7 +236,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
     {
         double wl[2];
-        m_vectorViewers.value( 0 )->m_2DView->getDefaultWindowLevel( wl );
+        m_vectorViewers.value( 0 )->getViewer()->getDefaultWindowLevel( wl );
         m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
     }
     m_windowLevelComboBox->setCurrentIndex( 0 );
@@ -297,7 +297,7 @@ void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
     {
         delete m_keyImageNoteAttacher;
     }
-    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher( m_vectorViewers.value( 0 )->m_2DView, m_keyImageNote );
+    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher( m_vectorViewers.value( 0 )->getViewer(), m_keyImageNote );
     m_keyImageNoteAttacher->setVisibleAdditionalInformation( true );
     m_keyImageNoteAttacher->attach();
 }
@@ -309,7 +309,7 @@ void Q2DViewerExtension::loadPresentationState(const QString &filename)
     {
         delete m_presentationStateAttacher;
     }
-    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_vectorViewers.value( 0 )->m_2DView, qPrintable(filename) );
+    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_vectorViewers.value( 0 )->getViewer(), qPrintable(filename) );
     m_presentationStateAction->setEnabled( true );
     m_presentationStateAction->setChecked( true );
 }
@@ -451,9 +451,9 @@ void Q2DViewerExtension::removeRows( int rows )
 Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
-    newViewer->m_2DView->render();
-    (newViewer->m_2DView)->setTool( (m_vectorViewers.value( 0 )->m_2DView)->getCurrentToolName() );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->m_2DView, SLOT( setTool(QString) ) );
+    newViewer->getViewer()->render();
+    (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
     connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
 
     return newViewer;
@@ -509,51 +509,51 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
     {
         ///TODO canviar aquestes connexions i desconnexions per dos mètodes el qual
         /// enviin el senyal al visualitzador que toca.
-        disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
-        disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+        disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+        disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
 
         m_selectedViewer->setSelected( false );
         m_selectedViewer = viewer;
         m_selectedViewer->setSelected( true );
 
-        connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
-        connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->m_2DView, SLOT( setGrid( int, int ) ) );
+        connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+        connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
     }
 }
 
 void Q2DViewerExtension::rotateClockWise()
 {
-    ( m_selectedViewer->m_2DView )->rotateClockWise();
+    ( m_selectedViewer->getViewer() )->rotateClockWise();
 }
 
 void Q2DViewerExtension::rotateCounterClockWise()
 {
-    ( m_selectedViewer->m_2DView )->rotateCounterClockWise();
+    ( m_selectedViewer->getViewer() )->rotateCounterClockWise();
 }
 
 void Q2DViewerExtension::setVoxelInformationCaptionEnabled(bool option)
 {
-    ( m_selectedViewer->m_2DView )->setVoxelInformationCaptionEnabled( option );
+    ( m_selectedViewer->getViewer() )->setVoxelInformationCaptionEnabled( option );
 }
 
 void Q2DViewerExtension::horizontalFlip()
 {
-    ( m_selectedViewer->m_2DView )->horizontalFlip();
+    ( m_selectedViewer->getViewer() )->horizontalFlip();
 }
 
 void Q2DViewerExtension::verticalFlip()
 {
-    ( m_selectedViewer->m_2DView )->verticalFlip();
+    ( m_selectedViewer->getViewer() )->verticalFlip();
 }
 
 void Q2DViewerExtension::setWindowLevel(double wl1 ,double wl2)
 {
-    ( m_selectedViewer->m_2DView )->setWindowLevel( wl1, wl2 );
+    ( m_selectedViewer->getViewer() )->setWindowLevel( wl1, wl2 );
 }
 
 void Q2DViewerExtension::resetWindowLevelToDefault()
 {
-    ( m_selectedViewer->m_2DView )->resetWindowLevelToDefault();
+    ( m_selectedViewer->getViewer() )->resetWindowLevelToDefault();
 }
 
 void Q2DViewerExtension::showPredefinedGrid()
@@ -587,7 +587,7 @@ void Q2DViewerExtension::showPredefinedImageGrid()
 {
     QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
     m_predefinedSlicesGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
-    m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->m_2DView->getNumberOfSlices() );
+    m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->getViewer()->getNumberOfSlices() );
     m_predefinedSlicesGrid->show();
 }
 

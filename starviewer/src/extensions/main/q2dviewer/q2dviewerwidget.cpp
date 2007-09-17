@@ -126,4 +126,9 @@ void Q2DViewerWidget::setSelected( bool option )
     }
 }
 
+Q2DViewer * Q2DViewerWidget::getViewer()
+{
+    return m_2DView;
+}
+
 }
