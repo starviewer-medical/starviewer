@@ -74,14 +74,6 @@
 #include <vtkImageShiftScale.h>
 #include <vtkWindowLevelLookupTable.h>
 
-// dcmtk:
-//\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
-#define HAVE_CONFIG_H 1
-#include "dcmtk/dcmdata/dcfilefo.h"
-#include "dcmtk/dcmdata/dcdatset.h"
-#include "dcmtk/dcmdata/dcdeftag.h" // DcmTagKey
-#include "dcmtk/dcmdata/dcsequen.h" // DcmSequenceOfItems
-
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
@@ -2352,7 +2344,6 @@ void Q2DViewer::computeInputGrayscalePipeline()
 {
     // si llegim l'arxiu tal qual, la modality no cal aplicar-la perquè les pròpies gdcm ja ens apliquen la modality lut
     computeModalityLUT();
-//     applyMaskSubstraction();
     computeVOILUT();
 }
 
@@ -2517,8 +2508,9 @@ void Q2DViewer::computeModalityLUT()
 {
     // If the Modality LUT or equivalent Attributes are part of both the Image and the Presentation State, then the Presentation State Modality LUT shall be used instead of the Image Modality LUT or equivalent Attributes in the Image. If the Modality LUT is not present in the Presentation State it shall be assumed to be an identity transformation. Any Modality LUT or equivalent Attributes in the Image shall not be used.
 
-    // busquem si existeix una modality lut
-    m_modalityLut = this->parseLookupTable( 0 );
+    // busquem si existeix una modality lut TODO eliminem el parseLookupTable, això hauria de ser feina de
+    // la classe que apliqui les transformacions de grisos i  presentation states
+    m_modalityLut = NULL;
     if( m_modalityLut )
     {
         m_modalityRange[0] = m_modalityLut->GetTableRange()[0];
@@ -2547,19 +2539,6 @@ void Q2DViewer::computeModalityLUT()
     }
 }
 
-void Q2DViewer::applyMaskSubstraction()
-{
-    //
-    // 2. Mask Substraction
-    //
-    //             The mask transformation may be applied in the case of multi-frame images for which other frames at a fixed frame position or time interval relative to the current frame may be subtracted from the current frame. Multiple mask frames may be averaged, and sub-pixel shifted before subtraction.
-    //             The result will be a signed value with a bit length one longer than the source frames.
-    // When there is no difference between corresponding pixel values, the subtracted image pixel will have a value of 0.
-    // If a pixel in the current frame has a greater value than in the mask frame, then the resulting frame shall have a positive value. If it has a lesser value, then the resulting frame shall have a negative value.
-
-    // aquests canvis s'apliquen a totes les imatges
-}
-
 void Q2DViewer::computeVOILUT()
 {
     //
@@ -2569,8 +2548,9 @@ void Q2DViewer::computeVOILUT()
 
     // aquests canvis es poden aplicar a un subconjunt de imatges/frames. Per tant podem tenir diverses VOI LUT per una mateixa sèrie que s'apliquen a diverses imatges.
 
-    // primer busquem voi lut, sinó busquem window level
-    m_windowLevelLut = this->parseLookupTable(1);
+    // primer busquem voi lut, sinó busquem window level TODO eliminem el parseLookupTable, això hauria de ser feina de
+    // la classe que apliqui les transformacions de grisos i  presentation states
+    m_windowLevelLut = NULL;
     // si hi ha una VOI LUT
     if( m_windowLevelLut )
     {
@@ -2610,145 +2590,6 @@ void Q2DViewer::computeVOILUT()
             );
         }
     }
-}
-
-vtkWindowLevelLookupTable *Q2DViewer::parseLookupTable( int type )
-{
-    DcmTagKey lutType;
-    vtkWindowLevelLookupTable *vtkLut = 0;
-    QString lutDescription;
-    bool signedRepresentation = false;
-    if( m_mainVolume->getImages().at(0)->getPixelRepresentation() == 0 )// Signed
-            signedRepresentation = true;
-    switch( type )
-    {
-    case 0:
-        lutType = DCM_ModalityLUTSequence;
-        lutDescription = "Modality LUT";
-    break;
-
-    case 1:
-        lutType = DCM_VOILUTSequence;
-        lutDescription = "Window Level LUT";
-    break;
-
-    case 2:
-        lutType = DCM_PresentationLUTSequence;
-        lutDescription = "Presentation LUT";
-    break;
-    }
-    DcmStack stack;
-    DcmDataset *dataset = new DcmDataset;
-
-    bool ok = true;
-
-    QStringList list = m_mainVolume->getInputFiles();
-    if( list.isEmpty() )
-        ok = false;
-    if( ok )
-    {
-        DcmFileFormat dicomFile;
-
-        OFCondition status = dicomFile.loadFile( qPrintable( list.at(0) ) );
-        if( status.bad() )
-        {
-            DEBUG_LOG( QString( "algo falla::: %1\nARXIU: %2 ").arg( status.text() ).arg( list.at(0) ) );
-            ok = false;
-        }
-    }
-
-    if( ok )
-    {
-        if( dataset->search( lutType, stack ).bad() )
-            ok = false;
-        else
-            DEBUG_LOG( QString("Parsing [%1] from dicom dataset").arg( lutDescription ) );
-    }
-
-    if( ok )
-    {
-        DcmSequenceOfItems *lutSequence = NULL;
-        lutSequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
-        DcmItem *item = lutSequence->getItem( 0 );
-        // obtenim la descripció de la lut que ens especifica el format d'aquesta
-        const Uint16 *lutDescriptor;
-        OFCondition status = item->findAndGetUint16Array( DcmTagKey( DCM_LUTDescriptor ) , lutDescriptor  );
-        if( status.good() )
-        {
-            // 0: # d'entrades a la lookup table. Quan val 0 equival a 2^16 ( 65536 )
-
-            // 1: FirstStoredPixelValueMapped: El valor del primer valor de pixel de la imatge mapejat. Aquest valor es mapeja a la primera entrada de la lut. Tots els valors de pixel de la imatge menors que aquest es mapejen amb el valor de la primera entrada de la lut. Un pixel amb valor FirstStoredPixelValueMapped + 1, es mapejarà amb la següent entrada de la lut i així fins arribar a la última entrada de la lut. Els valors per sobre de la última entrada també es mapejen amb el valor de l'última entrada de la lut. Aquest valor estableix la relació entre els valors de la imatge i les entrades de la lut.
-            // Per exemple, FirstStoredPixelValueMapped = 63488. Els valors de la imatge que estiguin per sota d'aquest se'ls assignarà el valor de la primera entrada de la lut (lut[0]). FirstStoredPixelValueMapped+1 es correspondrà amb lut[1], etc fins FirstStoredPixelValueMapped+n=> lut[n-1], on n seran el nombre d'entrades de la lut. Els valors de pixel més grans que FirstStoredPixelValueMapped+n-1 es mapejaran amb el valor de lut[n-1].
-
-            // 2: Especifica el nombre de bits per cada entrada a la lut, que podran ser 8 o 16, corresponent amb el rang de valors de la lut que podrà ser de 256 o 65536 respectivament
-
-            // allotjem la memòria per les dades de la lut
-            int numberOfEntries;
-            if( lutDescriptor[0] == 0 )
-                numberOfEntries = 65535;
-            else
-                numberOfEntries =  lutDescriptor[0];
-            signed int firstStored;
-            if( signedRepresentation )
-                firstStored = static_cast<signed short>( lutDescriptor[1] );
-            else
-                firstStored = lutDescriptor[1];
-
-            DEBUG_LOG( QString("LUT Descriptor: %1\\%2\\%3")
-            .arg( numberOfEntries )
-            .arg( firstStored )
-            .arg( lutDescriptor[2] )
-            );
-
-            vtkLut = vtkWindowLevelLookupTable::New();
-            vtkLut->SetNumberOfTableValues( numberOfEntries );
-            vtkLut->SetTableRange( firstStored , firstStored + numberOfEntries );
-
-            // Encara que lutDescriptor[2] pugui ser 8,10,12 o 16 bits, sempre llegirem en un vector de components de 16 bits per comoditat
-            const Uint16 *lutData16;
-            lutData16 = new Uint16[ numberOfEntries ];
-            // obtenim les dades de la lut
-            status = item->findAndGetUint16Array( DcmTagKey( DCM_LUTData ) , lutData16  );
-            if( status.good() )
-            {
-                unsigned int min = 65535, max = 0;
-                for( int i = 0; i < numberOfEntries; i++ )
-                {
-                    if( lutData16[i] > max )
-                        max = lutData16[i];
-                    if( lutData16[i] < min )
-                        min = lutData16[i];
-                }
-                for( int i =0; i < numberOfEntries; i++ )
-                {
-                    double value;
-                    if( m_windowLevelLut ) // ens precedeix una VOI lut
-                        value = m_windowLevelLut->GetTableValue( i )[0];
-                        //value = m_windowLevelLut->GetLuminance( i );
-                    else if( m_modalityLut ) // només ens precedeix una modality
-                        value = m_modalityLut->GetTableValue( i )[0];
-                        //value = m_modalityLut->GetLuminance( i );
-                    else // no hi ha cap lut precedent
-                        value = (double)lutData16[ i ]/max;
-                    vtkLut->SetTableValue( i , value , value , value , 1.0 );
-                }
-            }
-            else
-                DEBUG_LOG( QString("Error message:: ") + status.text() );
-
-// experiment
-//             unsigned char *outTable = new unsigned char[ numberOfEntries ];
-//             void *inPtr = m_mainVolume->getVtkData()->GetScalarPointer();
-//             vtkLut->MapScalarsThroughTable2( inPtr, outTable, m_mainVolume->getVtkData()->GetScalarType(), numberOfEntries, 1, 1 );
-//             for( int i = 0; i < numberOfEntries; i++ )
-//                 std::cout << "value: " << (int)outTable[i] << std::endl;
-
-//             vtkLut->SetRampToLinear();
-        }
-        else
-            DEBUG_LOG( QString("Error message:: ") + status.text() );
-    }
-    return vtkLut;
 }
 
 };  // end namespace udg

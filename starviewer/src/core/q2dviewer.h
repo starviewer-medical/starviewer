@@ -181,6 +181,22 @@ public:
     void setModalityRescale( vtkImageShiftScale *rescale );
     vtkImageActor *getImageActor();
 
+    ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
+    Drawer* getDrawer() const;
+
+    /**
+     * Calcula la posició del cursor en coordenades de món
+     * @param xyz[] La posició que obtenim
+     * @return Cert si el cursor està sobre una posició vàlida de la imatge, fals altrament
+     */
+    bool getCurrentCursorPosition( double xyz[3] );
+
+    /**
+     * Retorna el valor del voxel allà on es troba el cursor en aquell moment
+     * @return valor del voxel
+     */
+    double getCurrentImageValue();
+
     //
     // DISPLAYED AREA. Mètodes per poder modificar l'àrea visible del volum (zoom enquadrat) i/o canviar aspecte, espaiat de presentació, etc
     //
@@ -198,12 +214,6 @@ public:
 
     /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
     void setMagnificationFactor( double factor );
-
-    ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
-    Drawer* getDrawer() const;
-
-    bool getCurrentCursorPosition( double xyz[3] );
-    double getCurrentImageValue();
 
 public slots:
 
@@ -402,8 +412,6 @@ private:
     Els canvis de la modality LUT s'apliquen a totes les imatges contingudes en el volum
      */
     void computeModalityLUT();
-    ///
-    void applyMaskSubstraction();
 
     /**
      *  Aplica l'ajustament de finestra sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
@@ -425,9 +433,6 @@ private:
     De cares al connectathon només es tracta una sola VOI LUT i imatges mono-frame, però hem de tenir en compte que l'estàndar DICOM contempla les possibilitats abans mencionades.
      */
     void computeVOILUT();
-
-    /// Aquest mètode s'encarrega de donar-nos en format vtk el tipu de lookup table de la grayscale pipeline que ens ofereix el presentation state actualment assignat. type: 0 -> modality lut, 1-> VOI lut, 2-> presentation lut  \TODO mètode temporal
-    vtkWindowLevelLookupTable *parseLookupTable( int type );
 
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
