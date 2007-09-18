@@ -251,15 +251,14 @@ void QConfigurationScreen::loadInstitutionInformation()
 
 void QConfigurationScreen:: clear()
 {
-    m_textAETitle->setText( "" );
-    m_textAddress->setText( "" );
-    m_textPort->setText( "" );
-    m_textInstitution->setText( "" );
-    m_textLocation->setText( "" );
-    m_textDescription->setText( "" );
+    m_textAETitle->clear();
+    m_textAddress->clear();
+    m_textPort->clear();
+    m_textInstitution->clear();
+    m_textLocation->clear();
+    m_textDescription->clear();
     m_checkDefault->setChecked( false );
     m_PacsID = 0;
-
 }
 
 void QConfigurationScreen::addPacs()
