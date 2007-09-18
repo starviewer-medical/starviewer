@@ -1197,7 +1197,8 @@ void Q2DViewer::setOverlayToRectilinearWipe()
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
     //\TODO l'única info que cal actualitzar és la mida de finestra/viewport
-    updateInformation();
+    if( m_mainVolume )
+        updateInformation();
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
