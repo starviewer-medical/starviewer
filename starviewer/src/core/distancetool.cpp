@@ -59,10 +59,8 @@ void DistanceTool::handleEvent( unsigned long eventID )
             {
                 if ( m_isCtrlPressed )
                 {
-                    cout << "NO HI HA SELECCIO" << endl;
                     if ( m_2DViewer->getDrawer()->hasNearestSet() && m_2DViewer->getDrawer()->getNumberOfDrawedPrimitives() > 0 ) 
                     {
-                 cout << "SELECCIONO" << endl;   
                         m_2DViewer->getDrawer()->selectNearestSet();
                         createSelectedDistanceData( m_2DViewer->getDrawer()->getSelectedSet() );
                     }
