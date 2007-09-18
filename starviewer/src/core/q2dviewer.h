@@ -174,8 +174,14 @@ public:
     void removePhaseColumns( int slice, int columns );
     void setPhaseGrid( int slice, int rows, int columns );
 
-    /// Indiquem quina informació mostrem
-    void updateInformation();
+    /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
+    void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
+
+    /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
+    void updateWindowAnnotationInformation();
+    void updateSliceAnnotationInformation();
+    void updatePatientAnnotationInformation();
+    void updatePatientOrientationAnnotationInformation();
 
     /// Mètodes de conveniència pels presentation state
     void setModalityRescale( vtkImageShiftScale *rescale );
@@ -257,7 +263,7 @@ public slots:
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
     void removeAnnotation( AnnotationFlags annotation );
 
-    /// Ajusta els ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
+    /// Ajusta ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
     void setDefaultWindowLevel( double window, double level );
 
     /// Ajusta el window/level
@@ -327,16 +333,15 @@ protected:
     virtual void resizeEvent( QResizeEvent* resize );
 
 private:
-    /// Recorre tots els renderers per actualitzar les annotacions de llesca
-    void updateSliceAnnotation();
+    /**
+     * Refresca la visibilitat de les annotacions en funció dels flags que tenim
+     */
+    void refreshAnnotations();
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
     /// li proporcionem també el corner annotation sobre el qual s'aplica
     void updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0 );
-
-    /// inicialitza les annotacions de texte
-    void initTextAnnotations();
 
     /// configuració de la interacció amb l'usuari
     void setupInteraction();

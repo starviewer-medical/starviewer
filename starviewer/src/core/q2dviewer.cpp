@@ -79,7 +79,7 @@ namespace udg {
 Q2DViewer::Q2DViewer( QWidget *parent )
  : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0),  m_scalarBar(0), m_rotateFactor(0), m_columns(1), m_rows(1), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
-    m_enabledAnnotations = Q2DViewer::AllAnnotation;
+    m_enabledAnnotations = Q2DViewer::NoAnnotation;
     m_lastView = Q2DViewer::Axial;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -122,8 +122,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_informationCollection->AddItem ( m_serieInformationAnnotation );
     m_scalarBarCollection->AddItem( m_scalarBar );
 
-    this->updateGrid();
-
     m_anchoredRulerCoordinatesCollection = vtkCollection::New();
     m_anchoredRulerCoordinatesCollection->AddItem( m_anchoredRulerCoordinates );
     m_rulerActorCollection = vtkActor2DCollection::New();
@@ -132,6 +130,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
+    refreshAnnotations();
 }
 
 Q2DViewer::~Q2DViewer()
@@ -361,7 +360,6 @@ vtkScalarBarActor* Q2DViewer::createScalarBar()
 void Q2DViewer::updateScalarBar()
 {
     // Així és més ràpid i senzill
-
     vtkScalarBarActor *scalarBar;
     int i;
 
@@ -495,6 +493,80 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     }
 }
 
+void Q2DViewer::refreshAnnotations()
+{
+    if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
+        m_serieInformationAnnotation->VisibilityOn();
+    else
+        m_serieInformationAnnotation->VisibilityOff();
+
+    vtkCornerAnnotation *sliceAnnotation;
+    vtkRenderer *renderer;
+    vtkAxisActor2D *ruler;
+    int i = 0, rulerIndex = 0;
+
+    // Informació que es mostra per cada viewport
+    for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
+    {
+        renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ) );
+        // Mostrem o amaguem els rulers del volum
+        ruler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( rulerIndex ));
+        if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
+            ruler->VisibilityOn();
+        else
+            ruler->VisibilityOff();
+
+        ruler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( rulerIndex+1 ));
+        if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
+            ruler->VisibilityOn();
+        else
+            ruler->VisibilityOff();
+
+        rulerIndex += 2;
+
+        sliceAnnotation = vtkCornerAnnotation::SafeDownCast ( m_sliceAnnotationsCollection->GetItemAsObject ( i ) );
+        // informació de la finestra
+        if( !m_mainVolume )
+            m_upperLeftText = "";
+        else
+        {
+            if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
+            {
+                m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                        .arg( m_imageSizeInformation[0] )
+                        .arg( m_imageSizeInformation[1] )
+                        .arg( renderer->GetSize()[0] )
+                        .arg( renderer->GetSize()[1] )
+                        .arg( m_windowLevelLUTMapper->GetWindow() )
+                        .arg( m_windowLevelLUTMapper->GetLevel() );
+            }
+            else
+                m_upperLeftText = "";
+        }
+        sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
+
+        if ( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
+        {
+            for( int j = 0; j < 4; j++ )
+                m_patientOrientationTextActor[j]->VisibilityOn();
+        }
+        else
+        {
+            for( int j = 0; j < 4; j++ )
+                m_patientOrientationTextActor[j]->VisibilityOff();
+        }
+
+        if ( m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation )
+            m_scalarBar->VisibilityOn();
+        else
+            m_scalarBar->VisibilityOff();
+    }
+
+    this->updateSliceAnnotationInformation();
+
+    this->refresh();
+}
+
 void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int currentSlice, int maxSlice, int currentPhase, int maxPhase )
 {
     if( !sliceAnnotation )
@@ -600,36 +672,9 @@ QString Q2DViewer::getOppositeOrientationLabel( QString label )
     return oppositeLabel;
 }
 
-void Q2DViewer::initTextAnnotations()
-{
-    if( m_mainVolume )
-    {
-        // informació fixa
-        m_upperRightText = tr("%1")
-            .arg( m_mainVolume->getPatient()->getFullName() );
-
-        m_upperRightText += tr("\n%1\n%2\n%3\nAcc:\n%4\n%5")
-                    .arg( m_mainVolume->getSeries()->getInstitutionName() )
-                    .arg( m_mainVolume->getPatient()->getID() )
-                    .arg( m_mainVolume->getStudy()->getAccessionNumber() )
-                    .arg( m_mainVolume->getStudy()->getDateAsString() )
-                    .arg( m_mainVolume->getStudy()->getTimeAsString() );
-
-        m_lowerRightText = tr("%1")
-            .arg( m_mainVolume->getSeries()->getProtocolName() );
-
-        m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
-        m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );
-    }
-    else
-    {
-        DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte");
-    }
-}
-
 void Q2DViewer::setVoxelInformationCaptionEnabled( bool enable )
 {
-    enable ?  enableVoxelInformationCaption() : disableVoxelInformationCaption();
+    enable ? enableVoxelInformationCaption() : disableVoxelInformationCaption();
 }
 
 void Q2DViewer::enableVoxelInformationCaption()
@@ -767,6 +812,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_mainVolume = volume;
     m_currentSlice = 0;
     m_currentPhase = 0;
+    this->enableAnnotation( Q2DViewer::AllAnnotation );
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
     this->computeInputGrayscalePipeline();
@@ -802,11 +848,12 @@ void Q2DViewer::setInput( Volume* volume )
         DEBUG_LOG( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases ).arg( m_maxSliceValue) );
     }
 
-    updateGrid();
+
     updateRulers();
     updateScalarBar();
-    initTextAnnotations();
-    updateInformation();
+    updatePatientAnnotationInformation();
+    updateGrid();
+    refreshAnnotations();
 }
 
 vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
@@ -997,7 +1044,6 @@ void Q2DViewer::updateCamera()
             m_applyFlip = false;
         }
         mapOrientationStringToAnnotation();
-        this->updateInformation();
         this->updateRulers();
         this->refresh();
     }
@@ -1204,9 +1250,8 @@ void Q2DViewer::setOverlayToRectilinearWipe()
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
-    //\TODO l'única info que cal actualitzar és la mida de finestra/viewport
-    if( m_mainVolume )
-        updateInformation();
+    // l'única info que cal actualitzar és la mida de finestra/viewport
+    updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
@@ -1215,7 +1260,7 @@ void Q2DViewer::setWindowLevel( double window , double level )
     {
         m_windowLevelLUTMapper->SetWindow( window );
         m_windowLevelLUTMapper->SetLevel( level );
-        updateInformation();
+        updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
         updateScalarBar();
         refresh();
     }
@@ -1297,7 +1342,7 @@ void Q2DViewer::resetWindowLevelToDefault()
         m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
         m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
         this->refresh();
-        //\TODO fer updateInformation() en comptes d'aquest?
+        //\TODO fer updateAnnotationsInformation() en comptes d'aquest?
         updateWindowLevelAnnotation();
     }
     else
@@ -1549,7 +1594,7 @@ double Q2DViewer::getCurrentImageValue()
 
 void Q2DViewer::updateWindowLevelAnnotation()
 {
-    updateInformation();
+    updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
     emit windowLevelChanged( m_windowLevelLUTMapper->GetWindow() , m_windowLevelLUTMapper->GetLevel() );
     updateScalarBar();
 }
@@ -1948,81 +1993,136 @@ void Q2DViewer::setPhaseGrid( int slice, int rows, int columns )
     }
 }
 
-void Q2DViewer::updateInformation()
+void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
 {
-    vtkCornerAnnotation *sliceAnnotation;
-    vtkRenderer *renderer;
-    vtkAxisActor2D *ruler;
-    int i = 0, numRuler = 0;
-
-    if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
+    // Informació que es mostra per cada viewport
+    if( annotation & Q2DViewer::WindowInformationAnnotation )
     {
-        m_serieInformationAnnotation->VisibilityOn();
+        vtkCornerAnnotation *sliceAnnotation;
+        vtkRenderer *renderer;
+        vtkAxisActor2D *ruler;
+        int i = 0;
+        for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
+        {
+            sliceAnnotation = vtkCornerAnnotation::SafeDownCast ( m_sliceAnnotationsCollection->GetItemAsObject ( i ) );
+            renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ) );
+
+            // informació de la finestra
+            if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
+            {
+                m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                        .arg( m_imageSizeInformation[0] )
+                        .arg( m_imageSizeInformation[1] )
+                        .arg( renderer->GetSize()[0] )
+                        .arg( renderer->GetSize()[1] )
+                        .arg( m_windowLevelLUTMapper->GetWindow() )
+                        .arg( m_windowLevelLUTMapper->GetLevel() );
+            }
+            else
+                m_upperLeftText = "";
+            sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
+        }
+    }
+
+    if( annotation & Q2DViewer::SliceAnnotation )
+        this->updateSliceAnnotationInformation();
+
+    this->refresh();
+}
+
+void Q2DViewer::updateSliceAnnotationInformation()
+{
+    if( !m_mainVolume )
+        return;
+
+    int i = 0;
+    int rendererIndex = 0;
+    int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
+    vtkCornerAnnotation *sliceAnnotation = NULL;
+
+    for( i = 0; i < m_numberOfSlicesWindows; i++ )
+    {
+        QMap<int,int*>::iterator iterator = m_phaseGridMap.find( m_currentSlice + i );
+        if( iterator != m_phaseGridMap.end() )
+        {
+            int *phaseGrid = iterator.value();
+            for( int j = 0; j < phaseGrid[0]*phaseGrid[1]; j++  )
+            {
+                sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
+
+                if( sliceAnnotation )
+                {
+                    this->updateSliceAnnotation( sliceAnnotation, ((int)(value/m_numberOfPhases)) + 1, m_maxSliceValue+1, value+1, m_numberOfPhases );
+                    if( value >=  m_viewer->GetSliceMax() )
+                        value = 0;
+                    else
+                        value++;
+                }
+                rendererIndex++;
+            }
+            // si no es mostren totes les fases ens ho haurem de saltar
+            if( phaseGrid[0]*phaseGrid[1] < m_numberOfPhases )
+            {
+                value += m_numberOfPhases - phaseGrid[0]*phaseGrid[1];
+            }
+
+        }
+        else
+        {
+            sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
+
+            if( sliceAnnotation )
+            {
+                if ( m_numberOfPhases > 1)
+                {
+                    this->updateSliceAnnotation( sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
+                }
+                else
+                {
+                    this->updateSliceAnnotation( sliceAnnotation, value+1, m_maxSliceValue+1 );
+                }
+                if( value >=  m_viewer->GetSliceMax() )
+                    value = 0;
+                else
+                    value += m_numberOfPhases;
+            }
+            rendererIndex++;
+        }
+    }
+    this->refresh();
+}
+
+void Q2DViewer::updatePatientAnnotationInformation()
+{
+    if( m_mainVolume )
+    {
+        // informació fixa
+        m_upperRightText = tr("%1")
+            .arg( m_mainVolume->getPatient()->getFullName() );
+
+        m_upperRightText += tr("\n%1\n%2\n%3\nAcc:\n%4\n%5")
+                    .arg( m_mainVolume->getSeries()->getInstitutionName() )
+                    .arg( m_mainVolume->getPatient()->getID() )
+                    .arg( m_mainVolume->getStudy()->getAccessionNumber() )
+                    .arg( m_mainVolume->getStudy()->getDateAsString() )
+                    .arg( m_mainVolume->getStudy()->getTimeAsString() );
+
+        m_lowerRightText = tr("%1")
+            .arg( m_mainVolume->getSeries()->getProtocolName() );
+
+        m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
+        m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );
     }
     else
     {
-        m_serieInformationAnnotation->VisibilityOff();
+        DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte");
     }
-    //\TODO mirar perquè cal posar aquesta crida, sino al canviar de llesca d'avegades es deixa de veure l'actor
-    updateViewports();
-
-    // Informació que es mostra per cada viewport
-    for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
-    {
-        sliceAnnotation = vtkCornerAnnotation::SafeDownCast ( m_sliceAnnotationsCollection->GetItemAsObject ( i ) );
-        renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ) );
-
-        // Mostrem o amaguem els rulers del volum
-        ruler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( numRuler ));
-        if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
-            ruler->VisibilityOn();
-        else
-            ruler->VisibilityOff();
-
-        ruler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( numRuler+1 ));
-        if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
-            ruler->VisibilityOn();
-        else
-            ruler->VisibilityOff();
-
-        numRuler += 2;
-
-        // informació de la finestra
-        if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
-        {
-            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                    .arg( m_imageSizeInformation[0] )
-                    .arg( m_imageSizeInformation[1] )
-                    .arg( renderer->GetSize()[0] )
-                    .arg( renderer->GetSize()[1] )
-                    .arg( m_windowLevelLUTMapper->GetWindow() )
-                    .arg( m_windowLevelLUTMapper->GetLevel() );
-        }
-        else
-            m_upperLeftText = "";
-        sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
-
-
-        if ( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
-        {
-            for( int j = 0; j < 4; j++ )
-                m_patientOrientationTextActor[j]->VisibilityOn();
-        }
-        else
-        {
-            for( int j = 0; j < 4; j++ )
-                m_patientOrientationTextActor[j]->VisibilityOff();
-        }
-
-        if ( m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation )
-            m_scalarBar->VisibilityOn();
-        else
-            m_scalarBar->VisibilityOff();
-    }
-
-    this->updateSliceAnnotation();
-
     this->refresh();
+}
+
+void Q2DViewer::updatePatientOrientationAnnotationInformation()
+{
+    // TODO per implementar correctament
 }
 
 void Q2DViewer::addRenderScene()
@@ -2161,7 +2261,7 @@ void Q2DViewer::updateGrid()
         updateRulers();
     }
     else
-        updateViewports(); // Redistribuir viewports
+        updateViewports(); // Redistribuir viewports TODO perquè si no tinc input he de fer un updateViewports?
     m_viewer->Render();
 }
 
@@ -2230,68 +2330,6 @@ void Q2DViewer::updateViewports()
         xmin = m_slicesViewportExtent[0];
         ymax = ymax - sizeVertical;
     }
-}
-
-void Q2DViewer::updateSliceAnnotation()
-{
-    if( !m_mainVolume )
-        return;
-
-    int i = 0;
-    int rendererIndex = 0;
-    int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
-    vtkCornerAnnotation *sliceAnnotation = NULL;
-
-    for( i = 0; i < m_numberOfSlicesWindows; i++ )
-    {
-        QMap<int,int*>::iterator iterator = m_phaseGridMap.find( m_currentSlice + i );
-        if( iterator != m_phaseGridMap.end() )
-        {
-            int *phaseGrid = iterator.value();
-            for( int j = 0; j < phaseGrid[0]*phaseGrid[1]; j++  )
-            {
-                sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
-
-                if( sliceAnnotation )
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, ((int)(value/m_numberOfPhases)) + 1, m_maxSliceValue+1, value+1, m_numberOfPhases );
-                    if( value >=  m_viewer->GetSliceMax() )
-                        value = 0;
-                    else
-                        value++;
-                }
-                rendererIndex++;
-            }
-            // si no es mostren totes les fases ens ho haurem de saltar
-            if( phaseGrid[0]*phaseGrid[1] < m_numberOfPhases )
-            {
-                value += m_numberOfPhases - phaseGrid[0]*phaseGrid[1];
-            }
-
-        }
-        else
-        {
-            sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
-
-            if( sliceAnnotation )
-            {
-                if ( m_numberOfPhases > 1)
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
-                }
-                else
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, value+1, m_maxSliceValue+1 );
-                }
-                if( value >=  m_viewer->GetSliceMax() )
-                    value = 0;
-                else
-                    value += m_numberOfPhases;
-            }
-            rendererIndex++;
-        }
-    }
-    this->refresh();
 }
 
 void Q2DViewer::updateDisplayExtent()
@@ -2392,8 +2430,8 @@ void Q2DViewer::updateDisplayExtent()
             }
             rendererIndex++;
         }
+        renderer->ResetCameraClippingRange();
     }
-    this->updateInformation();
 }
 
 void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
@@ -2402,6 +2440,8 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
         m_enabledAnnotations = m_enabledAnnotations | annotation;
     else
         m_enabledAnnotations =  m_enabledAnnotations & ~annotation ;
+
+    refreshAnnotations();
 }
 
 void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
