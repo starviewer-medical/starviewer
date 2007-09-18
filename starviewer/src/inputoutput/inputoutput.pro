@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/inputoutput
-# L'objectiu és una biblioteca:  
+# L'objectiu Ã©s una biblioteca:  
 
 TRANSLATIONS += inputoutput_ca_ES.ts \
                 inputoutput_es_ES.ts \
@@ -36,8 +36,6 @@ HEADERS += const.h \
            dicomstudy.h \
            studylistsingleton.h \
            studylist.h \
-           seriesvolum.h \
-           studyvolum.h \
            cachepool.h \
            scalestudy.h \
            multiplequerystudy.h \
@@ -90,8 +88,6 @@ SOURCES += databaseconnection.cpp \
            dicomstudy.cpp \
            studylistsingleton.cpp \
            studylist.cpp \
-           seriesvolum.cpp \
-           studyvolum.cpp \
            cachepool.cpp \
            scalestudy.cpp \
            multiplequerystudy.cpp \
