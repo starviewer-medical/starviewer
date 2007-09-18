@@ -2,8 +2,7 @@
 #define SERIESLIST
 
 #include <QString>
-
-#define HAVE_CONFIG_H 1
+#include <list>
 
 #include "dicomseries.h"
 #include <semaphore.h>

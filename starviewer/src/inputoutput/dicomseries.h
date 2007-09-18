@@ -3,16 +3,13 @@
 
 #include <QString>
 
-#define HAVE_CONFIG_H 1
-#include <list>
-#include <dimse.h> // provide the structure DcmDataSet
-#include <dcdeftag.h> //provide the information for the tags
-
-/** This class sets and gets series fields
- */
+class DcmDataset;
 
 namespace udg{
 
+/**
+* This class sets and gets series fields
+*/
 class DICOMSeries
 {
 
