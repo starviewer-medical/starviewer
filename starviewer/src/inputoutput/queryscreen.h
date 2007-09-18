@@ -9,24 +9,21 @@
 
 #include "ui_queryscreenbase.h"
 #include "multiplequerystudy.h"
-#include "processimagesingleton.h"
-#include "studyvolum.h"
-#include "serieslistsingleton.h"
 #include "qexecuteoperationthread.h"
 #include "qoperationstatescreen.h"
-#include "qcreatedicomdir.h"
 #include "readdicomdir.h"
-#include "imagelistsingleton.h"
 #include "dicommask.h"
-
-#include "patientfillerinput.h"
 
 namespace udg {
 
 class SeriesList;
 class Status;
-class ReadDicomdir;
 class PacsServer;
+class PatientFillerInput;
+class QCreateDicomdir;
+class ProcessImageSingleton;
+class SeriesListSingleton;
+class ImageListSingleton;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -183,12 +180,6 @@ public slots:
     void textOtherModalityEdited();
 
 signals:
-
-    /** Signal que s'emet quan es vol visualtizar un estudi cap a ExtensionHandler
-     * @param Volum de l'estudi a visualitzar
-     */
-    void viewStudy( StudyVolum );
-
     /// Signal similar a viewStudy(), però en aquest cas enviem tota la estructura PatientFillerInput que es continuarà processant per la classe que reculli aquest signal
     void viewPatient( PatientFillerInput *input, QString studyUID, QString seriesUID );
 
@@ -217,37 +208,6 @@ protected :
     void closeEvent( QCloseEvent* ce );
 
 private:
-//estructura necessària per passar els paràmetres al thread que descarregarrà les imatges
-struct retrieveParameters
-     {
-        QString studyUID;
-        PacsParameters pacs;
-      };
-
-    retrieveParameters retParam;
-    StudyListSingleton *m_studyListSingleton; //aquest es utilitzat per buscar estudis al pacs
-    SeriesListSingleton *m_seriesListSingleton;
-    ImageListSingleton *m_imageListSingleton;
-    ProcessImageSingleton *m_piSingleton;
-
-    MultipleQueryStudy multipleQueryStudy;//Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
-
-    ReadDicomdir m_readDicomdir;// conté la informació del dicomdir obert en aquests instants
-
-    /*A la pestanya de dicomdir no s'ha de mostrar el QPacsList, per tant a la pestany de dicomdir
-     * automaticament l'amaguem, i si tornem a la pestanya de la cache o del pacs, si anteriorment
-     estava desplagat es mostra el QPacsList, per això utilitzem el m_PacsListShow que guarda si
-     per la Cache o el PACS el QPacsList es mostrava. Llavors el m_PacsListIsShowed és utilitzat
-     independentment de la pestanya per saber si en aquells moments s'està mostran el QPacsListShow */
-    bool m_PacsListShow;
-    bool m_pacsListIsShowed;
-
-    QOperationStateScreen *m_OperationStateScreen;
-    QCreateDicomdir *m_qcreateDicomdir;
-    QExecuteOperationThread m_qexecuteOperationThread;
-
-    QString m_lastQueriedPacs;//Indica quin és l'últim pacs que hem consultat, això es per de cares anar al connectathon, ja que les messatools no retornen el tag indicant a quin pacs pertanyen, per això és necessari guardar quin és l'últim pacs consultat per saber si hem de descarregar l'estudi, consultar, sèrie etc a quin PACS atacar.
-
     ///Connecta els signals i slots pertinents
     void connectSignalsAndSlots();
 
@@ -347,7 +307,7 @@ struct retrieveParameters
      * @param mask màscara a la que s'ha d'afegir la modalitat
      * @param modality modalitat a afegir
      */
-    void addModalityStudyMask( DicomMask* mask, QString modality );
+    void addModalityStudyMask( DicomMask *mask, QString modality );
 
     /** Donat un AETitle busca les dades del PACS a la base de dades i prepara un objecte PACSERVER, per poder
      * connectar al PACS
@@ -356,8 +316,46 @@ struct retrieveParameters
      */
     Status preparePacsServerConnection( QString AETitlePACS , PacsServer *pacsConnection );
 
-    /// Mètode que a partir d'un StudyVolum emetrà el signal correcte depenent de la modalitat que s'intenta obrir
-    void emitViewSignal(StudyVolum study);
+private:
+
+/// estructura necessària per passar els paràmetres al thread que descarregarrà les imatges
+struct retrieveParameters
+     {
+        QString studyUID;
+        PacsParameters pacs;
+      };
+
+    retrieveParameters retParam;
+    /// aquest es utilitzat per buscar estudis al pacs
+    StudyListSingleton *m_studyListSingleton;
+    SeriesListSingleton *m_seriesListSingleton;
+    ImageListSingleton *m_imageListSingleton;
+    ProcessImageSingleton *m_piSingleton;
+
+    /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
+    MultipleQueryStudy multipleQueryStudy;
+
+    /// conté la informació del dicomdir obert en aquests instants
+    ReadDicomdir m_readDicomdir;
+
+    /** A la pestanya de dicomdir no s'ha de mostrar el QPacsList, per tant a la pestany de dicomdir
+     * automaticament l'amaguem, i si tornem a la pestanya de la cache o del pacs, si anteriorment
+     * estava desplagat es mostra el QPacsList, per això utilitzem el m_PacsListShow que guarda si
+     * per la Cache o el PACS el QPacsList es mostrava. Llavors el m_PacsListIsShowed és utilitzat
+     * independentment de la pestanya per saber si en aquells moments s'està mostran el QPacsListShow
+     */
+    bool m_PacsListShow;
+    bool m_pacsListIsShowed;
+
+    QOperationStateScreen *m_OperationStateScreen;
+    QCreateDicomdir *m_qcreateDicomdir;
+    QExecuteOperationThread m_qexecuteOperationThread;
+
+    /// Indica quin és l'últim pacs que hem consultat, això es per de cares anar al connectathon,
+    /// ja que les messatools no retornen el tag indicant a quin pacs pertanyen, per això és necessari guardar
+    /// quin és l'últim pacs consultat per saber si hem de descarregar l'estudi, consultar, sèrie etc a quin PACS atacar.
+    QString m_lastQueriedPacs;
+
 };
 
 };
