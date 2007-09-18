@@ -90,6 +90,12 @@ QList<Image *> Series::getImages() const
     return m_imageSet;
 }
 
+void Series::setImages( QList<Image *> imageSet )
+{
+    // TODO Buidar la llista abans d'afegir-hi la nova
+    m_imageSet = imageSet;
+}
+
 int Series::getNumberOfImages()
 {
     return m_imageSet.size();

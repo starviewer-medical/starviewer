@@ -22,6 +22,7 @@
 #include "volumegeneratorstep.h"
 #include "referencelinesfillerstep.h"
 #include "mhdfileclassifierstep.h"
+#include "orderimagesfillerstep.h"
 
 namespace udg {
 
@@ -99,6 +100,7 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new VolumeGeneratorStep() );
     m_registeredSteps.append(new ReferenceLinesFillerStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
+    m_registeredSteps.append(new OrderImagesFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
