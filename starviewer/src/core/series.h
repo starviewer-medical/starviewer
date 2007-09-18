@@ -58,7 +58,24 @@ public:
     void setDescription( QString description );
     QString getDescription() const;
 
-    /// Assignar/Obtenir la posició del pacient relativa a la màquina
+    /**
+     * Assignar/Obtenir la posició del pacient relativa a la màquina
+     * Tenim diversos termes definits que ens diuen en quina posició entra el pacient a la màquina
+     * - Head First vol dir que el pacient entra de cap
+     * - Feet First vol dir que el pacient entra de peus
+     * - Prone vol dir que el pacient mira cap avall
+     * - Supine vol dir que el pacient mira cap amunt
+     * - Decubitus Right vol dir que el pacient està recolzat sobre el seu costat esquerre
+     * - Decubitus Left vol dir que el pacient està recolzat sobre el seu costat dret
+     *
+     * Aquests són els termes disponibles
+     * HFP: Head First-Prone                HFS: Head First-Supine
+     * HFDR: Head First-Decubitus Right     HFDL: Head First-Decubitus Left
+     * FFDR: Feet First-Decubitus Right     FFDL: Feet First-Decubitus Left
+     * FFP: Feet First-Prone                FFS: Feet First-Supine
+     *
+     * @param position String amb un dels valors esmentats
+     */
     void setPatientPosition( QString position );
     QString getPatientPosition() const;
 
