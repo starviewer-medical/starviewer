@@ -72,15 +72,9 @@ private:
     /// valors per controlar l'anotació de les distàncies
     double m_distanceStartPosition[3], m_distanceCurrentPosition[3];
 
-    /// Llesca actual on estem pintant les distàncies. Ens serveix per controlar els actors que s'han de dibuixar o no al canviar de llesca
-    int m_currentSlice;
-
     /// atribut per saber quin dels dos punts de la distància seleccionada és el més proper
     int m_nearestPoint;
 
-    /// Manté la última vista del 2DViewer. Ens servirà per controlar les distàncies visibles quan canviem de vista
-    int m_lastView;
-    
     ///objecte per a crear distàncies noves
     DistanceRepresentation *m_distanceRepresentation;
 
