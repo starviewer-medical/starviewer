@@ -227,9 +227,9 @@ void POVSphereCloud::subdivide( Vector3 v1, Vector3 v2, Vector3 v3, unsigned sho
         v31 = v3 + v1;
 
         // No cal dividir per dos els punts mitjos perquè normalitzem
-        v12.normalise();
-        v23.normalise();
-        v31.normalise();
+        v12.normalize();
+        v23.normalize();
+        v31.normalize();
 
         subdivide( v1, v12, v31, depth - 1 );
         subdivide( v2, v23, v12, depth - 1 );
