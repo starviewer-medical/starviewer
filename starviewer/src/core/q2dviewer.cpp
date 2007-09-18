@@ -77,28 +77,28 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0),  m_scalarBar(0), m_rotateFactor(0), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
+ : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0),  m_scalarBar(0), m_rotateFactor(0), m_columns(1), m_rows(1), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
     m_enabledAnnotations = Q2DViewer::AllAnnotation;
     m_lastView = Q2DViewer::Axial;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
     m_overlay = CheckerBoard; // per defecte
+    // CheckerBoard
+    // el nombre de divisions per defecte, serà de 2, per simplificar
+    m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
+
+    // inicialització viewport de les llesques
+    m_slicesViewportExtent[0] = .0;
+    m_slicesViewportExtent[1] = .0;
+    m_slicesViewportExtent[2] = 1.;
+    m_slicesViewportExtent[3] = 1.;
 
     // inicialitzacions d'objectes
     // visor
     m_viewer = vtkImageViewer2::New();
-    // preparem el picker
-    m_picker = vtkPropPicker::New();
-
-    for( int i = 0; i < 4; i++ )
-    {
-        m_patientOrientationTextActor[i] = 0;
-    }
-
-    // CheckerBoard
-    // el nombre de divisions per defecte, serà de 2, per simplificar
-    m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
+    // grayscale pipeline
+    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
 
     setupInteraction();
     m_toolManager = new Q2DViewerToolManager( this );
@@ -111,18 +111,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     addActors();
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-
-    // grayscale pipeline
-    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
-
-    // inicialització viewport de les llesques
-    m_slicesViewportExtent[0]=.0;
-    m_slicesViewportExtent[1]=.0;
-    m_slicesViewportExtent[2]=1.;
-    m_slicesViewportExtent[3]=1.;
-
-    m_rows = 1;
-    m_columns = 1;
 
     m_sliceActorCollection = vtkPropCollection::New();
     m_rendererCollection = vtkRendererCollection::New();
@@ -745,6 +733,7 @@ void Q2DViewer::contextMenuRelease()
 
 void Q2DViewer::setupInteraction()
 {
+    m_picker = vtkPropPicker::New();
     // configurem l'Image Viewer i el qvtkWidget
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
     m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
