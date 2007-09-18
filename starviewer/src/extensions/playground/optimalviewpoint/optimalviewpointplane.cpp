@@ -24,8 +24,10 @@
 
 #include "optimalviewpointplanehelper.h"
 #include "histogram.h"
-
-
+#include "optimalviewpointvolume.h"
+#include "slicer.h"
+#include <vtkPointData.h>
+#include "logging.h"
 
 namespace udg {
 
@@ -130,28 +132,44 @@ void OptimalViewpointPlane::update()
     m_window->setMinimumSize( m_size, m_size );
     m_window->setMaximumSize( m_size, m_size );
     //m_window->resize( m_size, m_size );
-    m_window->show();
-    m_window->raise();
 
-    vtkWindowToImageFilter * windowToImageFilter = vtkWindowToImageFilter::New();
-    windowToImageFilter->SetInput( m_window->GetRenderWindow() );
-    //windowToImageFilter->Update();
 
-    vtkPNGWriter * pngWriter = vtkPNGWriter::New();
-    pngWriter->SetInput( windowToImageFilter->GetOutput() );
-    pngWriter->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
-    pngWriter->Write();
 
-    windowToImageFilter->Delete();
-    pngWriter->Delete();
 
-    vtkPNGReader * pngReader = vtkPNGReader::New();
-    pngReader->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
-    //pngReader->Update();
-    m_plane->SetInput( pngReader->GetOutput() );
-    pngReader->Delete();
 
-    std::cout << "OVP" << m_id << "::update(): end" << std::endl;
+//     m_window->show();
+//     m_window->raise();
+// 
+//     vtkWindowToImageFilter * windowToImageFilter = vtkWindowToImageFilter::New();
+//     windowToImageFilter->SetInput( m_window->GetRenderWindow() );
+//     //windowToImageFilter->Update();
+// 
+//     vtkPNGWriter * pngWriter = vtkPNGWriter::New();
+//     pngWriter->SetInput( windowToImageFilter->GetOutput() );
+//     pngWriter->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
+//     pngWriter->Write();
+// 
+//     windowToImageFilter->Delete();
+//     pngWriter->Delete();
+// 
+//     vtkPNGReader * pngReader = vtkPNGReader::New();
+//     pngReader->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
+//     //pngReader->Update();
+//     m_plane->SetInput( pngReader->GetOutput() );
+//     pngReader->Delete();
+// 
+//     std::cout << "OVP" << m_id << "::update(): end" << std::endl;
+
+
+    DEBUG_LOG( "start entropy computing" );
+    startEntropyComputing();
+    DEBUG_LOG( QString("cast rays (%1)").arg(m_id) );
+    castRays();
+    DEBUG_LOG( "end entropy computing" );
+    endEntropyComputing();
+
+
+
 }
 
 void OptimalViewpointPlane::hide()
@@ -187,6 +205,19 @@ void OptimalViewpointPlane::startEntropyComputing()
         {
             QMessageBox::warning( 0, "problema amb els raigs", "last values per thread no buit" );
         }
+
+        Slicer slicer( m_id );
+        slicer.setInput( m_volume->getLabeledImage() );
+        slicer.setMatrix( getTransformMatrix() );
+        slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+        slicer.reslice( false, false );
+        m_planeImage = slicer.getReslicedImage(); m_planeImage->Register( 0 );
+        m_planeData = reinterpret_cast< unsigned char * >( m_planeImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+        m_planeDataSize = m_planeImage->GetPointData()->GetScalars()->GetSize();
+        int dimensions[3];
+        m_planeImage->GetDimensions( dimensions );
+        m_numberOfRays = dimensions[0] * dimensions[1];
+        m_rayLength = dimensions[2];
     }
 }
 
@@ -284,6 +315,9 @@ void OptimalViewpointPlane::endEntropyComputing()
         }
         std::cout << std::endl;
         // per comptar els canvis //////////////////////////////////////////////
+
+
+        m_planeImage->Delete();
     }
 }
 
@@ -404,6 +438,34 @@ void OptimalViewpointPlane::setNumberOfThreads( unsigned char numberOfThreads )
 vtkMatrix4x4 * OptimalViewpointPlane::getTransformMatrix()
 {
     return m_plane->GetMatrix();
+}
+
+
+void OptimalViewpointPlane::setVolume( OptimalViewpointVolume * volume )
+{
+    m_volume = volume;
+}
+
+
+void OptimalViewpointPlane::castRays()
+{
+    if ( m_compute && m_computing )
+    {
+        for ( unsigned int i = 0; i < m_numberOfRays; i++ ) // iterem sobre els raigs
+        {
+//             DEBUG_LOG( QString("i = %1").arg(i) );
+            for ( unsigned int j = 0; j < m_rayLength; j++ )    // iterem sobre el raig actual
+            {
+//                 DEBUG_LOG( QString("j = %1").arg(j) );
+                unsigned char value = m_planeData[i + j * m_numberOfRays];
+//                 if ( value == 255 ) value = 0;
+                if ( value != 255 )
+                    compute( 0, value );
+            }
+
+            endLBlock( 0 );
+        }
+    }
 }
 
 

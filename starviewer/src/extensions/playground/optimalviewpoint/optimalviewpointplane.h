@@ -24,6 +24,7 @@
 
 class vtkCamera;
 class vtkImageActor;
+class vtkImageData;
 class vtkMatrix4x4;
 class vtkRenderer;
 
@@ -37,6 +38,7 @@ namespace udg {
 
 class Histogram;
 class OptimalViewpointPlaneHelper;
+class OptimalViewpointVolume;
 
 
 /**
@@ -94,6 +96,8 @@ public:
 
     vtkMatrix4x4 * getTransformMatrix();
 
+    void setVolume( OptimalViewpointVolume * volume );
+
 
 
 public slots:
@@ -103,6 +107,11 @@ public slots:
     void endLBlock( int threadId );
 
 private:
+
+    void castRays();
+
+
+
 
     unsigned short m_id;
     unsigned short m_size;
@@ -150,6 +159,13 @@ private:
 
 
     unsigned char m_numberOfThreads;
+
+    OptimalViewpointVolume * m_volume;
+    vtkImageData * m_planeImage;
+    unsigned char * m_planeData;
+    unsigned int m_planeDataSize;
+    unsigned int m_numberOfRays;
+    unsigned short m_rayLength;
 
 
 
