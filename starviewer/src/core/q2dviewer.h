@@ -327,8 +327,13 @@ protected:
     virtual void resizeEvent( QResizeEvent* resize );
 
 private:
-    /// Refresca les anotacions que s'han de veure i les que no \TODO no fa res
-    void updateAnnotations();
+    /// Recorre tots els renderers per actualitzar les annotacions de llesca
+    void updateSliceAnnotation();
+
+    /// Refresca els valors de les annotacions de llesca. Si els valors referents
+    /// a les fases són < 2 no es printarà informació de fases
+    /// li proporcionem també el corner annotation sobre el qual s'aplica
+    void updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0 );
 
     /// inicialitza les annotacions de texte
     void initTextAnnotations();
