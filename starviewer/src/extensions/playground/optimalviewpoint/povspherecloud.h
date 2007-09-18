@@ -13,10 +13,10 @@
 #include <QVector>
 
 
-class Vector3;
-
-
 namespace udg {
+
+
+class Vector3;
 
 
 /**
