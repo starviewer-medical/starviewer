@@ -37,18 +37,6 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
     //ara no importa el que continguin, perquè no s'han d'utilitzar encara.
     m_selectedDistanceToolData = new DistanceToolData( m_distanceStartPosition, m_distanceStartPosition );
     m_selectedDistanceRepresentation = new DistanceRepresentation( m_selectedDistanceToolData );
-
-    if( m_2DViewer )
-    {
-        m_currentSlice = m_2DViewer->getCurrentSlice();
-        m_lastView = m_2DViewer->getView();
-    }
-    else
-    {
-        DEBUG_LOG( "El viewer proporcionat és NUL! ");
-        m_currentSlice = 0;
-        m_lastView = 0;
-    }
 }
 
 DistanceTool::~DistanceTool()
