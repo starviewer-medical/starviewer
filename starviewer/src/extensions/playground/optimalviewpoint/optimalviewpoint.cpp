@@ -226,6 +226,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                          this, SLOT( newResults() ) );
                 connect( (*m_planes)[i], SIGNAL( goingToRecompute() ),
                          m_volume, SLOT( setComputing() ) );
+
+                (*m_planes)[i]->setVolume( m_volume );
             }
 
 //             m_renderer->RemoveViewProp( m_volume->getMainVolume() );

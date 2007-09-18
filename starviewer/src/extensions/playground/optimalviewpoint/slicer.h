@@ -59,7 +59,7 @@ public:
     /// Assigna l'espaiat de la imatge de sortida.
     void setSpacing( double xSpacing, double ySpacing, double zSpacing );
     /// Aplica el reslice per generar la nova imatge.
-    void reslice();
+    void reslice( bool saveMhd = true, bool doClip = true );
 
     /// Estableix si s'ha de llegir l'extent des d'un fitxer (sinó, es calcula sobre les dades)
     void setReadExtentFromFile( bool readExtentFromFile );
@@ -80,6 +80,8 @@ public:
     void method1B_0( double threshold );
     /// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
     void method1B( double threshold );
+
+    vtkImageData * getReslicedImage() const { return m_reslicedImage; }
 
 private:
 

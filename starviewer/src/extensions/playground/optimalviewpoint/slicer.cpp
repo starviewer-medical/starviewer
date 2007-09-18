@@ -74,7 +74,7 @@ void Slicer::setSpacing( double xSpacing, double ySpacing, double zSpacing )
 }
 
 
-void Slicer::reslice()
+void Slicer::reslice( bool saveMhd, bool doClip )
 {
     m_input->UpdateInformation();
 
@@ -146,33 +146,36 @@ void Slicer::reslice()
     vtkImageClip * clip = vtkImageClip::New();
     clip->SetInput( reslice->GetOutput() );
     clip->SetOutputWholeExtent( minX, maxX, minY, maxY, minZ, maxZ );
-    clip->ClipDataOn();
+    if ( doClip ) clip->ClipDataOn();
     clip->Update();
 
-    // Guardar la nova imatge en un fitxer
-    vtkImageData * clipped = clip->GetOutput();
-    unsigned char * clippedData = reinterpret_cast< unsigned char * >( clipped->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    int size = clipped->GetPointData()->GetScalars()->GetSize();
-    QFile outFile( QDir::tempPath().append( QString( "/resliced%1.raw" ).arg( static_cast< short >( m_id ) ) ) );
-    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    if ( saveMhd )
     {
-        QDataStream out( &outFile );
-        for ( int i = 0; i < size; i++ )
-            out << clippedData[i];
-        outFile.close();
-    }
-    QFile outFileMhd( QDir::tempPath().append( QString( "/resliced%1.mhd" ).arg( static_cast< short >( m_id ) ) ) );
-    if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        QTextStream out( &outFileMhd );
-        out << "NDims = 3\n";
-        int dimensions[3];
-        clipped->GetDimensions( dimensions );
-        out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
-        out << "ElementSpacing = " << m_xSpacing << " " << m_ySpacing << " " << m_zSpacing << "\n";
-        out << "ElementType = MET_UCHAR\n";
-        out << "ElementDataFile = resliced" << static_cast< short >( m_id ) << ".raw";
-        outFileMhd.close();
+        // Guardar la nova imatge en un fitxer
+        vtkImageData * clipped = clip->GetOutput();
+        unsigned char * clippedData = reinterpret_cast< unsigned char * >( clipped->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+        int size = clipped->GetPointData()->GetScalars()->GetSize();
+        QFile outFile( QDir::tempPath().append( QString( "/resliced%1.raw" ).arg( static_cast< short >( m_id ) ) ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QDataStream out( &outFile );
+            for ( int i = 0; i < size; i++ )
+                out << clippedData[i];
+            outFile.close();
+        }
+        QFile outFileMhd( QDir::tempPath().append( QString( "/resliced%1.mhd" ).arg( static_cast< short >( m_id ) ) ) );
+        if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFileMhd );
+            out << "NDims = 3\n";
+            int dimensions[3];
+            clipped->GetDimensions( dimensions );
+            out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+            out << "ElementSpacing = " << m_xSpacing << " " << m_ySpacing << " " << m_zSpacing << "\n";
+            out << "ElementType = MET_UCHAR\n";
+            out << "ElementDataFile = resliced" << static_cast< short >( m_id ) << ".raw";
+            outFileMhd.close();
+        }
     }
 
     // Informació sobre la nova imatge
