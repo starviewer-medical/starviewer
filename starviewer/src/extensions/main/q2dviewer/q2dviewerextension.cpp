@@ -465,12 +465,12 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
     if( state == Qt::Unchecked )
     {
         newViewer->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
-        newViewer->getViewer()->updateInformation();
+        newViewer->getViewer()->updateAnnotationsInformation();
     }
     else if( state == Qt::Checked )
     {
         newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
-        newViewer->getViewer()->updateInformation();
+        newViewer->getViewer()->updateAnnotationsInformation();
     }
 
     return newViewer;
@@ -731,7 +731,7 @@ void Q2DViewerExtension::showInformation( int state )
         for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
         {
             m_vectorViewers.value( numViewer )->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
-            m_vectorViewers.value( numViewer )->getViewer()->updateInformation();
+            m_vectorViewers.value( numViewer )->getViewer()->updateAnnotationsInformation();
         }
     }
     else if( state == Qt::Checked )
@@ -739,7 +739,7 @@ void Q2DViewerExtension::showInformation( int state )
         for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
         {
             m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
-            m_vectorViewers.value( numViewer )->getViewer()->updateInformation();
+            m_vectorViewers.value( numViewer )->getViewer()->updateAnnotationsInformation();
         }
     }
 }
