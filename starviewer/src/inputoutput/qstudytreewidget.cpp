@@ -183,7 +183,7 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     item->setText( 7 , study->getStudyTime() );
     //item->setText( 7 , formatHour( study->getStudyTime() ) );
 
-    if ( study->getInstitutionName() == "" ) //si la informació ve buida l'anem a buscar a la bdd local
+    if ( study->getInstitutionName().isEmpty() ) //si la informació ve buida l'anem a buscar a la bdd local
     {
         if ( m_oldPacsAETitle != study->getPacsAETitle() ) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
         {//si es un pacs diferent busquem la informacio
