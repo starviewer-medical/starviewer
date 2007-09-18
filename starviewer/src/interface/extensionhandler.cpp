@@ -27,6 +27,7 @@
 // PACS --------------------------------------------
 #include "queryscreen.h"
 #include "patientfiller.h"
+#include "patientfillerinput.h"
 
 namespace udg {
 
