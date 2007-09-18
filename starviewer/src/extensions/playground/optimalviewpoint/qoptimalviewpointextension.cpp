@@ -84,19 +84,6 @@ void QOptimalViewpointExtension::doSegmentation()
 
 void QOptimalViewpointExtension::execute()
 {
-    m_method->setShade( m_parameters->getShade() );
-    std::cout << "OVD: set shade" << std::endl;
-    m_method->setImageSampleDistance( m_parameters->getVisualizationImageSampleDistance() );
-    std::cout << "OVD: set image sample distance" << std::endl;
-    m_method->setSampleDistance( m_parameters->getVisualizationSampleDistance() );
-    std::cout << "OVD: set sample distance" << std::endl;
-    m_method->setBlockLength( m_parameters->getVisualizationBlockLength() );
-    std::cout << "OVD: set block length" << std::endl;
-    m_method->setTransferFunction( m_parameters->getTransferFunctionObject() );
-    std::cout << "OVD: set transfer function" << std::endl;
-
-
-
     // nous paràmetres
 
     m_method->setOpacityForComputing( m_parameters->getComputeWithOpacity() );
