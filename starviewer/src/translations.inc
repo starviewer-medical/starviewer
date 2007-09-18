@@ -54,4 +54,4 @@ i18n_release.commands = @for dir in $$I18NPROJECTS; do \
 
 QMAKE_EXTRA_TARGETS += i18n_update i18n_release
 PRE_TARGETDEPS += i18n_release
-QMAKE_CLEAN += $$I18NPROJECTS_QMFILES
+QMAKE_CLEAN += $$I18NPROJECTS_QMFILES i18n_release
