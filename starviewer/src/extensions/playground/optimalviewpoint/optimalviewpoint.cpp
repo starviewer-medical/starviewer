@@ -764,6 +764,21 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;
+        case OptimalViewpointParameters::Shade:
+            setShade( m_parameters->getShade() );
+            break;
+        case OptimalViewpointParameters::VisualizationImageSampleDistance:
+            setImageSampleDistance( m_parameters->getVisualizationImageSampleDistance() );
+            break;
+        case OptimalViewpointParameters::VisualizationSampleDistance:
+            setSampleDistance( m_parameters->getVisualizationSampleDistance() );
+            break;
+        case OptimalViewpointParameters::VisualizationBlockLength:
+            setBlockLength( m_parameters->getVisualizationBlockLength() );
+            break;
+        case OptimalViewpointParameters::TransferFunctionObject:
+            setTransferFunction( m_parameters->getTransferFunctionObject() );
+            break;
     }
 }
 
