@@ -143,6 +143,7 @@ public:
 
     /// Retorna una llista de totes les imatges de la sèrie
     QList<Image *> getImages() const;
+    void setImages( QList<Image *> imageSet );
 
     /**
      * Ens diu quantes imatges té aquesta sèrie

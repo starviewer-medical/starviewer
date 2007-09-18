@@ -110,7 +110,8 @@ HEADERS += extensionfactory.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            mhdfileclassifierstep.h \
-           voxelinformationtool.h
+           voxelinformationtool.h \
+           orderimagesfillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -200,7 +201,8 @@ SOURCES += extensionmediator.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            mhdfileclassifierstep.cpp \
-           voxelinformationtool.cpp
+           voxelinformationtool.cpp \
+           orderimagesfillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
