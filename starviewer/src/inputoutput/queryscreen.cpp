@@ -7,14 +7,12 @@
 #include "queryscreen.h"
 
 #include <QMessageBox>
-#include <QDesktopWidget>
 #include <QCloseEvent>
-#include <QDateTime>
 #include <QFileDialog>
 
-#include <QTimer>
-
 #include "processimagesingleton.h"
+#include "serieslistsingleton.h"
+#include "imagelistsingleton.h"
 #include "pacsparameters.h"
 #include "pacsconnection.h"
 #include "multiplequerystudy.h"
@@ -31,7 +29,6 @@
 #include "qpacslist.h"
 #include "starviewersettings.h"
 #include "cachepool.h"
-#include "scalestudy.h"
 #include "queueoperationlist.h"
 #include "operation.h"
 #include "cachelayer.h"
@@ -41,13 +38,10 @@
 #include "cachestudydal.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
-
 #include "qchooseoneobjectdialog.h"
-
 #include "importdicomdir.h"
-
-#include "patient.h"
-#include "study.h"
+#include "patientfillerinput.h"
+#include "qcreatedicomdir.h"
 
 namespace udg {
 
@@ -93,6 +87,22 @@ QueryScreen::QueryScreen( QWidget *parent )
     queryStudy("Cache");
     m_pushButtonAdvancedSearch->hide();
     m_qwidgetAdvancedSearch->hide();
+}
+
+QueryScreen::~QueryScreen()
+{
+    StarviewerSettings settings;
+
+    //guardem la posició en que es troba la pantalla
+    settings.setQueryScreenWindowPositionX( x() );
+    settings.setQueryScreenWindowPositionY( y() );
+
+    //guardem les dimensions de la pantalla
+    settings.setQueryScreenWindowHeight( height() );
+    settings.setQueryScreenWindowWidth( width() );
+
+    //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
+    settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
 }
 
 void QueryScreen::initialize()
@@ -265,23 +275,23 @@ void QueryScreen::setQSplitterState()
 
 void QueryScreen::clearTexts()
 {
-    m_textStudyID->setText( "" );
-    m_textPatientID->setText( "" );
-    m_textPatientName->setText( "" );
-    m_textAccessionNumber->setText( "" );
+    m_textStudyID->clear();
+    m_textPatientID->clear();
+    m_textPatientName->clear();
+    m_textAccessionNumber->clear();
     m_checkTo->setChecked( false );
     m_checkFrom->setChecked( false );
-    m_textReferringPhysiciansName->setText( "" );
-    m_textStudyUID->setText( "" );
-    m_textSeriesUID->setText( "" );
-    m_textRequestedProcedureID->setText( "" );
-    m_textScheduledProcedureStepID->setText( "" );
-    m_textSOPInstanceUID->setText( "" );
-    m_textInstanceNumber->setText( "" );
-    m_textPPStartDate->setText( "" );
-    m_textPPStartTime->setText( "" );
-    m_textSeriesNumber->setText( "" );
-    m_textStudyModality->setText( "" );
+    m_textReferringPhysiciansName->clear();
+    m_textStudyUID->clear();
+    m_textSeriesUID->clear();
+    m_textRequestedProcedureID->clear();
+    m_textScheduledProcedureStepID->clear();
+    m_textSOPInstanceUID->clear();
+    m_textInstanceNumber->clear();
+    m_textPPStartDate->clear();
+    m_textPPStartTime->clear();
+    m_textSeriesNumber->clear();
+    m_textStudyModality->clear();
 
     clearCheckedModality();
 
@@ -321,7 +331,7 @@ void QueryScreen::clearCheckedModality()
     m_checkUS->setChecked( false );
     m_checkXA->setChecked( false );
 
-    m_textOtherModality->setText( "" );
+    m_textOtherModality->clear();
     m_textOtherModality->setEnabled( false );
 }
 
@@ -342,19 +352,19 @@ void QueryScreen::checkedSeriesModality()
         m_checkXA->isChecked() ||
         m_checkAll->isChecked() )
     {
-        m_textOtherModality->setText( "" );
+        m_textOtherModality->clear();
         m_textOtherModality->setEnabled( false );
     }
     else
     {
         m_textOtherModality->setEnabled( true );
-        m_textOtherModality->setText( "" );
+        m_textOtherModality->clear();
     }
 }
 
 void QueryScreen::textOtherModalityEdited()
 {
-    if ( m_textOtherModality->text() == "")
+    if ( m_textOtherModality->text().isEmpty() )
     {
         clearCheckedModality();
     }
@@ -647,14 +657,12 @@ void QueryScreen::searchSeries( QString studyUID , QString pacsAETitle )
     switch ( m_tab->currentIndex() )
     {
         case 0 : // si estem a la pestanya de la cache
-//             QuerySeriesCache( studyUID );
             querySeries( studyUID, "Cache" );
             break;
         case 1 :  //si estem la pestanya del PACS fem query al Pacs
             querySeriesPacs( studyUID , pacsAETitle , true );
             break;
         case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
-//             querySeriesDicomdir( studyUID );
             querySeries( studyUID, "DICOMDIR" );
             break;
     }
@@ -734,58 +742,6 @@ void QueryScreen::querySeriesPacs( QString studyUID , QString pacsAETitle , bool
     if ( show ) m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
 }
 
-// void QueryScreen::QuerySeriesCache( QString studyUID )
-// {
-//     DICOMSeries serie;
-//     CacheSeriesDAL cacheSeriesDAL;
-//     CacheImageDAL cacheImageDAL;
-//     int imagesNumber;
-//     Status state;
-//     DicomMask mask;
-//
-//     INFO_LOG( "Cerca de sèries a la caché de l'estudi " + studyUID );
-//
-//     seriesList.clear();//preparem la llista de series
-//
-//     //preparem la mascara i cerquem les series a la cache
-//     mask.setStudyUID( studyUID );
-//     state=cacheSeriesDAL.querySeries( mask , seriesList );
-//
-//     if ( !state.good() )
-//     {
-//         databaseError( &state );
-//         return;
-//     }
-//
-//     seriesList.firstSeries();
-//     if ( seriesList.end() )
-//     {
-//         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
-//         return;
-//     }
-//
-//     seriesList.firstSeries();
-//     m_seriesListWidgetCache->clear();
-//
-//     while ( !seriesList.end() )
-//     {
-//         serie= seriesList.getSeries();
-//
-//         //preparem per fer la cerca d'imatges
-//         mask.setSeriesUID( serie.getSeriesUID() );
-//
-//         state = cacheImageDAL.countImageNumber( mask , imagesNumber );
-//         serie.setImageNumber( imagesNumber );
-//         if ( !state.good() )
-//         {
-//             databaseError( &state );
-//             return;
-//         }
-//         m_studyTreeWidgetCache->insertSeries( &serie );//inserim la informació de les imatges al formulari
-//         seriesList.nextSeries();
-//     }
-// }
-
 void QueryScreen::querySeries( QString studyUID, QString source )
 {
     DICOMSeries serie;
@@ -851,25 +807,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
     else if( source == "DICOMDIR" )
         m_studyTreeWidgetDicomdir->insertSeriesList( &seriesList );//inserim la informació de la sèrie al llistat
 }
-/*
-void QueryScreen::querySeriesDicomdir( QString studyUID )
-{
-    SeriesList seriesList;
 
-    m_readDicomdir.readSeries( studyUID , "" , seriesList ); //"" pq no busquem cap serie en concret
-
-    INFO_LOG( "Cerca de sèries a la caché de l'estudi " + studyUID );
-
-    seriesList.firstSeries();
-    if ( seriesList.end() )
-    {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
-        return;
-    }
-
-    m_studyTreeWidgetDicomdir->insertSeriesList( &seriesList );//inserim la informació de la sèrie al llistat
-}
-*/
 void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString AETitlePACS )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
@@ -930,15 +868,15 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
 void QueryScreen::retrieve()
 {
-    switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-				      tr( "Are you sure you want to retrieve this Study ?" ) ,
-				      tr( "&Yes" ) , tr( "&No" ) ,
-				      0, 1 ) )
-    {
-    case 0:
+//     switch( QMessageBox::information( this , tr( "Starviewer" ) ,
+// 				      tr( "Are you sure you want to retrieve this Study ?" ) ,
+// 				      tr( "&Yes" ) , tr( "&No" ) ,
+// 				      0, 1 ) )
+//     {
+//     case 0:
         retrievePacs( false );
-        break;
-    }
+//         break;
+//     }
 }
 
 void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source )
@@ -991,7 +929,7 @@ void QueryScreen::retrievePacs( bool view )
 
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
 
-    if ( m_studyTreeWidgetPacs->getSelectedStudyUID() == "" )
+    if ( m_studyTreeWidgetPacs->getSelectedStudyUID().isEmpty() )
     {
         QApplication::restoreOverrideCursor();
         if ( view)
@@ -1038,9 +976,11 @@ void QueryScreen::retrievePacs( bool view )
     }
 
     mask.setStudyUID( studyUID );//definim la màscara per descarregar l'estudi
-    if ( m_studyTreeWidgetPacs->getSelectedSeriesUID() != "") mask.setSeriesUID( m_studyTreeWidgetPacs->getSelectedSeriesUID() );
+    if ( !m_studyTreeWidgetPacs->getSelectedSeriesUID().isEmpty() )
+        mask.setSeriesUID( m_studyTreeWidgetPacs->getSelectedSeriesUID() );
 
-    if ( m_studyTreeWidgetPacs->getSelectedImageUID() != "") mask.setSOPInstanceUID(  m_studyTreeWidgetPacs->getSelectedImageUID() );
+    if ( !m_studyTreeWidgetPacs->getSelectedImageUID().isEmpty() )
+        mask.setSOPInstanceUID(  m_studyTreeWidgetPacs->getSelectedImageUID() );
 
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
     state = pacsListDB.queryPacs( &pacs , pacsAETitle );
@@ -1147,15 +1087,15 @@ void QueryScreen::view()
             retrieve( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
             break;
         case 1 :
-            switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-                        tr( "Are you sure you want to view this Study ?" ) ,
-                        tr( "&Yes" ) , tr( "&No" ) ,
-                        0 , 1 ) )
-            {
-                case 0:
+//             switch( QMessageBox::information( this , tr( "Starviewer" ) ,
+//                         tr( "Are you sure you want to view this Study ?" ) ,
+//                         tr( "&Yes" ) , tr( "&No" ) ,
+//                         0 , 1 ) )
+//             {
+//                 case 0:
                     retrievePacs( true );
-                    break;
-            }
+//                     break;
+//             }
            break;
         case 2 :
             retrieve( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
@@ -1230,18 +1170,18 @@ void QueryScreen::deleteStudyCache()
 
     studyUID = m_studyTreeWidgetCache->getSelectedStudyUID();
 
-    if ( studyUID == "" )
+    if ( studyUID.isEmpty() )
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select a study to delete" ) );
         return;
     }
 
-    switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-				      tr( "Are you sure you want to delete this Study ?" ) ,
-				      tr( "&Yes" ) , tr( "&No" ) ,
-				      0, 1 ) )
-    {
-        case 0:
+//     switch( QMessageBox::information( this , tr( "Starviewer" ) ,
+// 				      tr( "Are you sure you want to delete this Study ?" ) ,
+// 				      tr( "&Yes" ) , tr( "&No" ) ,
+// 				      0, 1 ) )
+//     {
+//         case 0:
             INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
 
             state = cacheStudyDAL.delStudy( studyUID );
@@ -1255,7 +1195,7 @@ void QueryScreen::deleteStudyCache()
             {
                 databaseError( &state );
             }
-    }
+//     }
 }
 
 void QueryScreen::studyRetrieveFinished( QString studyUID )
@@ -1758,100 +1698,6 @@ void QueryScreen::databaseError(Status *state)
                         text.append(code);
         }
         QMessageBox::critical( this, tr("Starviewer"),text);
-    }
-}
-
-QueryScreen::~QueryScreen()
-{
-    StarviewerSettings settings;
-
-    //guardem la posició en que es troba la pantalla
-    settings.setQueryScreenWindowPositionX( x() );
-    settings.setQueryScreenWindowPositionY( y() );
-
-    //guardem les dimensions de la pantalla
-    settings.setQueryScreenWindowHeight( height() );
-    settings.setQueryScreenWindowWidth( width() );
-
-    //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
-    settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
-}
-
-void QueryScreen::emitViewSignal(StudyVolum study)
-{
-    QStringList imageSupportedModalities;
-    QStringList othersSupportedModalities;
-
-    // \TODO Caldria especificar, exactament, totes les modalitats que es suporten del totxo 03, C.7.3.1.1.1 de l'especificació DICOM
-    imageSupportedModalities << "CT" << "CR" << "MR" << "ES" << "MG" << "OT" << "US" << "NM" << "RF" << "XA" << "DT" << "SC" << "DX" << "PT";
-    othersSupportedModalities << "KO" << "PR";
-
-    SeriesVolum serie;
-    bool found = false;
-    int i = 0;
-    while( i < study.getNumberOfSeries() && !found )
-    {
-        if ( study.getDefaultSeriesUID() == study.getSeriesVolum(i).getSeriesUID() )
-        {
-            found = true;
-            serie = study.getSeriesVolum(i);
-        }
-        i++;
-    }
-    if( !found )
-    {
-        WARN_LOG("La DefaultSeriesUID no es trobava en el volume, s'agafa la primera sèrie");
-        //si no l'hem trobat per defecte mostrarem la primera serie
-        serie = study.getSeriesVolum(0);
-        return;
-    }
-
-    QString modality = serie.getSeriesModality();
-    INFO_LOG( "S'ha escollit obrir del QueryScreen una sèrie de la modalitat [" + modality + "]" );
-
-    if ( othersSupportedModalities.contains( modality ) )
-    {
-        QStringList filenames = serie.getImagesPathList();
-
-        if( filenames.empty() )
-        {
-            ERROR_LOG("La llista de noms de fitxer per carregar és buida");
-            return;
-        }
-
-        QString filename;
-        if( filenames.size() > 1 )
-        {
-            INFO_LOG("La llista de noms de fitxer per carregar té més d'una sèrie/imatge");
-
-            QChooseOneObjectDialog dialog(this);
-            dialog.setObjectsList(filenames);
-            dialog.exec();
-            filename = dialog.getChoosed();
-            if(filename.isEmpty())
-            {
-                ERROR_LOG("No s'ha seleccionat cap filename de la llista!");
-                return;
-            }
-        }
-        else
-        {
-            //Extraiem el nom de l'Ãºnic fitxer de la Ãºnica sÃ¨rie que hi hauria d'haver
-            filename = filenames.at(0);
-        }
-
-        INFO_LOG( "S'obrirà, concretament, el fitxer " + filename );
-
-        if(modality == "KO")
-                emit viewKeyImageNote(filename);
-        else if(modality == "PR")
-                emit viewPresentationState(filename);
-    }
-    // \TODO hem de fer un tractament especialitzat de cada tipu de modalitat si cal
-    else /*if ( imageSupportedModalities.contains( modality ) ) */
-    {
-        INFO_LOG("Fem un viewStudy");
-        emit viewStudy(study);
     }
 }
 
