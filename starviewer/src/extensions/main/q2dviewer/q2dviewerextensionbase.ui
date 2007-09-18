@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>901</width>
+    <width>988</width>
     <height>391</height>
    </rect>
   </property>
@@ -390,6 +390,16 @@
           <bool>false</bool>
          </property>
          <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="m_volumeInformation" >
+         <property name="text" >
+          <string>Information</string>
+         </property>
+         <property name="checked" >
           <bool>true</bool>
          </property>
         </widget>

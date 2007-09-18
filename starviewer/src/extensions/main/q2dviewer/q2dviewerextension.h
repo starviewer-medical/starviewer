@@ -89,6 +89,9 @@ public slots:
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showInteractiveImageTable();
 
+    /// Mostrar la informació del volum a cada visualitzador o no.
+    void showInformation( int state );
+
 private slots:
     /// activem o desactivem el presentation state
     void enablePresentationState( bool enable );
