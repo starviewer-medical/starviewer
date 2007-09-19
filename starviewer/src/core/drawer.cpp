@@ -1359,7 +1359,7 @@ Drawer::PrimitiveActorPair* Drawer::getNearestPrimitivePair( double point[3] )
             p2[coordinateToZero] = 0.0;
             distance = vtkLine::DistanceToLine( point , p1 , p2 );
 
-            if ( ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) ) || ( distance < 20.0 )  )
+            if ( ( ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) ) || ( distance < 20.0 ) ) && ( isPointIncludedInLineBounds( point, p1, p2 ) ) )
             {
                     minDistanceLine = distance;
                     nearestPair = pair;
@@ -1367,6 +1367,63 @@ Drawer::PrimitiveActorPair* Drawer::getNearestPrimitivePair( double point[3] )
         }
     }
     return nearestPair;
+}
+
+bool Drawer::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
+{
+    double x1, x2, y1, y2;
+    int coordinate1, coordinate2;
+    bool correctPoint = false;
+    double range = 5.;
+    
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            coordinate1 = 0;
+            coordinate2 = 1;
+            break;
+        case Q2DViewer::Sagittal:
+            coordinate1 = 2;
+            coordinate2 = 1;
+            break;
+        case Q2DViewer::Coronal:
+            coordinate1 = 0;
+            coordinate2 = 2;
+            break;
+        default:
+            ERROR_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
+            break;
+    }
+    
+    //posem a _1 el valor més petit i a _2 el més gran 
+    if ( lineP1[coordinate1] <= lineP2[coordinate1] )
+    {
+        x1 = lineP1[coordinate1];
+        x2 = lineP2[coordinate1];
+    }
+    else
+    {
+        x2 = lineP1[coordinate1];
+        x1 = lineP2[coordinate1];
+    }
+    
+    if ( lineP1[coordinate2] <= lineP2[coordinate2] )
+    {
+        y1 = lineP1[coordinate2];
+        y2 = lineP2[coordinate2];
+    }
+    else
+    {
+        y2 = lineP1[coordinate2];
+        y1 = lineP2[coordinate2];
+    }
+    
+    if ( ( point[coordinate1] >= ( x1 - range ) ) && ( point[coordinate1] <= ( x2 + range ) ) && ( point[coordinate2] >= ( y1 - range ) ) && ( point[coordinate2] <= ( y2 + range ) ) )
+    {
+        correctPoint = true;
+    }
+    
+    return( correctPoint );
 }
 
 void Drawer::addSetOfPrimitives( Representation *representation )
