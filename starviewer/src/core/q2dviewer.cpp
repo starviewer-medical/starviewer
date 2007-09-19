@@ -452,7 +452,8 @@ void Q2DViewer::setPresentationLUT( vtkWindowLevelLookupTable *lut )
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     //\TODO Cal comprovar que els flips siguin correctes
-    QString orientation = m_mainVolume->getImages().at(m_currentSlice)->getPatientOrientation() ;
+    int index = (m_lastView == Axial) ? m_currentSlice : 0;
+    QString orientation = m_mainVolume->getImages().at(index)->getPatientOrientation();
     QStringList list = orientation.split(",");
 
     if( list.size() > 1 )
@@ -1213,7 +1214,7 @@ void Q2DViewer::setSlice( int value )
         }
     }
     this->updateDisplayExtent();
-
+    mapOrientationStringToAnnotation();
     emit sliceChanged( m_currentSlice );
     this->refresh();
 }
