@@ -18,7 +18,6 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkPolyDataMapper2D.h>
 #include <math.h>
 
 namespace udg {
@@ -29,6 +28,9 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
     m_state = NONE;
     m_2DViewer = viewer;
     m_isCtrlPressed = false;
+    
+    m_annotationMode = "undefined";
+    m_lastLeftButtonAction = "undefined";
     
     //de moment no hem recuperat dades correctes del Drawer
     m_correctData = false;
@@ -55,6 +57,7 @@ void DistanceTool::handleEvent( unsigned long eventID )
     {
         //click amb el botó esquerre: anotació de distància
         case vtkCommand::LeftButtonPressEvent:
+        m_lastLeftButtonAction = "pressed";
             if ( !m_2DViewer->getDrawer()->hasSelectedSet() ) //cas en que no hi ha cap conjunt de primitives (distància) seleccionat.
             {
                 if ( m_isCtrlPressed )
@@ -69,9 +72,10 @@ void DistanceTool::handleEvent( unsigned long eventID )
                 {
                     this->startDistanceAnnotation();
                 }
-                else if ( m_state == ANNOTATING )
+                else if ( m_state == ANNOTATING && m_annotationMode == "doubleClickAnnotation" )
                 {
                     this->endDistanceAnnotation();
+                    m_annotationMode = "undefined";
                 }
             }
             else
@@ -109,9 +113,28 @@ void DistanceTool::handleEvent( unsigned long eventID )
                 }
             }
             break;
-
+            
+        case vtkCommand::LeftButtonReleaseEvent:    
+            m_lastLeftButtonAction = "released";
+            
+             switch ( m_state )
+            {
+                case ANNOTATING:
+                    if ( m_annotationMode == "releasedAnnotation" )
+                    {
+                         this->endDistanceAnnotation();
+                         m_annotationMode = "undefined";                               
+                    }
+                break;
+            }
+        break;
+        
         case vtkCommand::MouseMoveEvent:
-
+            if ( m_lastLeftButtonAction == "pressed" )
+                m_annotationMode = "releasedAnnotation";
+            else
+                m_annotationMode = "doubleClickAnnotation";
+    
             switch ( m_state )
             {
                 case NONE:
