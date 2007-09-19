@@ -57,6 +57,7 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
+        <file>images/preferences.png</file>
         <file>../interface/interface_ca_ES.qm</file>
         <file>../interface/interface_en_GB.qm</file>
         <file>../interface/interface_es_ES.qm</file>

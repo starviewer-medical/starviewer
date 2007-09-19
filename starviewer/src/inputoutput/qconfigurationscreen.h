@@ -15,7 +15,7 @@ class Status;
 /** Interfície que permet configurar els paràmetres del pacs i de la caché
 @author marc
 */
-class QConfigurationScreen : public QDialog , private ::Ui::QConfigurationScreenBase
+class QConfigurationScreen : public QWidget , private ::Ui::QConfigurationScreenBase
 {
 Q_OBJECT
 

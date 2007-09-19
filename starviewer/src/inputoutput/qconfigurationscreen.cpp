@@ -38,7 +38,7 @@ namespace udg {
 
 
 QConfigurationScreen::QConfigurationScreen( QWidget *parent )
- : QDialog( parent )
+ : QWidget( parent )
 {
     setupUi( this );
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats

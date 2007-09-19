@@ -90,9 +90,6 @@ public slots:
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
     void view();
 
-    ///Mostran la interficia QConfigurationScreen
-    void config();
-
     ///Mostra la llista de Pacs, o l'amaga
     void showPacsList();
 

@@ -135,7 +135,6 @@ void QueryScreen::deleteOldStudies()
 void QueryScreen::connectSignalsAndSlots()
 {
     //connectem els butons
-    connect( m_buttonConfig , SIGNAL( clicked() ) , this , SLOT( config() ) );
     connect( m_buttonSearch , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
     connect( m_buttonToday , SIGNAL( clicked() ) , this , SLOT( searchTodayStudy() ) );
     connect( m_buttonYesterday , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
@@ -1248,20 +1247,6 @@ void QueryScreen::showCreateDicomdirScreen()
     //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra
     m_qcreateDicomdir->setVisible( false );
     m_qcreateDicomdir->setVisible( true );
-}
-
-void QueryScreen::config()
-{
-    udg::QConfigurationScreen *configScreen = new udg::QConfigurationScreen;
-
-    INFO_LOG( "S'obre la finestra de configuració" );
-
-    connect( configScreen , SIGNAL(  pacsListChanged() ) , qPacsList , SLOT(  refresh()  ) );
-    connect( configScreen , SIGNAL(  cacheCleared() ) , m_studyTreeWidgetCache , SLOT(  clear() ) );
-    connect( configScreen , SIGNAL(  cacheCleared() ) , m_seriesListWidgetCache , SLOT(  clearSeriesListWidget() ) );
-
-    configScreen->setModal( true );
-    configScreen->show();
 }
 
 void QueryScreen::showPacsList()
