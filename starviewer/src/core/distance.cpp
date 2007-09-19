@@ -37,6 +37,18 @@ void Distance::setPoints( double* first , double* second )
     setSecondPoint( second );
 }
 
+void Distance::setFirstPoint( double* first )
+{ 
+    for ( int i = 0; i < 3; i++ )
+        m_first[i] = first[i]; 
+}
+
+void Distance::setSecondPoint( double* second )
+{ 
+    for ( int i = 0; i < 3; i++ )
+        m_second[i] = second[i]; 
+}
+
 double Distance::getDistance2D()
 {
     double xx = (m_first[0] - m_second[0]);
