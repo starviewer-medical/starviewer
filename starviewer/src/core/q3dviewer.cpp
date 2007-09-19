@@ -115,6 +115,36 @@ vtkInteractorStyle *Q3DViewer::getInteractorStyle()
     return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
 }
 
+void Q3DViewer::setRenderFunction(RenderFunction function)
+{
+    m_renderFunction = function;
+}
+
+void Q3DViewer::setRenderFunctionToRayCasting()
+{
+    m_renderFunction = RayCasting;
+}
+
+void Q3DViewer::setRenderFunctionToMIP3D()
+{
+    m_renderFunction = MIP3D;
+}
+
+void Q3DViewer::setRenderFunctionToIsoSurface()
+{
+    m_renderFunction = IsoSurface;
+}
+
+void Q3DViewer::setRenderFunctionToTexture2D()
+{
+    m_renderFunction = Texture2D;
+}
+
+void Q3DViewer::setRenderFunctionToTexture3D()
+{
+    m_renderFunction = Texture3D;
+}
+
 QString Q3DViewer::getRenderFunctionAsString()
 {
     QString result;

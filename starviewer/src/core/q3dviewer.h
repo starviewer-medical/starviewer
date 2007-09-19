@@ -52,12 +52,12 @@ public:
 
 public slots:
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
-    void setRenderFunction(RenderFunction function){ m_renderFunction = function; };
-    void setRenderFunctionToRayCasting(){ m_renderFunction = RayCasting; };
-    void setRenderFunctionToMIP3D(){ m_renderFunction = MIP3D; };
-    void setRenderFunctionToIsoSurface(){ m_renderFunction = IsoSurface; };
-    void setRenderFunctionToTexture2D(){ m_renderFunction = Texture2D; };
-    void setRenderFunctionToTexture3D(){ m_renderFunction = Texture3D; };
+    void setRenderFunction(RenderFunction function);
+    void setRenderFunctionToRayCasting();
+    void setRenderFunctionToMIP3D();
+    void setRenderFunctionToIsoSurface();
+    void setRenderFunctionToTexture2D();
+    void setRenderFunctionToTexture3D();
 
     /// Reinicia la vista
     void resetViewToAxial();
