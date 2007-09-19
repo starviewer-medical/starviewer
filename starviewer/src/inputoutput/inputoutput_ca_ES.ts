@@ -1326,7 +1326,7 @@ You would have to choose only one.</source>
     <message>
         <location filename="queryscreen.cpp" line="1469"/>
         <source>Not enough space to retrieve studies. Please free space</source>
-        <translation>No hi ha suficiemt espai per descarregar nous estudis. Si us plau allibereu espai</translation>
+        <translation>No hi ha suficient espai per descarregar nous estudis. Si us plau allibereu espai</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="1474"/>
