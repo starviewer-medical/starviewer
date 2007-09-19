@@ -807,6 +807,9 @@ void Q2DViewer::setupInteraction()
 
 void Q2DViewer::setInput( Volume* volume )
 {
+    //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
+    m_drawer->removeAllPrimitives();
+    
     if( volume == 0 )
         return;
     m_mainVolume = volume;
@@ -847,7 +850,6 @@ void Q2DViewer::setInput( Volume* volume )
     {
         DEBUG_LOG( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases ).arg( m_maxSliceValue) );
     }
-
 
     updateRulers();
     updateScalarBar();
