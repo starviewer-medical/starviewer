@@ -132,7 +132,7 @@ private :
      * @param original path original
      * @return path amb '/'
      */
-    QString replaceBarra( QString original );
+    QString backSlashToSlash( QString original );
 };
 
 }
