@@ -9,12 +9,14 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
+#ifndef ITKQTADAPTOR
+#define ITKQTADAPTOR
 
 // \TODO No es fa servir la classe, treure-la!!
 #include <QObject>
@@ -39,9 +41,9 @@ signals:
   void Signal();
 
 public slots:
-  virtual void Slot() {}; 
-  virtual void Slot(int) {}; 
-  virtual void Slot(double) {}; 
+  virtual void Slot() {};
+  virtual void Slot(int) {};
+  virtual void Slot(double) {};
 
 };
 
@@ -51,9 +53,9 @@ public slots:
 template <typename T>
 class QtSlotAdaptor : public QtTranslator
 {
-  typedef  void (T::*TMemberFunctionVoidPointer)(); 
-  typedef  void (T::*TMemberFunctionIntPointer)(int); 
-  typedef  void (T::*TMemberFunctionDoublePointer)(double); 
+  typedef  void (T::*TMemberFunctionVoidPointer)();
+  typedef  void (T::*TMemberFunctionIntPointer)(int);
+  typedef  void (T::*TMemberFunctionDoublePointer)(double);
 
 public:
   QtSlotAdaptor():m_MemberFunctionVoid(0),
@@ -63,7 +65,7 @@ public:
   virtual ~QtSlotAdaptor() {}
 
   /** Specify the callback function. */
-  void SetCallbackFunction(T* object,  
+  void SetCallbackFunction(T* object,
                            TMemberFunctionVoidPointer memberFunction)
     {
       m_This = object;
@@ -71,7 +73,7 @@ public:
     }
 
   /** Specify the callback function. */
-  void SetCallbackFunction(T* object,  
+  void SetCallbackFunction(T* object,
                            TMemberFunctionIntPointer memberFunction)
     {
       m_This = object;
@@ -79,35 +81,35 @@ public:
     }
 
   /** Specify the callback function. */
-  void SetCallbackFunction(T* object,  
+  void SetCallbackFunction(T* object,
                            TMemberFunctionDoublePointer memberFunction)
     {
       m_This = object;
       m_MemberFunctionDouble = memberFunction;
     }
- 
+
   /** Slot to be connected to Qt Signals. */
-  void Slot() 
+  void Slot()
   {
-  if( m_MemberFunctionVoid ) 
+  if( m_MemberFunctionVoid )
     {
     ((*m_This).*(m_MemberFunctionVoid))();
     }
   }
 
   /** Slot to be connected to Qt Signals. */
-  void Slot(int value) 
+  void Slot(int value)
   {
-  if( m_MemberFunctionInt ) 
+  if( m_MemberFunctionInt )
     {
     ((*m_This).*(m_MemberFunctionInt))(value);
     }
   }
 
   /** Slot to be connected to Qt Signals. */
-  void Slot(double value) 
+  void Slot(double value)
   {
-  if( m_MemberFunctionDouble ) 
+  if( m_MemberFunctionDouble )
     {
     ((*m_This).*(m_MemberFunctionDouble))(value);
     }
@@ -121,7 +123,7 @@ protected:
   TMemberFunctionIntPointer     m_MemberFunctionInt;
   TMemberFunctionDoublePointer  m_MemberFunctionDouble;
 
- 
+
 };
 
 
@@ -137,7 +139,7 @@ public:
   QtSignalAdaptor()
     {
     m_Command = CommandType::New();
-    m_Command->SetCallbackFunction( this, & QtSignalAdaptor::EmitSignal );  
+    m_Command->SetCallbackFunction( this, & QtSignalAdaptor::EmitSignal );
     }
 
   virtual ~QtSignalAdaptor() {}
@@ -145,7 +147,7 @@ public:
   CommandType * GetCommand()
     {
     return m_Command;
-    } 
+    }
 
   void EmitSignal()
     {
@@ -160,3 +162,5 @@ private:
 
 
 } // end namespace
+
+#endif
