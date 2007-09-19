@@ -338,7 +338,7 @@ void DistanceTool::answerToKeyEvent()
     char keyChar = m_2DViewer->getInteractor()->GetKeyCode();
     int keyInt = (int)keyChar;
 
-    if ( keyInt == 127 ) //s'ha polsat el Sup
+    if ( keyInt == 127 && m_2DViewer->getDrawer()->hasSelectedSet() ) //s'ha polsat el Sup
     {
         m_2DViewer->getDrawer()->removeSelectedSet();
         m_state = NONE;
