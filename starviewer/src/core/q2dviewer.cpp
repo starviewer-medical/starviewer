@@ -1226,6 +1226,7 @@ void Q2DViewer::setPhase( int value )
 
     m_currentPhase = value;
     this->updateDisplayExtent();
+    this->refresh();
 }
 
 void Q2DViewer::setOverlay( OverlayType overlay )
