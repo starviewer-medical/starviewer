@@ -8,6 +8,7 @@
 #include "volume.h"
 #include "logging.h"
 
+#include "series.h"
 #include <QAction>
 #include <QPalette>
 
@@ -57,12 +58,14 @@ void Q2DViewerWidget::changeViewToAxial()
     if( !m_mainVolume )
         return;
 
+    int phases = m_mainVolume->getSeries()->getNumberOfPhases();
+
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
     m_spinBox->setMinimum( extent[4] );
-    m_spinBox->setMaximum( extent[5] );
-    m_slider->setMaximum( extent[5] );
+    m_spinBox->setMaximum( extent[5] / phases );
+    m_slider->setMaximum( extent[5] / phases);
     m_viewText->setText( tr("XY : Axial") );
     m_2DView->setViewToAxial();
     m_2DView->render();
