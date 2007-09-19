@@ -1026,7 +1026,7 @@
                  </size>
                 </property>
                 <property name="title" >
-                 <string>Advancerd Search</string>
+                 <string>Advanced Search</string>
                 </property>
                 <layout class="QGridLayout" >
                  <property name="margin" >
@@ -1117,12 +1117,12 @@
                       <enum>Qt::Horizontal</enum>
                      </property>
                      <property name="sizeType" >
-                      <enum>QSizePolicy::Preferred</enum>
+                      <enum>QSizePolicy::Expanding</enum>
                      </property>
                      <property name="sizeHint" >
                       <size>
                        <width>40</width>
-                       <height>20</height>
+                       <height>24</height>
                       </size>
                      </property>
                     </spacer>
@@ -1301,10 +1301,13 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>1</height>
+           <width>797</width>
+           <height>16</height>
           </size>
          </property>
         </spacer>

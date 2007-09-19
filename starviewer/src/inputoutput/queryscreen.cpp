@@ -866,7 +866,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     if ( m_imageListSingleton->end() )
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No image match for this series.\n" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this series.\n" ) );
         return;
     }
 
