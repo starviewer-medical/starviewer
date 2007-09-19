@@ -127,6 +127,8 @@ private:
     
     ///ens permet assignar el color de normal a la parella passada per paràmetre
     void setNormalColor( PrimitiveActorPair *pair );
+    
+    bool isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 );
 
 public:
     
