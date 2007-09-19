@@ -22,8 +22,8 @@ public:
     Distance( double* first , double* second );
     ~Distance();
     
-    void setFirstPoint( double* first ){ m_first[0] = first[0], m_first[1] = first[1], m_first[2] = first[2]; };
-    void setSecondPoint( double* second ){ m_second[0] = second[0], m_second[1] = second[1],m_second[2] = second[2]; };
+    void setFirstPoint( double* first );
+    void setSecondPoint( double* second );
     void setPoint( double* point , int n );
     void setPoints( double* first , double* second );
 
