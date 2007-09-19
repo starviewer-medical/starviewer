@@ -14,7 +14,6 @@ namespace udg {
 
 // Fordward Declarations
 class VolumeRepository;
-class Input;
 
 /**
 Mini-aplicació encarregada de permetre carregar un model des del sistema de fitxers al repositori de volums
@@ -45,21 +44,23 @@ signals:
     void selectedFiles( QStringList );
 
 private:
-    /// Directori de treball per fitxers ordinaris
-    QString m_workingDirectory;
-
-    /// Directori de treball per directoris dicom
-    QString m_workingDicomDirectory;
+    /**
+     * Ens retorna la llista d'arxius DICOM agrupables en series d'un directori
+     * @param directory Nom del directori on es troben els arxius
+     * @return La llista de noms de fitxers ordenada
+     */
+    QStringList generateFilenames( QString dirPath );
 
     /// llegeix escriu configuracions
     void readSettings();
     void writeSettings();
 
-    // :::::::::::::::::::::::::::::::::::::::::
-    // Recursos
-    // :::::::::::::::::::::::::::::::::::::::::
-    /// accés a l'entrada de dades -> això hauria de formar part d'una mini-app, per tant és temporal
-    Input *m_inputReader;
+private:
+    /// Directori de treball per fitxers ordinaris
+    QString m_workingDirectory;
+
+    /// Directori de treball per directoris dicom
+    QString m_workingDicomDirectory;
 };
 
 };  //  end  namespace udg

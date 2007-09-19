@@ -29,13 +29,9 @@
 #include "study.h"
 #include "patient.h"
 
-#include "input.h"
-
-//\TODO trobar perquè això és necessari amb les dcmtk
-#define HAVE_CONFIG_H 1
-#include "dcmtk/dcmdata/dcfilefo.h"
-#include "dcmtk/dcmdata/dcdeftag.h"
-#include "dcmtk/dcmimgle/dcmimage.h"
+// extra per INPUT
+#include <QFileInfo>
+#include <QDir>
 
 namespace udg {
 
@@ -67,10 +63,13 @@ void Volume::init()
     m_itkToVtkFilter = ItkToVtkFilterType::New();
     m_vtkToItkFilter = VtkToItkFilterType::New();
     m_dataLoaded = false;
+
+    inputConstructor();
 }
 
 Volume::~Volume()
 {
+    inputDestructor();
 }
 
 Volume::ItkImageTypePointer Volume::getItkData()
@@ -95,20 +94,22 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         QStringList fileList = getInputFiles();
         if( !fileList.isEmpty() )
         {
-            Input *input = new Input;
-            connect( input, SIGNAL( progress(int) ), this, SIGNAL( progress(int) ) );
-            switch( input->readFiles( fileList ) )
-            {
-                case Input::NoError:
-                    this->setData( input->getData()->getVtkData() );
-                    break;
-
-                case Input::InvalidFileName:
-                    break;
-
-                case Input::SizeMismatch:
-                    break;
-            }
+//             Input *input = new Input;
+//             connect( input, SIGNAL( progress(int) ), this, SIGNAL( progress(int) ) );
+//             switch( input->readFiles( fileList ) )
+//             {
+//                 case Volume::NoError:
+//                     this->setData( input->getData()->getVtkData() );
+//
+//                     break;
+//
+//                 case Volume::InvalidFileName:
+//                     break;
+//
+//                 case Volume::SizeMismatch:
+//                     break;
+//             }
+            this->readFiles( fileList );
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader
         if( !m_imageSet.isEmpty() )
@@ -429,6 +430,127 @@ void Volume::loadSlicesWithReaders( int method )
     reader->setBufferPointer( m_imageDataVTK->GetScalarPointer() );
     reader->setSliceByteIncrement( m_imageDataVTK->GetIncrements()[2]*m_imageDataVTK->GetScalarSize() );
     reader->load();
+}
+
+//
+//
+//
+// PART ADAPTADA d'INPUT
+// TODO tot això és temporal, quan es faci la lectura tal i com volem desapareixerà tot aquest codi
+//
+//
+void Volume::inputConstructor()
+{
+    m_reader = ReaderType::New();
+    m_seriesReader = SeriesReaderType::New();
+
+    m_gdcmIO = ImageIOType::New();
+
+    itk::QtSignalAdaptor *m_progressSignalAdaptor = new itk::QtSignalAdaptor;
+    //   Connect the adaptor as an observer of a Filter's event
+    m_seriesReader->AddObserver( itk::ProgressEvent(),  m_progressSignalAdaptor->GetCommand() );
+//
+//  Connect the adaptor's Signal to the Qt Widget Slot
+   connect( m_progressSignalAdaptor, SIGNAL( Signal() ), this, SLOT( slotProgress() ) );
+}
+
+void Volume::slotProgress()
+{
+    emit progress( (int)( m_seriesReader->GetProgress() * 100 ) );
+}
+
+void Volume::inputDestructor()
+{
+//     m_seriesReader->Delete();
+//     m_reader->Delete();
+//     m_gdcmIO->Delete();
+}
+
+int Volume::openFile( QString fileName )
+{
+    ProgressCommand::Pointer observer = ProgressCommand::New();
+    m_reader->AddObserver( itk::ProgressEvent(), observer );
+
+    int errorCode = NoError;
+
+    m_reader->SetFileName( qPrintable(fileName) );
+    emit progress(0);
+    try
+    {
+        m_reader->Update();
+    }
+    catch ( itk::ExceptionObject & e )
+    {
+        ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+                .arg( QFileInfo( fileName ).dir().path() )
+                .arg( e.GetDescription() )
+                );
+        // llegim el missatge d'error per esbrinar de quin error es tracta
+        QString errorMessage( e.GetDescription() );
+        if( errorMessage.contains("Size mismatch") )
+        {
+            errorCode = SizeMismatch;
+        }
+        emit progress( -1 ); // això podria indicar excepció
+    }
+    if ( errorCode == NoError )
+    {
+        this->setData( m_reader->GetOutput() );
+        emit progress( 100 );
+    }
+    return errorCode;
+}
+
+int Volume::readFiles( QStringList filenames )
+{
+    int errorCode = NoError;
+    if( filenames.isEmpty() )
+    {
+        WARN_LOG( "La llista de noms de fitxer per carregar és buida" );
+        errorCode = InvalidFileName;
+        return errorCode;
+    }
+
+    if( filenames.size() > 1 )
+    {
+        // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
+        m_seriesReader->SetImageIO( m_gdcmIO );
+
+        // convertim la QStringList al format std::vector< std::string > que s'esperen les itk
+        std::vector< std::string > stlFilenames;
+        for( int i = 0; i < filenames.size(); i++ )
+        {
+            stlFilenames.push_back( filenames.at(i).toStdString() );
+        }
+
+        m_seriesReader->SetFileNames( stlFilenames );
+
+        emit progress( 0 );
+
+        try
+        {
+            m_seriesReader->Update();
+        }
+        catch ( itk::ExceptionObject & e )
+        {
+            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+                .arg( QFileInfo( filenames.at(0) ).dir().path() )
+                .arg( e.GetDescription() )
+                );
+            errorCode = SizeMismatch;
+            emit progress( -1 ); // això podria indicar excepció
+        }
+        if ( errorCode == NoError )
+        {
+            this->setData( m_seriesReader->GetOutput() );
+            emit progress( 100 );
+        }
+    }
+    else
+    {
+        this->openFile( filenames.at(0) );
+    }
+    return errorCode;
 }
 
 };

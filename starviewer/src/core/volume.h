@@ -13,6 +13,15 @@
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
 #include <QStringList>
 
+// itk - input
+#include <itkImageFileReader.h>
+#include <itkImageSeriesReader.h>
+#include <itkGDCMImageIO.h>
+#include <itkGDCMSeriesFileNames.h>
+#include <itkCommand.h>
+#include <itkSmartPointer.h>
+#include "itkQtAdaptor.h"
+#include "logging.h"
 // FWD declarations
 class vtkImageData;
 
@@ -167,6 +176,85 @@ private:
 
     /// Conjunt d'imatges que composen el volum
     QList<Image *> m_imageSet;
+
+//
+// TOT AIXÒ ESTÀ PER L'ADAPTACIÓ D'INPUT NOMÉS!
+// TODO tot això és temporal, quan es faci la lectura tal i com volem desapareixerà tot aquest codi
+//
+private slots:
+    void slotProgress();
+private:
+    /// Tipus d'error que podem tenir
+    enum { NoError = 1, SizeMismatch, InvalidFileName, UnknownError };
+    void inputConstructor();
+    void inputDestructor();
+    /**
+     * Carrega un volum a partir del nom de fitxer que se li passi
+     * @param fileName
+     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
+     */
+    int openFile( QString fileName );
+
+    /**
+     * Donat un conjunt de fitxers els carrega en una única sèrie/volum
+     * @param filenames
+     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
+     */
+    int readFiles( QStringList filenames );
+
+private:
+    typedef itk::ImageFileReader< ItkImageType >  ReaderType;
+    typedef ReaderType::Pointer    ReaderTypePointer;
+
+    typedef itk::ImageSeriesReader< ItkImageType >     SeriesReaderType;
+    typedef itk::GDCMImageIO                        ImageIOType;
+    typedef itk::GDCMSeriesFileNames                NamesGeneratorType;
+
+    /// El lector de sèries dicom
+    SeriesReaderType::Pointer m_seriesReader;
+
+    /// El lector estàndar de fitxers singulars, normalment servirà per llegir *.mhd's
+    ReaderTypePointer    m_reader;
+
+    /// el lector de DICOM
+    ImageIOType::Pointer m_gdcmIO;
+};
+
+/**
+    Classe auxiliar per monitorejar el progrés de la lectura del fitxer
+*/
+class ProgressCommand : public itk::Command
+{
+public:
+    typedef  ProgressCommand   Self;
+    typedef  itk::Command             Superclass;
+    typedef  itk::SmartPointer<Self>  Pointer;
+    itkNewMacro( Self );
+
+protected:
+    ProgressCommand() {};
+
+public:
+    typedef itk::ImageFileReader< Volume::ItkImageType >  ReaderType;
+    typedef const ReaderType *ReaderTypePointer;
+
+    void Execute(itk::Object *caller, const itk::EventObject & event)
+    {
+        Execute( (const itk::Object *)caller, event);
+    }
+
+    void Execute(const itk::Object * object, const itk::EventObject & event)
+    {
+        ReaderTypePointer m_reader = dynamic_cast< ReaderTypePointer >( object );
+        if( typeid( event ) == typeid( itk::ProgressEvent ) )
+        {
+            DEBUG_LOG( QString("Progressant...%1").arg( m_reader->GetProgress() ) );
+        }
+        else
+        {
+            DEBUG_LOG( QString("No s'ha invocat ProgressEvent") );
+        }
+    }
 };
 
 };  // end namespace udg
