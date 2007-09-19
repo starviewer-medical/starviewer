@@ -9,9 +9,9 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QFileInfo>
-
+// itk
+#include <itkGDCMSeriesFileNames.h> // per generar els noms dels arxius DICOM d'un directori
 // recursos
-#include "input.h"
 #include "logging.h"
 
 namespace udg {
@@ -20,7 +20,6 @@ AppImportFile::AppImportFile(QObject *parent, QString name)
  : QObject( parent )
 {
     this->setObjectName( name );
-    m_inputReader = new udg::Input;
     readSettings();
 }
 
@@ -80,7 +79,7 @@ bool AppImportFile::openDirectory()
     QString directoryName = QFileDialog::getExistingDirectory( 0 , tr("Choose a directory") , m_workingDicomDirectory , QFileDialog::ShowDirsOnly );
     if ( !directoryName.isEmpty() )
     {
-        emit selectedFiles( m_inputReader->generateFilenames( directoryName ) );
+        emit selectedFiles( this->generateFilenames( directoryName ) );
         m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
         writeSettings();
         INFO_LOG( "S'obre el directori: " + directoryName );
@@ -89,6 +88,21 @@ bool AppImportFile::openDirectory()
         ok = false;
 
     return ok;
+}
+
+QStringList AppImportFile::generateFilenames( QString dirPath )
+{
+    //generador dels noms dels fitxers DICOM d'un directori
+    itk::GDCMSeriesFileNames::Pointer namesGenerator;
+    namesGenerator->SetInputDirectory( qPrintable(dirPath) );
+    const std::vector< std::string > &filenames = namesGenerator->GetInputFileNames();
+    // convertim el vector en QStringList
+    QStringList list;
+    for( unsigned int i = 0; i < filenames.size(); i++ )
+    {
+        list += filenames[i].c_str();
+    }
+    return list;
 }
 
 void AppImportFile::readSettings()
