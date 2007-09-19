@@ -46,6 +46,12 @@ void PatientFiller::fill(PatientFillerInput *input)
     fillUntil(input, UntilEndLabel);
 }
 
+// Mètode intern per poder realitzar l'ordenació dels patientfiller
+bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFillerStep *s2)
+{
+    return (*s1) < (*s2);
+}
+
 void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
 {
     QList<PatientFillerStep*> processedFillerSteps;
@@ -58,6 +64,7 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
 
     emit progress(0);
     qApp->processEvents();
+
     while (!input->getLabels().contains(stopLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
     {
         QList<PatientFillerStep*> fillerStepsToProcess;
@@ -78,7 +85,7 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
         }
         candidatesFillerSteps = newCandidatesFillerSteps;
 
-        qSort(fillerStepsToProcess); // Ordenem segons la seva prioritat
+        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst); // Ordenem segons la seva prioritat
 
         foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
         {
