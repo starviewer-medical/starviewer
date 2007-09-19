@@ -809,7 +809,7 @@ void Q2DViewer::setInput( Volume* volume )
 {
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     m_drawer->removeAllPrimitives();
-    
+
     if( volume == 0 )
         return;
     m_mainVolume = volume;
@@ -2003,7 +2003,6 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
     {
         vtkCornerAnnotation *sliceAnnotation;
         vtkRenderer *renderer;
-        vtkAxisActor2D *ruler;
         int i = 0;
         for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
         {
