@@ -22,343 +22,343 @@ You would have to choose only one.</source>
 <context>
     <name>QConfigurationScreenBase</name>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="30"/>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="63"/>
+        <location filename="qconfigurationscreenbase.ui" line="66"/>
         <source>Pacs Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="544"/>
+        <location filename="qconfigurationscreenbase.ui" line="547"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="338"/>
+        <location filename="qconfigurationscreenbase.ui" line="341"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="335"/>
+        <location filename="qconfigurationscreenbase.ui" line="338"/>
         <source>Add the new Pacs to the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="364"/>
+        <location filename="qconfigurationscreenbase.ui" line="367"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="361"/>
+        <location filename="qconfigurationscreenbase.ui" line="364"/>
         <source>Update the parameters of the selected Pacs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="390"/>
+        <location filename="qconfigurationscreenbase.ui" line="393"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="419"/>
+        <location filename="qconfigurationscreenbase.ui" line="422"/>
         <source>Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="416"/>
+        <location filename="qconfigurationscreenbase.ui" line="419"/>
         <source>Test if selected Pacs is alive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="445"/>
+        <location filename="qconfigurationscreenbase.ui" line="448"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="107"/>
+        <location filename="qconfigurationscreenbase.ui" line="110"/>
         <source>AE Title :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="133"/>
+        <location filename="qconfigurationscreenbase.ui" line="136"/>
         <source>Address :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="159"/>
+        <location filename="qconfigurationscreenbase.ui" line="162"/>
         <source>Port :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1572"/>
+        <location filename="qconfigurationscreenbase.ui" line="1573"/>
         <source>99999; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="214"/>
+        <location filename="qconfigurationscreenbase.ui" line="217"/>
         <source>Default </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="553"/>
+        <location filename="qconfigurationscreenbase.ui" line="556"/>
         <source>Cache Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1222"/>
+        <location filename="qconfigurationscreenbase.ui" line="1225"/>
         <source>Delete All Studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1219"/>
+        <location filename="qconfigurationscreenbase.ui" line="1222"/>
         <source>Delete all the studies of the cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="985"/>
+        <location filename="qconfigurationscreenbase.ui" line="988"/>
         <source>999; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1927"/>
+        <location filename="qconfigurationscreenbase.ui" line="1926"/>
         <source>Accept</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1959"/>
+        <location filename="qconfigurationscreenbase.ui" line="1958"/>
         <source>Apply Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1985"/>
+        <location filename="qconfigurationscreenbase.ui" line="1984"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1452"/>
+        <location filename="qconfigurationscreenbase.ui" line="1453"/>
         <source>Local Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1693"/>
+        <location filename="qconfigurationscreenbase.ui" line="1694"/>
         <source>99; </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="514"/>
+        <location filename="qconfigurationscreenbase.ui" line="517"/>
         <source>AETitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="519"/>
+        <location filename="qconfigurationscreenbase.ui" line="522"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="524"/>
+        <location filename="qconfigurationscreenbase.ui" line="527"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="529"/>
+        <location filename="qconfigurationscreenbase.ui" line="532"/>
         <source>Institution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="534"/>
+        <location filename="qconfigurationscreenbase.ui" line="537"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="539"/>
+        <location filename="qconfigurationscreenbase.ui" line="542"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="874"/>
+        <location filename="qconfigurationscreenbase.ui" line="877"/>
         <source>     %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="901"/>
+        <location filename="qconfigurationscreenbase.ui" line="904"/>
         <source>     Gb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1248"/>
+        <location filename="qconfigurationscreenbase.ui" line="1251"/>
         <source>Compact Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1135"/>
+        <location filename="qconfigurationscreenbase.ui" line="1138"/>
         <source>Examine disk to find the directory to save the retrieved images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1138"/>
+        <location filename="qconfigurationscreenbase.ui" line="1141"/>
         <source>Examine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="635"/>
+        <location filename="qconfigurationscreenbase.ui" line="638"/>
         <source>Delete studies that has not been viewed in :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="690"/>
+        <location filename="qconfigurationscreenbase.ui" line="693"/>
         <source>days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="789"/>
+        <location filename="qconfigurationscreenbase.ui" line="792"/>
         <source>Examine disk  to find the database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1924"/>
+        <location filename="qconfigurationscreenbase.ui" line="1923"/>
         <source>Save changes and close the configuration window </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1372"/>
+        <location filename="qconfigurationscreenbase.ui" line="1374"/>
         <source>Apply the canges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1401"/>
+        <location filename="qconfigurationscreenbase.ui" line="1403"/>
         <source>Cancel changes and close the windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1953"/>
+        <location filename="qconfigurationscreenbase.ui" line="1952"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="387"/>
+        <location filename="qconfigurationscreenbase.ui" line="390"/>
         <source>Delete selected Pacs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="442"/>
+        <location filename="qconfigurationscreenbase.ui" line="445"/>
         <source>Clear the text boxes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="710"/>
+        <location filename="qconfigurationscreenbase.ui" line="713"/>
         <source>Create database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1875"/>
+        <location filename="qconfigurationscreenbase.ui" line="1874"/>
         <source>Institution Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2049"/>
+        <location filename="qconfigurationscreenbase.ui" line="2048"/>
         <source>Institution :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2092"/>
+        <location filename="qconfigurationscreenbase.ui" line="2091"/>
         <source>Address :      </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2135"/>
+        <location filename="qconfigurationscreenbase.ui" line="2134"/>
         <source>Town :         </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2152"/>
+        <location filename="qconfigurationscreenbase.ui" line="2151"/>
         <source>ZIP Code :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2169"/>
+        <location filename="qconfigurationscreenbase.ui" line="2168"/>
         <source>Country :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2209"/>
+        <location filename="qconfigurationscreenbase.ui" line="2208"/>
         <source>Contact e-mail :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2226"/>
+        <location filename="qconfigurationscreenbase.ui" line="2225"/>
         <source>Phone Number :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2010"/>
+        <location filename="qconfigurationscreenbase.ui" line="2009"/>
         <source>Institution contact information </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="257"/>
+        <location filename="qconfigurationscreenbase.ui" line="260"/>
         <source>Location :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="283"/>
+        <location filename="qconfigurationscreenbase.ui" line="286"/>
         <source>Description :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="741"/>
+        <location filename="qconfigurationscreenbase.ui" line="744"/>
         <source>Database path :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="884"/>
+        <location filename="qconfigurationscreenbase.ui" line="887"/>
         <source>Free :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="911"/>
+        <location filename="qconfigurationscreenbase.ui" line="914"/>
         <source>Used : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="972"/>
+        <location filename="qconfigurationscreenbase.ui" line="975"/>
         <source>Pool Size :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="995"/>
+        <location filename="qconfigurationscreenbase.ui" line="998"/>
         <source>Gb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1078"/>
+        <location filename="qconfigurationscreenbase.ui" line="1081"/>
         <source>Cache Image Path :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1527"/>
+        <location filename="qconfigurationscreenbase.ui" line="1528"/>
         <source>Incoming Connections Port :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1590"/>
+        <location filename="qconfigurationscreenbase.ui" line="1591"/>
         <source>Maximum Simultaneous Connections :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1623"/>
+        <location filename="qconfigurationscreenbase.ui" line="1624"/>
         <source>Timeout </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1680"/>
+        <location filename="qconfigurationscreenbase.ui" line="1681"/>
         <source>seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1703"/>
+        <location filename="qconfigurationscreenbase.ui" line="1704"/>
         <source>AETitle Machine :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="27"/>
+        <source>PACS Configuration</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -414,182 +414,182 @@ You would have to choose only one.</source>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="988"/>
+        <location filename="qconfigurationscreen.cpp" line="987"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="357"/>
+        <location filename="qconfigurationscreen.cpp" line="356"/>
         <source>Select a Pacs for update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="404"/>
+        <location filename="qconfigurationscreen.cpp" line="403"/>
         <source>Select a Pacs for delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="541"/>
+        <location filename="qconfigurationscreen.cpp" line="540"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="549"/>
+        <location filename="qconfigurationscreen.cpp" line="548"/>
         <source>Incorrect address server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="557"/>
+        <location filename="qconfigurationscreen.cpp" line="556"/>
         <source>PACS Port has to be between 0 and 65535</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="565"/>
+        <location filename="qconfigurationscreen.cpp" line="564"/>
         <source>Institution field can&apos;t be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="582"/>
+        <location filename="qconfigurationscreen.cpp" line="581"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="591"/>
+        <location filename="qconfigurationscreen.cpp" line="590"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="600"/>
+        <location filename="qconfigurationscreen.cpp" line="599"/>
         <source>Invalid database path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="823"/>
+        <location filename="qconfigurationscreen.cpp" line="822"/>
         <source>Are you sure you want to delete all Studies of the cache ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="984"/>
+        <location filename="qconfigurationscreen.cpp" line="983"/>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="964"/>
+        <location filename="qconfigurationscreen.cpp" line="963"/>
         <source>Database is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="982"/>
+        <location filename="qconfigurationscreen.cpp" line="981"/>
         <source>Internal Database error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="297"/>
+        <location filename="qconfigurationscreen.cpp" line="296"/>
         <source>AETitle </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="297"/>
+        <location filename="qconfigurationscreen.cpp" line="296"/>
         <source> exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="610"/>
+        <location filename="qconfigurationscreen.cpp" line="609"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="611"/>
+        <location filename="qconfigurationscreen.cpp" line="610"/>
         <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="824"/>
+        <location filename="qconfigurationscreen.cpp" line="823"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="824"/>
+        <location filename="qconfigurationscreen.cpp" line="823"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="761"/>
+        <location filename="qconfigurationscreen.cpp" line="760"/>
         <source>Cache Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="970"/>
+        <location filename="qconfigurationscreen.cpp" line="969"/>
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="921"/>
+        <location filename="qconfigurationscreen.cpp" line="920"/>
         <source>The application has to be restart to apply the changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="950"/>
+        <location filename="qconfigurationscreen.cpp" line="949"/>
         <source>Database is corrupted or SQL syntax error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="958"/>
+        <location filename="qconfigurationscreen.cpp" line="957"/>
         <source>To solve this error restart the user session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="636"/>
+        <location filename="qconfigurationscreen.cpp" line="635"/>
         <source>Pool space can&apos;t be less than used space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="516"/>
+        <location filename="qconfigurationscreen.cpp" line="515"/>
         <source> Pacs </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="487"/>
+        <location filename="qconfigurationscreen.cpp" line="486"/>
         <source> doesn&apos;t responds </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="520"/>
+        <location filename="qconfigurationscreen.cpp" line="519"/>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="504"/>
+        <location filename="qconfigurationscreen.cpp" line="503"/>
         <source> Test of Pacs </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="506"/>
+        <location filename="qconfigurationscreen.cpp" line="505"/>
         <source> is correct </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="518"/>
+        <location filename="qconfigurationscreen.cpp" line="517"/>
         <source> doesn&apos;t responds correctly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="617"/>
+        <location filename="qconfigurationscreen.cpp" line="616"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="956"/>
+        <location filename="qconfigurationscreen.cpp" line="955"/>
         <source>Database is locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="910"/>
+        <location filename="qconfigurationscreen.cpp" line="909"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="916"/>
+        <location filename="qconfigurationscreen.cpp" line="915"/>
         <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -873,7 +873,7 @@ You would have to choose only one.</source>
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1381"/>
+        <location filename="queryscreen.cpp" line="1316"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1212,204 +1212,189 @@ You would have to choose only one.</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1760"/>
+        <location filename="queryscreen.cpp" line="1697"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="431"/>
+        <location filename="queryscreen.cpp" line="440"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="521"/>
+        <location filename="queryscreen.cpp" line="531"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="535"/>
+        <location filename="queryscreen.cpp" line="545"/>
         <source>ERROR QUERING!.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="623"/>
+        <location filename="queryscreen.cpp" line="633"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="827"/>
+        <location filename="queryscreen.cpp" line="783"/>
         <source>No series match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="934"/>
-        <source>Are you sure you want to retrieve this Study ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1001"/>
+        <location filename="queryscreen.cpp" line="948"/>
         <source>Select a study to download </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1010"/>
+        <location filename="queryscreen.cpp" line="957"/>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1235"/>
+        <location filename="queryscreen.cpp" line="1184"/>
         <source>Please select a study to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1756"/>
+        <location filename="queryscreen.cpp" line="1693"/>
         <source>Error Number : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1736"/>
+        <location filename="queryscreen.cpp" line="1673"/>
         <source>Database is corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1754"/>
+        <location filename="queryscreen.cpp" line="1691"/>
         <source>Internal Database error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1322"/>
+        <location filename="queryscreen.cpp" line="1257"/>
         <source>Hide Pacs List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1184"/>
+        <location filename="queryscreen.cpp" line="1133"/>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1240"/>
-        <source>Are you sure you want to delete this Study ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1742"/>
+        <location filename="queryscreen.cpp" line="1679"/>
         <source>Register duplicated.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="120"/>
+        <location filename="queryscreen.cpp" line="130"/>
         <source>Error deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1151"/>
-        <source>Are you sure you want to view this Study ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1241"/>
+        <location filename="queryscreen.cpp" line="441"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1241"/>
+        <location filename="queryscreen.cpp" line="441"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1469"/>
+        <location filename="queryscreen.cpp" line="1406"/>
         <source>Not enough space to retrieve studies. Please free space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1474"/>
+        <location filename="queryscreen.cpp" line="1411"/>
         <source>Error Freeing Space. The study couldn&apos;t be retrieved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1486"/>
+        <location filename="queryscreen.cpp" line="1423"/>
         <source> Can&apos;t connect to PACS </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1506"/>
+        <location filename="queryscreen.cpp" line="1443"/>
         <source> of </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1509"/>
+        <location filename="queryscreen.cpp" line="1446"/>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1722"/>
+        <location filename="queryscreen.cpp" line="1659"/>
         <source>Database is corrupted or SQL syntax error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1728"/>
+        <location filename="queryscreen.cpp" line="1665"/>
         <source>Database is looked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1326"/>
+        <location filename="queryscreen.cpp" line="1261"/>
         <source>Show Pacs List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="588"/>
+        <location filename="queryscreen.cpp" line="597"/>
         <source>Error, not opened Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="593"/>
+        <location filename="queryscreen.cpp" line="602"/>
         <source>Error quering in dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1381"/>
+        <location filename="queryscreen.cpp" line="1316"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1395"/>
+        <location filename="queryscreen.cpp" line="1330"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1504"/>
+        <location filename="queryscreen.cpp" line="1441"/>
         <source> Can&apos;t query studies to PACS </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1432"/>
+        <location filename="queryscreen.cpp" line="1368"/>
         <source>You have to select a Pacs to store the study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1460"/>
+        <location filename="queryscreen.cpp" line="1397"/>
         <source>The study can only be stored at one pacs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="720"/>
+        <location filename="queryscreen.cpp" line="728"/>
         <source>Error! Can&apos;t query series in PACS : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="911"/>
+        <location filename="queryscreen.cpp" line="857"/>
         <source>Error! Can&apos;t query images in PACS : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="922"/>
-        <source>No image match for this series.
+        <location filename="queryscreen.cpp" line="869"/>
+        <source>No images match for this series.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="971"/>
+        <location filename="queryscreen.cpp" line="918"/>
         <source>No images match for this study.
 </source>
         <translation type="unfinished"></translation>
@@ -1598,17 +1583,12 @@ You would have to choose only one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1501"/>
+        <location filename="queryscreenbase.ui" line="1478"/>
         <source>Local Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1463"/>
-        <source>config</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="1541"/>
+        <location filename="queryscreenbase.ui" line="1518"/>
         <source>PacsServer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1623,7 +1603,7 @@ You would have to choose only one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1566"/>
+        <location filename="queryscreenbase.ui" line="1543"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1665,11 +1645,6 @@ You would have to choose only one.</source>
     <message>
         <location filename="queryscreenbase.ui" line="952"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="1029"/>
-        <source>Advancerd Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
