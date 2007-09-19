@@ -88,6 +88,12 @@ private:
     ///ens permetrà controlar si la tecla Ctrl per a seleccionar distàncies està polsada o no.
     bool m_isCtrlPressed;
     
+    ///ens permet controlar el mode d'anotació: amb 2 clicks o clicant-arrossegant-alliberant
+    QString m_annotationMode;
+    
+    ///ens permet emmagatzemar l'última acció que s'ha fet amb el botó esquerre.
+    QString m_lastLeftButtonAction;
+    
 private slots:
     /// Comença l'anotació de la distància
     void startDistanceAnnotation();
