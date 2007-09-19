@@ -20,6 +20,7 @@
 #include "logging.h"
 #include "qlogviewer.h"
 #include "patient.h"
+#include "qconfigurationdialog.h"
 
 // Mini - aplicacions
 #include "cacheinstallation.h"
@@ -160,6 +161,13 @@ void QApplicationMainWindow::createActions()
     m_exitAction->setStatusTip(tr("Exit the application"));
     m_exitAction->setIcon( QIcon(":/images/exit.png") );
     connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
+
+    m_configurationAction = new QAction(this);
+    m_configurationAction->setText(tr("&Configuration..."));
+    m_configurationAction->setShortcut(tr("Ctrl+O") );
+    m_configurationAction->setStatusTip(tr("Modify Starviewer configuration"));
+    m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
+    connect(m_configurationAction, SIGNAL(triggered()), this, SLOT(showConfigurationDialog()));
 }
 
 void QApplicationMainWindow::switchFullScreen( bool full )
@@ -178,6 +186,12 @@ void QApplicationMainWindow::switchFullScreen( bool full )
         m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
         m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
     }
+}
+
+void QApplicationMainWindow::showConfigurationDialog()
+{
+    QConfigurationDialog configurationDialog;
+    configurationDialog.exec();
 }
 
 void QApplicationMainWindow::createMenus()
@@ -201,9 +215,11 @@ void QApplicationMainWindow::createMenus()
         m_visualizationMenu->addAction(action);
     }
 
-    // menú per escollir idioma
-    m_languageMenu = menuBar()->addMenu( tr("&Language") );
+    // Menú tools
+    m_toolsMenu = menuBar()->addMenu( tr("&Tools") );
+    m_languageMenu = m_toolsMenu->addMenu( tr("&Language") );
     createLanguageMenu();
+    m_toolsMenu->addAction(m_configurationAction);
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu( tr("&Window") );

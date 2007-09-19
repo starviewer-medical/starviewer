@@ -1447,29 +1447,6 @@
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeType" >
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>21</width>
-           <height>28</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="m_buttonConfig" >
-         <property name="text" >
-          <string>config</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType" >
           <enum>QSizePolicy::Expanding</enum>
          </property>
          <property name="sizeHint" >
@@ -1637,7 +1614,6 @@
   <tabstop>m_buttonClear</tabstop>
   <tabstop>m_buttonShowPacsList</tabstop>
   <tabstop>m_tab</tabstop>
-  <tabstop>m_buttonConfig</tabstop>
  </tabstops>
  <resources/>
  <connections/>

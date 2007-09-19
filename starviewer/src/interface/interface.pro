@@ -6,14 +6,17 @@
 TRANSLATIONS += interface_ca_ES.ts \
                 interface_es_ES.ts \
                 interface_en_GB.ts 
+FORMS += qconfigurationdialogbase.ui
 HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
            extensionhandler.h \
-           extensionworkspace.h
+           extensionworkspace.h \
+           qconfigurationdialog.h
 SOURCES += qapplicationmainwindow.cpp \
            appimportfile.cpp \
            extensionhandler.cpp \
-           extensionworkspace.cpp
+           extensionworkspace.cpp \
+           qconfigurationdialog.cpp
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../inputoutput/libinputoutput.a \

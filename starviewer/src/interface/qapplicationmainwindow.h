@@ -92,6 +92,10 @@ private slots:
     /// canvia a pantalla completa o no
     void switchFullScreen( bool full );
 
+    /// Mostra el diàleg de configuració de l'aplicació.
+    /// TODO Millorar, de moment és bastant "xapussa"
+    void showConfigurationDialog();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -105,6 +109,7 @@ private:
     QMenu *m_windowMenu;
     QMenu *m_languageMenu;
     QMenu *m_helpMenu;
+    QMenu *m_toolsMenu;
 
     /// Accions
     QAction *m_pacsAction;
@@ -117,6 +122,7 @@ private:
     QAction *m_aboutAction;
     QAction *m_fullScreenAction;
     QAction *m_logViewerAction;
+    QAction *m_configurationAction;
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
