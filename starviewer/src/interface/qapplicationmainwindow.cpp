@@ -164,7 +164,6 @@ void QApplicationMainWindow::createActions()
 
     m_configurationAction = new QAction(this);
     m_configurationAction->setText(tr("&Configuration..."));
-    m_configurationAction->setShortcut(tr("Ctrl+O") );
     m_configurationAction->setStatusTip(tr("Modify Starviewer configuration"));
     m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
     connect(m_configurationAction, SIGNAL(triggered()), this, SLOT(showConfigurationDialog()));
