@@ -47,6 +47,9 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     createActions();
     createConnections();
     initLayouts();
+    // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
+    m_imageGrid->setVisible(false);
+    m_downImageGrid->setVisible(false);
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
