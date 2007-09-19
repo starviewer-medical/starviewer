@@ -187,7 +187,7 @@ Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesLi
                 imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );
                 seriesPath.clear();
                 seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
-                seriesPath = replaceBarra( seriesPath );
+                seriesPath = backSlashToSlash( seriesPath );
                 seriesPath = seriesPath.mid( 0 , seriesPath.toStdString().rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
                 series.setSeriesPath( seriesPath );
 
@@ -267,7 +267,7 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
                 //creem el path absolut
                 imagePath.insert( 0 , m_dicomdirAbsolutePath );
                 imagePath.append( "/" ),
-                imagePath.append( replaceBarra ( text.c_str() ) );
+                imagePath.append( backSlashToSlash ( text.c_str() ) );
                 image.setImagePath( imagePath );
 
                 imageList.insert( image );//inserim a la llista la imatge*/
@@ -336,7 +336,7 @@ QStringList ReadDicomdir::getFiles( QString studyUID )
                 OFString text;
                 //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '\' (format windows)
                 imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
-                files << m_dicomdirAbsolutePath + "/" + replaceBarra( text.c_str() );
+                files << m_dicomdirAbsolutePath + "/" + backSlashToSlash( text.c_str() );
                 imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
             }
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi
@@ -523,7 +523,7 @@ bool ReadDicomdir::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumb
     return true;
 }
 
-QString ReadDicomdir::replaceBarra( QString original )
+QString ReadDicomdir::backSlashToSlash( QString original )
 {
     QString ret;
 
