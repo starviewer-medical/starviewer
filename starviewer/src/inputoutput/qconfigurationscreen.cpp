@@ -86,15 +86,6 @@ void QConfigurationScreen::createConnections()
     //connecta el boto aplicar del Pacs amb l'slot apply
     connect( m_buttonApplyPacs , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
 
-    //connecta el boto acceptar de l'informació de l'institució amb l'slot accept
-    connect( m_buttonAcceptInstitution , SIGNAL( clicked() ), this ,  SLOT( acceptChanges() ) );
-
-    //connecta el boto cancelar de l'informació de l'institució amb l'slot cancel
-    connect( m_buttonCancelInstitution , SIGNAL( clicked() ) , this ,  SLOT( cancelChanges() ) );
-
-    //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
-    connect( m_buttonApplyInstitution , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
-
     //connecta el boto aplicar de l'informació de l'institució amb l'slot apply
     connect( m_buttonCreateDatabase , SIGNAL( clicked() ) , this ,  SLOT( createDatabase() ) );
 
@@ -127,7 +118,6 @@ void QConfigurationScreen::createConnections()
     connect( m_buttonAddPacs , SIGNAL( clicked() ) , this , SLOT( addPacs() ) );
     connect( m_buttonDeletePacs , SIGNAL( clicked() ) , this , SLOT( deletePacs() ) );
     connect( m_buttonUpdatePacs , SIGNAL( clicked() ), this , SLOT( updatePacs() ) );
-    connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clear() ) );
     connect( m_buttonTestPacs , SIGNAL( clicked() ) , this , SLOT( test() ) );
     connect( m_PacsTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int) ) , this , SLOT( selectedPacs( QTreeWidgetItem * , int ) ) );
 }
@@ -147,15 +137,12 @@ void QConfigurationScreen::setIconButtons()
 {
     m_buttonAcceptCache->setIcon( QIcon( ":images/button_ok.png" ) );
     m_buttonAcceptPacs->setIcon( QIcon( ":images/button_ok.png" ) );
-    m_buttonAcceptInstitution->setIcon( QIcon( ":images/button_ok.png" ) );
 
     m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
     m_buttonApplyCache->setIcon( QIcon( ":images/apply.png" ) );
-    m_buttonApplyInstitution->setIcon( QIcon( ":images/apply.png" ) );
 
     m_buttonCancelPacs->setIcon( QIcon( ":images/cancel.png" ) );
     m_buttonCancelCache->setIcon( QIcon( ":images/cancel.png" ) );
-    m_buttonCancelInstitution->setIcon( QIcon( ":images/cancel.png" ) );
 }
 
 void QConfigurationScreen::loadCacheDefaults()
@@ -173,8 +160,6 @@ void QConfigurationScreen::loadCachePoolDefaults()
 {
     Status state;
     unsigned int space,used;
-    float result;
-    QString text;
     CachePool pool;
 
     //accemdim a la caché a agafar les dades del Pool
@@ -192,9 +177,9 @@ void QConfigurationScreen::loadCachePoolDefaults()
         return;
     }
 
-    m_textPoolSize->setText( text.setNum( space / 1024 , 10 ) );
+    m_textPoolSize->setText( QString::number( space / 1024 , 10 ) );
 
-    result = used;
+/*    result = used;
     result = result / 1024; //passem Mb a Gb;
     text.setNum( result , 'f' , 2 );
     text.append( " Gb" );
@@ -208,17 +193,25 @@ void QConfigurationScreen::loadCachePoolDefaults()
     m_PoolFree->setText( text );
 
     //Percentatges
-    result = used;
-    result = result / space * 100;
+    result = used / space * 100;
     text.setNum( result , 'f' , 1 );
     text.append( " %" );
     m_PoolUsedPerc->setText( text );
 
-    result = ( space - used );
-    result = result / space * 100;
+    result = ( space - used ) / space * 100;
     text.setNum( result , 'f' , 1 );
     text.append( " %" );
-    m_PoolFreePerc->setText( text );
+    m_PoolFreePerc->setText( text );*/
+    float usedMBs = used / 1024;
+    float freeMBs = (space - used) / 1024;
+    float usedPercentage = static_cast<float>(used) / space * 100.f;
+    float freePercentage = static_cast<float>(space - used) / space * 100.f;
+
+    m_cacheUtilization->setText( m_cacheUtilization->text()
+            .arg(usedMBs, 0, 'f', 2)
+            .arg(usedPercentage, 0, 'f', 1)
+            .arg(freeMBs, 0, 'f', 2)
+            .arg(freePercentage, 0, 'f', 1));
 }
 
 void QConfigurationScreen::loadPacsDefaults()
@@ -724,7 +717,6 @@ void QConfigurationScreen::configurationChanged ( const QString& )
 {
     m_buttonApplyPacs->setEnabled( true );
     m_buttonApplyCache->setEnabled( true );
-    m_buttonApplyInstitution->setEnabled( true );
     m_configurationChanged = true;
 }
 
@@ -894,8 +886,6 @@ void QConfigurationScreen::applyChangesInstitution()
     if ( m_textInstitutionPhoneNumber->isModified() ) settings.setInstitutionPhoneNumber( m_textInstitutionPhoneNumber->text() );
 
     if ( m_textInstitutionEmail->isModified() ) settings.setInstitutionEmail( m_textInstitutionEmail->text() );
-
-    m_buttonApplyInstitution->setEnabled( false );
 }
 
 void QConfigurationScreen::createDatabase()
