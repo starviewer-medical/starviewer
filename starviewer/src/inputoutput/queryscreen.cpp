@@ -528,6 +528,7 @@ void QueryScreen::queryStudyPacs()
     m_imageListSingleton->clear();
     if ( pacsList.end() ) //es comprova que hi hagi pacs seleccionats
     {
+        QApplication::restoreOverrideCursor();
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
         return;
     }
@@ -561,7 +562,6 @@ void QueryScreen::queryStudyPacs()
     m_studyTreeWidgetPacs->setSortColumn( 2 );//ordenem pel nom
 
     QApplication::restoreOverrideCursor();
-
 }
 
 void QueryScreen::queryStudy( QString source )
@@ -608,6 +608,7 @@ void QueryScreen::queryStudy( QString source )
     }
     else
     {
+        QApplication::restoreOverrideCursor();
         DEBUG_LOG( "Unrecognised source: " + source );
         return;
     }
@@ -819,7 +820,8 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     QueryPacs queryImages;
     DicomMask dicomMask;
 
-    if ( AETitlePACS.isEmpty() ) AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
+    if ( AETitlePACS.isEmpty() )
+        AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
     m_imageListSingleton->clear();//netejem la llista de sèries
 
     INFO_LOG( "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS );
@@ -829,11 +831,16 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     dicomMask.setImageNumber( "" );
     dicomMask.setSOPInstanceUID( "" );
 
-    if ( ! preparePacsServerConnection( AETitlePACS, &pacsConnection ).good() ) return;
+    if ( ! preparePacsServerConnection( AETitlePACS, &pacsConnection ).good() )
+    {
+        QApplication::restoreOverrideCursor();
+        return;
+    }
 
     state = pacsConnection.connect(PacsServer::query,PacsServer::imageLevel);
     if ( !state.good() )
     {   //Error al connectar
+        QApplication::restoreOverrideCursor();
         ERROR_LOG( "Error al connectar al pacs " + AETitlePACS + ". PACS ERROR : " + state.text() );
         errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
         return;
@@ -843,7 +850,9 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
     state = queryImages.query( dicomMask );
     if ( !state.good() )
-    {   //Error a la query
+    {
+        //Error a la query
+        QApplication::restoreOverrideCursor();
         ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les images al PACS " + AETitlePACS + ". PACS ERROR : " + state.text() );
 
         text.insert( 0 , tr( "Error! Can't query images in PACS : " ) );
@@ -857,6 +866,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     m_imageListSingleton->firstImage();
     if ( m_imageListSingleton->end() )
     {
+        QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No image match for this series.\n" ) );
         return;
     }
@@ -955,12 +965,13 @@ void QueryScreen::retrievePacs( bool view )
         pacsAETitle = m_lastQueriedPacs;
         studyToRetrieve.setPacsAETitle( m_lastQueriedPacs );
     }
-    else pacsAETitle = m_studyTreeWidgetPacs->getSelectedPacsAETitle();
+    else
+        pacsAETitle = m_studyTreeWidgetPacs->getSelectedPacsAETitle();
 
     //Inserim l'informació de l'estudi a la caché!
     state = insertStudyCache( studyToRetrieve );
 
-    if (  !state.good() )
+    if( !state.good() )
     {
         if ( state.code() != 2019 ) // si hi ha l'error 2019, indica que l'estudi ja existeix a la base de dades, per tant estar parcialment o totalment descarregat, de totes maneres el tornem a descarregar
         {
@@ -1004,10 +1015,9 @@ void QueryScreen::retrievePacs( bool view )
     operation.setPacsParameters( pacs );
     operation.setDicomMask( mask );
     if ( view )
-    {
         operation.setOperation( operationView );
-    }
-    else operation.setOperation( operationRetrieve );
+    else
+        operation.setOperation( operationRetrieve );
 
     //emplenem les dades de l'operació
     operation.setPatientName( m_studyListSingleton->getStudy().getPatientName() );
@@ -1369,6 +1379,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     switch (pacsList.size())
     {
         case  0 :
+            QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "You have to select a Pacs to store the study" ));
             break;
         case 1 :
@@ -1397,6 +1408,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
             m_qexecuteOperationThread.queueOperation( storeStudyOperation );
             break;
         default :
+            QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study can only be stored at one pacs" ));
             break;
     }
