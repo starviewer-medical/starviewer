@@ -113,6 +113,7 @@ private:
 
     /// Accions
     QAction *m_pacsAction;
+    QAction *m_openDICOMDIRAction;
 
     QAction *m_newAction;
     QAction *m_openAction;

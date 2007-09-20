@@ -65,6 +65,10 @@ void ExtensionHandler::request( int who )
         case 7:
             m_queryScreen->show();
             break;
+
+        case 8:
+            m_queryScreen->openDicomdir();
+            break;
     }
 }
 

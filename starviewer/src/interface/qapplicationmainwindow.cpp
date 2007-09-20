@@ -101,6 +101,14 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping( m_pacsAction , 7 );
     connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
+    m_openDICOMDIRAction = new QAction( this );
+    m_openDICOMDIRAction->setText(tr("Open DICOMDIR") );
+//     m_openDICOMDIRAction->setShortcut( tr("Ctrl+ ") );
+    m_openDICOMDIRAction->setStatusTip( tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk") );
+//     m_openDICOMDIRAction->setIcon( QIcon(":/images/openDICOMDIRQuery.png") );
+    m_signalMapper->setMapping( m_openDICOMDIRAction , 8 );
+    connect( m_openDICOMDIRAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
     QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
     foreach(QString name, extensionsMediatorNames)
     {
@@ -201,13 +209,13 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction( m_openAction );
     m_fileMenu->addAction( m_openDirAction );
     m_fileMenu->addAction( m_pacsAction );
+    m_fileMenu->addAction( m_openDICOMDIRAction );
     m_fileMenu->addSeparator();
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );
 
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
-//     m_visualizationMenu->addAction( m_2DViewerAction );
 
     foreach(QAction *action, m_actionsList)
     {
