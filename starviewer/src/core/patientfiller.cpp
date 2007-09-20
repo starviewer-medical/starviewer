@@ -107,7 +107,9 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new VolumeGeneratorStep() );
     m_registeredSteps.append(new ReferenceLinesFillerStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
-    m_registeredSteps.append(new OrderImagesFillerStep() );
+// l'hem de comentar ja que fins que no s'arregli el seu comportament
+// no el podem fer servir ja que provoca l'error del ticket https://trueta.udg.edu/trac/ticket/239
+//     m_registeredSteps.append(new OrderImagesFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
