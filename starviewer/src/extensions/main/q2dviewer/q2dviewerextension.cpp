@@ -11,9 +11,16 @@
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
+#include "q2dviewerwidget.h"
+#include "menugridwidget.h"
+#include "tablemenu.h"
+#include "patient.h"
+#include "study.h"
 #include <QAction>
 #include <QSettings>
 #include <QPoint>
+#include <QGridLayout>
+#include <QProgressDialog>
 // EXTRA!!! \TODO es temporal
 #include <QFileDialog>
 #include "keyimagenote.h"
@@ -664,7 +671,6 @@ void Q2DViewerExtension::showRows( int rows )
     {
         for( numColumn = 0; numColumn < m_columns; numColumn++ )
         {
-
             viewer = m_vectorViewers.value( ( m_totalColumns*m_rows ) + numColumn );
             viewer->show();
         }

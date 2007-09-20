@@ -5,6 +5,9 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "gridicon.h"
+#include <QGridLayout>
+#include <QLabel>
+
 
 namespace udg {
 

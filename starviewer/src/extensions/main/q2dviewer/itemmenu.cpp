@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "itemmenu.h"
+#include <QEvent>
 
 namespace udg {
 
@@ -22,7 +23,6 @@ ItemMenu::~ItemMenu()
 
 bool ItemMenu::event( QEvent * event )
 {
-
     if ( event->type() == QEvent::Enter )
     {
         QPalette palette = this->palette();

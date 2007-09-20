@@ -9,6 +9,7 @@
 
 #include "ui_q2dviewerwidgetbase.h"
 
+// FWD declarations
 class QAction;
 class vtkCommand;
 
@@ -32,30 +33,32 @@ public:
 
     Q2DViewer * getViewer();
 
-protected:
-    /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
-    void mousePressEvent ( QMouseEvent * event );
-
-private:
-    /// El volum principal
-    Volume *m_mainVolume;
-
-    /// Crea les connexions entre signals i slots
-    void createConnections();
-
-signals:
-    /// Aquest senyal s'emetrà quan el mouse entri al widget
-    void selected(Q2DViewerWidget * viewer);
-
 public slots:
     void setInput( Volume *input );
     void changeViewToAxial();
     void changeViewToSagital();
     void changeViewToCoronal();
 
+signals:
+    /// Aquest senyal s'emetrà quan el mouse entri al widget
+    void selected(Q2DViewerWidget * viewer);
+
+protected:
+    /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
+    void mousePressEvent ( QMouseEvent * event );
+
+private:
+
+    /// Crea les connexions entre signals i slots
+    void createConnections();
+
 private slots:
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
+
+private:
+    /// El volum principal
+    Volume *m_mainVolume;
 };
 
 };
