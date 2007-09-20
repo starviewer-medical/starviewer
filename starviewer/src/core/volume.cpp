@@ -94,21 +94,6 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         QStringList fileList = getInputFiles();
         if( !fileList.isEmpty() )
         {
-//             Input *input = new Input;
-//             connect( input, SIGNAL( progress(int) ), this, SIGNAL( progress(int) ) );
-//             switch( input->readFiles( fileList ) )
-//             {
-//                 case Volume::NoError:
-//                     this->setData( input->getData()->getVtkData() );
-//
-//                     break;
-//
-//                 case Volume::InvalidFileName:
-//                     break;
-//
-//                 case Volume::SizeMismatch:
-//                     break;
-//             }
             this->readFiles( fileList );
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader
