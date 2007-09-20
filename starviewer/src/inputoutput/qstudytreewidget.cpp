@@ -231,9 +231,7 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     studyItem = getStudyItem( serie->getStudyUID() , serie->getPacsAETitle() );
     item = new QTreeWidgetItem( studyItem );
 
-    text.truncate( 0 );
-    text.append( tr( "Series " ) );
-    text.append( serie->getSeriesNumber() );
+    text = tr( "Series %1" ).arg(serie->getSeriesNumber());
     item->setIcon( 0 , m_iconSeries );
     item->setText( 0 , text );
     item->setText( 4 , serie->getSeriesModality() );
@@ -405,8 +403,8 @@ QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AET
 {
     int index = 0;
     bool stop = false;
-    QList< QTreeWidgetItem * > qStudyList( m_studyTreeView->findItems( studyUID ,
-    Qt::MatchExactly , 11 ) ); //busquem l'estudi a la que pertany la sèrie
+    //busquem l'estudi a la que pertany la sèrie
+    QList<QTreeWidgetItem*> qStudyList( m_studyTreeView->findItems(studyUID, Qt::MatchExactly, 11) );
 
     while ( !stop && index < qStudyList.count() )
     {

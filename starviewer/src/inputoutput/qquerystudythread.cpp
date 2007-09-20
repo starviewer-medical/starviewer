@@ -33,7 +33,7 @@ void QQueryStudyThread::run()
     //creem la connexió
     PacsServer serverSCP(m_param);
 
-    INFO_LOG( infoLogInitialitzedThread().toAscii().constData() );
+    INFO_LOG( infoLogInitialitzedThread() );
 
     state = serverSCP.connect( PacsServer::query,PacsServer::studyLevel );
 

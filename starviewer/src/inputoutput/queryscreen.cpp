@@ -626,7 +626,6 @@ void QueryScreen::queryStudy( QString source )
         else if( source == "DICOMDIR" )
             m_studyTreeWidgetDicomdir->clear();
 
-        QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
     }
     else
@@ -635,6 +634,7 @@ void QueryScreen::queryStudy( QString source )
         {
             m_studyTreeWidgetCache->insertStudyList( &studyList );//es mostra la llista d'estudis
             m_studyTreeWidgetCache->setSortColumn( 2 ); //ordenem pel nom
+            studyList.firstStudy();
         }
         else if( source == "DICOMDIR" )
         {
@@ -642,8 +642,8 @@ void QueryScreen::queryStudy( QString source )
             m_studyTreeWidgetDicomdir->insertStudyList( &studyList );
             m_studyTreeWidgetDicomdir->setSortColumn( 2 );//ordenem pel nom
         }
-        QApplication::restoreOverrideCursor();
     }
+    QApplication::restoreOverrideCursor();
 }
 
 /* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
@@ -657,7 +657,7 @@ void QueryScreen::searchSeries( QString studyUID , QString pacsAETitle )
             querySeries( studyUID, "Cache" );
             break;
         case 1 :  //si estem la pestanya del PACS fem query al Pacs
-            querySeriesPacs( studyUID , pacsAETitle , true );
+            querySeriesPacs(studyUID, pacsAETitle);
             break;
         case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
             querySeries( studyUID, "DICOMDIR" );
@@ -689,7 +689,7 @@ void QueryScreen::searchImages( QString studyUID , QString seriesUID , QString p
 }
 
 
-void QueryScreen::querySeriesPacs( QString studyUID , QString pacsAETitle , bool show )
+void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 {
     DICOMSeries serie;
     Status state;
@@ -735,8 +735,7 @@ void QueryScreen::querySeriesPacs( QString studyUID , QString pacsAETitle , bool
         return;
     }
 
-    //si la query és per mostrar les series al PACS les inserim a l'objecte studyTreeWidget
-    if ( show ) m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
+    m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
 }
 
 void QueryScreen::querySeries( QString studyUID, QString source )
