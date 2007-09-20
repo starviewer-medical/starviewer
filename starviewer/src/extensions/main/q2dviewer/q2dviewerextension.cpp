@@ -29,10 +29,10 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
  : QWidget( parent ), m_presentationStateAttacher(0)
 {
     setupUi( this );
-    
-    //per a la release 0.4 les ROI no es podran utilitzar
+
+    //per a la release 0.4 les ROI no es podran utilitzar TODO ocultem fins que funcionin correctament com volem
     m_roiToolButton->setVisible( false );
-    
+
     m_mainVolume = 0;
     m_keyImageNoteAttacher = NULL;
     m_keyImageNote = NULL;
@@ -157,11 +157,10 @@ void Q2DViewerExtension::createActions()
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool( QString ) ) , m_selectedViewer->getViewer() , SLOT( setTool( QString ) ) );
-
     m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
     m_roiToolButton->setDefaultAction( m_roiAction );
-    m_roiAction->setIcon( QIcon(":/images/roi.png") );
+
+    connect( m_actionFactory , SIGNAL( triggeredTool( QString ) ) , m_selectedViewer->getViewer() , SLOT( setTool( QString ) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
