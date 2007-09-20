@@ -130,6 +130,9 @@ void OrderImagesFillerStep::processImage( Image *image )
         }
         else
         {
+            // TODO BUG: si l'instance number és el mateix, s'insereix la imatge al mateix lloc, per tant si tenim una
+            // serie amb 4 imatges que tenen el mateix instance number (molt comú en els LOCALIZERS), ja l'hem cagat
+            // perquè considerarem que tenim 4 imatges però nomes hi ha una
             instanceNumberSet = new QMap< int , Image* >();
             instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
 

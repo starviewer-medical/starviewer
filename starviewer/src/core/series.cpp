@@ -62,7 +62,10 @@ bool Series::addImage( Image *image )
     else
     {
         image->setParentSeries( this );
-        this->insertImage( image );
+        // TODO això provocava que les imatges amb el mateix instance number s'inserissin allà mateix. Fem un add directament i avall. Això provocava el bug definit al ticket https://trueta.udg.edu/trac/ticket/239.
+        // Cal replantejar.se si l'ordenació la fa el mètode insertImage o ho fa un fillerStep
+//         this->insertImage( image );
+        m_imageSet << image;
     }
 
     return ok;
