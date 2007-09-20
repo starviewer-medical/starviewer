@@ -86,7 +86,7 @@ void QApplicationMainWindow::createActions()
     connect( m_openAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_openDirAction = new QAction( this );
-    m_openDirAction->setText( tr("Open &DICOM Directory") );
+    m_openDirAction->setText( tr("Open Files from a Directory") );
     m_openDirAction->setShortcut( tr("Ctrl+D") );
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
