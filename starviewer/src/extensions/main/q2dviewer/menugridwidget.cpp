@@ -7,12 +7,14 @@
 #include "menugridwidget.h"
 
 #include "gridicon.h"
+#include "itemmenu.h"
+#include "logging.h"
 #include "QFrame"
 #include "QPalette"
 #include "QMouseEvent"
-#include <math.h>
-
-#include "logging.h"
+#include "QGridLayout"
+#include "QLabel"
+#include "math.h"
 
 namespace udg {
 

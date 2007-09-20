@@ -8,17 +8,11 @@
 #define UDGQ2DVIEWEREXTENSION_H
 
 #include "ui_q2dviewerextensionbase.h"
-//Estructura pacient
-#include "patient.h"
-//Visualitzador
-#include "q2dviewerwidget.h"
-// Menus
-#include "menugridwidget.h"
-#include "tablemenu.h"
+#include <QWidget>
 
-#include <QProgressDialog>
 // FWD declarations
 class QAction;
+class QProgressDialog;
 
 namespace udg {
 
@@ -28,6 +22,13 @@ class ToolsActionFactory;
 class Q2DViewerKeyImageNoteAttacher;
 class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
+//Estructura pacient
+class Patient;
+//Visualitzador
+class Q2DViewerWidget;
+// Menus
+class MenuGridWidget;
+class TableMenu;
 
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
@@ -92,6 +93,22 @@ public slots:
     /// Mostrar la informació del volum a cada visualitzador o no.
     void showInformation( int state );
 
+private:
+    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
+    void createActions();
+
+    /// Crea les connexions entre signals i slots
+    void createConnections();
+
+    /// Llegir/Escriure la configuració de l'aplicació
+    void readSettings();
+    void writeSettings();
+
+    /// Retorna un nou widget Q2DViewerWidget per poder-lo inserir a una nova fila o columna
+    Q2DViewerWidget *getNewQ2DViewerWidget();
+
+    void createProgressDialog();
+
 private slots:
     /// activem o desactivem el presentation state
     void enablePresentationState( bool enable );
@@ -119,27 +136,8 @@ private slots:
     void updateVolumeLoadProgressNotification(int progress);
 
 private:
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
-    void createActions();
-
-    /// Crea les connexions entre signals i slots
-    void createConnections();
-
-    /// Llegir/Escriure la configuració de l'aplicació
-    void readSettings();
-    void writeSettings();
-
-    /// Retorna un nou widget Q2DViewerWidget per poder-lo inserir a una nova fila o columna
-    Q2DViewerWidget *getNewQ2DViewerWidget();
-
-    void createProgressDialog();
-
-private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };
-
-    /// canvia la vista actual
-    void setView( ViewType view );
 
     /// La vista actual amb la que estem treballant
     ViewType m_currentView;
@@ -207,6 +205,12 @@ private:
     TableMenu * m_sliceTableGrid;
 
     QProgressDialog *m_progressDialog;
+
+private:
+
+    /// canvia la vista actual. Ho declarem en aquesta posició perque primer
+    /// s'ha de declarar el ViewType
+    void setView( ViewType view );
 };
 
 } // end namespace udg

@@ -8,8 +8,10 @@
 #define UDGITEMMENU_H
 
 #include <QFrame>
-#include <QVariant>
-#include <QEvent>
+
+// FWD declarations
+class QVariant;
+class QEvent;
 
 namespace udg {
 
@@ -40,17 +42,6 @@ public:
     /// Mètode per fixar l'element com a seleccionat o no seleccionat
     void setSelected( bool option );
 
-protected:
-
-    /// Sobrecàrrega del mètode que tracta tots els events
-    bool event( QEvent * event);
-
-    /// Dades que pot guardar el widget
-    QString * m_data;
-
-    /// Atribut que informa si s'ha de quedar seleccionat o s'ha de deseleccionar
-    bool m_fixed;
-
 signals:
 
     /// Signal que s'emet al entrar el mouse al widget
@@ -58,6 +49,20 @@ signals:
 
     /// Signal que s'emet al seleccionar l'item
     void isSelected( ItemMenu * );
+
+protected:
+
+    /// Sobrecàrrega del mètode que tracta tots els events
+    bool event( QEvent * event);
+
+protected:
+
+    /// Dades que pot guardar el widget
+    QString * m_data;
+
+    /// Atribut que informa si s'ha de quedar seleccionat o s'ha de deseleccionar
+    bool m_fixed;
+
 };
 
 }

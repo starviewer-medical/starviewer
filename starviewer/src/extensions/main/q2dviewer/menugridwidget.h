@@ -7,9 +7,12 @@
 #ifndef UDGMENUGRIDWIDGET_H
 #define UDGMENUGRIDWIDGET_H
 
-#include <itemmenu.h>
 #include <QWidget>
-#include <QGridLayout>
+
+// FWD declarations
+class QWidget;
+class QGridLayout;
+class Math;
 
 namespace udg {
 
@@ -18,6 +21,10 @@ Classe que representa el menu desplegable per seleccionar el grid, amb opcions d
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+
+// FWD declarations
+class ItemMenu;
+
 class MenuGridWidget : public QWidget {
 Q_OBJECT
 public:
@@ -43,12 +50,25 @@ public:
     /// Elimina tot el contingut del widget
     void dropContent();
 
+public slots:
+
+    /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
+    void emitSelected( ItemMenu * selected );
+
+signals:
+    
+    /// Emet que s'ha escollit un grid
+    void selectedGrid( int , int );
+
 protected:
-    /// Widget on posarem tots els items
-    QWidget * m_predefinedGrids;
 
     /// Mètode que crea una icona de rows x columns
     ItemMenu * createIcon( int rows, int columns );
+
+protected:
+
+    /// Widget on posarem tots els items
+    QWidget * m_predefinedGrids;
 
     /// Nombre de columnes a mostrar
     int m_maxColumns;
@@ -61,16 +81,6 @@ protected:
 
     /// Llista dels items
     QList<ItemMenu *> * m_itemList;
-
-public slots:
-
-    /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
-    void emitSelected( ItemMenu * selected );
-
-signals:
-    
-    /// Emet que s'ha escollit un grid
-    void selectedGrid( int , int );
 };
 
 }

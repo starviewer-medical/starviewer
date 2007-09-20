@@ -6,6 +6,10 @@
  ***************************************************************************/
 #include "tablemenu.h"
 #include "logging.h"
+#include "itemmenu.h"
+#include <QGridLayout>
+#include <QLabel>
+#include <QEvent>
 
 namespace udg {
 
