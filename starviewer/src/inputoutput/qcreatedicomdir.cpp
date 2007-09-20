@@ -696,7 +696,7 @@ void QCreateDicomdir::deviceChanged( int index )
                     m_DICOMDIRUsedSpaceLabel->setVisible( false );
                     m_lineEditDicomdirPath->setVisible( false );
                     m_buttonExamineDisk->setVisible( false );
-                    m_DICOMDIRLocationLabel->setText( tr( "Space used" ) );
+                    m_DICOMDIRLocationLabel->setText( tr( "Used Space" ) );
                     m_progressBarOcupat->setMaximum( 700 );
                     m_DiskSpace = ( unsigned long ) 700 * ( unsigned long ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
                     m_progressBarOcupat->repaint();
@@ -714,7 +714,7 @@ void QCreateDicomdir::deviceChanged( int index )
                     m_DICOMDIRUsedSpaceLabel->setVisible( false );
                     m_lineEditDicomdirPath->setVisible( false );
                     m_buttonExamineDisk->setVisible( false );
-                    m_DICOMDIRLocationLabel->setText( tr( "Space Used" ) );
+                    m_DICOMDIRLocationLabel->setText( tr( "Used Space" ) );
                     m_progressBarOcupat->setMaximum( 4400 );
                     m_DiskSpace = ( unsigned long ) 4400 * ( unsigned long ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
                     m_progressBarOcupat->repaint();
