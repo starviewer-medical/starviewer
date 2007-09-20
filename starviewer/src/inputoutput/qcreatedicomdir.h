@@ -11,6 +11,8 @@
 #include <ui_qcreatedicomdirbase.h>
 #include "const.h"
 
+class QSignalMapper;
+
 namespace udg {
 
 class DICOMStudy;
@@ -49,13 +51,6 @@ public slots:
     ///Slot que s'activa quan es fa click al botó create Dicomdir, i comença el procés de crear el dicomdir
     void createDicomdir();
 
-public slots:
-
-    /** Slot que s'activa quan canviem els dispositiu d'emmagatzemament seleccionat al combobox
-     * @param index del combobox
-     */
-    void changedAction( int index );
-
 protected :
 
     /** Event que s'activa al tancar al rebren un event de tancament
@@ -64,11 +59,6 @@ protected :
     void closeEvent( QCloseEvent* ce );
 
 private:
-
-    unsigned long m_dicomdirSize;
-    unsigned long m_DiskSpace;
-    QMenu m_contextMenu;///<Menu contextual
-
     /** Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla. La mida de les columnes la tenim guardada al StarviewerSettings
      */
     void setWidthColumns();
@@ -132,7 +122,6 @@ private:
      */
     void burnDicomdir( recordDeviceDicomDir device );
 
-
     /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit
      */
     void clearQCreateDicomdirScreen();
@@ -141,7 +130,35 @@ private:
      */
     void saveColumnsWidth();
 
+    /// Inicialitza les QActions
+    void createActions();
 
+private slots:
+    /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
+    void deviceChanged( int value );
+
+private:
+    unsigned long m_dicomdirSize;
+    unsigned long m_DiskSpace;
+    QMenu m_contextMenu;///<Menu contextual
+
+    /// Dispositius on es pot gravar el DICOMDIR
+    enum DICOMDIRDevices{ CDROM = 0, DVDROM = 1, HardDisk = 2, PenDrive = 3 };
+
+    ///Agrupa les accions dels dispositius on gravarem el DICOMDIR
+    QActionGroup *m_devicesActionGroup;
+
+    /// Mapejador d'accions
+    QSignalMapper *m_signalMapper;
+
+    /// Accions
+    QAction *m_cdromAction;
+    QAction *m_dvdromAction;
+    QAction *m_hardDiskAction;
+    QAction *m_pendriveAction;
+
+    /// Variable que ens diu quin és el dispositiu seleccionat en aquell moment
+    int m_currentDevice;
 };
 
 }
