@@ -143,9 +143,6 @@ signals :
     ///signal que s'emet per netejar el QSeriesListWidget
     void clearSeriesListWidget();
 
-    ///signal que s'emet quan seleccionem una serie, cap al QSeriesListWidget, per a que seleccioni la mateixa serie que nosaltres tenim seleccionada
-    void selectedSeriesList( QString );
-
     //signal que s'emet quan es vol convertir un estudi al format DicomDir
     void convertToDicomDir( QString studyUID );
 
@@ -192,7 +189,7 @@ public slots:
 private :
 
     QMenu m_contextMenu;///<Menu contextual
-    QString m_parentName , m_oldStudyUID , m_oldPacsAETitle , m_OldInstitution; ///< strings per guardar valors de l'anterior element
+    QString m_parentName , m_oldPacsAETitle , m_OldInstitution; ///< strings per guardar valors de l'anterior element
     QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
 
     /// crea les connexions dels signals i slots

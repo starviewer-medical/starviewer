@@ -547,7 +547,6 @@ void QStudyTreeWidget::clicked( QTreeWidgetItem *item , int )
         {
             setSeriesToSeriesListWidget( item->parent()->parent() );
         }
-        m_oldStudyUID = getSelectedStudyUID();
     }
 }
 

@@ -79,36 +79,9 @@ void QSeriesListWidget::view( QListWidgetItem *item )
     if ( item != NULL ) emit( viewSeriesIcon() );
 }
 
-void QSeriesListWidget::selectedSeriesList( QString seriesUID )
-{
-    QList< QListWidgetItem * > qSeriesList( m_seriesListWidget->findItems( "*" , Qt::MatchWildcard ) );
-    QListWidgetItem *item;
-
-    for ( int i = 0;i < qSeriesList.count(); i++ )
-    {
-        item = qSeriesList.at( i );
-        if ( item->statusTip() == seriesUID )
-        {
-            m_seriesListWidget->setItemSelected( item , true );
-            m_seriesListWidget->setCurrentItem( item );
-        }
-        else m_seriesListWidget->setItemSelected( item , false );
-    }
-}
-
 void QSeriesListWidget::clear()
 {
     m_seriesListWidget->clear();
-}
-
-void QSeriesListWidget::addSeries( DICOMSeries *serie )
-{
-    insertSeries( serie );
-}
-
-void QSeriesListWidget::clearSeriesListWidget()
-{
-    clear();
 }
 
 QSeriesListWidget::~QSeriesListWidget()

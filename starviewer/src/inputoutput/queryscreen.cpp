@@ -24,12 +24,10 @@
 #include "pacsserver.h"
 #include "qserieslistwidget.h"
 #include "retrieveimages.h"
-#include "qconfigurationscreen.h"
 #include "pacslist.h"
 #include "qpacslist.h"
 #include "starviewersettings.h"
 #include "cachepool.h"
-#include "queueoperationlist.h"
 #include "operation.h"
 #include "cachelayer.h"
 #include "pacslistdb.h"
@@ -188,16 +186,15 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_studyTreeWidgetDicomdir , SIGNAL( view() ) , this , SLOT( view() ) );//quan fem doble click sobre un estudi o sèrie de la llista d'estudis
 
     //connectem els signes del SeriesIconView StudyListView
-    connect( m_studyTreeWidgetCache , SIGNAL( addSeries(DICOMSeries * ) ) , m_seriesListWidgetCache , SLOT( addSeries(DICOMSeries *) ) );
-    connect( m_studyTreeWidgetCache , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clearSeriesListWidget() ) );
+    connect( m_studyTreeWidgetCache , SIGNAL( addSeries(DICOMSeries * ) ) , m_seriesListWidgetCache , SLOT( insertSeries(DICOMSeries *) ) );
+    connect( m_studyTreeWidgetCache , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clear() ) );
     connect( m_seriesListWidgetCache , SIGNAL( selectedSeriesIcon( QString) ) , m_studyTreeWidgetCache , SLOT( selectedSeriesIcon( QString) ) );
     connect( m_seriesListWidgetCache , SIGNAL( viewSeriesIcon() ) , m_studyTreeWidgetCache , SLOT( viewStudy() ) );
-    connect( m_studyTreeWidgetCache , SIGNAL( selectedSeriesList( QString) ) , m_seriesListWidgetCache , SLOT( selectedSeriesList( QString) ) );
-connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , SLOT( storeStudyToPacs( QString) ) );
+    connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , SLOT( storeStudyToPacs( QString) ) );
 
 
     //per netejar la QSeriesIconView quant s'esborrar un estudi
-    connect(this , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clearSeriesListWidget() ) );
+    connect(this , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clear() ) );
 
     //per poder descarregar i veure un estudi amb el menu contextual dels del QStudyList del PACS
     connect( m_studyTreeWidgetPacs , SIGNAL( view() ) , this , SLOT( view() ) );
@@ -634,7 +631,6 @@ void QueryScreen::queryStudy( QString source )
         {
             m_studyTreeWidgetCache->insertStudyList( &studyList );//es mostra la llista d'estudis
             m_studyTreeWidgetCache->setSortColumn( 2 ); //ordenem pel nom
-            studyList.firstStudy();
         }
         else if( source == "DICOMDIR" )
         {

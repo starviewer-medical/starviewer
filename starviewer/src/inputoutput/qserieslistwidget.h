@@ -30,36 +30,23 @@ public:
     ///constructor de la classe
     QSeriesListWidget( QWidget *parent = 0 );
 
-    /** Insereix l'informació d'una sèrie al ListICon
-     * @param descripció de la sèrie
-     */
-    void insertSeries( DICOMSeries *serie );
-
-    ///Neteja el ListWidget de sèries
-    void clear();
-
     /// Destructor de la classe
     ~QSeriesListWidget();
 
 public slots:
 
-    /// Slot, que al rebre la senya del QStudyTreeWidget neteja el ListWidget
-    void clearSeriesListWidget();
+    ///Neteja el ListWidget de sèries
+    void clear();
 
-    /** Slot, que al rebre la senyal addSeries del del QStudyTreeWidget afegeix una sèrie al IconView
-     *  @param serie
+    /** Insereix l'informació d'una sèrie al ListICon
+     * @param descripció de la sèrie
      */
-    void addSeries( DICOMSeries *serie );
+    void insertSeries( DICOMSeries *serie );
 
     /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
      *  @param serie Seleccionada
      */
     void clicked( QListWidgetItem *item );
-
-    /** Slot que s'activa quant es selecciona una sèrie des del StudyTreeWidget,selecciona la serie del QStudyTreeWidget en el QSeriesListWidget
-     * @param  UID de la serie seleccionada
-     */
-    void selectedSeriesList( QString key );
 
     /** slot que s'activa quant es fa doblec
      *  @param item de la serie Seleccionada
