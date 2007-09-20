@@ -19,6 +19,7 @@
 #include <QProgressDialog>
 #include <QCloseEvent>
 #include <QHeaderView>
+#include <QSignalMapper>
 
 #include "dicomstudy.h"
 #include "converttodicomdir.h"
@@ -42,6 +43,9 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
 
+    // crear les accions
+    createActions();
+
     createConnections();
 
     m_dicomdirSize = 0;
@@ -58,13 +62,68 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     setWidthColumns();
 }
 
+QCreateDicomdir::~QCreateDicomdir()
+{
+}
+
+void QCreateDicomdir::createActions()
+{
+    m_signalMapper = new QSignalMapper;
+    connect( m_signalMapper, SIGNAL( mapped(int) ), this , SLOT( deviceChanged(int) ) );
+
+    m_cdromAction = new QAction(0);
+    m_cdromAction->setText( tr("CD-ROM") );
+    m_cdromAction->setStatusTip( tr("Record DICOMDIR on a CD-ROM device") );
+    m_cdromAction->setIcon( QIcon(":/images/cdrom.png") );
+    m_cdromAction->setCheckable( true );
+    m_signalMapper->setMapping( m_cdromAction , CDROM );
+    connect( m_cdromAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_cdromDeviceToolButton->setDefaultAction( m_cdromAction );
+
+    m_dvdromAction = new QAction(0);
+    m_dvdromAction->setText( tr("DVD-ROM") );
+    m_dvdromAction->setStatusTip( tr("Record DICOMDIR on a DVD-ROM device") );
+    m_dvdromAction->setIcon( QIcon(":/images/dvd.png") );
+    m_dvdromAction->setCheckable( true );
+    m_signalMapper->setMapping( m_dvdromAction , DVDROM );
+    connect( m_dvdromAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_dvdromDeviceToolButton->setDefaultAction( m_dvdromAction );
+
+    m_hardDiskAction = new QAction(0);
+    m_hardDiskAction->setText( tr("Hard Disk") );
+    m_hardDiskAction->setStatusTip( tr("Record DICOMDIR on a Hard Disk") );
+    m_hardDiskAction->setIcon( QIcon(":/images/harddrive.png") );
+    m_hardDiskAction->setCheckable( true );
+    m_signalMapper->setMapping( m_hardDiskAction , HardDisk );
+    connect( m_hardDiskAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_hardDiskDeviceToolButton->setDefaultAction( m_hardDiskAction );
+
+    m_pendriveAction = new QAction(0);
+    m_pendriveAction->setText( tr("Pen Drive") );
+    m_pendriveAction->setStatusTip( tr("Record DICOMDIR on a USB Pen drive device") );
+    m_pendriveAction->setIcon( QIcon(":/images/usbpendrive.png") );
+    m_pendriveAction->setCheckable( true );
+    m_signalMapper->setMapping( m_pendriveAction , PenDrive );
+    connect( m_pendriveAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_pendriveDeviceToolButton->setDefaultAction( m_pendriveAction );
+
+    m_devicesActionGroup = new QActionGroup( 0 );
+    m_devicesActionGroup->setExclusive( true );
+    m_devicesActionGroup->addAction( m_cdromAction );
+    m_devicesActionGroup->addAction( m_dvdromAction );
+    m_devicesActionGroup->addAction( m_hardDiskAction );
+    m_devicesActionGroup->addAction( m_pendriveAction );
+
+    // primer activem el CD com a dispositiu per defecte
+    m_cdromAction->trigger();
+}
+
 void QCreateDicomdir::createConnections()
 {
     connect( m_buttonRemove , SIGNAL( clicked() ) , this , SLOT( removeSelectedStudy() ) );
     connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( removeAllStudies() ) );
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
-    connect( m_comboBoxAction , SIGNAL( currentIndexChanged( int ) ) , this , SLOT( changedAction( int ) ) );
 }
 
 void QCreateDicomdir::setWidthColumns()
@@ -74,81 +133,6 @@ void QCreateDicomdir::setWidthColumns()
     for ( int index = 0; index < m_dicomdirStudiesList->columnCount(); index++ )
     {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
             m_dicomdirStudiesList->header()->resizeSection( index ,settings.getQCreateDicomdirColumnWidth( index ) );
-    }
-}
-
-void QCreateDicomdir::changedAction( int index )
-{
-    float sizeInMB = (m_dicomdirSize / ( 1024 * 1024 ) );
-
-    switch( index )
-    {
-        case 0  : //memòria usb o flash == 1
-                 m_labelMbCdDvdOcupat->setVisible( false );
-                 m_progressBarOcupat->setVisible( false );
-                 m_labelSizeOfDicomdir->setVisible( true );
-                 m_lineEditDicomdirPath->setVisible( true );
-                 m_buttonExamineDisk->setVisible( true );
-                 m_labelCreateDicomdir->setText( tr( "Create Dicomdir at"  ) );
-                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha màxim
-                 break;
-        case 1  : //memòria usb o flash == 1
-                 m_labelMbCdDvdOcupat->setVisible( false );
-                 m_progressBarOcupat->setVisible( false );
-                 m_labelSizeOfDicomdir->setVisible( true );
-                 m_lineEditDicomdirPath->setVisible( true );
-                 m_buttonExamineDisk->setVisible( true );
-                 m_labelCreateDicomdir->setText( tr( "Create Dicomdir at"  ) );
-                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar a usb o memòria flash, no hi ha màxim perqué no sabem l'usuari en quin dispositu ho vol gravar
-                 break;
-        case 2 : //cd
-                 if ( sizeInMB < 700 )
-                 {
-                    m_labelMbCdDvdOcupat->setVisible( true );
-                    m_progressBarOcupat->setVisible( true );
-                    m_labelSizeOfDicomdir->setVisible( false );
-                    m_lineEditDicomdirPath->setVisible( false );
-                    m_buttonExamineDisk->setVisible( false );
-                    m_labelCreateDicomdir->setText( tr( "Cd occupied" ) );
-                    m_progressBarOcupat->setMaximum( 700 );
-                    m_DiskSpace = ( unsigned long ) 700 * ( unsigned long ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
-                    m_progressBarOcupat->repaint();
-                 }
-                 else
-                 {
-                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb" ) );
-                    m_comboBoxAction->setCurrentIndex( 0 );
-                 }
-                 break;
-        case 3 : //dvd
-                 if ( sizeInMB < 4400 )
-                 {
-                    m_labelMbCdDvdOcupat->setVisible( true );
-                    m_progressBarOcupat->setVisible( true );
-                    m_labelSizeOfDicomdir->setVisible( false );
-                    m_lineEditDicomdirPath->setVisible( false );
-                    m_buttonExamineDisk->setVisible( false );
-                    m_labelCreateDicomdir->setText( tr( "Dvd Ocuppied" ) );
-                    m_progressBarOcupat->setMaximum( 4400 );
-                    m_DiskSpace = ( unsigned long ) 4400 * ( unsigned long ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
-                    m_progressBarOcupat->repaint();
-                 }
-                 else
-                 {
-                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb" ) );
-                    m_comboBoxAction->setCurrentIndex( 0 );
-                 }
-                 break;
-    }
-
-    //Si la mida del dicomdir excedeix el maxim de la barra de progrés, com a valor a la barra de progrés li assignem el seu màxim
-    if ( index > 0 )
-    {
-        if ( sizeInMB < m_progressBarOcupat->maximum() )
-        {
-            m_progressBarOcupat->setValue( int ( sizeInMB ) );
-        }
-        else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
     }
 }
 
@@ -163,7 +147,7 @@ void QCreateDicomdir::setDicomdirSize()
     sizeText.setNum( sizeInMb , 'f' , 2 );
     sizeOfDicomdirText.append( sizeText );
     sizeOfDicomdirText.append( " Mb" );
-    m_labelSizeOfDicomdir->setText( sizeOfDicomdirText );
+    m_DICOMDIRUsedSpaceLabel->setText( sizeOfDicomdirText );
 
     if ( sizeInMb < m_progressBarOcupat->maximum() )
     {
@@ -200,7 +184,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
         }
 
         //només comprovem l'espai si gravem a un cd o dvd
-        if ( studySize + m_dicomdirSize > m_DiskSpace && m_comboBoxAction->currentIndex() != 0 )
+        if ( studySize + m_dicomdirSize > m_DiskSpace && (m_currentDevice == CDROM || m_currentDevice == DVDROM )  )
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir" ) );
         }
@@ -231,23 +215,18 @@ void QCreateDicomdir::createDicomdir()
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     Status state;
 
-    switch( m_comboBoxAction->currentIndex() )
+    switch( m_currentDevice )
     {
-        case 0 : //disc dur
+        case PenDrive:
+        case HardDisk:
                  createDicomdirOnHardDiskOrFlashMemories();
                  break;
-        case 1 : //memòria usb o flash
-                 createDicomdirOnHardDiskOrFlashMemories();
-                 break;
-        case 2 : //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
+        case DVDROM:
+        case CDROM: //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
                  state = createDicomdirOnCdOrDvd();
                  //error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
-                 if ( state.good() || ( !state.good() && state.code() == 4001 ) ) burnDicomdir( recordDeviceDicomDir(cd) );
-                 break;
-        case 3 : //dvd, si s'ha creat bé, executem el programa per gravar el dicomdir a dvd's
-                 state = createDicomdirOnCdOrDvd();
-                 //error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
-                 if ( state.good() || ( !state.good() && state.code() == 4001) ) burnDicomdir( recordDeviceDicomDir(dvd) );
+                 if ( state.good() || ( !state.good() && state.code() == 4001 ) )
+                    burnDicomdir( recordDeviceDicomDir(cd) );
                  break;
     }
 
@@ -391,18 +370,18 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG( logMessage );
     }
 
-    switch( m_comboBoxAction->currentIndex() )
+    switch( m_currentDevice )
     {
-        case 0 : //disc dur o dispositiu extrable
+        case HardDisk: //disc dur o dispositiu extrable
                  state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( harddisk ) );
                  break;
-        case 1 : //usb o memòria flash
+        case PenDrive: //usb o memòria flash
                  state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( usb ) );
                  break;
-        case 2 : //cd
+        case CDROM: //cd
                  state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( cd ) );
                  break;
-        case 3 : //dvd
+        case DVDROM: //dvd
                  state = convertToDicomdir.convert( dicomdirPath, recordDeviceDicomDir( dvd ) );
                  break;
     }
@@ -426,11 +405,8 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         }
     }
 
-    //Cas que sigui un cd o dvd li copiem el README.TXT
-    if ( m_comboBoxAction->currentIndex() == 1 || m_comboBoxAction->currentIndex() == 2)
-    {
+    if ( m_currentDevice == CDROM || m_currentDevice == DVDROM )
         convertToDicomdir.createReadmeTxt();
-    }
 
     INFO_LOG( "Finalitzada la creació del Dicomdir" );
     clearQCreateDicomdirScreen();
@@ -443,7 +419,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
     m_dicomdirStudiesList->clear();
     m_lineEditDicomdirPath->setText( "" );
 
-    m_labelSizeOfDicomdir->setText( tr( "The size of Dicomdir is 0 Mb" ) );
+    m_DICOMDIRUsedSpaceLabel->setText( tr( "The size of Dicomdir is 0 Mb" ) );
 
     m_dicomdirSize = 0;
     setDicomdirSize();//Reiniciem la barra de progrés
@@ -695,8 +671,70 @@ void QCreateDicomdir::closeEvent( QCloseEvent* ce )
     ce->accept();
 }
 
-QCreateDicomdir::~QCreateDicomdir()
+void QCreateDicomdir::deviceChanged( int index )
 {
+    float sizeInMB = (m_dicomdirSize / ( 1024 * 1024 ) );
+
+    m_currentDevice = index;
+    switch( m_currentDevice )
+    {
+        case PenDrive:
+        case HardDisk:
+                 m_labelMbCdDvdOcupat->setVisible( false );
+                 m_progressBarOcupat->setVisible( false );
+                 m_DICOMDIRUsedSpaceLabel->setVisible( true );
+                 m_lineEditDicomdirPath->setVisible( true );
+                 m_buttonExamineDisk->setVisible( true );
+                 m_DICOMDIRLocationLabel->setText( tr( "Location"  ) );
+                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha màxim
+                 break;
+        case CDROM:
+                 if( sizeInMB < 700 )
+                 {
+                    m_labelMbCdDvdOcupat->setVisible( true );
+                    m_progressBarOcupat->setVisible( true );
+                    m_DICOMDIRUsedSpaceLabel->setVisible( false );
+                    m_lineEditDicomdirPath->setVisible( false );
+                    m_buttonExamineDisk->setVisible( false );
+                    m_DICOMDIRLocationLabel->setText( tr( "Space used" ) );
+                    m_progressBarOcupat->setMaximum( 700 );
+                    m_DiskSpace = ( unsigned long ) 700 * ( unsigned long ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
+                    m_progressBarOcupat->repaint();
+                 }
+                 else
+                 {
+                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb" ) );
+                 }
+                 break;
+        case DVDROM:
+                 if( sizeInMB < 4400 )
+                 {
+                    m_labelMbCdDvdOcupat->setVisible( true );
+                    m_progressBarOcupat->setVisible( true );
+                    m_DICOMDIRUsedSpaceLabel->setVisible( false );
+                    m_lineEditDicomdirPath->setVisible( false );
+                    m_buttonExamineDisk->setVisible( false );
+                    m_DICOMDIRLocationLabel->setText( tr( "Space Used" ) );
+                    m_progressBarOcupat->setMaximum( 4400 );
+                    m_DiskSpace = ( unsigned long ) 4400 * ( unsigned long ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
+                    m_progressBarOcupat->repaint();
+                 }
+                 else
+                 {
+                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb" ) );
+                 }
+                 break;
+    }
+
+    //Si la mida del dicomdir excedeix el maxim de la barra de progrés, com a valor a la barra de progrés li assignem el seu màxim
+//     if ( index > 0 )
+//     {
+        if ( sizeInMB < m_progressBarOcupat->maximum() )
+        {
+            m_progressBarOcupat->setValue( int ( sizeInMB ) );
+        }
+        else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
+//     }
 }
 
 }
