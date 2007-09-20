@@ -41,6 +41,7 @@ INCLUDEPATH += ../main \
                ../interface \
                ../core \
                ../inputoutput
+DEPENDPATH += images
 
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui

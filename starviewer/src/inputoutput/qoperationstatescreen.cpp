@@ -30,6 +30,23 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     setWidthColumns();//carreguem la mida de les columnes
 }
 
+unsigned int QOperationStateScreen::getActiveOperationsCount()
+{
+    QList<QTreeWidgetItem *> retrieveList( m_treeRetrieveStudy->findItems( "*" , Qt::MatchWildcard, 0 ) );
+    QTreeWidgetItem *item;
+    unsigned int finalizedItems = 0;
+
+    for ( int i = 0; i < retrieveList.count();i++ )
+    {
+        item = retrieveList.at( i );
+        if ( ! isOperationFinalized(item->text(0)) )
+        {
+            ++finalizedItems;
+        }
+    }
+    return finalizedItems;
+}
+
 void QOperationStateScreen::createConnections()
 {
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearList() ) );
@@ -85,7 +102,7 @@ void QOperationStateScreen::clearList()
     for ( int i = 0; i < qRetrieveList.count();i++ )
     {
         item = qRetrieveList.at( i );
-        if (item->text( 0 ) == tr( "RETRIEVED" ) || item->text( 0 ) == tr( "STORED" ) )
+        if ( isOperationFinalized(item->text(0)) )
         {
             delete item;
         }
@@ -217,6 +234,11 @@ void QOperationStateScreen::closeEvent( QCloseEvent* ce )
 
 QOperationStateScreen::~QOperationStateScreen()
 {
+}
+
+bool QOperationStateScreen::isOperationFinalized(const QString &message)
+{
+    return  message == tr( "RETRIEVED" ) || message == tr( "STORED" );
 }
 
 };

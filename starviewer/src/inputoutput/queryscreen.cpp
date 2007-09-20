@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QFileDialog>
+#include <QMovie>
 
 #include "processimagesingleton.h"
 #include "serieslistsingleton.h"
@@ -81,10 +82,17 @@ QueryScreen::QueryScreen( QWidget *parent )
 
     m_textPatientID->setFocus();
 
+    QMovie *operationAnimation = new QMovie(this);
+    operationAnimation->setFileName(":/images/loader.gif");
+    m_operationAnimation->setMovie(operationAnimation);
+    operationAnimation->start();
+
     //fem que per defecte mostri els estudis de la cache
     queryStudy("Cache");
     m_pushButtonAdvancedSearch->hide();
     m_qwidgetAdvancedSearch->hide();
+    m_operationAnimation->hide();
+    m_labelOperation->hide();
 }
 
 QueryScreen::~QueryScreen()
@@ -127,6 +135,20 @@ void QueryScreen::deleteOldStudies()
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error deleting old studies" ) );
         databaseError( &state );
+    }
+}
+
+void QueryScreen::updateOperationsInProgressMessage()
+{
+    if (m_OperationStateScreen->getActiveOperationsCount() > 0)
+    {
+        m_operationAnimation->show();
+        m_labelOperation->show();
+    }
+    else
+    {
+        m_operationAnimation->hide();
+        m_labelOperation->hide();
     }
 }
 
@@ -210,11 +232,16 @@ void QueryScreen::connectSignalsAndSlots()
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_OperationStateScreen, SLOT(  setErrorOperation( QString ) ) );
     connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_OperationStateScreen, SLOT(  setOperationFinished( QString ) ) );
+
     connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_OperationStateScreen, SLOT(  setOperating( QString ) ) );
     connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_OperationStateScreen , SLOT(  imageCommit( QString , int ) ) );
     connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_OperationStateScreen , SLOT(  seriesCommit( QString ) ) );
     connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_OperationStateScreen , SLOT(  insertNewOperation( Operation *) ) );
 
+    // Label d'informació (cutre-xapussa)
+    connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), this, SLOT( updateOperationsInProgressMessage() ));
+    connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), this, SLOT( updateOperationsInProgressMessage() ));
+    connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ),  this, SLOT( updateOperationsInProgressMessage() ));
 
     //connecta el signal de que no hi ha suficient espai de disc
     connect( &m_qexecuteOperationThread , SIGNAL(  notEnoughFreeSpace() ) , this , SLOT(  notEnoughFreeSpace() ) );
