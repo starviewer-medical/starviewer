@@ -82,8 +82,9 @@ public:
     enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlags{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x1 , PatientOrientationAnnotation = 0x2 , RulersAnnotation = 0x4 , SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40,
+    enum AnnotationFlag{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x1 , PatientOrientationAnnotation = 0x2 , RulersAnnotation = 0x4 , SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40,
     AllAnnotation = 0x7F };
+    Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
     Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
@@ -260,8 +261,8 @@ public slots:
     void contextMenuRelease();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
-    void enableAnnotation( unsigned int annotation, bool enable = true );
-    void removeAnnotation( unsigned int annotation );
+    void enableAnnotation( AnnotationFlags annotation, bool enable = true );
+    void removeAnnotation( AnnotationFlags annotation );
 
     /// Ajusta ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
     void setDefaultWindowLevel( double window, double level );
@@ -490,7 +491,7 @@ protected:
 
 private:
     /// flag que ens indica quines anotacions es veuran per la finestra
-    unsigned int m_enabledAnnotations;
+    AnnotationFlags m_enabledAnnotations;
 
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
     OverlayType m_overlay;
@@ -590,7 +591,7 @@ private:
     /// Tool per mostrar un caption amb la informació del voxel sota el cursor (posició i valor)
     VoxelInformationTool *m_voxelInformationTool;
 };
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
 };  //  end  namespace udg
 
 #endif
