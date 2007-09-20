@@ -75,7 +75,7 @@ void QApplicationMainWindow::createActions()
     m_newAction->setShortcut( tr("Ctrl+N") );
     m_newAction->setStatusTip(tr("Open a new working window") );
     m_newAction->setIcon( QIcon(":/images/new.png") );
-    connect( m_newAction , SIGNAL( triggered() ), this, SLOT( openNewWindow() ) );
+    connect( m_newAction , SIGNAL( triggered() ), this, SLOT( openBlankWindow() ) );
 
     m_openAction = new QAction( this );
     m_openAction->setText( tr("&Open...") );
@@ -289,9 +289,10 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
 
-void QApplicationMainWindow::openNewWindow( Patient *patient )
+void QApplicationMainWindow::openNewWindow( const ExtensionContext &context )
 {
     QString windowName;
+    Patient *patient = context.getPatient();
     if( patient )
     {
         windowName = patient->getID() + " : " + patient->getFullName();
@@ -302,13 +303,20 @@ void QApplicationMainWindow::openNewWindow( Patient *patient )
     }
 
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName );
-    newMainWindow->addPatient( patient );
+    newMainWindow->addPatientContext( context );
     newMainWindow->show();
 }
 
-void QApplicationMainWindow::addPatient( Patient *patient )
+void QApplicationMainWindow::openBlankWindow()
 {
-    if( !patient ) // si les dades de pacient són nules, no fem res
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0 );
+    newMainWindow->show();
+}
+
+void QApplicationMainWindow::addPatientContext( const ExtensionContext &context )
+{
+    Patient *newPatient = context.getPatient();
+    if( !newPatient ) // si les dades de pacient són nules, no fem res
     {
         DEBUG_LOG("NULL Patient, maybe creating a blank new window");
         return;
@@ -316,22 +324,26 @@ void QApplicationMainWindow::addPatient( Patient *patient )
 
     if( !m_patient )
     {
-        m_patient = patient;
+        m_patient = newPatient;
         this->setWindowTitle( m_patient->getID() + " : " + m_patient->getFullName() );
         enableExtensions();
+        m_extensionHandler->setContext( context );
         // si són les primeres dades que es carreguen, cal obrir l'extensió per defecte
         m_extensionHandler->openDefaultExtension();
         DEBUG_LOG("No teníem cap pacient, assignem el que ens donen");
     }
-    else if( m_patient->isSamePatient( patient ) )
+    else if( m_patient->isSamePatient( newPatient ) )
     {
-        *m_patient += *patient;
+        *m_patient += *newPatient;
+        m_extensionHandler->getContext().setPatient( m_patient );
+        m_extensionHandler->getContext().addDefaultSelectedSeries( context.getDefaultSelectedSeries() );
+        m_extensionHandler->getContext().addDefaultSelectedStudies( context.getDefaultSelectedStudies() );
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
     }
     else
     {
         // és un pacient diferent, cal obrir-lo apart en una nova finestra
-        openNewWindow( patient );
+        openNewWindow( context );
         DEBUG_LOG("Creem nou pacient");
     }
 }

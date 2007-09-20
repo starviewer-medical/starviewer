@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QString>
 #include "patient.h"
+#include "extensioncontext.h"
 
 class QProgressDialog;
 
@@ -56,16 +57,21 @@ public slots:
     void processInput( QStringList inputFiles, QString defaultStudyUID = QString(), QString  defaultSeriesUID = QString(), QString defaultImageInstance = QString() );
 
     /**
-     * Donada una estructura de pacient decideix que fer amb aquesta, com por exemple fusionar les dades si ja tenim
-     * dades d'aquest mateix pacient, obrir finestres noves, alertar a l'usuari de les noves dades, etc.
-     * @param patient L'estructura de pacient que volem afegir a l'aplicació
-     */
-    void addPatientData( Patient *patient );
-
-    /**
      * Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
      */
     void openDefaultExtension();
+
+    /**
+     * Assigna el contexte de l'extensió
+     * @param context contexte
+     */
+    void setContext( const ExtensionContext &context );
+
+    /**
+     * Obtenim el contexte de l'extensió
+     * @return El contexte de l'extensió, es pot modificar
+     */
+    ExtensionContext &getContext();
 
 private:
     /// Crea les connexions de signals i slots
@@ -83,6 +89,9 @@ private:
 
     /// Membres de conveniència per saber quin estudi i series es volen veure per defecte
     QString m_defaultStudyUID, m_defaultSeriesUID;
+
+    /// Contexte de l'extensió
+    ExtensionContext m_extensionContext;
 };
 
 };  //  end  namespace udg
