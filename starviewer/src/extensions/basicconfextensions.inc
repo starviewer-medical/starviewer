@@ -5,6 +5,7 @@ TRANSLATIONS += translations_ca_ES.ts \
 TARGETDEPS += ../../../core/libcore.a
 LIBS += ../../../core/libcore.a
 INCLUDEPATH += ../../../core
+DEPENDPATH += ../../../core
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
 OBJECTS_DIR = ../../../../tmp/obj
