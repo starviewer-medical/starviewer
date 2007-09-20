@@ -51,6 +51,8 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     readSettings();
 
     m_thickSlab = 0.0;
+    
+    m_isCtrlPressed = false;
 }
 
 QMPRExtension::~QMPRExtension()
@@ -301,12 +303,21 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-        detectAxialViewAxisActor();
+    
+        if ( m_isCtrlPressed )
+            detectPushAxialViewAxisActor();
+        else
+            detectAxialViewAxisActor();
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        if( m_state != NONE )
-            releaseAxialViewAxisActor();
+        if ( m_isCtrlPressed )
+            releasePushAxialViewAxisActor();
+        else
+        {
+            if( m_state != NONE )
+                releaseAxialViewAxisActor();
+        }
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -316,14 +327,23 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
             pushAxialViewAxisActor();
     break;
 
-    case vtkCommand::RightButtonPressEvent:
-        detectPushAxialViewAxisActor();
-    break;
-
-    case vtkCommand::RightButtonReleaseEvent:
-        if( m_state != NONE )
-            releasePushAxialViewAxisActor();
-    break;
+//     case vtkCommand::RightButtonPressEvent:
+//         detectPushAxialViewAxisActor();
+//     break;
+// 
+//     case vtkCommand::RightButtonReleaseEvent:
+//         if( m_state != NONE )
+//             releasePushAxialViewAxisActor();
+//     break;
+    
+    case vtkCommand::KeyPressEvent:
+                this->answerToKeyEvent();
+            break;
+        
+        case vtkCommand::KeyReleaseEvent:
+            if ( ((int)( m_axial2DView->getInteractor()->GetKeyCode() ) ) == 0 ) // s'ha alliberat el Ctrl
+                m_isCtrlPressed = false;
+            break;
 
     default:
     break;
@@ -573,6 +593,9 @@ void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
 
 void QMPRExtension::detectPushAxialViewAxisActor()
 {
+    //desactivem les tools perquè no facin interferència
+    m_axial2DView->disableTools();
+    
     // obtenim el punt que s'ha clicat
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
@@ -652,6 +675,8 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         m_pickedActorPlaneSource = 0;
         m_pickedActorReslice = 0;
     }
+    //activem les tools 
+    m_axial2DView->enableTools();
 }
 
 void QMPRExtension::detectPushSagitalViewAxisActor()
@@ -1485,6 +1510,17 @@ void QMPRExtension::writeSettings()
     settings.setValue("defaultSaveDir", m_defaultSaveDir );
 
     settings.endGroup();
+}
+
+void QMPRExtension::answerToKeyEvent()
+{
+    char keyChar = m_axial2DView->getInteractor()->GetKeyCode();
+    int keyInt = (int)keyChar;
+
+   if ( keyInt == 0 ) // s'ha polsat el Ctrl
+    {
+        m_isCtrlPressed = true;
+    }
 }
 
 };  // end namespace udg

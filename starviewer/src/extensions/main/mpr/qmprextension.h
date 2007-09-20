@@ -65,6 +65,9 @@ signals:
     void sagitalYAxisChanged( double y1 , double y2 , double y3 );
 
 private:
+    ///ens permet respondre a events de teclat
+    void answerToKeyEvent();
+    
     /// Ens diu si un eix és paral·lel a un dels aixos de coordenades X Y o Z
     bool isParallel( double axis[3] );
 
@@ -93,6 +96,9 @@ private:
 
     /// inicialitza les orientacions dels plans de tall correctament perquè tinguin un espaiat, dimensions i límits correctes
     void initOrientation();
+    
+    ///variable booleana que ens permet saber si està polsada la tecla control
+    bool m_isCtrlPressed;
 
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
