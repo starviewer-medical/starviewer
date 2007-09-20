@@ -262,9 +262,8 @@ private:
     /** Busca la informació d'una sèrie en el PACS i la mostra en la interfície
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
-     * @param show Si es verdader mostra les dades de la sèrie per pantalla, pot ser que no les volguem mostrar, per exemple el cas que volem la informació per guardar-la en la caché al descarragar-nos una imatge
      */
-    void querySeriesPacs( QString , QString , bool );
+    void querySeriesPacs(QString studyUID, QString pacsAETitle);
 
     /** Cerca les sèries d'un estudi a la font indicada (Cache,DICOMDIR)
      * @param studyUID UID de l'estudi a cercar
