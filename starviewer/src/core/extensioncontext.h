@@ -38,6 +38,13 @@ public:
     void setDefaultSelectedStudies( QStringList selectedStudies );
 
     /**
+     * Afegim un estudi més per defecte a la llista
+     * @param study L'uid de l'estudi
+     */
+    void addDefaultSelectedStudy( QString study );
+    void addDefaultSelectedStudies( QStringList studies );
+
+    /**
      * Retorna la llista d'estudis seleccionats per defecte
      * @return La llista amb els UID dels estudis seleccionats per defecte
      */
@@ -50,6 +57,13 @@ public:
      * seleccionades per defecte
      */
     void setDefaultSelectedSeries( QStringList selectedSeries );
+
+    /**
+     * Afegim una sèrie més per defecte a la llista
+     * @param series L'uid de la sèrie
+     */
+    void addDefaultSelectedSeries( QString series );
+    void addDefaultSelectedSeries( QStringList series );
 
     /**
      * Retorna la llista de series seleccionades per defecte
