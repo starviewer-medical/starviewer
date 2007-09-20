@@ -29,6 +29,16 @@ void ExtensionContext::setPatient(Patient *patient)
     m_patient = patient;
 }
 
+void ExtensionContext::addDefaultSelectedStudy(QString study)
+{
+    m_defaultSelectedStudies << study;
+}
+
+void ExtensionContext::addDefaultSelectedStudies( QStringList studies )
+{
+    m_defaultSelectedStudies += studies;
+}
+
 void ExtensionContext::setDefaultSelectedStudies( QStringList selectedStudies )
 {
     m_defaultSelectedStudies = selectedStudies;
@@ -39,9 +49,19 @@ QStringList ExtensionContext::getDefaultSelectedStudies() const
     return m_defaultSelectedStudies;
 }
 
+void ExtensionContext::addDefaultSelectedSeries(QString series)
+{
+    m_defaultSelectedSeries << series;
+}
+
 void ExtensionContext::setDefaultSelectedSeries( QStringList selectedSeries )
 {
     m_defaultSelectedSeries = selectedSeries;
+}
+
+void ExtensionContext::addDefaultSelectedSeries( QStringList series )
+{
+    m_defaultSelectedSeries += series;
 }
 
 QStringList ExtensionContext::getDefaultSelectedSeries() const
@@ -70,3 +90,4 @@ Volume *ExtensionContext::getDefaultVolume() const
 }
 
 }
+
