@@ -2437,7 +2437,7 @@ void Q2DViewer::updateDisplayExtent()
     }
 }
 
-void Q2DViewer::enableAnnotation( unsigned int annotation, bool enable )
+void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
 {
     if( enable )
         m_enabledAnnotations = m_enabledAnnotations | annotation;
@@ -2447,7 +2447,7 @@ void Q2DViewer::enableAnnotation( unsigned int annotation, bool enable )
     refreshAnnotations();
 }
 
-void Q2DViewer::removeAnnotation( unsigned int annotation )
+void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
 {
     enableAnnotation( annotation, false );
 }
