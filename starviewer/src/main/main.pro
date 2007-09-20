@@ -7,6 +7,7 @@ for(dir, PLAYGROUND_EXTENSIONS) {
         TARGETDEPS += ../extensions/playground/$$dir/lib$${dir}.a
         LIBS += ../extensions/playground/$$dir/lib$${dir}.a
         INCLUDEPATH += ../extensions/playground/$$dir
+        DEPENDPATH += ../extensions/playground/$$dir
     }
 }
 
@@ -15,6 +16,7 @@ for(dir, CONTRIB_EXTENSIONS) {
         TARGETDEPS += ../extensions/contrib/$$dir/lib$${dir}.a
         LIBS += ../extensions/contrib/$$dir/lib$${dir}.a
         INCLUDEPATH += ../extensions/contrib/$$dir
+        DEPENDPATH += ../extensions/contrib/$$dir
     }
 }
 
@@ -23,6 +25,7 @@ for(dir, MAIN_EXTENSIONS) {
         TARGETDEPS += ../extensions/main/$$dir/lib$${dir}.a
         LIBS += ../extensions/main/$$dir/lib$${dir}.a
         INCLUDEPATH += ../extensions/main/$$dir
+        DEPENDPATH += ../extensions/main/$$dir
     }
 }
 

@@ -20,9 +20,11 @@ SOURCES += qapplicationmainwindow.cpp \
 TARGETDEPS += ../core/libcore.a \
 ../../src/inputoutput/libinputoutput.a
 LIBS += ../inputoutput/libinputoutput.a \
-../core/libcore.a
+        ../core/libcore.a
 INCLUDEPATH += ../inputoutput \
-../core
+               ../core
+DEPENDPATH += ../inputoutput \
+               ../core
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui
 OBJECTS_DIR = ../../tmp/obj
