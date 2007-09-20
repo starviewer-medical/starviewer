@@ -43,18 +43,12 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
 
-    // crear les accions
-    createActions();
-
-    createConnections();
-
     m_dicomdirSize = 0;
-
     setDicomdirSize();
 
-    //com per defecte carreguem del combo l'opcio copia a disc o dispositiu extern, amaguem aquests dos objectes que només s'utilitzen per quan gravem en cd o dvd
-    m_labelMbCdDvdOcupat->setVisible( false );
-    m_progressBarOcupat->setVisible( false );
+    // crear les accions
+    createActions();
+    createConnections();
 
     //per defecte gravem al disc dur per tant, l'espai és il·limitat
     m_DiskSpace = ( unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
@@ -142,24 +136,19 @@ void QCreateDicomdir::setDicomdirSize()
     float sizeInMb;
 
     sizeInMb = m_dicomdirSize / ( 1024 * 1024 );//passem a Mb
-
-    sizeOfDicomdirText.insert( 0 , tr( "The size of Dicomdir is " ) );
     sizeText.setNum( sizeInMb , 'f' , 2 );
-    sizeOfDicomdirText.append( sizeText );
-    sizeOfDicomdirText.append( " Mb" );
-    m_DICOMDIRUsedSpaceLabel->setText( sizeOfDicomdirText );
+
+    sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb").arg(sizeText);
+    m_dicomdirSizeOnDiskLabel->setText( sizeOfDicomdirText );
 
     if ( sizeInMb < m_progressBarOcupat->maximum() )
-    {
-        m_progressBarOcupat->setValue( int ( sizeInMb ) );
-    }
-    else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
+        m_progressBarOcupat->setValue( int( sizeInMb ) );
+    else
+        m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 
     sizeText.setNum( sizeInMb , 'f' , 0 );
-    sizeOfDicomdirText.clear();
-    sizeOfDicomdirText.insert( 0 , sizeText );
-    sizeOfDicomdirText.append( " Mb" );
 
+    sizeOfDicomdirText = tr("%1 Mb").arg( sizeText );
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
 }
 
@@ -186,7 +175,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
         //només comprovem l'espai si gravem a un cd o dvd
         if ( studySize + m_dicomdirSize > m_DiskSpace && (m_currentDevice == CDROM || m_currentDevice == DVDROM )  )
         {
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
         else
         {   //afegim la informació de l'estudi a la llista
@@ -206,7 +195,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
     }
     else
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study exists in the Dicomdir list" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study exists in the DICOMDIR list" ) );
     }
 }
 
@@ -250,17 +239,17 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
         delDirectory.deleteDirectory( dicomdirPath , true );
     }
 
-    logMessage = "Iniciant la creació del Dicomdir en cd-dvd al directori temporal ";
+    logMessage = "Iniciant la creació del DICOMDIR en cd-dvd al directori temporal ";
     logMessage.append( dicomdirPath );
     INFO_LOG ( logMessage );
 
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
-        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create Dicomdir. Please check users permission" ) );
+        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission" ) );
         logMessage = "Error al crear directori ";
         logMessage.append( dicomdirPath );
         ERROR_LOG( logMessage );
-        return state.setStatus( "Can't create temporary Dicomdir", false , 3002 );
+        return state.setStatus( "Can't create temporary DICOMDIR", false , 3002 );
     }
     else
     {
@@ -278,20 +267,20 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please enter a diretory to create de Dicomdir" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please enter a diretory to create de DICOMDIR" ) );
         return;
     }
 
 
-    logMessage = "Iniciant la creació del Dicomdir en discdur o usb al directori ";
+    logMessage = "Iniciant la creació del DICOMDIR en discdur o usb al directori ";
     logMessage.append( dicomdirPath );
     INFO_LOG ( logMessage );
 
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
         switch ( QMessageBox::question( this ,
-                tr( "Create Dicomdir" ) ,
-                tr( "The directory contains a Dicomdir, do you want to overwrite and delete all the files in the directory ?" ) ,
+                tr( "Create DICOMDIR" ) ,
+                tr( "The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?" ) ,
                 tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
             case 0: // si vol sobreescriure, esborrem el contingut del directori
@@ -309,7 +298,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         {
                 switch ( QMessageBox::question( this ,
                         tr( "Create directory ?" ) ,
-                        tr( "The Dicomdir directory doesn't exists. Do you want to create it ?" ) ,
+                        tr( "The DICOMDIR directory doesn't exists. Do you want to create it ?" ) ,
                         tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
                 {
                     case 0:
@@ -342,12 +331,12 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Not enough free space to create Dicomdir. Please free space" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Not enough free space to create DICOMDIR. Please free space" ) );
 
-        logMessage = "Error al crear el Dicomdir, no hi ha suficient espai al disc ERROR : ";
+        logMessage = "Error al crear el DICOMDIR, no hi ha suficient espai al disc ERROR : ";
         logMessage.append( state.text() );
         ERROR_LOG( logMessage );
-        return state.setStatus( "Not enough space to create Dicomdir", false , 3000 );
+        return state.setStatus( "Not enough space to create DICOMDIR", false , 3000 );
     }
 
     QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
@@ -355,8 +344,8 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies which you want to create a Dicomdir" ) );
-        return state.setStatus( "No study selected to create Dicomdir", false , 3001 );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies which you want to create a DICOMDIR" ) );
+        return state.setStatus( "No study selected to create DICOMDIR", false , 3001 );
     }
 
     for ( int i = 0; i < dicomdirStudiesList.count(); i++ )
@@ -366,7 +355,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
         logMessage = "L'estudi ";
         logMessage.append( item->text( 7 ) );
-        logMessage.append( " s'afegirà al Dicomdir " );
+        logMessage.append( " s'afegirà al DICOMDIR " );
         INFO_LOG( logMessage );
     }
 
@@ -396,8 +385,8 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         }
         else
         {
-            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating Dicomdir. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
-            logMessage = "Error al crear el Dicomdir ERROR : ";
+            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating DICOMDIR. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
+            logMessage = "Error al crear el DICOMDIR ERROR : ";
             logMessage.append( state.text() );
             ERROR_LOG( logMessage );
 
@@ -408,7 +397,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     if ( m_currentDevice == CDROM || m_currentDevice == DVDROM )
         convertToDicomdir.createReadmeTxt();
 
-    INFO_LOG( "Finalitzada la creació del Dicomdir" );
+    INFO_LOG( "Finalitzada la creació del DICOMDIR" );
     clearQCreateDicomdirScreen();
 
     return state;
@@ -419,7 +408,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
     m_dicomdirStudiesList->clear();
     m_lineEditDicomdirPath->setText( "" );
 
-    m_DICOMDIRUsedSpaceLabel->setText( tr( "The size of Dicomdir is 0 Mb" ) );
+    m_dicomdirSizeOnDiskLabel->setText( tr( "The size of DICOMDIR is 0 Mb" ) );
 
     m_dicomdirSize = 0;
     setDicomdirSize();//Reiniciem la barra de progrés
@@ -427,7 +416,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
 
 void QCreateDicomdir::examineDicomdirPath()
 {
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Dicomdir Directory" ) );
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "DICOMDIR Directory" ) );
     QString path;
 
     dlg->setFileMode( QFileDialog::DirectoryOnly );
@@ -444,9 +433,8 @@ void QCreateDicomdir::removeAllStudies()
 {
     m_dicomdirSize = 0;
     setDicomdirSize();
-
     m_dicomdirStudiesList->clear();
-
+    // TODO perquè es fa un segon setDicomdirSize?
     setDicomdirSize();
 }
 
@@ -482,7 +470,7 @@ void QCreateDicomdir::removeSelectedStudy()
             m_dicomdirSize = m_dicomdirSize - studySize;
             setDicomdirSize();
 
-            delete selectedStudies.at( i );;
+            delete selectedStudies.at( i );
         }
     }
 }
@@ -506,7 +494,7 @@ void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
     QString dicomdirPath, outputIsoPathParameter, isoPath;
 
     //com que de moment no hi ha comunicacio amb el mkisofs es crea aquest progress bar per donar algo de feeling a l'usuari, per a que no es pensi que s'ha penjat l'aplicació
-    QProgressDialog *progressBar = new QProgressDialog( tr( "Creating Dicomdir Image..." ) , "" , 0 , 10 );;
+    QProgressDialog *progressBar = new QProgressDialog( tr( "Creating DICOMDIR Image..." ) , "" , 0 , 10 );;
     progressBar->setMinimumDuration( 0 );
     progressBar->setCancelButton( 0 );
     progressBar->setValue( 7 );
@@ -680,61 +668,43 @@ void QCreateDicomdir::deviceChanged( int index )
     {
         case PenDrive:
         case HardDisk:
-                 m_labelMbCdDvdOcupat->setVisible( false );
-                 m_progressBarOcupat->setVisible( false );
-                 m_DICOMDIRUsedSpaceLabel->setVisible( true );
-                 m_lineEditDicomdirPath->setVisible( true );
-                 m_buttonExamineDisk->setVisible( true );
-                 m_DICOMDIRLocationLabel->setText( tr( "Location"  ) );
-                 m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );//per gravar al disc no hi ha màxim
-                 break;
+            m_stackedWidget->setCurrentIndex(1);
+            // per gravar al disc no hi ha màxim TODO això no es del tot cert, caldria comprovar l'espai de disc
+            m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );
+            break;
         case CDROM:
-                 if( sizeInMB < 700 )
-                 {
-                    m_labelMbCdDvdOcupat->setVisible( true );
-                    m_progressBarOcupat->setVisible( true );
-                    m_DICOMDIRUsedSpaceLabel->setVisible( false );
-                    m_lineEditDicomdirPath->setVisible( false );
-                    m_buttonExamineDisk->setVisible( false );
-                    m_DICOMDIRLocationLabel->setText( tr( "Used Space" ) );
+                m_stackedWidget->setCurrentIndex(0);
+                if( sizeInMB < 700 )
+                {
                     m_progressBarOcupat->setMaximum( 700 );
                     m_DiskSpace = ( unsigned long ) 700 * ( unsigned long ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
                     m_progressBarOcupat->repaint();
-                 }
-                 else
-                 {
+                }
+                else
+                {
                     QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb" ) );
-                 }
-                 break;
+                }
+                break;
         case DVDROM:
-                 if( sizeInMB < 4400 )
-                 {
-                    m_labelMbCdDvdOcupat->setVisible( true );
-                    m_progressBarOcupat->setVisible( true );
-                    m_DICOMDIRUsedSpaceLabel->setVisible( false );
-                    m_lineEditDicomdirPath->setVisible( false );
-                    m_buttonExamineDisk->setVisible( false );
-                    m_DICOMDIRLocationLabel->setText( tr( "Used Space" ) );
+                m_stackedWidget->setCurrentIndex(0);
+                if( sizeInMB < 4400 )
+                {
                     m_progressBarOcupat->setMaximum( 4400 );
                     m_DiskSpace = ( unsigned long ) 4400 * ( unsigned long ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
                     m_progressBarOcupat->repaint();
-                 }
-                 else
-                 {
+                }
+                else
+                {
                     QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb" ) );
-                 }
-                 break;
+                }
+                break;
     }
 
-    //Si la mida del dicomdir excedeix el maxim de la barra de progrés, com a valor a la barra de progrés li assignem el seu màxim
-//     if ( index > 0 )
-//     {
-        if ( sizeInMB < m_progressBarOcupat->maximum() )
-        {
-            m_progressBarOcupat->setValue( int ( sizeInMB ) );
-        }
-        else m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
-//     }
+    if ( sizeInMB < m_progressBarOcupat->maximum() )
+        m_progressBarOcupat->setValue( int( sizeInMB ) );
+    else
+        m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
+
 }
 
 }
