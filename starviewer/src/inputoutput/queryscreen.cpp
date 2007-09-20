@@ -238,9 +238,6 @@ connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , 
     //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
     connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomdir( QString ) ) );
 
-    //connecta amb el mètode que obre un dicomdir
-    connect( m_buttonOpenDicomdir , SIGNAL( clicked() ) , this , SLOT( openDicomdir() ) );
-
     //Amaga o ensenya la cerca avançada
     connect( m_pushButtonAdvancedSearch , SIGNAL( toggled( bool ) ) , m_qwidgetAdvancedSearch , SLOT( setVisible( bool ) ) );
 
@@ -1333,6 +1330,7 @@ void QueryScreen::openDicomdir()
         else
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
+            this->show();
             m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
         }
 
