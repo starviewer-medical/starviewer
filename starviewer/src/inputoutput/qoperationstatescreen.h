@@ -32,6 +32,9 @@ public:
 	/// destructor de la classe
     ~QOperationStateScreen();
 
+    /// Retorna el núm. d'operacions que s'estan executant
+    unsigned int getActiveOperationsCount();
+
 public slots :
 
 
@@ -93,6 +96,9 @@ private:
     /** Guarda la mida de les columnes del QTreeWidget al StarviewerSettings
      */
     void saveColumnsWidth();
+
+    /// Indica si una operació es pot considerar com a finalitzada a partir del seu missatge d'estat
+    bool isOperationFinalized(const QString &message);
 };
 
 };

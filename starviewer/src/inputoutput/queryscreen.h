@@ -204,6 +204,9 @@ protected :
      */
     void closeEvent( QCloseEvent* ce );
 
+private slots:
+    void updateOperationsInProgressMessage();
+
 private:
     ///Connecta els signals i slots pertinents
     void connectSignalsAndSlots();
