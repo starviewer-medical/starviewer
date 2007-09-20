@@ -260,8 +260,8 @@ public slots:
     void contextMenuRelease();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
-    void enableAnnotation( AnnotationFlags annotation, bool enable = true );
-    void removeAnnotation( AnnotationFlags annotation );
+    void enableAnnotation( unsigned int annotation, bool enable = true );
+    void removeAnnotation( unsigned int annotation );
 
     /// Ajusta ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
     void setDefaultWindowLevel( double window, double level );

@@ -79,7 +79,7 @@ namespace udg {
 Q2DViewer::Q2DViewer( QWidget *parent )
  : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0),  m_scalarBar(0), m_rotateFactor(0), m_columns(1), m_rows(1), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
-    m_enabledAnnotations = Q2DViewer::NoAnnotation;
+    m_enabledAnnotations = Q2DViewer::AllAnnotation;
     m_lastView = Q2DViewer::Axial;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -816,7 +816,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_mainVolume = volume;
     m_currentSlice = 0;
     m_currentPhase = 0;
-    this->enableAnnotation( Q2DViewer::AllAnnotation );
+    this->enableAnnotation( m_enabledAnnotations );
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
     this->computeInputGrayscalePipeline();
@@ -2437,7 +2437,7 @@ void Q2DViewer::updateDisplayExtent()
     }
 }
 
-void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
+void Q2DViewer::enableAnnotation( unsigned int annotation, bool enable )
 {
     if( enable )
         m_enabledAnnotations = m_enabledAnnotations | annotation;
@@ -2447,7 +2447,7 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
     refreshAnnotations();
 }
 
-void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
+void Q2DViewer::removeAnnotation( unsigned int annotation )
 {
     enableAnnotation( annotation, false );
 }
