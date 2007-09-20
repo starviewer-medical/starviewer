@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>853</width>
+    <width>753</width>
     <height>815</height>
    </rect>
   </property>
@@ -204,7 +204,7 @@
          </sizepolicy>
         </property>
         <property name="currentIndex" >
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="page" >
          <layout class="QVBoxLayout" >
@@ -350,19 +350,6 @@ p, li { white-space: pre-wrap; }
              </widget>
             </item>
             <item>
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" >
-               <size>
-                <width>61</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
              <widget class="QLineEdit" name="m_lineEditDicomdirPath" />
             </item>
             <item>
@@ -374,6 +361,22 @@ p, li { white-space: pre-wrap; }
                <iconset resource="../main/main.qrc" >:/images/folderclose.png</iconset>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Maximum</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>100</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
@@ -409,6 +412,13 @@ p, li { white-space: pre-wrap; }
           </property>
           <property name="text" >
            <string>Create</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonCancelDicomdir" >
+          <property name="text" >
+           <string>Cancel</string>
           </property>
          </widget>
         </item>
@@ -607,5 +617,22 @@ p, li { white-space: pre-wrap; }
  <resources>
   <include location="../main/main.qrc" />
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>m_buttonCancelDicomdir</sender>
+   <signal>clicked()</signal>
+   <receiver>udg::QCreateDicomdirBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>799</x>
+     <y>782</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>849</x>
+     <y>491</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
