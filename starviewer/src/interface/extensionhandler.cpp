@@ -79,12 +79,7 @@ void ExtensionHandler::request( const QString &who )
 
     if (mediator && extension)
     {
-        ExtensionContext extensionContext;
-        extensionContext.setPatient( m_mainApp->getCurrentPatient() );
-        extensionContext.setDefaultSelectedStudies( QStringList(m_defaultStudyUID) );
-        extensionContext.setDefaultSelectedSeries( QStringList(m_defaultSeriesUID) );
-
-        mediator->initializeExtension(extension, extensionContext);
+        mediator->initializeExtension(extension, m_extensionContext );
         m_mainApp->getExtensionWorkspace()->addApplication(extension, mediator->getExtensionID().getLabel() );
     }
     else
@@ -110,6 +105,16 @@ void ExtensionHandler::killBill()
             }
         }
     }
+}
+
+void ExtensionHandler::setContext( const ExtensionContext &context )
+{
+    m_extensionContext = context;
+}
+
+ExtensionContext &ExtensionHandler::getContext()
+{
+    return m_extensionContext;
 }
 
 void ExtensionHandler::createConnections()
@@ -146,14 +151,14 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     for( int i = 0; i < numberOfPatients; i++ )
     {
         DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput->getPatient(i)->toString() ) );
-        this->addPatientData( fillerInput->getPatient(i) );
-    }
-}
 
-void ExtensionHandler::addPatientData( Patient *patient )
-{
-    // TODO decidir que fem aquí, si mostrar diàlegs, etc
-    m_mainApp->addPatient( patient );
+        ExtensionContext extensionContext;
+        extensionContext.setPatient( fillerInput->getPatient(i) );
+        extensionContext.addDefaultSelectedStudy( defaultStudyUID );
+        extensionContext.addDefaultSelectedSeries( defaultSeriesUID );
+
+        m_mainApp->addPatientContext( extensionContext );
+    }
 }
 
 void ExtensionHandler::openDefaultExtension()
@@ -168,3 +173,4 @@ void ExtensionHandler::openDefaultExtension()
 }
 
 };  // end namespace udg
+

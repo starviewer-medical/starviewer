@@ -21,6 +21,7 @@ namespace udg{
 // Forward declarations
 class ExtensionWorkspace;
 class ExtensionHandler;
+class ExtensionContext;
 class QLogViewer;
 class Patient;
 
@@ -33,8 +34,13 @@ public:
 
     ~QApplicationMainWindow();
 
-    /// Donat un pacient, segons el pacient que tinguem, afegirem les dades, crearem una nova instància de la main window, etc
-    void addPatient( Patient *patient );
+    /**
+     * Afegeix noves dades de pacient a la finestra.
+     * Farà les accions pertinents segons si es tracta del mateix o un nou pacient obrint noves finestres
+     * o fusionant informació
+     * @param context El contexte que defineix el pacient
+     */
+    void addPatientContext( const ExtensionContext &context );
 
     /// Ens retorna el punter al pacient que té ara
     Patient *getCurrentPatient();
@@ -79,9 +85,10 @@ private:
 private slots:
     /**
      * Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
-     * @param patient El pacient que volem que contingui la nova finestra
+     * @param context Dades de pacient que volem que contingui la nova finestra
      */
-    void openNewWindow( Patient *patient = 0 );
+    void openNewWindow( const ExtensionContext &context  );
+    void openBlankWindow(); // l'obre en blanc
 
     /// mostra el formulari d'about
     void about();
