@@ -453,6 +453,11 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 {
     //\TODO Cal comprovar que els flips siguin correctes
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
+    // això es fa per si tenim un mhd que realment només té un arxiu (imatge) però té més llesques
+    // TODO caldria millorar l'accés a les imatges a partir del volum, per no haver de fer aquestes filigranes
+    // és a dir, al preguntar a Volume, getImage(index) ell ens retorna la imatge que toca i ja comprova rangs si cal
+    // i no ens retorna la llista d'imatges a saco
+    index = ( index >= m_mainVolume->getImages().size() ) ? 0 : index;
     QString orientation = m_mainVolume->getImages().at(index)->getPatientOrientation();
     QStringList list = orientation.split(",");
 
