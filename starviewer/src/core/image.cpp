@@ -28,12 +28,8 @@ Image::Image(QObject *parent)
 {
     m_pixelSpacing[0] = 1.;
     m_pixelSpacing[0] = 2.;
-    double xDir[3] = { 1., 0., 0. };
-    double yDir[3] = { 0., -1., 0. };
-    this->setImageOrientationPatient(xDir,yDir);
-    m_imagePositionPatient[0] = 0.;
-    m_imagePositionPatient[1] = 0.;
-    m_imagePositionPatient[2] = 0.;
+    memset( m_imageOrientationPatient, 0.0, 9*sizeof(double) );
+    memset( m_imagePositionPatient, 0.0, 3*sizeof(double) );
 }
 
 Image::~Image()
