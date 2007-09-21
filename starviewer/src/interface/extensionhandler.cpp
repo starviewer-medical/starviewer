@@ -165,7 +165,7 @@ void ExtensionHandler::openDefaultExtension()
 {
     if( m_mainApp->getCurrentPatient() )
     {
-        // TODO de moment simplement cridem el load2DViewerExtension
+        // TODO de moment simplement cridem el Q2DViewerExtension
         request("Q2DViewerExtension");
     }
     else
