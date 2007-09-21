@@ -51,7 +51,7 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     readSettings();
 
     m_thickSlab = 0.0;
-    
+
     m_isCtrlPressed = false;
 }
 
@@ -112,9 +112,11 @@ void QMPRExtension::init()
     m_coronalReslice->AutoCropOutputOn();
     m_coronalReslice->SetInterpolationModeToCubic();
 
-    m_axial2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
-    m_sagital2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
-    m_coronal2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
+    // configurem les annotacions que volem veure
+    m_axial2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
+    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
+    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation );
+
     /// per defecte isomètric
     m_axialSpacing[0] = 1.;
     m_axialSpacing[1] = 1.;
@@ -303,7 +305,7 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-    
+
         if ( m_isCtrlPressed )
             detectPushAxialViewAxisActor();
         else
@@ -330,16 +332,16 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
 //     case vtkCommand::RightButtonPressEvent:
 //         detectPushAxialViewAxisActor();
 //     break;
-// 
+//
 //     case vtkCommand::RightButtonReleaseEvent:
 //         if( m_state != NONE )
 //             releasePushAxialViewAxisActor();
 //     break;
-    
+
     case vtkCommand::KeyPressEvent:
                 this->answerToKeyEvent();
             break;
-        
+
         case vtkCommand::KeyReleaseEvent:
             if ( ((int)( m_axial2DView->getInteractor()->GetKeyCode() ) ) == 0 ) // s'ha alliberat el Ctrl
                 m_isCtrlPressed = false;
@@ -595,7 +597,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
 {
     //desactivem les tools perquè no facin interferència
     m_axial2DView->disableTools();
-    
+
     // obtenim el punt que s'ha clicat
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
@@ -675,7 +677,7 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         m_pickedActorPlaneSource = 0;
         m_pickedActorReslice = 0;
     }
-    //activem les tools 
+    //activem les tools
     m_axial2DView->enableTools();
 }
 
@@ -780,9 +782,7 @@ void QMPRExtension::setInput( Volume *input )
     m_coronal2DView->setInput( coronalResliced );
 
     m_sagital2DView->setViewToAxial();
-    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation );
     m_coronal2DView->setViewToAxial();
-    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation );
 
     m_axial2DView->render();
     m_sagital2DView->render();
