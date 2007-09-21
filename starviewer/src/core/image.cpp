@@ -24,8 +24,16 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(1.0)
+ : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_parentSeries(NULL), m_CTLocalizer(false)
 {
+    m_pixelSpacing[0] = 1.;
+    m_pixelSpacing[0] = 2.;
+    double xDir[3] = { 1., 0., 0. };
+    double yDir[3] = { 0., -1., 0. };
+    this->setImageOrientationPatient(xDir,yDir);
+    m_imagePositionPatient[0] = 0.;
+    m_imagePositionPatient[1] = 0.;
+    m_imagePositionPatient[2] = 0.;
 }
 
 Image::~Image()

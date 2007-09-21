@@ -17,7 +17,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1)
 {
 }
 
