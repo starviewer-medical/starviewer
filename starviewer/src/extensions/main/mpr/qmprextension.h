@@ -38,11 +38,6 @@ public:
     QMPRExtension( QWidget *parent = 0 );
 
     ~QMPRExtension();
-    /**
-        Li assigna el volum amb el que s'aplica l'MPR.
-        A cada finestra es veurà el tall corresponent per defecte. De bon principi cada visor visualitzarà la llesca central corresponent a cada vista. En les vistes axial i sagital es veuran els respectius plans de tall.
-    */
-    void setInput( Volume *input );
 
     /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans. EL primer pla es el que volem rotar i l'altre sobre el qual estroba l'eix d'intersecció/rotació
     // caldria resoldre què fer quan els plans son coplanars!!!!
@@ -52,6 +47,12 @@ public:
     void rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane );
 
 public slots:
+    /**
+        Li assigna el volum amb el que s'aplica l'MPR.
+        A cada finestra es veurà el tall corresponent per defecte. De bon principi cada visor visualitzarà la llesca central corresponent a cada vista. En les vistes axial i sagital es veuran els respectius plans de tall.
+    */
+    void setInput( Volume *input );
+
     /// Canvia la distribució horitzontal de les finestres ( el que està a la dreta passa a l'esquerra i viceversa )
     void switchHorizontalLayout();
 
@@ -67,7 +68,7 @@ signals:
 private:
     ///ens permet respondre a events de teclat
     void answerToKeyEvent();
-    
+
     /// Ens diu si un eix és paral·lel a un dels aixos de coordenades X Y o Z
     bool isParallel( double axis[3] );
 
@@ -96,7 +97,7 @@ private:
 
     /// inicialitza les orientacions dels plans de tall correctament perquè tinguin un espaiat, dimensions i límits correctes
     void initOrientation();
-    
+
     ///variable booleana que ens permet saber si està polsada la tecla control
     bool m_isCtrlPressed;
 
