@@ -117,6 +117,9 @@ void QMPRExtension::init()
     m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
     m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation );
 
+    m_sagital2DView->disableContextMenu();
+    m_coronal2DView->disableContextMenu();
+
     /// per defecte isomètric
     m_axialSpacing[0] = 1.;
     m_axialSpacing[1] = 1.;
@@ -243,6 +246,9 @@ void QMPRExtension::createConnections()
     connect( m_horizontalLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchHorizontalLayout() ) );
     connect( m_mipAction , SIGNAL( triggered(bool) ) , this , SLOT( switchToMIPLayout(bool) ) );
     connect( m_mipAction , SIGNAL( triggered(bool) ) , m_rotate3DToolButton , SLOT( setVisible(bool) ) );
+
+    // quan canvia l'input de l'axial view hem de fer un altre cop el set input TODO millora de rendiment, s'hauria de fer primer l'input de l'extensió i no pas el del viewer per evitar que al 2D viewer se li doni dos cops l'input
+    connect( m_axial2DView, SIGNAL( volumeChanged(Volume *) ), this, SLOT( setInput(Volume *) ) );
 }
 
 void QMPRExtension::switchHorizontalLayout()
