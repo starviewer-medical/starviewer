@@ -77,5 +77,8 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
+	<file>images/kinThumbnail.png</file>
+	<file>images/presentationStateThumbnail.png</file>
+	<file>images/structuredReportThumbnail.png</file>
     </qresource>
 </RCC>

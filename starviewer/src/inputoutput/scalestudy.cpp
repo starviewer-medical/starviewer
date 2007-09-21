@@ -60,9 +60,20 @@ void ScaleStudy::scale( QString studyUID )
         }
         absPath = settings.getCacheImagePath() + relPath; //creem el path absolut a la imatge a la imatge
 
-        Image image;
-        image.setPath(absPath);
-        QImage thumbnail = image.createThumbnail();
+        QImage thumbnail;
+        QString modality = seriesList.getSeries().getSeriesModality();
+        if( modality == "KO" )
+            thumbnail.load(":/images/kinThumbnail.png");
+        else if( modality == "PR" )
+            thumbnail.load(":/images/presentationStateThumbnail.png");
+        else if( modality == "SR" )
+            thumbnail.load(":/images/structuredReportThumbnail.png");
+        else
+        {
+            Image image;
+            image.setPath(absPath);
+            thumbnail = image.createThumbnail();
+        }
 
         if (!thumbnail.save( this->getScaledImagePath( &seriesList.getSeries() )))
         {

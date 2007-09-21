@@ -426,7 +426,18 @@ void Series::setSelectStatus( bool select )
 
 QPixmap Series::getThumbnail() const
 {
-    return getImages()[ getImages().size() / 2 ]->getThumbnail();;
+    QPixmap thumb;
+
+    if( m_modality == "KO" )
+        thumb.load(":/images/kinThumbnail.png");
+    else if( m_modality == "PR" )
+        thumb.load(":/images/presentationStateThumbnail.png");
+    else if( m_modality == "SR" )
+        thumb.load(":/images/structuredReportThumbnail.png");
+    else
+        thumb = getImages()[ getImages().size() / 2 ]->getThumbnail();
+
+    return thumb;
 }
 
 void Series::setNumberOfPhases( int phases )

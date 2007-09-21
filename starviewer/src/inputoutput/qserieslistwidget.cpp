@@ -40,26 +40,28 @@ void QSeriesListWidget::insertSeries( DICOMSeries *serie )
     QListWidgetItem *item = new QListWidgetItem( m_seriesListWidget );
     QString statusTip;
 
-    text.insert( 0 , tr( "Series " ) );
-    text.append( serie->getSeriesNumber() );
-
+    text = tr( " Series " ) + serie->getSeriesNumber();
     if ( serie->getProtocolName().length() > 0 )
     {//si hi ha descripció la inserim
-        text.append( " " );
-        text.append (serie->getProtocolName() );
-        text.append( '\n' );
+        text += " " + serie->getProtocolName();
     }
-    else text.append( '\n' );
+    text +="\n";
 
-    if ( serie->getImageNumber() > 0 )
+    if( serie->getImageNumber() > 0 )
     {
-        num.setNum( serie->getImageNumber() );
-        text.append( num );
-        text.append( tr(" images") );
-        text.append( '\n' );
+        text += QString::number( serie->getImageNumber() );
+        QString modality = serie->getSeriesModality();
+        if( modality == "KO" )
+            text += tr(" Key Object Note");
+        else if( modality == "PR" )
+            text += tr(" Presentation State");
+        else if( modality == "SR" )
+            text += tr(" Structured Report");
+        else
+            text += tr(" Images");
     }
 
-    QIcon   icon( ScaleStudy::getScaledImagePath(serie) );
+    QIcon  icon( ScaleStudy::getScaledImagePath(serie) );
 
     item->setText(text);
     item->setIcon(icon);

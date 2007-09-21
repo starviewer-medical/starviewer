@@ -170,7 +170,7 @@ public:
      * \TODO Aquest mètode hauria de desaparèixer, ara es manté ja que es necessita per crear les previsualitzacions del queryscreen.
      * @return Un QImage amb la imatge del thumbnail
      */
-    QImage createThumbnail(int resolution = 100);
+    QImage createThumbnail(int resolution = 128);
 
 private:
     /// Atributs DICOM
