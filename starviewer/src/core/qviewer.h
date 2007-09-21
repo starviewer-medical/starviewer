@@ -100,6 +100,13 @@ public slots:
 
     void setSeries(Series *series);
 
+public slots:
+    /**
+     * Activa o desactiva el menú de contexte
+     */
+    void enableContextMenu();
+    void disableContextMenu();
+
 signals:
     /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
     void eventReceived( unsigned long eventID );
@@ -130,6 +137,9 @@ protected:
 
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
+
+    /// indica si el menú de contexte està actiu o no. Per defecte sempre està actiu
+    bool m_contextMenuActive;
 };
 
 };  //  end  namespace udg {

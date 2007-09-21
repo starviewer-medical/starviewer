@@ -32,7 +32,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_contextMenuActive(true)
 {
     m_vtkWidget = new QVTKWidget( this );
 
@@ -197,10 +197,18 @@ void QViewer::setSeries(Series *series)
     }
 }
 
+void QViewer::enableContextMenu()
+{
+    m_contextMenuActive = true;
+}
+
+void QViewer::disableContextMenu()
+{
+    m_contextMenuActive = false;
+}
+
 void QViewer::contextMenuEvent(QContextMenuEvent *event)
 {
-    // TODO: Passar a membre configurable: a l'espera de si aquest mètode es queda aquí o no..
-    bool m_contextMenuActive = true;
     if (m_contextMenuActive)
     {
         PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
