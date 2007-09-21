@@ -15,6 +15,7 @@
 // Qt
 #include <QHBoxLayout>
 #include <QContextMenuEvent>
+#include <QMessageBox>
 
 // include's vtk
 #include <QVTKWidget.h>
@@ -183,9 +184,17 @@ void QViewer::grabCurrentView()
 
 void QViewer::setSeries(Series *series)
 {
-    setInput( series->getFirstVolume() );
-    render();
-    emit volumeChanged( series->getFirstVolume() );
+    QString modality = series->getModality();
+    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    {
+        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
+    }
+    else
+    {
+        setInput( series->getFirstVolume() );
+        render();
+        emit volumeChanged( series->getFirstVolume() );
+    }
 }
 
 void QViewer::contextMenuEvent(QContextMenuEvent *event)
