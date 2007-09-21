@@ -2697,6 +2697,12 @@ void Q2DViewer::computeVOILUT()
             // Encara que en tingui més d'un window level, agafarem el primer i prou. Si n'hi ha més s'escolliran desde l'extensió adequada
             m_defaultWindow = m_mainVolume->getImages().at(0)->getWindowLevel().first;
             m_defaultLevel = m_mainVolume->getImages().at(0)->getWindowLevel().second;
+            if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
+            {
+                double *range = m_mainVolume->getVtkData()->GetScalarRange();
+                m_defaultWindow = range[1] - range[0];
+                m_defaultLevel = (m_defaultWindow / 2.) + range[0];
+            }
             DEBUG_LOG( QString("Image VOI Adjustment: Window: %1, Level: %2")
                 .arg( m_defaultWindow )
                 .arg( m_defaultLevel )
