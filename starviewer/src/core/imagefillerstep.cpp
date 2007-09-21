@@ -106,7 +106,7 @@ void ImageFillerStep::processImage( Image *image )
         if( list.size() == 2 )
             image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
         else
-            DEBUG_LOG("Error a l'obtenir el pixel spacing")
+            DEBUG_LOG("Error a l'obtenir el pixel spacing. Es pot tractar d'una imatge US.")
 
         value = dicomReader.getAttributeByName( DCM_SliceThickness );
         if( !value.isEmpty() )
@@ -122,34 +122,34 @@ void ImageFillerStep::processImage( Image *image )
                 orientation[ i ] = list.at( i ).toDouble();
             }
             image->setImageOrientationPatient( orientation );
+
+            // cerquem l'string amb la orientació del pacient
+            value = dicomReader.getAttributeByName( DCM_PatientOrientation );
+            if( !value.isEmpty() )
+                image->setPatientOrientation( value );
+            else // si no tenim aquest valor, el calculem a partir dels direction cosines
+            {
+                // I ara ens disposem a crear l'string amb l'orientació del pacient
+                double *orientation = (double *)image->getImageOrientationPatient();
+                double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
+                for( int i = 0; i < 3; i++ )
+                {
+                    dirCosinesX[i] = orientation[i];
+                    dirCosinesY[i] = orientation[3+i];
+                    dirCosinesZ[i] = orientation[6+i];
+                }
+                QString patientOrientationString;
+                // \TODO potser el delimitador hauria de ser '\' en comptes de ','
+                patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
+                patientOrientationString += ",";
+                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
+                patientOrientationString += ",";
+                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
+                image->setPatientOrientation( patientOrientationString );
+            }
         }
         else
-            DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6!");
-
-        // cerquem l'string amb la orientació del pacient
-        value = dicomReader.getAttributeByName( DCM_PatientOrientation );
-        if( !value.isEmpty() )
-            image->setPatientOrientation( value );
-        else // si no tenim aquest valor, el calculem a partir dels direction cosines
-        {
-            // I ara ens disposem a crear l'string amb l'orientació del pacient
-            double *orientation = (double *)image->getImageOrientationPatient();
-            double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
-            for( int i = 0; i < 3; i++ )
-            {
-                dirCosinesX[i] = orientation[i];
-                dirCosinesY[i] = orientation[3+i];
-                dirCosinesZ[i] = orientation[6+i];
-            }
-            QString patientOrientationString;
-            // \TODO potser el delimitador hauria de ser '\' en comptes de ','
-            patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
-            patientOrientationString += ",";
-            patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
-            patientOrientationString += ",";
-            patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
-            image->setPatientOrientation( patientOrientationString );
-        }
+            DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6! Es pot tractar d'una imatge US.");
 
         value = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
         list = value.split("\\");
@@ -166,7 +166,13 @@ void ImageFillerStep::processImage( Image *image )
         image->setBitsAllocated( dicomReader.getAttributeByName( DCM_BitsAllocated ).toInt() );
         image->setBitsStored( dicomReader.getAttributeByName( DCM_BitsStored ).toInt() );
         image->setPixelRepresentation( dicomReader.getAttributeByName( DCM_PixelRepresentation ).toInt() );
-        image->setRescaleSlope( dicomReader.getAttributeByName( DCM_RescaleSlope ).toDouble() );
+
+        value = dicomReader.getAttributeByName( DCM_RescaleSlope );
+        if( value.toDouble() == 0 )
+            image->setRescaleSlope( 1. );
+        else
+            image->setRescaleSlope( value.toDouble() );
+
         image->setRescaleIntercept( dicomReader.getAttributeByName( DCM_RescaleIntercept ).toDouble() );
         // llegim els window levels
         QStringList windowWidthList = dicomReader.getAttributeByName( DCM_WindowWidth ).split("\\");
