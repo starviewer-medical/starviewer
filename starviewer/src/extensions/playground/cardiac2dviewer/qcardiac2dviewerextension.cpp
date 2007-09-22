@@ -153,6 +153,7 @@ void QCardiac2DViewerExtension::createConnections()
 
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setPhase(int) ) );
     //connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
+    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
 
     connect( m_playAction , SIGNAL( triggered() ) , this , SLOT( playImages() ) );
 
