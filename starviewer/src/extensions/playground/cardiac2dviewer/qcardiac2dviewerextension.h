@@ -31,10 +31,11 @@ public:
 
     ~QCardiac2DViewerExtension();
 
+public slots:
+
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
-public slots:
     /// Canvia a la vista axial, sagital o coronal
     void changeViewToAxial();
     void changeViewToSagital();
