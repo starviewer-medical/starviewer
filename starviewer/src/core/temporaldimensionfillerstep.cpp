@@ -52,7 +52,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
     bool found = false;
     int phases = 1;
     int slices = 0;
-    QStringList list = series->getFilesPathList();
+    QStringList list = series->getImagesPathList();
     DICOMTagReader dicomReader( list[0] );
     QString sliceLocation = dicomReader.getAttributeByName( DCM_SliceLocation );
 
