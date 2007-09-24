@@ -54,7 +54,7 @@
          <number>6</number>
         </property>
         <item row="0" column="0" >
-         <widget class="QPushButton" name="m_buttonSearch" >
+         <widget class="QPushButton" name="m_searchButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -78,7 +78,7 @@
          </widget>
         </item>
         <item row="1" column="0" >
-         <widget class="QPushButton" name="m_buttonToday" >
+         <widget class="QPushButton" name="m_todayButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -99,7 +99,7 @@
          </widget>
         </item>
         <item row="2" column="0" >
-         <widget class="QPushButton" name="m_buttonYesterday" >
+         <widget class="QPushButton" name="m_yesterdayButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -120,7 +120,7 @@
          </widget>
         </item>
         <item row="3" column="0" >
-         <widget class="QPushButton" name="m_buttonRetrieve" >
+         <widget class="QPushButton" name="m_retrieveButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -141,7 +141,7 @@
          </widget>
         </item>
         <item row="4" column="0" >
-         <widget class="QPushButton" name="m_buttonRetrieveList" >
+         <widget class="QPushButton" name="m_retrieveListButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -162,7 +162,7 @@
          </widget>
         </item>
         <item row="5" column="0" >
-         <widget class="QPushButton" name="m_buttonView" >
+         <widget class="QPushButton" name="m_viewButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -183,7 +183,7 @@
          </widget>
         </item>
         <item row="6" column="0" >
-         <widget class="QPushButton" name="m_buttonClear" >
+         <widget class="QPushButton" name="m_clearButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>1</hsizetype>
@@ -1351,7 +1351,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="m_pushButtonAdvancedSearch" >
+          <widget class="QPushButton" name="m_advancedSearchButton" >
            <property name="text" >
             <string>Advanced Search</string>
            </property>
@@ -1361,7 +1361,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_buttonShowPacsList" >
+          <widget class="QPushButton" name="m_showPacsListButton" >
            <property name="enabled" >
             <bool>true</bool>
            </property>
@@ -1429,7 +1429,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="m_buttonCreateDicomdir" >
+        <widget class="QPushButton" name="m_createDicomdirButton" >
          <property name="text" >
           <string>Create Dicomdir</string>
          </property>
@@ -1599,14 +1599,14 @@
   <tabstop>m_checkMR</tabstop>
   <tabstop>m_checkPT</tabstop>
   <tabstop>m_checkUS</tabstop>
-  <tabstop>m_buttonSearch</tabstop>
-  <tabstop>m_buttonToday</tabstop>
-  <tabstop>m_buttonYesterday</tabstop>
-  <tabstop>m_buttonRetrieve</tabstop>
-  <tabstop>m_buttonRetrieveList</tabstop>
-  <tabstop>m_buttonView</tabstop>
-  <tabstop>m_buttonClear</tabstop>
-  <tabstop>m_buttonShowPacsList</tabstop>
+  <tabstop>m_searchButton</tabstop>
+  <tabstop>m_todayButton</tabstop>
+  <tabstop>m_yesterdayButton</tabstop>
+  <tabstop>m_retrieveButton</tabstop>
+  <tabstop>m_retrieveListButton</tabstop>
+  <tabstop>m_viewButton</tabstop>
+  <tabstop>m_clearButton</tabstop>
+  <tabstop>m_showPacsListButton</tabstop>
   <tabstop>m_tab</tabstop>
  </tabstops>
  <resources>
