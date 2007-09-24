@@ -75,10 +75,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
     m_imageListSingleton = ImageListSingleton::getImageListSingleton();
 
-    setWindowPosition(); //la pantalla sempre es situa en el lloc on estava l'última vegada que es va tancar
-    setWindowSize();//la pantalla sempre té les dimensions de l'última vegada que es va tancar
-
-    setQSplitterState(); //posa els splitters en el lloc on estaven l'última vegada que es va tancar l'aplicació
+    readSettings();
 
     m_textPatientID->setFocus();
 
@@ -301,24 +298,11 @@ void QueryScreen::checkDateRadioButtons()
         m_customDateRadioButton->setChecked( true );
 }
 
-void QueryScreen::setWindowPosition()
+void QueryScreen::readSettings()
 {
     StarviewerSettings settings;
-
     move( settings.getQueryScreenWindowPositionX() , settings.getQueryScreenWindowPositionX() );
-}
-
-void QueryScreen::setWindowSize()
-{
-    StarviewerSettings settings;
-
     resize( settings.getQueryScreenWindowWidth() , settings.getQueryScreenWindowHeight() );
-}
-
-void QueryScreen::setQSplitterState()
-{
-    StarviewerSettings settings;
-
     if ( !settings.getQueryScreenStudyTreeSeriesListQSplitterState().isEmpty() )
     {
         m_StudyTreeSeriesListQSplitter->restoreState( settings.getQueryScreenStudyTreeSeriesListQSplitterState() );
