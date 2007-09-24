@@ -81,12 +81,6 @@ signals :
      */
     void seriesCommit( QString );
 
-    ///Signal que s'emet cap a QueryScreen per indicar que no hi ha prou espai lliure per a descarregar nous estudis
-    void notEnoughFreeSpace();
-
-    ///Signal que s'emet quant s'ha produït un error alliberant espai de la cache
-    void errorFreeingCacheSpace();
-
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
      * @param  pacsID del pacs amb que s'ha produit error
      */

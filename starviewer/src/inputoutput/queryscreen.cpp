@@ -93,6 +93,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_qwidgetAdvancedSearch->hide();
     m_operationAnimation->hide();
     m_labelOperation->hide();
+    refreshTab( LocalDataBaseTab );
 }
 
 QueryScreen::~QueryScreen()
@@ -118,10 +119,10 @@ void QueryScreen::initialize()
     //indiquem que la llista de Pacs no es mostra
     m_showPACSNodes = false;
 
-    qPacsList->setMaximumSize( 1 , 1 );//amaguem al finestra del QPacsList
+    m_PACSNodes->setMaximumSize( 1 , 1 );//amaguem al finestra del QPacsList
 
-    m_dateStudyDateFrom->setDate( currentDate.currentDate() );
-    m_dateStudyDateTo->setDate( currentDate.currentDate() );
+    m_fromStudyDate->setDate( currentDate.currentDate() );
+    m_toStudyDate->setDate( currentDate.currentDate() );
 }
 
 void QueryScreen::deleteOldStudies()
@@ -156,8 +157,6 @@ void QueryScreen::createConnections()
 {
     //connectem els butons
     connect( m_searchButton , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
-    connect( m_todayButton , SIGNAL( clicked() ) , this , SLOT( searchTodayStudy() ) );
-    connect( m_yesterdayButton , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
     connect( m_clearButton , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
     connect( m_retrieveButton , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
     connect( m_retrieveListButton , SIGNAL( clicked() ) , m_operationStateScreen , SLOT( show() ) );
@@ -174,14 +173,15 @@ void QueryScreen::createConnections()
     connect( m_studyTreeWidgetCache , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
 
     //es canvia de pestanya del TAB
-    connect( m_tab , SIGNAL( currentChanged( int ) ) , this , SLOT( tabChanged( int ) ) );
+    connect( m_tab , SIGNAL( currentChanged( int ) ) , this , SLOT( refreshTab( int ) ) );
 
     //connectem els checkbox de les dates
-    connect( m_checkFrom, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextFrom( int ) ) );
-    connect( m_checkTo, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
+    connect( m_fromDateCheck, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextFrom( int ) ) );
+    connect( m_toDateCheck, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
 
     //connectem el QDateEdit
-    connect( m_dateStudyDateFrom, SIGNAL( dateChanged( QDate ) ) , m_dateStudyDateTo , SLOT( setDate( QDate ) ) );
+//     connect( m_fromStudyDate, SIGNAL( dateChanged( QDate ) ) , m_toStudyDate , SLOT( setDate( QDate ) ) );
+
 
     //checkbox
     connect( m_checkAll, SIGNAL( clicked() ) , this , SLOT( clearCheckedModality() ) );
@@ -243,11 +243,6 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), this, SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ),  this, SLOT( updateOperationsInProgressMessage() ));
 
-    //connecta el signal de que no hi ha suficient espai de disc
-    connect( &m_qexecuteOperationThread , SIGNAL(  notEnoughFreeSpace() ) , this , SLOT(  notEnoughFreeSpace() ) );
-    //error alliberant espai de la cache
-    connect( &m_qexecuteOperationThread , SIGNAL(  errorFreeingCacheSpace() ) , this , SLOT(  errorFreeingCacheSpace() ) );
-
     //connect tracta els errors de connexió al PACS
     connect ( &multipleQueryStudy , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
 
@@ -267,6 +262,47 @@ void QueryScreen::createConnections()
 
     connect( m_textOtherModality , SIGNAL ( editingFinished () ) , SLOT( textOtherModalityEdited() ) );
 
+    connect( m_fromStudyDate, SIGNAL( dateChanged( QDate ) ) , this , SLOT( checkNewFromDate( QDate ) ) );
+    connect( m_toStudyDate, SIGNAL( dateChanged( QDate ) ) , this , SLOT( checkNewToDate( QDate ) ) );
+
+    connect( m_todayRadioButton, SIGNAL( clicked() ), this, SLOT( setSearchDateToToday() ) );
+    connect( m_yesterdayRadioButton, SIGNAL( clicked() ), this, SLOT( setSearchDateToYesterday() ) );
+}
+
+void QueryScreen::checkNewFromDate( QDate date )
+{
+    if( date > m_toStudyDate->date() )
+    {
+        m_toStudyDate->setDate( date );
+    }
+    checkDateRadioButtons();
+}
+
+void QueryScreen::checkNewToDate( QDate date )
+{
+    if( date < m_fromStudyDate->date()   )
+    {
+        m_fromStudyDate->setDate( date );
+    }
+    checkDateRadioButtons();
+}
+
+void QueryScreen::checkDateRadioButtons()
+{
+    QDate today, yesterday;
+    today = yesterday = QDate::currentDate();
+    yesterday = yesterday.addDays(-1);
+    if( m_toStudyDate->date() == m_fromStudyDate->date() )
+    {
+        if( m_toStudyDate->date() == today )
+            m_todayRadioButton->setChecked(true);
+        else if( m_toStudyDate->date() == yesterday )
+            m_yesterdayRadioButton->setChecked(true);
+        else
+            m_customDateRadioButton->setChecked( true );
+    }
+    else
+        m_customDateRadioButton->setChecked( true );
 }
 
 void QueryScreen::setWindowPosition()
@@ -299,8 +335,8 @@ void QueryScreen::clearTexts()
     m_textPatientID->clear();
     m_textPatientName->clear();
     m_textAccessionNumber->clear();
-    m_checkTo->setChecked( false );
-    m_checkFrom->setChecked( false );
+    m_toDateCheck->setChecked( false );
+    m_fromDateCheck->setChecked( false );
     m_textReferringPhysiciansName->clear();
     m_textStudyUID->clear();
     m_textSeriesUID->clear();
@@ -315,18 +351,18 @@ void QueryScreen::clearTexts()
 
     clearCheckedModality();
 
-    setEnabledTextTo( m_checkTo->isChecked() );
-    setEnabledTextFrom( m_checkFrom->isChecked() );
+    setEnabledTextTo( m_toDateCheck->isChecked() );
+    setEnabledTextFrom( m_fromDateCheck->isChecked() );
 }
 
 void QueryScreen::setEnabledTextTo( int value )
 {
-    m_dateStudyDateTo->setEnabled( value );
+    m_toStudyDate->setEnabled( value );
 }
 
 void QueryScreen::setEnabledTextFrom( int value )
 {
-    m_dateStudyDateFrom->setEnabled( value );
+    m_fromStudyDate->setEnabled( value );
 }
 
 void QueryScreen::clearCheckedModality()
@@ -404,47 +440,41 @@ void QueryScreen::textOtherModalityEdited()
 
 void QueryScreen::setEnabledDates( bool enabled )
 {
-    m_dateStudyDateFrom->setEnabled( enabled );
-    m_checkFrom->setEnabled( enabled );
-    m_checkFrom->setChecked( enabled );
+    m_fromStudyDate->setEnabled( enabled );
+    m_fromDateCheck->setEnabled( enabled );
+    m_fromDateCheck->setChecked( enabled );
 
-    m_dateStudyDateTo->setEnabled( enabled );
-    m_checkTo->setEnabled( enabled );
-    m_checkTo->setChecked( enabled );
+    m_toStudyDate->setEnabled( enabled );
+    m_toDateCheck->setEnabled( enabled );
+    m_toDateCheck->setChecked( enabled );
 }
 
-void QueryScreen::searchTodayStudy()
+void QueryScreen::setSearchDateToToday()
 {
     QDate today;
-
     setEnabledDates( true );
-
-    m_dateStudyDateTo->setDate(today.currentDate() );
-    m_dateStudyDateFrom->setDate(today.currentDate() );
-    searchStudy();
+    m_toStudyDate->setDate(today.currentDate() );
+    m_fromStudyDate->setDate(today.currentDate() );
 }
 
-void QueryScreen::searchYesterdayStudy()
+void QueryScreen::setSearchDateToYesterday()
 {
-    QDate today;
-    QDate yesterday( today.currentDate() );
+    QDate yesterday( QDate::currentDate() );
 
     setEnabledDates( true );
     yesterday = yesterday.addDays( -1 );//calcula la data d'ahir
-
-    m_dateStudyDateFrom->setDate( yesterday );
-    m_dateStudyDateTo->setDate( yesterday );
-    searchStudy();
+    m_fromStudyDate->setDate( yesterday );
+    m_toStudyDate->setDate( yesterday );
 }
 
 void QueryScreen::searchStudy()
 {
     switch ( m_tab->currentIndex() )
     {
-        case 0:
+        case LocalDataBaseTab:
             queryStudy("Cache");
             break;
-        case 1:
+        case PACSQueryTab:
             if ( !validateNoEmptyMask() )
             {
                 switch( QMessageBox::information( this , tr( "Starviewer" ) ,
@@ -463,7 +493,7 @@ void QueryScreen::searchStudy()
                 queryStudyPacs();
             }
             break;
-        case 2:
+        case DICOMDIRTab:
             queryStudy("DICOMDIR");
             break;
     }
@@ -476,8 +506,8 @@ bool QueryScreen::validateNoEmptyMask()
          m_textPatientName->text().length() == 0 &&
          m_textStudyID->text().length() == 0 &&
          m_textAccessionNumber->text().length() == 0 &&
-         !m_checkFrom->isChecked()  &&
-         !m_checkTo->isChecked() &&
+         !m_fromDateCheck->isChecked()  &&
+         !m_toDateCheck->isChecked() &&
          m_checkAll->isChecked() &&
          !m_textReferringPhysiciansName->text().length() == 0 &&
          !m_textSeriesNumber->text().length() == 0 &&
@@ -530,7 +560,7 @@ void QueryScreen::queryStudyPacs()
     INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy() );
 
     pacsList.clear(); //netejem el pacsLIST
-    qPacsList->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     pacsList.firstPacs();
     m_seriesListSingleton->clear();
@@ -1062,24 +1092,29 @@ void QueryScreen::studyRetrievedView( QString studyUID , QString seriesUID , QSt
     retrieve( studyUID , seriesUID , sopInstanceUID, "Cache" );
 }
 
-void QueryScreen::tabChanged( int index )
+void QueryScreen::refreshTab( int index )
 {
     switch ( index )
     {
-        case 0: //Database
+        case LocalDataBaseTab:
                 m_buttonGroupModality->setEnabled( false );//desactivem el grup button de motalitat
                 m_retrieveButton->setEnabled( false );//desactivem el boto retrieve
-                m_showPacsListButton->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                //activem el boto d'ensenyar la llista de pacs, per si volem fer un store
+                m_showPacsListButton->setEnabled( true );
+                m_showPacsListButton->setVisible( true );
                 clearCheckedModality();
                 if( m_showPACSNodes )
                     resizePacsList();
-                m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
+                //amaguem la cerca avançada
+                m_qwidgetAdvancedSearch->hide();
+                m_advancedSearchButton->setEnabled(true);
                 m_advancedSearchButton->hide();
                 break;
-        case 1: //Pacs
+        case PACSQueryTab: //Pacs
                 m_buttonGroupModality->setEnabled( true );//activem el grup button de modalitat
                 m_retrieveButton->setEnabled( true );//activem el boto retrieve
                 m_showPacsListButton->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                m_showPacsListButton->setVisible( true );
                 clearCheckedModality();
                 if( m_showPACSNodes )
                     resizePacsList();
@@ -1087,17 +1122,19 @@ void QueryScreen::tabChanged( int index )
                 if( m_advancedSearchButton->isChecked() )
                     m_qwidgetAdvancedSearch->show();
                 break;
-        case 2: //Dicomdir
+        case DICOMDIRTab: //Dicomdir
                 m_buttonGroupModality->setEnabled( false );;//desactivem el grup button de modalitat
                 m_retrieveButton->setEnabled( true );//activem el boto retrieve
                 m_showPacsListButton->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
+                m_showPacsListButton->setVisible( false );
                 clearCheckedModality();
                 if( m_showPACSNodes )
                     resizePacsList();
-                m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
+                //amaguem la cerca avançada
+                m_qwidgetAdvancedSearch->hide();
                 m_advancedSearchButton->hide();
                 break;
-        }
+    }
 }
 
 void QueryScreen::view()
@@ -1272,7 +1309,7 @@ void QueryScreen::resizePacsList()
     {
         if ( m_showPACSNodes && m_pacsListIsShowed )
         {
-            qPacsList->setFixedSize( 1 , 1 );
+            m_PACSNodes->setFixedSize( 1 , 1 );
             mida = -( 200 + 20 );
             m_pacsListIsShowed = false;
         }
@@ -1281,14 +1318,14 @@ void QueryScreen::resizePacsList()
     {
         if ( m_showPACSNodes && !m_pacsListIsShowed )
         {
-            qPacsList->setFixedSize( 200 ,240 );
+            m_PACSNodes->setFixedSize( 200 ,240 );
             mida = 200 + 20;
             m_pacsListIsShowed = true;
         }
 
         if ( !m_showPACSNodes && m_pacsListIsShowed )
         {
-            qPacsList->setFixedSize( 1 , 1 );
+            m_PACSNodes->setFixedSize( 1 , 1 );
             mida = -( 200 + 20 );
             m_pacsListIsShowed = false;
         }
@@ -1358,7 +1395,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     pacsList.clear(); //netejem el pacsLIST
-    qPacsList->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     switch (pacsList.size())
     {
@@ -1398,16 +1435,6 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     }
 
     QApplication::restoreOverrideCursor();
-}
-
-void QueryScreen::notEnoughFreeSpace()
-{
-    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Not enough space to retrieve studies. Please free space" ) );
-}
-
-void QueryScreen::errorFreeingCacheSpace()
-{
-    QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error Freeing Space. The study couldn't be retrieved" ) );
 }
 
 void QueryScreen::errorConnectingPacs( int IDPacs )
@@ -1469,30 +1496,30 @@ QString QueryScreen::buildStudyDates()
 {
     QString date;
 
-    if ( m_checkFrom->isChecked() && m_checkTo->isChecked() )
+    if ( m_fromDateCheck->isChecked() && m_toDateCheck->isChecked() )
     {
-        if ( m_dateStudyDateFrom->date() == m_dateStudyDateTo->date() )
+        if ( m_fromStudyDate->date() == m_toStudyDate->date() )
         {
-            date.append( m_dateStudyDateFrom->date().toString( "yyyyMMdd" ) );
+            date.append( m_fromStudyDate->date().toString( "yyyyMMdd" ) );
         }
         else
         {
-            date.append( m_dateStudyDateFrom->date().toString( "yyyyMMdd" ) );
+            date.append( m_fromStudyDate->date().toString( "yyyyMMdd" ) );
             date.append( "-" );
-            date.append( m_dateStudyDateTo->date().toString( "yyyyMMdd" ) );
+            date.append( m_toStudyDate->date().toString( "yyyyMMdd" ) );
         }
     }
     else
     {
-        if ( m_checkFrom->isChecked() )
+        if ( m_fromDateCheck->isChecked() )
         {
-            date.append( m_dateStudyDateFrom->date().toString( "yyyyMMdd" ) );
+            date.append( m_fromStudyDate->date().toString( "yyyyMMdd" ) );
             date.append( "-" ); // indiquem que volem buscar tots els estudis d'aquella data en endavant
         }
-        else if ( m_checkTo->isChecked() )
+        else if ( m_toDateCheck->isChecked() )
         {
             date.append( "-" ); //indiquem que volem buscar tots els estudis que no superin aquesta data
-            date.append( m_dateStudyDateTo->date().toString( "yyyyMMdd" ) );
+            date.append( m_toStudyDate->date().toString( "yyyyMMdd" ) );
         }
     }
 
