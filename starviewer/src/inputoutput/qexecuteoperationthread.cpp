@@ -6,6 +6,7 @@
  ***************************************************************************/
 
 #include <QSemaphore>
+#include <QMessageBox>
 #include "qexecuteoperationthread.h"
 #include "pacsserver.h"
 #include "retrieveimages.h"
@@ -117,27 +118,24 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     state = enoughFreeSpace( enoughSpace );
 
-    //s'indica que comença la descarreca de l'estudi al qOperationStateScreen
+    //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
     emit( setOperating( studyUID ) );
 
     if ( !state.good() || !enoughSpace )
     {
-        logMessage = "La descàrrega de l'estudi ";
-        logMessage.append( studyUID );
-        logMessage.append( "del pacs " );
-        logMessage.append( operation.getPacsParameters().getAEPacs() );
+        logMessage = "La descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs();
 
         emit( setErrorOperation( studyUID ) );
 
         if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
         {
-            logMessage.append (" al no haver suficient espai lliure al disc" );
-            emit( notEnoughFreeSpace() );
+            logMessage += " al no haver suficient espai lliure al disc";
+            QMessageBox::warning( 0 , tr( "Starviewer" ) , tr( "Not enough space to retrieve studies. Please free space" ) );
         }
         else
         {
-            emit ( errorFreeingCacheSpace() ); //si s'ha produit algun error alliberant espai emitim aquest signal
-            logMessage.append( " al intentar alliberar espai al disc " );
+            logMessage += " al intentar alliberar espai al disc ";
+            QMessageBox::critical( 0 , tr( "Starviewer" ) , tr( "Error Freeing Space. The study couldn't be retrieved" ) );
         }
         ERROR_LOG( logMessage );
 

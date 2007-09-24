@@ -31,6 +31,7 @@ class ImageListSingleton;
 class QueryScreen : public QDialog , private Ui::QueryScreenBase{
 Q_OBJECT
 public:
+    enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
 
     /**Constuctor de la classe
     * @param parent
@@ -46,11 +47,11 @@ public slots:
     /// Neteja els LineEdit del formulari
     void clearTexts();
 
-    /// Fa una cerca dels estudis fets avui
-    void searchTodayStudy();
-
-    /// Fa una cerca dels estudis d'ahir
-    void searchYesterdayStudy();
+    /**
+     * Posa les dates automàticament a avui o ahir
+     */
+    void setSearchDateToToday();
+    void setSearchDateToYesterday();
 
     /// Escull a on fer la cerca, si a nivell local o PACS
     void searchStudy();
@@ -71,7 +72,7 @@ public slots:
     /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat
      */
-    void tabChanged( int index );
+    void refreshTab( int index );
 
     /** Aquest mètode s'encarrega de començar la descarrega d'un estudi, estableix la màscara, insereix l'estudi i la sèria a la caché, ademés de crear el thread per continuar amb la descàrrega de l'estdui
      * @param view boolea que indica si després de la descarrega s'ha de visualitzar l'estudi
@@ -109,9 +110,6 @@ public slots:
     /// Posa a verdader o fals tots els check modality, i deixa a true el all
     void clearCheckedModality();
 
-    /// Slot que s'activa pel signal notEnoughFreeSpace de QExecuteOperationThread, que s'emiteix quan no hi ha prou espai al disc per descarregar nous estudis
-    void notEnoughFreeSpace();
-
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
      * @param pacsID ID del pacs a la base de ades local
      */
@@ -121,9 +119,6 @@ public slots:
      * @param id del PACS
      */
     void errorQueringStudiesPacs( int );
-
-    ///Slot que s'activa quant s'ha produit un error alliberant espai al disc
-    void errorFreeingCacheSpace();
 
     /** Slot que s'activa quant s'ha descarregat un estudi, prove de la classe QExecuteOperationThread
      * @param studyUID UID de l'estudi descarregat
@@ -193,6 +188,13 @@ protected :
 private slots:
     void updateOperationsInProgressMessage();
 
+    /**
+     * Checkeig de les dates que canvien els QDateEdit per mantenir consistència
+     * @param date
+     */
+    void checkNewFromDate( QDate date );
+    void checkNewToDate( QDate date );
+
 private:
     ///Connecta els signals i slots pertinents
     void createConnections();
@@ -201,6 +203,11 @@ private:
      * @param Indica si s'ha d'activar o desactivar
      */
     void setEnabledDates(bool);
+
+    /**
+     * Fa un check dels butons que han d'estar habilitats segons les dates que modifiquem
+     */
+    void checkDateRadioButtons();
 
     DicomMask buildSeriesDicomMask(QString);
 
