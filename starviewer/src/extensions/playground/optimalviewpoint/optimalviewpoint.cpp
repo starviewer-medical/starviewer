@@ -143,8 +143,6 @@ void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
 /// Afegeix un volum.
 void OptimalViewpoint::setImage( vtkImageData * image )
 {
-    if ( !image ) return;
-
     // fem un casting a int perquè a vegades hi ha problemes amb l'scalar range
     vtkImageCast * imageCaster = vtkImageCast::New();
     imageCaster->SetInput( image );
@@ -761,7 +759,8 @@ void OptimalViewpoint::readParameter( int parameter )
     switch ( parameter )
     {
         case OptimalViewpointParameters::VolumeObject:
-            setImage( m_parameters->getVolumeObject()->getVtkData() );
+            if ( m_parameters->getVolumeObject() )
+                setImage( m_parameters->getVolumeObject()->getVtkData() );
             break;
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
