@@ -61,7 +61,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     initialize();//inicialitzem les variables necessàries
 
     //connectem signals i slots
-    connectSignalsAndSlots();
+    createConnections();
 
     //esborrem els estudis vells de la cache
     deleteOldStudies();
@@ -152,7 +152,7 @@ void QueryScreen::updateOperationsInProgressMessage()
     }
 }
 
-void QueryScreen::connectSignalsAndSlots()
+void QueryScreen::createConnections()
 {
     //connectem els butons
     connect( m_buttonSearch , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
@@ -1243,14 +1243,13 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
 
 }
 
-void QueryScreen::closeEvent( QCloseEvent* ce )
+void QueryScreen::closeEvent( QCloseEvent* event )
 {
-	//ce->ignore();
 	m_studyTreeWidgetPacs->saveColumnsWidth();
 	m_studyTreeWidgetCache->saveColumnsWidth();
     m_studyTreeWidgetDicomdir->saveColumnsWidth();
 
-    ce->accept();
+    event->accept();
     m_qcreateDicomdir->clearTemporaryDir();
 }
 
