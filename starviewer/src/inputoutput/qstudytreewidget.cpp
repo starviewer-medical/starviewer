@@ -93,7 +93,7 @@ void QStudyTreeWidget::createContextMenu()
         connect( m_deleteStudyAction , SIGNAL(triggered()), this, SLOT(deleteStudy()));
 
         //nomes es pot afegir element a la llista de DICOMDIR desde local
-        m_sendToDICOMDIRListAction = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
+        m_sendToDICOMDIRListAction = m_contextMenu.addAction( tr( "Send to DICOMDIR List" ) );
         m_sendToDICOMDIRListAction->setShortcut( tr( "Ctrl+M" ) );
         connect( m_sendToDICOMDIRListAction , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
 
