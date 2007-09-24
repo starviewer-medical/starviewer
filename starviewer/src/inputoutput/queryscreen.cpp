@@ -179,10 +179,6 @@ void QueryScreen::createConnections()
     connect( m_fromDateCheck, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextFrom( int ) ) );
     connect( m_toDateCheck, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
 
-    //connectem el QDateEdit
-//     connect( m_fromStudyDate, SIGNAL( dateChanged( QDate ) ) , m_toStudyDate , SLOT( setDate( QDate ) ) );
-
-
     //checkbox
     connect( m_checkAll, SIGNAL( clicked() ) , this , SLOT( clearCheckedModality() ) );
     connect( m_checkCT, SIGNAL( clicked() ) , this , SLOT( checkedSeriesModality() ) );
