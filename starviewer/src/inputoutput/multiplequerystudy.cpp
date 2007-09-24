@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <QLineEdit>
 #include <semaphore.h>
 
 #include "status.h"
@@ -61,7 +60,6 @@ Status MultipleQueryStudy::StartQueries()
     bool error = false;
     Status state;
     PacsParameters pacsParameters;
-    QLineEdit prova;
     QString missatgeLog;
 
     m_studyListSingleton->clear();
