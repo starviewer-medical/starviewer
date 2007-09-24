@@ -1256,14 +1256,14 @@ void QueryScreen::closeEvent( QCloseEvent* ce )
 
 void QueryScreen::showRetrieveScreen()
 {
-    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra
+    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra TODO no es pot solucionar això amb un simple show()?
     m_OperationStateScreen->setVisible( false );
     m_OperationStateScreen->setVisible( true );
 }
 
 void QueryScreen::showCreateDicomdirScreen()
 {
-    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra
+    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra TODO no es pot solucionar això amb un simple show()?
     m_qcreateDicomdir->setVisible( false );
     m_qcreateDicomdir->setVisible( true );
 }
@@ -1666,55 +1666,34 @@ QString QueryScreen::logQueryStudy()
     return logMessage;
 }
 
-/** Tracta els errors que s'han produït a la base de dades en general
-  *           @param state [in] Estat del mètode
-  */
 void QueryScreen::databaseError(Status *state)
 {
-
-    QString text,code;
-    if (!state->good())
+    if( !state->good() )
     {
+        QString message;
+        QString errorCode = tr("Error Number : %1").arg( state->code() );
         switch(state->code())
-        {  case 2001 : text.insert(0,tr("Database is corrupted or SQL syntax error"));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        break;
-            case 2005 : text.insert(0,tr("Database is looked"));
-                        text.append("\n");
-                        text.append("To solve this error restart the user session");
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        break;
-            case 2011 : text.insert(0,tr("Database is corrupted."));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        break;
-            case 2019 : text.insert(0,tr("Register duplicated."));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        break;
-            case 2050 : text.insert(0,"Not Connected to database");
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
-                        break;
-            default :   text.insert(0,tr("Internal Database error"));
-                        text.append("\n");
-                        text.append(tr("Error Number : "));
-                        code.setNum(state->code(),10);
-                        text.append(code);
+        {
+            case 2001:
+                message = tr("Database is corrupted or SQL syntax error\n") + errorCode;
+                break;
+            case 2005:
+                message = tr("Database is locked\nRestart the user session to solve this error\n") + errorCode;
+                break;
+            case 2011:
+                message = tr("Database is corrupted\n") + errorCode;
+                break;
+            case 2019:
+                message = tr("Duplicated register\n") + errorCode;
+                break;
+            case 2050:
+                message = tr("Not Connected to the database\n") + errorCode;
+                break;
+            default:
+                message = tr("Internal Database error\n") + errorCode;
+                break;
         }
-        QMessageBox::critical( this, tr("Starviewer"),text);
+        QMessageBox::critical( this, tr("Starviewer"), message );
     }
 }
 

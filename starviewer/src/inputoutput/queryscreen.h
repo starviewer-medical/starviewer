@@ -278,7 +278,7 @@ private:
     void deleteOldStudies();
 
     /** Tracta els errors de la base de dades
-     * @param Estat del mètode de la base de dades
+     * @param state del mètode de la base de dades
      */
     void databaseError( Status *state );
 
