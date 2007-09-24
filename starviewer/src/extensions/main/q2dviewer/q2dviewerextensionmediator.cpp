@@ -7,6 +7,8 @@
 #include "q2dviewerextensionmediator.h"
 
 #include "extensioncontext.h"
+// QT
+#include <QMessageBox>
 
 namespace udg{
 
@@ -34,7 +36,11 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
     }
 
     q2dviewerExtension->setPatient( extensionContext.getPatient() );
-    q2dviewerExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        q2dviewerExtension->setInput( input );
 
     return true;
 }

@@ -8,6 +8,9 @@
 
 #include "extensioncontext.h"
 
+// QT
+#include <QMessageBox>
+
 namespace udg{
 
 DiffusionPerfusionSegmentationExtensionMediator::DiffusionPerfusionSegmentationExtensionMediator(QObject *parent)
@@ -33,10 +36,16 @@ bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidge
         return false;
     }
 
-    difuPerfuExtension->setDiffusionInput( extensionContext.getDefaultVolume() );
-    // TODO per evitar segmentation faults. S'hauria de fer un tracte més intel·ligent a l'hora de
-    // donar l'input de difu i perfu, examninar els estudis, etc
-    difuPerfuExtension->setPerfusionInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+    {
+        difuPerfuExtension->setDiffusionInput( input );
+        // TODO per evitar segmentation faults. S'hauria de fer un tracte més intel·ligent a l'hora de
+        // donar l'input de difu i perfu, examninar els estudis, etc
+        difuPerfuExtension->setPerfusionInput( input );
+    }
 
     return true;
 }

@@ -8,6 +8,9 @@
 
 #include "extensioncontext.h"
 
+// QT
+#include <QMessageBox>
+
 namespace udg {
 
 Cardiac2DViewerExtensionMediator::Cardiac2DViewerExtensionMediator(QObject *parent)
@@ -33,7 +36,11 @@ bool Cardiac2DViewerExtensionMediator::initializeExtension(QWidget* extension, c
         return false;
     }
 
-    cardiac2DViewerExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        cardiac2DViewerExtension->setInput( input );
 
     return true;
 }

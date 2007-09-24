@@ -8,6 +8,9 @@
 
 #include "extensioncontext.h"
 
+// QT
+#include <QMessageBox>
+
 namespace udg {
 
 EdemaSegmentationExtensionMediator::EdemaSegmentationExtensionMediator(QObject *parent)
@@ -33,7 +36,11 @@ bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension,
         return false;
     }
 
-    edemaSegmentationExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        edemaSegmentationExtension->setInput( input );
 
     return true;
 }

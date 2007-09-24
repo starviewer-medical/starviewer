@@ -8,6 +8,9 @@
 
 #include "extensioncontext.h"
 
+// QT
+#include <QMessageBox>
+
 namespace udg{
 
 MPR3DExtensionMediator::MPR3DExtensionMediator(QObject *parent)
@@ -33,7 +36,11 @@ bool MPR3DExtensionMediator::initializeExtension(QWidget* extension, const Exten
         return false;
     }
 
-    mpr3dExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        mpr3dExtension->setInput( input );
 
     return true;
 }
