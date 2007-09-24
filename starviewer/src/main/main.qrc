@@ -34,6 +34,7 @@
         <file>images/harddrive.png</file>
         <file>images/icon.png</file>
         <file>images/info.png</file>
+        <file>images/kinThumbnail.png</file>
         <file>images/loader.gif</file>
         <file>images/logs.png</file>
         <file>images/mip.png</file>
@@ -52,6 +53,7 @@
         <file>images/player_play32.png</file>
         <file>images/player_stop32.png</file>
         <file>images/preferences.png</file>
+        <file>images/presentationStateThumbnail.png</file>
         <file>images/record.png</file>
         <file>images/reload.png</file>
         <file>images/repeat_track.png</file>
@@ -61,11 +63,13 @@
         <file>images/rotateClockWise.png</file>
         <file>images/rotateCounterClockWise.png</file>
         <file>images/sagital.png</file>
+        <file>images/retrieve.png</file>
         <file>images/seed.png</file>
         <file>images/series.png</file>
         <file>images/singleView.png</file>
         <file>images/slicing.png</file>
         <file>images/splash.png</file>
+        <file>images/structuredReportThumbnail.png</file>
         <file>images/tabRemove.png</file>
         <file>images/usbpendrive.png</file>
         <file>images/verticalWidget.png</file>
@@ -77,8 +81,5 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
-	<file>images/kinThumbnail.png</file>
-	<file>images/presentationStateThumbnail.png</file>
-	<file>images/structuredReportThumbnail.png</file>
     </qresource>
 </RCC>
