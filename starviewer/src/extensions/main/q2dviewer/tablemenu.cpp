@@ -10,6 +10,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QEvent>
+#include <QMouseEvent>
 
 namespace udg {
 
@@ -27,6 +28,8 @@ TableMenu::TableMenu()
     verticalLayout->addWidget( m_information,1,0 );
 
     initializeTable();
+
+    setMouseTracking( true );
 }
 
 TableMenu::~TableMenu()
@@ -50,6 +53,12 @@ void TableMenu::initializeTable()
     connect( firstItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
 
     m_information->setText("1x1");
+
+    addColumn();
+    addColumn();
+    addColumn();
+    addRow();
+    addRow();
 }
 
 void TableMenu::addColumn()
@@ -172,6 +181,14 @@ void TableMenu::dropTable()
     }
 
     m_itemList->clear();
+}
+
+void TableMenu::mouseMoveEvent ( QMouseEvent * event )
+{
+    if( event->x() >= ( this->width() - 20 ) )
+    {
+        addColumn();
+    }
 }
 
 }
