@@ -134,4 +134,21 @@ Q2DViewer * Q2DViewerWidget::getViewer()
     return m_2DView;
 }
 
+bool Q2DViewerWidget::hasPhases()
+{
+
+    int phases = 0 ;
+
+    if( m_mainVolume )
+    {
+        phases = m_mainVolume->getSeries()->getNumberOfPhases();
+    }
+
+
+    DEBUG_LOG( QString( tr("Phases: %1").arg( phases) ) );
+
+
+    return ( phases > 1 ) ;
+}
+
 }

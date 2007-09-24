@@ -29,9 +29,14 @@ public:
 
     ~Q2DViewerWidget();
 
+    /// Marca el widget com a seleccionat
     void setSelected( bool option );
 
+    /// Retorna el visualitzador
     Q2DViewer * getViewer();
+
+    /// Retorna cert si el model té fases, fals altrament.
+    bool hasPhases();
 
 public slots:
     void setInput( Volume *input );
