@@ -727,11 +727,11 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
     pacsConnection.disconnect();
 
     if ( !state.good() )
-    {//Error a la query
+    {
+        //Error a la query
         ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les sèries al PACS " + pacsAETitle + ". PACS ERROR : " + state.text() );
 
-        text.insert( 0 , tr( "Error! Can't query series in PACS : " ) );
-        text.append( pacsAETitle );
+        text = tr( "Error! Can't query series to PACS named %1" ).arg( pacsAETitle );
         QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;
     }
@@ -858,8 +858,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
         QApplication::restoreOverrideCursor();
         ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les images al PACS " + AETitlePACS + ". PACS ERROR : " + state.text() );
 
-        text.insert( 0 , tr( "Error! Can't query images in PACS : " ) );
-        text.append( AETitlePACS );
+        text = tr( "Error! Can't query images to PACS named %1 " ).arg(AETitlePACS);
         QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;
     }
@@ -952,7 +951,7 @@ void QueryScreen::retrievePacs( bool view )
         else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to download " ) );
         return;
     }
-    studyUID.insert(0 , m_studyTreeWidgetPacs->getSelectedStudyUID() );
+    studyUID = m_studyTreeWidgetPacs->getSelectedStudyUID();
 
     //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
     if ( !m_studyListSingleton->exists( studyUID , m_studyTreeWidgetPacs->getSelectedPacsAETitle() ) )
@@ -1042,10 +1041,7 @@ Status QueryScreen::insertStudyCache( DICOMStudy stu )
     CacheStudyDAL cacheStudyDAL;
 
     //creem el path absolut de l'estudi
-    absPath.insert( 0 , settings.getCacheImagePath() );
-    absPath.append( study.getStudyUID() );
-    absPath.append( "/" );
-    study.setAbsPath(absPath);
+    absPath = settings.getCacheImagePath() + study.getStudyUID() + "/" + absPath;
     //inserim l'estudi a la caché
     state = cacheStudyDAL.insertStudy( &study );
 
@@ -1321,7 +1317,8 @@ void QueryScreen::openDicomdir()
 
     if ( dlg->exec() == QDialog::Accepted )
     {
-        if ( !dlg->selectedFiles().empty() ) dicomdirPath.insert( 0 , dlg->selectedFiles().takeFirst() );
+        if ( !dlg->selectedFiles().empty() )
+            dicomdirPath = dlg->selectedFiles().takeFirst();
 
         state = m_readDicomdir.open ( dicomdirPath );//Obrim el dicomdir
 
@@ -1459,26 +1456,24 @@ QString QueryScreen::getStudyDatesStringMask()
     {
         if ( m_fromStudyDate->date() == m_toStudyDate->date() )
         {
-            date.append( m_fromStudyDate->date().toString( "yyyyMMdd" ) );
+            date = m_fromStudyDate->date().toString( "yyyyMMdd" );
         }
         else
         {
-            date.append( m_fromStudyDate->date().toString( "yyyyMMdd" ) );
-            date.append( "-" );
-            date.append( m_toStudyDate->date().toString( "yyyyMMdd" ) );
+            date = m_fromStudyDate->date().toString( "yyyyMMdd" ) + "-" + m_toStudyDate->date().toString( "yyyyMMdd" );
         }
     }
     else
     {
         if ( m_fromDateCheck->isChecked() )
         {
-            date.append( m_fromStudyDate->date().toString( "yyyyMMdd" ) );
-            date.append( "-" ); // indiquem que volem buscar tots els estudis d'aquella data en endavant
+            // indiquem que volem buscar tots els estudis d'aquella data en endavant
+            date = m_fromStudyDate->date().toString( "yyyyMMdd" ) + "-";
         }
         else if ( m_toDateCheck->isChecked() )
         {
-            date.append( "-" ); //indiquem que volem buscar tots els estudis que no superin aquesta data
-            date.append( m_toStudyDate->date().toString( "yyyyMMdd" ) );
+            //indiquem que volem buscar tots els estudis que no superin aquesta data
+            date = "-"+ m_toStudyDate->date().toString( "yyyyMMdd" );
         }
     }
 
@@ -1603,12 +1598,9 @@ void QueryScreen::addModalityStudyMask( DicomMask* mask, QString modality )
     QString studyModalities;
 
     if ( mask->getStudyModality().length() > 0 ) // ja hi ha una altra modalitat
-    {
-        studyModalities.insert( 0 , mask->getStudyModality() );
-        studyModalities.append( "," );
-        studyModalities.append( modality );
-    }
-    else studyModalities.insert( 0 , modality );
+        studyModalities = mask->getStudyModality() + "," + modality;
+    else
+        studyModalities = modality;
 
     mask->setStudyModality( studyModalities );
 }
@@ -1617,16 +1609,11 @@ QString QueryScreen::buildQueryParametersString()
 {
 	QString logMessage;
 
-    logMessage.insert( 0 , m_textPatientID->text() );
-    logMessage.append(  ";" );
-    logMessage.append(  m_textPatientName->text() );
-    logMessage.append(  ";" );
-    logMessage.append(  m_textStudyID->text() );
-    logMessage.append(  ";" );
-    logMessage.append(  getStudyDatesStringMask() );
-    logMessage.append(  ";" );
-    logMessage.append(  m_textAccessionNumber->text() );
-    logMessage.append(  ";" );
+    logMessage = "PATIENT_ID=[" + m_textPatientID->text() + "]\n"
+        + "PATIENT_NAME=[" + m_textPatientName->text() + "]\n"
+        + "STUDY_ID=[" + m_textStudyID->text() + "]\n"
+        + "DATES_MASK=[" + getStudyDatesStringMask() + "]\n"
+        + "ACCESSION_NUMBER=[" + m_textAccessionNumber->text() + "]\n";
 
     return logMessage;
 }
