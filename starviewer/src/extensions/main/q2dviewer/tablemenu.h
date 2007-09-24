@@ -13,6 +13,7 @@
 class QGridLayout;
 class QLabel;
 class QEvent;
+class QMouseEvent;
 
 namespace udg {
 
@@ -56,6 +57,9 @@ protected:
 
     /// Sobrecàrrega del mètode que tracta tots els events
     bool event( QEvent * event);
+
+    /// Sobrecàrrega del mètode que tracta els events del mouse
+    void mouseMoveEvent ( QMouseEvent * event );
 
 private:
 
