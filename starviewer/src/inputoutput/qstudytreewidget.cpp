@@ -38,7 +38,7 @@
 namespace udg {
 
 QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_viewAction(NULL), m_retrieveAction(NULL), m_deleteStudyAction(NULL), m_sendToDICOMDIRListAction(NULL), m_storeStudyAction(NULL)
 {
     setupUi( this );
 
@@ -49,7 +49,7 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     m_studyTreeView->setColumnHidden( 13, true );
     m_studyTreeView->setColumnHidden( 14 , true );
 
-    //carreguem les imatges que es mostren el QStudyTreeWidget, el :/ indica que és un QRecourse, que s'especifica al main.qrc
+    //carreguem les imatges que es mostren el QStudyTreeWidget
     m_openFolder = QIcon( ":/images/folderopen.png" );
     m_closeFolder = QIcon( ":/images/folderclose.png" );
     m_iconSeries = QIcon( ":/images/series.png" );
@@ -70,55 +70,38 @@ void QStudyTreeWidget::createConnections()
 void QStudyTreeWidget::createContextMenu()
 {
     //acció veure
-    QAction *view = m_contextMenu.addAction( tr("&View") );
-    view->setShortcut( tr("Ctrl+V") );
-    //acció descarregar
-    QAction *retrieve = m_contextMenu.addAction( tr("&Retrieve") );
-    retrieve->setShortcut( tr("Ctrl+R") );
-    //acció esborrar
-    m_contextMenu.addSeparator();
-    QAction *deleteStudy =  m_contextMenu.addAction( tr("&Delete")) ;
-    deleteStudy->setShortcut( tr("Ctrl+D") );
-    //accio crear Directori DicomDIR
-    m_contextMenu.addSeparator();
-    QAction *createDicomdir = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
-    createDicomdir->setShortcut( tr( "Ctrl+M" ) );
-    m_contextMenu.addSeparator();
-    QAction *storeStudy = m_contextMenu.addAction( tr( "Store to PACS" ) );
-    storeStudy->setShortcut( tr( "Ctrl+S" ) );
+    m_viewAction = m_contextMenu.addAction( tr("&View") );
+    m_viewAction->setShortcut( tr("Ctrl+V") );
+    connect( m_viewAction , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
 
-    connect( view , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
-    connect( retrieve , SIGNAL( triggered() ) , this , SLOT( retrieveImages() ) );
-    connect( deleteStudy , SIGNAL(triggered()), this, SLOT(deleteStudy()));
-    connect( createDicomdir , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
-    connect( storeStudy , SIGNAL ( triggered() ) , this , SLOT ( storeStudy() ) );
-
-    /*QT ignora els shortCut, especificats a través de QAction, per això per fer que els shortCut funcionin els haig de fer aquesta xapussa redefini aquí com QShortcut*/
-    (void) new QShortcut( deleteStudy->shortcut() , this , SLOT( deleteStudy() ) );
-    (void) new QShortcut( view->shortcut() , this , SLOT( viewStudy() ) );
-    (void) new QShortcut( retrieve->shortcut() , this , SLOT( retrieveImages() ) );
-    (void) new QShortcut( createDicomdir->shortcut() , this , SLOT( createDicomDir() ) );
-    (void) new QShortcut( storeStudy->shortcut() , this , SLOT( storeStudy() ) );
-
-    if (m_parentName == "m_tabPacs")
-    {   //si el QStudyTreeWidget es el que mostra la llista d'estudis del PACS, la opcio delete desactivada
-        deleteStudy->setEnabled(false);
-        createDicomdir->setEnabled( false );
-        storeStudy->setEnabled( false );
-    }
-
-    //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
-    if (m_parentName == "m_StudyTreeSeriesListQSplitter")
-    {   //si el QStudyTreeWidget es el que mostra la llista d'estudis a la caché, la opció retrieve es desactiva
-        retrieve->setEnabled(false);
-    }
-
-    if ( m_parentName == "m_tabDicomdir")
+    // només hi ha RETRIEVE en el PACS i DICOMDIR TODO a DICOMDIR s'hauria de dir IMPORT to DATABASE... per ser mes correctes
+    // TODO AL TANTO AMB AIXÒ!!!!!!! SI MAI CANVIA EL PARENT QUÈ PASSA???????????? FER SISTEMA PER DETERMINAR EL TIPUS DE TAB QUE ÉS O ALGO
+    if( m_parentName == "m_tabPacs" || m_parentName == "m_tabDicomdir" )
     {
-        retrieve->setEnabled( true );
-        deleteStudy->setEnabled(false);
-        createDicomdir->setEnabled(false);
-        storeStudy->setEnabled( false );
+        m_retrieveAction = m_contextMenu.addAction( tr("&Retrieve") );
+        m_retrieveAction->setShortcut( tr("Ctrl+R") );
+        m_retrieveAction->setIcon( QIcon(":/images/retrieve.png") );
+        connect( m_retrieveAction , SIGNAL( triggered() ) , this , SLOT( retrieveImages() ) );
+    }
+
+    // Al haver un QSplitter el nom del Pare del TabCache és l'splitter TODO molt al tanto amb aquesta guarrada -_-¡
+    if( m_parentName == "m_StudyTreeSeriesListQSplitter" )
+    {
+        // només es pot esborrar a local
+        m_deleteStudyAction =  m_contextMenu.addAction( tr("&Delete")) ;
+        m_deleteStudyAction->setShortcut( tr("Ctrl+D") );
+        connect( m_deleteStudyAction , SIGNAL(triggered()), this, SLOT(deleteStudy()));
+
+        //nomes es pot afegir element a la llista de DICOMDIR desde local
+        m_sendToDICOMDIRListAction = m_contextMenu.addAction( tr( "Convert to DicomDir" ) );
+        m_sendToDICOMDIRListAction->setShortcut( tr( "Ctrl+M" ) );
+        connect( m_sendToDICOMDIRListAction , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
+
+        // només es pot fer store des de local
+        m_storeStudyAction = m_contextMenu.addAction( tr( "Store to PACS" ) );
+        m_storeStudyAction->setShortcut( tr( "Ctrl+S" ) );
+        m_storeStudyAction->setIcon( QIcon(":/images/store.png") );
+        connect( m_storeStudyAction , SIGNAL ( triggered() ) , this , SLOT ( storeStudy() ) );
     }
 }
 

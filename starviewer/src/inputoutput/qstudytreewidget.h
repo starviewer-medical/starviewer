@@ -150,7 +150,6 @@ signals :
     void storeStudyToPacs( QString studyUID);
 
 public slots:
-
     /** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
      * @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
      */
@@ -169,16 +168,16 @@ public slots:
     void doubleClicked( QTreeWidgetItem * , int );
 
     /// Neteja el TreeView
-    void clear( );
+    void clear();
 
     /// Slot que descarrega imatges
-    void retrieveImages( );
+    void retrieveImages();
 
     /// ESborra un estudi de la caché
-    void deleteStudy( );
+    void deleteStudy();
 
     /// Slot que visualitza l'estudi
-    void viewStudy( );
+    void viewStudy();
 
     ///Slot que converteix un estudi
     void createDicomDir();
@@ -186,12 +185,7 @@ public slots:
     ///Slot que guardar un estudi al PACS
     void storeStudy();
 
-private :
-
-    QMenu m_contextMenu;///<Menu contextual
-    QString m_parentName , m_oldPacsAETitle , m_OldInstitution; ///< strings per guardar valors de l'anterior element
-    QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
-
+private:
     /// crea les connexions dels signals i slots
     void createConnections( );
 
@@ -227,6 +221,19 @@ private :
      * @param AETitle AEtitle de la màquina on està l'estudi
      */
     QTreeWidgetItem* getStudyItem( QString studyUID , QString AETitle );
+
+private:
+    /// Menu contextual
+    QMenu m_contextMenu;
+
+    /// strings per guardar valors de l'anterior element
+    QString m_parentName , m_oldPacsAETitle , m_OldInstitution;
+
+    QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
+
+    /// Accions del menú de contexte
+    QAction *m_viewAction, *m_retrieveAction, *m_deleteStudyAction, *m_sendToDICOMDIRListAction, *m_storeStudyAction;
+
 };
 
 }; // end namespace
