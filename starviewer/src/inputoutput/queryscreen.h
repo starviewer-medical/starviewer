@@ -81,12 +81,6 @@ public slots:
     ///importa el dicomdir a la nostra base de ades
     void importDicomdir();
 
-    /// Slot que mostra la interfície QRetrieveScreen
-    void showRetrieveScreen();
-
-    ///Slot que mostra la interfície QCreateDicomdir
-    void showCreateDicomdirScreen();
-
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
     void view();
 
