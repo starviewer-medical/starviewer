@@ -100,19 +100,11 @@ public slots:
     /// Slot que activa o desactiva el m_checkAll en funció de si hi ha alguna modalitat d'estudi seleccionada
     void checkedSeriesModality();
 
-    /** Quant la data from canvia, amb aquest slot també es canvia la data del TO, per a que vagin sincronitzats
-     * @param data
-     */
-    void dateFromChanged( const QDate & );
-
     /// Activa o desactiva els text i el label de la data fins
     void setEnabledTextTo( int );
 
     /// Activa o desactiva el text de la data desde
     void setEnabledTextFrom( int );
-
-    ///Si la data del m_textDate canviarà la data m_textTo, per si es vol cercar per una data concreta
-    void searchStudyfromDateChanged( QDate fromDate );
 
     /// Posa a verdader o fals tots els check modality, i deixa a true el all
     void clearCheckedModality();
