@@ -103,8 +103,8 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
                 m_segmentationFileLabel->setText( m_parameters->getSegmentationFileName() );
                 break;
 
-            case OptimalViewpointParameters::SegmentationIterations:
-                m_spinBoxSegmentationIterations->setValue( m_parameters->getSegmentationIterations() );
+            case OptimalViewpointParameters::SegmentationNumberOfIterations:
+                m_spinBoxSegmentationIterations->setValue( m_parameters->getSegmentationNumberOfIterations() );
                 break;
 
             case OptimalViewpointParameters::SegmentationBlockLength:
@@ -225,7 +225,7 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         // actualitzem els valors dels paràmetres
 //         m_parameters->setVolumeId( m_volumeId );
         m_parameters->setSegmentationFileName( m_segmentationFileLabel->text() );
-        m_parameters->setSegmentationIterations( m_spinBoxSegmentationIterations->value() );
+        m_parameters->setSegmentationNumberOfIterations( m_spinBoxSegmentationIterations->value() );
         m_parameters->setSegmentationBlockLength( m_spinBoxSegmentationBlockLength->value() );
         m_parameters->setSegmentationNumberOfClusters( m_spinBoxSegmentationNumberOfClusters->value() );
         m_parameters->setSegmentationNoise( m_doubleSpinBoxSegmentationNoise->value() );
@@ -268,7 +268,7 @@ void OptimalViewpointInputParametersForm::writeSegmentationParameters()
     }
 
     m_parameters->setSegmentationFileName( m_segmentationFileLabel->text() );
-    m_parameters->setSegmentationIterations( m_spinBoxSegmentationIterations->value() );
+    m_parameters->setSegmentationNumberOfIterations( m_spinBoxSegmentationIterations->value() );
     m_parameters->setSegmentationBlockLength( m_spinBoxSegmentationBlockLength->value() );
     m_parameters->setSegmentationNumberOfClusters( m_spinBoxSegmentationNumberOfClusters->value() );
     m_parameters->setSegmentationNoise( m_doubleSpinBoxSegmentationNoise->value() );
@@ -329,9 +329,49 @@ void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const Tra
     m_loadSegmentationWidget->setDisabled( true );
     m_automaticSegmentationRadioButton->setDisabled( true );
     m_automaticSegmentationWidget->setDisabled( true );
-    m_segmentationOkPushButton->setDisabled( true );
+
+
+
+
+
+//     m_segmentationOkPushButton->setDisabled( true );
+    toggleSegmentationParameters();
+
+    disconnect( m_segmentationOkPushButton, SIGNAL( clicked() ), this, SLOT( writeSegmentationParameters() ) );
+    disconnect( m_segmentationOkPushButton, SIGNAL( clicked() ), this, SLOT( requestSegmentation() ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( toggleSegmentationParameters() ) );
+
+
+
+
+
+
     m_applyPushButton->setEnabled( true );
 }
+
+
+void OptimalViewpointInputParametersForm::toggleSegmentationParameters()
+{
+    if ( m_segmentationLine->isVisible() )
+    {
+        m_segmentationOkPushButton->setText( tr("Show parameters") );
+        m_loadSegmentationRadioButton->hide();
+        m_loadSegmentationWidget->hide();
+        m_automaticSegmentationRadioButton->hide();
+        m_automaticSegmentationWidget->hide();
+        m_segmentationLine->hide();
+    }
+    else
+    {
+        m_segmentationOkPushButton->setText( tr("Hide parameters") );
+        m_loadSegmentationRadioButton->show();
+        if ( m_loadSegmentationRadioButton->isChecked() ) m_loadSegmentationWidget->show();
+        m_automaticSegmentationRadioButton->show();
+        if ( m_automaticSegmentationRadioButton->isChecked() ) m_automaticSegmentationWidget->show();
+        m_segmentationLine->show();
+    }
+}
+
 
 void OptimalViewpointInputParametersForm::setNumberOfPlanes( const QString & numberOfPlanes )
 {

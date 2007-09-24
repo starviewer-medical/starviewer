@@ -35,6 +35,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     m_method->setParameters( m_parameters );
     m_method->setMainRenderer( m_viewerWidget->getRenderer() );
 
+    m_parameters->init();
+
     connect( m_inputParametersWidget, SIGNAL( segmentationRequested() ), SLOT( doSegmentation() ) );
     connect( m_inputParametersWidget, SIGNAL( executionRequested() ), SLOT( execute() ) );
 }

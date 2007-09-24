@@ -6,27 +6,44 @@
  ***************************************************************************/
 
 
-
 #include "optimalviewpointparameters.h"
-
 
 
 namespace udg {
 
 
-
 OptimalViewpointParameters::OptimalViewpointParameters( QObject * parent )
     : Parameters( parent )
 {
-    m_volumeObject = 0;
 }
-
 
 
 OptimalViewpointParameters::~OptimalViewpointParameters()
 {
 }
 
+
+void OptimalViewpointParameters::init()
+{
+    setVolumeObject( 0 );
+
+    setSegmentation( LoadSegmentation );
+
+    setSegmentationFileName( QString() );
+
+    setSegmentationNumberOfIterations( 200 );
+    setSegmentationBlockLength( 4 );
+    setSegmentationNumberOfClusters( 4 );
+    setSegmentationNoise( 32.0 );
+    setSegmentationImageSampleDistance( 1.0 );
+    setSegmentationSampleDistance( 1.0 );
+}
+
+
+Volume * OptimalViewpointParameters::getVolumeObject() const
+{
+    return m_volumeObject;
+}
 
 
 void OptimalViewpointParameters::setVolumeObject( Volume * volumeObject )
@@ -38,12 +55,25 @@ void OptimalViewpointParameters::setVolumeObject( Volume * volumeObject )
 }
 
 
-
-Volume * OptimalViewpointParameters::getVolumeObject() const
+OptimalViewpointParameters::SegmentationType OptimalViewpointParameters::getSegmentation() const
 {
-    return m_volumeObject;
+    return m_segmentation;
 }
 
+
+void OptimalViewpointParameters::setSegmentation( SegmentationType segmentation )
+{
+    if ( m_segmentation != segmentation )
+    {
+        m_segmentation = segmentation; emit changed( Segmentation );
+    }
+}
+
+
+const QString & OptimalViewpointParameters::getSegmentationFileName() const
+{
+    return m_segmentationFileName;
+}
 
 
 void OptimalViewpointParameters::setSegmentationFileName( const QString & segmentationFileName )
@@ -55,29 +85,25 @@ void OptimalViewpointParameters::setSegmentationFileName( const QString & segmen
 }
 
 
-
-const QString & OptimalViewpointParameters::getSegmentationFileName() const
+unsigned short OptimalViewpointParameters::getSegmentationNumberOfIterations() const
 {
-    return m_segmentationFileName;
+    return m_segmentationNumberOfIterations;
 }
 
 
-
-void OptimalViewpointParameters::setSegmentationIterations( unsigned short segmentationIterations )
+void OptimalViewpointParameters::setSegmentationNumberOfIterations( unsigned short segmentationNumberOfIterations )
 {
-    if ( m_segmentationIterations != segmentationIterations )
+    if ( m_segmentationNumberOfIterations != segmentationNumberOfIterations )
     {
-        m_segmentationIterations = segmentationIterations; emit changed( SegmentationIterations );
+        m_segmentationNumberOfIterations = segmentationNumberOfIterations; emit changed( SegmentationNumberOfIterations );
     }
 }
 
 
-
-unsigned short OptimalViewpointParameters::getSegmentationIterations() const
+unsigned char OptimalViewpointParameters::getSegmentationBlockLength() const
 {
-    return m_segmentationIterations;
+    return m_segmentationBlockLength;
 }
-
 
 
 void OptimalViewpointParameters::setSegmentationBlockLength( unsigned char segmentationBlockLenth )
@@ -89,12 +115,10 @@ void OptimalViewpointParameters::setSegmentationBlockLength( unsigned char segme
 }
 
 
-
-unsigned char OptimalViewpointParameters::getSegmentationBlockLength() const
+unsigned char OptimalViewpointParameters::getSegmentationNumberOfClusters() const
 {
-    return m_segmentationBlockLength;
+    return m_segmentationNumberOfClusters;
 }
-
 
 
 void OptimalViewpointParameters::setSegmentationNumberOfClusters( unsigned char segmentationNumberOfClusters )
@@ -106,12 +130,10 @@ void OptimalViewpointParameters::setSegmentationNumberOfClusters( unsigned char 
 }
 
 
-
-unsigned char OptimalViewpointParameters::getSegmentationNumberOfClusters() const
+double OptimalViewpointParameters::getSegmentationNoise() const
 {
-    return m_segmentationNumberOfClusters;
+    return m_segmentationNoise;
 }
-
 
 
 void OptimalViewpointParameters::setSegmentationNoise( double segmentationNoise )
@@ -123,12 +145,10 @@ void OptimalViewpointParameters::setSegmentationNoise( double segmentationNoise 
 }
 
 
-
-double OptimalViewpointParameters::getSegmentationNoise() const
+double OptimalViewpointParameters::getSegmentationImageSampleDistance() const
 {
-    return m_segmentationNoise;
+    return m_segmentationImageSampleDistance;
 }
-
 
 
 void OptimalViewpointParameters::setSegmentationImageSampleDistance( double segmentationImageSampleDistance )
@@ -140,12 +160,10 @@ void OptimalViewpointParameters::setSegmentationImageSampleDistance( double segm
 }
 
 
-
-double OptimalViewpointParameters::getSegmentationImageSampleDistance() const
+double OptimalViewpointParameters::getSegmentationSampleDistance() const
 {
-    return m_segmentationImageSampleDistance;
+    return m_segmentationSampleDistance;
 }
-
 
 
 void OptimalViewpointParameters::setSegmentationSampleDistance( double segmentationSampleDistance )
@@ -157,12 +175,10 @@ void OptimalViewpointParameters::setSegmentationSampleDistance( double segmentat
 }
 
 
-
-double OptimalViewpointParameters::getSegmentationSampleDistance() const
+unsigned char OptimalViewpointParameters::getNumberOfClusters() const
 {
-    return m_segmentationSampleDistance;
+    return m_numberOfClusters;
 }
-
 
 
 void OptimalViewpointParameters::setNumberOfClusters( unsigned char numberOfClusters )
@@ -175,10 +191,7 @@ void OptimalViewpointParameters::setNumberOfClusters( unsigned char numberOfClus
 
 
 
-unsigned char OptimalViewpointParameters::getNumberOfClusters() const
-{
-    return m_numberOfClusters;
-}
+
 
 
 
@@ -449,19 +462,6 @@ void OptimalViewpointParameters::setReadExtentFromFile( bool readExtentFromFile 
 }
 
 
-OptimalViewpointParameters::SegmentationType OptimalViewpointParameters::getSegmentation() const
-{
-    return m_segmentation;
-}
-
-
-void OptimalViewpointParameters::setSegmentation( SegmentationType segmentation )
-{
-    if ( m_segmentation != segmentation )
-    {
-        m_segmentation = segmentation; emit changed( Segmentation );
-    }
-}
 
 
 }

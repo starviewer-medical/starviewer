@@ -143,6 +143,8 @@ void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
 /// Afegeix un volum.
 void OptimalViewpoint::setImage( vtkImageData * image )
 {
+    if ( !image ) return;
+
     // fem un casting a int perquè a vegades hi ha problemes amb l'scalar range
     vtkImageCast * imageCaster = vtkImageCast::New();
     imageCaster->SetInput( image );
@@ -701,7 +703,7 @@ void OptimalViewpoint::doAutomaticSegmentation()
                       m_volume, SLOT( setExcessEntropy(double) ) );
 
     m_volume->setComputing( true );
-    m_numberOfClusters = m_volume->segmentateVolume( m_parameters->getSegmentationIterations(),
+    m_numberOfClusters = m_volume->segmentateVolume( m_parameters->getSegmentationNumberOfIterations(),
                                                      m_parameters->getSegmentationNumberOfClusters(),
                                                      m_parameters->getSegmentationNoise() );
     m_volume->setComputing( false );
