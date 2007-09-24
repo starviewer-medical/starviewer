@@ -48,49 +48,14 @@ QueryScreen::QueryScreen( QWidget *parent )
  : QDialog(parent )
 {
     setupUi( this );
-
-    Status state;
-    QString path;
-    StarviewerSettings settings;
-    CacheStudyDAL cacheStudyDal;
-    ReadDicomdir read;
-
-    m_operationStateScreen = new udg::QOperationStateScreen;
-    m_qcreateDicomdir = new udg::QCreateDicomdir( this );
-
     initialize();//inicialitzem les variables necessàries
-
     //connectem signals i slots
     createConnections();
-
     //esborrem els estudis vells de la cache
     deleteOldStudies();
-
-    //carreguem el processImageSingleton
-    m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    m_processImageSingleton->setPath( settings.getCacheImagePath() );
-
-    //Instanciem els llistats
-    m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
-    m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
-    m_imageListSingleton = ImageListSingleton::getImageListSingleton();
-
     readSettings();
-
-    m_textPatientID->setFocus();
-
-    QMovie *operationAnimation = new QMovie(this);
-    operationAnimation->setFileName(":/images/loader.gif");
-    m_operationAnimation->setMovie(operationAnimation);
-    operationAnimation->start();
-
     //fem que per defecte mostri els estudis de la cache
     queryStudy("Cache");
-    m_advancedSearchButton->hide();
-    m_qwidgetAdvancedSearch->hide();
-    m_operationAnimation->hide();
-    m_labelOperation->hide();
-    refreshTab( LocalDataBaseTab );
 }
 
 QueryScreen::~QueryScreen()
@@ -111,15 +76,33 @@ QueryScreen::~QueryScreen()
 
 void QueryScreen::initialize()
 {
-    QDate currentDate;
-
     //indiquem que la llista de Pacs no es mostra
     m_showPACSNodes = false;
-
     m_PACSNodes->setMaximumSize( 1 , 1 );//amaguem al finestra del QPacsList
 
-    m_fromStudyDate->setDate( currentDate.currentDate() );
-    m_toStudyDate->setDate( currentDate.currentDate() );
+    m_fromStudyDate->setDate( QDate::currentDate() );
+    m_toStudyDate->setDate( QDate::currentDate() );
+
+    m_operationStateScreen = new udg::QOperationStateScreen;
+    m_qcreateDicomdir = new udg::QCreateDicomdir( this );
+    m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
+
+    //Instanciem els llistats
+    m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
+    m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
+    m_imageListSingleton = ImageListSingleton::getImageListSingleton();
+
+    QMovie *operationAnimation = new QMovie(this);
+    operationAnimation->setFileName(":/images/loader.gif");
+    m_operationAnimation->setMovie(operationAnimation);
+    operationAnimation->start();
+
+    m_textPatientID->setFocus();
+    m_advancedSearchButton->hide();
+    m_qwidgetAdvancedSearch->hide();
+    m_operationAnimation->hide();
+    m_labelOperation->hide();
+    refreshTab( LocalDataBaseTab );
 }
 
 void QueryScreen::deleteOldStudies()
@@ -307,6 +290,8 @@ void QueryScreen::readSettings()
     {
         m_StudyTreeSeriesListQSplitter->restoreState( settings.getQueryScreenStudyTreeSeriesListQSplitterState() );
     }
+    //carreguem el processImageSingleton
+    m_processImageSingleton->setPath( settings.getCacheImagePath() );
 }
 
 void QueryScreen::clearTexts()
