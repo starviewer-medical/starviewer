@@ -275,15 +275,6 @@ private:
      */
     void databaseError( Status *state );
 
-    /// Posiciona la pantalla en funció dels valors guardarts a StarviewerSettings
-    void setWindowPosition();
-
-    /// Estableix la mida de la pantalla en funció dels valors guardats a StarviewerSettings
-    void setWindowSize();
-
-    ///Retorna els Splitter al estat que estaven quan es va tancar l'aplicació
-    void setQSplitterState();
-
     /// Assigna la mida al PacsList en funcio del tab en que es trobi i de la variable m_PacsListShow
     void resizePacsList();
 
@@ -307,6 +298,11 @@ private:
      * @return Objecte ParcsServer a punt per connectar amb el PACS
      */
     Status preparePacsServerConnection( QString AETitlePACS , PacsServer *pacsConnection );
+
+    /**
+     * Llegeix i aplica dades de configuració
+     */
+    void readSettings();
 
 private:
 
