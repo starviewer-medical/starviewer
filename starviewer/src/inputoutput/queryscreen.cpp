@@ -522,7 +522,7 @@ void QueryScreen::queryStudyPacs()
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + logQueryStudy() );
+    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString() );
 
     pacsList.clear(); //netejem el pacsLIST
     m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
@@ -577,7 +577,7 @@ void QueryScreen::queryStudy( QString source )
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + logQueryStudy() );
+    INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString() );
 
     studyList.clear();
     if( source == "Cache" )
@@ -1451,7 +1451,7 @@ DicomMask QueryScreen::buildSeriesDicomMask( QString studyUID )
     return mask;
 }
 
-QString QueryScreen::buildStudyDates()
+QString QueryScreen::getStudyDatesStringMask()
 {
     QString date;
 
@@ -1497,7 +1497,7 @@ DicomMask QueryScreen::buildDicomMask()
     mask.setPatientId( m_textPatientID->text() );
     mask.setPatientName( m_textPatientName->text() );
     mask.setStudyId( m_textStudyID->text()  );
-    mask.setStudyDate( buildStudyDates() );
+    mask.setStudyDate( getStudyDatesStringMask() );
     mask.setStudyDescription( "" );
     mask.setStudyTime( m_textStudyTime->text() );
     mask.setStudyUID( m_textStudyUID->text() );
@@ -1613,7 +1613,7 @@ void QueryScreen::addModalityStudyMask( DicomMask* mask, QString modality )
     mask->setStudyModality( studyModalities );
 }
 
-QString QueryScreen::logQueryStudy()
+QString QueryScreen::buildQueryParametersString()
 {
 	QString logMessage;
 
@@ -1623,7 +1623,7 @@ QString QueryScreen::logQueryStudy()
     logMessage.append(  ";" );
     logMessage.append(  m_textStudyID->text() );
     logMessage.append(  ";" );
-    logMessage.append(  buildStudyDates() );
+    logMessage.append(  getStudyDatesStringMask() );
     logMessage.append(  ";" );
     logMessage.append(  m_textAccessionNumber->text() );
     logMessage.append(  ";" );
