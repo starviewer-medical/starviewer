@@ -1169,15 +1169,15 @@ int Q2DViewer::getNumberOfSlices()
 
 void Q2DViewer::setSlice( int value )
 {
-    if( value < 0 )
-        value = 0;
-    else if( value > m_maxSliceValue )
-        value = m_maxSliceValue;
-
-    this->m_currentSlice = value;
-
     if( this->m_mainVolume )
     {
+        if( value < 0 )
+            value = 0;
+        else if( value > m_maxSliceValue )
+            value = m_maxSliceValue;
+
+        this->m_currentSlice = value;
+
         // Calcular si necessitarem més renders o menys, ja que al canviar de llesca ens trobem que potser tenim un grid per una llesca que no es veu i passem a veure o al revés
         int newNumberOfRenderers=0;
         int i;
@@ -1217,24 +1217,31 @@ void Q2DViewer::setSlice( int value )
                 removeRenderScene();
             }
         }
+        this->updateDisplayExtent();
+        mapOrientationStringToAnnotation();
+        emit sliceChanged( m_currentSlice );
+        this->refresh();
     }
-    this->updateDisplayExtent();
-    mapOrientationStringToAnnotation();
-    emit sliceChanged( m_currentSlice );
-    this->refresh();
+    else
+        DEBUG_LOG("No es pot canviar la llesca. No hi ha input");
 }
 
 void Q2DViewer::setPhase( int value )
 {
     // comprovació de rang
-    if( value < 0 )
-        value = 0;
-    else if( value > m_numberOfPhases - 1 )
-        value = m_numberOfPhases - 1;
+    if( m_mainVolume )
+    {
+        if( value < 0 )
+            value = 0;
+        else if( value > m_numberOfPhases - 1 )
+            value = m_numberOfPhases - 1;
 
-    m_currentPhase = value;
-    this->updateDisplayExtent();
-    this->refresh();
+        m_currentPhase = value;
+        this->updateDisplayExtent();
+        this->refresh();
+    }
+    else
+        DEBUG_LOG("No es pot canviar la fase. No hi ha input");
 }
 
 void Q2DViewer::setOverlay( OverlayType overlay )
