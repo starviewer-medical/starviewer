@@ -224,7 +224,7 @@ private:
     /** construeix la màscara de les dates
      * @return retorna la màscara de les dates
      */
-    QString buildStudyDates();
+    QString getStudyDatesStringMask();
 
     /** Descarrega una estudi del pacs
      * @param indica si l'estudi s'ha de visualitzar
@@ -281,10 +281,10 @@ private:
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
 
-    /** Fa el log, indicant amb quins parametres es cerquen els estudis
+    /** Construeix un string amb els parametres de cerca, per debug/logs
      * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis
      */
-    QString logQueryStudy();
+    QString buildQueryParametersString();
 
     /** Afegeix una modalitat a cercar a la màscara d'estudi.
      * @param mask màscara a la que s'ha d'afegir la modalitat
