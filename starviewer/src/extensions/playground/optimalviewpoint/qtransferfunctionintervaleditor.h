@@ -25,7 +25,7 @@ namespace udg {
  * comporta com a punt el que val és el punt inicial (start), i en cas que es
  * comporti com a interval hi ha el punt inicial (start) i el final (end).
  * Sempre es compleix que start <= end, i tant l'inici com el final sempre estan
- * entre 0 i 255 (ambdós inclosos).
+ * entre 0 i un màxim (per defecte 255) (ambdós inclosos).
  *
  * Tant si és un punt com un interval, sempre té associat un únic valor RGBA. El
  * color es pot triar amb un diàleg de selecció de color i l'opacitat amb el
@@ -49,8 +49,16 @@ class QTransferFunctionIntervalEditor
 
 public:
 
+    /// Construeix l'interval amb un màxim de 255.
     QTransferFunctionIntervalEditor( QWidget * parent = 0 );
+    /// Construeix l'interval amb un màxim de \a maximum.
+    QTransferFunctionIntervalEditor( int maximum, QWidget * parent = 0 );
     virtual ~QTransferFunctionIntervalEditor();
+
+    /// Retorna el màxim de l'interval.
+    int maximum() const;
+    /// Assigna el màxim de l'interval.
+    void setMaximum( int maximum );
 
     /// Assigna la propietat isFirst.
     void setIsFirst( bool isFirst );
@@ -112,6 +120,8 @@ private slots:
 
 private:
 
+    /// Màxim de l'interval.
+    int m_maximum;
     /// Propietats isFirst i isLast.
     bool m_isFirst, m_isLast;
 
