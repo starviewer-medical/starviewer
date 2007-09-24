@@ -8,6 +8,9 @@
 
 #include "extensioncontext.h"
 
+// QT
+#include <QMessageBox>
+
 namespace udg {
 
 RectumSegmentationExtensionMediator::RectumSegmentationExtensionMediator(QObject *parent)
@@ -33,7 +36,11 @@ bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension
         return false;
     }
 
-    rectumSegmentationExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        rectumSegmentationExtension->setInput( input );
 
     return true;
 }

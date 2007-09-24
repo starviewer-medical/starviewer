@@ -4,9 +4,12 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "volume3dviewtestingextensionmediator.h"
+
 #include "extensioncontext.h"
+
+// QT
+#include <QMessageBox>
 
 namespace udg {
 
@@ -33,7 +36,11 @@ bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extensio
         return false;
     }
 
-    volume3DViewTestingExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        volume3DViewTestingExtension->setInput( input );
 
     return true;
 }

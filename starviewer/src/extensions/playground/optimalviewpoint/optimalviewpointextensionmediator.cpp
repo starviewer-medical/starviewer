@@ -4,9 +4,12 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "optimalviewpointextensionmediator.h"
+
 #include "extensioncontext.h"
+
+// QT
+#include <QMessageBox>
 
 namespace udg {
 
@@ -33,7 +36,11 @@ bool OptimalViewpointExtensionMediator::initializeExtension(QWidget * extension,
         return false;
     }
 
-    optimalViewpointExtension->setInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        optimalViewpointExtension->setInput( input );
 
     return true;
 }

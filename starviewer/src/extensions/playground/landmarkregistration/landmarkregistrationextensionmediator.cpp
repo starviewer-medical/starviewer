@@ -8,6 +8,9 @@
 
 #include "extensioncontext.h"
 
+// QT
+#include <QMessageBox>
+
 namespace udg {
 
 LandmarkRegistrationExtensionMediator::LandmarkRegistrationExtensionMediator(QObject *parent)
@@ -33,9 +36,15 @@ bool LandmarkRegistrationExtensionMediator::initializeExtension(QWidget* extensi
         return false;
     }
 
-    landmarkRegistrationExtension->setInput( extensionContext.getDefaultVolume() );
-    // TODO per evitar segmentation faults.
-    landmarkRegistrationExtension->setSecondInput( extensionContext.getDefaultVolume() );
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+    {
+        landmarkRegistrationExtension->setInput( input );
+        // TODO per evitar segmentation faults.
+        landmarkRegistrationExtension->setSecondInput( input );
+    }
 
     return true;
 }

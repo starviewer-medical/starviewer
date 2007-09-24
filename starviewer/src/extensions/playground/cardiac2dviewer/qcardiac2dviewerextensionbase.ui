@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>udg::QCardiac2DViewerExtensionBase</class>
  <widget class="QWidget" name="udg::QCardiac2DViewerExtensionBase" >
   <property name="geometry" >
@@ -55,7 +52,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -80,7 +77,7 @@
           <string>window level</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -102,7 +99,7 @@
           <string>zoom</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -124,7 +121,7 @@
           <string>move</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -146,7 +143,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -165,7 +162,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/sagital.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -184,7 +181,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/coronal.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -203,7 +200,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -222,7 +219,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/rotateCounterClockWise.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -241,7 +238,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/singleView.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -263,7 +260,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/addViewRight.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -285,7 +282,7 @@
           <string>voxel information</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -307,7 +304,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/photo.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -354,7 +351,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox" />
+        <widget class="QWindowLevelComboBox" native="1" name="m_windowLevelComboBox" />
        </item>
        <item>
         <spacer>
@@ -390,7 +387,7 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="udg::Q2DViewer" name="m_2DView" >
+        <widget class="udg::Q2DViewer" native="1" name="m_2DView" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -426,7 +423,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/record.png</iconset>
+            <iconset>../../../../../icones/icones-candidates/player_mute.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -477,7 +474,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/endavant_enrera.png</iconset>
+            <iconset>../../../../../icones/icones-candidates/redo.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -510,7 +507,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/repeat_track.png</iconset>
+            <iconset>../../../../../icones/icones-candidates/reload-flipH.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -519,6 +516,9 @@
             </size>
            </property>
            <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="flat" >
             <bool>true</bool>
            </property>
           </widget>
@@ -564,7 +564,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/parentesis_obertn.png</iconset>
+            <iconset>../../../../../icones/icones-candidates/player_start2.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -602,7 +602,7 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/parentesis_tancatn.png</iconset>
+            <iconset>../../../../../icones/icones-candidates/player_end2.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -648,13 +648,16 @@
             <string/>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/player_play32.png</iconset>
+            <iconset>../../../../../icones/icones-candidates/player_play2.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
              <width>28</width>
              <height>28</height>
             </size>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -773,18 +776,23 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>QWindowLevelComboBox</class>
+   <extends>QWidget</extends>
+   <header>qwindowlevelcombobox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
   <include location="../main/main.qrc" />
+  <include location="cardiac2dviewer.qrc" />
+  <include location="../../../main/main.qrc" />
  </resources>
  <connections/>
 </ui>
