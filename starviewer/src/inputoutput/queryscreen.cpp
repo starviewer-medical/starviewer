@@ -1410,13 +1410,10 @@ void QueryScreen::errorConnectingPacs( int IDPacs )
 
     pacsListDB.queryPacs( &errorPacs, IDPacs );
 
-
-    errorMessage.insert( 0 , tr( " Can't connect to PACS " ) );
-    errorMessage.append( errorPacs.getAEPacs() );
-    errorMessage.append( tr ( " of " ) );
-    errorMessage.append( errorPacs.getInstitution() );
-    errorMessage.append( '\n' );
-    errorMessage.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
+    errorMessage = tr( "Can't connect to PACS %1 from %2\nBe sure that the IP and AETitle of the PACS is correct" )
+        .arg( errorPacs.getAEPacs() )
+        .arg( errorPacs.getInstitution()
+    );
 
     QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
 }
@@ -1428,13 +1425,10 @@ void QueryScreen::errorQueringStudiesPacs( int PacsID )
     QString errorMessage;
 
     pacsListDB.queryPacs( &errorPacs, PacsID );
-
-    errorMessage.insert( 0 , tr( " Can't query studies to PACS " ) );
-    errorMessage.append( errorPacs.getAEPacs() );
-    errorMessage.append( tr ( " of " ) );
-    errorMessage.append( errorPacs.getInstitution() );
-    errorMessage.append( '\n' );
-    errorMessage.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
+    errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of the PACS is correct" )
+        .arg( errorPacs.getAEPacs() )
+        .arg( errorPacs.getInstitution()
+    );
 
     QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
 }
