@@ -1334,7 +1334,7 @@
      </widget>
      <widget class="QWidget" name="m_tabDicomdir" >
       <attribute name="title" >
-       <string>Dicomdir</string>
+       <string>DICOMDIR</string>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
@@ -1544,7 +1544,6 @@
   <tabstop>m_tab</tabstop>
  </tabstops>
  <resources>
-  <include location="../main/main.qrc" />
   <include location="../main/main.qrc" />
  </resources>
  <connections/>
