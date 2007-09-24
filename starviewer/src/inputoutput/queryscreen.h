@@ -323,7 +323,7 @@ struct retrieveParameters
     StudyListSingleton *m_studyListSingleton;
     SeriesListSingleton *m_seriesListSingleton;
     ImageListSingleton *m_imageListSingleton;
-    ProcessImageSingleton *m_piSingleton;
+    ProcessImageSingleton *m_processImageSingleton;
 
     /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
     MultipleQueryStudy multipleQueryStudy;
@@ -337,10 +337,10 @@ struct retrieveParameters
      * per la Cache o el PACS el QPacsList es mostrava. Llavors el m_PacsListIsShowed és utilitzat
      * independentment de la pestanya per saber si en aquells moments s'està mostran el QPacsListShow
      */
-    bool m_PacsListShow;
+    bool m_showPACSNodes;
     bool m_pacsListIsShowed;
 
-    QOperationStateScreen *m_OperationStateScreen;
+    QOperationStateScreen *m_operationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;
 

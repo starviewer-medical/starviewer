@@ -55,7 +55,7 @@ QueryScreen::QueryScreen( QWidget *parent )
     CacheStudyDAL cacheStudyDal;
     ReadDicomdir read;
 
-    m_OperationStateScreen = new udg::QOperationStateScreen;
+    m_operationStateScreen = new udg::QOperationStateScreen;
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
 
     initialize();//inicialitzem les variables necessàries
@@ -67,8 +67,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     deleteOldStudies();
 
     //carreguem el processImageSingleton
-    m_piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    m_piSingleton->setPath( settings.getCacheImagePath() );
+    m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
+    m_processImageSingleton->setPath( settings.getCacheImagePath() );
 
     //Instanciem els llistats
     m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
@@ -116,7 +116,7 @@ void QueryScreen::initialize()
     QDate currentDate;
 
     //indiquem que la llista de Pacs no es mostra
-    m_PacsListShow = false;
+    m_showPACSNodes = false;
 
     qPacsList->setMaximumSize( 1 , 1 );//amaguem al finestra del QPacsList
 
@@ -140,7 +140,7 @@ void QueryScreen::deleteOldStudies()
 
 void QueryScreen::updateOperationsInProgressMessage()
 {
-    if (m_OperationStateScreen->getActiveOperationsCount() > 0)
+    if (m_operationStateScreen->getActiveOperationsCount() > 0)
     {
         m_operationAnimation->show();
         m_labelOperation->show();
@@ -160,7 +160,7 @@ void QueryScreen::createConnections()
     connect( m_yesterdayButton , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
     connect( m_clearButton , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
     connect( m_retrieveButton , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
-    connect( m_retrieveListButton , SIGNAL( clicked() ) , m_OperationStateScreen , SLOT( show() ) );
+    connect( m_retrieveListButton , SIGNAL( clicked() ) , m_operationStateScreen , SLOT( show() ) );
     connect( m_showPacsListButton , SIGNAL( clicked() ) , this , SLOT( showPacsList() ) );
     connect( m_viewButton , SIGNAL( clicked() ) , this , SLOT( view() ) );
     connect( m_createDicomdirButton , SIGNAL ( clicked() ) , m_qcreateDicomdir , SLOT( show() ) );
@@ -230,13 +230,13 @@ void QueryScreen::createConnections()
     QObject::connect( &m_qexecuteOperationThread , SIGNAL( viewStudy( QString , QString , QString ) ) , this , SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_OperationStateScreen, SLOT(  setErrorOperation( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_OperationStateScreen, SLOT(  setOperationFinished( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_operationStateScreen, SLOT(  setErrorOperation( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_operationStateScreen, SLOT(  setOperationFinished( QString ) ) );
 
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_OperationStateScreen, SLOT(  setOperating( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_OperationStateScreen , SLOT(  imageCommit( QString , int ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_OperationStateScreen , SLOT(  seriesCommit( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_OperationStateScreen , SLOT(  insertNewOperation( Operation *) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_operationStateScreen, SLOT(  setOperating( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_operationStateScreen , SLOT(  imageCommit( QString , int ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_operationStateScreen , SLOT(  seriesCommit( QString ) ) );
+    connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_operationStateScreen , SLOT(  insertNewOperation( Operation *) ) );
 
     // Label d'informació (cutre-xapussa)
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), this, SLOT( updateOperationsInProgressMessage() ));
@@ -1022,7 +1022,7 @@ void QueryScreen::retrievePacs( bool view )
     }
 
     //inserim a la pantalla de retrieve que iniciem la descarrega
-    //m_OperationStateScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );
+    //m_operationStateScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );
 
     //emplanem els parametres amb dades del starviewersettings
     pacs.setAELocal( settings.getAETitleMachine() );
@@ -1081,25 +1081,29 @@ void QueryScreen::tabChanged( int index )
                 m_retrieveButton->setEnabled( false );//desactivem el boto retrieve
                 m_showPacsListButton->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
-                if (  m_PacsListShow ) resizePacsList();
+                if( m_showPACSNodes )
+                    resizePacsList();
                 m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
                 m_advancedSearchButton->hide();
                 break;
         case 1: //Pacs
-                m_buttonGroupModality->setEnabled( true );;//activem el grup button de modalitat
+                m_buttonGroupModality->setEnabled( true );//activem el grup button de modalitat
                 m_retrieveButton->setEnabled( true );//activem el boto retrieve
                 m_showPacsListButton->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
-                if (  m_PacsListShow ) resizePacsList();
+                if( m_showPACSNodes )
+                    resizePacsList();
                 m_advancedSearchButton->show();
-                if ( m_advancedSearchButton->isChecked() ) m_qwidgetAdvancedSearch->show();
+                if( m_advancedSearchButton->isChecked() )
+                    m_qwidgetAdvancedSearch->show();
                 break;
         case 2: //Dicomdir
                 m_buttonGroupModality->setEnabled( false );;//desactivem el grup button de modalitat
-                m_retrieveButton->setEnabled( false );//activem el boto retrieve
+                m_retrieveButton->setEnabled( true );//activem el boto retrieve
                 m_showPacsListButton->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
-                if (  m_PacsListShow ) resizePacsList();
+                if( m_showPACSNodes )
+                    resizePacsList();
                 m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
                 m_advancedSearchButton->hide();
                 break;
@@ -1170,9 +1174,9 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     }
 
     this->close();//s'amaga per poder visualitzar la serie
-    if ( m_OperationStateScreen->isVisible() )
+    if ( m_operationStateScreen->isVisible() )
     {
-        m_OperationStateScreen->close();//s'amaga per poder visualitzar la serie
+        m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
     // enviem la informació a processar
@@ -1255,15 +1259,15 @@ void QueryScreen::closeEvent( QCloseEvent* event )
 
 void QueryScreen::showPacsList()
 {
-    if ( !m_PacsListShow )
+    if ( !m_showPACSNodes )
     {
-        m_PacsListShow = true;
-        m_showPacsListButton->setText( tr( "Hide Pacs List" ) );
+        m_showPACSNodes = true;
+        m_showPacsListButton->setText( tr( "Hide PACS Nodes" ) );
     }
     else
     {
-        m_showPacsListButton->setText( tr( "Show Pacs List" ) );
-        m_PacsListShow = false;
+        m_showPacsListButton->setText( tr( "Show PACS Nodes" ) );
+        m_showPACSNodes = false;
     }
 
     resizePacsList();
@@ -1276,7 +1280,7 @@ void QueryScreen::resizePacsList()
     //si es cert i estem al tab del Pacs s'ha de mostrar la llistat de PACS
     if ( m_tab->currentWidget()->objectName() == "m_tabDicomdir" )
     {
-        if ( m_PacsListShow && m_pacsListIsShowed )
+        if ( m_showPACSNodes && m_pacsListIsShowed )
         {
             qPacsList->setFixedSize( 1 , 1 );
             mida = -( 200 + 20 );
@@ -1285,14 +1289,14 @@ void QueryScreen::resizePacsList()
     }
     else
     {
-        if ( m_PacsListShow && !m_pacsListIsShowed )
+        if ( m_showPACSNodes && !m_pacsListIsShowed )
         {
             qPacsList->setFixedSize( 200 ,240 );
             mida = 200 + 20;
             m_pacsListIsShowed = true;
         }
 
-        if ( !m_PacsListShow && m_pacsListIsShowed )
+        if ( !m_showPACSNodes && m_pacsListIsShowed )
         {
             qPacsList->setFixedSize( 1 , 1 );
             mida = -( 200 + 20 );
