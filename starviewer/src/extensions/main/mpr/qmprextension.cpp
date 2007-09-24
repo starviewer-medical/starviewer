@@ -51,8 +51,6 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     readSettings();
 
     m_thickSlab = 0.0;
-
-    m_isCtrlPressed = false;
 }
 
 QMPRExtension::~QMPRExtension()
@@ -311,15 +309,14 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-
-        if ( m_isCtrlPressed )
+        if ( m_axial2DView->getInteractor()->GetControlKey() )
             detectPushAxialViewAxisActor();
         else
             detectAxialViewAxisActor();
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        if ( m_isCtrlPressed )
+        if ( m_state == PUSHING )
             releasePushAxialViewAxisActor();
         else
         {
@@ -334,24 +331,6 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
         else if( m_state == PUSHING )
             pushAxialViewAxisActor();
     break;
-
-//     case vtkCommand::RightButtonPressEvent:
-//         detectPushAxialViewAxisActor();
-//     break;
-//
-//     case vtkCommand::RightButtonReleaseEvent:
-//         if( m_state != NONE )
-//             releasePushAxialViewAxisActor();
-//     break;
-
-    case vtkCommand::KeyPressEvent:
-                this->answerToKeyEvent();
-            break;
-
-        case vtkCommand::KeyReleaseEvent:
-            if ( ((int)( m_axial2DView->getInteractor()->GetKeyCode() ) ) == 0 ) // s'ha alliberat el Ctrl
-                m_isCtrlPressed = false;
-            break;
 
     default:
     break;
@@ -816,6 +795,15 @@ void QMPRExtension::initOrientation()
     double spacing[3];
     m_volume->getSpacing(spacing);
 
+    DEBUG_LOG( QString("Dades volum original-------\nOrigen: %1,%2,%3\nSpacing: %4,%5,%6")
+        .arg( origin[0] )
+        .arg( origin[1] )
+        .arg( origin[2] )
+        .arg( spacing[0] )
+        .arg( spacing[1] )
+        .arg( spacing[2] )
+        );
+
     // Prevent obscuring voxels by offsetting the plane geometry
     //
     double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5) ,
@@ -848,6 +836,18 @@ void QMPRExtension::initOrientation()
     m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
 
+    DEBUG_LOG( QString("Coordenades del pla AXIAL>>\nOrigen: %1,%2,%3\nPoint1: %4,%5,%6\nPoint2: %7,%8,%9")
+        .arg( xbounds[0] )
+        .arg( ybounds[0] )
+        .arg( zbounds[0] )
+        .arg( xbounds[1] )
+        .arg( ybounds[0] )
+        .arg( zbounds[0] )
+        .arg( xbounds[0] )
+        .arg( ybounds[1] )
+        .arg( zbounds[0] )
+        );
+
     //YZ, x-normal : vista sagital
     // estem ajustant la mida del pla a les dimensions d'aquesta orientació
     // \TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
@@ -859,6 +859,17 @@ void QMPRExtension::initOrientation()
     m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[0] );
     m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] );
 
+    DEBUG_LOG( QString("Coordenades del pla sagital>>\nOrigen: %1,%2,%3\nPoint1: %4,%5,%6\nPoint2: %7,%8,%9")
+        .arg( xbounds[0] )
+        .arg( ybounds[0] )
+        .arg( zbounds[0] )
+        .arg( xbounds[0] )
+        .arg( ybounds[1] )
+        .arg( zbounds[0] )
+        .arg( xbounds[0] )
+        .arg( ybounds[0] )
+        .arg( zbounds[1] )
+        );
     // \TODO aqui caldria canviar-li els bounds del point 2 perquè siguin més llargs i encaixi amb la diagonal
     // perquè quedi centrat hauriem de desplaçar la meitat de l'espai extra per l'origen i pel punt2
     // posem en la llesca central
@@ -1516,17 +1527,6 @@ void QMPRExtension::writeSettings()
     settings.setValue("defaultSaveDir", m_defaultSaveDir );
 
     settings.endGroup();
-}
-
-void QMPRExtension::answerToKeyEvent()
-{
-    char keyChar = m_axial2DView->getInteractor()->GetKeyCode();
-    int keyInt = (int)keyChar;
-
-   if ( keyInt == 0 ) // s'ha polsat el Ctrl
-    {
-        m_isCtrlPressed = true;
-    }
 }
 
 };  // end namespace udg
