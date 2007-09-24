@@ -19,8 +19,31 @@ QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor( QWidget * pare
 {
     setupUi( this );
 
-
+    m_maximum = 255;
     m_isFirst = m_isLast = false;
+
+    m_intervalEndSpinBox->setVisible( m_isIntervalCheckBox->isChecked() );
+
+    connect( m_isIntervalCheckBox, SIGNAL( toggled(bool) ), SLOT( isIntervalToggled(bool) ) );
+    connect( m_intervalStartSpinBox, SIGNAL( valueChanged(int) ), SLOT( adjustWithNewStart(int) ) );
+    connect( m_intervalEndSpinBox, SIGNAL( valueChanged(int) ), SLOT( adjustWithNewEnd(int) ) );
+    connect( m_intervalStartSpinBox, SIGNAL( valueChanged(int) ), SIGNAL( startChanged(int) ) );
+    connect( m_intervalEndSpinBox, SIGNAL( valueChanged(int) ), SIGNAL( endChanged(int) ) );
+    connect( m_selectColorPushButton, SIGNAL( clicked() ), SLOT( selectColor() ) );
+    connect( m_colorSpinBox, SIGNAL( colorChanged(const QColor&) ), SIGNAL( colorChanged(const QColor&) ) );
+}
+
+
+QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor( int maximum, QWidget * parent )
+    : QWidget( parent )
+{
+    setupUi( this );
+
+    m_maximum = maximum;
+    m_isFirst = m_isLast = false;
+
+    m_intervalStartSpinBox->setMaximum( m_maximum );
+    m_intervalEndSpinBox->setMaximum( m_maximum );
 
     m_intervalEndSpinBox->setVisible( m_isIntervalCheckBox->isChecked() );
 
@@ -36,6 +59,26 @@ QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor( QWidget * pare
 
 QTransferFunctionIntervalEditor::~QTransferFunctionIntervalEditor()
 {
+}
+
+
+int QTransferFunctionIntervalEditor::maximum() const
+{
+    return m_maximum;
+}
+
+
+void QTransferFunctionIntervalEditor::setMaximum( int maximum )
+{
+    m_maximum = maximum;
+    m_intervalStartSpinBox->setMaximum( m_maximum );
+    m_intervalEndSpinBox->setMaximum( m_maximum );
+
+    if ( m_isLast )
+    {
+        if ( this->isInterval() ) this->setEnd( m_maximum );
+        else this->setStart( m_maximum );
+    }
 }
 
 
@@ -65,11 +108,11 @@ void QTransferFunctionIntervalEditor::setIsLast( bool isLast )
     else
     {
         m_isIntervalCheckBox->setEnabled( true );
-        if ( m_isLast ) this->setEnd( 255 );
+        if ( m_isLast ) this->setEnd( m_maximum );
         m_intervalEndSpinBox->setReadOnly( m_isLast );
         if ( !m_isIntervalCheckBox->isChecked() )
         {
-            if ( m_isLast ) this->setStart( 255 );
+            if ( m_isLast ) this->setStart( m_maximum );
             m_intervalStartSpinBox->setReadOnly( m_isLast );
         }
     }
@@ -150,7 +193,7 @@ void QTransferFunctionIntervalEditor::firstAndLast()
     m_isIntervalCheckBox->setDisabled( true );
     this->setStart( 0 );
     m_intervalStartSpinBox->setReadOnly( true );
-    this->setEnd( 255 );
+    this->setEnd( m_maximum );
     m_intervalEndSpinBox->setReadOnly( true );
 }
 
@@ -161,7 +204,7 @@ void QTransferFunctionIntervalEditor::isIntervalToggled( bool checked )
         this->setEnd( this->start() );
     if ( m_isLast )
     {
-        if ( !checked ) this->setStart( 255 );
+        if ( !checked ) this->setStart( m_maximum );
         m_intervalStartSpinBox->setReadOnly( !checked );
     }
 }
