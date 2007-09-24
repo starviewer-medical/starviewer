@@ -89,7 +89,7 @@ QueryScreen::QueryScreen( QWidget *parent )
 
     //fem que per defecte mostri els estudis de la cache
     queryStudy("Cache");
-    m_pushButtonAdvancedSearch->hide();
+    m_advancedSearchButton->hide();
     m_qwidgetAdvancedSearch->hide();
     m_operationAnimation->hide();
     m_labelOperation->hide();
@@ -155,15 +155,15 @@ void QueryScreen::updateOperationsInProgressMessage()
 void QueryScreen::createConnections()
 {
     //connectem els butons
-    connect( m_buttonSearch , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
-    connect( m_buttonToday , SIGNAL( clicked() ) , this , SLOT( searchTodayStudy() ) );
-    connect( m_buttonYesterday , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
-    connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
-    connect( m_buttonRetrieve , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
-    connect( m_buttonRetrieveList , SIGNAL( clicked() ) , m_OperationStateScreen , SLOT( show() ) );
-    connect( m_buttonShowPacsList , SIGNAL( clicked() ) , this , SLOT( showPacsList() ) );
-    connect( m_buttonView , SIGNAL( clicked() ) , this , SLOT( view() ) );
-    connect( m_buttonCreateDicomdir , SIGNAL ( clicked() ) , m_qcreateDicomdir , SLOT( show() ) );
+    connect( m_searchButton , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
+    connect( m_todayButton , SIGNAL( clicked() ) , this , SLOT( searchTodayStudy() ) );
+    connect( m_yesterdayButton , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
+    connect( m_clearButton , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
+    connect( m_retrieveButton , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
+    connect( m_retrieveListButton , SIGNAL( clicked() ) , m_OperationStateScreen , SLOT( show() ) );
+    connect( m_showPacsListButton , SIGNAL( clicked() ) , this , SLOT( showPacsList() ) );
+    connect( m_viewButton , SIGNAL( clicked() ) , this , SLOT( view() ) );
+    connect( m_createDicomdirButton , SIGNAL ( clicked() ) , m_qcreateDicomdir , SLOT( show() ) );
 
     //connectem Slots dels StudyTreeWidget amb la interficie
     connect( m_studyTreeWidgetPacs , SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
@@ -263,7 +263,7 @@ void QueryScreen::createConnections()
     connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomdir( QString ) ) );
 
     //Amaga o ensenya la cerca avançada
-    connect( m_pushButtonAdvancedSearch , SIGNAL( toggled( bool ) ) , m_qwidgetAdvancedSearch , SLOT( setVisible( bool ) ) );
+    connect( m_advancedSearchButton , SIGNAL( toggled( bool ) ) , m_qwidgetAdvancedSearch , SLOT( setVisible( bool ) ) );
 
     connect( m_textOtherModality , SIGNAL ( editingFinished () ) , SLOT( textOtherModalityEdited() ) );
 
@@ -1078,30 +1078,30 @@ void QueryScreen::tabChanged( int index )
     {
         case 0: //Database
                 m_buttonGroupModality->setEnabled( false );//desactivem el grup button de motalitat
-                m_buttonRetrieve->setEnabled( false );//desactivem el boto retrieve
-                m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                m_retrieveButton->setEnabled( false );//desactivem el boto retrieve
+                m_showPacsListButton->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
                 m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
-                m_pushButtonAdvancedSearch->hide();
+                m_advancedSearchButton->hide();
                 break;
         case 1: //Pacs
                 m_buttonGroupModality->setEnabled( true );;//activem el grup button de modalitat
-                m_buttonRetrieve->setEnabled( true );//activem el boto retrieve
-                m_buttonShowPacsList->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
+                m_retrieveButton->setEnabled( true );//activem el boto retrieve
+                m_showPacsListButton->setEnabled( true );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
-                m_pushButtonAdvancedSearch->show();
-                if ( m_pushButtonAdvancedSearch->isChecked() ) m_qwidgetAdvancedSearch->show();
+                m_advancedSearchButton->show();
+                if ( m_advancedSearchButton->isChecked() ) m_qwidgetAdvancedSearch->show();
                 break;
         case 2: //Dicomdir
                 m_buttonGroupModality->setEnabled( false );;//desactivem el grup button de modalitat
-                m_buttonRetrieve->setEnabled( false );//activem el boto retrieve
-                m_buttonShowPacsList->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
+                m_retrieveButton->setEnabled( false );//activem el boto retrieve
+                m_showPacsListButton->setEnabled( false );//activem el boto d'ensenyar la llista de pacs
                 clearCheckedModality();
                 if (  m_PacsListShow ) resizePacsList();
                 m_qwidgetAdvancedSearch->hide();//amaguem la cerca avançada
-                m_pushButtonAdvancedSearch->hide();
+                m_advancedSearchButton->hide();
                 break;
         }
 }
@@ -1258,11 +1258,11 @@ void QueryScreen::showPacsList()
     if ( !m_PacsListShow )
     {
         m_PacsListShow = true;
-        m_buttonShowPacsList->setText( tr( "Hide Pacs List" ) );
+        m_showPacsListButton->setText( tr( "Hide Pacs List" ) );
     }
     else
     {
-        m_buttonShowPacsList->setText( tr( "Show Pacs List" ) );
+        m_showPacsListButton->setText( tr( "Show Pacs List" ) );
         m_PacsListShow = false;
     }
 
