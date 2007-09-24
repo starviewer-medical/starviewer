@@ -81,6 +81,8 @@ private slots:
     void setClusterFirst( int slice );
     void setClusterLast( int slice );
 
+    void toggleSegmentationParameters();
+
 signals:
 
     /// Demana que es faci la segmentació.
