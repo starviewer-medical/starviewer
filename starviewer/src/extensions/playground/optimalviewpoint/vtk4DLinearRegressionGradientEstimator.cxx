@@ -158,24 +158,31 @@ void vtkComputeGradients(
 
       for ( x = xlow; x < xhigh; x++ )
         {
-
+        /// \TODO Optimitzar treient les coses mës enfora encara, precalculant i guardant en taules tot el que es pugui
         float A = 0.0;
         float B = 0.0;
         float C = 0.0;
         float D = 0.0;
         for ( int ix = -2; ix <= 2; ix++ )
         {
+            int xPix = x + ix;
+            if ( xPix < 0 || xPix >= size[0] ) continue;    // v = 0
+            int ix2 = ix * ix;
+            T * dptrPixxstep = dptr + ix * xstep;
             for ( int iy = -2; iy <= 2; iy++ )
             {
+                int yPiy = y + iy;
+                if ( yPiy < 0 || yPiy >= size[1] ) continue;    // v = 0
+                int ix2Piy2 = ix2 + iy * iy;
+                T * dptrPixxstepPiyystep = dptrPixxstep + iy * ystep;
                 for ( int iz = -2; iz <= 2; iz++ )
                 {
+                    int zPiz = z + iz;
+                    if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
                     // distància euclidiana
-                    float w = sqrt( ix * ix + iy * iy + iz * iz );
-                    // valor del vòxel (si és fora de rang considerem 0)
-                    float v = ( x + ix < 0 || x + ix >= size[0] ||
-                                y + iy < 0 || y + iy >= size[1] ||
-                                z + iz < 0 || z + iz >= size[2] ) ? 0.0
-                            : *( dptr + ix * xstep + iy * ystep + iz * zstep );
+                    float w = sqrt( ix2Piy2 + iz * iz );
+                    // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
+                    float v = *( dptrPixxstepPiyystep + iz * zstep );
                     v *= w;
                     A += v * ix;
                     B += v * iy;
@@ -184,6 +191,27 @@ void vtkComputeGradients(
                 }
             }
         }
+//         for ( int ix = -2; ix <= 2; ix++ )
+//         {
+//             for ( int iy = -2; iy <= 2; iy++ )
+//             {
+//                 for ( int iz = -2; iz <= 2; iz++ )
+//                 {
+//                     // distància euclidiana
+//                     float w = sqrt( ix * ix + iy * iy + iz * iz );
+//                     // valor del vòxel (si és fora de rang considerem 0)
+//                     float v = ( x + ix < 0 || x + ix >= size[0] ||
+//                                 y + iy < 0 || y + iy >= size[1] ||
+//                                 z + iz < 0 || z + iz >= size[2] ) ? 0.0
+//                             : *( dptr + ix * xstep + iy * ystep + iz * zstep );
+//                     v *= w;
+//                     A += v * ix;
+//                     B += v * iy;
+//                     C += v * iz;
+//                     D += v;
+//                 }
+//             }
+//         }
 /*
         // Compute the X component
         if ( x < estimator->SampleSpacingInVoxels ) 
