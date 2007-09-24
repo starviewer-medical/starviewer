@@ -160,10 +160,10 @@ void QueryScreen::connectSignalsAndSlots()
     connect( m_buttonYesterday , SIGNAL( clicked() ) , this , SLOT( searchYesterdayStudy() ) );
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
     connect( m_buttonRetrieve , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
-    connect( m_buttonRetrieveList , SIGNAL( clicked() ) , this , SLOT( showRetrieveScreen() ) );
+    connect( m_buttonRetrieveList , SIGNAL( clicked() ) , m_OperationStateScreen , SLOT( show() ) );
     connect( m_buttonShowPacsList , SIGNAL( clicked() ) , this , SLOT( showPacsList() ) );
     connect( m_buttonView , SIGNAL( clicked() ) , this , SLOT( view() ) );
-    connect( m_buttonCreateDicomdir , SIGNAL ( clicked() ) , this , SLOT( showCreateDicomdirScreen() ) );
+    connect( m_buttonCreateDicomdir , SIGNAL ( clicked() ) , m_qcreateDicomdir , SLOT( show() ) );
 
     //connectem Slots dels StudyTreeWidget amb la interficie
     connect( m_studyTreeWidgetPacs , SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
@@ -1252,20 +1252,6 @@ void QueryScreen::closeEvent( QCloseEvent* ce )
 
     ce->accept();
     m_qcreateDicomdir->clearTemporaryDir();
-}
-
-void QueryScreen::showRetrieveScreen()
-{
-    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra TODO no es pot solucionar això amb un simple show()?
-    m_OperationStateScreen->setVisible( false );
-    m_OperationStateScreen->setVisible( true );
-}
-
-void QueryScreen::showCreateDicomdirScreen()
-{
-    //el ActiveWindow no funciona, no enfoca la finestra el setWindowState tampoc, és un bug de QT ? a la docu posa que en certes ocasions el Qt::WindowActive pot ser ignorat! Per aixo s'ha de tornar la finestra invisble i tornar-la a fer visible per visualitzar-la, sinó no s'enfoca la finestra TODO no es pot solucionar això amb un simple show()?
-    m_qcreateDicomdir->setVisible( false );
-    m_qcreateDicomdir->setVisible( true );
 }
 
 void QueryScreen::showPacsList()
