@@ -196,14 +196,14 @@ protected :
     /** Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
-    void closeEvent( QCloseEvent* ce );
+    void closeEvent( QCloseEvent* event );
 
 private slots:
     void updateOperationsInProgressMessage();
 
 private:
     ///Connecta els signals i slots pertinents
-    void connectSignalsAndSlots();
+    void createConnections();
 
     /** Activa els labels i text de la data segons el parametre d'entrada
      * @param Indica si s'ha d'activar o desactivar
