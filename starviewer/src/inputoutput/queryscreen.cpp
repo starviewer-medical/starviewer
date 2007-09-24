@@ -564,7 +564,7 @@ void QueryScreen::queryStudyPacs()
     m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
     m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
     m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
-    m_studyTreeWidgetPacs->setSortColumn( 2 );//ordenem pel nom
+    m_studyTreeWidgetPacs->setSortColumn( 2 );//ordenem pel nom TODO hauríem de tenir un mètode sortBy, que passant-li uns enums definits ho fes, perquè així si canviem la columna on tenim el nom, haurem de canviar tots els "setSortColumn( 2 )"
 
     QApplication::restoreOverrideCursor();
 }
