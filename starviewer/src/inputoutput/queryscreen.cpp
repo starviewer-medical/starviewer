@@ -181,7 +181,7 @@ void QueryScreen::createConnections()
     connect( m_checkTo, SIGNAL( stateChanged( int ) ) , this , SLOT( setEnabledTextTo( int ) ) );
 
     //connectem el QDateEdit
-    connect( m_dateStudyDateFrom, SIGNAL( dateChanged( QDate ) ) , this , SLOT( searchStudyfromDateChanged( QDate ) ) );
+    connect( m_dateStudyDateFrom, SIGNAL( dateChanged( QDate ) ) , m_dateStudyDateTo , SLOT( setDate( QDate ) ) );
 
     //checkbox
     connect( m_checkAll, SIGNAL( clicked() ) , this , SLOT( clearCheckedModality() ) );
@@ -329,11 +329,6 @@ void QueryScreen::setEnabledTextFrom( int value )
     m_dateStudyDateFrom->setEnabled( value );
 }
 
-void QueryScreen::searchStudyfromDateChanged( QDate fromDate )
-{
-    m_dateStudyDateTo->setDate( fromDate );
-}
-
 void QueryScreen::clearCheckedModality()
 {
     m_checkAll->setChecked( true );
@@ -405,11 +400,6 @@ void QueryScreen::textOtherModalityEdited()
         m_checkUS->setChecked( false );
         m_checkXA->setChecked( false );
     }
-}
-
-void QueryScreen::dateFromChanged( const QDate &data )
-{
-    m_dateStudyDateTo->setDate( data );
 }
 
 void QueryScreen::setEnabledDates( bool enabled )
