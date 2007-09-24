@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "temporaldimensionfillerstep.h"
+
 #include "orderimagesfillerstep.h"
 #include "logging.h"
 #include "patientfillerinput.h"
@@ -59,6 +59,7 @@ void OrderImagesFillerStep::processSeries( Series *series )
     }
 
     QList<Image *> imageSet;
+    QMap< int , Image* > * instanceNumberSet;
     QMap< double , QMap< int , Image* >* >* imagePositionSet;
     QMap< double, QMap< double , QMap< int , Image* >* >* > lastOrderedImageSet;
 
@@ -83,17 +84,20 @@ void OrderImagesFillerStep::processSeries( Series *series )
         }
     }
 
-    // Passar l'estructura a l'atribut
+    // Passar l'estructura a la series
     foreach ( double key, lastOrderedImageSet.keys() )
     {
         imagePositionSet = lastOrderedImageSet.take(key);
         foreach ( double key2 , imagePositionSet->keys() )
         {
-            imageSet += imagePositionSet->take(key2)->values();
+            instanceNumberSet = imagePositionSet->take(key2);
+            foreach ( int key3 , instanceNumberSet->keys() )
+            {
+                imageSet += instanceNumberSet->take(key3);
+            }
         }
     }
     series->setImages( imageSet );
-
     m_input->addLabelToSeries("OrderImagesFillerStep", series );
 
 }
@@ -118,7 +122,9 @@ void OrderImagesFillerStep::processImage( Image *image )
             imagePositionSet = m_orderedImageSet.value( imageOrientationString );
             if ( imagePositionSet->contains( distance ) )
             {
-                imagePositionSet->value( distance )->insert( image->getInstanceNumber().toInt(), image );
+                // Hi ha series on les imatges comparteixen el mateix instance number.
+                // Per evitar el problema es fa un insertMulti.
+                imagePositionSet->value( distance )->insertMulti( image->getInstanceNumber().toInt(), image );
             }
             else
             {
@@ -130,9 +136,7 @@ void OrderImagesFillerStep::processImage( Image *image )
         }
         else
         {
-            // TODO BUG: si l'instance number és el mateix, s'insereix la imatge al mateix lloc, per tant si tenim una
-            // serie amb 4 imatges que tenen el mateix instance number (molt comú en els LOCALIZERS), ja l'hem cagat
-            // perquè considerarem que tenim 4 imatges però nomes hi ha una
+
             instanceNumberSet = new QMap< int , Image* >();
             instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
 
@@ -146,7 +150,7 @@ void OrderImagesFillerStep::processImage( Image *image )
 
 double OrderImagesFillerStep::distance( Image *image )
 {
-    //Calcul de la distancia (basat en l'algorisme de Jolinda Smith)
+    //Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
     double distance = 0;
     double *imageOrientation = (double *)image->getImageOrientationPatient();
     double *imagePosition = (double *)image->getImagePositionPatient();
