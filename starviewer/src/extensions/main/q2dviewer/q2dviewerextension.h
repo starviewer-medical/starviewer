@@ -135,6 +135,9 @@ private slots:
      */
     void updateVolumeLoadProgressNotification(int progress);
 
+    /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
+    void validePhases();
+
 private:
     /// Tipus de vistes que podem tenir
     enum ViewType{ Axial , Sagital , Coronal };

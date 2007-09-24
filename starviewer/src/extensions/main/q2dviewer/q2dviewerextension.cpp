@@ -226,6 +226,7 @@ void Q2DViewerExtension::createConnections()
 
     // Connexions necessaries pel primer visualitzador
     connect( m_selectedViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
+    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) ); 
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
@@ -237,6 +238,7 @@ void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_vectorViewers.value( 0 )->setInput( m_mainVolume );
+    validePhases();
 
     // Omplim el combo amb tants window levels com tingui el volum
     int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
@@ -541,13 +543,16 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
         /// enviin el senyal al visualitzador que toca.
         disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+        disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
 
         m_selectedViewer->setSelected( false );
         m_selectedViewer = viewer;
         m_selectedViewer->setSelected( true );
+        validePhases();
 
         connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );  
     }
 }
 
@@ -751,6 +756,20 @@ void Q2DViewerExtension::showInformation( int state )
         {
             m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
         }
+    }
+}
+
+void Q2DViewerExtension::validePhases()
+{
+    if( m_selectedViewer->hasPhases() )
+    {
+        m_sagitalViewAction->setEnabled( false );
+        m_coronalViewAction->setEnabled( false );
+    }
+    else
+    {
+        m_sagitalViewAction->setEnabled( true );
+        m_coronalViewAction->setEnabled( true );
     }
 }
 
