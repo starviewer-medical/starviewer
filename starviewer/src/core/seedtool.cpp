@@ -60,11 +60,13 @@ void SeedTool::handleEvent( unsigned long eventID )
     }
 }
 
-void SeedTool::setSeed( )
+void SeedTool::setSeed()
 {
     m_state=SEEDING;
 
     m_2DViewer->getCurrentCursorPosition(m_seedPosition);
+    //es calcula correctament el valor de profunditat per a corretgir el bug #245
+    m_2DViewer->calculateDepthCoordinate( m_seedPosition );
     m_2DViewer->setSeedPosition(m_seedPosition);
 
     vtkSphereSource *point = vtkSphereSource::New();
