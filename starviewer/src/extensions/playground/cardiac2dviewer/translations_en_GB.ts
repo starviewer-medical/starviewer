@@ -3,8 +3,18 @@
 <context>
     <name>udg::Cardiac2DViewerExtensionMediator</name>
     <message>
-        <location filename="cardiac2dviewerextensionmediator.cpp" line="24"/>
+        <location filename="cardiac2dviewerextensionmediator.cpp" line="27"/>
         <source>2D Cardiac Viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cardiac2dviewerextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="cardiac2dviewerextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -37,7 +47,7 @@
     </message>
     <message>
         <location filename="qcardiac2dviewerextension.cpp" line="72"/>
-        <source>Change Current View To Sagital</source>
+        <source>Change Current View To Saggital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -96,22 +106,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="313"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="314"/>
         <source>Save video file as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="332"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="333"/>
         <source>MPEG (*.mpg)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="337"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="338"/>
         <source>AVI (*.avi)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="355"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="356"/>
         <source>Making video</source>
         <translation type="unfinished"></translation>
     </message>
@@ -119,42 +129,42 @@
 <context>
     <name>udg::QCardiac2DViewerExtensionBase</name>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="307"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="304"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="80"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="77"/>
         <source>window level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="102"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="99"/>
         <source>zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="124"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="121"/>
         <source>move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="285"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="282"/>
         <source>voxel information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="352"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="349"/>
         <source>WW/WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="742"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="745"/>
         <source>Velocity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="749"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="752"/>
         <source>frames/sec</source>
         <translation type="unfinished"></translation>
     </message>
