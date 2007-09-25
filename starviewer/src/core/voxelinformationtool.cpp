@@ -89,11 +89,25 @@ void VoxelInformationTool::createCaptionActor()
 void VoxelInformationTool::updateVoxelInformation()
 {
     double xyz[3];
+    int slice = m_2DViewer->getCurrentSlice();
+    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *origin = m_2DViewer->getInput()->getOrigin();
     
     if( m_2DViewer->getCurrentCursorPosition(xyz) )
     {
         //codi que soluciona el bug de les coordenades del voxel information (BUG: 122)
-        m_2DViewer->calculateDepthCoordinate( xyz );
+        switch( m_2DViewer->getView() )
+        {
+            case Q2DViewer::Axial:
+                xyz[2] = origin[2] + (slice * spacing[2]);
+            break;
+            case Q2DViewer::Sagittal:
+                xyz[0] = origin[0] + (slice * spacing[0]);
+            break;
+            case Q2DViewer::Coronal:
+                xyz[1] = origin[1] + (slice * spacing[1]);
+            break;
+        }
         ////
     
         m_voxelInformationCaption->VisibilityOn();
