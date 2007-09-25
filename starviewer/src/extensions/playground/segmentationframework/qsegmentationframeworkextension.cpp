@@ -138,7 +138,7 @@ void QSegmentationFrameworkExtension::createActions()
     m_sagitalViewAction = new QAction( 0 );
     m_sagitalViewAction->setText( tr("&Sagital View") );
     m_sagitalViewAction->setShortcut( tr("Ctrl+S") );
-    m_sagitalViewAction->setStatusTip( tr("Change Current View To Sagital") );
+    m_sagitalViewAction->setStatusTip( tr("Change Current View To Saggital") );
     m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
     m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
 
