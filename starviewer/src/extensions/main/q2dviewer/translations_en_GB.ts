@@ -42,7 +42,7 @@
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="85"/>
-        <source>Change Current View To Sagital</source>
+        <source>Change Current View To Saggital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -191,6 +191,11 @@
     <message>
         <location filename="q2dviewerextensionbase.ui" line="375"/>
         <source>Image layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="400"/>
+        <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
