@@ -328,7 +328,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies whith you want to create a DICOMDIR" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies you want to create a DICOMDIR with" ) );
         return state.setStatus( "No study selected to create the DICOMDIR", false , 3001 );
     }
 
