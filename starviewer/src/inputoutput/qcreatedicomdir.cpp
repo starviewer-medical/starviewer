@@ -383,9 +383,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 void QCreateDicomdir::clearQCreateDicomdirScreen()
 {
     m_dicomdirStudiesList->clear();
-    m_lineEditDicomdirPath->setText( "" );
-
-    m_dicomdirSizeOnDiskLabel->setText( tr( "The size of DICOMDIR is 0 Mb" ) );
+    m_lineEditDicomdirPath->clear();
 
     m_dicomdirSize = 0;
     setDicomdirSize();//Reiniciem la barra de progrés
