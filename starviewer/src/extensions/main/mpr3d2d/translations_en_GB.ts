@@ -36,8 +36,18 @@
 <context>
     <name>udg::MPR3D2DExtensionMediator</name>
     <message>
-        <location filename="mpr3d2dextensionmediator.cpp" line="24"/>
+        <location filename="mpr3d2dextensionmediator.cpp" line="27"/>
         <source>MPR 3D-2D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mpr3d2dextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mpr3d2dextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
