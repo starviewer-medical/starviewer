@@ -360,7 +360,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         if ( state.code() == 4001 ) //alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , tr( "Starviewer" ), tr( "Some images are not 100 % Dicom compliant. It could be possible that some viewers have problems to visualize them " ) );
+            QMessageBox::information( this , tr( "Starviewer" ), tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them " ) );
             QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
         }
         else
