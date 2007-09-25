@@ -23,6 +23,8 @@ VoxelInformationTool::VoxelInformationTool( Q2DViewer *viewer, QObject *parent )
 {
     m_2DViewer = viewer;
     createCaptionActor();
+    
+    connect( m_2DViewer, SIGNAL( sliceChanged(int) ), this, SLOT( isNeededUpdateVoxelInformation() ) );
 }
 
 VoxelInformationTool::~VoxelInformationTool()
@@ -119,6 +121,14 @@ void VoxelInformationTool::updateVoxelInformation()
         m_voxelInformationCaption->VisibilityOff();
     }
     m_2DViewer->refresh();
+}
+
+void VoxelInformationTool::isNeededUpdateVoxelInformation()
+{
+    if ( m_isEnabled )
+    {
+        updateVoxelInformation();
+    }
 }
 
 }
