@@ -93,7 +93,7 @@ bool AppImportFile::openDirectory()
 QStringList AppImportFile::generateFilenames( QString dirPath )
 {
     //generador dels noms dels fitxers DICOM d'un directori
-    itk::GDCMSeriesFileNames::Pointer namesGenerator;
+    itk::GDCMSeriesFileNames::Pointer namesGenerator = itk::GDCMSeriesFileNames::New();
     namesGenerator->SetInputDirectory( qPrintable(dirPath) );
     const std::vector< std::string > &filenames = namesGenerator->GetInputFileNames();
     // convertim el vector en QStringList
