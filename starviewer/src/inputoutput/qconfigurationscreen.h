@@ -131,7 +131,7 @@ private :
     /** Tracta els errors que s'han produït a la base de dades en general
      *           @param state  Estat del mètode
      */
-    void databaseError(Status * state);
+    void showDatabaseErrorMessage( const Status &state );
 
     /// Carrega les dades de configuració de la cache
     void loadCacheDefaults();

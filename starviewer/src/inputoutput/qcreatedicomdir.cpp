@@ -168,7 +168,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
 
         if ( !state.good() )
         {
-            databaseError ( &state );
+            showDatabaseErrorMessage( state );
             return;
         }
 
@@ -225,13 +225,12 @@ void QCreateDicomdir::createDicomdir()
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 {
     QDir temporaryDirPath;
-    QString dicomdirPath, logMessage;
+    QString dicomdirPath;
     Status state;
     ConvertToDicomdir convertToDicomdir;
 
-    dicomdirPath.insert( 0 , temporaryDirPath.tempPath() );
-    dicomdirPath.append( "/DICOMDIR" ); // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
-
+    // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
+    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
     //si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
@@ -239,16 +238,12 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
         delDirectory.deleteDirectory( dicomdirPath , true );
     }
 
-    logMessage = "Iniciant la creació del DICOMDIR en cd-dvd al directori temporal ";
-    logMessage.append( dicomdirPath );
-    INFO_LOG ( logMessage );
+    INFO_LOG( "Iniciant la creació del DICOMDIR en cd-dvd al directori temporal " + dicomdirPath );
 
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
         QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission" ) );
-        logMessage = "Error al crear directori ";
-        logMessage.append( dicomdirPath );
-        ERROR_LOG( logMessage );
+        ERROR_LOG( "Error al crear directori " + dicomdirPath );
         return state.setStatus( "Can't create temporary DICOMDIR", false , 3002 );
     }
     else
@@ -259,7 +254,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
 void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 {
-    QString dicomdirPath = m_lineEditDicomdirPath->text() , logMessage;
+    QString dicomdirPath = m_lineEditDicomdirPath->text();
     DeleteDirectory delDirectory;
     QDir directoryDicomdirPath( dicomdirPath );
 
@@ -267,14 +262,11 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please enter a diretory to create de DICOMDIR" ) );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No directory specified to create the DICOMDIR" ) );
         return;
     }
 
-
-    logMessage = "Iniciant la creació del DICOMDIR en discdur o usb al directori ";
-    logMessage.append( dicomdirPath );
-    INFO_LOG ( logMessage );
+    INFO_LOG ( "Iniciant la creació del DICOMDIR en discdur o usb al directori " + dicomdirPath );
 
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
@@ -305,9 +297,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                         if ( !directoryDicomdirPath.mkpath( dicomdirPath ) )
                         {
                             QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the directory. Please check users permission" ) );
-                            logMessage = "Error al crear directori ";
-                            logMessage.append( dicomdirPath );
-                            ERROR_LOG( logMessage );
+                            ERROR_LOG( "Error al crear directori " + dicomdirPath );
                         }
                         break;
                     case 1:
@@ -325,17 +315,11 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 {
     ConvertToDicomdir convertToDicomdir;
     Status state;
-    QString logMessage;
-
-    INFO_LOG( logMessage );
 
     if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "Not enough free space to create DICOMDIR. Please free space" ) );
-
-        logMessage = "Error al crear el DICOMDIR, no hi ha suficient espai al disc ERROR : ";
-        logMessage.append( state.text() );
-        ERROR_LOG( logMessage );
+        ERROR_LOG( "Error al crear el DICOMDIR, no hi ha suficient espai al disc ERROR : " + state.text() );
         return state.setStatus( "Not enough space to create DICOMDIR", false , 3000 );
     }
 
@@ -344,19 +328,15 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies which you want to create a DICOMDIR" ) );
-        return state.setStatus( "No study selected to create DICOMDIR", false , 3001 );
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies whith you want to create a DICOMDIR" ) );
+        return state.setStatus( "No study selected to create the DICOMDIR", false , 3001 );
     }
 
     for ( int i = 0; i < dicomdirStudiesList.count(); i++ )
     {
         item = dicomdirStudiesList.at( i );
         convertToDicomdir.addStudy( item->text( 7 ) ); // indiquem a la classe convertToDicomdir, quins estudis s'ha de convertir a dicomdir, passant el UID de l'estudi
-
-        logMessage = "L'estudi ";
-        logMessage.append( item->text( 7 ) );
-        logMessage.append( " s'afegirà al DICOMDIR " );
-        INFO_LOG( logMessage );
+        INFO_LOG( "L'estudi " + item->text( 7 ) + " s'afegirà al DICOMDIR " );
     }
 
     switch( m_currentDevice )
@@ -380,16 +360,13 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         if ( state.code() == 4001 ) //alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , tr( "Starviewer" ), tr( "Some images are not 100 % Dicom compliance. It can be possible that some viewers have problems to visualizate them " ) );
+            QMessageBox::information( this , tr( "Starviewer" ), tr( "Some images are not 100 % Dicom compliant. It could be possible that some viewers have problems to visualize them " ) );
             QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
         }
         else
         {
-            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating DICOMDIR. Be sure you have user permissions in " ) + m_lineEditDicomdirPath->text() + " and that the directory is empty " );
-            logMessage = "Error al crear el DICOMDIR ERROR : ";
-            logMessage.append( state.text() );
-            ERROR_LOG( logMessage );
-
+            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty" ).arg( m_lineEditDicomdirPath->text() ) );
+            ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
             return state;
         }
     }
@@ -463,7 +440,7 @@ void QCreateDicomdir::removeSelectedStudy()
 
             if ( !state.good() )
             {
-                databaseError ( &state );
+                showDatabaseErrorMessage( state );
                 return;
             }
 
@@ -502,16 +479,14 @@ void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
     dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR/";
 
     //indiquem al directori i nom de la imatge a crear
-    isoPath = dicomdirPath;
-    isoPath.append( "/dicomdir.iso" );
+    isoPath = dicomdirPath + "/dicomdir.iso";
 
     //el mkisofs per indica el nom de la iso a crear se li ha de posar amb el parametre -o
-    outputIsoPathParameter = "-o";
-    outputIsoPathParameter.append( isoPath );
+    outputIsoPathParameter = "-o" + isoPath;
 
-    mkisofsParamaterList.push_back( "-V STARVIEWER DICOMDIR" );//indiquem que el label de la imatge és STARVIEWER DICOMDIR
-    mkisofsParamaterList.push_back( outputIsoPathParameter ); //nom i directori on guardarem la imatge
-    mkisofsParamaterList.push_back( dicomdirPath );//path a convertir en iso
+    mkisofsParamaterList <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
+    mkisofsParamaterList << outputIsoPathParameter; //nom i directori on guardarem la imatge
+    mkisofsParamaterList << dicomdirPath;//path a convertir en iso
 
     mkisofs.execute( "mkisofs" , mkisofsParamaterList );//creem la imatge
     mkisofs.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
@@ -521,13 +496,13 @@ void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
     switch( device )
     {
         case recordDeviceDicomDir(cd) :
-                k3bParamatersList.push_back( "--cdimage" );
-                k3bParamatersList.push_back( isoPath );
+                k3bParamatersList << "--cdimage";
+                k3bParamatersList << isoPath;
                 k3b.execute( "k3b" , k3bParamatersList );
                 break;
         case recordDeviceDicomDir(dvd):
-                k3bParamatersList.push_back( "--dvdimage" );
-                k3bParamatersList.push_back( isoPath );
+                k3bParamatersList << "--dvdimage";
+                k3bParamatersList << isoPath;
                 k3b.execute( "k3b" , k3bParamatersList );
                 break;
         default:
@@ -550,26 +525,16 @@ bool QCreateDicomdir::enoughFreeSpace( QString path )
 
 QString QCreateDicomdir::formatDate( const QString date )
 {
-    QString formateDate , originalDate ( date );
+    QString originalDate( date );
 
-    formateDate.insert( 0 , originalDate.mid( 6 , 2 ) ); //dd
-    formateDate.append( "/" );
-    formateDate.append( originalDate.mid( 4 , 2 ) );
-    formateDate.append( "/" );
-    formateDate.append( originalDate.mid( 0 , 4 ) );
-
-    return formateDate;
+    return originalDate.mid( 6 , 2 ) + "/" + originalDate.mid( 4 , 2 ) + "/" + originalDate.mid( 0 , 4 );
 }
 
 QString QCreateDicomdir::formatHour( const QString hour )
 {
-    QString formatedHour,originalHour( hour );
+    QString originalHour( hour );
 
-    formatedHour.insert( 0 , originalHour.mid( 0 , 2 ) );
-    formatedHour.append( ":" );
-    formatedHour.append( originalHour.mid( 2 , 2 ) );
-
-    return formatedHour;
+    return originalHour.mid( 0 , 2 ) + ":" + originalHour.mid( 2 , 2 );
 }
 
 void QCreateDicomdir::clearTemporaryDir()
@@ -577,62 +542,20 @@ void QCreateDicomdir::clearTemporaryDir()
     QString dicomdirPath, logMessage;
     QDir temporaryDirPath;
 
-    dicomdirPath.insert( 0 , temporaryDirPath.tempPath() );
-    dicomdirPath.append( "/DICOMDIR" );
+    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
 
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
         DeleteDirectory delDirectory;
-        delDirectory.deleteDirectory( dicomdirPath , true);
+        delDirectory.deleteDirectory( dicomdirPath , true );
     }
 }
 
-void QCreateDicomdir::databaseError( Status *state )
+void QCreateDicomdir::showDatabaseErrorMessage( const Status &state )
 {
-    QString text,code;
-
-    if ( !state->good() )
+    if( !state.good() )
     {
-        switch( state->code() )
-        {  case 2001 :  text.insert( 0, tr( "Database is corrupted or SQL syntax error" ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2005 : text.insert( 0, tr( "Database is locked" ) );
-                        text.append( "\n" );
-                        text.append( "To solve this error restart the user session" );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2011 : text.insert( 0, tr( "Database is corrupted." ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10);
-                        text.append( code );
-                        break;
-            case 2019 : text.insert( 0, tr( "Register duplicated." ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2050 : text.insert( 0, "Not Connected to database" );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            default :   text.insert( 0, tr( "Internal Database error" ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-        }
-        QMessageBox::critical( this , tr( "Starviewer" ) , text );
+        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code()) );
     }
 }
 

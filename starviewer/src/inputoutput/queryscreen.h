@@ -273,7 +273,7 @@ private:
     /** Tracta els errors de la base de dades
      * @param state del mètode de la base de dades
      */
-    void databaseError( Status *state );
+    void showDatabaseErrorMessage( const Status &state );
 
     /// Assigna la mida al PacsList en funcio del tab en que es trobi i de la variable m_PacsListShow
     void resizePacsList();

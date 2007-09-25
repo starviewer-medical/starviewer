@@ -60,6 +60,10 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     setWidthColumns();
 }
 
+QConfigurationScreen::~QConfigurationScreen()
+{
+}
+
 void QConfigurationScreen::createConnections()
 {
     //connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
@@ -166,14 +170,14 @@ void QConfigurationScreen::loadCachePoolDefaults()
     state = pool.getPoolTotalSize( space );
     if ( !state.good() )
     {
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
         return;
     }
 
     state = pool.getPoolUsedSpace( used );
     if ( !state.good() )
     {
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
         return;
     }
 
@@ -287,7 +291,7 @@ void QConfigurationScreen::addPacs()
             {
 
                 QMessageBox::warning( this , tr("Starviewer") , tr("AETitle ") + pacs.getAEPacs() + tr(" exists") + "\n" );
-            }else databaseError( &state );
+            }else showDatabaseErrorMessage( state );
 
         }
         else
@@ -312,7 +316,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * item , int )
 
         if ( !state.good() )
         {
-            databaseError( &state );
+            showDatabaseErrorMessage( state );
             return;
         }
 
@@ -373,7 +377,7 @@ void QConfigurationScreen::updatePacs()
 
         if ( !state.good() )
         {
-            databaseError( &state );
+            showDatabaseErrorMessage( state );
         }
         else
         {
@@ -407,7 +411,7 @@ void QConfigurationScreen::deletePacs()
 
     if ( !state.good() )
     {
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
     }
     else
     {
@@ -781,7 +785,7 @@ void QConfigurationScreen::applyChangesCache()
         INFO_LOG( logMessage );
 
         state = pool.updatePoolTotalSize( m_textPoolSize->text().toInt( NULL , 10 )* 1024 );//Passem l'espai a Mb
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
     }
 
     if ( m_textCacheImagePath->isModified() )
@@ -827,7 +831,7 @@ void QConfigurationScreen::deleteStudies()
 
         if ( !state.good() )
         {
-            databaseError( &state );
+            showDatabaseErrorMessage( state );
         }
 
         loadCachePoolDefaults();
@@ -852,7 +856,7 @@ void QConfigurationScreen::compactCache()
 
     if ( !state.good() )
     {
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
     }
 
 }
@@ -929,57 +933,12 @@ void QConfigurationScreen::closeEvent( QCloseEvent* ce )
     ce->accept();
 }
 
-
-void QConfigurationScreen::databaseError(Status *state)
+void QConfigurationScreen::showDatabaseErrorMessage( const Status &state )
 {
-    QString text , code;
-    if ( !state->good() )
+    if( !state.good() )
     {
-        switch( state->code() )
-        {  case 2001 : text.insert( 0, tr("Database is corrupted or SQL syntax error") );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2005 : text.insert( 0 , tr("Database is locked") );
-                        text.append( "\n" );
-                        text.append( tr( "To solve this error restart the user session" ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2011 : text.insert( 0 , tr( "Database is corrupted." ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2019 : text.insert( 0 , tr( "Register duplicated." ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2050 : text.insert( 0 , "Not Connected to database" );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            default :   text.insert( 0 , tr( "Internal Database error" ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-        }
-        QMessageBox::critical( this , tr( "Starviewer" ) , text );
+        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code() ) );
     }
-}
-
-QConfigurationScreen::~QConfigurationScreen()
-{
 }
 
 };
