@@ -10,6 +10,8 @@
 #include "status.h"
 #include "logging.h"
 
+#include <QObject> // per les traduccions: tr()
+
 namespace udg {
 
 DatabaseConnection::DatabaseConnection()
@@ -71,22 +73,22 @@ Status DatabaseConnection::databaseStatus( int numState )
 
     switch(numState)
     {//aqui tractem els errors que ens poden afectar de manera més directe, i els quals l'usuari pot intentar solucionbar
-        case SQLITE_OK :        state.setStatus( "Normal" , true , 0 );
+        case SQLITE_OK :        state.setStatus( QObject::tr("Normal") , true , 0 );
                                 break;
-        case SQLITE_ERROR :     state.setStatus( "Database is corrupted or SQL error syntax " , false , 2001 );
+        case SQLITE_ERROR :     state.setStatus( QObject::tr("Database is corrupted or SQL error syntax") , false , 2001 );
                                 break;
-        case SQLITE_BUSY :      state.setStatus( "Database is locked" , false , 2006 );
+        case SQLITE_BUSY :      state.setStatus( QObject::tr("Database is locked") , false , 2006 );
                                 break;
-        case SQLITE_CORRUPT :   state.setStatus( "Database corrupted" , false , 2011 );
+        case SQLITE_CORRUPT :   state.setStatus( QObject::tr("Database corrupted") , false , 2011 );
                                 break;
-        case SQLITE_CONSTRAINT: state.setStatus( "The new register is duplicated" , false , 2019 );
+        case SQLITE_CONSTRAINT: state.setStatus( QObject::tr("The new register is duplicated") , false , 2019 );
                                 break;
-        case 50 :               state.setStatus( "Not connected to database" , false , 2050 );
+        case 50 :               state.setStatus( QObject::tr("Not connected to database") , false , 2050 );
                                 break;
       //aquests errors en principi no es poden donar, pq l'aplicació no altera cap element de l'estructura, si es produeix algun
       //Error d'aquests en principi serà perquè la bdd està corrupte o problemes interns del SQLITE, fent Numerror-2000 de l'estat
       //a la pàgina de www.sqlite.org podrem saber de quin error es tracta.
-        default :               state.setStatus( "SQLITE internal error" , false , 2000 + numState );
+        default :               state.setStatus( QObject::tr("Internal Database error (SQLITE)") , false , 2000 + numState );
                                 break;
     }
 
