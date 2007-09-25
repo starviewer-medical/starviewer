@@ -40,7 +40,7 @@
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
-           <vsizetype>1</vsizetype>
+           <vsizetype>0</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -163,7 +163,7 @@
            <property name="sizePolicy" >
             <sizepolicy>
              <hsizetype>7</hsizetype>
-             <vsizetype>1</vsizetype>
+             <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -239,7 +239,7 @@
               <property name="sizePolicy" >
                <sizepolicy>
                 <hsizetype>5</hsizetype>
-                <vsizetype>1</vsizetype>
+                <vsizetype>0</vsizetype>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -1243,6 +1243,14 @@
      </item>
      <item>
       <widget class="udg::QPacsList" native="1" name="m_PACSNodes" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>13</hsizetype>
+         <vsizetype>1</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize" >
         <size>
          <width>20</width>
@@ -1503,6 +1511,11 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>udg::QPacsList</class>
+   <extends>QWidget</extends>
+   <header>qpacslist.h</header>
+  </customwidget>
+  <customwidget>
    <class>udg::QSeriesListWidget</class>
    <extends>QWidget</extends>
    <header>qserieslistwidget.h</header>
@@ -1511,11 +1524,6 @@
    <class>udg::QStudyTreeWidget</class>
    <extends>QWidget</extends>
    <header>qstudytreewidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>udg::QPacsList</class>
-   <extends>QWidget</extends>
-   <header>qpacslist.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
