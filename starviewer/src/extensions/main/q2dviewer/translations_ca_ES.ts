@@ -42,7 +42,7 @@
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="85"/>
-        <source>Change Current View To Sagital</source>
+        <source>Change Current View To Saggital</source>
         <translation>Canviar la Vista Actual a Sagital</translation>
     </message>
     <message>
@@ -192,6 +192,11 @@
         <location filename="q2dviewerextensionbase.ui" line="375"/>
         <source>Image layout</source>
         <translation>distribució de les imatges</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="400"/>
+        <source>Information</source>
+        <translation></translation>
     </message>
 </context>
 <context>
