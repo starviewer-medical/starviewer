@@ -195,7 +195,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
     }
     else
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study exists in the DICOMDIR list" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study already exists in the DICOMDIR list" ) );
     }
 }
 
