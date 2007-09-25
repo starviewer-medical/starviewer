@@ -5,113 +5,123 @@
     <message>
         <location filename="qmprextensionbase.ui" line="299"/>
         <source>WW/WL:</source>
-        <translation type="unfinished">WW/WL:</translation>
+        <translation>WW/WL:</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="257"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="49"/>
         <source>Slicing</source>
-        <translation type="unfinished">Moure llesques</translation>
+        <translation>Moure llesques</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="68"/>
         <source>Window Level</source>
-        <translation type="unfinished">Lluentor/Contrast</translation>
+        <translation>Lluentor/Contrast</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="87"/>
         <source>Zoom</source>
-        <translation type="unfinished">Zoom</translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="106"/>
         <source>Move</source>
-        <translation type="unfinished">Moure</translation>
+        <translation>Moure</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="213"/>
         <source>Thick Slab (mm)</source>
-        <translation type="unfinished">Gruix de tall (mm)</translation>
+        <translation>Gruix de tall (mm)</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="147"/>
         <source>zoom</source>
-        <translation type="unfinished">zoom</translation>
+        <translation>zoom</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="13"/>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>udg::MPRExtensionMediator</name>
     <message>
-        <location filename="mprextensionmediator.cpp" line="24"/>
+        <location filename="mprextensionmediator.cpp" line="27"/>
         <source>MPR 2D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="mprextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="mprextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="129"/>
+        <location filename="qmprextension.cpp" line="134"/>
         <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
-        <translation type="unfinished">Imatges PNG (*.png);;Imatges PNM(*.pnm);;Imatges JPEG(*.jpg);;Imatges TIFF (*.tif);;Imatges BMP (*.bmp);;Imatges DICOM (*.dcm)</translation>
+        <translation>Imatges PNG (*.png);;Imatges PNM(*.pnm);;Imatges JPEG(*.jpg);;Imatges TIFF (*.tif);;Imatges BMP (*.bmp);;Imatges DICOM (*.dcm)</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="863"/>
+        <location filename="qmprextension.cpp" line="905"/>
         <source>Information</source>
-        <translation type="unfinished">Informació</translation>
+        <translation>Informació</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="863"/>
+        <location filename="qmprextension.cpp" line="905"/>
         <source>There are not grabbed views to save</source>
-        <translation type="unfinished">No hi ha vistes capturades per desar</translation>
+        <translation>No hi ha vistes capturades per desar</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="867"/>
+        <location filename="qmprextension.cpp" line="909"/>
         <source>Save file</source>
-        <translation type="unfinished">Desar fitxer</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="136"/>
-        <source>Switch horizontal layout</source>
-        <translation type="unfinished">Canviar la distribució horitzontal</translation>
+        <translation>Desar fitxer</translation>
     </message>
     <message>
         <location filename="qmprextension.cpp" line="141"/>
+        <source>Switch horizontal layout</source>
+        <translation>Canviar la distribució horitzontal</translation>
+    </message>
+    <message>
+        <location filename="qmprextension.cpp" line="146"/>
         <source>&amp;MIP</source>
-        <translation type="unfinished">&amp;MIP</translation>
+        <translation>&amp;MIP</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="143"/>
+        <location filename="qmprextension.cpp" line="148"/>
         <source>Maximum Intensity Projection</source>
-        <translation type="unfinished">Projecció de Màxima Intensitat</translation>
+        <translation>Projecció de Màxima Intensitat</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="150"/>
+        <location filename="qmprextension.cpp" line="155"/>
         <source>Voxel Information</source>
-        <translation type="unfinished">Informació de voxel</translation>
+        <translation>Informació de voxel</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="151"/>
+        <location filename="qmprextension.cpp" line="156"/>
         <source>Ctrl+I</source>
-        <translation type="unfinished">Ctrl+I</translation>
+        <translation>Ctrl+I</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="152"/>
+        <location filename="qmprextension.cpp" line="157"/>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished">Habilitar la informació devoxel sobre el cursor</translation>
+        <translation>Habilitar la informació devoxel sobre el cursor</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="142"/>
+        <location filename="qmprextension.cpp" line="147"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>
