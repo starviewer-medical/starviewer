@@ -13,22 +13,22 @@ Status::Status()
     m_numberError=-1;
 }
 
-bool Status:: good()
+bool Status::good() const
 {
 	return m_success;
 }
 
-QString Status:: text()
+QString Status::text() const
 {
     return m_descText;
 }
 
-int Status:: code()
+int Status::code() const
 {
 	return m_numberError;
 }
 
-Status Status:: setStatus( const OFCondition  status )
+Status Status::setStatus( const OFCondition status )
 {
 	m_descText = status.text();
 	m_success = status.good();
@@ -37,7 +37,7 @@ Status Status:: setStatus( const OFCondition  status )
     return *this;
 }
 
-Status Status:: setStatus( QString desc , bool ok , int numError )
+Status Status::setStatus( QString desc , bool ok , int numError )
 {
     m_descText = desc;
     m_success = ok;
