@@ -155,6 +155,9 @@ public:
 
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
+    
+    ///a partir de la posició seleccionada i passada per paràmetre, ens calcula la coordenada correcta de profunditat segons la llesca, l'espaiat i l'origen del volum.
+    void calculateDepthCoordinate( double pickedPosition[3] );
 
     /**
         Mètodes pel tractament de múltiples vistes
