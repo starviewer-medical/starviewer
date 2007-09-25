@@ -135,7 +135,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         else
         {
             logMessage += " al intentar alliberar espai al disc ";
-            QMessageBox::critical( 0 , tr( "Starviewer" ) , tr( "Error Freeing Space. The study couldn't be retrieved" ) );
+            QMessageBox::critical( 0 , tr( "Starviewer" ) , tr( "Error freeing space. The study couldn't be retrieved" ) );
         }
         ERROR_LOG( logMessage );
 
