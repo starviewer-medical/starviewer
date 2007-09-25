@@ -35,6 +35,9 @@ public slots:
      * Activa/Desactiva aquesta tool
      */
     void enable( bool enable = true );
+    
+    ///mira si cal actualitzar la informació de vòxel. Si la tool d'informació de vòxel està activada i es canvia la llesca, s'executarà aquest SLOT.
+    void isNeededUpdateVoxelInformation();
 
 private:
     void createCaptionActor();
