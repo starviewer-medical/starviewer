@@ -70,15 +70,21 @@ public:
     Status queryPacs( PacsParameters *pacs , int pacsID );
 
 private:
-
-    DatabaseConnection *m_DBConnect;
-
     /** Comprova si el pacs existeix en estat de baixa, comprovem si el AETitle està en estat donat de baixa
      * @param Pacs a Trobar
      * @return estat de l'operació
      */
     Status queryPacsDeleted( PacsParameters *pacs );
 
+    /// Interroga la base de dades per obtenir la informació del PACS
+    Status queryPACSInformation( PacsParameters *pacs, QString sqlSentence );
+
+    /// Construeixen les sentències SQL per a la interrogació de queryPACS...
+    QString getQueryPACSByIDSQLSentence( int id );
+    QString getQueryPACSByAETitleSQLSentence( QString AETitle );
+
+private:
+    DatabaseConnection *m_DBConnect;
 };
 
 };

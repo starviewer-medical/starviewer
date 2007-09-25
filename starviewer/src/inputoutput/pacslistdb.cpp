@@ -155,55 +155,30 @@ Status PacsListDB::queryPacsList( PacsList &list )
 
 Status PacsListDB::queryPacs( PacsParameters *pacs , QString AETitle )
 {
-    int col , rows = 0 , i = 0 , estat;
-    char **resposta = NULL , **error = NULL;
-    QString sqlSentence;
-    Status state;
-
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-
-    sqlSentence = QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where AEtitle = '%1'").arg( AETitle );
-
-    m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
-    m_DBConnect->releaseLock();
-
-    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
-    if ( rows == 0 && estat == 0 ) estat = 99;
-
-    state = m_DBConnect->databaseStatus( estat );
-
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
-        return state;
-    }
-
-    if ( rows > 0 )
-    {
-        i = 1;//ignorem les capçaleres
-        pacs->setAEPacs( resposta[0 + i*col ] );
-        pacs->setPacsAdr( resposta[1 + i*col ] );
-        pacs->setPacsPort( resposta[2 + i*col ] );
-        pacs->setInstitution( resposta[3 + i*col ] );
-        pacs->setLocation( resposta[4 + i*col ] );
-        pacs->setDescription( resposta[5 + i*col ] );
-        pacs->setDefault( resposta[6 + i*col ] );
-        pacs->setPacsID(atoi( resposta[7 + i*col]));
-    }
-
-    return state;
+    QString sqlSentence = this->getQueryPACSByAETitleSQLSentence( AETitle );
+    return this->queryPACSInformation( pacs, sqlSentence );
 }
 
 Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
 {
+    QString sqlSentence = this->getQueryPACSByIDSQLSentence( pacsID );
+    return this->queryPACSInformation( pacs, sqlSentence );
+}
+
+QString PacsListDB::getQueryPACSByIDSQLSentence( int id )
+{
+    return QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where PacsID = %1").arg( id );
+}
+
+QString PacsListDB::getQueryPACSByAETitleSQLSentence( QString AETitle )
+{
+    return QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where AEtitle = '%1'").arg( AETitle );
+}
+
+Status PacsListDB::queryPACSInformation( PacsParameters *pacs, QString sqlSentence )
+{
     int col , rows = 0 , i = 0 , estat;
     char **resposta = NULL , **error = NULL;
-    QString sqlSentence;
     Status state;
 
     if ( !m_DBConnect->connected() )
@@ -211,14 +186,13 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where PacsID = %1").arg( pacsID );
-
     m_DBConnect->getLock();
     estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
     m_DBConnect->releaseLock();
 
     //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
-    if ( rows == 0 && estat == 0 ) estat = 99;
+    if ( rows == 0 && estat == 0 )
+        estat = 99;
 
     state = m_DBConnect->databaseStatus( estat );
     if ( !state.good() )
