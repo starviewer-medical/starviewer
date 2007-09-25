@@ -29,6 +29,7 @@ class DICOMImage;
 */
 class ConvertToDicomdir : public QObject
 {
+Q_OBJECT
 public:
 
     ConvertToDicomdir( );
