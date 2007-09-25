@@ -116,7 +116,6 @@ public:
     ~QStudyTreeWidget();
 
 protected:
-
     /** Mostra el menu contextual
      *  @param Dades de l'event sol·licitat
      */

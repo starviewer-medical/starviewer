@@ -61,6 +61,10 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
 }
 
+QStudyTreeWidget::~QStudyTreeWidget()
+{
+}
+
 void QStudyTreeWidget::createConnections()
 {
     connect( m_studyTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int ) ) , this, SLOT( clicked ( QTreeWidgetItem * , int ) ) );
@@ -511,7 +515,8 @@ void QStudyTreeWidget::sort()
 
 void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
 {
-    m_contextMenu.exec( event->globalPos() );
+    if ( !m_studyTreeView->selectedItems().isEmpty() )
+        m_contextMenu.exec( event->globalPos() );
 }
 
 void QStudyTreeWidget::clicked( QTreeWidgetItem *item , int )
@@ -605,10 +610,6 @@ void QStudyTreeWidget::saveColumnsWidth()
             settings.setStudyDicomdirListColumnWidth( i , m_studyTreeView->columnWidth( i ) );
         }
     }
-}
-
-QStudyTreeWidget::~QStudyTreeWidget()
-{
 }
 
 };
