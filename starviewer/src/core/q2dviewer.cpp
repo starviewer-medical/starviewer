@@ -2728,24 +2728,5 @@ void Q2DViewer::computeVOILUT()
     }
 }
 
-void Q2DViewer::calculateDepthCoordinate( double pickedPosition[3] )
-{
-    double *spacing = this->getInput()->getSpacing();
-    double *origin = this->getInput()->getOrigin();
-    
-    switch( this->getView() )
-    {
-        case Q2DViewer::Axial:
-            pickedPosition[2] = origin[2] + (this->getCurrentSlice() * spacing[2]);
-        break;
-        case Q2DViewer::Sagittal:
-            pickedPosition[0] = origin[0] + (this->getCurrentSlice() * spacing[0]);
-        break;
-        case Q2DViewer::Coronal:
-            pickedPosition[1] = origin[1] + (this->getCurrentSlice() * spacing[1]);
-        break;
-    }
-}
-
 };  // end namespace udg
 

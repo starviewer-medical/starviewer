@@ -65,8 +65,26 @@ void SeedTool::setSeed()
     m_state=SEEDING;
 
     m_2DViewer->getCurrentCursorPosition(m_seedPosition);
+    
     //es calcula correctament el valor de profunditat per a corretgir el bug #245
-    m_2DViewer->calculateDepthCoordinate( m_seedPosition );
+    int slice = m_2DViewer->getCurrentSlice();
+    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *origin = m_2DViewer->getInput()->getOrigin();
+    
+        switch( m_2DViewer->getView() )
+        {
+            case Q2DViewer::Axial:
+                m_seedPosition[2] = origin[2] + (slice * spacing[2]);
+            break;
+            case Q2DViewer::Sagittal:
+                m_seedPosition[0] = origin[0] + (slice * spacing[0]);
+            break;
+            case Q2DViewer::Coronal:
+                m_seedPosition[1] = origin[1] + (slice * spacing[1]);
+            break;
+        }
+    //
+    
     m_2DViewer->setSeedPosition(m_seedPosition);
 
     vtkSphereSource *point = vtkSphereSource::New();
