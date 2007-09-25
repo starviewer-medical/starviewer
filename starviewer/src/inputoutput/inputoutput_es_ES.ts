@@ -24,336 +24,216 @@ Tendría que escoger solo uno.</translation>
     <name>QConfigurationScreenBase</name>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="66"/>
-        <source>Pacs Device</source>
-        <translation>Dispositivos PACS</translation>
+        <source>PACS Servers</source>
+        <translation>Servidores PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="547"/>
+        <location filename="qconfigurationscreenbase.ui" line="140"/>
         <source>Default</source>
         <translation>Por defecto</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="341"/>
-        <source>Add</source>
-        <translation>Añadir</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="338"/>
+        <location filename="qconfigurationscreenbase.ui" line="432"/>
         <source>Add the new Pacs to the list</source>
         <translation>Añadir un nuevo Pacs a la lista</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="367"/>
-        <source>Update</source>
-        <translation>Actualizar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="364"/>
+        <location filename="qconfigurationscreenbase.ui" line="442"/>
         <source>Update the parameters of the selected Pacs</source>
         <translation>Actualizar los parámetros del Pacs seleccionado</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="393"/>
+        <location filename="qconfigurationscreenbase.ui" line="172"/>
         <source>Delete</source>
         <translation>Borrar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="422"/>
+        <location filename="qconfigurationscreenbase.ui" line="185"/>
         <source>Test</source>
         <translation>Compobar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="419"/>
+        <location filename="qconfigurationscreenbase.ui" line="182"/>
         <source>Test if selected Pacs is alive</source>
         <translation>Comprobar si los Pacs seleccionados están &quot;vivos&quot;</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="448"/>
-        <source>Clear</source>
-        <translation>Borrar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="110"/>
+        <location filename="qconfigurationscreenbase.ui" line="301"/>
         <source>AE Title :</source>
         <translation>AE Title :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="136"/>
+        <location filename="qconfigurationscreenbase.ui" line="308"/>
         <source>Address :</source>
         <translation>Dirección :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="162"/>
+        <location filename="qconfigurationscreenbase.ui" line="334"/>
         <source>Port :</source>
         <translation>Puerto:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1573"/>
+        <location filename="qconfigurationscreenbase.ui" line="587"/>
         <source>99999; </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="217"/>
-        <source>Default </source>
-        <translation>Defecto</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="556"/>
-        <source>Cache Configuration</source>
-        <translation>Configuración de la cache</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1225"/>
-        <source>Delete All Studies</source>
-        <translation>Borrar todos los estudios</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1222"/>
+        <location filename="qconfigurationscreenbase.ui" line="1362"/>
         <source>Delete all the studies of the cache</source>
         <translation>Borrar todos los estudios de la cache</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="988"/>
+        <location filename="qconfigurationscreenbase.ui" line="1128"/>
         <source>999; </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1926"/>
+        <location filename="qconfigurationscreenbase.ui" line="1427"/>
         <source>Accept</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1958"/>
+        <location filename="qconfigurationscreenbase.ui" line="1459"/>
         <source>Apply Changes</source>
         <translation>Aplicar Cambios</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1984"/>
+        <location filename="qconfigurationscreenbase.ui" line="1488"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1694"/>
+        <location filename="qconfigurationscreenbase.ui" line="1075"/>
         <source>99; </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="517"/>
+        <location filename="qconfigurationscreenbase.ui" line="110"/>
         <source>AETitle</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="522"/>
+        <location filename="qconfigurationscreenbase.ui" line="115"/>
         <source>Address</source>
         <translation>Dirección</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="527"/>
+        <location filename="qconfigurationscreenbase.ui" line="120"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="532"/>
+        <location filename="qconfigurationscreenbase.ui" line="125"/>
         <source>Institution</source>
         <translation>Institución</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="537"/>
+        <location filename="qconfigurationscreenbase.ui" line="130"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="542"/>
+        <location filename="qconfigurationscreenbase.ui" line="135"/>
         <source>Description</source>
         <translation>Descripción</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="877"/>
-        <source>     %</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="904"/>
-        <source>     Gb</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1251"/>
+        <location filename="qconfigurationscreenbase.ui" line="1339"/>
         <source>Compact Database</source>
         <translation>Caompactar base de Datos</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1138"/>
+        <location filename="qconfigurationscreenbase.ui" line="1220"/>
         <source>Examine disk to find the directory to save the retrieved images</source>
         <translation>Examinar disco para encontrar el directorio para almacenar las imágenes recibidas</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1141"/>
-        <source>Examine</source>
-        <translation>Examinar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="638"/>
+        <location filename="qconfigurationscreenbase.ui" line="1062"/>
         <source>Delete studies that has not been viewed in :</source>
         <translation>Borrar estudios que no se han abierto en:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="693"/>
+        <location filename="qconfigurationscreenbase.ui" line="1085"/>
         <source>days</source>
         <translation>días</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="792"/>
+        <location filename="qconfigurationscreenbase.ui" line="1181"/>
         <source>Examine disk  to find the database</source>
         <translation>Examinar el disco para encontrar la base de datos</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1923"/>
+        <location filename="qconfigurationscreenbase.ui" line="1424"/>
         <source>Save changes and close the configuration window </source>
         <translation>Guardar cambios y cerrar la ventana de configuración</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1374"/>
+        <location filename="qconfigurationscreenbase.ui" line="1453"/>
         <source>Apply the canges</source>
         <translation>Aplicar Cambios</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1403"/>
+        <location filename="qconfigurationscreenbase.ui" line="1482"/>
         <source>Cancel changes and close the windows</source>
         <translation>Cancelar cambios y cerrar las ventanas</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1952"/>
+        <location filename="qconfigurationscreenbase.ui" line="929"/>
         <source>Apply changes</source>
         <translation>Aplicar cambios</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="390"/>
+        <location filename="qconfigurationscreenbase.ui" line="169"/>
         <source>Delete selected Pacs</source>
         <translation>Borra el pacs seleccionado</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="445"/>
-        <source>Clear the text boxes</source>
-        <translation>Limpia las cajas de texto</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="713"/>
+        <location filename="qconfigurationscreenbase.ui" line="1329"/>
         <source>Create database</source>
         <translation>Crear la base de datos</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1874"/>
-        <source>Institution Information</source>
-        <translation>Información de la Institución</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="2048"/>
+        <location filename="qconfigurationscreenbase.ui" line="397"/>
         <source>Institution :</source>
         <translation>Institución:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2134"/>
-        <source>Town :         </source>
-        <translation>Ciudad:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="2151"/>
+        <location filename="qconfigurationscreenbase.ui" line="760"/>
         <source>ZIP Code :</source>
         <translation>Código Postal:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2168"/>
+        <location filename="qconfigurationscreenbase.ui" line="817"/>
         <source>Country :</source>
         <translation>País:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2208"/>
-        <source>Contact e-mail :</source>
-        <translation>Correo electrónico de contacto:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="2225"/>
+        <location filename="qconfigurationscreenbase.ui" line="733"/>
         <source>Phone Number :</source>
         <translation>Número de teléfono:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="2009"/>
-        <source>Institution contact information </source>
-        <translation>Información de contacto de la institución </translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="260"/>
+        <location filename="qconfigurationscreenbase.ui" line="380"/>
         <source>Location :</source>
         <translation>Localización :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="286"/>
+        <location filename="qconfigurationscreenbase.ui" line="390"/>
         <source>Description :</source>
         <translation>Descripción :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="887"/>
-        <source>Free :</source>
-        <translation>Libre :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="914"/>
-        <source>Used : </source>
-        <translation>Usado :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="975"/>
-        <source>Pool Size :</source>
-        <translation>Tamaño Pool :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="998"/>
+        <location filename="qconfigurationscreenbase.ui" line="1138"/>
         <source>Gb</source>
         <translation>Gb</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1081"/>
-        <source>Cache Image Path :</source>
-        <translation>Ruta Cache Imágenes :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1528"/>
-        <source>Incoming Connections Port :</source>
-        <translation>Puerto Connexiones Entrantes :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1624"/>
-        <source>Timeout </source>
-        <translation>Timeout </translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1681"/>
-        <source>seconds</source>
-        <translation>segundos</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1704"/>
-        <source>AETitle Machine :</source>
-        <translation>AETitle Máquina :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1453"/>
+        <location filename="qconfigurationscreenbase.ui" line="472"/>
         <source>Local Configuration</source>
         <translation>Configuración Local</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1591"/>
-        <source>Maximum Simultaneous Connections :</source>
-        <translation>Connexiones Simultáneas Máximas :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="2091"/>
-        <source>Address :      </source>
-        <translation>Direcció :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="744"/>
+        <location filename="qconfigurationscreenbase.ui" line="1249"/>
         <source>Database path :</source>
         <translation>Ruta Base de Datos :</translation>
     </message>
@@ -361,6 +241,116 @@ Tendría que escoger solo uno.</translation>
         <location filename="qconfigurationscreenbase.ui" line="27"/>
         <source>PACS Configuration</source>
         <translation>Configuración PACS</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="78"/>
+        <source>DICOM PACS Servers for DICOM Query/Retrieve:</source>
+        <translation>Serividores PACS para Query/Retrieve DICOM:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="215"/>
+        <source>Modify selected PACS Server/Add new PACS Server:</source>
+        <translation>Modificar el Servidor PACS seleccionado/Añadir un nuevo Servidor PACS</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="344"/>
+        <source>Mark as default server</source>
+        <translation>Marcar como servidor por defecto</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="435"/>
+        <source>Add as new server</source>
+        <translation>Añadir como nuevo servidor</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="445"/>
+        <source>Update configuration</source>
+        <translation>Actualizar configuración</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="484"/>
+        <source>Local DICOM Configuration:</source>
+        <translation>Configuración DICOM Local:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="553"/>
+        <source>Incoming connections port :</source>
+        <translation>Puerto de conexiones entrantes:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="560"/>
+        <source>AETitle Local Machine :</source>
+        <translation>AETitle de la Máquina Local:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="605"/>
+        <source>Max. simultaneous connections :</source>
+        <translation>Máximas conexiones simultáneas:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="612"/>
+        <source>Max. seconds for Timeout:</source>
+        <translation>Límite de segundos para Timeout:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="668"/>
+        <source>Local Institution information:</source>
+        <translation>Información de la Institución Local:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="767"/>
+        <source>City :</source>
+        <translation>Ciudad:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="794"/>
+        <source>Address: </source>
+        <translation>Dirección: </translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="835"/>
+        <source>Institution:</source>
+        <translation>Institución:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="842"/>
+        <source>EMail :</source>
+        <translation>Correo electrónico:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="987"/>
+        <source>DICOM Cache</source>
+        <translation>Cache DICOM</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="999"/>
+        <source>Local DICOM Cache configuration:</source>
+        <translation>Configuración de la Cache Local DICOM:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1115"/>
+        <source>Maximum Cache size :</source>
+        <translation>Tamaño máximo de la Cache:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1145"/>
+        <source>&lt;i&gt;(Used: %1Gb, %2%;  Free: %3Gb, %4%)&lt;/i&gt;</source>
+        <translation>&lt;i&gt;(Usado: %1Gb, %2%;  Libre: %3Gb, %4%)&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1202"/>
+        <source>Cache images path :</source>
+        <translation>Ruta de las imágenes de Cache:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1282"/>
+        <source>Local DICOM Cache operations:</source>
+        <translation>Operaciones de la Cache DICOM Local:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1365"/>
+        <source>Delete all Studies</source>
+        <translation>Borrar todos los estudios</translation>
     </message>
 </context>
 <context>
@@ -415,509 +405,575 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="987"/>
+        <location filename="qconfigurationscreen.cpp" line="940"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="356"/>
+        <location filename="qconfigurationscreen.cpp" line="353"/>
         <source>Select a Pacs for update</source>
         <translation>Seleccione un Pacs para actualizar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="403"/>
+        <location filename="qconfigurationscreen.cpp" line="400"/>
         <source>Select a Pacs for delete</source>
         <translation>Seleccione un Pacs para borrar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="540"/>
+        <location filename="qconfigurationscreen.cpp" line="537"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation>El AETitle no puede estar vacio</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="548"/>
+        <location filename="qconfigurationscreen.cpp" line="545"/>
         <source>Incorrect address server</source>
         <translation>Dirección del servidor incorrecta</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="556"/>
+        <location filename="qconfigurationscreen.cpp" line="553"/>
         <source>PACS Port has to be between 0 and 65535</source>
         <translation>El puerto del Pacs tiene que ser entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="564"/>
+        <location filename="qconfigurationscreen.cpp" line="561"/>
         <source>Institution field can&apos;t be empty</source>
         <translation>Institución no puede estar vacio</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="581"/>
+        <location filename="qconfigurationscreen.cpp" line="578"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation>El puerto local tiene que estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="590"/>
+        <location filename="qconfigurationscreen.cpp" line="587"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation>El número máximo de conexiones simultáneas tiene que ser entre 1 i 15</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="599"/>
+        <location filename="qconfigurationscreen.cpp" line="596"/>
         <source>Invalid database path</source>
         <translation>Ruta a la base de datos inválida</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="822"/>
+        <location filename="qconfigurationscreen.cpp" line="818"/>
         <source>Are you sure you want to delete all Studies of the cache ?</source>
         <translation>¿ Está seguro que desea borrar todos los estudios de la caché ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="983"/>
-        <source>Error Number : </source>
-        <translation>Error Número :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="963"/>
-        <source>Database is corrupted.</source>
-        <translation>La base de datos está corrupta.</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="981"/>
-        <source>Internal Database error</source>
-        <translation>Error interno de la base de datos</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="296"/>
+        <location filename="qconfigurationscreen.cpp" line="293"/>
         <source>AETitle </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="296"/>
+        <location filename="qconfigurationscreen.cpp" line="293"/>
         <source> exists</source>
         <translation>existe</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="609"/>
+        <location filename="qconfigurationscreen.cpp" line="606"/>
         <source>Create directory ?</source>
         <translation>¿ Crear directorio ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="610"/>
+        <location filename="qconfigurationscreen.cpp" line="607"/>
         <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directorio de la caché de imagenes no existe. ¿ Desea crearlo ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="823"/>
+        <location filename="qconfigurationscreen.cpp" line="819"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="823"/>
+        <location filename="qconfigurationscreen.cpp" line="819"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="760"/>
+        <location filename="qconfigurationscreen.cpp" line="756"/>
         <source>Cache Directory</source>
         <translation>Directorio de la caché</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="969"/>
-        <source>Register duplicated.</source>
-        <translation>Registro duplicado.</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="920"/>
+        <location filename="qconfigurationscreen.cpp" line="914"/>
         <source>The application has to be restart to apply the changes</source>
         <translation>Se debe reiniciar la aplicación, para que los cambios tengan efecto</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="949"/>
-        <source>Database is corrupted or SQL syntax error</source>
-        <translation>La base de datos está corrupta o error en sintaxis SQL</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="957"/>
-        <source>To solve this error restart the user session</source>
-        <translation>Para resolver este error, reinicie la sesión de usuario</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="635"/>
+        <location filename="qconfigurationscreen.cpp" line="632"/>
         <source>Pool space can&apos;t be less than used space</source>
         <translation>El espacio de la pool no puede ser menor que el espacio utilitzado actualmente</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="515"/>
+        <location filename="qconfigurationscreen.cpp" line="512"/>
         <source> Pacs </source>
         <translation>Pacs</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="486"/>
+        <location filename="qconfigurationscreen.cpp" line="483"/>
         <source> doesn&apos;t responds </source>
         <translation>no responde</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="519"/>
+        <location filename="qconfigurationscreen.cpp" line="516"/>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
         <translation>Asegurese que la IP i el AETitle del Pacs són correctos</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="503"/>
+        <location filename="qconfigurationscreen.cpp" line="500"/>
         <source> Test of Pacs </source>
         <translation>El Teste del Pacs</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="505"/>
+        <location filename="qconfigurationscreen.cpp" line="502"/>
         <source> is correct </source>
         <translation>es correcto</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="517"/>
+        <location filename="qconfigurationscreen.cpp" line="514"/>
         <source> doesn&apos;t responds correctly</source>
         <translation>no responde correctamente</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="616"/>
+        <location filename="qconfigurationscreen.cpp" line="613"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation>No se puede crear el directorio. Revise sus permisos de usuario</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="955"/>
-        <source>Database is locked</source>
-        <translation>La base de datos está bloqueada</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="909"/>
+        <location filename="qconfigurationscreen.cpp" line="903"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation>La extensión de la base de datos debe ser &apos;.sdb&apos;</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="915"/>
+        <location filename="qconfigurationscreen.cpp" line="909"/>
         <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
         <translation>Starviewer no puede crear la base de datos, porqué existe otra base de datos en el directorio con el mismo nombre</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="940"/>
+        <source>
+Error Number: %1</source>
+        <translation>
+Código de error: %1</translation>
     </message>
 </context>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="112"/>
-        <source>Cd occupied</source>
-        <translation>Cd ocupado</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="671"/>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="131"/>
-        <source>Dvd Ocuppied</source>
-        <translation>Dvd ocupado</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="162"/>
-        <source>The size of Dicomdir is </source>
-        <translation>El tamaño del Dicomdir es </translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="225"/>
-        <source>The study exists in the Dicomdir list</source>
-        <translation>El estudio ya está añadido en la lista de Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
-        <source>Create Dicomdir</source>
-        <translation>Crear Dicomcidr</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="334"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="334"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="332"/>
+        <location filename="qcreatedicomdir.cpp" line="292"/>
         <source>Create directory ?</source>
         <translation>¿ Crear directorio ?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="333"/>
-        <source>The Dicomdir directory doesn&apos;t exists. Do you want to create it ?</source>
-        <translation>El directorio Dicomdir no existe. ¿ Lo desea crear ?</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="339"/>
+        <location filename="qcreatedicomdir.cpp" line="299"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation>No se puede crear el directorio. Revise sus permisos de usuario</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="420"/>
-        <source>Error creating Dicomdir. Be sure you have user permissions in </source>
-        <translation>Error creando el Dicomdir. Asseguresse que tiene permisos de usuario en </translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="446"/>
-        <source>The size of Dicomdir is 0 Mb</source>
-        <translation>El tamaño del Dicomdir es de 0 Mb</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="454"/>
-        <source>Dicomdir Directory</source>
-        <translation>Directorio Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="633"/>
-        <source>Database is corrupted or SQL syntax error</source>
-        <translation>La base de datos está corrupta o error en sintaxis SQL</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="667"/>
-        <source>Error Number : </source>
-        <translation>Error número :</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="639"/>
-        <source>Database is locked</source>
-        <translation>La base de datos está bloqueada</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="647"/>
-        <source>Database is corrupted.</source>
-        <translation>La base de datos está corrumpida.</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="653"/>
-        <source>Register duplicated.</source>
-        <translation>Registro duplicado.</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="665"/>
-        <source>Internal Database error</source>
-        <translation>Error interno de la base de datos</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="280"/>
-        <source>Can&apos;t create the temporary directory to create Dicomdir. Please check users permission</source>
-        <translation>No se puede crear el directorio temporal para crear el Dicomdir. Por favor revise sus permisos de usuario</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="119"/>
+        <location filename="qcreatedicomdir.cpp" line="606"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para copiar todos los estudios, por favor quite algun estudio. La capacidad de un cd es de 700 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="138"/>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para copiar todos los estudios, por favor quite algun estudio. La capacidad de un dvd es de 4400 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="101"/>
-        <source>Create Dicomdir at</source>
-        <translation>Crear el dicomdir en </translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="302"/>
-        <source>Please enter a diretory to create de Dicomdir</source>
-        <translation>Por favor entre un directorio, donde crear el Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="315"/>
-        <source>The directory contains a Dicomdir, do you want to overwrite and delete all the files in the directory ?</source>
-        <translation>El directorio ya contiene un Dicomdir. ¿ Desea sobreescribilor i borrar todos los archivos del directorio ?</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="379"/>
-        <source>Please, first select the studies which you want to create a Dicomdir</source>
-        <translation>Por favor, primero seleccione los estudios con los que desea crear el Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="366"/>
-        <source>Not enough free space to create Dicomdir. Please free space</source>
-        <translation>No hay suficiente espacio para crear el Dicomdir. Por favor libere espacio</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="205"/>
-        <source>With this study the Dicomdir exceeds the maximum capacity of the selected device. Please change the selected device or create the Dicomdir</source>
-        <translation>Con este nuevo estudio se excede la capacidad máxima del dispositivo seleccionado. Por favor canvie el dispositivo seleccionado o cree el Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="489"/>
+        <location filename="qcreatedicomdir.cpp" line="428"/>
         <source>Please select a study to remove of the list</source>
         <translation>Por favor seleccione el estudi que desea quitar del la lista</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
-        <source>Creating Dicomdir Image...</source>
-        <translation>Creando imagen de Dicomdir...</translation>
+        <location filename="qcreatedicomdir.cpp" line="69"/>
+        <source>CD-ROM</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="415"/>
-        <source>Some images are not 100 % Dicom compliance. It can be possible that some viewers have problems to visualizate them </source>
-        <translation>Algunas imagenes no cumplen al 100 % el estándard Dicom. Puede ser que en algunos visualizadores hayan problemas para visualizarlas</translation>
+        <location filename="qcreatedicomdir.cpp" line="70"/>
+        <source>Record DICOMDIR on a CD-ROM device</source>
+        <translation>Grabar DICOMDIR en un dispositivo de CD-ROM</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="78"/>
+        <source>DVD-ROM</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="79"/>
+        <source>Record DICOMDIR on a DVD-ROM device</source>
+        <translation>Grabar DICOMDIR en un dispositivo de DVD-ROM</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="87"/>
+        <source>Hard Disk</source>
+        <translation>Disco Duro</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="88"/>
+        <source>Record DICOMDIR on a Hard Disk</source>
+        <translation>Grabar DICOMDIR en el disco duro</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="96"/>
+        <source>Pen Drive</source>
+        <translation>Dispositivo extraible USB</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="97"/>
+        <source>Record DICOMDIR on a USB Pen drive device</source>
+        <translation>Grabar DICOMDIR en un dispositivo de almacenamiento extraíble USB</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="141"/>
+        <source>DICOMDIR size: %1 Mb</source>
+        <translation>Tamaño DICOMDIR: %1 Mb</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="151"/>
+        <source>%1 Mb</source>
+        <translation>%1 Mb</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="178"/>
+        <source>With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR</source>
+        <translation>Con este estudio el DICOMDIR excede la capacidad máxima del dispositivo seleccionado</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="198"/>
+        <source>The study already exists in the DICOMDIR list</source>
+        <translation>El estudio ya existe en la lista de DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="245"/>
+        <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
+        <translation>No se puede crear el directorio temporal para crear el DICOMDIR. Por favor comprube los permisos de usuario</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="274"/>
+        <source>Create DICOMDIR</source>
+        <translation>Crear DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="275"/>
+        <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
+        <translation>El directorio contiene un DICOMDIR, ¿quiere sobreescribirlo i borrar todos los archivos en el directorio?</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="293"/>
+        <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
+        <translation>El directorio del DICOMDIR no existe. ¿Quiere crearlo?</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="321"/>
+        <source>Not enough free space to create DICOMDIR. Please free space</source>
+        <translation>Espacio insuficiente para crear el DICOMDIR. Libere espacio para poder continuar</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="394"/>
+        <source>DICOMDIR Directory</source>
+        <translation>Directorio del DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="472"/>
+        <source>Creating DICOMDIR Image...</source>
+        <translation>Creando imagen de DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="265"/>
+        <source>No directory specified to create the DICOMDIR</source>
+        <translation>No se especificó el directorio donde crear el DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="331"/>
+        <source>Please, first select the studies you want to create a DICOMDIR with</source>
+        <translation>Seleccione los estudios con los que quiere crear el DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="363"/>
+        <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them </source>
+        <translation>Algunas de las imágenes no cumplen al 100% el estándar DICOM. Es posible que algunos visualizadores tengan problemas para visualizarlas </translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="368"/>
+        <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty</source>
+        <translation>Error creando el DICOMDIR. Asegúrese que tiene permisos en %1 y que el directorio está vacío</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="556"/>
+        <source>
+Error Number: %1</source>
+        <translation>
+Código de error: %1</translation>
     </message>
 </context>
 <context>
     <name>udg::QCreateDicomdirBase</name>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="13"/>
-        <source>Create DicomDir</source>
-        <translation>Crear Dicomdir </translation>
+        <source>Create DICOMDIR</source>
+        <translation>Crear DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="76"/>
+        <location filename="qcreatedicomdirbase.ui" line="271"/>
         <source>650 Mb</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="157"/>
-        <source>Create Dicomdir at :</source>
-        <translation>Crear el Dicomdir en :</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="165"/>
-        <source>Copy to disk</source>
-        <translation>Copiar al disco duro</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="175"/>
-        <source>Burn in a Cd</source>
-        <translation>Copiar en un Cd</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="180"/>
-        <source>Burn in a Dvd</source>
-        <translation>Copiar en un Dvd</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="212"/>
+        <location filename="qcreatedicomdirbase.ui" line="417"/>
         <source>Creates the Dicomdir with the selected studies</source>
         <translation>Crea el Dicomdir con los estudios seleccionados</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="215"/>
-        <source>Create Dicomdir</source>
-        <translation>Crear Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="283"/>
+        <location filename="qcreatedicomdirbase.ui" line="61"/>
         <source>Study</source>
         <translation>Estudio</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="288"/>
+        <location filename="qcreatedicomdirbase.ui" line="66"/>
         <source>Patient ID</source>
         <translation>ID Paciente</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="293"/>
+        <location filename="qcreatedicomdirbase.ui" line="71"/>
         <source>Patient Name</source>
         <translation>Nombre del paciente</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="298"/>
+        <location filename="qcreatedicomdirbase.ui" line="76"/>
         <source>Modality</source>
         <translation>Modalidad</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="303"/>
+        <location filename="qcreatedicomdirbase.ui" line="81"/>
         <source>Study Date</source>
         <translation>Fecha del estudio</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="308"/>
+        <location filename="qcreatedicomdirbase.ui" line="86"/>
         <source>Study Time</source>
         <translation>Hora del estudio</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="313"/>
+        <location filename="qcreatedicomdirbase.ui" line="91"/>
         <source>Description</source>
         <translation>Descripción</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="318"/>
+        <location filename="qcreatedicomdirbase.ui" line="96"/>
         <source>studyUID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="363"/>
+        <location filename="qcreatedicomdirbase.ui" line="125"/>
         <source>Remove selected study of the list</source>
         <translation>Quita el estudio seleccionado de la lista</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="366"/>
+        <location filename="qcreatedicomdirbase.ui" line="128"/>
         <source>Remove</source>
         <translation>Quitar</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="392"/>
+        <location filename="qcreatedicomdirbase.ui" line="154"/>
         <source>Remove All</source>
         <translation>Quitar todos</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="116"/>
-        <source>Size of Dicomdir :</source>
-        <translation>Tamaño Dicomdir : </translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="389"/>
+        <location filename="qcreatedicomdirbase.ui" line="151"/>
         <source>Remove all the studies of the list</source>
         <translation>Quita todos los estudios de la lista</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="170"/>
-        <source>Copy to usb or flash memories</source>
-        <translation>Copiar en memoria usb o flash</translation>
+        <location filename="qcreatedicomdirbase.ui" line="33"/>
+        <source>DICOMDIR List</source>
+        <translation>Lista de DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="187"/>
+        <source>Create DICOMDIR on...</source>
+        <translation>Crear DICOMDIR en...</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="239"/>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600; font-style:normal; text-decoration:none;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Used Space&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="293"/>
+        <source>The size of the DICOMDIR is XX Mb</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="345"/>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600; font-style:normal; text-decoration:none;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Location:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="420"/>
+        <source>Create</source>
+        <translation>Crear</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="427"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="588"/>
+        <source>...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="490"/>
+        <source>CD-ROM</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="529"/>
+        <source>DVD-ROM</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="546"/>
+        <source>disk</source>
+        <translation>disco</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="571"/>
+        <source>Hard Disk</source>
+        <translation>Disco Duro</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="610"/>
+        <source>Pen Drive</source>
+        <translation>Dispositivo de almacenamiento extraíble USB</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QExecuteOperationThread</name>
+    <message>
+        <location filename="qexecuteoperationthread.cpp" line="138"/>
+        <source>Starviewer</source>
+        <translation>Starviewer</translation>
+    </message>
+    <message>
+        <location filename="qexecuteoperationthread.cpp" line="133"/>
+        <source>Not enough space to retrieve studies. Please free space</source>
+        <translation>No hay suficiente espacio libre para descargar nuevos estudios. Por favor libere espacio</translation>
+    </message>
+    <message>
+        <location filename="qexecuteoperationthread.cpp" line="138"/>
+        <source>Error freeing space. The study couldn&apos;t be retrieved</source>
+        <translation>Error liberando espacio. El estudio no se pudo descargar</translation>
     </message>
 </context>
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1316"/>
+        <location filename="queryscreen.cpp" line="1312"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
 </context>
 <context>
+    <name>udg::QObject</name>
+    <message>
+        <location filename="databaseconnection.cpp" line="76"/>
+        <source>Normal</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="78"/>
+        <source>Database is corrupted or SQL error syntax</source>
+        <translation>La base de datos está corrupta o error de sintaxis SQL</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="80"/>
+        <source>Database is locked</source>
+        <translation>La base de datos está bloqueada</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="82"/>
+        <source>Database corrupted</source>
+        <translation>La base de datos está corrupta</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="84"/>
+        <source>The new register is duplicated</source>
+        <translation>El nuevo registro está duplicado</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="86"/>
+        <source>Not connected to database</source>
+        <translation>Sin conexión a la base de datos</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="91"/>
+        <source>Internal Database error (SQLITE)</source>
+        <translation>Error interno de la base de datos (SQLITE)</translation>
+    </message>
+</context>
+<context>
     <name>udg::QOperationStateScreen</name>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="59"/>
+        <location filename="qoperationstatescreen.cpp" line="76"/>
         <source>PENDING</source>
         <translation>PENDIENTE</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="63"/>
+        <location filename="qoperationstatescreen.cpp" line="80"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="65"/>
+        <location filename="qoperationstatescreen.cpp" line="82"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="154"/>
+        <location filename="qoperationstatescreen.cpp" line="171"/>
         <source>RETRIEVING</source>
         <translation>DESCARGANDO</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="196"/>
+        <location filename="qoperationstatescreen.cpp" line="213"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="176"/>
+        <location filename="qoperationstatescreen.cpp" line="241"/>
         <source>RETRIEVED</source>
         <translation>DESCARGADO</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="178"/>
+        <location filename="qoperationstatescreen.cpp" line="241"/>
         <source>STORED</source>
         <translation>ENVIADO</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="156"/>
+        <location filename="qoperationstatescreen.cpp" line="173"/>
         <source>STORING</source>
         <translation>ENVIANDO</translation>
     </message>
@@ -988,53 +1044,50 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>udg::QPacsList</name>
     <message>
-        <location filename="qpacslist.cpp" line="143"/>
-        <source>Error Number : </source>
-        <translation>Error número : </translation>
-    </message>
-    <message>
-        <location filename="qpacslist.cpp" line="148"/>
+        <location filename="qpacslist.cpp" line="47"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qpacslist.cpp" line="129"/>
-        <source>Database is corrupted.</source>
-        <translation>La base de datos está corrupta.</translation>
-    </message>
-    <message>
-        <location filename="qpacslist.cpp" line="141"/>
-        <source>Internal Database error</source>
-        <translation>Error interno de la base de datos</translation>
-    </message>
-    <message>
-        <location filename="qpacslist.cpp" line="115"/>
-        <source>Database is corrupted or SQL syntax error</source>
-        <translation>La base de datos está corrupta o error en sintaxis SQL</translation>
-    </message>
-    <message>
-        <location filename="qpacslist.cpp" line="121"/>
-        <source>Database is looked</source>
-        <translation>La base de datos está bloqueada</translation>
+        <location filename="qpacslist.cpp" line="47"/>
+        <source>
+Error Number: %1</source>
+        <translation>
+Código de error: %1</translation>
     </message>
 </context>
 <context>
     <name>udg::QSeriesListWidget</name>
     <message>
         <location filename="qserieslistwidget.cpp" line="43"/>
-        <source>Series </source>
-        <translation>Serie </translation>
+        <source> Series </source>
+        <translation> Serie </translation>
     </message>
     <message>
-        <location filename="qserieslistwidget.cpp" line="58"/>
-        <source> images</source>
-        <translation> imagenes </translation>
+        <location filename="qserieslistwidget.cpp" line="55"/>
+        <source> Key Object Note</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qserieslistwidget.cpp" line="57"/>
+        <source> Presentation State</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qserieslistwidget.cpp" line="59"/>
+        <source> Structured Report</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qserieslistwidget.cpp" line="61"/>
+        <source> Images</source>
+        <translation> Imágenes</translation>
     </message>
 </context>
 <context>
     <name>udg::QSeriesListWidgetBase</name>
     <message>
-        <location filename="qserieslistwidgetbase.ui" line="24"/>
+        <location filename="qserieslistwidgetbase.ui" line="21"/>
         <source>Form1</source>
         <translation></translation>
     </message>
@@ -1042,74 +1095,74 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="73"/>
+        <location filename="qstudytreewidget.cpp" line="77"/>
         <source>&amp;View</source>
         <translation>V&amp;izualizar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="76"/>
+        <location filename="qstudytreewidget.cpp" line="85"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descargar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="80"/>
+        <location filename="qstudytreewidget.cpp" line="95"/>
         <source>&amp;Delete</source>
         <translation>&amp;Borrar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="235"/>
-        <source>Series </source>
-        <translation>Serie </translation>
-    </message>
-    <message>
-        <location filename="qstudytreewidget.cpp" line="463"/>
+        <location filename="qstudytreewidget.cpp" line="448"/>
         <source>Series</source>
         <translation>Serie</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="74"/>
+        <location filename="qstudytreewidget.cpp" line="78"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="77"/>
+        <location filename="qstudytreewidget.cpp" line="86"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="81"/>
+        <location filename="qstudytreewidget.cpp" line="96"/>
         <source>Ctrl+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="172"/>
+        <location filename="qstudytreewidget.cpp" line="159"/>
         <source>Study </source>
         <translation>Estudio </translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="84"/>
-        <source>Convert to DicomDir</source>
-        <translation>Convertir a DicomDir</translation>
-    </message>
-    <message>
-        <location filename="qstudytreewidget.cpp" line="85"/>
+        <location filename="qstudytreewidget.cpp" line="101"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="87"/>
+        <location filename="qstudytreewidget.cpp" line="105"/>
         <source>Store to PACS</source>
         <translation>Almacenar en PACS</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="88"/>
+        <location filename="qstudytreewidget.cpp" line="106"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="306"/>
+        <location filename="qstudytreewidget.cpp" line="291"/>
         <source>Image </source>
         <translation>Imagen </translation>
+    </message>
+    <message>
+        <location filename="qstudytreewidget.cpp" line="100"/>
+        <source>Send to DICOMDIR List</source>
+        <translation>Enviar a la lista de DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qstudytreewidget.cpp" line="221"/>
+        <source>Series %1</source>
+        <translation>Serie %1</translation>
     </message>
 </context>
 <context>
@@ -1213,194 +1266,154 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1697"/>
+        <location filename="queryscreen.cpp" line="1625"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="440"/>
+        <location filename="queryscreen.cpp" line="446"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation>No ha especificado ningún filtro. Está consulta puede tardar bastantes minutos. ¿Está seguro que desea continuar?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="531"/>
+        <location filename="queryscreen.cpp" line="537"/>
         <source>Please select a PACS to query</source>
         <translation>Seleccione un Pacs a consultar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="545"/>
+        <location filename="queryscreen.cpp" line="551"/>
         <source>ERROR QUERING!.</source>
         <translation>Error consultando!.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="633"/>
+        <location filename="queryscreen.cpp" line="638"/>
         <source>No study match found.</source>
         <translation>No se han encontrado estudios.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="783"/>
+        <location filename="queryscreen.cpp" line="787"/>
         <source>No series match for this study.
 </source>
         <translation>No se han encontrado series para este estudio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="948"/>
+        <location filename="queryscreen.cpp" line="951"/>
         <source>Select a study to download </source>
         <translation>Seleccione un estudio para descargar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="957"/>
+        <location filename="queryscreen.cpp" line="960"/>
         <source>Internal Error : </source>
         <translation>Error interno :</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1184"/>
+        <location filename="queryscreen.cpp" line="1195"/>
         <source>Please select a study to delete</source>
         <translation>Seleccione el estudio a borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1693"/>
-        <source>Error Number : </source>
-        <translation>Error Número : </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1673"/>
-        <source>Database is corrupted.</source>
-        <translation>La base de datos está corrupta.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1691"/>
-        <source>Internal Database error</source>
-        <translation>Error interno de la base de datos</translation>
-    </message>
-    <message>
         <location filename="queryscreen.cpp" line="1257"/>
-        <source>Hide Pacs List</source>
-        <translation>Esconder lista Pacs</translation>
+        <source>Show PACS Nodes</source>
+        <translation>Mostrar lista de Nodos PACS</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1133"/>
+        <location filename="queryscreen.cpp" line="1144"/>
         <source>Select a study to view </source>
         <translation>Seleccione un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1679"/>
-        <source>Register duplicated.</source>
-        <translation>Registro duplicado.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="130"/>
+        <location filename="queryscreen.cpp" line="117"/>
         <source>Error deleting old studies</source>
         <translation>Error borrando antiguos estudios</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="441"/>
+        <location filename="queryscreen.cpp" line="447"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="441"/>
+        <location filename="queryscreen.cpp" line="447"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1406"/>
-        <source>Not enough space to retrieve studies. Please free space</source>
-        <translation>No hay suficient espacio para descargar nuevos estudios. Por favor libere espacio</translation>
-    </message>
-    <message>
         <location filename="queryscreen.cpp" line="1411"/>
-        <source>Error Freeing Space. The study couldn&apos;t be retrieved</source>
-        <translation>Error liberando espacio. El estudio no puede ser descargado</translation>
+        <source>Can&apos;t connect to PACS %1 from %2
+Be sure that the IP and AETitle of the PACS is correct</source>
+        <translation>No se puede conectar al PACS %1 de %2Asegúrese que la IP y el AETitle de este PACS sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1423"/>
-        <source> Can&apos;t connect to PACS </source>
-        <translation>No se puede connectar al Pacs </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1443"/>
-        <source> of </source>
-        <translation>de </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1446"/>
-        <source> Be sure that the IP and AETitle of the PACS is correct </source>
-        <translation>Asegurese que la IP i el AETitle del Pacs són correctos</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1659"/>
-        <source>Database is corrupted or SQL syntax error</source>
-        <translation>La base de datos está corrupta o error en sintaxis SQL</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1665"/>
-        <source>Database is looked</source>
-        <translation>La base de datos está bloqueada</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1261"/>
-        <source>Show Pacs List</source>
-        <translation>Mostrar lista Pacs</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="597"/>
+        <location filename="queryscreen.cpp" line="603"/>
         <source>Error, not opened Dicomdir</source>
         <translation>Error, no se abierto un directorio Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="602"/>
+        <location filename="queryscreen.cpp" line="608"/>
         <source>Error quering in dicomdir</source>
         <translation>Error consultando el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1316"/>
+        <location filename="queryscreen.cpp" line="1312"/>
         <source>Dicomdir</source>
         <translation>Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1330"/>
+        <location filename="queryscreen.cpp" line="1327"/>
         <source>Error openning dicomdir</source>
         <translation>Error abriendo el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1441"/>
-        <source> Can&apos;t query studies to PACS </source>
-        <translation>No se puede consultar estudios en el PACS </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1368"/>
+        <location filename="queryscreen.cpp" line="1366"/>
         <source>You have to select a Pacs to store the study</source>
         <translation>Tiene que seleccionar un Pacs donde enviar el estudio</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1397"/>
+        <location filename="queryscreen.cpp" line="1395"/>
         <source>The study can only be stored at one pacs</source>
         <translation>El estudio sólo se puede guardar en un Pacs</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="728"/>
-        <source>Error! Can&apos;t query series in PACS : </source>
-        <translation>Error! No se pueden consultar la series en el PACS : </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="857"/>
-        <source>Error! Can&apos;t query images in PACS : </source>
-        <translation>Error! No se pueden consultar las imagenes en el PACS : </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="869"/>
+        <location filename="queryscreen.cpp" line="872"/>
         <source>No images match for this series.
 </source>
         <translation>No se han encontrado imagenes para esta serie.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="918"/>
+        <location filename="queryscreen.cpp" line="921"/>
         <source>No images match for this study.
 </source>
         <translation>No se han encontrado imagenes para este estudio.
 </translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="734"/>
+        <source>Error! Can&apos;t query series to PACS named %1</source>
+        <translation>Error! No se pueden consultar las Series al PACS llamado %1</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="861"/>
+        <source>Error! Can&apos;t query images to PACS named %1 </source>
+        <translation>Error! No se pueden consultar las Series al PACS llamado %1 </translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1253"/>
+        <source>Hide PACS Nodes</source>
+        <translation>Ocultar Lista de Nodos PACS</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1426"/>
+        <source>Can&apos;t query PACS %1 from %2
+Be sure that the IP and AETitle of this PACS are correct</source>
+        <translation>No se puede consultar el PACS %1 de %2
+Asegúrese que la IP y el AETitle sean correctos</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1625"/>
+        <source>
+Error Number: %1</source>
+        <translation>
+Código de error: %1</translation>
     </message>
 </context>
 <context>
@@ -1411,299 +1424,314 @@ Tendría que escoger solo uno.</translation>
         <translation>Consultar estudio</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="76"/>
+        <location filename="queryscreenbase.ui" line="1227"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="73"/>
+        <location filename="queryscreenbase.ui" line="1221"/>
         <source>search</source>
         <translation>buscar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="97"/>
+        <location filename="queryscreenbase.ui" line="268"/>
         <source>Today</source>
         <translation>Hoy</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="118"/>
+        <location filename="queryscreenbase.ui" line="275"/>
         <source>Yesterday</source>
         <translation>Ayer</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="139"/>
+        <location filename="queryscreenbase.ui" line="1387"/>
         <source>Retrieve</source>
         <translation>Descargar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="181"/>
+        <location filename="queryscreenbase.ui" line="1417"/>
         <source>View</source>
         <translation>Visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="202"/>
-        <source>Clear Filter</source>
-        <translation>Limpiar filtro</translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="250"/>
+        <location filename="queryscreenbase.ui" line="55"/>
         <source>Patient</source>
         <translation>Paciente</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="373"/>
+        <location filename="queryscreenbase.ui" line="178"/>
         <source>Study</source>
         <translation>Estudio</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="525"/>
+        <location filename="queryscreenbase.ui" line="353"/>
         <source>To</source>
         <translation>Hasta</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="483"/>
+        <location filename="queryscreenbase.ui" line="317"/>
         <source>From</source>
         <translation>Desde</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="755"/>
+        <location filename="queryscreenbase.ui" line="615"/>
         <source>MG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="611"/>
+        <location filename="queryscreenbase.ui" line="471"/>
         <source>SC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="734"/>
+        <location filename="queryscreenbase.ui" line="594"/>
         <source>PT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="731"/>
+        <location filename="queryscreenbase.ui" line="591"/>
         <source>Penetrant Test</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="779"/>
+        <location filename="queryscreenbase.ui" line="639"/>
         <source>US</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="776"/>
+        <location filename="queryscreenbase.ui" line="636"/>
         <source>Ultrasounds</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="803"/>
+        <location filename="queryscreenbase.ui" line="663"/>
         <source>DT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="800"/>
+        <location filename="queryscreenbase.ui" line="660"/>
         <source> Dental Technician</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="854"/>
+        <location filename="queryscreenbase.ui" line="714"/>
         <source>MR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="851"/>
+        <location filename="queryscreenbase.ui" line="711"/>
         <source>Magnetic Resonance</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="830"/>
+        <location filename="queryscreenbase.ui" line="690"/>
         <source>CT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="824"/>
+        <location filename="queryscreenbase.ui" line="684"/>
         <source>Computerized Tomography</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="659"/>
+        <location filename="queryscreenbase.ui" line="519"/>
         <source>DX</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="656"/>
+        <location filename="queryscreenbase.ui" line="516"/>
         <source>Direct Radiography</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="878"/>
+        <location filename="queryscreenbase.ui" line="738"/>
         <source>NM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="875"/>
+        <location filename="queryscreenbase.ui" line="735"/>
         <source>Nuclear Medicine</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="683"/>
+        <location filename="queryscreenbase.ui" line="543"/>
         <source>RF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="680"/>
+        <location filename="queryscreenbase.ui" line="540"/>
         <source>Radiography Fluoroscopy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="635"/>
+        <location filename="queryscreenbase.ui" line="495"/>
         <source>CR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="632"/>
+        <location filename="queryscreenbase.ui" line="492"/>
         <source>Computerized Radiography</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="899"/>
+        <location filename="queryscreenbase.ui" line="759"/>
         <source>ES</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="704"/>
+        <location filename="queryscreenbase.ui" line="564"/>
         <source>All</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="920"/>
+        <location filename="queryscreenbase.ui" line="780"/>
         <source>XA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1372"/>
-        <source>Show PacsList</source>
-        <translation>Mostrar lista pacs</translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="1478"/>
+        <location filename="queryscreenbase.ui" line="1272"/>
         <source>Local Database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1518"/>
+        <location filename="queryscreenbase.ui" line="1312"/>
         <source>PacsServer</source>
         <translation>Servidor Pacs</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1417"/>
+        <location filename="queryscreenbase.ui" line="1495"/>
         <source>Create Dicomdir</source>
         <translation>Crear Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1440"/>
-        <source>Open Dicomdir</source>
-        <translation>Abrir Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="1543"/>
-        <source>Dicomdir</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="160"/>
+        <location filename="queryscreenbase.ui" line="1451"/>
         <source>Operation List</source>
         <translation>Lista de peticiones</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="287"/>
+        <location filename="queryscreenbase.ui" line="92"/>
         <source>Patient ID</source>
         <translation>ID Paciente</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="316"/>
+        <location filename="queryscreenbase.ui" line="121"/>
         <source>Patient Name</source>
         <translation>Nombre Paciente</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="393"/>
+        <location filename="queryscreenbase.ui" line="198"/>
         <source>Study ID</source>
         <translation>ID Estudio</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="416"/>
+        <location filename="queryscreenbase.ui" line="221"/>
         <source>Accession Number</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1100"/>
+        <location filename="queryscreenbase.ui" line="960"/>
         <source>Time</source>
         <translation>Hora</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="580"/>
+        <location filename="queryscreenbase.ui" line="440"/>
         <source>Series Modality</source>
         <translation>Modalidad de serie</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="952"/>
+        <location filename="queryscreenbase.ui" line="812"/>
         <source>Other</source>
         <translation>Otro</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1049"/>
+        <location filename="queryscreenbase.ui" line="909"/>
         <source>Req. Proc. ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1066"/>
+        <location filename="queryscreenbase.ui" line="926"/>
         <source>Sche. Proc. Step ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1083"/>
+        <location filename="queryscreenbase.ui" line="943"/>
         <source>Proc. Perf. Start Date</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1143"/>
+        <location filename="queryscreenbase.ui" line="1003"/>
         <source>UID Study</source>
         <translation>UID Estudio</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1153"/>
+        <location filename="queryscreenbase.ui" line="1013"/>
         <source>UID Series</source>
         <translation>UID Serie</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1173"/>
+        <location filename="queryscreenbase.ui" line="1033"/>
         <source>SOP Instance UID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1183"/>
+        <location filename="queryscreenbase.ui" line="1043"/>
         <source>Instance Number</source>
         <translation>Número de Instancia</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1223"/>
+        <location filename="queryscreenbase.ui" line="1083"/>
         <source>Referring Physicians Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1233"/>
+        <location filename="queryscreenbase.ui" line="1093"/>
         <source>Study Modalities</source>
         <translation>Modalidades de Estudio</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1250"/>
+        <location filename="queryscreenbase.ui" line="1110"/>
         <source>Series number</source>
         <translation>Número de serie</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1339"/>
+        <location filename="queryscreenbase.ui" line="1197"/>
         <source>Advanced Search</source>
         <translation>Busqueda avanzada</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="248"/>
+        <source>Date</source>
+        <translation>Fecha</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="282"/>
+        <source>Custom</source>
+        <translation>A medida</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1170"/>
+        <source>Clear Search Fields</source>
+        <translation>Vaciar los Campos de Búsqueda</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1190"/>
+        <source>Show PACS Nodes</source>
+        <translation>Mostrar lista de Nodos PACS</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1337"/>
+        <source>DICOMDIR</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1466"/>
+        <source>Operation in progress</source>
+        <translation>Operación en curso</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1473"/>
+        <source>TextLabel</source>
+        <translation></translation>
     </message>
 </context>
 </TS>
