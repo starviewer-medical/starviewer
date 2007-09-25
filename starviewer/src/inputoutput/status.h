@@ -38,7 +38,7 @@ public :
 	/** Retorna un text descrivint l'error o l'exit del procés
 	 * @return text descriptiu de l'exit o l'error de la crida
 	 */
-    QString text();
+    QString text() const;
 
 	/** per contruir l'objecte status
  	 * @param OFCodition resultant d'una crida
@@ -57,12 +57,12 @@ public :
 	/** Retorna si l'èxit de l'element cridat
 	 * @return boolea indicant l'exit de la crida
 	 */
-    bool good();
+    bool good() const;
 
 	/** Retorna el codi d'estat
 	 * @return codi d'estat
   	 */
-    int code();
+    int code() const;
 
 private :
 
