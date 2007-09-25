@@ -75,15 +75,25 @@
     <message>
         <location filename="qmpr3dextensionbase.ui" line="16"/>
         <source>Form1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>udg::MPR3DExtensionMediator</name>
     <message>
-        <location filename="mpr3dextensionmediator.cpp" line="24"/>
+        <location filename="mpr3dextensionmediator.cpp" line="27"/>
         <source>MPR 3D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="mpr3dextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="mpr3dextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
+        <translation>L&apos;ítem seleccionat no és una imatge</translation>
     </message>
 </context>
 </TS>
