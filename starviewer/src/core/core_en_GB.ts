@@ -3,7 +3,7 @@
 <context>
     <name>udg::Image</name>
     <message>
-        <location filename="image.cpp" line="526"/>
+        <location filename="image.cpp" line="530"/>
         <source>No Image Available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -43,12 +43,12 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="645"/>
+        <location filename="q2dviewer.cpp" line="2126"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="638"/>
+        <location filename="q2dviewer.cpp" line="2119"/>
         <source>
 %1
 %2
@@ -59,19 +59,19 @@ Acc:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2001"/>
+        <location filename="q2dviewer.cpp" line="2029"/>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2331"/>
+        <location filename="q2dviewer.cpp" line="590"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2339"/>
+        <location filename="q2dviewer.cpp" line="598"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -160,6 +160,19 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="qlogviewerbase.ui" line="109"/>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QViewer</name>
+    <message>
+        <location filename="qviewer.cpp" line="190"/>
+        <source>Viewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="190"/>
+        <source>The selected item is not a valid image format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
