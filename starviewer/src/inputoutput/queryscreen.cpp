@@ -115,7 +115,7 @@ void QueryScreen::deleteOldStudies()
     if ( !state.good() )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error deleting old studies" ) );
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
     }
 }
 
@@ -501,7 +501,7 @@ Status QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer 
     state = pacsListDB.queryPacs( &pacs, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
     if ( !state.good() )
     {
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
         return state;
     }
 
@@ -588,7 +588,7 @@ void QueryScreen::queryStudy( QString source )
         {
             m_studyTreeWidgetCache->clear();
             QApplication::restoreOverrideCursor();
-            databaseError( &state );
+            showDatabaseErrorMessage( state );
             return;
         }
     }
@@ -767,7 +767,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         state = cacheSeriesDAL.querySeries( mask , seriesList );
         if ( !state.good() )
         {
-            databaseError( &state );
+            showDatabaseErrorMessage( state );
             return;
         }
     }
@@ -801,7 +801,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
             serie.setImageNumber( imagesNumber );
             if ( !state.good() )
             {
-                databaseError( &state );
+                showDatabaseErrorMessage( state );
                 return;
             }
             m_studyTreeWidgetCache->insertSeries( &serie );//inserim la informació de les imatges al formulari
@@ -978,7 +978,7 @@ void QueryScreen::retrievePacs( bool view )
         if ( state.code() != 2019 ) // si hi ha l'error 2019, indica que l'estudi ja existeix a la base de dades, per tant estar parcialment o totalment descarregat, de totes maneres el tornem a descarregar
         {
             QApplication::restoreOverrideCursor();
-            databaseError( &state );
+            showDatabaseErrorMessage( state );
             return;
         }
         else // si l'estudi ja existeix actualizem la seva informació també
@@ -1001,7 +1001,7 @@ void QueryScreen::retrievePacs( bool view )
     if ( !state.good() )
     {
         QApplication::restoreOverrideCursor();
-        databaseError( &state );
+        showDatabaseErrorMessage( state );
         return;
     }
 
@@ -1213,7 +1213,7 @@ void QueryScreen::deleteStudyCache()
             }
             else
             {
-                databaseError( &state );
+                showDatabaseErrorMessage( state );
             }
 //     }
 }
@@ -1231,7 +1231,7 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
         m_studyTreeWidgetCache->insertStudy( &study );
         m_studyTreeWidgetCache->sort();
     }
-    else databaseError( &state );
+    else showDatabaseErrorMessage( state );
 
 }
 
@@ -1381,7 +1381,7 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
             if ( !state.good() )
             {
                 QApplication::restoreOverrideCursor();
-                databaseError( &state );
+                showDatabaseErrorMessage( state );
                 return;
             }
 
@@ -1618,34 +1618,11 @@ QString QueryScreen::buildQueryParametersString()
     return logMessage;
 }
 
-void QueryScreen::databaseError(Status *state)
+void QueryScreen::showDatabaseErrorMessage( const Status &state )
 {
-    if( !state->good() )
+    if( !state.good() )
     {
-        QString message;
-        QString errorCode = tr("Error Number : %1").arg( state->code() );
-        switch(state->code())
-        {
-            case 2001:
-                message = tr("Database is corrupted or SQL syntax error\n") + errorCode;
-                break;
-            case 2005:
-                message = tr("Database is locked\nRestart the user session to solve this error\n") + errorCode;
-                break;
-            case 2011:
-                message = tr("Database is corrupted\n") + errorCode;
-                break;
-            case 2019:
-                message = tr("Duplicated register\n") + errorCode;
-                break;
-            case 2050:
-                message = tr("Not Connected to the database\n") + errorCode;
-                break;
-            default:
-                message = tr("Internal Database error\n") + errorCode;
-                break;
-        }
-        QMessageBox::critical( this, tr("Starviewer"), message );
+        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code() ) );
     }
 }
 

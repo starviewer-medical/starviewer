@@ -27,6 +27,10 @@ QPacsList::QPacsList( QWidget *parent )
     refresh();
 }
 
+QPacsList::~QPacsList()
+{
+}
+
 void QPacsList::refresh()
 {
     PacsListDB pacsListDB;
@@ -40,7 +44,7 @@ void QPacsList::refresh()
 
     if ( !state.good() )
     {
-        databaseError( &state );
+        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code() ) );
         return;
     }
 
@@ -102,55 +106,6 @@ Status QPacsList::getSelectedPacs( PacsList *pacsList )
     }
 
   return state;
-}
-
-void QPacsList::databaseError( Status *state )
-{
-
-    QString text,code;
-    if ( !state->good() )
-    {
-        switch( state->code() )
-        {
-            case 2001 : text.insert( 0 , tr( "Database is corrupted or SQL syntax error" ) );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2005 : text.insert( 0 , tr( "Database is looked" ) );
-                        text.append( "\n" );
-                        text.append( "To solve this error restart the user session" );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2011 : text.insert( 0 , tr("Database is corrupted.") );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            case 2050 : text.insert( 0 , "Not Connected to database" );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-            default :   text.insert( 0 , tr("Internal Database error") );
-                        text.append( "\n" );
-                        text.append( tr( "Error Number : " ) );
-                        code.setNum( state->code() , 10 );
-                        text.append( code );
-                        break;
-        }
-        QMessageBox::critical( this , tr("Starviewer"), text );
-    }
-}
-
-QPacsList::~QPacsList()
-{
 }
 
 };

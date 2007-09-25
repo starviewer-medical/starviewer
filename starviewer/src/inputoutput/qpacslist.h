@@ -46,11 +46,6 @@ private :
     /// Aquesta accio selecciona en el PacsListView els Pacs que tenen a 'S' a Default. Son els pacs que per defecte l'usuari te que es realitzin les cerques
     void setSelectedDefaultPacs();
 
-    /** Tracta els errors que s'han produït durant els accessos a la base dades
-     *  @param state Estat de l'acció retrieve
-      */
-    void databaseError(Status *state);
-
 };
 
 };

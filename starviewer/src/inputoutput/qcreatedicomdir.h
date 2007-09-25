@@ -96,7 +96,7 @@ private:
     /** Tracta els errors que s'han produït a la base de dades en general
      * @param state  Estat del mètode
      */
-    void databaseError( Status *state );
+    void showDatabaseErrorMessage( const Status &state );
 
     /** Crea el dicomdir amb els estudis seleccionats, en el directori on se li passa per paràmetre
      * @param dicomdirPath directori on s'ha de crear el dicomdir
