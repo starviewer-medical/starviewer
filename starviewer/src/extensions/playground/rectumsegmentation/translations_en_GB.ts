@@ -311,26 +311,36 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="452"/>
-        <source>ERROR: no hi ha definida llavor o m&#xc3;&#xa0;scara</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextension.cpp" line="1130"/>
+        <location filename="qrectumsegmentationextension.cpp" line="1129"/>
         <source>Save Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="1130"/>
+        <location filename="qrectumsegmentationextension.cpp" line="1129"/>
         <source>MetaImage Files (*.mhd)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextension.cpp" line="452"/>
+        <source>ERROR: seed or mask undefined</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::RectumSegmentationExtensionMediator</name>
     <message>
-        <location filename="rectumsegmentationextensionmediator.cpp" line="24"/>
+        <location filename="rectumsegmentationextensionmediator.cpp" line="27"/>
         <source>Rectum Segmentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="rectumsegmentationextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="rectumsegmentationextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
