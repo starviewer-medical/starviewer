@@ -449,7 +449,7 @@ void QRectumSegmentationExtension::ApplyCleanSkullMethod( )
 void QRectumSegmentationExtension::ApplyMethod( )
 {
     if(!m_isSeed || !m_isMask){
-        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "ERROR: no hi ha definida llavor o màscara" ) );
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "ERROR: seed or mask undefined" ) );
         return;
     }
 
