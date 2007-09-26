@@ -201,8 +201,18 @@
 <context>
     <name>udg::EdemaSegmentationExtensionMediator</name>
     <message>
-        <location filename="edemasegmentationextensionmediator.cpp" line="24"/>
+        <location filename="edemasegmentationextensionmediator.cpp" line="27"/>
         <source>Edema Segmentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="edemasegmentationextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="edemasegmentationextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -319,18 +329,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="449"/>
-        <source>ERROR: no hi ha definida llavor o m&#xc3;&#xa0;scara</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qedemasegmentationextension.cpp" line="1122"/>
+        <location filename="qedemasegmentationextension.cpp" line="1121"/>
         <source>Save Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="1122"/>
+        <location filename="qedemasegmentationextension.cpp" line="1121"/>
         <source>MetaImage Files (*.mhd)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qedemasegmentationextension.cpp" line="449"/>
+        <source>ERROR: Seed or mask undefined</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

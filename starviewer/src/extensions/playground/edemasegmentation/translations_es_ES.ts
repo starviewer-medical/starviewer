@@ -1,209 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="es">
 <context>
     <name>QEdemaSegmentationExtensionBase</name>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="13"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="33"/>
         <source>Edema Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Métode de edema</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="53"/>
         <source>Stroke</source>
-        <translation type="unfinished"></translation>
+        <translation>Infarto</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="361"/>
         <source>Lower value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor mínimo:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="395"/>
         <source>Upper value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor máximo:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="144"/>
         <source>View thresholds</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver umbrales</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="164"/>
         <source>Seed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Semilla:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="652"/>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="277"/>
         <source>Volume (in mm3):</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen (en mm3):</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="319"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="331"/>
         <source>Clean Skull</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpiar Cráneo</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="341"/>
         <source>Ventricle</source>
-        <translation type="unfinished"></translation>
+        <translation>Ventrículo</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="912"/>
         <source>Edema</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="482"/>
         <source>Multiplier</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplicador</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="489"/>
         <source>100.0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="506"/>
         <source>Alpha:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alfa:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="513"/>
         <source>1.0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="530"/>
         <source>Mean</source>
-        <translation type="unfinished"></translation>
+        <translation>Media</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="537"/>
         <source>30.0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="554"/>
         <source>Variance</source>
-        <translation type="unfinished"></translation>
+        <translation>Variancia</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="561"/>
         <source>50.0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="578"/>
         <source>Stopping Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiempo de parada</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="585"/>
         <source>5.0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="602"/>
         <source>K:</source>
-        <translation type="unfinished"></translation>
+        <translation>K:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="609"/>
         <source>0.0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="626"/>
         <source>Volume:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="665"/>
         <source>Save Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar máscara</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="988"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="716"/>
         <source>window level</source>
-        <translation type="unfinished"></translation>
+        <translation>Brillo y contraste</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="738"/>
         <source>zoom</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="760"/>
         <source>move</source>
-        <translation type="unfinished"></translation>
+        <translation>mover</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="826"/>
         <source>voxel information</source>
-        <translation type="unfinished"></translation>
+        <translation>información de vóxel</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="870"/>
         <source>Filter Main Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrar la imagen principal</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="898"/>
         <source>View:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="905"/>
         <source>Lesion</source>
-        <translation type="unfinished"></translation>
+        <translation>lesión</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="919"/>
         <source>Ventricles</source>
-        <translation type="unfinished"></translation>
+        <translation>Ventrículos</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="998"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Tamaño</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="1052"/>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opacidad:</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="1118"/>
         <source>Slice:</source>
-        <translation type="unfinished"></translation>
+        <translation>Corte:</translation>
     </message>
 </context>
 <context>
     <name>udg::EdemaSegmentationExtensionMediator</name>
     <message>
-        <location filename="edemasegmentationextensionmediator.cpp" line="24"/>
+        <location filename="edemasegmentationextensionmediator.cpp" line="27"/>
         <source>Edema Segmentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Segmentación del edema</translation>
+    </message>
+    <message>
+        <location filename="edemasegmentationextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="edemasegmentationextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
+        <translation>El ítem seleccionado no es una imagen</translation>
     </message>
 </context>
 <context>
@@ -211,127 +221,127 @@
     <message>
         <location filename="qedemasegmentationextension.cpp" line="130"/>
         <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de vóxel</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="131"/>
         <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="132"/>
         <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar la información de vóxel</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="140"/>
         <source>Rotate Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotación en sentido horario</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="142"/>
         <source>Rotate the image in clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotación de la imagen en sentido horario</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="167"/>
         <source>EditorTool</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta de edición</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="168"/>
         <source>Enable/Disable editor tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la herramienta de edición</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="189"/>
         <source>Lesion Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Capa de la lesión</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="190"/>
         <source>Enable/Disable lesion View Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la visualización de la capa de la lesión</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="196"/>
         <source>Edema Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Capa del edema</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="197"/>
         <source>Enable/Disable edema View Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la visualización de la capa del edema</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="203"/>
         <source>Ventricles Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Capa de los ventrículos</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="204"/>
         <source>Enable/Disable ventricles View Overlay</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la visualización de la capa de los ventrículos</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="217"/>
         <source>Paint Editor Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta de pintado</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="218"/>
         <source>Enable/Disable Paint Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la herramienta de pintado</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="225"/>
         <source>Erase Editor Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta de borrado</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="226"/>
         <source>Enable/Disable Erase Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la herramienta de borrado</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="233"/>
         <source>Erase Slice Editor Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta de borrado de corte</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="234"/>
         <source>Enable/Disable Erase Slice Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la herramienta de borrado de corte</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="241"/>
         <source>Erase Region Editor Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta de borrado de región</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="242"/>
         <source>Enable/Disable Erase Region Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la herramienta de borrado de región</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="449"/>
         <source>StarViewer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qedemasegmentationextension.cpp" line="1121"/>
+        <source>Save Volume file</source>
+        <translation>Guardar fichero de volumen</translation>
+    </message>
+    <message>
+        <location filename="qedemasegmentationextension.cpp" line="1121"/>
+        <source>MetaImage Files (*.mhd)</source>
+        <translation>Ficheros MetaImage (*.mhd)</translation>
     </message>
     <message>
         <location filename="qedemasegmentationextension.cpp" line="449"/>
-        <source>ERROR: no hi ha definida llavor o m&#xc3;&#xa0;scara</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qedemasegmentationextension.cpp" line="1122"/>
-        <source>Save Volume file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qedemasegmentationextension.cpp" line="1122"/>
-        <source>MetaImage Files (*.mhd)</source>
-        <translation type="unfinished"></translation>
+        <source>ERROR: Seed or mask undefined</source>
+        <translation>ERROR: Semilla o máscara no definida</translation>
     </message>
 </context>
 </TS>
