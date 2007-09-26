@@ -97,7 +97,7 @@ void QueryScreen::initialize()
     m_operationAnimation->setMovie(operationAnimation);
     operationAnimation->start();
 
-    m_textPatientID->setFocus();
+    m_patientNameText->setFocus();
     m_advancedSearchButton->hide();
     m_qwidgetAdvancedSearch->hide();
     m_operationAnimation->hide();
@@ -296,23 +296,23 @@ void QueryScreen::readSettings()
 
 void QueryScreen::clearTexts()
 {
-    m_textStudyID->clear();
-    m_textPatientID->clear();
-    m_textPatientName->clear();
-    m_textAccessionNumber->clear();
+    m_studyIDText->clear();
+    m_patientIDText->clear();
+    m_patientNameText->clear();
+    m_accessionNumberText->clear();
     m_toDateCheck->setChecked( false );
     m_fromDateCheck->setChecked( false );
-    m_textReferringPhysiciansName->clear();
-    m_textStudyUID->clear();
-    m_textSeriesUID->clear();
-    m_textRequestedProcedureID->clear();
-    m_textScheduledProcedureStepID->clear();
-    m_textSOPInstanceUID->clear();
-    m_textInstanceNumber->clear();
-    m_textPPStartDate->clear();
-    m_textPPStartTime->clear();
-    m_textSeriesNumber->clear();
-    m_textStudyModality->clear();
+    m_referringPhysiciansNameText->clear();
+    m_studyUIDText->clear();
+    m_seriesUIDText->clear();
+    m_requestedProcedureIDText->clear();
+    m_scheduledProcedureStepIDText->clear();
+    m_SOPInstanceUIDText->clear();
+    m_instanceNumberText->clear();
+    m_PPStartDateText->clear();
+    m_PPStartTimeText->clear();
+    m_seriesNumberText->clear();
+    m_studyModalityText->clear();
 
     clearCheckedModality();
 
@@ -467,24 +467,24 @@ void QueryScreen::searchStudy()
 
 bool QueryScreen::validateNoEmptyMask()
 {
-    if ( m_textPatientID->text().length() == 0 &&
-         m_textPatientName->text().length() == 0 &&
-         m_textStudyID->text().length() == 0 &&
-         m_textAccessionNumber->text().length() == 0 &&
+    if ( m_patientIDText->text().length() == 0 &&
+         m_patientNameText->text().length() == 0 &&
+         m_studyIDText->text().length() == 0 &&
+         m_accessionNumberText->text().length() == 0 &&
          !m_fromDateCheck->isChecked()  &&
          !m_toDateCheck->isChecked() &&
          m_checkAll->isChecked() &&
-         !m_textReferringPhysiciansName->text().length() == 0 &&
-         !m_textSeriesNumber->text().length() == 0 &&
-         m_textStudyUID->text().length() == 0 &&
-         m_textSeriesUID->text().length() == 0 &&
-         m_textRequestedProcedureID->text().length() == 0 &&
-         m_textScheduledProcedureStepID->text().length() == 0 &&
-         m_textPPStartDate->text().length() == 0 &&
-         m_textPPStartTime->text().length() == 0 &&
-         m_textSOPInstanceUID->text().length() == 0 &&
-         m_textInstanceNumber->text().length() == 0 &&
-         m_textStudyModality->text().length() )
+         !m_referringPhysiciansNameText->text().length() == 0 &&
+         !m_seriesNumberText->text().length() == 0 &&
+         m_studyUIDText->text().length() == 0 &&
+         m_seriesUIDText->text().length() == 0 &&
+         m_requestedProcedureIDText->text().length() == 0 &&
+         m_scheduledProcedureStepIDText->text().length() == 0 &&
+         m_PPStartDateText->text().length() == 0 &&
+         m_PPStartTimeText->text().length() == 0 &&
+         m_SOPInstanceUIDText->text().length() == 0 &&
+         m_instanceNumberText->text().length() == 0 &&
+         m_studyModalityText->text().length() )
     {
         return false;
     }
@@ -1489,38 +1489,38 @@ DicomMask QueryScreen::buildDicomMask()
     QString modalityMask;
 
     //Sempre anem a buscar nivell d'estudi
-    mask.setPatientId( m_textPatientID->text() );
-    mask.setPatientName( m_textPatientName->text() );
-    mask.setStudyId( m_textStudyID->text()  );
+    mask.setPatientId( m_patientIDText->text() );
+    mask.setPatientName( m_patientNameText->text() );
+    mask.setStudyId( m_studyIDText->text()  );
     mask.setStudyDate( getStudyDatesStringMask() );
     mask.setStudyDescription( "" );
-    mask.setStudyTime( m_textStudyTime->text() );
-    mask.setStudyUID( m_textStudyUID->text() );
+    mask.setStudyTime( m_studyTimeText->text() );
+    mask.setStudyUID( m_studyUIDText->text() );
     mask.setInstitutionName( "" );
-    mask.setStudyModality( m_textStudyModality->text() );
+    mask.setStudyModality( m_studyModalityText->text() );
     mask.setPatientAge( "" );
-    mask.setAccessionNumber( m_textAccessionNumber->text() );
-    mask.setReferringPhysiciansName( m_textReferringPhysiciansName->text() );
+    mask.setAccessionNumber( m_accessionNumberText->text() );
+    mask.setReferringPhysiciansName( m_referringPhysiciansNameText->text() );
     mask.setPatientSex( "" );
     mask.setPatientBirth( "" );
 
     //si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
-    if (!m_textSeriesUID->text().isEmpty() || !m_textScheduledProcedureStepID->text().isEmpty() ||
-        !m_textRequestedProcedureID->text().isEmpty() || !m_checkAll->isChecked() ||
-        !m_textSOPInstanceUID->text().isEmpty() || !m_textInstanceNumber->text().isEmpty() ||
-        !m_textPPStartDate->text().isEmpty() || !m_textPPStartTime->text().isEmpty() ||
-        !m_textSeriesNumber->text().isEmpty()
+    if (!m_seriesUIDText->text().isEmpty() || !m_scheduledProcedureStepIDText->text().isEmpty() ||
+        !m_requestedProcedureIDText->text().isEmpty() || !m_checkAll->isChecked() ||
+        !m_SOPInstanceUIDText->text().isEmpty() || !m_instanceNumberText->text().isEmpty() ||
+        !m_PPStartDateText->text().isEmpty() || !m_PPStartTimeText->text().isEmpty() ||
+        !m_seriesNumberText->text().isEmpty()
        )
     {
         mask.setSeriesDate( "" );
         mask.setSeriesTime( "" );
         mask.setSeriesModality( "" );
-        mask.setSeriesNumber( m_textSeriesNumber->text() );
+        mask.setSeriesNumber( m_seriesNumberText->text() );
         mask.setSeriesBodyPartExaminated( "" );
-        mask.setSeriesUID( m_textSeriesUID->text() );
-        mask.setRequestAttributeSequence( m_textRequestedProcedureID->text() , m_textScheduledProcedureStepID->text() );
-        mask.setPPSStartDate( m_textPPStartDate->text() );
-        mask.setPPStartTime( m_textPPStartTime->text() );
+        mask.setSeriesUID( m_seriesUIDText->text() );
+        mask.setRequestAttributeSequence( m_requestedProcedureIDText->text() , m_scheduledProcedureStepIDText->text() );
+        mask.setPPSStartDate( m_PPStartDateText->text() );
+        mask.setPPStartTime( m_PPStartTimeText->text() );
 
         if ( m_buttonGroupModality->isEnabled() )
         { //es crea una sentencia per poder fer un in
@@ -1582,10 +1582,10 @@ DicomMask QueryScreen::buildDicomMask()
             }
         }
 
-        if ( !m_textSOPInstanceUID->text().isEmpty() || !m_textInstanceNumber->text().isEmpty() )
+        if ( !m_SOPInstanceUIDText->text().isEmpty() || !m_instanceNumberText->text().isEmpty() )
         {
-            mask.setImageNumber( m_textInstanceNumber->text() );
-            mask.setSOPInstanceUID( m_textSOPInstanceUID->text() );
+            mask.setImageNumber( m_instanceNumberText->text() );
+            mask.setSOPInstanceUID( m_SOPInstanceUIDText->text() );
         }
 
     }
@@ -1609,11 +1609,11 @@ QString QueryScreen::buildQueryParametersString()
 {
 	QString logMessage;
 
-    logMessage = "PATIENT_ID=[" + m_textPatientID->text() + "]\n"
-        + "PATIENT_NAME=[" + m_textPatientName->text() + "]\n"
-        + "STUDY_ID=[" + m_textStudyID->text() + "]\n"
+    logMessage = "PATIENT_ID=[" + m_patientIDText->text() + "]\n"
+        + "PATIENT_NAME=[" + m_patientNameText->text() + "]\n"
+        + "STUDY_ID=[" + m_studyIDText->text() + "]\n"
         + "DATES_MASK=[" + getStudyDatesStringMask() + "]\n"
-        + "ACCESSION_NUMBER=[" + m_textAccessionNumber->text() + "]\n";
+        + "ACCESSION_NUMBER=[" + m_accessionNumberText->text() + "]\n";
 
     return logMessage;
 }
