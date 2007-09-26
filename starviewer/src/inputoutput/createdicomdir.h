@@ -23,6 +23,7 @@ class CreateDicomdir
 public:
 
     CreateDicomdir();
+    ~CreateDicomdir();
 
     /** Especifica a quin dispositiu crearem el dicomdir. És important especificar el dispositiu correctament, sinó ens podem trobar, que no ens crei correctament el dicomdir
      * @param deviceToCreateDicomdir Dispositiu on crearem el dicomdir (harddisk,cdDvd,usb)
@@ -44,19 +45,10 @@ public:
      */
     Status create( QString dicomdirPath );
 
-    ~CreateDicomdir();
-
 private:
 
     DicomDirInterface::E_ApplicationProfile m_optProfile;
     DicomDirInterface m_ddir;
-
-
-    /** Crea un missatge d'error per un fitxer que no s'ha pogut convertir a DicomDir
-     * @param imagePath path de la imatge que dona l'error
-     */
-    void errorConvertingFile( QString imagePath );
-
 };
 
 }
