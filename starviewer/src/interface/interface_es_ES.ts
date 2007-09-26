@@ -43,7 +43,7 @@
     <message>
         <location filename="appimportfile.cpp" line="44"/>
         <source>Choose a file to open...</source>
-        <translation>Escoger un arxivo para abrir...</translation>
+        <translation>Seleccionar un archivo para abrir...</translation>
     </message>
 </context>
 <context>
@@ -234,12 +234,12 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="405"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gr&#xc3;&#xa0;fics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy;2005-2007 Grup de Gràfics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer es un software de processamiento de imágenes para imágenes DICOM producidas por equipamiento médico (MRI, CT, PET, PET-CT...) Puede leer otros formatos de archivos especificados por el estandard MetalO ( archivos *.mhd). Es completamente compatible con el estandard DICOM para la comuniación de imagénes i los formatos. Starviewer puede recibir las imágenes transferidas por el protocolo de comunicación de DICOM de qualquier PACS o modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, i Query/Retrive).&lt;p align=&apos;justify&apos;&gt;Starviewer está específicamente diseñado para la navegación i visualización de imagénes multimodalidad i multidimensional: visualizador 2D, visualizador MPR 2D (reconstucción multiplanar), visualizador 3D MPR i un visualizador híbrido MPR i MIP (Maximum Intensity Projection).&lt;p align=&apos;justify&apos;&gt;Starviewer es al mismo tiempo una estación DICOM PACS para la visualización i software para el processamiento de imágenes médicas para la investigación (radiología i visualización de imagen nuclear), visualización de imágenes funcionales, imágenes 3D i visualización de imágenes moleculares.&lt;p&gt;Version: %1 &lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy;2005-2007 Grup de Gràfics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer es un software de procesamiento de imágenes DICOM producidas a partir de equipamiento médico (MRI, CT, PET, PET-CT...). Puede leer otros formatos de archivos especificados por el estándar MetalO ( archivos *.mhd). Es completamente compatible con el estándar DICOM de comuniación de imagénes y formatos. Starviewer puede recibir las imágenes trasferidas por el protocolo de comunicación DICOM de qualquier PACS o modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, i Query/Retrive).&lt;p align=&apos;justify&apos;&gt;Starviewer está especialmente diseñado para la navegación y visualización de imagénes multimodalidad y multidimensional: visualizador 2D, visualizador MPR 2D (reconstucción multiplanar), visualizador 3D MPR y un visualizador híbrido MPR i MIP (Maximum Intensity Projection).&lt;p align=&apos;justify&apos;&gt;Starviewer es al mismo tiempo una estación DICOM PACS para la visualización y un software para el procesamiento de imágenes médicas para la investigación (radiología y visualización de imagen nuclear), visualización de imágenes funcionales, imágenes 3D y visualización de imágenes moleculares.&lt;p&gt;Versión: %1 &lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="89"/>
         <source>Open Files from a Directory</source>
-        <translation>Abrir un arxivo a partir de un directorio</translation>
+        <translation>Abrir un archivo a partir de un directorio</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="105"/>
@@ -269,7 +269,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="247"/>
         <source>Catalan</source>
-        <translation>Catalan</translation>
+        <translation>Catalán</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="248"/>
@@ -279,7 +279,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="249"/>
         <source>English</source>
-        <translation>Inglès</translation>
+        <translation>Inglés</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="277"/>
