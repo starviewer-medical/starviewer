@@ -54,7 +54,7 @@
          <property name="title" >
           <string>Patient</string>
          </property>
-         <layout class="QVBoxLayout" >
+         <layout class="QHBoxLayout" >
           <property name="margin" >
            <number>9</number>
           </property>
@@ -62,90 +62,86 @@
            <number>6</number>
           </property>
           <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
+           <widget class="QLabel" name="textLabel2_3" >
+            <property name="minimumSize" >
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
             </property>
-            <property name="spacing" >
-             <number>6</number>
+            <property name="text" >
+             <string>Patient Name</string>
             </property>
-            <item>
-             <widget class="QLabel" name="textLabel1_3" >
-              <property name="minimumSize" >
-               <size>
-                <width>80</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="font" >
-               <font>
-                <family>Sans Serif</family>
-                <pointsize>9</pointsize>
-                <weight>50</weight>
-                <italic>false</italic>
-                <bold>false</bold>
-                <underline>false</underline>
-                <strikeout>false</strikeout>
-               </font>
-              </property>
-              <property name="text" >
-               <string>Patient ID</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="m_textPatientID" >
-              <property name="minimumSize" >
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize" >
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="textLabel2_3" >
-              <property name="minimumSize" >
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text" >
-               <string>Patient Name</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="m_textPatientName" >
-              <property name="minimumSize" >
-               <size>
-                <width>20</width>
-                <height>0</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer>
-              <property name="orientation" >
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" >
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
+            <property name="buddy" >
+             <cstring>m_patientNameText</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="m_patientNameText" >
+            <property name="minimumSize" >
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textLabel1_3" >
+            <property name="minimumSize" >
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font" >
+             <font>
+              <family>Sans Serif</family>
+              <pointsize>9</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+              <underline>false</underline>
+              <strikeout>false</strikeout>
+             </font>
+            </property>
+            <property name="text" >
+             <string>Patient ID</string>
+            </property>
+            <property name="buddy" >
+             <cstring>m_patientIDText</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="m_patientIDText" >
+            <property name="minimumSize" >
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>111</width>
+              <height>24</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -185,56 +181,6 @@
              <number>6</number>
             </property>
             <item>
-             <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
-              </property>
-              <property name="spacing" >
-               <number>6</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="textLabel5_3" >
-                <property name="text" >
-                 <string>Study ID</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="m_textStudyID" >
-                <property name="minimumSize" >
-                 <size>
-                  <width>0</width>
-                  <height>20</height>
-                 </size>
-                </property>
-                <property name="maximumSize" >
-                 <size>
-                  <width>90</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_9" >
-                <property name="text" >
-                 <string>Accession Number</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="m_textAccessionNumber" >
-                <property name="minimumSize" >
-                 <size>
-                  <width>0</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
              <widget class="QGroupBox" name="groupBox_2" >
               <property name="sizePolicy" >
                <sizepolicy>
@@ -246,6 +192,12 @@
               </property>
               <property name="title" >
                <string>Date</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignLeading</set>
+              </property>
+              <property name="flat" >
+               <bool>true</bool>
               </property>
               <layout class="QHBoxLayout" >
                <property name="margin" >
@@ -383,14 +335,73 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="QLabel" name="label_13" >
+               <widget class="QLabel" name="textLabel5_3" >
                 <property name="text" >
-                 <string>Time</string>
+                 <string>Study ID</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>m_studyIDText</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="m_textStudyTime" >
+               <widget class="QLineEdit" name="m_studyIDText" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+                <property name="maximumSize" >
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_9" >
+                <property name="text" >
+                 <string>Accession Number</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>m_accessionNumberText</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="m_accessionNumberText" >
+                <property name="minimumSize" >
+                 <size>
+                  <width>0</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_13" >
+                <property name="text" >
+                 <string>Time</string>
+                </property>
+                <property name="buddy" >
+                 <cstring>m_studyTimeText</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="m_studyTimeText" >
                 <property name="maximumSize" >
                  <size>
                   <width>120</width>
@@ -846,399 +857,6 @@
          </item>
         </layout>
        </item>
-       <item>
-        <widget class="QWidget" native="1" name="m_qwidgetAdvancedSearch" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>7</hsizetype>
-           <vsizetype>7</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>2</number>
-          </property>
-          <property name="spacing" >
-           <number>3</number>
-          </property>
-          <item row="0" column="0" >
-           <widget class="QGroupBox" name="groupBox" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>7</hsizetype>
-              <vsizetype>1</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize" >
-             <size>
-              <width>16777215</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="title" >
-             <string>Advanced Search</string>
-            </property>
-            <layout class="QGridLayout" >
-             <property name="margin" >
-              <number>9</number>
-             </property>
-             <property name="spacing" >
-              <number>6</number>
-             </property>
-             <item row="2" column="0" >
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_4" >
-                 <property name="text" >
-                  <string>Req. Proc. ID</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textRequestedProcedureID" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>80</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_5" >
-                 <property name="text" >
-                  <string>Sche. Proc. Step ID</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textScheduledProcedureStepID" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>80</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_6" >
-                 <property name="text" >
-                  <string>Proc. Perf. Start Date</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textPPStartDate" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>100</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_10" >
-                 <property name="text" >
-                  <string>Time</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textPPStartTime" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeType" >
-                  <enum>QSizePolicy::Expanding</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>24</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item row="1" column="0" >
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_2" >
-                 <property name="text" >
-                  <string>UID Study</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textStudyUID" />
-               </item>
-               <item>
-                <widget class="QLabel" name="label_3" >
-                 <property name="text" >
-                  <string>UID Series</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textSeriesUID" />
-               </item>
-              </layout>
-             </item>
-             <item row="3" column="0" >
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_7" >
-                 <property name="text" >
-                  <string>SOP Instance UID</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textSOPInstanceUID" />
-               </item>
-               <item>
-                <widget class="QLabel" name="label_8" >
-                 <property name="text" >
-                  <string>Instance Number</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textInstanceNumber" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>50</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item row="0" column="0" >
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_11" >
-                 <property name="text" >
-                  <string>Referring Physicians Name</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textReferringPhysiciansName" />
-               </item>
-               <item>
-                <widget class="QLabel" name="label_12" >
-                 <property name="text" >
-                  <string>Study Modalities</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textStudyModality" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label" >
-                 <property name="text" >
-                  <string>Series number</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="m_textSeriesNumber" >
-                 <property name="maximumSize" >
-                  <size>
-                   <width>100</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer>
-                 <property name="orientation" >
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" >
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="m_clearButton" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>3</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="text" >
-            <string>Clear Search Fields</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>301</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_showPacsListButton" >
-           <property name="text" >
-            <string>Show PACS Nodes</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_advancedSearchButton" >
-           <property name="text" >
-            <string>Advanced Search</string>
-           </property>
-           <property name="checkable" >
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_searchButton" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>3</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip" >
-            <string>search</string>
-           </property>
-           <property name="layoutDirection" >
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text" >
-            <string>Search</string>
-           </property>
-           <property name="icon" >
-            <iconset/>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
       </layout>
      </item>
      <item>
@@ -1255,6 +873,432 @@
         <size>
          <width>20</width>
          <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" native="1" name="m_qwidgetAdvancedSearch" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>7</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>2</number>
+      </property>
+      <property name="spacing" >
+       <number>3</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QGroupBox" name="groupBox" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize" >
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="title" >
+         <string>Advanced Search</string>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="2" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_4" >
+             <property name="text" >
+              <string>Req. Proc. ID</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_requestedProcedureIDText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_requestedProcedureIDText" >
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5" >
+             <property name="text" >
+              <string>Sche. Proc. Step ID</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_scheduledProcedureStepIDText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_scheduledProcedureStepIDText" >
+             <property name="maximumSize" >
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_6" >
+             <property name="text" >
+              <string>Proc. Perf. Start Date</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_PPStartDateText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_PPStartDateText" >
+             <property name="maximumSize" >
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_10" >
+             <property name="text" >
+              <string>Time</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_PPStartTimeText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_PPStartTimeText" >
+             <property name="maximumSize" >
+              <size>
+               <width>60</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType" >
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>24</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_2" >
+             <property name="text" >
+              <string>UID Study</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_studyUIDText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_studyUIDText" />
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3" >
+             <property name="text" >
+              <string>UID Series</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_seriesUIDText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_seriesUIDText" />
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_7" >
+             <property name="text" >
+              <string>SOP Instance UID</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_SOPInstanceUIDText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_SOPInstanceUIDText" />
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8" >
+             <property name="text" >
+              <string>Instance Number</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_instanceNumberText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_instanceNumberText" >
+             <property name="maximumSize" >
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="0" >
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_11" >
+             <property name="text" >
+              <string>Referring Physicians Name</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_referringPhysiciansNameText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_referringPhysiciansNameText" />
+           </item>
+           <item>
+            <widget class="QLabel" name="label_12" >
+             <property name="text" >
+              <string>Study Modalities</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_studyModalityText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_studyModalityText" >
+             <property name="maximumSize" >
+              <size>
+               <width>40</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label" >
+             <property name="text" >
+              <string>Series number</string>
+             </property>
+             <property name="buddy" >
+              <cstring>m_seriesNumberText</cstring>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="m_seriesNumberText" >
+             <property name="maximumSize" >
+              <size>
+               <width>100</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation" >
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" >
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="m_clearButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>3</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Clear Search Fields</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>301</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_showPacsListButton" >
+       <property name="text" >
+        <string>Show PACS Nodes</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_advancedSearchButton" >
+       <property name="text" >
+        <string>Advanced Search</string>
+       </property>
+       <property name="checkable" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_searchButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>3</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>search</string>
+       </property>
+       <property name="layoutDirection" >
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text" >
+        <string>Search</string>
+       </property>
+       <property name="icon" >
+        <iconset/>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>32</width>
+         <height>32</height>
         </size>
        </property>
       </widget>
@@ -1527,9 +1571,18 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_textPatientID</tabstop>
-  <tabstop>m_textPatientName</tabstop>
-  <tabstop>m_textStudyID</tabstop>
+  <tabstop>m_patientNameText</tabstop>
+  <tabstop>m_patientIDText</tabstop>
+  <tabstop>m_todayRadioButton</tabstop>
+  <tabstop>m_yesterdayRadioButton</tabstop>
+  <tabstop>m_customDateRadioButton</tabstop>
+  <tabstop>m_fromDateCheck</tabstop>
+  <tabstop>m_fromStudyDate</tabstop>
+  <tabstop>m_toDateCheck</tabstop>
+  <tabstop>m_toStudyDate</tabstop>
+  <tabstop>m_studyIDText</tabstop>
+  <tabstop>m_accessionNumberText</tabstop>
+  <tabstop>m_studyTimeText</tabstop>
   <tabstop>m_checkAll</tabstop>
   <tabstop>m_checkCR</tabstop>
   <tabstop>m_checkES</tabstop>
@@ -1540,16 +1593,32 @@
   <tabstop>m_checkMG</tabstop>
   <tabstop>m_checkDT</tabstop>
   <tabstop>m_checkSC</tabstop>
+  <tabstop>m_checkOtherModality</tabstop>
   <tabstop>m_checkDX</tabstop>
   <tabstop>m_checkMR</tabstop>
   <tabstop>m_checkPT</tabstop>
   <tabstop>m_checkUS</tabstop>
+  <tabstop>m_instanceNumberText</tabstop>
+  <tabstop>m_showPacsListButton</tabstop>
+  <tabstop>m_advancedSearchButton</tabstop>
   <tabstop>m_searchButton</tabstop>
+  <tabstop>m_textOtherModality</tabstop>
   <tabstop>m_retrieveButton</tabstop>
-  <tabstop>m_retrieveListButton</tabstop>
   <tabstop>m_viewButton</tabstop>
-  <tabstop>m_clearButton</tabstop>
+  <tabstop>m_retrieveListButton</tabstop>
+  <tabstop>m_createDicomdirButton</tabstop>
   <tabstop>m_tab</tabstop>
+  <tabstop>m_clearButton</tabstop>
+  <tabstop>m_referringPhysiciansNameText</tabstop>
+  <tabstop>m_studyModalityText</tabstop>
+  <tabstop>m_seriesNumberText</tabstop>
+  <tabstop>m_studyUIDText</tabstop>
+  <tabstop>m_seriesUIDText</tabstop>
+  <tabstop>m_requestedProcedureIDText</tabstop>
+  <tabstop>m_scheduledProcedureStepIDText</tabstop>
+  <tabstop>m_PPStartDateText</tabstop>
+  <tabstop>m_PPStartTimeText</tabstop>
+  <tabstop>m_SOPInstanceUIDText</tabstop>
  </tabstops>
  <resources>
   <include location="../main/main.qrc" />
