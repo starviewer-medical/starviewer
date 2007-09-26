@@ -272,7 +272,7 @@ void QLandmarkRegistrationExtension::applyMethod()
 {
     if(m_seedList1.size() != m_seedList2.size())
     {
-        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "El nombre de llavors és diferent en les dues imatges" ) );
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "There are not the same number of seeds into images" ) );
         //std::cerr<<"El nombre de llavors és diferent en les dues imatges"<<std::endl;
         return;
     }

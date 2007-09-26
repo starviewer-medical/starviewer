@@ -91,8 +91,18 @@
 <context>
     <name>udg::LandmarkRegistrationExtensionMediator</name>
     <message>
-        <location filename="landmarkregistrationextensionmediator.cpp" line="24"/>
+        <location filename="landmarkregistrationextensionmediator.cpp" line="27"/>
         <source>Landmark Registration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="landmarkregistrationextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="landmarkregistrationextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -149,11 +159,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="275"/>
-        <source>El nombre de llavors &#xc3;&#xa9;s diferent en les dues imatges</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qlandmarkregistrationextension.cpp" line="1097"/>
         <source>Save Transform file</source>
         <translation type="unfinished"></translation>
@@ -166,6 +171,11 @@
     <message>
         <location filename="qlandmarkregistrationextension.cpp" line="1120"/>
         <source>Chose a transform filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlandmarkregistrationextension.cpp" line="275"/>
+        <source>There are not the same number of seeds into images</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
