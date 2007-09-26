@@ -1235,6 +1235,9 @@
        <property name="text" >
         <string>Clear Search Fields</string>
        </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -1255,6 +1258,9 @@
        <property name="text" >
         <string>Show PACS Nodes</string>
        </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -1264,6 +1270,9 @@
        </property>
        <property name="checkable" >
         <bool>true</bool>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
        </property>
       </widget>
      </item>
