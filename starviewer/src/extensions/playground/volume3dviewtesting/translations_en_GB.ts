@@ -97,8 +97,18 @@
 <context>
     <name>udg::Volume3DViewTestingExtensionMediator</name>
     <message>
-        <location filename="volume3dviewtestingextensionmediator.cpp" line="24"/>
+        <location filename="volume3dviewtestingextensionmediator.cpp" line="27"/>
         <source>Volume 3D View Testing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume3dviewtestingextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume3dviewtestingextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
