@@ -1041,8 +1041,9 @@ Status QueryScreen::insertStudyCache( DICOMStudy stu )
     CacheStudyDAL cacheStudyDAL;
 
     //creem el path absolut de l'estudi
-    absPath = settings.getCacheImagePath() + study.getStudyUID() + "/" + absPath;
+    absPath = settings.getCacheImagePath() + study.getStudyUID() + "/";
     //inserim l'estudi a la caché
+    study.setAbsPath(absPath);
     state = cacheStudyDAL.insertStudy( &study );
 
     return state;
