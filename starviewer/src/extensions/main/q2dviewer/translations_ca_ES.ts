@@ -196,7 +196,7 @@
     <message>
         <location filename="q2dviewerextensionbase.ui" line="400"/>
         <source>Information</source>
-        <translation></translation>
+        <translation>Informació</translation>
     </message>
 </context>
 <context>
