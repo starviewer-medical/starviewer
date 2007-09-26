@@ -29,6 +29,10 @@ CreateDicomdir::CreateDicomdir()
     m_optProfile = DicomDirInterface::AP_GeneralPurpose;//PErmet gravar al discdur i tb usb's
 }
 
+CreateDicomdir::~CreateDicomdir()
+{
+}
+
 void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
 {
     //indiquem que el propòsit d'aquest dicomdir
@@ -72,12 +76,11 @@ void CreateDicomdir::setStrictMode(bool enabled)
 
         INFO_LOG( "Mode estricte OFF" );
     }
-
 }
 
 Status CreateDicomdir::create( QString dicomdirPath )
 {
-    QString errorMessage , outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
+    QString outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
     OFList<OFString> fileNames;/* create list of input files */
     const char *opt_pattern = NULL;
     const char *opt_fileset = DEFAULT_FILESETID;
@@ -105,9 +108,7 @@ Status CreateDicomdir::create( QString dicomdirPath )
 
     if ( !result.good() )
     {
-        errorMessage = "Error al crear el DICOMDIR. ERROR : ";
-        errorMessage.append( result.text() );
-        ERROR_LOG ( errorMessage );
+        ERROR_LOG ( "Error al crear el DICOMDIR. ERROR : " + QString( result.text() ) );
         state.setStatus( result );
         return state;
     }
@@ -125,54 +126,20 @@ Status CreateDicomdir::create( QString dicomdirPath )
             //afegim els fitxers al dicomdir
             result = m_ddir.checkDicomFile( (*iter).c_str() , qPrintable(dicomdirPath) );
             result = m_ddir.addDicomFile( (*iter).c_str() , qPrintable(dicomdirPath) );
-            if ( result.good() ) iter++;
+            if ( result.good() )
+                iter++;
         }
 
-        if ( !result.good() )
+        if( !result.good() )
         {
-            QString imageErrorPath;
-
-            imageErrorPath = dicomdirPath;
-            imageErrorPath.append( "/" );
-            imageErrorPath.append ( ( *iter ).c_str() );
-
-			errorConvertingFile ( imageErrorPath );
-
+            ERROR_LOG( "Error al convertir a DICOMDIR el fitxer : " + dicomdirPath + "/" + ( *iter ).c_str() );
             result = EC_IllegalCall;
         }
-        else result = m_ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
+        else
+            result = m_ddir.writeDicomDir ( opt_enctype , opt_glenc ); //escribim el dicomDir
     }
 
     return state.setStatus( result );
-}
-
-void CreateDicomdir::errorConvertingFile( QString imagePath )
-{
-    QString logMessage;
-    DICOMTagReader dicomFile;
-
-    if ( dicomFile.setFile(imagePath) )
-    {
-        logMessage = "Error al convertir a DICOMDIR el fitxer : ";
-        logMessage.append( dicomFile.getAttributeByName(DCM_StudyInstanceUID) );
-        logMessage.append( "/" );
-        logMessage.append( dicomFile.getAttributeByName(DCM_SeriesInstanceUID) );
-        logMessage.append( "/" );
-        logMessage.append( dcmSOPClassUIDToModality( qPrintable(dicomFile.getAttributeByName(DCM_SOPClassUID)) ) );
-        logMessage.append( "." );
-        logMessage.append( dicomFile.getAttributeByName(DCM_SOPInstanceUID) );
-    }
-    else
-    {
-        logMessage = "Error al convertir a DICOMDIR el fitxer que es troba a la cache, al directori : ";
-        logMessage.append( imagePath );
-    }
-
-    ERROR_LOG ( logMessage );
-}
-
-CreateDicomdir::~CreateDicomdir()
-{
 }
 
 }
