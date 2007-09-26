@@ -836,46 +836,16 @@ void QMPRExtension::initOrientation()
     m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[0] , zbounds[0] );
     m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
 
-    DEBUG_LOG( QString("Coordenades del pla AXIAL>>\nOrigen: %1,%2,%3\nPoint1: %4,%5,%6\nPoint2: %7,%8,%9")
-        .arg( xbounds[0] )
-        .arg( ybounds[0] )
-        .arg( zbounds[0] )
-        .arg( xbounds[1] )
-        .arg( ybounds[0] )
-        .arg( zbounds[0] )
-        .arg( xbounds[0] )
-        .arg( ybounds[1] )
-        .arg( zbounds[0] )
-        );
-
     //YZ, x-normal : vista sagital
     // estem ajustant la mida del pla a les dimensions d'aquesta orientació
     // \TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
+    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[1] );
+    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[1] );
+    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[0] );
 
-//     double maxYBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
-//     double diffYBound = maxYBound - ybounds[1];
-// \TODO maxYBound és correcte, el problema que hi ha és que inicialment està ben distribuit (0.5 amunt i avall ) perquè tenim les llesques centrades, però al canviar de llesca hauríem de tenir en compte que aquestes diferències s'han de canviar i equilibrar segons la llesca en que ens trobem
-    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
-    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[0] );
-    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] );
-
-    DEBUG_LOG( QString("Coordenades del pla sagital>>\nOrigen: %1,%2,%3\nPoint1: %4,%5,%6\nPoint2: %7,%8,%9")
-        .arg( xbounds[0] )
-        .arg( ybounds[0] )
-        .arg( zbounds[0] )
-        .arg( xbounds[0] )
-        .arg( ybounds[1] )
-        .arg( zbounds[0] )
-        .arg( xbounds[0] )
-        .arg( ybounds[0] )
-        .arg( zbounds[1] )
-        );
-    // \TODO aqui caldria canviar-li els bounds del point 2 perquè siguin més llargs i encaixi amb la diagonal
-    // perquè quedi centrat hauriem de desplaçar la meitat de l'espai extra per l'origen i pel punt2
-    // posem en la llesca central
-    m_sagitalPlaneSource->Push( xbounds[0] + 0.5 * ( xbounds[1] - xbounds[0] ) );
-    double axis[3] = { 0 , 1 , 0 };
+    double axis[3] = { 0 , 0 , 1 };
     rotateMiddle( 180 , axis , m_sagitalPlaneSource );
+    m_sagitalPlaneSource->Push( 0.5 * ( xbounds[1] - xbounds[0] ) );
 
     //ZX, y-normal : vista coronal
     // ídem anterior
@@ -889,7 +859,7 @@ void QMPRExtension::initOrientation()
     m_coronalPlaneSource->SetPoint1( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
     m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
     // posem en la llesca central
-    m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) + ybounds[0] );
+    m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) );
     // li donem la volta perquè es vegi des del punt de vista correcte
     axis[0] = 0; axis[1] = 0; axis[2] = 1;
     rotateMiddle( 180 , axis , m_coronalPlaneSource );
