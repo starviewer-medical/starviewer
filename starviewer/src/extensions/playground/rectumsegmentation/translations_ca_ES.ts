@@ -185,7 +185,7 @@
     <message>
         <location filename="qrectumsegmentationextensionbase.ui" line="998"/>
         <source>Size</source>
-        <translation>Dimensió</translation>
+        <translation>Gruix</translation>
     </message>
     <message>
         <location filename="qrectumsegmentationextensionbase.ui" line="1052"/>
