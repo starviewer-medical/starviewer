@@ -342,53 +342,73 @@
 <context>
     <name>udg::OptimalViewpointExtensionMediator</name>
     <message>
-        <location filename="optimalviewpointextensionmediator.cpp" line="24"/>
+        <location filename="optimalviewpointextensionmediator.cpp" line="27"/>
         <source>Optimal Viewpoint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="optimalviewpointextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="optimalviewpointextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::OptimalViewpointInputParametersForm</name>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="349"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="390"/>
         <source>Open segmentation file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="350"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="391"/>
         <source>Segmentation files (*.seg);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="371"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="413"/>
         <source>No segmentation file chosen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="372"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="414"/>
         <source>Please, choose a segmentation file or do an automatic segmentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="388"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="434"/>
         <source>Load transfer function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="416"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="462"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="416"/>
+        <location filename="optimalviewpointinputparametersform.cpp" line="462"/>
         <source>Save transfer function</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="optimalviewpointinputparametersform.cpp" line="357"/>
+        <source>Show parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="optimalviewpointinputparametersform.cpp" line="366"/>
+        <source>Hide parameters</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::OptimalViewpointPlane</name>
     <message>
-        <location filename="optimalviewpointplane.cpp" line="49"/>
+        <location filename="optimalviewpointplane.cpp" line="51"/>
         <source>Plane %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -396,23 +416,23 @@
 <context>
     <name>udg::QOptimalViewpointExtension</name>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="191"/>
+        <location filename="qoptimalviewpointextension.cpp" line="117"/>
         <source>Results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="197"/>
+        <location filename="qoptimalviewpointextension.cpp" line="123"/>
         <source>Plane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="241"/>
+        <location filename="qoptimalviewpointextension.cpp" line="69"/>
         <source>Segmentation error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="242"/>
-        <source>Cannot load segmentation from file </source>
+        <location filename="qoptimalviewpointextension.cpp" line="70"/>
+        <source>Cannot load segmentation from file %1.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
