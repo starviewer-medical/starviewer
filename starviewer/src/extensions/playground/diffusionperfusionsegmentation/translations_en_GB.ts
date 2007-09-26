@@ -176,8 +176,18 @@
 <context>
     <name>udg::DiffusionPerfusionSegmentationExtensionMediator</name>
     <message>
-        <location filename="diffusionperfusionsegmentationextensionmediator.cpp" line="24"/>
+        <location filename="diffusionperfusionsegmentationextensionmediator.cpp" line="27"/>
         <source>Diffusion-Perfusion Segmentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diffusionperfusionsegmentationextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diffusionperfusionsegmentationextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
