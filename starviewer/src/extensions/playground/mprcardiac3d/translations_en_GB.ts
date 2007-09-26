@@ -91,8 +91,18 @@
 <context>
     <name>udg::MPRCardiac3DExtensionMediator</name>
     <message>
-        <location filename="mprcardiac3dextensionmediator.cpp" line="24"/>
+        <location filename="mprcardiac3dextensionmediator.cpp" line="27"/>
         <source>3D Cardiac MPR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mprcardiac3dextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mprcardiac3dextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
