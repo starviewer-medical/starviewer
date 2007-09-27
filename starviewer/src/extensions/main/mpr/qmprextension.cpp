@@ -866,6 +866,7 @@ void QMPRExtension::initOrientation()
     axis[0] = 0; axis[1] = 1; axis[2] = 0;
     rotateMiddle( 180 , axis , m_coronalPlaneSource );
     updatePlanes();
+    updateControls();
 }
 
 void QMPRExtension::saveImages()
@@ -960,14 +961,12 @@ void QMPRExtension::axialSliceUpdated( int slice )
     // nou push - anterior push = push relatiu que hem de fer
     m_axialPlaneSource->Push( ( slice * m_axialSpacing[2] ) - m_axialPlaneSource->GetOrigin()[2] );
     m_axialPlaneSource->Update();
-    updateIntersectionPoint();
     updateControls();
 }
 
 void QMPRExtension::updateControls()
 {
-
-// posem la representació dels plans sobre cada vista
+    // posem la representació dels plans sobre cada vista
     updateIntersectionPoint();
 
     // Passem a sistema de coordenades de món
@@ -997,7 +996,7 @@ void QMPRExtension::updateControls()
     double r[3] , t[3] , position1[3] , position2[3];
 
     // projecció sagital sobre axial i viceversa
-    MathTools::planeIntersection( m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal() ,  m_sagitalPlaneSource->GetOrigin() , m_sagitalPlaneSource->GetNormal() , r , t );
+    MathTools::planeIntersection( m_axialPlaneSource->GetOrigin() , m_axialPlaneSource->GetNormal(),  m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal() , r , t );
 
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
