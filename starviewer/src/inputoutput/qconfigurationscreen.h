@@ -62,12 +62,6 @@ public slots :
     /// Aplica els canvis de la configuració
     bool applyChanges();
 
-    /// Guarda els canvis a la configuració dels paràmetres del PACS
-    void acceptChanges();
-
-    /// Tanca la pantalla de configuració, i desprecia els canvis
-    void cancelChanges();
-
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void configurationChanged( const QString& );
 
