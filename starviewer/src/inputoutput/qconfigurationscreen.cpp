@@ -72,20 +72,8 @@ void QConfigurationScreen::createConnections()
     //connecta el boto examinar de la cache amb el dialog per escollir el path de la base de dades
     connect( m_buttonExaminateCacheImage , SIGNAL( clicked() ) , this, SLOT( examinateCacheImagePath() ) );
 
-    //connecta el boto acceptar de la cache amb l'slot accept
-    connect( m_buttonAcceptCache , SIGNAL( clicked() ) , this , SLOT( acceptChanges() ) );
-
-    //connecta el boto cancelar de la cache amb l'slot cancel
-    connect( m_buttonCancelCache , SIGNAL( clicked()) , this , SLOT( cancelChanges( ) ) );
-
     //connecta el boto aplicar de la cache amb l'slot apply
     connect( m_buttonApplyCache , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
-
-    //connecta el boto acceptar del pacs amb l'slot accept
-    connect( m_buttonAcceptPacs , SIGNAL( clicked() ), this ,  SLOT( acceptChanges() ) );
-
-    //connecta el boto cancelar del pacs amb l'slot cancel
-    connect( m_buttonCancelPacs , SIGNAL( clicked() ) , this ,  SLOT( cancelChanges() ) );
 
     //connecta el boto aplicar del Pacs amb l'slot apply
     connect( m_buttonApplyPacs , SIGNAL( clicked() ) , this ,  SLOT( applyChanges() ) );
@@ -139,14 +127,8 @@ void QConfigurationScreen::setWidthColumns()
 
 void QConfigurationScreen::setIconButtons()
 {
-    m_buttonAcceptCache->setIcon( QIcon( ":images/button_ok.png" ) );
-    m_buttonAcceptPacs->setIcon( QIcon( ":images/button_ok.png" ) );
-
     m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
     m_buttonApplyCache->setIcon( QIcon( ":images/apply.png" ) );
-
-    m_buttonCancelPacs->setIcon( QIcon( ":images/cancel.png" ) );
-    m_buttonCancelCache->setIcon( QIcon( ":images/cancel.png" ) );
 }
 
 void QConfigurationScreen::loadCacheDefaults()
@@ -635,20 +617,6 @@ bool QConfigurationScreen::validateChanges()
 	}
 
     return true;
-}
-
-void QConfigurationScreen::acceptChanges()
-{
-    if ( m_configurationChanged )
-    {
-        if ( applyChanges() ) this->hide();
-    }
-    else this->hide();
-}
-
-void QConfigurationScreen::cancelChanges()
-{
-    this->hide();
 }
 
 bool QConfigurationScreen::applyChanges()

@@ -895,32 +895,6 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="m_buttonAcceptPacs" >
-           <property name="toolTip" >
-            <string>Save changes and close the configuration window </string>
-           </property>
-           <property name="text" >
-            <string>Accept</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>30</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QPushButton" name="m_buttonApplyPacs" >
            <property name="enabled" >
             <bool>false</bool>
@@ -935,48 +909,6 @@
             <string>Apply Changes</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>30</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_buttonCancelPacs" >
-           <property name="layoutDirection" >
-            <enum>Qt::RightToLeft</enum>
-           </property>
-           <property name="text" >
-            <string>Cancel</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>21</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
@@ -1419,32 +1351,6 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="m_buttonAcceptCache" >
-           <property name="toolTip" >
-            <string>Save changes and close the configuration window </string>
-           </property>
-           <property name="text" >
-            <string>Accept</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>30</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QPushButton" name="m_buttonApplyCache" >
            <property name="enabled" >
             <bool>false</bool>
@@ -1459,51 +1365,6 @@
             <string>Apply Changes</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>31</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_buttonCancelCache" >
-           <property name="toolTip" >
-            <string>Cancel changes and close the windows</string>
-           </property>
-           <property name="layoutDirection" >
-            <enum>Qt::RightToLeft</enum>
-           </property>
-           <property name="text" >
-            <string>Cancel</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType" >
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>31</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
@@ -1539,9 +1400,7 @@
   <tabstop>m_textInstitutionCountry</tabstop>
   <tabstop>m_textInstitutionEmail</tabstop>
   <tabstop>m_textInstitutionPhoneNumber</tabstop>
-  <tabstop>m_buttonAcceptPacs</tabstop>
   <tabstop>m_buttonApplyPacs</tabstop>
-  <tabstop>m_buttonCancelPacs</tabstop>
   <tabstop>m_textDatabaseRoot</tabstop>
   <tabstop>m_textCacheImagePath</tabstop>
   <tabstop>m_textMaximumDaysNotViewed</tabstop>
@@ -1549,9 +1408,7 @@
   <tabstop>m_buttonCreateDatabase</tabstop>
   <tabstop>m_buttonCompactDatabase</tabstop>
   <tabstop>m_buttonDeleteStudies</tabstop>
-  <tabstop>m_buttonAcceptCache</tabstop>
   <tabstop>m_buttonApplyCache</tabstop>
-  <tabstop>m_buttonCancelCache</tabstop>
   <tabstop>m_buttonExaminateDataBase</tabstop>
   <tabstop>m_buttonExaminateCacheImage</tabstop>
  </tabstops>
