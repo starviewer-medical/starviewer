@@ -10,6 +10,8 @@
 #include "tool.h"
 
 class vtkActor;
+class vtkSphereSource;
+class vtkPolyDataMapper;
 
 namespace udg {
 
@@ -47,6 +49,12 @@ private:
 
     ///Actor que dibuixa la llavor
     vtkActor *m_pointActor;
+    
+    ///esfera que representa en punt de la llavor
+    vtkSphereSource *m_point;
+    
+    ///mapejador del punt
+    vtkPolyDataMapper *m_pointMapper;
 
     /// Coordenades on s'ha posat la llavor
     double m_seedPosition[3];

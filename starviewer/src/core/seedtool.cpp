@@ -27,12 +27,26 @@ SeedTool::SeedTool( Q2DViewer *viewer, QObject *parent )
     m_2DViewer = viewer;
     m_seedSlice = -1;
     m_pointActor = vtkActor::New();
+    m_point = vtkSphereSource::New();
+    m_point->SetRadius( 2 );
+    m_pointActor -> GetProperty()->SetColor( 0.85, 0.13, 0.26 );
+    
+    m_pointMapper = vtkPolyDataMapper::New();
+    m_pointMapper->SetInput( m_point->GetOutput() );
+    m_pointActor->SetMapper( m_pointMapper );
+    
+    m_pointActor->VisibilityOff();
+    m_2DViewer->getRenderer()-> AddActor( m_pointActor );
+    
+    connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
 }
 
 
 SeedTool::~SeedTool()
 {
     m_pointActor-> Delete();
+    m_point->Delete();
+    m_pointMapper->Delete();
 }
 
 void SeedTool::createAction()
@@ -64,7 +78,7 @@ void SeedTool::setSeed()
 {
     m_state=SEEDING;
 
-    m_2DViewer->getCurrentCursorPosition(m_seedPosition);
+    m_2DViewer->getCurrentCursorPosition( m_seedPosition );
     
     //es calcula correctament el valor de profunditat per a corretgir el bug #245
     int slice = m_2DViewer->getCurrentSlice();
@@ -86,27 +100,11 @@ void SeedTool::setSeed()
     //
     
     m_2DViewer->setSeedPosition(m_seedPosition);
-
-    vtkSphereSource *point = vtkSphereSource::New();
-    point->SetRadius(2);
-    point-> SetCenter(m_seedPosition);
-
+    m_point-> SetCenter(m_seedPosition);
     m_seedSlice = m_2DViewer->getCurrentSlice();
-
-    m_pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
-    vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
-    pointMapper->SetInput( point->GetOutput() );
-    m_pointActor->SetMapper( pointMapper );
     m_pointActor->VisibilityOn();
 
-    m_2DViewer->getRenderer()-> AddActor( m_pointActor );
-    m_2DViewer->getInteractor()->Render();
-
-    connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
-
-    pointMapper -> Delete();
-    point       -> Delete();
-
+    m_2DViewer->refresh();
 }
 
 void SeedTool::doSeeding( )
@@ -116,23 +114,11 @@ void SeedTool::doSeeding( )
         QString aux;
         m_2DViewer->getCurrentCursorPosition(m_seedPosition);
 
-        vtkSphereSource *point = vtkSphereSource::New();
-        point->SetRadius(2);
-        point-> SetCenter(m_seedPosition);
-
+        m_point-> SetCenter(m_seedPosition);
         m_seedSlice = m_2DViewer->getCurrentSlice();
-
-        m_pointActor -> GetProperty()->SetColor(0.85, 0.13, 0.26);
-        vtkPolyDataMapper *pointMapper = vtkPolyDataMapper::New();
-        pointMapper->SetInput( point->GetOutput() );
-        m_pointActor->SetMapper( pointMapper );
         m_pointActor->VisibilityOn();
-
-        m_2DViewer->getRenderer()-> AddActor( m_pointActor );
-        m_2DViewer->getInteractor()->Render();
-
-        pointMapper -> Delete();
-        point       -> Delete();
+        
+        m_2DViewer->refresh();
     }
 }
 
@@ -146,12 +132,12 @@ void SeedTool::sliceChanged( int s )
     if(m_seedSlice==s)
     {
         m_pointActor->VisibilityOn();
-        m_2DViewer->getInteractor()->Render();
+        m_2DViewer->refresh();
     }
     else
     {
         m_pointActor->VisibilityOff();
-        m_2DViewer->getInteractor()->Render();
+        m_2DViewer->refresh();
     }
 }
 
