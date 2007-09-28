@@ -87,42 +87,42 @@ void DICOMImage::setPacsAETitle( QString AETitle )
     m_pacsAETitle = AETitle;
 }
 
-QString DICOMImage::getSOPInstanceUID()
+QString DICOMImage::getSOPInstanceUID() const
 {
     return m_SoPUID;
 }
 
-QString DICOMImage::getImagePath()
+QString DICOMImage::getImagePath() const
 {
     return m_imagePath;
 }
 
-QString DICOMImage::getSeriesUID()
+QString DICOMImage::getSeriesUID() const
 {
     return m_seriesUID;
 }
 
-QString DICOMImage::getImageName()
+QString DICOMImage::getImageName() const
 {
     return m_imageName;
 }
 
-QString DICOMImage::getStudyUID()
+QString DICOMImage::getStudyUID() const
 {
     return m_studyUID;
 }
 
-int DICOMImage::getImageNumber()
+int DICOMImage::getImageNumber() const
 {
     return m_imageNumber;
 }
 
-int DICOMImage::getImageSize()
+int DICOMImage::getImageSize() const
 {
     return m_imageSize;
 }
 
-QString DICOMImage::getPacsAETitle()
+QString DICOMImage::getPacsAETitle() const
 {
     return m_pacsAETitle;
 }

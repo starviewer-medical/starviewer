@@ -71,42 +71,42 @@ public:
     /** Retorna el UID de la Imatge
      * @return  UID de la imatge
      */
-    QString getSOPInstanceUID();
+    QString getSOPInstanceUID() const;
 
     /** Retorna el UID de la sèrie al qual pertany la imatge
      * @return UID de la sèrie a la que pertany la imatge
      */
-    QString getSeriesUID();
+    QString getSeriesUID() const;
 
     /** Retorna el path de la imatge a l'ordinador local
      * @return path de la imatge
      */
-    QString getImagePath ();
+    QString getImagePath() const;
 
     /** Retorna el UID de l'estudi al qual pertany la imatge
      * @return UID de la l'estudi a la que pertany la imatge
      */
-    QString getStudyUID();
+    QString getStudyUID() const;
 
     /** Retorna el nom de la imatge
      * @return el nom de la imatge
      */
-    QString getImageName();
+    QString getImageName() const;
 
     /** retorna el número d'imatge
      * @return Retorna el número que ocupa la imatge dins la sèrie
      */
-    int getImageNumber();
+    int getImageNumber() const;
 
     /** retorna el número de bytes que ocupa la imatge
      * @return retorna el número de bytes de la imatge
      */
-    int getImageSize();
+    int getImageSize() const;
 
     /** retorna el AETitle de la imatge
      * @return AETitle de la imatge
      */
-    QString getPacsAETitle();
+    QString getPacsAETitle() const;
 
 private:
     //variables que guarden la informació de la imatge
