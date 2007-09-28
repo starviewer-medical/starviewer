@@ -33,13 +33,16 @@ private:
     ///atribut que conté el text de la distància
     QString m_text;
     
+    ///ens diu el tipus de roi que encapsula
+    QString m_typeOfROI;
+    
     ///atribut corresponent a la posició del text de la distància
     double m_textPosition[3];
 
 public:
     
     ///constructor amb paràmetres
-    ROIToolData( PointsList points );
+    ROIToolData( PointsList points, QString typeOfROI );
     
     ~ROIToolData();
     
@@ -59,10 +62,18 @@ public:
     QString getROIText()
     { return( m_text ); }
     
+    ///ens retorna el tipus de roi
+    QString getTypeOfROI()
+    { return( m_typeOfROI ); }
+    
+    ///ens permet assignar el tipus de roi
+    void setTypeOfROI( QString type )
+    { m_typeOfROI = type; }
+    
 signals:
     
     ///s'emet quan canvia algun punt de la ROI
-    void pointsChanged();
+    void listOfPointsChanged();
     
     ///s'emet quan canvia el text de la ROI
     void roiTextChanged();
