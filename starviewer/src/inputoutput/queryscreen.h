@@ -11,7 +11,7 @@
 #include "multiplequerystudy.h"
 #include "qexecuteoperationthread.h"
 #include "qoperationstatescreen.h"
-#include "readdicomdir.h"
+#include "dicomdirreader.h"
 #include "dicommask.h"
 
 namespace udg {
@@ -324,7 +324,7 @@ struct retrieveParameters
     MultipleQueryStudy multipleQueryStudy;
 
     /// conté la informació del dicomdir obert en aquests instants
-    ReadDicomdir m_readDicomdir;
+    DICOMDIRReader m_readDicomdir;
 
     /** A la pestanya de dicomdir no s'ha de mostrar el QPacsList, per tant a la pestany de dicomdir
      * automaticament l'amaguem, i si tornem a la pestanya de la cache o del pacs, si anteriorment

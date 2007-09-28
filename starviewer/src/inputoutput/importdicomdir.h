@@ -7,7 +7,7 @@
 #ifndef UDGIMPORTDICOMDIR_H
 #define UDGIMPORTDICOMDIR_H
 
-#include "readdicomdir.h"
+#include "dicomdirreader.h"
 
 namespace udg {
 
@@ -23,7 +23,7 @@ public:
     Status import( QString dicomdirPath , QString studyUID , QString seriesUID , QString imageUID );
 
 private :
-    ReadDicomdir m_readDicomdir;
+    DICOMDIRReader m_readDicomdir;
 
     Status importStudy( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
