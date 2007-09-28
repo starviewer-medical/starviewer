@@ -38,7 +38,7 @@
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
 #include "qchooseoneobjectdialog.h"
-#include "importdicomdir.h"
+#include "dicomdirimporter.h"
 #include "patientfillerinput.h"
 #include "qcreatedicomdir.h"
 
@@ -1174,7 +1174,7 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
 
 void QueryScreen::importDicomdir()
 {
-    ImportDicomdir importDicom;
+    DICOMDIRImporter importDicom;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 

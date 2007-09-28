@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGIMPORTDICOMDIR_H
-#define UDGIMPORTDICOMDIR_H
+#ifndef UDGDICOMDIRIMPORTER_H
+#define UDGDICOMDIRIMPORTER_H
 
 #include "dicomdirreader.h"
 
@@ -17,7 +17,7 @@ class DICOMImage;
 /** Aquesta classe permet importar un dicomdir a la nostra base de ades
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ImportDicomdir{
+class DICOMDIRImporter{
 
 public:
     Status import( QString dicomdirPath , QString studyUID , QString seriesUID , QString imageUID );

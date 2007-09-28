@@ -59,7 +59,7 @@ HEADERS += const.h \
            imagelistsingleton.h \
            querypacs.h \
            dicommask.h \
-           importdicomdir.h \
+           dicomdirimporter.h \
            qconfigurationscreen.h \
            qpacslist.h \
            qstudytreewidget.h \
@@ -111,7 +111,7 @@ SOURCES += databaseconnection.cpp \
            imagelistsingleton.cpp \
            querypacs.cpp \
            dicommask.cpp \
-           importdicomdir.cpp \
+           dicomdirimporter.cpp \
            qconfigurationscreen.cpp \
            qpacslist.cpp \
            qstudytreewidget.cpp \
