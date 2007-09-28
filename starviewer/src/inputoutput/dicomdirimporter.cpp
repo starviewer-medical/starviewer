@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 #include "status.h"
-#include "importdicomdir.h"
+#include "dicomdirimporter.h"
 #include "imagelist.h"
 #include "starviewersettings.h"
 #include "cachestudydal.h"
@@ -28,8 +28,7 @@
 namespace udg
 {
 
-
-Status ImportDicomdir::import( QString dicomdirPath , QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     ImageList imageList;
@@ -44,7 +43,7 @@ Status ImportDicomdir::import( QString dicomdirPath , QString studyUID , QString
     return state;
 }
 
-Status ImportDicomdir::importStudy( QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -104,7 +103,7 @@ Status ImportDicomdir::importStudy( QString studyUID , QString seriesUID , QStri
     return state;
 }
 
-Status ImportDicomdir::importSeries( QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     ImageList imageList;
@@ -130,7 +129,7 @@ Status ImportDicomdir::importSeries( QString studyUID , QString seriesUID , QStr
     return state;
 }
 
-Status ImportDicomdir::importImage(DICOMImage image)
+Status DICOMDIRImporter::importImage(DICOMImage image)
 {
     QString imagePath, imageFile;
     StarviewerSettings starviewerSettings;
