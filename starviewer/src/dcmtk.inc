@@ -21,9 +21,13 @@ LIBS += -L$${DCMTKLIBDIR} \
     -ldcmimage \
     -ldcmimgle \
     -lofstd \
-    -ldcmpstat \
     -ldcmsr \
+    -lssl \
+    -ldcmqrdb \
+    -ldcmtls \
+    -ldcmdsig \
+    -ldcmpstat \
     -ldcmjpeg \
     -lijg8 \ 
     -lijg12 \ 
-    -lijg16
+    -lijg16 
