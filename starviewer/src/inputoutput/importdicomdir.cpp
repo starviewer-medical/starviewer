@@ -39,12 +39,12 @@ Status ImportDicomdir::import( QString dicomdirPath , QString studyUID , QString
 
     if ( !state.good() ) return state;
 
-    importarEstudi( studyUID , seriesUID , sopInstanceUID );
+    importStudy( studyUID , seriesUID , sopInstanceUID );
 
     return state;
 }
 
-Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status ImportDicomdir::importStudy( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -58,11 +58,9 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     DICOMSeries serie;
     ScaleStudy scaleDicomStudy;
 
-    studyPath.insert( 0 , starviewerSettings.getCacheImagePath() );
-    studyPath.append( studyUID );
-    studyPath.append( "/" );
-
-    createPath( studyPath );
+    studyPath = starviewerSettings.getCacheImagePath() + studyUID + "/";
+    QDir directoryCreator;
+    directoryCreator.mkdir( studyPath );
 
     mask.setStudyUID( studyUID );
 
@@ -94,7 +92,7 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     {
         serie = seriesList.getSeries();
         cacheSeriesDAL.insertSeries( &serie );
-        importarSerie( studyUID , serie.getSeriesUID() , sopInstanceUID );
+        importSeries( studyUID , serie.getSeriesUID() , sopInstanceUID );
 
         seriesList.nextSeries();
     }
@@ -106,20 +104,16 @@ Status ImportDicomdir::importarEstudi( QString studyUID , QString seriesUID , QS
     return state;
 }
 
-Status ImportDicomdir::importarSerie( QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status ImportDicomdir::importSeries( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
     ImageList imageList;
-
     QString seriesPath;
     StarviewerSettings starviewerSettings;
 
-    seriesPath.insert( 0 , starviewerSettings.getCacheImagePath() );
-    seriesPath.append( "/" );
-    seriesPath.append( studyUID );
-    seriesPath.append( "/" );
-    seriesPath.append( seriesUID );
-    createPath( seriesPath );
+    seriesPath = starviewerSettings.getCacheImagePath() + "/" + studyUID + "/" + seriesUID;
+    QDir directoryCreator;
+    directoryCreator.mkdir( seriesPath );
 
     m_readDicomdir.readImages( seriesUID , sopInstanceUID , imageList );
 
@@ -129,14 +123,14 @@ Status ImportDicomdir::importarSerie( QString studyUID , QString seriesUID , QSt
 
     while ( !imageList.end() )
     {
-        importarImatge( imageList.getImage() );
+        importImage( imageList.getImage() );
         imageList.nextImage();
     }
 
     return state;
 }
 
-Status ImportDicomdir::importarImatge( DICOMImage image )
+Status ImportDicomdir::importImage(DICOMImage image)
 {
     QString imagePath, imageFile;
     StarviewerSettings starviewerSettings;
@@ -166,13 +160,6 @@ Status ImportDicomdir::importarImatge( DICOMImage image )
     }
 
     return state;
-}
-
-void ImportDicomdir::createPath( QString path )
-{
-    QDir studyDir;
-
-    studyDir.mkdir( path );
 }
 
 }

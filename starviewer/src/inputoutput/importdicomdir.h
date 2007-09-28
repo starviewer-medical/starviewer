@@ -18,22 +18,18 @@ class DICOMImage;
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ImportDicomdir{
+
 public:
-
-
     Status import( QString dicomdirPath , QString studyUID , QString seriesUID , QString imageUID );
 
 private :
     ReadDicomdir m_readDicomdir;
 
-    Status importarEstudi( QString studyUID , QString seriesUID , QString sopInstanceUID );
+    Status importStudy( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
-    Status importarSerie( QString studyUID , QString seriesUID , QString sopInstanceUID );
+    Status importSeries( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
-    Status importarImatge( DICOMImage image );
-
-    void createPath( QString path );
-
+    Status importImage(DICOMImage image);
 };
 
 }
