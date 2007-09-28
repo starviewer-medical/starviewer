@@ -139,27 +139,33 @@ Status ImportDicomdir::importarSerie( QString studyUID , QString seriesUID , QSt
 Status ImportDicomdir::importarImatge( DICOMImage image )
 {
     QString imagePath, imageFile;
-    QFile copyFile;
     StarviewerSettings starviewerSettings;
     CacheImageDAL cacheImage;
     Status state;
 
-    imagePath.insert( 0 , starviewerSettings.getCacheImagePath() );
-    imagePath.append( "/" );
-    imagePath.append( image.getStudyUID() );
-    imagePath.append( "/" );
-    imagePath.append( image.getSeriesUID() );
-    imagePath.append( "/" );
-    imagePath.append( image.getSOPInstanceUID() );
+    imagePath = starviewerSettings.getCacheImagePath() + "/" + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
-    if ( copyFile.copy( image.getImagePath() , imagePath ) )
+    if( QFile::copy( image.getImagePath() , imagePath ) )
     {
         image.setImageName ( image.getSOPInstanceUID() );
-        state = cacheImage.insertImage( &image );
+        QFileInfo imageInfo( imagePath );
+        if( imageInfo.exists() )
+        {
+            image.setImageSize( imageInfo.size() );
+            state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
+        }
+        else
+        {
+            ERROR_LOG("La imatge [" + imagePath + "] que s'ha volgut copiar de [" + image.getImagePath()  + "] no existeix" );
+        }
+    }
+    else
+    {
+        // TODO no s'hauria de forçar la sobre-escriptura????
+        DEBUG_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, ja que ja existeix amb aquest mateix nom");
     }
 
     return state;
-
 }
 
 void ImportDicomdir::createPath( QString path )
