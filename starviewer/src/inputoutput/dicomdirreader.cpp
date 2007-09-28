@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "readdicomdir.h"
+#include "dicomdirreader.h"
 
 #include "ofstring.h"
 #include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
@@ -24,16 +24,16 @@
 
 namespace udg {
 
-ReadDicomdir::ReadDicomdir()
+DICOMDIRReader::DICOMDIRReader()
 {
     m_dicomdir = NULL;
 }
 
-ReadDicomdir::~ReadDicomdir()
+DICOMDIRReader::~DICOMDIRReader()
 {
 }
 
-Status ReadDicomdir::open( QString dicomdirPath )
+Status DICOMDIRReader::open( QString dicomdirPath )
 {
     Status state;
     QString dicomdirFilePath;
@@ -52,7 +52,7 @@ Status ReadDicomdir::open( QString dicomdirPath )
 }
 
 //El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que conté n series, i que conté n imatges, per llegir la informació hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent així fins arribar al nivell de baix de tot, les imatges,
-Status ReadDicomdir::readStudies( StudyList &studyList , DicomMask studyMask )
+Status DICOMDIRReader::readStudies( StudyList &studyList , DicomMask studyMask )
 {
     Status state;
 
@@ -118,7 +118,7 @@ Status ReadDicomdir::readStudies( StudyList &studyList , DicomMask studyMask )
 }
 
 //Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada found, podrem accedir a la seva informacio de la sèrie
-Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesList &seriesList )
+Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , SeriesList &seriesList )
 {
     Status state;
 
@@ -200,7 +200,7 @@ Status ReadDicomdir::readSeries( QString studyUID , QString seriesUID , SeriesLi
     return state.setStatus( m_dicomdir->error() );
 }
 
-Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , ImageList &imageList )
+Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , ImageList &imageList )
 {
     Status state;
 
@@ -280,12 +280,12 @@ Status ReadDicomdir::readImages( QString seriesUID , QString sopInstanceUID , Im
     return state.setStatus( m_dicomdir->error() );
 }
 
-QString ReadDicomdir::getDicomdirPath()
+QString DICOMDIRReader::getDicomdirPath()
 {
     return m_dicomdirAbsolutePath;
 }
 
-QStringList ReadDicomdir::getFiles( QString studyUID )
+QStringList DICOMDIRReader::getFiles( QString studyUID )
 {
     QStringList files;
     Status state;
@@ -350,7 +350,7 @@ QStringList ReadDicomdir::getFiles( QString studyUID )
 }
 
 //Per fer el match seguirem els criteris del PACS
-bool ReadDicomdir::matchStudyMask( DICOMStudy study , DicomMask studyMask )
+bool DICOMDIRReader::matchStudyMask( DICOMStudy study , DicomMask studyMask )
 {
     if ( !matchStudyMaskStudyId( studyMask.getStudyId() , study.getStudyId() ) ) return false;
 
@@ -367,7 +367,7 @@ bool ReadDicomdir::matchStudyMask( DICOMStudy study , DicomMask studyMask )
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskStudyId( QString studyMaskStudyId , QString studyStudyId )
+bool DICOMDIRReader::matchStudyMaskStudyId( QString studyMaskStudyId , QString studyStudyId )
 {
     if ( studyMaskStudyId.length() > 0 )
     { //si hi ha màscara d'estudi Id
@@ -388,7 +388,7 @@ bool ReadDicomdir::matchStudyMaskStudyId( QString studyMaskStudyId , QString stu
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString studyStudyUID )
+bool DICOMDIRReader::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString studyStudyUID )
 {
     if ( studyMaskStudyUID.length() > 0 )
     { //si hi ha màscara d'estudi UID
@@ -406,7 +406,7 @@ bool ReadDicomdir::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString s
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId )
+bool DICOMDIRReader::matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId )
 {
     if ( studyMaskPatientId.length() > 0 )
     { //si hi ha màscara Patient Id
@@ -428,7 +428,7 @@ bool ReadDicomdir::matchStudyMaskPatientId( QString studyMaskPatientId , QString
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskDate( QString studyMaskDate , QString studyDate )
+bool DICOMDIRReader::matchStudyMaskDate( QString studyMaskDate , QString studyDate )
 {
     if ( studyMaskDate.length() > 0 )
     { //Si hi ha màscara de data
@@ -481,7 +481,7 @@ bool ReadDicomdir::matchStudyMaskDate( QString studyMaskDate , QString studyDate
     return true;
 }
 
-bool ReadDicomdir::matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName )
+bool DICOMDIRReader::matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName )
 {
     QString lastPatientName , firstPatientName;
 
@@ -505,7 +505,7 @@ bool ReadDicomdir::matchStudyMaskPatientName( QString studyMaskPatientName , QSt
 
 }
 
-bool ReadDicomdir::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber )
+bool DICOMDIRReader::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber )
 {
     if ( studyMaskAccessionNumber.length() > 0 )
     { //si hi ha màscara AccessioNumber
@@ -523,7 +523,7 @@ bool ReadDicomdir::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumb
     return true;
 }
 
-QString ReadDicomdir::backSlashToSlash( QString original )
+QString DICOMDIRReader::backSlashToSlash( QString original )
 {
     QString ret;
 
