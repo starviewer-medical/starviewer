@@ -132,13 +132,12 @@ void SeedTool::sliceChanged( int s )
     if(m_seedSlice==s)
     {
         m_pointActor->VisibilityOn();
-        m_2DViewer->refresh();
     }
     else
     {
         m_pointActor->VisibilityOff();
-        m_2DViewer->refresh();
     }
+    m_2DViewer->refresh();
 }
 
 }

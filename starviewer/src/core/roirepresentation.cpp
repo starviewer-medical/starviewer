@@ -20,6 +20,7 @@ ROIRepresentation::ROIRepresentation( ROIToolData *dtd ) : Representation()
     
     //creem les connexions entre aquest objecte i els seu atribut ROIToolData
     connect( m_roiToolData, SIGNAL( roiTextChanged() ), this , SLOT( updateText() ) );
+    connect( m_roiToolData, SIGNAL( listOfPointsChanged() ), this , SLOT( updatePolygonPoints() ) );
 }
     
 ROIRepresentation::~ROIRepresentation()
@@ -58,6 +59,11 @@ ROIToolData* ROIRepresentation::getROIToolData()
 {
     return( m_roiToolData );
 } 
+
+void ROIRepresentation::updatePolygonPoints()
+{
+    m_polygon->setPoints( m_roiToolData->getPoints() );
+}
 
 void ROIRepresentation::updateText()
 {

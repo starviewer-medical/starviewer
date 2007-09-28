@@ -9,9 +9,10 @@
 
 namespace udg {
 
-ROIToolData::ROIToolData( ROIToolData::PointsList points )
+ROIToolData::ROIToolData( ROIToolData::PointsList points, QString typeOfROI )
 {
     setPoints( points );
+    m_typeOfROI = typeOfROI;
 }
 
 ROIToolData::~ROIToolData()
@@ -24,7 +25,7 @@ void ROIToolData::setPoints( ROIToolData::PointsList points )
         m_points << points[i];
     }
     
-    emit pointsChanged();
+    emit listOfPointsChanged();
 }
     
 };  // end namespace udg

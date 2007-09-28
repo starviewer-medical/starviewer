@@ -78,6 +78,9 @@ private slots:
     
     ///actualitza el text de la roi. L'actualització del text de la roi no es realitza cada cop que canvia un punt, ja que és innecessari perquè podem estar movent un punt i mentre s'està editant no volem que es vegi el text. El text es mostra en el moment en que la roi ha estat fixada.
     void updateText();
+    
+    ///actualitza els punts del polígon
+    void updatePolygonPoints();
 };
 
 };  //  end  namespace udg
