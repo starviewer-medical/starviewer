@@ -120,12 +120,12 @@ Status CreateDicomdir::create( QString dicomdirPath )
         OFListIterator( OFString ) iter = fileNames.begin();
         OFListIterator( OFString ) last = fileNames.end();
 
+        
         //iterem sobre la llista de fitxer i els afegim al dicomdir
         while ( ( iter != last ) && result.good() )
         {
             //afegim els fitxers al dicomdir
-            result = m_ddir.checkDicomFile( (*iter).c_str() , qPrintable(dicomdirPath) );
-            result = m_ddir.addDicomFile( (*iter).c_str() , qPrintable(dicomdirPath) );
+            result = m_ddir.addDicomFile( qPrintable(QString((*iter).c_str()).toUpper()) , qPrintable(dicomdirPath) );
             if ( result.good() )
                 iter++;
         }
