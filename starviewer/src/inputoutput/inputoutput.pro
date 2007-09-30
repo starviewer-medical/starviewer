@@ -130,7 +130,8 @@ OBJECTS_DIR = ../../tmp/obj
 QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
 QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
 CONFIG += warn_on \
-staticlib
+          staticlib \
+          qt
 TEMPLATE = lib
 include(../vtk.inc)
 include(../itk.inc)
