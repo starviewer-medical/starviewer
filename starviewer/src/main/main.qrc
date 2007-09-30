@@ -82,5 +82,6 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
+        <file>images/small-warning.png</file>
     </qresource>
 </RCC>
