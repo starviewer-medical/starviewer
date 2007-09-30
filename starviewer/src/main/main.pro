@@ -37,11 +37,13 @@ LIBS += -llog4cxx \
         ../interface/libinterface.a \
         ../inputoutput/libinputoutput.a \
         ../core/libcore.a
-INCLUDEPATH += ../main \
-               ../interface \
+INCLUDEPATH += ../interface \
                ../core \
                ../inputoutput
-DEPENDPATH += images
+DEPENDPATH += images \
+              ../interface \
+              ../core \
+              ../inputoutput
 
 MOC_DIR = ../../tmp/moc
 UI_DIR = ../../tmp/ui
