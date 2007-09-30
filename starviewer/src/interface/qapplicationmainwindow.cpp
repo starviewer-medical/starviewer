@@ -28,12 +28,10 @@
 #include "extensionfactory.h"
 #include "extensionmediatorfactory.h"
 
-#include <QDebug>
-
 namespace udg{
 
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
-    : QMainWindow( parent ), m_patient(0)
+    : QMainWindow( parent ), m_patient(0), m_isBetaVersion(false)
 {
     this->setAttribute( Qt::WA_DeleteOnClose );
     this->setObjectName( name );
@@ -56,6 +54,11 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     // icona de l'aplicació
     this->setWindowIcon( QPixmap(":/images/starviewer.png") );
     this->setWindowTitle( tr("Starviewer") );
+
+#ifdef BETA_VERSION
+    markAsBetaVersion();
+    showBetaVersionDialog();
+#endif
 }
 
 QApplicationMainWindow::~QApplicationMainWindow()
@@ -386,6 +389,15 @@ void QApplicationMainWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
+{
+    if (m_isBetaVersion)
+    {
+        updateBetaVersionTextPosition();
+    }
+    QMainWindow::resizeEvent(event);
+}
+
 void QApplicationMainWindow::about()
 {
     QMessageBox::about(this, tr("About Starviewer"),
@@ -423,6 +435,35 @@ void QApplicationMainWindow::enableExtensions()
     {
         action->setEnabled( true );
     }
+}
+
+void QApplicationMainWindow::markAsBetaVersion()
+{
+    m_isBetaVersion = true;
+    m_betaVersionMenuText = new QLabel(menuBar());
+    m_betaVersionMenuText->setText("<a href='beta'><img src=':/images/small-warning.png'></a>&nbsp;<a href='beta'>Beta Version</a>");
+    m_betaVersionMenuText->setAlignment(Qt::AlignVCenter);
+    connect(m_betaVersionMenuText, SIGNAL(linkActivated(const QString &)), this, SLOT(showBetaVersionDialog()));
+    updateBetaVersionTextPosition();
+}
+
+void QApplicationMainWindow::updateBetaVersionTextPosition()
+{
+    m_betaVersionMenuText->move(this->size().width() - (m_betaVersionMenuText->sizeHint().width() + 10), 5);
+}
+
+void QApplicationMainWindow::showBetaVersionDialog()
+{
+    QMessageBox::warning(this, tr("Beta version"),
+                         tr("<h2>Starviewer</h2>"
+                            "<p align='justify'>This version of Starviewer is a preview release of our next Starviewer version and it is"
+                            " being made available for testing purposes only.</p>"
+                            "<p align='justify'>This version is intended for radiologist and our testing members that are helping us to "
+                            "improve this software. Current users of this version should not expect all of the extensions to work "
+                            "properly.</p>"
+                            "<p align='justify'>If you  want to help us to improve our software, please, report any bug you found or "
+                            "any other feature request you have to us.</p>"
+                            "<h3>We really appreciate that you give us your feedback!</h3>"));
 }
 
 void QApplicationMainWindow::readSettings()

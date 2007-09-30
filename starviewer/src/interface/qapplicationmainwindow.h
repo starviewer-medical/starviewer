@@ -16,6 +16,7 @@ class QAction;
 class QMenu;
 class QCloseEvent;
 class QSignalMapper;
+class QLabel;
 
 namespace udg{
 // Forward declarations
@@ -56,7 +57,9 @@ public:
 
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
-    void closeEvent(QCloseEvent *event);
+    virtual void closeEvent(QCloseEvent *event);
+
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
     ///Crea i inicialitza les accions de l'aplicació
@@ -68,6 +71,7 @@ private:
     /// Crea el menú per escollir l'idioma de l'aplicació
     void createLanguageMenu();
 
+    /// Crea una acció per canviar d'idioma passant l'idioma (ex. Catalan) i el locale al que s'ha de canviar (ex. ca_ES)
     QAction *createLanguageAction(const QString &language, const QString &locale);
 
     /// Llegeix la configuració inicial amb la que engega el programa
@@ -82,7 +86,16 @@ private:
      */
     void enableExtensions();
 
+    /// Marca aquesta aplicació com a aplicació beta, mostrant informació a l'usuari.
+    void markAsBetaVersion();
+
+    /// Actualitza la informació que es mostra a l'usuari en el menú com a versió beta.
+    void updateBetaVersionTextPosition();
+
 private slots:
+    /// Mostra el diàleg on s'explica que és una versió beta.
+    void showBetaVersionDialog();
+
     /**
      * Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
      * @param context Dades de pacient que volem que contingui la nova finestra
@@ -132,6 +145,8 @@ private:
     QAction *m_logViewerAction;
     QAction *m_configurationAction;
 
+    QLabel *m_betaVersionMenuText;
+
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
     QList<QAction*> m_actionsList;
@@ -141,6 +156,8 @@ private:
 
     /// El pacient que li correspon a aquesta instància
     Patient *m_patient;
+
+    bool m_isBetaVersion;
 };
 
 }; // fi namespace udg
