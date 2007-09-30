@@ -32,7 +32,7 @@ class ConvertToDicomdir : public QObject
 Q_OBJECT
 public:
 
-    ConvertToDicomdir( );
+    ConvertToDicomdir(QObject *parent = 0);
 
     /** Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
      * @param studyUID UID de l'estudi a convertir a dicomdir

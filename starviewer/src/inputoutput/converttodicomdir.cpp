@@ -34,7 +34,7 @@
 
 namespace udg {
 
-ConvertToDicomdir::ConvertToDicomdir()
+ConvertToDicomdir::ConvertToDicomdir(QObject *parent) : QObject(parent)
 {
     QDir dicomDir;
 
