@@ -78,32 +78,22 @@ N&apos;hauries de triar només un.</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1362"/>
+        <location filename="qconfigurationscreenbase.ui" line="1294"/>
         <source>Delete all the studies of the cache</source>
         <translation>Esborra tots els estudis de la cache</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1128"/>
+        <location filename="qconfigurationscreenbase.ui" line="1060"/>
         <source>999; </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1427"/>
-        <source>Accept</source>
-        <translation>Acceptar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1459"/>
+        <location filename="qconfigurationscreenbase.ui" line="1365"/>
         <source>Apply Changes</source>
         <translation>Aplicar canvis</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1488"/>
-        <source>Cancel</source>
-        <translation>Cancel·lar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1075"/>
+        <location filename="qconfigurationscreenbase.ui" line="1007"/>
         <source>99; </source>
         <translation></translation>
     </message>
@@ -138,47 +128,37 @@ N&apos;hauries de triar només un.</translation>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1339"/>
+        <location filename="qconfigurationscreenbase.ui" line="1271"/>
         <source>Compact Database</source>
         <translation>Compactar base de dades</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1220"/>
+        <location filename="qconfigurationscreenbase.ui" line="1152"/>
         <source>Examine disk to find the directory to save the retrieved images</source>
         <translation>Examina el disc per trobar el directori on guardar les imatges descarregades</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1062"/>
+        <location filename="qconfigurationscreenbase.ui" line="994"/>
         <source>Delete studies that has not been viewed in :</source>
         <translation>Esborrar els estudis que no hagin estat visualitzats en :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1085"/>
+        <location filename="qconfigurationscreenbase.ui" line="1017"/>
         <source>days</source>
         <translation>dies</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1181"/>
+        <location filename="qconfigurationscreenbase.ui" line="1113"/>
         <source>Examine disk  to find the database</source>
         <translation>Examinar el dis per trobar la base de dades</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1424"/>
-        <source>Save changes and close the configuration window </source>
-        <translation>Guarda els canvis i tanca la finestra de configuració</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1453"/>
+        <location filename="qconfigurationscreenbase.ui" line="1359"/>
         <source>Apply the canges</source>
         <translation>Aplicar els canvis</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1482"/>
-        <source>Cancel changes and close the windows</source>
-        <translation>Cancel·la els canvis i tanca la finestra</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="929"/>
+        <location filename="qconfigurationscreenbase.ui" line="903"/>
         <source>Apply changes</source>
         <translation>Aplica els canvis</translation>
     </message>
@@ -188,7 +168,7 @@ N&apos;hauries de triar només un.</translation>
         <translation>Esborra el Pacs seleccionat</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1329"/>
+        <location filename="qconfigurationscreenbase.ui" line="1261"/>
         <source>Create database</source>
         <translation>Crear la base de dades</translation>
     </message>
@@ -223,7 +203,7 @@ N&apos;hauries de triar només un.</translation>
         <translation>Descripció :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1138"/>
+        <location filename="qconfigurationscreenbase.ui" line="1070"/>
         <source>Gb</source>
         <translation>Gb</translation>
     </message>
@@ -233,7 +213,7 @@ N&apos;hauries de triar només un.</translation>
         <translation>Configuració Local</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1249"/>
+        <location filename="qconfigurationscreenbase.ui" line="1181"/>
         <source>Database path :</source>
         <translation>Ruta Base de Dades :</translation>
     </message>
@@ -318,37 +298,37 @@ N&apos;hauries de triar només un.</translation>
         <translation>Correu electrònic:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="987"/>
+        <location filename="qconfigurationscreenbase.ui" line="919"/>
         <source>DICOM Cache</source>
         <translation>Cache DICOM</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="999"/>
+        <location filename="qconfigurationscreenbase.ui" line="931"/>
         <source>Local DICOM Cache configuration:</source>
         <translation>Configuració de la Cache local de DICOM:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1115"/>
+        <location filename="qconfigurationscreenbase.ui" line="1047"/>
         <source>Maximum Cache size :</source>
         <translation>Mida màxima de la Cache:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1145"/>
+        <location filename="qconfigurationscreenbase.ui" line="1077"/>
         <source>&lt;i&gt;(Used: %1Gb, %2%;  Free: %3Gb, %4%)&lt;/i&gt;</source>
         <translation>&lt;i&gt;(Usat: %1Gb, %2%;  Lliure: %3Gb, %4%)&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1202"/>
+        <location filename="qconfigurationscreenbase.ui" line="1134"/>
         <source>Cache images path :</source>
         <translation>Ruta de la Cache d&apos;imatges:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1282"/>
+        <location filename="qconfigurationscreenbase.ui" line="1214"/>
         <source>Local DICOM Cache operations:</source>
         <translation>Operacions de la Cache local per DICOM:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1365"/>
+        <location filename="qconfigurationscreenbase.ui" line="1297"/>
         <source>Delete all Studies</source>
         <translation>Esborrar tots els estudis</translation>
     </message>
@@ -405,155 +385,156 @@ N&apos;hauries de triar només un.</translation>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="940"/>
+        <location filename="qconfigurationscreen.cpp" line="908"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="353"/>
+        <location filename="qconfigurationscreen.cpp" line="335"/>
         <source>Select a Pacs for update</source>
         <translation>Seleccioneu un Pacs per actualitzar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="400"/>
+        <location filename="qconfigurationscreen.cpp" line="382"/>
         <source>Select a Pacs for delete</source>
         <translation>Seleccioneu un Pacs per esborrar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="537"/>
+        <location filename="qconfigurationscreen.cpp" line="519"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation>El camp AETitle no pot estar buit</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="545"/>
+        <location filename="qconfigurationscreen.cpp" line="527"/>
         <source>Incorrect address server</source>
         <translation>Adreça del servidor incorrecte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="553"/>
+        <location filename="qconfigurationscreen.cpp" line="535"/>
         <source>PACS Port has to be between 0 and 65535</source>
         <translation>El port del PACS ha d&apos;estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="561"/>
+        <location filename="qconfigurationscreen.cpp" line="543"/>
         <source>Institution field can&apos;t be empty</source>
         <translation>El cam institució no pot estar buit</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="578"/>
+        <location filename="qconfigurationscreen.cpp" line="560"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation>El port local ha d&apos;estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="587"/>
+        <location filename="qconfigurationscreen.cpp" line="569"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation>El nombre màxim de connexions simultànies ha de ser entre 1 i 15</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="596"/>
+        <location filename="qconfigurationscreen.cpp" line="578"/>
         <source>Invalid database path</source>
         <translation>Ruta a la base de dades incorrecte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="818"/>
+        <location filename="qconfigurationscreen.cpp" line="786"/>
         <source>Are you sure you want to delete all Studies of the cache ?</source>
         <translation>Esteu segurs que voleu esborrar tots els estudis de la cache ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="293"/>
+        <location filename="qconfigurationscreen.cpp" line="275"/>
         <source>AETitle </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="293"/>
+        <location filename="qconfigurationscreen.cpp" line="275"/>
         <source> exists</source>
         <translation>existeix</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="606"/>
+        <location filename="qconfigurationscreen.cpp" line="588"/>
         <source>Create directory ?</source>
         <translation>Crear el directori ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="607"/>
+        <location filename="qconfigurationscreen.cpp" line="589"/>
         <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directori d&apos;imatges de la cache no existeix. El vols crear ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="819"/>
+        <location filename="qconfigurationscreen.cpp" line="787"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="819"/>
+        <location filename="qconfigurationscreen.cpp" line="787"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="756"/>
+        <location filename="qconfigurationscreen.cpp" line="724"/>
         <source>Cache Directory</source>
         <translation>Directori cache</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="914"/>
+        <location filename="qconfigurationscreen.cpp" line="882"/>
         <source>The application has to be restart to apply the changes</source>
         <translation>Heu de reiniciar l&apos;aplicació per a que els canvis tinguin efecte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="632"/>
+        <location filename="qconfigurationscreen.cpp" line="614"/>
         <source>Pool space can&apos;t be less than used space</source>
         <translation>L&apos;espai de la pool no pot ser menor a l&apos;espai utilitzat actualment</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="512"/>
+        <location filename="qconfigurationscreen.cpp" line="494"/>
         <source> Pacs </source>
         <translation>Pacs</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="483"/>
+        <location filename="qconfigurationscreen.cpp" line="465"/>
         <source> doesn&apos;t responds </source>
         <translation>no respon</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="516"/>
+        <location filename="qconfigurationscreen.cpp" line="498"/>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
         <translation>Assegureu-vos que la IP i el AETitle del PACS és correcte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="500"/>
+        <location filename="qconfigurationscreen.cpp" line="482"/>
         <source> Test of Pacs </source>
         <translation>El test del Pacs </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="502"/>
+        <location filename="qconfigurationscreen.cpp" line="484"/>
         <source> is correct </source>
         <translation> és correcte </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="514"/>
+        <location filename="qconfigurationscreen.cpp" line="496"/>
         <source> doesn&apos;t responds correctly</source>
         <translation>no respon correctament </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="613"/>
+        <location filename="qconfigurationscreen.cpp" line="595"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation>No es pot crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="903"/>
+        <location filename="qconfigurationscreen.cpp" line="871"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation>L&apos;extensió de la base de dades ha de ser &apos;.sdb&apos;</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="909"/>
+        <location filename="qconfigurationscreen.cpp" line="877"/>
         <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
         <translation>No es pot crear la base de dades perquè una base de dades amb el mateix nom ja existeix en el directori</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="940"/>
+        <location filename="qconfigurationscreen.cpp" line="908"/>
         <source>
 Error Number: %1</source>
-        <translation></translation>
+        <translation>
+Error número: %1</translation>
     </message>
 </context>
 <context>
@@ -671,12 +652,12 @@ Error Number: %1</source>
     <message>
         <location filename="qcreatedicomdir.cpp" line="275"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
-        <translation></translation>
+        <translation>El directori conté un DICOMDIR, vols sobreescriure i esborrar tots els fitxers del directori?</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="293"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
-        <translation></translation>
+        <translation>El directori DICOMDIR no existeix. Desitges crear-lo?</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="321"/>
@@ -819,7 +800,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="qcreatedicomdirbase.ui" line="293"/>
         <source>The size of the DICOMDIR is XX Mb</source>
-        <translation type="unfinished"></translation>
+        <translation>La mida del DICOMDIR és XX Mb</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="345"/>
@@ -827,7 +808,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600; font-style:normal; text-decoration:none;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Location:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:600; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;Localització:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="420"/>
@@ -842,7 +823,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="qcreatedicomdirbase.ui" line="588"/>
         <source>...</source>
-        <translation></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="490"/>
@@ -873,17 +854,17 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QExecuteOperationThread</name>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="138"/>
+        <location filename="qexecuteoperationthread.cpp" line="141"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="133"/>
+        <location filename="qexecuteoperationthread.cpp" line="136"/>
         <source>Not enough space to retrieve studies. Please free space</source>
         <translation>No hi ha suficient espai per descarregar nous estudis. Si us plau allibereu espai</translation>
     </message>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="138"/>
+        <location filename="qexecuteoperationthread.cpp" line="141"/>
         <source>Error freeing space. The study couldn&apos;t be retrieved</source>
         <translation>Error alliberant espai. L&apos;estudi no s&apos;ha pogut descarregar</translation>
     </message>
@@ -891,7 +872,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1312"/>
+        <location filename="queryscreen.cpp" line="1313"/>
         <source>Open</source>
         <translation>Obrir</translation>
     </message>
@@ -1265,7 +1246,7 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1625"/>
+        <location filename="queryscreen.cpp" line="1626"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
@@ -1307,17 +1288,17 @@ Codi d&apos;error: %1</translation>
         <translation>Error intern :</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1195"/>
+        <location filename="queryscreen.cpp" line="1196"/>
         <source>Please select a study to delete</source>
         <translation>Si us plau selecciona un estudi a esborrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1257"/>
+        <location filename="queryscreen.cpp" line="1258"/>
         <source>Show PACS Nodes</source>
         <translation>Amagar llista de Nodes PACS</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1144"/>
+        <location filename="queryscreen.cpp" line="1145"/>
         <source>Select a study to view </source>
         <translation>Seleccioneu un estudi per visualitzar</translation>
     </message>
@@ -1337,7 +1318,7 @@ Codi d&apos;error: %1</translation>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1411"/>
+        <location filename="queryscreen.cpp" line="1412"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Noes pot connectar al PACS %1 de %2
@@ -1354,22 +1335,22 @@ Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</transl
         <translation>Error consultant el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1312"/>
+        <location filename="queryscreen.cpp" line="1313"/>
         <source>Dicomdir</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1327"/>
+        <location filename="queryscreen.cpp" line="1328"/>
         <source>Error openning dicomdir</source>
         <translation>Error obrint el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1366"/>
+        <location filename="queryscreen.cpp" line="1367"/>
         <source>You have to select a Pacs to store the study</source>
         <translation>Ha de seleccionar un Pacs on enviar l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1395"/>
+        <location filename="queryscreen.cpp" line="1396"/>
         <source>The study can only be stored at one pacs</source>
         <translation>L&apos;estudi només pot ser enviar a un Pacs</translation>
     </message>
@@ -1398,18 +1379,18 @@ Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</transl
         <translation>Error! No es poden consultar les sèries al PACS anomenat %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1253"/>
+        <location filename="queryscreen.cpp" line="1254"/>
         <source>Hide PACS Nodes</source>
         <translation>Amagar Llista de Nodes PACS</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1426"/>
+        <location filename="queryscreen.cpp" line="1427"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Noes pot connectar al PACS %1 de %2Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1625"/>
+        <location filename="queryscreen.cpp" line="1626"/>
         <source>
 Error Number: %1</source>
         <translation>
@@ -1424,32 +1405,32 @@ Codi d&apos;error: %1</translation>
         <translation>Cercar estudi</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1227"/>
+        <location filename="queryscreenbase.ui" line="1302"/>
         <source>Search</source>
         <translation>Cercar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1221"/>
+        <location filename="queryscreenbase.ui" line="1296"/>
         <source>search</source>
         <translation>cercar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="268"/>
+        <location filename="queryscreenbase.ui" line="220"/>
         <source>Today</source>
         <translation>Avui</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="275"/>
+        <location filename="queryscreenbase.ui" line="227"/>
         <source>Yesterday</source>
         <translation>Ahir</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1387"/>
+        <location filename="queryscreenbase.ui" line="1448"/>
         <source>Retrieve</source>
         <translation>Descarregar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1417"/>
+        <location filename="queryscreenbase.ui" line="1478"/>
         <source>View</source>
         <translation>Visualitzar</translation>
     </message>
@@ -1459,277 +1440,277 @@ Codi d&apos;error: %1</translation>
         <translation>Pacient</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="178"/>
+        <location filename="queryscreenbase.ui" line="174"/>
         <source>Study</source>
         <translation>Estudi</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="353"/>
+        <location filename="queryscreenbase.ui" line="305"/>
         <source>To</source>
         <translation>Fins</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="317"/>
+        <location filename="queryscreenbase.ui" line="269"/>
         <source>From</source>
         <translation>Des de</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="615"/>
+        <location filename="queryscreenbase.ui" line="626"/>
         <source>MG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="471"/>
+        <location filename="queryscreenbase.ui" line="482"/>
         <source>SC</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="594"/>
+        <location filename="queryscreenbase.ui" line="605"/>
         <source>PT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="591"/>
+        <location filename="queryscreenbase.ui" line="602"/>
         <source>Penetrant Test</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="639"/>
+        <location filename="queryscreenbase.ui" line="650"/>
         <source>US</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="636"/>
+        <location filename="queryscreenbase.ui" line="647"/>
         <source>Ultrasounds</source>
-        <translation></translation>
+        <translation>Ultrasons</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="663"/>
+        <location filename="queryscreenbase.ui" line="674"/>
         <source>DT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="660"/>
+        <location filename="queryscreenbase.ui" line="671"/>
         <source> Dental Technician</source>
-        <translation></translation>
+        <translation> Dental</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="714"/>
+        <location filename="queryscreenbase.ui" line="725"/>
         <source>MR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="711"/>
+        <location filename="queryscreenbase.ui" line="722"/>
         <source>Magnetic Resonance</source>
-        <translation></translation>
+        <translation>Ressonància magnètica</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="690"/>
+        <location filename="queryscreenbase.ui" line="701"/>
         <source>CT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="684"/>
+        <location filename="queryscreenbase.ui" line="695"/>
         <source>Computerized Tomography</source>
-        <translation></translation>
+        <translation>Tomografia computeritzada</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="519"/>
+        <location filename="queryscreenbase.ui" line="530"/>
         <source>DX</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="516"/>
+        <location filename="queryscreenbase.ui" line="527"/>
         <source>Direct Radiography</source>
-        <translation></translation>
+        <translation>Radiografia directa</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="738"/>
+        <location filename="queryscreenbase.ui" line="749"/>
         <source>NM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="735"/>
+        <location filename="queryscreenbase.ui" line="746"/>
         <source>Nuclear Medicine</source>
-        <translation></translation>
+        <translation>Medicina Nuclear</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="543"/>
+        <location filename="queryscreenbase.ui" line="554"/>
         <source>RF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="540"/>
+        <location filename="queryscreenbase.ui" line="551"/>
         <source>Radiography Fluoroscopy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="495"/>
+        <location filename="queryscreenbase.ui" line="506"/>
         <source>CR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="492"/>
+        <location filename="queryscreenbase.ui" line="503"/>
         <source>Computerized Radiography</source>
-        <translation></translation>
+        <translation>Radiografia computeritzada</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="759"/>
+        <location filename="queryscreenbase.ui" line="770"/>
         <source>ES</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="564"/>
+        <location filename="queryscreenbase.ui" line="575"/>
         <source>All</source>
         <translation>Tots</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="780"/>
+        <location filename="queryscreenbase.ui" line="791"/>
         <source>XA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1272"/>
+        <location filename="queryscreenbase.ui" line="1333"/>
         <source>Local Database</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1312"/>
+        <location filename="queryscreenbase.ui" line="1373"/>
         <source>PacsServer</source>
         <translation>PACS</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1495"/>
+        <location filename="queryscreenbase.ui" line="1556"/>
         <source>Create Dicomdir</source>
         <translation>Crear Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1451"/>
+        <location filename="queryscreenbase.ui" line="1512"/>
         <source>Operation List</source>
         <translation>Llista de peticions</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="92"/>
+        <location filename="queryscreenbase.ui" line="110"/>
         <source>Patient ID</source>
         <translation>ID Pacient</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="121"/>
+        <location filename="queryscreenbase.ui" line="73"/>
         <source>Patient Name</source>
         <translation>Nom Pacient</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="198"/>
+        <location filename="queryscreenbase.ui" line="340"/>
         <source>Study ID</source>
         <translation>ID Estudi</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="221"/>
+        <location filename="queryscreenbase.ui" line="366"/>
         <source>Accession Number</source>
-        <translation></translation>
+        <translation>Número d&apos;accés</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="960"/>
+        <location filename="queryscreenbase.ui" line="1002"/>
         <source>Time</source>
         <translation>Hora</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="440"/>
+        <location filename="queryscreenbase.ui" line="451"/>
         <source>Series Modality</source>
         <translation>Modalitat Sèrie</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="812"/>
+        <location filename="queryscreenbase.ui" line="823"/>
         <source>Other</source>
         <translation>Altres</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="909"/>
+        <location filename="queryscreenbase.ui" line="942"/>
         <source>Req. Proc. ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="926"/>
+        <location filename="queryscreenbase.ui" line="962"/>
         <source>Sche. Proc. Step ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="943"/>
+        <location filename="queryscreenbase.ui" line="982"/>
         <source>Proc. Perf. Start Date</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1003"/>
+        <location filename="queryscreenbase.ui" line="1048"/>
         <source>UID Study</source>
         <translation>UID Estudi</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1013"/>
+        <location filename="queryscreenbase.ui" line="1061"/>
         <source>UID Series</source>
         <translation>UID Serie</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1033"/>
+        <location filename="queryscreenbase.ui" line="1084"/>
         <source>SOP Instance UID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1043"/>
+        <location filename="queryscreenbase.ui" line="1097"/>
         <source>Instance Number</source>
         <translation>Número d&apos;instància</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1083"/>
+        <location filename="queryscreenbase.ui" line="1140"/>
         <source>Referring Physicians Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1093"/>
+        <location filename="queryscreenbase.ui" line="1153"/>
         <source>Study Modalities</source>
         <translation>Modalitats d&apos;estudi</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1110"/>
+        <location filename="queryscreenbase.ui" line="1173"/>
         <source>Series number</source>
         <translation>Número de sèrie</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1197"/>
+        <location filename="queryscreenbase.ui" line="1269"/>
         <source>Advanced Search</source>
         <translation>Cerca Avançada</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="248"/>
+        <location filename="queryscreenbase.ui" line="194"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="282"/>
+        <location filename="queryscreenbase.ui" line="234"/>
         <source>Custom</source>
         <translation>A mida</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1170"/>
+        <location filename="queryscreenbase.ui" line="1236"/>
         <source>Clear Search Fields</source>
         <translation>Netejar els Camps de Cerca</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1190"/>
+        <location filename="queryscreenbase.ui" line="1259"/>
         <source>Show PACS Nodes</source>
         <translation>Mostrar la llista de Nodes PACS</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1337"/>
+        <location filename="queryscreenbase.ui" line="1398"/>
         <source>DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1466"/>
+        <location filename="queryscreenbase.ui" line="1527"/>
         <source>Operation in progress</source>
         <translation>Operació en execució</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1473"/>
+        <location filename="queryscreenbase.ui" line="1534"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
