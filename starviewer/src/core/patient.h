@@ -140,6 +140,9 @@ private:
 
     /// Llista que conté els estudis del pacient ordenats per data
     QList<Study *> m_studiesSet;
+    
+    ///fa tractament del nom del pacient, treient caràcters extranys i espais inicials i finals i passant a majúscules
+    QString patientNameTreatment( QString patientName );
 
 };
 
