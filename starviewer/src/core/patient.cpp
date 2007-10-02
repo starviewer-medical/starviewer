@@ -233,10 +233,45 @@ Patient Patient::operator -=( const Patient &patient )
     DEBUG_LOG("Mètode per implementar");
 }
 
+QString Patient::patientNameTreatment( QString patientName )
+{
+    QString name = patientName;
+    
+    name = name.replace(QString("^"), QString(" "));
+    name = name.replace(QString("."), QString(" "));
+    name = name.replace(QString(","), QString(" "));
+    name = name.replace(QString("-"), QString(" "));
+    name = name.replace(QString(";"), QString(" "));
+    name = name.replace(QString("_"), QString(" "));
+    
+    name = name.trimmed();
+    
+    name = name.toUpper();
+    
+    return( name );
+}
+
 bool Patient::isSamePatient( const Patient *patient )
 {
-    // si coincideix nom o ID llavors es poden considerar que són el mateix pacient TODO mirar de definir aquest criteri
-    return patient->m_fullName == this->m_fullName || patient->m_patientID == this->m_patientID;
+    //si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
+    bool isSame = ( patient->m_patientID == this->m_patientID );
+    
+    if ( !isSame )
+    {
+        //Pre-tractament sobre el nom del pacient per treure caràcters extranys
+        QString nameOfThis = patientNameTreatment( this->getFullName() );
+        QString nameOfParameter = patientNameTreatment( patient->getFullName() );
+        
+        //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
+        isSame = ( nameOfThis == nameOfParameter );
+        
+//         if ( !isSame )
+//         {
+//             int distance = LevenshteinDistance( nameOfThis, nameOfParameter );
+//         }
+    }  
+      
+    return ( isSame );
 }
 
 QString Patient::toString()
