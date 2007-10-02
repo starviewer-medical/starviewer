@@ -492,7 +492,7 @@ void OptimalViewpointInputParametersForm::setClusterLast( int slice )
 
 void OptimalViewpointInputParametersForm::setNumberOfSlices( unsigned short numberOfSlices )
 {
-    m_clusterFirstSpinBox->setMaximum( numberOfSlices );
+    m_clusterFirstSpinBox->setMaximum( numberOfSlices - 1 );
     m_clusterLastSpinBox->setMaximum( numberOfSlices - 1 );
     m_clusterLastSpinBox->setValue( numberOfSlices - 1 );
 }
