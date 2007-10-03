@@ -1491,7 +1491,18 @@ DicomMask QueryScreen::buildDicomMask()
 
     //Sempre anem a buscar nivell d'estudi
     mask.setPatientId( m_patientIDText->text() );
-    mask.setPatientName( m_patientNameText->text() );
+    
+    
+    if ( !m_patientNameText->text().startsWith("*") && !m_patientNameText->text().endsWith("*") )
+    {
+        QString patientName = "*"+m_patientNameText->text()+"*";
+        mask.setPatientName( patientName );
+    }
+    else
+    {
+        mask.setPatientName( m_patientNameText->text() );
+    }
+    
     mask.setStudyId( m_studyIDText->text()  );
     mask.setStudyDate( getStudyDatesStringMask() );
     mask.setStudyDescription( "" );
