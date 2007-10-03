@@ -8,6 +8,7 @@
 #include "logging.h"
 
 #include <QStringList>
+#include <QChar>
 
 namespace udg {
 
@@ -323,6 +324,82 @@ int Patient::findStudyIndex( QString uid )
         i = -1;
 
     return i;
+}
+
+double Patient::needlemanWunchDistance (QString s, QString t, int gap ) 
+{
+    int n = s.length(); 
+    int m = t.length(); 
+        
+    if (n == 0) return 1.;
+    else if (m == 0) return 1.;
+
+    int *p = new int[n+1]; 
+    int *d = new int[n+1]; 
+    int i, j, cost; 
+
+    QChar t_j; 
+
+    for (i = 0; i<=n; i++) p[i] = i;
+    
+    for (j = 1; j<=m; j++) {
+        t_j = t.at(j-1);
+        d[0] = j;
+        
+        for (i=1; i<=n; i++) {
+            cost = s.at(i-1)==t_j ? 0 : 1;
+                
+            d[i] = minimum( minimum( d[i-1]+gap, p[i]+gap),  p[i-1]+cost );  
+        }
+        
+        swap( p, d, n+1 );
+    } 
+
+    int min = minimum( n, m );
+    int diff = maximum( n, m ) - min;
+    return (double)p[n] / (double)(min + diff*gap);
+}
+
+void Patient::swap( int *p, int *g, int length )
+{
+    int i;
+    int *d = new int[length];
+    for (i=0;i < length; i++)
+        d[i] = p[i];
+    
+    for (i=0;i < length; i++)
+        p[i] = g[i];
+
+    for (i=0;i < length; i++)
+        g[i] = d[i];
+
+    delete d;
+}
+
+double Patient::needlemanWunch2Distance( QString s, QString t ) 
+{
+    return needlemanWunchDistance( s, t, 2 );
+}
+
+double Patient::levenshteinDistance( QString s, QString t) 
+{
+    return needlemanWunchDistance( s, t, 1 );
+}
+
+int Patient::minimum( int a, int b )
+{
+    if ( a < b)
+     return a;
+    else 
+     return b;
+}
+
+int Patient::maximum( int a, int b )
+{
+    if ( a > b)
+     return a;
+    else 
+     return b;
 }
 
 }
