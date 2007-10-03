@@ -1490,7 +1490,17 @@ DicomMask QueryScreen::buildDicomMask()
     QString modalityMask;
 
     //Sempre anem a buscar nivell d'estudi
-    mask.setPatientId( m_patientIDText->text() );
+//     mask.setPatientId( m_patientIDText->text() );
+    
+    if ( !m_patientIDText->text().startsWith("*") && !m_patientIDText->text().endsWith("*") )
+    {
+        QString patientId = "*"+m_patientIDText->text()+"*";
+        mask.setPatientId( patientId );
+    }
+    else
+    {
+        mask.setPatientId( m_patientIDText->text() );
+    }
     
     
     if ( !m_patientNameText->text().startsWith("*") && !m_patientNameText->text().endsWith("*") )
