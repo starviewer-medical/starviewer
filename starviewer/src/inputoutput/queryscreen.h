@@ -47,12 +47,6 @@ public slots:
     /// Neteja els LineEdit del formulari
     void clearTexts();
 
-    /**
-     * Posa les dates automàticament a avui o ahir
-     */
-    void setSearchDateToToday();
-    void setSearchDateToYesterday();
-
     /// Escull a on fer la cerca, si a nivell local o PACS
     void searchStudy();
 
@@ -85,9 +79,6 @@ public slots:
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
     void view();
 
-    ///Mostra la llista de Pacs, o l'amaga
-    void showPacsList();
-
     ///slot que s'activa al esborrar estudi de la caché
     void deleteStudyCache();
 
@@ -97,15 +88,6 @@ public slots:
      * @param sopInstanceUID de la imatge descarregada
      */
     void studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID );
-
-    /// Slot que activa o desactiva el m_checkAll en funció de si hi ha alguna modalitat d'estudi seleccionada
-    void checkedSeriesModality();
-
-    /// Activa o desactiva els text i el label de la data fins
-    void setEnabledTextTo( int );
-
-    /// Activa o desactiva el text de la data desde
-    void setEnabledTextFrom( int );
 
     /// Posa a verdader o fals tots els check modality, i deixa a true el all
     void clearCheckedModality();
@@ -195,19 +177,14 @@ private slots:
     void checkNewFromDate( QDate date );
     void checkNewToDate( QDate date );
 
+    /// Mostra/amaga els camps de cerca avançats
+    void setAdvancedSearchVisible(bool visible);
+
+    void updateAdvancedSearchModifiedStatus();
+
 private:
     ///Connecta els signals i slots pertinents
     void createConnections();
-
-    /** Activa els labels i text de la data segons el parametre d'entrada
-     * @param Indica si s'ha d'activar o desactivar
-     */
-    void setEnabledDates(bool);
-
-    /**
-     * Fa un check dels butons que han d'estar habilitats segons les dates que modifiquem
-     */
-    void checkDateRadioButtons();
 
     DicomMask buildSeriesDicomMask(QString);
 
@@ -274,9 +251,6 @@ private:
      * @param state del mètode de la base de dades
      */
     void showDatabaseErrorMessage( const Status &state );
-
-    /// Assigna la mida al PacsList en funcio del tab en que es trobi i de la variable m_PacsListShow
-    void resizePacsList();
 
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
