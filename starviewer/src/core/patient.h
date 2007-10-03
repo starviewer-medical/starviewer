@@ -115,6 +115,17 @@ private:
      * @return L'índex d'aquell estudi dins de la llista, -1 si no existeix l'estudi amb aquell uid.
      */
     int findStudyIndex( QString uid );
+    
+    ///mètodes per a comparar la simulitud entre noms de pacients
+    
+    int minimum( int a, int b );
+    int maximum( int a, int b );
+    
+    void swap( int *p, int *g, int length );
+    
+    double levenshteinDistance( QString s, QString t); 
+    double needlemanWunch2Distance( QString s, QString t );
+    double needlemanWunchDistance(QString s, QString t, int gap );
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.
