@@ -101,6 +101,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
 
     setupInteraction();
+    m_enabledTools = false;
     m_toolManager = new Q2DViewerToolManager( this );
     this->enableTools();
     m_voxelInformationTool = new VoxelInformationTool(this);
@@ -727,12 +728,21 @@ void Q2DViewer::setEnableTools( bool enable )
 
 void Q2DViewer::enableTools()
 {
-    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+    /// Això evita que es faci més d'un connect en cas que es cridi aquesta funció i ja s'hagi fet abans
+    if(!m_enabledTools)
+    {
+        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+        m_enabledTools = true;
+    }
 }
 
 void Q2DViewer::disableTools()
 {
-    disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+    if(m_enabledTools)
+    {
+        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
+        m_enabledTools = false;
+    }
 }
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
@@ -857,6 +867,12 @@ void Q2DViewer::setInput( Volume* volume )
         DEBUG_LOG( QString("Nombre de fases: %1, nombre de llesques per fase: %2").arg( m_numberOfPhases ).arg( m_maxSliceValue) );
     }
 
+    // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
+    if(m_blender!=0)
+    {
+        m_blender->Delete();
+        m_blender = 0;
+    }
     updateRulers();
     updateScalarBar();
     updatePatientAnnotationInformation();

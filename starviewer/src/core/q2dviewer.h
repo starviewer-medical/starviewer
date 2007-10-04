@@ -590,6 +590,11 @@ private:
 
     /// Tool per mostrar un caption amb la informació del voxel sota el cursor (posició i valor)
     VoxelInformationTool *m_voxelInformationTool;
+
+    /// Variable que controla si les tools estant habilitades
+    /// Aquesta variable evita que es faci més d'un "connect" quan es fa l'enableTool i ja estan habilitades
+    bool m_enabledTools;
+
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
 };  //  end  namespace udg
