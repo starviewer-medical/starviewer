@@ -832,39 +832,32 @@ void QMPRExtension::initOrientation()
         zbounds[1] = t;
     }
     //XY, z-normal : vista axial , en principi d'aquesta vista nomès canviarem la llesca
-    m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[0] );
-    m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[0] , zbounds[0] );
-    m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
+    m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[1] , zbounds[0] );
+    m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[1] , zbounds[0] );
+    m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[0] );
 
     //YZ, x-normal : vista sagital
     // estem ajustant la mida del pla a les dimensions d'aquesta orientació
-    // \TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
-    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[1] );
-    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[1] );
-    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[0] );
-
-    double axis[3] = { 0 , 0 , 1 };
-    rotateMiddle( 180 , axis , m_sagitalPlaneSource );
+    // TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
+    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[1] , zbounds[1] );
+    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[0] , zbounds[1] );
+    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
     m_sagitalPlaneSource->Push( 0.5 * ( xbounds[1] - xbounds[0] ) );
 
     //ZX, y-normal : vista coronal
     // ídem anterior
-// \TODO comprovar si és correcte aquest ajustament de mides
+    // TODO comprovar si és correcte aquest ajustament de mides
     double maxZBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
     double maxXBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
     double diffXBound = maxXBound - xbounds[1];
     double diffZBound = maxZBound - zbounds[1];
 
-    m_coronalPlaneSource->SetOrigin( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
-    m_coronalPlaneSource->SetPoint1( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
-    m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetOrigin( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint1( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint2( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
     // posem en la llesca central
     m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) );
-    // li donem la volta perquè es vegi des del punt de vista correcte
-    axis[0] = 0; axis[1] = 0; axis[2] = 1;
-    rotateMiddle( 180 , axis , m_coronalPlaneSource );
-    axis[0] = 0; axis[1] = 1; axis[2] = 0;
-    rotateMiddle( 180 , axis , m_coronalPlaneSource );
+
     updatePlanes();
     updateControls();
 }
