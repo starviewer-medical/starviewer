@@ -169,15 +169,6 @@ public slots:
     /// Neteja el TreeView
     void clear();
 
-    /// Slot que descarrega imatges
-    void retrieveImages();
-
-    /// ESborra un estudi de la caché
-    void deleteStudy();
-
-    /// Slot que visualitza l'estudi
-    void viewStudy();
-
     ///Slot que converteix un estudi
     void createDicomDir();
 
