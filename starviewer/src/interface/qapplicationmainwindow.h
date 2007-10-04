@@ -103,6 +103,12 @@ private slots:
     void openNewWindow( const ExtensionContext &context  );
     void openBlankWindow(); // l'obre en blanc
 
+    /**
+     * Donat un context, esborra el pacient actual i sobre la mateixa finestra aplica aquest nou pacient
+     * @param context Contexte del nou pacient
+     */
+    void overwriteCurrentWindow( const ExtensionContext &context  );
+
     /// mostra el formulari d'about
     void about();
 

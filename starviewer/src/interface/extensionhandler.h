@@ -43,7 +43,10 @@ public slots:
     void request( int who );
     void request( const QString &who );
 
-    /// cridat quan l'aplicació mor
+    /**
+     * Elimina totes les extensions que contingui el workspace i allibera la memòria que
+     * ocupa el pacient actual (principalment,els volums del repositori)
+     */
     void killBill();
 
     /**

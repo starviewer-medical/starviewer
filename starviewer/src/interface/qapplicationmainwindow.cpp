@@ -63,8 +63,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
 
 QApplicationMainWindow::~QApplicationMainWindow()
 {
-    delete m_extensionWorkspace;
     m_extensionHandler->killBill();
+    delete m_extensionWorkspace;
 }
 
 void QApplicationMainWindow::createActions()
@@ -316,6 +316,15 @@ void QApplicationMainWindow::openBlankWindow()
     newMainWindow->show();
 }
 
+void QApplicationMainWindow::overwriteCurrentWindow( const ExtensionContext &context  )
+{
+    // primer ens carreguem el pacient
+    m_extensionHandler->killBill();
+    delete m_patient;
+    m_patient = 0;
+    this->addPatientContext( context );
+}
+
 void QApplicationMainWindow::addPatientContext( const ExtensionContext &context )
 {
     Patient *newPatient = context.getPatient();
@@ -346,7 +355,9 @@ void QApplicationMainWindow::addPatientContext( const ExtensionContext &context 
     else
     {
         // és un pacient diferent, cal obrir-lo apart en una nova finestra
-        openNewWindow( context );
+//         openNewWindow( context );
+        // canviem de política, pacient diferent, pacient matxacat
+        overwriteCurrentWindow( context );
         DEBUG_LOG("Creem nou pacient");
     }
 }
