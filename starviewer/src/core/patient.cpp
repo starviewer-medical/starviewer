@@ -349,32 +349,17 @@ double Patient::needlemanWunchDistance (QString s, QString t, int gap )
         for (i=1; i<=n; i++) {
             cost = s.at(i-1)==t_j ? 0 : 1;
                 
-            d[i] = minimum( minimum( d[i-1]+gap, p[i]+gap),  p[i-1]+cost );  
+            d[i] = qMin( qMin( d[i-1]+gap, p[i]+gap),  p[i-1]+cost );  
         }
         
-        swap( p, d, n+1 );
+        qSwap( p, d );
     } 
 
-    int min = minimum( n, m );
-    int diff = maximum( n, m ) - min;
+    int min = qMin( n, m );
+    int diff = qMax( n, m ) - min;
     return (double)p[n] / (double)(min + diff*gap);
 }
 
-void Patient::swap( int *p, int *g, int length )
-{
-    int i;
-    int *d = new int[length];
-    for (i=0;i < length; i++)
-        d[i] = p[i];
-    
-    for (i=0;i < length; i++)
-        p[i] = g[i];
-
-    for (i=0;i < length; i++)
-        g[i] = d[i];
-
-    delete d;
-}
 
 double Patient::needlemanWunch2Distance( QString s, QString t ) 
 {
@@ -385,21 +370,4 @@ double Patient::levenshteinDistance( QString s, QString t)
 {
     return needlemanWunchDistance( s, t, 1 );
 }
-
-int Patient::minimum( int a, int b )
-{
-    if ( a < b)
-     return a;
-    else 
-     return b;
-}
-
-int Patient::maximum( int a, int b )
-{
-    if ( a > b)
-     return a;
-    else 
-     return b;
-}
-
 }

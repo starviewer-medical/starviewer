@@ -117,12 +117,6 @@ private:
     int findStudyIndex( QString uid );
     
     ///mètodes per a comparar la simulitud entre noms de pacients
-    
-    int minimum( int a, int b );
-    int maximum( int a, int b );
-    
-    void swap( int *p, int *g, int length );
-    
     double levenshteinDistance( QString s, QString t); 
     double needlemanWunch2Distance( QString s, QString t );
     double needlemanWunchDistance(QString s, QString t, int gap );
