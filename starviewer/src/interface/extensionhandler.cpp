@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QProgressDialog>
+#include <QMessageBox>
 // recursos
 #include "logging.h"
 #include "extensionworkspace.h"
@@ -155,7 +156,9 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     DEBUG_LOG( "Labels: " + fillerInput->getLabels().join("; "));
     DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
 
-    for( int i = 0; i < numberOfPatients; i++ )
+    QList<int> correctlyLoadedPatients;
+
+    for(unsigned int i = 0; i < numberOfPatients; i++ )
     {
         DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput->getPatient(i)->toString() ) );
 
@@ -163,36 +166,73 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
         extensionContext.setPatient( fillerInput->getPatient(i) );
 
         // marquem les series seleccionades
-        Study *study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
-        if( study )
+        Study *study = NULL;
+        if ( !defaultStudyUID.isEmpty() )
         {
-            if( !defaultSeriesUID.isEmpty() )
+            study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
+        }
+        else   // Si no ens diuen un study seleccionat en seleccionem un nosaltres.
+        {
+            QList<Study *> studyList = fillerInput->getPatient(i)->getStudies();
+            if ( !studyList.isEmpty() )
             {
-                Series *series = fillerInput->getPatient(i)->getSeries( defaultSeriesUID );
-                if( series )
-                    series->select();
-                else
-                {
-                    DEBUG_LOG("No s'ha trobat cap series amb l'uid: " + defaultSeriesUID );
-                }
-            }
-            else
-            {
-                // no tenim cap serie seleccionada, seleccionem per defecte la primera
-                QList<Series *> seriesList = study->getSeries();
-                if( !seriesList.isEmpty() )
-                {
-                    seriesList.at(0)->select();
-                }
-                else
-                {
-                    // no podem seleccionar cap! no en tenim->Error!
-                    DEBUG_LOG("L'estudi no té cap serie!!! La llista és buida");
-                }
+                study = studyList.first();
             }
         }
 
-        m_mainApp->addPatientContext( extensionContext );
+        bool error = true;
+
+        if( study )
+        {
+            Series *series = NULL;
+            if( !defaultSeriesUID.isEmpty() )
+            {
+                series = fillerInput->getPatient(i)->getSeries( defaultSeriesUID );
+            }
+            else   // No tenim cap serie seleccionada, seleccionem per defecte la primera
+            {
+                QList<Series *> seriesList = study->getSeries();
+                if( !seriesList.isEmpty() )
+                {
+                    series = seriesList.first();
+                }
+            }
+
+            if (series)
+            {
+                series->select();
+                error = false;
+                correctlyLoadedPatients << i;
+            }
+            else
+            {
+                ERROR_LOG(fillerInput->getPatient(i)->toString());
+                ERROR_LOG("Error carregant aquest pacient. La serie retornada és null. defaultSeriesUID: " + defaultSeriesUID);
+            }
+        }
+        else
+        {
+            ERROR_LOG(fillerInput->getPatient(i)->toString());
+            ERROR_LOG("Error carregant aquest pacient. L'study retornat és null. defaultStudyUID: " + defaultStudyUID);
+        }
+
+        if (!error)
+        {
+            m_mainApp->addPatientContext( extensionContext );
+        }
+    }
+
+    QString patientsWithError;
+    if (correctlyLoadedPatients.count() != numberOfPatients)
+    {
+        for (unsigned int i = 0; i < numberOfPatients; i++ )
+        {
+            if (!correctlyLoadedPatients.contains(i))
+            {
+                patientsWithError += "- " + fillerInput->getPatient(i)->getFullName() + "; ID: " + fillerInput->getPatient(i)->getID() + "<br>";
+            }
+        }
+        QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
     }
 }
 
