@@ -52,9 +52,18 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
     int x = point.x();
     int y = point.y();
 
-    //Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
-    int screen_x = qApp->desktop()->availableGeometry(point).width();
-    int screen_y = qApp->desktop()->availableGeometry(point).height();
+    int screen_x, screen_y;
+    
+    if (qApp->desktop()->isVirtualDesktop())
+    {
+        screen_x = qApp->desktop()->geometry().width();
+        screen_y = qApp->desktop()->geometry().height();
+    }
+    else
+    {
+        screen_x = qApp->desktop()->availableGeometry( point ).width();
+        screen_y = qApp->desktop()->availableGeometry( point ).height();
+    }
 
     m_patientBrowserList->setSelectedSerie( serieUID );
 
@@ -114,9 +123,16 @@ void PatientBrowserMenu::emitSelected( Series * serie )
 void PatientBrowserMenu::updatePosition()
 {
     int x;
-
+    int screen_x;
     //Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
-    int screen_x = qApp->desktop()->availableGeometry( m_patientBrowserList->pos() ).width();
+    if (qApp->desktop()->isVirtualDesktop())
+    {
+        screen_x = qApp->desktop()->geometry().width();
+    }
+    else
+    {
+        screen_x = qApp->desktop()->availableGeometry( m_patientBrowserList->pos() ).width();
+    }
 
     QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
     m_patientAdditionalInfo->resize( patientAdditionalInfoSize );
