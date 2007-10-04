@@ -59,6 +59,7 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     createConnections();
 
     setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
+    m_studyTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 }
 
 QStudyTreeWidget::~QStudyTreeWidget()
@@ -76,7 +77,7 @@ void QStudyTreeWidget::createContextMenu()
     //acció veure
     m_viewAction = m_contextMenu.addAction( tr("&View") );
     m_viewAction->setShortcut( tr("Ctrl+V") );
-    connect( m_viewAction , SIGNAL( triggered() ) , this , SLOT( viewStudy() ) );
+    connect( m_viewAction , SIGNAL( triggered() ) , SIGNAL( view() ) );
 
     // només hi ha RETRIEVE en el PACS i DICOMDIR TODO a DICOMDIR s'hauria de dir IMPORT to DATABASE... per ser mes correctes
     // TODO AL TANTO AMB AIXÒ!!!!!!! SI MAI CANVIA EL PARENT QUÈ PASSA???????????? FER SISTEMA PER DETERMINAR EL TIPUS DE TAB QUE ÉS O ALGO
@@ -85,7 +86,7 @@ void QStudyTreeWidget::createContextMenu()
         m_retrieveAction = m_contextMenu.addAction( tr("&Retrieve") );
         m_retrieveAction->setShortcut( tr("Ctrl+R") );
         m_retrieveAction->setIcon( QIcon(":/images/retrieve.png") );
-        connect( m_retrieveAction , SIGNAL( triggered() ) , this , SLOT( retrieveImages() ) );
+        connect( m_retrieveAction , SIGNAL( triggered() ) , SIGNAL( retrieve() ) );
     }
 
     // Al haver un QSplitter el nom del Pare del TabCache és l'splitter TODO molt al tanto amb aquesta guarrada -_-¡
@@ -94,7 +95,7 @@ void QStudyTreeWidget::createContextMenu()
         // només es pot esborrar a local
         m_deleteStudyAction =  m_contextMenu.addAction( tr("&Delete")) ;
         m_deleteStudyAction->setShortcut( tr("Ctrl+D") );
-        connect( m_deleteStudyAction , SIGNAL(triggered()), this, SLOT(deleteStudy()));
+        connect( m_deleteStudyAction , SIGNAL( triggered() ), SIGNAL( delStudy() ) );
 
         //nomes es pot afegir element a la llista de DICOMDIR desde local
         m_sendToDICOMDIRListAction = m_contextMenu.addAction( tr( "Send to DICOMDIR List" ) );
@@ -468,11 +469,6 @@ void QStudyTreeWidget::removeStudy( QString studyUID )
     }
 }
 
-void QStudyTreeWidget::deleteStudy()
-{
-    emit(delStudy()); //aquest signal es recollit per la QueryScreen
-}
-
 void QStudyTreeWidget::selectedSeriesIcon( QString seriesUID )
 {
     QTreeWidgetItem *item , *current;
@@ -564,16 +560,6 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
             emit( clearSeriesListWidget() );
         }
     }
-}
-
-void QStudyTreeWidget::viewStudy()
-{
-    emit(view());
-}
-
-void QStudyTreeWidget::retrieveImages()
-{
-    emit( retrieve() );
 }
 
 void QStudyTreeWidget::createDicomDir()
