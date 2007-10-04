@@ -13,6 +13,7 @@
 #include "volume.h"
 
 #include <QDateTime>
+#include <QFileInfo>
 
 #include <metaCommand.h> // fer servir la llibreria metaIO de les itk
 #include <vtkMetaImageReader.h> // fer servir el reader de vtk
@@ -99,8 +100,9 @@ bool MHDFileClassifierStep::classifyFile( QString file )
 
         // creem el pacient
         Patient *patient = new Patient;
-        patient->setFullName( "Anonymous MHD Data" );
-        patient->setID( "MHDPatient#123456" );
+        QFileInfo fileInfo(file);
+        patient->setFullName( "MHD File " + fileInfo.fileName() );
+        patient->setID( "MHDPatient" + fileInfo.fileName() );
         m_input->addPatient( patient );
 
         // creem l'estudi
