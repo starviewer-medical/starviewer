@@ -7,7 +7,6 @@
 #ifndef UDGDRAWER_H
 #define UDGDRAWER_H
 
-#include <QObject>
 #include <QString>
 #include <QMultiMap>
 #include <QPair>
@@ -19,6 +18,8 @@ class vtkCoordinate;
 class QColor;
 class QString;
 class vtkProp;
+class vtkPoints;
+class vtkCellArray;
 
 namespace udg {
 
@@ -57,6 +58,9 @@ private:
     
     /// llista de conjunts de primitives relacionades entre sí. Ens permetrà controlar totes les relacions entre les diferents primitives.
     typedef QList< PrimitivesSet* > PrimitivesSetList;
+    
+    ///Parella d'objectes vtk per a poder encapsular els punts de l'el·lipse que volem calcular.
+    typedef QPair< vtkPoints*, vtkCellArray*> EllipsePoints;
     
     /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
     PrimitivesMap m_axialPairs;
@@ -128,8 +132,12 @@ private:
     ///ens permet assignar el color de normal a la parella passada per paràmetre
     void setNormalColor( PrimitiveActorPair *pair );
     
+    ///ens diu si el punt està dins de les fronteres de la línia
     bool isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 );
 
+    ///ens calcula els punts de l'el·lipse passada per paràmetre i ens retorna una parella d'objectes vtk que contenen aquests punts
+    EllipsePoints computeEllipsePoints( Ellipse *ellipse );
+    
 public:
     
     Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
@@ -230,6 +238,9 @@ private slots:
     
     ///cerca el que ha invocat el signal i n'actualitza els atributs gràfics
     void updateChangedText( Text *text );    
+    
+    ///cerca l'el·lipse que ha invocat el signal i n'actualitza els atributs gràfics
+    void updateChangedEllipse( Ellipse *ellipse );
 };
 
 };  
