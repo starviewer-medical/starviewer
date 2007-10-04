@@ -35,12 +35,16 @@ bool DICOMFileClassifierFillerStep::fill()
         QStringList fileList = m_input->getFilesList();
         foreach( QString file, fileList )
         {
-            classifyFile( file );
+            if (classifyFile(file))
+            {
+                m_input->addLabel("DICOMFileClassifierFillerStep");
+            }
         }
-        m_input->addLabel("DICOMFileClassifierFillerStep");
     }
     else
+    {
         DEBUG_LOG("No tenim input!");
+    }
 
     return ok;
 }
@@ -59,8 +63,7 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
         return true;
 
     // no està classificat per tal l'hem de tractar
-    bool ok = false;
-    ok = m_dicomReader->setFile( file );
+    bool ok = m_dicomReader->setFile( file );
     if( ok )
     {
         // primer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
