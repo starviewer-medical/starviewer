@@ -412,9 +412,7 @@ void Drawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordi
 
 void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
 {
-    double intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius, *topLeft, *bottomRight, *center, *minor, *major;
-    int i;
-
+    double *topLeft, *bottomRight;
     //validem les coordenades segons la vista en la que estem
     topLeft = ellipse->getTopLeftPoint();
     bottomRight = ellipse->getBottomRightPoint();
@@ -428,6 +426,61 @@ void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
     ellipse->setBottomRightPoint( bottomRight );
 
     vtkPolyData *polydata = vtkPolyData::New();
+    
+    //calculem els punts de l'el·lipse i els retornem amb una parella
+    EllipsePoints ellipsePoints = computeEllipsePoints( ellipse );
+
+    polydata->SetPoints( ellipsePoints.first );
+
+    if ( ellipse->isBackgroundEnabled() )
+        polydata->SetPolys( ellipsePoints.second );
+    else
+        polydata->SetLines( ellipsePoints.second );
+
+    vtkActor2D *actor = vtkActor2D::New();
+    vtkPolyDataMapper2D *mapper = vtkPolyDataMapper2D::New();
+
+    actor->SetMapper( mapper );
+    mapper->SetTransformCoordinate( getCoordinateSystem( ellipse->getCoordinatesSystemAsString() ) );
+    mapper->SetInput( polydata );
+
+    //Assignem discontinuïtat
+    if ( ellipse->isDiscontinuous() )
+        actor->GetProperty()->SetLineStipplePattern( 2000 );
+    else
+        actor->GetProperty()->SetLineStipplePattern( 65535 );
+
+    //Assignem gruix de la línia
+    actor->GetProperty()->SetLineWidth( ellipse->getWidth() );
+
+    //Assignem opacitat de la línia
+    actor->GetProperty()->SetOpacity( ellipse->getOpacity() );
+
+    //mirem la visibilitat de l'actor
+    if ( !ellipse->isVisible() )
+        actor->VisibilityOff();
+
+    //Assignem color
+    QColor color = ellipse->getColor();
+    actor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+
+    addActorAndRefresh( actor, ellipse, slice, view );
+
+    //connectem la línia amb el drawer per quan s'actualitzi algun dels seus atributs
+    connect( ellipse, SIGNAL( ellipseChanged( Ellipse* ) ), this, SLOT( updateChangedEllipse( Ellipse* ) ) );
+
+    actor->Delete();
+    mapper->Delete();
+    ellipsePoints.first->Delete();
+    ellipsePoints.second->Delete();
+    polydata->Delete();
+}
+
+Drawer::EllipsePoints Drawer::computeEllipsePoints( Ellipse *ellipse )
+{
+    double intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius, *center, *minor, *major,*topLeft, *bottomRight;
+    int i;
+    
     vtkPoints *points = vtkPoints::New();
     vtkCellArray *vertexs = vtkCellArray::New();
 
@@ -481,51 +534,13 @@ void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
 
     //afegim l'últim punt per tancar la ROI
     vertexs->InsertCellPoint( 0 );
-
-    polydata->SetPoints( points );
-
-    if ( ellipse->isBackgroundEnabled() )
-        polydata->SetPolys( vertexs );
-    else
-        polydata->SetLines( vertexs );
-
-    vtkActor2D *actor = vtkActor2D::New();
-    vtkPolyDataMapper2D *mapper = vtkPolyDataMapper2D::New();
-
-    actor->SetMapper( mapper );
-    mapper->SetTransformCoordinate( getCoordinateSystem( ellipse->getCoordinatesSystemAsString() ) );
-    mapper->SetInput( polydata );
-
-    //Assignem discontinuïtat
-    if ( ellipse->isDiscontinuous() )
-        actor->GetProperty()->SetLineStipplePattern( 2000 );
-    else
-        actor->GetProperty()->SetLineStipplePattern( 65535 );
-
-    //Assignem gruix de la línia
-    actor->GetProperty()->SetLineWidth( ellipse->getWidth() );
-
-    //Assignem opacitat de la línia
-    actor->GetProperty()->SetOpacity( ellipse->getOpacity() );
-
-    //mirem la visibilitat de l'actor
-    if ( !ellipse->isVisible() )
-        actor->VisibilityOff();
-
-    //Assignem color
-    QColor color = ellipse->getColor();
-    actor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
-
-    addActorAndRefresh( actor, ellipse, slice, view );
-
-    actor->Delete();
-    mapper->Delete();
-    points->Delete();
-    vertexs->Delete();
-    polydata->Delete();
+    
+    EllipsePoints ellipsePoints( points, vertexs );
+    
+    return ( ellipsePoints );
 }
 
-vtkCoordinate *Drawer::getCoordinateSystem( QString coordinateSystem )
+vtkCoordinate* Drawer::getCoordinateSystem( QString coordinateSystem )
 {
     vtkCoordinate *coordinates = vtkCoordinate::New();
 
@@ -846,22 +861,20 @@ void Drawer::updateChangedLine( Line *line )
 
     if ( isValid( pair ) )
     {
-        ///|TODO mirar si hi ha una manera més correcta de trobar el vtkLineSource
         vtkActor2D *lineActor = vtkActor2D::SafeDownCast( pair->second );
-
         Line *line = static_cast<Line*> ( pair->first );
 
         vtkPolyDataMapper2D *lineMapper = vtkPolyDataMapper2D::SafeDownCast( lineActor->GetMapper() );
 
         vtkLineSource *lineSource = vtkLineSource::New();
-        ///\TODO mirar perquè el següent mètode dóna errors (no greus) però els dóna
-        lineSource->SetInputConnection( lineMapper->GetOutputPort() ); 
-
+        
+        lineMapper->SetInputConnection( lineSource->GetOutputPort() );
+    
+        lineSource->SetResolution ( 2 );
+    
         //assignem els punts a la línia
         lineSource->SetPoint1( line->getFirstPoint() );
         lineSource->SetPoint2( line->getSecondPoint() );
-
-        lineMapper->SetInputConnection( lineSource->GetOutputPort() );
 
         //Assignem el tipus de coordenades seleccionades
         lineMapper->SetTransformCoordinate( getCoordinateSystem( line->getCoordinatesSystemAsString() ) );
@@ -899,6 +912,69 @@ void Drawer::updateChangedLine( Line *line )
 
         lineSource->Delete();
         m_2DViewer->refresh();
+    }
+}
+
+void Drawer::updateChangedEllipse( Ellipse *ellipse )
+{
+    PrimitiveActorPair *pair = this->findPrimitiveActorPair( ellipse );
+
+    if ( isValid( pair ) )
+    {
+        vtkActor2D *ellipseActor = vtkActor2D::SafeDownCast( pair->second );
+        Ellipse *ellipse = static_cast<Ellipse*> ( pair->first );
+
+        vtkPolyDataMapper2D *ellipseMapper = vtkPolyDataMapper2D::SafeDownCast( ellipseActor->GetMapper() );
+
+        EllipsePoints ellipsePoints = computeEllipsePoints( ellipse );
+
+        vtkPolyData *ellipsePolyData = vtkPolyData::New();
+        
+        ellipsePolyData->SetPoints( ellipsePoints.first );
+
+        if ( ellipse->isBackgroundEnabled() )
+            ellipsePolyData->SetPolys( ellipsePoints.second );
+        else
+            ellipsePolyData->SetLines( ellipsePoints.second );
+            
+        ellipseMapper->SetInput( ellipsePolyData );
+
+        //Assignem el tipus de coordenades seleccionades
+        ellipseMapper->SetTransformCoordinate( getCoordinateSystem( ellipse->getCoordinatesSystemAsString() ) );
+
+        //Assignem les propietats a la línia
+        vtkProperty2D *properties = ellipseActor->GetProperty();
+
+        //Assignem gruix de la línia
+        properties->SetLineWidth( ellipse->getWidth() );
+
+        //Assignem opacitat de la línia
+        properties->SetOpacity( ellipse->getOpacity() );
+
+        //Assignem discontinuïtat
+        if ( ellipse->isDiscontinuous() )
+            properties->SetLineStipplePattern( 2000 );
+        else
+            properties->SetLineStipplePattern( 65535 );
+
+        //mirem si la línia està en estat de resaltat o no. Segons això assignem el color
+        QColor ellipseColor = ellipse->getColor();
+        QColor highlightColor = m_colorPalette->getHighlightColor();
+        QColor selectionColor = m_colorPalette->getSelectionColor();
+
+        if ( ellipse->isHighlighted() )
+            properties->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
+        else if ( ellipse->isSelected() )
+            properties->SetColor( selectionColor.redF(), selectionColor.greenF(), selectionColor.blueF() );
+        else
+            properties->SetColor( ellipseColor.redF(), ellipseColor.greenF(), ellipseColor.blueF() );
+
+        //mirem la visibilitat de l'actor
+        if ( !ellipse->isVisible() )
+            ellipseActor->VisibilityOff();
+
+        m_2DViewer->refresh();
+        ellipsePolyData->Delete();
     }
 }
 
