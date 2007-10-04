@@ -90,9 +90,6 @@ private:
     /// La pantalla d'accés al pacs
     QueryScreen *m_queryScreen;
 
-    /// Membres de conveniència per saber quin estudi i series es volen veure per defecte
-    QString m_defaultStudyUID, m_defaultSeriesUID;
-
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
 };
