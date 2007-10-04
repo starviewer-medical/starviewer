@@ -348,8 +348,6 @@ void QApplicationMainWindow::addPatientContext( const ExtensionContext &context 
     {
         *m_patient += *newPatient;
         m_extensionHandler->getContext().setPatient( m_patient );
-        m_extensionHandler->getContext().addDefaultSelectedSeries( context.getDefaultSelectedSeries() );
-        m_extensionHandler->getContext().addDefaultSelectedStudies( context.getDefaultSelectedStudies() );
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
     }
     else

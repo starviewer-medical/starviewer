@@ -72,6 +72,9 @@ public:
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
     Series *getSeries( QString uid );
 
+    /// Ens retorna una llista amb les sèries que estiguin seleccionades
+    QList<Series *> getSelectedSeries();
+
     /// Ens diu si aquest arxiu pertany a alguna series del pacient
     bool hasFile( QString filename );
 
@@ -115,9 +118,9 @@ private:
      * @return L'índex d'aquell estudi dins de la llista, -1 si no existeix l'estudi amb aquell uid.
      */
     int findStudyIndex( QString uid );
-    
+
     ///mètodes per a comparar la simulitud entre noms de pacients
-    double levenshteinDistance( QString s, QString t); 
+    double levenshteinDistance( QString s, QString t);
     double needlemanWunch2Distance( QString s, QString t );
     double needlemanWunchDistance(QString s, QString t, int gap );
 
@@ -145,7 +148,7 @@ private:
 
     /// Llista que conté els estudis del pacient ordenats per data
     QList<Study *> m_studiesSet;
-    
+
     ///fa tractament del nom del pacient, treient caràcters extranys i espais inicials i finals i passant a majúscules
     QString patientNameTreatment( QString patientName );
 

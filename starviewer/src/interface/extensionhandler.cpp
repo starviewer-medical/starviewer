@@ -133,9 +133,6 @@ void ExtensionHandler::createConnections()
 
 void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
 {
-    m_defaultStudyUID = defaultStudyUID;
-    m_defaultSeriesUID = defaultSeriesUID;
-
     PatientFillerInput *fillerInput = new PatientFillerInput;
     fillerInput->setFilesList( inputFiles );
 
@@ -164,8 +161,36 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
         ExtensionContext extensionContext;
         extensionContext.setPatient( fillerInput->getPatient(i) );
-        extensionContext.addDefaultSelectedStudy( defaultStudyUID );
-        extensionContext.addDefaultSelectedSeries( defaultSeriesUID );
+
+        // marquem les series seleccionades
+        Study *study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
+        if( study )
+        {
+            if( !defaultSeriesUID.isEmpty() )
+            {
+                Series *series = fillerInput->getPatient(i)->getSeries( defaultSeriesUID );
+                if( series )
+                    series->select();
+                else
+                {
+                    DEBUG_LOG("No s'ha trobat cap series amb l'uid: " + defaultSeriesUID );
+                }
+            }
+            else
+            {
+                // no tenim cap serie seleccionada, seleccionem per defecte la primera
+                QList<Series *> seriesList = study->getSeries();
+                if( !seriesList.isEmpty() )
+                {
+                    seriesList.at(0)->select();
+                }
+                else
+                {
+                    // no podem seleccionar cap! no en tenim->Error!
+                    DEBUG_LOG("L'estudi no té cap serie!!! La llista és buida");
+                }
+            }
+        }
 
         m_mainApp->addPatientContext( extensionContext );
     }

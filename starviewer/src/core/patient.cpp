@@ -148,6 +148,18 @@ Series *Patient::getSeries( QString uid )
     return result;
 }
 
+QList<Series *> Patient::getSelectedSeries()
+{
+    QList<Series *> selectedSeries;
+    foreach( Study *study, m_studiesSet )
+    {
+        QList<Series *> list = study->getSelectedSeries();
+        if( !list.empty() )
+            selectedSeries << list;
+    }
+    return selectedSeries;
+}
+
 bool Patient::hasFile( QString filename )
 {
     QList<Study *> studyList = this->getStudies();
@@ -237,18 +249,18 @@ Patient Patient::operator -=( const Patient &patient )
 QString Patient::patientNameTreatment( QString patientName )
 {
     QString name = patientName;
-    
+
     name = name.replace(QString("^"), QString(" "));
     name = name.replace(QString("."), QString(" "));
     name = name.replace(QString(","), QString(" "));
     name = name.replace(QString("-"), QString(" "));
     name = name.replace(QString(";"), QString(" "));
     name = name.replace(QString("_"), QString(" "));
-    
+
     name = name.trimmed();
-    
+
     name = name.toUpper();
-    
+
     return( name );
 }
 
@@ -256,22 +268,22 @@ bool Patient::isSamePatient( const Patient *patient )
 {
     //si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
     bool isSame = ( patient->m_patientID == this->m_patientID );
-    
+
     if ( !isSame )
     {
         //Pre-tractament sobre el nom del pacient per treure caràcters extranys
         QString nameOfThis = patientNameTreatment( this->getFullName() );
         QString nameOfParameter = patientNameTreatment( patient->getFullName() );
-        
+
         //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
         isSame = ( nameOfThis == nameOfParameter );
-        
+
 //         if ( !isSame )
 //         {
 //             int distance = LevenshteinDistance( nameOfThis, nameOfParameter );
 //         }
-    }  
-      
+    }
+
     return ( isSame );
 }
 
@@ -326,34 +338,34 @@ int Patient::findStudyIndex( QString uid )
     return i;
 }
 
-double Patient::needlemanWunchDistance (QString s, QString t, int gap ) 
+double Patient::needlemanWunchDistance (QString s, QString t, int gap )
 {
-    int n = s.length(); 
-    int m = t.length(); 
-        
+    int n = s.length();
+    int m = t.length();
+
     if (n == 0) return 1.;
     else if (m == 0) return 1.;
 
-    int *p = new int[n+1]; 
-    int *d = new int[n+1]; 
-    int i, j, cost; 
+    int *p = new int[n+1];
+    int *d = new int[n+1];
+    int i, j, cost;
 
-    QChar t_j; 
+    QChar t_j;
 
     for (i = 0; i<=n; i++) p[i] = i;
-    
+
     for (j = 1; j<=m; j++) {
         t_j = t.at(j-1);
         d[0] = j;
-        
+
         for (i=1; i<=n; i++) {
             cost = s.at(i-1)==t_j ? 0 : 1;
-                
-            d[i] = qMin( qMin( d[i-1]+gap, p[i]+gap),  p[i-1]+cost );  
+
+            d[i] = qMin( qMin( d[i-1]+gap, p[i]+gap),  p[i-1]+cost );
         }
-        
+
         qSwap( p, d );
-    } 
+    }
 
     int min = qMin( n, m );
     int diff = qMax( n, m ) - min;
@@ -361,12 +373,12 @@ double Patient::needlemanWunchDistance (QString s, QString t, int gap )
 }
 
 
-double Patient::needlemanWunch2Distance( QString s, QString t ) 
+double Patient::needlemanWunch2Distance( QString s, QString t )
 {
     return needlemanWunchDistance( s, t, 2 );
 }
 
-double Patient::levenshteinDistance( QString s, QString t) 
+double Patient::levenshteinDistance( QString s, QString t)
 {
     return needlemanWunchDistance( s, t, 1 );
 }
