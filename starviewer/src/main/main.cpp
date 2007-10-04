@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     splash->show();
 
     udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
-    INFO_LOG("Creada finestra principal")
+    INFO_LOG("Creada finestra principal");
     mainWin->show();
 
     QObject::connect( &app, SIGNAL( lastWindowClosed() ),
