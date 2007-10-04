@@ -1585,7 +1585,7 @@
      <item>
       <widget class="QPushButton" name="m_createDicomdirButton" >
        <property name="text" >
-        <string>Create Dicomdir</string>
+        <string>Create DICOMDIR</string>
        </property>
       </widget>
      </item>
@@ -1596,6 +1596,11 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>udg::QPacsList</class>
+   <extends>QWidget</extends>
+   <header>qpacslist.h</header>
+  </customwidget>
+  <customwidget>
    <class>udg::QSeriesListWidget</class>
    <extends>QWidget</extends>
    <header>qserieslistwidget.h</header>
@@ -1604,11 +1609,6 @@
    <class>udg::QStudyTreeWidget</class>
    <extends>QWidget</extends>
    <header>qstudytreewidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>udg::QPacsList</class>
-   <extends>QWidget</extends>
-   <header>qpacslist.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -869,7 +869,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1313"/>
+        <location filename="queryscreen.cpp" line="1135"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1242,149 +1242,144 @@ Error Number: %1</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1626"/>
+        <location filename="queryscreen.cpp" line="1476"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="446"/>
+        <location filename="queryscreen.cpp" line="348"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="537"/>
+        <location filename="queryscreen.cpp" line="439"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="551"/>
+        <location filename="queryscreen.cpp" line="453"/>
         <source>ERROR QUERING!.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="638"/>
+        <location filename="queryscreen.cpp" line="540"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="787"/>
+        <location filename="queryscreen.cpp" line="689"/>
         <source>No series match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="951"/>
+        <location filename="queryscreen.cpp" line="853"/>
         <source>Select a study to download </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="960"/>
+        <location filename="queryscreen.cpp" line="862"/>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1196"/>
+        <location filename="queryscreen.cpp" line="1067"/>
         <source>Please select a study to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1258"/>
-        <source>Show PACS Nodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1145"/>
+        <location filename="queryscreen.cpp" line="1016"/>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="117"/>
+        <location filename="queryscreen.cpp" line="116"/>
         <source>Error deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="447"/>
+        <location filename="queryscreen.cpp" line="1074"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="447"/>
+        <location filename="queryscreen.cpp" line="1074"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1412"/>
+        <location filename="queryscreen.cpp" line="1234"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="603"/>
+        <location filename="queryscreen.cpp" line="505"/>
         <source>Error, not opened Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="608"/>
+        <location filename="queryscreen.cpp" line="510"/>
         <source>Error quering in dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1313"/>
+        <location filename="queryscreen.cpp" line="1135"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1328"/>
+        <location filename="queryscreen.cpp" line="1150"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1367"/>
+        <location filename="queryscreen.cpp" line="1189"/>
         <source>You have to select a Pacs to store the study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1396"/>
+        <location filename="queryscreen.cpp" line="1218"/>
         <source>The study can only be stored at one pacs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="872"/>
+        <location filename="queryscreen.cpp" line="774"/>
         <source>No images match for this series.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="921"/>
+        <location filename="queryscreen.cpp" line="823"/>
         <source>No images match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="734"/>
+        <location filename="queryscreen.cpp" line="636"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="861"/>
+        <location filename="queryscreen.cpp" line="763"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1254"/>
-        <source>Hide PACS Nodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1427"/>
+        <location filename="queryscreen.cpp" line="1249"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1626"/>
+        <location filename="queryscreen.cpp" line="1476"/>
         <source>
 Error Number: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1073"/>
+        <source>Are you sure you want to delete this Study ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1396,32 +1391,32 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1302"/>
+        <location filename="queryscreenbase.ui" line="1193"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1296"/>
+        <location filename="queryscreenbase.ui" line="1187"/>
         <source>search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="220"/>
+        <location filename="queryscreenbase.ui" line="207"/>
         <source>Today</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="227"/>
+        <location filename="queryscreenbase.ui" line="214"/>
         <source>Yesterday</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1448"/>
+        <location filename="queryscreenbase.ui" line="1474"/>
         <source>Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1478"/>
+        <location filename="queryscreenbase.ui" line="1453"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1431,152 +1426,147 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="174"/>
+        <location filename="queryscreenbase.ui" line="826"/>
         <source>Study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="305"/>
+        <location filename="queryscreenbase.ui" line="340"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="269"/>
+        <location filename="queryscreenbase.ui" line="301"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="626"/>
+        <location filename="queryscreenbase.ui" line="563"/>
         <source>MG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="482"/>
+        <location filename="queryscreenbase.ui" line="419"/>
         <source>SC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="605"/>
+        <location filename="queryscreenbase.ui" line="542"/>
         <source>PT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="602"/>
+        <location filename="queryscreenbase.ui" line="539"/>
         <source>Penetrant Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="650"/>
+        <location filename="queryscreenbase.ui" line="587"/>
         <source>US</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="647"/>
+        <location filename="queryscreenbase.ui" line="584"/>
         <source>Ultrasounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="674"/>
+        <location filename="queryscreenbase.ui" line="611"/>
         <source>DT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="671"/>
+        <location filename="queryscreenbase.ui" line="608"/>
         <source> Dental Technician</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="725"/>
+        <location filename="queryscreenbase.ui" line="662"/>
         <source>MR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="722"/>
+        <location filename="queryscreenbase.ui" line="659"/>
         <source>Magnetic Resonance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="701"/>
+        <location filename="queryscreenbase.ui" line="638"/>
         <source>CT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="695"/>
+        <location filename="queryscreenbase.ui" line="632"/>
         <source>Computerized Tomography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="530"/>
+        <location filename="queryscreenbase.ui" line="467"/>
         <source>DX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="527"/>
+        <location filename="queryscreenbase.ui" line="464"/>
         <source>Direct Radiography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="749"/>
+        <location filename="queryscreenbase.ui" line="686"/>
         <source>NM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="746"/>
+        <location filename="queryscreenbase.ui" line="683"/>
         <source>Nuclear Medicine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="554"/>
+        <location filename="queryscreenbase.ui" line="491"/>
         <source>RF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="551"/>
+        <location filename="queryscreenbase.ui" line="488"/>
         <source>Radiography Fluoroscopy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="506"/>
+        <location filename="queryscreenbase.ui" line="443"/>
         <source>CR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="503"/>
+        <location filename="queryscreenbase.ui" line="440"/>
         <source>Computerized Radiography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="770"/>
+        <location filename="queryscreenbase.ui" line="707"/>
         <source>ES</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="575"/>
+        <location filename="queryscreenbase.ui" line="512"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="791"/>
+        <location filename="queryscreenbase.ui" line="728"/>
         <source>XA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1333"/>
+        <location filename="queryscreenbase.ui" line="1224"/>
         <source>Local Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1373"/>
-        <source>PacsServer</source>
+        <location filename="queryscreenbase.ui" line="1588"/>
+        <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1556"/>
-        <source>Create Dicomdir</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="1512"/>
+        <location filename="queryscreenbase.ui" line="1531"/>
         <source>Operation List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1586,123 +1576,148 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="73"/>
+        <location filename="queryscreenbase.ui" line="83"/>
         <source>Patient Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="340"/>
+        <location filename="queryscreenbase.ui" line="929"/>
         <source>Study ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="366"/>
+        <location filename="queryscreenbase.ui" line="919"/>
         <source>Accession Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1002"/>
+        <location filename="queryscreenbase.ui" line="1026"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="451"/>
+        <location filename="queryscreenbase.ui" line="388"/>
         <source>Series Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="823"/>
+        <location filename="queryscreenbase.ui" line="752"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="942"/>
+        <location filename="queryscreenbase.ui" line="971"/>
         <source>Req. Proc. ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="962"/>
+        <location filename="queryscreenbase.ui" line="993"/>
         <source>Sche. Proc. Step ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="982"/>
+        <location filename="queryscreenbase.ui" line="1036"/>
         <source>Proc. Perf. Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1048"/>
+        <location filename="queryscreenbase.ui" line="844"/>
         <source>UID Study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1061"/>
+        <location filename="queryscreenbase.ui" line="1016"/>
         <source>UID Series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1084"/>
+        <location filename="queryscreenbase.ui" line="1082"/>
         <source>SOP Instance UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1097"/>
+        <location filename="queryscreenbase.ui" line="1072"/>
         <source>Instance Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1140"/>
+        <location filename="queryscreenbase.ui" line="903"/>
         <source>Referring Physicians Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1153"/>
+        <location filename="queryscreenbase.ui" line="893"/>
         <source>Study Modalities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1173"/>
+        <location filename="queryscreenbase.ui" line="961"/>
         <source>Series number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1269"/>
-        <source>Advanced Search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="194"/>
-        <source>Date</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="234"/>
-        <source>Custom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="1236"/>
+        <location filename="queryscreenbase.ui" line="1163"/>
         <source>Clear Search Fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1259"/>
+        <location filename="queryscreenbase.ui" line="1575"/>
         <source>Show PACS Nodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1398"/>
+        <location filename="queryscreenbase.ui" line="1407"/>
         <source>DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1527"/>
+        <location filename="queryscreenbase.ui" line="1546"/>
         <source>Operation in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="1534"/>
+        <location filename="queryscreenbase.ui" line="1553"/>
         <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="177"/>
+        <source>Study Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="197"/>
+        <source>Any date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="221"/>
+        <source>Last Week</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="251"/>
+        <source>Custom:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="943"/>
+        <source>Series</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1060"/>
+        <source>Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1123"/>
+        <source>Advanced Search &gt;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="1308"/>
+        <source>PACS Server</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
