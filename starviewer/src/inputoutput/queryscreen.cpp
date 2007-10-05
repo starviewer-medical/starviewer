@@ -328,6 +328,19 @@ void QueryScreen::textOtherModalityEdited()
     }
 }
 
+void QueryScreen::updateConfiguration(const QString &configuration)
+{
+    if (configuration == "Pacs/ListChanged")
+    {
+        m_PACSNodes->refresh();
+    }
+    else if (configuration == "Pacs/CacheCleared")
+    {
+        m_studyTreeWidgetCache->clear();
+        m_seriesListWidgetCache->clear();
+    }
+}
+
 void QueryScreen::searchStudy()
 {
     switch ( m_tab->currentIndex() )

@@ -25,6 +25,11 @@ public:
     QConfigurationDialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
     ~QConfigurationDialog();
+signals:
+    /// S'emet quan es canvia alguna opció indicant com a paràmetres quina secció s'ha canviat i informació útil per qui el rep
+    //TODO Semi-xapussa per resoldre el problema de comunicació entre el queryscreen i la seva configuració. Cal fer un disseny de tot això.
+    //Veure el mètode de extensionhandler updateConfiguration
+    void configurationChanged(const QString &section);
 private slots:
     /// S'encarrega d'amagar/mostrar les opcions de configuració depenent si s'ha seleccionat o no l'opció
     /// de mostrar opcions avançades.

@@ -202,6 +202,7 @@ void QApplicationMainWindow::switchFullScreen( bool full )
 void QApplicationMainWindow::showConfigurationDialog()
 {
     QConfigurationDialog configurationDialog;
+    connect(&configurationDialog, SIGNAL(configurationChanged(const QString&)), m_extensionHandler, SLOT(updateConfiguration(const QString&)));
     configurationDialog.exec();
 }
 

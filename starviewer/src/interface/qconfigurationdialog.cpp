@@ -10,8 +10,6 @@
 
 #include "qconfigurationscreen.h"
 
-#include <QDebug>
-
 namespace udg {
 
 QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
@@ -37,6 +35,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     //configScreen->setModal( true );
     configScreen->show();
 */
+    connect(screen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), this, SLOT(setViewAdvancedConfiguration()));
 
     m_optionsList->setCurrentRow(0);

@@ -139,6 +139,9 @@ public slots:
      */
     void textOtherModalityEdited();
 
+    /// Actualitza la configuració que l'usuari hagi pogut canviar des del diàleg de configuració
+    void updateConfiguration(const QString &configuration);
+
 signals:
     /// Signal similar a viewStudy(), però en aquest cas enviem tota la estructura PatientFillerInput que es continuarà processant per la classe que reculli aquest signal
     void viewPatient( PatientFillerInput *input, QString studyUID, QString seriesUID );

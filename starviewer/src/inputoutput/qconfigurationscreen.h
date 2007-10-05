@@ -63,10 +63,10 @@ public slots :
     bool applyChanges();
 
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
-    void configurationChanged( const QString& );
+    void enableApplyButtons();
 
     /// Slot que s'utilitza quant es fa algun canvia el path de la base de dades, per activar els buttons apply
-    void configurationChangedDatabaseRoot( const QString& );
+    void configurationChangedDatabaseRoot();
 
     /// Afegeix la '/' al final del path del directori si l'usuari no l'ha escrit
     void cacheImagePathEditingFinish();
@@ -75,12 +75,8 @@ public slots :
     void createDatabase();
 
 signals :
-
-    ///signal que s'emet quan hi ha algun canvi a la llista de PACS, per a que la QPacsList es pugui refrescar
-    void pacsListChanged();
-
-    ///signal que s'emet quan la cache ha estat netejada cap a QueryScreen, pq netegi el QStudyTreeView que mostra els estudis de la cache
-    void cacheCleared();
+    /// Signal que s'emet cada vegada que hi ha un canvi a la configuració que pot afectar al queryscreen
+    void configurationChanged(const QString& configuration);
 
 protected :
 
