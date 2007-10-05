@@ -28,7 +28,6 @@ Patient::Patient( const Patient &patient, QObject *parent )
     m_studiesSet = patient.m_studiesSet;
 }
 
-
 Patient::~Patient()
 {
     m_studiesSet.clear();
@@ -186,51 +185,64 @@ Patient & Patient::operator =( const Patient &patient )
     return *this;
 }
 
+void Patient::patientFusionLogMessage( const Patient &patient )
+{
+    switch( isSamePatient( &patient ) )
+    {
+        case ExactIdentity:
+            INFO_LOG("Fusionem dos pacients iguals:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            break;
+        case VerySimilarIdentity:
+            INFO_LOG("Fusionem dos pacients molt semblants:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            break;
+        case FuzzyIdentity:
+            INFO_LOG("Fusionem dos pacients una mica semblants:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            break;
+        case DifferentIdentity:
+            INFO_LOG("!!!!Fusionem dos pacients diferents!!!!:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            break;
+    }
+}
+
 Patient Patient::operator +( const Patient &patient )
 {
     Patient result;
-    if( this->isSamePatient( &patient ) )
-    {
-        // copiem informació estructural en el resultat
-        result.copyPatientInformation( &patient );
-        result.m_studiesSet = this->m_studiesSet;
+    patientFusionLogMessage(patient);
+    // copiem informació estructural en el resultat
+    result.copyPatientInformation( &patient );
 
-        // ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
-        QList<Study *> studyListToAdd = patient.getStudies();
-        QString uid;
-        foreach( Study *study, studyListToAdd )
-        {
-            uid = study->getInstanceUID();
-            if( !result.studyExists(uid) )
-                result.addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
-        }
-    }
-    else
+    result.m_studiesSet = this->m_studiesSet;
+
+    // ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
+    QList<Study *> studyListToAdd = patient.getStudies();
+    QString uid;
+    foreach( Study *study, studyListToAdd )
     {
-        DEBUG_LOG("Els pacients no es poden fusionar perquè no s'identifiquen com el mateix");
+        uid = study->getInstanceUID();
+        if( !result.studyExists(uid) )
+            result.addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
     }
+
     return result;
 }
 
 Patient Patient::operator +=( const Patient &patient )
 {
-    // si coincideix nom o ID llavors es poden fusionar TODO mirar de definir aquest criteri
-    if( isSamePatient( &patient ) )
+    // deixem el criteri de fusionar en mans de qui "fusioni els pacients", de totes formes fem log per
+    // poder fer estadístiques del tema de fusió
+    // en tots casos, la informació del pacient "original" és la que preval i mai es matxaca.
+    patientFusionLogMessage(patient);
+
+    // recorrem els estudis que té "l'altre pacient" per afegir-los al resultat (aquesta mateixa instància) si no els té ja
+    QList<Study *> studyListToAdd = patient.getStudies();
+    QString uid;
+    foreach( Study *study, studyListToAdd )
     {
-        // recorrem els estudis que té "l'altre pacient" per afegir-los al resultat (aquesta mateixa instància) si no els té ja
-        QList<Study *> studyListToAdd = patient.getStudies();
-        QString uid;
-        foreach( Study *study, studyListToAdd )
-        {
-            uid = study->getInstanceUID();
-            if( !this->studyExists(uid) )
-                this->addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
-        }
+        uid = study->getInstanceUID();
+        if( !this->studyExists(uid) )
+            this->addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
     }
-    else
-    {
-        DEBUG_LOG("Els pacients no es poden fusionar perquè no comparteixen ni nom ni ID");
-    }
+
     return this;
 }
 
@@ -264,11 +276,11 @@ QString Patient::patientNameTreatment( QString patientName )
     return( name );
 }
 
-Patient::Similarity Patient::isSamePatient( const Patient *patient )
+Patient::PatientIdentity Patient::isSamePatient( const Patient *patient )
 {
     //si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
-    if ( patient->m_patientID == this->m_patientID )
-        return( EQUALS );
+    if( patient->m_patientID == this->m_patientID )
+        return( ExactIdentity );
     else
     {
         //Pre-tractament sobre el nom del pacient per treure caràcters extranys
@@ -277,17 +289,16 @@ Patient::Similarity Patient::isSamePatient( const Patient *patient )
 
         //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
         if ( nameOfThis == nameOfParameter )
-            return( EQUALS );
+            return( ExactIdentity );
         else
         {
             //si tenen poca similitud, retornarem la similitud entre els identificadors dels dos pacients
-            if ( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) == LOW_SIMILARITY )
+            if ( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) == FuzzyIdentity )
             {
                 return ( getProbability( needlemanWunch2Distance( patient->m_patientID , this->m_patientID )));
             }
             else  //si tenen molta similitud, retornem aquest valor
                 return( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) );
-                                 
         }
     }
 }
@@ -388,18 +399,19 @@ double Patient::levenshteinDistance( QString s, QString t)
     return needlemanWunchDistance( s, t, 1 );
 }
 
-Patient::Similarity Patient::getProbability( double probability )
+Patient::PatientIdentity Patient::getProbability( double probability )
 {
-    Patient::Similarity sim;
+    PatientIdentity identity;
     if ( probability < 0.1 )
-        sim = EQUALS;
+        identity = ExactIdentity;
     else if ( ( probability >= 0.1 ) && ( probability < 0.25 ) )
-        sim = HIGH_SIMILARITY;
+        identity = VerySimilarIdentity;
     else if ( ( probability >= 0.25 ) && ( probability < 0.31 ) )
-        sim = LOW_SIMILARITY;
+        identity = FuzzyIdentity;
     else
-        sim = DIFERENTS;
-    
-    return ( sim );
+        identity = DifferentIdentity;
+
+    return ( identity );
 }
+
 }
