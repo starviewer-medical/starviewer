@@ -80,7 +80,7 @@ public slots:
     void view();
 
     ///slot que s'activa al esborrar estudi de la caché
-    void deleteStudyCache();
+    void deleteSelectedStudiesInCache();
 
     /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si l'usuari així ho ha indicat
      * @param studyUID studyUID de l'estudi descarregat
@@ -107,19 +107,19 @@ public slots:
      */
     void studyRetrieveFinished( QString studyUID );
 
-    /** Afegeix l'estudi a la llista d'estudis per convertir a Dicomdir
-     * @param studyUID UID de l'estudi a covnertir a Dicomdir
+    /** Afegeix els estudis a la llista d'estudis per convertir a Dicomdir
+     * @param studiesUIDList UID dels estudis a covnertir a Dicomdir
      */
-    void convertToDicomdir( QString studyUID );
+    void convertToDicomdir( QStringList studiesUIDList );
 
     /** Obre un dicomdir
      */
     void openDicomdir();
 
-    /** guarda un estudi en el PACS
-     * @param studyUID uid de l'estudi a guardar
+    /** guarda els estudis seleccionats en el PACS
+     * @param studiesUIDList llista d'uid's dels estudis a guardar
      */
-    void storeStudyToPacs( QString studyUID );
+    void storeStudiesToPacs( QStringList studiesUIDList );
 
     /** Cerca les imatges d'una sèrie al PACS
      * @param StudyUID uid de l'estudi
@@ -216,6 +216,13 @@ private:
      * @param source font des d'on es volen carregar les dades (Cache i DICOMDIR suportats de moment)
     */
     void retrieve( QString studyUID , QString seriesUID , QString sopInstanceUID, QString source );
+
+    /**
+     * Donada una llista de uid's d'estudi, procedeix a carregar-los desde la font indicada (Cache,DICOMDIR)
+     * @param studiesUIDList Llista d'uid's d'estudi
+     * @param source font des d'on es volen carregar les dades (Cache i DICOMDIR suportats de moment)
+     */
+    void loadStudies( QStringList studiesUIDList, QString source );
 
     /** Insereix un estudi a descarregar a la cache
      * @param estudi a insertat

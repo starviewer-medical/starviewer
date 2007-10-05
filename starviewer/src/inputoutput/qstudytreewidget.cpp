@@ -34,6 +34,7 @@
 #include "imagelist.h"
 #include "dicomimage.h"
 #include "status.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -59,6 +60,7 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     createConnections();
 
     setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
+    m_studyTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 }
 
 QStudyTreeWidget::~QStudyTreeWidget()
@@ -92,9 +94,9 @@ void QStudyTreeWidget::createContextMenu()
     if( m_parentName == "m_StudyTreeSeriesListQSplitter" )
     {
         // només es pot esborrar a local
-        m_deleteStudyAction =  m_contextMenu.addAction( tr("&Delete")) ;
-        m_deleteStudyAction->setShortcut( tr("Ctrl+D") );
-        connect( m_deleteStudyAction , SIGNAL( triggered() ), SIGNAL( delStudy() ) );
+        m_deleteStudyAction = m_contextMenu.addAction( tr("&Delete")) ;
+        m_deleteStudyAction->setShortcut( /*tr("Ctrl+D")*/ Qt::Key_Delete );
+        connect( m_deleteStudyAction , SIGNAL( triggered() ), SIGNAL( deleteSelectedStudies() ) );
 
         //nomes es pot afegir element a la llista de DICOMDIR desde local
         m_sendToDICOMDIRListAction = m_contextMenu.addAction( tr( "Send to DICOMDIR List" ) );
@@ -105,7 +107,7 @@ void QStudyTreeWidget::createContextMenu()
         m_storeStudyAction = m_contextMenu.addAction( tr( "Store to PACS" ) );
         m_storeStudyAction->setShortcut( tr( "Ctrl+S" ) );
         m_storeStudyAction->setIcon( QIcon(":/images/store.png") );
-        connect( m_storeStudyAction , SIGNAL ( triggered() ) , this , SLOT ( storeStudy() ) );
+        connect( m_storeStudyAction , SIGNAL ( triggered() ) , this , SLOT ( storeStudies() ) );
     }
 }
 
@@ -369,6 +371,74 @@ QString QStudyTreeWidget::getSelectedStudyUID()
     else return "";
 }
 
+QStringList QStudyTreeWidget::getSelectedStudiesUID()
+{
+    QStringList result;
+    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+    foreach( QTreeWidgetItem *item, selectedItems )
+    {
+        if( item->text(12) == "STUDY" ) //es un estudi
+        {
+            if( !result.contains( item->text(11) ) )
+                result << item->text(11);
+        }
+        else if( item->text(12) == "SERIES" )
+        {
+            if( !result.contains( item->parent()->text(11) ) )
+                result << item->parent()->text(11);
+        }
+        else if( item->text(12) == "IMAGE" )
+        {
+            if( !result.contains( item->parent()->parent()->text(11) ) )
+                result << item->parent()->parent()->text(11);
+        }
+        else
+        {
+            DEBUG_LOG("Texte no esperat: " + item->text(12) );
+        }
+    }
+    return result;
+}
+
+QStringList QStudyTreeWidget::getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID )
+{
+    QStringList result;
+    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+    foreach( QTreeWidgetItem *item, selectedItems )
+    {
+        // només mirem les series
+        if( item->text( 12 ) == "SERIES" )
+        {
+            // si aquesta serie seleccionada pertany a l'estudi que demanem
+            if( item->parent()->text( 11 ) == studyUID )
+            {
+                result << item->text(11); // afegim el SERIES UID
+            }
+        }
+    }
+    return result;
+}
+
+QStringList QStudyTreeWidget::getStudySelectedImagesUIDFromSelectedStudies( QString studyUID )
+{
+    QStringList result;
+    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+    foreach( QTreeWidgetItem *item, selectedItems )
+    {
+        // només mirem les series
+        if( item->text( 12 ) == "IMAGE" )
+        {
+            // si aquesta imatge seleccionada pertany a l'estudi que demanem
+            if( item->parent()->parent()->text( 11 ) == studyUID )
+            {
+                result << item->text(11); // afegim l'Image UID (SOPInstance...)
+            }
+        }
+
+    }
+    return result;
+}
+
 QString QStudyTreeWidget::getSelectedSeriesUID()
 {
     if ( m_studyTreeView->currentItem() != NULL )
@@ -422,10 +492,19 @@ QString QStudyTreeWidget::getSelectedImageUID()
     else return "";
 }
 
-QString QStudyTreeWidget::getSelectedPacsAETitle()
+QString QStudyTreeWidget::getStudyPACSAETitleFromSelectedStudies( QString studyUID )
 {
-   if ( m_studyTreeView->currentItem() == NULL ) return "";
-   else return m_studyTreeView->currentItem()->text( 10 );
+    QString result;
+    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+    foreach( QTreeWidgetItem *item, selectedItems )
+    {
+        if( item->text(11) == studyUID )
+        {
+            result = item->text(10);
+            break;
+        }
+    }
+    return result;
 }
 
 void QStudyTreeWidget::setSeriesToSeriesListWidget( QTreeWidgetItem *item )
@@ -563,12 +642,12 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
 
 void QStudyTreeWidget::createDicomDir()
 {
-    emit ( convertToDicomDir( getSelectedStudyUID() ) );
+    emit ( convertToDicomDir( getSelectedStudiesUID() ) );
 }
 
-void QStudyTreeWidget::storeStudy()
+void QStudyTreeWidget::storeStudies()
 {
-    emit ( storeStudyToPacs( getSelectedStudyUID() ) );
+    emit ( storeStudiesToPacs( getSelectedStudiesUID() ) );
 }
 
 void QStudyTreeWidget::saveColumnsWidth()

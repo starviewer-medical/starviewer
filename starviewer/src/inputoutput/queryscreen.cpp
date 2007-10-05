@@ -158,7 +158,7 @@ void QueryScreen::createConnections()
     connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
 
     //conectem els signals dels TreeView
-    connect( m_studyTreeWidgetCache, SIGNAL( delStudy() ), SLOT( deleteStudyCache() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( deleteSelectedStudies() ), SLOT( deleteSelectedStudiesInCache() ) );
     connect( m_studyTreeWidgetCache, SIGNAL( view() ), SLOT( view() ) );
 
     //quan fem doble click sobre un estudi o sèrie de la llista d'estudis
@@ -169,9 +169,7 @@ void QueryScreen::createConnections()
     connect( m_studyTreeWidgetCache, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
     connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( selectedSeriesIcon(QString) ) );
     connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), m_studyTreeWidgetCache, SIGNAL( view() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( storeStudyToPacs( QString) ), SLOT( storeStudyToPacs( QString) ) );
-
-
+    connect( m_studyTreeWidgetCache, SIGNAL( storeStudiesToPacs( QStringList ) ), SLOT( storeStudiesToPacs( QStringList ) ) );
     //per netejar la QSeriesIconView quant s'esborrar un estudi
     connect(this, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
 
@@ -181,7 +179,6 @@ void QueryScreen::createConnections()
 
     //slot per importar objecte del dicomdir
     connect( m_studyTreeWidgetDicomdir, SIGNAL( retrieve() ), SLOT( importDicomdir() ) );
-
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
@@ -209,7 +206,7 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( setRetrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
 
     //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
-    connect( m_studyTreeWidgetCache, SIGNAL( convertToDicomDir( QString ) ), SLOT( convertToDicomdir( QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( convertToDicomDir( QStringList ) ), SLOT( convertToDicomdir( QStringList ) ) );
 
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
@@ -828,106 +825,117 @@ void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source
 
 void QueryScreen::retrievePacs( bool view )
 {
-    DicomMask mask;
-    QString studyUID,defaultSeriesUID;
-    Status state;
-    Operation operation;
-    PacsParameters pacs;
-    PacsListDB pacsListDB;
-    StarviewerSettings settings;
-    QString pacsAETitle;
-    DICOMStudy studyToRetrieve;
-
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
 
-    if ( m_studyTreeWidgetPacs->getSelectedStudyUID().isEmpty() )
+    QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
+    if( selectedStudiesUIDList.isEmpty() )
     {
         QApplication::restoreOverrideCursor();
-        if ( view)
-        {
+        if( view )
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
-        }
-        else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to download " ) );
-        return;
-    }
-    studyUID = m_studyTreeWidgetPacs->getSelectedStudyUID();
+        else
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to download " ) );
 
-    //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
-    if ( !m_studyListSingleton->exists( studyUID , m_studyTreeWidgetPacs->getSelectedPacsAETitle() ) )
-    {
-        QApplication::restoreOverrideCursor();
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
         return;
     }
 
-    studyToRetrieve = m_studyListSingleton->getStudy();
-    if ( m_studyTreeWidgetPacs->getSelectedPacsAETitle().isEmpty() ) //per les mesatools que no retornen a quin PACS pertany l'estudi cercat
+    StarviewerSettings settings;
+    bool ok;
+    foreach( QString currentStudyUID, selectedStudiesUIDList )
     {
-        pacsAETitle = m_lastQueriedPacs;
-        studyToRetrieve.setPacsAETitle( m_lastQueriedPacs );
-    }
-    else
-        pacsAETitle = m_studyTreeWidgetPacs->getSelectedPacsAETitle();
+        DicomMask mask;
+        QString defaultSeriesUID;
+        Status state;
+        Operation operation;
+        PacsParameters pacs;
+        PacsListDB pacsListDB;
+        QString pacsAETitle;
+        DICOMStudy studyToRetrieve;
 
-    //Inserim l'informació de l'estudi a la caché!
-    state = insertStudyCache( studyToRetrieve );
-
-    if( !state.good() )
-    {
-        if ( state.code() != 2019 ) // si hi ha l'error 2019, indica que l'estudi ja existeix a la base de dades, per tant estar parcialment o totalment descarregat, de totes maneres el tornem a descarregar
+        ok = true;
+        //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
+        if ( !m_studyListSingleton->exists( currentStudyUID, m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID) ) )
         {
+            // TODO no sé què es comprova exactament aquí ni de quin tipus d'error es tracta això
             QApplication::restoreOverrideCursor();
-            showDatabaseErrorMessage( state );
-            return;
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
         }
-        else // si l'estudi ja existeix actualizem la seva informació també
+        else
         {
-            CacheStudyDAL cacheStudyDAL; //Actualitzem la informació
-            cacheStudyDAL.updateStudy ( studyToRetrieve );
+            studyToRetrieve = m_studyListSingleton->getStudy();
+            pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID);
+            if ( pacsAETitle.isEmpty() ) //per les mesatools que no retornen a quin PACS pertany l'estudi cercat
+            {
+                pacsAETitle = m_lastQueriedPacs;
+                studyToRetrieve.setPacsAETitle( m_lastQueriedPacs );
+            }
+
+            //Inserim l'informació de l'estudi a la caché!
+            state = insertStudyCache( studyToRetrieve );
+
+            if( !state.good() )
+            {
+                if ( state.code() != 2019 ) // si hi ha l'error 2019, indica que l'estudi ja existeix a la base de dades, per tant estar parcialment o totalment descarregat, de totes maneres el tornem a descarregar
+                {
+                    //TODO no entenc que es fa aquí, el comentari anterior no sembla gaire coherent
+                    QApplication::restoreOverrideCursor();
+                    showDatabaseErrorMessage( state );
+                    ok = false;
+                }
+                else // si l'estudi ja existeix actualizem la seva informació també
+                {
+                    CacheStudyDAL cacheStudyDAL; //Actualitzem la informació
+                    cacheStudyDAL.updateStudy( studyToRetrieve );
+                }
+            }
+            if( ok )
+            {
+                mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi
+                if ( !m_studyTreeWidgetPacs->getSelectedSeriesUID().isEmpty() )
+                    mask.setSeriesUID( m_studyTreeWidgetPacs->getSelectedSeriesUID() );
+
+                if ( !m_studyTreeWidgetPacs->getSelectedImageUID().isEmpty() )
+                    mask.setSOPInstanceUID( m_studyTreeWidgetPacs->getSelectedImageUID() );
+
+                //busquem els paràmetres del pacs del qual volem descarregar l'estudi
+                state = pacsListDB.queryPacs( &pacs , pacsAETitle );
+
+                if ( !state.good() )
+                {
+                    QApplication::restoreOverrideCursor();
+                    showDatabaseErrorMessage( state );
+                    // TODO potser l'error no s'hauria de mostrar aquí, es podria fer un missatge de
+                    // "hi ha hagut errors en alguns estudis" o algo per l'estil
+                }
+                else
+                {
+                    //inserim a la pantalla de retrieve que iniciem la descarrega
+                    //m_operationStateScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );
+
+                    //emplanem els parametres amb dades del starviewersettings
+                    pacs.setAELocal( settings.getAETitleMachine() );
+                    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
+                    pacs.setLocalPort( settings.getLocalPort() );
+
+                    //definim l'operacio
+                    operation.setPacsParameters( pacs );
+                    operation.setDicomMask( mask );
+                    if ( view )
+                        operation.setOperation( operationView );
+                    else
+                        operation.setOperation( operationRetrieve );
+
+                    //emplenem les dades de l'operació
+                    operation.setPatientName( m_studyListSingleton->getStudy().getPatientName() );
+                    operation.setPatientID( m_studyListSingleton->getStudy().getPatientId() );
+                    operation.setStudyID( m_studyListSingleton->getStudy().getStudyId() );
+                    operation.setStudyUID( m_studyListSingleton->getStudy().getStudyUID() );
+
+                    m_qexecuteOperationThread.queueOperation( operation );
+                }
+            }
         }
     }
-
-    mask.setStudyUID( studyUID );//definim la màscara per descarregar l'estudi
-    if ( !m_studyTreeWidgetPacs->getSelectedSeriesUID().isEmpty() )
-        mask.setSeriesUID( m_studyTreeWidgetPacs->getSelectedSeriesUID() );
-
-    if ( !m_studyTreeWidgetPacs->getSelectedImageUID().isEmpty() )
-        mask.setSOPInstanceUID(  m_studyTreeWidgetPacs->getSelectedImageUID() );
-
-    //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    state = pacsListDB.queryPacs( &pacs , pacsAETitle );
-
-    if ( !state.good() )
-    {
-        QApplication::restoreOverrideCursor();
-        showDatabaseErrorMessage( state );
-        return;
-    }
-
-    //inserim a la pantalla de retrieve que iniciem la descarrega
-    //m_operationStateScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );
-
-    //emplanem els parametres amb dades del starviewersettings
-    pacs.setAELocal( settings.getAETitleMachine() );
-    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
-    pacs.setLocalPort( settings.getLocalPort() );
-
-    //definim l'operacio
-    operation.setPacsParameters( pacs );
-    operation.setDicomMask( mask );
-    if ( view )
-        operation.setOperation( operationView );
-    else
-        operation.setOperation( operationRetrieve );
-
-    //emplenem les dades de l'operació
-    operation.setPatientName( m_studyListSingleton->getStudy().getPatientName() );
-    operation.setPatientID( m_studyListSingleton->getStudy().getPatientId() );
-    operation.setStudyID( m_studyListSingleton->getStudy().getStudyId() );
-    operation.setStudyUID( m_studyListSingleton->getStudy().getStudyUID() );
-
-    m_qexecuteOperationThread.queueOperation( operation );
-
     QApplication::restoreOverrideCursor();
 }
 
@@ -977,30 +985,21 @@ void QueryScreen::refreshTab( int index )
 
 void QueryScreen::view()
 {
-
     switch ( m_tab->currentIndex() )
     {
         case 0 :
-            retrieve( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
+//             retrieve( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
+            loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), "Cache" );
             break;
         case 1 :
             retrievePacs( true );
            break;
         case 2 :
-            retrieve( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
+//             retrieve( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
+            loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), "DICOMDIR" );
             break;
         default :
             break;
-
-    }
-    if ( m_tab->currentIndex() == 1)
-    {
-
-    }
-    else if ( m_tab->currentIndex() == 0)
-    {
-
-
     }
 }
 
@@ -1040,52 +1039,98 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     emit processFiles( files, studyUID, seriesUID, sopInstanceUID );
 }
 
+void QueryScreen::loadStudies( QStringList studiesUIDList, QString source )
+{
+    if( studiesUIDList.isEmpty() )
+    {
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select at least one study to view" ) );
+        return;
+    }
+
+    CacheStudyDAL cacheStudyDAL;
+    QStringList files;
+    if( source == "Cache" )
+    {
+        foreach(QString studyUID, studiesUIDList )
+        {
+            files += cacheStudyDAL.getFiles( studyUID );
+            cacheStudyDAL.updateStudyAccTime( studyUID );
+        }
+    }
+    else if( source == "DICOMDIR" )
+    {
+        foreach(QString studyUID, studiesUIDList )
+        {
+            files += m_readDicomdir.getFiles( studyUID );
+        }
+    }
+    else
+    {
+        DEBUG_LOG("Unrecognized source: " + source );
+        return;
+    }
+
+    this->close();//s'amaga per poder visualitzar la serie
+    if ( m_operationStateScreen->isVisible() )
+    {
+        m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
+    }
+
+    // enviem la informació a processar
+    emit processFiles( files, QString(), QString(), QString() );
+}
+
 void QueryScreen::importDicomdir()
 {
     DICOMDIRImporter importDicom;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    importDicom.import( m_readDicomdir.getDicomdirPath() , m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID() );
+//     importDicom.import( m_readDicomdir.getDicomdirPath() , m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID() );
+    // TODO ara només permetrem importar estudis sencers
+    foreach( QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID() )
+    {
+        importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
+    }
 
     QApplication::restoreOverrideCursor();
 }
 
-void QueryScreen::deleteStudyCache()
+void QueryScreen::deleteSelectedStudiesInCache()
 {
-    Status state;
-    CacheStudyDAL cacheStudyDAL;
-    QString studyUID;
-
-    studyUID = m_studyTreeWidgetCache->getSelectedStudyUID();
-
-    if ( studyUID.isEmpty() )
+    QStringList studiesList = m_studyTreeWidgetCache->getSelectedStudiesUID();
+    if( studiesList.isEmpty() )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select a study to delete" ) );
-        return;
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select at least one study to delete" ) );
     }
-
-
-    switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-                    tr( "Are you sure you want to delete this Study ?" ) ,
-                    tr( "&Yes" ) , tr( "&No" ) ,
-                    0, 1 ) )
+    else
     {
-        case 0:
-            INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
-
-            state = cacheStudyDAL.delStudy( studyUID );
-
-            if ( state.good() )
-            {
-                m_studyTreeWidgetCache->removeStudy( studyUID );
-                emit( clearSeriesListWidget() );//Aquest signal es recollit per qSeriesIconView
-            }
-            else
-            {
-                showDatabaseErrorMessage( state );
-            }
-     }
+        switch( QMessageBox::information( this , tr( "Starviewer" ) ,
+                        tr( "Are you sure you want to delete the selected Studies?" ) ,
+                        tr( "&Yes" ) , tr( "&No" ) ,
+                        0, 1 )
+                )
+        {
+            case 0:
+                Status state;
+                CacheStudyDAL cacheStudyDAL;
+                foreach(QString studyUID, studiesList)
+                {
+                    INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
+                    state = cacheStudyDAL.delStudy( studyUID );
+                    if ( state.good() )
+                    {
+                        m_studyTreeWidgetCache->removeStudy( studyUID );
+                        emit( clearSeriesListWidget() );//Aquest signal es recollit per qSeriesIconView
+                    }
+                    else
+                    {
+                        // TODO potser s'hauria de fer al final, recollir per quins hi ha hagut error i mostrar-ho
+                        showDatabaseErrorMessage( state );
+                    }
+                }
+        }
+    }
 }
 
 void QueryScreen::studyRetrieveFinished( QString studyUID )
@@ -1115,16 +1160,19 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     m_qcreateDicomdir->clearTemporaryDir();
 }
 
-void QueryScreen::convertToDicomdir( QString studyUID )
+void QueryScreen::convertToDicomdir( QStringList studiesUIDList )
 {
     CacheStudyDAL cacheStudyDAL;
     DICOMStudy study;
 
-    //busquem la informació de l'estudi
-    cacheStudyDAL.queryStudy( studyUID , study );
+    foreach(QString studyUID, studiesUIDList )
+    {
+        //busquem la informació de l'estudi
+        cacheStudyDAL.queryStudy( studyUID , study );
 
-    //afegim l'estudi a la llista d'estudis pendents per crear el Dicomdir
-    m_qcreateDicomdir->addStudy( study );
+        //afegim l'estudi a la llista d'estudis pendents per crear el Dicomdir
+        m_qcreateDicomdir->addStudy( study );
+    }
 }
 
 void QueryScreen::openDicomdir()
@@ -1162,16 +1210,8 @@ void QueryScreen::openDicomdir()
     delete dlg;
 }
 
-void QueryScreen::storeStudyToPacs( QString studyUID )
+void QueryScreen::storeStudiesToPacs( QStringList studiesUIDList )
 {
-    CacheStudyDAL cacheStudy;
-    PacsListDB pacsListDB;
-    PacsParameters pacs;
-    StarviewerSettings settings;
-    Operation storeStudyOperation;
-    DicomMask dicomMask;
-    Status state;
-    DICOMStudy study;
     PacsList pacsList;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
@@ -1179,40 +1219,55 @@ void QueryScreen::storeStudyToPacs( QString studyUID )
     pacsList.clear(); //netejem el pacsLIST
     m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
-    switch (pacsList.size())
+    switch( pacsList.size() )
     {
         case  0 :
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "You have to select a Pacs to store the study" ));
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "You have to select a PACS to store the study in" ));
             break;
         case 1 :
-            cacheStudy.queryStudy( studyUID, study );
-
-            dicomMask.setStudyUID( studyUID );
-            storeStudyOperation.setPatientName( study.getPatientName() );
-            storeStudyOperation.setStudyUID( study.getStudyUID() );
-            storeStudyOperation.setOperation( operationMove );
-            storeStudyOperation.setDicomMask( dicomMask );
-            storeStudyOperation.setPatientID( study.getPatientId() );
-            storeStudyOperation.setStudyID( study.getStudyId() );
-
-            pacsList.firstPacs();
-            state = pacsListDB.queryPacs( &pacs, pacsList.getPacs().getAEPacs() );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
-            if ( !state.good() )
+        {
+            StarviewerSettings settings;
+            foreach( QString studyUID, studiesUIDList )
             {
-                QApplication::restoreOverrideCursor();
-                showDatabaseErrorMessage( state );
-                return;
+                CacheStudyDAL cacheStudy;
+                PacsListDB pacsListDB;
+                PacsParameters pacs;
+                Operation storeStudyOperation;
+                DicomMask dicomMask;
+                Status state;
+                DICOMStudy study;
+
+                cacheStudy.queryStudy( studyUID, study );
+                dicomMask.setStudyUID( studyUID );
+                storeStudyOperation.setPatientName( study.getPatientName() );
+                storeStudyOperation.setStudyUID( study.getStudyUID() );
+                storeStudyOperation.setOperation( operationMove );
+                storeStudyOperation.setDicomMask( dicomMask );
+                storeStudyOperation.setPatientID( study.getPatientId() );
+                storeStudyOperation.setStudyID( study.getStudyId() );
+
+                pacsList.firstPacs();
+                state = pacsListDB.queryPacs( &pacs, pacsList.getPacs().getAEPacs() );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
+                if ( state.good() )
+                {
+                    pacsList.firstPacs();
+                    storeStudyOperation.setPacsParameters( pacsList.getPacs() );
+
+                    m_qexecuteOperationThread.queueOperation( storeStudyOperation );
+                }
+                else
+                {
+                    QApplication::restoreOverrideCursor();
+                    // TODO potser s'haurien de recollir si hi ha hagut errors i al final fer el sumari si calgues
+                    showDatabaseErrorMessage( state );
+                }
             }
-
-            pacsList.firstPacs();
-            storeStudyOperation.setPacsParameters( pacsList.getPacs() );
-
-            m_qexecuteOperationThread.queueOperation( storeStudyOperation );
             break;
+        }
         default :
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study can only be stored at one pacs" ));
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The studies can only be stored to one PACS" ));
             break;
     }
 
