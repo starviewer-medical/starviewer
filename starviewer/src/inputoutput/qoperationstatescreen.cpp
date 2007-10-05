@@ -238,7 +238,7 @@ QOperationStateScreen::~QOperationStateScreen()
 
 bool QOperationStateScreen::isOperationFinalized(const QString &message)
 {
-    return  message == tr( "RETRIEVED" ) || message == tr( "STORED" );
+    return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR");
 }
 
 };
