@@ -82,22 +82,22 @@ void QConfigurationScreen::createConnections()
     connect( m_buttonCreateDatabase , SIGNAL( clicked() ) , this ,  SLOT( createDatabase() ) );
 
     //activen el boto apply quant canvia el seu valor
-    connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textCacheImagePath , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textPoolSize , SIGNAL( textChanged(const QString &) ) , this, SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textAETitleMachine , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textTimeout , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textDatabaseRoot , SIGNAL( textChanged(const QString &) ), this , SLOT ( configurationChangedDatabaseRoot( const QString& ) ) );
-    connect( m_textLocalPort , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textMaxConnections , SIGNAL( textChanged(const QString &) ), this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionName , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionAddress , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionTown , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionZipCode , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionCountry , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionPhoneNumber , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textInstitutionEmail , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
-    connect( m_textMaximumDaysNotViewed , SIGNAL( textChanged(const QString &) ) , this , SLOT( configurationChanged( const QString& ) ) );
+    connect( m_textDatabaseRoot, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textCacheImagePath, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textPoolSize, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textAETitleMachine, SIGNAL( textChanged(const QString &) ) , this, SLOT( enableApplyButtons() ) );
+    connect( m_textTimeout, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textDatabaseRoot, SIGNAL( textChanged(const QString &) ), this, SLOT ( configurationChangedDatabaseRoot() ) );
+    connect( m_textLocalPort, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textMaxConnections, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionName, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionAddress, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionTown, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionZipCode, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionCountry, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionPhoneNumber, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textInstitutionEmail, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
+    connect( m_textMaximumDaysNotViewed, SIGNAL( textChanged(const QString &) ), this, SLOT( enableApplyButtons() ) );
 
     //mateniment base de dades
     connect( m_buttonDeleteStudies , SIGNAL( clicked() ) , this , SLOT( deleteStudies() ) );
@@ -280,7 +280,7 @@ void QConfigurationScreen::addPacs()
         {
             fillPacsListView();
             clear();
-            emit( pacsListChanged() );
+            emit( configurationChanged("Pacs/ListChanged") );
         }
     }
 }
@@ -365,7 +365,7 @@ void QConfigurationScreen::updatePacs()
         {
             fillPacsListView();
             clear();
-            emit( pacsListChanged() );
+            emit( configurationChanged("Pacs/ListChanged") );
         }
     }
 }
@@ -399,7 +399,7 @@ void QConfigurationScreen::deletePacs()
     {
         fillPacsListView();
         clear();
-        emit( pacsListChanged() );
+        emit( configurationChanged("Pacs/ListChanged") );
     }
 }
 
@@ -685,17 +685,17 @@ void QConfigurationScreen::applyChangesPacs()
     m_buttonApplyPacs->setEnabled( false );
 }
 
-void QConfigurationScreen::configurationChanged ( const QString& )
+void QConfigurationScreen::enableApplyButtons()
 {
     m_buttonApplyPacs->setEnabled( true );
     m_buttonApplyCache->setEnabled( true );
     m_configurationChanged = true;
 }
 
-void QConfigurationScreen::configurationChangedDatabaseRoot ( const QString& )
+void QConfigurationScreen::configurationChangedDatabaseRoot()
 {
     m_createDatabase= false; //indiquem no s'ha demanat que es creï la base de dades indicada a m_textDatabaseRoot
-    configurationChanged( "" );
+    enableApplyButtons();
 }
 
 
@@ -803,7 +803,7 @@ void QConfigurationScreen::deleteStudies()
         }
 
         loadCachePoolDefaults();
-        emit( cacheCleared() );
+        emit( configurationChanged("Pacs/CacheCleared") );
 
         break;
     }

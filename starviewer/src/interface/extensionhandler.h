@@ -76,6 +76,11 @@ public slots:
      */
     ExtensionContext &getContext();
 
+    /// Actualitza la configuració que se li indica
+    //TODO Semi-xapussa per resoldre el problema de comunicació entre el queryscreen i la seva configuració. Cal fer un disseny de tot això.
+    //Veure el signal de qconfigurationdialog configurationChanged
+    void updateConfiguration(const QString &configuration);
+
 private:
     /// Crea les connexions de signals i slots
     void createConnections();
