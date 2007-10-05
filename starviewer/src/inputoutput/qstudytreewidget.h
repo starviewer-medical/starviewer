@@ -85,15 +85,22 @@ public:
      */
     void setSortColumn(int);
 
-    /** Retorna el AETitle del PACS  l'estudi seleccionat
-     * @return AETitle del PACS de l'estudi seleccionat
+    /**
+     * Cerca l'AETitle del PACS de l'estudi indicat dins dels estudis seleccionats a la llista
+     * @param studyUID uid de l'estudi que volem saber l'AETitle
+     * @return Retorna l'AETitle de l'estudi indicat, sempre que aquest estigui dins dels seleccionats
      */
-    QString getSelectedPacsAETitle();
+    QString getStudyPACSAETitleFromSelectedStudies( QString studyUID );
 
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat
      */
     QString getSelectedStudyUID();
+
+    QStringList getSelectedStudiesUID();
+
+    QStringList getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID );
+    QStringList getStudySelectedImagesUIDFromSelectedStudies( QString studyUID );
 
     /** Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
      *  @return UID de la sèrie seleccionat
@@ -131,7 +138,7 @@ signals :
     void retrieve();
 
     ///signal que s'emet quan es vol esborrar un estudi seleccionat a la QStudyTreeView
-    void delStudy();
+    void deleteSelectedStudies();
 
     ///signal que s'emet quan es vol veure un estudi seleccionat a la QStudyTreeView
     void view();
@@ -142,11 +149,11 @@ signals :
     ///signal que s'emet per netejar el QSeriesListWidget
     void clearSeriesListWidget();
 
-    //signal que s'emet quan es vol convertir un estudi al format DicomDir
-    void convertToDicomDir( QString studyUID );
+    /// signal que s'emet quan es vol convertir els estudis seleccionats al format DicomDir
+    void convertToDicomDir( QStringList studiesUIDList );
 
-    ///signal que s'emet quan es vol guardar un estudi al PACS
-    void storeStudyToPacs( QString studyUID);
+    ///signal que s'emet quan es vol guardar els estudis seleccionats al PACS
+    void storeStudiesToPacs( QStringList studiesUIDList );
 
 public slots:
     /** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
@@ -172,8 +179,8 @@ public slots:
     ///Slot que converteix un estudi
     void createDicomDir();
 
-    ///Slot que guardar un estudi al PACS
-    void storeStudy();
+    ///Slot que guardar els estudis seleccionats al PACS
+    void storeStudies();
 
 private:
     /// crea les connexions dels signals i slots
