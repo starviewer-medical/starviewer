@@ -122,6 +122,7 @@ void QApplicationMainWindow::createActions()
             QAction *action = new QAction(this);
             action->setText( mediator->getExtensionID().getLabel() );
             action->setStatusTip( tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
+            DEBUG_LOG(tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
             action->setEnabled( false );
             m_signalMapper->setMapping( action , mediator->getExtensionID().getID() );
             connect( action , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
@@ -344,7 +345,7 @@ void QApplicationMainWindow::addPatientContext( const ExtensionContext &context 
         m_extensionHandler->openDefaultExtension();
         DEBUG_LOG("No teníem cap pacient, assignem el que ens donen");
     }
-    else if( m_patient->isSamePatient( newPatient ) )
+    else if( ( m_patient->isSamePatient( newPatient ) == Patient::EQUALS ) || ( m_patient->isSamePatient( newPatient ) == Patient::HIGH_SIMILARITY ))
     {
         *m_patient += *newPatient;
         m_extensionHandler->getContext().setPatient( m_patient );
