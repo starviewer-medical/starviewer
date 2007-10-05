@@ -23,6 +23,9 @@ class Patient : public QObject
 {
 Q_OBJECT
 public:
+    ///Enumeració dels graus de similitud
+    enum Similarity{ EQUALS, HIGH_SIMILARITY, LOW_SIMILARITY, DIFERENTS };
+    
     Patient( QObject *parent = 0 );
 
     /// constructor per còpia, necessari pels operadors +, +=, -, -=
@@ -93,9 +96,9 @@ public:
     Patient operator-( const Patient &patient );
     Patient operator-=( const Patient &patient );
 
-    /// retorna cert si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
+    /// retorna si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
     /// No compara ni els estudis ni les sèries que conté, únicament la identificació
-    bool isSamePatient( const Patient *patient );
+    Similarity isSamePatient( const Patient *patient );
 
     /// \TODO Mètode que només serveix per debugar i que s'haurà de refer
     QString toString();
@@ -123,6 +126,9 @@ private:
     double levenshteinDistance( QString s, QString t);
     double needlemanWunch2Distance( QString s, QString t );
     double needlemanWunchDistance(QString s, QString t, int gap );
+    
+    ///ens diu amb un QString la provabilitat de que siguin el mateix pacient
+    Similarity getProbability( double probability );
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.

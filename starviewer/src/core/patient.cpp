@@ -264,27 +264,32 @@ QString Patient::patientNameTreatment( QString patientName )
     return( name );
 }
 
-bool Patient::isSamePatient( const Patient *patient )
+Patient::Similarity Patient::isSamePatient( const Patient *patient )
 {
     //si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
-    bool isSame = ( patient->m_patientID == this->m_patientID );
-
-    if ( !isSame )
+    if ( patient->m_patientID == this->m_patientID )
+        return( EQUALS );
+    else
     {
         //Pre-tractament sobre el nom del pacient per treure caràcters extranys
         QString nameOfThis = patientNameTreatment( this->getFullName() );
         QString nameOfParameter = patientNameTreatment( patient->getFullName() );
 
         //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
-        isSame = ( nameOfThis == nameOfParameter );
-
-//         if ( !isSame )
-//         {
-//             int distance = LevenshteinDistance( nameOfThis, nameOfParameter );
-//         }
+        if ( nameOfThis == nameOfParameter )
+            return( EQUALS );
+        else
+        {
+            //si tenen poca similitud, retornarem la similitud entre els identificadors dels dos pacients
+            if ( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) == LOW_SIMILARITY )
+            {
+                return ( getProbability( needlemanWunch2Distance( patient->m_patientID , this->m_patientID )));
+            }
+            else  //si tenen molta similitud, retornem aquest valor
+                return( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) );
+                                 
+        }
     }
-
-    return ( isSame );
 }
 
 QString Patient::toString()
@@ -381,5 +386,20 @@ double Patient::needlemanWunch2Distance( QString s, QString t )
 double Patient::levenshteinDistance( QString s, QString t)
 {
     return needlemanWunchDistance( s, t, 1 );
+}
+
+Patient::Similarity Patient::getProbability( double probability )
+{
+    Patient::Similarity sim;
+    if ( probability < 0.1 )
+        sim = EQUALS;
+    else if ( ( probability >= 0.1 ) && ( probability < 0.25 ) )
+        sim = HIGH_SIMILARITY;
+    else if ( ( probability >= 0.25 ) && ( probability < 0.31 ) )
+        sim = LOW_SIMILARITY;
+    else
+        sim = DIFERENTS;
+    
+    return ( sim );
 }
 }
