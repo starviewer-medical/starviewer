@@ -59,7 +59,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     createConnections();
 
     setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
-    m_studyTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 }
 
 QStudyTreeWidget::~QStudyTreeWidget()
