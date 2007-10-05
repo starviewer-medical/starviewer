@@ -6,8 +6,6 @@
  ***************************************************************************/
 #include "qconfigurationdialog.h"
 
-#include <QLabel>
-
 #include "qconfigurationscreen.h"
 
 namespace udg {
@@ -20,21 +18,6 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     QConfigurationScreen *screen = new QConfigurationScreen(this);
     this->addConfigurationWidget(screen, "PACS", AdvancedConfiguration);
 
-    QLabel *label = new QLabel("Provant, provant");
-    label->setWindowTitle("Prova");
-    this->addConfigurationWidget(label, "Prova_NoAdvanced", BasicConfiguration);
-/*
-    udg::QConfigurationScreen *configScreen = new udg::QConfigurationScreen;
-
-    INFO_LOG( "S'obre la finestra de configuració" );
-
-    connect( configScreen , SIGNAL(  pacsListChanged() ) , qPacsList , SLOT(  refresh()  ) );
-    connect( configScreen , SIGNAL(  cacheCleared() ) , m_studyTreeWidgetCache , SLOT(  clear() ) );
-    connect( configScreen , SIGNAL(  cacheCleared() ) , m_seriesListWidgetCache , SLOT(  clear() ) );
-
-    //configScreen->setModal( true );
-    configScreen->show();
-*/
     connect(screen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), this, SLOT(setViewAdvancedConfiguration()));
 

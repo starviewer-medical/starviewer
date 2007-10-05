@@ -165,29 +165,6 @@ void QConfigurationScreen::loadCachePoolDefaults()
 
     m_textPoolSize->setText( QString::number( space / 1024 , 10 ) );
 
-/*    result = used;
-    result = result / 1024; //passem Mb a Gb;
-    text.setNum( result , 'f' , 2 );
-    text.append( " Gb" );
-    m_PoolUsed->setText( text );
-
-    //espai lliure
-    result = space - used;
-    result = result / 1024;
-    text.setNum( result , 'f' , 2 );
-    text.append( " Gb" );
-    m_PoolFree->setText( text );
-
-    //Percentatges
-    result = used / space * 100;
-    text.setNum( result , 'f' , 1 );
-    text.append( " %" );
-    m_PoolUsedPerc->setText( text );
-
-    result = ( space - used ) / space * 100;
-    text.setNum( result , 'f' , 1 );
-    text.append( " %" );
-    m_PoolFreePerc->setText( text );*/
     float usedMBs = used / 1024;
     float freeMBs = (space - used) / 1024;
     float usedPercentage = static_cast<float>(used) / space * 100.f;
