@@ -135,96 +135,93 @@ void QueryScreen::updateOperationsInProgressMessage()
 void QueryScreen::createConnections()
 {
     //connectem els butons
-    connect( m_searchButton , SIGNAL( clicked() ) , this , SLOT( searchStudy() ) );
-    connect( m_clearButton , SIGNAL( clicked() ) , this , SLOT( clearTexts() ) );
-    connect( m_retrieveButtonPACS , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
-    connect( m_retrieveButtonDICOMDIR , SIGNAL( clicked() ) , this , SLOT( retrieve() ) );
-    connect( m_retrieveListButton , SIGNAL( clicked() ) , m_operationStateScreen , SLOT( show() ) );
-    connect( m_showPacsListButton , SIGNAL( toggled(bool) ) , m_PACSNodes , SLOT( setVisible(bool) ) );
-    connect( m_viewButtonLocal , SIGNAL( clicked() ) , this , SLOT( view() ) );
-    connect( m_viewButtonPACS , SIGNAL( clicked() ) , this , SLOT( view() ) );
-    connect( m_viewButtonDICOMDIR , SIGNAL( clicked() ) , this , SLOT( view() ) );
-    connect( m_createDicomdirButton , SIGNAL ( clicked() ) , m_qcreateDicomdir , SLOT( show() ) );
+    connect( m_searchButton, SIGNAL( clicked() ), SLOT( searchStudy() ) );
+    connect( m_clearButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
+    connect( m_retrieveButtonPACS, SIGNAL( clicked() ), SLOT( retrieve() ) );
+    connect( m_retrieveButtonDICOMDIR, SIGNAL( clicked() ), SLOT( retrieve() ) );
+    connect( m_retrieveListButton, SIGNAL( clicked() ), m_operationStateScreen, SLOT( show() ) );
+    connect( m_showPacsListButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
+    connect( m_viewButtonLocal, SIGNAL( clicked() ), SLOT( view() ) );
+    connect( m_viewButtonPACS, SIGNAL( clicked() ), SLOT( view() ) );
+    connect( m_viewButtonDICOMDIR, SIGNAL( clicked() ), SLOT( view() ) );
+    connect( m_createDicomdirButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
 
     //connectem Slots dels StudyTreeWidget amb la interficie
-    connect( m_studyTreeWidgetPacs , SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetCache,  SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetDicomdir,  SIGNAL( expandStudy( QString , QString ) ) , this , SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetPacs , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
-    connect( m_studyTreeWidgetDicomdir , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
-    connect( m_studyTreeWidgetCache , SIGNAL( expandSeries( QString , QString , QString ) ) , this , SLOT( searchImages( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( expandSeries( QString , QString , QString ) ), SLOT( searchImages( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( expandSeries( QString , QString , QString ) ), SLOT( searchImages( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( expandSeries( QString , QString , QString ) ), SLOT( searchImages( QString , QString , QString ) ) );
 
     //es canvia de pestanya del TAB
-    connect( m_tab , SIGNAL( currentChanged( int ) ) , this , SLOT( refreshTab( int ) ) );
+    connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
 
     //conectem els signals dels TreeView
-    connect( m_studyTreeWidgetCache , SIGNAL( delStudy() ) , this , SLOT( deleteStudyCache() ) );
-    connect( m_studyTreeWidgetCache , SIGNAL( view() ) , this , SLOT( view() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( delStudy() ), SLOT( deleteStudyCache() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( view() ), SLOT( view() ) );
 
     //quan fem doble click sobre un estudi o sèrie de la llista d'estudis
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( view() ), this, SLOT( view() ));
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( view() ), SLOT( view() ));
 
     //connectem els signes del SeriesIconView StudyListView
-    connect( m_studyTreeWidgetCache , SIGNAL( addSeries(DICOMSeries * ) ) , m_seriesListWidgetCache , SLOT( insertSeries(DICOMSeries *) ) );
-    connect( m_studyTreeWidgetCache , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clear() ) );
-    connect( m_seriesListWidgetCache , SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( selectedSeriesIcon(QString) ) );
-    connect( m_seriesListWidgetCache , SIGNAL( viewSeriesIcon() ) , m_studyTreeWidgetCache , SIGNAL( view() ) );
-    connect( m_studyTreeWidgetCache , SIGNAL( storeStudyToPacs( QString) ) , this , SLOT( storeStudyToPacs( QString) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( addSeries(DICOMSeries * ) ), m_seriesListWidgetCache, SLOT( insertSeries(DICOMSeries *) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
+    connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( selectedSeriesIcon(QString) ) );
+    connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), m_studyTreeWidgetCache, SIGNAL( view() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( storeStudyToPacs( QString) ), SLOT( storeStudyToPacs( QString) ) );
 
 
     //per netejar la QSeriesIconView quant s'esborrar un estudi
-    connect(this , SIGNAL( clearSeriesListWidget() ) , m_seriesListWidgetCache , SLOT( clear() ) );
+    connect(this, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
 
     //per poder descarregar i veure un estudi amb el menu contextual dels del QStudyList del PACS
-    connect( m_studyTreeWidgetPacs , SIGNAL( view() ) , this , SLOT( view() ) );
-    connect( m_studyTreeWidgetPacs , SIGNAL( retrieve() ) , this , SLOT( retrieve() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( view() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( retrieve() ), SLOT( retrieve() ) );
 
     //slot per importar objecte del dicomdir
-    connect( m_studyTreeWidgetDicomdir , SIGNAL( retrieve() ) , this , SLOT( importDicomdir() ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( retrieve() ), SLOT( importDicomdir() ) );
 
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
-    QObject::connect( &m_qexecuteOperationThread , SIGNAL( viewStudy( QString , QString , QString ) ) , this , SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
+    connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect( &m_qexecuteOperationThread , SIGNAL(  setErrorOperation( QString ) ) , m_operationStateScreen, SLOT(  setErrorOperation( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperationFinished( QString ) ) , m_operationStateScreen, SLOT(  setOperationFinished( QString ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation( QString ) ), m_operationStateScreen, SLOT(  setErrorOperation( QString ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished( QString ) ), m_operationStateScreen, SLOT(  setOperationFinished( QString ) ) );
 
-    connect( &m_qexecuteOperationThread , SIGNAL(  setOperating( QString ) ) , m_operationStateScreen, SLOT(  setOperating( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  imageCommit( QString , int) ) , m_operationStateScreen , SLOT(  imageCommit( QString , int ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  seriesCommit( QString ) ) ,  m_operationStateScreen , SLOT(  seriesCommit( QString ) ) );
-    connect( &m_qexecuteOperationThread , SIGNAL(  newOperation( Operation * ) ) ,  m_operationStateScreen , SLOT(  insertNewOperation( Operation *) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( setOperating( QString ) ), m_operationStateScreen, SLOT(  setOperating( QString ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( imageCommit( QString , int) ), m_operationStateScreen, SLOT(  imageCommit( QString , int ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( seriesCommit( QString ) ), m_operationStateScreen, SLOT(  seriesCommit( QString ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( newOperation( Operation * ) ), m_operationStateScreen, SLOT(  insertNewOperation( Operation *) ) );
 
     // Label d'informació (cutre-xapussa)
-    connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), this, SLOT( updateOperationsInProgressMessage() ));
-    connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), this, SLOT( updateOperationsInProgressMessage() ));
-    connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ),  this, SLOT( updateOperationsInProgressMessage() ));
+    connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
+    connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), SLOT( updateOperationsInProgressMessage() ));
+    connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ), SLOT( updateOperationsInProgressMessage() ));
 
     //connect tracta els errors de connexió al PACS
-    connect ( &multipleQueryStudy , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
-
-    connect ( &multipleQueryStudy , SIGNAL ( errorQueringStudiesPacs( int ) ) , this , SLOT(  errorQueringStudiesPacs( int ) ) );
-
+    connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( int ) ), SLOT( errorConnectingPacs( int ) ) );
+    connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( int ) ), SLOT( errorQueringStudiesPacs( int ) ) );
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
-    connect ( &m_qexecuteOperationThread , SIGNAL ( errorConnectingPacs( int ) ) , this , SLOT(  errorConnectingPacs( int ) ) );
-
-    connect( &m_qexecuteOperationThread , SIGNAL(  setRetrieveFinished( QString ) ) , this, SLOT(  studyRetrieveFinished ( QString ) ) );
+    connect ( &m_qexecuteOperationThread, SIGNAL( errorConnectingPacs( int ) ), SLOT( errorConnectingPacs( int ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( setRetrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
 
     //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
-    connect( m_studyTreeWidgetCache , SIGNAL ( convertToDicomDir( QString ) ) , this , SLOT ( convertToDicomdir( QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( convertToDicomDir( QString ) ), SLOT( convertToDicomdir( QString ) ) );
 
     //Amaga o ensenya la cerca avançada
-    connect( m_advancedSearchButton , SIGNAL( toggled( bool ) ) , this , SLOT( setAdvancedSearchVisible( bool ) ) );
+    connect( m_advancedSearchButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
 
-    connect( m_textOtherModality , SIGNAL ( editingFinished () ) , SLOT( textOtherModalityEdited() ) );
+    connect( m_textOtherModality, SIGNAL( editingFinished () ), SLOT( textOtherModalityEdited() ) );
 
-    connect( m_fromStudyDate, SIGNAL( dateChanged( QDate ) ) , this , SLOT( checkNewFromDate( QDate ) ) );
-    connect( m_toStudyDate, SIGNAL( dateChanged( QDate ) ) , this , SLOT( checkNewToDate( QDate ) ) );
+    connect( m_fromStudyDate, SIGNAL( dateChanged( QDate ) ), SLOT( checkNewFromDate( QDate ) ) );
+    connect( m_toStudyDate, SIGNAL( dateChanged( QDate ) ), SLOT( checkNewToDate( QDate ) ) );
 
     foreach(QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>())
     {
-        connect(lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateAdvancedSearchModifiedStatus()));
+        connect(lineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateAdvancedSearchModifiedStatus()));
     }
 }
 
