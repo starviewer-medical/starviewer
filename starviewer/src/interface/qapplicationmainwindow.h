@@ -40,8 +40,10 @@ public:
      * Farà les accions pertinents segons si es tracta del mateix o un nou pacient obrint noves finestres
      * o fusionant informació
      * @param context El contexte que defineix el pacient
+     * @param overwriteIfDifferentPatient indica que matxaquem el pacient actual si el proporcionat és diferent quan
+     * el valor és true. En cas que sigui fals, obrim una nova finestra
      */
-    void addPatientContext( const ExtensionContext &context );
+    void addPatientContext( const ExtensionContext &context, bool overwriteIfDifferentPatient = true );
 
     /// Ens retorna el punter al pacient que té ara
     Patient *getCurrentPatient();

@@ -24,8 +24,8 @@ class Patient : public QObject
 Q_OBJECT
 public:
     ///Enumeració dels graus de similitud
-    enum Similarity{ EQUALS, HIGH_SIMILARITY, LOW_SIMILARITY, DIFERENTS };
-    
+    enum PatientIdentity{ ExactIdentity, VerySimilarIdentity, FuzzyIdentity, DifferentIdentity };
+
     Patient( QObject *parent = 0 );
 
     /// constructor per còpia, necessari pels operadors +, +=, -, -=
@@ -98,7 +98,7 @@ public:
 
     /// retorna si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
     /// No compara ni els estudis ni les sèries que conté, únicament la identificació
-    Similarity isSamePatient( const Patient *patient );
+    PatientIdentity isSamePatient( const Patient *patient );
 
     /// \TODO Mètode que només serveix per debugar i que s'haurà de refer
     QString toString();
@@ -126,9 +126,15 @@ private:
     double levenshteinDistance( QString s, QString t);
     double needlemanWunch2Distance( QString s, QString t );
     double needlemanWunchDistance(QString s, QString t, int gap );
-    
-    ///ens diu amb un QString la provabilitat de que siguin el mateix pacient
-    Similarity getProbability( double probability );
+
+    /// ens diu la probabilitat de que siguin el mateix pacient
+    PatientIdentity getProbability( double probability );
+
+    /**
+     * Crea un missatge de log per saber quins pacients estem fusionant
+     * @param patient Les dades del pacient que es fusiona amb aquest
+     */
+    void patientFusionLogMessage( const Patient &patient );
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.

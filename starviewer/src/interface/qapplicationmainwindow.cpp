@@ -122,7 +122,7 @@ void QApplicationMainWindow::createActions()
             QAction *action = new QAction(this);
             action->setText( mediator->getExtensionID().getLabel() );
             action->setStatusTip( tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
-            DEBUG_LOG(tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
+            DEBUG_LOG( "Etiqueta d'extensió traduida?: " + mediator->getExtensionID().getLabel() );
             action->setEnabled( false );
             m_signalMapper->setMapping( action , mediator->getExtensionID().getID() );
             connect( action , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
@@ -326,7 +326,7 @@ void QApplicationMainWindow::overwriteCurrentWindow( const ExtensionContext &con
     this->addPatientContext( context );
 }
 
-void QApplicationMainWindow::addPatientContext( const ExtensionContext &context )
+void QApplicationMainWindow::addPatientContext( const ExtensionContext &context, bool overwriteIfDifferentPatient )
 {
     Patient *newPatient = context.getPatient();
     if( !newPatient ) // si les dades de pacient són nules, no fem res
@@ -345,7 +345,7 @@ void QApplicationMainWindow::addPatientContext( const ExtensionContext &context 
         m_extensionHandler->openDefaultExtension();
         DEBUG_LOG("No teníem cap pacient, assignem el que ens donen");
     }
-    else if( ( m_patient->isSamePatient( newPatient ) == Patient::EQUALS ) || ( m_patient->isSamePatient( newPatient ) == Patient::HIGH_SIMILARITY ))
+    else if( ( m_patient->isSamePatient( newPatient ) == Patient::ExactIdentity ) || ( m_patient->isSamePatient( newPatient ) == Patient::VerySimilarIdentity ))
     {
         *m_patient += *newPatient;
         m_extensionHandler->getContext().setPatient( m_patient );
@@ -353,11 +353,18 @@ void QApplicationMainWindow::addPatientContext( const ExtensionContext &context 
     }
     else
     {
-        // és un pacient diferent, cal obrir-lo apart en una nova finestra
-//         openNewWindow( context );
-        // canviem de política, pacient diferent, pacient matxacat
-        overwriteCurrentWindow( context );
-        DEBUG_LOG("Creem nou pacient");
+        // és un pacient diferent
+        if( overwriteIfDifferentPatient )
+        {
+            overwriteCurrentWindow( context );
+            DEBUG_LOG("Matxaquem el pacient actual en la mateixa finestra");
+        }
+        else
+        {
+            openNewWindow( context );
+            DEBUG_LOG("Creem nou pacient amb una nova finestra");
+        }
+
     }
 }
 
