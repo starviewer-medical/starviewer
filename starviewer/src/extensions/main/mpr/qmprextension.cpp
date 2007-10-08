@@ -41,7 +41,7 @@
 namespace udg {
 
 QMPRExtension::QMPRExtension( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_axialZeroSliceCoordinate(.0)
 {
     setupUi( this );
     init();
@@ -412,9 +412,7 @@ void QMPRExtension::detectAxialViewAxisActor()
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
-
     }
-
 }
 
 void QMPRExtension::rotateAxialViewAxisActor()
@@ -722,7 +720,13 @@ void QMPRExtension::releasePushSagitalViewAxisActor()
 
 void QMPRExtension::setInput( Volume *input )
 {
-    m_volume = input;
+    vtkImageChangeInformation *changeInfo = vtkImageChangeInformation::New();
+    changeInfo->SetInput( input->getVtkData() );
+    changeInfo->SetOutputOrigin( .0, .0, .0 );
+
+    m_volume = new Volume;
+    m_volume->setImages( input->getImages() );
+    m_volume->setData( changeInfo->GetOutput() );
 
     m_volume->updateInformation();
     m_volume->getSpacing( m_axialSpacing );
@@ -795,15 +799,6 @@ void QMPRExtension::initOrientation()
     double spacing[3];
     m_volume->getSpacing(spacing);
 
-    DEBUG_LOG( QString("Dades volum original-------\nOrigen: %1,%2,%3\nSpacing: %4,%5,%6")
-        .arg( origin[0] )
-        .arg( origin[1] )
-        .arg( origin[2] )
-        .arg( spacing[0] )
-        .arg( spacing[1] )
-        .arg( spacing[2] )
-        );
-
     // Prevent obscuring voxels by offsetting the plane geometry
     //
     double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5) ,
@@ -832,17 +827,18 @@ void QMPRExtension::initOrientation()
         zbounds[1] = t;
     }
     //XY, z-normal : vista axial , en principi d'aquesta vista nomès canviarem la llesca
-    m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[1] , zbounds[0] );
-    m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[1] , zbounds[0] );
-    m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[0] );
+    m_axialPlaneSource->SetOrigin( xbounds[0] , ybounds[1] , zbounds[1] );
+    m_axialPlaneSource->SetPoint1( xbounds[1] , ybounds[1] , zbounds[1] );
+    m_axialPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[1] );
+    m_axialZeroSliceCoordinate = zbounds[1];
 
     //YZ, x-normal : vista sagital
     // estem ajustant la mida del pla a les dimensions d'aquesta orientació
     // TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
-    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[1] , zbounds[1] );
-    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[0] , zbounds[1] );
-    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[1] , zbounds[0] );
-    m_sagitalPlaneSource->Push( 0.5 * ( xbounds[1] - xbounds[0] ) );
+    m_sagitalPlaneSource->SetOrigin( xbounds[0] , ybounds[0] , zbounds[1] );
+    m_sagitalPlaneSource->SetPoint1( xbounds[0] , ybounds[1] , zbounds[1] );
+    m_sagitalPlaneSource->SetPoint2( xbounds[0] , ybounds[0] , zbounds[0] );
+    m_sagitalPlaneSource->Push( -0.5 * ( xbounds[1] - xbounds[0] ) );
 
     //ZX, y-normal : vista coronal
     // ídem anterior
@@ -852,11 +848,11 @@ void QMPRExtension::initOrientation()
     double diffXBound = maxXBound - xbounds[1];
     double diffZBound = maxZBound - zbounds[1];
 
-    m_coronalPlaneSource->SetOrigin( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
-    m_coronalPlaneSource->SetPoint1( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
-    m_coronalPlaneSource->SetPoint2( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
+    m_coronalPlaneSource->SetOrigin( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint1( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
     // posem en la llesca central
-    m_coronalPlaneSource->Push( - 0.5 * ( ybounds[1] - ybounds[0] ) );
+    m_coronalPlaneSource->Push( 0.5 * ( ybounds[1] - ybounds[0] ) );
 
     updatePlanes();
     updateControls();
@@ -951,8 +947,8 @@ void QMPRExtension::createActors()
 
 void QMPRExtension::axialSliceUpdated( int slice )
 {
-    // nou push - anterior push = push relatiu que hem de fer
-    m_axialPlaneSource->Push( ( slice * m_axialSpacing[2] ) - m_axialPlaneSource->GetOrigin()[2] );
+    // push relatiu que hem de fer = reubicar-nos a l'inici i colocar la llesca
+    m_axialPlaneSource->Push( -(m_axialZeroSliceCoordinate - m_axialPlaneSource->GetOrigin()[2]) + (slice*m_axialSpacing[2]) );
     m_axialPlaneSource->Update();
     updateControls();
 }
@@ -1099,8 +1095,10 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 //     {
         double origin[3];
         m_volume->getOrigin( origin );
+
         int extent[6];
         m_volume->getWholeExtent(extent);
+
         double bounds[] = { origin[0] + spacing[0]*extent[0], //xmin
                         origin[0] + spacing[0]*extent[1], //xmax
                         origin[1] + spacing[1]*extent[2], //ymin
@@ -1120,8 +1118,10 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
         double abs_normal[3];
         planeSource->GetNormal(abs_normal);
+
         double planeCenter[3];
         planeSource->GetCenter(planeCenter);
+
         double nmax = 0.0;
         int k = 0;
         for ( i = 0; i < 3; i++ )
@@ -1251,7 +1251,6 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
     // \TODO li passem thickSlab que és double però això només accepta int's! Buscar si aquesta és la manera adequada. Potsre si volem fer servir doubles ho hauríem de combinar amb l'outputSpacing
     reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , static_cast<int>( m_thickSlab ) ); // obtenim una única llesca
     reslice->Update();
-
 }
 
 void QMPRExtension::getSagitalXVector( double x[3] )
