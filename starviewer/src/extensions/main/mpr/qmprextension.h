@@ -110,6 +110,9 @@ private:
     /// Ens serà molt útil ens molts de càlculs i a més serà una dada constant un cop tenim l'input
     double m_axialSpacing[3];
 
+    /// aquesta variable ens servirà per controlar on col·loquem la llesca del pla axial
+    double m_axialZeroSliceCoordinate;
+
     /// Punt d'intersecció entre els 3 plans
     double m_intersectionPoint[3];
 
