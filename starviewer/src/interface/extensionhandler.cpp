@@ -172,11 +172,9 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
         // marquem les series seleccionades
         Study *study = NULL;
-        if ( !defaultStudyUID.isEmpty() )
-        {
-            study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
-        }
-        else   // Si no ens diuen un study seleccionat en seleccionem un nosaltres.
+        study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
+        // Si no ens diuen un study seleccionat en seleccionem un nosaltres. Això pot ser perquè l'uid d'estudi sigui d'un altre pacient o perquè l'uid està buit
+        if(!study)
         {
             QList<Study *> studyList = fillerInput->getPatient(i)->getStudies();
             if ( !studyList.isEmpty() )
@@ -186,15 +184,13 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
         }
 
         bool error = true;
-
         if( study )
         {
             Series *series = NULL;
-            if( !defaultSeriesUID.isEmpty() )
-            {
-                series = fillerInput->getPatient(i)->getSeries( defaultSeriesUID );
-            }
-            else   // No tenim cap serie seleccionada, seleccionem per defecte la primera
+            series = fillerInput->getPatient(i)->getSeries( defaultSeriesUID );
+            // si aquest ens "falla" és perquè possiblement l'UID és d'un altre estudi
+            // o perquè l'uid és buit, per tant no tenim cap predilecció i escollim el primer
+            if( !series ) // No tenim cap serie seleccionada, seleccionem per defecte la primera
             {
                 QList<Series *> seriesList = study->getSeries();
                 if( !seriesList.isEmpty() )
@@ -223,7 +219,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
         if (!error)
         {
-            m_mainApp->addPatientContext( extensionContext );
+            m_mainApp->addPatientContext( extensionContext, false );
         }
     }
 

@@ -225,7 +225,7 @@ private:
      * @param studiesUIDList Llista d'uid's d'estudi
      * @param source font des d'on es volen carregar les dades (Cache i DICOMDIR suportats de moment)
      */
-    void loadStudies( QStringList studiesUIDList, QString source );
+    void loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source );
 
     /** Insereix un estudi a descarregar a la cache
      * @param estudi a insertat
