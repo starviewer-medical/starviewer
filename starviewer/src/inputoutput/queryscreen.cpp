@@ -1002,14 +1002,14 @@ void QueryScreen::view()
     {
         case 0 :
 //             retrieve( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
-            loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), "Cache" );
+            loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getSelectedSeriesUID(), m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
             break;
         case 1 :
             retrievePacs( true );
            break;
         case 2 :
 //             retrieve( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
-            loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), "DICOMDIR" );
+            loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), m_studyTreeWidgetDicomdir->getSelectedSeriesUID(), m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
             break;
         default :
             break;
@@ -1052,7 +1052,7 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
     emit processFiles( files, studyUID, seriesUID, sopInstanceUID );
 }
 
-void QueryScreen::loadStudies( QStringList studiesUIDList, QString source )
+void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source )
 {
     if( studiesUIDList.isEmpty() )
     {
@@ -1090,7 +1090,7 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString source )
     }
 
     // enviem la informació a processar
-    emit processFiles( files, QString(), QString(), QString() );
+    emit processFiles( files, studiesUIDList.first(), defaultSeriesUID, defaultSOPInstanceUID );
 }
 
 void QueryScreen::importDicomdir()
