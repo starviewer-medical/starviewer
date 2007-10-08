@@ -19,6 +19,7 @@ namespace udg {
 */
 class EdemaSegmentationExtensionMediator : public ExtensionMediator
 {
+    Q_OBJECT
 public:
     EdemaSegmentationExtensionMediator(QObject *parent = 0);
 

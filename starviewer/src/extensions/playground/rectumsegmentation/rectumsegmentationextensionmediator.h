@@ -19,6 +19,7 @@ namespace udg {
 */
 class RectumSegmentationExtensionMediator : public ExtensionMediator
 {
+    Q_OBJECT
 public:
     RectumSegmentationExtensionMediator(QObject *parent = 0);
 

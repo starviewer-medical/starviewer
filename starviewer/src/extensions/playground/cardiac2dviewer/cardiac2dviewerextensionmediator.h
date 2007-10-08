@@ -19,6 +19,7 @@ namespace udg {
 */
 class Cardiac2DViewerExtensionMediator : public ExtensionMediator
 {
+    Q_OBJECT
 public:
     Cardiac2DViewerExtensionMediator(QObject *parent = 0);
 

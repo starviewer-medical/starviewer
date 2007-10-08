@@ -17,8 +17,9 @@ namespace udg {
 /**
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class Volume3DViewTestingExtensionMediator : public ExtensionMediator {
-
+class Volume3DViewTestingExtensionMediator : public ExtensionMediator
+{
+    Q_OBJECT
 public:
 
     Volume3DViewTestingExtensionMediator( QObject * parent = 0 );

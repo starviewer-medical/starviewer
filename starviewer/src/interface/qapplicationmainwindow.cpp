@@ -122,7 +122,6 @@ void QApplicationMainWindow::createActions()
             QAction *action = new QAction(this);
             action->setText( mediator->getExtensionID().getLabel() );
             action->setStatusTip( tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
-            DEBUG_LOG( "Etiqueta d'extensió traduida?: " + mediator->getExtensionID().getLabel() );
             action->setEnabled( false );
             m_signalMapper->setMapping( action , mediator->getExtensionID().getID() );
             connect( action , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );

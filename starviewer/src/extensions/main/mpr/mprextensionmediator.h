@@ -19,6 +19,7 @@ namespace udg{
 */
 class MPRExtensionMediator: public ExtensionMediator
 {
+    Q_OBJECT
 public:
     MPRExtensionMediator(QObject *parent = 0);
 

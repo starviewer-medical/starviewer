@@ -27,9 +27,9 @@ namespace udg {
 /**
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class OptimalViewpointExtensionMediator : public ExtensionMediator {
-
-
+class OptimalViewpointExtensionMediator : public ExtensionMediator
+{
+    Q_OBJECT
 public:
 
     OptimalViewpointExtensionMediator( QObject * parent = 0 );

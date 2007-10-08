@@ -19,6 +19,7 @@ namespace udg {
 */
 class MPRCardiac3DExtensionMediator : public ExtensionMediator
 {
+    Q_OBJECT
 public:
     MPRCardiac3DExtensionMediator(QObject *parent = 0);
 
