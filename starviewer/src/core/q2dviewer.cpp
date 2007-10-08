@@ -1091,7 +1091,7 @@ void Q2DViewer::resetCamera()
         {
         case Axial:
             m_viewer->SetSliceOrientationToXY();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= (m_viewer->GetSliceMax()))
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
                 cam = renderer->GetActiveCamera();
@@ -1112,7 +1112,7 @@ void Q2DViewer::resetCamera()
 
         case Sagittal:
             m_viewer->SetSliceOrientationToYZ();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
                 cam = renderer->GetActiveCamera();
@@ -1134,7 +1134,7 @@ void Q2DViewer::resetCamera()
 
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i < m_viewer->GetSliceMax())
+            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
                 cam = renderer->GetActiveCamera();
