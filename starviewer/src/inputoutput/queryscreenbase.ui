@@ -1201,6 +1201,9 @@
          <height>32</height>
         </size>
        </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
@@ -1353,6 +1356,9 @@
            <property name="text" >
             <string>View</string>
            </property>
+           <property name="autoDefault" >
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -1382,6 +1388,9 @@
              <width>32</width>
              <height>32</height>
             </size>
+           </property>
+           <property name="default" >
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1452,6 +1461,9 @@
            <property name="text" >
             <string>View</string>
            </property>
+           <property name="autoDefault" >
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -1481,6 +1493,9 @@
              <width>32</width>
              <height>32</height>
             </size>
+           </property>
+           <property name="default" >
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1529,6 +1544,9 @@
        </property>
        <property name="text" >
         <string>Operation List</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -1586,6 +1604,9 @@
       <widget class="QPushButton" name="m_createDicomdirButton" >
        <property name="text" >
         <string>Create DICOMDIR</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
        </property>
       </widget>
      </item>
