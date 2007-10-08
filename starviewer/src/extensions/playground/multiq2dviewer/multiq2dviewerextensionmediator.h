@@ -18,6 +18,7 @@ namespace udg{
 */
 class MultiQ2DViewerExtensionMediator: public ExtensionMediator
 {
+    Q_OBJECT
 public:
     MultiQ2DViewerExtensionMediator(QObject *parent = 0);
 

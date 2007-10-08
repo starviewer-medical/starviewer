@@ -19,6 +19,7 @@ namespace udg{
 */
 class Q2DViewerExtensionMediator: public ExtensionMediator
 {
+    Q_OBJECT
 public:
     Q2DViewerExtensionMediator(QObject *parent = 0);
 

@@ -19,6 +19,7 @@ namespace udg {
 */
 class LandmarkRegistrationExtensionMediator : public ExtensionMediator
 {
+    Q_OBJECT
 public:
     LandmarkRegistrationExtensionMediator(QObject *parent = 0);
 
