@@ -24,8 +24,8 @@ class Status;
 class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
 Q_OBJECT
 public:
-
     QCreateDicomdir( QWidget *parent = 0 );
+    ~QCreateDicomdir();
 
     /** Afegeix un estudi per convertir a dicomdir
      * @param study estudi per convertir a dicomdir
@@ -35,10 +35,13 @@ public:
     ///Neteja el directori temporal utilitzat crear els dicomdir que es gravaran en cd o dvd
     void clearTemporaryDir();
 
-    ~QCreateDicomdir();
+    /** Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a Dicomdir
+     * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
+     * @return indica si existeix l'estudi a la llista d'estudis pendents de passa a DicomDir
+     */
+    bool studyExists( QString studyUID );
 
 public slots:
-
     ///Slot que esborra l'estudi seleccionat de la llista
     void removeSelectedStudy();
 
@@ -78,12 +81,6 @@ private:
      * @param Hora de l'estudi
      */
     QString formatHour( const QString );
-
-    /** Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a Dicomdir
-     * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
-     * @return indica si existeix l'estudi a la llista d'estudis pendents de passa a DicomDir
-     */
-    bool existsStudy( QString studyUID );
 
     ///Dona valor a l'etiqueta que indica l'espai que ocupa el Dicomdir
     void setDicomdirSize();

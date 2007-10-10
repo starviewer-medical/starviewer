@@ -159,7 +159,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
     unsigned long studySize;
     Status state;
 
-    if ( !existsStudy( study.getStudyUID() ) )
+    if ( !studyExists( study.getStudyUID() ) )
     {
         //consultem la mida de l'estudi
         imageMask.setStudyUID( study.getStudyUID() );
@@ -450,7 +450,7 @@ void QCreateDicomdir::removeSelectedStudy()
     }
 }
 
-bool QCreateDicomdir::existsStudy( QString studyUID )
+bool QCreateDicomdir::studyExists( QString studyUID )
 {
     QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( studyUID , Qt::MatchExactly, 7 ) );
 
