@@ -869,7 +869,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1193"/>
+        <location filename="queryscreen.cpp" line="1201"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1237,7 +1237,7 @@ Error Number: %1</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1541"/>
+        <location filename="queryscreen.cpp" line="1549"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1298,7 +1298,7 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1299"/>
+        <location filename="queryscreen.cpp" line="1307"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation type="unfinished"></translation>
@@ -1314,12 +1314,12 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1193"/>
+        <location filename="queryscreen.cpp" line="1201"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1208"/>
+        <location filename="queryscreen.cpp" line="1216"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1346,13 +1346,13 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1314"/>
+        <location filename="queryscreen.cpp" line="1322"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1541"/>
+        <location filename="queryscreen.cpp" line="1549"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
@@ -1373,13 +1373,18 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1239"/>
+        <location filename="queryscreen.cpp" line="1247"/>
         <source>You have to select a PACS to store the study in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1283"/>
+        <location filename="queryscreen.cpp" line="1291"/>
         <source>The studies can only be stored to one PACS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1135"/>
+        <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
