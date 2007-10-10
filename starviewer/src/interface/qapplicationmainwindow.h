@@ -36,14 +36,17 @@ public:
     ~QApplicationMainWindow();
 
     /**
-     * Afegeix noves dades de pacient a la finestra.
-     * Farà les accions pertinents segons si es tracta del mateix o un nou pacient obrint noves finestres
-     * o fusionant informació
-     * @param context El contexte que defineix el pacient
-     * @param overwriteIfDifferentPatient indica que matxaquem el pacient actual si el proporcionat és diferent quan
-     * el valor és true. En cas que sigui fals, obrim una nova finestra
+     * Assigna un pacient a la finestra.
+     * Farà les accions pertinents segons si ja es tenia un pacient o bé és el primer pacient que s'assigna
+     * @param patient El pacient
      */
-    void addPatientContext( const ExtensionContext &context, bool overwriteIfDifferentPatient = true );
+    void setPatient(Patient *patient);
+
+    /**
+     * Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
+     * @param context Dades de pacient que volem que contingui la nova finestra
+     */
+    void setPatientInNewWindow(Patient *patient);
 
     /// Ens retorna el punter al pacient que té ara
     Patient *getCurrentPatient();
@@ -98,18 +101,8 @@ private slots:
     /// Mostra el diàleg on s'explica que és una versió beta.
     void showBetaVersionDialog();
 
-    /**
-     * Crea una nova finestra i l'obre. Si li proporcionem dades de pacient, els hi afegeix
-     * @param context Dades de pacient que volem que contingui la nova finestra
-     */
-    void openNewWindow( const ExtensionContext &context  );
-    void openBlankWindow(); // l'obre en blanc
-
-    /**
-     * Donat un context, esborra el pacient actual i sobre la mateixa finestra aplica aquest nou pacient
-     * @param context Contexte del nou pacient
-     */
-    void overwriteCurrentWindow( const ExtensionContext &context  );
+    /// Crea una nova finestra i l'obre.
+    void openBlankWindow();
 
     /// mostra el formulari d'about
     void about();

@@ -85,6 +85,9 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
+    /// Afegeix un pacient a la mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
+    void addPatientToWindow(Patient *patient, bool canReplaceActualPatient);
+
 private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
