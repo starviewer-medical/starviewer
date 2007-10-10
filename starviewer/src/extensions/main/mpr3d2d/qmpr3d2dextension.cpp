@@ -49,7 +49,9 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     m_sagital2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
     m_coronal2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
     m_mpr3DView->orientationMarkerOff();
-
+    m_axial2DView->disableContextMenu();
+    m_sagital2DView->disableContextMenu();
+    m_coronal2DView->disableContextMenu();
     readSettings();
 }
 

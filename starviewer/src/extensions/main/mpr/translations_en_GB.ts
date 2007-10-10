@@ -69,58 +69,68 @@
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="134"/>
+        <location filename="qmprextension.cpp" line="135"/>
         <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="141"/>
+        <location filename="qmprextension.cpp" line="142"/>
         <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="146"/>
+        <location filename="qmprextension.cpp" line="147"/>
         <source>&amp;MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="147"/>
+        <location filename="qmprextension.cpp" line="148"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="148"/>
+        <location filename="qmprextension.cpp" line="149"/>
         <source>Maximum Intensity Projection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="155"/>
+        <location filename="qmprextension.cpp" line="156"/>
         <source>Voxel Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="156"/>
+        <location filename="qmprextension.cpp" line="157"/>
         <source>Ctrl+I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="157"/>
+        <location filename="qmprextension.cpp" line="158"/>
         <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="905"/>
+        <location filename="qmprextension.cpp" line="870"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="905"/>
+        <location filename="qmprextension.cpp" line="870"/>
         <source>There are not grabbed views to save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="909"/>
+        <location filename="qmprextension.cpp" line="874"/>
         <source>Save file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qmprextension.cpp" line="726"/>
+        <source>MPR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qmprextension.cpp" line="726"/>
+        <source>The current Series has multiple phases. Currently the MPR doesn&apos;t support Series with multiple phases so it won&apos;t work propperly.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
