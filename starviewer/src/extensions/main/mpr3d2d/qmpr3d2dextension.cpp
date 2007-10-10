@@ -12,6 +12,7 @@
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
 #include "volume.h"
+#include "series.h"
 // qt
 #include <QToolButton>
 #include <QSplitter>
@@ -64,6 +65,10 @@ QMPR3D2DExtension::~QMPR3D2DExtension()
 
 void QMPR3D2DExtension::setInput( Volume *input )
 {
+    if( input->getSeries()->getNumberOfPhases() > 1 )
+    {
+        QMessageBox::warning(this, tr("MPR 3D-2D"), tr("The current Series has multiple phases. Currently the MPR 3D-2D doesn't support Series with multiple phases so it won't work propperly.") );
+    }
     m_volume = input;
 
     m_mpr3DView->setInput( m_volume );

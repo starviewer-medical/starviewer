@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "qmprextension.h"
 #include "volume.h"
+#include "series.h"
 #include "q2dviewer.h"
 #include "mathtools.h" // per càlculs d'interseccions
 #include "q3dviewer.h"
@@ -720,6 +721,10 @@ void QMPRExtension::releasePushSagitalViewAxisActor()
 
 void QMPRExtension::setInput( Volume *input )
 {
+    if( input->getSeries()->getNumberOfPhases() > 1 )
+    {
+        QMessageBox::warning(this, tr("MPR"), tr("The current Series has multiple phases. Currently the MPR doesn't support Series with multiple phases so it won't work propperly.") );
+    }
     vtkImageChangeInformation *changeInfo = vtkImageChangeInformation::New();
     changeInfo->SetInput( input->getVtkData() );
     changeInfo->SetOutputOrigin( .0, .0, .0 );
