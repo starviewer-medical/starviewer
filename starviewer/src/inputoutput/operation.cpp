@@ -15,6 +15,10 @@ Operation::Operation()
     m_operation = operationUnknow;
 }
 
+Operation::~Operation()
+{
+}
+
 bool Operation::operator < ( Operation ope ) const
 {
     //ordena al reves, perque la prioritat més gran és la 0
@@ -23,6 +27,23 @@ bool Operation::operator < ( Operation ope ) const
         return true;
     }
     else return false;
+}
+
+bool Operation::operator ==(const Operation &operation)
+{
+    if(    (m_priority == operation.m_priority )
+        && (m_operation == operation.m_operation)
+        && (m_patientName == operation.m_patientName)
+        && (m_patientID == operation.m_patientID)
+        && (m_patientName == operation.m_patientName)
+        && (m_studyID == operation.m_studyID)
+        && (m_studyUID == operation.m_studyUID)
+        && (m_pacsParameters == operation.m_pacsParameters)
+        && (m_mask == operation.m_mask)
+        )
+        return true;
+    else
+        return false;
 }
 
 void Operation::setDicomMask( DicomMask mask )
@@ -124,10 +145,6 @@ QString Operation::getStudyUID()
 QString Operation::getStudyID()
 {
     return m_studyID;
-}
-
-Operation::~Operation()
-{
 }
 
 }

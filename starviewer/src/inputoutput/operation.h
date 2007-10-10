@@ -70,6 +70,9 @@ public:
     /// Operador per ordernar per prioritats
     bool operator < ( Operation ) const;
 
+    /// Operador per poder dir si dues operacions són la mateixa
+    bool operator ==(const Operation &operation);
+
     /** defineix el nom del pacient pel qual es portarà a terme l'operacio
      * @param patientName nom del pacient
      */
