@@ -147,72 +147,72 @@ public:
      * @param mask [in] màscara de la cerca
      * @return   Estudi UID que cerquem
      */
-    QString getStudyUID();
+    QString getStudyUID() const;
 
     /** Retorna el Id del pacient a buscar
      * @return   ID del pacient
      */
-    QString getPatientId();
+    QString getPatientId() const;
 
     /** Retorna el nom del pacient
      * @return Nom del pacient
      */
-    QString getPatientName();
+    QString getPatientName() const;
 
     /** Retorna la data naixement
      * @return Data de naixament del pacient
      */
-    QString getPatientBirth();
+    QString getPatientBirth() const;
 
     /** Retorna l'edat de pacient
      * @return edat del pacient
      */
-    QString getPatientAge();
+    QString getPatientAge() const;
 
     /** Retorna el sexe del pacient
      * @return sexe del pacient
      */
-    QString getPatientSex();
+    QString getPatientSex() const;
 
     /** Retorna Id de l'estudi
      * @return   ID de l'estudi
      */
-    QString getStudyId();
+    QString getStudyId() const;
 
     /** Retorna la data de l'estudi
      * @return   Data de l'estudi
      */
-    QString getStudyDate();
+    QString getStudyDate() const;
 
     /** Retorna la descripció de l'estudi
      * @return   descripció de l'estudi
      */
-    QString getStudyDescription();
+    QString getStudyDescription() const;
 
     /** Retorna de la modalitat de l'estudi
      * @return   Modalitat de l'estudi
      */
-    QString getStudyModality();
+    QString getStudyModality() const;
 
     /** Retorna l'hora de l'estudi
      * @return   hora de l'estudi
      */
-    QString getStudyTime();
+    QString getStudyTime() const;
 
     /** Retorna el accession number de l'estudi
      * @return   accession number de l'estudi
      */
-    QString getAccessionNumber();
+    QString getAccessionNumber() const;
 
     /** Retorna el nom de l'institució on s'ha realitzat l'estudi
      * @return   Nom de l'institucio
      */
-    QString getInstitutionName();
+    QString getInstitutionName() const;
 
     /** retorna el ReferringPhysiciansName
       * @return ReferringPhysiciansName
       */
-    QString getReferringPhysiciansName();
+    QString getReferringPhysiciansName() const;
 
     /** This action especified in the search which series number we want to match
      * @param seriesNumber' Number of the series to search. If this parameter is null it's supose that any mask is applied at this field
@@ -300,67 +300,67 @@ public:
     /** Retorna el series Number
      * @return   series Number
      */
-    QString getSeriesNumber();
+    QString getSeriesNumber() const;
 
     /** Retorna la data de la sèrie
      * @return   data de la sèrie
      */
-    QString getSeriesDate();
+    QString getSeriesDate() const;
 
     /** Retorna l'hora de la sèrie
      * @return   hora de la sèrie
      */
-    QString getSeriesTime();
+    QString getSeriesTime() const;
 
     /** Retorna la descripcio de la sèrie
      * @return descripcio de la serie
      */
-    QString getSeriesDescription();
+    QString getSeriesDescription() const;
 
     /** Retorna la modalitat de la sèrie
      * @return modalitat de la sèrie
      */
-    QString getSeriesModality();
+    QString getSeriesModality() const;
 
     /** Retorna l'operador que captat la serie
      * @return operdor
      */
-    QString getSeriesOperator();
+    QString getSeriesOperator() const;
 
     /** Retorna la part del cos examinada en la serie
      * @return part del cos examinada
      */
-    QString getSeriesBodyPartExaminated();
+    QString getSeriesBodyPartExaminated() const;
 
     /** Retorna el nom del protocol utiltizat la serie
      * @return nom del protocol utilitzat a la seire
      */
-    QString getSeriesProtocolName();
+    QString getSeriesProtocolName() const;
 
     /** Retorna l'uid de la serie
      * @return SeriesUID
      */
-    QString getSeriesUID();
+    QString getSeriesUID() const;
 
     /** retorna el Requested procedures ID
      * @return requesta procedure ID
      */
-    QString getRequestedProcedureID();
+    QString getRequestedProcedureID() const;
 
     /** retorna el scheduled procedure step ID
      * @return scheduled procedure step ID
      */
-    QString getScheduledProcedureStepID();
+    QString getScheduledProcedureStepID() const;
 
     /** retorna el Perfomed Procedure Step Start date
      * @return Perfomed Procedure Step Start date
      */
-    QString getPPSStartDate();
+    QString getPPSStartDate() const;
 
     /** retorna el Perfomed Procedure Step Start Time
      * @return Perfomed Procedure Step Start Time
      */
-    QString getPPSStartTime();
+    QString getPPSStartTime() const;
 
     /** set the StudyId of the images
      * @param   Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
@@ -377,18 +377,20 @@ public:
     /** Retorna el número d'imatge
       * @return número d'imatge
       */
-    QString getImageNumber();
+    QString getImageNumber() const;
 
     /** retorna el SOPInstance UID de l'imatge
      * @return SOPInstance UID de l'imatge
      */
-    QString getSOPInstanceUID();
+    QString getSOPInstanceUID() const;
 
     /** retorna a quin nivell es fa la màscara
      */
-    QString getRetrieveLevel();
+    QString getRetrieveLevel() const;
 
     DcmDataset* getDicomMask();
+
+    bool operator ==(const DicomMask &mask);
 
 private:
 

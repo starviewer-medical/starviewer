@@ -148,6 +148,8 @@ public :
      */
     int getTimeOut();
 
+    bool operator ==(const PacsParameters &parameters);
+
 private :
 
     QString  m_aeCalled;
