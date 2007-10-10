@@ -1160,8 +1160,11 @@ void Q2DViewer::resetCamera()
         {
             m_maxSliceValue = m_viewer->GetSliceRange()[1];
         }
-        // sempre començarem a visualitzar des de la llesca 0
-        setSlice(0);
+        if( m_lastView == Axial ) // en axial sempre començarem a visualitzar des de la llesca 0
+            setSlice(0);
+        else // posem la llesca del mig
+            setSlice( m_viewer->GetSliceRange()[1]/2 );
+
         mapOrientationStringToAnnotation();
         updateRulers();
         this->updateDisplayExtent();
