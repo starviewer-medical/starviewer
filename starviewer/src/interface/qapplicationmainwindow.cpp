@@ -293,10 +293,9 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
 
-void QApplicationMainWindow::openNewWindow( const ExtensionContext &context )
+void QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
 {
     QString windowName;
-    Patient *patient = context.getPatient();
     if( patient )
     {
         windowName = patient->getID() + " : " + patient->getFullName();
@@ -307,7 +306,7 @@ void QApplicationMainWindow::openNewWindow( const ExtensionContext &context )
     }
 
     QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName );
-    newMainWindow->addPatientContext( context );
+    newMainWindow->setPatient(patient);
     newMainWindow->show();
 }
 
@@ -317,55 +316,29 @@ void QApplicationMainWindow::openBlankWindow()
     newMainWindow->show();
 }
 
-void QApplicationMainWindow::overwriteCurrentWindow( const ExtensionContext &context  )
+void QApplicationMainWindow::setPatient(Patient *patient)
 {
-    // primer ens carreguem el pacient
-    m_extensionHandler->killBill();
-    delete m_patient;
-    m_patient = 0;
-    this->addPatientContext( context );
-}
-
-void QApplicationMainWindow::addPatientContext( const ExtensionContext &context, bool overwriteIfDifferentPatient )
-{
-    Patient *newPatient = context.getPatient();
-    if( !newPatient ) // si les dades de pacient són nules, no fem res
+    if( !patient ) // si les dades de pacient són nules, no fem res
     {
         DEBUG_LOG("NULL Patient, maybe creating a blank new window");
         return;
     }
 
-    if( !m_patient )
+    if (this->getCurrentPatient())
     {
-        m_patient = newPatient;
-        this->setWindowTitle( m_patient->getID() + " : " + m_patient->getFullName() );
-        enableExtensions();
-        m_extensionHandler->setContext( context );
-        // si són les primeres dades que es carreguen, cal obrir l'extensió per defecte
-        m_extensionHandler->openDefaultExtension();
-        DEBUG_LOG("No teníem cap pacient, assignem el que ens donen");
+        // primer ens carreguem el pacient
+        m_extensionHandler->killBill();
+        delete m_patient;
+        m_patient = NULL;
+        DEBUG_LOG("Ja teníem un pacient, l'esborrem.");
     }
-    else if( ( m_patient->isSamePatient( newPatient ) == Patient::ExactIdentity ) || ( m_patient->isSamePatient( newPatient ) == Patient::VerySimilarIdentity ))
-    {
-        *m_patient += *newPatient;
-        m_extensionHandler->getContext().setPatient( m_patient );
-        DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
-    }
-    else
-    {
-        // és un pacient diferent
-        if( overwriteIfDifferentPatient )
-        {
-            overwriteCurrentWindow( context );
-            DEBUG_LOG("Matxaquem el pacient actual en la mateixa finestra");
-        }
-        else
-        {
-            openNewWindow( context );
-            DEBUG_LOG("Creem nou pacient amb una nova finestra");
-        }
 
-    }
+    m_patient = patient;
+
+    this->setWindowTitle( m_patient->getID() + " : " + m_patient->getFullName() );
+    enableExtensions();
+    m_extensionHandler->getContext().setPatient(patient);
+    m_extensionHandler->openDefaultExtension();
 }
 
 Patient *QApplicationMainWindow::getCurrentPatient()

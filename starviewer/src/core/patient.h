@@ -17,14 +17,14 @@ namespace udg {
 /**
 Classe que representa la unitat central de treball de l'aplicació: el Pacient. Guardarà tota la informació relacionada amb aquests ( Estudis, Sèries , etc )
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Patient : public QObject
 {
 Q_OBJECT
 public:
     ///Enumeració dels graus de similitud
-    enum PatientIdentity{ ExactIdentity, VerySimilarIdentity, FuzzyIdentity, DifferentIdentity };
+    enum PatientsSimilarity { SamePatients, IndeterminableSimilarity, DifferentPatients };
 
     Patient( QObject *parent = 0 );
 
@@ -96,9 +96,9 @@ public:
     Patient operator-( const Patient &patient );
     Patient operator-=( const Patient &patient );
 
-    /// retorna si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
-    /// No compara ni els estudis ni les sèries que conté, únicament la identificació
-    PatientIdentity isSamePatient( const Patient *patient );
+    /// Retorna si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
+    /// No compara ni els estudis ni les sèries que conté, únicament la identificació de pacient.
+    PatientsSimilarity compareTo( const Patient *patient );
 
     /// \TODO Mètode que només serveix per debugar i que s'haurà de refer
     QString toString();
@@ -127,14 +127,17 @@ private:
     double needlemanWunch2Distance( QString s, QString t );
     double needlemanWunchDistance(QString s, QString t, int gap );
 
-    /// ens diu la probabilitat de que siguin el mateix pacient
-    PatientIdentity getProbability( double probability );
+    /// A partir del resultat d'una metrica aplicada a dos pacients ens diu la similaritat entre aquests
+    PatientsSimilarity metricToSimilarity(double measure);
 
     /**
      * Crea un missatge de log per saber quins pacients estem fusionant
      * @param patient Les dades del pacient que es fusiona amb aquest
      */
     void patientFusionLogMessage( const Patient &patient );
+
+    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules
+    QString clearPatientName( QString patientName );
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.
@@ -160,10 +163,6 @@ private:
 
     /// Llista que conté els estudis del pacient ordenats per data
     QList<Study *> m_studiesSet;
-
-    ///fa tractament del nom del pacient, treient caràcters extranys i espais inicials i finals i passant a majúscules
-    QString patientNameTreatment( QString patientName );
-
 };
 
 }

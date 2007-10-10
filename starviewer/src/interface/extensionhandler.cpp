@@ -167,9 +167,6 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     {
         DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput->getPatient(i)->toString() ) );
 
-        ExtensionContext extensionContext;
-        extensionContext.setPatient( fillerInput->getPatient(i) );
-
         // marquem les series seleccionades
         Study *study = NULL;
         study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
@@ -203,7 +200,6 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
             {
                 series->select();
                 error = false;
-                correctlyLoadedPatients << i;
             }
             else
             {
@@ -219,7 +215,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
         if (!error)
         {
-            m_mainApp->addPatientContext( extensionContext, false );
+            correctlyLoadedPatients << i;
         }
     }
 
@@ -234,6 +230,54 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
             }
         }
         QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
+    }
+
+    // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
+    bool canReplaceActualPatient = true;
+    if (m_mainApp->getCurrentPatient())
+    {
+        foreach (int i, correctlyLoadedPatients)
+        {
+            if (m_mainApp->getCurrentPatient()->compareTo( fillerInput->getPatient(i) ) == Patient::SamePatients )
+            {
+                canReplaceActualPatient = false;
+                break;
+            }
+        }
+    }
+
+    // Afegim els pacients carregats correctament
+    foreach (int i, correctlyLoadedPatients)
+    {
+        this->addPatientToWindow( fillerInput->getPatient(i), canReplaceActualPatient );
+        canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
+    }
+}
+
+void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient)
+{
+    if( !m_mainApp->getCurrentPatient() )
+    {
+        m_mainApp->setPatient(patient);
+        DEBUG_LOG("No tenim dades de cap pacient. Obrim en la finestra actual");
+    }
+    else if( ( m_mainApp->getCurrentPatient()->compareTo( patient ) == Patient::SamePatients ))
+    {
+        *(m_mainApp->getCurrentPatient()) += *patient;
+        DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
+    }
+    else //Són diferents o no sabem diferenciar
+    {
+        if (canReplaceActualPatient)
+        {
+            m_mainApp->setPatient(patient);
+            DEBUG_LOG("Tenim pacient i el substituim");
+        }
+        else
+        {
+            m_mainApp->setPatientInNewWindow(patient);
+            DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
+        }
     }
 }
 

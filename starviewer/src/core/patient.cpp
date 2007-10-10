@@ -187,18 +187,15 @@ Patient & Patient::operator =( const Patient &patient )
 
 void Patient::patientFusionLogMessage( const Patient &patient )
 {
-    switch( isSamePatient( &patient ) )
+    switch( compareTo( &patient ) )
     {
-        case ExactIdentity:
+        case SamePatients:
             INFO_LOG("Fusionem dos pacients iguals:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
             break;
-        case VerySimilarIdentity:
-            INFO_LOG("Fusionem dos pacients molt semblants:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+        case IndeterminableSimilarity:
+            INFO_LOG("Fusionem dos pacients amb similitut indeterminable:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
             break;
-        case FuzzyIdentity:
-            INFO_LOG("Fusionem dos pacients una mica semblants:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
-            break;
-        case DifferentIdentity:
+        case DifferentPatients:
             INFO_LOG("!!!!Fusionem dos pacients diferents!!!!:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
             break;
     }
@@ -258,49 +255,35 @@ Patient Patient::operator -=( const Patient &patient )
     DEBUG_LOG("Mètode per implementar");
 }
 
-QString Patient::patientNameTreatment( QString patientName )
+QString Patient::clearPatientName( QString patientName )
 {
-    QString name = patientName;
-
-    name = name.replace(QString("^"), QString(" "));
-    name = name.replace(QString("."), QString(" "));
-    name = name.replace(QString(","), QString(" "));
-    name = name.replace(QString("-"), QString(" "));
-    name = name.replace(QString(";"), QString(" "));
-    name = name.replace(QString("_"), QString(" "));
-
-    name = name.trimmed();
-
-    name = name.toUpper();
-
-    return( name );
+    return patientName.toUpper().replace(QRegExp("[^A-Z]"), " ").trimmed();
 }
 
-Patient::PatientIdentity Patient::isSamePatient( const Patient *patient )
+Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
 {
     //si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
     if( patient->m_patientID == this->m_patientID )
-        return( ExactIdentity );
-    else
     {
-        //Pre-tractament sobre el nom del pacient per treure caràcters extranys
-        QString nameOfThis = patientNameTreatment( this->getFullName() );
-        QString nameOfParameter = patientNameTreatment( patient->getFullName() );
-
-        //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
-        if ( nameOfThis == nameOfParameter )
-            return( ExactIdentity );
-        else
-        {
-            //si tenen poca similitud, retornarem la similitud entre els identificadors dels dos pacients
-            if ( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) == FuzzyIdentity )
-            {
-                return ( getProbability( needlemanWunch2Distance( patient->m_patientID , this->m_patientID )));
-            }
-            else  //si tenen molta similitud, retornem aquest valor
-                return( getProbability( needlemanWunch2Distance( nameOfThis, nameOfParameter ) ) );
-        }
+        return SamePatients;
     }
+    //Pre-tractament sobre el nom del pacient per treure caràcters extranys
+    QString nameOfThis = clearPatientName( this->getFullName() );
+    QString nameOfParameter = clearPatientName( patient->getFullName() );
+
+    //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
+    if ( nameOfThis == nameOfParameter )
+    {
+        return SamePatients;
+    }
+
+    PatientsSimilarity namesSimilarity = metricToSimilarity(needlemanWunch2Distance( nameOfThis, nameOfParameter ));
+    if (namesSimilarity != IndeterminableSimilarity)
+    {
+        return namesSimilarity; //si tenen molta similitud, retornem aquest valor
+    }
+
+    return metricToSimilarity( needlemanWunch2Distance(patient->m_patientID, this->m_patientID) );
 }
 
 QString Patient::toString()
@@ -399,19 +382,14 @@ double Patient::levenshteinDistance( QString s, QString t)
     return needlemanWunchDistance( s, t, 1 );
 }
 
-Patient::PatientIdentity Patient::getProbability( double probability )
+Patient::PatientsSimilarity Patient::metricToSimilarity(double measure)
 {
-    PatientIdentity identity;
-    if ( probability < 0.1 )
-        identity = ExactIdentity;
-    else if ( ( probability >= 0.1 ) && ( probability < 0.25 ) )
-        identity = VerySimilarIdentity;
-    else if ( ( probability >= 0.25 ) && ( probability < 0.31 ) )
-        identity = FuzzyIdentity;
+    if (measure < 0.25)
+        return SamePatients;
+    else if (measure < 0.31)
+        return IndeterminableSimilarity;
     else
-        identity = DifferentIdentity;
-
-    return ( identity );
+        return DifferentPatients;
 }
 
 }
