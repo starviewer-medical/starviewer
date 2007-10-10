@@ -131,5 +131,25 @@ int PacsParameters::getPacsID()
     return m_PacsID;
 }
 
+bool PacsParameters::operator ==(const PacsParameters &parameters)
+{
+    if(    m_aeCalled == parameters.m_aeCalled
+        && m_aeTitle == parameters.m_aeTitle
+        && m_Port == parameters.m_Port
+        && m_Adr == parameters.m_Adr
+        && m_LocalPort == parameters.m_LocalPort
+        && m_Desc == parameters.m_Desc
+        && m_Inst == parameters.m_Inst
+        && m_Location == parameters.m_Location
+        && m_Default == parameters.m_Default
+        && m_Location == parameters.m_Location
+        && m_PacsID == parameters.m_PacsID
+        && m_TimeOut == parameters.m_TimeOut
+    )
+        return true;
+    else
+        return false;
+}
+
 }
 

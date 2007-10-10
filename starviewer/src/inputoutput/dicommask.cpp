@@ -175,7 +175,7 @@ Status DicomMask::setPatientAge( QString patientAge )
 }
 
 
-QString DicomMask::getPatientId()
+QString DicomMask::getPatientId() const
 {
     const char *value = NULL;
     QString patientID;
@@ -190,7 +190,7 @@ QString DicomMask::getPatientId()
     return patientID;
 }
 
-QString DicomMask::getPatientName()
+QString DicomMask::getPatientName() const
 {
     const char *value = NULL;
     QString patientName;
@@ -204,7 +204,7 @@ QString DicomMask::getPatientName()
     return patientName;
 }
 
-QString DicomMask::getPatientBirth()
+QString DicomMask::getPatientBirth() const
 {
     const char *value = NULL;
     QString patientBirth;
@@ -219,7 +219,7 @@ QString DicomMask::getPatientBirth()
     return patientBirth;
 }
 
-QString DicomMask::getPatientSex()
+QString DicomMask::getPatientSex() const
 {
     const char *value = NULL;
     QString patientSex;
@@ -233,7 +233,7 @@ QString DicomMask::getPatientSex()
     return patientSex;
 }
 
-QString DicomMask::getPatientAge()
+QString DicomMask::getPatientAge() const
 {
     const char *value = NULL;
     QString patientAge;
@@ -466,7 +466,7 @@ Status DicomMask::setReferringPhysiciansName( QString physiciansName )
 
 /***************************************************************   GET **********************************************/
 
-QString DicomMask::getStudyUID()
+QString DicomMask::getStudyUID() const
 {
     const char * value =NULL;
     QString studyUID;
@@ -480,7 +480,7 @@ QString DicomMask::getStudyUID()
     return studyUID;
 }
 
-QString DicomMask::getStudyId()
+QString DicomMask::getStudyId() const
 {
     const char *value = NULL;
     QString studyID;
@@ -494,7 +494,7 @@ QString DicomMask::getStudyId()
     return studyID;
 }
 
-QString DicomMask::getStudyDate()
+QString DicomMask::getStudyDate() const
 {
     const char * value = NULL;
     QString studyDate;
@@ -508,7 +508,7 @@ QString DicomMask::getStudyDate()
     return studyDate;
 }
 
-QString DicomMask::getStudyDescription()
+QString DicomMask::getStudyDescription() const
 {
     const char *value = NULL;
     QString studyDescription;
@@ -522,7 +522,7 @@ QString DicomMask::getStudyDescription()
     return studyDescription;
 }
 
-QString DicomMask::getStudyTime()
+QString DicomMask::getStudyTime() const
 {
     const char *value = NULL;
     QString studyTime;
@@ -536,7 +536,7 @@ QString DicomMask::getStudyTime()
     return studyTime;
 }
 
-QString DicomMask::getStudyModality()
+QString DicomMask::getStudyModality() const
 {
     const char *value = NULL;
     QString studyModality;
@@ -550,7 +550,7 @@ QString DicomMask::getStudyModality()
     return studyModality;
 }
 
-QString DicomMask::getAccessionNumber()
+QString DicomMask::getAccessionNumber() const
 {
     const char *value = NULL;
     QString accessionNumber;
@@ -564,7 +564,7 @@ QString DicomMask::getAccessionNumber()
     return accessionNumber;
 }
 
-QString DicomMask::getInstitutionName()
+QString DicomMask::getInstitutionName() const
 {
     const char *value = NULL;
     QString institutionName;
@@ -578,7 +578,7 @@ QString DicomMask::getInstitutionName()
     return institutionName;
 }
 
-QString DicomMask::getReferringPhysiciansName()
+QString DicomMask::getReferringPhysiciansName() const
 {
     const char * value = NULL;
     QString referringPhysiciansName;
@@ -871,7 +871,7 @@ Status DicomMask::setPPStartTime( QString startTime )
 
 /************************************************ GET **************************************************************/
 
-QString DicomMask::getSeriesNumber()
+QString DicomMask::getSeriesNumber() const
 {
     const char *value = NULL;
     QString seriesNumber;
@@ -885,7 +885,7 @@ QString DicomMask::getSeriesNumber()
     return seriesNumber;
 }
 
-QString DicomMask::getSeriesDate()
+QString DicomMask::getSeriesDate() const
 {
     const char *value = NULL;
     QString seriesDate;
@@ -899,7 +899,7 @@ QString DicomMask::getSeriesDate()
     return seriesDate;
 }
 
-QString DicomMask::getSeriesTime()
+QString DicomMask::getSeriesTime() const
 {
     const char *value = NULL;
     QString seriesTime;
@@ -913,7 +913,7 @@ QString DicomMask::getSeriesTime()
     return seriesTime;
 }
 
-QString DicomMask::getSeriesDescription()
+QString DicomMask::getSeriesDescription() const
 {
     const char *value = NULL;
     QString seriesDescription;
@@ -927,7 +927,7 @@ QString DicomMask::getSeriesDescription()
     return seriesDescription;
 }
 
-QString DicomMask::getSeriesModality()
+QString DicomMask::getSeriesModality() const
 {
     const char *value = NULL;
     QString seriesModality;
@@ -941,7 +941,7 @@ QString DicomMask::getSeriesModality()
     return seriesModality;
 }
 
-QString DicomMask::getSeriesOperator()
+QString DicomMask::getSeriesOperator() const
 {
     const char *value = NULL;
     QString operatorsName;
@@ -955,7 +955,7 @@ QString DicomMask::getSeriesOperator()
     return operatorsName;
 }
 
-QString DicomMask::getSeriesBodyPartExaminated()
+QString DicomMask::getSeriesBodyPartExaminated() const
 {
     const char *value = NULL;
     QString bodyPartExaminated;
@@ -969,7 +969,7 @@ QString DicomMask::getSeriesBodyPartExaminated()
     return bodyPartExaminated;
 }
 
-QString DicomMask::getSeriesProtocolName()
+QString DicomMask::getSeriesProtocolName() const
 {
     const char *value = NULL;
     QString ProtocolName;
@@ -983,7 +983,7 @@ QString DicomMask::getSeriesProtocolName()
     return ProtocolName;
 }
 
-QString DicomMask::getSeriesUID()
+QString DicomMask::getSeriesUID() const
 {
     const char *value = NULL;
     QString seriesUID;
@@ -997,7 +997,7 @@ QString DicomMask::getSeriesUID()
     return seriesUID;
 }
 
-QString DicomMask::getRequestedProcedureID()
+QString DicomMask::getRequestedProcedureID() const
 {
     const char * value = NULL;
     QString requestedProcedureID;
@@ -1016,7 +1016,7 @@ QString DicomMask::getRequestedProcedureID()
     return requestedProcedureID;
 }
 
-QString DicomMask::getScheduledProcedureStepID()
+QString DicomMask::getScheduledProcedureStepID() const
 {
     const char * value = NULL;
     QString procedureStepID;
@@ -1035,7 +1035,7 @@ QString DicomMask::getScheduledProcedureStepID()
     return procedureStepID;
 }
 
-QString DicomMask::getPPSStartDate()
+QString DicomMask::getPPSStartDate() const
 {
     const char * value =NULL;
     QString startDate;
@@ -1049,7 +1049,7 @@ QString DicomMask::getPPSStartDate()
     return startDate;
 }
 
-QString DicomMask::getPPSStartTime()
+QString DicomMask::getPPSStartTime() const
 {
     const char * value =NULL;
     QString startTime;
@@ -1108,7 +1108,7 @@ Status DicomMask:: setSOPInstanceUID( QString SOPInstanceUID )
     return state.setStatus( correct );
 }
 
-QString DicomMask::getImageNumber()
+QString DicomMask::getImageNumber() const
 {
     const char *value = NULL;
     QString imageNumber;
@@ -1122,7 +1122,7 @@ QString DicomMask::getImageNumber()
     return imageNumber;
 }
 
-QString DicomMask::getSOPInstanceUID()
+QString DicomMask::getSOPInstanceUID() const
 {
     const char * value = NULL;
     QString SOPInstanceUID;
@@ -1136,7 +1136,7 @@ QString DicomMask::getSOPInstanceUID()
     return SOPInstanceUID;
 }
 
-QString DicomMask::getRetrieveLevel()
+QString DicomMask::getRetrieveLevel() const
 {
     const char * value = NULL;
     QString queryRetrieve;
@@ -1154,6 +1154,44 @@ QString DicomMask::getRetrieveLevel()
 DcmDataset* DicomMask::getDicomMask()
 {
     return m_mask;
+}
+
+bool DicomMask::operator ==(const DicomMask &mask)
+{
+    if(    getStudyUID() == mask.getStudyUID()
+        && getPatientId() == mask.getPatientId()
+        && getPatientName() == mask.getPatientName()
+        && getPatientBirth() == mask.getPatientBirth()
+        && getPatientAge() == mask.getPatientAge()
+        && getPatientSex() == mask.getPatientSex()
+        && getStudyId() == mask.getStudyId()
+        && getStudyDate() == mask.getStudyDate()
+        && getStudyDescription() == mask.getStudyDescription()
+        && getStudyModality() == mask.getStudyModality()
+        && getStudyTime() == mask.getStudyTime()
+        && getAccessionNumber() == mask.getAccessionNumber()
+        && getInstitutionName() == mask.getInstitutionName()
+        && getReferringPhysiciansName() == mask.getReferringPhysiciansName()
+        && getSeriesNumber() == mask.getSeriesNumber()
+        && getSeriesDate() == mask.getSeriesDate()
+        && getSeriesTime() == mask.getSeriesTime()
+        && getSeriesDescription() == mask.getSeriesDescription()
+        && getSeriesModality() == mask.getSeriesModality()
+        && getSeriesOperator() == mask.getSeriesOperator()
+        && getSeriesBodyPartExaminated() == mask.getSeriesBodyPartExaminated()
+        && getSeriesProtocolName() == mask.getSeriesProtocolName()
+        && getSeriesUID() == mask.getSeriesUID()
+        && getRequestedProcedureID() == mask.getRequestedProcedureID()
+        && getScheduledProcedureStepID() == mask.getScheduledProcedureStepID()
+        && getPPSStartDate() == mask.getPPSStartDate()
+        && getPPSStartTime() == mask.getPPSStartTime()
+        && getImageNumber() == mask.getImageNumber()
+        && getSOPInstanceUID() == mask.getSOPInstanceUID()
+        && getRetrieveLevel() == mask.getRetrieveLevel()
+    )
+        return true;
+    else
+        return false;
 }
 
 };
