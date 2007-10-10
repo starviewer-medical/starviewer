@@ -1129,17 +1129,25 @@ void QueryScreen::deleteSelectedStudiesInCache()
                 CacheStudyDAL cacheStudyDAL;
                 foreach(QString studyUID, studiesList)
                 {
-                    INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
-                    state = cacheStudyDAL.delStudy( studyUID );
-                    if ( state.good() )
+                    if( m_qcreateDicomdir->studyExists( studyUID ) )
                     {
-                        m_studyTreeWidgetCache->removeStudy( studyUID );
-                        emit( clearSeriesListWidget() );//Aquest signal es recollit per qSeriesIconView
+                        QMessageBox::warning( this , tr( "Starviewer" ) ,
+                        tr( "The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first." ).arg(studyUID) );
                     }
                     else
                     {
-                        // TODO potser s'hauria de fer al final, recollir per quins hi ha hagut error i mostrar-ho
-                        showDatabaseErrorMessage( state );
+                        state = cacheStudyDAL.delStudy( studyUID );
+                        if ( state.good() )
+                        {
+                            INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
+                            m_studyTreeWidgetCache->removeStudy( studyUID );
+                            emit( clearSeriesListWidget() );//Aquest signal es recollit per qSeriesIconView
+                        }
+                        else
+                        {
+                            // TODO potser s'hauria de fer al final, recollir per quins hi ha hagut error i mostrar-ho
+                            showDatabaseErrorMessage( state );
+                        }
                     }
                 }
         }
