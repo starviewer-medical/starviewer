@@ -52,6 +52,10 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     readSettings();
 
     m_thickSlab = 0.0;
+    m_thickSlabLabel->setVisible(false);
+    m_thickSlabSlider->setVisible(false);
+    m_thickSlabSpinBox->setVisible(false);
+    m_mipToolButton->setVisible(false);
 }
 
 QMPRExtension::~QMPRExtension()
@@ -1496,4 +1500,5 @@ void QMPRExtension::writeSettings()
 }
 
 };  // end namespace udg
+
 
