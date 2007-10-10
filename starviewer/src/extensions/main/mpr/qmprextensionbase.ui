@@ -125,7 +125,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/rotate3d.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -147,7 +147,7 @@
             <string>zoom</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/distance.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -169,7 +169,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/photo.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -191,7 +191,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -208,7 +208,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_2" >
+          <widget class="QLabel" name="m_thickSlabLabel" >
            <property name="text" >
             <string>Thick Slab (mm)</string>
            </property>
