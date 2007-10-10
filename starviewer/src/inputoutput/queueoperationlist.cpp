@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "queueoperationlist.h"
 #include <QtAlgorithms>
+
 namespace udg {
 
 QueueOperationList::QueueOperationList(QObject *parent)
@@ -14,7 +15,6 @@ QueueOperationList::QueueOperationList(QObject *parent)
 }
 
 QueueOperationList* QueueOperationList::pInstance = 0;
-
 
 QueueOperationList * QueueOperationList::getQueueOperationList()
 {
@@ -29,9 +29,18 @@ QueueOperationList * QueueOperationList::getQueueOperationList()
 
 void QueueOperationList::insertOperation(Operation operation )
 {
-    m_queueOperationList.push_back(operation);
+    bool ok = true;
+    foreach( Operation operationItem, m_queueOperationList )
+    {
+        if( operation == operationItem )
+        {
+            ok = false;
+            break;
+        }
+    }
+    if( ok )
+        m_queueOperationList << operation;
 }
-
 
 Operation QueueOperationList::getMaximumPriorityOperation()
 {
