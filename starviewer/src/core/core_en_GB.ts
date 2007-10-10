@@ -43,12 +43,12 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2126"/>
+        <location filename="q2dviewer.cpp" line="2145"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2119"/>
+        <location filename="q2dviewer.cpp" line="2138"/>
         <source>
 %1
 %2
@@ -59,19 +59,19 @@ Acc:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2029"/>
+        <location filename="q2dviewer.cpp" line="2048"/>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="590"/>
+        <location filename="q2dviewer.cpp" line="591"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="598"/>
+        <location filename="q2dviewer.cpp" line="599"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
