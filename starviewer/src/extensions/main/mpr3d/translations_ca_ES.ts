@@ -96,4 +96,17 @@
         <translation>L&apos;ítem seleccionat no és una imatge</translation>
     </message>
 </context>
+<context>
+    <name>udg::QMPR3DExtension</name>
+    <message>
+        <location filename="qmpr3dextension.cpp" line="85"/>
+        <source>MPR 3D</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmpr3dextension.cpp" line="85"/>
+        <source>The current Series has multiple phases. Currently the MPR 3D doesn&apos;t support Series with multiple phases so it won&apos;t work propperly.</source>
+        <translation>La Sèrie actual té múltiples fases. Actualment l&apos;MPR 3D no soporta Sèries amb múltiples fases, pe tant no funcionarà com s&apos;espera.</translation>
+    </message>
+</context>
 </TS>

@@ -96,4 +96,17 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>udg::QMPR3DExtension</name>
+    <message>
+        <location filename="qmpr3dextension.cpp" line="85"/>
+        <source>MPR 3D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qmpr3dextension.cpp" line="85"/>
+        <source>The current Series has multiple phases. Currently the MPR 3D doesn&apos;t support Series with multiple phases so it won&apos;t work propperly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
