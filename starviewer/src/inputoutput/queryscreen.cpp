@@ -875,6 +875,7 @@ void QueryScreen::retrievePacs( bool view )
         }
         else
         {
+            // al haver fet un exists() ara mateix s'apunta a l'estudi trobat O_o!
             studyToRetrieve = m_studyListSingleton->getStudy();
             pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID);
             if ( pacsAETitle.isEmpty() ) //per les mesatools que no retornen a quin PACS pertany l'estudi cercat
@@ -1001,14 +1002,12 @@ void QueryScreen::view()
     switch ( m_tab->currentIndex() )
     {
         case 0 :
-//             retrieve( m_studyTreeWidgetCache->getSelectedStudyUID() , m_studyTreeWidgetCache->getSelectedSeriesUID() , m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
             loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getSelectedSeriesUID(), m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
             break;
         case 1 :
             retrievePacs( true );
            break;
         case 2 :
-//             retrieve( m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
             loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), m_studyTreeWidgetDicomdir->getSelectedSeriesUID(), m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
             break;
         default :
