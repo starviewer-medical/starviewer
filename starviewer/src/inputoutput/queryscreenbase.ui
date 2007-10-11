@@ -1,0 +1,1802 @@
+<ui version="4.0" >
+ <class>udg::QueryScreenBase</class>
+ <widget class="QDialog" name="udg::QueryScreenBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>685</width>
+    <height>813</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Query Study</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="title" >
+          <string>Patient</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="m_patientNameText" >
+            <property name="minimumSize" >
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="textLabel2_3" >
+            <property name="minimumSize" >
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text" >
+             <string>Patient Name</string>
+            </property>
+            <property name="buddy" >
+             <cstring>m_patientNameText</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QLabel" name="textLabel1_3" >
+            <property name="minimumSize" >
+             <size>
+              <width>80</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font" >
+             <font>
+              <family>Sans Serif</family>
+              <pointsize>9</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+              <underline>false</underline>
+              <strikeout>false</strikeout>
+             </font>
+            </property>
+            <property name="text" >
+             <string>Patient ID</string>
+            </property>
+            <property name="buddy" >
+             <cstring>m_patientIDText</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" >
+           <widget class="QLineEdit" name="m_patientIDText" >
+            <property name="minimumSize" >
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>200</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType" >
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QGroupBox" name="groupBox_6" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title" >
+            <string>Study Date</string>
+           </property>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>9</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QRadioButton" name="m_anyDateRadioButton" >
+                <property name="text" >
+                 <string>Any date</string>
+                </property>
+                <property name="checked" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="m_todayRadioButton" >
+                <property name="text" >
+                 <string>Today</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="m_yesterdayRadioButton" >
+                <property name="text" >
+                 <string>Yesterday</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="m_lastWeekRadioButton" >
+                <property name="text" >
+                 <string>Last Week</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <spacer>
+                <property name="orientation" >
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" >
+                 <size>
+                  <width>186</width>
+                  <height>23</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="m_customDateRadioButton" >
+                <property name="text" >
+                 <string>Custom:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <item>
+                 <spacer>
+                  <property name="orientation" >
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType" >
+                   <enum>QSizePolicy::Maximum</enum>
+                  </property>
+                  <property name="sizeHint" >
+                   <size>
+                    <width>30</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" >
+                  <property name="margin" >
+                   <number>0</number>
+                  </property>
+                  <property name="spacing" >
+                   <number>6</number>
+                  </property>
+                  <item>
+                   <layout class="QHBoxLayout" >
+                    <property name="margin" >
+                     <number>0</number>
+                    </property>
+                    <property name="spacing" >
+                     <number>6</number>
+                    </property>
+                    <item>
+                     <widget class="QCheckBox" name="m_fromDateCheck" >
+                      <property name="enabled" >
+                       <bool>false</bool>
+                      </property>
+                      <property name="text" >
+                       <string>From</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDateEdit" name="m_fromStudyDate" >
+                      <property name="enabled" >
+                       <bool>false</bool>
+                      </property>
+                      <property name="minimumSize" >
+                       <size>
+                        <width>0</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                      <property name="wrapping" >
+                       <bool>false</bool>
+                      </property>
+                      <property name="buttonSymbols" >
+                       <enum>QAbstractSpinBox::UpDownArrows</enum>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" >
+                    <property name="margin" >
+                     <number>0</number>
+                    </property>
+                    <property name="spacing" >
+                     <number>6</number>
+                    </property>
+                    <item>
+                     <widget class="QCheckBox" name="m_toDateCheck" >
+                      <property name="enabled" >
+                       <bool>false</bool>
+                      </property>
+                      <property name="text" >
+                       <string>To</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QDateEdit" name="m_toStudyDate" >
+                      <property name="enabled" >
+                       <bool>false</bool>
+                      </property>
+                      <property name="minimumSize" >
+                       <size>
+                        <width>0</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="m_buttonGroupModality" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>1</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="title" >
+            <string>Series Modality</string>
+           </property>
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>9</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="0" column="0" >
+             <layout class="QGridLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item row="2" column="3" >
+               <widget class="QCheckBox" name="m_checkSC" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="text" >
+                 <string>SC</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" >
+               <widget class="QCheckBox" name="m_checkCR" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Computerized Radiography</string>
+                </property>
+                <property name="text" >
+                 <string>CR</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0" >
+               <widget class="QCheckBox" name="m_checkDX" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Direct Radiography</string>
+                </property>
+                <property name="text" >
+                 <string>DX</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3" >
+               <widget class="QCheckBox" name="m_checkRF" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Radiography Fluoroscopy</string>
+                </property>
+                <property name="text" >
+                 <string>RF</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" >
+               <widget class="QCheckBox" name="m_checkAll" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="text" >
+                 <string>All</string>
+                </property>
+                <property name="checked" >
+                 <bool>true</bool>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+                <property name="tristate" >
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2" >
+               <widget class="QCheckBox" name="m_checkPT" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Penetrant Test</string>
+                </property>
+                <property name="text" >
+                 <string>PT</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1" >
+               <widget class="QCheckBox" name="m_checkMG" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="text" >
+                 <string>MG</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3" >
+               <widget class="QCheckBox" name="m_checkUS" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Ultrasounds</string>
+                </property>
+                <property name="text" >
+                 <string>US</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2" >
+               <widget class="QCheckBox" name="m_checkDT" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string> Dental Technician</string>
+                </property>
+                <property name="text" >
+                 <string>DT</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" >
+               <widget class="QCheckBox" name="m_checkCT" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Computerized Tomography</string>
+                </property>
+                <property name="whatsThis" >
+                 <string/>
+                </property>
+                <property name="text" >
+                 <string>CT</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1" >
+               <widget class="QCheckBox" name="m_checkMR" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Magnetic Resonance</string>
+                </property>
+                <property name="text" >
+                 <string>MR</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2" >
+               <widget class="QCheckBox" name="m_checkNM" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="toolTip" >
+                 <string>Nuclear Medicine</string>
+                </property>
+                <property name="text" >
+                 <string>NM</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" >
+               <widget class="QCheckBox" name="m_checkES" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="text" >
+                 <string>ES</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4" >
+               <widget class="QCheckBox" name="m_checkXA" >
+                <property name="font" >
+                 <font>
+                  <family>Sans Serif</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                  <underline>false</underline>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="text" >
+                 <string>XA</string>
+                </property>
+                <property name="autoExclusive" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="4" >
+               <layout class="QHBoxLayout" >
+                <property name="margin" >
+                 <number>0</number>
+                </property>
+                <property name="spacing" >
+                 <number>6</number>
+                </property>
+                <item>
+                 <widget class="QCheckBox" name="m_checkOtherModality" >
+                  <property name="maximumSize" >
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="text" >
+                   <string>Other</string>
+                  </property>
+                  <property name="autoExclusive" >
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="m_textOtherModality" >
+                  <property name="enabled" >
+                   <bool>false</bool>
+                  </property>
+                  <property name="sizePolicy" >
+                   <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="maximumSize" >
+                   <size>
+                    <width>30</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="udg::QPacsList" native="1" name="m_PACSNodes" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>5</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>150</width>
+         <height>243</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="m_qwidgetAdvancedSearch" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>1</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="m_advancedSearchStudy" >
+      <attribute name="title" >
+       <string>Study</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="2" column="1" >
+        <widget class="QLineEdit" name="m_studyModalityText" />
+       </item>
+       <item row="0" column="4" >
+        <widget class="QLineEdit" name="m_studyUIDText" />
+       </item>
+       <item row="0" column="3" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>UID Study</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyUIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_13" >
+         <property name="text" >
+          <string>Time</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyTimeText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="5" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="4" >
+        <widget class="QLineEdit" name="m_accessionNumberText" />
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_12" >
+         <property name="text" >
+          <string>Study Modalities</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyModalityText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" >
+        <widget class="QLabel" name="label_11" >
+         <property name="text" >
+          <string>Referring Physicians Name</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_referringPhysiciansNameText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="m_studyIDText" />
+       </item>
+       <item row="2" column="4" >
+        <widget class="QLineEdit" name="m_referringPhysiciansNameText" />
+       </item>
+       <item row="1" column="3" >
+        <widget class="QLabel" name="label_9" >
+         <property name="text" >
+          <string>Accession Number</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_accessionNumberText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel5_3" >
+         <property name="text" >
+          <string>Study ID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="m_studyTimeText" />
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_advancedSearchSeries" >
+      <attribute name="title" >
+       <string>Series</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="2" column="1" >
+        <widget class="QLineEdit" name="m_PPStartTimeText" />
+       </item>
+       <item row="2" column="4" >
+        <widget class="QLineEdit" name="m_PPStartDateText" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Series number</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_seriesNumberText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Req. Proc. ID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_requestedProcedureIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4" >
+        <widget class="QLineEdit" name="m_scheduledProcedureStepIDText" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="m_seriesNumberText" />
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="m_seriesUIDText" />
+       </item>
+       <item row="0" column="4" >
+        <widget class="QLineEdit" name="m_requestedProcedureIDText" />
+       </item>
+       <item row="1" column="3" >
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Sche. Proc. Step ID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_scheduledProcedureStepIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>UID Series</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_seriesUIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_10" >
+         <property name="text" >
+          <string>Time</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_PPStartTimeText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Proc. Perf. Start Date</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_PPStartDateText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_advancedSearchSeries" >
+      <attribute name="title" >
+       <string>Image</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="text" >
+          <string>Instance Number</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_instanceNumberText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>SOP Instance UID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_SOPInstanceUIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="m_SOPInstanceUIDText" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="m_instanceNumberText" />
+       </item>
+       <item row="1" column="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="m_advancedSearchButton" >
+       <property name="text" >
+        <string>Advanced Search >></string>
+       </property>
+       <property name="checkable" >
+        <bool>true</bool>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>211</width>
+         <height>30</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_clearButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>3</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Clear Search Fields</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_searchButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>3</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>search</string>
+       </property>
+       <property name="layoutDirection" >
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text" >
+        <string>Search</string>
+       </property>
+       <property name="icon" >
+        <iconset/>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="m_tab" >
+     <property name="enabled" >
+      <bool>true</bool>
+     </property>
+     <property name="tabPosition" >
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="tabShape" >
+      <enum>QTabWidget::Rounded</enum>
+     </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="m_tabCache" >
+      <attribute name="title" >
+       <string>Local Database</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="m_StudyTreeSeriesListQSplitter" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetCache" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+         <widget class="udg::QSeriesListWidget" native="1" name="m_seriesListWidgetCache" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="m_viewButtonLocal" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>1</hsizetype>
+             <vsizetype>3</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>View</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_tabPacs" >
+      <attribute name="title" >
+       <string>PACS Server</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetPacs" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="m_viewButtonPACS" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>1</hsizetype>
+             <vsizetype>3</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>View</string>
+           </property>
+           <property name="autoDefault" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_retrieveButtonPACS" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>1</hsizetype>
+             <vsizetype>3</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>Retrieve</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="default" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_tabDicomdir" >
+      <attribute name="title" >
+       <string>DICOMDIR</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetDicomdir" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="m_viewButtonDICOMDIR" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>1</hsizetype>
+             <vsizetype>3</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>View</string>
+           </property>
+           <property name="autoDefault" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_retrieveButtonDICOMDIR" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>1</hsizetype>
+             <vsizetype>3</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text" >
+            <string>Retrieve</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="default" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="m_retrieveListButton" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>3</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Operation List</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="m_labelOperation" >
+         <property name="text" >
+          <string>Operation in progress</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_operationAnimation" >
+         <property name="text" >
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>66</width>
+         <height>30</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_showPacsListButton" >
+       <property name="text" >
+        <string>Show PACS Nodes</string>
+       </property>
+       <property name="checkable" >
+        <bool>true</bool>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_createDicomdirButton" >
+       <property name="text" >
+        <string>Create DICOMDIR</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>udg::QPacsList</class>
+   <extends>QWidget</extends>
+   <header>qpacslist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QSeriesListWidget</class>
+   <extends>QWidget</extends>
+   <header>qserieslistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QStudyTreeWidget</class>
+   <extends>QWidget</extends>
+   <header>qstudytreewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>m_patientNameText</tabstop>
+  <tabstop>m_patientIDText</tabstop>
+  <tabstop>m_todayRadioButton</tabstop>
+  <tabstop>m_yesterdayRadioButton</tabstop>
+  <tabstop>m_customDateRadioButton</tabstop>
+  <tabstop>m_fromDateCheck</tabstop>
+  <tabstop>m_fromStudyDate</tabstop>
+  <tabstop>m_toDateCheck</tabstop>
+  <tabstop>m_toStudyDate</tabstop>
+  <tabstop>m_studyIDText</tabstop>
+  <tabstop>m_accessionNumberText</tabstop>
+  <tabstop>m_studyTimeText</tabstop>
+  <tabstop>m_checkAll</tabstop>
+  <tabstop>m_checkCR</tabstop>
+  <tabstop>m_checkES</tabstop>
+  <tabstop>m_checkNM</tabstop>
+  <tabstop>m_checkRF</tabstop>
+  <tabstop>m_checkXA</tabstop>
+  <tabstop>m_checkCT</tabstop>
+  <tabstop>m_checkMG</tabstop>
+  <tabstop>m_checkDT</tabstop>
+  <tabstop>m_checkSC</tabstop>
+  <tabstop>m_checkOtherModality</tabstop>
+  <tabstop>m_checkDX</tabstop>
+  <tabstop>m_checkMR</tabstop>
+  <tabstop>m_checkPT</tabstop>
+  <tabstop>m_checkUS</tabstop>
+  <tabstop>m_instanceNumberText</tabstop>
+  <tabstop>m_showPacsListButton</tabstop>
+  <tabstop>m_advancedSearchButton</tabstop>
+  <tabstop>m_searchButton</tabstop>
+  <tabstop>m_textOtherModality</tabstop>
+  <tabstop>m_retrieveButtonPACS</tabstop>
+  <tabstop>m_viewButtonPACS</tabstop>
+  <tabstop>m_retrieveListButton</tabstop>
+  <tabstop>m_createDicomdirButton</tabstop>
+  <tabstop>m_tab</tabstop>
+  <tabstop>m_clearButton</tabstop>
+  <tabstop>m_referringPhysiciansNameText</tabstop>
+  <tabstop>m_studyModalityText</tabstop>
+  <tabstop>m_seriesNumberText</tabstop>
+  <tabstop>m_studyUIDText</tabstop>
+  <tabstop>m_seriesUIDText</tabstop>
+  <tabstop>m_requestedProcedureIDText</tabstop>
+  <tabstop>m_scheduledProcedureStepIDText</tabstop>
+  <tabstop>m_PPStartDateText</tabstop>
+  <tabstop>m_PPStartTimeText</tabstop>
+  <tabstop>m_SOPInstanceUIDText</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>m_fromDateCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_fromStudyDate</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>211</x>
+     <y>201</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>319</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_toDateCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_toStudyDate</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>195</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>260</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_customDateRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_fromDateCheck</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>320</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>211</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_customDateRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_toDateCheck</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>262</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>211</x>
+     <y>233</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_customDateRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_fromDateCheck</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>320</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>211</x>
+     <y>201</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_customDateRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_toDateCheck</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>320</x>
+     <y>170</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>195</x>
+     <y>213</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkOtherModality</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_textOtherModality</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>548</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>579</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
