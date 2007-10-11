@@ -201,15 +201,15 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
 
 void QCreateDicomdir::createDicomdir()
 {
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     Status state;
-
     switch( m_currentDevice )
     {
         case PenDrive:
         case HardDisk:
-                 createDicomdirOnHardDiskOrFlashMemories();
-                 break;
+                QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+                createDicomdirOnHardDiskOrFlashMemories();
+                QApplication::restoreOverrideCursor();
+                break;
         case DVDROM:
         case CDROM: //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
                  state = createDicomdirOnCdOrDvd();
@@ -218,8 +218,6 @@ void QCreateDicomdir::createDicomdir()
                     burnDicomdir( recordDeviceDicomDir(cd) );
                  break;
     }
-
-    QApplication::restoreOverrideCursor();
 }
 
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
@@ -463,13 +461,14 @@ bool QCreateDicomdir::studyExists( QString studyUID )
 
 void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
 {
-    QProcess k3b, mkisofs;
-    QStringList k3bParamatersList, mkisofsParamaterList;
+    // TODO comprovar primer si el device que ens passen és un CD o DVD, si no no pot funcionar
+    QProcess process;
+    QStringList processParameters;
     QDir temporaryDirPath;
-    QString dicomdirPath, outputIsoPathParameter, isoPath;
+    QString dicomdirPath, isoPath;
 
     //com que de moment no hi ha comunicacio amb el mkisofs es crea aquest progress bar per donar algo de feeling a l'usuari, per a que no es pensi que s'ha penjat l'aplicació
-    QProgressDialog *progressBar = new QProgressDialog( tr( "Creating DICOMDIR Image..." ) , "" , 0 , 10 );;
+    QProgressDialog *progressBar = new QProgressDialog( tr( "Creating DICOMDIR Image..." ) , "" , 0 , 10 );
     progressBar->setMinimumDuration( 0 );
     progressBar->setCancelButton( 0 );
     progressBar->setValue( 7 );
@@ -477,37 +476,79 @@ void QCreateDicomdir::burnDicomdir( recordDeviceDicomDir device )
     dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR/";
 
     //indiquem al directori i nom de la imatge a crear
-    isoPath = dicomdirPath + "/dicomdir.iso";
+    isoPath = dicomdirPath + "dicomdir.iso";
 
-    //el mkisofs per indica el nom de la iso a crear se li ha de posar amb el parametre -o
-    outputIsoPathParameter = "-o" + isoPath;
+    processParameters <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
+    processParameters << "-o" + isoPath;; //nom i directori on guardarem la imatge
+    processParameters << dicomdirPath;//path a convertir en iso
 
-    mkisofsParamaterList <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
-    mkisofsParamaterList << outputIsoPathParameter; //nom i directori on guardarem la imatge
-    mkisofsParamaterList << dicomdirPath;//path a convertir en iso
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    process.start( "mkisofs" , processParameters );
+    process.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
+    QApplication::restoreOverrideCursor();
 
-    mkisofs.execute( "mkisofs" , mkisofsParamaterList );//creem la imatge
-    mkisofs.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
-
-    k3bParamatersList.push_back( "--nosplash" );//que no s'engegui l'splash del k3b
-
-    switch( device )
+    if( process.exitCode() != 0 ) // hi ha hagut problemes
     {
-        case recordDeviceDicomDir(cd) :
-                k3bParamatersList << "--cdimage";
-                k3bParamatersList << isoPath;
-                k3b.execute( "k3b" , k3bParamatersList );
+        showProcessErrorMessage(process, "mkisofs");
+    }
+    else
+    {
+        processParameters.clear();
+        processParameters << "--nosplash";//que no s'engegui l'splash del k3b
+
+        switch( device )
+        {
+            case recordDeviceDicomDir(cd) :
+                processParameters << "--cdimage";
                 break;
-        case recordDeviceDicomDir(dvd):
-                k3bParamatersList << "--dvdimage";
-                k3bParamatersList << isoPath;
-                k3b.execute( "k3b" , k3bParamatersList );
+
+            case recordDeviceDicomDir(dvd):
+                processParameters << "--dvdimage";
                 break;
-        default:
-            break;
+        }
+        processParameters << isoPath;
+        process.start( "k3b" , processParameters );
+        process.waitForFinished( -1 );
+        if( process.exitCode() != 0 ) // hi ha hagut problemes
+            showProcessErrorMessage(process, "k3b");
+        else
+            this->close();
     }
 
     progressBar->close();
+}
+
+void QCreateDicomdir::showProcessErrorMessage( const QProcess &process, QString name )
+{
+    QString errorMessage;
+    switch( process.error() )
+    {
+        case QProcess::FailedToStart:
+            errorMessage = tr("The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.").arg(name);
+            break;
+
+        case QProcess::Crashed:
+            errorMessage = tr("The process [ %1 ] crashed some time after starting successfully.").arg(name);
+            break;
+
+//             case QProcess::Timedout:
+//                 errorMessage = tr("The last waitFor...() function timed out. The state of QProcess is unchanged, and you can try calling waitFor...() again.").arg(name);
+//                 break;
+
+            case QProcess::WriteError:
+                errorMessage = tr("An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.").arg(name);
+                break;
+
+            case QProcess::ReadError:
+                errorMessage = tr("An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.").arg(name);
+                break;
+
+//             case QProcess::UnknownError:
+//                 errorMessage = tr("An unknown error occurred with the process [ %1 ]").arg("mkisofs");
+//                 break;
+    }
+    QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR") + "\n\n" + errorMessage + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+
 }
 
 bool QCreateDicomdir::enoughFreeSpace( QString path )
