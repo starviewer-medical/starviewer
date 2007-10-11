@@ -1,18 +1,8 @@
 # Aquí cal afegir les extensions que volem que s'incloguin a l'executable
 #
 
-PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
-             edemasegmentation \
-             landmarkregistration \
-             strokesegmentation \
-             optimalviewpoint \
-             rectumsegmentation \
-             volume3dviewtesting \
-             mprcardiac3d \
-             cardiac2dviewer \
-             multiq2dviewer \
-             segmentationframework \
-             registrationframework
+PLAYGROUND_EXTENSIONS = mprcardiac3d \
+             cardiac2dviewer
 
 #CONTRIB_EXTENSIONS =
 

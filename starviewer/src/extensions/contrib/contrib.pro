@@ -1,11 +1,10 @@
+include(../../extensions.inc)
 
-TEMPLATE = subdirs 
+TEMPLATE = subdirs
 
-#SUBDIRS = 
-
-for(dir, SUBDIRS) {
-    !exists($$dir) {
-        SUBDIRS -= $$dir
+for(dir, CONTRIB_EXTENSIONS) {
+    exists($$dir) {
+        SUBDIRS += $$dir
     }
 }
 
