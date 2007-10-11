@@ -540,42 +540,42 @@ Código de error: %1</translation>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="619"/>
+        <location filename="qcreatedicomdir.cpp" line="660"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="292"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="292"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="292"/>
+        <location filename="qcreatedicomdir.cpp" line="290"/>
         <source>Create directory ?</source>
         <translation>¿ Crear directorio ?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="299"/>
+        <location filename="qcreatedicomdir.cpp" line="297"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation>No se puede crear el directorio. Revise sus permisos de usuario</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="606"/>
+        <location filename="qcreatedicomdir.cpp" line="647"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para copiar todos los estudios, por favor quite algun estudio. La capacidad de un cd es de 700 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="619"/>
+        <location filename="qcreatedicomdir.cpp" line="660"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb</source>
         <translation>El dispositivo seleccionado no tiene suficiente espacio para copiar todos los estudios, por favor quite algun estudio. La capacidad de un dvd es de 4400 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="428"/>
+        <location filename="qcreatedicomdir.cpp" line="426"/>
         <source>Please select a study to remove of the list</source>
         <translation>Por favor seleccione el estudi que desea quitar del la lista</translation>
     </message>
@@ -640,66 +640,101 @@ Código de error: %1</translation>
         <translation>El estudio ya existe en la lista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="245"/>
+        <location filename="qcreatedicomdir.cpp" line="243"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation>No se puede crear el directorio temporal para crear el DICOMDIR. Por favor comprube los permisos de usuario</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="274"/>
+        <location filename="qcreatedicomdir.cpp" line="272"/>
         <source>Create DICOMDIR</source>
         <translation>Crear DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="275"/>
+        <location filename="qcreatedicomdir.cpp" line="273"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation>El directorio contiene un DICOMDIR, ¿quiere sobreescribirlo i borrar todos los archivos en el directorio?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="293"/>
+        <location filename="qcreatedicomdir.cpp" line="291"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directorio del DICOMDIR no existe. ¿Quiere crearlo?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="321"/>
+        <location filename="qcreatedicomdir.cpp" line="319"/>
         <source>Not enough free space to create DICOMDIR. Please free space</source>
         <translation>Espacio insuficiente para crear el DICOMDIR. Libere espacio para poder continuar</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="394"/>
+        <location filename="qcreatedicomdir.cpp" line="392"/>
         <source>DICOMDIR Directory</source>
         <translation>Directorio del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="472"/>
+        <location filename="qcreatedicomdir.cpp" line="471"/>
         <source>Creating DICOMDIR Image...</source>
         <translation>Creando imagen de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="265"/>
+        <location filename="qcreatedicomdir.cpp" line="263"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation>No se especificó el directorio donde crear el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="331"/>
+        <location filename="qcreatedicomdir.cpp" line="329"/>
         <source>Please, first select the studies you want to create a DICOMDIR with</source>
         <translation>Seleccione los estudios con los que quiere crear el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="363"/>
+        <location filename="qcreatedicomdir.cpp" line="361"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them </source>
         <translation>Algunas de las imágenes no cumplen al 100% el estándar DICOM. Es posible que algunos visualizadores tengan problemas para visualizarlas </translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="368"/>
+        <location filename="qcreatedicomdir.cpp" line="366"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty</source>
         <translation>Error creando el DICOMDIR. Asegúrese que tiene permisos en %1 y que el directorio está vacío</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="556"/>
+        <location filename="qcreatedicomdir.cpp" line="597"/>
         <source>
 Error Number: %1</source>
         <translation>
 Código de error: %1</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="527"/>
+        <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
+        <translation>No se ha podido iniciar el proceso [ %1 ]. Puede que el programa invocado no esté instalado o que no tenga suficientes permisos para invocar el programa.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="531"/>
+        <source>The process [ %1 ] crashed some time after starting successfully.</source>
+        <translation>El proceso [ %1 ] se ha colgado después de haberse iniciado correctamente.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="539"/>
+        <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
+        <translation>Ha habido algún error cuando se intentaba escribir al proceso [ %1 ]. Por ejemplo, puede que el proceso no se esté ejecutando o puede haberse cerrado.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="543"/>
+        <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
+        <translation>Ha habido algún error cuando se intentaba leer del proceso [ %1 ]. Por ejemplo, puede que el proceso no se esté ejecutando.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="550"/>
+        <source>DICOMDIR Creation Failure</source>
+        <translation>Fallo en la Creación de DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="550"/>
+        <source>There was an error during the creation of the DICOMDIR</source>
+        <translation>Hubo un error durante la creación del DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="550"/>
+        <source>Please, contact your system administrator to solve this problem.</source>
+        <translation>Por favor, contacte con el administrador del sistema para solucionar este problema.</translation>
     </message>
 </context>
 <context>
@@ -872,7 +907,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1201"/>
+        <location filename="queryscreen.cpp" line="1200"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
@@ -1075,62 +1110,52 @@ Código de error: %1</translation>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="79"/>
+        <location filename="qstudytreewidget.cpp" line="81"/>
         <source>&amp;View</source>
         <translation>V&amp;izualizar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="89"/>
+        <location filename="qstudytreewidget.cpp" line="91"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descargar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="101"/>
+        <location filename="qstudytreewidget.cpp" line="103"/>
         <source>&amp;Delete</source>
         <translation>&amp;Borrar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="536"/>
+        <location filename="qstudytreewidget.cpp" line="529"/>
         <source>Series</source>
         <translation>Serie</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="80"/>
+        <location filename="qstudytreewidget.cpp" line="82"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="90"/>
+        <location filename="qstudytreewidget.cpp" line="92"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="170"/>
-        <source>Study </source>
-        <translation>Estudio </translation>
-    </message>
-    <message>
-        <location filename="qstudytreewidget.cpp" line="108"/>
+        <location filename="qstudytreewidget.cpp" line="110"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="113"/>
+        <location filename="qstudytreewidget.cpp" line="115"/>
         <source>Store to PACS</source>
         <translation>Almacenar en PACS</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="114"/>
+        <location filename="qstudytreewidget.cpp" line="116"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="302"/>
-        <source>Image </source>
-        <translation>Imagen </translation>
-    </message>
-    <message>
-        <location filename="qstudytreewidget.cpp" line="107"/>
+        <location filename="qstudytreewidget.cpp" line="109"/>
         <source>Send to DICOMDIR List</source>
         <translation>Enviar a la lista de DICOMDIR</translation>
     </message>
@@ -1139,11 +1164,21 @@ Código de error: %1</translation>
         <source>Series %1</source>
         <translation>Serie %1</translation>
     </message>
+    <message>
+        <location filename="qstudytreewidget.cpp" line="180"/>
+        <source>Study %1</source>
+        <translation>Estudio %1</translation>
+    </message>
+    <message>
+        <location filename="qstudytreewidget.cpp" line="293"/>
+        <source>Image %1</source>
+        <translation>Imagen %1</translation>
+    </message>
 </context>
 <context>
     <name>udg::QStudyTreeWidgetBase</name>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="115"/>
+        <location filename="qstudytreewidgetbase.ui" line="120"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
@@ -1153,12 +1188,12 @@ Código de error: %1</translation>
         <translation>ID Paciente</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="65"/>
+        <location filename="qstudytreewidgetbase.ui" line="55"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="70"/>
+        <location filename="qstudytreewidgetbase.ui" line="65"/>
         <source>Age</source>
         <translation>Edad</translation>
     </message>
@@ -1168,17 +1203,17 @@ Código de error: %1</translation>
         <translation>Modalidad</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="80"/>
+        <location filename="qstudytreewidgetbase.ui" line="70"/>
         <source>Description</source>
         <translation>Descripción</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="85"/>
+        <location filename="qstudytreewidgetbase.ui" line="80"/>
         <source>Date</source>
         <translation>Fecha</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="90"/>
+        <location filename="qstudytreewidgetbase.ui" line="85"/>
         <source>Hour</source>
         <translation>Hora</translation>
     </message>
@@ -1188,27 +1223,27 @@ Código de error: %1</translation>
         <translation>Institución</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="100"/>
+        <location filename="qstudytreewidgetbase.ui" line="115"/>
         <source>Acc. Num</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="105"/>
+        <location filename="qstudytreewidgetbase.ui" line="90"/>
         <source>AETitle</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="110"/>
+        <location filename="qstudytreewidgetbase.ui" line="100"/>
         <source>UID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="120"/>
+        <location filename="qstudytreewidgetbase.ui" line="125"/>
         <source>Img Num</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="125"/>
+        <location filename="qstudytreewidgetbase.ui" line="110"/>
         <source>Protocol Name</source>
         <translation>Nombre Protocolo</translation>
     </message>
@@ -1237,11 +1272,16 @@ Código de error: %1</translation>
         <source>Sche. Proc. Step ID</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="qstudytreewidgetbase.ui" line="105"/>
+        <source>StudyID</source>
+        <translation>ID de Estudio</translation>
+    </message>
 </context>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1548"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
@@ -1282,7 +1322,7 @@ Código de error: %1</translation>
         <translation>Error interno :</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1025"/>
+        <location filename="queryscreen.cpp" line="1024"/>
         <source>Select a study to view </source>
         <translation>Seleccione un estudio para visualizar</translation>
     </message>
@@ -1292,17 +1332,17 @@ Código de error: %1</translation>
         <translation>Error borrando antiguos estudios</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1123"/>
+        <location filename="queryscreen.cpp" line="1122"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1123"/>
+        <location filename="queryscreen.cpp" line="1122"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1307"/>
+        <location filename="queryscreen.cpp" line="1306"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>No se puede conectar al PACS %1 de %2Asegúrese que la IP y el AETitle de este PACS sean correctos</translation>
@@ -1318,12 +1358,12 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Error consultando el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1201"/>
+        <location filename="queryscreen.cpp" line="1200"/>
         <source>Dicomdir</source>
         <translation>Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1216"/>
+        <location filename="queryscreen.cpp" line="1215"/>
         <source>Error openning dicomdir</source>
         <translation>Error abriendo el Dicomdir</translation>
     </message>
@@ -1352,46 +1392,46 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1322"/>
+        <location filename="queryscreen.cpp" line="1321"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>No se puede consultar el PACS %1 de %2
 Asegúrese que la IP y el AETitle sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1548"/>
         <source>
 Error Number: %1</source>
         <translation>
 Código de error: %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1059"/>
+        <location filename="queryscreen.cpp" line="1058"/>
         <source>Select at least one study to view</source>
         <translation>Seleccione almenos un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1117"/>
+        <location filename="queryscreen.cpp" line="1116"/>
         <source>Please select at least one study to delete</source>
         <translation>Seleccione almenos un estudio a borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1122"/>
+        <location filename="queryscreen.cpp" line="1121"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation>¿Está seguro que quiere borrar los estudios seleccionados?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1247"/>
+        <location filename="queryscreen.cpp" line="1246"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Debe seleccionar un PACS donde almacenar el estudio</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1291"/>
+        <location filename="queryscreen.cpp" line="1290"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Los estudios solo se pueden almacenar en un PACS a la vez</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1135"/>
+        <location filename="queryscreen.cpp" line="1134"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>El estudio con UID: %1 está en uso por la Lista de DICOMDIR. Si desea borrar este estudio debería borrarlo primero de la Lista de DICOMDIR.</translation>
     </message>
