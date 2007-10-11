@@ -1,0 +1,717 @@
+<ui version="4.0" >
+    <author></author>
+    <comment></comment>
+    <exportmacro></exportmacro>
+    <class>QMPRCardiac3DExtensionBase</class>
+    <widget class="QWidget" name="QMPRCardiac3DExtensionBase">
+        <property name="geometry" >
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>899</width>
+                <height>583</height>
+            </rect>
+        </property>
+        <property name="windowTitle" >
+            <string>Form1</string>
+        </property>
+        <layout class="QVBoxLayout" >
+            <property name="margin" >
+                <number>9</number>
+            </property>
+            <property name="spacing" >
+                <number>6</number>
+            </property>
+            <item>
+                <layout class="QHBoxLayout" >
+                    <property name="margin" >
+                        <number>0</number>
+                    </property>
+                    <property name="spacing" >
+                        <number>6</number>
+                    </property>
+                    <item>
+                        <layout class="QHBoxLayout" >
+                            <property name="margin" >
+                                <number>0</number>
+                            </property>
+                            <property name="spacing" >
+                                <number>6</number>
+                            </property>
+                            <item>
+                                <widget class="QToolButton" name="m_zoomToolButton" >
+                                    <property name="text" >
+                                        <string>...</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_moveToolButton" >
+                                    <property name="text" >
+                                        <string>...</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_rotate3DToolButton" >
+                                    <property name="text" >
+                                        <string>...</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/rotate3d.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_axialViewEnabledButton" >
+                                    <property name="toolTip" >
+                                        <string>Enable axial plane</string>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Axial</string>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_sagitalViewEnabledButton" >
+                                    <property name="toolTip" >
+                                        <string>Enable sagital plane</string>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Sagital</string>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_coronalViewEnabledButton" >
+                                    <property name="toolTip" >
+                                        <string>Enable coronal plane</string>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Coronal</string>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" >
+                            <property name="margin" >
+                                <number>0</number>
+                            </property>
+                            <property name="spacing" >
+                                <number>6</number>
+                            </property>
+                            <item>
+                                <widget class="QToolButton" name="m_axialOrientationButton" >
+                                    <property name="sizePolicy" >
+                                        <sizepolicy>
+                                            <hsizetype>1</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="toolTip" >
+                                        <string>Switch to axial view</string>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Axial view</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/axial.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_sagitalOrientationButton" >
+                                    <property name="sizePolicy" >
+                                        <sizepolicy>
+                                            <hsizetype>1</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="toolTip" >
+                                        <string>Switch to sagital view</string>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Sagital view</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/sagital.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QToolButton" name="m_coronalOrientationButton" >
+                                    <property name="toolTip" >
+                                        <string>Switch to coronal view</string>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Coronal view</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/coronal.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="checkable" >
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" >
+                            <property name="margin" >
+                                <number>0</number>
+                            </property>
+                            <property name="spacing" >
+                                <number>6</number>
+                            </property>
+                            <item>
+                                <widget class="QToolButton" name="m_screenShotToolButton" >
+                                    <property name="text" >
+                                        <string>...</string>
+                                    </property>
+                                    <property name="icon" >
+                                        <iconset resource="../main/main.qrc" >:/images/photo.png</iconset>
+                                    </property>
+                                    <property name="iconSize" >
+                                        <size>
+                                            <width>32</width>
+                                            <height>32</height>
+                                        </size>
+                                    </property>
+                                    <property name="autoRaise" >
+                                        <bool>true</bool>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                    <item>
+                        <spacer>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeType" >
+                                <enum>QSizePolicy::Expanding</enum>
+                            </property>
+                            <property name="sizeHint" >
+                                <size>
+                                    <width>173</width>
+                                    <height>43</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" >
+                            <property name="margin" >
+                                <number>0</number>
+                            </property>
+                            <property name="spacing" >
+                                <number>6</number>
+                            </property>
+                            <item>
+                                <widget class="QLabel" name="label" >
+                                    <property name="text" >
+                                        <string>WW/WL:</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox" />
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </item>
+            <item>
+                <widget class="udg::QCardiac3DMPRViewer" name="m_mpr3DView" >
+                    <property name="sizePolicy" >
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize" >
+                        <size>
+                            <width>16</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </widget>
+            </item>
+            <item>
+                <layout class="QHBoxLayout" >
+                    <property name="margin" >
+                        <number>0</number>
+                    </property>
+                    <property name="spacing" >
+                        <number>6</number>
+                    </property>
+                    <item>
+                        <widget class="QPushButton" name="m_ButtonRecord" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="autoFillBackground" >
+                                <bool>false</bool>
+                            </property>
+                            <property name="text" >
+                                <string/>
+                            </property>
+                            <property name="icon" >
+                                <iconset resource="../main/main.qrc" >:/images/record.png</iconset>
+                            </property>
+                            <property name="iconSize" >
+                                <size>
+                                    <width>28</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <spacer>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeType" >
+                                <enum>QSizePolicy::Fixed</enum>
+                            </property>
+                            <property name="sizeHint" >
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="m_ButtonComeBack" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font" >
+                                <font>
+                                    <family>Sans Serif</family>
+                                    <pointsize>17</pointsize>
+                                    <weight>75</weight>
+                                    <italic>false</italic>
+                                    <bold>true</bold>
+                                    <underline>false</underline>
+                                    <strikeout>false</strikeout>
+                                </font>
+                            </property>
+                            <property name="text" >
+                                <string/>
+                            </property>
+                            <property name="icon" >
+                                <iconset resource="../main/main.qrc" >:/images/endavant_enrera.png</iconset>
+                            </property>
+                            <property name="iconSize" >
+                                <size>
+                                    <width>28</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                            <property name="checkable" >
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="m_ButtonLoop" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="acceptDrops" >
+                                <bool>false</bool>
+                            </property>
+                            <property name="autoFillBackground" >
+                                <bool>false</bool>
+                            </property>
+                            <property name="text" >
+                                <string/>
+                            </property>
+                            <property name="icon" >
+                                <iconset resource="../main/main.qrc" >:/images/repeat_track.png</iconset>
+                            </property>
+                            <property name="iconSize" >
+                                <size>
+                                    <width>28</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                            <property name="checkable" >
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <spacer>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeType" >
+                                <enum>QSizePolicy::Fixed</enum>
+                            </property>
+                            <property name="sizeHint" >
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="m_ButtonOpenParentesis" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font" >
+                                <font>
+                                    <family>Sans Serif</family>
+                                    <pointsize>17</pointsize>
+                                    <weight>75</weight>
+                                    <italic>false</italic>
+                                    <bold>true</bold>
+                                    <underline>false</underline>
+                                    <strikeout>false</strikeout>
+                                </font>
+                            </property>
+                            <property name="text" >
+                                <string/>
+                            </property>
+                            <property name="icon" >
+                                <iconset resource="../main/main.qrc" >:/images/parentesis_obertn.png</iconset>
+                            </property>
+                            <property name="iconSize" >
+                                <size>
+                                    <width>28</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                            <property name="checkable" >
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="m_ButtonCloseParentesis" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="font" >
+                                <font>
+                                    <family>Sans Serif</family>
+                                    <pointsize>16</pointsize>
+                                    <weight>75</weight>
+                                    <italic>false</italic>
+                                    <bold>true</bold>
+                                    <underline>false</underline>
+                                    <strikeout>false</strikeout>
+                                </font>
+                            </property>
+                            <property name="text" >
+                                <string/>
+                            </property>
+                            <property name="icon" >
+                                <iconset resource="../main/main.qrc" >:/images/parentesis_tancatn.png</iconset>
+                            </property>
+                            <property name="iconSize" >
+                                <size>
+                                    <width>28</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                            <property name="checkable" >
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <spacer>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeType" >
+                                <enum>QSizePolicy::Fixed</enum>
+                            </property>
+                            <property name="sizeHint" >
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QToolButton" name="m_ButtonPlay" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="autoFillBackground" >
+                                <bool>false</bool>
+                            </property>
+                            <property name="text" >
+                                <string/>
+                            </property>
+                            <property name="icon" >
+                                <iconset resource="../main/main.qrc" >:/images/player_play32.png</iconset>
+                            </property>
+                            <property name="iconSize" >
+                                <size>
+                                    <width>28</width>
+                                    <height>28</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <spacer>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeType" >
+                                <enum>QSizePolicy::Fixed</enum>
+                            </property>
+                            <property name="sizeHint" >
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QSlider" name="m_slider" >
+                            <property name="sizePolicy" >
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="focusPolicy" >
+                                <enum>Qt::TabFocus</enum>
+                            </property>
+                            <property name="maximum" >
+                                <number>0</number>
+                            </property>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="invertedControls" >
+                                <bool>false</bool>
+                            </property>
+                            <property name="tickPosition" >
+                                <enum>QSlider::NoTicks</enum>
+                            </property>
+                            <property name="tickInterval" >
+                                <number>1</number>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <spacer>
+                            <property name="orientation" >
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeType" >
+                                <enum>QSizePolicy::Fixed</enum>
+                            </property>
+                            <property name="sizeHint" >
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <layout class="QVBoxLayout" >
+                            <property name="margin" >
+                                <number>0</number>
+                            </property>
+                            <property name="spacing" >
+                                <number>6</number>
+                            </property>
+                            <item>
+                                <widget class="QLabel" name="label" >
+                                    <property name="sizePolicy" >
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text" >
+                                        <string>Velocity</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QSpinBox" name="m_spinBox" >
+                                    <property name="toolTip" >
+                                        <string>frames/sec</string>
+                                    </property>
+                                    <property name="statusTip" >
+                                        <string/>
+                                    </property>
+                                    <property name="readOnly" >
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="buttonSymbols" >
+                                        <enum>QAbstractSpinBox::PlusMinus</enum>
+                                    </property>
+                                    <property name="suffix" >
+                                        <string/>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </item>
+       </layout>
+    </widget>
+    <layoutdefault spacing="6" margin="11" />
+    <pixmapfunction></pixmapfunction>
+    <customwidgets>
+        <customwidget>
+            <class>udg::QWindowLevelComboBox</class>
+            <extends>QComboBox</extends>
+            <header>qwindowlevelcombobox.h</header>
+            <container>0</container>
+            <pixmap></pixmap>
+        </customwidget>
+        <customwidget>
+            <class>udg::QCardiac3DMPRViewer</class>
+            <extends>QFrame</extends>
+            <header>qcardiac3dmprviewer.h</header>
+            <container>0</container>
+            <pixmap></pixmap>
+        </customwidget>
+    </customwidgets>
+    <resources>
+        <include location="../main/main.qrc" />
+    </resources>
+    <connections/>
+</ui>

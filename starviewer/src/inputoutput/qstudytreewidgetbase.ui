@@ -1,0 +1,166 @@
+<ui version="4.0" >
+ <class>udg::QStudyTreeWidgetBase</class>
+ <widget class="QWidget" name="udg::QStudyTreeWidgetBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>699</width>
+    <height>212</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>7</hsizetype>
+    <vsizetype>7</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>16</width>
+    <height>16</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QTreeWidget" name="m_studyTreeView" >
+     <property name="alternatingRowColors" >
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="rootIsDecorated" >
+      <bool>true</bool>
+     </property>
+     <property name="sortingEnabled" >
+      <bool>true</bool>
+     </property>
+     <property name="animated" >
+      <bool>false</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Patient ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Age</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Description</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Modality</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Hour</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>AETitle</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Institution</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>UID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>StudyID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Protocol Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Acc. Num</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Img Num</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Ref Physician Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>PP Start Date</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>PP Start Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Req. Proc. ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Sche. Proc. Step ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string/>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

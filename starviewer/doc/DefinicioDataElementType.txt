@@ -1,0 +1,49 @@
+Data Element Type
+
+El Data Element Type d'un Atribut és utilitzat per indicar si un atribut és
+obligatori, opcional, o condicional en funció de certes condicions. El Data
+Element Type per cada atribut es troba especificat en el document PS 3.3 del
+DICOM
+
+Existeixen els següents tipus de Data Element
+
+Tipus 1 “Required Data Elements”
+
+Els tags que siguin de tipus 1 obligatòriament han d'estar presents en el
+DICOM. El valor del camp ha de tenir un valor dels definits pel VR (Value
+Representation) i VM ( Value specified ) que es troba especificat per cada
+tag en el document PS 3.6 de l'estàndard DICOM.
+El valor del tag no pot ser nul i l'absència dels tags de tipus 1 és un
+incompliment de l'estàndard.
+
+Tipus 1C “Conditional Data Elements”
+
+Han de ser inclosos en determinades condicions. Els elements de tipus 1C
+tenen els mateixos requeriments que els de tipus 1. És un incompliment de
+l'estàndard si es donen les condicions perquè un tag de tipus 1C hagi
+d'aparèixer i no hi sigui. Quan no es coneixen les condicions sota les quals
+ha d'aparèixer, els tags tipus 1C no hi ha de ser.
+
+Tipus 2 “Required Data Elements”
+
+Els tags de tipus 2 han d'estar inclosos, però es permet que tinguin un
+valor de longitud zero, si no es coneix el valor del tag. Si es coneix el
+valor del tag han de contenir un valor del tipus definit pel VR (Value
+Representation) i VM ( Value specified ) que es troba especificat per cada
+tag en el document PS 3.6 de l'estàndard DICOM.
+
+Tipus 2C “Conditional Data Elements”
+
+Han de ser inclosos en determinades condicions, per exemple quan un tag de
+tipus 2 té valor. Els tags de tipus 2C tenen els mateix requeriments que els
+de tipus 2. És un incompliment de l'estàndard si es donen les condicions
+perquè un tag de tipus 2C hi hagi d'aparèixer i no hi sigui, quan no es
+coneixen les condicions sota les quals ha d'aparèixer, els tags tipus 2C no
+hi han de ser.
+
+Tipus 3 “Optional Data Elements”
+
+Els tags de tipus 3 són opcionals. L' absència d'aquests tags no ens aporta cap
+informació, i la seva absència no és cap violació del protocol. Els tags de
+tipus 3 també poden ser codificats sense valor. El significat d'un tag  de
+tipus 3 sense valor en un Data Set, és el mateix de si no hi apareix.

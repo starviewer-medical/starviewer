@@ -1,0 +1,91 @@
+<ui version="4.0" >
+ <class>QTransferFunctionIntervalEditorBase</class>
+ <widget class="QWidget" name="QTransferFunctionIntervalEditorBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>284</width>
+    <height>25</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QCheckBox" name="m_isIntervalCheckBox" >
+      <property name="text" >
+        <string>Interval</string>
+      </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QWidget" native="1" name="widget" >
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QSpinBox" name="m_intervalStartSpinBox" >
+        <property name="maximum" >
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="m_intervalEndSpinBox" >
+        <property name="maximum" >
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QPushButton" name="m_selectColorPushButton" >
+     <property name="text" >
+      <string>Select color...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <widget class="udg::QColorSpinBox" name="m_colorSpinBox" />
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="9" />
+ <customwidgets>
+  <customwidget>
+   <class>udg::QColorSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>qcolorspinbox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_isIntervalCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_intervalEndSpinBox</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>39</x>
+     <y>98</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>167</x>
+     <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
