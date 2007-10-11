@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
+    <width>699</width>
     <height>212</height>
    </rect>
   </property>
@@ -52,7 +52,7 @@
      </property>
      <column>
       <property name="text" >
-       <string>Type</string>
+       <string>Name</string>
       </property>
      </column>
      <column>
@@ -62,22 +62,17 @@
      </column>
      <column>
       <property name="text" >
-       <string>Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
        <string>Age</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Modality</string>
+       <string>Description</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Description</string>
+       <string>Modality</string>
       </property>
      </column>
      <column>
@@ -92,22 +87,32 @@
      </column>
      <column>
       <property name="text" >
-       <string>Institution</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Acc. Num</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
        <string>AETitle</string>
       </property>
      </column>
      <column>
       <property name="text" >
+       <string>Institution</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
        <string>UID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>StudyID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Protocol Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Acc. Num</string>
       </property>
      </column>
      <column>
@@ -118,11 +123,6 @@
      <column>
       <property name="text" >
        <string>Img Num</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Protocol Name</string>
       </property>
      </column>
      <column>
