@@ -1,22 +1,10 @@
+include(../../extensions.inc)
 
-TEMPLATE = subdirs 
+TEMPLATE = subdirs
 
-SUBDIRS = diffusionperfusionsegmentation \
-          edemasegmentation \
-          landmarkregistration \
-          strokesegmentation \
-          rectumsegmentation \
-          optimalviewpoint \
-          volume3dviewtesting \
-          mprcardiac3d \
-          cardiac2dviewer \
-          multiq2dviewer \
-          segmentationframework \
-          registrationframework 
-
-for(dir, SUBDIRS) {
-    !exists($$dir) {
-        SUBDIRS -= $$dir
+for(dir, PLAYGROUND_EXTENSIONS) {
+    exists($$dir) {
+        SUBDIRS += $$dir
     }
 }
 
