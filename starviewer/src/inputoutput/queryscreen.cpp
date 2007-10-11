@@ -473,7 +473,7 @@ void QueryScreen::queryStudyPacs()
     m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
     m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
     m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
-    m_studyTreeWidgetPacs->setSortColumn( 2 );//ordenem pel nom TODO hauríem de tenir un mètode sortBy, que passant-li uns enums definits ho fes, perquè així si canviem la columna on tenim el nom, haurem de canviar tots els "setSortColumn( 2 )"
+    m_studyTreeWidgetPacs->setSortColumn( QStudyTreeWidget::PatientName );
 
     QApplication::restoreOverrideCursor();
 }
@@ -551,13 +551,13 @@ void QueryScreen::queryStudy( QString source )
         if( source == "Cache" )
         {
             m_studyTreeWidgetCache->insertStudyList( &studyList );//es mostra la llista d'estudis
-            m_studyTreeWidgetCache->setSortColumn( 2 ); //ordenem pel nom
+            m_studyTreeWidgetCache->setSortColumn( QStudyTreeWidget::PatientName ); //ordenem pel nom
         }
         else if( source == "DICOMDIR" )
         {
             m_studyTreeWidgetDicomdir->clear();
             m_studyTreeWidgetDicomdir->insertStudyList( &studyList );
-            m_studyTreeWidgetDicomdir->setSortColumn( 2 );//ordenem pel nom
+            m_studyTreeWidgetDicomdir->setSortColumn( QStudyTreeWidget::PatientName );//ordenem pel nom
         }
     }
     QApplication::restoreOverrideCursor();

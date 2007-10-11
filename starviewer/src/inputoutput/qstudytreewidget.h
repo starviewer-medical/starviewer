@@ -41,6 +41,10 @@ class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
 {
 Q_OBJECT
 public:
+    enum ColumnIndex{ PatientName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
+    PACSAETitle = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
+    ImageNumber = 14, RefPhysName = 15, PPStartDate = 16, PPStartTime = 17, ReqProcID = 18, SchedProcStep = 19
+    };
 
     /// Constructor de la classe
     QStudyTreeWidget( QWidget *parent = 0 );
