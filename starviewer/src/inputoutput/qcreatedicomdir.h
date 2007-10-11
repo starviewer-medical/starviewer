@@ -12,6 +12,7 @@
 #include "const.h"
 
 class QSignalMapper;
+class QProcess;
 
 namespace udg {
 
@@ -118,6 +119,13 @@ private:
      * @param device dispositiu al que es grava, pot ser cd o dvd
      */
     void burnDicomdir( recordDeviceDicomDir device );
+
+    /**
+     * Mostra un msgbox amb el corresponent missatge d'error segons l'estat del procés
+     * @param process procés que hem executat
+     * @param name nom del procés
+     */
+    void showProcessErrorMessage( const QProcess &process, QString name );
 
     /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit
      */
