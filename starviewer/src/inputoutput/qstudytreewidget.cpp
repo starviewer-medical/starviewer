@@ -177,7 +177,7 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     item->setText( Description , study->getStudyDescription() );
     item->setText( Date , formatDate( study->getStudyDate() ) );
     item->setText( Time , formatHour( study->getStudyTime() ) );
-    item->setText( StudyID, tr("Study ") + study->getStudyId() );
+    item->setText( StudyID, tr("Study %1").arg( study->getStudyId() ) );
 
     if ( study->getInstitutionName().isEmpty() ) //si la informació ve buida l'anem a buscar a la bdd local
     {
