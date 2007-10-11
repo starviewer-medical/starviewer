@@ -43,3 +43,5 @@ include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
 include(../compilationtype.inc)
+
+DEFINES += BETA_VERSION
