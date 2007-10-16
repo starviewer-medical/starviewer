@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "ellipse.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -114,6 +115,11 @@ void Ellipse::computeRectanglePoints()
     m_bottomRight[0] = m_majorRadius[0];
     m_bottomRight[1] = m_center[1] - diference;
     m_bottomRight[2] = m_majorRadius[2];
+}
+
+void Ellipse::refresh()
+{
+    emit  ellipseChanged( this );
 }
 
 }

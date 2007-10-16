@@ -16,6 +16,7 @@
 #include "q2dviewer.h"
 #include "representation.h"
 #include "distancerepresentation.h"
+#include "ellipserepresentation.h"
 #include "distance.h"
 
 //includes vtk
@@ -1520,6 +1521,15 @@ void Drawer::addSetOfPrimitives( Representation *representation )
 
         //li diem al drawer que dibuixi el text de la distància
         drawText( distanceRepresentation->getText(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
+    }
+    else if( representation->getRepresentationType() == "EllipseRepresentation" )
+    {
+        EllipseRepresentation *ellipseRepresentation = static_cast<EllipseRepresentation*> ( representation );
+        set->insert( ellipseRepresentation->getEllipse() );
+        set->insert( ellipseRepresentation->getText() );
+
+        //li diem al drawer que dibuixi el text de la distància
+        drawText( ellipseRepresentation->getText(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
     }
 
     //afegim el conjunt a la llista si realment s'ha emplenat

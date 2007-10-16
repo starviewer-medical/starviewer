@@ -70,6 +70,9 @@ public:
     void setTypeOfROI( QString type )
     { m_typeOfROI = type; }
     
+    ///a partir dels punts del rectangle que inscriu l'el·lipse, calcula l'àrea, crea el text i la posició d'aquest
+    void calculateTextArea( double *topLeft, double *bottomRight, int view );
+    
 signals:
     
     ///s'emet quan canvia algun punt de la ROI

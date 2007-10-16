@@ -53,12 +53,11 @@ public:
     ///ens retorna l'atribut de tipus ROIToolData
     ROIToolData* getROIToolData();
     
-    ///permet avisar per tal de refrescar el text i el voltant del text
-    void refreshText( int view );
+    ///permet avisar per tal de refrescar el text
+    void refreshText( double *topLeft, double *bottomRight, int view );
     
     ///permet avisar per tal de refrescar l'el·lipse
-    void refreshEllipse()
-    { m_ellipse->refreshEllipse(); }
+    void refreshEllipse();
     
     ///fa que l'atribut ROIToolData calculi el text de la distància i la posició del mateix
     void calculateTextAndPositionOfEllipse( int view );
