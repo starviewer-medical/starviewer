@@ -16,9 +16,11 @@ namespace udg {
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 	
 	Classe que implementa la primitiva gràfica El·lipse. També engloba el cas del cercle, ja que podem tractar el cercle com a cas especial d'una el·lipse, si fem que coincideixin els dos centres d'aquesta. Hereta de la classe Polygon, pertant també és subclasse de DrawPrimitive.
+    En el cas de l'el·lipse, la llista de punts de la classe polígon no l'ulilitzarem perquè no podem tractar els diferents punts i radis de l'el·lipse com a llista de punts consecutius que formen un polígon perquè no ho són.
 */
 class Ellipse : public Polygon
 {
+Q_OBJECT
 public:
     
     /**propietats especials que aporten les el·lipses:
@@ -89,12 +91,8 @@ public:
     QString getPrimitiveType()
     { return( "Ellipse" ); }
         
-private:
-    ///calcula els punts del rectangle que inscriu una el·lipse a partir del centre i els radis
-    void computeRectanglePoints();
-    
-    ///calcula el centre i els radis d'una el·lipse apartir dels punts del rectangle que la inscriu 
-    void computeCenterAndRadius();
+    ///emet el senyal perquè l'el·lipse s'actualitzi.
+    void refresh();
     
 private:
         ///Eixos i centre
@@ -109,6 +107,16 @@ private:
         ///ens determina el comportament de l'el·lipse: com a el·lipse o com a cercle (cas particular 
         ///d'una el·lipse).
         QString m_behavior;
+        
+        ///calcula els punts del rectangle que inscriu una el·lipse a partir del centre i els radis
+        void computeRectanglePoints();
+    
+        ///calcula el centre i els radis d'una el·lipse apartir dels punts del rectangle que la inscriu 
+        void computeCenterAndRadius();
+
+signals:
+    ///s'emet quan canvia un dels atributs de l'el·lipse
+    void ellipseChanged( Ellipse *ellipse );
 };
 
 }
