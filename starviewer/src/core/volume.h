@@ -106,6 +106,11 @@ public:
     int *getDimensions();
     void getDimensions( int dims[3] );
 
+    /// TODO Mètodes transitoris pels canvis de disseny del tema de fases
+    void setNumberOfPhases( int phases );
+    int getNumberOfPhases() const;
+    Volume *getPhaseVolume( int index );
+
     /// TODO: Repassar: això no hauria d'anar així.
     /// Retorna un nou Volume on la Data és només del sub volume indicat
     Volume *getSubVolume( int index );
@@ -218,6 +223,9 @@ private:
 
     /// el lector de DICOM
     ImageIOType::Pointer m_gdcmIO;
+
+    /// TODO membre temporal per la transició al tractament de fases
+    int m_numberOfPhases;
 };
 
 /**

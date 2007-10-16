@@ -57,6 +57,7 @@ Volume::Volume( VtkImageTypePointer vtkImage, QObject *parent )
 
 void Volume::init()
 {
+    m_numberOfPhases = 1;
     // \TODO és millor crear un objecte o assignar-li NUL a l'inicialitzar? Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
     m_imageDataVTK = vtkImageData::New();
 
@@ -172,6 +173,39 @@ int *Volume::getDimensions()
 void Volume::getDimensions( int dims[3] )
 {
     getVtkData()->GetDimensions( dims );
+}
+
+void Volume::setNumberOfPhases( int phases )
+{
+    if( phases > 1 )
+        m_numberOfPhases = phases;
+    else
+        DEBUG_LOG( QString("Nombre de phases >1 :: %1").arg(phases) );
+}
+
+int Volume::getNumberOfPhases() const
+{
+    return m_numberOfPhases;
+}
+
+Volume *Volume::getPhaseVolume( int index )
+{
+    int phases = this->getSeries()->getNumberOfPhases();
+    Volume *result = NULL;
+    if( index >= 0 && index < phases )
+    {
+        int slices = this->getSeries()->getNumberOfSlicesPerPhase();
+        int currentImageIndex = index;
+        QList<Image *> phaseImages;
+        QList<Image *> seriesImages = this->getSeries()->getImages();
+        for( int i = 0; i < slices; i++ )
+        {
+            phaseImages << seriesImages.at( currentImageIndex );
+            currentImageIndex += slices;
+        }
+        result->setImages( phaseImages );
+    }
+    return result;
 }
 
 Volume *Volume::getSubVolume( int index  )
