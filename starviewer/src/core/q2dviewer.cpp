@@ -853,7 +853,7 @@ void Q2DViewer::setInput( Volume* volume )
 //     m_picker->PickFromListOn();
 //     m_picker->AddPickList( m_viewer->GetImageActor() );
 
-    m_numberOfPhases = m_mainVolume->getSeries()->getNumberOfPhases();
+    m_numberOfPhases = m_mainVolume->getNumberOfPhases();
     if( m_numberOfPhases > 1 )
         m_maxSliceValue = m_mainVolume->getSeries()->getNumberOfSlicesPerPhase() - 1;
     else
