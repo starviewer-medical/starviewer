@@ -194,6 +194,7 @@ Volume *Volume::getPhaseVolume( int index )
     Volume *result = NULL;
     if( index >= 0 && index < phases )
     {
+        result = new Volume(  );
         int slices = this->getSeries()->getNumberOfSlicesPerPhase();
         int currentImageIndex = index;
         QList<Image *> phaseImages;
@@ -201,7 +202,7 @@ Volume *Volume::getPhaseVolume( int index )
         for( int i = 0; i < slices; i++ )
         {
             phaseImages << seriesImages.at( currentImageIndex );
-            currentImageIndex += slices;
+            currentImageIndex += phases;
         }
         result->setImages( phaseImages );
     }
