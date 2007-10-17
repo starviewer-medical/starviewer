@@ -11,6 +11,7 @@
 
 #include "logging.h"
 #include "q2dviewer.h"
+#include "volume.h"
 #include <vtkCommand.h>
 
 namespace udg {
@@ -107,12 +108,39 @@ void Slicing2DTool::endSlicing()
         DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
 }
 
+bool Slicing2DTool::currentInputHasPhases()
+{
+    bool hasPhases = false;
+
+    if( m_2DViewer )
+    {
+        if( m_2DViewer->getInput() )
+        {
+            if( m_2DViewer->getInput()->getNumberOfPhases() > 1 )
+                hasPhases = true;
+        }
+        else
+        {
+            DEBUG_LOG("L'input del viewer és NULL!");
+        }
+    }
+    else
+    {
+        DEBUG_LOG("El viewer és NULL!");
+    }
+
+    return hasPhases;
+}
+
 void Slicing2DTool::switchSlicingMode()
 {
-    if( m_slicingMode == SliceMode )
-        m_slicingMode = PhaseMode;
-    else
-        m_slicingMode = SliceMode;
+    if( currentInputHasPhases() )
+    {
+        if( m_slicingMode == SliceMode )
+            m_slicingMode = PhaseMode;
+        else
+            m_slicingMode = SliceMode;
+    }
 }
 
 void Slicing2DTool::updateIncrement(int increment)

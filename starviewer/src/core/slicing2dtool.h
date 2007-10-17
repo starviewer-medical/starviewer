@@ -12,6 +12,7 @@
 namespace udg {
 
 class Q2DViewer;
+class Volume;
 
 /**
 Tool que serveix per fer slicing en un visor 2D
@@ -52,6 +53,12 @@ private:
      * @param value nou valor de la llesca/fase
      */
     void updateIncrement(int increment);
+
+    /**
+     * Ens diu si l'input actual té fases o no
+     * @return
+     */
+    bool currentInputHasPhases();
 
 private:
     enum { SliceMode, PhaseMode };
