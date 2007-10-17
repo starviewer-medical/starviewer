@@ -42,7 +42,12 @@ Classe experta en dibuixar totes les primitives gràfiques que podem representar
 class Drawer : public QObject{
     Q_OBJECT
             
-private:
+public:
+    
+    Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
+    
+    ~Drawer();
+    
     /// Tipus definit:  parella de primitiva actor per tenir aquests dos tipus d'objectes relacionats: 
     ///PrimitiveActorPair.first serà la DrawingPrimitive i PrimitiveActorPair.second el vtkProp
     typedef QPair< DrawingPrimitive*, vtkProp* > PrimitiveActorPair;
@@ -62,34 +67,70 @@ private:
     ///Parella d'objectes vtk per a poder encapsular els punts de l'el·lipse que volem calcular.
     typedef QPair< vtkPoints*, vtkCellArray*> EllipsePoints;
     
-    /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
-    PrimitivesMap m_axialPairs;
-    PrimitivesMap m_sagittalPairs;
-    PrimitivesMap m_coronalPairs;
-
-    ///Llista on guardarem els conjunts de primitives relacionades entre sí.
-    PrimitivesSetList m_primitivesSetList;
+    ///ens retorna el nombre de primitives que ha dibuixat el drawer
+    int getNumberOfDrawedPrimitives();
     
-    ///conjunt de primitives més proper (candidat a highlight)
-    PrimitivesSet *m_nearestSet;
+    ///dibuixa un punt amb els atributs passats dins l'objecte passat per paràmetre
+    void drawPoint( Point *point, int slice, int view );
+    
+    ///dibuixa una línia amb els atributs passats dins l'objecte passat per paràmetre
+    void drawLine( Line *line, int slice, int view );
+    
+    ///dibuixa text amb els atributs passats dins l'objecte passat per paràmetre
+    void drawText( Text *text, int slice, int view );
+    
+    ///dibuixa el polígon passat per paràmetre
+    void drawPolygon( Polygon *polygon, int slice, int view );
+    
+    ///dibuixa l'el·lipse passada per paràmetre. 
+    void drawEllipse( Ellipse *ellipse, int slice, int view );
+    
+    ///els editors gràfics solen enmarcar les el·lipses dins d'un rectangle, sense tenir en compte els eixos major i menor i el centre.
+    ///Aquest mètode serveix per fer aquesta operació: passem com a punts els marges superior esquerre i l'inferior dret del rectangle que conté l'el·lipse. 
+    void drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior, int slice, int view );
+    
+    ///fa el resaltat de les primitives més properes 
+    void highlightNearestPrimitives();
+    
+    ///ens retorna la paleta de colors
+    ColorPalette* getColorPalette()
+    { return ( m_colorPalette ); }
+    
+    ///ens permet afegir un nou conjunt de primitives associades a la llista, a partir d'una representació
+    void addSetOfPrimitives( Representation *representation );
 
-    ///conjunt de primitives seleccionat
-    PrimitivesSet *m_selectedSet;
+    ///retorna el conjunt de primitives seleccionat
+    PrimitivesSet* getSelectedSet()
+    { return( m_selectedSet ); }
 
-    ///visor 2D
-    Q2DViewer *m_2DViewer;
+    ///passa a conjunt en estat seleccionat el que està com a més proper: highlight -> Selected. A més li canvia el color.
+    void selectNearestSet();
 
-    /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
+    ///deselecciona el conjunt que està en estat de selecció
+    void unselectSet();
+
+    ///ens diu si hi ha algun conjunt seleccionat
+    bool hasSelectedSet()
+    { return( m_selectedSet != NULL ); }
+    
+    ///ens esborra el conjunt de primitives seleccionat
+    void removeSelectedSet();
+
+    ///ens diu si hi ha algun conjunt marcat com el més proper
+    bool hasNearestSet()
+    { return( m_nearestSet && !m_nearestSet->isEmpty() ); }
+    
+public slots:
+    /// Elimina totes les annotacions dels multimaps
+    void removeAllPrimitives();    
+    
+    /// Actualitza la llesca/vista actual en la que es troba el visor 2D associat i els actors corresponents que cal visualitzar
+    void setCurrentSlice( int slice );
+    void setCurrentView( int view );
+
+private:
+     /// Donada una llesca i una vista ens retorna la corresponent llista d'actors i primitives
     PrimitivesPairsList getPrimitivesPairsList( int slice, int view );
-
-    /// llesca sobre la que es troba el visor 2D associat
-    int m_currentSlice;
-
-    /// vista actual del visor 2D associat
-    int m_currentView;
-    
-    /// paleta de colors que fa servir el Drawer
-    ColorPalette *m_colorPalette;
 
     ///Retorna el sistema de coordenades segons l'especificat per paràmetre 
     vtkCoordinate *getCoordinateSystem( QString coordinateSystem );
@@ -138,36 +179,6 @@ private:
     ///ens calcula els punts de l'el·lipse passada per paràmetre i ens retorna una parella d'objectes vtk que contenen aquests punts
     EllipsePoints computeEllipsePoints( Ellipse *ellipse );
     
-public:
-    
-    Drawer( Q2DViewer *m_viewer , QObject *parent = 0 );
-    
-    ~Drawer();
-    
-    ///MÈTODES REFERENTS AL DIBUIXAT DE PRIMITIVES
-    
-    ///ens retorna el nombre de primitives que ha dibuixat el drawer
-    int getNumberOfDrawedPrimitives();
-    
-    ///dibuixa un punt amb els atributs passats dins l'objecte passat per paràmetre
-    void drawPoint( Point *point, int slice, int view );
-    
-    ///dibuixa una línia amb els atributs passats dins l'objecte passat per paràmetre
-    void drawLine( Line *line, int slice, int view );
-    
-    ///dibuixa text amb els atributs passats dins l'objecte passat per paràmetre
-    void drawText( Text *text, int slice, int view );
-    
-    ///dibuixa el polígon passat per paràmetre
-    void drawPolygon( Polygon *polygon, int slice, int view );
-    
-    ///dibuixa l'el·lipse passada per paràmetre. 
-    void drawEllipse( Ellipse *ellipse, int slice, int view );
-    
-    ///els editors gràfics solen enmarcar les el·lipses dins d'un rectangle, sense tenir en compte els eixos major i menor i el centre.
-    ///Aquest mètode serveix per fer aquesta operació: passem com a punts els marges superior esquerre i l'inferior dret del rectangle que conté l'el·lipse. 
-    void drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior, int slice, int view );
-
     /// Afegeix una associació de primitiva/actor a la llesca i vista indicades
     void addPrimitive( PrimitiveActorPair *pair, int slice, int view );
     
@@ -186,51 +197,13 @@ public:
     ///fa invisible totes les primitives d'una determinada vista
     void hidePrimitivesOfView( int view );
     
-    ///fa el resaltat de les primitives més properes 
-    void highlightNearestPrimitives();
-    
     ///ens retorna la parella més propera al punt donat i segons la vista i llesca on estem
     PrimitiveActorPair* getNearestPrimitivePair( double point[3] );
     
-    ///ens retorna la paleta de colors
-    ColorPalette* getColorPalette()
-    { return ( m_colorPalette ); }
-    
-    ///ens permet afegir un nou conjunt de primitives associades a la llista, a partir d'una representació
-    void addSetOfPrimitives( Representation *representation );
-
     ///retorna el conjunt més proper a la posició del mouse
     PrimitivesSet* getNearestSet()
     { return( m_nearestSet ); }
-
-    ///retorna el conjunt de primitives seleccionat
-    PrimitivesSet* getSelectedSet()
-    { return( m_selectedSet ); }
-
-    ///passa a conjunt en estat seleccionat el que està com a més proper: highlight -> Selected. A més li canvia el color.
-    void selectNearestSet();
-
-    ///deselecciona el conjunt que està en estat de selecció
-    void unselectSet();
-
-    ///ens diu si hi ha algun conjunt seleccionat
-    bool hasSelectedSet()
-    { return( m_selectedSet != NULL ); }
     
-    ///ens esborra el conjunt de primitives seleccionat
-    void removeSelectedSet();
-
-    ///ens diu si hi ha algun conjunt marcat com el més proper
-    bool hasNearestSet()
-    { return( m_nearestSet && !m_nearestSet->isEmpty() ); }
-    
-public slots:
-    /// Elimina totes les annotacions dels multimaps
-    void removeAllPrimitives();    
-    
-    /// Actualitza la llesca/vista actual en la que es troba el visor 2D associat i els actors corresponents que cal visualitzar
-    void setCurrentSlice( int slice );
-    void setCurrentView( int view );
         
 private slots:
     ///cerca la línia que ha invocat el signal i n'actualitza els atributs gràfics
@@ -241,6 +214,33 @@ private slots:
     
     ///cerca l'el·lipse que ha invocat el signal i n'actualitza els atributs gràfics
     void updateChangedEllipse( Ellipse *ellipse );
+    
+private:
+    /// Amb aquests maps hi guardem les vinculacions de les llesques amb els actors i primitives creades.
+    PrimitivesMap m_axialPairs;
+    PrimitivesMap m_sagittalPairs;
+    PrimitivesMap m_coronalPairs;
+
+    ///Llista on guardarem els conjunts de primitives relacionades entre sí.
+    PrimitivesSetList m_primitivesSetList;
+    
+    ///conjunt de primitives més proper (candidat a highlight)
+    PrimitivesSet *m_nearestSet;
+
+    ///conjunt de primitives seleccionat
+    PrimitivesSet *m_selectedSet;
+
+    ///visor 2D
+    Q2DViewer *m_2DViewer;
+
+    /// llesca sobre la que es troba el visor 2D associat
+    int m_currentSlice;
+
+    /// vista actual del visor 2D associat
+    int m_currentView;
+    
+    /// paleta de colors que fa servir el Drawer
+    ColorPalette *m_colorPalette;
 };
 
 };  
