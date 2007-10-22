@@ -22,7 +22,6 @@ Classe que implementa una especialització de la classe ToolData, per a contenir
 class DistanceToolData : public ToolData {
 Q_OBJECT
 public:
-    
     ///constructor amb paràmetres
     DistanceToolData( double p1[3], double p2[3] );
     
@@ -53,6 +52,16 @@ public:
     ///Mètode per calcular el la distància entre els dos punts, per tant el text que contindrà la distància i la posició
     void calculateDistance();
     
+signals:
+    ///s'emet quan canvia el primer punt de la distància
+    void firstPointChanged();
+    
+    ///s'emet quan canvia el segon punt de la distància
+    void secondPointChanged();
+    
+    ///s'emet quan canvia el text de la distància
+    void distanceTextChanged();
+
 private:
     
     ///atributs corresponents als punts de la distància
@@ -64,17 +73,6 @@ private:
     
     ///atribut corresponent a la posició del text de la distància
     double m_textPosition[3];
-    
-signals:
-    
-    ///s'emet quan canvia el primer punt de la distància
-    void firstPointChanged();
-    
-    ///s'emet quan canvia el segon punt de la distància
-    void secondPointChanged();
-    
-    ///s'emet quan canvia el text de la distància
-    void distanceTextChanged();
 };
 
 };  //  end  namespace udg
