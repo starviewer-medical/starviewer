@@ -93,6 +93,17 @@ public:
         
     ///emet el senyal perquè l'el·lipse s'actualitzi.
     void refresh();
+
+signals:
+    ///s'emet quan canvia un dels atributs de l'el·lipse
+    void ellipseChanged( Ellipse *ellipse );
+    
+private:
+         ///calcula els punts del rectangle que inscriu una el·lipse a partir del centre i els radis
+        void computeRectanglePoints();
+    
+        ///calcula el centre i els radis d'una el·lipse apartir dels punts del rectangle que la inscriu 
+        void computeCenterAndRadius();
     
 private:
         ///Eixos i centre
@@ -107,16 +118,6 @@ private:
         ///ens determina el comportament de l'el·lipse: com a el·lipse o com a cercle (cas particular 
         ///d'una el·lipse).
         QString m_behavior;
-        
-        ///calcula els punts del rectangle que inscriu una el·lipse a partir del centre i els radis
-        void computeRectanglePoints();
-    
-        ///calcula el centre i els radis d'una el·lipse apartir dels punts del rectangle que la inscriu 
-        void computeCenterAndRadius();
-
-signals:
-    ///s'emet quan canvia un dels atributs de l'el·lipse
-    void ellipseChanged( Ellipse *ellipse );
 };
 
 }

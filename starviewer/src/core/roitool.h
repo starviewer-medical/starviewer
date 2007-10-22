@@ -63,6 +63,19 @@ public:
     ///ens retorna el valor de gris d'un píxel determinat amb coordenades de món.
 //     double getGrayValue( double* ); 
 
+private slots:
+    /// Comença l'anotació de la roi
+    void startROIAnnotation();
+
+    /// simula la nova roi
+    void doROISimulation();
+
+    /// finalitza l'anotació de la ROI
+    void stopROIAnnotation();
+
+    ///respon als events de teclat
+    void answerToKeyEvent();
+
 private:
     
     ///objecte per a crear rois noves
@@ -88,19 +101,6 @@ private:
     
     ///visor sobre el que es programa la tool
     Q2DViewer *m_2DViewer;
-    
-private slots:
-    /// Comença l'anotació de la roi
-    void startROIAnnotation();
-
-    /// simula la nova roi
-    void doROISimulation();
-
-    /// finalitza l'anotació de la ROI
-    void stopROIAnnotation();
-
-    ///respon als events de teclat
-    void answerToKeyEvent();
 };
 
 }

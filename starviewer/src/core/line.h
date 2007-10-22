@@ -71,6 +71,10 @@ public:
     ///ens emet el senyal per que es refresqui la línia
     void refreshLine();
     
+signals:
+    ///s'emet quan canvia un dels atributs de la línia
+    void lineChanged( Line *line );
+    
 private:
     
     ///primer punt de la línia
@@ -82,10 +86,6 @@ private:
     ///determina si la primitiva es dibuixa discontínua o no.
     bool m_discontinuousPrimitive;
     
-signals:
-        
-    ///s'emet quan canvia un dels atributs de la línia
-    void lineChanged( Line *line );
 };
 
 };  //  end  namespace udg
