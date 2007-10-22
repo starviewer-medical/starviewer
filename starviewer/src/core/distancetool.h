@@ -8,10 +8,7 @@
 #define UDGDISTANCETOOL_H
 
 #include "tool.h"
-
 #include <QSet>
-#include <QMultiMap>
-
 
 //Forward declarations
 class vtkRenderWindowInteractor;
@@ -32,6 +29,8 @@ class DistanceTool : public Tool
 {
     Q_OBJECT
 public:
+    ///definim un tipus nom de dades
+    typedef QSet< DrawingPrimitive* > PrimitivesSet;
 
     /// estats de la tool
     enum { NONE , ANNOTATING, MOVINGPOINT };
@@ -48,9 +47,6 @@ public:
     void handleEvent( unsigned long eventID );
 
 private:
-    ///definim un tipus nom de dades
-    typedef QSet< DrawingPrimitive* > PrimitivesSet;
-
     ///ens assigna els atributs als objectes DistanceToolData i DistanceRepresentation de la distància seleccionada
     void createSelectedDistanceData( PrimitivesSet *primitiveSet );
 
@@ -65,7 +61,18 @@ private:
     
     ///mètode per a respondre als events de teclat
     void answerToKeyEvent();
+    
+private slots:
+    /// Comença l'anotació de la distància
+    void startDistanceAnnotation();
 
+    /// simula la nova distància
+    void doDistanceSimulation();
+
+    /// Calcula la nova distància i després atura l'estat d'anotació de distància
+    void endDistanceAnnotation();
+
+private:
     ///visor sobre el que es programa la tool
     Q2DViewer *m_2DViewer;
 
@@ -93,16 +100,6 @@ private:
     
     ///ens permet emmagatzemar l'última acció que s'ha fet amb el botó esquerre.
     QString m_lastLeftButtonAction;
-    
-private slots:
-    /// Comença l'anotació de la distància
-    void startDistanceAnnotation();
-
-    /// simula la nova distància
-    void doDistanceSimulation();
-
-    /// Calcula la nova distància i després atura l'estat d'anotació de distància
-    void endDistanceAnnotation();
     };
 }
 

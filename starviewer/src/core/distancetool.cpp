@@ -138,7 +138,7 @@ void DistanceTool::handleEvent( unsigned long eventID )
             switch ( m_state )
             {
                 case NONE:
-                    if ( ( m_2DViewer->getDrawer()->getNumberOfDrawedPrimitives() > 0 ) && !m_2DViewer->getDrawer()->hasSelectedSet() )
+                    if ( ( m_2DViewer->getDrawer()->getNumberOfDrawedPrimitives() > 0 ) /*&& !m_2DViewer->getDrawer()->hasSelectedSet()*/ )
                     { 
                         //només fem highlight si hi han primitives dibuixades i no n'hi ha cap de seleccionada perquè si és així, no ens interessa el highlighting
                         m_2DViewer->getDrawer()->highlightNearestPrimitives();
