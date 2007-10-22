@@ -25,7 +25,6 @@ Classe que implementa una especialització de la classe representation, especial
 class DistanceRepresentation : public Representation{
 Q_OBJECT
 public:
-    
     ///constructor amb paràmetres
     DistanceRepresentation( DistanceToolData *dtd );
     
@@ -66,13 +65,23 @@ public:
     ///permet avisar per tal de refrescar el text i el voltant del text
     void refreshText( int view );
     
-    ///permet avisar per tal de refrescar el polígon
+    //permet avisar per tal de refrescar el polígon
 //     void refreshPolygon()
 //     { m_polygon->refreshPolygon(); }
     
     ///fa que l'atribut DistanceToolData calculi el text de la distància i la posició del mateix
     void calculateTextAndPositionOfDistance( int view );
     
+private slots:
+    ///actualitza el primer punt de la línia 
+    void updateFirstPointLine();
+    
+    ///actualitza el segon punt de la línia
+    void updateSecondPointLine();
+    
+    ///actualitza el text de la distància. L'actualització del text de la distància no es realitza cada cop que canvia un punt, ja que és innecessari perquè podem estar movent un punt de la distància i mentre s'està editant no volem que es vegi el text. El text es mostra en el moment en que la distància ha estat fixada.
+    void updateText();
+
 private:
     
     ///atribut del tipus primitiva de text
@@ -86,16 +95,6 @@ private:
     
     ///atribut del tipus DistanceToolData per tal de guardar dades referents a la distància
     DistanceToolData *m_distanceToolData;
-
-private slots:
-    ///actualitza el primer punt de la línia 
-    void updateFirstPointLine();
-    
-    ///actualitza el segon punt de la línia
-    void updateSecondPointLine();
-    
-    ///actualitza el text de la distància. L'actualització del text de la distància no es realitza cada cop que canvia un punt, ja que és innecessari perquè podem estar movent un punt de la distància i mentre s'està editant no volem que es vegi el text. El text es mostra en el moment en que la distància ha estat fixada.
-    void updateText();
 };
 
 };  //  end  namespace udg
