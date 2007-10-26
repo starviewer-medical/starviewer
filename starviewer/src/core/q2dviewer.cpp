@@ -599,6 +599,22 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
                         .arg( currentSlice )
                         .arg( maxSlice );
         }
+        double thickness;
+        switch( m_lastView )
+        {
+        case Axial:
+            thickness = m_mainVolume->getSpacing()[2];
+        break;
+        case Sagittal:
+            thickness = m_mainVolume->getSpacing()[0];
+        break;
+        case Coronal:
+            thickness = m_mainVolume->getSpacing()[1];
+        break;
+        }
+        //afegim el thickness de la llesca
+        lowerLeftText += tr("Slice Thickness: %1").arg( thickness );
+
         sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
     }
     else
@@ -2409,7 +2425,6 @@ void Q2DViewer::updateDisplayExtent()
                             imageActor->SetDisplayExtent( value, value, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
                             break;
                     }
-
                     this->updateSliceAnnotation( sliceAnnotation, ((int)(value/m_numberOfPhases)) + 1, m_maxSliceValue+1, value+1, m_numberOfPhases );
                     if( value >=  m_viewer->GetSliceMax() )
                         value = 0;
