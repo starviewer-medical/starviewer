@@ -79,7 +79,7 @@ public:
     enum ViewType{ Axial, Coronal, Sagittal };
 
     /// tipus de fusió dels models
-    enum OverlayType{ Blend , CheckerBoard , RectilinearWipe };
+    enum OverlayType{ None, Blend , CheckerBoard , RectilinearWipe };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
     enum AnnotationFlag{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x1 , PatientOrientationAnnotation = 0x2 , RulersAnnotation = 0x4 , SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40,
@@ -249,6 +249,7 @@ public slots:
 
     /// indica el tipu de solapament dels volums, per defecte checkerboard
     void setOverlay( OverlayType overlay );
+    void setNoOverlay();
     void setOverlayToBlend();
     void setOverlayToCheckerBoard();
     void setOverlayToRectilinearWipe();
@@ -307,6 +308,9 @@ public slots:
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
+
+    /// envia la nova fase en la que ens trobem
+    void phaseChanged(int);
 
     /// envia la nova vista en la que ens trobem
     void viewChanged(int);

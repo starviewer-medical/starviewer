@@ -914,6 +914,14 @@ void Q2DViewer::setOverlayInput( Volume* volume )
     // \TODO hauríem d'actualitzar valors que es calculen al setInput de la variable m_overlay!
     switch( m_overlay )
     {
+    case None:
+
+        // actualitzem el viewer
+        m_windowLevelLUTMapper->RemoveAllInputs();
+        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
+    break;
+
     case CheckerBoard:
 
         imageCheckerBoard->SetInput1( m_mainVolume->getVtkData() );
@@ -1273,6 +1281,7 @@ void Q2DViewer::setPhase( int value )
 
         m_currentPhase = value;
         this->updateDisplayExtent();
+        emit phaseChanged( m_currentPhase );
         this->refresh();
     }
     else
@@ -1282,6 +1291,14 @@ void Q2DViewer::setPhase( int value )
 void Q2DViewer::setOverlay( OverlayType overlay )
 {
     m_overlay = overlay;
+}
+
+void Q2DViewer::setNoOverlay()
+{
+    setOverlay( Q2DViewer::None );
+    DEBUG_LOG("Passem pel setNoOverlay()");
+    m_windowLevelLUTMapper->RemoveAllInputs();
+    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
 }
 
 void Q2DViewer::setOverlayToBlend()
