@@ -84,8 +84,32 @@ void QCardiac2DViewerExtension::createActions()
 
     m_playAction = new QAction( 0 );
     m_playAction->setShortcut( tr("Space") );
-    m_playAction->setIcon( QIcon(":/images/player_play32.png") );
-    m_ButtonPlay->setDefaultAction( m_playAction );
+    m_playAction->setIcon( QIcon(":/images/play.png") );
+    m_playButton->setDefaultAction( m_playAction );
+
+    m_recordAction = new QAction( 0 );
+    m_recordAction->setIcon( QIcon(":/images/record.png") );
+    m_recordButton->setDefaultAction( m_recordAction );
+
+    m_boomerangAction = new QAction( 0 );
+    m_boomerangAction->setIcon( QIcon(":/images/boomerang.png") );
+    m_boomerangAction->setCheckable( true );
+    m_boomerangButton->setDefaultAction( m_boomerangAction );
+
+    m_repeatAction = new QAction( 0 );
+    m_repeatAction->setIcon( QIcon(":/images/repeat.png") );
+    m_repeatAction->setCheckable( true );
+    m_repeatButton->setDefaultAction( m_repeatAction );
+
+    m_sequenceBeginAction = new QAction( 0 );
+    m_sequenceBeginAction->setIcon( QIcon(":/images/sequenceBegin.png") );
+    m_sequenceBeginAction->setCheckable( true );
+    m_sequenceBeginButton->setDefaultAction( m_sequenceBeginAction );
+
+    m_sequenceEndAction = new QAction( 0 );
+    m_sequenceEndAction->setIcon( QIcon(":/images/sequenceEnd.png") );
+    m_sequenceEndAction->setCheckable( true );
+    m_sequenceEndButton->setDefaultAction( m_sequenceEndAction );
 
     // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
     m_voxelInformationAction = new QAction( 0 );
@@ -151,33 +175,28 @@ void QCardiac2DViewerExtension::createConnections()
 {
     // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
 
-    connect( m_slider , SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setPhase(int) ) );
+    connect( m_slider, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setPhase(int) ) );
     //connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
-    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
+    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
 
-    connect( m_playAction , SIGNAL( triggered() ) , this , SLOT( playImages() ) );
+    connect( m_playAction , SIGNAL( triggered() ), SLOT( playImages() ) );
+    connect( m_recordAction, SIGNAL( triggered() ), SLOT( recordVideo() ) );
 
-    connect( m_ButtonRecord , SIGNAL( clicked() ) , this , SLOT( recordVideo() ) );
+    connect( m_spinBox, SIGNAL( valueChanged( int ) ), SLOT( changeVelocity( int ) ) );
 
-    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , this , SLOT( changeVelocity( int ) ) );
+    connect( m_sequenceBeginAction, SIGNAL( toggled( bool ) ), SLOT( initInterval( bool ) ));
+    connect( m_sequenceEndAction, SIGNAL( toggled( bool ) ), SLOT( finishInterval( bool ) ));
 
-    connect( m_ButtonOpenParentesis , SIGNAL( toggled( bool ) ) , this , SLOT( initInterval( bool ) ));
-    connect( m_ButtonCloseParentesis , SIGNAL( toggled( bool ) ) , this , SLOT( finishInterval( bool ) ));
+    connect( m_repeatAction, SIGNAL(toggled( bool )), SLOT( changeToLoopMode( bool ) ));
+    connect( m_boomerangAction, SIGNAL(toggled( bool )), SLOT( changeToComeBackMode( bool ) ));
 
-    connect( m_ButtonLoop , SIGNAL (toggled( bool )) , this , SLOT ( changeToLoopMode( bool ) ));
-    connect( m_ButtonComeBack , SIGNAL (toggled( bool )) , this , SLOT ( changeToComeBackMode( bool ) ));
-
-    connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
-    connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
-    connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
-
+    connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
+    connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
+    connect( m_coronalViewAction, SIGNAL( triggered() ), SLOT( changeViewToCoronal() ) );
 
     // window level combo box
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
-
-
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView , SLOT( resetWindowLevelToDefault() ) );
-
 }
 
 void QCardiac2DViewerExtension::setInput( Volume *input )
@@ -195,7 +214,6 @@ void QCardiac2DViewerExtension::setInput( Volume *input )
     changeViewToAxial();
 }
 
-
 void QCardiac2DViewerExtension::changeViewToAxial()
 {
     m_currentView = Axial;
@@ -208,7 +226,6 @@ void QCardiac2DViewerExtension::changeViewToAxial()
     INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
     m_2DView->render();
     m_slider->setValue( m_firstSliceInterval );
-
 }
 
 void QCardiac2DViewerExtension::changeViewToSagital()
@@ -228,11 +245,9 @@ void QCardiac2DViewerExtension::changeViewToSagital()
 
 void QCardiac2DViewerExtension::changeViewToCoronal()
 {
-
     m_currentView = Coronal;
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
-
 
     m_spinBox->setMinimum( extent[2] );
     m_spinBox->setMaximum( extent[3] );
@@ -260,11 +275,11 @@ void QCardiac2DViewerExtension::setView( ViewType view )
     }
 }
 
-void QCardiac2DViewerExtension::playImages(){
-
-if ( !m_timer->isActive() )
+void QCardiac2DViewerExtension::playImages()
+{
+    if( !m_timer->isActive() )
     {
-        m_ButtonPlay->setIcon( QIcon(":/images/player_pause32.png") );
+        m_playAction->setIcon( QIcon(":/images/pause.png") );
         m_timer->start(1000 / m_spinBox->value(), this);
     }
     else
@@ -276,8 +291,7 @@ if ( !m_timer->isActive() )
 void QCardiac2DViewerExtension::pauseImages()
 {
     m_timer->stop();
-    m_ButtonPlay->setIcon( QIcon(":/images/player_play32.png") );
-//     m_ButtonPlay->setChecked( false );
+    m_playAction->setIcon( QIcon(":/images/play.png") );
 }
 
 void QCardiac2DViewerExtension::recordVideo()
@@ -360,14 +374,13 @@ void QCardiac2DViewerExtension::recordVideo()
 
     videoWriter->SetFileName( qPrintable( fileName+pattern ) );
 
-    cout << "Writing file prova-cor2D.mpg..." << endl;
+    DEBUG_LOG("Writing file prova-cor2D.mpg...");
     vtkImageData * data = frames[0];
     videoWriter->SetInput( data );
     videoWriter->Start();
 
     for ( unsigned int i = 0 ; i < frames.size() ; i++ )
     {
-
         videoWriter->SetInput( frames[i] );
 
         for ( int j = 0 ; j < 3 ; j++ )
@@ -380,7 +393,7 @@ void QCardiac2DViewerExtension::recordVideo()
     }
     videoWriter->End();
     m_progressDialog->setValue( frames.size() );
-    cout << "End writing file prova-cor.mpg..." << endl;
+    DEBUG_LOG("End writing file prova-cor.mpg...");
     frames.clear();
 }
 
@@ -388,15 +401,14 @@ void QCardiac2DViewerExtension::timerEvent(QTimerEvent *event)
 {
     if ( event->timerId() == m_timer->timerId() )
     {
-
         // Si estem al final de l'interval
         if (  m_slider->value() == m_lastSliceInterval )
         {
-            if ( m_ButtonLoop->isChecked() )
+            if ( m_repeatAction->isChecked() )
             {
                 m_slider->setValue( m_firstSliceInterval );
             }
-            else if ( m_ButtonComeBack->isChecked() )
+            else if ( m_boomerangAction->isChecked() )
             {
                 m_nextStep = -1;
                 m_slider->setValue( m_slider->value() + m_nextStep );
@@ -410,8 +422,8 @@ void QCardiac2DViewerExtension::timerEvent(QTimerEvent *event)
         // Si estem a l'inici de l'interval
         else if ( ( m_slider->value() == m_firstSliceInterval )  )
         {
-            // Si tenim algun tipus de loop activat
-            if ( m_ButtonLoop->isChecked() ||  m_ButtonComeBack->isChecked() )
+            // Si tenim algun tipus de repeat activat
+            if ( m_repeatAction->isChecked() ||  m_boomerangAction->isChecked() )
             {
                 m_nextStep = 1;
                 m_slider->setValue( m_slider->value() + m_nextStep );
@@ -451,7 +463,7 @@ void QCardiac2DViewerExtension::changeToLoopMode( bool checked )
 {
     if ( checked )
     {
-        m_ButtonComeBack->setChecked( false );
+        m_boomerangAction->setChecked( false );
     }
 }
 
@@ -459,7 +471,7 @@ void QCardiac2DViewerExtension::changeToComeBackMode( bool checked )
 {
     if ( checked )
     {
-        m_ButtonLoop->setChecked( false );
+        m_repeatAction->setChecked( false );
     }
 }
 
