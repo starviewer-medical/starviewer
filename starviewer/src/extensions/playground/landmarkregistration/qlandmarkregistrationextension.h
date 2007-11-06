@@ -35,9 +35,6 @@ public:
 
     ~QLandmarkRegistrationExtension();
 
-    /// Li assigna el volum principal
-    void setInput( Volume *input );
-
     /// Obtenim la ToolBar d'eines de l'extensió \TODO 'pujar' al pare com a mètode com a Extensions?
     QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
 
@@ -46,16 +43,27 @@ public:
 
 public slots:
 
+    /// Li assigna el volum principal
+    void setInput( Volume *input );
+
+    /// Canvia la fase del volum principal
+    void setPhase( int phase );
+
     /// Li assigna el volum secundari. Aquest mètode només és de conveniència i és temporal
     void setSecondInput( Volume *input );
+
+    /// Canvia la fase del segon volum
+    void setSecondPhase( int phase );
 
 private:
 
     /// El volum principal
     Volume *m_firstVolume;
+    Volume *m_inputVolume;
 
     /// El volum on hi guardem el segon volum a registrar
     Volume *m_secondVolume;
+    Volume *m_secondInputVolume;
 
     /// El volum on hi guardem el resultat del registre (imatge transformada)
     Volume *m_registeredVolume;
@@ -170,6 +178,9 @@ private slots:
 
     ///Reinicialitza l'extensió
     void restore(  );
+
+    ///Reinicialitza l'extensió, sense esborrar els punts
+    void tryAgain(  );
 };
 
 }

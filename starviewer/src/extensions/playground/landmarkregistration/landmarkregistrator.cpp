@@ -34,7 +34,7 @@ LandmarkRegistrator
 void
 LandmarkRegistrator
 ::StartRegistration()
-  { 
+  {
   m_Generator->Initialize(1289);
 
   //std::cout<<"Size of Landmark Sets: "<<m_FixedLandmarkSet->Size()<<", "<<m_MovingLandmarkSet->Size()<<std::endl;
@@ -54,7 +54,7 @@ LandmarkRegistrator
     {
     for( unsigned int j=0; j<3; j++)
       {
-      fixedCenter[j] += m_FixedLandmarkSet->ElementAt(i)[j];     
+      fixedCenter[j] += m_FixedLandmarkSet->ElementAt(i)[j];
       m_movingCenter[j] += m_MovingLandmarkSet->ElementAt(i)[j];
       }
     }
@@ -67,8 +67,9 @@ LandmarkRegistrator
   m_InitialTransformParameters[4] = fixedCenter[1]-m_movingCenter[1];
   m_InitialTransformParameters[5] = fixedCenter[2]-m_movingCenter[2];
 
-  std::cout << "LandmarkRegistrator: InitialParameters = " << std::endl
-            << m_InitialTransformParameters << std::endl;
+  //std::cout << "LandmarkRegistrator: InitialParameters = " << std::endl
+  //          << m_InitialTransformParameters << std::endl;
+
   try
     {
     m_Metric->SetFixedPointSet(m_FixedLandmarkSet);
@@ -105,14 +106,14 @@ LandmarkRegistrator
   m_Transform = TransformType::New();
   m_Transform->SetParameters(m_Optimizer->GetCurrentPosition());
   m_Transform->SetCenter(m_movingCenter);
-  std::cout << "LandmarkRegistrator: FinalParameters = " << std::endl
-            << m_Transform->GetParameters() << std::endl;
-  std::cout << m_Transform << std::endl;
-  std::cout << "*********************** " << std::endl;
+//   std::cout << "LandmarkRegistrator: FinalParameters = " << std::endl
+//             << m_Transform->GetParameters() << std::endl;
+//   std::cout << m_Transform << std::endl;
+//   std::cout << "*********************** " << std::endl;
 
   }
 
-void 
+void
 LandmarkRegistrator
 ::PrintSelf( std::ostream &os, itk::Indent indent ) const
   {
@@ -126,14 +127,14 @@ LandmarkRegistrator
   os<<"Optimizer: "<<m_Optimizer<<std::endl;
   }
 
-void 
+void
 LandmarkRegistrator
 ::CopyLandmarkSet( LandmarkSetType::Pointer source,
                    LandmarkSetType::Pointer dest ) const
   {
   unsigned int i;
   unsigned int size= source->Size();
-  
+
   dest->Initialize();
 
   for( i=0; i<size; i++ )

@@ -11,6 +11,8 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "reglandmark.h"
+#include "series.h"
+#include "image.h"
 
 //QT
 #include <QString>
@@ -165,6 +167,8 @@ void QLandmarkRegistrationExtension::createConnections()
 
     connect( m_restorePushButton , SIGNAL( clicked() ), this, SLOT( restore () ) );
 
+    connect( m_tryAgainPushButton , SIGNAL( clicked() ), this, SLOT( tryAgain () ) );
+
     connect( m_applyRegistrationPushButton , SIGNAL( clicked() ) , this , SLOT( applyMethod() ) );
 
     connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ), this, SLOT( landmarkEventHandler (unsigned long) ) );
@@ -184,6 +188,15 @@ void QLandmarkRegistrationExtension::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ), this, SLOT( sliceChanged1 (int) ) );
 
     connect( m_2DView_2 , SIGNAL( sliceChanged( int ) ), this, SLOT( sliceChanged2 (int) ) );
+
+    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
+
+    connect( m_2DView_2, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setSecondInput( Volume * ) ) );
+
+    connect( m_seriesSpinBox, SIGNAL( valueChanged(int) ) , this , SLOT( setPhase(int) ) );
+
+    connect( m_seriesSpinBox_2, SIGNAL( valueChanged(int) ) , this , SLOT( setSecondPhase(int) ) );
+
 }
 
 void QLandmarkRegistrationExtension::readSettings()
@@ -212,14 +225,29 @@ void QLandmarkRegistrationExtension::writeSettings()
 void QLandmarkRegistrationExtension::setInput( Volume *input )
 {
 
-    m_firstVolume = input;
+    m_inputVolume = input;
 
+    if(m_inputVolume->getSeries()->getNumberOfPhases()==1)
+    {
+        m_seriesLabel->setVisible(false);
+        m_seriesSpinBox->setVisible(false);
+        m_firstVolume = m_inputVolume;
+    }
+    else
+    {
+        m_seriesLabel->setVisible(true);
+        m_seriesSpinBox->setVisible(true);
+        m_seriesSpinBox->setMinimum(0);
+        m_seriesSpinBox->setMaximum(input->getSeries()->getNumberOfPhases() -1);
+        m_firstVolume = m_inputVolume->getPhaseVolume(m_seriesSpinBox->value());
+    }
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_firstVolume );
     m_2DView->setView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
+
 
     int* dim;
     dim = m_firstVolume->getDimensions();
@@ -228,6 +256,8 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     m_sliceSpinBox->setMinimum(0);
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
+
+    m_tryAgainPushButton->setEnabled(false);
 
     //std::cout<<"setInput: NumSlices:"<<dim[2]-1<<std::endl;
     /*m_actionFactory = new ToolsActionFactory( 0 );
@@ -241,9 +271,38 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     m_2DView->render();
 }
 
+void QLandmarkRegistrationExtension::setPhase( int phase )
+{
+    m_firstVolume = m_inputVolume->getPhaseVolume(phase);
+
+    // \TODO ara ho fem "a saco" per?s'hauria de millorar
+    m_2DView->setInput( m_firstVolume );
+    m_2DView->setView( Q2DViewer::Axial );
+    m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
+    m_2DView->resetWindowLevelToDefault();
+
+    m_2DView->render();
+
+}
+
 void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
 {
-    m_secondVolume = input;
+    m_secondInputVolume = input;
+
+    if(m_inputVolume->getSeries()->getNumberOfPhases()==1)
+    {
+        m_seriesLabel_2->setVisible(false);
+        m_seriesSpinBox_2->setVisible(false);
+        m_secondVolume = m_secondInputVolume;
+    }
+    else
+    {
+        m_seriesLabel_2->setVisible(true);
+        m_seriesSpinBox_2->setVisible(true);
+        m_seriesSpinBox_2->setMinimum(0);
+        m_seriesSpinBox_2->setMaximum(input->getSeries()->getNumberOfPhases() -1);
+        m_secondVolume = m_secondInputVolume->getPhaseVolume(m_seriesSpinBox_2->value());
+    }
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
@@ -268,12 +327,25 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
     m_2DView_2->render();
 }
 
+void QLandmarkRegistrationExtension::setSecondPhase( int phase )
+{
+    m_secondVolume = m_secondInputVolume->getPhaseVolume(phase);
+
+    // \TODO ara ho fem "a saco" per?s'hauria de millorar
+    m_2DView_2->setInput( m_secondVolume );
+    m_2DView_2->setView( Q2DViewer::Axial );
+    m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
+    m_2DView_2->resetWindowLevelToDefault();
+
+    m_2DView_2->render();
+
+}
+
 void QLandmarkRegistrationExtension::applyMethod()
 {
     if(m_seedList1.size() != m_seedList2.size())
     {
         QMessageBox::critical( this , tr( "StarViewer" ) , tr( "There are not the same number of seeds into images" ) );
-        //std::cerr<<"El nombre de llavors és diferent en les dues imatges"<<std::endl;
         return;
     }
 
@@ -290,7 +362,8 @@ void QLandmarkRegistrationExtension::applyMethod()
     }
     catch( itk::ExceptionObject &e )
     {
-        std::cout << "ha petat aixo!! " << std::endl;
+        QMessageBox::critical( this , tr( "StarViewer" ) , tr( "The registration process has not obtained successfull results" ) );
+        return;
     }
 //    std::cout<<"Final Transform: "<< m_registrationMethod->GetFinalParameters()<<std::endl;
 
@@ -420,13 +493,13 @@ void QLandmarkRegistrationExtension::applyMethod()
     resampleFilter->SetDefaultPixelValue( 100 );
 
     //prova!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    std::cout<<landmarkRegTransform<<std::endl;
+    //std::cout<<landmarkRegTransform<<std::endl;
     //landmarkRegTransform->SetIdentity();
 
 
     LandmarkRegTransformType::Pointer landmarkRegInverseTransform =LandmarkRegTransformType::New();
     landmarkRegTransform->GetInverse(landmarkRegInverseTransform);
-    std::cout<<"Inverse: "<< landmarkRegInverseTransform<<std::endl;
+    //std::cout<<"Inverse: "<< landmarkRegInverseTransform<<std::endl;
     //Ara toca l'original --> no inversa!!!
     resampleFilter->SetTransform(landmarkRegTransform);
     //resampleFilter->SetTransform(landmarkRegInverseTransform);
@@ -508,9 +581,8 @@ void QLandmarkRegistrationExtension::applyMethod()
         pos[2] = (double) pointMoved[2];
         //std::cout<<pos[0]<<", "<<pos[1]<<", "<<pos[2]<<std::endl;
         pos[2] = (double) ((int)(pos[2]/m_firstVolume->getSpacing()[2])+ 0.5) * m_firstVolume->getSpacing()[2];
-
         vtkSphereSource *point = vtkSphereSource::New();
-        point->SetRadius(1);
+        point->SetRadius(2);
         point-> SetCenter(pos);
 
         vtkActor *pointActor = vtkActor::New();
@@ -525,7 +597,8 @@ void QLandmarkRegistrationExtension::applyMethod()
 
         //std::cout<<pos[0]<<", "<<pos[1]<<", "<<pos[2]<<std::endl;
         //std::cout<<"Moved seed Slice: "<<(int)(pos[2]/m_firstVolume->getSpacing()[2])<<std::endl;
-        m_seedSliceVectorReg.push_back((int)((pos[2]/m_firstVolume->getSpacing()[2])+0.5));
+        m_seedSliceVectorReg.push_back((int)((pos[2]/m_firstVolume->getSpacing()[2])+1.5));
+        //std::cout<<"slice2:"<<(int)((pos[2]/m_firstVolume->getSpacing()[2])+1.5)<<std::endl;
         m_2DView->getRenderer()-> AddActor( pointActor );
         m_seedActorVectorReg.push_back(pointActor);
 
@@ -562,10 +635,11 @@ void QLandmarkRegistrationExtension::applyMethod()
     m_2DView_2->setOverlayInput(m_registeredVolume);
     m_opacityOverlaySlider->setEnabled(true);
     m_opacityLabel->setEnabled(true);
+    m_tryAgainPushButton->setEnabled(true);
     m_2DView_2->getInteractor()->Render();
 
     QApplication::restoreOverrideCursor();
-    std::cout<<"EndApply"<<std::endl;
+    DEBUG_LOG("EndApply");
 }
 
 void QLandmarkRegistrationExtension::setLandmarks()
@@ -976,12 +1050,12 @@ void QLandmarkRegistrationExtension::setOpacity( int op )
 
     m_2DView_2->setOpacityOverlay(((double)op)/100.0);
     m_2DView_2->setOverlayInput(m_registeredVolume);
-    m_2DView_2->getInteractor()->Render();
+    m_2DView_2->render();
 }
 
 void QLandmarkRegistrationExtension::seed1Activated( int row, int aux)
 {
-    std::cout<<"Row1: "<<row<<std::endl;
+    //std::cout<<"Row1: "<<row<<std::endl;
     if( row < (int)m_seedActorVectorReg.size() )
     {
         m_seedActorVectorReg[row]->GetProperty()->SetColor(0.13, 0.92, 0.26);
@@ -1012,7 +1086,7 @@ void QLandmarkRegistrationExtension::seed1Activated( int row, int aux)
 
 void QLandmarkRegistrationExtension::seed2Activated( int row, int aux)
 {
-    std::cout<<"Row2: "<<row<<std::endl;
+    //std::cout<<"Row2: "<<row<<std::endl;
     if( row < (int)m_seedActorVector2.size() )
     {
         m_seedActorVector2[row]->GetProperty()->SetColor(0.13, 0.92, 0.26);
@@ -1067,6 +1141,9 @@ void QLandmarkRegistrationExtension::sliceChanged1( int s )
         it++;
     }
     m_2DView->getInteractor()->Render();
+    //std::cout<<"CurrentSlice:"<<m_2DView->getCurrentSlice()<<std::endl;
+/*    double pos[3];
+    std::cout<<"ChapusSlice:"<<(int)((pos[2]/m_firstVolume->getSpacing()[2])+0.5)<<std::endl;*/
 }
 
 void QLandmarkRegistrationExtension::sliceChanged2( int s )
@@ -1098,7 +1175,7 @@ void QLandmarkRegistrationExtension::saveTransform(  )
     if ( !fileName.isEmpty() )
     {
         ofstream fout(qPrintable( fileName ));
-        std::cout<<qPrintable( fileName  )<<std::endl;
+        DEBUG_LOG(qPrintable( fileName  ));
         for(unsigned int i=0;i<landmarkRegTransform->GetNumberOfParameters();i++)
         {
             fout<<landmarkRegTransform->GetParameters()[i]<<std::endl;
@@ -1122,14 +1199,14 @@ void QLandmarkRegistrationExtension::loadTransform(  )
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         ifstream fin(qPrintable( fileName ));
-        std::cout<<qPrintable( fileName  )<<std::endl;
+        //std::cout<<qPrintable( fileName  )<<std::endl;
         LandmarkRegTransformType::ParametersType parameters(landmarkRegTransform->GetNumberOfParameters());
         LandmarkRegTransformType::InputPointType center;
         for(unsigned int i=0;i<landmarkRegTransform->GetNumberOfParameters();i++)
         {
             fin>>parameters[i];
         }
-        std::cout<<landmarkRegTransform;
+        //std::cout<<landmarkRegTransform;
         landmarkRegTransform->SetParameters(parameters);
         //fin>>center[0]>>" "center[1]>>" "center[2];
         for(unsigned int i=0;i<3;i++)
@@ -1140,8 +1217,8 @@ void QLandmarkRegistrationExtension::loadTransform(  )
 
         fin.close();
         //std::cout<<landmarkRegTransform;
-        std::cout<<landmarkRegTransform->GetParameters()<<std::endl;
-        std::cout<<landmarkRegTransform->GetCenter()[0]<<" "<<landmarkRegTransform->GetCenter()[1]<<" "<<landmarkRegTransform->GetCenter()[2] <<"  "<<std::endl;
+        //std::cout<<landmarkRegTransform->GetParameters()<<std::endl;
+        //std::cout<<landmarkRegTransform->GetCenter()[0]<<" "<<landmarkRegTransform->GetCenter()[1]<<" "<<landmarkRegTransform->GetCenter()[2] <<"  "<<std::endl;
 
 
         typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
@@ -1197,7 +1274,7 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         }
         catch( itk::ExceptionObject &e )
         {
-            std::cerr << "ha petat aixo!! " << e << std::endl;
+            DEBUG_LOG( "ha petat aixo!! ");
         }
 
         m_registeredVolume = new Volume();
@@ -1213,7 +1290,7 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         m_2DView_2->getInteractor()->Render();
 
         QApplication::restoreOverrideCursor();
-        std::cout<<"EndApply"<<std::endl;
+        //std::cout<<"EndApply"<<std::endl;
 
     }
 
@@ -1258,15 +1335,38 @@ void QLandmarkRegistrationExtension::restore(  )
 
     if(m_registeredVolume != 0)
     {
-        m_2DView->setOpacityOverlay(1.0);
-        m_2DView->setOverlayInput(m_registeredVolume);
+        m_2DView_2->setNoOverlay();
         m_opacityOverlaySlider->setEnabled(false);
         m_opacityLabel->setEnabled(false);
     }
 
-    m_2DView->getInteractor()->Render();
-    m_2DView_2->getInteractor()->Render();
+    m_tryAgainPushButton->setEnabled(false);
+
+    m_2DView->render();
+    m_2DView_2->render();
 
 }
 
+void QLandmarkRegistrationExtension::tryAgain(  )
+{
+    std::vector<vtkActor*>::iterator itActor;
+    itActor  = m_seedActorVectorReg.begin();
+    while(itActor != m_seedActorVectorReg.end())
+    {
+        m_2DView->getRenderer()-> RemoveActor( *itActor );
+        itActor++;
+    }
+    m_seedActorVectorReg.clear();
+    m_seedSliceVectorReg.clear();
+    if(m_registeredVolume != 0)
+    {
+        m_2DView_2->setNoOverlay();
+        m_opacityOverlaySlider->setEnabled(false);
+        m_opacityLabel->setEnabled(false);
+    }
+
+    m_2DView->render();
+    m_2DView_2->render();
+
+}
 }
