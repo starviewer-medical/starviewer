@@ -1,21 +1,18 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>QLandmarkRegistrationExtensionBase</class>
  <widget class="QWidget" name="QLandmarkRegistrationExtensionBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>894</width>
-    <height>431</height>
+    <width>984</width>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>9</number>
    </property>
@@ -409,6 +406,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="m_tryAgainPushButton" >
+           <property name="text" >
+            <string>Try Again</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="m_savePushButton" >
            <property name="text" >
             <string>Save Transform</string>
@@ -444,7 +448,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="udg::Q2DViewer" name="m_2DView" >
+           <widget class="udg::Q2DViewer" native="1" name="m_2DView" >
             <property name="sizePolicy" >
              <sizepolicy>
               <hsizetype>7</hsizetype>
@@ -486,6 +490,26 @@
             <item>
              <widget class="QSpinBox" name="m_sliceSpinBox" />
             </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="m_seriesLabel" >
+                <property name="text" >
+                 <string>Serie</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="m_seriesSpinBox" />
+              </item>
+             </layout>
+            </item>
            </layout>
           </item>
          </layout>
@@ -499,7 +523,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="udg::Q2DViewer" name="m_2DView_2" >
+           <widget class="udg::Q2DViewer" native="1" name="m_2DView_2" >
             <property name="sizePolicy" >
              <sizepolicy>
               <hsizetype>7</hsizetype>
@@ -541,6 +565,26 @@
             <item>
              <widget class="QSpinBox" name="m_sliceSpinBox_2" />
             </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="m_seriesLabel_2" >
+                <property name="text" >
+                 <string>Serie</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="m_seriesSpinBox_2" />
+              </item>
+             </layout>
+            </item>
            </layout>
           </item>
          </layout>
@@ -552,14 +596,11 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
  </customwidgets>
  <resources>
