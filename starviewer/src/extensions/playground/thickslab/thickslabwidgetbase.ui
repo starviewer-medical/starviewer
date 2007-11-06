@@ -1,0 +1,85 @@
+<ui version="4.0" >
+ <class>udg::ThickSlabWidgetBase</class>
+ <widget class="QFrame" name="udg::ThickSlabWidgetBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>377</width>
+    <height>295</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>ViewerWidget</string>
+  </property>
+  <property name="frameShape" >
+   <enum>QFrame::NoFrame</enum>
+  </property>
+  <property name="frameShadow" >
+   <enum>QFrame::Plain</enum>
+  </property>
+  <property name="lineWidth" >
+   <number>2</number>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>3</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="1" column="0" >
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>2</number>
+     </property>
+     <property name="spacing" >
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="m_viewText" >
+       <property name="text" >
+        <string>XY : Axial</string>
+       </property>
+       <property name="scaledContents" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="m_slider" >
+       <property name="focusPolicy" >
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="maximum" >
+        <number>0</number>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="m_spinBox" >
+       <property name="maximum" >
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" >
+    <widget class="udg::Q2DViewer" native="1" name="m_2DView" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
