@@ -301,6 +301,8 @@ void QEdemaSegmentationExtension::createConnections()
 
   connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
 
+  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
+
   connect( m_saveMaskPushButton, SIGNAL( clicked() ) , this , SLOT( saveActivedMaskVolume() ) );
 }
 
@@ -352,6 +354,8 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
 
     int* dim;
     dim = m_mainVolume->getDimensions();
+    std::cout<<"dims Vol: "<<dim[0]<<", "<<dim[1]<<", "<<dim[2]<<std::endl;
+    std::cout<<"**********************************************************************************************"<<std::endl;
     m_sliceViewSlider->setMinimum(0);
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
@@ -407,6 +411,35 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_lowerValueVentriclesSlider->setValue(15);
     m_upperValueVentriclesSlider->setValue(150);
 
+    //Esborrem els volum per si hem fet un canvi de sèrie
+    if(m_filteredVolume != 0)
+    {
+        delete m_filteredVolume;
+        m_filteredVolume = 0;
+    }
+    if(m_lesionMaskVolume != 0)
+    {
+        delete m_lesionMaskVolume;
+        m_lesionMaskVolume = 0;
+    }
+    if(m_ventriclesMaskVolume != 0)
+    {
+        delete m_ventriclesMaskVolume;
+        m_ventriclesMaskVolume = 0;
+    }
+
+    if(m_imageThreshold != 0)
+    {
+        m_imageThreshold -> Delete();
+        m_imageThreshold = 0;
+    }
+    if(m_edemaMaskVolume != 0)
+    {
+        delete m_edemaMaskVolume;
+        m_edemaMaskVolume = 0;
+    }
+
+    //m_2DView->updateDisplayExtent();
 
     m_2DView->render();
 
@@ -988,7 +1021,12 @@ void QEdemaSegmentationExtension::viewThresholds()
     if(m_lesionMaskVolume == 0)
     {
         m_lesionMaskVolume = new Volume();
+        std::cout<<"*"<<std::endl;
     }
+            std::cout<<"Extent Vol:"<<m_mainVolume->getWholeExtent()[0]<<" "<<m_mainVolume->getWholeExtent()[1]<<" "<<m_mainVolume->getWholeExtent()[2]<<" "<<m_mainVolume->getWholeExtent()[3]<<" "<<m_mainVolume->getWholeExtent()[4]<<" "<<m_mainVolume->getWholeExtent()[5]<<std::endl;
+
+            std::cout<<"Extent Vol Lesion:"<<m_lesionMaskVolume->getWholeExtent()[0]<<" "<<m_lesionMaskVolume->getWholeExtent()[1]<<" "<<m_lesionMaskVolume->getWholeExtent()[2]<<" "<<m_lesionMaskVolume->getWholeExtent()[3]<<" "<<m_lesionMaskVolume->getWholeExtent()[4]<<" "<<m_lesionMaskVolume->getWholeExtent()[5]<<std::endl;
+
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
     imageThreshold->SetInput( m_mainVolume->getVtkData() );
     imageThreshold->ThresholdBetween( m_lowerValueSlider->value(),  m_upperValueSlider->value());
@@ -996,10 +1034,15 @@ void QEdemaSegmentationExtension::viewThresholds()
     imageThreshold->SetOutValue( m_outsideValue );
     std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
     imageThreshold->Update();
+    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
+
 
     m_lesionMaskVolume->setData(imageThreshold->GetOutput() );
+    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
 
     this->viewLesionOverlay();
+    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
+    imageThreshold->Delete();
 
 }
 
@@ -1027,6 +1070,8 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
+        std::cout<<"Extent les:"<<m_lesionMaskVolume->getWholeExtent()[0]<<" "<<m_lesionMaskVolume->getWholeExtent()[1]<<" "<<m_lesionMaskVolume->getWholeExtent()[2]<<" "<<m_lesionMaskVolume->getWholeExtent()[3]<<" "<<m_lesionMaskVolume->getWholeExtent()[4]<<" "<<m_lesionMaskVolume->getWholeExtent()[5]<<std::endl;
+        std::cout<<"Extent les:"<<m_mainVolume->getWholeExtent()[0]<<" "<<m_mainVolume->getWholeExtent()[1]<<" "<<m_mainVolume->getWholeExtent()[2]<<" "<<m_mainVolume->getWholeExtent()[3]<<" "<<m_mainVolume->getWholeExtent()[4]<<" "<<m_mainVolume->getWholeExtent()[5]<<std::endl;
         m_2DView->getInteractor()->Render();
     }
 }

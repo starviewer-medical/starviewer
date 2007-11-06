@@ -31,11 +31,14 @@
 #include "toolsactionfactory.h"
 #include "volumecalculator.h"
 
+#include "series.h"
+
 //prova recte
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkRegistre3DAffine.h"
+#include "itkMinimumMaximumImageCalculator.h"
 #include "udgPerfusionEstimator.h"
 #include "udgBinaryMaker.h"
 #include "logging.h"
@@ -46,7 +49,6 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
  : QWidget( parent )
 {
     setupUi( this );
-
 
     m_diffusionInputVolume = 0;
     m_perfusionInputVolume = 0;
@@ -74,6 +76,8 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     m_isLeftButtonPressed = false;
 
     m_squareActor = vtkActor::New();
+
+    m_perfusionHueLut = vtkLookupTable::New();
 
     m_actionFactory = 0;
 
@@ -111,6 +115,8 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
     delete m_strokeSegmentationMethod;
 
     m_squareActor->Delete();
+
+    m_perfusionHueLut->Delete();
 
     delete m_actionFactory;
 }
@@ -269,17 +275,19 @@ void QDifuPerfuSegmentationExtension::createToolBars()
 
 void QDifuPerfuSegmentationExtension::createConnections()
 {
-    connect( m_totalDiffusionImagesSpinBox, SIGNAL( valueChanged(int) ),
-             this, SLOT( setMaxDiffusionImage(int) ) );
+    connect( m_diffusion2DView, SIGNAL( phaseChanged(int) ),
+             m_selectedDiffusionImageSpinBox, SLOT( setValue(int) ) );
     connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ),
              this, SLOT( setDiffusionImage(int) ) );
 
     connect( m_openPerfusionImagePushButton, SIGNAL( clicked() ),
              this, SIGNAL( openPerfusionImage() ) );
-    connect( m_totalPerfusionImagesSpinBox, SIGNAL( valueChanged(int) ),
-             this, SLOT( setMaxPerfusionImage(int) ) );
+    connect( m_perfusion2DView, SIGNAL( phaseChanged(int) ),
+             m_selectedPerfusionImageSpinBox, SLOT( setValue(int) ) );
     connect( m_selectedPerfusionImageSpinBox, SIGNAL( valueChanged(int) ),
              this, SLOT( setPerfusionImage(int) ) );
+    connect( m_perfusionThresholdViewerSlider, SIGNAL( valueChanged(int) ),
+             this, SLOT( setPerfusionLut(int) ) );
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ),
              this, SLOT( setStrokeLowerValue(int) ) );
@@ -351,6 +359,9 @@ void QDifuPerfuSegmentationExtension::createConnections()
   connect( m_diffusionOpacitySlider, SIGNAL( valueChanged(int) ), this, SLOT( setDiffusionOpacity(int) ) );
   connect( m_perfusionOpacitySlider, SIGNAL( valueChanged(int) ), this, SLOT( setPerfusionOpacity(int) ) );
 
+  connect( m_diffusion2DView, SIGNAL(volumeChanged(Volume *)) , this , SLOT( setDiffusionInput( Volume * ) ) );
+  connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)) , this , SLOT( setPerfusionInput( Volume * ) ) );
+
 
 }
 
@@ -399,43 +410,18 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
     }
     m_diffusionInputVolume = input;
 
-    ItkImageType::Pointer inputImage = input->getItkData();
-    ItkImageType::RegionType region = inputImage->GetLargestPossibleRegion();
-    ItkImageType::RegionType::SizeType size = region.GetSize();
-    m_totalDiffusionImagesSpinBox->setMaximum( size[2] );
+    m_diffusionSliceSlider->setMinimum( 0 );
+    m_diffusionSliceSlider->setMaximum( m_diffusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() -1 );
+    m_diffusionSliceSpinBox->setMinimum( 0 );
+    m_diffusionSliceSpinBox->setMaximum(m_diffusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() - 1 );
 
+    m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getSeries()->getNumberOfPhases() -1);
+    m_selectedDiffusionImageSpinBox->setValue(m_diffusionInputVolume->getSeries()->getNumberOfPhases() -1);
+
+    DEBUG_LOG("Fem el set diffusion");
     setDiffusionImage( m_selectedDiffusionImageSpinBox->value() );
 
-}
-
-void QDifuPerfuSegmentationExtension::moveViewerSplitterToLeft(  )
-{
-    DEBUG_LOG("Move L");
-    QList<int> splitterSize = m_viewerSplitter->sizes();
-    int suma = splitterSize[0]+splitterSize[1];
-    splitterSize[0]=0;
-    splitterSize[1]=suma;
-    m_viewerSplitter->setSizes(splitterSize);
-}
-
-void QDifuPerfuSegmentationExtension::moveViewerSplitterToRight(  )
-{
-    DEBUG_LOG("Move R");
-    QList<int> splitterSize = m_viewerSplitter->sizes();
-    int suma = splitterSize[0]+splitterSize[1];
-    splitterSize[0]=suma;
-    splitterSize[1]=0;
-    m_viewerSplitter->setSizes(splitterSize);
-}
-
-void QDifuPerfuSegmentationExtension::moveViewerSplitterToCenter(  )
-{
-    DEBUG_LOG("Move C");
-    QList<int> splitterSize = m_viewerSplitter->sizes();
-    int suma = splitterSize[0]+splitterSize[1];
-    splitterSize[0]=suma/2;
-    splitterSize[1]=suma - suma/2;
-    m_viewerSplitter->setSizes(splitterSize);
+    m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
 }
 
 
@@ -445,105 +431,20 @@ void QDifuPerfuSegmentationExtension::setMaxDiffusionImage( int max )
 }
 
 
-
 void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 {
-    int total = m_totalDiffusionImagesSpinBox->value();
+    m_diffusionMainVolume = m_diffusionInputVolume->getPhaseVolume(index);
 
+    itk::MinimumMaximumImageCalculator< ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< ItkImageType >::New();
 
-    ItkImageType::Pointer inputImage = m_diffusionInputVolume->getItkData();
+    minmaxCalc->SetImage(m_diffusionMainVolume->getItkData());
+    minmaxCalc->SetRegion(m_diffusionMainVolume->getItkData()->GetRequestedRegion());
+    minmaxCalc->Compute();
 
-    ItkImageType::RegionType region = inputImage->GetLargestPossibleRegion();
-    ItkImageType::RegionType::SizeType size = region.GetSize();
-    size[2] /= total;
-//     DEBUG_LOG( "size: " << size );
-//     DEBUG_LOG( "region: " << region );
-    region.SetSize( size );
+    DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()) );
 
-    /// \warning Posem l'espaiat en Z a 7!!
-    ItkImageType::SpacingType spacing = inputImage->GetSpacing();
-//     DEBUG_LOG( "spacing before: " << spacing );
-//     spacing[2] *= total;
-    spacing[2] = 7.0;
-//     DEBUG_LOG( "spacing after: " << spacing );
-
-
-    ItkImageType::Pointer diffusionImage = ItkImageType::New();
-    diffusionImage->SetRegions( region );
-//     diffusionImage->SetSpacing( inputImage->GetSpacing() );
-    diffusionImage->SetSpacing( spacing );
-    diffusionImage->SetOrigin( inputImage->GetOrigin() );
-    diffusionImage->Allocate();
-
-
-    itk::ImageRegionConstIteratorWithIndex< ItkImageType > itInput(
-            inputImage, inputImage->GetBufferedRegion() );
-    itk::ImageRegionIterator< ItkImageType > itDiffusion(
-            diffusionImage, diffusionImage->GetBufferedRegion() );
-
-    itInput.GoToBegin();
-    itDiffusion.GoToBegin();
-
-    unsigned int sliceSize = size[0] * size[1];
-    unsigned int slice = index;
-
-    for ( unsigned int k = 0; k < size[2]; k++ )
-    {
-        ItkImageType::IndexType imageIndex = { { 0, 0, slice } };
-        itInput.SetIndex( imageIndex );
-
-        for ( unsigned int i = 0; i < sliceSize; i++ )
-        {
-            itDiffusion.Set( itInput.Get() );
-            ++itInput;
-            ++itDiffusion;
-        }
-
-        slice += total;
-    }
-
-
-    delete m_diffusionMainVolume;
-    m_diffusionMainVolume = new Volume();
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_diffusionMainVolume->setImages( m_diffusionInputVolume->getImages() );
-    m_diffusionMainVolume->setData( diffusionImage );
-
-    // TODO ara ho fem "a saco" però s'hauria de millorar
-    m_diffusion2DView->setInput( m_diffusionMainVolume );
-    m_diffusion2DView->setView( Q2DViewer::Axial );
-    m_diffusion2DView->removeAnnotation( Q2DViewer::NoAnnotation );
-    m_diffusion2DView->resetWindowLevelToDefault();
-
-    int * dim = m_diffusionMainVolume->getDimensions();
-    m_diffusionSliceSlider->setMinimum( 0 );
-    m_diffusionSliceSlider->setMaximum( dim[2] - 1 );
-    m_diffusionSliceSpinBox->setMinimum( 0 );
-    m_diffusionSliceSpinBox->setMaximum( dim[2] - 1 );
-
-    m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
-
-
-    // Trobem els valors de propietat mínim i màxim
-
-    itk::ImageRegionConstIterator< ItkImageType > it(
-            diffusionImage, diffusionImage->GetBufferedRegion() );
-
-    it.GoToBegin();
-    m_diffusionMinValue = m_diffusionMaxValue = it.Get();
-
-    ItkImageType::PixelType value;
-
-    while ( !it.IsAtEnd() )
-    {
-        value = it.Get();
-
-        if ( value < m_diffusionMinValue ) m_diffusionMinValue = value;
-        if ( value > m_diffusionMaxValue ) m_diffusionMaxValue = value;
-
-        ++it;
-    }
-
+    m_diffusionMinValue = minmaxCalc->GetMinimum();
+    m_diffusionMaxValue = minmaxCalc->GetMaximum();
 
     m_strokeLowerValueSpinBox->setMinimum( m_diffusionMinValue );
     m_strokeLowerValueSpinBox->setMaximum( m_diffusionMaxValue );
@@ -553,23 +454,23 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     m_strokeLowerValueSlider->setMaximum( m_diffusionMaxValue );
     m_strokeUpperValueSlider->setMinimum( m_diffusionMinValue );
     m_strokeUpperValueSlider->setMaximum( m_diffusionMaxValue );
-
     m_strokeLowerValueSlider->setValue( 150 );
     m_strokeUpperValueSlider->setValue( m_diffusionMaxValue );
-
 
     m_ventriclesLowerValueSpinBox->setMinimum( m_diffusionMinValue );
     m_ventriclesLowerValueSpinBox->setMaximum( m_diffusionMaxValue );
     m_ventriclesLowerValueSlider->setMinimum( m_diffusionMinValue );
     m_ventriclesLowerValueSlider->setMaximum( m_diffusionMaxValue );
-
     m_ventriclesLowerValueSlider->setValue( 50 );
-
 
     m_filterDiffusionPushButton->setEnabled( true );
 
-
+    // TODO ara ho fem "a saco" però s'hauria de millorar
+    m_diffusion2DView->setInput( m_diffusionMainVolume );
+    m_diffusion2DView->setView( Q2DViewer::Axial );
+    m_diffusion2DView->resetWindowLevelToDefault();
     m_diffusion2DView->render();
+
 }
 
 
@@ -585,26 +486,65 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
     if ( m_perfusionInputVolume )
     {
         qWarning() << "setPerfusionInput: second input has no effect";
-        return;
+        //return;
     }
 
     m_perfusionImageStackedWidget->setCurrentWidget( m_selectPerfusionImagePage );
 
     m_perfusionInputVolume = input;
 
-    ItkImageType::Pointer inputImage = input->getItkData();
-    ItkImageType::RegionType region = inputImage->GetLargestPossibleRegion();
-    ItkImageType::RegionType::SizeType size = region.GetSize();
-    m_totalPerfusionImagesSpinBox->setMaximum( size[2] );
+    m_selectedPerfusionImageSpinBox->setMaximum(m_perfusionInputVolume->getSeries()->getNumberOfPhases() -1);
+    m_selectedPerfusionImageSpinBox->setValue(m_perfusionInputVolume->getSeries()->getNumberOfPhases() -1);
 
+    DEBUG_LOG("Set Perfusion");
     setPerfusionImage( m_selectedPerfusionImageSpinBox->value() );
 
+    m_perfusionSliceSlider->setMinimum( 0 );
+    m_perfusionSliceSlider->setMaximum( m_perfusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() -1  );
+    m_perfusionSliceSpinBox->setMinimum( 0 );
+    m_perfusionSliceSpinBox->setMaximum( m_perfusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() -1 );
+
     m_applyRegistrationPushButton->setEnabled( true );
+
+    m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
 
     this->moveViewerSplitterToCenter();
 
 }
 
+
+void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
+{
+    m_perfusionHueLut->Delete();
+    m_perfusionHueLut = vtkLookupTable::New();
+    m_perfusionHueLut->SetTableRange( m_perfusionMinValue, m_perfusionMaxValue );
+    m_perfusionHueLut->SetHueRange( 1.0, 0.0 );
+    m_perfusionHueLut->SetSaturationRange( 1.0, 1.0 );
+    m_perfusionHueLut->SetValueRange( 1.0, 1.0 );
+    m_perfusionHueLut->SetAlphaRange( 1.0, 1.0 );
+    m_perfusionHueLut->SetRampToLinear();
+    m_perfusionHueLut->ForceBuild();    //effective built
+    int nvalues=m_perfusionHueLut->GetNumberOfTableValues();
+    double* tvalue= new double[4];
+    for(int i=0;i<((threshold*nvalues)/255);i++)
+    {
+        tvalue=m_perfusionHueLut->GetTableValue(i);
+        tvalue[0]=0.0;  //Posem els valors transparents
+        tvalue[1]=0.0;  //Posem els valors transparents
+        tvalue[2]=0.0;  //Posem els valors transparents
+        tvalue[3]=0.0;  //Posem els valors transparents
+        m_perfusionHueLut->SetTableValue(i, tvalue);
+    }
+    m_perfusionHueLut->Build();    //effective built
+
+    vtkUnsignedCharArray * table = m_perfusionHueLut->GetTable();
+    unsigned char tuple[4] = { 0, 0, 0, 0 };
+    table->SetTupleValue( 0, tuple );
+    table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
+
+    m_perfusion2DView->getWindowLevelMapper()->SetLookupTable( m_perfusionHueLut );
+    m_perfusion2DView->render();
+}
 
 
 void QDifuPerfuSegmentationExtension::setMaxPerfusionImage( int max )
@@ -616,8 +556,40 @@ void QDifuPerfuSegmentationExtension::setMaxPerfusionImage( int max )
 
 void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 {
-    int total = m_totalPerfusionImagesSpinBox->value();
+    m_perfusionMainVolume = m_perfusionInputVolume->getPhaseVolume(index);
 
+    itk::MinimumMaximumImageCalculator< ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< ItkImageType >::New();
+
+    minmaxCalc->SetImage(m_perfusionMainVolume->getItkData());
+    minmaxCalc->SetRegion(m_perfusionMainVolume->getItkData()->GetRequestedRegion());
+    minmaxCalc->Compute();
+
+    DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2 -->(%3)").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()).arg(index) );
+
+    m_perfusionMinValue = minmaxCalc->GetMinimum();
+    m_perfusionMaxValue = minmaxCalc->GetMaximum();
+
+
+     // TODO ara ho fem "a saco" però s'hauria de millorar
+    m_perfusion2DView->setInput( m_perfusionMainVolume );
+    m_perfusion2DView->setView( Q2DViewer::Axial );
+
+    //Ho fem per tal de que es vegi tot "blanc" i per tant en color "vius"
+    m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+    //m_perfusion2DView->setWindowLevel( m_perfusionMaxValue - m_perfusionMinValue, 0.0 );
+    setPerfusionLut(m_perfusionThresholdViewerSlider->value());
+
+
+//------------------------------------------------------------------------
+/*
+    //int total = m_totalPerfusionImagesSpinBox->value();
+    int total = m_perfusionInputVolume->getSeries()->getNumberOfPhases();
+
+    //En el cas vingui de la tool ja haurà canviat
+    if(m_perfusion2DView->getCurrentPhase() != index)
+    {
+        m_perfusion2DView->setPhase( index );
+    }
 
     ItkImageType::Pointer inputImage = m_perfusionInputVolume->getItkData();
 
@@ -637,10 +609,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 
 
     ItkImageType::IndexType imageIndex = { { 0, 0, index * size[2] } };
-    itk::ImageRegionConstIterator< ItkImageType > itInput(
-            inputImage, ItkImageType::RegionType( imageIndex, size ) );
-    itk::ImageRegionIterator< ItkImageType > itPerfusion(
-            perfusionImage, perfusionImage->GetBufferedRegion() );
+    itk::ImageRegionConstIterator< ItkImageType > itInput( inputImage, ItkImageType::RegionType( imageIndex, size ) );
+    itk::ImageRegionIterator< ItkImageType > itPerfusion( perfusionImage, perfusionImage->GetBufferedRegion() );
 
     itInput.GoToBegin();
     itPerfusion.GoToBegin();
@@ -654,7 +624,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
         ++itPerfusion;
     }
 
-
     delete m_perfusionMainVolume;
     m_perfusionMainVolume = new Volume();
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
@@ -662,26 +631,9 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 
     m_perfusionMainVolume->setData( perfusionImage );
 
-    // TODO ara ho fem "a saco" però s'hauria de millorar
-    m_perfusion2DView->setInput( m_perfusionMainVolume );
-    m_perfusion2DView->setView( Q2DViewer::Axial );
-    m_perfusion2DView->removeAnnotation( Q2DViewer::NoAnnotation );
-    m_perfusion2DView->resetWindowLevelToDefault();
-
-
-    int * dim = m_perfusionMainVolume->getDimensions();
-    m_perfusionSliceSlider->setMinimum( 0 );
-    m_perfusionSliceSlider->setMaximum( dim[2] - 1 );
-    m_perfusionSliceSpinBox->setMinimum( 0 );
-    m_perfusionSliceSpinBox->setMaximum( dim[2] - 1 );
-
-    m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
-
-
     // Trobem els valors de propietat mínim i màxim
 
-    itk::ImageRegionConstIterator< ItkImageType > it(
-            perfusionImage, perfusionImage->GetBufferedRegion() );
+    itk::ImageRegionConstIterator< ItkImageType > it( perfusionImage, perfusionImage->GetBufferedRegion() );
 
     it.GoToBegin();
     m_perfusionMinValue = m_perfusionMaxValue = it.Get();
@@ -698,39 +650,10 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
         ++it;
     }
 
+    std::cout<<"Index: "<<index<<"Max perf: "<<m_perfusionMaxValue<<", min perfu: "<<m_perfusionMinValue<<std::endl;
 
-    vtkLookupTable * hueLut = vtkLookupTable::New();
-    hueLut->SetTableRange( m_perfusionMinValue, m_perfusionMaxValue );
-    hueLut->SetHueRange( 1.0, 0.0 );
-    hueLut->SetSaturationRange( 1.0, 1.0 );
-    hueLut->SetValueRange( 1.0, 1.0 );
-    hueLut->SetAlphaRange( 1.0, 1.0 );
-    hueLut->SetRampToLinear();
-    hueLut->Build();    //effective built
-    int nvalues=hueLut->GetNumberOfTableValues();
-    double* tvalue= new double[4];
-    for(int i=0;i<(nvalues/3);i++)
-    {
-        tvalue=hueLut->GetTableValue(i);
-        tvalue[0]=0.0;  //Posem els valors transparents
-        tvalue[1]=0.0;  //Posem els valors transparents
-        tvalue[2]=0.0;  //Posem els valors transparents
-        tvalue[3]=0.0;  //Posem els valors transparents
-        hueLut->SetTableValue(i, tvalue);
-    }
-    hueLut->Build();    //effective built
+*/
 
-    vtkUnsignedCharArray * table = hueLut->GetTable();
-    unsigned char tuple[4] = { 0, 0, 0, 0 };
-    table->SetTupleValue( 0, tuple );
-    table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
-
-    m_perfusion2DView->getWindowLevelMapper()->SetLookupTable( hueLut );
-    m_perfusion2DView->updateWindowLevelAnnotation();
-    m_perfusion2DView->setWindowLevel( m_perfusionMaxValue - m_perfusionMinValue, 0.0 );
-
-
-    m_perfusion2DView->render();
 }
 
 
@@ -757,12 +680,14 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
 
     vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
     imageThreshold->SetInput( m_diffusionMainVolume->getVtkData() );
+    //imageThreshold->SetInput( m_diffusionInputVolume->getVtkData() );
     imageThreshold->ThresholdBetween( m_strokeLowerValueSlider->value(),
                                       m_strokeUpperValueSlider->value() );
     imageThreshold->SetInValue( m_diffusionMaxValue );
     imageThreshold->SetOutValue( m_diffusionMinValue );
     imageThreshold->Update();
 
+    m_strokeMaskVolume->setImages( m_diffusionInputVolume->getImages() );
     m_strokeMaskVolume->setData( imageThreshold->GetOutput() );
 
     m_diffusion2DView->setOverlayToBlend();
@@ -806,11 +731,9 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_strokeSegmentationMethod->setOutsideMaskValue( m_diffusionMinValue );
     m_strokeSegmentationMethod->setHistogramLowerLevel( m_strokeLowerValueSlider->value() );
     m_strokeSegmentationMethod->setHistogramUpperLevel( m_strokeUpperValueSlider->value() );
-    m_strokeSegmentationMethod->setSeedPosition(
-            m_seedPosition[0], m_seedPosition[1], m_seedPosition[2] );
+    m_strokeSegmentationMethod->setSeedPosition( m_seedPosition[0], m_seedPosition[1], m_seedPosition[2] );
 
     m_strokeVolume = m_strokeSegmentationMethod->applyMethod();
-
 
     m_diffusion2DView->setOverlayToBlend();
     m_diffusion2DView->setOpacityOverlay( m_diffusionOpacitySlider->value() / 100.0 );
@@ -986,7 +909,7 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         hueLut->Build();    //effective built
         int nvalues=hueLut->GetNumberOfTableValues();
         double* tvalue= new double[4];
-        for(int i=0;i<(nvalues/3);i++)
+        for(int i=0;i<(m_perfusionThresholdViewerSlider->value()*nvalues)/255;i++)
         {
             tvalue=hueLut->GetTableValue(i);
             tvalue[0]=0.0;  //Posem els valors transparents
@@ -1573,11 +1496,35 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
 
 
 
+void QDifuPerfuSegmentationExtension::moveViewerSplitterToLeft(  )
+{
+    DEBUG_LOG("Move L");
+    QList<int> splitterSize = m_viewerSplitter->sizes();
+    int suma = splitterSize[0]+splitterSize[1];
+    splitterSize[0]=0;
+    splitterSize[1]=suma;
+    m_viewerSplitter->setSizes(splitterSize);
+}
 
+void QDifuPerfuSegmentationExtension::moveViewerSplitterToRight(  )
+{
+    DEBUG_LOG("Move R");
+    QList<int> splitterSize = m_viewerSplitter->sizes();
+    int suma = splitterSize[0]+splitterSize[1];
+    splitterSize[0]=suma;
+    splitterSize[1]=0;
+    m_viewerSplitter->setSizes(splitterSize);
+}
 
-
-
-
+void QDifuPerfuSegmentationExtension::moveViewerSplitterToCenter(  )
+{
+    DEBUG_LOG("Move C");
+    QList<int> splitterSize = m_viewerSplitter->sizes();
+    int suma = splitterSize[0]+splitterSize[1];
+    splitterSize[0]=suma/2;
+    splitterSize[1]=suma - suma/2;
+    m_viewerSplitter->setSizes(splitterSize);
+}
 
 void QDifuPerfuSegmentationExtension::synchronizeSlices( bool sync )
 {

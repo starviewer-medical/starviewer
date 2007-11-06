@@ -39,9 +39,6 @@ public:
 
     ~QEdemaSegmentationExtension();
 
-    /// Li assigna el volum principal
-    void setInput( Volume *input );
-
     /// Obtenim la ToolBar d'eines de l'extensió \TODO 'pujar' al pare com a mètode com a Extensions?
     QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
 
@@ -49,6 +46,10 @@ public:
     //void populateToolBar( QToolBar *toolbar );
 
 public slots:
+
+    /// Li assigna el volum principal
+    /// És slot pq també ho fem servir en cas de canvi de sèrie
+    void setInput( Volume *input );
 
     /// Executa l'algorisme de segmetnació
     void ApplyMethod();

@@ -606,7 +606,7 @@
                 <item>
                  <widget class="QLineEdit" name="m_constantEdit" >
                   <property name="text" >
-                   <string>0.0</string>
+                   <string>0.3</string>
                   </property>
                  </widget>
                 </item>
@@ -1146,9 +1146,7 @@
    <header>q2dviewer.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../main/main.qrc" />
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>m_sliceViewSlider</sender>
