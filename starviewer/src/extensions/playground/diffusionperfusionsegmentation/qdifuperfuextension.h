@@ -42,6 +42,7 @@ class QToolBar;
 
 class vtkActor;
 class vtkImageActor;
+class vtkLookupTable;
 
 
 
@@ -128,6 +129,7 @@ private:
     ItkImageType::PixelType m_perfusionMinValue, m_perfusionMaxValue;
 
     vtkImageActor * m_perfusionOverlay;
+    vtkLookupTable * m_perfusionHueLut;
 
     /// Stroke segmentation
     StrokeSegmentationMethod * m_strokeSegmentationMethod;
@@ -224,13 +226,8 @@ private slots:
 
     void applyFilterDiffusionImage();
 
-
-
-
-
-
-
-
+    ///Pinta el mapa de colors segons un threshold determinat
+    void setPerfusionLut( int threshold );
 
      /// gestiona els events del m_2DView
     void strokeEventHandler( unsigned long id );
@@ -240,10 +237,10 @@ private slots:
 
 
 
-     /// determina la llavor del m�ode de segmentaci�
+     /// determina la llavor del mètode de segmentació
     void setEditorPoint( );
 
-    /// desactiva el boole�que ens diu si est�el bot�esquerra apretat
+    /// desactiva el booleà que ens diu si està el botó esquerra apretat
     void setLeftButtonOff( );
 
 
@@ -278,18 +275,6 @@ private slots:
 
     /// Desa la màscara que s'està visualitzant
 //     void saveActivedMaskVolume();
-
-/*    /// sincronitza les llesques de les s?ies que es visualitzen
-    void synchronizeSlices( bool ok );
-
-    /// ens permet escollir una nova s?ie per a comparar
-    void chooseNewSerie();
-
-  signals:
-    /// Aquest senyal s'emetr?quan es vulgui canviar de s?ie per comparar
-    void newSerie();
-*/
-
 
     // [temporal] el farem servir mentre no s'actualitzi la tècnica d'overlay del Q2DViewer
     void setPerfusionSlice( int slice );

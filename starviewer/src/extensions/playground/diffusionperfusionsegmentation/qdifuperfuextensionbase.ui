@@ -5,14 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>944</width>
-    <height>743</height>
+    <width>977</width>
+    <height>784</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>9</number>
    </property>
@@ -65,36 +65,6 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QLabel" name="m_totalDiffusionImagesLabel" >
-                 <property name="text" >
-                  <string>Number of dynamics</string>
-                 </property>
-                 <property name="buddy" >
-                  <cstring>m_totalDiffusionImagesSpinBox</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="m_totalDiffusionImagesSpinBox" >
-                 <property name="minimum" >
-                  <number>1</number>
-                 </property>
-                 <property name="value" >
-                  <number>5</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
                 <widget class="QLabel" name="m_selectedDiffusionImageLabel" >
                  <property name="text" >
                   <string>Selected</string>
@@ -134,7 +104,7 @@
              <item>
               <widget class="QStackedWidget" name="m_perfusionImageStackedWidget" >
                <property name="currentIndex" >
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="m_openPerfusionImagePage" >
                 <layout class="QVBoxLayout" >
@@ -170,19 +140,19 @@
                     <number>6</number>
                    </property>
                    <item>
-                    <widget class="QLabel" name="m_totalPerfusionImagesLabel" >
+                    <widget class="QLabel" name="m_selectedPerfusionImageLabel" >
                      <property name="text" >
-                      <string>Number of maps</string>
+                      <string>Selected</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="m_totalPerfusionImagesSpinBox" >
-                     <property name="minimum" >
-                      <number>1</number>
+                    <widget class="QSpinBox" name="m_selectedPerfusionImageSpinBox" >
+                     <property name="maximum" >
+                      <number>4</number>
                      </property>
                      <property name="value" >
-                      <number>5</number>
+                      <number>4</number>
                      </property>
                     </widget>
                    </item>
@@ -197,19 +167,22 @@
                     <number>6</number>
                    </property>
                    <item>
-                    <widget class="QLabel" name="m_selectedPerfusionImageLabel" >
+                    <widget class="QLabel" name="m_perfusionThresholdViewerLabel" >
                      <property name="text" >
-                      <string>Selected</string>
+                      <string>Threshold: </string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="m_selectedPerfusionImageSpinBox" >
+                    <widget class="QSlider" name="m_perfusionThresholdViewerSlider" >
                      <property name="maximum" >
-                      <number>4</number>
+                      <number>255</number>
                      </property>
                      <property name="value" >
-                      <number>4</number>
+                      <number>70</number>
+                     </property>
+                     <property name="orientation" >
+                      <enum>Qt::Horizontal</enum>
                      </property>
                     </widget>
                    </item>

@@ -73,6 +73,9 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
     m_volume = 0.0;
     m_rectumVolume = 0.0;
 
+    m_enabledTools=true;
+
+
     m_segMethod = new rectumSegmentationMethod();
 
     m_isSeed  = false;
@@ -617,13 +620,21 @@ void QRectumSegmentationExtension::leftButtonEventHandler( )
 
     if(m_editorToolButton->isChecked())
     {
-        //std::cout<<"Editor Tool"<<std::endl;
-        m_2DView->disableTools();
-        setEditorPoint(  );
-    }
+        if(m_enabledTools==true)
+        {
+            //std::cout<<"Editor Tool"<<std::endl;
+            m_2DView->disableTools();
+            setEditorPoint(  );
+            m_enabledTools=false;
+        }
+   }
     else
     {
-        m_2DView->enableTools();
+        if(m_enabledTools==false)
+        {
+            m_2DView->enableTools();
+            m_enabledTools=true;
+        }
     }
 }
 

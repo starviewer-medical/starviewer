@@ -155,8 +155,6 @@ double StrokeSegmentationMethod::applyMethod()
 
     //m_Mask->setData( outcaster->GetOutput());
     m_Mask->setData( volumeCalc->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
     m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
 
@@ -190,8 +188,6 @@ double StrokeSegmentationMethod::applyMethodVTK()
     DEBUG_LOG(QString("Tractant llesca %1").arg(index[2]));
 
     m_Mask->setData(imMask);
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
 
     return m_cont*spacing[0]*spacing[1]*spacing[2];
 }
@@ -418,8 +414,6 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     m_cont = volumeCalc->GetVolumeCount();
 
     m_Mask->setData( volumeCalc->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
 
     return m_volume;
 }
@@ -456,9 +450,10 @@ void StrokeSegmentationMethod::applyFilter(Volume* output)
         std::cerr << excep << std::endl;
     }
 
-    output->setData( outcaster->GetOutput() );
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     output->setImages( m_Volume->getImages() );
+
+    output->setData( outcaster->GetOutput() );
     output->getVtkData()->Update();
 
     return;
@@ -707,9 +702,11 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     ErfcLevelSetImageFilterType::Pointer erfcSegmentation = ErfcLevelSetImageFilterType::New();
 
     erfcSegmentation->SetPropagationScaling( 1.0 );
+    //erfcSegmentation->SetCurvatureScaling( 5.0 );
     erfcSegmentation->SetCurvatureScaling( m_stoppingTime );
 
     erfcSegmentation->SetMaximumRMSError( 0.001 );
+    //erfcSegmentation->SetNumberOfIterations( m_stoppingTime );
     erfcSegmentation->SetNumberOfIterations( 500 );
 
     erfcSegmentation->SetLowerThreshold( m_lowerVentriclesThreshold );
@@ -894,8 +891,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume * lesionMask)
     //lesionMask->setData( medianFilter->GetOutput());
     //lesionMask->setData( binaryDilate3->GetOutput());
     lesionMask->setData( thresholder2->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    lesionMask->setImages( m_Volume->getImages() );
 
     itk::ImageRegionIterator<Volume::ItkImageType> lesionIt( lesionMask->getItkData(), lesionMask->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> hematomaIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
@@ -1156,8 +1151,6 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume * lesionMask)
     lesionMask->setData( outcaster->GetOutput() );*/
     std::cout<<"Mask Set!!"<<std::endl;
     lesionMask->setData( thresholder->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    lesionMask->setImages( m_Volume->getImages() );
 
     itk::ImageRegionIterator<Volume::ItkImageType> lesionIt( lesionMask->getItkData(), lesionMask->getItkData()->GetBufferedRegion());
     itk::ImageRegionIterator<Volume::ItkImageType> hematomaIt( m_Mask->getItkData(), m_Mask->getItkData()->GetBufferedRegion());
@@ -1277,8 +1270,6 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     m_cont = volumeCalc->GetVolumeCount();
 
     m_Mask->setData( volumeCalc->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
     m_Mask->getVtkData()->Update();
 
     return m_volume;
@@ -1396,8 +1387,6 @@ void StrokeSegmentationMethod::applyMethod2()
     }
   */
     m_Mask->setData( thresholder->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
   //m_Mask->setData( smoothcaster->GetOutput());
 
 }
@@ -1513,8 +1502,6 @@ int StrokeSegmentationMethod::applyMethod3()
     outcaster->Update();
     std::cout<<"Mask Set!!"<<std::endl;
     m_Mask->setData( outcaster->GetOutput());
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
     m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
 
@@ -1642,8 +1629,6 @@ int StrokeSegmentationMethod::applyMethod4()
     std::cout << "RMS change: " << geodesicActiveContour->GetRMSChange() << std::endl;
 
     m_Mask->setData( thresholder->GetOutput() );
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_Mask->setImages( m_Volume->getImages() );
     return this->computeSizeMask();
 
 }

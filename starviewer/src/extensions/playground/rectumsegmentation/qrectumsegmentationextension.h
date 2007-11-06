@@ -151,6 +151,8 @@ private:
     QActionGroup *m_viewOverlayActionGroup;
     QActionGroup* m_editorToolActionGroup;
 
+    bool m_enabledTools;
+
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
     void createActions();
 

@@ -218,7 +218,7 @@ double rectumSegmentationMethod::applyMethod()
     std::cout<<"Inside: "<<m_insideMaskValue<<", outside: "<<m_outsideMaskValue<<std::endl;
     distanceFilter->Update();
 
-        OutputCastingFilterType::Pointer outcaster2 = OutputCastingFilterType::New();
+        /*OutputCastingFilterType::Pointer outcaster2 = OutputCastingFilterType::New();
         ExternalWriterType::Pointer mapWriter2 = ExternalWriterType::New();
         outcaster2->SetInput( distanceFilter->GetOutput() );
         //outcaster2->SetInput( binthresholdFilter->GetOutput() );
@@ -232,7 +232,7 @@ double rectumSegmentationMethod::applyMethod()
         outcaster3->SetInput( binaryDilate->GetOutput() );
         mapWriter3->SetInput( outcaster2->GetOutput() );
         mapWriter3->SetFileName("distanceMap2.jpg");
-        mapWriter3->Update();
+        mapWriter3->Update();*/
 
     itk::ImageRegionIteratorWithIndex< InternalImageType > itDist( distanceFilter->GetOutput(), distanceFilter->GetOutput()->GetLargestPossibleRegion() );
     itDist.GoToBegin();
@@ -302,9 +302,11 @@ double rectumSegmentationMethod::applyMethod()
     m_Mask->setData( maskAux );
     m_Mask->getVtkData()->Update();
 
-    if(m_cont!=0){
-        this->applyMethodNextSlice(sliceNumber+1, 1, xmax, ymax);
+    if(m_cont!=0 && (sliceNumber>0)){
         this->applyMethodNextSlice(sliceNumber-1, -1, xmax, ymax);
+    }
+    if(m_cont!=0 && (sliceNumber < sizeOut[2]-1)){
+        this->applyMethodNextSlice(sliceNumber+1, 1, xmax, ymax);
     }
     return m_volume;
 }
