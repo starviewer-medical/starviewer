@@ -21,7 +21,7 @@
         <file>images/distance.png</file>
         <file>images/down.png</file>
         <file>images/dvd.png</file>
-        <file>images/endavant_enrera.png</file>
+        <file>images/boomerang.png</file>
         <file>images/eraser.png</file>
         <file>images/exit.png</file>
         <file>images/fileclose.png</file>
@@ -44,19 +44,19 @@
         <file>images/open.png</file>
         <file>images/openDicom.png</file>
         <file>images/pacsQuery.png</file>
-        <file>images/parentesis_obertn.png</file>
-        <file>images/parentesis_tancatn.png</file>
+        <file>images/sequenceBegin.png</file>
+        <file>images/sequenceEnd.png</file>
         <file>images/pencil.png</file>
         <file>images/photo.png</file>
-        <file>images/player_back32.png</file>
-        <file>images/player_pause32.png</file>
-        <file>images/player_play32.png</file>
-        <file>images/player_stop32.png</file>
+        <file>images/back.png</file>
+        <file>images/pause.png</file>
+        <file>images/play.png</file>
+        <file>images/stop.png</file>
         <file>images/preferences.png</file>
         <file>images/presentationStateThumbnail.png</file>
         <file>images/record.png</file>
         <file>images/reload.png</file>
-        <file>images/repeat_track.png</file>
+        <file>images/repeat.png</file>
         <file>images/retractFullscreen.png</file>
         <file>images/roi.png</file>
         <file>images/rotate3d.png</file>
