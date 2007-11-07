@@ -51,8 +51,10 @@ Slicer::~Slicer()
 
 void Slicer::setInput( vtkImageData * input )
 {
+    DEBUG_LOG( "setInput()" );
     m_input = input; m_input->Register( 0 );
     double range[2];
+    DEBUG_LOG( "m_input->GetScalarRange" );
     m_input->GetScalarRange( range );
     DEBUG_LOG( QString( "scalar range = %1 %2" ).arg( range[0] ).arg( range[1] ) );
     m_nLabels = static_cast< unsigned short >( round( range[1] ) ) + 1;

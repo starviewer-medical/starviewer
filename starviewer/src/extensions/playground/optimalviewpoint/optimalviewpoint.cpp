@@ -688,6 +688,7 @@ void OptimalViewpoint::doAutomaticSegmentation()
     plane->setDistance( m_volume->getMainVolume()->GetLength() );
     plane->setEntropyL( m_parameters->getSegmentationBlockLength() );
     plane->setEntropyN( m_parameters->getSegmentationNumberOfClusters() );
+    plane->setVolume( m_volume );
 
     QObject::connect( m_volume, SIGNAL( needsExcessEntropy() ),
                       plane, SLOT( updateAndRecompute() ) );
