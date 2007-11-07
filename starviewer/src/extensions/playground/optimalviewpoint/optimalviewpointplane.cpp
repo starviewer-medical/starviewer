@@ -66,6 +66,10 @@ OptimalViewpointPlane::OptimalViewpointPlane( unsigned short id, unsigned short 
     m_E = 0.0;
 
     m_numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
+
+
+    /// \todo fer la nova implementació multithread
+    m_numberOfThreads = 1;
 }
 
 OptimalViewpointPlane::~OptimalViewpointPlane()
@@ -189,11 +193,14 @@ void OptimalViewpointPlane::setEntropyN( unsigned char N )
 
 void OptimalViewpointPlane::startEntropyComputing()
 {
+    DEBUG_LOG( QString( "m_compute = %1" ).arg( m_compute ) );
     if ( m_compute )
     {
+        DEBUG_LOG( QString( "H L-1 size; m_N = %1, m_L = %2" ).arg( m_N ).arg( m_L ) );
         m_histogramL_1Size = static_cast< unsigned short >( pow( m_N, m_L - 1 ) );
 //         m_histogramL_1 = new std::vector<unsigned long>( m_histogramL_1Size );
 //         m_countL_1 = 0;
+        DEBUG_LOG( QString( "H L size" ) );
         m_histogramLSize = static_cast< unsigned short >( pow( m_N, m_L ) );
 //         m_histogramL = new std::vector<unsigned long>( m_histogramLSize );
 //         m_countL = 0;
@@ -206,11 +213,16 @@ void OptimalViewpointPlane::startEntropyComputing()
             QMessageBox::warning( 0, "problema amb els raigs", "last values per thread no buit" );
         }
 
+        DEBUG_LOG( "creem l'slicer" );
         Slicer slicer( m_id );
+        DEBUG_LOG( "slicer.setInput( m_volume->getLabeledImage() );" );
         slicer.setInput( m_volume->getLabeledImage() );
+        DEBUG_LOG( "slicer.setMatrix" );
         slicer.setMatrix( getTransformMatrix() );
         slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+        DEBUG_LOG( "slicer.reslice" );
         slicer.reslice( false, false );
+        DEBUG_LOG( "getReslicedImage" );
         m_planeImage = slicer.getReslicedImage(); m_planeImage->Register( 0 );
         m_planeData = reinterpret_cast< unsigned char * >( m_planeImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
         m_planeDataSize = m_planeImage->GetPointData()->GetScalars()->GetSize();
