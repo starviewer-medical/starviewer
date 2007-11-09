@@ -33,7 +33,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent ), m_presentationStateAttacher(0)
+ : QWidget( parent ), m_currentView(Axial), m_presentationStateAttacher(0)
 {
     setupUi( this );
 
@@ -48,7 +48,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     m_patient = NULL;
     m_selectedViewer = new Q2DViewerWidget( m_workingArea );
-    m_selectedViewer->getViewer()->render();
 
     m_predefinedSeriesGrid = new MenuGridWidget();
     m_seriesTableGrid = new TableMenu();
@@ -226,7 +225,7 @@ void Q2DViewerExtension::createConnections()
 
     // Connexions necessaries pel primer visualitzador
     connect( m_selectedViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) ); 
+    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
@@ -263,7 +262,6 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_windowLevelComboBox->setCurrentIndex( 0 );
 
     INFO_LOG("Q2DViewerExtension: Donem l'input principal")
-    changeViewToAxial();
 }
 
 void Q2DViewerExtension::changeViewToAxial()
@@ -472,7 +470,6 @@ void Q2DViewerExtension::removeRows( int rows )
 Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
-    newViewer->getViewer()->render();
     (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
     connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
@@ -552,7 +549,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
 
         connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );  
+        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
     }
 }
 
