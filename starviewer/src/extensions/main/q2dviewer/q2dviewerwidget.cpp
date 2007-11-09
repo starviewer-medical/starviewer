@@ -39,7 +39,6 @@ void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
-    changeViewToAxial();
     m_2DView->render();
 }
 
