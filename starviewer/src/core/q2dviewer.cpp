@@ -131,7 +131,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
-    refreshAnnotations();
 }
 
 Q2DViewer::~Q2DViewer()
@@ -840,7 +839,8 @@ void Q2DViewer::setupInteraction()
 void Q2DViewer::setInput( Volume* volume )
 {
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
-    m_drawer->removeAllPrimitives();
+    if( m_mainVolume )
+        m_drawer->removeAllPrimitives();
 
     if( volume == 0 )
         return;
@@ -974,7 +974,6 @@ void Q2DViewer::render()
     }
     else
     {
-        this->refresh();
         DEBUG_LOG( "::render() : No hi ha cap volum per visualitzar" );
     }
 }
