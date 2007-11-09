@@ -1264,8 +1264,6 @@ void Q2DViewer::setSlice( int value )
         emit sliceChanged( m_currentSlice );
         this->refresh();
     }
-    else
-        DEBUG_LOG("No es pot canviar la llesca. No hi ha input");
 }
 
 void Q2DViewer::setPhase( int value )
@@ -1283,8 +1281,6 @@ void Q2DViewer::setPhase( int value )
         emit phaseChanged( m_currentPhase );
         this->refresh();
     }
-    else
-        DEBUG_LOG("No es pot canviar la fase. No hi ha input");
 }
 
 void Q2DViewer::setOverlay( OverlayType overlay )
