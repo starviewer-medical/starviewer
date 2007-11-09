@@ -75,7 +75,7 @@ public slots:
     void hideColumns( int columns );
 
     /// Mostrar menu per seleccionar grid predefinit
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop 
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showPredefinedGrid();
 
     /// Mostrar el menu de la taula per seleccionar grids
@@ -117,7 +117,7 @@ private slots:
     void initLayouts();
 
     /// Posem el widget seleccionat com a actual
-    void setViewerSelected( Q2DViewerWidget * viewer );
+    void setViewerSelected( Q2DViewerWidget *viewer );
 
     /// Slots per canviar rotacions al widget seleccionat
     void rotateClockWise();
@@ -180,12 +180,12 @@ private:
     Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
 
     /// Grids per mostrar diferents q2dviewers alhora.
-    QGridLayout * m_gridLayout;
-    QVBoxLayout * m_verticalLayout;
+    QGridLayout *m_gridLayout;
+    QVBoxLayout *m_verticalLayout;
     QVector<QHBoxLayout*> m_qHorizontalLayoutVector;
 
     /// Visualitzador seleccionat, també sempre en tindrem un
-    Q2DViewerWidget * m_selectedViewer;
+    Q2DViewerWidget *m_selectedViewer;
 
     /// Nombre de files i columnes per els layouts
     int m_rows;
@@ -200,12 +200,12 @@ private:
     Patient *m_patient;
 
     /// Menús per seleccionar el grid de series( predefinits + taula )
-    MenuGridWidget * m_predefinedSeriesGrid;
-    TableMenu * m_seriesTableGrid;
+    MenuGridWidget *m_predefinedSeriesGrid;
+    TableMenu *m_seriesTableGrid;
 
     /// Menús per seleccionar el grid de les llesques d'una serie ( predefinits + taula )
-    MenuGridWidget * m_predefinedSlicesGrid;
-    TableMenu * m_sliceTableGrid;
+    MenuGridWidget *m_predefinedSlicesGrid;
+    TableMenu *m_sliceTableGrid;
 
     QProgressDialog *m_progressDialog;
 
