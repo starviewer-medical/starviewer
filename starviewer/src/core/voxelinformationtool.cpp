@@ -15,6 +15,12 @@
 #include <vtkTextProperty.h>
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+
+//Qt
+#include <QDesktopWidget>
+#include <QApplication>
+#include <QPoint>
 
 namespace udg {
 
@@ -95,32 +101,124 @@ void VoxelInformationTool::updateVoxelInformation()
     double *spacing = m_2DViewer->getInput()->getSpacing();
     double *origin = m_2DViewer->getInput()->getOrigin();
     
-    if( m_2DViewer->getCurrentCursorPosition(xyz) )
-    {
-        //codi que soluciona el bug de les coordenades del voxel information (BUG: 122)
-        switch( m_2DViewer->getView() )
-        {
-            case Q2DViewer::Axial:
-                xyz[2] = origin[2] + (slice * spacing[2]);
-            break;
-            case Q2DViewer::Sagittal:
-                xyz[0] = origin[0] + (slice * spacing[0]);
-            break;
-            case Q2DViewer::Coronal:
-                xyz[1] = origin[1] + (slice * spacing[1]);
-            break;
-        }
-        ////
     
-        m_voxelInformationCaption->VisibilityOn();
-        m_voxelInformationCaption->SetAttachmentPoint( xyz );
-        m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(xyz[0],0,'f',2).arg(xyz[1],0,'f',2).arg(xyz[2],0,'f',2).arg( m_2DViewer->getCurrentImageValue() ) ) );
+    if ( !captionExceedsViewportLimits() )
+    {
+        if( m_2DViewer->getCurrentCursorPosition(xyz) )
+        {
+            depthAccordingViewAndSlice( xyz );
+            placeText( xyz );
+        }
+        else
+        {
+            m_voxelInformationCaption->VisibilityOff();
+        }
     }
     else
     {
-        m_voxelInformationCaption->VisibilityOff();
+        double wPoint[4];
+        int position[2];
+        correctPositionOfCaption( position );
+        QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
+        xyz[0] = wPoint[0];
+        xyz[1] = wPoint[1];
+        
+        depthAccordingViewAndSlice( xyz );
+        placeText( xyz );
     }
     m_2DViewer->refresh();
+}
+
+void VoxelInformationTool::depthAccordingViewAndSlice( double xyz[3] )
+{
+    int slice = m_2DViewer->getCurrentSlice();
+    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *origin = m_2DViewer->getInput()->getOrigin();
+    
+    //codi que soluciona el bug de les coordenades del voxel information (BUG: 122)
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            xyz[2] = origin[2] + (slice * spacing[2]);
+        break;
+        case Q2DViewer::Sagittal:
+            xyz[0] = origin[0] + (slice * spacing[0]);
+        break;
+        case Q2DViewer::Coronal:
+            xyz[1] = origin[1] + (slice * spacing[1]);
+        break;
+    }
+    
+}
+
+void VoxelInformationTool::placeText( double textPosition[3] )
+{
+    m_voxelInformationCaption->VisibilityOn();
+    m_voxelInformationCaption->SetAttachmentPoint( textPosition );
+    m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( m_2DViewer->getCurrentImageValue() ) ) );
+}
+
+void VoxelInformationTool::screenDimensions( int dimensions[2] )
+{
+    QPoint point(m_2DViewer->getInteractor()->GetEventPosition()[0],m_2DViewer->getInteractor()->GetEventPosition()[1]);
+    
+    if (qApp->desktop()->isVirtualDesktop())
+    {
+        dimensions[0] = qApp->desktop()->geometry().width();
+        dimensions[1] = qApp->desktop()->geometry().height();
+    }
+    else
+    {
+        dimensions[0] = qApp->desktop()->availableGeometry( point ).width();
+        dimensions[1] = qApp->desktop()->availableGeometry( point ).height();
+    }
+}
+
+bool VoxelInformationTool::captionExceedsViewportTopLimit()
+{
+    int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
+    int dimensions[2];
+    screenDimensions( dimensions );
+    int captionHeigth = (dimensions[1]*0.05);
+    
+    return ( eventPosition[1]+captionHeigth > dimensions[1] );
+}
+
+bool VoxelInformationTool::captionExceedsViewportRightLimit()
+{
+    int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
+    int dimensions[2];
+    screenDimensions( dimensions );
+    int captionWidth = (dimensions[0]*0.3)+1;
+    
+    return ( eventPosition[0]+captionWidth > dimensions[0] );
+}
+
+
+bool VoxelInformationTool::captionExceedsViewportLimits()
+{
+    return ( captionExceedsViewportTopLimit() || captionExceedsViewportRightLimit() );
+}
+
+void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPort[2] )
+{
+    int xSecurityRange = 20;
+    int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
+    int dimensions[2];
+    screenDimensions( dimensions );
+    int captionWidth = (dimensions[0]*0.3)+xSecurityRange;
+    int captionHeigth = (dimensions[1]*0.05);
+    
+    correctPositionInViewPort[0] = eventPosition[0] - ( eventPosition[0] + captionWidth - dimensions[0] );
+    
+    if ( captionExceedsViewportTopLimit() )
+    {
+        correctPositionInViewPort[1] = eventPosition[1] - 5;
+    }
+    else
+    {
+        correctPositionInViewPort[1] = eventPosition[1];
+    }
 }
 
 void VoxelInformationTool::isNeededUpdateVoxelInformation()
