@@ -847,7 +847,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_mainVolume = volume;
     m_currentSlice = 0;
     m_currentPhase = 0;
-    this->enableAnnotation( m_enabledAnnotations );
+
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
     this->computeInputGrayscalePipeline();
@@ -893,7 +893,7 @@ void Q2DViewer::setInput( Volume* volume )
     updateScalarBar();
     updatePatientAnnotationInformation();
     updateGrid();
-    refreshAnnotations();
+    this->enableAnnotation( m_enabledAnnotations );
 }
 
 vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
@@ -2677,7 +2677,6 @@ void Q2DViewer::applyGrayscalePipeline()
             }
         }
     }
-    updateWindowLevelAnnotation();
 }
 
 void Q2DViewer::computeModalityLUT()
