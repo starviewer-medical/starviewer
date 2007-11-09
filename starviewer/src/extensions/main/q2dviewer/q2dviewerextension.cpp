@@ -224,8 +224,8 @@ void Q2DViewerExtension::createConnections()
     connect( m_presentationStateAction, SIGNAL( toggled(bool) ), this, SLOT( enablePresentationState(bool) ) );
 
     // Connexions necessaries pel primer visualitzador
-    connect( m_selectedViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
-    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
+    connect( m_selectedViewer , SIGNAL( selected( Q2DViewerWidget *) ) , this, SLOT( setViewerSelected( Q2DViewerWidget *) ) );
+    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
@@ -367,7 +367,7 @@ void Q2DViewerExtension::addColumns( int columns )
 {
     QVector<QHBoxLayout*>::Iterator it;
     int posViewer = m_columns;
-    Q2DViewerWidget * newViewer;
+    Q2DViewerWidget *newViewer;
 
     while( columns > 0 )
     {
@@ -421,7 +421,7 @@ void Q2DViewerExtension::removeColumns( int columns )
 {
     QVector<QHBoxLayout*>::Iterator it = m_qHorizontalLayoutVector.begin();
     int posViewer = m_columns-1;
-    Q2DViewerWidget * oldViewer;
+    Q2DViewerWidget *oldViewer;
 
     while( columns > 0 && m_columns > 1 )
     {
@@ -448,7 +448,7 @@ void Q2DViewerExtension::removeRows( int rows )
     int i;
     m_verticalLayout->removeItem(m_verticalLayout->itemAt(m_verticalLayout->count()));
     int posViewer = m_vectorViewers.count()-1;
-    Q2DViewerWidget * oldViewer;
+    Q2DViewerWidget *oldViewer;
 
     while( rows > 0 && m_rows > 1 )
     {
@@ -472,7 +472,7 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
     (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
-    connect( newViewer , SIGNAL( selected( Q2DViewerWidget * ) ) , this, SLOT( setViewerSelected( Q2DViewerWidget * ) ) );
+    connect( newViewer , SIGNAL( selected( Q2DViewerWidget *) ) , this, SLOT( setViewerSelected( Q2DViewerWidget *) ) );
 
     int state = m_volumeInformation->checkState();
 
@@ -532,7 +532,7 @@ void Q2DViewerExtension::setGrid( int rows, int columns )
     }
 }
 
-void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
+void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
 {
     if ( viewer != m_selectedViewer )
     {
@@ -540,7 +540,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
         /// enviin el senyal al visualitzador que toca.
         disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
+        disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
 
         m_selectedViewer->setSelected( false );
         m_selectedViewer = viewer;
@@ -549,7 +549,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget * viewer )
 
         connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
+        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
     }
 }
 
