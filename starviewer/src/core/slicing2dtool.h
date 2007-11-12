@@ -9,6 +9,8 @@
 
 #include "tool.h"
 
+class QTime;
+
 namespace udg {
 
 class Q2DViewer;
@@ -71,6 +73,12 @@ private:
     /// El mode en que movem les llesques.
     /// De moment podrà tenir els valors SliceMode o PhaseMode, per defecte SliceMode
     int m_slicingMode;
+
+    /// Temps que ha passat des de que s'ha iniciat l'slicing
+    QTime * m_time;
+    
+    /// Temps en milisegons de l'ultim event tractat
+    int m_latestTime;
 
 };
 
