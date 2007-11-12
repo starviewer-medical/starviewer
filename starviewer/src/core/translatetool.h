@@ -7,7 +7,7 @@
 #ifndef UDGTRANSLATETOOL_H
 #define UDGTRANSLATETOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class vtkInteractorStyle;
 

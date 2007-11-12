@@ -7,7 +7,7 @@
 #ifndef UDGSEEDTOOL_H
 #define UDGSEEDTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class vtkActor;
 class vtkSphereSource;
@@ -49,10 +49,10 @@ private:
 
     ///Actor que dibuixa la llavor
     vtkActor *m_pointActor;
-    
+
     ///esfera que representa en punt de la llavor
     vtkSphereSource *m_point;
-    
+
     ///mapejador del punt
     vtkPolyDataMapper *m_pointMapper;
 

@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "toolmanager.h"
 #include "qviewer.h"
-#include "tool.h"
+#include "oldtool.h"
 #include "logging.h"
 namespace udg {
 

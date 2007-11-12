@@ -7,7 +7,7 @@
 #ifndef UDGDISTANCETOOL_H
 #define UDGDISTANCETOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 #include <QSet>
 
 //Forward declarations
@@ -58,10 +58,10 @@ private:
 
     ///calcula quin punt de la distància seleccionada, és més proper a on es produeix l'event que el crida.
     void getNearestPointOfSelectedDistance();
-    
+
     ///mètode per a respondre als events de teclat
     void answerToKeyEvent();
-    
+
 private slots:
     /// Comença l'anotació de la distància
     void startDistanceAnnotation();
@@ -88,16 +88,16 @@ private:
     ///objectes que ens servirà per crear la distància que l'usuari ha seleccionat
     DistanceRepresentation *m_selectedDistanceRepresentation;
     DistanceToolData *m_selectedDistanceToolData;
-    
+
     ///ens permet conèixer si s'han obtingut primitives correctes com a distància seleccionada
     bool m_correctData;
-    
+
     ///ens permetrà controlar si la tecla Ctrl per a seleccionar distàncies està polsada o no.
     bool m_isCtrlPressed;
-    
+
     ///ens permet controlar el mode d'anotació: amb 2 clicks o clicant-arrossegant-alliberant
     QString m_annotationMode;
-    
+
     ///ens permet emmagatzemar l'última acció que s'ha fet amb el botó esquerre.
     QString m_lastLeftButtonAction;
     };

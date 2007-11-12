@@ -7,7 +7,7 @@
 #ifndef UDGSCREENSHOTTOOL_H
 #define UDGSCREENSHOTTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class vtkWindowToImageFilter;
 class vtkRenderWindow;

@@ -7,7 +7,7 @@
 #ifndef UDGROTATE3DTOOL_H
 #define UDGROTATE3DTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class vtkInteractorStyle;
 

@@ -41,7 +41,7 @@ HEADERS += extensionfactory.h \
            study.h \
            parameters.h \
            qinputparameters.h \
-           tool.h \
+           oldtool.h \
            output.h \
            q3dorientationmarker.h \
            slicing2dtool.h \
@@ -133,7 +133,7 @@ SOURCES += extensionmediator.cpp \
            study.cpp \
            parameters.cpp \
            qinputparameters.cpp \
-           tool.cpp \
+           oldtool.cpp \
            output.cpp \
            q3dorientationmarker.cpp \
            slicing2dtool.cpp \
