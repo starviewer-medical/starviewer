@@ -7,7 +7,7 @@
 #ifndef UDGWINDOWLEVELTOOL_H
 #define UDGWINDOWLEVELTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 namespace udg {
 

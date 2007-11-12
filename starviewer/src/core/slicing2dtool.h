@@ -7,7 +7,7 @@
 #ifndef UDGSLICING2DTOOL_H
 #define UDGSLICING2DTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class QTime;
 

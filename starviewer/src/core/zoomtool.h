@@ -7,7 +7,7 @@
 #ifndef UDGZOOMTOOL_H
 #define UDGZOOMTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class vtkInteractorStyle;
 

@@ -4,9 +4,9 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "tool.h"
+#include "oldtool.h"
 
 namespace udg {
 
 
-};  // end namespace udg 
+};  // end namespace udg

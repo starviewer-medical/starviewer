@@ -7,7 +7,7 @@
 #ifndef UDGVOXELINFORMATIONTOOL_H
 #define UDGVOXELINFORMATIONTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 
 class vtkCaptionActor2D;
 
@@ -35,10 +35,10 @@ public slots:
      * Activa/Desactiva aquesta tool
      */
     void enable( bool enable = true );
-    
+
     ///mira si cal actualitzar la informació de vòxel. Si la tool d'informació de vòxel està activada i es canvia la llesca, s'executarà aquest SLOT.
     void isNeededUpdateVoxelInformation();
-    
+
     ///ens retorna les dimensions de la pantalla
     int* viewportDimensions();
 
@@ -53,7 +53,7 @@ private:
     bool captionExceedsViewportLimits();
     ///situa el text del caption
     void placeText( double textPosition[3] );
-    
+
     ///calcula la profunditat segons la vista i la llesca en la que estem.
     void depthAccordingViewAndSlice( double xyz[3] );
 
