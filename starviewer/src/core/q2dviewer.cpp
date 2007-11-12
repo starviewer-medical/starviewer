@@ -219,6 +219,7 @@ void Q2DViewer::createRulers()
     m_sideRuler->TitleVisibilityOff();
     m_sideRuler->SetTickLength( 10 );
     m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
+    m_sideRuler->VisibilityOff(); // per defecte, fins que no hi hagi input son invisibles
 
     // ruler inferior
     m_bottomRuler = vtkAxisActor2D::New();
@@ -237,6 +238,7 @@ void Q2DViewer::createRulers()
     m_bottomRuler->TitleVisibilityOff();
     m_bottomRuler->SetTickLength( 10 );
     m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
+    m_bottomRuler->VisibilityOff(); // per defecte, fins que no hi hagi input son invisibles
 
     // coordenades fixes per ancorar els rulers al lateral i a la part inferior
     m_anchoredRulerCoordinates = vtkCoordinate::New();
@@ -894,6 +896,7 @@ void Q2DViewer::setInput( Volume* volume )
     updatePatientAnnotationInformation();
     updateGrid();
     this->enableAnnotation( m_enabledAnnotations );
+    setViewToAxial();
 }
 
 vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
