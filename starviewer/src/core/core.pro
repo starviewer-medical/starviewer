@@ -87,7 +87,7 @@ HEADERS += extensionfactory.h \
            imagefillerstep.h \
            presentationstatefillerstep.h \
            representation.h \
-           tooldata.h \
+           oldtooldata.h \
            extensioncontext.h \
            keyimagenotefillerstep.h \
            dcmdatasetcache.h \
@@ -179,7 +179,7 @@ SOURCES += extensionmediator.cpp \
            imagefillerstep.cpp \
            presentationstatefillerstep.cpp \
            representation.cpp \
-           tooldata.cpp \
+           oldtooldata.cpp \
            extensioncontext.cpp \
            keyimagenotefillerstep.cpp \
            dcmdatasetcache.cpp \

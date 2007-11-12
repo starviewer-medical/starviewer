@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGTOOLDATA_H
-#define UDGTOOLDATA_H
+#ifndef UDGOLDTOOLDATA_H
+#define UDGOLDTOOLDATA_H
 
 #include <QObject>
 
@@ -13,21 +13,21 @@
 
 namespace udg {
 //Forward declarations
-    
+
 /**
 Classe base per a totes les sub-classes que encapsulen dades necessàries per a les diferents representacions
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
 
-class ToolData : public QObject{
-    Q_OBJECT
+class OldToolData : public QObject{
+Q_OBJECT
 public:
-    
-    ToolData( QObject *parent = 0 );
-    ~ToolData();
+
+    OldToolData( QObject *parent = 0 );
+    ~OldToolData();
 };
 
-};  
+};
 #endif
 

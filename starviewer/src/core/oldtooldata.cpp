@@ -4,14 +4,17 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "tooldata.h"
+#include "oldtooldata.h"
 
 namespace udg {
 
-ToolData::ToolData( QObject *parent ) 
-    : QObject( parent ) 
-{}
+OldToolData::OldToolData( QObject *parent )
+ : QObject( parent )
+{
+}
 
-ToolData::~ToolData(){}
+OldToolData::~OldToolData()
+{
+}
 
 };  // end namespace udg
