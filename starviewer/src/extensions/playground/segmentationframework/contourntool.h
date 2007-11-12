@@ -7,7 +7,7 @@
 #ifndef UDGCONTOURNTOOL_H
 #define UDGCONTOURNTOOL_H
 
-#include "tool.h"
+#include "oldtool.h"
 #include "vtkSplineWidget.h"
 #include "itkImage.h"
 
@@ -24,7 +24,7 @@ Tool que serveix per posar llavors en un visor 2D
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ContournTool : public Tool
+class ContournTool : public OldTool
 {
 Q_OBJECT
 public:
@@ -41,7 +41,7 @@ public:
 
     void doContouring(int slice);
     void getCoords();
-    
+
 signals:
 
     void setLenght(double);
@@ -49,13 +49,13 @@ signals:
     void splineChanged(double);
 
     void actualspline(double);
-    
+
     void originalspline(double,int);
-    
+
     void changeOriginalSpline();
 
 private:
-    
+
     typedef itk::Image<signed int,3>     ImageType;
     Q2DViewer *m_2DViewer;
     Volume *m_seg;
@@ -63,7 +63,7 @@ private:
     int m_lastView;
 
     double m_seedPosition[3];
-       
+
     LlescaContorn *m_conAxial;
     LlescaContorn *m_conCoronal;
     LlescaContorn *m_conSagital;
@@ -72,22 +72,22 @@ private:
     vtkSplineWidget*  m_splineY;
     vtkSplineWidget*  m_splineZ;
     ViewType vista;
-    AreaSpline* m_areaSpline;    
+    AreaSpline* m_areaSpline;
     llenca *l;
 
     bool m_calculat;
     float xt;
     float yt;
     float zt;
-    
-    
 
-   
+
+
+
 /// \TODO potser aquests m�todes slots passen a ser p�blics
 private slots:
-   
+
     void setContourn( );
-   
+
     void DibuixaSpline();
 
     void sliceChanged( int s );
