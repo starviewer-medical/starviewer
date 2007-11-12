@@ -40,7 +40,7 @@ public slots:
     void isNeededUpdateVoxelInformation();
     
     ///ens retorna les dimensions de la pantalla
-    void screenDimensions( int dimensions[2] );
+    int* viewportDimensions();
 
 private:
     void createCaptionActor();

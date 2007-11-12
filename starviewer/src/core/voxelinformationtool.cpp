@@ -97,35 +97,18 @@ void VoxelInformationTool::createCaptionActor()
 void VoxelInformationTool::updateVoxelInformation()
 {
     double xyz[3];
-    int slice = m_2DViewer->getCurrentSlice();
-    double *spacing = m_2DViewer->getInput()->getSpacing();
-    double *origin = m_2DViewer->getInput()->getOrigin();
     
+    double wPoint[4];
+    int position[2];
+
+    correctPositionOfCaption( position );
+
+    QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
+    xyz[0] = wPoint[0];
+    xyz[1] = wPoint[1];
+    depthAccordingViewAndSlice( xyz );
+    placeText( xyz );
     
-    if ( !captionExceedsViewportLimits() )
-    {
-        if( m_2DViewer->getCurrentCursorPosition(xyz) )
-        {
-            depthAccordingViewAndSlice( xyz );
-            placeText( xyz );
-        }
-        else
-        {
-            m_voxelInformationCaption->VisibilityOff();
-        }
-    }
-    else
-    {
-        double wPoint[4];
-        int position[2];
-        correctPositionOfCaption( position );
-        QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
-        xyz[0] = wPoint[0];
-        xyz[1] = wPoint[1];
-        
-        depthAccordingViewAndSlice( xyz );
-        placeText( xyz );
-    }
     m_2DViewer->refresh();
 }
 
@@ -158,28 +141,16 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( m_2DViewer->getCurrentImageValue() ) ) );
 }
 
-void VoxelInformationTool::screenDimensions( int dimensions[2] )
+int* VoxelInformationTool::viewportDimensions()
 {
-    QPoint point(m_2DViewer->getInteractor()->GetEventPosition()[0],m_2DViewer->getInteractor()->GetEventPosition()[1]);
-    
-    if (qApp->desktop()->isVirtualDesktop())
-    {
-        dimensions[0] = qApp->desktop()->geometry().width();
-        dimensions[1] = qApp->desktop()->geometry().height();
-    }
-    else
-    {
-        dimensions[0] = qApp->desktop()->availableGeometry( point ).width();
-        dimensions[1] = qApp->desktop()->availableGeometry( point ).height();
-    }
+    return m_2DViewer->getRenderer()->GetSize();
 }
 
 bool VoxelInformationTool::captionExceedsViewportTopLimit()
 {
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
-    int dimensions[2];
-    screenDimensions( dimensions );
-    int captionHeigth = (dimensions[1]*0.05);
+    int *dimensions = viewportDimensions();
+    double captionHeigth = ((double)dimensions[1]*0.05)+5.;
     
     return ( eventPosition[1]+captionHeigth > dimensions[1] );
 }
@@ -187,9 +158,8 @@ bool VoxelInformationTool::captionExceedsViewportTopLimit()
 bool VoxelInformationTool::captionExceedsViewportRightLimit()
 {
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
-    int dimensions[2];
-    screenDimensions( dimensions );
-    int captionWidth = (dimensions[0]*0.3)+1;
+    int *dimensions = viewportDimensions();
+    double captionWidth = ((double)dimensions[0]*0.3)+1.;
     
     return ( eventPosition[0]+captionWidth > dimensions[0] );
 }
@@ -202,22 +172,22 @@ bool VoxelInformationTool::captionExceedsViewportLimits()
 
 void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPort[2] )
 {
-    int xSecurityRange = 20;
+    double xSecurityRange = 20.;
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
-    int dimensions[2];
-    screenDimensions( dimensions );
-    int captionWidth = (dimensions[0]*0.3)+xSecurityRange;
-    int captionHeigth = (dimensions[1]*0.05);
+    int *dimensions = viewportDimensions();
+    double captionWidth = ((double)dimensions[0]*0.3)+xSecurityRange;
     
-    correctPositionInViewPort[0] = eventPosition[0] - ( eventPosition[0] + captionWidth - dimensions[0] );
+    correctPositionInViewPort[0] = eventPosition[0];
+    correctPositionInViewPort[1] = eventPosition[1];
+    
+    if ( captionExceedsViewportRightLimit() )
+    {
+        correctPositionInViewPort[0] = eventPosition[0] - ( eventPosition[0] + captionWidth - dimensions[0] );
+    }
     
     if ( captionExceedsViewportTopLimit() )
     {
-        correctPositionInViewPort[1] = eventPosition[1] - 5;
-    }
-    else
-    {
-        correctPositionInViewPort[1] = eventPosition[1];
+        correctPositionInViewPort[1] = eventPosition[1] - 35;
     }
 }
 
