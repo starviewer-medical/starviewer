@@ -111,7 +111,12 @@ HEADERS += extensionfactory.h \
            voxelinformationtool.h \
            orderimagesfillerstep.h \
            roitooldata.h \
-           ellipserepresentation.h 
+           ellipserepresentation.h  \
+           toolfactory.h \
+           toolmanager.h \
+           toolconfiguration.h \
+           tool.h \
+           toolproxy.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -203,7 +208,12 @@ SOURCES += extensionmediator.cpp \
            voxelinformationtool.cpp \
            orderimagesfillerstep.cpp \
            roitooldata.cpp \
-           ellipserepresentation.cpp 
+           ellipserepresentation.cpp  \
+           toolfactory.cpp \
+           toolmanager.cpp \
+           toolconfiguration.cpp \
+           tool.cpp \
+           toolproxy.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
