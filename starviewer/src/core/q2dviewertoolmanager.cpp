@@ -18,14 +18,14 @@
 namespace udg {
 
 Q2DViewerToolManager::Q2DViewerToolManager(QObject *parent)
- : ToolManager(parent)
+ : OldToolManager(parent)
 {
     m_viewer = 0;
     initToolRegistration();
 }
 
 Q2DViewerToolManager::Q2DViewerToolManager( Q2DViewer *viewer , QObject *parent )
- : ToolManager(parent)
+ : OldToolManager(parent)
 {
     m_viewer = viewer;
     initToolRegistration();

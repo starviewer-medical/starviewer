@@ -14,14 +14,14 @@
 namespace udg {
 
 Q3DMPRViewerToolManager::Q3DMPRViewerToolManager(QObject *parent)
- : ToolManager(parent)
+ : OldToolManager(parent)
 {
     m_viewer = 0;
     initToolRegistration();
 }
 
 Q3DMPRViewerToolManager::Q3DMPRViewerToolManager( Q3DMPRViewer *viewer , QObject *parent )
- : ToolManager(parent)
+ : OldToolManager(parent)
 {
     m_viewer = viewer;
     initToolRegistration();

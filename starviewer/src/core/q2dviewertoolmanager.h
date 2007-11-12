@@ -7,7 +7,7 @@
 #ifndef UDGQ2DVIEWERTOOLMANAGER_H
 #define UDGQ2DVIEWERTOOLMANAGER_H
 
-#include "toolmanager.h"
+#include "oldtoolmanager.h"
 
 namespace udg {
 
@@ -18,7 +18,7 @@ Tool Manager per al visor Q2DViewer
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Q2DViewerToolManager : public ToolManager
+class Q2DViewerToolManager : public OldToolManager
 {
 Q_OBJECT
 public:
