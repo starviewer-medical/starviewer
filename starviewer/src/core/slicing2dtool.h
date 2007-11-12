@@ -21,7 +21,7 @@ Tool que serveix per fer slicing en un visor 2D
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Slicing2DTool : public Tool
+class Slicing2DTool : public OldTool
 {
 Q_OBJECT
 public:
@@ -76,7 +76,7 @@ private:
 
     /// Temps que ha passat des de que s'ha iniciat l'slicing
     QTime * m_time;
-    
+
     /// Temps en milisegons de l'ultim event tractat
     int m_latestTime;
 

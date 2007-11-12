@@ -30,7 +30,7 @@ bool ToolManager::setCurrentTool( QString toolName )
         return false;
 }
 
-Tool *ToolManager::getTool( QString toolName )
+OldTool *ToolManager::getTool( QString toolName )
 {
     if( m_toolList.find( toolName ) != m_toolList.end() )
         return m_toolList[toolName];

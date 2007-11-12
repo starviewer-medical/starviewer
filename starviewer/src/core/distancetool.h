@@ -25,7 +25,7 @@ class DrawingPrimitive;
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class DistanceTool : public Tool
+class DistanceTool : public OldTool
 {
     Q_OBJECT
 public:
