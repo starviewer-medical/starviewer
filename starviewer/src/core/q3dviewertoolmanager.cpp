@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q3dviewertoolmanager.h"
-#include "oldtool.h"
 #include "zoomtool.h"
 #include "translatetool.h"
 #include "screenshottool.h"

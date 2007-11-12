@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q2dviewertoolmanager.h"
-#include "oldtool.h"
 #include "slicing2dtool.h"
 #include "windowleveltool.h"
 #include "zoomtool.h"
