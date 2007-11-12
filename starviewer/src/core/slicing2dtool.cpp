@@ -110,7 +110,6 @@ void Slicing2DTool::doSlicing()
                 }
             }
             this->updateIncrement( value );
-            DEBUG_LOG( tr("INCREMENT: %1").arg( value ) );
         }
     }
     else
