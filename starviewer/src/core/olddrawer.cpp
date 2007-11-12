@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "drawer.h"
+#include "olddrawer.h"
 #include "line.h"
 #include "text.h"
 #include "point.h"
@@ -46,7 +46,7 @@
 ///\TODO treure mètodes que no es fan servir
 namespace udg {
 
-Drawer::Drawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent )
+OldDrawer::OldDrawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent )
 {
     //Per defecte paleta de colors rgb. caldria validar si rgb o monocrom
     m_colorPalette = new ColorPalette();
@@ -57,12 +57,12 @@ Drawer::Drawer( Q2DViewer *m_viewer , QObject *parent ) : QObject( parent )
     connect( m_2DViewer , SIGNAL( viewChanged(int) ) , this , SLOT( setCurrentView( int ) ) );
 }
 
-Drawer::~Drawer()
+OldDrawer::~OldDrawer()
 {
     delete m_colorPalette;
 }
 
-void Drawer::drawPoint( Point *point, int slice, int view )
+void OldDrawer::drawPoint( Point *point, int slice, int view )
 {
     validateCoordinates( point->getPosition(), view );
 
@@ -109,7 +109,7 @@ void Drawer::drawPoint( Point *point, int slice, int view )
     polyMapper->Delete();
 }
 
-void Drawer::drawLine( Line *line, int slice, int view )
+void OldDrawer::drawLine( Line *line, int slice, int view )
 {
     vtkActor2D *lineActor = vtkActor2D::New();
     vtkLineSource *lineSource = vtkLineSource::New();
@@ -161,7 +161,7 @@ void Drawer::drawLine( Line *line, int slice, int view )
     lineMapper->Delete();
 }
 
-void Drawer::drawText( Text *text, int slice, int view )
+void OldDrawer::drawText( Text *text, int slice, int view )
 {
     vtkCaptionActor2D *textActor = vtkCaptionActor2D::New();
 
@@ -263,7 +263,7 @@ void Drawer::drawText( Text *text, int slice, int view )
     textActor->Delete();
 }
 
-void Drawer::drawPolygon( Polygon *polygon, int slice, int view )
+void OldDrawer::drawPolygon( Polygon *polygon, int slice, int view )
 {
     //Ens assegurem que el polígon és tancat, és a dir, que el primer punt coincideix amb el primer
     double *firstPoint = polygon->getPoints().first();
@@ -332,7 +332,7 @@ void Drawer::drawPolygon( Polygon *polygon, int slice, int view )
     polydata->Delete();
 }
 
-void Drawer::addActorAndRefresh( vtkProp *prop, DrawingPrimitive *drawingPrimitive, int slice, int view )
+void OldDrawer::addActorAndRefresh( vtkProp *prop, DrawingPrimitive *drawingPrimitive, int slice, int view )
 {
     //afegim l'actor al renderer del visor
     m_2DViewer->getRenderer()->AddActor( prop );
@@ -348,7 +348,7 @@ void Drawer::addActorAndRefresh( vtkProp *prop, DrawingPrimitive *drawingPrimiti
     m_2DViewer->refresh();
 }
 
-void Drawer::validateCoordinates( double coordinates[3], int view )
+void OldDrawer::validateCoordinates( double coordinates[3], int view )
 {
     double aux;
     switch( view )
@@ -376,7 +376,7 @@ void Drawer::validateCoordinates( double coordinates[3], int view )
     }
 }
 
-void Drawer::adaptCoordinatesToCurrentView( double *coordinates, int view )
+void OldDrawer::adaptCoordinatesToCurrentView( double *coordinates, int view )
 {
     double aux;
     switch( view )
@@ -404,14 +404,14 @@ void Drawer::adaptCoordinatesToCurrentView( double *coordinates, int view )
     }
 }
 
-void Drawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior, int slice, int view )
+void OldDrawer::drawEllipse( double rectangleCoordinate1[3], double rectangleCoordinate2[3], QColor color, QString behavior, int slice, int view )
 {
     Ellipse *ellipse = new Ellipse( rectangleCoordinate1, rectangleCoordinate2, behavior );
     ellipse->setColor( color );
     drawEllipse( ellipse, slice, view );
 }
 
-void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
+void OldDrawer::drawEllipse( Ellipse *ellipse, int slice, int view )
 {
     double *topLeft, *bottomRight;
     //validem les coordenades segons la vista en la que estem
@@ -427,7 +427,7 @@ void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
     ellipse->setBottomRightPoint( bottomRight );
 
     vtkPolyData *polydata = vtkPolyData::New();
-    
+
     //calculem els punts de l'el·lipse i els retornem amb una parella
     EllipsePoints ellipsePoints = computeEllipsePoints( ellipse );
 
@@ -477,11 +477,11 @@ void Drawer::drawEllipse( Ellipse *ellipse, int slice, int view )
     polydata->Delete();
 }
 
-Drawer::EllipsePoints Drawer::computeEllipsePoints( Ellipse *ellipse )
+OldDrawer::EllipsePoints OldDrawer::computeEllipsePoints( Ellipse *ellipse )
 {
     double intersection[2], degrees, xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], xRadius, yRadius, *center, *minor, *major,*topLeft, *bottomRight;
     int i;
-    
+
     vtkPoints *points = vtkPoints::New();
     vtkCellArray *vertexs = vtkCellArray::New();
 
@@ -535,13 +535,13 @@ Drawer::EllipsePoints Drawer::computeEllipsePoints( Ellipse *ellipse )
 
     //afegim l'últim punt per tancar la ROI
     vertexs->InsertCellPoint( 0 );
-    
+
     EllipsePoints ellipsePoints( points, vertexs );
-    
+
     return ( ellipsePoints );
 }
 
-vtkCoordinate* Drawer::getCoordinateSystem( QString coordinateSystem )
+vtkCoordinate* OldDrawer::getCoordinateSystem( QString coordinateSystem )
 {
     vtkCoordinate *coordinates = vtkCoordinate::New();
 
@@ -563,7 +563,7 @@ vtkCoordinate* Drawer::getCoordinateSystem( QString coordinateSystem )
     return( coordinates );
 }
 
-void Drawer::setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coordinates )
+void OldDrawer::setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coordinates )
 {
     if ( coordinateSystem == "DISPLAY" )
         coordinates->SetCoordinateSystemToDisplay();
@@ -581,7 +581,7 @@ void Drawer::setCoordinateSystem( QString coordinateSystem, vtkCoordinate *coord
         DEBUG_LOG( "Sistema de coordenades no esperat!!" );
 }
 
-Drawer::PrimitivesPairsList Drawer::getPrimitivesPairsList( int slice, int view )
+OldDrawer::PrimitivesPairsList OldDrawer::getPrimitivesPairsList( int slice, int view )
 {
     PrimitivesPairsList list;
     list.clear();
@@ -607,7 +607,7 @@ Drawer::PrimitivesPairsList Drawer::getPrimitivesPairsList( int slice, int view 
     return list;
 }
 
-void Drawer::addPrimitive( PrimitiveActorPair *pair, int slice, int view )
+void OldDrawer::addPrimitive( PrimitiveActorPair *pair, int slice, int view )
 {
     bool ok = true;
     switch( view )
@@ -639,7 +639,7 @@ void Drawer::addPrimitive( PrimitiveActorPair *pair, int slice, int view )
     }
 }
 
-void Drawer::setVisibility( PrimitiveActorPair *pair, bool visibility )
+void OldDrawer::setVisibility( PrimitiveActorPair *pair, bool visibility )
 {
     if( visibility && pair )
     {
@@ -653,7 +653,7 @@ void Drawer::setVisibility( PrimitiveActorPair *pair, bool visibility )
     }
 }
 
-void Drawer::hidePrimitivesFrom( int slice, int view )
+void OldDrawer::hidePrimitivesFrom( int slice, int view )
 {
     PrimitivesPairsList listToHide = this->getPrimitivesPairsList( slice, view );
 
@@ -665,7 +665,7 @@ void Drawer::hidePrimitivesFrom( int slice, int view )
     m_2DViewer->refresh();
 }
 
-void Drawer::hidePrimitivesOfView( int view )
+void OldDrawer::hidePrimitivesOfView( int view )
 {
     QList< PrimitiveActorPair* > allPairsOfSelectedView;
 
@@ -702,7 +702,7 @@ void Drawer::hidePrimitivesOfView( int view )
     }
 }
 
-void Drawer::showPrimitivesFrom( int slice, int view )
+void OldDrawer::showPrimitivesFrom( int slice, int view )
 {
     PrimitivesPairsList listToShow = this->getPrimitivesPairsList( slice, view );
 
@@ -716,7 +716,7 @@ void Drawer::showPrimitivesFrom( int slice, int view )
     m_2DViewer->refresh();
 }
 
-void Drawer::setCurrentSlice( int slice )
+void OldDrawer::setCurrentSlice( int slice )
 {
     //diem que no hi ha cap conjunt proper ni seleccionat
     m_nearestSet = NULL;
@@ -732,7 +732,7 @@ void Drawer::setCurrentSlice( int slice )
     showPrimitivesFrom( slice, m_currentView );
 }
 
-void Drawer::setCurrentView( int view )
+void OldDrawer::setCurrentView( int view )
 {
     if( m_currentView != view )
     {
@@ -751,7 +751,7 @@ void Drawer::setCurrentView( int view )
     }
 }
 
-void Drawer::removeAllPrimitives()
+void OldDrawer::removeAllPrimitives()
 {
     // recorrem cadscun dels maps, primer retirem l'actor de l'escena i després l'esborrem de la llista
     foreach( PrimitiveActorPair *pair, m_axialPairs )
@@ -781,7 +781,7 @@ void Drawer::removeAllPrimitives()
     m_2DViewer->refresh();
 }
 
-Drawer::PrimitiveActorPair* Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive, int slice, int view )
+OldDrawer::PrimitiveActorPair* OldDrawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive, int slice, int view )
 {
     PrimitiveActorPair *desiredPrimitiveActorPair;
     PrimitivesPairsList list =  getPrimitivesPairsList( slice, view );
@@ -806,7 +806,7 @@ Drawer::PrimitiveActorPair* Drawer::findPrimitiveActorPair( DrawingPrimitive *dr
     return desiredPrimitiveActorPair;
 }
 
-Drawer::PrimitiveActorPair* Drawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive )
+OldDrawer::PrimitiveActorPair* OldDrawer::findPrimitiveActorPair( DrawingPrimitive *drawingPrimitive )
 {
     int i;
     PrimitiveActorPair *desiredPrimitiveActorPair;
@@ -851,12 +851,12 @@ Drawer::PrimitiveActorPair* Drawer::findPrimitiveActorPair( DrawingPrimitive *dr
     return desiredPrimitiveActorPair;
 }
 
-bool Drawer::isValid( PrimitiveActorPair *pair )
+bool OldDrawer::isValid( PrimitiveActorPair *pair )
 {
     return( pair->first != NULL && pair->second != NULL );
 }
 
-void Drawer::updateChangedLine( Line *line )
+void OldDrawer::updateChangedLine( Line *line )
 {
     PrimitiveActorPair *pair = this->findPrimitiveActorPair( line );
 
@@ -868,11 +868,11 @@ void Drawer::updateChangedLine( Line *line )
         vtkPolyDataMapper2D *lineMapper = vtkPolyDataMapper2D::SafeDownCast( lineActor->GetMapper() );
 
         vtkLineSource *lineSource = vtkLineSource::New();
-        
+
         lineMapper->SetInputConnection( lineSource->GetOutputPort() );
-    
+
         lineSource->SetResolution ( 2 );
-    
+
         //assignem els punts a la línia
         lineSource->SetPoint1( line->getFirstPoint() );
         lineSource->SetPoint2( line->getSecondPoint() );
@@ -916,7 +916,7 @@ void Drawer::updateChangedLine( Line *line )
     }
 }
 
-void Drawer::updateChangedEllipse( Ellipse *ellipse )
+void OldDrawer::updateChangedEllipse( Ellipse *ellipse )
 {
     PrimitiveActorPair *pair = this->findPrimitiveActorPair( ellipse );
 
@@ -930,14 +930,14 @@ void Drawer::updateChangedEllipse( Ellipse *ellipse )
         EllipsePoints ellipsePoints = computeEllipsePoints( ellipse );
 
         vtkPolyData *ellipsePolyData = vtkPolyData::New();
-        
+
         ellipsePolyData->SetPoints( ellipsePoints.first );
 
         if ( ellipse->isBackgroundEnabled() )
             ellipsePolyData->SetPolys( ellipsePoints.second );
         else
             ellipsePolyData->SetLines( ellipsePoints.second );
-            
+
         ellipseMapper->SetInput( ellipsePolyData );
 
         //Assignem el tipus de coordenades seleccionades
@@ -979,59 +979,59 @@ void Drawer::updateChangedEllipse( Ellipse *ellipse )
     }
 }
 
-void Drawer::updateChangedText( Text *text )
+void OldDrawer::updateChangedText( Text *text )
 {
     PrimitiveActorPair *pair = this->findPrimitiveActorPair( text );
-    
+
     if ( isValid( pair ) )
     {
         //obtenim l'actor de text
         vtkCaptionActor2D *textActor = vtkCaptionActor2D::SafeDownCast( pair->second );
-        
+
         //fem la conversió estàtica per a poder executar els mètodes de la primitiva de text
         Text *text = static_cast<Text*> ( pair->first );
-    
+
         //mirem si s'ha d'escalar el text
         if ( text->isTextScaled() )
             textActor->GetTextActor()->ScaledTextOn();
         else
             textActor->GetTextActor()->ScaledTextOff();
-        
+
         //mirem l'opacitat
         textActor->GetCaptionTextProperty()->SetOpacity( text->getOpacity() );
-        
+
         //Assignem color
         QColor textColor = text->getColor();
         QColor highlightColor = m_colorPalette->getHighlightColor();
         QColor selectionColor = m_colorPalette->getSelectionColor();
-        
+
         if ( text->isHighlighted() )
             textActor->GetCaptionTextProperty()->SetColor( highlightColor.redF(), highlightColor.greenF(), highlightColor.blueF() );
         else if ( text->isSelected() )
             textActor->GetCaptionTextProperty()->SetColor( selectionColor.redF(), selectionColor.greenF(), selectionColor.blueF() );
         else
             textActor->GetCaptionTextProperty()->SetColor( textColor.redF(), textColor.greenF(), textColor.blueF() );
-        
+
         textActor->SetPadding( text->getPadding() );
-        
+
         textActor->SetPosition( -1.0 , -1.0 );
         textActor->SetHeight( text->getHeight() );
         textActor->SetWidth( text->getWidth() );
-        
+
         //deshabilitem la línia que va des del punt de situació al text
         textActor->LeaderOff();
         textActor->ThreeDimensionalLeaderOff();
-        
+
         if ( text->hasShadow() )
             textActor->GetCaptionTextProperty()->ShadowOn();
         else
             textActor->GetCaptionTextProperty()->ShadowOff();
-        
+
         if ( text->isItalic() )
             textActor->GetCaptionTextProperty()->ItalicOn();
         else
             textActor->GetCaptionTextProperty()->ItalicOff();
-    
+
         //Assignem el tipus de font al text
         if ( text->getFontFamily() == "Arial" )
             textActor->GetCaptionTextProperty()->SetFontFamilyToArial();
@@ -1041,10 +1041,10 @@ void Drawer::updateChangedText( Text *text )
             textActor->GetCaptionTextProperty()->SetFontFamilyToTimes();
         else
             DEBUG_LOG( "Tipus de font no reconegut a l'intentar crear text!!" );
-        
+
         //Assignem el tamany de la font
         textActor->GetCaptionTextProperty()->SetFontSize( text->getFontSize() );
-        
+
         //Assignem el tipus de justificació horitzontal
         if ( text->getHorizontalJustification() == "Left" )
             textActor->GetCaptionTextProperty()->SetJustificationToLeft();
@@ -1056,7 +1056,7 @@ void Drawer::updateChangedText( Text *text )
         {
             DEBUG_LOG( "Tipus de justificació horitzontal no reconegut a l'intentar crear text!!" );
         }
-        
+
         //Assignem el tipus de justificació vertical
         if ( text->getVerticalJustification() == "Top" )
             textActor->GetCaptionTextProperty()->SetVerticalJustificationToTop();
@@ -1068,35 +1068,35 @@ void Drawer::updateChangedText( Text *text )
         {
             DEBUG_LOG( "Tipus de justificació vertical no reconegut a l'intentar crear text!!" );
         }
-        
+
         //Assignem el text
         textActor->SetCaption( qPrintable ( text->getText() ) );
-        
+
         //Assignem la posició en pantalla
         textActor->SetAttachmentPoint( text->getAttatchmentPoint() );
-        
+
         //mirem si el text té fons o no
         if ( text->isBorderEnabled() )
              textActor->BorderOn();
          else
              textActor->BorderOff();
-         
+
         //mirem la visibilitat de l'actor
         if ( !text->isVisible() )
             textActor->VisibilityOff();
         else
             textActor->VisibilityOn();
-            
+
         m_2DViewer->refresh();
     }
 }
 
-int Drawer::getNumberOfDrawedPrimitives()
+int OldDrawer::getNumberOfDrawedPrimitives()
 {
     return( m_axialPairs.count() + m_sagittalPairs.count() + m_coronalPairs.count() );
 }
 
-Drawer::PrimitivesSet* Drawer::getSetOf( DrawingPrimitive *primitive )
+OldDrawer::PrimitivesSet* OldDrawer::getSetOf( DrawingPrimitive *primitive )
 {
     PrimitivesSet *set;
     bool notFound = true;
@@ -1118,7 +1118,7 @@ Drawer::PrimitivesSet* Drawer::getSetOf( DrawingPrimitive *primitive )
     return( set );
 }
 
-void Drawer::highlightNearestPrimitives()
+void OldDrawer::highlightNearestPrimitives()
 {
     double point[3] = { .0, .0, .0 };
     int x, y;
@@ -1155,12 +1155,12 @@ void Drawer::highlightNearestPrimitives()
 
     //agafem la primitiva més propera
     PrimitiveActorPair *nearestPair = getNearestPrimitivePair( point );
-    
+
     if ( !isValid( nearestPair ) )
     {
         DEBUG_LOG( "No hi ha primitiva propera vàlida!!" );
         return;
-    }    
+    }
     m_nearestSet = getSetOf( nearestPair->first );
 
     foreach( PrimitiveActorPair *pair, list )
@@ -1198,7 +1198,7 @@ void Drawer::highlightNearestPrimitives()
     m_2DViewer->refresh();
 }
 
-void Drawer::selectNearestSet()
+void OldDrawer::selectNearestSet()
 {
     m_selectedSet = m_nearestSet;
 
@@ -1236,11 +1236,11 @@ void Drawer::selectNearestSet()
             pair->first->selectedOff();
         }
     }
-    
+
     m_2DViewer->refresh();
 }
 
-void Drawer::unselectSet()
+void OldDrawer::unselectSet()
 {
     m_selectedSet = NULL;
     m_nearestSet  = NULL;
@@ -1274,7 +1274,7 @@ void Drawer::unselectSet()
     m_2DViewer->refresh();
 }
 
-void Drawer::setHighlightColor( PrimitiveActorPair *pair )
+void OldDrawer::setHighlightColor( PrimitiveActorPair *pair )
 {
     QColor highlightColor = m_colorPalette->getHighlightColor();
 
@@ -1294,7 +1294,7 @@ void Drawer::setHighlightColor( PrimitiveActorPair *pair )
     }
 }
 
-void Drawer::setSelectedColor( PrimitiveActorPair *pair )
+void OldDrawer::setSelectedColor( PrimitiveActorPair *pair )
 {
     QColor selectedColor = m_colorPalette->getSelectionColor();
 
@@ -1314,7 +1314,7 @@ void Drawer::setSelectedColor( PrimitiveActorPair *pair )
     }
 }
 
-void Drawer::setNormalColor( PrimitiveActorPair *pair )
+void OldDrawer::setNormalColor( PrimitiveActorPair *pair )
 {
     QColor normalColor = m_colorPalette->getNormalColor();
 
@@ -1334,7 +1334,7 @@ void Drawer::setNormalColor( PrimitiveActorPair *pair )
     }
 }
 
-Drawer::PrimitivesPairsList Drawer::getAllPrimitivesOfType( QString primitiveType )
+OldDrawer::PrimitivesPairsList OldDrawer::getAllPrimitivesOfType( QString primitiveType )
 {
     PrimitivesPairsList result;
     PrimitivesMap map;
@@ -1363,7 +1363,7 @@ Drawer::PrimitivesPairsList Drawer::getAllPrimitivesOfType( QString primitiveTyp
     return( result );
 }
 
-int Drawer::getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType )
+int OldDrawer::getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QString primitiveType )
 {
     int index, i = 0;
 
@@ -1377,7 +1377,7 @@ int Drawer::getIndexOfPairWhenTypeIs( PrimitivesPairsList nearestPairslist, QStr
     return( index );
 }
 
-bool Drawer::hasPrimitiveOfType( PrimitivesPairsList nearestPairslist, QString primitiveType )
+bool OldDrawer::hasPrimitiveOfType( PrimitivesPairsList nearestPairslist, QString primitiveType )
 {
     bool response = false;
     foreach( PrimitiveActorPair *pair, nearestPairslist )
@@ -1388,7 +1388,7 @@ bool Drawer::hasPrimitiveOfType( PrimitivesPairsList nearestPairslist, QString p
     return( response );
 }
 
-Drawer::PrimitiveActorPair* Drawer::getNearestPrimitivePair( double point[3] )
+OldDrawer::PrimitiveActorPair* OldDrawer::getNearestPrimitivePair( double point[3] )
 {
     PrimitivesPairsList list;
     PrimitiveActorPair *nearestPair;
@@ -1446,13 +1446,13 @@ Drawer::PrimitiveActorPair* Drawer::getNearestPrimitivePair( double point[3] )
     return nearestPair;
 }
 
-bool Drawer::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
+bool OldDrawer::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
 {
     double x1, x2, y1, y2;
     int coordinate1, coordinate2;
     bool correctPoint = false;
     double range = 5.;
-    
+
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
@@ -1471,8 +1471,8 @@ bool Drawer::isPointIncludedInLineBounds( double point[3], double *lineP1, doubl
             ERROR_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
             break;
     }
-    
-    //posem a _1 el valor més petit i a _2 el més gran 
+
+    //posem a _1 el valor més petit i a _2 el més gran
     if ( lineP1[coordinate1] <= lineP2[coordinate1] )
     {
         x1 = lineP1[coordinate1];
@@ -1483,7 +1483,7 @@ bool Drawer::isPointIncludedInLineBounds( double point[3], double *lineP1, doubl
         x2 = lineP1[coordinate1];
         x1 = lineP2[coordinate1];
     }
-    
+
     if ( lineP1[coordinate2] <= lineP2[coordinate2] )
     {
         y1 = lineP1[coordinate2];
@@ -1494,16 +1494,16 @@ bool Drawer::isPointIncludedInLineBounds( double point[3], double *lineP1, doubl
         y2 = lineP1[coordinate2];
         y1 = lineP2[coordinate2];
     }
-    
+
     if ( ( point[coordinate1] >= ( x1 - range ) ) && ( point[coordinate1] <= ( x2 + range ) ) && ( point[coordinate2] >= ( y1 - range ) ) && ( point[coordinate2] <= ( y2 + range ) ) )
     {
         correctPoint = true;
     }
-    
+
     return( correctPoint );
 }
 
-void Drawer::addSetOfPrimitives( Representation *representation )
+void OldDrawer::addSetOfPrimitives( Representation *representation )
 {
     PrimitivesSet *set = new PrimitivesSet;
 
@@ -1513,7 +1513,7 @@ void Drawer::addSetOfPrimitives( Representation *representation )
         set->insert( distanceRepresentation->getLine() );
         set->insert( distanceRepresentation->getText() );
 //         set->insert( distanceRepresentation->getPolygon() );
-// 
+//
 //         //li diem que dibuixi el polígon que representa el voltant del text.
 //         distanceRepresentation->getPolygon()->enableBackground();
 //         distanceRepresentation->getPolygon()->setColor( QColor( 0, 0, 0 ) );
@@ -1537,7 +1537,7 @@ void Drawer::addSetOfPrimitives( Representation *representation )
         m_primitivesSetList.append( set );
 }
 
-void Drawer::removeSelectedSet()
+void OldDrawer::removeSelectedSet()
 {
     if ( hasSelectedSet() )
     {
@@ -1546,9 +1546,9 @@ void Drawer::removeSelectedSet()
 
         //obtenim la llista dels elements que estan dins del conjunt.
         QList< DrawingPrimitive *> listOfPrimitives = m_selectedSet->values();
-        
+
         PrimitiveActorPair *pair;
-        
+
         QMutableMapIterator< int , PrimitiveActorPair* > *iterator = NULL;
         switch( m_currentView )
         {
@@ -1568,27 +1568,27 @@ void Drawer::removeSelectedSet()
             DEBUG_LOG( "Valor inesperat" );
         break;
         }
-        
+
         if ( iterator )
         {
             foreach( DrawingPrimitive *primitive, listOfPrimitives )
             {
                 pair = findPrimitiveActorPair( primitive );
-            
+
                 iterator->toFront();
                 if( iterator->findNext( pair ) )
                 {
                     iterator->remove();
                     m_2DViewer->getRenderer()->RemoveActor( pair->second );
                     delete pair->first;
-                    
+
                 }
             }
             m_primitivesSetList.removeAt( position );
             m_selectedSet = NULL;
             m_nearestSet = NULL;
             m_2DViewer->refresh();
-        }   
+        }
     }
 }
 };  // end namespace udg

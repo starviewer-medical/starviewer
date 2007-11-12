@@ -74,7 +74,7 @@ HEADERS += extensionfactory.h \
            dicomtagreader.h \
            line.h \
            drawingprimitive.h \
-           drawer.h \
+           olddrawer.h \
            text.h \
            patientfiller.h \
            patientfillerstep.h \
@@ -166,7 +166,7 @@ SOURCES += extensionmediator.cpp \
            dicomtagreader.cpp \
            line.cpp \
            drawingprimitive.cpp \
-           drawer.cpp \
+           olddrawer.cpp \
            text.cpp \
            patientfiller.cpp \
            patientfillerstep.cpp \
