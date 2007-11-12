@@ -14,14 +14,14 @@
 namespace udg {
 
 Q3DViewerToolManager::Q3DViewerToolManager(QObject *parent)
- : ToolManager(parent)
+ : OldToolManager(parent)
 {
     m_viewer = 0;
     initToolRegistration();
 }
 
 Q3DViewerToolManager::Q3DViewerToolManager( Q3DViewer *viewer , QObject *parent )
- : ToolManager(parent)
+ : OldToolManager(parent)
 {
     m_viewer = viewer;
     initToolRegistration();

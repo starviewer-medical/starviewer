@@ -7,7 +7,7 @@
 #ifndef UDGQ3DMPRVIEWERTOOLMANAGER_H
 #define UDGQ3DMPRVIEWERTOOLMANAGER_H
 
-#include "toolmanager.h"
+#include "oldtoolmanager.h"
 
 namespace udg {
 
@@ -18,7 +18,7 @@ Tool Manager per al visor q3dmprviewer
 */
 class Q3DMPRViewer;
 
-class Q3DMPRViewerToolManager : public ToolManager
+class Q3DMPRViewerToolManager : public OldToolManager
 {
 Q_OBJECT
 public:

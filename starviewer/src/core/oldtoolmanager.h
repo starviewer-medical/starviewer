@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGTOOLMANAGER_H
-#define UDGTOOLMANAGER_H
+#ifndef UDGOLDTOOLMANAGER_H
+#define UDGOLDTOOLMANAGER_H
 
 #include <QObject>
 #include <map> // per mapejar el conjunt de tools disponibles
@@ -19,13 +19,13 @@ Classe pare que s'ocuparà de gestionar les tools associades a un visor.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ToolManager : public QObject
+class OldToolManager : public QObject
 {
 Q_OBJECT
 public:
-    ToolManager(QObject *parent = 0);
+    OldToolManager(QObject *parent = 0);
 
-    ~ToolManager();
+    ~OldToolManager();
 
     /// Retorna la tool que li demanem si existeix
     OldTool *getTool( QString toolName );

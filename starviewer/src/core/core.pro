@@ -45,7 +45,7 @@ HEADERS += extensionfactory.h \
            output.h \
            q3dorientationmarker.h \
            slicing2dtool.h \
-           toolmanager.h \
+           oldtoolmanager.h \
            q2dviewertoolmanager.h \
            windowleveltool.h \
            toolsactionfactory.h \
@@ -137,7 +137,7 @@ SOURCES += extensionmediator.cpp \
            output.cpp \
            q3dorientationmarker.cpp \
            slicing2dtool.cpp \
-           toolmanager.cpp \
+           oldtoolmanager.cpp \
            q2dviewertoolmanager.cpp \
            windowleveltool.cpp \
            toolsactionfactory.cpp \

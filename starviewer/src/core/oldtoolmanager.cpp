@@ -4,22 +4,22 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "toolmanager.h"
+#include "oldtoolmanager.h"
 #include "qviewer.h"
 #include "oldtool.h"
 #include "logging.h"
 namespace udg {
 
-ToolManager::ToolManager(QObject *parent)
+OldToolManager::OldToolManager(QObject *parent)
  : QObject(parent)
 {
 }
 
-ToolManager::~ToolManager()
+OldToolManager::~OldToolManager()
 {
 }
 
-bool ToolManager::setCurrentTool( QString toolName )
+bool OldToolManager::setCurrentTool( QString toolName )
 {
     if( m_toolList.find( toolName ) != m_toolList.end() )
     {
@@ -30,7 +30,7 @@ bool ToolManager::setCurrentTool( QString toolName )
         return false;
 }
 
-OldTool *ToolManager::getTool( QString toolName )
+OldTool *OldToolManager::getTool( QString toolName )
 {
     if( m_toolList.find( toolName ) != m_toolList.end() )
         return m_toolList[toolName];
@@ -38,7 +38,7 @@ OldTool *ToolManager::getTool( QString toolName )
         return 0;
 }
 
-void ToolManager::forwardEvent( unsigned long eventID )
+void OldToolManager::forwardEvent( unsigned long eventID )
 {
     if( m_toolList.find( m_currentToolName ) != m_toolList.end() )
     {
