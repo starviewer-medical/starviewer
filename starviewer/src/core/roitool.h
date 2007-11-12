@@ -33,7 +33,7 @@ class EllipseRepresentation;
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class ROITool : public Tool
+class ROITool : public OldTool
 {
     Q_OBJECT
 public:

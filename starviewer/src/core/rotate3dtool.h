@@ -21,7 +21,7 @@ Eina per rotacions tridimensionals ( pensat per visors 3D )
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Rotate3DTool : public Tool
+class Rotate3DTool : public OldTool
 {
 Q_OBJECT
 public:

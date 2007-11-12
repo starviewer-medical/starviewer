@@ -21,7 +21,7 @@ class Q2DViewer;
 class Q3DViewer;
 class Q3DMPRViewer;
 
-class ZoomTool : public Tool
+class ZoomTool : public OldTool
 {
 Q_OBJECT
 public:

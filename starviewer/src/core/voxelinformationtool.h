@@ -20,7 +20,7 @@ Tool per mostrar la informació del voxel (coordenades i valor ) en un visualitz
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class VoxelInformationTool : public Tool
+class VoxelInformationTool : public OldTool
 {
 Q_OBJECT
 public:

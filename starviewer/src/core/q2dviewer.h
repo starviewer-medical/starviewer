@@ -68,7 +68,7 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 // Fordward declarations
 class Volume;
 class Q2DViewerToolManager;
-class Tool;
+class OldTool;
 class VoxelInformationTool;
 class Drawer;
 
@@ -148,7 +148,7 @@ public:
     void getCurrentWindowLevel( double wl[2] );
 
     /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
-    Tool *getTool( QString toolName );
+    OldTool *getTool( QString toolName );
 
     /// Retorna el nom de la tool activa
     QString getCurrentToolName();

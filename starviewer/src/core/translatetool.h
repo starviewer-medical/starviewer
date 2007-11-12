@@ -21,7 +21,7 @@ class Q2DViewer;
 class Q3DViewer;
 class Q3DMPRViewer;
 
-class TranslateTool : public Tool
+class TranslateTool : public OldTool
 {
 Q_OBJECT
 public:

@@ -725,7 +725,7 @@ void Q2DViewer::setTool( QString toolName )
     }
 }
 
-Tool *Q2DViewer::getTool( QString toolName )
+OldTool *Q2DViewer::getTool( QString toolName )
 {
     return m_toolManager->getTool( toolName );
 }

@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGTOOL_H
-#define UDGTOOL_H
+#ifndef UDGOLDTOOL_H
+#define UDGOLDTOOL_H
 
 #include <QObject>
 
@@ -22,7 +22,7 @@ Classe base per a totes les classes de tools
 @author Grup de Gràfics de Girona  ( GGG )
 */
 
-class Tool : public QObject{
+class OldTool : public QObject{
 Q_OBJECT
 
 public slots:

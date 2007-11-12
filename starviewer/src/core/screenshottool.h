@@ -24,7 +24,7 @@ class Q2DViewer;
 class Q3DViewer;
 class Q3DMPRViewer;
 
-class ScreenShotTool: public Tool
+class ScreenShotTool: public OldTool
 {
 Q_OBJECT
 public:

@@ -17,7 +17,7 @@ namespace udg {
 
 class Q2DViewer;
 
-class WindowLevelTool : public Tool
+class WindowLevelTool : public OldTool
 {
 Q_OBJECT
 public:

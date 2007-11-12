@@ -12,7 +12,7 @@
 
 namespace udg {
 
-class Tool;
+class OldTool;
 
 /**
 Classe pare que s'ocuparà de gestionar les tools associades a un visor.
@@ -28,7 +28,7 @@ public:
     ~ToolManager();
 
     /// Retorna la tool que li demanem si existeix
-    Tool *getTool( QString toolName );
+    OldTool *getTool( QString toolName );
 
     /// Retorna el nom de la tool actual que es fa servir
     QString getCurrentToolName(){ return m_currentToolName; };
@@ -45,7 +45,7 @@ protected:
     virtual void initToolRegistration() = 0;
 
     /// Mapa de tools disponibles. Cada subclasse omplirà aquest conjunt amb les tools que proporciona
-    typedef std::map<QString,Tool*> ToolObjectMapType;
+    typedef std::map<QString,OldTool*> ToolObjectMapType;
     ToolObjectMapType m_toolList;
 
     /// Nom de la tool actual que s'està fent servir
