@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "drawer.h"
+#include "olddrawer.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "logging.h"
@@ -130,7 +130,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_rulerActorCollection->AddItem( m_sideRuler );
 
     //creem el drawer, passant-li com a visor l'objecte this
-    m_drawer = new Drawer( this );
+    m_drawer = new OldDrawer( this );
 }
 
 Q2DViewer::~Q2DViewer()
@@ -1570,7 +1570,7 @@ void Q2DViewer::setMagnificationFactor( double factor )
     }
 }
 
-Drawer *Q2DViewer::getDrawer() const
+OldDrawer *Q2DViewer::getOldDrawer() const
 {
     return m_drawer;
 }

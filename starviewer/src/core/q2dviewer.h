@@ -70,7 +70,7 @@ class Volume;
 class Q2DViewerToolManager;
 class OldTool;
 class VoxelInformationTool;
-class Drawer;
+class OldDrawer;
 
 class Q2DViewer : public QViewer{
 Q_OBJECT
@@ -189,7 +189,7 @@ public:
     vtkImageActor *getImageActor();
 
     ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
-    Drawer* getDrawer() const;
+    OldDrawer* getOldDrawer() const;
 
     /**
      * Calcula la posició del cursor en coordenades de món
@@ -583,7 +583,7 @@ private:
     double m_modalityRange[2];
 
     ///Punter a l'objecte especialista de dibuixat de primitives
-    Drawer *m_drawer;
+    OldDrawer *m_drawer;
 
     /// objectes per a les transformacions en el pipeline d'escala de grisos
     vtkImageMapToWindowLevelColors *m_windowLevelLUTMapper;
