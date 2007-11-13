@@ -101,13 +101,20 @@ void VoxelInformationTool::updateVoxelInformation()
     double wPoint[4];
     int position[2];
 
-    correctPositionOfCaption( position );
-
-    QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
-    xyz[0] = wPoint[0];
-    xyz[1] = wPoint[1];
-    depthAccordingViewAndSlice( xyz );
-    placeText( xyz );
+    if( !m_2DViewer->getCurrentCursorPosition(xyz) )
+    {
+        m_voxelInformationCaption->VisibilityOff();
+    }
+    else
+    {
+        correctPositionOfCaption( position );
+    
+        QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
+        xyz[0] = wPoint[0];
+        xyz[1] = wPoint[1];
+        depthAccordingViewAndSlice( xyz );
+        placeText( xyz );
+    }
     
     m_2DViewer->refresh();
 }
@@ -150,7 +157,7 @@ bool VoxelInformationTool::captionExceedsViewportTopLimit()
 {
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
     int *dimensions = viewportDimensions();
-    double captionHeigth = ((double)dimensions[1]*0.05)+5.;
+    double captionHeigth = ((double)dimensions[1]*0.05);
     
     return ( eventPosition[1]+captionHeigth > dimensions[1] );
 }
@@ -176,6 +183,7 @@ void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPo
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
     int *dimensions = viewportDimensions();
     double captionWidth = ((double)dimensions[0]*0.3)+xSecurityRange;
+    double captionHeight = ((double)dimensions[1]*0.05)+xSecurityRange;
     
     correctPositionInViewPort[0] = eventPosition[0];
     correctPositionInViewPort[1] = eventPosition[1];
@@ -187,7 +195,7 @@ void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPo
     
     if ( captionExceedsViewportTopLimit() )
     {
-        correctPositionInViewPort[1] = eventPosition[1] - 35;
+        correctPositionInViewPort[1] = eventPosition[1] - ( eventPosition[1] + captionHeight - dimensions[1] );
     }
 }
 
