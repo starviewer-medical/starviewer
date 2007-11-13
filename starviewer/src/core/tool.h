@@ -40,6 +40,30 @@ public:
      */
     ToolConfiguration *getConfiguration() const;
 
+    /**
+     * Assigna les dades
+     * @param data dades que assignem a la tool
+     */
+    void setToolData( ToolData *data );
+
+    /**
+     * Ens retorna les dades de la tool
+     * @return Dades de la tool
+     * TODO hauria de ser const o no?
+     */
+    ToolData *getToolData() const;
+
+    /**
+     * Ens determina si aquesta tool té dades compartides o no
+     * @return Cert si té dades compartides, fals altrament
+     * TODO podem implementar de dues maneres aquest mètode.
+     * 1.- Cada classe defineix amb la variable m_hasSharedData si té dades compartides o no
+     * 2.- Definim aquest mètode virtual i cada classe el reimplementa retornant el valor que volem
+     * El mètode 1 sembla millor perquè no cal mantenir tantes línies de codi, encara que és més fàcil de tenir
+     * problemes ja que és més fàcil donar valors a la variable per error o no inicialitzar-la correctament
+     */
+    bool hasSharedData() const;
+
 protected:
     /// Configuracio de la tool
     ToolConfiguration *m_toolConfiguration;
