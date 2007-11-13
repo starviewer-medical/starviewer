@@ -1006,7 +1006,7 @@ void Q2DViewer::updateCamera()
 {
     if( m_viewer->GetInput() )
     {
-        vtkCamera *cam;
+        vtkCamera *camera;
         vtkRenderer *renderer;
         vtkRendererCollection* renderCollection = m_viewer->GetRenderWindow()->GetRenderers();
         int i = 0;
@@ -1017,10 +1017,10 @@ void Q2DViewer::updateCamera()
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
+                camera = renderer->GetActiveCamera();
+                if ( camera )
                 {
-                    cam->SetRoll( -m_rotateFactor*90. + 180. );
+                    camera->SetRoll( -m_rotateFactor*90. + 180. );
                 }
                 i++;
             }
@@ -1032,10 +1032,10 @@ void Q2DViewer::updateCamera()
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
+                camera = renderer->GetActiveCamera();
+                if ( camera )
                 {
-                    cam->SetRoll( -m_rotateFactor*90. -90. );
+                    camera->SetRoll( -m_rotateFactor*90. -90. );
                 }
                 i++;
             }
@@ -1048,10 +1048,10 @@ void Q2DViewer::updateCamera()
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
+                camera = renderer->GetActiveCamera();
+                if ( camera )
                 {
-                    cam->SetRoll( -m_rotateFactor*90. );
+                    camera->SetRoll( -m_rotateFactor*90. );
                 }
                 i++;
             }
@@ -1068,7 +1068,7 @@ void Q2DViewer::updateCamera()
             // Caldria escollir quina és la manera que més convé de fer-ho
             // Alternativa 1)
             // així movem la càmera, però faltaria que la imatge no es mogués de lloc
-            cam->Azimuth( 180 );
+            camera->Azimuth( 180 );
 
             // Alternativa 2)
             // D'aquesta manera només movem l'actor. Per contra, el sistema de coordenades queda "igual" cosa que es reflexa en els rulers que no indiquen les coordenades correctes de la imatge
@@ -1080,14 +1080,14 @@ void Q2DViewer::updateCamera()
             // Alternativa 3) La que ens proposen a la mailing list. Fa el mateix que azimuth
             // una manera d'arreglar això seria mirar la posició respecte el centre i llavors invertir el desplaçament que hi hagi tant sobre les Y com sobre les X
 //             double cameraPosition[3];
-//             cam->GetPosition(cameraPosition);
+//             camera->GetPosition(cameraPosition);
 //             double cameraFocalPoint[3];
-//             cam->GetFocalPoint(cameraFocalPoint);
+//             camera->GetFocalPoint(cameraFocalPoint);
 //             for ( int i = 0; i < 3; ++i )
 //             {
 //                 cameraPosition[i] = 2.0*cameraFocalPoint[i] - cameraPosition[i];
 //             }
-//             cam->SetPosition(cameraPosition);
+//             camera->SetPosition(cameraPosition);
 //             this->getRenderer()->ResetCameraClippingRange();
 //             m_viewer->Render();
             m_applyFlip = false;
@@ -1109,7 +1109,7 @@ void Q2DViewer::resetCamera()
         m_rotateFactor = 0;
         m_applyFlip = false;
         m_isImageFlipped = false;
-        vtkCamera *cam;
+        vtkCamera *camera;
         vtkRenderer *renderer;
         int i = 0;
         switch( m_lastView )
@@ -1119,13 +1119,13 @@ void Q2DViewer::resetCamera()
             while( i < (m_rendererCollection->GetNumberOfItems()) && i <= (m_viewer->GetSliceMax()))
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
+                camera = renderer->GetActiveCamera();
+                if ( camera )
                 {
-                    cam->SetFocalPoint(0,0,0);
-                    cam->SetViewUp(0,-1,0);
-                    cam->SetPosition(0,0,-1);
-                    cam->SetRoll( -m_rotateFactor*90. + 180. );
+                    camera->SetFocalPoint(0,0,0);
+                    camera->SetViewUp(0,-1,0);
+                    camera->SetPosition(0,0,-1);
+                    camera->SetRoll( -m_rotateFactor*90. + 180. );
                     renderer->ResetCamera();
                 }
                 i++;
@@ -1140,13 +1140,13 @@ void Q2DViewer::resetCamera()
             while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
+                camera = renderer->GetActiveCamera();
+                if ( camera )
                 {
-                    cam->SetFocalPoint(0,0,0);
-                    cam->SetPosition(1,0,0); // -1 if medical ?
-                    cam->SetViewUp(0,0,1);
-                    cam->SetRoll( -m_rotateFactor*90. -90. );
+                    camera->SetFocalPoint(0,0,0);
+                    camera->SetPosition(1,0,0); // -1 if medical ?
+                    camera->SetViewUp(0,0,1);
+                    camera->SetRoll( -m_rotateFactor*90. -90. );
                     renderer->ResetCamera();
                 }
                 emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
@@ -1162,13 +1162,13 @@ void Q2DViewer::resetCamera()
             while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-                cam = renderer->GetActiveCamera();
-                if ( cam )
+                camera = renderer->GetActiveCamera();
+                if ( camera )
                 {
-                    cam->SetFocalPoint(0,0,0);
-                    cam->SetPosition(0,-1,0); // 1 if medical ?
-                    cam->SetViewUp(0,0,1);
-                    cam->SetRoll( -m_rotateFactor*90. );
+                    camera->SetFocalPoint(0,0,0);
+                    camera->SetPosition(0,-1,0); // 1 if medical ?
+                    camera->SetViewUp(0,0,1);
+                    camera->SetRoll( -m_rotateFactor*90. );
                     renderer->ResetCamera();
                 }
                 emit rotationDegreesChanged( -m_rotateFactor*90. );
@@ -1463,7 +1463,7 @@ void Q2DViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRight
 
     int *size = this->getRenderer()->GetSize();
     int *rendererOrigin = this->getRenderer()->GetOrigin();
-    vtkCamera *cam = this->getRenderer()->GetActiveCamera();
+    vtkCamera *camera = this->getRenderer()->GetActiveCamera();
 
     double min[2];
     double rbcenter[4];
@@ -1501,8 +1501,8 @@ void Q2DViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRight
     translation[2] = rbcenter[2] - worldWinCenter[2];
 
     double pos[3], fp[3];
-    cam->GetPosition( pos );
-    cam->GetFocalPoint( fp );
+    camera->GetPosition( pos );
+    camera->GetFocalPoint( fp );
 
     pos[0] += translation[0];
     pos[1] += translation[1];
@@ -1511,8 +1511,8 @@ void Q2DViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRight
     fp[1] += translation[1];
     fp[2] += translation[2];
 
-    cam->SetPosition( pos );
-    cam->SetFocalPoint( fp );
+    camera->SetPosition( pos );
+    camera->SetFocalPoint( fp );
 
     // ara cal calcular la width i height en coordenades de display
     double displayTopLeft[3], displayBottomRight[3];
@@ -1524,9 +1524,9 @@ void Q2DViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRight
     //\TODO caldria considerar l'opció d'afegir un marge per si no volem que la regió escollida mantingui una distància amb les vores de la finestra
     // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
     if( size[0] < size[1] )
-        cam->Zoom( size[0] / (float)width );
+        camera->Zoom( size[0] / (float)width );
     else
-        cam->Zoom( size[1] / (float)height );
+        camera->Zoom( size[1] / (float)height );
 
     this->getRenderer()->ResetCameraClippingRange();
     this->refresh();
