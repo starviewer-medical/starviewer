@@ -45,7 +45,6 @@
 #include <vtkProp.h>
 #include <vtkScalarBarActor.h>
 #include <vtkLookupTable.h>
-#include <vtkImageMapToWindowLevelColors.h>
 // desar imatges
 #include <vtkWindowToImageFilter.h>
 #include <vtkPNGWriter.h>
