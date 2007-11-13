@@ -9,14 +9,37 @@
 namespace udg {
 
 Tool::Tool(QObject *parent)
- : QObject(parent)
+ : QObject(parent), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false)
 {
 }
-
 
 Tool::~Tool()
 {
 }
 
+void Tool::setConfiguration( ToolConfiguration *configuration )
+{
+    m_toolConfiguration = configuration;
+}
+
+ToolConfiguration *Tool::getConfiguration() const
+{
+    return m_toolConfiguration;
+}
+
+void Tool::setToolData( ToolData *data )
+{
+    m_toolData = data;
+}
+
+ToolData *Tool::getToolData() const
+{
+    return m_toolData;
+}
+
+bool Tool::hasSharedData() const
+{
+    return m_hasSharedData;
+}
 
 }
