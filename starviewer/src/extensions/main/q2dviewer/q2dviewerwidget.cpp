@@ -39,7 +39,7 @@ void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
-    m_2DView->render();
+    changeViewToAxial();
 }
 
 void Q2DViewerWidget::mousePressEvent( QMouseEvent * event )
@@ -67,7 +67,6 @@ void Q2DViewerWidget::changeViewToAxial()
     m_slider->setMaximum( extent[5] / phases);
     m_viewText->setText( tr("XY : Axial") );
     m_2DView->setViewToAxial();
-    m_2DView->render();
 
     INFO_LOG("Visor per defecte: Canviem a vista axial");
 }
