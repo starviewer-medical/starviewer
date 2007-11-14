@@ -130,6 +130,8 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new OldDrawer( this );
+
+    connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
 }
 
 Q2DViewer::~Q2DViewer()
@@ -763,7 +765,6 @@ void Q2DViewer::disableTools()
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
-    updateRulers();
     m_voxelInformationTool->handleEvent(event);
     switch( event )
     {
@@ -890,7 +891,6 @@ void Q2DViewer::setInput( Volume* volume )
         m_blender->Delete();
         m_blender = 0;
     }
-    updateRulers();
     updateScalarBar();
     updatePatientAnnotationInformation();
     updateGrid();
@@ -898,7 +898,7 @@ void Q2DViewer::setInput( Volume* volume )
     setViewToAxial();
 }
 
-vtkInteractorStyleImage *Q2DViewer::getInteractorStyle()
+vtkInteractorStyle/*Image*/ *Q2DViewer::getInteractorStyle()
 {
     if( m_viewer )
         return m_viewer->GetInteractorStyle();
@@ -1092,8 +1092,8 @@ void Q2DViewer::updateCamera()
 //             m_viewer->Render();
             m_applyFlip = false;
         }
+        emit cameraChanged();
         mapOrientationStringToAnnotation();
-        this->updateRulers();
         this->refresh();
     }
     else
@@ -1190,8 +1190,8 @@ void Q2DViewer::resetCamera()
         else // posem la llesca del mig
             setSlice( m_viewer->GetSliceRange()[1]/2 );
 
+        emit cameraChanged();
         mapOrientationStringToAnnotation();
-        updateRulers();
         this->updateDisplayExtent();
         this->refresh();
     }
@@ -1317,6 +1317,7 @@ void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
     // l'única info que cal actualitzar és la mida de finestra/viewport
     updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
+    updateRulers();
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
@@ -2321,8 +2322,6 @@ void Q2DViewer::updateGrid()
     if( m_viewer->GetInput() )
     {
         this->setSlice( m_currentSlice );
-        // Actualitzar els rulers
-        updateRulers();
     }
     else
         updateViewports(); // Redistribuir viewports TODO perquè si no tinc input he de fer un updateViewports?
