@@ -898,7 +898,7 @@ void Q2DViewer::setInput( Volume* volume )
     setViewToAxial();
 }
 
-vtkInteractorStyle/*Image*/ *Q2DViewer::getInteractorStyle()
+vtkInteractorStyle *Q2DViewer::getInteractorStyle()
 {
     if( m_viewer )
         return m_viewer->GetInteractorStyle();
