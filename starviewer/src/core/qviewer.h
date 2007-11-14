@@ -17,6 +17,7 @@ class QVTKWidget;
 class vtkRenderer;
 class vtkRenderWindow;
 class vtkRenderWindowInteractor;
+class vtkInteractorStyle;
 class vtkWindowToImageFilter;
 class vtkEventQtSlotConnect;
 
@@ -43,6 +44,9 @@ public:
 
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor *getInteractor();
+
+    /// Retorna l'interactor style
+    virtual vtkInteractorStyle *getInteractorStyle();
 
     /// Retorna el renderer
     virtual vtkRenderer *getRenderer() = 0;
@@ -71,6 +75,12 @@ public:
 
     /// Refresca l'escena amb el RenderWindowInteractor. És sobretot per haver d'escriure menys.
     void refresh();
+
+    /**
+     * Fa zoom sobre l'escena amb el factor donat
+     * @param factor Factor de zoom que volem aplicar a la càmera
+     */
+    void zoom( double factor );
 
 public slots:
     /// Gestiona els events que rep de la finestra
@@ -113,6 +123,9 @@ signals:
 
     /// Signal que s'emet quan s'escull una altra serie per l'input
     void volumeChanged( Volume * );
+
+    /// s'emet quan els paràmetres de la càmera han canviat
+    void cameraChanged();
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);

@@ -9,18 +9,16 @@
 
 #include "oldtool.h"
 
-class vtkInteractorStyle;
-
 namespace udg {
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-
+class QViewer;
 class Q2DViewer;
 class Q3DViewer;
 class Q3DMPRViewer;
 
+/**
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+*/
 class ZoomTool : public OldTool
 {
 Q_OBJECT
@@ -35,8 +33,8 @@ public:
     void handleEvent( unsigned long eventID );
 
 private:
-    /// interactor style que omplirem en el constructor depenent del visor
-    vtkInteractorStyle *m_interactorStyle;
+    /// Viewer sobre el qual aplicarem el zoom
+    QViewer *m_viewer;
 
 /// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
@@ -48,9 +46,6 @@ private slots:
 
     /// Atura l'estat de zoom
     void endZoom();
-
-    /// Augmenta o disminueix el zoom, mètode per roda del mouse o combinació de tecles CTRL++ o CTRL+-, per exemple
-    void zoom( double factor );
 };
 
 }

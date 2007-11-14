@@ -55,6 +55,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
+    this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
     m_renderFunction = RayCasting; // per defecte
@@ -108,11 +109,6 @@ void Q3DViewer::disableTools()
 vtkRenderer *Q3DViewer::getRenderer()
 {
     return m_renderer;
-}
-
-vtkInteractorStyle *Q3DViewer::getInteractorStyle()
-{
-    return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
 }
 
 void Q3DViewer::setRenderFunction(RenderFunction function)

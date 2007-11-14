@@ -26,7 +26,7 @@ class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkCoordinate;
 class vtkScalarBarActor;
-class vtkInteractorStyleImage;
+class vtkInteractorStyle;
 class vtkImageBlend;
 class vtkImageActor;
 
@@ -92,8 +92,7 @@ public:
     virtual vtkRenderer *getRenderer();
     virtual void setInput( Volume* volume );
 
-    /// Retorna l'interactor style
-    vtkInteractorStyleImage *getInteractorStyle();
+    vtkInteractorStyle *getInteractorStyle();
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
     void setView( ViewType view );
@@ -357,9 +356,6 @@ private:
     /// crea els indicadors d'escala
     void createRulers();
 
-    /// Actualitza els rulers
-    void updateRulers();
-
     /// Crea la barra de valors
     vtkScalarBarActor * createScalarBar();
 
@@ -452,6 +448,9 @@ private:
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
     void updateCamera();
+
+    /// Actualitza els rulers
+    void updateRulers();
 
 protected:
     /// Connector d'events vtk i slots qt

@@ -47,9 +47,6 @@ public:
 
     virtual vtkRenderer *getRenderer();
 
-    /// Retorna el vtkInteractorStyle que té associat
-    vtkInteractorStyle *getInteractorStyle();
-
 public slots:
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);

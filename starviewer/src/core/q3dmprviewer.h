@@ -43,9 +43,6 @@ public:
 
     virtual vtkRenderer *getRenderer();
 
-    /// Retorna el vtkInteractorStyle que té associat
-    vtkInteractorStyle *getInteractorStyle();
-
     /// Retorna el volum transformat segons el reslice de cada vista
     Volume *getAxialResliceOutput();
     Volume *getSagitalResliceOutput();

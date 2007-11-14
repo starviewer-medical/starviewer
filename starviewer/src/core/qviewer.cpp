@@ -28,6 +28,9 @@
 #include <vtkTIFFWriter.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkEventQtSlotConnect.h>
+// necessari pel zoom
+#include <vtkInteractorStyle.h>
+#include <vtkCamera.h>
 
 namespace udg {
 
@@ -66,6 +69,11 @@ QViewer::~QViewer()
 vtkRenderWindowInteractor *QViewer::getInteractor()
 {
     return m_vtkWidget->GetRenderWindow()->GetInteractor();
+}
+
+vtkInteractorStyle *QViewer::getInteractorStyle()
+{
+    return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
 }
 
 vtkRenderWindow *QViewer::getRenderWindow()
@@ -170,6 +178,39 @@ bool QViewer::saveGrabbedViews( QString baseName , FileType extension )
 void QViewer::refresh()
 {
     this->getInteractor()->Render();
+}
+
+void QViewer::zoom( double factor )
+{
+    // TODO potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
+    vtkRenderer *renderer = this->getInteractor()->GetInteractorStyle()->GetCurrentRenderer();
+    if( renderer )
+    {
+        // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
+        vtkCamera *camera = renderer->GetActiveCamera();
+        if ( camera->GetParallelProjection() )
+        {
+            camera->SetParallelScale(camera->GetParallelScale() / factor );
+        }
+        else
+        {
+            camera->Dolly(factor);
+            if( vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() )->GetAutoAdjustCameraClippingRange() )
+            {
+                // TODO en principi sempre ens interessarà fer això? ens podriem enstalviar l'if??
+                renderer->ResetCameraClippingRange();
+            }
+        }
+        if ( this->getInteractor()->GetLightFollowCamera() )
+        {
+            renderer->UpdateLightsGeometryToFollowCamera();
+        }
+
+        emit cameraChanged();
+        this->refresh();
+    }
+    else
+        DEBUG_LOG( "::zoom(double factor): El renderer és NUL!" );
 }
 
 void QViewer::grabCurrentView()
