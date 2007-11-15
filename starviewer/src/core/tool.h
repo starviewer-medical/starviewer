@@ -15,6 +15,7 @@ namespace udg {
 
 class ToolConfiguration;
 class ToolData;
+class QViewer;
 
 /**
 Classe base per a totes les tools
@@ -25,7 +26,7 @@ class Tool : public QObject
 {
 Q_OBJECT
 public:
-    Tool(QObject *parent = 0);
+    Tool( QViewer *viewer, QObject *parent = 0 );
     ~Tool();
 
     /**
@@ -80,6 +81,9 @@ public:
     virtual void handleEvent( unsigned long eventID ) = 0;
 
 protected:
+    /// Viewer sobre el que s'executa la tool
+    QViewer *m_viewer;
+
     /// Configuracio de la tool
     ToolConfiguration *m_toolConfiguration;
 
