@@ -7,6 +7,7 @@
 #include "qviewer.h"
 #include "volume.h"
 #include "series.h"
+#include "toolproxy.h"
 #include "patientbrowsermenu.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
@@ -79,6 +80,11 @@ vtkInteractorStyle *QViewer::getInteractorStyle()
 vtkRenderWindow *QViewer::getRenderWindow()
 {
     return m_vtkWidget->GetRenderWindow();
+}
+
+ToolProxy *QViewer::getToolProxy() const
+{
+    return m_toolProxy;
 }
 
 void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )

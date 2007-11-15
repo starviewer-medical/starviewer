@@ -32,6 +32,7 @@ Classe base per a totes les finestres de visualització
 // Fordward declarations
 class Volume;
 class Series;
+class ToolProxy;
 
 class QViewer : public QWidget{
 Q_OBJECT
@@ -59,6 +60,12 @@ public:
 
     /// retorna el vtkRenderWindow
     vtkRenderWindow *getRenderWindow();
+
+    /**
+     * Ens retorna el ToolProxy del viewer
+     * @return ToolProxy del viewer
+     */
+    ToolProxy *getToolProxy() const;
 
     /// Passa coordenades de display a coordenades de món i viceversa \TODO aquest metode haurioa de ser virtual al pare
     static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] );
@@ -153,6 +160,9 @@ protected:
 
     /// indica si el menú de contexte està actiu o no. Per defecte sempre està actiu
     bool m_contextMenuActive;
+
+    /// ToolProxy
+    ToolProxy *m_toolProxy;
 };
 
 };  //  end  namespace udg {
