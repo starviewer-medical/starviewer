@@ -15,6 +15,8 @@
 #include "logging.h"
 #include "seedtool.h"
 
+#include "q2dviewer.h"
+
 namespace udg {
 
 Q2DViewerToolManager::Q2DViewerToolManager(QObject *parent)
