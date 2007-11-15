@@ -50,7 +50,7 @@ HEADERS += extensionfactory.h \
            windowleveltool.h \
            toolsactionfactory.h \
            seedtool.h \
-           zoomtool.h \
+           oldzoomtool.h \
            q3dviewertoolmanager.h \
            translatetool.h \
            q3dmprviewertoolmanager.h \
@@ -148,7 +148,7 @@ SOURCES += extensionmediator.cpp \
            windowleveltool.cpp \
            toolsactionfactory.cpp \
            seedtool.cpp \
-           zoomtool.cpp \
+           oldzoomtool.cpp \
            q3dviewertoolmanager.cpp \
            translatetool.cpp \
            q3dmprviewertoolmanager.cpp \

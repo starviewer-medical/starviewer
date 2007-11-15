@@ -7,7 +7,7 @@
 #include "q2dviewertoolmanager.h"
 #include "slicing2dtool.h"
 #include "windowleveltool.h"
-#include "zoomtool.h"
+#include "oldzoomtool.h"
 #include "translatetool.h"
 #include "screenshottool.h"
 #include "distancetool.h"
@@ -52,7 +52,7 @@ void Q2DViewerToolManager::initToolRegistration()
     m_toolList.clear();
     m_toolList["SlicingTool"] = new Slicing2DTool( m_viewer );
     m_toolList["WindowLevelTool"] = new WindowLevelTool( m_viewer );
-    m_toolList["ZoomTool"] = new ZoomTool( m_viewer );
+    m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new TranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
     m_toolList["SeedTool"] = new SeedTool( m_viewer );
