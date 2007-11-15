@@ -9,7 +9,7 @@ writeIncludes()
     for include in `grep -Ir InstallExtension ../extensions/$1/*|grep -v .svn|grep -v \~|cut -d: -f1|grep .h$`
     do
         extensionName=`expr $include : '.*/\(.*\)/.*\..*' '|' $include`
-        n=`grep -E "$extensionName( )*(\\\\\){0,1}$" ../extensions.inc|wc -l`
+        n=`grep -E " $extensionName( )*(\\\\\){0,1}$" ../extensions.inc|grep -v "#"|wc -l`
         if [ "$n" -gt "0" ]
         then
             echo "#include \"$include\"">> extensions.h
@@ -22,7 +22,7 @@ writeInitResources()
     for resource in `grep -Ir RESOURCES ../extensions/$1/*|grep -v .svn|grep -v \~|grep .pro|cut -d= -f2`
     do
         extensionName=`expr $resource : '\(.*\).qrc' '|' $resource`
-        n=`grep -E "$extensionName( )*(\\\\\){0,1}$" ../extensions.inc|wc -l`
+        n=`grep -E " $extensionName( )*(\\\\\){0,1}$" ../extensions.inc|grep -v "#"|wc -l`
         if [ "$n" -gt "0" ]
         then
             resourceName=${resource%.*}
