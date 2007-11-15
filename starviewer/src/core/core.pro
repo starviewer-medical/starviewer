@@ -112,7 +112,7 @@ HEADERS += extensionfactory.h \
            orderimagesfillerstep.h \
            roitooldata.h \
            ellipserepresentation.h  \
-           toolfactory.h \
+           toolregistry.h \
            toolmanager.h \
            toolconfiguration.h \
            tool.h \
@@ -209,7 +209,7 @@ SOURCES += extensionmediator.cpp \
            orderimagesfillerstep.cpp \
            roitooldata.cpp \
            ellipserepresentation.cpp  \
-           toolfactory.cpp \
+           toolregistry.cpp \
            toolmanager.cpp \
            toolconfiguration.cpp \
            tool.cpp \

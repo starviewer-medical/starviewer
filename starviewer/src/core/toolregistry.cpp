@@ -4,28 +4,17 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGTOOLFACTORY_H
-#define UDGTOOLFACTORY_H
-
-#include <QObject>
+#include "toolregistry.h"
 
 namespace udg {
 
-/**
-Factory de Tools i elements associats
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class ToolFactory : public QObject
+ToolRegistry::ToolRegistry(QObject *parent)
+ : QObject(parent)
 {
-Q_OBJECT
-public:
-    ToolFactory(QObject *parent = 0);
-
-    ~ToolFactory();
-
-};
-
 }
 
-#endif
+ToolRegistry::~ToolRegistry()
+{
+}
+
+}
