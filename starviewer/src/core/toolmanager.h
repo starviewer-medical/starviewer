@@ -8,8 +8,18 @@
 #define UDGTOOLMANAGER_H
 
 #include <QObject>
+#include <QMultiMap>
+#include <QPair>
+
+class QAction;
+class QSignalMapper;
+class QActionGroup;
 
 namespace udg {
+
+class QViewer;
+class ToolConfiguration;
+class ToolRegistry;
 
 /**
 Manager de Tools que tindrem per cada extensio, Aquest s'encarregara de determinar les tools i les configuracions que suporten els visualitzadors d'una determinada extensio
@@ -24,6 +34,71 @@ public:
 
     ~ToolManager();
 
+    /**
+     * Donat un viewer, li assignem la llista de tools que suporta
+     * @param viewer El viewer al que volem assignar les tools suportades
+     * @param toolsList Llista de noms de tools que li volem assignar
+     */
+    void setViewerTools( QViewer *viewer, const QStringList &toolsList );
+
+    /**
+     * Donat un viewer, li assignem el parell tool-configuració.
+     * Aquesta crida la farem servir quan volguem donar una configuració per defecte
+     * diferent de la que proporciona la tool
+     * @param viewer
+     * @param toolName
+     * @param configuration
+     */
+    void setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration );
+
+    /**
+     * Afegim una llista de tools dins d'un grup exclusiu.
+     * Les tools dins d'un grup, no poden estar actives alhora.
+     * Quan s'activa una dins d'un grup, la resta es desactiven.
+     * @param groupName Nom del grup on volem posar les tools
+     * @param tools Llista de tools que volem dins del grup
+     */
+    void addExclusiveToolsGroup( const QString &groupName, const QStringList &tools );
+
+public slots:
+    /**
+     * Activa/Desactiva la tool especificada en tots els viewers registrats
+     * @param toolName Nom de la tool a activar/desactivar
+     */
+    void activateTool( const QString &toolName );
+    void deactivateTool( const QString &toolName );
+
+private slots:
+    /**
+     * Quan es dispara l'acció d'una tool, aquest slot la rep i a partir del seu nom
+     * esbrina si l'acció ha estat d'activar o desactivar la tool (isChecked())
+     * En funció d'això activarà o desactivarà la tool
+     * @param toolName Nom de la tool disparada
+     */
+    void triggeredToolAction( const QString &toolName );
+
+private:
+    /**
+     * Obtenim l'acció que defineix una tool a través del ToolRegistry
+     * @param toolName Nom de la tool de la qual volem l'acció
+     * @return QAction de la tool demanada
+     */
+    QAction *getToolAction( const QString &toolName );
+
+private:
+    /// Registre que ens proporcionarà tools i accions associades
+    ToolRegistry *m_toolRegistry;
+
+    /// Mapa en el que per cada nom de tool (clau), associem el viewer i la configuració que li correspon
+    /// Una mateixa tool pot tenir més d'un parell <QViewer *,ToolConfiguration *>, és a dir, la mateixa tool pot
+    /// estar en diferents viewers amb diverses configuracions
+    QMultiMap< QString, QPair<QViewer *,ToolConfiguration *> > m_toolViewerMap;
+
+    /// Signal mapper encarregat de mapejar les senyals de les accions de les tools
+    QSignalMapper *m_toolsActionSignalMapper;
+
+    /// Mapa que associa el nom del grup amb les accions agrupades de les tools exclusives
+    QMap<QString, QActionGroup *> m_toolsGroups;
 };
 
 }
