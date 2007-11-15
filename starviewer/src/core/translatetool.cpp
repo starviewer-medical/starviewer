@@ -5,17 +5,16 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "translatetool.h"
+#include "logging.h"
 #include "q2dviewer.h"
 #include "q3dviewer.h"
 #include "q3dmprviewer.h"
-#include <vtkInteractorStyleImage.h>
+// vtk
 #include <vtkInteractorStyle.h>
-#include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
-
-#include "logging.h"
+#include <vtkCommand.h>
 
 namespace udg {
 
