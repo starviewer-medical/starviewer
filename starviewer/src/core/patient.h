@@ -136,8 +136,19 @@ private:
      */
     void patientFusionLogMessage( const Patient &patient );
 
-    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules
+    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules.
+    /// També elimina els números que contingui en nom del pacient.
     QString clearPatientName( QString patientName );
+
+    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules, 
+    /// però sense eliminar els números que contingui el nom, ja que poden haver pacients anonimitzats i diferenciats 
+    /// per un número, com per exemple VOLUNTARI1, VOLUNTARI2 i no són el mateix pacient, en canvi si treiem els números
+    ///els detectarà com a l mateix pacient.
+    QString clearStrangeSymbols( QString patientName );
+
+    /// Ens diu si el nom del pacient conté números identificadors. Considerem números entre 0-9999, és un rang 
+    /// suficientment gran.
+    bool containtsNumericalSymbols( QString patientName );
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.
