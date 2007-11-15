@@ -255,9 +255,20 @@ Patient Patient::operator -=( const Patient &patient )
     DEBUG_LOG("Mètode per implementar");
 }
 
+QString Patient::clearStrangeSymbols( QString patientName )
+{
+    return patientName.toUpper().replace(QRegExp("[^A-Z ^\\d]"), " ").trimmed();
+}
+
 QString Patient::clearPatientName( QString patientName )
 {
     return patientName.toUpper().replace(QRegExp("[^A-Z]"), " ").trimmed();
+}
+
+bool Patient::containtsNumericalSymbols( QString patientName )
+{
+     QRegExp rx("\\d\\d?\\d?\\d?");     
+    return ( rx.indexIn( patientName ) != -1 ); 
 }
 
 Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
@@ -267,10 +278,26 @@ Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
     {
         return SamePatients;
     }
+    
+    
     //Pre-tractament sobre el nom del pacient per treure caràcters extranys
-    QString nameOfThis = clearPatientName( this->getFullName() );
-    QString nameOfParameter = clearPatientName( patient->getFullName() );
+    QString nameOfThis = clearStrangeSymbols( this->getFullName() );
+    QString nameOfParameter = clearStrangeSymbols( patient->getFullName() );
 
+    //tractament especial en el cas de que els noms continguin números
+    if ( containtsNumericalSymbols( nameOfThis ) && containtsNumericalSymbols( nameOfParameter ) )
+    {
+        if ( nameOfThis == nameOfParameter )
+        {
+            return SamePatients;
+        }
+        else
+        {
+            return DifferentPatients;
+        }
+    }
+    
+    //si passem del condicional anterior és que algun o cap dels noms tenia dades numèriques; pertant fem el tractament normal.
     //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
     if ( nameOfThis == nameOfParameter )
     {
