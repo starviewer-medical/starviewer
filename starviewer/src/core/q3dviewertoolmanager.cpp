@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q3dviewertoolmanager.h"
-#include "zoomtool.h"
+#include "oldzoomtool.h"
 #include "translatetool.h"
 #include "screenshottool.h"
 #include "rotate3dtool.h"
@@ -45,7 +45,7 @@ void Q3DViewerToolManager::initToolRegistration()
         DEBUG_LOG("ERROR:Inicialitzant tools amb un viewer NUL");
 
     m_toolList.clear();
-    m_toolList["ZoomTool"] = new ZoomTool( m_viewer );
+    m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new TranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
     m_toolList["3DRotationTool"] = new Rotate3DTool( m_viewer );
