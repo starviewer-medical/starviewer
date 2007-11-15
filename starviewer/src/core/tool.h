@@ -64,6 +64,21 @@ public:
      */
     bool hasSharedData() const;
 
+    /**
+    * Retorna una QAction per la tool
+    **/
+    static QAction *getAction();
+
+    /**
+    * Retorna el nom de la tool
+    **/
+    QString toolName();
+
+    /**
+    * Decideix què s'ha de fer per cada event rebut
+    **/
+    virtual void handleEvent( unsigned long eventID ) = 0;
+
 protected:
     /// Configuracio de la tool
     ToolConfiguration *m_toolConfiguration;
