@@ -36,19 +36,17 @@ I18NPROJECTS_QMFILES += ../core/*.qm ../interface/*.qm ../inputoutput/*.qm
 
 
 i18n_update.commands = @for dir in $$I18NPROJECTS; do \
-                             pushd .; \
                              cd \$$dir; \
                              $$[QT_INSTALL_PREFIX]/bin/lupdate -noobsolete *.pro; \
-                             popd; \
+                             cd -; \
                          done
 
 i18n_release.target = i18n_release
 i18n_release.depends = $$I18NPROJECTS_TSFILES
 i18n_release.commands = @for dir in $$I18NPROJECTS; do \
-                             pushd .; \
                              cd \$$dir; \
                              $$[QT_INSTALL_PREFIX]/bin/lrelease *.pro; \
-                             popd; \
+                             cd -; \
                          done \
                          && touch $$i18n_release.target
 
