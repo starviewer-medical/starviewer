@@ -9,8 +9,8 @@
 
 namespace udg {
 
-Tool::Tool(QObject *parent)
- : QObject(parent), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false)
+Tool::Tool( QViewer *viewer, QObject *parent )
+ : QObject(parent), m_viewer(viewer), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false)
 {
 }
 
@@ -52,8 +52,5 @@ QString Tool::toolName()
 {
     return m_toolName;
 }
-
-
-
 
 }
