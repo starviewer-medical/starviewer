@@ -12,9 +12,6 @@
 namespace udg {
 
 class QViewer;
-class Q2DViewer;
-class Q3DViewer;
-class Q3DMPRViewer;
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -24,9 +21,7 @@ class ZoomTool : public OldTool
 Q_OBJECT
 public:
     enum { NONE , ZOOMING };
-    ZoomTool( Q2DViewer *viewer, QObject *parent = 0 );
-    ZoomTool( Q3DViewer *viewer, QObject *parent = 0 );
-    ZoomTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
+    ZoomTool( QViewer *viewer, QObject *parent = 0 );
 
     ~ZoomTool();
 

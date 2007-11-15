@@ -10,6 +10,7 @@
 #include "screenshottool.h"
 #include "rotate3dtool.h"
 #include "logging.h"
+#include "q3dviewer.h"
 
 namespace udg {
 

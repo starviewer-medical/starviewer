@@ -5,9 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "zoomtool.h"
-#include "q2dviewer.h"
-#include "q3dviewer.h"
-#include "q3dmprviewer.h"
+#include "qviewer.h"
 #include "logging.h"
 // vtk
 #include <vtkInteractorStyle.h>
@@ -18,19 +16,7 @@
 
 namespace udg {
 
-ZoomTool::ZoomTool( Q2DViewer *viewer, QObject *parent )
-{
-    m_state = NONE;
-    m_viewer = viewer;
-}
-
-ZoomTool::ZoomTool( Q3DViewer *viewer, QObject *parent )
-{
-    m_state = NONE;
-    m_viewer = viewer;
-}
-
-ZoomTool::ZoomTool( Q3DMPRViewer *viewer, QObject *parent )
+ZoomTool::ZoomTool( QViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_viewer = viewer;
