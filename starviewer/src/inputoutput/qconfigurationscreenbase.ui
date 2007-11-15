@@ -999,12 +999,12 @@
               <widget class="QLineEdit" name="m_textMaximumDaysNotViewed" >
                <property name="maximumSize" >
                 <size>
-                 <width>30</width>
+                 <width>60</width>
                  <height>16777215</height>
                 </size>
                </property>
                <property name="inputMask" >
-                <string>99; </string>
+                <string>9999; </string>
                </property>
                <property name="alignment" >
                 <set>Qt::AlignRight</set>
