@@ -55,62 +55,51 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "WindowLevelTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("Window Level") );
         toolAction->setStatusTip( tr("Enable/Disable Window Level tool") );
         toolAction->setIcon( QIcon(":/images/windowLevel.png") );
     }
     else if( toolName == "ZoomTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("Zoom") );
         toolAction->setStatusTip( tr("Enable/Disable Zoom tool") );
         toolAction->setIcon( QIcon(":/images/zoom.png") );
     }
     else if( toolName == "TranslateTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("Move") );
         toolAction->setStatusTip( tr("Enable/Disable Move tool") );
         toolAction->setIcon( QIcon(":/images/move.png") );
     }
     else if( toolName == "SeedTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("Seed") );
         toolAction->setStatusTip( tr("Put Seed tool") );
+        toolAction->setIcon( QIcon(":/images/seed.png") );
     }
     else if( toolName == "ScreenShotTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("Screen Shot") );
         toolAction->setStatusTip( tr("Enable/Disable Screen shot tool") );
         toolAction->setIcon( QIcon(":/images/photo.png") );
-
     }
     else if( toolName == "3DRotationTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("3D Rotation") );
         toolAction->setStatusTip( tr("Enable/Disable 3D Rotation tool") );
         toolAction->setIcon( QIcon(":/images/rotate3d.png") );
-
     }
     else if( toolName == "DistanceTool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("Distances") );
         toolAction->setStatusTip( tr("Enable/Disable Distances tool") );
         toolAction->setIcon( QIcon(":/images/distance.png") );
-
     }
     else if( toolName == "ROITool" )
     {
-        toolAction = new QAction( 0 );
         toolAction->setText( tr("ROI's") );
         toolAction->setStatusTip( tr("Enable/Disable ROI tool") );
         toolAction->setIcon( QIcon(":/images/roi.png") );
-
     }
     else
     {
