@@ -29,7 +29,6 @@ Les seves tasques són:
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-
 class ToolProxy : public QObject
 {
 Q_OBJECT
@@ -38,30 +37,36 @@ public:
 
     ~ToolProxy();
 
-    //mètodes
-
-    ///addTool: ens permet afegir una tool.
+    /**
+     * Afegeix una tool al registre intern. Aquesta tool escoltarà els events
+     * que se li comuniquin mitjançant forward event
+     * @param tool
+     */
     void addTool( Tool *tool );
-    
-    ///removeTool: ens permet eliminar una tool a partir del nom d'aquesta. Ens retorna true si s'ha trobat l'element i s'ha pogut eliminar, 
-    ///            false en cas contrari.
-    bool removeTool( QString toolName );
-    
-    ///removeAllTools: ens permet eliminar totes les tools que té guardades.
-    void removeAllTools();
-    
-public slots: 
 
+    /**
+     * Donat un nom de tool, l'elimina del registre.
+     * @param toolName Nom de la tool a eliminar del proxy
+     * @return Cert si la tenia, fals altrament
+     */
+    bool removeTool( QString toolName );
+
+    /**
+     * Buida i elimina totes les tools del proxy
+     */
+    void removeAllTools();
+
+public slots:
     ///Avalua l'event que ha rebut del visualitzador al que està associat i l'envia a les tools actives
     void forwardEvent( unsigned long eventID );
-    
+
 private:
      /// Tipus definit:  map on hi guardem les tools associades a una clau determinada pel nom de la tool.
      ///                 en principi no es poden tenir dues tools amb el mateix nom, per tant podem fer-ho
      ///                 amb un map, no cal un multimap.
-     
+
     typedef QMap< QString, Tool* > ToolsMap;
-    
+
     ///atribut de tipus ToolsMap
     ToolsMap m_toolsMap;
 };
