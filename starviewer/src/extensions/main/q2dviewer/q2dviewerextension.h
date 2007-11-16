@@ -22,6 +22,7 @@ class ToolsActionFactory;
 class Q2DViewerKeyImageNoteAttacher;
 class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
+class ToolManager;
 //Estructura pacient
 class Patient;
 //Visualitzador
@@ -108,6 +109,11 @@ private:
     Q2DViewerWidget *getNewQ2DViewerWidget();
 
     void createProgressDialog();
+
+    /**
+     * Inicialitza les tools que tindrà l'extensió
+     */
+    void initializeTools();
 
 private slots:
     /// activem o desactivem el presentation state
@@ -208,6 +214,9 @@ private:
     TableMenu *m_sliceTableGrid;
 
     QProgressDialog *m_progressDialog;
+
+    /// ToolManager per configurar l'entorn de tools de l'extensió
+    ToolManager *m_toolManager;
 
 private:
 
