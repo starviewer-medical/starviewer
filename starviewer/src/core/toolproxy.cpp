@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "toolproxy.h"
 #include "tool.h"
-
 #include <QString>
 #include <QList>
 
@@ -28,10 +27,15 @@ void ToolProxy::addTool( Tool *tool )
 
 bool ToolProxy::removeTool( QString toolName )
 {
-    // TODO potser caldria fer un delete de la tool, és a dir toolproxy és el màxim responsable de la tool
-    // per tant caldria que alliberés l'espai de memòria també
-    int numberRemoved = m_toolsMap.remove( toolName );
-    return numberRemoved > 0;
+    bool ok = false;
+    if( m_toolsMap.contains( toolName ) )
+    {
+        // l'eliminem del mapa i alliberem la seva memòria
+        Tool *tool = m_toolsMap.take( toolName );
+        delete tool;
+        ok = true;
+    }
+    return ok;
 }
 
 void ToolProxy::removeAllTools()
