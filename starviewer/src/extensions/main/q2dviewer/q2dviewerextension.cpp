@@ -16,6 +16,7 @@
 #include "tablemenu.h"
 #include "patient.h"
 #include "study.h"
+#include "toolmanager.h"
 #include <QAction>
 #include <QSettings>
 #include <QPoint>
@@ -59,6 +60,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
+    initializeTools();
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -258,7 +260,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     }
     m_windowLevelComboBox->setCurrentIndex( 0 );
 
-    INFO_LOG("Q2DViewerExtension: Donem l'input principal")
+    INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 }
 
 void Q2DViewerExtension::changeViewToAxial()
@@ -661,6 +663,15 @@ void Q2DViewerExtension::createProgressDialog()
     m_progressDialog->setWindowTitle( tr("Loading") );
     m_progressDialog->setLabelText( tr("Loading data, please wait...") );
     m_progressDialog->setCancelButton( 0 );
+}
+
+void Q2DViewerExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_newZoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_toolManager->setViewerTool( m_selectedViewer->getViewer(), "ZoomTool" );
 }
 
 void Q2DViewerExtension::showRows( int rows )
