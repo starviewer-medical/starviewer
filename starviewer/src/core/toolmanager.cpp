@@ -25,7 +25,7 @@ ToolManager::ToolManager(QObject *parent)
     // el "new" s'haurà de canviar per un ::instance()
     m_toolRegistry = new ToolRegistry(this);
     m_toolsActionSignalMapper = new QSignalMapper(this);
-    connect( m_toolsActionSignalMapper, SIGNAL( mapped(const QString &) ), SIGNAL( triggeredToolAction(const QString &) ) );
+    connect( m_toolsActionSignalMapper, SIGNAL( mapped(const QString &) ), SLOT( triggeredToolAction(const QString &) ) );
 }
 
 ToolManager::~ToolManager()
@@ -133,7 +133,7 @@ QAction *ToolManager::getToolAction( const QString &toolName )
 {
     QAction *toolAction = m_toolRegistry->getToolAction( toolName );
     m_toolsActionSignalMapper->setMapping( toolAction, toolName );
-    connect( toolAction , SIGNAL( toggled() ) , m_toolsActionSignalMapper , SLOT( map() ) );
+    connect( toolAction , SIGNAL( triggered() ) , m_toolsActionSignalMapper , SLOT( map() ) );
     return toolAction;
 }
 
