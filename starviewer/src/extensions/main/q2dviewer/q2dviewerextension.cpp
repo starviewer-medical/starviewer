@@ -26,9 +26,6 @@
 #include "keyimagenote.h"
 #include "q2dviewerkeyimagenoteattacher.h"
 #include "q2dviewerpresentationstateattacher.h"
-// VTK
-#include <vtkRenderer.h>
-#include "slicing2dtool.h"
 
 namespace udg {
 
