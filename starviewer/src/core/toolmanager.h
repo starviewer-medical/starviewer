@@ -49,7 +49,14 @@ public:
      * @param toolName
      * @param configuration
      */
-    void setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration );
+    void setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration = 0 );
+
+    /**
+     * Obtenim l'acció que defineix una tool a través del ToolRegistry
+     * @param toolName Nom de la tool de la qual volem l'acció
+     * @return QAction de la tool demanada
+     */
+    QAction *getToolAction( const QString &toolName );
 
     /**
      * Afegim una llista de tools dins d'un grup exclusiu.
@@ -76,14 +83,6 @@ private slots:
      * @param toolName Nom de la tool disparada
      */
     void triggeredToolAction( const QString &toolName );
-
-private:
-    /**
-     * Obtenim l'acció que defineix una tool a través del ToolRegistry
-     * @param toolName Nom de la tool de la qual volem l'acció
-     * @return QAction de la tool demanada
-     */
-    QAction *getToolAction( const QString &toolName );
 
 private:
     /// Registre que ens proporcionarà tools i accions associades
