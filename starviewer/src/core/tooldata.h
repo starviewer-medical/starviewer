@@ -24,6 +24,9 @@ public:
 
     ~ToolData();
 
+signals:
+    /// senyal que indica que les dades han canviat
+    void changed();
 };
 
 }
