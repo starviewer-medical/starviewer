@@ -9,8 +9,6 @@
 
 #include <QObject>
 
-class QAction;
-
 namespace udg {
 
 class ToolConfiguration;
@@ -64,11 +62,6 @@ public:
      * problemes ja que és més fàcil donar valors a la variable per error o no inicialitzar-la correctament
      */
     bool hasSharedData() const;
-
-    /**
-    * Retorna una QAction per la tool
-    **/
-    static QAction *getAction();
 
     /**
     * Retorna el nom de la tool
