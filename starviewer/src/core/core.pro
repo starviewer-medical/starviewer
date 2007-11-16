@@ -119,7 +119,9 @@ HEADERS += extensionfactory.h \
            tool.h \
            toolproxy.h \
            tooldata.h \
-           referencelinestool.h
+           referencelinestool.h \
+           referencelinestooldata.h \
+           imageplane.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -219,7 +221,9 @@ SOURCES += extensionmediator.cpp \
            tool.cpp \
            toolproxy.cpp \
            tooldata.cpp \
-           referencelinestool.cpp
+           referencelinestool.cpp \
+           referencelinestooldata.cpp \
+           imageplane.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
