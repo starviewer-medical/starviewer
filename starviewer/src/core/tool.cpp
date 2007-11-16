@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "tool.h"
-#include <QAction>
 
 namespace udg {
 
@@ -41,11 +40,6 @@ ToolData *Tool::getToolData() const
 bool Tool::hasSharedData() const
 {
     return m_hasSharedData;
-}
-
-QAction *Tool::getAction()
-{
-    return new QAction( 0 );
 }
 
 QString Tool::toolName()
