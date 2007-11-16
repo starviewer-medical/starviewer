@@ -61,14 +61,9 @@ public slots:
     void forwardEvent( unsigned long eventID );
 
 private:
-     /// Tipus definit:  map on hi guardem les tools associades a una clau determinada pel nom de la tool.
-     ///                 en principi no es poden tenir dues tools amb el mateix nom, per tant podem fer-ho
-     ///                 amb un map, no cal un multimap.
-
-    typedef QMap< QString, Tool* > ToolsMap;
-
-    ///atribut de tipus ToolsMap
-    ToolsMap m_toolsMap;
+     /// map on hi guardem les tools associades a una clau determinada pel nom de la tool.
+     /// en principi no es poden tenir dues tools amb el mateix nom
+    QMap< QString, Tool* > m_toolsMap;
 };
 
 }
