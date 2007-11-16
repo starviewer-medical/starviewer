@@ -6,8 +6,7 @@
  ***************************************************************************/
 #include "toolproxy.h"
 #include "tool.h"
-#include <QString>
-#include <QList>
+#include <QStringList>
 
 namespace udg {
 
@@ -40,13 +39,18 @@ bool ToolProxy::removeTool( QString toolName )
 
 void ToolProxy::removeAllTools()
 {
-    m_toolsMap.clear();
+    QStringList toolsList = m_toolsMap.keys();
+    foreach( QString toolName, toolsList )
+    {
+        Tool *tool = m_toolsMap.take( toolName );
+        delete tool;
+    }
 }
 
 void ToolProxy::forwardEvent( unsigned long eventID )
 {
     //no es pot fer un foreach sobre un map perquè retorna parella d'elements, per això passem tots els elements del map a una QList.
-    QList <Tool*> toolsList = m_toolsMap.values();
+    QList<Tool *> toolsList = m_toolsMap.values();
 
     foreach( Tool *tool, toolsList )
     {
