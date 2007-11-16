@@ -20,6 +20,7 @@ ZoomTool::ZoomTool( QViewer *viewer, QObject *parent )
  : Tool(viewer,parent)
 {
     m_state = NONE;
+    m_toolName = "ZoomTool";
 }
 
 ZoomTool::~ZoomTool()
