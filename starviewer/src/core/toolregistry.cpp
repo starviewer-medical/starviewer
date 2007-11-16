@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "toolregistry.h"
 #include "tool.h"
+#include "zoomtool.h"
 #include "qviewer.h"
 #include "logging.h"
 
@@ -25,16 +26,20 @@ ToolRegistry::~ToolRegistry()
 Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
 {
     Tool *tool = 0;
-//     if( toolName == "SlicingTool" )
-//         tool = new Slicing2DTool( viewer );
-//     else if( toolName == "ZoomTool" )
-//         tool = new ZoomTool( viewer );
+    if( toolName == "ZoomTool" )
+    {
+        tool = new ZoomTool( viewer );
+    }
+//     else if( toolName == "SlicingTool" )
+//     {
+//         tool = new SlicingTool( viewer );
+//     }
 //         ...
 //         etc
-//     else
-//     {
-//         DEBUG_LOG( toolName + "> Tool no registrada!");
-//     }
+    else
+    {
+        DEBUG_LOG( toolName + "> Tool no registrada!");
+    }
     return tool;
 }
 
