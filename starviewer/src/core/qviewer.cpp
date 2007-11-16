@@ -59,6 +59,8 @@ QViewer::QViewer( QWidget *parent )
     this->setMouseTracking( true );
 
     m_vtkQtConnections = 0;
+    m_toolProxy = new ToolProxy(this);
+    connect( this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)) );
 }
 
 QViewer::~QViewer()
