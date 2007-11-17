@@ -7,7 +7,8 @@ FORMS += optimalviewpointinputparametersformbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
          qtransferfunctionintervaleditorbase.ui \
          qoptimalviewpointextensionbase.ui 
-HEADERS += histogram.h \
+HEADERS += doublehistogram.h \
+           histogram.h \
            hoverpoints.h \
            optimalviewpoint.h \
            optimalviewpointinputparametersform.h \
@@ -34,7 +35,8 @@ HEADERS += histogram.h \
            slicer.h \
            qtransferfunctioneditor.h \
            qtransferfunctioneditorbygradient.h 
-SOURCES += histogram.cpp \
+SOURCES += doublehistogram.cpp \
+           histogram.cpp \
            hoverpoints.cpp \
            optimalviewpoint.cpp \
            optimalviewpointinputparametersform.cpp \

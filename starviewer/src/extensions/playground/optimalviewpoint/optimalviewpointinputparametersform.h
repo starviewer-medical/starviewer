@@ -83,6 +83,8 @@ private slots:
 
     void toggleSegmentationParameters();
 
+    void requestNewMethod();
+
 signals:
 
     /// Demana que es faci la segmentació.
@@ -93,6 +95,9 @@ signals:
     /// Demana que s'executi la segmentació automàtica.
     void automaticSegmentationRequested();
     void executionRequested();
+
+    /// Demana que s'executi un dels nous mètodes.
+    void newMethod2Requested( int step, bool normalized );
 
 private:
 

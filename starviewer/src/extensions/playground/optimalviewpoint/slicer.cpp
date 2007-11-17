@@ -17,9 +17,11 @@
 #include <QDataStream>
 #include <QDir>
 #include <QFile>
+#include <QMultiMap>
 #include <QPair>
 #include <QTextStream>
 
+#include "doublehistogram.h"
 #include "histogram.h"
 #include "logging.h"
 
@@ -533,6 +535,71 @@ void Slicer::findExtent( const unsigned char * data,
 }
 
 
+double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned char * sliceY ) const
+{
+    // H(X) = -\sum_x p_x \log_2(p_x)
+    // H(X,Y) = -\sum_{x,y} p_{x,y} \log_2(p_{x,y})
+    // I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p(x)\,p(y)} \right) }
+    // I(X;Y) = H(X) + H(Y) - H(X,Y)
+    Histogram histogramX( m_nLabels ), histogramY( m_nLabels ); // histogrames individuals
+    Histogram jointHistogram( m_nLabels * m_nLabels );  // histograma conjunt (2d)
+    // la indexació serà valueX + m_nLabels * valueY
+
+    for ( unsigned int j = 0; j < m_sliceSize; j++ )
+    {
+        unsigned char valueX = sliceX[j]; if ( valueX == m_newBackground ) valueX = 0;
+        unsigned char valueY = sliceY[j]; if ( valueY == m_newBackground ) valueY = 0;
+        //if ( valueX < m_nLabels && valueX > 0
+        //     && valueY < m_nLabels && valueY > 0 )  // no comptem cap background
+        //{
+        histogramX.add( valueX ); histogramY.add( valueY );
+        jointHistogram.add( valueX + m_nLabels * valueY );
+        //}
+    }
+
+    double H_X_ = 0.0;
+    double countX = histogramX.count();
+    QVectorIterator< unsigned long > * itHistogramX = histogramX.getIterator();
+    while ( itHistogramX->hasNext() )
+    {
+        double p_x_ = itHistogramX->next() / countX;
+        if ( p_x_ > 0.0 ) H_X_ -= p_x_ * log( p_x_ );
+    }
+    H_X_ /= log( 2.0 );
+    delete itHistogramX;
+
+    double H_Y_ = 0.0;
+    double countY = histogramY.count();
+    QVectorIterator< unsigned long > * itHistogramY = histogramY.getIterator();
+    while ( itHistogramY->hasNext() )
+    {
+        double p_y_ = itHistogramY->next() / countY;
+        if ( p_y_ > 0.0 ) H_Y_ -= p_y_ * log( p_y_ );
+    }
+    H_Y_ /= log( 2.0 );
+    delete itHistogramY;
+
+    double H_X_Y_ = 0.0;
+    double count = jointHistogram.count();
+    QVectorIterator< unsigned long > * itJointHistogram = jointHistogram.getIterator();
+    while ( itJointHistogram->hasNext() )
+    {
+        double p_x_y_ = itJointHistogram->next() / count;
+        if ( p_x_y_ > 0.0 ) H_X_Y_ -= p_x_y_ * log( p_x_y_ );
+    }
+    H_X_Y_ /= log( 2.0 );
+    delete itJointHistogram;
+
+    double I_X_Y_ = H_X_ + H_Y_ - H_X_Y_;
+
+    DEBUG_LOG( QString( "[*mutualInformation*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+    DEBUG_LOG( QString( "[*mutualInformation*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
+    DEBUG_LOG( QString( "[*mutualInformation*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
+
+    return I_X_Y_;
+}
+
+
 double Slicer::similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const
 {
     // H(X) = -\sum_x p_x \log_2(p_x)
@@ -633,6 +700,238 @@ void Slicer::setRightGroup( QVector< unsigned short > & rightGroups, unsigned sh
 void Slicer::setReadExtentFromFile( bool readExtentFromFile )
 {
     m_readExtentFromFile = readExtentFromFile;
+}
+
+
+double Slicer::newMethod2( int step, bool normalized )
+{
+    double sum = 0.0;
+
+    for ( int i = 0; i < m_sliceCount - step; i++ )    // iterarate over slices
+    {
+        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;          // start of slice X
+        unsigned char * sliceY = m_reslicedData + ( i + step ) * m_sliceSize;  // start of slice Y
+        DEBUG_LOG( QString( "[*NM2*] X = %1, Y = %2" ).arg( i ).arg( i + step ) );
+        sum += normalized ? similarity( sliceX, sliceY ) : mutualInformation( sliceX, sliceY );
+    }
+
+    // normalize sum
+    sum /= m_sliceCount;
+
+    DEBUG_LOG( QString( "[*NM2*] sum = %1" ).arg( sum ) );
+
+    return sum;
+}
+
+
+// llesques fusionades
+void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficient!!!
+{
+    /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
+    // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
+    // Should be done in a cleaner way.
+    QVector< Group > groups( m_sliceCount );   // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
+
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        Slice s = { i, i, m_reslicedData + i * m_sliceSize };
+        Group g;
+        g.id = i;
+        g.slices << s;
+        g.similarityToNext = 0.0;
+        g.previous = i > 0 ? &(groups[i - 1]) : 0;
+        groups[i] = g;
+        if ( g.previous ) groups[i].previous->next = &(groups[i]);
+    }
+    groups.last().next = 0;
+
+    if ( m_similarities.isEmpty() ) computeSimilarities();
+
+    QMultiMap< double, unsigned short > sortedSimilarities;    // similarities sorted in ascending order
+
+    for ( unsigned short i = 0; i < m_similarities.size(); i++ )
+    {
+        sortedSimilarities.insert( m_similarities[i], i );
+        groups[i].similarityToNext = m_similarities[i];
+    }
+
+    bool aboveThreshold = true;
+
+    while ( !sortedSimilarities.isEmpty() && aboveThreshold )
+    {
+        QMultiMap< double, unsigned short >::iterator it = --sortedSimilarities.end();    // last element
+
+        if ( it.key() > threshold )
+        {
+            Group & groupX = groups[it.value()];    // group X
+            Group & groupY = *groupX.next;          // group Y (following X)
+            DEBUG_LOG( QString( "[*GMC*] agrupem g%1(%2-%3) i g%4(%5-%6) (sim = %7)" ).arg( groupX.id ).arg( groupX.slices.first().id ).arg( groupX.slices.last().id ).arg( groupY.id ).arg( groupY.slices.first().id ).arg( groupY.slices.last().id ).arg( it.key() ) );
+            join( groupX, groupY );
+            DEBUG_LOG( "[*GMC*] agrupats :)" );
+
+            // remove obsolete entries form sortedSimilarities
+            sortedSimilarities.erase( it );
+            if ( groupX.previous )
+            {
+                Group & groupW = *groupX.previous;
+                QMultiMap< double, unsigned short >::iterator itW = sortedSimilarities.find( groupW.similarityToNext );
+                while ( itW != sortedSimilarities.end() && itW.value() != groupW.id ) ++itW;
+                if ( itW != sortedSimilarities.end() ) sortedSimilarities.erase( itW );
+                else DEBUG_LOG( "[*GMC*] problema esborrant groupW!!!" );
+            }
+            if ( groupY.next )
+            {
+                QMultiMap< double, unsigned short >::iterator itY = sortedSimilarities.find( groupY.similarityToNext );
+                while ( itY != sortedSimilarities.end() && itY.value() != groupY.id ) ++itY;
+                if ( itY != sortedSimilarities.end() ) sortedSimilarities.erase( itY );
+                else DEBUG_LOG( "[*GMC*] problema esborrant groupY!!!" );
+            }
+
+            // compute new similarities
+            if ( groupX.previous )
+            {
+                Group & groupW = *groupX.previous;
+                groupW.similarityToNext = similarity( groupW, groupX );
+                sortedSimilarities.insert( groupW.similarityToNext, groupW.id );
+            }
+            if ( groupX.next )
+            {
+                Group & groupZ = *groupX.next;
+                groupX.similarityToNext = similarity( groupX, groupZ );
+                sortedSimilarities.insert( groupX.similarityToNext, groupX.id );
+            }
+            else groupX.similarityToNext = 0.0;
+
+            // invalidate groupY (to later assign consecutive ids)
+            groupY.id = groupX.id;
+        }
+        else
+        {
+            aboveThreshold = false;
+        }
+    }
+
+    // assign consecutive ids to groups
+    unsigned short g = 0;
+    QList< Group > finalGroups;
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        if ( i == groups[i].id )    // the group is valid
+        {
+            groups[i].id = g++;
+            finalGroups << groups[i];
+        }
+    }
+
+    // Print results i save them to a file
+    QFile outFile( QDir::tempPath().append( QString( "/gmc%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        DEBUG_LOG( QString( "[GMC] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        for ( int i = 0; i < finalGroups.size(); i++ )
+        {
+            const Group & gr = finalGroups[i];
+            for ( int j = 0; j < gr.slices.size(); j++ )
+            {
+                DEBUG_LOG( QString( "[GMC] group %1 : slice %2" ).arg( gr.id ).arg( gr.slices[j].id ) );
+                out << "group " << gr.id << " : slice " << gr.slices[j].id << "\n";
+            }
+        }
+        outFile.close();
+    }
+}
+
+
+double Slicer::similarity( const Group & groupX, const Group & groupY ) const
+{
+    // H(X) = -\sum_x p_x \log_2(p_x)
+    // H(X,Y) = -\sum_{x,y} p_{x,y} \log_2(p_{x,y})
+    // I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p(x)\,p(y)} \right) }
+    // I(X;Y) = H(X) + H(Y) - H(X,Y)
+    DoubleHistogram histogramX( m_nLabels ), histogramY( m_nLabels );   // individual histograms
+    DoubleHistogram jointHistogram( m_nLabels * m_nLabels );            // joint histogram (2d)
+                                                                        // indexation is valueX + m_nLabels * valueY
+    unsigned short nx = groupX.slices.size(), ny = groupY.slices.size();
+    double amountX = 1.0 / nx, amountY = 1.0 / ny, amountXY = amountX * amountY;
+
+    for ( unsigned int i = 0; i < m_sliceSize; i++ )
+    {
+        // iterate over all slices of every group
+        for ( unsigned short sx = 0; sx < nx; sx++ )
+        {
+            for ( unsigned short sy = 0; sy < ny; sy++ )
+            {
+                unsigned char valueX = groupX.slices[sx].data[i]; if ( valueX == m_newBackground ) valueX = 0;
+                unsigned char valueY = groupY.slices[sy].data[i]; if ( valueY == m_newBackground ) valueY = 0;
+                //if ( valueX < m_nLabels && valueX > 0
+                //     && valueY < m_nLabels && valueY > 0 )  // no comptem cap background
+                //{
+                histogramX.add( valueX, amountX ); histogramY.add( valueY, amountY );
+                jointHistogram.add( valueX + m_nLabels * valueY, amountXY );
+                //}
+            }
+        }
+    }
+
+    double H_X_ = 0.0;
+    double countX = histogramX.count();
+    QVectorIterator< double > * itHistogramX = histogramX.getIterator();
+    while ( itHistogramX->hasNext() )
+    {
+        double p_x_ = itHistogramX->next() / countX;
+        if ( p_x_ > 0.0 ) H_X_ -= p_x_ * log( p_x_ );
+    }
+    H_X_ /= log( 2.0 );
+    delete itHistogramX;
+
+    double H_Y_ = 0.0;
+    double countY = histogramY.count();
+    QVectorIterator< double > * itHistogramY = histogramY.getIterator();
+    while ( itHistogramY->hasNext() )
+    {
+        double p_y_ = itHistogramY->next() / countY;
+        if ( p_y_ > 0.0 ) H_Y_ -= p_y_ * log( p_y_ );
+    }
+    H_Y_ /= log( 2.0 );
+    delete itHistogramY;
+
+    double H_X_Y_ = 0.0;
+    double count = jointHistogram.count();
+    QVectorIterator< double > * itJointHistogram = jointHistogram.getIterator();
+    while ( itJointHistogram->hasNext() )
+    {
+        double p_x_y_ = itJointHistogram->next() / count;
+        if ( p_x_y_ > 0.0 ) H_X_Y_ -= p_x_y_ * log( p_x_y_ );
+    }
+    H_X_Y_ /= log( 2.0 );
+    delete itJointHistogram;
+
+    double I_X_Y_ = H_X_ + H_Y_ - H_X_Y_;
+
+    // H(X,Y) = 0 when they are homogenious groups; then check wether they are equal or different to set the similarity value
+    double similarity = ( ( H_X_Y_ > 0.0 ) ? ( I_X_Y_ / H_X_Y_ ) : ( groupX.slices[0].data[0] == groupY.slices[0].data[0] ? 1.0 : 0.0 ) );
+
+    DEBUG_LOG( QString( "[*similarityG*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+    DEBUG_LOG( QString( "[*similarityG*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
+    DEBUG_LOG( QString( "[*similarityG*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
+    DEBUG_LOG( QString( "[*similarityG*][semblança] I/H = %1" ).arg( similarity ) );
+
+    return similarity;
+}
+
+
+void Slicer::join( Group & groupX, Group & groupY ) const
+{
+    for ( unsigned short i = 0; i < groupY.slices.size(); i++ )
+    {
+        groupY.slices[i].group = groupX.id;
+    }
+
+    groupX.slices << groupY.slices;
+    groupX.next = groupY.next;
+    if ( groupX.next ) groupX.next->previous = &groupX;
 }
 
 

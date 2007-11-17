@@ -64,6 +64,8 @@
 
 #include "logging.h"
 
+#include <QTextStream>
+
 
 namespace udg {
 
@@ -544,6 +546,7 @@ void OptimalViewpoint::updatePlanes()
             slicer.computeSmi();
             slicer.method1A( m_similarityThreshold );
             slicer.method1B( m_similarityThreshold );
+            slicer.groupingMethodC( m_similarityThreshold );
 
             break;
     }
@@ -781,6 +784,75 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::TransferFunctionObject:
             setTransferFunction( m_parameters->getTransferFunctionObject() );
             break;
+    }
+}
+
+
+void OptimalViewpoint::newMethod2( int step, bool normalized )
+{
+    m_volume->synchronize();
+
+    double result;
+
+    switch ( m_updatePlane )
+    {
+        case -1:    // All
+        {
+            QVector< double > results;
+            for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
+            {
+                Slicer slicer( i );
+//             slicer.setInput( m_volume->getLabeledImage() );
+                slicer.setInput( m_volume->getImage() );
+                slicer.setMatrix( (*m_planes)[i]->getTransformMatrix() );
+                slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+                slicer.setReadExtentFromFile( m_readExtentFromFile );
+                slicer.reslice();
+                result = slicer.newMethod2( step, normalized );
+                DEBUG_LOG( QString( "[OV] (%1) newMethod2(%2, %3) = %4" ).arg( i ).arg( step ).arg( normalized ).arg( result ) );
+                results << result;
+            }
+
+            // Printar resultats i guardar-los en un fitxer
+            QFile outFile( QDir::tempPath().append( QString( "/nm2_%1%2.txt" ).arg( step ).arg( normalized ? "_norm" : "" ) ) );
+            if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QTextStream out( &outFile );
+                out << "step = " << step << "\n";
+                for ( int i = 0; i < results.size(); i++ )
+                {
+                    out << "plane " << i + 1 << " : " << results[i] << "\n";
+                }
+                outFile.close();
+            }
+        }
+            break;
+
+        case 0:     // None
+            break;
+
+        default:
+            Slicer slicer( m_updatePlane );
+//             slicer.setInput( m_volume->getLabeledImage() );
+            slicer.setInput( m_volume->getImage() );
+            slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
+            slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+            slicer.setReadExtentFromFile( m_readExtentFromFile );
+            slicer.reslice();
+            result = slicer.newMethod2( step, normalized );
+            DEBUG_LOG( QString( "[OV] (%1) newMethod2(%2, %3) = %4" ).arg( m_updatePlane ).arg( step ).arg( normalized ).arg( result ) );
+            break;
+    }
+}
+
+
+void OptimalViewpoint::rescale()
+{
+    m_numberOfClusters = m_volume->rescale( 32 );
+    if ( m_numberOfClusters > 0 )
+    {
+        m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );
+        m_parameters->setNumberOfClusters( m_numberOfClusters );
     }
 }
 

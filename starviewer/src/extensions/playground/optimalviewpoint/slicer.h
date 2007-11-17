@@ -10,6 +10,7 @@
 #define UDGSLICER_H
 
 
+#include <QList>
 #include <QVector>
 
 
@@ -80,10 +81,30 @@ public:
     void method1B_0( double threshold );
     /// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
     void method1B( double threshold );
+    /// Works with fusioned slices.
+    void groupingMethodC( double threshold );
 
     vtkImageData * getReslicedImage() const { return m_reslicedImage; }
 
+    // New methods to find most structured view
+    /// "Sum of similarities"
+    double newMethod2( int step, bool normalized );
+
 private:
+
+    struct Slice
+    {
+        unsigned short id, group;
+        const unsigned char * data;
+    };
+
+    struct Group
+    {
+        unsigned short id;
+        QList< Slice > slices;
+        double similarityToNext;    // similarity to next group (optimization for groupingMethodC)
+        Group * previous, * next;
+    };
 
     /// Troba l'extent mínim en la direcció 0 i guarda els resultats a min0 i max0.
     void findExtent( const unsigned char * data,
@@ -91,6 +112,8 @@ private:
                      int inc0, int inc1, int inc2,
                      int & min0, int & max0 ) const;
 
+    /// Returns mutual information between two slices. \todo Fer-ho passant els índexs.
+    double mutualInformation( const unsigned char * sliceX, const unsigned char * sliceY ) const;
     /// Retorna la similaritat entre dues llesques. \todo Fer-ho passant els índexs.
     double similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const;
     /// Calcula la semblança entre tots els parells de llesques consecutives.
@@ -99,6 +122,10 @@ private:
     void setGroup( QVector< unsigned short > & groups, unsigned short slice, unsigned short group ) const;
     /// Assigna el grup \a group a \a slice i totes les seves seguidores del mateix grup.
     void setRightGroup( QVector< unsigned short > & rightGroups, unsigned short slice, unsigned short group ) const;
+    /// Returns similarity between two groups.
+    double similarity( const Group & groupX, const Group & groupY ) const;
+    /// Integrates \a groupY into \a groupX.
+    void join( Group & groupX, Group & groupY ) const;
 
     /// Identificador de l'objecte.
     unsigned char m_id;

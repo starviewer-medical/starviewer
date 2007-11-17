@@ -59,6 +59,8 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
 
     connect( m_clusterFirstSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterFirst(int) ) );
     connect( m_clusterLastSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterLast(int) ) );
+
+    connect( m_newMethodOkPushButton, SIGNAL( clicked() ), SLOT( requestNewMethod() ) );
 }
 
 
@@ -495,6 +497,15 @@ void OptimalViewpointInputParametersForm::setNumberOfSlices( unsigned short numb
     m_clusterFirstSpinBox->setMaximum( numberOfSlices - 1 );
     m_clusterLastSpinBox->setMaximum( numberOfSlices - 1 );
     m_clusterLastSpinBox->setValue( numberOfSlices - 1 );
+}
+
+
+void OptimalViewpointInputParametersForm::requestNewMethod()
+{
+    if ( m_newMethodComboBox->currentText() == "2" )
+    {
+        emit newMethod2Requested( m_newMethod2StepSpinBox->value(), m_newMethod2NormalizedCheckBox->isChecked() );
+    }
 }
 
 
