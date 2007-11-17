@@ -96,6 +96,7 @@ public:
     signed char loadSegmentationFromFile( const QString & segmentationFileName );
     /// Fa una segmentació automàtica del volum.
     unsigned char segmentateVolume( unsigned short iterations, unsigned char numberOfClusters, double noise );
+    signed char rescale( int bins );
 
     void setSegmentationFileName( QString name );
 

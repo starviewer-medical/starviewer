@@ -848,4 +848,20 @@ void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned sh
 }
 
 
+signed char OptimalViewpointVolume::rescale( int bins )
+{
+    QVector< unsigned char > limits;
+
+    for ( int i = 1; i < bins; i++ )
+    {
+        limits.push_back( i * 256 / bins - 1 );
+    }
+
+    labelize( limits );
+    generateAdjustedTransferFunction( limits );
+
+    return limits.size() + 1;
+}
+
+
 }

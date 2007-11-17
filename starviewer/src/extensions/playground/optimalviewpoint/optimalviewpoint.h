@@ -130,6 +130,8 @@ public:
     /// Fa una segmentació automàtica del volum.
     void doAutomaticSegmentation();
 
+    void rescale();
+
 
 
     void setRenderCluster( bool renderCluster );
@@ -137,6 +139,10 @@ public:
     void setReadExtentFromFile( bool readExtentFromFile );
 
     void setParameters( OptimalViewpointParameters * parameters );
+
+public slots:
+
+    void newMethod2( int step, bool normalized );
 
 
 

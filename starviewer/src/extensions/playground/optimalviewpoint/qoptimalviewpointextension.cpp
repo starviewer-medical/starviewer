@@ -39,6 +39,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
     connect( m_inputParametersWidget, SIGNAL( segmentationRequested() ), SLOT( doSegmentation() ) );
     connect( m_inputParametersWidget, SIGNAL( executionRequested() ), SLOT( execute() ) );
+
+    connect( m_inputParametersWidget, SIGNAL( newMethod2Requested(int,bool) ), m_method, SLOT( newMethod2(int,bool) ) );
 }
 
 
@@ -73,7 +75,9 @@ void QOptimalViewpointExtension::doSegmentation()
             break;
 
         case OptimalViewpointParameters::AutomaticSegmentation:
-            m_method->doAutomaticSegmentation();
+            /// \warning HACK per fer una prova
+            //m_method->doAutomaticSegmentation();
+            m_method->rescale();
             break;
     }
 
