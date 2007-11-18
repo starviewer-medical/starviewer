@@ -509,4 +509,11 @@ void OptimalViewpointInputParametersForm::requestNewMethod()
 }
 
 
+void OptimalViewpointInputParametersForm::setRangeMax( unsigned char rangeMax )
+{
+    m_gradientEditor->setMaximum( rangeMax );
+    m_editorByValues->setMaximum( rangeMax );
+}
+
+
 };

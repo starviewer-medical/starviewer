@@ -144,6 +144,9 @@ public slots:
 
     void newMethod2( int step, bool normalized );
 
+signals:
+
+    void scalarRange( unsigned char min, unsigned char max );
 
 
 private slots:

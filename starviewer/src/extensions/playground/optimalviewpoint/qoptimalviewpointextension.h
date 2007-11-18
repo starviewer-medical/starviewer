@@ -62,6 +62,9 @@ public slots:
     ///Aplica el mètode segons els paràmetres actuals.
     void execute();
 
+    /// Assinge el rang escalar als editors de la funció de transferència.
+    void setScalarRange( unsigned char rangeMin, unsigned char rangeMax );
+
 private:
 
     /// Paràmetres del mètode.

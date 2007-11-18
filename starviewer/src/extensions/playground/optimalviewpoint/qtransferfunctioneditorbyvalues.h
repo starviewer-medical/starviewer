@@ -24,16 +24,17 @@ class QTransferFunctionIntervalEditor;
 /**
  * Editor de funcions de transferència basat en valors.
  *
- * L'usuari pot definir punts o intervals amb el valor RGBA que els correspon.
- * Aquests punts o intervals són sempre disjunts i n'hi pot haver un màxim de
- * 256. Els valors de propietat són enters en l'interval [0,255] (el primer
- * sempre comença a 0 i l'últim sempre acaba a 255). El color es pot triar en un
- * diàleg de selecció de color i l'opacitat en el mateix diàleg o directament
- * modificant el valor d'un SpinBox.
+ * L'usuari pot definir punts o intervals amb el valor RGBA que els correspon. Aquests punts o
+ * intervals són sempre disjunts i n'hi pot haver un màxim de <i>n</i> + 1, on <i>n</i> és el valor
+ * de propietat màxim del volum. Els valors de propietat són enters en l'interval [0,<i>n</i>] (el
+ * primer sempre comença a 0 i l'últim sempre acaba a <i>n</i>). El color es pot triar en un diàleg
+ * de selecció de color i l'opacitat en el mateix diàleg o directament modificant el valor d'un
+ * SpinBox.
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class QTransferFunctionEditorByValues : public QTransferFunctionEditor, private ::Ui::QTransferFunctionEditorByValuesBase
+class QTransferFunctionEditorByValues
+    : public QTransferFunctionEditor, private ::Ui::QTransferFunctionEditorByValuesBase
 {
 
     Q_OBJECT
@@ -44,6 +45,9 @@ public:
     QTransferFunctionEditorByValues( QWidget * parent = 0 );
     virtual ~QTransferFunctionEditorByValues();
 
+    /// Assigna el valor de propietat màxim mapat per aquest editor.
+    virtual void setMaximum( unsigned short maximum );
+
     /// Assigna una funció de transferència a l'editor.
     virtual void setTransferFunction( const TransferFunction & transferFunction );
     /// Retorna la funció de transferència de l'editor.
@@ -51,14 +55,14 @@ public:
 
 public slots:
 
-    /// Afegeix un interval a l'editor (al final). Si ja n'hi ha 256 no fa res.
+    /// Afegeix un interval a l'editor (al final). Si ja n'hi ha el màxim no fa res.
     void addInterval();
     /// Esborra un interval de l'editor (l'últim). Si n'hi ha només 1 no fa res.
     void removeInterval();
 
 private:
 
-    /// Afegeix un interval al final i el retorna. Si ja n'hi ha 256 no fa res.
+    /// Afegeix un interval al final i el retorna. Si ja n'hi ha el màxim no fa res.
     QTransferFunctionIntervalEditor * addIntervalAndReturnIt();
 
 private slots:
@@ -74,11 +78,17 @@ private:
     QVBoxLayout * m_intervalEditorsLayout;
 
     /// Nombre d'intervals de l'editor.
-    unsigned short m_numberOfIntervals;
+    unsigned int m_numberOfIntervals;
 
-    /// Memoria cau de la funció de transferència representada actualment per l'editor (si m_changed és fals).
+    /**
+     * Memoria cau de la funció de transferència representada actualment per l'editor (si m_changed
+     * és fals).
+     */
     mutable TransferFunction m_transferFunction;
-    /// Indica si hi ha hagut canvis des de l'últim cop que s'ha actualitzat la memòria cau de la funció de transferència.
+    /**
+     * Indica si hi ha hagut canvis des de l'últim cop que s'ha actualitzat la memòria cau de la
+     * funció de transferència.
+     */
     mutable bool m_changed;
 
 };

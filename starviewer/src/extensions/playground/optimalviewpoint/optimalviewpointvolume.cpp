@@ -12,6 +12,7 @@
 #include <QTextStream>
 
 #include <vtkColorTransferFunction.h>
+#include <vtkImageCast.h>
 #include <vtkImageClip.h>
 #include <vtkImageData.h>
 #include <vtkImageShiftScale.h>
@@ -37,19 +38,24 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     double range[2];
     image->GetScalarRange( range );
     double min = range[0], max = range[1];
-
-    DEBUG_LOG( qPrintable( QString( "min = %1, max = %2" ).arg( min ).arg( max ) ) );
+    DEBUG_LOG( QString( "min = %1, max = %2" ).arg( min ).arg( max ) );
 
     // tot això està comentat perquè falta canviar altres coses abans que funcioni
-//     if ( min >= 0.0 && max <= 255.0 )    // si ja està dins del rang que volem no cal fer res
-//     {
-//         m_image = image;
-//         m_image->Register( 0 );
-//
-//         m_rangeMin = static_cast< unsigned short >( min );
-//         m_rangeMax = static_cast< unsigned short >( max );
-//     }
-//     else
+    if ( min >= 0.0 && max <= 255.0 )    // si ja està dins del rang que volem no cal fer res
+    {
+        // cal fer el casting perquè ens arriba com a int
+        vtkImageCast * caster = vtkImageCast::New();
+        caster->SetInput( image );
+        caster->SetOutputScalarTypeToUnsignedChar();
+        caster->Update();
+
+        m_image = caster->GetOutput(); m_image->Register( 0 );
+        caster->Delete();
+
+        m_rangeMin = static_cast< unsigned short >( min );
+        m_rangeMax = static_cast< unsigned short >( max );
+    }
+    else
     {
         double shift = -min;
         double slope = 255.0 / ( max - min );
@@ -62,15 +68,14 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
         shifter->ClampOverflowOn();
         shifter->Update();
 
-        m_image = shifter->GetOutput();
-        m_image->Register( 0 ); // s'ha de fer abans del shifter->Delete()
+        m_image = shifter->GetOutput(); m_image->Register( 0 ); // s'ha de fer abans del shifter->Delete()
         shifter->Delete();
 
         m_rangeMin = 0; m_rangeMax = 255;
 
-        double irange[2];
-        m_image->GetScalarRange( irange );
-        DEBUG_LOG( QString( "new scalar range = %1 %2" ).arg( irange[0] ).arg( irange[1] ) );
+        double newRange[2];
+        m_image->GetScalarRange( newRange );
+        DEBUG_LOG( QString( "new scalar range = %1 %2" ).arg( newRange[0] ).arg( newRange[1] ) );
     }
 
     m_data = reinterpret_cast< unsigned char * >( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
@@ -205,8 +210,6 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_planeVolume->SetProperty( m_volumeProperty );
     m_planeVolume->AddPosition( -center[0], -center[1], -center[2] );
 
-
-    emit scalarRange( m_rangeMin, m_rangeMax );
 
 
 
@@ -363,8 +366,12 @@ signed char OptimalViewpointVolume::loadSegmentationFromFile( const QString & se
         in >> sValue;
         bool ok;
         ushort usValue = sValue.toUShort( &ok );
-        if ( ok ) limits.push_back( usValue );
-        else break;
+        if ( ok && usValue <= m_rangeMax ) limits.push_back( usValue );
+        else
+        {
+            WARN_LOG( "OVV::ldSegFromFile(): S'ha aturat la lectura del fitxer de segmentació perquè s'ha trobat un valor no vàlid" );
+            break;
+        }
     }
 
     segFile.close();

@@ -41,6 +41,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_inputParametersWidget, SIGNAL( executionRequested() ), SLOT( execute() ) );
 
     connect( m_inputParametersWidget, SIGNAL( newMethod2Requested(int,bool) ), m_method, SLOT( newMethod2(int,bool) ) );
+
+    connect( m_method, SIGNAL( scalarRange(unsigned char,unsigned char) ), SLOT( setScalarRange(unsigned char,unsigned char) ) );
 }
 
 
@@ -135,6 +137,12 @@ void QOptimalViewpointExtension::execute()
         delete entropyRateResults;
         delete excessEntropyResults;
     }
+}
+
+
+void QOptimalViewpointExtension::setScalarRange( unsigned char /*rangeMin*/, unsigned char rangeMax )
+{
+    m_inputParametersWidget->setRangeMax( rangeMax );
 }
 
 

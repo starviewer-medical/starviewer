@@ -6,8 +6,8 @@
  ***************************************************************************/
 
 
-#ifndef UDGMAGICMIRRORSVOLUME_H
-#define UDGMAGICMIRRORSVOLUME_H
+#ifndef UDGOPTIMALVIEWPOINTVOLUME_H
+#define UDGOPTIMALVIEWPOINTVOLUME_H
 
 
 #include <QObject>
@@ -30,29 +30,26 @@ class TransferFunction;
 
 
 /**
- * Aquesta classe gestiona el tractament de volums de l'extensió Optimal
- * Viewpoint.
+ * Aquesta classe gestiona el tractament de volums de l'extensió Optimal Viewpoint.
  *
- * Guarda tots els objectes necessaris per crear un vtkVolume a partir d'un
- * vtkImageData, permet definir els paràmetres de la visualització del volum amb
- * ray casting, pot segmentar un volum amb les dades d'un fitxer o amb un
- * algorisme propi, etc.
+ * Guarda tots els objectes necessaris per crear un vtkVolume a partir d'un vtkImageData, permet
+ * definir els paràmetres de la visualització del volum amb ray casting, pot segmentar un volum amb
+ * les dades d'un fitxer o amb un algorisme propi, etc.
  *
- * Té signals i slots que permeten la comunicació amb OptimalViewpointPlane
- * mentre es fa una visualització.
+ * Té signals i slots que permeten la comunicació amb OptimalViewpointPlane  mentre es fa una
+ * visualització.
  *
  * \todo S'hauria d'ampliar una mica més aquesta descripció.
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class OptimalViewpointVolume : public QObject
-{
+class OptimalViewpointVolume : public QObject {
 
     Q_OBJECT
 
 public:
 
-    /// Construeix el volum a partir de l'imatge \a image. \a image no pot ser nul.
+    /// Construeix el volum a partir de l'imatge \a image.
     OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
     virtual ~OptimalViewpointVolume();
 
@@ -139,6 +136,14 @@ public slots:
     void setExcessEntropy( double excessEntropy );
     void setComputing( bool on = true );
 
+    
+signals:
+    
+    void needsExcessEntropy();
+    void visited( int rayId, unsigned char value );
+    void rayEnd( int rayId );
+    void adjustedTransferFunctionDefined( const TransferFunction & adjustedTransferFunction );
+
 private:
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
@@ -199,22 +204,12 @@ private:
     bool m_clusterFirst, m_clusterLast;
 
 
-signals:
-
-    /// S'emet quan es crea el volum i dóna els valors de propietat mínim i màxim.
-    void scalarRange( unsigned char min, unsigned char max );
-    void needsExcessEntropy();
-    void visited( int rayId, unsigned char value );
-    void rayEnd( int rayId );
-    void adjustedTransferFunctionDefined( const TransferFunction & adjustedTransferFunction );
 
 
 };
 
 
-
 }
-
 
 
 #endif

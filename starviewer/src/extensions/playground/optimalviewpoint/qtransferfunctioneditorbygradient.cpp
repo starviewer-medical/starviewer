@@ -83,7 +83,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction( const TransferFunct
 
     foreach ( double x, points )
     {
-        gradientStops << QGradientStop( x / 255.0, transferFunction.get( x ) );
+        gradientStops << QGradientStop( x / m_maximum, transferFunction.get( x ) );
     }
 
     setGradientStops( gradientStops );
@@ -177,7 +177,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction( const QGradientStop
 
     for ( unsigned char i = 0; i < stops.size(); i++ )
     {
-        m_transferFunction.addPoint( stops.at( i ).first * 255.0, stops.at( i ).second );
+        m_transferFunction.addPoint( stops.at( i ).first * m_maximum, stops.at( i ).second );
     }
 }
 
