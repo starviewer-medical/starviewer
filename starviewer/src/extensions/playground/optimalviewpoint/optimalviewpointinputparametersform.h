@@ -60,6 +60,8 @@ public slots:
 
     void setNumberOfSlices( unsigned short numberOfSlices );
 
+    void setRangeMax( unsigned char rangeMax );
+
 protected:
 
     /**

@@ -180,6 +180,8 @@ void OptimalViewpoint::setImage( vtkImageData * image )
 //     m_volume = new OptimalViewpointVolume( shifter->GetOutput() );
     m_volume = new OptimalViewpointVolume( imageCaster->GetOutput() );
 
+    emit scalarRange( m_volume->getRangeMin(), m_volume->getRangeMax() );
+
     imageCaster->Delete();
 //     shifter->Delete();
 

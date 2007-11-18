@@ -8,7 +8,7 @@
 
 #include "qtransferfunctioneditorbyvalues.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <QBoxLayout>
 #include <QScrollArea>
@@ -78,6 +78,22 @@ QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
 }
 
 
+void QTransferFunctionEditorByValues::setMaximum( unsigned short maximum )
+{
+    QTransferFunctionEditor::setMaximum( maximum );
+
+    QList<QTransferFunctionIntervalEditor *> intervalList =
+        m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor *>();
+    QTransferFunctionIntervalEditor * interval;
+    foreach ( interval, intervalList )
+    {
+        interval->setMaximum( m_maximum );
+    }
+
+    m_changed = true;
+}
+
+
 void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunction & transferFunction )
 {
     // si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
@@ -117,7 +133,8 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
         first = false;
     }
 
-    removeInterval();   // esborrem l'últim interval
+    //  esborrem l'últim interval (excepte si tenim la funció definida en tots els punts)
+    if ( points.size() < m_maximum + 1 ) removeInterval();
 
     m_changed = true;
     getTransferFunction();  // actualitzem m_transferFunction
@@ -175,13 +192,14 @@ void QTransferFunctionEditorByValues::removeInterval()
 
 QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAndReturnIt()
 {
-    if ( m_numberOfIntervals == 256 ) return 0;
+    if ( m_numberOfIntervals == m_maximum + 1u ) return 0;
 
     QTransferFunctionIntervalEditor * last =
             m_intervalEditorsWidget->findChild< QTransferFunctionIntervalEditor * >(
             QString( "interval%1" ).arg( m_numberOfIntervals - 1 ) );
     QTransferFunctionIntervalEditor * afterLast
             = new QTransferFunctionIntervalEditor( m_intervalEditorsWidget );
+    afterLast->setMaximum( m_maximum );
 
     connect( last, SIGNAL( endChanged(int) ), afterLast, SLOT( setPreviousEnd(int) ) );
     connect( afterLast, SIGNAL( startChanged(int) ), last, SLOT( setNextStart(int) ) );
