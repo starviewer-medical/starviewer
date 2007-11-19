@@ -36,6 +36,7 @@ void ReferenceLinesToolData::setFrameOfReferenceUID( const QString &frameOfRefer
 void ReferenceLinesToolData::setImagePlane( ImagePlane *imagePlane )
 {
     m_referenceImagePlane = imagePlane;
+    emit changed();
 }
 
 }

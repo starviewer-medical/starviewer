@@ -41,12 +41,16 @@ public:
 public slots:
     /**
      * Li assignem el frameOfReference del pla de referencia
+     * El frame of reference només pot canviar de valor quan es canvia de sèrie.
+     * Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
      * @param frameOfReference
      */
     void setFrameOfReferenceUID( const QString &frameOfReference );
 
     /**
      * Assigna el pla de la imatge de referencia
+     * Aquest pla pot canviar cada cop que es canvia de llesca en el viewer
+     * Quan canvïi aquest valor, s'emetrà el senyal changed()
      * @param imagePlane
      */
     void setImagePlane( ImagePlane *imagePlane );
