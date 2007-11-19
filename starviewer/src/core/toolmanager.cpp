@@ -77,6 +77,9 @@ void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStrin
         else
             DEBUG_LOG( QString("No tenim registrada cap Action per la tool ") + toolName );
     }
+    // guarrada! TODO aixo es un workaround per poder desactivar "automaticament" les tools dins d'un mateix grup
+    // lo correcte seria plantejar be el tema dels signals mappers o fer una implementacio propia mes elaborada
+    connect( actionGroup, SIGNAL(triggered(QAction *)), SLOT(refreshConnections()) );
 }
 
 void ToolManager::activateTool( const QString &toolName )
