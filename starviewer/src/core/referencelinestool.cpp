@@ -63,6 +63,9 @@ void ReferenceLinesTool::updateProjectionLines()
 
 void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane)
 {
+    if( !(referencePlane && localizerPlane) )
+        return;
+
     // primer mirem que siguin plans diferents
     if( *localizerPlane != *referencePlane )
     {
