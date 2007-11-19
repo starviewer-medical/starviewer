@@ -24,7 +24,8 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_parentSeries(NULL), m_CTLocalizer(false)
+ : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_parentSeries(NULL), m_CTLocalizer(false),
+ m_KVP(0), m_uAs(0), m_mAs(0)
 {
     m_pixelSpacing[0] = 1.;
     m_pixelSpacing[0] = 2.;
@@ -303,6 +304,36 @@ void Image::setRescaleIntercept( double intercept )
 double Image::getRescaleIntercept() const
 {
     return m_rescaleIntercept;
+}
+
+void Image::setKVP( double kvp )
+{
+ m_KVP = kvp;
+}
+
+double Image::getKVP()
+{
+ return m_KVP;
+}
+
+void Image::setuAs( double uas )
+{
+     m_uAs = uas;
+}
+
+double Image::getuAs()
+{
+     return m_uAs;
+}
+
+void Image::setmAs( double mas )
+{
+    m_mAs = mas;
+}
+
+double Image::getmAs()
+{
+     return m_mAs;
 }
 
 void Image::addWindowLevel( double window, double level )
