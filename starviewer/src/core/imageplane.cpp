@@ -147,4 +147,9 @@ bool ImagePlane::operator ==(const ImagePlane &imagePlane)
         return false;
 }
 
+bool ImagePlane::operator !=(const ImagePlane &imagePlane)
+{
+    return !(*this == imagePlane);
+}
+
 }
