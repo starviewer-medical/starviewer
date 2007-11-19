@@ -1586,41 +1586,44 @@ Image *Q2DViewer::getCurrentDisplayedImage() const
 
 ImagePlane *Q2DViewer::getCurrentImagePlane()
 {
+    ImagePlane *imagePlane = 0;
     Image *image = this->getCurrentDisplayedImage();
-    const double *dirCosines = image->getImageOrientationPatient();
-    ImagePlane *imagePlane = new ImagePlane();
-    double *spacing = m_mainVolume->getSpacing();
-    int *dimensions = m_mainVolume->getDimensions();
-
-    switch( m_lastView )
+    if( image )
     {
-        case Axial: // XY
-            imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
-            imagePlane->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
-            imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
-            imagePlane->setRows( image->getRows() );
-            imagePlane->setColumns( image->getColumns() );
-        break;
+        imagePlane = new ImagePlane();
+        const double *dirCosines = image->getImageOrientationPatient();
+        double *spacing = m_mainVolume->getSpacing();
+        int *dimensions = m_mainVolume->getDimensions();
 
-        case Sagittal: // XZ
-            imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
-            imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
-            imagePlane->setSpacing( spacing[0], spacing[2] );
-            imagePlane->setRows( dimensions[0] );
-            imagePlane->setColumns( dimensions[2] );
-        break;
+        switch( m_lastView )
+        {
+            case Axial: // XY
+                imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+                imagePlane->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+                imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
+                imagePlane->setRows( image->getRows() );
+                imagePlane->setColumns( image->getColumns() );
+            break;
 
-        case Coronal: // YZ
-            imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
-            imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
-            imagePlane->setSpacing( spacing[1], spacing[2] );
-            imagePlane->setRows( dimensions[1] );
-            imagePlane->setColumns( dimensions[2] );
-        break;
+            case Sagittal: // XZ
+                imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+                imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+                imagePlane->setSpacing( spacing[0], spacing[2] );
+                imagePlane->setRows( dimensions[0] );
+                imagePlane->setColumns( dimensions[2] );
+            break;
+
+            case Coronal: // YZ
+                imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+                imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+                imagePlane->setSpacing( spacing[1], spacing[2] );
+                imagePlane->setRows( dimensions[1] );
+                imagePlane->setColumns( dimensions[2] );
+            break;
+        }
+        // TODO aquest canvia segons l'orientació?
+        imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
     }
-    // TODO aquest canvia segons l'orientació?
-    imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
-
     return imagePlane;
 }
 
