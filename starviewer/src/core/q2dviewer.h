@@ -29,19 +29,24 @@ class vtkScalarBarActor;
 class vtkInteractorStyle;
 class vtkImageBlend;
 class vtkImageActor;
-
-/// tractament múltiples vistes
+// tractament múltiples vistes
 class vtkPropCollection;
 class vtkRendererCollection;
 class vtkCollection;
 class vtkActor2DCollection;
-
 // grayscale pipeline
 class vtkImageMapToWindowLevelColors;
 class vtkImageShiftScale;
 class vtkWindowLevelLookupTable;
 
 namespace udg {
+
+// Fordward declarations
+class Volume;
+class Q2DViewerToolManager;
+class OldTool;
+class VoxelInformationTool;
+class OldDrawer;
 
 /**
 
@@ -64,14 +69,6 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-
-// Fordward declarations
-class Volume;
-class Q2DViewerToolManager;
-class OldTool;
-class VoxelInformationTool;
-class OldDrawer;
-
 class Q2DViewer : public QViewer{
 Q_OBJECT
 public:
@@ -222,7 +219,6 @@ public:
     void setMagnificationFactor( double factor );
 
 public slots:
-
     virtual void render();
     void reset();
     void setTool( QString toolName );
