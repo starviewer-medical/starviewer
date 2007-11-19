@@ -6,9 +6,11 @@
  ***************************************************************************/
 #include "toolregistry.h"
 #include "tool.h"
-#include "zoomtool.h"
 #include "qviewer.h"
 #include "logging.h"
+// tools registrades
+#include "zoomtool.h"
+#include "referencelinestool.h"
 
 #include <QAction>
 
@@ -29,6 +31,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     if( toolName == "ZoomTool" )
     {
         tool = new ZoomTool( viewer );
+    }
+    else if( toolName == "ReferenceLinesTool" )
+    {
+        tool = new ReferenceLinesTool( viewer );
     }
 //     else if( toolName == "SlicingTool" )
 //     {
@@ -100,6 +106,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("ROI's") );
         toolAction->setStatusTip( tr("Enable/Disable ROI tool") );
         toolAction->setIcon( QIcon(":/images/roi.png") );
+    }
+    else if( toolName == "ReferenceLinesTool" )
+    {
+        toolAction->setText( tr("Reference Lines") );
+        toolAction->setStatusTip( tr("Enable/Disable Reference Lines tool") );
+//         toolAction->setIcon( QIcon(":/images/roi.png") ); TODO icona per determinar
     }
     else
     {
