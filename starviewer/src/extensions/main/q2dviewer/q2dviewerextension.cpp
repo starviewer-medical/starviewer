@@ -61,6 +61,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
+    addColumns();
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -683,6 +684,7 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
     m_newZoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
 
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
