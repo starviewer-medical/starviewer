@@ -140,7 +140,19 @@ public:
     /// assigna/retorna el path absolut de la imatge
     void setPath( QString path );
     QString getPath() const;
-
+    
+    ///assigna / retorna el KiloVoltatge de la imatge
+    void setKVP( double kvp );
+    double getKVP();
+    
+    ///assigna / retorna el microAmperatge de la imatge
+    void setuAs( double uas );
+    double getuAs();
+    
+    ///assigna / retorna el miliAperatge de la imatge
+    void setmAs( double mas );
+    double getmAs();
+    
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
 
@@ -245,6 +257,38 @@ private:
 
     /// Nombre de frames de la imatge. (0028,0008) Tipus 1
     int m_numberOfFrames;
+    
+    /** Kilo voltatge de sortida del generador de raigs-X. (0018,0060) 
+        El tipus depèn de la modalitat:
+        
+        CR IMAGE->tipus 3
+        CT IMAGE->tipus 2
+        X-RAY->   tipus 2
+        X-RAY SEQUENCE->tipus 1C: condició: requerit si el tipus de frame té valor 1.
+        X-RAY FRAME-> tipus 1.
+        XA/XRF->tipus 1.
+    */
+    double m_KVP;
+    
+    /** Exposició als raigs-X expressada en micro ampers per segon. (0018,1153) 
+        El tipus depèn de la modalitat:
+        
+        CR IMAGE->tipus 3
+        CT IMAGE->tipus 2
+        X-RAY->   tipus 3
+        X-RAY SEQUENCE->no en té.
+        X-RAY FRAME->no en té.
+    */
+    double m_uAs;
+    
+     /** Exposició als raigs-X expressada en mi·liampers per segon. (0018,1153) 
+        El tipus depèn de la modalitat:
+        
+        XA/XRF->tipus 1C: condició: requerit si el temps d'exposició en ms (0018,9328) o el corrent del tub de raigs-X en mA no estan presents.
+                                    Altrament també pot ser-hi.
+    */
+    double m_mAs;
+    
 
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM

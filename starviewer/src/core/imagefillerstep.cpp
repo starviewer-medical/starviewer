@@ -184,6 +184,21 @@ void ImageFillerStep::processImage( Image *image )
 
         int frames = dicomReader.getAttributeByName( DCM_NumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
+        
+        if (dicomReader.tagExists( 0x0018, 0x0060 ))
+        {
+            image->setKVP( dicomReader.getAttributeByTag( 0x018, 0x0060 ).toDouble() );
+        }
+        
+        if (dicomReader.tagExists( 0x0018, 0x1153 ))
+        {
+            image->setuAs( dicomReader.getAttributeByTag( 0x018, 0x1153 ).toDouble() );
+        }
+        
+        if (dicomReader.tagExists( 0x0018, 0x9332 ))
+        {
+            image->setmAs( dicomReader.getAttributeByTag( 0x018, 0x9332 ).toDouble() );
+        }
     }
     else
     {
