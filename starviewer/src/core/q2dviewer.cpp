@@ -12,6 +12,7 @@
 #include "series.h"
 #include "study.h"
 #include "patient.h"
+#include "imageplane.h"
 
 // include's qt
 #include <QResizeEvent>
@@ -1568,6 +1569,64 @@ void Q2DViewer::setMagnificationFactor( double factor )
     {
         DEBUG_LOG( QString("Factor no aplicable: %1").arg(factor) );
     }
+}
+
+Image *Q2DViewer::getCurrentDisplayedImage() const
+{
+    Image *image = NULL;
+    if( m_mainVolume )
+    {
+        if( m_mainVolume->getSeries() )
+        {
+            if( (m_currentPhase*m_maxSliceValue + m_currentSlice) < m_mainVolume->getSeries()->getImages().count() )
+            {
+                image = m_mainVolume->getSeries()->getImages().at( m_currentPhase*m_maxSliceValue + m_currentSlice );
+            }
+        }
+    }
+    return image;
+}
+
+ImagePlane *Q2DViewer::getCurrentImagePlane()
+{
+    Image *image = this->getCurrentDisplayedImage();
+    const double *dirCosines = image->getImageOrientationPatient();
+    ImagePlane *imagePlane = new ImagePlane();
+    double *spacing = m_mainVolume->getSpacing();
+    int *dimensions = m_mainVolume->getDimensions();
+
+    switch( m_lastView )
+    {
+        case Axial: // XY
+            imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+            imagePlane->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+            imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
+            imagePlane->setRows( image->getRows() );
+            imagePlane->setColumns( image->getColumns() );
+        break;
+
+        case Sagittal: // XZ
+            imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+            imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+            imagePlane->setSpacing( spacing[0], spacing[2] );
+            imagePlane->setRows( dimensions[0] );
+            imagePlane->setColumns( dimensions[2] );
+        break;
+
+        case Coronal: // YZ
+            imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+            imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+            imagePlane->setSpacing( spacing[1], spacing[2] );
+            imagePlane->setRows( dimensions[1] );
+            imagePlane->setColumns( dimensions[2] );
+        break;
+    }
+
+    // TODO aquest canvia segons l'orientació?
+    imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
+
+
+    return imagePlane;
 }
 
 OldDrawer *Q2DViewer::getOldDrawer() const

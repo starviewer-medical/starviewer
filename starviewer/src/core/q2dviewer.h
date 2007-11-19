@@ -43,10 +43,12 @@ namespace udg {
 
 // Fordward declarations
 class Volume;
+class Image;
 class Q2DViewerToolManager;
 class OldTool;
 class VoxelInformationTool;
 class OldDrawer;
+class ImagePlane;
 
 /**
 
@@ -217,6 +219,20 @@ public:
 
     /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
     void setMagnificationFactor( double factor );
+
+    /**
+     * Ens retorna la imatge que s'està visualitzant en aquell moment
+     * TODO pot ser que aquest mètode sigui purament de conveniència per la tool de reference lines i desaparegui
+     * en un futur o sigui substituit per un altre
+     * @return Objecte Image corresponent al que es visualitza en aquell moment. NULL si no es veu cap imatge
+     */
+    Image *getCurrentDisplayedImage() const;
+
+    /**
+     * Ens dóna el pla d'imatge actual que estem visualitzant
+     * @return El pla imatge actual
+     */
+    ImagePlane *getCurrentImagePlane();
 
 public slots:
     virtual void render();
