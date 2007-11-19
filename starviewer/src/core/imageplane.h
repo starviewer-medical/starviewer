@@ -43,6 +43,8 @@ public:
     double getRowLength() const;
     double getColumnLength() const;
 
+    bool operator ==(const ImagePlane &imagePlane);
+
 private:
     /// Vectors que defineixen el pla
     double m_rowDirectionVector[3], m_columnDirectionVector[3], m_normal[3];
