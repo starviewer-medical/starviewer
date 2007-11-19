@@ -380,9 +380,11 @@ void Q2DViewerExtension::addColumns( int columns )
             newViewer = getNewQ2DViewerWidget();
             (*it)->addWidget( newViewer );
             m_vectorViewers.insert( posViewer,newViewer );
+            initializeDefaultTools( newViewer->getViewer() );
             posViewer += m_columns;
             it++;
-            if( i >= m_rows ) newViewer->hide();
+            if( i >= m_rows )
+                newViewer->hide();
             i++;
 
         }
@@ -410,7 +412,9 @@ void Q2DViewerExtension::addRows( int rows )
             newViewer = getNewQ2DViewerWidget();
             horizontal->addWidget( newViewer );
             m_vectorViewers.push_back( newViewer );
-            if( i >= m_columns) newViewer->hide();
+            initializeDefaultTools( newViewer->getViewer() );
+            if( i >= m_columns)
+                newViewer->hide();
         }
         rows--;
     }
@@ -431,7 +435,9 @@ void Q2DViewerExtension::removeColumns( int columns )
             oldViewer = m_vectorViewers.value(posViewer);
             ( *it )->removeWidget( oldViewer );
             m_vectorViewers.remove( posViewer );
-            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
+            // TODO eliminar els viewers que treiem del toolManager???
+            if ( m_selectedViewer == oldViewer )
+                setViewerSelected( m_vectorViewers.value( 0 ) );
             delete oldViewer;
             posViewer += (m_columns-1);
             it++;
@@ -457,7 +463,9 @@ void Q2DViewerExtension::removeRows( int rows )
         {
             oldViewer = m_vectorViewers.value(posViewer);
             m_vectorViewers.remove(posViewer);
-            if ( m_selectedViewer == oldViewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
+            // TODO eliminar els viewers que treiem del toolManager???
+            if ( m_selectedViewer == oldViewer )
+                setViewerSelected( m_vectorViewers.value( 0 ) );
             delete oldViewer;
             posViewer -= 1;
         }
@@ -498,8 +506,10 @@ void Q2DViewerExtension::setGrid( int rows, int columns )
     {
         int hideWindows = m_totalRows - m_rows;
 
-        if( hideWindows < (rows - m_rows) ) windowsToShow = hideWindows;
-        else windowsToShow = rows-m_rows;
+        if( hideWindows < (rows - m_rows) )
+             windowsToShow = hideWindows;
+        else
+            windowsToShow = rows-m_rows;
         showRows( windowsToShow );
 
         if( rows > m_totalRows ) windowsToCreate = rows - m_totalRows;
@@ -518,8 +528,10 @@ void Q2DViewerExtension::setGrid( int rows, int columns )
     {
         int hideWindows = m_totalColumns - m_columns;
 
-        if( hideWindows < (columns - m_columns) ) windowsToShow = hideWindows;
-        else windowsToShow = columns-m_columns;
+        if( hideWindows < (columns - m_columns) )
+            windowsToShow = hideWindows;
+        else
+            windowsToShow = columns-m_columns;
         showColumns( windowsToShow );
 
         if( columns > m_totalColumns ) windowsToCreate = columns - m_totalColumns;
@@ -671,7 +683,17 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
     m_newZoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_toolManager->setViewerTool( m_selectedViewer->getViewer(), "ZoomTool" );
+
+    // registrem al manager les tools que van amb el viewer principal
+    initializeDefaultTools( m_selectedViewer->getViewer() );
+}
+
+void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
+{
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "ReferenceLinesTool";
+    m_toolManager->setViewerTools( viewer, toolsList );
+    m_toolManager->refreshConnections();
 }
 
 void Q2DViewerExtension::showRows( int rows )
