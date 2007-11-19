@@ -108,6 +108,7 @@ public slots:
 
 private:
 
+    /// Simulates ray casting by traversing a resliced volume.
     void castRays();
 
 

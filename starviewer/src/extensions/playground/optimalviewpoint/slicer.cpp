@@ -92,7 +92,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
     resliceAxes->SetElement( 1, 3, 0.0 );
     resliceAxes->SetElement( 2, 3, 0.0 );
 
-    // Extract a slice in the desired orientation
+    // Reslice the image in the desired orientation
     vtkImageReslice * reslice = vtkImageReslice::New();
     reslice->SetInput( m_input );
     reslice->SetOutputDimensionality( 3 );
@@ -104,7 +104,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
     reslice->Update();
 //     reslice->Print( std::cout );
 
-    // Trobar l'extent mínim
+    // Find minimum extent
     vtkImageData * resliced = reslice->GetOutput();
     unsigned char * data = reinterpret_cast< unsigned char * >( resliced->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     int increments[3];
@@ -116,7 +116,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
 
     if ( m_readExtentFromFile )
     {
-        // llegim l'extent d'un fitxer
+        // read extent from file
         QFile inFileExtent( QDir::tempPath().append( QString( "/extent%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
         if ( inFileExtent.open( QFile::ReadOnly ) )
         {
@@ -129,11 +129,12 @@ void Slicer::reslice( bool saveMhd, bool doClip )
 
     if ( !hasExtent)
     {
+        // Compute extent from data
         findExtent( data, dims[0], dims[1], dims[2], increments[0], increments[1], increments[2], minX, maxX );
         findExtent( data, dims[1], dims[0], dims[2], increments[1], increments[0], increments[2], minY, maxY );
         findExtent( data, dims[2], dims[0], dims[1], increments[2], increments[0], increments[1], minZ, maxZ );
 
-        // guardem l'extent en un fitxer
+        // store extent to file
         QFile outFileExtent( QDir::tempPath().append( QString( "/extent%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
         if ( outFileExtent.open( QFile::WriteOnly | QFile::Truncate ) )
         {
@@ -146,7 +147,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
     DEBUG_LOG( QString( "minY = %1, maxY = %2" ).arg( minY ).arg( maxY ) );
     DEBUG_LOG( QString( "minZ = %1, maxZ = %2" ).arg( minZ ).arg( maxZ ) );
 
-    // Retallar la imatge fins al mínim extent
+    // Clip image to minimum extent
     vtkImageClip * clip = vtkImageClip::New();
     clip->SetInput( reslice->GetOutput() );
     clip->SetOutputWholeExtent( minX, maxX, minY, maxY, minZ, maxZ );
@@ -155,7 +156,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
 
     if ( saveMhd )
     {
-        // Guardar la nova imatge en un fitxer
+        // Save resliced image to file
         vtkImageData * clipped = clip->GetOutput();
         unsigned char * clippedData = reinterpret_cast< unsigned char * >( clipped->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
         int size = clipped->GetPointData()->GetScalars()->GetSize();
@@ -187,7 +188,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
 //     clipped->Print( std::cout );
 //     DEBUG_LOG( "============================================================" );
 
-    // Guardar la nova imatge als atributs de l'objecte
+    // Get some data about resliced image
     m_reslicedImage = clip->GetOutput(); m_reslicedImage->Register( 0 );
     m_reslicedData = reinterpret_cast< unsigned char * >( m_reslicedImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_reslicedDataSize = m_reslicedImage->GetPointData()->GetScalars()->GetSize();
@@ -201,7 +202,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
     DEBUG_LOG( QString( "[Slicer] n labels = %1" ).arg( m_nLabels ) );
     DEBUG_LOG( QString( "[Slicer] new background = %1" ).arg( static_cast< short >( m_newBackground ) ) );
 
-    // Destruir els objectes creats
+    // Destroy created objects
     reslice->Delete();
     clip->Delete();
 }
@@ -280,20 +281,21 @@ void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 // Després comença un nou grup i va fent el mateix, i així fins que acaba.
 void Slicer::method1A( double threshold )   /// \todo Fer-ho més eficient!!!
 {
-    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
-    unsigned short g = 0;   // id del grup
-    unsigned int x = 0;
+    // Start of the algorithm
+    QVector< unsigned short > groups;   // every position corresponds to a slice and stores id of the group to which the slice belongs
+    unsigned short g = 0;   // group id
+    unsigned int x = 0;     // slice index
 
     while ( x < m_sliceCount )
     {
-        groups << g;    // comencem el nou grup
+        groups << g;    // start new group
         unsigned int y = x + 1;
         bool grouped = true;
 
         while ( y < m_sliceCount && grouped )
         {
-            unsigned char * sliceX = m_reslicedData + x * m_sliceSize;  // començament de la llesca X
-            unsigned char * sliceY = m_reslicedData + y * m_sliceSize;  // començament de la llesca Y
+            unsigned char * sliceX = m_reslicedData + x * m_sliceSize;  // start of slice X
+            unsigned char * sliceY = m_reslicedData + y * m_sliceSize;  // start of slice Y
             double similarity = this->similarity( sliceX, sliceY );
             DEBUG_LOG( QString( "[*M1A*] x = %1, y = %2; similarity = %3" ).arg( x ).arg( y ).arg( similarity ) );
 
@@ -309,8 +311,10 @@ void Slicer::method1A( double threshold )   /// \todo Fer-ho més eficient!!!
         x = y;
         g++;
     }
+    // End of the algorithm
+    // The results are in the vector "groups"
 
-    // Printar resultats i guardar-los en un fitxer
+    // Print results and save them in a file
     QFile outFile( QDir::tempPath().append( QString( "/m1a%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
     if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
@@ -328,96 +332,32 @@ void Slicer::method1A( double threshold )   /// \todo Fer-ho més eficient!!!
 
 
 // Ajunta llesques consecutives amb semblança per sobre d'un llindar.
-void Slicer::method1B_0( double threshold )   /// \todo Fer-ho més eficient!!!
-{
-    if ( m_similarities.isEmpty() ) computeSimilarities();
-
-    QVector< QPair< double, unsigned short > > sortedSimilarities;
-
-    for ( unsigned short i = 0; i < m_similarities.size(); i++ )
-        sortedSimilarities << qMakePair( m_similarities[i], i );
-
-    qSort( sortedSimilarities );    // ordenació creixent
-
-    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
-    for ( unsigned short i = 0; i < m_sliceCount; i++ ) groups << i;    // inicialment cada llesca té un grup propi
-
-    unsigned short i = sortedSimilarities.size() - 1;
-    bool grouped = true;
-
-    DEBUG_LOG( "[*M1B*] while" );
-
-    // hauria de ser i >= 0, però com que és unsigned si es passa serà més gran que sortedSimilarities.size()
-    // quedaria millor amb un iterador
-    while ( i < sortedSimilarities.size() && grouped )
-    {
-        if ( sortedSimilarities[i].first > threshold )
-        {
-            //groups[sortedSimilarities[i].second+1] = groups[sortedSimilarities[i].second];
-            setGroup( groups, sortedSimilarities[i].second + 1, groups[sortedSimilarities[i].second] );
-        }
-        else
-        {
-            grouped = false;
-        }
-
-        i--;
-    }
-
-    // assignem ids consecutius als groups
-    unsigned short g = 0, lastGroup = groups[0];
-    for ( int i = 0; i < groups.size(); i++ )
-    {
-        if ( groups[i] == lastGroup ) groups[i] = g;
-        else
-        {
-            lastGroup = groups[i];
-            groups[i] = ++g;
-        }
-    }
-
-    // Printar resultats i guardar-los en un fitxer
-    QFile outFile( QDir::tempPath().append( QString( "/m1b%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
-    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        QTextStream out( &outFile );
-        DEBUG_LOG( QString( "[M1B] threshold = %1" ).arg( threshold ) );
-        out << "threshold = " << threshold << "\n";
-        for ( int i = 0; i < groups.size(); i++ )
-        {
-            DEBUG_LOG( QString( "[M1B] group %1 : slice %2" ).arg( groups[i] ).arg( i ) );
-            out << "group " << groups[i] << " : slice " << i << "\n";
-        }
-        outFile.close();
-    }
-}
-
-
-// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
 void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
 {
-    if ( m_similarities.isEmpty() ) computeSimilarities();
+    // Start of the algorithm
+    if ( m_similarities.isEmpty() ) computeSimilarities();  // compute similarities between pairs of consecutive slices
 
-    QVector< QPair< double, unsigned short > > sortedSimilarities;
+    // Order by similarity
+    QVector< QPair< double, unsigned short > > sortedSimilarities;  // each position stores a pair ("similarity between (i) and (i+1)", i)
 
     for ( unsigned short i = 0; i < m_similarities.size(); i++ )
         sortedSimilarities << qMakePair( m_similarities[i], i );
 
-    qSort( sortedSimilarities );    // ordenació creixent
+    qSort( sortedSimilarities );    // sort in ascending order
 
-    QVector< unsigned short > groups;   // cada posició correspon a una llesca i conté l'id del grup al qual pertany la llesca
-    QVector< unsigned short > rightGroups;   // cada posició correspon a una llesca i conté l'id de l'última llesca del grup al qual pertany la llesca
+    QVector< unsigned short > groups;   // every position corresponds to a slice s and stores id of the group to which the slice s belongs
+    QVector< unsigned short > rightGroups;// every position corresponds to a slice s and stores id of the last slice of the group to which the slice s belongs
     for ( unsigned short i = 0; i < m_sliceCount; i++ )
     {
-        groups << i;    // inicialment cada llesca té un grup propi
+        groups << i;    // at the start every slice has an own group
         rightGroups << i;
     }
 
     unsigned short i = sortedSimilarities.size() - 1;
-    bool belowThreshold = true;
+    bool belowThreshold = true; // it's name should be "aboveThreshold"
 
-    // hauria de ser i >= 0, però com que és unsigned si es passa serà més gran que sortedSimilarities.size()
-    // quedaria millor amb un iterador
+    // should be while i >= 0, but since i is unsigned, if it goes below 0 it will overflow to a number bigger than sortedSimilarities.size()
+    // would be better with an iterator
     while ( i < sortedSimilarities.size() && belowThreshold )
     {
         if ( sortedSimilarities[i].first > threshold )
@@ -426,8 +366,8 @@ void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
             unsigned short sy = sortedSimilarities[i].second + 1;
             unsigned short gx = groups[sx];
             unsigned short gy = rightGroups[sy];
-            unsigned char * sliceX = m_reslicedData + gx * m_sliceSize;  // començament de la llesca X
-            unsigned char * sliceY = m_reslicedData + gy * m_sliceSize;  // començament de la llesca Y
+            unsigned char * sliceX = m_reslicedData + gx * m_sliceSize;  // start of slice X
+            unsigned char * sliceY = m_reslicedData + gy * m_sliceSize;  // start of slice Y
             double sim = similarity( sliceX, sliceY );
             DEBUG_LOG( QString( "[*M1B*] provem %1(g%2) i %3(rg%4) --> sim = %5" ).arg( sx ).arg( gx ).arg( sy ).arg( gy ).arg( sim ) );
             if ( sim > threshold )
@@ -446,7 +386,7 @@ void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
         i--;
     }
 
-    // assignem ids consecutius als groups
+    // Assign consecutive ids to the groups
     unsigned short g = 0, lastGroup = groups[0];
     for ( int i = 0; i < groups.size(); i++ )
     {
@@ -467,8 +407,10 @@ void Slicer::method1B( double threshold )   /// \todo Fer-ho més eficient!!!
             rightGroups[i] = --rg;
         }
     }
+    // End of the algorithm
+    // The results are in the vector "groups" (rightGroups was only temporary)
 
-    // Printar resultats i guardar-los en un fitxer
+    // Print results and save them in a file
     QFile outFile( QDir::tempPath().append( QString( "/m1b%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
     if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
@@ -542,8 +484,8 @@ double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned c
     // I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p(x)\,p(y)} \right) }
     // I(X;Y) = H(X) + H(Y) - H(X,Y)
     Histogram histogramX( m_nLabels ), histogramY( m_nLabels ); // histogrames individuals
-    Histogram jointHistogram( m_nLabels * m_nLabels );  // histograma conjunt (2d)
-    // la indexació serà valueX + m_nLabels * valueY
+    Histogram jointHistogram( m_nLabels * m_nLabels );  // joint histogram (2d)
+                                                        // indexation is valueX + m_nLabels * valueY
 
     for ( unsigned int j = 0; j < m_sliceSize; j++ )
     {
@@ -606,9 +548,9 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
     // H(X,Y) = -\sum_{x,y} p_{x,y} \log_2(p_{x,y})
     // I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p(x)\,p(y)} \right) }
     // I(X;Y) = H(X) + H(Y) - H(X,Y)
-    Histogram histogramX( m_nLabels ), histogramY( m_nLabels ); // histogrames individuals
-    Histogram jointHistogram( m_nLabels * m_nLabels );  // histograma conjunt (2d)
-    // la indexació serà valueX + m_nLabels * valueY
+    Histogram histogramX( m_nLabels ), histogramY( m_nLabels ); // individual histograms
+    Histogram jointHistogram( m_nLabels * m_nLabels );  // joint histogram (2d)
+                                                        // indexation is valueX + m_nLabels * valueY
 
     for ( unsigned int j = 0; j < m_sliceSize; j++ )
     {
@@ -657,7 +599,7 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
 
     double I_X_Y_ = H_X_ + H_Y_ - H_X_Y_;
 
-    // H(X,Y) = 0 quan són llesques homogènies; llavors comprovem si són iguals o diferents per assingar el valor de semblança
+    // H(X,Y) = 0 when they are homogenious slices; then we check if they are equal or different to set similarity value
     double similarity = ( ( H_X_Y_ > 0.0 ) ? ( I_X_Y_ / H_X_Y_ ) : ( sliceX[0] == sliceY[0] ? 1.0 : 0.0 ) );
 
     DEBUG_LOG( QString( "[*similarity*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
@@ -671,10 +613,10 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
 
 void Slicer::computeSimilarities()  /// \todo Fer-ho més eficient!!!
 {
-    for ( int i = 0; i < m_sliceCount - 1; i++ )  // iterem sobre les llesques
+    for ( int i = 0; i < m_sliceCount - 1; i++ )  // iterate over slices
     {
-        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;          // començament de la llesca X
-        unsigned char * sliceY = m_reslicedData + ( i + 1 ) * m_sliceSize;  // començament de la llesca Y
+        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;          // start of slice X
+        unsigned char * sliceY = m_reslicedData + ( i + 1 ) * m_sliceSize;  // start of slice Y
         DEBUG_LOG( QString( "[*CS*] X = %1, Y = %2" ).arg( i ).arg( i + 1 ) );
         m_similarities << similarity( sliceX, sliceY );
     }
@@ -703,14 +645,15 @@ void Slicer::setReadExtentFromFile( bool readExtentFromFile )
 }
 
 
+// method to find most structured view
 double Slicer::newMethod2( int step, bool normalized )
 {
     double sum = 0.0;
 
-    for ( int i = 0; i < m_sliceCount - step; i++ )    // iterarate over slices
+    for ( int i = 0; i < m_sliceCount - step; i++ ) // iterarate over slices
     {
-        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;          // start of slice X
-        unsigned char * sliceY = m_reslicedData + ( i + step ) * m_sliceSize;  // start of slice Y
+        unsigned char * sliceX = m_reslicedData + i * m_sliceSize;              // start of slice X
+        unsigned char * sliceY = m_reslicedData + ( i + step ) * m_sliceSize;   // start of slice Y
         DEBUG_LOG( QString( "[*NM2*] X = %1, Y = %2" ).arg( i ).arg( i + step ) );
         sum += normalized ? similarity( sliceX, sliceY ) : mutualInformation( sliceX, sliceY );
     }
@@ -727,6 +670,7 @@ double Slicer::newMethod2( int step, bool normalized )
 // llesques fusionades
 void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficient!!!
 {
+    // Start of the algorithm
     /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
     // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
     // Should be done in a cleaner way.
@@ -747,7 +691,7 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
 
     if ( m_similarities.isEmpty() ) computeSimilarities();
 
-    QMultiMap< double, unsigned short > sortedSimilarities;    // similarities sorted in ascending order
+    QMultiMap< double, unsigned short > sortedSimilarities; // similarities sorted in ascending order
 
     for ( unsigned short i = 0; i < m_similarities.size(); i++ )
     {
@@ -759,7 +703,7 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
 
     while ( !sortedSimilarities.isEmpty() && aboveThreshold )
     {
-        QMultiMap< double, unsigned short >::iterator it = --sortedSimilarities.end();    // last element
+        QMultiMap< double, unsigned short >::iterator it = --sortedSimilarities.end();  // last element
 
         if ( it.key() > threshold )
         {
@@ -822,6 +766,8 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
             finalGroups << groups[i];
         }
     }
+    // End of the algorithm
+    // The results are in the vector "finalGroups"
 
     // Print results i save them to a file
     QFile outFile( QDir::tempPath().append( QString( "/gmc%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
