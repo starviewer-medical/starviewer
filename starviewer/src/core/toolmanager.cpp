@@ -10,6 +10,7 @@
 #include "toolproxy.h"
 #include "tool.h"
 #include "qviewer.h"
+#include "logging.h"
 
 #include <QStringList>
 #include <QSignalMapper>
@@ -87,9 +88,24 @@ void ToolManager::activateTool( const QString &toolName )
         // declarem aquestes variables per fer-ho més llegible
         QViewer *viewer = pair.first;
         ToolConfiguration *configuration = pair.second;
+        Tool *tool = 0;
 
-        // obtenim la tool i la posem a punt amb les dades i la configuració
-        Tool *tool = m_toolRegistry->getTool( toolName, viewer );
+        // hem de comprovar si el proxy ja té o no la tool,
+        if( !viewer->getToolProxy()->isToolActive( toolName ) )
+        {
+            // com que el proxy no té aquesta tool
+            // la produim i la posem a punt amb les dades i la configuració
+            tool = m_toolRegistry->getTool( toolName, viewer );
+            if( configuration ) // si no tenim cap configuració guardada, no cal fer res, es queda amb la que té per defecte
+                tool->setConfiguration( configuration );
+            // afegim la tool al proxy
+            viewer->getToolProxy()->addTool( tool );
+        }
+        else
+        {
+            tool = viewer->getToolProxy()->getTool( toolName );
+        }
+        // comprovem les dades per si cal donar-n'hi
         if( tool->hasSharedData() )
         {
             if( !data ) // si data és nul, vol dir que és la primera tool que creem
@@ -97,10 +113,7 @@ void ToolManager::activateTool( const QString &toolName )
             else
                 tool->setToolData( data ); // si ja les hem creat abans, li assignem les de la primera tool creada
         }
-        if( configuration ) // si no tenim cap configuració guardada, no cal fer res, es queda amb la que té per defecte
-            tool->setConfiguration( configuration );
-        // afegim la tool al proxy
-        viewer->getToolProxy()->addTool( tool );
+
     }
 }
 
@@ -122,11 +135,16 @@ void ToolManager::triggeredToolAction( const QString &toolName )
 {
     // obtenim l'acció que l'ha provocat
     QAction *toolAction = qobject_cast<QAction *>( m_toolsActionSignalMapper->mapping(toolName) );
-    // si està checked és que s'ha d'activar, altrament desactivar
-    if( toolAction->isChecked() )
-        activateTool(toolName);
+    if( toolAction )
+    {
+        // si està checked és que s'ha d'activar, altrament desactivar
+        if( toolAction->isChecked() )
+            activateTool(toolName);
+        else
+            deactivateTool(toolName);
+    }
     else
-        deactivateTool(toolName);
+        DEBUG_LOG( QString("No hi ha cap tool Action per la tool anomenada: ") + toolName );
 }
 
 QAction *ToolManager::getToolAction( const QString &toolName )
@@ -135,6 +153,15 @@ QAction *ToolManager::getToolAction( const QString &toolName )
     m_toolsActionSignalMapper->setMapping( toolAction, toolName );
     connect( toolAction , SIGNAL( triggered() ) , m_toolsActionSignalMapper , SLOT( map() ) );
     return toolAction;
+}
+
+void ToolManager::refreshConnections()
+{
+    QStringList toolsList = m_toolViewerMap.uniqueKeys();
+    foreach( QString tool, toolsList )
+    {
+        triggeredToolAction( tool );
+    }
 }
 
 }

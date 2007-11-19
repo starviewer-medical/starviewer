@@ -75,6 +75,13 @@ public slots:
     void activateTool( const QString &toolName );
     void deactivateTool( const QString &toolName );
 
+    /**
+     * Comprova per cada tool registrada, si l'acció associada està checked o no per activar/desactivar
+     * la tool en els viewers indicats. Es pot fer servir per quan per exemple afegim nous viewers en un mateix contexte
+     * i volem que s'activin les mateixes tools que estan actives en els altres viewers.
+     */
+    void refreshConnections();
+
 private slots:
     /**
      * Quan es dispara l'acció d'una tool, aquest slot la rep i a partir del seu nom
