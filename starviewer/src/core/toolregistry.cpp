@@ -10,6 +10,7 @@
 #include "logging.h"
 // tools registrades
 #include "zoomtool.h"
+#include "slicingtool.h"
 #include "referencelinestool.h"
 
 #include <QAction>
@@ -31,6 +32,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     if( toolName == "ZoomTool" )
     {
         tool = new ZoomTool( viewer );
+    }
+    else if( toolName == "SlicingTool" )
+    {
+        tool = new SlicingTool( viewer );
     }
     else if( toolName == "ReferenceLinesTool" )
     {
