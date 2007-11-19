@@ -123,4 +123,28 @@ double ImagePlane::getColumnLength() const
     return m_columns * m_spacing[1];
 }
 
+bool ImagePlane::operator ==(const ImagePlane &imagePlane)
+{
+    if( m_rowDirectionVector[0] == imagePlane.m_rowDirectionVector[0] &&
+        m_rowDirectionVector[1] == imagePlane.m_rowDirectionVector[1] &&
+        m_rowDirectionVector[2] == imagePlane.m_rowDirectionVector[0] &&
+        m_columnDirectionVector[0] == imagePlane.m_columnDirectionVector[0] &&
+        m_columnDirectionVector[1] == imagePlane.m_columnDirectionVector[0] &&
+        m_columnDirectionVector[2] == imagePlane.m_columnDirectionVector[0] &&
+        m_normal[0] == imagePlane.m_normal[0] &&
+        m_normal[1] == imagePlane.m_normal[1] &&
+        m_normal[2] == imagePlane.m_normal[2] &&
+        m_origin[0] == imagePlane.m_origin[0] &&
+        m_origin[1] == imagePlane.m_origin[1]  &&
+        m_origin[2] == imagePlane.m_origin[2] &&
+        m_spacing[0] == imagePlane.m_spacing[0] &&
+        m_spacing[1] == imagePlane.m_spacing[1] &&
+        m_rows == imagePlane.m_rows &&
+        m_columns == imagePlane.m_columns
+    )
+        return true;
+    else
+        return false;
+}
+
 }
