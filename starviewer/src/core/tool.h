@@ -43,7 +43,7 @@ public:
      * Assigna les dades
      * @param data dades que assignem a la tool
      */
-    void setToolData( ToolData *data );
+    virtual void setToolData( ToolData *data );
 
     /**
      * Ens retorna les dades de la tool
