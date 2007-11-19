@@ -463,15 +463,15 @@ void OptimalViewpointPlane::castRays()
 {
     if ( m_compute && m_computing )
     {
-        for ( unsigned int i = 0; i < m_numberOfRays; i++ ) // iterem sobre els raigs
+        for ( unsigned int i = 0; i < m_numberOfRays; i++ ) // iterate over rays
         {
 //             DEBUG_LOG( QString("i = %1").arg(i) );
-            for ( unsigned int j = 0; j < m_rayLength; j++ )    // iterem sobre el raig actual
+            for ( unsigned int j = 0; j < m_rayLength; j++ )    // iterate over current ray
             {
 //                 DEBUG_LOG( QString("j = %1").arg(j) );
                 unsigned char value = m_planeData[i + j * m_numberOfRays];
 //                 if ( value == 255 ) value = 0;
-                if ( value != 255 )
+                if ( value != 255 ) // don't count backgroud added by reslicer (255)
                     compute( 0, value );
             }
 

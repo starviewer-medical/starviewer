@@ -49,17 +49,21 @@ class Slicer {
 
 public:
 
-    /// Crea un objecte Slicer amb l'identificador \a id.
+    /// Creates a Slicer object with identifier \a id.
     Slicer( unsigned char id );
     ~Slicer();
 
-    /// Assigna la imatge d'entrada.
+    /// Sets input image.
     void setInput( vtkImageData * input );
-    /// Assigna la matriu de transformació.
+    /// Sets transformation matrix (for orientation).
     void setMatrix( vtkMatrix4x4 * matrix );
-    /// Assigna l'espaiat de la imatge de sortida.
+    /// Sets spacing of output resliced image.
     void setSpacing( double xSpacing, double ySpacing, double zSpacing );
-    /// Aplica el reslice per generar la nova imatge.
+    /**
+     * Reslices the input image to obtain the resliced image.
+     * If \a saveMhd is true the resliced image is saved to the temporary directory in MHD format.
+     * If \a doClip is true the resliced image is clipped to remove slices of only background.
+     */
     void reslice( bool saveMhd = true, bool doClip = true );
 
     /// Estableix si s'ha de llegir l'extent des d'un fitxer (sinó, es calcula sobre les dades)
@@ -77,8 +81,6 @@ public:
      * un nou grup i va fent el mateix, i així fins que acaba.
      */
     void method1A( double threshold );
-    /// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
-    void method1B_0( double threshold );
     /// Ajunta llesques consecutives amb semblança per sobre d'un llindar.
     void method1B( double threshold );
     /// Works with fusioned slices.
@@ -106,7 +108,7 @@ private:
         Group * previous, * next;
     };
 
-    /// Troba l'extent mínim en la direcció 0 i guarda els resultats a min0 i max0.
+    /// Finds minimum extent in direction 0 and stores results in min0 and max0.
     void findExtent( const unsigned char * data,
                      int dim0, int dim1, int dim2,
                      int inc0, int inc1, int inc2,
@@ -114,50 +116,50 @@ private:
 
     /// Returns mutual information between two slices. \todo Fer-ho passant els índexs.
     double mutualInformation( const unsigned char * sliceX, const unsigned char * sliceY ) const;
-    /// Retorna la similaritat entre dues llesques. \todo Fer-ho passant els índexs.
+    /// Returns the similarity between two slices. \todo Fer-ho passant els índexs.
     double similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const;
-    /// Calcula la semblança entre tots els parells de llesques consecutives.
+    /// Computes similarities between all pairs of consecutive slices.
     void computeSimilarities();
-    /// Assigna el grup \a group a \a slice i totes les seves seguidores del mateix grup.
+    /// Sets group \a group to \a slice and all her neighbours with higher id and same group.
     void setGroup( QVector< unsigned short > & groups, unsigned short slice, unsigned short group ) const;
-    /// Assigna el grup \a group a \a slice i totes les seves seguidores del mateix grup.
+    /// Sets group \a group to \a slice and all her neighbours with lower id and same group.
     void setRightGroup( QVector< unsigned short > & rightGroups, unsigned short slice, unsigned short group ) const;
     /// Returns similarity between two groups.
     double similarity( const Group & groupX, const Group & groupY ) const;
     /// Integrates \a groupY into \a groupX.
     void join( Group & groupX, Group & groupY ) const;
 
-    /// Identificador de l'objecte.
+    /// Object identifier.
     unsigned char m_id;
 
-    /// Imatge d'entrada.
+    /// Input image.
     vtkImageData * m_input;
-    /// Nombre de valors de la imatge d'entrada.
+    /// Number of labels of input image.
     unsigned short m_nLabels;
-    /// Matriu de transformació.
+    /// Transformation matrix.
     vtkMatrix4x4 * m_matrix;
-    /// Espaiat de la imatge de sortida.
+    /// Spacing of resliced image.
     double m_xSpacing, m_ySpacing, m_zSpacing;
-    /// Valor de propietat del background afegit pel reslice.
+    /// Label for background added in the reslice process.
     unsigned char m_newBackground;
 
     /// Indica si s'ha de llegir l'extent des d'un fitxer (sinó, es calcula sobre les dades)
     bool m_readExtentFromFile;
 
-    /// Nova imatge.
+    /// Resliced image.
     vtkImageData * m_reslicedImage;
-    /// Dades de la nova imatge.
+    /// Raw data of resliced image.
     unsigned char * m_reslicedData;
-    /// Mida de les dades de la nova imatge.
+    /// Size of data of resliced image.
     unsigned int m_reslicedDataSize;
-    /// Mida de les dades de cada llesca de la nova imatge.
+    /// Size of data of a slice in the resliced image.
     unsigned int m_sliceSize;
-    /// Nombre de llesques de la nova imatge.
+    /// Number of slices of the resliced image.
     unsigned short m_sliceCount;
 
     /// SMI per cada llesca.
     QVector< double > m_smi;    // Slice Mutual Information B-)
-    /// A cada posició guarda la similaritat entre la llesca (i) i la (i+1)
+    /// Similarities between pairs of consecutive slices. Every position stores similarity between slices (i) and (i+1).
     QVector< double > m_similarities; // IM(X,Y) / H(X,Y)
 
 };
