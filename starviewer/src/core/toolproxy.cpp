@@ -21,10 +21,15 @@ ToolProxy::~ToolProxy()
 
 void ToolProxy::addTool( Tool *tool )
 {
-    m_toolsMap.insert( tool->toolName(), tool );
+    if( !m_toolsMap.contains(tool->toolName()) )
+        m_toolsMap.insert( tool->toolName(), tool );
+    else
+    {
+        delete tool;
+    }
 }
 
-bool ToolProxy::removeTool( QString toolName )
+bool ToolProxy::removeTool( const QString &toolName )
 {
     bool ok = false;
     if( m_toolsMap.contains( toolName ) )
@@ -45,6 +50,20 @@ void ToolProxy::removeAllTools()
         Tool *tool = m_toolsMap.take( toolName );
         delete tool;
     }
+}
+
+bool ToolProxy::isToolActive( const QString &toolName )
+{
+    return m_toolsMap.contains( toolName );
+}
+
+Tool *ToolProxy::getTool( const QString &toolName ) const
+{
+    Tool *tool = 0;
+    if( m_toolsMap.contains(toolName) )
+        tool = m_toolsMap.value( toolName );
+
+    return tool;
 }
 
 void ToolProxy::forwardEvent( unsigned long eventID )

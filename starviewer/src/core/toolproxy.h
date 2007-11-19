@@ -49,12 +49,26 @@ public:
      * @param toolName Nom de la tool a eliminar del proxy
      * @return Cert si la tenia, fals altrament
      */
-    bool removeTool( QString toolName );
+    bool removeTool( const QString &toolName );
 
     /**
      * Buida i elimina totes les tools del proxy
      */
     void removeAllTools();
+
+    /**
+     * Ens diu si la tool demanada està activa o no
+     * @param toolName Nom de la tool que volem consultar
+     * @return Cert si la tool està activa, fals altrament
+     */
+    bool isToolActive( const QString &toolName );
+
+    /**
+     * Ens retorna la tool demanada
+     * @param toolName Nom de la tool que volem obtenir
+     * @return La tool demanada, NUL si no està registrada en el proxy
+     */
+    Tool *getTool( const QString &toolName ) const;
 
 public slots:
     ///Avalua l'event que ha rebut del visualitzador al que està associat i l'envia a les tools actives
