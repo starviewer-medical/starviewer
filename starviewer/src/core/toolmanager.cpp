@@ -72,7 +72,10 @@ void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStrin
     {
         // obtenim l'acció corresponent a aquella tool
         QAction *toolAction = qobject_cast<QAction *>( m_toolsActionSignalMapper->mapping(toolName) );
-        actionGroup->addAction( toolAction );
+        if( toolAction )
+            actionGroup->addAction( toolAction );
+        else
+            DEBUG_LOG( QString("No tenim registrada cap Action per la tool ") + toolName );
     }
 }
 
@@ -113,7 +116,6 @@ void ToolManager::activateTool( const QString &toolName )
             else
                 tool->setToolData( data ); // si ja les hem creat abans, li assignem les de la primera tool creada
         }
-
     }
 }
 
