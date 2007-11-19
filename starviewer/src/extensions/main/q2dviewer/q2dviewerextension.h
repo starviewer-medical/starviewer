@@ -27,6 +27,7 @@ class ToolManager;
 class Patient;
 //Visualitzador
 class Q2DViewerWidget;
+class Q2DViewer;
 // Menus
 class MenuGridWidget;
 class TableMenu;
@@ -114,6 +115,12 @@ private:
      * Inicialitza les tools que tindrà l'extensió
      */
     void initializeTools();
+
+    /**
+     * Inicialitza les tools per defecte per a un viewer determinat
+     * @param viewer viewer pel qual configurem les tools per defecte
+     */
+    void initializeDefaultTools( Q2DViewer *viewer );
 
 private slots:
     /// activem o desactivem el presentation state
