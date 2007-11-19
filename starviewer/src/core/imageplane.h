@@ -44,6 +44,7 @@ public:
     double getColumnLength() const;
 
     bool operator ==(const ImagePlane &imagePlane);
+    bool operator !=(const ImagePlane &imagePlane);
 
 private:
     /// Vectors que defineixen el pla
