@@ -571,9 +571,7 @@ void Q2DViewer::refreshAnnotations()
         else
             m_scalarBar->VisibilityOff();
     }
-
     this->updateSliceAnnotationInformation();
-
     this->refresh();
 }
 
@@ -836,7 +834,6 @@ void Q2DViewer::setupInteraction()
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
-
 }
 
 void Q2DViewer::setInput( Volume* volume )
@@ -1621,10 +1618,8 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
             imagePlane->setColumns( dimensions[2] );
         break;
     }
-
     // TODO aquest canvia segons l'orientació?
     imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
-
 
     return imagePlane;
 }
@@ -1670,9 +1665,7 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
         xyz[1] = -1;
         xyz[2] = -1;
     }
-    else
-    {
-    }
+
     return found;
 }
 
@@ -1994,7 +1987,6 @@ void Q2DViewer::addPhaseRows( int slice, int rows )
             int *value = mapIterator.value();
             rows += rows + value[0];
         }// sinó serà com fer un set tal qual i prou
-
         this->setRows( rows );
     }
 }
@@ -2017,7 +2009,6 @@ void Q2DViewer::removePhaseRows( int slice, int rows )
         }
         // assignem la quantitat de files corresponents
         this->setRows( rows );
-
     }
     // sinó en tenim per aquella llesca, no en podrem treure, per tant es queda igual
 }
@@ -2041,9 +2032,7 @@ void Q2DViewer::setPhaseColumns( int slice, int columns )
             value = new int[2];
             value[0] = 1;
             value[1] = columns;
-
             renderersCount = columns - 1;
-
         }
         // afegir renderers per fase
         if( renderersCount > 0 )
@@ -2085,7 +2074,6 @@ void Q2DViewer::removePhaseColumns( int slice, int columns )
         }
         // assignem la quantitat de columnes corresponents
         this->setColumns( columns );
-
     }
     // sinó en tenim per aquella llesca, no en podrem treure, per tant es queda igual
 }
@@ -2510,7 +2498,6 @@ void Q2DViewer::updateDisplayExtent()
             {
                 value += m_numberOfPhases - phaseGrid[0]*phaseGrid[1];
             }
-
         }
         else
         {
@@ -2594,8 +2581,6 @@ void Q2DViewer::applyGrayscalePipeline()
     .arg( m_mainVolume->getImages().at(0)->getPixelRepresentation() )
     .arg( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() )
                      );
-
-
 //\TODO Això s'ha d'aplicar enfunció de si tenim presentationm state o no? mirar si s'ha de fer aquí o al presentation state attacher...
 
 //     if( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() =="MONOCHROME1" && m_presentationStateFilename != NULL )
