@@ -53,7 +53,7 @@ HEADERS += extensionfactory.h \
            oldzoomtool.h \
 	   zoomtool.h \
            q3dviewertoolmanager.h \
-           translatetool.h \
+           oldtranslatetool.h \
            q3dmprviewertoolmanager.h \
            qlogviewer.h \
            screenshottool.h \
@@ -156,7 +156,7 @@ SOURCES += extensionmediator.cpp \
            oldzoomtool.cpp \
 	   zoomtool.cpp \
            q3dviewertoolmanager.cpp \
-           translatetool.cpp \
+           oldtranslatetool.cpp \
            q3dmprviewertoolmanager.cpp \
            qlogviewer.cpp \
            screenshottool.cpp \

@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGTRANSLATETOOL_H
-#define UDGTRANSLATETOOL_H
+#ifndef UDGOLDTRANSLATETOOL_H
+#define UDGOLDTRANSLATETOOL_H
 
 #include "oldtool.h"
 
@@ -21,16 +21,16 @@ class Q2DViewer;
 class Q3DViewer;
 class Q3DMPRViewer;
 
-class TranslateTool : public OldTool
+class OldTranslateTool : public OldTool
 {
 Q_OBJECT
 public:
     enum { NONE , TRANSLATING };
-    TranslateTool( Q2DViewer *viewer, QObject *parent = 0 );
-    TranslateTool( Q3DViewer *viewer, QObject *parent = 0 );
-    TranslateTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
+    OldTranslateTool( Q2DViewer *viewer, QObject *parent = 0 );
+    OldTranslateTool( Q3DViewer *viewer, QObject *parent = 0 );
+    OldTranslateTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
 
-    ~TranslateTool();
+    ~OldTranslateTool();
 
     void handleEvent( unsigned long eventID );
 

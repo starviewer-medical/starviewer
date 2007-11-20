@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "translatetool.h"
+#include "oldtranslatetool.h"
 #include "logging.h"
 #include "q2dviewer.h"
 #include "q3dviewer.h"
@@ -18,7 +18,7 @@
 
 namespace udg {
 
-TranslateTool::TranslateTool( Q2DViewer *viewer, QObject *parent )
+OldTranslateTool::OldTranslateTool( Q2DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -26,7 +26,7 @@ TranslateTool::TranslateTool( Q2DViewer *viewer, QObject *parent )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-TranslateTool::TranslateTool( Q3DViewer *viewer, QObject *parent )
+OldTranslateTool::OldTranslateTool( Q3DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -34,7 +34,7 @@ TranslateTool::TranslateTool( Q3DViewer *viewer, QObject *parent )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-TranslateTool::TranslateTool( Q3DMPRViewer *viewer, QObject *parent )
+OldTranslateTool::OldTranslateTool( Q3DMPRViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -42,11 +42,11 @@ TranslateTool::TranslateTool( Q3DMPRViewer *viewer, QObject *parent )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-TranslateTool::~TranslateTool()
+OldTranslateTool::~OldTranslateTool()
 {
 }
 
-void TranslateTool::handleEvent( unsigned long eventID )
+void OldTranslateTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
     {
@@ -67,7 +67,7 @@ void TranslateTool::handleEvent( unsigned long eventID )
     }
 }
 
-void TranslateTool::startTranslate()
+void OldTranslateTool::startTranslate()
 {
     if( m_interactorStyle )
     {
@@ -78,7 +78,7 @@ void TranslateTool::startTranslate()
         DEBUG_LOG( "::startTranslate(): L'interactor Style és buit!" );
 }
 
-void TranslateTool::doTranslate()
+void OldTranslateTool::doTranslate()
 {
     if( m_interactorStyle )
     {
@@ -90,7 +90,7 @@ void TranslateTool::doTranslate()
 
 }
 
-void TranslateTool::pan()
+void OldTranslateTool::pan()
 {
     // Codi extret de vtkInteractorStyleTrackballActor::Pan()
     // Si fem servir "current renderer" en comptes de "default" el desplaçament no va del tot bé
@@ -148,7 +148,7 @@ void TranslateTool::pan()
     m_interactorStyle->GetInteractor()->Render();
 }
 
-void TranslateTool::endTranslate()
+void OldTranslateTool::endTranslate()
 {
     if( m_interactorStyle )
     {
