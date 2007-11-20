@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "rotate3dtool.h"
+#include "oldrotate3dtool.h"
 #include "logging.h"
 #include "q3dviewer.h"
 #include "q3dmprviewer.h"
@@ -15,7 +15,7 @@
 
 namespace udg {
 
-Rotate3DTool::Rotate3DTool( Q3DViewer *viewer, QObject *parent )
+OldRotate3DTool::OldRotate3DTool( Q3DViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_interactorStyle = viewer->getInteractorStyle();
@@ -23,7 +23,7 @@ Rotate3DTool::Rotate3DTool( Q3DViewer *viewer, QObject *parent )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-Rotate3DTool::Rotate3DTool( Q3DMPRViewer *viewer, QObject *parent )
+OldRotate3DTool::OldRotate3DTool( Q3DMPRViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     // \TODO implement me
@@ -32,11 +32,11 @@ Rotate3DTool::Rotate3DTool( Q3DMPRViewer *viewer, QObject *parent )
         DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
-Rotate3DTool::~Rotate3DTool()
+OldRotate3DTool::~OldRotate3DTool()
 {
 }
 
-void Rotate3DTool::handleEvent( unsigned long eventID )
+void OldRotate3DTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
     {
@@ -57,7 +57,7 @@ void Rotate3DTool::handleEvent( unsigned long eventID )
     }
 }
 
-void Rotate3DTool::startRotate3D()
+void OldRotate3DTool::startRotate3D()
 {
     if( m_interactorStyle )
     {
@@ -68,7 +68,7 @@ void Rotate3DTool::startRotate3D()
         DEBUG_LOG( "::startRotate3D(): L'interactor Style és buit!" );
 }
 
-void Rotate3DTool::doRotate3D()
+void OldRotate3DTool::doRotate3D()
 {
     if( m_interactorStyle )
     {
@@ -80,7 +80,7 @@ void Rotate3DTool::doRotate3D()
 
 }
 
-void Rotate3DTool::endRotate3D()
+void OldRotate3DTool::endRotate3D()
 {
     if( m_interactorStyle )
     {

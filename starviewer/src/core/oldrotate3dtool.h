@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGROTATE3DTOOL_H
-#define UDGROTATE3DTOOL_H
+#ifndef UDGOLDROTATE3DTOOL_H
+#define UDGOLDROTATE3DTOOL_H
 
 #include "oldtool.h"
 
@@ -21,16 +21,16 @@ Eina per rotacions tridimensionals ( pensat per visors 3D )
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Rotate3DTool : public OldTool
+class OldRotate3DTool : public OldTool
 {
 Q_OBJECT
 public:
 
     enum { NONE , ROTATING };
-    Rotate3DTool( Q3DViewer *viewer, QObject *parent = 0 );
-    Rotate3DTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
+    OldRotate3DTool( Q3DViewer *viewer, QObject *parent = 0 );
+    OldRotate3DTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
 
-    ~Rotate3DTool();
+    ~OldRotate3DTool();
 
     void handleEvent( unsigned long eventID );
 

@@ -55,7 +55,6 @@ HEADERS += extensionfactory.h \
            oldtranslatetool.h \
            q3dmprviewertoolmanager.h \
            qlogviewer.h \
-           rotate3dtool.h \
            roitool.h \
            distancetool.h \
            strokesegmentationmethod.h \
@@ -123,7 +122,8 @@ HEADERS += extensionfactory.h \
            translatetool.h \
            oldwindowleveltool.h \
            oldvoxelinformationtool.h \
-           oldscreenshottool.h 
+           oldscreenshottool.h \
+           oldrotate3dtool.h 
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -160,7 +160,6 @@ SOURCES += extensionmediator.cpp \
            oldtranslatetool.cpp \
            q3dmprviewertoolmanager.cpp \
            qlogviewer.cpp \
-           rotate3dtool.cpp \
            roitool.cpp \
            distancetool.cpp \
            strokesegmentationmethod.cpp \
@@ -228,7 +227,8 @@ SOURCES += extensionmediator.cpp \
            slicingtool.cpp \
            oldwindowleveltool.cpp \
            oldvoxelinformationtool.cpp \
-           oldscreenshottool.cpp 
+           oldscreenshottool.cpp \
+           oldrotate3dtool.cpp 
 
 TEMPLATE = lib
 CONFIG += warn_on \
