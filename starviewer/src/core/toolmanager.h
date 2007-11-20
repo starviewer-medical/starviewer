@@ -95,10 +95,13 @@ private:
     /// Registre que ens proporcionarà tools i accions associades
     ToolRegistry *m_toolRegistry;
 
+    /// Definició de tipus del parell Viewer-ToolConfig
+    typedef QPair<QViewer *,ToolConfiguration *> ViewerToolConfigurationPairType;
+
     /// Mapa en el que per cada nom de tool (clau), associem el viewer i la configuració que li correspon
     /// Una mateixa tool pot tenir més d'un parell <QViewer *,ToolConfiguration *>, és a dir, la mateixa tool pot
     /// estar en diferents viewers amb diverses configuracions
-    QMultiMap< QString, QPair<QViewer *,ToolConfiguration *> > m_toolViewerMap;
+    QMultiMap< QString, ViewerToolConfigurationPairType > m_toolViewerMap;
 
     /// Signal mapper encarregat de mapejar les senyals de les accions de les tools
     QSignalMapper *m_toolsActionSignalMapper;

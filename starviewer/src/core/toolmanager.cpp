@@ -35,7 +35,7 @@ ToolManager::~ToolManager()
 
 void ToolManager::setViewerTools( QViewer *viewer, const QStringList &toolsList )
 {
-    QPair<QViewer *,ToolConfiguration *> pair;
+    ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = NULL;
     foreach( QString toolName, toolsList )
@@ -46,7 +46,7 @@ void ToolManager::setViewerTools( QViewer *viewer, const QStringList &toolsList 
 
 void ToolManager::setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration )
 {
-    QPair<QViewer *,ToolConfiguration *> pair;
+    ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = configuration;
     m_toolViewerMap.insert( toolName, pair );
@@ -85,11 +85,10 @@ void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStrin
 void ToolManager::activateTool( const QString &toolName )
 {
     // TODO caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools? o es farà automàticament?
-    QList< QPair<QViewer *, ToolConfiguration *> > viewerConfigList = m_toolViewerMap.values( toolName );
+    QList< ViewerToolConfigurationPairType > viewerConfigList = m_toolViewerMap.values( toolName );
 
     ToolData *data = 0;
-    QPair<QViewer *, ToolConfiguration *> pair;
-    foreach( pair, viewerConfigList )
+    foreach( ViewerToolConfigurationPairType pair, viewerConfigList )
     {
         // declarem aquestes variables per fer-ho més llegible
         QViewer *viewer = pair.first;
@@ -124,10 +123,9 @@ void ToolManager::activateTool( const QString &toolName )
 
 void ToolManager::deactivateTool( const QString &toolName )
 {
-    QList< QPair<QViewer *, ToolConfiguration *> > viewerConfigList = m_toolViewerMap.values( toolName );
+    QList< ViewerToolConfigurationPairType > viewerConfigList = m_toolViewerMap.values( toolName );
 
-    QPair<QViewer *, ToolConfiguration *> pair;
-    foreach( pair, viewerConfigList )
+    foreach( ViewerToolConfigurationPairType pair, viewerConfigList )
     {
         // declarem aquesta variable per fer-ho més llegible
         QViewer *viewer = pair.first;
