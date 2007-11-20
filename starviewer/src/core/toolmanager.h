@@ -52,6 +52,15 @@ public:
     void setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration = 0 );
 
     /**
+     * Elimina la tool demanada d'un viewer determinat. És a dir, si després d'aquesta crida li demanem a
+     * aquest viewer activar la tool especificada, no es podrà activar aquella tool per aquell viewer.
+     * Si aquest viewer no tenia registrada aquesta tool no es farà res.
+     * @param viewer Viewer al qual volem deshabilitar la tool
+     * @param toolName Nom de la tool a deshabilitar
+     */
+    void removeViewerTool( QViewer *viewer, const QString &toolName );
+
+    /**
      * Obtenim l'acció que defineix una tool a través del ToolRegistry
      * @param toolName Nom de la tool de la qual volem l'acció
      * @return QAction de la tool demanada
