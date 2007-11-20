@@ -17,7 +17,7 @@
 namespace udg {
 
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_slicingMode(SliceMode)
+ : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false)
 {
     m_state = NONE;
     m_toolName = "SlicingTool";
@@ -41,29 +41,38 @@ void SlicingTool::handleEvent( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
+        m_mouseMovement = false;
         this->startSlicing();
     break;
 
     case vtkCommand::MouseMoveEvent:
+        m_mouseMovement = true;
         this->doSlicing();
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
+        m_mouseMovement = false;
         this->endSlicing();
     break;
 
     case vtkCommand::MouseWheelForwardEvent:
+        m_mouseMovement = false;
         this->updateIncrement( 1 );
         // TODO si tenim l'eina VoxelInformationTool activada cal refrescar les dades
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
+        m_mouseMovement = false;
         this->updateIncrement( -1 );
         // TODO si tenim l'eina VoxelInformationTool activada cal refrescar les dades
     break;
 
     case vtkCommand::MiddleButtonPressEvent:
-        switchSlicingMode();
+        m_mouseMovement = false;
+    break;
+    case vtkCommand::MiddleButtonReleaseEvent:
+        if( !m_mouseMovement )
+            switchSlicingMode();
     break;
 
     default:
