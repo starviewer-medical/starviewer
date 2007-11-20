@@ -82,6 +82,9 @@ private:
 
     /// estats d'execució de la tool
     int m_state;
+
+    /// indica si entre event i event hi ha hagut moviment del ratolí
+    bool m_mouseMovement;
 };
 
 }
