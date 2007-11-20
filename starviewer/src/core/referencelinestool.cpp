@@ -36,6 +36,8 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( updateFrameOfReference(Volume *) ) );
     // cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()) );
+    // cada cop que el viewer es seleccioni, ens hem de "netejar" del que ens puguin haver pintat altres
+    connect( m_2DViewer, SIGNAL(selected()), SLOT(clearViewer()) );
 }
 
 ReferenceLinesTool::~ReferenceLinesTool()

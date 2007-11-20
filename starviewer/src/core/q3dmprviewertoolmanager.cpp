@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "q3dmprviewertoolmanager.h"
 #include "oldzoomtool.h"
-#include "translatetool.h"
+#include "oldtranslatetool.h"
 #include "screenshottool.h"
 #include "rotate3dtool.h"
 #include "logging.h"
@@ -46,7 +46,7 @@ void Q3DMPRViewerToolManager::initToolRegistration()
 
     m_toolList.clear();
     m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
-    m_toolList["TranslateTool"] = new TranslateTool( m_viewer );
+    m_toolList["TranslateTool"] = new OldTranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
     m_toolList["3DRotationTool"] = new Rotate3DTool( m_viewer );
 }
