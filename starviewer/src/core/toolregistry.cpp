@@ -12,6 +12,7 @@
 #include "zoomtool.h"
 #include "slicingtool.h"
 #include "referencelinestool.h"
+#include "translatetool.h"
 
 #include <QAction>
 
@@ -41,12 +42,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     {
         tool = new ReferenceLinesTool( viewer );
     }
-//     else if( toolName == "SlicingTool" )
-//     {
-//         tool = new SlicingTool( viewer );
-//     }
-//         ...
-//         etc
+    else if( toolName == "TranslateTool" )
+    {
+        tool = new TranslateTool( viewer );
+    }
     else
     {
         DEBUG_LOG( toolName + "> Tool no registrada!");
