@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGSEEDTOOL_H
-#define UDGSEEDTOOL_H
+#ifndef UDGOLDSEEDTOOL_H
+#define UDGOLDSEEDTOOL_H
 
 #include "oldtool.h"
 
@@ -22,16 +22,16 @@ Tool que serveix per posar llavors en un visor 2D
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SeedTool : public OldTool
+class OldSeedTool : public OldTool
 {
 Q_OBJECT
 public:
     /// estats de la tool
     enum { NONE , SEEDING };
 
-    SeedTool(Q2DViewer *viewer, QObject *parent = 0 );
+    OldSeedTool(Q2DViewer *viewer, QObject *parent = 0 );
 
-    ~SeedTool();
+    ~OldSeedTool();
 
     void handleEvent( unsigned long eventID );
 
