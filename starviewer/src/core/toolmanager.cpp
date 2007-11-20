@@ -8,6 +8,7 @@
 #include "toolregistry.h"
 #include "tooldata.h"
 #include "toolproxy.h"
+#include "toolconfiguration.h" // pel delete
 #include "tool.h"
 #include "qviewer.h"
 #include "logging.h"
@@ -50,6 +51,31 @@ void ToolManager::setViewerTool( QViewer *viewer, const QString &toolName, ToolC
     pair.first = viewer;
     pair.second = configuration;
     m_toolViewerMap.insert( toolName, pair );
+}
+
+void ToolManager::removeViewerTool( QViewer *viewer, const QString &toolName )
+{
+    QMutableMapIterator<QString, ViewerToolConfigurationPairType> mapIterator( m_toolViewerMap );
+    bool found = false;
+    while( mapIterator.hasNext() && !found )
+    {
+        mapIterator.next();
+        if( mapIterator.key() == toolName )
+        {
+            ViewerToolConfigurationPairType pair = mapIterator.value();
+            if( pair.first == viewer )
+            {
+                found = true;
+                // això vol dir que per un nom de tool, nomé spodem tenir un parell viewer-config
+                // del contrari, ens hauríem de "patejar" tot el map sencer per si tenim la mateixa tool,
+                // pel mateix viewer i amb una configuració diferent
+                if( pair.second ) // eliminem la configuració
+                    delete pair.second;
+
+                mapIterator.remove(); // eliminem l'element del mapa
+            }
+        }
+    }
 }
 
 void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStringList &tools )
