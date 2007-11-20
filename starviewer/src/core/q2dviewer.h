@@ -46,7 +46,7 @@ class Volume;
 class Image;
 class Q2DViewerToolManager;
 class OldTool;
-class VoxelInformationTool;
+class OldVoxelInformationTool;
 class OldDrawer;
 class ImagePlane;
 
@@ -604,7 +604,7 @@ private:
     vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
 
     /// Tool per mostrar un caption amb la informació del voxel sota el cursor (posició i valor)
-    VoxelInformationTool *m_voxelInformationTool;
+    OldVoxelInformationTool *m_voxelInformationTool;
 
     /// Variable que controla si les tools estant habilitades
     /// Aquesta variable evita que es faci més d'un "connect" quan es fa l'enableTool i ja estan habilitades

@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu ÃÂ¯ÃÂ¿ÃÂ½ una biblioteca:  
+# L'objectiu �s una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui 
@@ -47,11 +47,10 @@ HEADERS += extensionfactory.h \
            slicing2dtool.h \
            oldtoolmanager.h \
            q2dviewertoolmanager.h \
-           windowleveltool.h \
            toolsactionfactory.h \
            seedtool.h \
            oldzoomtool.h \
-	   zoomtool.h \
+           zoomtool.h \
            q3dviewertoolmanager.h \
            oldtranslatetool.h \
            q3dmprviewertoolmanager.h \
@@ -109,10 +108,9 @@ HEADERS += extensionfactory.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
            mhdfileclassifierstep.h \
-           voxelinformationtool.h \
            orderimagesfillerstep.h \
            roitooldata.h \
-           ellipserepresentation.h  \
+           ellipserepresentation.h \
            toolregistry.h \
            toolmanager.h \
            toolconfiguration.h \
@@ -122,7 +120,9 @@ HEADERS += extensionfactory.h \
            referencelinestool.h \
            referencelinestooldata.h \
            imageplane.h \
-           slicingtool.h
+           slicingtool.h \
+           oldwindowleveltool.h \
+           oldvoxelinformationtool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -150,11 +150,10 @@ SOURCES += extensionmediator.cpp \
            slicing2dtool.cpp \
            oldtoolmanager.cpp \
            q2dviewertoolmanager.cpp \
-           windowleveltool.cpp \
            toolsactionfactory.cpp \
            seedtool.cpp \
            oldzoomtool.cpp \
-	   zoomtool.cpp \
+           zoomtool.cpp \
            q3dviewertoolmanager.cpp \
            oldtranslatetool.cpp \
            q3dmprviewertoolmanager.cpp \
@@ -212,10 +211,9 @@ SOURCES += extensionmediator.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
            mhdfileclassifierstep.cpp \
-           voxelinformationtool.cpp \
            orderimagesfillerstep.cpp \
            roitooldata.cpp \
-           ellipserepresentation.cpp  \
+           ellipserepresentation.cpp \
            toolregistry.cpp \
            toolmanager.cpp \
            toolconfiguration.cpp \
@@ -225,7 +223,9 @@ SOURCES += extensionmediator.cpp \
            referencelinestool.cpp \
            referencelinestooldata.cpp \
            imageplane.cpp \
-           slicingtool.cpp
+           slicingtool.cpp \
+           oldwindowleveltool.cpp \
+           oldvoxelinformationtool.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
