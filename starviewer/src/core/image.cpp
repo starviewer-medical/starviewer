@@ -25,7 +25,7 @@ namespace udg {
 
 Image::Image(QObject *parent)
  : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_parentSeries(NULL), m_CTLocalizer(false),
- m_KVP(0), m_uAs(0), m_mAs(0)
+ m_KiloVoltagePeak(0), m_microAmpersSecond(0), m_milliAmpersSecond(0)
 {
     m_pixelSpacing[0] = 1.;
     m_pixelSpacing[0] = 2.;
@@ -306,34 +306,34 @@ double Image::getRescaleIntercept() const
     return m_rescaleIntercept;
 }
 
-void Image::setKVP( double kvp )
+void Image::setKiloVoltagePeak( double kvp )
 {
- m_KVP = kvp;
+ m_KiloVoltagePeak = kvp;
 }
 
-double Image::getKVP()
+double Image::getKiloVoltagePeak()
 {
- return m_KVP;
+ return m_KiloVoltagePeak;
 }
 
-void Image::setuAs( double uas )
+void Image::setMicroAmpersSecond( double uas )
 {
-     m_uAs = uas;
+     m_microAmpersSecond = uas;
 }
 
-double Image::getuAs()
+double Image::getMicroAmpersSecond()
 {
-     return m_uAs;
+     return m_microAmpersSecond;
 }
 
-void Image::setmAs( double mas )
+void Image::setMilliAmpersSecond( double mas )
 {
-    m_mAs = mas;
+    m_milliAmpersSecond = mas;
 }
 
-double Image::getmAs()
+double Image::getMilliAmpersSecond()
 {
-     return m_mAs;
+     return m_milliAmpersSecond;
 }
 
 void Image::addWindowLevel( double window, double level )
