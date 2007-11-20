@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "seedtool.h"
+#include "oldseedtool.h"
 
 #include "volume.h"
 #include <QAction>
@@ -20,7 +20,7 @@
 
 namespace udg {
 
-SeedTool::SeedTool( Q2DViewer *viewer, QObject *parent )
+OldSeedTool::OldSeedTool( Q2DViewer *viewer, QObject *parent )
 // : Tool(parent)
 {
     m_state = NONE;
@@ -42,18 +42,18 @@ SeedTool::SeedTool( Q2DViewer *viewer, QObject *parent )
 }
 
 
-SeedTool::~SeedTool()
+OldSeedTool::~OldSeedTool()
 {
     m_pointActor-> Delete();
     m_point->Delete();
     m_pointMapper->Delete();
 }
 
-void SeedTool::createAction()
+void OldSeedTool::createAction()
 {
 }
 
-void SeedTool::handleEvent( unsigned long eventID )
+void OldSeedTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
     {
@@ -74,7 +74,7 @@ void SeedTool::handleEvent( unsigned long eventID )
     }
 }
 
-void SeedTool::setSeed()
+void OldSeedTool::setSeed()
 {
     m_state=SEEDING;
 
@@ -107,7 +107,7 @@ void SeedTool::setSeed()
     m_2DViewer->refresh();
 }
 
-void SeedTool::doSeeding( )
+void OldSeedTool::doSeeding( )
 {
     if(m_state==SEEDING)
     {
@@ -122,12 +122,12 @@ void SeedTool::doSeeding( )
     }
 }
 
-void SeedTool::endSeeding( )
+void OldSeedTool::endSeeding( )
 {
     m_state = NONE;
 }
 
-void SeedTool::sliceChanged( int s )
+void OldSeedTool::sliceChanged( int s )
 {
     if(m_seedSlice==s)
     {

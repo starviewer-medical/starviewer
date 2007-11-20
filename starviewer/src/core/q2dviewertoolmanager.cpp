@@ -13,7 +13,7 @@
 #include "distancetool.h"
 #include "roitool.h"
 #include "logging.h"
-#include "seedtool.h"
+#include "oldseedtool.h"
 
 #include "q2dviewer.h"
 
@@ -55,7 +55,7 @@ void Q2DViewerToolManager::initToolRegistration()
     m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new OldTranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new OldScreenShotTool( m_viewer );
-    m_toolList["SeedTool"] = new SeedTool( m_viewer );
+    m_toolList["SeedTool"] = new OldSeedTool( m_viewer );
     m_toolList["DistanceTool"] = new DistanceTool( m_viewer );
     m_toolList["ROITool"] = new ROITool( m_viewer );
 }
