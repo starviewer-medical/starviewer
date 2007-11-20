@@ -142,16 +142,16 @@ public:
     QString getPath() const;
     
     ///assigna / retorna el KiloVoltatge de la imatge
-    void setKVP( double kvp );
-    double getKVP();
+    void setKiloVoltagePeak( double kvp );
+    double getKiloVoltagePeak();
     
     ///assigna / retorna el microAmperatge de la imatge
-    void setuAs( double uas );
-    double getuAs();
+    void setMicroAmpersSecond( double uas );
+    double getMicroAmpersSecond();
     
     ///assigna / retorna el miliAperatge de la imatge
-    void setmAs( double mas );
-    double getmAs();
+    void setMilliAmpersSecond( double mas );
+    double getMilliAmpersSecond();
     
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
@@ -268,7 +268,7 @@ private:
         X-RAY FRAME-> tipus 1.
         XA/XRF->tipus 1.
     */
-    double m_KVP;
+    double m_KiloVoltagePeak;
     
     /** Exposició als raigs-X expressada en micro ampers per segon. (0018,1153) 
         El tipus depèn de la modalitat:
@@ -279,7 +279,7 @@ private:
         X-RAY SEQUENCE->no en té.
         X-RAY FRAME->no en té.
     */
-    double m_uAs;
+    double m_microAmpersSecond;
     
      /** Exposició als raigs-X expressada en mi·liampers per segon. (0018,1153) 
         El tipus depèn de la modalitat:
@@ -287,7 +287,7 @@ private:
         XA/XRF->tipus 1C: condició: requerit si el temps d'exposició en ms (0018,9328) o el corrent del tub de raigs-X en mA no estan presents.
                                     Altrament també pot ser-hi.
     */
-    double m_mAs;
+    double m_milliAmpersSecond;
     
 
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image

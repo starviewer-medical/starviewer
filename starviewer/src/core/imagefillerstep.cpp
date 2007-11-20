@@ -187,17 +187,17 @@ void ImageFillerStep::processImage( Image *image )
         
         if (dicomReader.tagExists( 0x0018, 0x0060 ))
         {
-            image->setKVP( dicomReader.getAttributeByTag( 0x018, 0x0060 ).toDouble() );
+            image->setKiloVoltagePeak( dicomReader.getAttributeByTag( 0x018, 0x0060 ).toDouble() );
         }
         
         if (dicomReader.tagExists( 0x0018, 0x1153 ))
         {
-            image->setuAs( dicomReader.getAttributeByTag( 0x018, 0x1153 ).toDouble() );
+            image->setMicroAmpersSecond( dicomReader.getAttributeByTag( 0x018, 0x1153 ).toDouble() );
         }
         
         if (dicomReader.tagExists( 0x0018, 0x9332 ))
         {
-            image->setmAs( dicomReader.getAttributeByTag( 0x018, 0x9332 ).toDouble() );
+            image->setMilliAmpersSecond( dicomReader.getAttributeByTag( 0x018, 0x9332 ).toDouble() );
         }
     }
     else
