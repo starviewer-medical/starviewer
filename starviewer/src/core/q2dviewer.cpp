@@ -22,7 +22,7 @@
 #include <QMutableMapIterator>
 // Tools
 #include "q2dviewertoolmanager.h"
-#include "voxelinformationtool.h"
+#include "oldvoxelinformationtool.h"
 
 // include's bàsics vtk
 #include <QVTKWidget.h>
@@ -104,7 +104,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_enabledTools = false;
     m_toolManager = new Q2DViewerToolManager( this );
     this->enableTools();
-    m_voxelInformationTool = new VoxelInformationTool(this);
+    m_voxelInformationTool = new OldVoxelInformationTool(this);
     disableVoxelInformationCaption();
 
     // anotacions
