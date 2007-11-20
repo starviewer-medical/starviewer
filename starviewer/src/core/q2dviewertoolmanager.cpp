@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "q2dviewertoolmanager.h"
 #include "slicing2dtool.h"
-#include "windowleveltool.h"
+#include "oldwindowleveltool.h"
 #include "oldzoomtool.h"
 #include "oldtranslatetool.h"
 #include "screenshottool.h"
@@ -51,7 +51,7 @@ void Q2DViewerToolManager::initToolRegistration()
 
     m_toolList.clear();
     m_toolList["SlicingTool"] = new Slicing2DTool( m_viewer );
-    m_toolList["WindowLevelTool"] = new WindowLevelTool( m_viewer );
+    m_toolList["WindowLevelTool"] = new OldWindowLevelTool( m_viewer );
     m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new OldTranslateTool( m_viewer );
     m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
