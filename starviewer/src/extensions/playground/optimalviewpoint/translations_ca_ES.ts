@@ -1,327 +1,353 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>OptimalViewpointInputParametersFormBase</name>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="22"/>
+        <location filename="" line="7471221"/>
         <source>Segmentation</source>
         <translation>Segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="34"/>
+        <location filename="" line="7471221"/>
         <source>Load from file</source>
-        <translation>Carregar desde fitxer</translation>
+        <translation>Carrega des d&apos;un fitxer</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="80"/>
+        <location filename="" line="7471221"/>
         <source>Segmentation file</source>
         <translation>Fitxer de segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="87"/>
+        <location filename="" line="7471221"/>
         <source>Open...</source>
-        <translation>Obrir...</translation>
+        <translation>Obre...</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="97"/>
+        <location filename="" line="7471221"/>
         <source>Automatic segmentation</source>
         <translation>Segmentació automàtica</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="145"/>
+        <location filename="" line="7471221"/>
         <source>&amp;Block length</source>
-        <translation>Longitud del &amp;bloc</translation>
+        <translation>Longitud de &amp;bloc</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="155"/>
+        <location filename="" line="7471221"/>
         <source>Block length (L) to compute excess entropy during segmentation</source>
-        <translation>La longitud del bloc (L) calcula l&apos;excés d&apos;entropia durant la segmentació</translation>
+        <translation>La longitud de bloc (L) per calcular l&apos;excess entropy durant la segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="189"/>
+        <location filename="" line="7471221"/>
         <source>&amp;Iterations</source>
         <translation>&amp;Iteracions</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="199"/>
+        <location filename="" line="7471221"/>
         <source>Number of iterations of the genetic algorithm</source>
         <translation>Nombre d&apos;iteracions de l&apos;algorisme genètic</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="233"/>
+        <location filename="" line="7471221"/>
         <source>N&amp;oise</source>
         <translation>S&amp;oroll</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="243"/>
+        <location filename="" line="7471221"/>
         <source>Maximum variation in one step of the genetic algorithm</source>
         <translation>Variació màxima en un pas de l&apos;algorisme genètic</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="280"/>
+        <location filename="" line="7471221"/>
         <source>I&amp;mage sample distance</source>
-        <translation>D&amp;istància de mostra de la imatge</translation>
+        <translation>D&amp;istància entre mostres de la imatge</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="290"/>
+        <location filename="" line="7471221"/>
         <source>Horizontal and vertical distance between rays during segmentation</source>
-        <translation>Distàncies vertical i horitzontal entre els raigs durant la segmentació</translation>
+        <translation>Distància horitzontal i vertical entre els raigs durant la segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="330"/>
+        <location filename="" line="7471221"/>
         <source>&amp;Number of clusters</source>
         <translation>&amp;Nombre de clústers</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="340"/>
+        <location filename="" line="7471221"/>
         <source>Number of clusters (N) of the volume, including empty space</source>
-        <translation>Nombre de clústers (N) del volum, inclòs l&apos;espai buit</translation>
+        <translation>Nombre de clústers (N) del volum, incloent l&apos;espai buit</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="374"/>
+        <location filename="" line="7471221"/>
         <source>Sample &amp;distance</source>
-        <translation>&amp;Distància de la mostra</translation>
+        <translation>&amp;Distància entre mostres</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="384"/>
+        <location filename="" line="7471221"/>
         <source>Distance between samples on one ray during segmentation</source>
-        <translation>Distància entre mostres d&apos;un raig durant la segmentació</translation>
+        <translation>Distància entre les mostres d&apos;un raig durant la segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="438"/>
+        <location filename="" line="7471221"/>
         <source>OK</source>
-        <translation>Dacord</translation>
+        <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="458"/>
+        <location filename="" line="7471221"/>
         <source>&amp;Visualization parameters</source>
         <translation>Paràmetres de &amp;visualització</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="470"/>
+        <location filename="" line="7471221"/>
         <source>Advanced controls</source>
         <translation>Controls avançats</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="503"/>
+        <location filename="" line="7471221"/>
         <source>If checked, shading will be applied when rendering the volume</source>
-        <translation>Si està polsat, l0ombrejat s&apos;aplicarà a la renderització del volum</translation>
+        <translation>Si està marcat, s&apos;aplicarà ombreig quan es visualitzi el volum</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="506"/>
+        <location filename="" line="7471221"/>
         <source>S&amp;hade</source>
-        <translation>&amp;Habilitació d&apos;ombrejat</translation>
+        <translation>&amp;Ombreig</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="513"/>
+        <location filename="" line="7471221"/>
         <source>Compute with opacity</source>
-        <translation>Computació amb opacitat</translation>
+        <translation>Calcula amb opacitat</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="530"/>
+        <location filename="" line="7471221"/>
         <source>Interpolation</source>
         <translation>Interpolació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="541"/>
+        <location filename="" line="7471221"/>
         <source>Nearest Neighbour</source>
         <translation>Veí més proper</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="546"/>
+        <location filename="" line="7471221"/>
         <source>Linear (Interpolate &amp; Classify)</source>
         <translation>Lineal (Interpolació i Classificació)</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="551"/>
+        <location filename="" line="7471221"/>
         <source>Linear (Classify &amp; Interpolate)</source>
         <translation>Lineal (Classificació i Interpolació)</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="569"/>
+        <location filename="" line="7471221"/>
         <source>Specular</source>
         <translation>Especularitat</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="584"/>
+        <location filename="" line="7471221"/>
         <source>Power</source>
         <translation>Potència</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="616"/>
+        <location filename="" line="7471221"/>
         <source>Update plane</source>
         <translation>Actualitza el pla</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="626"/>
+        <location filename="" line="7471221"/>
         <source>All</source>
-        <translation>Tot</translation>
+        <translation>Tots</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="646"/>
+        <location filename="" line="7471221"/>
         <source>Cluster</source>
         <translation>Clúster</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="655"/>
+        <location filename="" line="7471221"/>
         <source>First</source>
-        <translation>Primer</translation>
+        <translation>Primera</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="665"/>
+        <location filename="" line="7471221"/>
         <source>Last</source>
-        <translation>Últim</translation>
+        <translation>Última</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="679"/>
+        <location filename="" line="7471221"/>
         <source>Read extent from file</source>
-        <translation>Llegir l&apos;extenció des del fitxer</translation>
+        <translation>Llegir l&apos;extensió des d&apos;un fitxer</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="697"/>
+        <location filename="" line="7471221"/>
         <source>Number of &amp;planes</source>
         <translation>Nombre de &amp;plans</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="707"/>
+        <location filename="" line="7471221"/>
         <source>Number of planes to use</source>
-        <translation>Nombre de plans que es volen utilitzar</translation>
+        <translation>Nombre de plans a utilitzar</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="711"/>
+        <location filename="" line="7471221"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="716"/>
+        <location filename="" line="7471221"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="721"/>
+        <location filename="" line="7471221"/>
         <source>4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="726"/>
+        <location filename="" line="7471221"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="731"/>
+        <location filename="" line="7471221"/>
         <source>8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="736"/>
+        <location filename="" line="7471221"/>
         <source>12</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="741"/>
+        <location filename="" line="7471221"/>
         <source>20</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="746"/>
+        <location filename="" line="7471221"/>
         <source>42</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="751"/>
+        <location filename="" line="7471221"/>
         <source>162</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="769"/>
+        <location filename="" line="7471221"/>
         <source>Block &amp;length</source>
-        <translation>&amp;Longitud del bloc</translation>
+        <translation>&amp;Longitud de bloc</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="779"/>
+        <location filename="" line="7471221"/>
         <source>Block length (L) to compute excess entropy</source>
-        <translation>La longitud del bloc (L) per calcular l&apos;excés d&apos;entropia</translation>
+        <translation>La longitud de bloc (L) per calcular l&apos;excess entropy</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="805"/>
+        <location filename="" line="7471221"/>
         <source>Ima&amp;ge sample distance</source>
-        <translation>D&amp;istància de mostra de la imatge</translation>
+        <translation>D&amp;istància entre mostres de la imatge</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="815"/>
+        <location filename="" line="7471221"/>
         <source>Horizontal and vertical distance between rays</source>
-        <translation>distàncies vertical i horitzontal entre raigs</translation>
+        <translation>Distància horitzontal i vertical entre els raigs</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="847"/>
+        <location filename="" line="7471221"/>
         <source>Sample dis&amp;tance</source>
-        <translation>Dis&amp;tància de la mostra</translation>
+        <translation>&amp;Distància entre mostres</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="857"/>
+        <location filename="" line="7471221"/>
         <source>Distance between samples on one ray</source>
-        <translation>Distància entre mostres d&apos;un raig</translation>
+        <translation>Distància entre les mostres d&apos;un raig</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="881"/>
+        <location filename="" line="7471221"/>
         <source>Compute entropy</source>
         <translation>Calcula l&apos;entropia</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="896"/>
+        <location filename="" line="7471221"/>
         <source>Similarity threshold</source>
         <translation>Llindar de similitud</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="933"/>
+        <location filename="" line="7471221"/>
         <source>Load transfer function</source>
-        <translation>Carregar una funció de transferència</translation>
+        <translation>Carrega una funció de transferència</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="936"/>
+        <location filename="" line="7471221"/>
         <source>Load...</source>
-        <translation>Carregar...</translation>
+        <translation>Carrega...</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="943"/>
+        <location filename="" line="7471221"/>
         <source>Save transfer function</source>
-        <translation>Desar la funció de transferència</translation>
+        <translation>Desa la funció de transferència</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="946"/>
+        <location filename="" line="7471221"/>
         <source>Save...</source>
-        <translation>Desar...</translation>
+        <translation>Desa...</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="956"/>
+        <location filename="" line="7471221"/>
         <source>Graphic editor</source>
         <translation>Editor gràfic</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="961"/>
+        <location filename="" line="7471221"/>
         <source>Editor by values</source>
         <translation>Editor per valors</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="982"/>
+        <location filename="" line="7471221"/>
         <source>Define the transfer function for the volume: left click on free space to add a new point; drag a point to move it; right click on a point to delete it</source>
-        <translation>Defineix la funció de transferència pel volum: clica el botó esquerre per afegir un nou punt; arrossega un punt per moure&apos;l; clica el botó dret sobre un punt per esborrar-lo</translation>
+        <translation>Defineix la funció de transferència pel volum: fes clic esquerre a l&apos;espai lliure per afegir un nou punt; arrossega un punt per moure&apos;l; fes clic dret sobre un punt per esborrar-lo</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersformbase.ui" line="1009"/>
+        <location filename="" line="7471221"/>
         <source>Apply</source>
         <translation>Aplica</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>New method</source>
+        <translation>Nou mètode</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>None</source>
+        <translation>Cap</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Step</source>
+        <translation>Pas</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Normalized</source>
+        <translation>Normalitzat</translation>
     </message>
 </context>
 <context>
     <name>QTransferFunctionEditorByValuesBase</name>
     <message>
-        <location filename="qtransferfunctioneditorbyvaluesbase.ui" line="30"/>
+        <location filename="" line="7471221"/>
         <source>Add</source>
         <translation>Afegeix</translation>
     </message>
     <message>
-        <location filename="qtransferfunctioneditorbyvaluesbase.ui" line="37"/>
+        <location filename="" line="7471221"/>
         <source>Remove</source>
         <translation>Esborra</translation>
     </message>
@@ -329,12 +355,12 @@
 <context>
     <name>QTransferFunctionIntervalEditorBase</name>
     <message>
-        <location filename="qtransferfunctionintervaleditorbase.ui" line="22"/>
+        <location filename="" line="7471221"/>
         <source>Interval</source>
         <translation>Interval</translation>
     </message>
     <message>
-        <location filename="qtransferfunctionintervaleditorbase.ui" line="55"/>
+        <location filename="" line="7471221"/>
         <source>Select color...</source>
         <translation>Tria color...</translation>
     </message>
@@ -342,17 +368,17 @@
 <context>
     <name>udg::OptimalViewpointExtensionMediator</name>
     <message>
-        <location filename="optimalviewpointextensionmediator.cpp" line="27"/>
+        <location filename="" line="7471221"/>
         <source>Optimal Viewpoint</source>
         <translation>Punt de vista òptim</translation>
     </message>
     <message>
-        <location filename="optimalviewpointextensionmediator.cpp" line="41"/>
+        <location filename="" line="7471221"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="optimalviewpointextensionmediator.cpp" line="41"/>
+        <location filename="" line="7471221"/>
         <source>The selected item is not an image</source>
         <translation>l&apos;ítem seleccionat no és una imatge</translation>
     </message>
@@ -360,47 +386,47 @@
 <context>
     <name>udg::OptimalViewpointInputParametersForm</name>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="390"/>
+        <location filename="" line="7471221"/>
         <source>Open segmentation file</source>
         <translation>Obre un fitxer de segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="391"/>
+        <location filename="" line="7471221"/>
         <source>Segmentation files (*.seg);;All files (*)</source>
         <translation>Fitxers de segmentació (*.seg);;Tots els fitxers(*)</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="413"/>
+        <location filename="" line="7471221"/>
         <source>No segmentation file chosen</source>
         <translation>No s&apos;ha escollit cap fitxer de segmentació</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="414"/>
+        <location filename="" line="7471221"/>
         <source>Please, choose a segmentation file or do an automatic segmentation.</source>
         <translation>Si us plau, selecciona un fitxer de segmentació o realitza una segmentació automàtica.</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="434"/>
+        <location filename="" line="7471221"/>
         <source>Load transfer function</source>
         <translation>Carrega una funció de transferència</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="462"/>
+        <location filename="" line="7471221"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation>Fitxers de funcions de transferència (*.tf);;Tots els fitxers(*)</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="462"/>
+        <location filename="" line="7471221"/>
         <source>Save transfer function</source>
         <translation>Desar la funció de transferència</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="357"/>
+        <location filename="" line="7471221"/>
         <source>Show parameters</source>
         <translation>Mostra els paràmetres</translation>
     </message>
     <message>
-        <location filename="optimalviewpointinputparametersform.cpp" line="366"/>
+        <location filename="" line="7471221"/>
         <source>Hide parameters</source>
         <translation>Amaga els paràmetres</translation>
     </message>
@@ -408,7 +434,7 @@
 <context>
     <name>udg::OptimalViewpointPlane</name>
     <message>
-        <location filename="optimalviewpointplane.cpp" line="51"/>
+        <location filename="" line="7471221"/>
         <source>Plane %1</source>
         <translation>Pla %1</translation>
     </message>
@@ -416,22 +442,22 @@
 <context>
     <name>udg::QOptimalViewpointExtension</name>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="117"/>
+        <location filename="" line="7471221"/>
         <source>Results</source>
         <translation>Resultats</translation>
     </message>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="123"/>
+        <location filename="" line="7471221"/>
         <source>Plane</source>
         <translation>Pla</translation>
     </message>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="69"/>
+        <location filename="" line="7471221"/>
         <source>Segmentation error</source>
         <translation>Error de la segmentació</translation>
     </message>
     <message>
-        <location filename="qoptimalviewpointextension.cpp" line="70"/>
+        <location filename="" line="7471221"/>
         <source>Cannot load segmentation from file %1.</source>
         <translation>No és possible carregar la segmentació des del fitxer %1.</translation>
     </message>
