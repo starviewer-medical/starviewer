@@ -55,7 +55,6 @@ HEADERS += extensionfactory.h \
            oldtranslatetool.h \
            q3dmprviewertoolmanager.h \
            qlogviewer.h \
-           screenshottool.h \
            rotate3dtool.h \
            roitool.h \
            distancetool.h \
@@ -122,7 +121,8 @@ HEADERS += extensionfactory.h \
            imageplane.h \
            slicingtool.h \
            oldwindowleveltool.h \
-           oldvoxelinformationtool.h 
+           oldvoxelinformationtool.h \
+           oldscreenshottool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -158,7 +158,6 @@ SOURCES += extensionmediator.cpp \
            oldtranslatetool.cpp \
            q3dmprviewertoolmanager.cpp \
            qlogviewer.cpp \
-           screenshottool.cpp \
            rotate3dtool.cpp \
            roitool.cpp \
            distancetool.cpp \
@@ -225,7 +224,8 @@ SOURCES += extensionmediator.cpp \
            imageplane.cpp \
            slicingtool.cpp \
            oldwindowleveltool.cpp \
-           oldvoxelinformationtool.cpp 
+           oldvoxelinformationtool.cpp \
+           oldscreenshottool.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

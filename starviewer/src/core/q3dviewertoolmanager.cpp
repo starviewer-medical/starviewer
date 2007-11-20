@@ -7,7 +7,7 @@
 #include "q3dviewertoolmanager.h"
 #include "oldzoomtool.h"
 #include "oldtranslatetool.h"
-#include "screenshottool.h"
+#include "oldscreenshottool.h"
 #include "rotate3dtool.h"
 #include "logging.h"
 #include "q3dviewer.h"
@@ -47,7 +47,7 @@ void Q3DViewerToolManager::initToolRegistration()
     m_toolList.clear();
     m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new OldTranslateTool( m_viewer );
-    m_toolList["ScreenShotTool"] = new ScreenShotTool( m_viewer );
+    m_toolList["ScreenShotTool"] = new OldScreenShotTool( m_viewer );
     m_toolList["3DRotationTool"] = new Rotate3DTool( m_viewer );
 }
 
