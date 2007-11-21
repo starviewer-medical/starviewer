@@ -24,15 +24,17 @@
 namespace udg {
 
 VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent), m_isEnabled(false), m_voxelInformationCaption(0)
+ : Tool(viewer, parent), m_voxelInformationCaption(0)
 {
     m_toolName = "VoxelInformationTool";
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if( !m_2DViewer )
         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+
     createCaptionActor();
-    connect( m_2DViewer, SIGNAL( sliceChanged(int) ), this, SLOT( isNeededUpdateVoxelInformation() ) );
+    connect( m_2DViewer, SIGNAL( sliceChanged(int) ), SLOT( updateVoxelInformation() ) );
+    connect( m_2DViewer, SIGNAL( phaseChanged(int) ), SLOT( updateVoxelInformation() ) );
 }
 
 VoxelInformationTool::~VoxelInformationTool()
@@ -44,8 +46,7 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::MouseMoveEvent:
-        if( m_isEnabled )
-            updateVoxelInformation();
+        updateVoxelInformation();
     break;
 
     case vtkCommand::EnterEvent:
@@ -60,13 +61,6 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
     break;
     }
 
-}
-
-void VoxelInformationTool::enable( bool enable )
-{
-    m_isEnabled = enable;
-    if(!enable)
-        m_voxelInformationCaption->VisibilityOff();
 }
 
 void VoxelInformationTool::createCaptionActor()
@@ -173,7 +167,6 @@ bool VoxelInformationTool::captionExceedsViewportRightLimit()
     return ( eventPosition[0]+captionWidth > dimensions[0] );
 }
 
-
 bool VoxelInformationTool::captionExceedsViewportLimits()
 {
     return ( captionExceedsViewportTopLimit() || captionExceedsViewportRightLimit() );
@@ -198,14 +191,6 @@ void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPo
     if ( captionExceedsViewportTopLimit() )
     {
         correctPositionInViewPort[1] = eventPosition[1] - ( eventPosition[1] + captionHeight - dimensions[1] );
-    }
-}
-
-void VoxelInformationTool::isNeededUpdateVoxelInformation()
-{
-    if ( m_isEnabled )
-    {
-        updateVoxelInformation();
     }
 }
 
