@@ -75,7 +75,7 @@ public slots:
     void hideColumns( int columns );
 
     /// Mostrar menu per seleccionar grid predefinit
-    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop 
+    ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showPredefinedGrid();
 
     /// Mostrar el menu de la taula per seleccionar grids
@@ -122,7 +122,6 @@ private slots:
     /// Slots per canviar rotacions al widget seleccionat
     void rotateClockWise();
     void rotateCounterClockWise();
-    void setVoxelInformationCaptionEnabled(bool option);
     void horizontalFlip();
     void verticalFlip();
     void setWindowLevel(double wl1 ,double wl2);
@@ -156,7 +155,6 @@ private:
     QAction *m_windowLevelAction;
     QAction *m_zoomAction;
     QAction *m_moveAction;
-    QAction *m_voxelInformationAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
     QAction *m_flipHorizontalAction;
