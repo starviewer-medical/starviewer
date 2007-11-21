@@ -101,16 +101,6 @@ void ThickSlabExtension::createActions()
     m_presentationStateAction->setEnabled(false);
     m_presentationStateAction->setChecked(false);
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , this , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
@@ -226,7 +216,7 @@ void ThickSlabExtension::createConnections()
 
     // Connexions necessaries pel primer visualitzador
     connect( m_selectedViewer , SIGNAL( selected( ThickSlabWidget * ) ) , this, SLOT( setViewerSelected( ThickSlabWidget * ) ) );
-    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) ); 
+    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
@@ -552,7 +542,7 @@ void ThickSlabExtension::setViewerSelected( ThickSlabWidget * viewer )
 
         connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );  
+        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
     }
 }
 
@@ -564,11 +554,6 @@ void ThickSlabExtension::rotateClockWise()
 void ThickSlabExtension::rotateCounterClockWise()
 {
     ( m_selectedViewer->getViewer() )->rotateCounterClockWise();
-}
-
-void ThickSlabExtension::setVoxelInformationCaptionEnabled(bool option)
-{
-    ( m_selectedViewer->getViewer() )->setVoxelInformationCaptionEnabled( option );
 }
 
 void ThickSlabExtension::horizontalFlip()
