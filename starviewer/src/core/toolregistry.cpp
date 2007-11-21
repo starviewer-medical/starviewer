@@ -13,6 +13,7 @@
 #include "slicingtool.h"
 #include "referencelinestool.h"
 #include "translatetool.h"
+#include "voxelinformationtool.h"
 
 #include <QAction>
 
@@ -45,6 +46,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "TranslateTool" )
     {
         tool = new TranslateTool( viewer );
+    }
+    else if( toolName == "VoxelInformationTool" )
+    {
+        tool = new VoxelInformationTool( viewer );
     }
     else
     {
@@ -116,6 +121,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Reference Lines") );
         toolAction->setStatusTip( tr("Enable/Disable Reference Lines tool") );
 //         toolAction->setIcon( QIcon(":/images/roi.png") ); TODO icona per determinar
+    }
+    else if( toolName == "VoxelInformationTool" )
+    {
+        toolAction->setText( tr("Voxel Information") );
+        toolAction->setStatusTip( tr("Enable voxel information over cursor") );
+        toolAction->setIcon( QIcon(":/images/voxelInformation.png") );
     }
     else
     {

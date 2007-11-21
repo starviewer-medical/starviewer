@@ -85,6 +85,14 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_roiAction->setCheckable( true );
     m_signalMapper->setMapping( m_roiAction , "ROITool" );
     connect( m_roiAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    
+    m_voxelInformationAction = new QAction( 0 );
+    m_voxelInformationAction->setText( tr("Voxel Information") );
+    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
+    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
+    m_voxelInformationAction->setCheckable( true );
+    m_signalMapper->setMapping( m_voxelInformationAction , "VoxelInformationTool" );
+    connect( m_voxelInformationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
 
@@ -98,6 +106,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["3DRotationTool"] = m_rotate3dAction;
     m_availableToolActions["DistanceTool"] = m_distanceAction;
     m_availableToolActions["ROITool"] = m_roiAction;
+    m_availableToolActions["VoxelInformationTool"] = m_voxelInformationAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()
