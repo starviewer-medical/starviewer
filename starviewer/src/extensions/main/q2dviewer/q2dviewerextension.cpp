@@ -61,6 +61,8 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
+
+    setGrid(1,2);
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -492,6 +494,10 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
         newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
     }
 
+    newViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
+    connect( newViewer, SIGNAL( sincronize( Q2DViewerWidget *) ), this, SLOT( activeSincronization( Q2DViewerWidget * ) ) );
+    
+
     return newViewer;
 }
 
@@ -692,6 +698,14 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
+
+    m_selectedViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
+    connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *) ), this, SLOT( activeSincronization( Q2DViewerWidget * ) ) );
+    
+
+//     m_selectedViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
+//     m_toolManager->setViewerTool( m_selectedViewer->getViewer(), "SynchronizeTool" );
+
 }
 
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
@@ -821,5 +835,18 @@ void Q2DViewerExtension::writeSettings()
 
     settings.endGroup();
 }
+
+void Q2DViewerExtension::activeSincronization( Q2DViewerWidget * viewer)
+{
+//     viewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
+    m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool" );
+    m_toolManager->refreshConnections();
+}
+
+// void Q2DViewerExtension::desactiveSincronization( Q2DViewerWidget * viewer)
+// {
+//     viewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
+//     m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool" );
+// }
 
 }

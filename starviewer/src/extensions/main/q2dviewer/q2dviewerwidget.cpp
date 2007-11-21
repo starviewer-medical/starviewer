@@ -33,6 +33,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( setInput( Volume *) ) );
+    connect( m_synchronizeButton, SIGNAL( clicked( bool ) ), this, SLOT( emitSincronize() ) );
 }
 
 void Q2DViewerWidget::setInput( Volume *input )
@@ -147,6 +148,16 @@ bool Q2DViewerWidget::hasPhases()
 
 
     return ( phases > 1 ) ;
+}
+
+void Q2DViewerWidget::setDefaultAction( QAction * synchronizeAction )
+{
+    m_synchronizeButton->setDefaultAction( synchronizeAction );
+}
+
+void Q2DViewerWidget::emitSincronize()
+{
+    emit sincronize( this );
 }
 
 }
