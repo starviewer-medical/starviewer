@@ -61,8 +61,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
-
-    setGrid(1,2);
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -101,16 +99,6 @@ void Q2DViewerExtension::createActions()
     m_presentationStateAction->setEnabled(false);
     m_presentationStateAction->setChecked(false);
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , this , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
@@ -496,7 +484,7 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 
     newViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
     connect( newViewer, SIGNAL( sincronize( Q2DViewerWidget *) ), this, SLOT( activeSincronization( Q2DViewerWidget * ) ) );
-    
+
 
     return newViewer;
 }
@@ -516,9 +504,12 @@ void Q2DViewerExtension::setGrid( int rows, int columns )
              windowsToShow = hideWindows;
         else
             windowsToShow = rows-m_rows;
+
         showRows( windowsToShow );
 
-        if( rows > m_totalRows ) windowsToCreate = rows - m_totalRows;
+        if( rows > m_totalRows )
+            windowsToCreate = rows - m_totalRows;
+
         addRows( windowsToCreate );
     }
     else if( rows < m_rows )
@@ -538,9 +529,12 @@ void Q2DViewerExtension::setGrid( int rows, int columns )
             windowsToShow = hideWindows;
         else
             windowsToShow = columns-m_columns;
+
         showColumns( windowsToShow );
 
-        if( columns > m_totalColumns ) windowsToCreate = columns - m_totalColumns;
+        if( columns > m_totalColumns )
+            windowsToCreate = columns - m_totalColumns;
+
         addColumns( windowsToCreate );
     }
     else if( columns < m_columns )
@@ -578,11 +572,6 @@ void Q2DViewerExtension::rotateClockWise()
 void Q2DViewerExtension::rotateCounterClockWise()
 {
     ( m_selectedViewer->getViewer() )->rotateCounterClockWise();
-}
-
-void Q2DViewerExtension::setVoxelInformationCaptionEnabled(bool option)
-{
-    ( m_selectedViewer->getViewer() )->setVoxelInformationCaptionEnabled( option );
 }
 
 void Q2DViewerExtension::horizontalFlip()
@@ -690,8 +679,9 @@ void Q2DViewerExtension::initializeTools()
     // obtenim les accions de cada tool que volem
     m_newZoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
     m_newSlicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_newTranslateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
-
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     // definim els grups exclusius
     QStringList exclusiveTools;
     exclusiveTools << "ZoomTool" << "SlicingTool";
@@ -701,17 +691,12 @@ void Q2DViewerExtension::initializeTools()
 
     m_selectedViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
     connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *) ), this, SLOT( activeSincronization( Q2DViewerWidget * ) ) );
-    
-
-//     m_selectedViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
-//     m_toolManager->setViewerTool( m_selectedViewer->getViewer(), "SynchronizeTool" );
-
 }
 
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }
@@ -745,7 +730,8 @@ void Q2DViewerExtension::hideRows( int rows )
         {
             viewer = m_vectorViewers.value( ( ( m_totalColumns*m_rows ) + numColumn ) );
             viewer->hide();
-            if ( m_selectedViewer == viewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
+            if ( m_selectedViewer == viewer )
+                setViewerSelected( m_vectorViewers.value( 0 ) );
         }
         rows--;
     }
@@ -780,7 +766,8 @@ void Q2DViewerExtension::hideColumns( int columns )
         {
             viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
             viewer->hide();
-            if ( m_selectedViewer == viewer ) setViewerSelected( m_vectorViewers.value( 0 ) );
+            if ( m_selectedViewer == viewer )
+                setViewerSelected( m_vectorViewers.value( 0 ) );
         }
         columns--;
     }

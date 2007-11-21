@@ -22,7 +22,6 @@
 #include <QMutableMapIterator>
 // Tools
 #include "q2dviewertoolmanager.h"
-#include "oldvoxelinformationtool.h"
 
 // include's bàsics vtk
 #include <QVTKWidget.h>
@@ -104,8 +103,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_enabledTools = false;
     m_toolManager = new Q2DViewerToolManager( this );
     this->enableTools();
-    m_voxelInformationTool = new OldVoxelInformationTool(this);
-    disableVoxelInformationCaption();
 
     // anotacions
     createAnnotations();
@@ -696,21 +693,6 @@ QString Q2DViewer::getOppositeOrientationLabel( QString label )
     return oppositeLabel;
 }
 
-void Q2DViewer::setVoxelInformationCaptionEnabled( bool enable )
-{
-    enable ? enableVoxelInformationCaption() : disableVoxelInformationCaption();
-}
-
-void Q2DViewer::enableVoxelInformationCaption()
-{
-    m_voxelInformationTool->enable();
-}
-
-void Q2DViewer::disableVoxelInformationCaption()
-{
-    m_voxelInformationTool->enable(false);
-}
-
 void Q2DViewer::setTool( QString toolName )
 {
     if( m_toolManager->setCurrentTool( toolName ) )
@@ -764,7 +746,6 @@ void Q2DViewer::disableTools()
 
 void Q2DViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
-    m_voxelInformationTool->handleEvent(event);
     switch( event )
     {
     case QVTKWidget::ContextMenuEvent:

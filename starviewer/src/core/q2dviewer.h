@@ -46,7 +46,6 @@ class Volume;
 class Image;
 class Q2DViewerToolManager;
 class OldTool;
-class OldVoxelInformationTool;
 class OldDrawer;
 class ImagePlane;
 
@@ -246,11 +245,6 @@ public slots:
     void setGrid( int rows, int columns );
 
     void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
-
-    /// Habilita/deshabilita que es vegi la info de voxel
-    void setVoxelInformationCaptionEnabled( bool enable );
-    void enableVoxelInformationCaption();
-    void disableVoxelInformationCaption();
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
@@ -602,9 +596,6 @@ private:
 
     /// Les diferents look up tables que ens podem trobar durant tot el procés.
     vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
-
-    /// Tool per mostrar un caption amb la informació del voxel sota el cursor (posició i valor)
-    OldVoxelInformationTool *m_voxelInformationTool;
 
     /// Variable que controla si les tools estant habilitades
     /// Aquesta variable evita que es faci més d'un "connect" quan es fa l'enableTool i ja estan habilitades
