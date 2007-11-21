@@ -38,6 +38,9 @@ public:
     /// Retorna cert si el model té fases, fals altrament.
     bool hasPhases();
 
+    /// Acció pel botó de sincronitzacio
+    void setDefaultAction( QAction * synchronizeAction );
+
 public slots:
     void setInput( Volume *input );
     void changeViewToAxial();
@@ -47,6 +50,9 @@ public slots:
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void selected(Q2DViewerWidget * viewer);
+
+    /// Senyal que s'emetra quan es seleccioni al boto de sincronitzar
+    void sincronize( Q2DViewerWidget * );
 
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
@@ -60,6 +66,9 @@ private:
 private slots:
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
+
+    /// Quan s'activa el boto de sincronitzar
+    void emitSincronize( );
 
 private:
     /// El volum principal
