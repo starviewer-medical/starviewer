@@ -65,12 +65,8 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
 
 void VoxelInformationTool::createCaptionActor()
 {
-    double xyz[3];
-    m_2DViewer->getCurrentCursorPosition(xyz);
-
     m_voxelInformationCaption = vtkCaptionActor2D::New();
     m_voxelInformationCaption->GetAttachmentPointCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->SetAttachmentPoint( xyz );
     m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_voxelInformationCaption->BorderOff();
     m_voxelInformationCaption->LeaderOff();
