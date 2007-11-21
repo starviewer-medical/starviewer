@@ -45,6 +45,7 @@ private:
     QAction *m_distanceAction;
     QAction *m_roiAction;
     QAction *m_seedAction;
+    QAction *m_voxelInformationAction;
 
     QSignalMapper *m_signalMapper;
     typedef std::map<QString,QAction*> ToolMapType;
