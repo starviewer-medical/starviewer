@@ -125,7 +125,8 @@ HEADERS += extensionfactory.h \
            oldrotate3dtool.h \
            oldseedtool.h \
            voxelinformationtool.h \
-           windowleveltool.h 
+           windowleveltool.h \
+           seedtool.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -231,7 +232,8 @@ SOURCES += extensionmediator.cpp \
            oldrotate3dtool.cpp \
            oldseedtool.cpp \
            voxelinformationtool.cpp \
-           windowleveltool.cpp 
+           windowleveltool.cpp \
+           seedtool.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

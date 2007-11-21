@@ -15,6 +15,7 @@
 #include "referencelinestool.h"
 #include "translatetool.h"
 #include "voxelinformationtool.h"
+#include "seedtool.h"
 
 #include <QAction>
 
@@ -55,6 +56,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "WindowLevelTool" )
     {
         tool = new WindowLevelTool( viewer );
+    }
+    else if( toolName == "SeedTool" )
+    {
+        tool = new SeedTool( viewer );
     }
     else
     {
