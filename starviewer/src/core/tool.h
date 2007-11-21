@@ -50,7 +50,7 @@ public:
      * @return Dades de la tool
      * TODO hauria de ser const o no?
      */
-    ToolData *getToolData() const;
+    virtual ToolData *getToolData() const;
 
     /**
      * Ens determina si aquesta tool té dades compartides o no

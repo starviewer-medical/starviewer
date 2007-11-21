@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu és una biblioteca:  
+# L'objectiu ï¿½ una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui 
@@ -126,7 +126,9 @@ HEADERS += extensionfactory.h \
            oldseedtool.h \
            voxelinformationtool.h \
            windowleveltool.h \
-           seedtool.h 
+           seedtool.h \
+           synchronizetool.h \
+           synchronizetooldata.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -233,7 +235,9 @@ SOURCES += extensionmediator.cpp \
            oldseedtool.cpp \
            voxelinformationtool.cpp \
            windowleveltool.cpp \
-           seedtool.cpp 
+           seedtool.cpp \
+           synchronizetool.cpp \
+           synchronizetooldata.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

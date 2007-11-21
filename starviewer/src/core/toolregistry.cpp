@@ -16,6 +16,7 @@
 #include "translatetool.h"
 #include "voxelinformationtool.h"
 #include "seedtool.h"
+#include "synchronizetool.h"
 
 #include <QAction>
 
@@ -60,6 +61,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "SeedTool" )
     {
         tool = new SeedTool( viewer );
+    }
+    else if( toolName == "SynchronizeTool" )
+    {
+        tool = new SynchronizeTool( viewer );
     }
     else
     {
@@ -137,6 +142,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Voxel Information") );
         toolAction->setStatusTip( tr("Enable voxel information over cursor") );
         toolAction->setIcon( QIcon(":/images/voxelInformation.png") );
+    }
+    else if( toolName == "SynchronizeTool" )
+    {
+        toolAction->setText( tr("Synchronize tool") );
+        toolAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
+        toolAction->setIcon( QIcon(":/images/boomerang.png") );
     }
     else
     {
