@@ -11,6 +11,7 @@
 // tools registrades
 #include "zoomtool.h"
 #include "slicingtool.h"
+#include "windowleveltool.h"
 #include "referencelinestool.h"
 #include "translatetool.h"
 #include "voxelinformationtool.h"
@@ -50,6 +51,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "VoxelInformationTool" )
     {
         tool = new VoxelInformationTool( viewer );
+    }
+    else if( toolName == "WindowLevelTool" )
+    {
+        tool = new WindowLevelTool( viewer );
     }
     else
     {
