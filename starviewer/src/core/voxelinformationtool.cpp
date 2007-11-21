@@ -7,7 +7,6 @@
 #include "voxelinformationtool.h"
 #include "q2dviewer.h"
 #include "volume.h"
-
 //vtk
 #include <vtkCaptionActor2D.h>
 #include <vtkProperty2D.h>
@@ -15,11 +14,6 @@
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
-
-//Qt
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QPoint>
 
 namespace udg {
 
