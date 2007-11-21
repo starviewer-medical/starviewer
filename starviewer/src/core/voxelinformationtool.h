@@ -31,22 +31,26 @@ public:
 
     void handleEvent( unsigned long eventID );
 
-public slots:
-    ///ens retorna les dimensions de la pantalla
-    int* viewportDimensions();
-
 private slots:
+    /// Actualitza la informació de voxel que ha de mostrar el caption
+    /// d'acord amb la posició on estigui el cursor
     void updateVoxelInformation();
 
 private:
+    /// Crear l'actor on es mostrarà la informació del voxel
     void createCaptionActor();
+
+    /// Ens retorna les dimensions de la pantalla
+    int *viewportDimensions();
 
     ///ens dóna la posició corretgida del caption
     void correctPositionOfCaption( int position[2] );
+
     ///Les següents 3 funcions ens diuen si excedim els límits del viewport
     bool captionExceedsViewportTopLimit();
     bool captionExceedsViewportRightLimit();
     bool captionExceedsViewportLimits();
+
     ///situa el text del caption
     void placeText( double textPosition[3] );
 
@@ -54,7 +58,10 @@ private:
     void depthAccordingViewAndSlice( double xyz[3] );
 
 private:
+    /// 2DViewer amb el que operem
     Q2DViewer *m_2DViewer;
+
+    /// L'actor per mostrar les annotacions de voxel
     vtkCaptionActor2D *m_voxelInformationCaption;
 };
 
