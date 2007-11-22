@@ -7,7 +7,6 @@
 #include "windowleveltool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include <vtkInteractorStyleImage.h> // per controlar el window level
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -32,7 +31,7 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
     {
-    case vtkCommand::LeftButtonPressEvent:
+    case vtkCommand::RightButtonPressEvent:
         this->startWindowLevel();
     break;
 
@@ -41,7 +40,7 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
             this->doWindowLevel();
     break;
 
-    case vtkCommand::LeftButtonReleaseEvent:
+    case vtkCommand::RightButtonReleaseEvent:
         this->endWindowLevel();
     break;
 

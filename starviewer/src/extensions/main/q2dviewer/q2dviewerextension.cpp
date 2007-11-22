@@ -680,6 +680,7 @@ void Q2DViewerExtension::initializeTools()
     m_newZoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
     m_newSlicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
     m_newTranslateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_newWindowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     // definim els grups exclusius
@@ -696,7 +697,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }
