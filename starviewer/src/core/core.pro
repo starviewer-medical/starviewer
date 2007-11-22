@@ -127,8 +127,11 @@ HEADERS += extensionfactory.h \
            voxelinformationtool.h \
            windowleveltool.h \
            seedtool.h \
+           rotate3dtool.h \
+           screenshottool.h \
            synchronizetool.h \
            synchronizetooldata.h
+
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -236,8 +239,11 @@ SOURCES += extensionmediator.cpp \
            voxelinformationtool.cpp \
            windowleveltool.cpp \
            seedtool.cpp \
+           rotate3dtool.cpp \
+           screenshottool.cpp \
            synchronizetool.cpp \
            synchronizetooldata.cpp
+
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
