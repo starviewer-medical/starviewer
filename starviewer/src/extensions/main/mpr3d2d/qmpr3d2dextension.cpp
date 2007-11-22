@@ -17,7 +17,6 @@
 #include <QToolButton>
 #include <QSplitter>
 #include <QSettings>
-#include <QMessageBox>
 #include <QAction>
 // vtk
 #include <vtkRenderWindowInteractor.h>
@@ -67,14 +66,9 @@ QMPR3D2DExtension::~QMPR3D2DExtension()
 
 void QMPR3D2DExtension::setInput( Volume *input )
 {
-    if( input->getSeries()->getNumberOfPhases() > 1 )
-    {
-        QMessageBox::warning(this, tr("MPR 3D-2D"), tr("The current Series has multiple phases. Currently the MPR 3D-2D doesn't support Series with multiple phases so it won't work propperly.") );
-    }
     m_volume = input;
-
     m_mpr3DView->setInput( m_volume );
-
+    updateExtension( m_volume );
     m_axial2DView->setInput( m_mpr3DView->getAxialResliceOutput() );
     m_axial2DView->render();
     // posem bé la càmara
@@ -107,6 +101,15 @@ void QMPR3D2DExtension::setInput( Volume *input )
     // posem la vista a coronal
     m_mpr3DView->resetViewToCoronal();
     updateActors();
+}
+
+void QMPR3D2DExtension::updateExtension( Volume *volume )
+{
+    m_volume = volume;
+    if( m_volume->getSeries()->getNumberOfPhases() > 1 )
+        m_phasesAlertLabel->setVisible(true);
+    else
+        m_phasesAlertLabel->setVisible(false);
 }
 
 void QMPR3D2DExtension::createActions()
@@ -227,7 +230,6 @@ void QMPR3D2DExtension::createActors()
 
     m_coronalOverSagitalIntersectionAxis = vtkAxisActor2D::New();
 
-
     // Els donem les propietats adequades
     m_sagitalOverAxialIntersectionAxis->AxisVisibilityOn();
     m_sagitalOverAxialIntersectionAxis->TickVisibilityOff();
@@ -254,15 +256,11 @@ void QMPR3D2DExtension::createActors()
     m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor( .0 , 1. , 1. );
 
     // Els afegim als visors corresponents
-
-
     m_axial2DView->getRenderer()->AddActor2D( m_sagitalOverAxialIntersectionAxis );
     m_axial2DView->getRenderer()->AddActor2D( m_coronalOverAxialIntersectionAxis );
 
     m_sagital2DView->getRenderer()->AddActor2D( m_axialOverSagitalIntersectionAxis );
     m_sagital2DView->getRenderer()->AddActor2D( m_coronalOverSagitalIntersectionAxis );
-
-
 }
 
 void QMPR3D2DExtension::updateActors()
@@ -338,7 +336,6 @@ void QMPR3D2DExtension::updateActors()
 
     m_coronalOverSagitalIntersectionAxis->SetPosition(  position1[1] , position1[2] );
     m_coronalOverSagitalIntersectionAxis->SetPosition2( position2[1] , position2[2] );
-
 }
 
 void QMPR3D2DExtension::createConnections()
@@ -384,6 +381,8 @@ void QMPR3D2DExtension::createConnections()
     // layouts
     connect( m_leftRightLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchBigView() ) );
     connect( m_viewsLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchViews() ) );
+
+    connect( m_mpr3DView, SIGNAL( volumeChanged(Volume *) ), SLOT( updateExtension(Volume *) ) );
 }
 
 void QMPR3D2DExtension::readSettings()

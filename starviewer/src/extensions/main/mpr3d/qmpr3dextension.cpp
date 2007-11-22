@@ -11,7 +11,6 @@
 #include "volume.h"
 #include "series.h"
 #include <QToolButton>
-#include <QMessageBox>
 #include <QAction>
 
 namespace udg {
@@ -77,27 +76,30 @@ void QMPR3DExtension::createConnections()
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_mpr3DView , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_mpr3DView , SLOT( resetWindowLevelToDefault() ) );
 
-    connect( m_mpr3DView, SIGNAL( volumeChanged(Volume *) ), SLOT( updateExtension() ) );
+    connect( m_mpr3DView, SIGNAL( volumeChanged(Volume *) ), SLOT( updateExtension(Volume *) ) );
 }
 
 void QMPR3DExtension::setInput( Volume *input )
 {
-    if( input->getSeries()->getNumberOfPhases() > 1 )
-    {
-        QMessageBox::warning(this, tr("MPR 3D"), tr("The current Series has multiple phases. Currently the MPR 3D doesn't support Series with multiple phases so it won't work propperly.") );
-    }
     m_volume = input;
     m_mpr3DView->setInput( m_volume );
-    updateExtension();
+    updateExtension(m_volume);
     INFO_LOG("QMPR3DExtension:: Donem Input ");
 }
 
-void QMPR3DExtension::updateExtension()
+void QMPR3DExtension::updateExtension( Volume * volume )
 {
+    m_volume = volume;
+    if( m_volume->getSeries()->getNumberOfPhases() > 1 )
+        m_phasesAlertLabel->setVisible(true);
+    else
+        m_phasesAlertLabel->setVisible(false);
+
     double wl[2];
     m_mpr3DView->getWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
-    // TODO falta actualitzar els botons
+    // TODO faltaria actualitzar els botons que calgui i/o altre elements de l'interfície
+
 }
 
 };  // end namespace udg

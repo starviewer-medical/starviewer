@@ -38,7 +38,7 @@ private slots:
      * actualitzant els valors de window level que es mostren per pantalla,
      * botons de l'extensió, etc
      */
-    void updateExtension();
+    void updateExtension( Volume *volume );
 
 private:
     /// El volum d'entrada
