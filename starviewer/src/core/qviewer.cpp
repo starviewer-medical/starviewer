@@ -91,6 +91,27 @@ ToolProxy *QViewer::getToolProxy() const
 
 void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
+    switch( event )
+    {
+    case QVTKWidget::ContextMenuEvent:
+        contextMenuRelease();
+    break;
+
+    default:
+    break;
+    }
+    // quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
+    switch( event )
+    {
+    case QVTKWidget::ContextMenuEvent:
+    case vtkCommand::LeftButtonPressEvent:
+    case vtkCommand::RightButtonPressEvent:
+    case vtkCommand::MiddleButtonPressEvent:
+    case vtkCommand::MouseWheelForwardEvent:
+    case vtkCommand::MouseWheelBackwardEvent:
+        emit selected();
+    break;
+    }
     emit eventReceived( event );
 }
 
@@ -254,6 +275,23 @@ void QViewer::enableContextMenu()
 void QViewer::disableContextMenu()
 {
     m_contextMenuActive = false;
+}
+
+void QViewer::contextMenuRelease()
+{
+    // Extret dels exemples de vtkEventQtSlotConnect
+
+    // Obtenim la posició de l'event
+    int eventPosition[2];
+    this->getInteractor()->GetEventPosition( eventPosition );
+    int* size = this->getInteractor()->GetSize();
+    // remember to flip y
+    QPoint point = QPoint( eventPosition[0], size[1]-eventPosition[1] );
+
+    // map to global
+    QPoint globalPoint = this->mapToGlobal( point );
+//     emit showContextMenu( globalPoint );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point, globalPoint));
 }
 
 void QViewer::contextMenuEvent(QContextMenuEvent *event)
