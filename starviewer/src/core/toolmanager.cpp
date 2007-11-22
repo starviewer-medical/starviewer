@@ -66,6 +66,8 @@ void ToolManager::removeViewerTool( QViewer *viewer, const QString &toolName )
             if( pair.first == viewer )
             {
                 found = true;
+                // eliminem la tool del proxy
+                viewer->getToolProxy()->removeTool( toolName );
                 // això vol dir que per un nom de tool, nomé spodem tenir un parell viewer-config
                 // del contrari, ens hauríem de "patejar" tot el map sencer per si tenim la mateixa tool,
                 // pel mateix viewer i amb una configuració diferent
