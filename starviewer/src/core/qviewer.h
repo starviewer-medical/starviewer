@@ -168,6 +168,9 @@ protected:
 
     /// ToolProxy
     ToolProxy *m_toolProxy;
+
+    /// Ens servirà per controlar si entre event o event s'ha mogut el mouse
+    bool m_mouseHasMoved;
 };
 
 };  //  end  namespace udg {
