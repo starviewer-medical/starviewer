@@ -36,7 +36,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_contextMenuActive(true)
+ : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false)
 {
     m_vtkWidget = new QVTKWidget( this );
 
@@ -91,15 +91,6 @@ ToolProxy *QViewer::getToolProxy() const
 
 void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
-    switch( event )
-    {
-    case QVTKWidget::ContextMenuEvent:
-        contextMenuRelease();
-    break;
-
-    default:
-    break;
-    }
     // quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch( event )
     {
@@ -109,8 +100,19 @@ void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_da
     case vtkCommand::MiddleButtonPressEvent:
     case vtkCommand::MouseWheelForwardEvent:
     case vtkCommand::MouseWheelBackwardEvent:
+        m_mouseHasMoved = false;
         emit selected();
     break;
+
+    case vtkCommand::MouseMoveEvent:
+        m_mouseHasMoved = true;
+    break;
+
+    case vtkCommand::RightButtonReleaseEvent:
+        if( !m_mouseHasMoved )
+            contextMenuRelease();
+    break;
+
     }
     emit eventReceived( event );
 }
