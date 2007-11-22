@@ -148,9 +148,6 @@ void Q2DViewerExtension::createActions()
     m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
 
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
 
@@ -165,7 +162,6 @@ void Q2DViewerExtension::createActions()
     m_toolsActionGroup->addAction( m_windowLevelAction );
     m_toolsActionGroup->addAction( m_zoomAction );
     m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
     m_toolsActionGroup->addAction( m_distanceAction );
     m_toolsActionGroup->addAction( m_roiAction );
 
@@ -683,6 +679,7 @@ void Q2DViewerExtension::initializeTools()
     m_newWindowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     // definim els grups exclusius
     QStringList exclusiveTools;
     exclusiveTools << "ZoomTool" << "SlicingTool";
@@ -697,7 +694,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }
