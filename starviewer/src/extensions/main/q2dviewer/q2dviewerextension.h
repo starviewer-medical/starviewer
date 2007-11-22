@@ -175,7 +175,6 @@ private:
     QAction *m_rotateCounterClockWiseAction;
     QAction *m_flipHorizontalAction;
     QAction *m_flipVerticalAction;
-    QAction *m_screenShotAction;
     QAction *m_distanceAction;
     QAction *m_roiAction;
     ToolsActionFactory *m_actionFactory;
