@@ -134,8 +134,13 @@ signals:
     /// s'emet quan els paràmetres de la càmera han canviat
     void cameraChanged();
 
+    /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
+    void selected( void );
+
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
+
+    void contextMenuRelease();
 
 protected:
     /// El volum a visualitzar

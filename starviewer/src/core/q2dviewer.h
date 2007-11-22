@@ -244,8 +244,6 @@ public slots:
     /// Assignar/afegir files i columnes
     void setGrid( int rows, int columns );
 
-    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
-
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
 
@@ -262,9 +260,6 @@ public slots:
     // Mètodes específics checkerboard
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int x , int y , int z );
-
-    /// s'executa quan es rep un event de ContextMenu (click botó dret). Mapeja els punts rebuts per enviar una senyal amb el QPoint global que indica on s'ha de mostrar el menú o widget de contexte que necessiti la extensió on es trobi
-    void contextMenuRelease();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
@@ -331,12 +326,6 @@ signals:
 
     /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
     void rotationDegreesChanged(double);
-
-    /// informa de la posició on s'ha de mostrar el menú de contexte
-    void showContextMenu( QPoint menuPoint );
-
-    /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
-    void selected( void );
 
 protected:
     /// Processem l'event de resize de la finestra Qt
