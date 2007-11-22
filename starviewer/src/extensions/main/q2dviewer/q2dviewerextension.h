@@ -167,10 +167,6 @@ private:
     QAction *m_axialViewAction;
     QAction *m_sagitalViewAction;
     QAction *m_coronalViewAction;
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
     QAction *m_flipHorizontalAction;
