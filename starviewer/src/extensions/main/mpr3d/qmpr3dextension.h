@@ -32,6 +32,14 @@ public:
     */
     void setInput( Volume *input );
 
+private slots:
+    /**
+     * Aquest slot es crida cada cop que es renovi l'input de l'extensió
+     * actualitzant els valors de window level que es mostren per pantalla,
+     * botons de l'extensió, etc
+     */
+    void updateExtension();
+
 private:
     /// El volum d'entrada
     Volume* m_volume;
