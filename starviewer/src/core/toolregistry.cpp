@@ -16,6 +16,8 @@
 #include "translatetool.h"
 #include "voxelinformationtool.h"
 #include "seedtool.h"
+#include "rotate3dtool.h"
+#include "screenshottool.h"
 #include "synchronizetool.h"
 
 #include <QAction>
@@ -61,6 +63,14 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "SeedTool" )
     {
         tool = new SeedTool( viewer );
+    }
+    else if( toolName == "ScreenShotTool" )
+    {
+        tool = new ScreenShotTool( viewer );
+    }
+    else if( toolName == "Rotate3DTool" )
+    {
+        tool = new Rotate3DTool( viewer );
     }
     else if( toolName == "SynchronizeTool" )
     {
@@ -113,7 +123,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setStatusTip( tr("Enable/Disable Screen shot tool") );
         toolAction->setIcon( QIcon(":/images/photo.png") );
     }
-    else if( toolName == "3DRotationTool" )
+    else if( toolName == "Rotate3DTool" )
     {
         toolAction->setText( tr("3D Rotation") );
         toolAction->setStatusTip( tr("Enable/Disable 3D Rotation tool") );
