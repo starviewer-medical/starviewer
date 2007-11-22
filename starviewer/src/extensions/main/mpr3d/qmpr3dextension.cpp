@@ -76,6 +76,8 @@ void QMPR3DExtension::createConnections()
 
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_mpr3DView , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_mpr3DView , SLOT( resetWindowLevelToDefault() ) );
+
+    connect( m_mpr3DView, SIGNAL( volumeChanged(Volume *) ), SLOT( updateExtension() ) );
 }
 
 void QMPR3DExtension::setInput( Volume *input )
@@ -86,10 +88,16 @@ void QMPR3DExtension::setInput( Volume *input )
     }
     m_volume = input;
     m_mpr3DView->setInput( m_volume );
+    updateExtension();
+    INFO_LOG("QMPR3DExtension:: Donem Input ");
+}
+
+void QMPR3DExtension::updateExtension()
+{
     double wl[2];
     m_mpr3DView->getWindowLevel( wl );
     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
-    INFO_LOG("QMPR3DExtension:: Donem Input ");
+    // TODO falta actualitzar els botons
 }
 
 };  // end namespace udg
