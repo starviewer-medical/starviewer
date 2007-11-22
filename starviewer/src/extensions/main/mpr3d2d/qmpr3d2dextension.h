@@ -45,6 +45,14 @@ public slots:
     /// Canvia de posició la finestra "gran" d'esquerra a dreta i vicerversa
     void switchBigView();
 
+private slots:
+    /**
+     * Aquest slot es crida cada cop que es renovi l'input de l'extensió
+     * actualitzant els valors de window level que es mostren per pantalla,
+     * botons de l'extensió, etc
+     */
+    void updateExtension(Volume *volume);
+
 private:
     /// El volum d'entrada
     Volume* m_volume;

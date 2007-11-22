@@ -726,13 +726,15 @@ void QMPRExtension::releasePushSagitalViewAxisActor()
 void QMPRExtension::setInput( Volume *input )
 {
     if( input->getSeries()->getNumberOfPhases() > 1 )
-    {
-        QMessageBox::warning(this, tr("MPR"), tr("The current Series has multiple phases. Currently the MPR doesn't support Series with multiple phases so it won't work propperly.") );
-    }
+        m_phasesAlertLabel->setVisible(true);
+    else
+        m_phasesAlertLabel->setVisible(false);
+
     vtkImageChangeInformation *changeInfo = vtkImageChangeInformation::New();
     changeInfo->SetInput( input->getVtkData() );
     changeInfo->SetOutputOrigin( .0, .0, .0 );
 
+    // TODO es crea un nou volum cada cop!
     m_volume = new Volume;
     m_volume->setImages( input->getImages() );
     m_volume->setData( changeInfo->GetOutput() );
