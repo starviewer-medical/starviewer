@@ -7,7 +7,7 @@
 #include "qmpr3dextension.h"
 #include "q3dmprviewer.h"
 #include "logging.h"
-#include "toolsactionfactory.h"
+#include "toolmanager.h"
 #include "volume.h"
 #include "series.h"
 #include <QToolButton>
@@ -20,7 +20,7 @@ QMPR3DExtension::QMPR3DExtension( QWidget *parent )
 {
     setupUi( this );
 
-    createTools();
+    initializeTools();
     createConnections();
 
     m_axialViewEnabledButton->setChecked( true );
@@ -29,38 +29,29 @@ QMPR3DExtension::QMPR3DExtension( QWidget *parent )
     m_mpr3DView->orientationMarkerOff();
 }
 
-
 QMPR3DExtension::~QMPR3DExtension()
 {
 }
 
-void QMPR3DExtension::createTools()
+void QMPR3DExtension::initializeTools()
 {
-    m_mpr3DView->enableTools();
-    m_actionFactory = new ToolsActionFactory( 0 );
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
 
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_zoomToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_rotate3DToolButton->defaultAction()->trigger();
 
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-
-    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
-    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mpr3DView , SLOT( setTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
-    m_toolsActionGroup->addAction( m_rotate3DAction );
-    // activem la tool de zoom per defecte
-    m_zoomAction->trigger();
+    // registrem al manager les tools que van amb el viewer principal
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
+    m_toolManager->setViewerTools( m_mpr3DView, toolsList );
+    m_toolManager->refreshConnections();
 }
 
 void QMPR3DExtension::createConnections()

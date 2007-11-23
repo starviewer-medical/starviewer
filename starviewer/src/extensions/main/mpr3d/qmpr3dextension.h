@@ -13,7 +13,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
+class ToolManager;
 
 /**
 Extensió de l'MPR 3D
@@ -41,25 +41,18 @@ private slots:
     void updateExtension( Volume *volume );
 
 private:
-    /// El volum d'entrada
-    Volume* m_volume;
-
-    /// factoria d'accions per les tools
-    ToolsActionFactory *m_actionFactory;
-
-    /// Accions de les tools
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_rotate3DAction;
-    QAction *m_screenShotAction;
-    QActionGroup *m_toolsActionGroup;
-
     /// posa a disposició les tools
-    void createTools();
+    void initializeTools();
 
     /// Estableix les connexions de signals i slots
     void createConnections();
 
+private:
+    /// El volum d'entrada
+    Volume* m_volume;
+
+    /// Gestor de tools de l'extensió
+    ToolManager *m_toolManager;
 };
 
 };  //  end  namespace udg

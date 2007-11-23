@@ -17,7 +17,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
+class ToolManager;
 
 /**
 Extensió de l'MPR 3D
@@ -53,25 +53,15 @@ private slots:
      */
     void updateExtension(Volume *volume);
 
+    /// Actualitza les vistes 2D conforme el que es veu a la vista MPR 3D
+    void update2DViews();
+
+    /// Refresca la posició dels actors d'acord amb l'interacció
+    void updateActors();
+
 private:
-    /// El volum d'entrada
-    Volume* m_volume;
-
-    /// Accions sobre els layouts
-    QAction *m_leftRightLayoutAction, *m_viewsLayoutAction;
-
-    /// Accions de les tools
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_voxelInformationAction;
-    QAction *m_screenShotAction;
-    QAction *m_rotate3DAction;
-    QActionGroup *m_toolsActionGroup;
-    ToolsActionFactory *m_actionFactory;
-
     /// crea les tools
-    void createTools();
+    void initializeTools();
 
     /// crea les accions
     void createActions();
@@ -80,22 +70,24 @@ private:
     void readSettings();
     void writeSettings();
 
-    /// els actors que serveixen de punts de referència sobre els plans 2D
-    vtkAxisActor2D *m_sagitalOverAxialIntersectionAxis , *m_coronalOverAxialIntersectionAxis , *m_axialOverSagitalIntersectionAxis , *m_coronalOverSagitalIntersectionAxis;
-
     /// Crea actors adicionals que s'afegiran als respectius visors
     void createActors();
 
     /// Estableix les connexions de signals i slots
     void createConnections();
 
-private slots:
-    /// Actualitza les vistes 2D conforme el que es veu a la vista MPR 3D
-    void update2DViews();
+private:
+    /// El volum d'entrada
+    Volume* m_volume;
 
-    /// Refresca la posició dels actors d'acord amb l'interacció
-    void updateActors();
+    /// Accions sobre els layouts
+    QAction *m_leftRightLayoutAction, *m_viewsLayoutAction;
 
+    /// els actors que serveixen de punts de referència sobre els plans 2D
+    vtkAxisActor2D *m_sagitalOverAxialIntersectionAxis , *m_coronalOverAxialIntersectionAxis , *m_axialOverSagitalIntersectionAxis , *m_coronalOverSagitalIntersectionAxis;
+
+    /// Gestor de tools de l'extensió
+    ToolManager *m_toolManager;
 };
 
 };  //  end  namespace udg
