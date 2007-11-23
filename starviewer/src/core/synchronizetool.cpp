@@ -48,8 +48,6 @@ ToolData * SynchronizeTool::getToolData() const
 
 void SynchronizeTool::setIncrement( int slice )
 {
-
-    DEBUG_LOG( tr("Visualitzador: %1. Jo SI faig un setIncrement") );
     int increment = slice - m_lastSlice;
     m_lastSlice = slice;
     disconnect( m_toolData, SIGNAL(dataChanged( ) ), this, SLOT( applyChanges() ) );
@@ -58,10 +56,8 @@ void SynchronizeTool::setIncrement( int slice )
 
 }
 
-void SynchronizeTool::applyChanges(  )
+void SynchronizeTool::applyChanges()
 {
-
-    DEBUG_LOG( tr("Visualitzador: %1. Jo SI actualitzo") );
     int increment = this->m_toolData->getIncrement();
     disconnect( m_viewer, SIGNAL(sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
     m_q2viewer->setSlice( m_lastSlice+increment );
