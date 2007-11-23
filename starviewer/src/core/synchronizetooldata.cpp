@@ -24,9 +24,6 @@ SynchronizeToolData::~SynchronizeToolData()
 void SynchronizeToolData::setIncrement( int value )
 {
     m_increment = value;
-
-    DEBUG_LOG( tr("HE CANVIAT LES DADES!! INCREMENT: %1").arg(m_increment) );
-
     emit( dataChanged() );
 }
 
