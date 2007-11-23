@@ -18,8 +18,17 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
  : QFrame(parent), m_mainVolume(0)
 {
     setupUi( this );
-    createConnections();
     setAutoFillBackground( true );
+
+    // Creació de l'acció del boto de sincronitzar.
+    m_buttonSynchronizeAction = new QAction( 0 );
+    m_buttonSynchronizeAction->setText( tr("Synchronize tool") );
+    m_buttonSynchronizeAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
+    m_buttonSynchronizeAction->setIcon( QIcon(":/images/boomerang.png") );
+    m_buttonSynchronizeAction->setCheckable( true );
+    m_synchronizeButton->setDefaultAction( m_buttonSynchronizeAction );
+
+    createConnections();
 }
 
 Q2DViewerWidget::~Q2DViewerWidget()
@@ -33,7 +42,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( setInput( Volume *) ) );
-    connect( m_synchronizeButton, SIGNAL( clicked( bool ) ), this, SLOT( emitSincronize() ) );
+    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), this, SLOT( emitSincronize() ) );
 }
 
 void Q2DViewerWidget::setInput( Volume *input )
@@ -157,7 +166,7 @@ void Q2DViewerWidget::setDefaultAction( QAction * synchronizeAction )
 
 void Q2DViewerWidget::emitSincronize()
 {
-    emit sincronize( this );
+    emit sincronize( this, m_buttonSynchronizeAction->isChecked() );
 }
 
 }

@@ -61,6 +61,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
+    setGrid( 1, 2 );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -459,8 +460,7 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
         newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
     }
 
-    newViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
-    connect( newViewer, SIGNAL( sincronize( Q2DViewerWidget *) ), this, SLOT( activeSincronization( Q2DViewerWidget * ) ) );
+    connect( newViewer, SIGNAL( sincronize( Q2DViewerWidget *, bool ) ), this, SLOT( sincronization( Q2DViewerWidget *, bool ) ) );
 
 
     return newViewer;
@@ -672,11 +672,14 @@ void Q2DViewerExtension::initializeTools()
     m_translateToolButton->defaultAction()->trigger();
     m_windowLevelToolButton->defaultAction()->trigger();
 
+    // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
+    m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
+
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
 
-    m_selectedViewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
-    connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *) ), this, SLOT( activeSincronization( Q2DViewerWidget * ) ) );
+    connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *, bool ) ), this, SLOT( sincronization( Q2DViewerWidget *, bool ) ) );
+
 }
 
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
@@ -809,17 +812,19 @@ void Q2DViewerExtension::writeSettings()
     settings.endGroup();
 }
 
-void Q2DViewerExtension::activeSincronization( Q2DViewerWidget * viewer)
+void Q2DViewerExtension::sincronization( Q2DViewerWidget * viewer, bool active )
 {
-//     viewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
-    m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool" );
-    m_toolManager->refreshConnections();
-}
+    if( active )
+    {
+        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool" );
+        m_toolManager->activateTool("SynchronizeTool");
+    }
+    else
+    {
+        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
+        m_toolManager->deactivateTool("SynchronizeTool");
+    }
 
-// void Q2DViewerExtension::desactiveSincronization( Q2DViewerWidget * viewer)
-// {
-//     viewer->setDefaultAction( m_toolManager->getToolAction("SynchronizeTool") );
-//     m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool" );
-// }
+}
 
 }
