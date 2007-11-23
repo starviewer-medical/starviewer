@@ -74,6 +74,9 @@
        <property name="icon" >
         <iconset resource="../../../main/main.qrc" >:/images/boomerang.png</iconset>
        </property>
+       <property name="checkable" >
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>

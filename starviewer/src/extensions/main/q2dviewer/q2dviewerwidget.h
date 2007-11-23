@@ -52,7 +52,7 @@ signals:
     void selected(Q2DViewerWidget * viewer);
 
     /// Senyal que s'emetra quan es seleccioni al boto de sincronitzar
-    void sincronize( Q2DViewerWidget * );
+    void sincronize( Q2DViewerWidget *, bool );
 
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
@@ -68,11 +68,14 @@ private slots:
     void emitSelectedViewer();
 
     /// Quan s'activa el boto de sincronitzar
-    void emitSincronize( );
+    void emitSincronize();
 
 private:
     /// El volum principal
     Volume *m_mainVolume;
+
+    /// Acció del boto de sincronitzar
+    QAction * m_buttonSynchronizeAction;
 };
 
 };

@@ -151,7 +151,7 @@ private slots:
     void validePhases();
 
     /// Activa la sincronització al visualitzador
-    void activeSincronization( Q2DViewerWidget * );
+    void sincronization( Q2DViewerWidget *, bool );
 
 private:
     /// Tipus de vistes que podem tenir
