@@ -7,8 +7,8 @@
 
 #include "qvolume3dviewtestingextension.h"
 #include "volume.h"
-#include "toolsactionfactory.h"
-
+#include "toolmanager.h"
+// qt
 #include <QAction>
 #include <QSettings>
 
@@ -19,7 +19,7 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
 {
     setupUi( this );
 
-    createTools();
+    initializeTools();
     createConnections();
     readSettings();
 }
@@ -29,29 +29,24 @@ QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
     writeSettings();
 }
 
-void QVolume3DViewTestingExtension::createTools()
+void QVolume3DViewTestingExtension::initializeTools()
 {
-    m_3DView->enableTools();
-    m_actionFactory = new ToolsActionFactory( 0 );
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
+    m_panToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
 
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_zoomToolButton->defaultAction()->trigger();
+    m_panToolButton->defaultAction()->trigger();
+    m_rotate3DToolButton->defaultAction()->trigger();
 
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_panToolButton->setDefaultAction( m_moveAction );
-
-    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
-    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_3DView , SLOT( setTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_rotate3DAction );
-    // activem la tool per defecte
-    m_rotate3DAction->trigger();
+    // registrem al manager les tools que van amb el viewer principal
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool";
+    m_toolManager->setViewerTools( m_3DView, toolsList );
+    m_toolManager->refreshConnections();
 }
 
 void QVolume3DViewTestingExtension::createConnections()

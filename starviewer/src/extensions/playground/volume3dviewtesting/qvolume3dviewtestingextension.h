@@ -16,7 +16,7 @@ namespace udg {
 
 class Volume3DViewTesting;
 class Volume;
-class ToolsActionFactory;
+class ToolManager;
 
 /**
  * ...
@@ -41,8 +41,8 @@ public slots:
     void updateRenderingMethodFromCombo( int index );
 
 private:
-    /// posa a disposició les tools
-    void createTools();
+    /// posa a punt les tools que es poden fer servir en l'extensió
+    void initializeTools();
 
     /// Estableix les connexions de signals i slots
     void createConnections();
@@ -55,14 +55,8 @@ private:
     /// El volum d'input
     Volume *m_input;
 
-    /// factoria d'accions per les tools
-    ToolsActionFactory *m_actionFactory;
-
-    /// Accions de les tools
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_rotate3DAction;
-    QActionGroup *m_toolsActionGroup;
+    /// Gestor de tools
+    ToolManager *m_toolManager;
 };
 
 } // end namespace udg
