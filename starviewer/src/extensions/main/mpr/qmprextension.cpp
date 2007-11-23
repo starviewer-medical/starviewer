@@ -13,6 +13,7 @@
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
 #include "toolsactionfactory.h"
+#include "toolmanager.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -50,12 +51,14 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createConnections();
     createActors();
     readSettings();
-
+    initializeTools();
+    
     m_thickSlab = 0.0;
     m_thickSlabLabel->setVisible(false);
     m_thickSlabSlider->setVisible(false);
     m_thickSlabSpinBox->setVisible(false);
     m_mipToolButton->setVisible(false);
+    m_rotate3DToolButton->setVisible(false);
 }
 
 QMPRExtension::~QMPRExtension()
@@ -137,6 +140,8 @@ void QMPRExtension::init()
     m_mipViewer = 0;
 
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
+    
+    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
 }
 
 void QMPRExtension::createActions()
@@ -155,43 +160,11 @@ void QMPRExtension::createActions()
     m_mipAction->setCheckable( true );
     m_mipToolButton->setDefaultAction( m_mipAction );
 
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_axial2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_sagital2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_coronal2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
 
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-
     m_distanceAction= m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
-
-    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
-    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
-    m_rotate3DToolButton->setVisible( false );
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_sagital2DView , SLOT( setTool(QString) ) );
@@ -199,16 +172,58 @@ void QMPRExtension::createActions()
 
     // posem a punt els botons per accedir a les tools
     m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
-    m_toolsActionGroup->addAction( m_rotate3DAction );
-    m_toolsActionGroup->addAction( m_distanceAction );
-    // activem la tool d'slicing per defecte
-    m_slicingAction->trigger();
+    m_toolsActionGroup->setExclusive( false );
+    m_toolsActionGroup->addAction( m_distanceAction );    
+}
+
+void QMPRExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+
+    // definim els grups exclusius
+    QStringList exclusiveTools;
+    exclusiveTools << "ZoomTool" << "SlicingTool";
+    m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // registrem al manager les tools que van als diferents viewers
+    initializeDefaultTools();
+}
+
+void QMPRExtension::initializeDefaultTools()
+{
+    QStringList toolsList1, toolsList2;
+    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
+    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
+    m_toolManager->setViewerTools( m_axial2DView, toolsList1 );
+    m_toolManager->setViewerTools( m_sagital2DView, toolsList2 );
+    m_toolManager->setViewerTools( m_coronal2DView, toolsList2 );
+    m_toolManager->refreshConnections();
+}
+
+void QMPRExtension::enableAllTools()
+{
+    m_toolManager->refreshConnections();
+}
+
+void QMPRExtension::disableAllTools()
+{
+    foreach ( QString toolName, m_extensionToolsList )
+    {
+        m_toolManager->deactivateTool( toolName );
+    }
 }
 
 void QMPRExtension::createConnections()
@@ -228,14 +243,9 @@ void QMPRExtension::createConnections()
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
     connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
-    // això es fa per evitar que la senyal es connecti primer al toolmanager. Necessitem que primer el signal sigui tractat per l'extensió i després pel tool manager \TODO això no deixa de ser un parxe, caldria pensar en un sistema de tractament de prioritats amb els events
-    m_axial2DView->disableTools();
-    m_sagital2DView->disableTools();
     // gestionen els events de les finestres per poder manipular els plans
     connect( m_axial2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleAxialViewEvents( unsigned long ) ) );
     connect( m_sagital2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleSagitalViewEvents( unsigned long ) ) );
-    m_axial2DView->enableTools();
-    m_sagital2DView->enableTools();
 
     connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
     connect( m_thickSlabSlider , SIGNAL( valueChanged(int) ) , this , SLOT( updateThickSlab(int) ) );
@@ -413,7 +423,7 @@ void QMPRExtension::detectAxialViewAxisActor()
         }
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         // desactivem les tools que puguin estar actives
-        m_axial2DView->disableTools();
+        disableAllTools();
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
@@ -474,7 +484,7 @@ void QMPRExtension::releaseAxialViewAxisActor()
             m_coronal2DView->getInteractor()->Render();
         }
         // reactivem les tools
-        m_axial2DView->enableTools();
+        enableAllTools();
         m_state = NONE;
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
@@ -506,7 +516,9 @@ void QMPRExtension::detectSagitalViewAxisActor()
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         m_pickedActorPlaneSource = m_coronalPlaneSource;
         // desactivem les tools que puguin estar actives
-        m_sagital2DView->disableTools();
+       
+       disableAllTools();
+       
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
@@ -567,7 +579,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
         // reactivem les tools
-        m_sagital2DView->enableTools();
+        enableAllTools();
     }
 }
 
@@ -584,7 +596,7 @@ void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
 void QMPRExtension::detectPushAxialViewAxisActor()
 {
     //desactivem les tools perquè no facin interferència
-    m_axial2DView->disableTools();
+    disableAllTools();
 
     // obtenim el punt que s'ha clicat
     int x, y;
@@ -666,7 +678,7 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         m_pickedActorReslice = 0;
     }
     //activem les tools
-    m_axial2DView->enableTools();
+    enableAllTools();
 }
 
 void QMPRExtension::detectPushSagitalViewAxisActor()
