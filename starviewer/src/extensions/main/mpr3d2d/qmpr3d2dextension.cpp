@@ -10,7 +10,7 @@
 #include "mathtools.h" // per càlculs d'interseccions
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
-#include "toolsactionfactory.h"
+#include "toolmanager.h"
 #include "volume.h"
 #include "series.h"
 // qt
@@ -40,7 +40,7 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     m_sagitalViewEnabledButton->setChecked( true );
     m_coronalViewEnabledButton->setChecked( true );
 
-    createTools();
+    initializeTools();
     createActors();
     updateActors();
 
@@ -127,58 +127,35 @@ void QMPR3D2DExtension::createActions()
     m_viewsLayoutToolButton->setDefaultAction( m_viewsLayoutAction );
 }
 
-void QMPR3D2DExtension::createTools()
+void QMPR3D2DExtension::initializeTools()
 {
-    m_mpr3DView->enableTools();
-    m_axial2DView->enableTools();
-    m_sagital2DView->enableTools();
-    m_coronal2DView->enableTools();
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+    m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
 
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_windowLevelToolButton->defaultAction()->trigger();
+    m_zoomToolButton->defaultAction()->trigger();
+    m_translateToolButton->defaultAction()->trigger();
+    m_rotate3DToolButton->defaultAction()->trigger();
 
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_axial2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_sagital2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_coronal2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+    // registrem al manager les tools que van amb el viewer principal
+    QStringList tools2DList;
+    tools2DList << "ZoomTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "VoxelInformationTool";
+    m_toolManager->setViewerTools( m_axial2DView, tools2DList );
+    m_toolManager->setViewerTools( m_sagital2DView, tools2DList );
+    m_toolManager->setViewerTools( m_coronal2DView, tools2DList );
 
+    QStringList toolsMPRList;
+    toolsMPRList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
+    m_toolManager->setViewerTools( m_mpr3DView, toolsMPRList );
 
-    m_actionFactory = new ToolsActionFactory( 0 );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_translateToolButton->setDefaultAction( m_moveAction );
-
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-
-    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
-    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mpr3DView , SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_sagital2DView , SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_coronal2DView , SLOT( setTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
-    m_toolsActionGroup->addAction( m_rotate3DAction );
-    // activem la tool de zoom per defecte
-    m_windowLevelAction->trigger();
+    m_toolManager->refreshConnections();
 }
 
 void QMPR3D2DExtension::switchBigView()
