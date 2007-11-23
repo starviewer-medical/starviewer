@@ -89,6 +89,12 @@ public:
      */
     void zoom( double factor );
 
+    /**
+     * Desplaça la càmera segons el vector de moviment que li passem
+     * @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
+     */
+    void pan( double motionVector[3] );
+
 public slots:
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );

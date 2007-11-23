@@ -10,6 +10,7 @@
 // vtk
 #include <vtkInteractorStyle.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
 #include <vtkCommand.h>
@@ -21,9 +22,6 @@ TranslateTool::TranslateTool( QViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_toolName = "TranslateTool";
-    m_interactorStyle = viewer->getInteractorStyle();
-    if( !m_interactorStyle )
-        DEBUG_LOG( "L'interactor Style és buit!" );
 }
 
 TranslateTool::~TranslateTool()
@@ -53,32 +51,19 @@ void TranslateTool::handleEvent( unsigned long eventID )
 
 void TranslateTool::startTranslate()
 {
-    if( m_interactorStyle )
-    {
-        m_state = TRANSLATING;
-        m_interactorStyle->StartPan();
-    }
-    else
-        DEBUG_LOG( "::startTranslate(): L'interactor Style és buit!" );
+    m_state = TRANSLATING;
+    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
 
 void TranslateTool::doTranslate()
 {
-    if( m_interactorStyle )
-    {
-        if( m_state == TRANSLATING )
-            this->pan();
-    }
-    else
-        DEBUG_LOG( "::doTranslate(): L'interactor Style és buit!" );
-
+    if( m_state == TRANSLATING )
+        this->pan();
 }
 
 void TranslateTool::pan()
 {
-    // Codi extret de vtkInteractorStyleTrackballActor::Pan()
-    // Si fem servir "current renderer" en comptes de "default" el desplaçament no va del tot bé
-    vtkRenderer *renderer = m_interactorStyle->GetDefaultRenderer();
+    vtkRenderer *renderer = m_viewer->getInteractorStyle()->GetCurrentRenderer();
     if( !renderer )
         return;
 
@@ -86,7 +71,6 @@ void TranslateTool::pan()
     double newPickPoint[4], oldPickPoint[4], motionVector[3];
 
     // Calculate the focal depth since we'll be using it a lot
-
     vtkCamera *camera = renderer->GetActiveCamera();
     camera->GetFocalPoint( viewFocus );
     QViewer::computeWorldToDisplay( renderer, viewFocus[0], viewFocus[1], viewFocus[2],
@@ -94,8 +78,8 @@ void TranslateTool::pan()
     focalDepth = viewFocus[2];
 
     QViewer::computeDisplayToWorld( renderer,
-                                (double)m_interactorStyle->GetInteractor()->GetEventPosition()[0],
-                                (double)m_interactorStyle->GetInteractor()->GetEventPosition()[1],
+                                (double)m_viewer->getInteractor()->GetEventPosition()[0],
+                                (double)m_viewer->getInteractor()->GetEventPosition()[1],
                                 focalDepth,
                                 newPickPoint);
 
@@ -103,44 +87,23 @@ void TranslateTool::pan()
     // so can't move it outside the loop
 
     QViewer::computeDisplayToWorld( renderer,
-                                (double)m_interactorStyle->GetInteractor()->GetLastEventPosition()[0],
-                                (double)m_interactorStyle->GetInteractor()->GetLastEventPosition()[1],
+                                (double)m_viewer->getInteractor()->GetLastEventPosition()[0],
+                                (double)m_viewer->getInteractor()->GetLastEventPosition()[1],
                                 focalDepth,
                                 oldPickPoint );
 
     // Camera motion is reversed
-
     motionVector[0] = oldPickPoint[0] - newPickPoint[0];
     motionVector[1] = oldPickPoint[1] - newPickPoint[1];
     motionVector[2] = oldPickPoint[2] - newPickPoint[2];
-
-    camera->GetFocalPoint( viewFocus );
-    camera->GetPosition( viewPoint );
-    camera->SetFocalPoint( motionVector[0] + viewFocus[0],
-                            motionVector[1] + viewFocus[1],
-                            motionVector[2] + viewFocus[2] );
-
-    camera->SetPosition( motionVector[0] + viewPoint[0],
-                        motionVector[1] + viewPoint[1],
-                        motionVector[2] + viewPoint[2] );
-
-    if( m_interactorStyle->GetInteractor()->GetLightFollowCamera() )
-    {
-        renderer->UpdateLightsGeometryToFollowCamera();
-    }
-
-    m_interactorStyle->GetInteractor()->Render();
+    m_viewer->pan( motionVector );
 }
 
 void TranslateTool::endTranslate()
 {
-    if( m_interactorStyle )
-    {
-        m_state = NONE;
-        m_interactorStyle->EndPan();
-    }
-    else
-        DEBUG_LOG( "::endTranslate(): L'interactor Style és buit!" );
+    m_state = NONE;
+    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
+    m_viewer->refresh();
 }
 
 }

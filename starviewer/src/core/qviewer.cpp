@@ -244,6 +244,31 @@ void QViewer::zoom( double factor )
         DEBUG_LOG( "::zoom(double factor): El renderer és NUL!" );
 }
 
+void QViewer::pan( double motionVector[3] )
+{
+    double viewFocus[4], viewPoint[3];
+
+    vtkRenderer *renderer = this->getInteractor()->GetInteractorStyle()->GetCurrentRenderer();
+    vtkCamera *camera = renderer->GetActiveCamera();
+
+    camera->GetFocalPoint( viewFocus );
+    camera->GetPosition( viewPoint );
+    camera->SetFocalPoint( motionVector[0] + viewFocus[0],
+                            motionVector[1] + viewFocus[1],
+                            motionVector[2] + viewFocus[2] );
+
+    camera->SetPosition( motionVector[0] + viewPoint[0],
+                        motionVector[1] + viewPoint[1],
+                        motionVector[2] + viewPoint[2] );
+
+    if( this->getInteractor()->GetLightFollowCamera() )
+    {
+        renderer->UpdateLightsGeometryToFollowCamera();
+    }
+    emit cameraChanged();
+    this->refresh();
+}
+
 void QViewer::grabCurrentView()
 {
     m_windowToImageFilter->Update();
