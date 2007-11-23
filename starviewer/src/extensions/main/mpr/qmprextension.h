@@ -17,6 +17,7 @@ class vtkImageReslice;
 class vtkTransform;
 class vtkActor2D;
 class QAction;
+class QStringList;
 
 namespace udg {
 
@@ -24,7 +25,7 @@ namespace udg {
 class Volume;
 class Q3DViewer;
 class ToolsActionFactory;
-
+class ToolManager;
 /**
 Extensió encarregada de fer l'MPR 2D
 
@@ -82,6 +83,14 @@ private:
     void getCoronalYVector( double y[3] );
     void getAxialXVector( double x[3] );
     void getAxialYVector( double y[3] );
+    
+    ///Inicialitza les tools que tindrà l'extensió
+    void initializeTools();
+    
+    /**
+     * Inicialitza les tools per defecte dels visors de l'extensió
+     */
+    void initializeDefaultTools();
 
     /// Actualitza valors dels plans i del reslice final \TODO: separar en dos mètodes diferenciats segons quin pla????
     void updatePlanes();
@@ -103,7 +112,7 @@ private:
 
     /// El volum al que se li practica l'MPR
     Volume *m_volume;
-
+    
     /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab ( línies puntejades blaves en vista axial i sagital ).
     vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis , *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor , *m_thickSlabOverSagitalActor;
 
@@ -146,12 +155,20 @@ private:
 
     /// Inicialitzador d'objectes pel constructor
     void init();
-
+    
+    ///activa totes les tools de tots els visors
+    void enableAllTools();
+    
+    ///desactiva totes les tools de tots els visors
+    void disableAllTools();
+    
     /// El directori on es desaran les imatges per defecte
     QString m_defaultSaveDir;
 
     /// Filtre de fitxers que es poden desar
     QString m_fileSaveFilter;
+    
+    QStringList m_extensionToolsList;
 
     /// Cosetes per controlar el moviment del plans a partir de l'interacció de l'usuari
     double m_initialPickX , m_initialPickY;
@@ -185,6 +202,9 @@ private:
     /// Estat en el que es troba la manipulació de plans
     enum { NONE , ROTATING , PUSHING };
     int m_state;
+    
+    /// ToolManager per configurar l'entorn de tools de l'extensió
+    ToolManager *m_toolManager;
 
 private slots:
     /// gestiona els events de cada finestra per controlar els eixos de manipulació
