@@ -9,8 +9,6 @@
 
 #include "tool.h"
 
-class vtkInteractorStyle;
-
 namespace udg {
 
 /**
@@ -43,9 +41,6 @@ private slots:
     void endTranslate();
 
 private:
-    /// interactor style que omplirem en el constructor depenent del visor
-    vtkInteractorStyle *m_interactorStyle;
-
     /// Estat de la tool
     int m_state;
 };
