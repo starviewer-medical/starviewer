@@ -238,6 +238,7 @@ void QViewer::zoom( double factor )
         }
 
         emit cameraChanged();
+        emit zoomFactorChanged( factor );
         this->refresh();
     }
     else

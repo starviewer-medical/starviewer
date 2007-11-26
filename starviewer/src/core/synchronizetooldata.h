@@ -33,6 +33,9 @@ public:
     double getWindow();
     double getLevel();
 
+    /// Obtenir el factor de zoom
+    double getZoomFactor();
+
 public slots:
 
     /// Per canviar les dades de sincronitzacio de llesques
@@ -40,6 +43,9 @@ public slots:
 
     /// Per canviar les dades de sincronitzacio del window level
     void setWindowLevel( double window, double level );
+
+    /// Per canviar les dades de sincronitzacio del factor de zoom
+    void setZoomFactor( double factor );
 
 signals:
 
@@ -49,6 +55,9 @@ signals:
     /// Signal que s'emet quan les dades de window level canvien
     void windowLevelChanged();
 
+    /// Signal que s'emet quan el factor de zoom canvia
+    void zoomFactorChanged();
+
 private:
 
     /// Dades per la sincronització de l'slicing
@@ -57,6 +66,9 @@ private:
     /// Dades per la sincronització del window level
     double m_window;
     double m_level;
+
+    /// Dades per la sincronització del zoom
+    double m_zoomFactor;
 };
 
 }
