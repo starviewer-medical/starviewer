@@ -50,6 +50,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_seedAction = new QAction( 0 );
     m_seedAction->setText( tr("Seed") );
     m_seedAction->setStatusTip( tr("Put Seed tool") );
+    m_seedAction->setIcon( QIcon(":/images/seed.png") );
     m_seedAction->setCheckable( true );
     m_signalMapper->setMapping( m_seedAction , "SeedTool" );
     connect( m_seedAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
@@ -69,7 +70,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_rotate3dAction->setCheckable( true );
     m_signalMapper->setMapping( m_rotate3dAction , "3DRotationTool" );
     connect( m_rotate3dAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-    
+
     m_distanceAction = new QAction( 0 );
     m_distanceAction->setText( tr("Distances") );
     m_distanceAction->setStatusTip( tr("Enable/Disable Distances tool") );
@@ -77,7 +78,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_distanceAction->setCheckable( true );
     m_signalMapper->setMapping( m_distanceAction , "DistanceTool" );
     connect( m_distanceAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-    
+
     m_roiAction = new QAction( 0 );
     m_roiAction->setText( tr("ROI's") );
     m_roiAction->setStatusTip( tr("Enable/Disable ROI tool") );
@@ -85,7 +86,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_roiAction->setCheckable( true );
     m_signalMapper->setMapping( m_roiAction , "ROITool" );
     connect( m_roiAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
-    
+
     m_voxelInformationAction = new QAction( 0 );
     m_voxelInformationAction->setText( tr("Voxel Information") );
     m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
