@@ -502,6 +502,9 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 
 void Q2DViewer::refreshAnnotations()
 {
+    if( !m_mainVolume )
+        return;
+
     if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
         m_serieInformationAnnotation->VisibilityOn();
     else
@@ -1393,6 +1396,9 @@ void Q2DViewer::setPresentationPixelSpacing( double x , double y )
 
 void Q2DViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY )
 {
+    if( !m_mainVolume )
+        return;
+
     double width, height;
     width = fabs( topLeftX - bottomRightX );
     height = fabs( topLeftY - bottomRightY );
@@ -2048,6 +2054,9 @@ void Q2DViewer::setPhaseGrid( int slice, int rows, int columns )
 
 void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
 {
+    if( !m_mainVolume )
+        return;
+
     // Informació que es mostra per cada viewport
     if( annotation & Q2DViewer::WindowInformationAnnotation )
     {
@@ -2164,12 +2173,13 @@ void Q2DViewer::updatePatientAnnotationInformation()
 
         m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
         m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );
+        this->refresh();
     }
     else
     {
         DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte");
     }
-    this->refresh();
+
 }
 
 void Q2DViewer::updatePatientOrientationAnnotationInformation()
