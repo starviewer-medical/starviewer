@@ -821,7 +821,6 @@ void Q2DViewerExtension::sincronization( Q2DViewerWidget * viewer, bool active )
     else
     {
         m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
-        m_toolManager->deactivateTool("SynchronizeTool");
     }
 
 }
