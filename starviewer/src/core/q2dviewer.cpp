@@ -1263,6 +1263,7 @@ void Q2DViewer::setWindowLevel( double window , double level )
         updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
         updateScalarBar();
         refresh();
+        emit windowLevelChanged( window , level );
     }
     else
     {

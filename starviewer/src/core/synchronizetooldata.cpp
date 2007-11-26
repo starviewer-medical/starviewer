@@ -24,7 +24,7 @@ SynchronizeToolData::~SynchronizeToolData()
 void SynchronizeToolData::setIncrement( int value )
 {
     m_increment = value;
-    emit( dataChanged() );
+    emit( sliceChanged() );
 }
 
 int SynchronizeToolData::getIncrement()
@@ -32,5 +32,20 @@ int SynchronizeToolData::getIncrement()
     return m_increment;
 }
 
+void SynchronizeToolData::setWindowLevel( double window, double level )
+{
+    m_level = level;
+    m_window = window;
+    emit( windowLevelChanged() );
+}
 
+double SynchronizeToolData::getWindow()
+{
+    return m_window;
+}
+
+double SynchronizeToolData::getLevel()
+{
+    return m_level;
+}
 }
