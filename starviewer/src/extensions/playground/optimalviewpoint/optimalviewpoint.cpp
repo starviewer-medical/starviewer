@@ -557,6 +557,28 @@ void OptimalViewpoint::updatePlanes()
 }
 
 
+void OptimalViewpoint::renderPlanes( short plane )
+{
+    m_volume->synchronize();
+
+    switch ( plane )
+    {
+        case -1:    // All
+            for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
+            {
+                (*m_planes)[i]->update( true );
+            }
+            break;
+
+        case 0:     // None
+            break;
+
+        default:
+            (*m_planes)[plane]->update( true );
+            break;
+    }
+}
+
 
 bool OptimalViewpoint::resultsChanged() const
 {

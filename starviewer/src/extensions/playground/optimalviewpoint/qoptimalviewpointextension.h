@@ -65,6 +65,8 @@ public slots:
     /// Assinge el rang escalar als editors de la funció de transferència.
     void setScalarRange( unsigned char rangeMin, unsigned char rangeMax );
 
+    void renderPlane( short plane );
+
 private:
 
     /// Paràmetres del mètode.

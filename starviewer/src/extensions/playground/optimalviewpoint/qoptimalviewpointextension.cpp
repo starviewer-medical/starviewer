@@ -43,6 +43,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_inputParametersWidget, SIGNAL( newMethod2Requested(int,bool) ), m_method, SLOT( newMethod2(int,bool) ) );
 
     connect( m_method, SIGNAL( scalarRange(unsigned char,unsigned char) ), SLOT( setScalarRange(unsigned char,unsigned char) ) );
+
+    connect( m_inputParametersWidget, SIGNAL( renderPlaneRequested(short) ), SLOT( renderPlane(short) ) );
 }
 
 
@@ -143,6 +145,12 @@ void QOptimalViewpointExtension::execute()
 void QOptimalViewpointExtension::setScalarRange( unsigned char /*rangeMin*/, unsigned char rangeMax )
 {
     m_inputParametersWidget->setRangeMax( rangeMax );
+}
+
+
+void QOptimalViewpointExtension::renderPlane( short plane )
+{
+    m_method->renderPlanes( plane );
 }
 
 

@@ -129,7 +129,7 @@ void OptimalViewpointPlane::setLongitude( double longitude )
     m_longitude = longitude;
 }
 
-void OptimalViewpointPlane::update()
+void OptimalViewpointPlane::update( bool render )
 {
     std::cout << "OVP" << m_id << "::update(): start" << std::endl;
 
@@ -140,28 +140,30 @@ void OptimalViewpointPlane::update()
 
 
 
+    if ( render )
+    {
+        m_window->show();
+        m_window->raise();
 
-//     m_window->show();
-//     m_window->raise();
-// 
-//     vtkWindowToImageFilter * windowToImageFilter = vtkWindowToImageFilter::New();
-//     windowToImageFilter->SetInput( m_window->GetRenderWindow() );
-//     //windowToImageFilter->Update();
-// 
-//     vtkPNGWriter * pngWriter = vtkPNGWriter::New();
-//     pngWriter->SetInput( windowToImageFilter->GetOutput() );
-//     pngWriter->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
-//     pngWriter->Write();
-// 
-//     windowToImageFilter->Delete();
-//     pngWriter->Delete();
-// 
-//     vtkPNGReader * pngReader = vtkPNGReader::New();
-//     pngReader->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
-//     //pngReader->Update();
-//     m_plane->SetInput( pngReader->GetOutput() );
-//     pngReader->Delete();
-// 
+        vtkWindowToImageFilter * windowToImageFilter = vtkWindowToImageFilter::New();
+        windowToImageFilter->SetInput( m_window->GetRenderWindow() );
+        //windowToImageFilter->Update();
+
+        vtkPNGWriter * pngWriter = vtkPNGWriter::New();
+        pngWriter->SetInput( windowToImageFilter->GetOutput() );
+        pngWriter->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
+        pngWriter->Write();
+
+        windowToImageFilter->Delete();
+        pngWriter->Delete();
+
+        vtkPNGReader * pngReader = vtkPNGReader::New();
+        pngReader->SetFileName( qPrintable( QDir::tempPath().append( "/plane%1.png" ).arg( m_id ) ) );
+        //pngReader->Update();
+        m_plane->SetInput( pngReader->GetOutput() );
+        pngReader->Delete();
+    }
+
 //     std::cout << "OVP" << m_id << "::update(): end" << std::endl;
 
 
