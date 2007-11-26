@@ -128,7 +128,8 @@ HEADERS += extensionfactory.h \
            rotate3dtool.h \
            screenshottool.h \
            synchronizetool.h \
-           synchronizetooldata.h
+           synchronizetooldata.h \
+           windowlevelpresetstool.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -237,7 +238,8 @@ SOURCES += extensionmediator.cpp \
            rotate3dtool.cpp \
            screenshottool.cpp \
            synchronizetool.cpp \
-           synchronizetooldata.cpp
+           synchronizetooldata.cpp \
+           windowlevelpresetstool.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

@@ -19,6 +19,7 @@
 #include "rotate3dtool.h"
 #include "screenshottool.h"
 #include "synchronizetool.h"
+#include "windowlevelpresetstool.h"
 
 #include <QAction>
 
@@ -75,6 +76,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "SynchronizeTool" )
     {
         tool = new SynchronizeTool( viewer );
+    }
+    else if( toolName == "WindowLevelPresetsTool" )
+    {
+        tool = new WindowLevelPresetsTool( viewer );
     }
     else
     {
@@ -158,6 +163,11 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Synchronize tool") );
         toolAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
         toolAction->setIcon( QIcon(":/images/boomerang.png") );
+    }
+    else if( toolName == "WindowLevelPresetsTool" )
+    {
+        toolAction->setText( tr("Window Level Presets tool") );
+        toolAction->setStatusTip( tr("Enable/Disable Window Level Presets tool") );
     }
     else
     {
