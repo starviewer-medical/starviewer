@@ -35,13 +35,14 @@ namespace udg {
 OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * parent )
     : QObject( parent )
 {
+    Q_CHECK_PTR( image );
+
     double range[2];
     image->GetScalarRange( range );
     double min = range[0], max = range[1];
-    DEBUG_LOG( QString( "min = %1, max = %2" ).arg( min ).arg( max ) );
+    DEBUG_LOG( QString( "[OVV] min = %1, max = %2" ).arg( min ).arg( max ) );
 
-    // tot això està comentat perquè falta canviar altres coses abans que funcioni
-    if ( min >= 0.0 && max <= 255.0 )    // si ja està dins del rang que volem no cal fer res
+    if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
     {
         // cal fer el casting perquè ens arriba com a int
         vtkImageCast * caster = vtkImageCast::New();
@@ -52,8 +53,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
         m_image = caster->GetOutput(); m_image->Register( 0 );
         caster->Delete();
 
-        m_rangeMin = static_cast< unsigned short >( min );
-        m_rangeMax = static_cast< unsigned short >( max );
+        m_rangeMin = static_cast<unsigned short>( qRound( min ) );
+        m_rangeMax = static_cast<unsigned short>( qRound( max ) );
     }
     else
     {
@@ -68,25 +69,26 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
         shifter->ClampOverflowOn();
         shifter->Update();
 
-        m_image = shifter->GetOutput(); m_image->Register( 0 ); // s'ha de fer abans del shifter->Delete()
+        m_image = shifter->GetOutput(); m_image->Register( 0 );
         shifter->Delete();
 
         m_rangeMin = 0; m_rangeMax = 255;
 
         double newRange[2];
         m_image->GetScalarRange( newRange );
-        DEBUG_LOG( QString( "new scalar range = %1 %2" ).arg( newRange[0] ).arg( newRange[1] ) );
+        DEBUG_LOG( QString( "[OVV] new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
     }
 
-    m_data = reinterpret_cast< unsigned char * >( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_data = reinterpret_cast<unsigned char *>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
     m_labeledImage = vtkImageData::New();
-    m_labeledImage->DeepCopy( m_image ); //m_labeledImage->Register( 0 );       // cal el register? (no perquè és New())??
-    m_labeledData = reinterpret_cast< unsigned char * >( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_labeledImage->DeepCopy( m_image );    //m_labeledImage->Register( 0 );    // no cal el register perquè hem fet un new
+    m_labeledData = reinterpret_cast<unsigned char *>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
-    m_segmentedImage = vtkImageData::New();
-    m_segmentedImage->DeepCopy( m_image ); //m_segmentedImage->Register( 0 );   // cal el register? (no perquè és New())??
-    m_segmentedData = reinterpret_cast< unsigned char * >( m_segmentedImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    // ja no cal
+//     m_segmentedImage = vtkImageData::New();
+//     m_segmentedImage->DeepCopy( m_image );  //m_segmentedImage->Register( 0 );  // no cal el register perquè hem fet un new
+//     m_segmentedData = reinterpret_cast< unsigned char *>( m_segmentedImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
 
@@ -139,7 +141,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
 
-//     m_planeMapper->SetInput( m_segmentedImage );
+//     m_planeMapper->SetInput( m_segmentedImage ); // ara s'hauria de fer amb labeled
     m_planeMapper->SetInput( m_image );
 
 
@@ -233,7 +235,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_planeVolume->Delete();
     m_image->Delete();
     m_labeledImage->Delete();
-    m_segmentedImage->Delete();
+//     m_segmentedImage->Delete();  // ja no cal
 
     if ( m_clusterImage ) m_clusterImage->Delete();
 }
@@ -652,7 +654,7 @@ void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
     unsigned char * fixIt = m_data;
 //    IteratorType grounIt(GrounImage, GrounImage->GetBufferedRegion());
     unsigned char * segIt = m_labeledData;
-    unsigned char * seg2It = m_segmentedData;
+//     unsigned char * seg2It = m_segmentedData;    // ja no cal
     unsigned char * fixItEnd = m_data + m_dataSize;
 
 //     int cont = 0;
@@ -683,14 +685,20 @@ void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
 //         {
 //             *seg2It = limits[i-1] + (limits[i] + 1 - limits[i-1]) / 2;
 //         }
-        unsigned char a = ( i == 0 ) ? m_rangeMin : limits[i-1];
-        unsigned short b = 1 + ( ( i == limits.size() ) ? m_rangeMax : limits[i] );
-        *seg2It = a + ( b - a ) / 2;
+
+
+        // ja no cal
+//         unsigned char a = ( i == 0 ) ? m_rangeMin : limits[i-1];
+//         unsigned short b = 1 + ( ( i == limits.size() ) ? m_rangeMax : limits[i] );
+//         *seg2It = a + ( b - a ) / 2;
+
+
+
 
         ++fixIt;
 //        ++grounIt;
         ++segIt;
-        ++seg2It;
+//         ++seg2It;    // ja no cal
     }
 }
 
