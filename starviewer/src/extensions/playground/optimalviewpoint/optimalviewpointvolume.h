@@ -36,7 +36,7 @@ class TransferFunction;
  * definir els paràmetres de la visualització del volum amb ray casting, pot segmentar un volum amb
  * les dades d'un fitxer o amb un algorisme propi, etc.
  *
- * Té signals i slots que permeten la comunicació amb OptimalViewpointPlane  mentre es fa una
+ * Té signals i slots que permeten la comunicació amb OptimalViewpointPlane mentre es fa una
  * visualització.
  *
  * \todo S'hauria d'ampliar una mica més aquesta descripció.
@@ -49,7 +49,7 @@ class OptimalViewpointVolume : public QObject {
 
 public:
 
-    /// Construeix el volum a partir de l'imatge \a image.
+    /// Construeix el volum a partir de la imatge \a image.
     OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
     virtual ~OptimalViewpointVolume();
 
@@ -154,7 +154,7 @@ private:
     /// Model de vòxels original.
     vtkImageData * m_image;
     vtkImageData * m_labeledImage;
-    vtkImageData * m_segmentedImage;
+//     vtkImageData * m_segmentedImage; // ja no cal
 
     /// Vector de volums.
     vtkVolume * m_mainVolume;
@@ -186,7 +186,7 @@ private:
 
     unsigned char * m_data;
     unsigned char * m_labeledData;
-    unsigned char * m_segmentedData;
+//     unsigned char * m_segmentedData; // ja no cal
     int m_dataSize;
 
     double m_imageSampleDistance;
