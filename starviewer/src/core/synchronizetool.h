@@ -30,25 +30,39 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+    /// Per posar dades (compartides)
     virtual void setToolData( ToolData *data );
 
+    /// Per obtenir les dades ( per compartir )
     virtual ToolData *getToolData() const;
 
 private slots:
 
+    /// Posa l'increment a les dades
     void setIncrement( int slice );
 
-    void applyChanges( );
+    /// Posa el window level a les dades
+    void setWindowLevel( double window, double level );
+
+    /// Aplica els canvis de canvi de llesca
+    void applySliceChanges();
+
+    /// Aplica els canvis del window level
+    void applyWindowLevelChanges();
 
 private:
 
     /// Llesca anterior per saber l'increment
     int m_lastSlice;
 
+    /// Valor del window level
+    int m_windowLevel;
+
     /// Dades de la tool
     SynchronizeToolData *m_toolData;
 
-    Q2DViewer *m_q2viewer;
+    /// Visualitzador 2d al que pertany la tool
+    Q2DViewer *m_q2dviewer;
 };
 
 }
