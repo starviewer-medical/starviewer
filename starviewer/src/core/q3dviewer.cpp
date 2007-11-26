@@ -8,7 +8,6 @@
 #include "volume.h"
 #include "logging.h"
 #include "q3dorientationmarker.h"
-#include "q3dviewertoolmanager.h"
 
 // include's qt
 #include <QString>
@@ -78,32 +77,11 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-    // tool manager init
-    m_toolManager = new Q3DViewerToolManager( this );
-    this->enableTools();
 }
 
 Q3DViewer::~Q3DViewer()
 {
     m_renderer->Delete();
-}
-
-void Q3DViewer::setEnableTools( bool enable )
-{
-    if( enable )
-        this->enableTools();
-    else
-        this->disableTools();
-}
-
-void Q3DViewer::enableTools()
-{
-    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
-}
-
-void Q3DViewer::disableTools()
-{
-    disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 vtkRenderer *Q3DViewer::getRenderer()
@@ -541,20 +519,6 @@ void Q3DViewer::orientationMarkerOn()
 void Q3DViewer::orientationMarkerOff()
 {
     this->enableOrientationMarker( false );
-}
-
-void Q3DViewer::setTool( QString toolName )
-{
-    if( m_toolManager->setCurrentTool( toolName ) )
-    {
-        ///\Todo per implementar
-        DEBUG_LOG( QString("OK, hem activat la tool: ") + toolName );
-    }
-    else
-    {
-        ///\Todo per implementar
-        DEBUG_LOG( QString(":/ no s'ha pogut activar la tool: ") + toolName );
-    }
 }
 
 void Q3DViewer::setCameraOrientation(int orientation)

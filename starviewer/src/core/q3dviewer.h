@@ -21,7 +21,6 @@ namespace udg {
 // FWD declarations
 class Volume;
 class Q3DOrientationMarker;
-class Q3DViewerToolManager;
 class TransferFunction;
 
 /**
@@ -66,12 +65,6 @@ public slots:
     void orientationMarkerOn();
     void orientationMarkerOff();
 
-    void setEnableTools( bool enable );
-    void enableTools();
-    void disableTools();
-
-    void setTool( QString toolName );
-
     virtual void render();
     void reset();
 
@@ -115,9 +108,6 @@ protected:
     RenderFunction m_renderFunction;
 
 private:
-    /// El manager de les tools
-    Q3DViewerToolManager *m_toolManager;
-
     /// el caster de les imatges
     vtkImageCast* m_imageCaster;
 
