@@ -103,7 +103,77 @@ private:
 
     /// inicialitza les orientacions dels plans de tall correctament perquè tinguin un espaiat, dimensions i límits correctes
     void initOrientation();
+    
+    /// Llegir/Escriure la configuració de l'aplicació
+    void readSettings();
+    void writeSettings();
+    
+    /// Torna a pintar els controls per modificar els plans
+    void updateControls();
 
+    /// Crea els actors i els incicialitza
+    void createActors();
+
+    /// Crea les accions
+    void createActions();
+
+    /// crea les connexions entre signals i slots
+    void createConnections();
+    
+    /// ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector
+    void planeIntersection( vtkPlaneSource* plane1 , vtkPlaneSource *plane2 , double r[3] , double t[3] );
+
+    /// Calcula el punt d'intersecció de 3 plans a l'espai
+    void planeIntersection( vtkPlaneSource *plane1 , vtkPlaneSource *plane2 , vtkPlaneSource *plane3 , double intersectionPoint[3] );
+
+    /// Ens dóna l'eix de rotació d'un planeSource
+    void getRotationAxis( vtkPlaneSource *plane , double axis[3] );
+
+    /// Inicialitzador d'objectes pel constructor
+    void init();
+    
+    ///activa totes les tools de tots els visors
+    void enableAllTools();
+    
+    ///desactiva totes les tools de tots els visors
+    void disableAllTools();
+    
+private slots:
+    /// gestiona els events de cada finestra per controlar els eixos de manipulació
+    void handleAxialViewEvents( unsigned long eventID );
+    void handleSagitalViewEvents( unsigned long eventID );
+
+    /// s'encarreguen de moure les llesques dels plans
+    void detectAxialViewAxisActor();
+    void releaseAxialViewAxisActor();
+
+    void detectSagitalViewAxisActor();
+    void releaseSagitalViewAxisActor();
+
+    void rotateAxialViewAxisActor(); // void moveAxialViewAxisActor( double x , double y );
+    void rotateSagitalViewAxisActor(); // void rotateAxisActor( double x , double y );
+
+    /// s'encarreguen de moure les llesques dels plans
+    void detectPushAxialViewAxisActor();
+    void releasePushAxialViewAxisActor();
+
+    void detectPushSagitalViewAxisActor();
+    void releasePushSagitalViewAxisActor();
+
+    void pushAxialViewAxisActor(); // void pushAxisActor( double x , double y );
+    void pushSagitalViewAxisActor(); // void pushAxialActor( double x , double y );
+
+    /// Fa les accions pertinents quan una llesca s'ha actualitzat
+    void axialSliceUpdated( int slice );
+
+    /// Fa el procés de guardar les imatges capturades
+    void saveImages();
+
+    /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
+    void updateThickSlab( double value );
+    void updateThickSlab( int value );
+    
+private:
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
 
@@ -125,49 +195,16 @@ private:
     /// Punt d'intersecció entre els 3 plans
     double m_intersectionPoint[3];
 
-    /// Llegir/Escriure la configuració de l'aplicació
-    void readSettings();
-    void writeSettings();
-
-    /// Torna a pintar els controls per modificar els plans
-    void updateControls();
-
-    /// Crea els actors i els incicialitza
-    void createActors();
-
-    /// Crea les accions
-    void createActions();
-
-    /// crea les connexions entre signals i slots
-    void createConnections();
-
     /// Els plans de tall per cada vista ( més el thickSlab )
     vtkPlaneSource *m_sagitalPlaneSource, *m_coronalPlaneSource , *m_axialPlaneSource , *m_thickSlabPlaneSource;
 
-    /// ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector
-    void planeIntersection( vtkPlaneSource* plane1 , vtkPlaneSource *plane2 , double r[3] , double t[3] );
-
-    /// Calcula el punt d'intersecció de 3 plans a l'espai
-    void planeIntersection( vtkPlaneSource *plane1 , vtkPlaneSource *plane2 , vtkPlaneSource *plane3 , double intersectionPoint[3] );
-
-    /// Ens dóna l'eix de rotació d'un planeSource
-    void getRotationAxis( vtkPlaneSource *plane , double axis[3] );
-
-    /// Inicialitzador d'objectes pel constructor
-    void init();
-    
-    ///activa totes les tools de tots els visors
-    void enableAllTools();
-    
-    ///desactiva totes les tools de tots els visors
-    void disableAllTools();
-    
     /// El directori on es desaran les imatges per defecte
     QString m_defaultSaveDir;
 
     /// Filtre de fitxers que es poden desar
     QString m_fileSaveFilter;
     
+    ///conjunt de tools disponibles en aquesta extensió
     QStringList m_extensionToolsList;
 
     /// Cosetes per controlar el moviment del plans a partir de l'interacció de l'usuari
@@ -206,40 +243,6 @@ private:
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
 
-private slots:
-    /// gestiona els events de cada finestra per controlar els eixos de manipulació
-    void handleAxialViewEvents( unsigned long eventID );
-    void handleSagitalViewEvents( unsigned long eventID );
-
-    /// s'encarreguen de moure les llesques dels plans
-    void detectAxialViewAxisActor();
-    void releaseAxialViewAxisActor();
-
-    void detectSagitalViewAxisActor();
-    void releaseSagitalViewAxisActor();
-
-    void rotateAxialViewAxisActor(); // void moveAxialViewAxisActor( double x , double y );
-    void rotateSagitalViewAxisActor(); // void rotateAxisActor( double x , double y );
-
-    /// s'encarreguen de moure les llesques dels plans
-    void detectPushAxialViewAxisActor();
-    void releasePushAxialViewAxisActor();
-
-    void detectPushSagitalViewAxisActor();
-    void releasePushSagitalViewAxisActor();
-
-    void pushAxialViewAxisActor(); // void pushAxisActor( double x , double y );
-    void pushSagitalViewAxisActor(); // void pushAxialActor( double x , double y );
-
-    /// Fa les accions pertinents quan una llesca s'ha actualitzat
-    void axialSliceUpdated( int slice );
-
-    /// Fa el procés de guardar les imatges capturades
-    void saveImages();
-
-    /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
-    void updateThickSlab( double value );
-    void updateThickSlab( int value );
 };
 
 };  //  end  namespace udg
