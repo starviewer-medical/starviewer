@@ -10,14 +10,13 @@
 #include "series.h"
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
-#include "toolsactionfactory.h"
+#include "toolmanager.h"
 #include <QAction>
 #include <QSettings>
 #include <QBasicTimer>
 #include <QString>
 #include <QProgressDialog>
 #include <QFileDialog>
-
 // VTK
 #include <vtkRenderer.h>
 #include <vtkWindowToImageFilter.h>
@@ -26,10 +25,6 @@
 #include <vtkMPEG2Writer.h>
 // #include <vtkAVIWriter.h>
 #include <vtkImageData.h>
-
-
-#include "slicing2dtool.h"
-
 #include <vector>
 
 namespace udg {
@@ -49,7 +44,7 @@ QCardiac2DViewerExtension::QCardiac2DViewerExtension( QWidget *parent )
     readSettings();
     createActions();
     createConnections();
-
+    initializeTools();
 }
 
 QCardiac2DViewerExtension::~QCardiac2DViewerExtension()
@@ -111,16 +106,9 @@ void QCardiac2DViewerExtension::createActions()
     m_sequenceEndAction->setCheckable( true );
     m_sequenceEndButton->setDefaultAction( m_sequenceEndAction );
 
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
 
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+
+
 
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
@@ -139,36 +127,6 @@ void QCardiac2DViewerExtension::createActions()
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
 
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
-
-
-    // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_slicingAction->trigger();
 }
 
 void QCardiac2DViewerExtension::createConnections()
@@ -197,6 +155,33 @@ void QCardiac2DViewerExtension::createConnections()
     // window level combo box
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView , SLOT( resetWindowLevelToDefault() ) );
+}
+
+void QCardiac2DViewerExtension::initializeTools()
+{
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+
+    // definim els grups exclusius
+    QStringList exclusiveTools;
+    exclusiveTools << "ZoomTool" << "SlicingTool";
+    m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+    m_toolManager->refreshConnections();
 }
 
 void QCardiac2DViewerExtension::setInput( Volume *input )

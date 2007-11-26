@@ -17,7 +17,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
+class ToolManager;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -32,7 +32,6 @@ public:
     ~QCardiac2DViewerExtension();
 
 public slots:
-
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
@@ -41,61 +40,8 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
-private:
-    /// Tipus de vistes que podem tenir
-    enum ViewType{ Axial , Sagital , Coronal };
-
-    /// canvia la vista actual
-    void setView( ViewType view );
-
-    /// La vista actual amb la que estem treballant
-    ViewType m_currentView;
-
-    /// El volum principal
-    Volume *m_mainVolume;
-
-    /// Variables de reproducció
-    int m_firstSliceInterval;
-    int m_lastSliceInterval;
-    int m_nextStep;
-    QBasicTimer *m_timer;
-
-    /// Accions
-    QAction *m_axialViewAction;
-    QAction *m_sagitalViewAction;
-    QAction *m_coronalViewAction;
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_voxelInformationAction;
-    QAction *m_rotateClockWiseAction;
-    QAction *m_rotateCounterClockWiseAction;
-    QAction *m_screenShotAction;
-    QAction *m_playAction;
-    QAction *m_recordAction;
-    QAction *m_boomerangAction;
-    QAction *m_repeatAction;
-    QAction *m_sequenceBeginAction;
-    QAction *m_sequenceEndAction;
-
-    ToolsActionFactory *m_actionFactory;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
-
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
-    void createActions();
-
-    /// Crea les connexions entre signals i slots
-    void createConnections();
-
-    /// Llegir/Escriure la configuració de l'aplicació
-    void readSettings();
-    void writeSettings();
-
-    /// El diàleg per escollir un window level ajustat per l'usuari
-    QCustomWindowLevelDialog *m_customWindowLevelDialog;
+protected:
+    void timerEvent(QTimerEvent *event);
 
 private slots:
     /// Fa la reproducció de la llesca
@@ -122,9 +68,57 @@ private slots:
     /// Fixa el final de l'interval de reproducció
     void finishInterval( bool checked );
 
-protected:
-    void timerEvent(QTimerEvent *event);
+private:
+    /// Tipus de vistes que podem tenir
+    enum ViewType{ Axial , Sagital , Coronal };
 
+    /// canvia la vista actual
+    void setView( ViewType view );
+
+    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
+    void createActions();
+
+    /// Crea les connexions entre signals i slots
+    void createConnections();
+
+    /// Inicialitza les tools de l'extensió
+    void initializeTools();
+
+    /// Llegir/Escriure la configuració de l'aplicació
+    void readSettings();
+    void writeSettings();
+
+private:
+    /// La vista actual amb la que estem treballant
+    ViewType m_currentView;
+
+    /// El volum principal
+    Volume *m_mainVolume;
+
+    /// Variables de reproducció
+    int m_firstSliceInterval;
+    int m_lastSliceInterval;
+    int m_nextStep;
+    QBasicTimer *m_timer;
+
+    /// Accions
+    QAction *m_axialViewAction;
+    QAction *m_sagitalViewAction;
+    QAction *m_coronalViewAction;
+    QAction *m_rotateClockWiseAction;
+    QAction *m_rotateCounterClockWiseAction;
+    QAction *m_playAction;
+    QAction *m_recordAction;
+    QAction *m_boomerangAction;
+    QAction *m_repeatAction;
+    QAction *m_sequenceBeginAction;
+    QAction *m_sequenceEndAction;
+
+    /// El diàleg per escollir un window level ajustat per l'usuari
+    QCustomWindowLevelDialog *m_customWindowLevelDialog;
+
+    /// Gestor de tools de l'extensió
+    ToolManager *m_toolManager;
 };
 
 } // end namespace udg
