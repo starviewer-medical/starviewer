@@ -15,7 +15,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
+class ToolManager;
 
 /**
 Extensió de l'MPR 3D
@@ -35,33 +35,14 @@ public:
     void setInput( Volume *input );
 
 private:
-    /// El volum d'entrada
-    Volume* m_volume;
-
-    /// factoria d'accions per les tools
-    ToolsActionFactory *m_actionFactory;
-
-    /// Variables de reproducció
-    int m_firstSliceInterval;
-    int m_lastSliceInterval;
-    int m_nextStep;
-    QBasicTimer *m_timer;
-
-    /// Accions de les tools
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_rotate3DAction;
-    QAction *m_screenShotAction;
-    QActionGroup *m_toolsActionGroup;
-
-    /// posa a disposició les tools
-    void createTools();
+    /// crea l'entorn de tools
+    void initializeTools();
 
     /// Estableix les connexions de signals i slots
     void createConnections();
     void timerEvent(QTimerEvent *event);
-private slots:
 
+private slots:
     /// Fa la reproducció de la llesca
     void playImages();
 
@@ -85,6 +66,19 @@ private slots:
 
     /// Fixa el final de l'interval de reproducció
     void finishInterval( bool checked );
+
+private:
+    /// El volum d'entrada
+    Volume* m_volume;
+
+    /// Variables de reproducció
+    int m_firstSliceInterval;
+    int m_lastSliceInterval;
+    int m_nextStep;
+    QBasicTimer *m_timer;
+
+    /// Gestor de tools de l'extensió
+    ToolManager *m_toolManager;
 };
 
 };  //  end  namespace udg
