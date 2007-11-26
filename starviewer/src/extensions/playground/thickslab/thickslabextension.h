@@ -29,6 +29,8 @@ class ThickSlabWidget;
 // Menus
 class MenuGridWidget;
 class TableMenu;
+class Q2DViewer;
+class ToolManager;
 
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
@@ -38,6 +40,9 @@ Extensió que s'executarà  per defecte a l'obrir un model
 class ThickSlabExtension : public QWidget , private Ui::ThickSlabExtensionBase {
 Q_OBJECT
 public:
+    /// Tipus de vistes que podem tenir
+    enum ViewType{ Axial , Sagital , Coronal };
+
     ThickSlabExtension( QWidget *parent = 0 );
 
     ~ThickSlabExtension();
@@ -138,9 +143,23 @@ private slots:
     void validePhases();
 
 private:
-    /// Tipus de vistes que podem tenir
-    enum ViewType{ Axial , Sagital , Coronal };
 
+    /// canvia la vista actual. Ho declarem en aquesta posició perque primer
+    /// s'ha de declarar el ViewType
+    void setView( ViewType view );
+    
+    /**
+     * Inicialitza les tools que tindrà l'extensió
+     */
+    void initializeTools();
+    
+    /**
+     * Inicialitza les tools per defecte per a un viewer determinat
+     * @param viewer viewer pel qual configurem les tools per defecte
+     */
+    void initializeDefaultTools( Q2DViewer *viewer );
+
+private:
     /// La vista actual amb la que estem treballant
     ViewType m_currentView;
 
@@ -206,12 +225,9 @@ private:
     TableMenu * m_sliceTableGrid;
 
     QProgressDialog *m_progressDialog;
-
-private:
-
-    /// canvia la vista actual. Ho declarem en aquesta posició perque primer
-    /// s'ha de declarar el ViewType
-    void setView( ViewType view );
+    
+    /// ToolManager per configurar l'entorn de tools de l'extensió
+    ToolManager *m_toolManager;
 };
 
 } // end namespace udg

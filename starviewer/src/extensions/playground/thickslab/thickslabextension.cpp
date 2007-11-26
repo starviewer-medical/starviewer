@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "thickslabextension.h"
-
+#include "toolmanager.h"
 #include "volume.h"
 #include "image.h"
 #include "logging.h"
@@ -28,7 +28,6 @@
 #include "q2dviewerpresentationstateattacher.h"
 // VTK
 #include <vtkRenderer.h>
-#include "slicing2dtool.h"
 
 namespace udg {
 
@@ -63,11 +62,13 @@ ThickSlabExtension::ThickSlabExtension( QWidget *parent )
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
+    initializeTools();
 }
 
 ThickSlabExtension::~ThickSlabExtension()
 {
     writeSettings();
+    delete m_toolManager;
 }
 
 void ThickSlabExtension::createActions()
@@ -138,21 +139,6 @@ void ThickSlabExtension::createActions()
 
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
-
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
     m_distanceToolButton->setDefaultAction( m_distanceAction );
 
@@ -163,16 +149,9 @@ void ThickSlabExtension::createActions()
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
+    
     m_toolsActionGroup->addAction( m_distanceAction );
     m_toolsActionGroup->addAction( m_roiAction );
-
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_slicingAction->trigger();
 }
 
 void ThickSlabExtension::enablePresentationState(bool enable)
@@ -772,6 +751,41 @@ void ThickSlabExtension::writeSettings()
     settings.beginGroup("Starviewer-App-2DViewer");
 
     settings.endGroup();
+}
+
+void ThickSlabExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+
+    // definim els grups exclusius
+    QStringList exclusiveTools;
+    exclusiveTools << "ZoomTool" << "SlicingTool";
+    m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // registrem al manager les tools que van amb el viewer principal
+    initializeDefaultTools( m_selectedViewer->getViewer() );
+
+    connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *, bool ) ), this, SLOT( sincronization( Q2DViewerWidget *, bool ) ) );
+}
+
+void ThickSlabExtension::initializeDefaultTools( Q2DViewer *viewer )
+{
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool";
+    m_toolManager->setViewerTools( viewer, toolsList );
+    m_toolManager->refreshConnections();
 }
 
 }
