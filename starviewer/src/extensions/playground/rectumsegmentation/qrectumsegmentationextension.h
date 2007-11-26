@@ -68,91 +68,9 @@ public slots:
     void setSecondInput( Volume *input );
     */
 private:
-
-    /// El volum principal
-    Volume *m_mainVolume;
-
-    /// El volum on hi guardem el resultat de la segmentaci�
-    Volume *m_lesionMaskVolume;
-    Volume *m_rectumMaskVolume;
-    Volume *m_ventriclesMaskVolume;
-    Volume *m_activedMaskVolume;
-    vtkImageThreshold *m_imageThreshold;
-
-    /// El volum on hi guardem la imatge principal filtrada
-    Volume *m_filteredVolume;
-
-    /// El volum on hi guardem la fusio de la imatge i la m�cara
-    //Volume *m_fusionVolume;
-    //vtkImageMask *m_vtkFusionImage;
-
-    ///Per pintar la llavor
-    //vtkActor *pointActor;
-    int m_seedSlice;
-
-    /// M�ode de la segmentaci�
-    rectumSegmentationMethod *m_segMethod;
-
-    /// Membres de classe
-    bool m_isSeed;
-    bool m_isMask;
-
-    bool m_isLeftButtonPressed;
-    vtkActor *squareActor;
-    int m_cont;
-    int m_rectumCont;
-    int m_ventriclesCont;
-    int* m_activedCont;
-    double m_volume;
-    double m_rectumVolume;
-    double m_ventriclesVolume;
-    double* m_activedVolume;
-
-  /// tipus d'edició dels models
+    /// tipus d'edició dels models
     enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
-    int m_editorTool;
-/*    bool m_isErase;
-    bool m_isPaint;
-    bool m_isEraseSlice;*/
-
-
-    int m_minValue, m_maxValue;
-    int m_insideValue, m_outsideValue;
-    int m_lowerVentriclesValue, m_upperVentriclesValue;
-
-    /// La ToolBar de les eines de l'extensi?\TODO 'pujar' al pare com a membre com a Extensions? [hauria de ser protected]
-    QToolBar *m_toolsToolBar;
-
-    /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_seedAction;
-    QAction *m_editorAction;
-    QAction *m_voxelInformationAction;
-    QAction *m_rotateClockWiseAction;
-    ToolsActionFactory *m_actionFactory;
-
-    QAction *m_lesionViewAction;
-    QAction *m_rectumViewAction;
-    QAction *m_ventriclesViewAction;
-
-    QAction *m_paintEditorAction;
-    QAction *m_eraseEditorAction;
-    QAction *m_eraseSliceEditorAction;
-    QAction *m_eraseRegionEditorAction;
-
-    ///Directori on guardem les màscares
-    QString m_savingMaskDirectory;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
-    QActionGroup *m_viewOverlayActionGroup;
-    QActionGroup* m_editorToolActionGroup;
-
-    bool m_enabledTools;
-
+    
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
     void createActions();
 
@@ -164,8 +82,7 @@ private:
 
     /// Guarda i llegeix les caracter�tiques
     void readSettings();
-    void writeSettings();
-
+    void writeSettings();    
 
 private slots:
      /// gestiona els events del m_2DView
@@ -243,6 +160,89 @@ private slots:
     /// Aquest senyal s'emetr?quan es vulgui canviar de s?ie per comparar
     void newSerie();
 */
+
+private:
+    /// El volum principal
+    Volume *m_mainVolume;
+
+    /// El volum on hi guardem el resultat de la segmentaci�
+    Volume *m_lesionMaskVolume;
+    Volume *m_rectumMaskVolume;
+    Volume *m_ventriclesMaskVolume;
+    Volume *m_activedMaskVolume;
+    vtkImageThreshold *m_imageThreshold;
+
+    /// El volum on hi guardem la imatge principal filtrada
+    Volume *m_filteredVolume;
+
+    /// El volum on hi guardem la fusio de la imatge i la m�cara
+    //Volume *m_fusionVolume;
+    //vtkImageMask *m_vtkFusionImage;
+
+    ///Per pintar la llavor
+    //vtkActor *pointActor;
+    int m_seedSlice;
+
+    /// M�ode de la segmentaci�
+    rectumSegmentationMethod *m_segMethod;
+
+    /// Membres de classe
+    bool m_isSeed;
+    bool m_isMask;
+
+    bool m_isLeftButtonPressed;
+    vtkActor *squareActor;
+    int m_cont;
+    int m_rectumCont;
+    int m_ventriclesCont;
+    int* m_activedCont;
+    double m_volume;
+    double m_rectumVolume;
+    double m_ventriclesVolume;
+    double* m_activedVolume;
+
+    int m_editorTool;
+/*    bool m_isErase;
+    bool m_isPaint;
+    bool m_isEraseSlice;*/
+
+
+    int m_minValue, m_maxValue;
+    int m_insideValue, m_outsideValue;
+    int m_lowerVentriclesValue, m_upperVentriclesValue;
+
+    /// La ToolBar de les eines de l'extensi?\TODO 'pujar' al pare com a membre com a Extensions? [hauria de ser protected]
+    QToolBar *m_toolsToolBar;
+
+    /// Accions
+    QAction *m_slicingAction;
+    QAction *m_windowLevelAction;
+    QAction *m_zoomAction;
+    QAction *m_moveAction;
+    QAction *m_seedAction;
+    QAction *m_editorAction;
+    QAction *m_voxelInformationAction;
+    QAction *m_rotateClockWiseAction;
+    ToolsActionFactory *m_actionFactory;
+
+    QAction *m_lesionViewAction;
+    QAction *m_rectumViewAction;
+    QAction *m_ventriclesViewAction;
+
+    QAction *m_paintEditorAction;
+    QAction *m_eraseEditorAction;
+    QAction *m_eraseSliceEditorAction;
+    QAction *m_eraseRegionEditorAction;
+
+    ///Directori on guardem les màscares
+    QString m_savingMaskDirectory;
+
+    /// Grup de botons en format exclusiu
+    QActionGroup *m_toolsActionGroup;
+    QActionGroup *m_viewOverlayActionGroup;
+    QActionGroup* m_editorToolActionGroup;
+
+    bool m_enabledTools;
 };
 
 } // end namespace udg
