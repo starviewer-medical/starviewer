@@ -10,14 +10,13 @@
 #include "volume.h"
 #include "series.h"
 #include "logging.h"
-#include "toolsactionfactory.h"
+#include "toolmanager.h"
 #include <QToolButton>
 #include <QMessageBox>
 #include <QAction>
 #include <QBasicTimer>
 #include <QProgressDialog>
 #include <QFileDialog>
-
 // VTK
 #include <vtkRenderer.h>
 #include <vtkWindowToImageFilter.h>
@@ -26,7 +25,7 @@
 #include <vtkMPEG2Writer.h>
 // #include <vtkAVIWriter.h>
 #include <vtkImageData.h>
-
+// stl
 #include <vector>
 
 namespace udg {
@@ -42,7 +41,7 @@ QMPRCardiac3DExtension::QMPRCardiac3DExtension( QWidget *parent )
     m_spinBox->setValue( 20 );
     m_slider->setPageStep(1);
 
-    createTools();
+    initializeTools();
     createConnections();
 
     m_axialViewEnabledButton->setChecked( true );
@@ -51,39 +50,32 @@ QMPRCardiac3DExtension::QMPRCardiac3DExtension( QWidget *parent )
     m_mpr3DView->orientationMarkerOff();
 }
 
-
 QMPRCardiac3DExtension::~QMPRCardiac3DExtension()
 {
 
 }
 
-void QMPRCardiac3DExtension::createTools()
+void QMPRCardiac3DExtension::initializeTools()
 {
-    m_mpr3DView->enableTools();
-    m_actionFactory = new ToolsActionFactory( 0 );
+    m_toolManager = new ToolManager( this );
 
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
+    // obtenim les accions per cada tool
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+    m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
 
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_zoomToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_rotate3DToolButton->defaultAction()->trigger();
 
-    m_screenShotAction = m_actionFactory->getActionFrom( "ScreenShotTool" );
-    m_screenShotToolButton->setDefaultAction( m_screenShotAction );
+    // registrem al manager les tools que van amb el viewer principal
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
+    m_toolManager->setViewerTools( m_mpr3DView, toolsList );
 
-    m_rotate3DAction = m_actionFactory->getActionFrom( "3DRotationTool" );
-    m_rotate3DToolButton->setDefaultAction( m_rotate3DAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mpr3DView , SLOT( setTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_screenShotAction );
-    m_toolsActionGroup->addAction( m_rotate3DAction );
-    // activem la tool de zoom per defecte
-    m_zoomAction->trigger();
+    m_toolManager->refreshConnections();
 }
 
 void QMPRCardiac3DExtension::createConnections()
@@ -111,7 +103,6 @@ void QMPRCardiac3DExtension::createConnections()
 
     connect( m_ButtonLoop , SIGNAL (toggled( bool )) , this , SLOT ( changeToLoopMode( bool ) ));
     connect( m_ButtonComeBack , SIGNAL (toggled( bool )) , this , SLOT ( changeToComeBackMode( bool ) ));
-
 }
 
 void QMPRCardiac3DExtension::setInput( Volume *input )
@@ -128,7 +119,6 @@ void QMPRCardiac3DExtension::setInput( Volume *input )
 
     m_slider->setMinimum( m_firstSliceInterval );
     m_slider->setMaximum( m_lastSliceInterval );
-
 }
 
 void QMPRCardiac3DExtension::playImages(){
@@ -153,7 +143,6 @@ void QMPRCardiac3DExtension::pauseImages()
 
 void QMPRCardiac3DExtension::recordVideo()
 {
-
     int phases = m_volume->getSeries()->getNumberOfPhases();
     int currentSubVolume = m_slider->value();
     std::vector< vtkImageData * > frames;
