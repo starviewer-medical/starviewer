@@ -44,19 +44,22 @@ private slots:
     /// Posa el window level a les dades
     void setWindowLevel( double window, double level );
 
+    /// Posa el factor de zoom
+    void setZoomFactor( double factor );
+
     /// Aplica els canvis de canvi de llesca
     void applySliceChanges();
 
     /// Aplica els canvis del window level
     void applyWindowLevelChanges();
 
+    /// Aplica els canvis de zoom
+    void applyZoomFactorChanges();
+
 private:
 
     /// Llesca anterior per saber l'increment
     int m_lastSlice;
-
-    /// Valor del window level
-    int m_windowLevel;
 
     /// Dades de la tool
     SynchronizeToolData *m_toolData;

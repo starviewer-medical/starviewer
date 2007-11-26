@@ -145,6 +145,9 @@ signals:
     /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
     void selected( void );
 
+    /// informa que s'ha canviat el zoom
+    void zoomFactorChanged( double );
+
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
 

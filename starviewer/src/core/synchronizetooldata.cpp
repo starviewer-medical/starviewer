@@ -48,4 +48,16 @@ double SynchronizeToolData::getLevel()
 {
     return m_level;
 }
+
+void SynchronizeToolData::setZoomFactor( double factor )
+{
+    m_zoomFactor = factor;
+    emit( zoomFactorChanged() );
+}
+
+double SynchronizeToolData::getZoomFactor()
+{
+    return m_zoomFactor;
+}
+
 }
