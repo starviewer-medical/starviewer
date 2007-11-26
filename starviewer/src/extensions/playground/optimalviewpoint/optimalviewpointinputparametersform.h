@@ -87,6 +87,8 @@ private slots:
 
     void requestNewMethod();
 
+    void requestRenderPlane();
+
 signals:
 
     /// Demana que es faci la segmentació.
@@ -100,6 +102,8 @@ signals:
 
     /// Demana que s'executi un dels nous mètodes.
     void newMethod2Requested( int step, bool normalized );
+
+    void renderPlaneRequested( short plane );
 
 private:
 

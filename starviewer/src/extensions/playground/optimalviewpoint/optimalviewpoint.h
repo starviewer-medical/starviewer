@@ -103,6 +103,7 @@ public:
 
     /// Actualitza els miralls.
     void updatePlanes();
+    void renderPlanes( short plane );
 
 
 

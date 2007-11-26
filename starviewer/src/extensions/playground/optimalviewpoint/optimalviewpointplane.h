@@ -77,7 +77,7 @@ public:
     void setDistance( double distance );
     void setLatitude( double latitude );
     void setLongitude( double longitude );
-    void update();
+    void update( bool render = false );
     void hide();
 
     void setEntropyL( unsigned char L );

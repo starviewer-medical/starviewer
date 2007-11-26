@@ -636,6 +636,13 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="m_updatePlaneRenderPushButton" >
+             <property name="text" >
+              <string>Render</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>

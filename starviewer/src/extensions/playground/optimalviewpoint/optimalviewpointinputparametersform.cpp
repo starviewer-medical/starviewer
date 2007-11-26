@@ -61,6 +61,8 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     connect( m_clusterLastSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterLast(int) ) );
 
     connect( m_newMethodOkPushButton, SIGNAL( clicked() ), SLOT( requestNewMethod() ) );
+
+    connect( m_updatePlaneRenderPushButton, SIGNAL( clicked() ), SLOT( requestRenderPlane() ) );
 }
 
 
@@ -513,6 +515,12 @@ void OptimalViewpointInputParametersForm::setRangeMax( unsigned char rangeMax )
 {
     m_gradientEditor->setMaximum( rangeMax );
     m_editorByValues->setMaximum( rangeMax );
+}
+
+
+void OptimalViewpointInputParametersForm::requestRenderPlane()
+{
+    emit renderPlaneRequested( m_updatePlaneSpinBox->value() );
 }
 
 
