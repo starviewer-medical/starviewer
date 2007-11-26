@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "q3dmprviewer.h"
-#include "q3dmprviewertoolmanager.h"
 
 //includes vtk
 #include <vtkRenderer.h>
@@ -88,7 +87,7 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
 
-    m_toolManager = new Q3DMPRViewerToolManager( this );
+
     this->enableTools();
 
     this->createActors();
@@ -133,20 +132,6 @@ void Q3DMPRViewer::addActors()
     else
     {
         m_renderer->AddActor( m_outlineActor );
-    }
-}
-
-void Q3DMPRViewer::setTool( QString toolName )
-{
-    if( m_toolManager->setCurrentTool( toolName ) )
-    {
-        ///\Todo per implementar
-        DEBUG_LOG( QString("OK, hem activat la tool: ") + toolName );
-    }
-    else
-    {
-        ///\Todo per implementar
-        DEBUG_LOG( QString(":/ no s'ha pogut activar la tool: ") + toolName );
     }
 }
 
@@ -614,24 +599,6 @@ void Q3DMPRViewer::getWindowLevel( double wl[2] )
 void Q3DMPRViewer::planeInteraction()
 {
     emit planesHasChanged();
-}
-
-void Q3DMPRViewer::setEnableTools( bool enable )
-{
-    if( enable )
-        this->enableTools();
-    else
-        this->disableTools();
-}
-
-void Q3DMPRViewer::enableTools()
-{
-    connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
-}
-
-void Q3DMPRViewer::disableTools()
-{
-    disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
 }
 
 Volume *Q3DMPRViewer::getAxialResliceOutput()

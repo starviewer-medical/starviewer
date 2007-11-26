@@ -111,12 +111,14 @@ public slots:
     void clearGrabbedViews(){ m_grabList.clear(); };
 
     /// Activa o desactiva que el manager escolti els events per processar tools.
-    virtual void setEnableTools( bool enable ) = 0;
-    virtual void enableTools() = 0;
-    virtual void disableTools() = 0;
+    /// \deprecated quan s'integri el nou model de tools
+    virtual void setEnableTools( bool enable ){};
+    virtual void enableTools(){};
+    virtual void disableTools(){};
 
     /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui. Reimplementat en cada viewer
-    virtual void setTool( QString ) = 0;
+    /// \deprecated quan s'integri el nou model de tools
+    virtual void setTool( QString ){};
 
     /// Crida que re-inicia a l'estat incial el visor
     virtual void reset() = 0;
