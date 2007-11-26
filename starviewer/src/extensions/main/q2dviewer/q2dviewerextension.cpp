@@ -61,7 +61,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
-    setGrid( 1, 2 );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
