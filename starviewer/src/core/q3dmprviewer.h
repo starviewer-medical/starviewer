@@ -21,16 +21,14 @@ class vtkInteractorStyle;
 
 namespace udg {
 
+// FWD declarations
+class Q3DOrientationMarker;
+
 /**
     Visor de Reconstrucció multiplanar 3D
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-
-// FWD declarations
-class Q3DOrientationMarker;
-class Q3DMPRViewerToolManager;
-
 class Q3DMPRViewer : public QViewer{
 Q_OBJECT
 public:
@@ -121,12 +119,6 @@ public slots:
     /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
     void planeInteraction();
 
-    void setEnableTools( bool enable );
-    void enableTools();
-    void disableTools();
-
-    void setTool( QString toolName );
-
     virtual void render();
     void reset();
 
@@ -183,9 +175,6 @@ protected:
 
     /// control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
     bool m_isOutlineEnabled;
-
-    /// Tool Manager del visor
-    Q3DMPRViewerToolManager *m_toolManager;
 };
 
 };  //  end  namespace udg
