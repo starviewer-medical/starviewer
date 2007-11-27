@@ -233,6 +233,9 @@ public:
      */
     ImagePlane *getCurrentImagePlane();
 
+    /// Retorna el thickness
+    double getThickness();
+
 public slots:
     virtual void render();
     void reset();

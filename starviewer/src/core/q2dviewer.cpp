@@ -600,19 +600,20 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
                         .arg( currentSlice )
                         .arg( maxSlice );
         }
-        double thickness;
-        switch( m_lastView )
-        {
-        case Axial:
-            thickness = m_mainVolume->getSpacing()[2];
-        break;
-        case Sagittal:
-            thickness = m_mainVolume->getSpacing()[0];
-        break;
-        case Coronal:
-            thickness = m_mainVolume->getSpacing()[1];
-        break;
-        }
+        double thickness = getThickness();
+//         double thickness;
+//         switch( m_lastView )
+//         {
+//         case Axial:
+//             thickness = m_mainVolume->getSpacing()[2];
+//         break;
+//         case Sagittal:
+//             thickness = m_mainVolume->getSpacing()[0];
+//         break;
+//         case Coronal:
+//             thickness = m_mainVolume->getSpacing()[1];
+//         break;
+//         }
         //afegim el thickness de la llesca
         lowerLeftText += tr(" Slice Thickness: %1").arg( thickness );
 
@@ -622,6 +623,24 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
     {
         sliceAnnotation->SetText( 0 , "" );
     }
+}
+
+double Q2DViewer::getThickness()
+{
+    double thickness;
+    switch( m_lastView )
+    {
+    case Axial:
+        thickness = m_mainVolume->getSpacing()[2];
+    break;
+    case Sagittal:
+        thickness = m_mainVolume->getSpacing()[0];
+    break;
+    case Coronal:
+        thickness = m_mainVolume->getSpacing()[1];
+    break;
+    }
+    return thickness;
 }
 
 void Q2DViewer::addActors()
