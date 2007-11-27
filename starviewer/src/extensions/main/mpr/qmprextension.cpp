@@ -52,7 +52,7 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createActors();
     readSettings();
     initializeTools();
-    
+
     m_thickSlab = 0.0;
     m_thickSlabLabel->setVisible(false);
     m_thickSlabSlider->setVisible(false);
@@ -140,7 +140,7 @@ void QMPRExtension::init()
     m_mipViewer = 0;
 
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
-    
+
     m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
 }
 
@@ -173,7 +173,7 @@ void QMPRExtension::createActions()
     // posem a punt els botons per accedir a les tools
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( false );
-    m_toolsActionGroup->addAction( m_distanceAction );    
+    m_toolsActionGroup->addAction( m_distanceAction );
 }
 
 void QMPRExtension::initializeTools()
@@ -235,13 +235,6 @@ void QMPRExtension::createConnections()
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
 
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( axialSliceUpdated(int) ) );
-
-    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
 
     // gestionen els events de les finestres per poder manipular els plans
     connect( m_axial2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleAxialViewEvents( unsigned long ) ) );
@@ -516,9 +509,9 @@ void QMPRExtension::detectSagitalViewAxisActor()
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         m_pickedActorPlaneSource = m_coronalPlaneSource;
         // desactivem les tools que puguin estar actives
-       
+
        disableAllTools();
-       
+
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
@@ -595,9 +588,6 @@ void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
 
 void QMPRExtension::detectPushAxialViewAxisActor()
 {
-    //desactivem les tools perquè no facin interferència
-    disableAllTools();
-
     // obtenim el punt que s'ha clicat
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
@@ -621,6 +611,8 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     // donem una "tolerància" mínima
     if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
     {
+        //desactivem les tools perquè no facin interferència
+        disableAllTools();
         if( distanceToCoronal < distanceToSagital )
         {
             m_pickedActorPlaneSource = m_coronalPlaneSource;
@@ -676,9 +668,9 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         m_state = NONE;
         m_pickedActorPlaneSource = 0;
         m_pickedActorReslice = 0;
+        //activem les tools
+        enableAllTools();
     }
-    //activem les tools
-    enableAllTools();
 }
 
 void QMPRExtension::detectPushSagitalViewAxisActor()
