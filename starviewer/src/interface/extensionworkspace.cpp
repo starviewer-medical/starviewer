@@ -63,6 +63,17 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
     }
 }
 
+void ExtensionWorkspace::killThemAll()
+{
+    int numberOfExtensions = this->count();
+    for( int i = numberOfExtensions-1; i >=0; i-- )
+    {
+        QWidget *currentExtension = this->widget(i);
+        removeApplication( currentExtension );
+        delete currentExtension;
+    }
+}
+
 void ExtensionWorkspace::closeCurrentApplication()
 {
     QWidget *w = this->currentWidget();
