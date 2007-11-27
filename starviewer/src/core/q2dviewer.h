@@ -210,9 +210,6 @@ public:
     /// canviem l'espaiat de pixel en la presentació en les direccions x/y ( no l'espaiat del volum en sí )
     void setPresentationPixelSpacing( double x, double y );
 
-    /// Fem un zoom del requadre definit pels paràmetres topLeft i rightBottom en coordenades de món perquè s'ajusti a la mida de la finestra
-    void scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY );
-
     /// En aquest mode, es presenta la imatge de tal manera que les mides estan a escala real, per tant 1mm de la imatge en pantalla seria 1 mm real d'aquella llesca. \TODO aquest mètode encara no està en funcionament, però el deixem per implementar en un futur pròxim
     void setTrueSizeMode( bool on = true );
 
