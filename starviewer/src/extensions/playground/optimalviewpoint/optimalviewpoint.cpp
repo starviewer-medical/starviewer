@@ -831,7 +831,7 @@ void OptimalViewpoint::newMethod2( int step, bool normalized )
                 slicer.setMatrix( (*m_planes)[i]->getTransformMatrix() );
                 slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
                 slicer.setReadExtentFromFile( m_readExtentFromFile );
-                slicer.reslice();
+                slicer.reslice( false );
                 result = slicer.newMethod2( step, normalized );
                 DEBUG_LOG( QString( "[OV] (%1) newMethod2(%2, %3) = %4" ).arg( i ).arg( step ).arg( normalized ).arg( result ) );
                 results << result;
@@ -862,7 +862,7 @@ void OptimalViewpoint::newMethod2( int step, bool normalized )
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
             slicer.setReadExtentFromFile( m_readExtentFromFile );
-            slicer.reslice();
+            slicer.reslice( false );
             result = slicer.newMethod2( step, normalized );
             DEBUG_LOG( QString( "[OV] (%1) newMethod2(%2, %3) = %4" ).arg( m_updatePlane ).arg( step ).arg( normalized ).arg( result ) );
             break;
