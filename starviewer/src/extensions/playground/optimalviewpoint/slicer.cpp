@@ -542,7 +542,7 @@ double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned c
 }
 
 
-double Slicer::similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const
+double Slicer::similarity( const unsigned char * sliceX, const unsigned char * sliceY, bool background ) const
 {
     // H(X) = -\sum_x p_x \log_2(p_x)
     // H(X,Y) = -\sum_{x,y} p_{x,y} \log_2(p_{x,y})
@@ -556,12 +556,13 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
     {
         unsigned char valueX = sliceX[j]; if ( valueX == m_newBackground ) valueX = 0;
         unsigned char valueY = sliceY[j]; if ( valueY == m_newBackground ) valueY = 0;
-        //if ( valueX < m_nLabels && valueX > 0
-        //     && valueY < m_nLabels && valueY > 0 )  // no comptem cap background
-        //{
-        histogramX.add( valueX ); histogramY.add( valueY );
-        jointHistogram.add( valueX + m_nLabels * valueY );
-        //}
+        if ( background
+             || ( valueX < m_nLabels && valueX > 0
+             && valueY < m_nLabels && valueY > 0 ) )    // no comptem cap background si el paràmetre background és fals
+        {
+            histogramX.add( valueX ); histogramY.add( valueY );
+            jointHistogram.add( valueX + m_nLabels * valueY );
+        }
     }
 
     double H_X_ = 0.0;
@@ -602,10 +603,10 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
     // H(X,Y) = 0 when they are homogenious slices; then we check if they are equal or different to set similarity value
     double similarity = ( ( H_X_Y_ > 0.0 ) ? ( I_X_Y_ / H_X_Y_ ) : ( sliceX[0] == sliceY[0] ? 1.0 : 0.0 ) );
 
-    DEBUG_LOG( QString( "[*similarity*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
-    DEBUG_LOG( QString( "[*similarity*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
-    DEBUG_LOG( QString( "[*similarity*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
-    DEBUG_LOG( QString( "[*similarity*][semblança] I/H = %1" ).arg( similarity ) );
+//     DEBUG_LOG( QString( "[*similarity*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+//     DEBUG_LOG( QString( "[*similarity*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
+//     DEBUG_LOG( QString( "[*similarity*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
+//     DEBUG_LOG( QString( "[*similarity*][semblança] I/H = %1" ).arg( similarity ) );
 
     return similarity;
 }
@@ -858,6 +859,11 @@ double Slicer::similarity( const Group & groupX, const Group & groupY ) const
 
     // H(X,Y) = 0 when they are homogenious groups; then check wether they are equal or different to set the similarity value
     double similarity = ( ( H_X_Y_ > 0.0 ) ? ( I_X_Y_ / H_X_Y_ ) : ( groupX.slices[0].data[0] == groupY.slices[0].data[0] ? 1.0 : 0.0 ) );
+
+
+//     double min = H_X_ < H_Y_ ? H_X_ : H_Y_;
+//     double max = H_X_ > H_Y_ ? H_X_ : H_Y_;
+//     double similarity = ( ( max > 0.0 ) ? ( I_X_Y_ / max ) : ( groupX.slices[0].data[0] == groupY.slices[0].data[0] ? 1.0 : 0.0 ) );
 
     DEBUG_LOG( QString( "[*similarityG*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
     DEBUG_LOG( QString( "[*similarityG*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );

@@ -117,7 +117,7 @@ private:
     /// Returns mutual information between two slices. \todo Fer-ho passant els índexs.
     double mutualInformation( const unsigned char * sliceX, const unsigned char * sliceY ) const;
     /// Returns the similarity between two slices. \todo Fer-ho passant els índexs.
-    double similarity( const unsigned char * sliceX, const unsigned char * sliceY ) const;
+    double similarity( const unsigned char * sliceX, const unsigned char * sliceY, bool background = true ) const;
     /// Computes similarities between all pairs of consecutive slices.
     void computeSimilarities();
     /// Sets group \a group to \a slice and all her neighbours with higher id and same group.
