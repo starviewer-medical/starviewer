@@ -21,13 +21,13 @@ SynchronizeToolData::~SynchronizeToolData()
 {
 }
 
-void SynchronizeToolData::setIncrement( int value )
+void SynchronizeToolData::setIncrement( double value )
 {
     m_increment = value;
     emit( sliceChanged() );
 }
 
-int SynchronizeToolData::getIncrement()
+double SynchronizeToolData::getIncrement()
 {
     return m_increment;
 }

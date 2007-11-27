@@ -27,7 +27,7 @@ public:
     ~SynchronizeToolData();
 
     /// Obtenir l'increment de llesca
-    int getIncrement();
+    double getIncrement();
 
     /// Obtenir el valor del window level
     double getWindow();
@@ -39,7 +39,7 @@ public:
 public slots:
 
     /// Per canviar les dades de sincronitzacio de llesques
-    void setIncrement( int value );
+    void setIncrement( double value );
 
     /// Per canviar les dades de sincronitzacio del window level
     void setWindowLevel( double window, double level );
@@ -60,8 +60,8 @@ signals:
 
 private:
 
-    /// Dades per la sincronització de l'slicing
-    int m_increment;
+    /// Dades per la sincronització de l'slicing. Distància recorreguda
+    double m_increment;
 
     /// Dades per la sincronització del window level
     double m_window;
