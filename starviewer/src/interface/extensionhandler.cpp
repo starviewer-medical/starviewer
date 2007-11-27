@@ -92,13 +92,7 @@ void ExtensionHandler::request( const QString &who )
 void ExtensionHandler::killBill()
 {
     // eliminem totes les extensions
-    int numberOfExtensions = m_mainApp->getExtensionWorkspace()->count();
-    for( int i = 0; i < numberOfExtensions; i++ )
-    {
-        QWidget *currentExtension = m_mainApp->getExtensionWorkspace()->widget(i);
-        delete currentExtension;
-        m_mainApp->getExtensionWorkspace()->removeTab(i);
-    }
+    m_mainApp->getExtensionWorkspace()->killThemAll();
     // TODO descarregar tots els volums que tingui el pacient en aquesta finestra
     // quan ens destruim alliberem tots els volums que hi hagi a memòria
     if (m_mainApp->getCurrentPatient() != NULL)

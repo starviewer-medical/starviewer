@@ -33,6 +33,9 @@ public:
     /// Treu una aplicació de l'espai de mini-aplicacions \TODO: fer també per id?
     void removeApplication( QWidget *application );
 
+    /// Elimina per complet totes les extensions que hi hagi al workspace
+    void killThemAll();
+
 public slots:
     /// Per tancar l'aplicació que està oberta en aquell moment
     void closeCurrentApplication();
