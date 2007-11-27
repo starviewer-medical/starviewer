@@ -473,7 +473,9 @@ void OptimalViewpointPlane::castRays()
 //                 DEBUG_LOG( QString("j = %1").arg(j) );
                 unsigned char value = m_planeData[i + j * m_numberOfRays];
 //                 if ( value == 255 ) value = 0;
-                if ( value != 255 ) // don't count backgroud added by reslicer (255)
+                if ( value != 255   // don't count backgroud added by reslicer (255)
+//                      && value != 0  // don't count normal background
+                   )
                     compute( 0, value );
             }
 
