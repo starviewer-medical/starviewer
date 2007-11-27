@@ -8,6 +8,7 @@
 #include "q2dviewer.h"
 #include "synchronizetooldata.h"
 #include "logging.h"
+#include <math.h>
 
 //TODO treure aixoooooooo
 #include <vtkMath.h>
@@ -22,9 +23,10 @@ SynchronizeTool::SynchronizeTool( QViewer *viewer, QObject *parent)
     m_hasSharedData = true;
     m_q2dviewer = dynamic_cast<Q2DViewer*>(viewer);
     m_lastSlice = m_q2dviewer->getCurrentSlice();
+    m_roundLostThickness = 0.0;
     connect( viewer, SIGNAL( sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
-    connect( viewer, SIGNAL( windowLevelChanged( double, double ) ), this, SLOT( setWindowLevel( double, double ) ) );
-    connect( viewer, SIGNAL( zoomFactorChanged( double ) ), this, SLOT( setZoomFactor( double ) ) );
+//     connect( viewer, SIGNAL( windowLevelChanged( double, double ) ), this, SLOT( setWindowLevel( double, double ) ) );
+//     connect( viewer, SIGNAL( zoomFactorChanged( double ) ), this, SLOT( setZoomFactor( double ) ) );
     setToolData( new SynchronizeToolData() );
 }
 
@@ -38,13 +40,17 @@ void SynchronizeTool::setToolData( ToolData *data )
     if( m_toolData )
     {
         disconnect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
-        disconnect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
-        disconnect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
+
+        // De moment no volen que el zoom i el window level estiguin sincronitzats.
+//         disconnect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
+//         disconnect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
     }
     this->m_toolData = dynamic_cast<SynchronizeToolData*>(data);
     connect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
-    connect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
-    connect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
+
+    // De moment no volen que el zoom i el window level estiguin sincronitzats.
+//     connect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
+//     connect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
 }
 
 ToolData * SynchronizeTool::getToolData() const
@@ -54,7 +60,7 @@ ToolData * SynchronizeTool::getToolData() const
 
 void SynchronizeTool::setIncrement( int slice )
 {
-    int increment = slice - m_lastSlice;
+    double increment = (slice - m_lastSlice)*m_q2dviewer->getThickness(); // Distancia incrementada
     m_lastSlice = slice;
     disconnect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
     this->m_toolData->setIncrement( increment );
@@ -79,10 +85,13 @@ void SynchronizeTool::setZoomFactor( double factor )
 
 void SynchronizeTool::applySliceChanges()
 {
-    int increment = this->m_toolData->getIncrement();
+    double sliceIncrement = (this->m_toolData->getIncrement()/m_q2dviewer->getThickness()) + m_roundLostThickness;
+    int slices = round( sliceIncrement );
+    m_roundLostThickness = sliceIncrement - slices;
     disconnect( m_viewer, SIGNAL(sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
-    m_q2dviewer->setSlice( m_lastSlice+increment );
-    m_lastSlice += increment;
+    m_q2dviewer->setSlice( m_lastSlice+slices );
+    m_lastSlice += slices
+;
     connect( m_viewer, SIGNAL(sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
 }
 
