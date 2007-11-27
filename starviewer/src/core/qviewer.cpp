@@ -270,6 +270,85 @@ void QViewer::pan( double motionVector[3] )
     this->refresh();
 }
 
+void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY )
+{
+    if( !m_mainVolume )
+        return;
+
+    double width, height;
+    width = fabs( topLeftX - bottomRightX );
+    height = fabs( topLeftY - bottomRightY );
+
+    int *size = this->getRenderer()->GetSize();
+    int *rendererOrigin = this->getRenderer()->GetOrigin();
+    vtkCamera *camera = this->getRenderer()->GetActiveCamera();
+
+    double min[2];
+    double rbcenter[4];
+    min[0] = bottomRightX < topLeftX ?
+        bottomRightX : topLeftX;
+    min[1] = bottomRightY < topLeftY ?
+        bottomRightY : topLeftY;
+
+    rbcenter[0] = min[0] + 0.5*width;
+    rbcenter[1] = min[1] + 0.5*height;
+    rbcenter[2] = 0.0;
+    rbcenter[3] = 1.0;
+
+    // \TODO aquesta normalització potser no és necessària
+    double invw;
+    double winCenter[3];
+    winCenter[0] = rendererOrigin[0] + 0.5*size[0];
+    winCenter[1] = rendererOrigin[1] + 0.5*size[1];
+    winCenter[2] = 0;
+
+    this->getRenderer()->SetDisplayPoint( winCenter );
+    this->getRenderer()->DisplayToView();
+    this->getRenderer()->ViewToWorld();
+
+    double worldWinCenter[4];
+    this->getRenderer()->GetWorldPoint( worldWinCenter );
+    invw = 1.0/worldWinCenter[3];
+    worldWinCenter[0] *= invw;
+    worldWinCenter[1] *= invw;
+    worldWinCenter[2] *= invw;
+
+    double translation[3];
+    translation[0] = rbcenter[0] - worldWinCenter[0];
+    translation[1] = rbcenter[1] - worldWinCenter[1];
+    translation[2] = rbcenter[2] - worldWinCenter[2];
+
+    double position[3], focalPoint[3];
+    camera->GetPosition( position );
+    camera->GetFocalPoint( focalPoint );
+
+    position[0] += translation[0];
+    position[1] += translation[1];
+    position[2] += translation[2];
+    focalPoint[0] += translation[0];
+    focalPoint[1] += translation[1];
+    focalPoint[2] += translation[2];
+
+    camera->SetPosition( position );
+    camera->SetFocalPoint( focalPoint );
+
+    // ara cal calcular la width i height en coordenades de display
+    double displayTopLeft[3], displayBottomRight[3];
+    this->computeWorldToDisplay( this->getRenderer(), topLeftX, topLeftY, 0.0, displayTopLeft );
+    this->computeWorldToDisplay( this->getRenderer(), bottomRightX, bottomRightY, 0.0, displayBottomRight );
+    // recalculem ara tenint en compte el display
+    width = fabs( displayTopLeft[0] - displayBottomRight[0] );
+    height = fabs( displayTopLeft[1] - displayBottomRight[1] );
+    //\TODO caldria considerar l'opció d'afegir un marge per si no volem que la regió escollida mantingui una distància amb les vores de la finestra
+    // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
+    if( size[0] < size[1] )
+        this->zoom( size[0] / (float)width );
+    else
+        this->zoom( size[1] / (float)height );
+
+    this->getRenderer()->ResetCameraClippingRange();
+}
+
 void QViewer::grabCurrentView()
 {
     m_windowToImageFilter->Update();
