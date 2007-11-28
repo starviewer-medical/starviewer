@@ -31,7 +31,7 @@ public:
      * Li assignem una configuracio, si la que te per defecte no ens val
      * @param configuration Configuracio que li volem assignar
      */
-    void setConfiguration( ToolConfiguration *configuration );
+    virtual void setConfiguration( ToolConfiguration *configuration );
 
     /**
      * Retorna la configuracio actual de la tool

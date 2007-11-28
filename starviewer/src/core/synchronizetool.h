@@ -30,6 +30,9 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+    /// Assignem una configuracio
+    void setConfiguration( ToolConfiguration *configuration );
+
     /// Per posar dades (compartides)
     virtual void setToolData( ToolData *data );
 

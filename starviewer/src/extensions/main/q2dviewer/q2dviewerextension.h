@@ -23,6 +23,7 @@ class Q2DViewerKeyImageNoteAttacher;
 class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
 class ToolManager;
+class ToolConfiguration;
 //Estructura pacient
 class Patient;
 //Visualitzador
@@ -218,7 +219,7 @@ private:
 
     QProgressDialog *m_progressDialog;
 
-    /// ToolManager per configurar l'entorn de tools de l'extensió
+    /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
     ToolManager *m_toolManager;
 
 private:

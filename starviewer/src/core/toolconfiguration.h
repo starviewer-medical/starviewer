@@ -42,6 +42,11 @@ public:
     **/
     QVariant getValue( QString attributeName );
 
+    /**
+    * Retorna cert si conté l'atribut, fals altrament
+    **/
+    bool containsValue( QString attributeName );
+
 private:
 
     /**

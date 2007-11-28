@@ -35,5 +35,9 @@ QVariant ToolConfiguration::getValue( QString attributeName )
     return attributeMap.value( attributeName );
 }
 
+bool ToolConfiguration::containsValue( QString attributeName )
+{
+    return attributeMap.contains( attributeName );
+}
 
 }
