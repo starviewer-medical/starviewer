@@ -41,7 +41,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
-    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( setInput( Volume *) ) );
+    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
     connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), this, SLOT( emitSincronize() ) );
 }
 
@@ -49,6 +49,11 @@ void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
+}
+
+void Q2DViewerWidget::updateInput( Volume *input )
+{
+    m_mainVolume = input;
     changeViewToAxial();
 }
 
