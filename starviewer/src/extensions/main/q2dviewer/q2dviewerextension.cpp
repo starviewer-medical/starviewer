@@ -17,6 +17,7 @@
 #include "patient.h"
 #include "study.h"
 #include "toolmanager.h"
+#include "toolconfiguration.h"
 #include <QAction>
 #include <QSettings>
 #include <QPoint>
@@ -819,7 +820,10 @@ void Q2DViewerExtension::sincronization( Q2DViewerWidget * viewer, bool active )
 {
     if( active )
     {
-        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool" );
+        // Per defecte sincronitzem només la tool de slicing
+        ToolConfiguration * synchronizeConfiguration = new ToolConfiguration();
+        synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
+        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
         m_toolManager->activateTool("SynchronizeTool");
     }
     else
