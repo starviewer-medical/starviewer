@@ -49,6 +49,7 @@ void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
+    changeViewToAxial();
 }
 
 void Q2DViewerWidget::updateInput( Volume *input )
@@ -99,7 +100,6 @@ void Q2DViewerWidget::changeViewToSagital()
     m_slider->setMaximum( extent[1] );
     m_viewText->setText( tr( "XY : Sagital" ) );
     m_2DView->setViewToSagittal();
-    m_2DView->render();
 
     INFO_LOG( "Visor per defecte: Canviem a vista sagital" );
 }
@@ -117,7 +117,6 @@ void Q2DViewerWidget::changeViewToCoronal()
     m_slider->setMaximum( extent[3] );
     m_viewText->setText( tr( "XY : Coronal" ) );
     m_2DView->setViewToCoronal();
-    m_2DView->render();
 
     INFO_LOG( "Visor per defecte: Canviem a vista coronal" );
 }

@@ -360,12 +360,11 @@ vtkScalarBarActor* Q2DViewer::createScalarBar()
 
 void Q2DViewer::updateScalarBar()
 {
-    // Així és més ràpid i senzill
-    vtkScalarBarActor *scalarBar;
-    int i;
-
     if( m_mainVolume )
     {
+        vtkScalarBarActor *scalarBar;
+        int i;
+
         vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
         lookup->SetWindow( m_windowLevelLUTMapper->GetWindow() );
         lookup->SetLevel( m_windowLevelLUTMapper->GetLevel() );
@@ -1060,7 +1059,7 @@ void Q2DViewer::updateCamera()
 
 void Q2DViewer::resetCamera()
 {
-    if( m_viewer->GetInput() )
+    if( m_viewer->GetInput()  )
     {
         m_rotateFactor = 0;
         m_applyFlip = false;
@@ -1169,7 +1168,7 @@ int Q2DViewer::getNumberOfSlices()
 
 void Q2DViewer::setSlice( int value )
 {
-    if( this->m_mainVolume )
+    if( this->m_mainVolume && this->m_currentSlice != value )
     {
         if( value < 0 )
             value = 0;
@@ -1177,7 +1176,6 @@ void Q2DViewer::setSlice( int value )
             value = m_maxSliceValue;
 
         this->m_currentSlice = value;
-
         // Calcular si necessitarem més renders o menys, ja que al canviar de llesca ens trobem que potser tenim un grid per una llesca que no es veu i passem a veure o al revés
         int newNumberOfRenderers=0;
         int i;
@@ -1271,9 +1269,12 @@ void Q2DViewer::setOverlayToRectilinearWipe()
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
-    // l'única info que cal actualitzar és la mida de finestra/viewport
-    updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
-    updateRulers();
+    if( m_mainVolume )
+    {
+        // l'única info que cal actualitzar és la mida de finestra/viewport
+        updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
+        updateRulers();
+    }
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
@@ -2454,9 +2455,12 @@ void Q2DViewer::setDefaultWindowLevel( double window, double level )
 
 void Q2DViewer::computeInputGrayscalePipeline()
 {
-    // si llegim l'arxiu tal qual, la modality no cal aplicar-la perquè les pròpies gdcm ja ens apliquen la modality lut
-    computeModalityLUT();
-    computeVOILUT();
+    if( m_mainVolume )
+    {
+        // si llegim l'arxiu tal qual, la modality no cal aplicar-la perquè les pròpies gdcm ja ens apliquen la modality lut
+        computeModalityLUT();
+        computeVOILUT();
+    }
 }
 
 void Q2DViewer::applyGrayscalePipeline()
