@@ -37,7 +37,11 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
     // cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()) );
     // cada cop que el viewer es seleccioni, ens hem de "netejar" del que ens puguin haver pintat altres
+    // TODO slot clearViewer(), encara per implementar
     connect( m_2DViewer, SIGNAL(selected()), SLOT(clearViewer()) );
+
+    // TODO només crear-se la tool caldria que s'agafés la llesca actual del viewer seleccionat i s'actualitzessin les
+    // dades, com si haguéssim fet un setSlice
 }
 
 ReferenceLinesTool::~ReferenceLinesTool()

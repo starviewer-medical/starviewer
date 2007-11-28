@@ -67,6 +67,7 @@ void WindowLevelTool::doWindowLevel()
 {
     if( m_2DViewer )
     {
+        m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
         m_windowLevelCurrentPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
         m_windowLevelCurrentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
 
@@ -130,7 +131,10 @@ void WindowLevelTool::doWindowLevel()
 void WindowLevelTool::endWindowLevel()
 {
     if( m_2DViewer )
+    {
+        m_viewer->setCursor( Qt::ArrowCursor );
         m_state = NONE;
+    }
     else
         DEBUG_LOG( "::endWindowLevel(): El 2DViewer és NUL!" );
 }

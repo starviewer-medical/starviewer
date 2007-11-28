@@ -57,14 +57,16 @@ void SlicingTool::handleEvent( unsigned long eventID )
 
     case vtkCommand::MouseWheelForwardEvent:
         m_mouseMovement = false;
+        m_viewer->setCursor( QCursor( QPixmap(":/images/slicing.png") ) );
         this->updateIncrement( 1 );
-        // TODO si tenim l'eina VoxelInformationTool activada cal refrescar les dades
+        m_viewer->setCursor( Qt::ArrowCursor );
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
         m_mouseMovement = false;
+        m_viewer->setCursor( QCursor( QPixmap(":/images/slicing.png") ) );
         this->updateIncrement( -1 );
-        // TODO si tenim l'eina VoxelInformationTool activada cal refrescar les dades
+        m_viewer->setCursor( Qt::ArrowCursor );
     break;
 
     case vtkCommand::MiddleButtonPressEvent:
@@ -99,6 +101,7 @@ void SlicingTool::doSlicing()
     {
         if( m_state == SLICING )
         {
+            m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
             m_currentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
             int dy = m_currentPosition[1] - m_startPosition[1];
 
@@ -128,7 +131,10 @@ void SlicingTool::doSlicing()
 void SlicingTool::endSlicing()
 {
     if( m_2DViewer )
+    {
+        m_viewer->setCursor( Qt::ArrowCursor );
         m_state = NONE;
+    }
     else
         DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
 }
