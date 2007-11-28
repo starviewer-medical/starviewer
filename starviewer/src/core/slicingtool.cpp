@@ -30,6 +30,8 @@ SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if( !m_2DViewer )
         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+    // cada cop que canvïi l'input cal fer algunes inicialitzacions
+    connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
 }
 
 SlicingTool::~SlicingTool()
@@ -137,6 +139,12 @@ void SlicingTool::endSlicing()
     }
     else
         DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
+}
+
+void SlicingTool::inputChanged( Volume *input )
+{
+    m_slicingMode = SliceMode;
+    m_mouseMovement = false;
 }
 
 bool SlicingTool::currentInputHasPhases()

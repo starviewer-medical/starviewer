@@ -43,6 +43,10 @@ private slots:
     /// Atura l'estat d'slicing
     void endSlicing();
 
+private slots:
+    /// Es crida cada cop que l'input del viewer s'ha actualitzat
+    void inputChanged(Volume *input);
+
 private:
     /**
      * Canvia el mode d'slicing tenint en compte l'actual
