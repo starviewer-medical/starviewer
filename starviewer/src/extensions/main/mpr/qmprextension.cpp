@@ -23,7 +23,6 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QMouseEvent>
 // vtk
 #include <vtkRenderer.h>
 #include <vtkMath.h> // pel vtkMath::Cross
@@ -784,15 +783,6 @@ void QMPRExtension::setInput( Volume *input )
     coronalResliced->setImages( m_volume->getImages() );
     coronalResliced->setData( m_coronalReslice->GetOutput() );
     m_coronal2DView->setInput( coronalResliced );
-
-    m_sagital2DView->setViewToAxial();
-    m_coronal2DView->setViewToAxial();
-
-    m_axial2DView->render();
-    m_sagital2DView->render();
-    m_coronal2DView->render();
-
-    updateControls();
 }
 
 void QMPRExtension::initOrientation()
@@ -1074,9 +1064,9 @@ void QMPRExtension::updateControls()
     m_thickSlabOverAxialActor->SetPosition2( position2[0] , position2[1] );
 
 //     Repintem l'escena
-    m_axial2DView->getInteractor()->Render();
-    m_sagital2DView->getInteractor()->Render();
-    m_coronal2DView->getInteractor()->Render();
+    m_axial2DView->refresh();
+    m_sagital2DView->refresh();
+    m_coronal2DView->refresh();
 }
 
 void QMPRExtension::updateIntersectionPoint()
