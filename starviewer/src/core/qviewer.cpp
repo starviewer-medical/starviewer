@@ -368,9 +368,12 @@ void QViewer::setSeries(Series *series)
     }
     else
     {
-        setInput( series->getFirstVolume() );
-        render();
-        emit volumeChanged( series->getFirstVolume() );
+        if( series->getFirstVolume() != m_mainVolume )
+        {
+            setInput( series->getFirstVolume() );
+            render();
+            emit volumeChanged( series->getFirstVolume() );
+        }
     }
 }
 
