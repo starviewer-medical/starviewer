@@ -41,8 +41,9 @@ public:
     /// Acció pel botó de sincronitzacio
     void setDefaultAction( QAction * synchronizeAction );
 
-public slots:
     void setInput( Volume *input );
+
+public slots:
     void changeViewToAxial();
     void changeViewToSagital();
     void changeViewToCoronal();
@@ -59,11 +60,12 @@ protected:
     void mousePressEvent ( QMouseEvent * event );
 
 private:
-
     /// Crea les connexions entre signals i slots
     void createConnections();
 
 private slots:
+    void updateInput(Volume *input);
+
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
 
