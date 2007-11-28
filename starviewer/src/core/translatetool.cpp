@@ -58,7 +58,10 @@ void TranslateTool::startTranslate()
 void TranslateTool::doTranslate()
 {
     if( m_state == TRANSLATING )
+    {
+        m_viewer->setCursor( QCursor(QPixmap(":/images/move.png")) );
         this->pan();
+    }
 }
 
 void TranslateTool::pan()
@@ -101,6 +104,7 @@ void TranslateTool::pan()
 
 void TranslateTool::endTranslate()
 {
+    m_viewer->setCursor( Qt::ArrowCursor );
     m_state = NONE;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
     m_viewer->refresh();

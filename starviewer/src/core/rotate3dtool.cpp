@@ -64,7 +64,10 @@ void Rotate3DTool::doRotate3D()
     if( m_interactorStyle )
     {
         if( m_state == ROTATING )
+        {
+            m_viewer->setCursor( QCursor(QPixmap(":/images/rotate3d.png")) );
             m_interactorStyle->Rotate();
+        }
     }
     else
         DEBUG_LOG( "::doRotate3D(): L'interactor Style és buit!" );
@@ -75,6 +78,7 @@ void Rotate3DTool::endRotate3D()
 {
     if( m_interactorStyle )
     {
+        m_viewer->setCursor( Qt::ArrowCursor );
         m_state = NONE;
         m_interactorStyle->EndRotate();
     }
