@@ -127,10 +127,10 @@ bool ImagePlane::operator ==(const ImagePlane &imagePlane)
 {
     if( m_rowDirectionVector[0] == imagePlane.m_rowDirectionVector[0] &&
         m_rowDirectionVector[1] == imagePlane.m_rowDirectionVector[1] &&
-        m_rowDirectionVector[2] == imagePlane.m_rowDirectionVector[0] &&
+        m_rowDirectionVector[2] == imagePlane.m_rowDirectionVector[2] &&
         m_columnDirectionVector[0] == imagePlane.m_columnDirectionVector[0] &&
-        m_columnDirectionVector[1] == imagePlane.m_columnDirectionVector[0] &&
-        m_columnDirectionVector[2] == imagePlane.m_columnDirectionVector[0] &&
+        m_columnDirectionVector[1] == imagePlane.m_columnDirectionVector[1] &&
+        m_columnDirectionVector[2] == imagePlane.m_columnDirectionVector[2] &&
         m_normal[0] == imagePlane.m_normal[0] &&
         m_normal[1] == imagePlane.m_normal[1] &&
         m_normal[2] == imagePlane.m_normal[2] &&
