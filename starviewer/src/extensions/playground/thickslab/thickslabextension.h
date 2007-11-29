@@ -25,7 +25,7 @@ class KeyImageNote;
 //Estructura pacient
 class Patient;
 //Visualitzador
-class ThickSlabWidget;
+class QThickSlabWidget;
 // Menus
 class MenuGridWidget;
 class TableMenu;
@@ -109,8 +109,8 @@ private:
     void readSettings();
     void writeSettings();
 
-    /// Retorna un nou widget ThickSlabWidget per poder-lo inserir a una nova fila o columna
-    ThickSlabWidget *getNewThickSlabWidget();
+    /// Retorna un nou widget QThickSlabWidget per poder-lo inserir a una nova fila o columna
+    QThickSlabWidget *getNewQThickSlabWidget();
 
     void createProgressDialog();
 
@@ -122,7 +122,7 @@ private slots:
     void initLayouts();
 
     /// Posem el widget seleccionat com a actual
-    void setViewerSelected( ThickSlabWidget * viewer );
+    void setViewerSelected( QThickSlabWidget * viewer );
 
     /// Slots per canviar rotacions al widget seleccionat
     void rotateClockWise();
@@ -202,7 +202,7 @@ private:
     QVector<QHBoxLayout*> m_qHorizontalLayoutVector;
 
     /// Visualitzador seleccionat, també sempre en tindrem un
-    ThickSlabWidget * m_selectedViewer;
+    QThickSlabWidget * m_selectedViewer;
 
     /// Nombre de files i columnes per els layouts
     int m_rows;
@@ -211,7 +211,7 @@ private:
     int m_totalColumns;
 
     /// Renderers que tenim
-    QVector<ThickSlabWidget *> m_vectorViewers;
+    QVector<QThickSlabWidget *> m_vectorViewers;
 
     /// Pacient que estem tractant
     Patient *m_patient;

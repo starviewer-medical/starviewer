@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "thickslabwidget.h"
+#include "qthickslabwidget.h"
 #include "volume.h"
 #include "logging.h"
 
@@ -12,107 +12,63 @@
 #include <QAction>
 #include <QPalette>
 
-
-
-
-#include <vtkLookupTable.h>
-#include <vtkImageMapToWindowLevelColors.h>
-
-
-
-
 namespace udg {
 
-ThickSlabWidget::ThickSlabWidget(QWidget *parent)
+QThickSlabWidget::QThickSlabWidget(QWidget *parent)
  : QFrame(parent), m_mainVolume(0)
 {
     setupUi( this );
-    createConnections();
     setAutoFillBackground( true );
+
+    // Creació de l'acció del boto de sincronitzar.
+    m_buttonSynchronizeAction = new QAction( 0 );
+    m_buttonSynchronizeAction->setText( tr("Synchronize tool") );
+    m_buttonSynchronizeAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
+    m_buttonSynchronizeAction->setIcon( QIcon(":/images/boomerang.png") );
+    m_buttonSynchronizeAction->setCheckable( true );
+    m_synchronizeButton->setDefaultAction( m_buttonSynchronizeAction );
+
+    createConnections();
 }
 
-ThickSlabWidget::~ThickSlabWidget()
+QThickSlabWidget::~QThickSlabWidget()
 {
 }
 
-void ThickSlabWidget::createConnections()
+void QThickSlabWidget::createConnections()
 {
     connect( m_slider , SIGNAL( valueChanged( int ) ) , m_spinBox , SLOT( setValue( int ) ) );
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
-    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( setInput( Volume *) ) );
+    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
+    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), this, SLOT( emitSincronize() ) );
 }
 
-void ThickSlabWidget::setInput( Volume *input )
+void QThickSlabWidget::setInput( Volume *input )
 {
-
-    vtkLookupTable * hueLut = vtkLookupTable::New();
-    hueLut->SetNumberOfTableValues( 255 );
-    hueLut->SetTableRange( 0.0, 255.0 );
-//     hueLut->SetHueRange( 1.0, 0.0 );
-//     hueLut->SetSaturationRange( 1.0, 1.0 );
-//     hueLut->SetValueRange( 1.0, 1.0 );
-//     hueLut->SetAlphaRange( 1.0, 1.0 );
-    hueLut->SetRampToLinear();
-
-    hueLut->Build();    //effective built
-//     int nvalues=hueLut->GetNumberOfTableValues();
-//     double* tvalue= new double[4];
-//     for(int i=0;i<(nvalues/3);i++)
-//     {
-//         tvalue=hueLut->GetTableValue(i);
-//         tvalue[0]=0.0;  //Posem els valors transparents
-//         tvalue[1]=0.0;  //Posem els valors transparents
-//         tvalue[2]=0.0;  //Posem els valors transparents
-//         tvalue[3]=0.0;  //Posem els valors transparents
-//         hueLut->SetTableValue(i, tvalue);
-//     }
-//     hueLut->Build();    //effective built
-
-//     vtkUnsignedCharArray * table = hueLut->GetTable();
-//     unsigned char tuple[4] = { 0, 0, 0, 0 };
-//     table->SetTupleValue( 0, tuple );
-//     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
-
-
-    for ( int i = 0; i <= 32; i++ )
-        hueLut->SetTableValue( i, 0.0, 0.0, 0.0 );
-    for ( int i = 33; i <= 96; i++ )
-        hueLut->SetTableValue( i, 2.0 / 3.0, 0.0, 0.0 );
-    for ( int i = 97; i <= 159; i++ )
-        hueLut->SetTableValue( i, 1.0, 1.0, 1.0 );
-    for ( int i = 160; i <= 223; i++ )
-        hueLut->SetTableValue( i, 1.0, 1.0, 0.0 );
-    for ( int i = 224; i <= 255; i++ )
-        hueLut->SetTableValue( i, 1.0, 2.0 / 3.0, 0.0 );
-
-
-    m_2DView->getWindowLevelMapper()->SetLookupTable( hueLut );
-
-
-
-
-
-
-
     m_mainVolume = input;
     m_2DView->setInput( input );
     changeViewToAxial();
-    m_2DView->render();
 }
 
-void ThickSlabWidget::mousePressEvent( QMouseEvent * event )
+void QThickSlabWidget::updateInput( Volume *input )
+{
+    m_mainVolume = input;
+    changeViewToAxial();
+}
+
+void QThickSlabWidget::mousePressEvent( QMouseEvent * event )
 {
     emit selected( this );
 }
 
-void ThickSlabWidget::emitSelectedViewer()
+void QThickSlabWidget::emitSelectedViewer()
 {
     emit selected( this );
 }
 
-void ThickSlabWidget::changeViewToAxial()
+void QThickSlabWidget::changeViewToAxial()
 {
     if( !m_mainVolume )
         return;
@@ -127,12 +83,11 @@ void ThickSlabWidget::changeViewToAxial()
     m_slider->setMaximum( extent[5] / phases);
     m_viewText->setText( tr("XY : Axial") );
     m_2DView->setViewToAxial();
-    m_2DView->render();
 
     INFO_LOG("Visor per defecte: Canviem a vista axial");
 }
 
-void ThickSlabWidget::changeViewToSagital()
+void QThickSlabWidget::changeViewToSagital()
 {
     if( !m_mainVolume )
         return;
@@ -145,12 +100,11 @@ void ThickSlabWidget::changeViewToSagital()
     m_slider->setMaximum( extent[1] );
     m_viewText->setText( tr( "XY : Sagital" ) );
     m_2DView->setViewToSagittal();
-    m_2DView->render();
 
     INFO_LOG( "Visor per defecte: Canviem a vista sagital" );
 }
 
-void ThickSlabWidget::changeViewToCoronal()
+void QThickSlabWidget::changeViewToCoronal()
 {
     if( !m_mainVolume )
         return;
@@ -163,12 +117,11 @@ void ThickSlabWidget::changeViewToCoronal()
     m_slider->setMaximum( extent[3] );
     m_viewText->setText( tr( "XY : Coronal" ) );
     m_2DView->setViewToCoronal();
-    m_2DView->render();
 
     INFO_LOG( "Visor per defecte: Canviem a vista coronal" );
 }
 
-void ThickSlabWidget::setSelected( bool option )
+void QThickSlabWidget::setSelected( bool option )
 {
     if( option )
     {
@@ -188,12 +141,12 @@ void ThickSlabWidget::setSelected( bool option )
     }
 }
 
-Q2DViewer * ThickSlabWidget::getViewer()
+Q2DViewer * QThickSlabWidget::getViewer()
 {
     return m_2DView;
 }
 
-bool ThickSlabWidget::hasPhases()
+bool QThickSlabWidget::hasPhases()
 {
 
     int phases = 0 ;
@@ -208,6 +161,16 @@ bool ThickSlabWidget::hasPhases()
 
 
     return ( phases > 1 ) ;
+}
+
+void QThickSlabWidget::setDefaultAction( QAction * synchronizeAction )
+{
+    m_synchronizeButton->setDefaultAction( synchronizeAction );
+}
+
+void QThickSlabWidget::emitSincronize()
+{
+    emit sincronize( this, m_buttonSynchronizeAction->isChecked() );
 }
 
 }
