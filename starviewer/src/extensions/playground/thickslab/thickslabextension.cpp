@@ -777,7 +777,7 @@ void ThickSlabExtension::initializeTools()
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
 
-    connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *, bool ) ), this, SLOT( sincronization( Q2DViewerWidget *, bool ) ) );
+    connect( m_selectedViewer, SIGNAL( sincronize( QThickSlabWidget *, bool ) ), this, SLOT( sincronization( QThickSlabWidget *, bool ) ) );
 }
 
 void ThickSlabExtension::initializeDefaultTools( Q2DViewer *viewer )
