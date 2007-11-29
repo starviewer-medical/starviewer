@@ -44,6 +44,7 @@ namespace udg {
 // Fordward declarations
 class Volume;
 class Image;
+class Drawer;
 class Q2DViewerToolManager;
 class OldTool;
 class OldDrawer;
@@ -74,7 +75,7 @@ class Q2DViewer : public QViewer{
 Q_OBJECT
 public:
     /// Axial: XY, Coronal: XZ, Sagittal: YZ
-    enum ViewType{ Axial, Coronal, Sagittal };
+    enum ViewType{ Axial = AxialPlane, Coronal = CoronalPlane, Sagittal = SagitalPlane };
 
     /// tipus de fusió dels models
     enum OverlayType{ None, Blend , CheckerBoard , RectilinearWipe };
@@ -187,6 +188,12 @@ public:
 
     ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
     OldDrawer* getOldDrawer() const;
+
+    /**
+     * Ens retorna el drawer per poder pintar-hi primitives
+     * @return Objecte drawer del viewer
+     */
+    Drawer *getDrawer() const;
 
     /**
      * Calcula la posició del cursor en coordenades de món
@@ -577,7 +584,10 @@ private:
     double m_modalityRange[2];
 
     ///Punter a l'objecte especialista de dibuixat de primitives
-    OldDrawer *m_drawer;
+    OldDrawer *m_oldDrawer;
+
+    /// Especialista en dibuixar primitives
+    Drawer *m_drawer;
 
     /// objectes per a les transformacions en el pipeline d'escala de grisos
     vtkImageMapToWindowLevelColors *m_windowLevelLUTMapper;
