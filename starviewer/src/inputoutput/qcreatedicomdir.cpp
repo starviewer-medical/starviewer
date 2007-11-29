@@ -183,13 +183,13 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
             m_dicomdirSize = m_dicomdirSize + studySize;
             setDicomdirSize();
 
-            item->setText( 0 , study.getStudyId() );
+            item->setText( 0 , study.getPatientName() );
             item->setText( 1 , study.getPatientId() );
-            item->setText( 2 , study.getPatientName() );
-            item->setText( 3 , study.getStudyModality() );
-            item->setText( 4 , formatDate( study.getStudyDate() ) );
-            item->setText( 5 , formatHour( study.getStudyTime() ) );
-            item->setText( 6 , study.getStudyDescription() );
+            item->setText( 2 , study.getPatientAge() );
+            item->setText( 3 , study.getStudyDescription() );
+            item->setText( 4 , study.getStudyModality() );
+            item->setText( 5 , formatDate( study.getStudyDate() ) );
+            item->setText( 6 , formatHour( study.getStudyTime() ) );
             item->setText( 7 , study.getStudyUID() );
         }
     }
