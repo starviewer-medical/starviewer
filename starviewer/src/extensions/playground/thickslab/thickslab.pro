@@ -4,15 +4,15 @@
 # L'objectiu �s una biblioteca:  
 
 FORMS += thickslabextensionbase.ui \
-	 thickslabwidgetbase.ui
+	 qthickslabwidgetbase.ui
 
 HEADERS += thickslabextensionmediator.h \
 	   thickslabextension.h \
-	   thickslabwidget.h
+	   qthickslabwidget.h
 
 SOURCES += thickslabextensionmediator.cpp \
 	   thickslabextension.cpp \
-           thickslabwidget.cpp
+           qthickslabwidget.cpp
 
 RESOURCES += thickslab.qrc
 

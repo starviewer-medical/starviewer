@@ -11,7 +11,7 @@
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolsactionfactory.h"
-#include "thickslabwidget.h"
+#include "qthickslabwidget.h"
 #include "../../main/q2dviewer/menugridwidget.h"
 #include "../../main/q2dviewer/tablemenu.h"
 #include "patient.h"
@@ -46,7 +46,7 @@ ThickSlabExtension::ThickSlabExtension( QWidget *parent )
     m_keyImageNote = NULL;
 
     m_patient = NULL;
-    m_selectedViewer = new ThickSlabWidget( m_workingArea );
+    m_selectedViewer = new QThickSlabWidget( m_workingArea );
     m_selectedViewer->getViewer()->render();
 
     m_predefinedSeriesGrid = new MenuGridWidget();
@@ -194,7 +194,7 @@ void ThickSlabExtension::createConnections()
     connect( m_presentationStateAction, SIGNAL( toggled(bool) ), this, SLOT( enablePresentationState(bool) ) );
 
     // Connexions necessaries pel primer visualitzador
-    connect( m_selectedViewer , SIGNAL( selected( ThickSlabWidget * ) ) , this, SLOT( setViewerSelected( ThickSlabWidget * ) ) );
+    connect( m_selectedViewer , SIGNAL( selected( QThickSlabWidget * ) ) , this, SLOT( setViewerSelected( QThickSlabWidget * ) ) );
     connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
@@ -338,7 +338,7 @@ void ThickSlabExtension::addColumns( int columns )
 {
     QVector<QHBoxLayout*>::Iterator it;
     int posViewer = m_columns;
-    ThickSlabWidget * newViewer;
+    QThickSlabWidget * newViewer;
 
     while( columns > 0 )
     {
@@ -349,7 +349,7 @@ void ThickSlabExtension::addColumns( int columns )
         int i = 0;
         while( it != m_qHorizontalLayoutVector.end() )
         {
-            newViewer = getNewThickSlabWidget();
+            newViewer = getNewQThickSlabWidget();
             (*it)->addWidget( newViewer );
             m_vectorViewers.insert( posViewer,newViewer );
             posViewer += m_columns;
@@ -366,7 +366,7 @@ void ThickSlabExtension::addColumns( int columns )
 void ThickSlabExtension::addRows( int rows )
 {
     QHBoxLayout *horizontal;
-    ThickSlabWidget *newViewer;
+    QThickSlabWidget *newViewer;
     int i;
 
     while( rows > 0 )
@@ -379,7 +379,7 @@ void ThickSlabExtension::addRows( int rows )
         //Afegim tants widgets com columnes
         for(i = 0; i < m_totalColumns; i++)
         {
-            newViewer = getNewThickSlabWidget();
+            newViewer = getNewQThickSlabWidget();
             horizontal->addWidget( newViewer );
             m_vectorViewers.push_back( newViewer );
             if( i >= m_columns) newViewer->hide();
@@ -392,7 +392,7 @@ void ThickSlabExtension::removeColumns( int columns )
 {
     QVector<QHBoxLayout*>::Iterator it = m_qHorizontalLayoutVector.begin();
     int posViewer = m_columns-1;
-    ThickSlabWidget * oldViewer;
+    QThickSlabWidget * oldViewer;
 
     while( columns > 0 && m_columns > 1 )
     {
@@ -419,7 +419,7 @@ void ThickSlabExtension::removeRows( int rows )
     int i;
     m_verticalLayout->removeItem(m_verticalLayout->itemAt(m_verticalLayout->count()));
     int posViewer = m_vectorViewers.count()-1;
-    ThickSlabWidget * oldViewer;
+    QThickSlabWidget * oldViewer;
 
     while( rows > 0 && m_rows > 1 )
     {
@@ -438,13 +438,13 @@ void ThickSlabExtension::removeRows( int rows )
     }
 }
 
-ThickSlabWidget* ThickSlabExtension::getNewThickSlabWidget()
+QThickSlabWidget* ThickSlabExtension::getNewQThickSlabWidget()
 {
-    ThickSlabWidget *newViewer = new ThickSlabWidget( m_workingArea );
+    QThickSlabWidget *newViewer = new QThickSlabWidget( m_workingArea );
     newViewer->getViewer()->render();
     (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
-    connect( newViewer , SIGNAL( selected( ThickSlabWidget * ) ) , this, SLOT( setViewerSelected( ThickSlabWidget * ) ) );
+    connect( newViewer , SIGNAL( selected( QThickSlabWidget * ) ) , this, SLOT( setViewerSelected( QThickSlabWidget * ) ) );
 
     int state = m_volumeInformation->checkState();
 
@@ -504,7 +504,7 @@ void ThickSlabExtension::setGrid( int rows, int columns )
     }
 }
 
-void ThickSlabExtension::setViewerSelected( ThickSlabWidget * viewer )
+void ThickSlabExtension::setViewerSelected( QThickSlabWidget * viewer )
 {
     if ( viewer != m_selectedViewer )
     {
@@ -635,7 +635,7 @@ void ThickSlabExtension::createProgressDialog()
 
 void ThickSlabExtension::showRows( int rows )
 {
-    ThickSlabWidget *viewer;
+    QThickSlabWidget *viewer;
     int numColumn;
 
     while( rows > 0 )
@@ -652,7 +652,7 @@ void ThickSlabExtension::showRows( int rows )
 
 void ThickSlabExtension::hideRows( int rows )
 {
-    ThickSlabWidget *viewer;
+    QThickSlabWidget *viewer;
     int numColumn;
 
     while( rows > 0 )
@@ -670,7 +670,7 @@ void ThickSlabExtension::hideRows( int rows )
 
 void ThickSlabExtension::showColumns( int columns )
 {
-    ThickSlabWidget *viewer;
+    QThickSlabWidget *viewer;
     int numRow;
 
     while( columns > 0 )
@@ -687,7 +687,7 @@ void ThickSlabExtension::showColumns( int columns )
 
 void ThickSlabExtension::hideColumns( int columns )
 {
-    ThickSlabWidget *viewer;
+    QThickSlabWidget *viewer;
     int numRow;
 
     while( columns > 0 )
