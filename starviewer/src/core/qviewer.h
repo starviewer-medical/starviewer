@@ -40,6 +40,9 @@ public:
     QViewer(QWidget *parent = 0);
     ~QViewer();
 
+    /// Per definir els diferents plans on podem operar
+    enum PlaneType{ AxialPlane, SagitalPlane, CoronalPlane, Top2DPlane };
+
     /// Tipus de fitxer que pot desar
     enum FileType{ PNG , JPEG , TIFF , DICOM , PNM , META , BMP };
 

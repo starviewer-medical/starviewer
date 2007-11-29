@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "olddrawer.h"
 #include "q2dviewer.h"
+#include "drawer.h"
 #include "volume.h"
 #include "logging.h"
 #include "image.h"
@@ -127,7 +128,8 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_rulerActorCollection->AddItem( m_sideRuler );
 
     //creem el drawer, passant-li com a visor l'objecte this
-    m_drawer = new OldDrawer( this );
+    m_oldDrawer = new OldDrawer( this );
+    m_drawer = new Drawer( this );
 
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
 }
@@ -145,7 +147,7 @@ Q2DViewer::~Q2DViewer()
     m_picker->Delete();
     m_viewer->Delete();
     m_vtkQtConnections->Delete();
-    delete m_drawer;
+    delete m_oldDrawer;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
@@ -797,7 +799,7 @@ void Q2DViewer::setInput( Volume* volume )
 {
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
-        m_drawer->removeAllPrimitives();
+        m_oldDrawer->removeAllPrimitives();
 
     if( volume == 0 )
         return;
@@ -940,6 +942,8 @@ void Q2DViewer::setView( ViewType view )
     m_lastView = view;
     emit viewChanged( m_lastView );
     resetCamera();
+//     double *bounds = m_viewer->GetImageActor()->GetBounds();
+//     scaleToFit( bounds[0], bounds[2], bounds[1], bounds[3] );
 }
 
 void Q2DViewer::setViewToAxial()
@@ -1511,6 +1515,11 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
 }
 
 OldDrawer *Q2DViewer::getOldDrawer() const
+{
+    return m_oldDrawer;
+}
+
+Drawer *Q2DViewer::getDrawer() const
 {
     return m_drawer;
 }
