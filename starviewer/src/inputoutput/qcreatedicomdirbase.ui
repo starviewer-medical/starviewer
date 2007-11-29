@@ -58,7 +58,7 @@
         </property>
         <column>
          <property name="text" >
-          <string>Study</string>
+          <string>Patient Name</string>
          </property>
         </column>
         <column>
@@ -68,7 +68,12 @@
         </column>
         <column>
          <property name="text" >
-          <string>Patient Name</string>
+          <string>Age</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Description</string>
          </property>
         </column>
         <column>
@@ -84,11 +89,6 @@
         <column>
          <property name="text" >
           <string>Study Time</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Description</string>
          </property>
         </column>
         <column>
