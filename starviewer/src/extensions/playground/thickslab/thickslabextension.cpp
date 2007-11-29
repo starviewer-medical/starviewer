@@ -200,7 +200,7 @@ void ThickSlabExtension::createConnections()
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
 
-
+    connect( m_slabThicknessSpinBox, SIGNAL( valueChanged(double) ), m_selectedViewer, SLOT( setSlabThickness(double) ) );
 }
 
 void ThickSlabExtension::setInput( Volume *input )
@@ -777,7 +777,8 @@ void ThickSlabExtension::initializeTools()
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
 
-    connect( m_selectedViewer, SIGNAL( sincronize( QThickSlabWidget *, bool ) ), this, SLOT( sincronization( QThickSlabWidget *, bool ) ) );
+    /// \todo Comentat perquè no existeix l'slot.
+//     connect( m_selectedViewer, SIGNAL( sincronize( QThickSlabWidget *, bool ) ), this, SLOT( sincronization( QThickSlabWidget *, bool ) ) );
 }
 
 void ThickSlabExtension::initializeDefaultTools( Q2DViewer *viewer )

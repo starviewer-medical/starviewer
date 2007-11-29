@@ -48,6 +48,9 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
+    /// Assigna el gruix que han de tenir les llesques.
+    void setSlabThickness( double slabThickness );
+
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void selected(QThickSlabWidget * viewer);
@@ -78,6 +81,9 @@ private:
 
     /// Acció del boto de sincronitzar
     QAction * m_buttonSynchronizeAction;
+
+    /// Gruix de les llesques.
+    double m_slabThickness;
 };
 
 };
