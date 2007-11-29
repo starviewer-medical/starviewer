@@ -29,6 +29,7 @@ SynchronizeTool::SynchronizeTool( QViewer *viewer, QObject *parent)
     connect( viewer, SIGNAL( sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
     connect( viewer, SIGNAL( windowLevelChanged( double, double ) ), this, SLOT( setWindowLevel( double, double ) ) );
     connect( viewer, SIGNAL( zoomFactorChanged( double ) ), this, SLOT( setZoomFactor( double ) ) );
+    connect( viewer, SIGNAL( panChanged( double * ) ), this, SLOT( setPan( double * ) ) );
 
     setToolData( new SynchronizeToolData() );
 }
@@ -46,6 +47,8 @@ void SynchronizeTool::setConfiguration( ToolConfiguration *configuration )
         configuration->addAttribute( "WindowLevel", QVariant( false ) );
     if( !( configuration->containsValue( "ZoomFactor" ) ) )
         configuration->addAttribute( "ZoomFactor", QVariant( false ) );
+    if( !( configuration->containsValue( "Pan" ) ) )
+        configuration->addAttribute( "Pan", QVariant( false ) );
 
     m_toolConfiguration = configuration;
 }
@@ -57,12 +60,14 @@ void SynchronizeTool::setToolData( ToolData *data )
         disconnect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
         disconnect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
         disconnect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
+        disconnect( m_toolData, SIGNAL(panChanged() ), this, SLOT( applyPanChanges() ) );
     }
     this->m_toolData = dynamic_cast<SynchronizeToolData*>(data);
 
     connect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
     connect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
     connect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
+    connect( m_toolData, SIGNAL(panChanged() ), this, SLOT( applyPanChanges() ) );
 }
 
 ToolData * SynchronizeTool::getToolData() const
@@ -108,6 +113,18 @@ void SynchronizeTool::setZoomFactor( double factor )
     }
 }
 
+void SynchronizeTool::setPan( double * motionVector )
+{
+    ToolConfiguration * configuration = getConfiguration();
+
+    if( configuration && configuration->getValue( "Pan" ).toBool() )
+    {
+        disconnect( m_toolData, SIGNAL(panChanged() ), this, SLOT( applyPanChanges() ) );
+        this->m_toolData->setPan( motionVector );
+        connect( m_toolData, SIGNAL( panChanged() ), this, SLOT( applyPanChanges() ) );
+    }
+}
+
 void SynchronizeTool::applySliceChanges()
 {
     ToolConfiguration * configuration = getConfiguration();
@@ -145,6 +162,18 @@ void SynchronizeTool::applyZoomFactorChanges()
         disconnect( m_viewer, SIGNAL( zoomFactorChanged( double ) ), this, SLOT( setZoomFactor( double ) ) );
         m_q2dviewer->zoom( this->m_toolData->getZoomFactor() );
         connect( m_viewer, SIGNAL( zoomFactorChanged( double ) ), this, SLOT( setZoomFactor( double ) ) );
+    }
+}
+
+void SynchronizeTool::applyPanChanges()
+{
+    ToolConfiguration * configuration = getConfiguration();
+
+    if( configuration && configuration->getValue( "Pan" ).toBool() )
+    {
+        disconnect( m_viewer, SIGNAL( panChanged( double * ) ), this, SLOT( setPan( double * ) ) );
+        m_q2dviewer->pan( this->m_toolData->getPan() );
+        connect( m_viewer, SIGNAL( panChanged( double * ) ), this, SLOT( setPan( double * ) ) );
     }
 }
 

@@ -267,6 +267,7 @@ void QViewer::pan( double motionVector[3] )
         renderer->UpdateLightsGeometryToFollowCamera();
     }
     emit cameraChanged();
+    emit panChanged( motionVector );
     this->refresh();
 }
 
