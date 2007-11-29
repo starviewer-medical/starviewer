@@ -14,6 +14,7 @@
 #include "logging.h"
 #include "toolsactionfactory.h"
 #include "toolmanager.h"
+#include "toolconfiguration.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -141,6 +142,7 @@ void QMPRExtension::init()
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
 
     m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
+
 }
 
 void QMPRExtension::createActions()
@@ -199,6 +201,21 @@ void QMPRExtension::initializeTools()
 
     // registrem al manager les tools que van als diferents viewers
     initializeDefaultTools();
+
+    // Per defecte sincronitzem només la tool de window level
+    ToolConfiguration * synchronizeAxialConfiguration = new ToolConfiguration();
+    synchronizeAxialConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
+    m_toolManager->setViewerTool( m_axial2DView, "SynchronizeTool", synchronizeAxialConfiguration );
+
+    ToolConfiguration * synchronizeCoronalConfiguration = new ToolConfiguration();
+    synchronizeCoronalConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
+    m_toolManager->setViewerTool( m_coronal2DView, "SynchronizeTool", synchronizeCoronalConfiguration );
+
+    ToolConfiguration * synchronizeSagitalConfiguration = new ToolConfiguration();
+    synchronizeSagitalConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
+    m_toolManager->setViewerTool( m_sagital2DView, "SynchronizeTool", synchronizeSagitalConfiguration );
+
+    m_toolManager->activateTool("SynchronizeTool");
 }
 
 void QMPRExtension::initializeDefaultTools()
