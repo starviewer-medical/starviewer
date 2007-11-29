@@ -121,6 +121,14 @@ void QThickSlabWidget::changeViewToCoronal()
     INFO_LOG( "Visor per defecte: Canviem a vista coronal" );
 }
 
+
+void QThickSlabWidget::setSlabThickness( double slabThickness )
+{
+    DEBUG_LOG( QString( "setSlabThickness(%1)" ).arg( slabThickness ) );
+    m_slabThickness = slabThickness;
+}
+
+
 void QThickSlabWidget::setSelected( bool option )
 {
     if( option )

@@ -426,6 +426,33 @@
          </property>
         </widget>
        </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>6</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="Line" name="line" >
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="m_slabThicknessLabel" >
+           <property name="text" >
+            <string>Slab thickness (mm)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="m_slabThicknessSpinBox" />
+         </item>
+        </layout>
+       </item>
       </layout>
      </item>
      <item>

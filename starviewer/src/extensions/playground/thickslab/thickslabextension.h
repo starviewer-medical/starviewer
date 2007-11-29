@@ -45,7 +45,7 @@ public:
 
     ThickSlabExtension( QWidget *parent = 0 );
 
-    ~ThickSlabExtension();
+    virtual ~ThickSlabExtension();
 
     /// Li assigna el volum principal
     void setInput( Volume *input );
