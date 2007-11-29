@@ -36,6 +36,9 @@ public:
     /// Obtenir el factor de zoom
     double getZoomFactor();
 
+    /// Obtenir el pan
+    double* getPan();
+
 public slots:
 
     /// Per canviar les dades de sincronitzacio de llesques
@@ -46,6 +49,9 @@ public slots:
 
     /// Per canviar les dades de sincronitzacio del factor de zoom
     void setZoomFactor( double factor );
+
+    /// Per canviar les dades de sincronitzacio del pan
+    void setPan( double motionVector[3] );
 
 signals:
 
@@ -58,6 +64,9 @@ signals:
     /// Signal que s'emet quan el factor de zoom canvia
     void zoomFactorChanged();
 
+    /// Signal que s'emet quan el pan canvia
+    void panChanged();
+
 private:
 
     /// Dades per la sincronització de l'slicing. Distància recorreguda
@@ -69,6 +78,9 @@ private:
 
     /// Dades per la sincronització del zoom
     double m_zoomFactor;
+
+    /// Dades per la sincronització del moure
+    double m_panVector[3];
 };
 
 }

@@ -50,6 +50,9 @@ private slots:
     /// Posa el factor de zoom
     void setZoomFactor( double factor );
 
+    /// Posa el pan
+    void setPan( double * motionVector);
+
     /// Aplica els canvis de canvi de llesca
     void applySliceChanges();
 
@@ -59,6 +62,8 @@ private slots:
     /// Aplica els canvis de zoom
     void applyZoomFactorChanges();
 
+    /// Aplica els canvis de pan
+    void applyPanChanges();
 private:
 
     /// Llesca anterior per saber l'increment

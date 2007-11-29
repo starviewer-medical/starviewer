@@ -14,6 +14,12 @@ SynchronizeToolData::SynchronizeToolData()
  : ToolData()
 {
     m_increment = 0;
+    m_level = 0;
+    m_window = 0;
+    m_zoomFactor = 0;
+    m_panVector[0] = 0;
+    m_panVector[1] = 1;
+    m_panVector[2] = 2;
 }
 
 
@@ -58,6 +64,20 @@ void SynchronizeToolData::setZoomFactor( double factor )
 double SynchronizeToolData::getZoomFactor()
 {
     return m_zoomFactor;
+}
+
+void SynchronizeToolData::setPan( double motionVector[3] )
+{
+    m_panVector[0] = motionVector[0];
+    m_panVector[1] = motionVector[1];
+    m_panVector[2] = motionVector[2];
+    DEBUG_LOG(" DADES PAN CANVIADES ");
+    emit( panChanged() );
+}
+
+double* SynchronizeToolData::getPan()
+{
+    return m_panVector;
 }
 
 }

@@ -158,6 +158,9 @@ signals:
     /// informa que s'ha canviat el zoom
     void zoomFactorChanged( double );
 
+    /// informa que s'ha mogut la imatge
+    void panChanged( double * );
+
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
