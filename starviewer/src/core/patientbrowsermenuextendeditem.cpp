@@ -9,6 +9,7 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QPainter>
+#include <QEvent>
 
 #include "logging.h"
 
@@ -69,6 +70,15 @@ QPixmap PatientBrowserMenuExtendedItem::makeEmptyThumbnail()
     painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, tr("No Series Selected"));
 
     return pixmap;
+}
+
+bool PatientBrowserMenuExtendedItem::event( QEvent * event )
+{
+    if ( event->type() == QEvent::Close ) // s'ha pulsat l'escape
+    {
+        emit close();
+    }
+    return QFrame::event( event );
 }
 
 }

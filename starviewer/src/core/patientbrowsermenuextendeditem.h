@@ -31,10 +31,18 @@ public:
 
     ~PatientBrowserMenuExtendedItem();
 
+    // Tractament dels events
+    bool event( QEvent * event );
+
 public slots:
 
     /// Assigna la serie a mostrar
     void setSeries(Series * series);
+
+signals:
+
+    /// Signal que s'emet quan es rep l'event de tancar el menu
+    void close();
 
 private:
 
