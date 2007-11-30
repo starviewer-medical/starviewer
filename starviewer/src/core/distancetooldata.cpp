@@ -41,7 +41,7 @@ void DistanceToolData::calculateDistance()
 {
     Distance d( m_firstPoint, m_secondPoint );
 
-    m_text = QString( "%1 mm" ).arg( d.getDistance2D(), 0, 'f',  2);
+    m_text = QString( "%1 mm" ).arg( d.getDistance3D(), 0, 'f',  2);
     
     m_textPosition[0] = ( m_firstPoint[0] + m_secondPoint[0] ) / 2;
     m_textPosition[1] = ( m_firstPoint[1] + m_secondPoint[1] ) / 2;
