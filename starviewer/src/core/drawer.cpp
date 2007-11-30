@@ -78,6 +78,7 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
     break;
     }
     m_2DViewer->getRenderer()->AddActor( primitive->getAsVtkProp() );
+    refresh();
 }
 
 void Drawer::refresh()
@@ -100,6 +101,8 @@ void Drawer::refresh()
         m_currentPlane = m_2DViewer->getView();
         show( m_currentPlane, m_currentSlice );
     }
+    // si no s'ha complert cap altre premisa, cal refrescar el que hi hagi en el pla actual i en el top
+    m_2DViewer->refresh();
 }
 
 void Drawer::hide( int plane, int slice )
@@ -127,6 +130,7 @@ void Drawer::hide( int plane, int slice )
     {
         primitive->visibilityOff();
     }
+    m_2DViewer->refresh();
 }
 
 void Drawer::show( int plane, int slice )
@@ -154,6 +158,7 @@ void Drawer::show( int plane, int slice )
     {
         primitive->visibilityOn();
     }
+    m_2DViewer->refresh();
 }
 
 }

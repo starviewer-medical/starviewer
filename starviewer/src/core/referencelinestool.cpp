@@ -11,8 +11,8 @@
 #include "volume.h"
 #include "series.h"
 #include "imageplane.h"
-#include "polygon.h"
-#include "olddrawer.h"
+#include "drawer.h"
+#include "drawerpolygon.h"
 // vtk
 #include <vtkMatrix4x4.h> // per les transformacions amb matrius del pla
 
@@ -140,14 +140,14 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             p3[j] = brhc[j];
             p4[j] = blhc[j];
         }
-        Polygon *referencePlane = new Polygon;
-        referencePlane->addPoint( p1 );
-        referencePlane->addPoint( p2 );
-        referencePlane->addPoint( p3 );
-        referencePlane->addPoint( p4 );
+        DrawerPolygon *referencePlane = new DrawerPolygon;
+        referencePlane->addVertix( p1 );
+        referencePlane->addVertix( p2 );
+        referencePlane->addVertix( p3 );
+        referencePlane->addVertix( p4 );
 
         // TODO es podria retornar el Polygon com a resultat i fer això fora
-        m_2DViewer->getOldDrawer()->drawPolygon( referencePlane, 0, Q2DViewer::Axial );
+        m_2DViewer->getDrawer()->draw( referencePlane, QViewer::Top2DPlane );
     }
 }
 
