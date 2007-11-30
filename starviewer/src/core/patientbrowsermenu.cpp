@@ -24,6 +24,8 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
     m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
     m_patientBrowserList = new PatientBrowserMenuList(this);
 
+    connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
+
     m_patientAdditionalInfo->setWindowFlags(Qt::Popup);
     m_patientBrowserList->setWindowFlags(Qt::Popup);
 
