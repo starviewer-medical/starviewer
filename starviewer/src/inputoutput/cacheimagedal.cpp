@@ -193,7 +193,7 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
    return state;
 }
 
-Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
+Status CacheImageDAL::imageSize (  DicomMask imageMask , double &size )
 {
     int columns , rows , stateDatabase;
     char **reply = NULL , **error = NULL;
@@ -220,7 +220,7 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , unsigned long &size )
 
     if ( reply[1] != NULL )
     {
-        size = atol( reply [1] );
+        size = atof( reply [1] );
     }
     else size = 0;
 

@@ -143,8 +143,8 @@ private slots:
     void deviceChanged( int value );
 
 private:
-    unsigned long m_dicomdirSize;
-    unsigned long m_DiskSpace;
+    double m_dicomdirSize;
+    double m_DiskSpace;
     QMenu m_contextMenu;///<Menu contextual
 
     /// Dispositius on es pot gravar el DICOMDIR
