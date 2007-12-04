@@ -36,7 +36,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false)
+ : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_isActive(false)
 {
     m_vtkWidget = new QVTKWidget( this );
 
@@ -84,6 +84,11 @@ vtkRenderWindow *QViewer::getRenderWindow()
     return m_vtkWidget->GetRenderWindow();
 }
 
+bool QViewer::isActive() const
+{
+    return m_isActive;
+}
+
 ToolProxy *QViewer::getToolProxy() const
 {
     return m_toolProxy;
@@ -123,6 +128,11 @@ void QViewer::eventHandler( vtkObject * obj, unsigned long event, void * client_
     this->eventHandler(obj, event, client_data, NULL, command);
 }
 #endif
+
+void QViewer::setActive( bool active )
+{
+    m_isActive = active;
+}
 
 void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] )
 {

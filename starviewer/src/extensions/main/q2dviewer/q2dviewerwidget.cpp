@@ -139,6 +139,7 @@ void Q2DViewerWidget::setSelected( bool option )
         palette.setBrush( QPalette::Active, QPalette::Window, noSelected );
         setPalette( palette );
     }
+    m_2DView->setActive( option );
 }
 
 Q2DViewer * Q2DViewerWidget::getViewer()

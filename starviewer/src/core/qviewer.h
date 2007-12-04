@@ -65,6 +65,12 @@ public:
     vtkRenderWindow *getRenderWindow();
 
     /**
+     * Ens diu si el viewer és actiu en aquell moment
+     * @return Cert si actiu, fals altrament
+     */
+    bool isActive() const;
+
+    /**
      * Ens retorna el ToolProxy del viewer
      * @return ToolProxy del viewer
      */
@@ -119,6 +125,12 @@ public slots:
 
     /// Força l'execució de la visualització
     virtual void render() = 0;
+
+    /**
+     * Assignem si aquest visualitzador és actiu, és a dir, amb el que s'està interactuant
+     * @param active
+     */
+    void setActive( bool active );
 
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews(){ m_grabList.clear(); };
@@ -198,6 +210,10 @@ protected:
 
     /// Ens servirà per controlar si entre event o event s'ha mogut el mouse
     bool m_mouseHasMoved;
+
+private:
+    /// Indica si el viewer és actiu o no
+    bool m_isActive;
 };
 
 };  //  end  namespace udg {
