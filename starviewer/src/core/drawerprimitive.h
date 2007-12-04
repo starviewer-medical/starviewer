@@ -27,8 +27,10 @@ class DrawerPrimitive : public QObject
 {
 Q_OBJECT
 public:
-    DrawerPrimitive(QObject *parent = 0);
+    /// tipus de representació que podem usar per construir la Primitiva en escena
+    enum RepresentationType{ VTKRepresentation, OpenGLRepresentation };
 
+    DrawerPrimitive(QObject *parent = 0);
     ~DrawerPrimitive();
 
     // mètodes per definir les propietats de la primitiva, com color, tipus de línia,
@@ -90,6 +92,22 @@ public:
      */
     virtual vtkProp *getAsVtkProp();
 
+    /**
+     * Ens diu si alguna de les propietats de la primitiva han estat modificades.
+     * Aquesta propietat indica si la seva representació gràfica, ja sigui vtk o openGL, està d'acord
+     * amb el que la defineix l'objecte
+     * @return Cert si s'ha modificat alguna propietat des de l'últim "update". Fals altrament
+     */
+    bool isModified() const;
+
+public slots:
+    /**
+     * Mètode virtual que implementarà cada primitiva i que actualitzarà les representacions
+     * com cal, segons s'indiqui. Ara mateix, el 100% dels casos serà VTK.
+     * @param representation Tipus de representació a actualitzar (VTK, OpenGL, etc)
+     */
+    virtual void update( int representation ){};
+
 signals:
     /// s'emet quan alguna de les propietats ha canviat
     void changed();
@@ -97,15 +115,18 @@ signals:
     /// s'emet just quan s'invoca el destructor
     void dying( DrawerPrimitive * );
 
-    /// s'emet quan l'estructura vtk s'ha actualitzat
-    void vtkPropUpdated();
-
 protected slots:
     /**
      * Aquest slot s'hauria de re-implementar per cada classe i és on s'actualitza
      * l'estructura vtk que s'ha creat per representar la primitiva
      */
     virtual void updateVtkProp(){};
+
+    /**
+     * Li diem si està modificat o no
+     * @param modified
+     */
+    void setModified( bool modified = true );
 
 protected:
     /**
@@ -137,6 +158,9 @@ protected:
 
     /// Opacitat de l'objecte, per defecte 1.0, és a dir, completament opac
     double m_opacity;
+
+    /// Indica si alguna de les propietats s'han modificat
+    bool m_modified;
 };
 
 }

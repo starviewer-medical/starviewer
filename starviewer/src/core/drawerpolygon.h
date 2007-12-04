@@ -47,6 +47,9 @@ public:
 
     vtkProp *getAsVtkProp();
 
+public slots:
+    void update( int representation );
+
 protected slots:
     void updateVtkProp();
 

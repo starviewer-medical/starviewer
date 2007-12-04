@@ -72,6 +72,20 @@ vtkProp *DrawerPolygon::getAsVtkProp()
     return m_vtkActor;
 }
 
+void DrawerPolygon::update( int representation )
+{
+    switch( representation )
+    {
+    case VTKRepresentation:
+        updateVtkProp();
+    break;
+
+    case OpenGLRepresentation:
+    break;
+
+    }
+}
+
 void DrawerPolygon::updateVtkProp()
 {
     if( m_vtkActor )
@@ -79,7 +93,6 @@ void DrawerPolygon::updateVtkProp()
         m_vtkPolydata->Reset();
         buildVtkPoints();
         updateVtkActorProperties();
-        emit vtkPropUpdated();
     }
     else
     {
