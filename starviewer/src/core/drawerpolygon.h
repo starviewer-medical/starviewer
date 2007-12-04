@@ -36,6 +36,15 @@ public:
      */
     void addVertix( double point[3] );
 
+    /**
+     * Assigna el valor del vèrtex i-éssim del polígon. En aquest cas equival a
+     * actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
+     * s'afegeix el vèrtex donat al final, tal com si fessim addVertix(point)
+     * @param i índex del vèrtex que volem modificar
+     * @param point[] coordenades del vèrtex
+     */
+    void setVertix( int i, double point[3] );
+
     vtkProp *getAsVtkProp();
 
 protected slots:

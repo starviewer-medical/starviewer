@@ -94,6 +94,12 @@ signals:
     /// s'emet quan alguna de les propietats ha canviat
     void changed();
 
+    /// s'emet just quan s'invoca el destructor
+    void dying( DrawerPrimitive * );
+
+    /// s'emet quan l'estructura vtk s'ha actualitzat
+    void vtkPropUpdated();
+
 protected slots:
     /**
      * Aquest slot s'hauria de re-implementar per cada classe i és on s'actualitza
