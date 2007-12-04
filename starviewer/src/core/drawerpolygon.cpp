@@ -24,6 +24,7 @@ DrawerPolygon::DrawerPolygon(QObject *parent)
 
 DrawerPolygon::~DrawerPolygon()
 {
+    emit dying(this);
 }
 
 void DrawerPolygon::addVertix( double point[3] )
@@ -34,6 +35,22 @@ void DrawerPolygon::addVertix( double point[3] )
 
     m_pointsList << array;
     emit changed();
+}
+
+void DrawerPolygon::setVertix( int i, double point[3] )
+{
+    if( i >= m_pointsList.count() || i < 0 )
+        addVertix( point );
+    else
+    {
+        QVector<double> array(3);
+        array = m_pointsList.takeAt(i);
+        for( int j=0; j < 3; j++ )
+            array[j] = point[j];
+
+        m_pointsList.insert(i,array);
+        emit changed();
+    }
 }
 
 vtkProp *DrawerPolygon::getAsVtkProp()
@@ -62,6 +79,7 @@ void DrawerPolygon::updateVtkProp()
         m_vtkPolydata->Reset();
         buildVtkPoints();
         updateVtkActorProperties();
+        emit vtkPropUpdated();
     }
     else
     {
@@ -73,11 +91,15 @@ void DrawerPolygon::buildVtkPoints()
 {
     // primer comprovem si el polígon és tancat. En cas que l'últim i el primer no coincideixin, l'afegim
     // TODO es podria comprovar si com a mínim té tres punts, sinó, no es pot considerar polígon
-    double *firstPoint = m_pointsList.first().data();
-    double *lastPoint = m_pointsList.last().data();
-    if ( ( firstPoint[0] != lastPoint[0] ) || ( firstPoint[1] != lastPoint[1] ) || ( firstPoint[2] != lastPoint[2] ) )
+    bool extraVertix = false;
+    if( !m_pointsList.isEmpty() )
     {
-        this->addVertix( firstPoint );
+        double *firstPoint = m_pointsList.first().data();
+        double *lastPoint = m_pointsList.last().data();
+        if ( ( firstPoint[0] != lastPoint[0] ) || ( firstPoint[1] != lastPoint[1] ) || ( firstPoint[2] != lastPoint[2] ) )
+        {
+            extraVertix = true;
+        }
     }
     if( !m_vtkPolydata )
     {
@@ -87,15 +109,28 @@ void DrawerPolygon::buildVtkPoints()
     }
 
     //especifiquem el nombre de vèrtexs que té el polígon
-    int numberOfVertices = m_pointsList.count();
+    int numberOfVertices = m_pointsList.count() + ( extraVertix ? 1 : 0 );
     m_vtkCellArray->InsertNextCell( numberOfVertices );
     m_vtkPoints->SetNumberOfPoints( numberOfVertices );
 
     //donem els punts/vertexs
-    for ( int i = 0; i < numberOfVertices; i++ )
+    int i = 0;
+    foreach( QVector<double> vertix, m_pointsList )
     {
-        m_vtkPoints->InsertPoint( i, m_pointsList.at(i).data() );
+        m_vtkPoints->InsertPoint( i, vertix.data() );
         m_vtkCellArray->InsertCellPoint( i );
+        i++;
+    }
+//     for ( int i = 0; i < numberOfVertices; i++ )
+//     {
+//         m_vtkPoints->InsertPoint( i, m_pointsList.at(i).data() );
+//         m_vtkCellArray->InsertCellPoint( i );
+//     }
+    if( extraVertix )
+    {
+        // tornem a afegir el primer punt
+        m_vtkPoints->InsertPoint( numberOfVertices-1, m_pointsList.at(0).data() );
+        m_vtkCellArray->InsertCellPoint( numberOfVertices-1 );
     }
     //assignem els punts al polydata
     m_vtkPolydata->SetPoints( m_vtkPoints );

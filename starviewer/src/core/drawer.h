@@ -44,6 +44,13 @@ public slots:
      */
     void refresh();
 
+    /**
+     * Deixa de mantenir la primitiva dins de la seva estructura interna
+     * i l'elimina de l'escena on s'estava pintant
+     * @param primitive Primitiva que volem deixar de controlar
+     */
+    void erasePrimitive(DrawerPrimitive *primitive);
+
 private:
     /**
      * Mostra/amaga les primitives que hi ha en un pla i llesca determinats

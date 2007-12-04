@@ -77,8 +77,14 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
         return;
     break;
     }
-    m_2DViewer->getRenderer()->AddActor( primitive->getAsVtkProp() );
-    refresh();
+    vtkProp *prop = primitive->getAsVtkProp();
+    if( prop )
+    {
+        connect( primitive, SIGNAL(vtkPropUpdated()), SLOT(refresh()) );
+        connect( primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *) ) );
+        m_2DViewer->getRenderer()->AddActor( prop );
+        refresh();
+    }
 }
 
 void Drawer::refresh()
@@ -103,6 +109,63 @@ void Drawer::refresh()
     }
     // si no s'ha complert cap altre premisa, cal refrescar el que hi hagi en el pla actual i en el top
     m_2DViewer->refresh();
+}
+
+void Drawer::erasePrimitive(DrawerPrimitive *primitive)
+{
+    bool found = false;
+    QMutableMapIterator< int, DrawerPrimitive * > axialIterator( m_axialPrimitives );
+    while( axialIterator.hasNext() && !found )
+    {
+        axialIterator.next();
+        if( primitive == axialIterator.value() )
+        {
+            found = true;
+            axialIterator.remove();
+            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+        }
+    }
+    // en principi una mateixa primitiva només estarà en una de les llistes
+    if( found )
+        return;
+
+    QMutableMapIterator< int, DrawerPrimitive * > sagitalIterator( m_sagitalPrimitives );
+    while( sagitalIterator.hasNext() && !found )
+    {
+        sagitalIterator.next();
+        if( primitive == sagitalIterator.value() )
+        {
+            found = true;
+            sagitalIterator.remove();
+            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+        }
+    }
+
+    if( found )
+        return;
+
+    QMutableMapIterator< int, DrawerPrimitive * > coronalIterator( m_coronalPrimitives );
+    while( coronalIterator.hasNext() && !found )
+    {
+        coronalIterator.next();
+        if( primitive = coronalIterator.value() )
+        {
+            found = true;
+            coronalIterator.remove();
+            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+        }
+    }
+
+    if( found )
+        return;
+
+    if( m_top2DPlanePrimitives.contains( primitive ) )
+    {
+        found = true;
+        m_top2DPlanePrimitives.removeAt( m_top2DPlanePrimitives.indexOf(primitive) );
+        m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+        m_2DViewer->refresh();
+    }
 }
 
 void Drawer::hide( int plane, int slice )
