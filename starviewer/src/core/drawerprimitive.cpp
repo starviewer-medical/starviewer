@@ -11,8 +11,9 @@
 namespace udg {
 
 DrawerPrimitive::DrawerPrimitive(QObject *parent)
- : QObject(parent), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(Qt::green), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0)
+ : QObject(parent), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(Qt::green), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false)
 {
+    connect( this, SIGNAL(changed()), SLOT(setModified()) );
 }
 
 DrawerPrimitive::~DrawerPrimitive()
@@ -109,6 +110,16 @@ double DrawerPrimitive::getOpacity() const
 vtkProp *DrawerPrimitive::getAsVtkProp()
 {
     return 0;
+}
+
+bool DrawerPrimitive::isModified() const
+{
+    return m_modified;
+}
+
+void DrawerPrimitive::setModified( bool modified )
+{
+    m_modified = modified;
 }
 
 vtkCoordinate *DrawerPrimitive::getVtkCoordinateObject()

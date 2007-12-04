@@ -80,7 +80,6 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
     vtkProp *prop = primitive->getAsVtkProp();
     if( prop )
     {
-        connect( primitive, SIGNAL(vtkPropUpdated()), SLOT(refresh()) );
         connect( primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *) ) );
         m_2DViewer->getRenderer()->AddActor( prop );
         refresh();
@@ -219,6 +218,10 @@ void Drawer::show( int plane, int slice )
     }
     foreach( DrawerPrimitive *primitive, primitivesList )
     {
+        if( primitive->isModified() )
+        {
+            primitive->update( DrawerPrimitive::VTKRepresentation );
+        }
         primitive->visibilityOn();
     }
     m_2DViewer->refresh();
