@@ -163,6 +163,9 @@ public:
     bool isTextScaled()
     { return( m_scaled ); }
 
+public slots:
+    void update( int representation );
+
 protected slots:
     void updateVtkProp();
 
