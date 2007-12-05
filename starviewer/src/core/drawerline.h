@@ -35,6 +35,10 @@ public:
     void setSecondPoint( double point[3] );
 
     vtkProp *getAsVtkProp();
+    
+public slots:
+    
+    void update( int representation );
 
 protected slots:
     void updateVtkProp();

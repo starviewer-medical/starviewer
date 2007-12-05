@@ -134,7 +134,8 @@ HEADERS += extensionfactory.h \
            drawerprimitive.h \
            drawerpolygon.h \
            drawerline.h \
-           drawertext.h 
+           drawertext.h \
+           drawerpolyline.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -249,7 +250,8 @@ SOURCES += extensionmediator.cpp \
            drawerprimitive.cpp \
            drawerpolygon.cpp \
            drawerline.cpp \
-           drawertext.cpp 
+           drawertext.cpp \
+           drawerpolyline.cpp 
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
