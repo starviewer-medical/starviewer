@@ -65,6 +65,7 @@ void DrawerPolyline::setPoint( int i, double point[3] )
 void DrawerPolyline::removePoint( int i )
 {
     m_pointsList.removeAt( i );
+    emit changed();
 }
 
 vtkProp *DrawerPolyline::getAsVtkProp()
@@ -80,8 +81,6 @@ vtkProp *DrawerPolyline::getAsVtkProp()
         m_vtkMapper->SetInput( m_vtkPolydata );
         // li donem els atributs
         updateVtkActorProperties();
-
-        connect( this, SIGNAL(changed()), SLOT(updateVtkProp()) );
     }
     return m_vtkActor;
 }
@@ -107,6 +106,7 @@ void DrawerPolyline::updateVtkProp()
         m_vtkPolydata->Reset();
         buildVtkPoints();
         updateVtkActorProperties();
+        this->setModified(false);
     }
     else
     {

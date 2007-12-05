@@ -18,6 +18,8 @@ DrawerLine::DrawerLine(QObject *parent) : DrawerPrimitive(parent), m_vtkLineSour
 
 DrawerLine::~DrawerLine()
 {
+    emit dying(this);
+
     if ( m_vtkActor )
         m_vtkActor->Delete();
         
@@ -62,8 +64,6 @@ vtkProp *DrawerLine::getAsVtkProp()
         
         // li donem els atributs
         updateVtkActorProperties();
-
-        connect( this, SIGNAL(changed()), SLOT(updateVtkProp()) );
     }
     return m_vtkActor;
 }
@@ -78,7 +78,6 @@ void DrawerLine::update( int representation )
 
     case OpenGLRepresentation:
     break;
-
     }
 }
 
@@ -86,10 +85,11 @@ void DrawerLine::updateVtkProp()
 {
     if( m_vtkActor )
     {
-       //assignem els punts a la línia
-       m_vtkLineSource->SetPoint1( m_firstPoint );
-       m_vtkLineSource->SetPoint2( m_secondPoint );
-       updateVtkActorProperties();
+        //assignem els punts a la línia
+        m_vtkLineSource->SetPoint1( m_firstPoint );
+        m_vtkLineSource->SetPoint2( m_secondPoint );
+        updateVtkActorProperties();
+        this->setModified(false);
     }
     else
     {

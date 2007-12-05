@@ -29,139 +29,106 @@ public:
     vtkProp *getAsVtkProp();
 
     ///permet assignar el text
-    void setText( QString text )
-    { m_text = text; }
+    void setText( QString text );
     
     ///ens retorna el text que conté
-    QString getText()
-    { return( m_text ); }
+    QString getText();
     
     ///permet canviar el punt d'ancoratge
     void setAttatchmentPoint( double point[3] );
     
     ///retorna el punt d'ancoratge
-    double* getAttatchmentPoint()
-    { return( m_attatchPoint ); }
+    double* getAttatchmentPoint();
     
     ///activa el dibuixat del requadre de la casella de text
-    void borderOn()
-    { borderEnabled( true ); }
+    void borderOn();
     
     ///desactiva el dibuixat del requadre de la casella de text
-    void borderOff()
-    { borderEnabled( false ); }
+    void borderOff();
     
     ///activa / desactiva el dibuixat del requadre de la casella de text segons el paràmetre que li passem
-    void borderEnabled( bool enabled )
-    { m_border = enabled; }
+    void borderEnabled( bool enabled );
     
     ///ens diu si s'ha de dibuixar el requadre o no.
-    bool isBorderEnabled()
-    { return( m_border ); }
+    bool isBorderEnabled();
     
     ///assigna l'espaiat entre el text i la caixa contenidora
-    void setPadding( int padding )
-    { m_padding = padding; }
+    void setPadding( int padding );
     
     ///ens retona l'espaiat entre el text i la caixa contenidora
-    int getPadding()
-    { return( m_padding ); }
+    int getPadding();
     
     ///ens retorna el tipus de font
-    QString getFontFamily() 
-    { return m_fontFamily; }
+    QString getFontFamily();
     
     ///ens permet assignar el tipus de font
-    void setFontFamily( QString family ) 
-    { m_fontFamily = family; }
+    void setFontFamily( QString family );
     
     ///assigna el tamany de la font 
-    void setFontSize( int size )
-    { m_fontSize = size; }
+    void setFontSize( int size );
     
     ///ens retona el tamany de la font
-    int getFontSize()
-    { return( m_fontSize ); }
+    int getFontSize();
     
     ///activa la negreta del text
-    void boldOn()
-    { bold( true ); }
+    void boldOn();
     
     ///desactiva la negreta del text
-    void boldOff()
-    { bold( false ); }
+    void boldOff();
     
     ///activa / desactiva la negreta del text
-    void bold( bool bold )
-    { m_bold = bold; }
+    void bold( bool bold );
     
     ///ens diu si està activada la negreta del text
-    bool isBold()
-    { return( m_bold ); }
+    bool isBold();
     
     ///activa la cursiva del text
-    void italicOn()
-    { italic( true ); }
+    void italicOn();
     
     ///desactiva la cursiva del text
-    void italicOff()
-    { italic( false ); }
+    void italicOff();
     
     ///activa / desactiva la cursiva del text
-    void italic( bool italic )
-    { m_italic = italic; }
+    void italic( bool italic );
     
     ///ens diu si està activada la cursiva del text
-    bool isItalic()
-    { return( m_italic ); }
+    bool isItalic();
     
     ///activa l'ombra del text
-    void shadowOn()
-    { shadow( true ); }
+    void shadowOn();
     
     ///desactiva l'ombra del text
-    void shadowOff()
-    { shadow( false ); }
+    void shadowOff();
     
     ///activa / desactiva l'ombra del text
-    void shadow( bool shadow )
-    { m_shadow = shadow; }
+    void shadow( bool shadow );
     
     ///ens diu si està activada l'ombra del text
-    bool hasShadow()
-    { return( m_shadow ); }
+    bool hasShadow();
     
     ///ens permet assignar el tipus de justificació horitzontal
-    void setHorizontalJustification( QString horizontalJustification )
-    { m_horizontalJustification = horizontalJustification; }
+    void setHorizontalJustification( QString horizontalJustification );
     
     ///ens retorna el tipus de justificació horitzontal
-    QString getHorizontalJustification()
-    { return( m_horizontalJustification ); }
+    QString getHorizontalJustification();
     
     ///ens permet assignar el tipus de justificació vertical
-    void setVerticalJustification( QString verticalJustification )
-    { m_verticalJustification = verticalJustification; }
+    void setVerticalJustification( QString verticalJustification );
     
     ///ens retorna el tipus de justificació vertical
-    QString getVerticalJustification()
-    { return( m_verticalJustification ); }
+    QString getVerticalJustification();
     
     ///fa que el text s'escali
-    void scaledTextOn()
-    { scaledText( true ); }
+    void scaledTextOn();
     
     ///fa que el text no s'escali
-    void scaledTextOff()
-    { scaledText( false ); }
+    void scaledTextOff();
     
     ///ens permet determinar si el text s'escala o no
-    void scaledText( bool scaled )
-    { m_scaled = scaled; }
+    void scaledText( bool scaled );
     
     ///ens diu si el text és escalat o no
-    bool isTextScaled()
-    { return( m_scaled ); }
+    bool isTextScaled();
 
 public slots:
     void update( int representation );
@@ -176,9 +143,6 @@ private:
 private:
     /// Text a mostrar
     QString m_text;
-    
-    /// Punt on es mostrara el text
-    double m_attatchPoint[3];
 
     /// Justificació horitzontal
     QString m_horizontalJustification;
@@ -216,11 +180,11 @@ private:
     /// Espaiat
     int m_padding;
 
-    /// Color de la font
-    QColor m_color;
-
     /// Estructures de vtk, per construir el text
     vtkCaptionActor2D *m_vtkActor;
+
+    /// Punt on es mostrara el text
+    double m_attatchPoint[3];
 };
 
 }
