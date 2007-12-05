@@ -51,7 +51,7 @@ public:
      * @param size Mida de les imatges que compleixen la màscara en bytes
      * @return retorna estat del mètode
      */
-    Status imageSize( DicomMask mask , double &size );
+    Status imageSize( DicomMask mask , quint64 &size );
 
 
     /** Esborra les imatges que tinguin el studyUID passat per paràmetre
