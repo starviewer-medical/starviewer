@@ -66,8 +66,6 @@ vtkProp *DrawerPolygon::getAsVtkProp()
         m_vtkMapper->SetInput( m_vtkPolydata );
         // li donem els atributs
         updateVtkActorProperties();
-
-        connect( this, SIGNAL(changed()), SLOT(updateVtkProp()) );
     }
     return m_vtkActor;
 }
