@@ -14,7 +14,8 @@
 namespace udg {
 
 DrawerText::DrawerText(QObject *parent) : DrawerPrimitive(parent), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" ), m_border( false ), m_fontFamily( "Arial" ), m_fontSize( 12 ), m_shadow( false ), m_italic( false ), m_bold( false ), m_height( 0.05 ), m_width( 0.09 ), m_scaled( false ), m_padding( 0 ), m_vtkActor(0)
-{}
+{
+}
 
 DrawerText::~DrawerText()
 {
@@ -28,7 +29,7 @@ void DrawerText::setAttatchmentPoint( double point[3] )
 {
     for( int i = 0; i<3; i++ )
         m_attatchPoint[i] = point[i];
-    
+
     emit changed();
 }
 
@@ -44,7 +45,7 @@ vtkProp *DrawerText::getAsVtkProp()
 
         //Assignem la posició en pantalla
         m_vtkActor->SetAttachmentPoint( m_attatchPoint );
-        
+
         // li donem els atributs
         updateVtkActorProperties();
     }
@@ -165,183 +166,182 @@ void DrawerText::updateVtkActorProperties()
          m_vtkActor->BorderOff();
 
     //mirem la visibilitat de l'actor
-    if ( !this->isVisible() )
-        m_vtkActor->VisibilityOff();
+    m_vtkActor->SetVisibility( this->isVisible() );
 }
 
 void DrawerText::setText( QString text )
-{ 
-    m_text = text; 
+{
+    m_text = text;
     emit changed();
 }
 
 QString DrawerText::getText()
-{ 
-    return( m_text ); 
+{
+    return( m_text );
 }
 
 double* DrawerText::getAttatchmentPoint()
-{ 
+{
     return( m_attatchPoint );
 }
 
 void DrawerText::borderOn()
-{ 
+{
     borderEnabled( true );
 }
 
 void DrawerText::borderOff()
-{ 
+{
     borderEnabled( false );
 }
 
 void DrawerText::borderEnabled( bool enabled )
-{ 
+{
     m_border = enabled;
     emit changed();
 }
 
 bool DrawerText::isBorderEnabled()
-{ 
+{
     return( m_border );
 }
 
 void DrawerText::setPadding( int padding )
-{ 
+{
     m_padding = padding;
     emit changed();
 }
 
 int DrawerText::getPadding()
-{ 
+{
     return( m_padding );
 }
 
-QString DrawerText::getFontFamily() 
-{ 
+QString DrawerText::getFontFamily()
+{
     return m_fontFamily;
 }
 
-void DrawerText::setFontFamily( QString family ) 
-{ 
+void DrawerText::setFontFamily( QString family )
+{
     m_fontFamily = family;
     emit changed();
 }
 
 void DrawerText::setFontSize( int size )
-{ 
+{
     m_fontSize = size;
     emit changed();
 }
 
 int DrawerText::getFontSize()
-{ 
+{
     return( m_fontSize );
 }
 
 void DrawerText::boldOn()
-{ 
+{
     bold( true );
 }
 
 void DrawerText::boldOff()
-{ 
+{
     bold( false );
 }
 
 void DrawerText::bold( bool bold )
-{ 
+{
     m_bold = bold;
     emit changed();
 }
 
 bool DrawerText::isBold()
-{ 
+{
     return( m_bold );
 }
 
 void DrawerText::italicOn()
-{ 
+{
     italic( true );
 }
 
 void DrawerText::italicOff()
-{ 
+{
     italic( false );
 }
 
 void DrawerText::italic( bool italic )
-{ 
+{
     m_italic = italic;
     emit changed();
 }
 
 bool DrawerText::isItalic()
-{ 
+{
     return( m_italic );
 }
 
 void DrawerText::shadowOn()
-{ 
+{
     shadow( true );
 }
 
 void DrawerText::shadowOff()
-{ 
+{
     shadow( false );
 }
 
 void DrawerText::shadow( bool shadow )
-{ 
+{
     m_shadow = shadow;
     emit changed();
 }
 
 bool DrawerText::hasShadow()
-{ 
+{
     return( m_shadow );
 }
 
 void DrawerText::setHorizontalJustification( QString horizontalJustification )
-{ 
+{
     m_horizontalJustification = horizontalJustification;
     emit changed();
 }
 
 QString DrawerText::getHorizontalJustification()
-{ 
+{
     return( m_horizontalJustification );
 }
 
 void DrawerText::setVerticalJustification( QString verticalJustification )
-{ 
+{
     m_verticalJustification = verticalJustification;
     emit changed();
 }
 
 QString DrawerText::getVerticalJustification()
-{ 
+{
     return( m_verticalJustification );
 }
 
 void DrawerText::scaledTextOn()
-{ 
+{
     scaledText( true );
 }
 
 void DrawerText::scaledTextOff()
-{ 
+{
     scaledText( false );
 }
 
 void DrawerText::scaledText( bool scaled )
-{ 
+{
     m_scaled = scaled;
     emit changed();
 }
 
 bool DrawerText::isTextScaled()
-{ 
+{
     return( m_scaled );
     emit changed();
 }

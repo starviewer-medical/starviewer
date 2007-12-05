@@ -25,13 +25,13 @@ DrawerPolyline::DrawerPolyline(QObject *parent)
 DrawerPolyline::~DrawerPolyline()
 {
     emit dying(this);
-    
+
     if ( !m_vtkPolydata )
         m_vtkPolydata->Delete();
-    
+
     if ( !m_vtkPoints )
         m_vtkPoints->Delete();
-        
+
     if ( !m_vtkCellArray )
         m_vtkCellArray->Delete();
 }
@@ -136,10 +136,10 @@ void DrawerPolyline::buildVtkPoints()
         m_vtkCellArray->InsertCellPoint( i );
         i++;
     }
-    
+
     //assignem els punts al polydata
     m_vtkPolydata->SetPoints( m_vtkPoints );
-        
+
     m_vtkPolydata->SetLines( m_vtkCellArray );
 }
 
@@ -154,8 +154,7 @@ void DrawerPolyline::updateVtkActorProperties()
     //Assignem opacitat de la línia
     m_vtkActor->GetProperty()->SetOpacity( m_opacity );
     //mirem la visibilitat de l'm_vtkActor
-    if ( !this->isVisible() )
-        m_vtkActor->VisibilityOff();
+    m_vtkActor->SetVisibility( this->isVisible() );
     //Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );

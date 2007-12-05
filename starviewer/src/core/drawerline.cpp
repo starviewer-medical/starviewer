@@ -22,10 +22,10 @@ DrawerLine::~DrawerLine()
 
     if ( m_vtkActor )
         m_vtkActor->Delete();
-        
+
     if ( m_vtkLineSource )
         m_vtkLineSource->Delete();
-        
+
     if ( m_vtkMapper )
         m_vtkMapper->Delete();
 }
@@ -34,7 +34,7 @@ void DrawerLine::setFirstPoint( double point[3] )
 {
     for( int i = 0; i<3; i++ )
         m_firstPoint[i] = point[i];
-    
+
     emit changed();
 }
 
@@ -42,7 +42,7 @@ void DrawerLine::setSecondPoint( double point[3] )
 {
     for( int i = 0; i<3; i++ )
         m_secondPoint[i] = point[i];
-    
+
     emit changed();
 }
 
@@ -54,14 +54,14 @@ vtkProp *DrawerLine::getAsVtkProp()
         m_vtkActor = vtkActor2D::New();
         m_vtkLineSource = vtkLineSource::New();
         m_vtkMapper = vtkPolyDataMapper2D::New();
-        
+
         //assignem els punts a la línia
         m_vtkLineSource->SetPoint1( m_firstPoint );
         m_vtkLineSource->SetPoint2( m_secondPoint );
 
         m_vtkActor->SetMapper( m_vtkMapper );
         m_vtkMapper->SetInputConnection( m_vtkLineSource->GetOutputPort() );
-        
+
         // li donem els atributs
         updateVtkActorProperties();
     }
@@ -103,20 +103,19 @@ void DrawerLine::updateVtkActorProperties()
 
     // sistema de coordenades
     m_vtkMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
-    
+
     // estil de la línia
     properties->SetLineStipplePattern( m_linePattern );
-    
+
     //Assignem gruix de la línia
     properties->SetLineWidth( m_lineWidth );
-    
+
     //Assignem opacitat de la línia
     properties->SetOpacity( m_opacity );
-   
+
     //mirem la visibilitat de l'm_vtkActor
-    if ( !this->isVisible() )
-        m_vtkActor->VisibilityOff();
-        
+    m_vtkActor->SetVisibility( this->isVisible() );
+
     //Assignem color
     QColor color = this->getColor();
     properties->SetColor( color.redF(), color.greenF(), color.blueF() );
