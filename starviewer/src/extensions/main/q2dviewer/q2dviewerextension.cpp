@@ -460,7 +460,7 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
         newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
     }
 
-    connect( newViewer, SIGNAL( sincronize( Q2DViewerWidget *, bool ) ), this, SLOT( sincronization( Q2DViewerWidget *, bool ) ) );
+    connect( newViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), this, SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
 
     return newViewer;
@@ -682,7 +682,7 @@ void Q2DViewerExtension::initializeTools()
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
 
-    connect( m_selectedViewer, SIGNAL( sincronize( Q2DViewerWidget *, bool ) ), this, SLOT( sincronization( Q2DViewerWidget *, bool ) ) );
+    connect( m_selectedViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), this, SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
 }
 
@@ -816,7 +816,7 @@ void Q2DViewerExtension::writeSettings()
     settings.endGroup();
 }
 
-void Q2DViewerExtension::sincronization( Q2DViewerWidget * viewer, bool active )
+void Q2DViewerExtension::synchronization( Q2DViewerWidget * viewer, bool active )
 {
     if( active )
     {
@@ -830,7 +830,6 @@ void Q2DViewerExtension::sincronization( Q2DViewerWidget * viewer, bool active )
     {
         m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
     }
-
 }
 
 }
