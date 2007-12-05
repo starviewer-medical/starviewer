@@ -164,8 +164,8 @@ void DrawerPolygon::updateVtkActorProperties()
     //Assignem opacitat de la línia
     m_vtkActor->GetProperty()->SetOpacity( m_opacity );
     //mirem la visibilitat de l'm_vtkActor
-    if ( !this->isVisible() )
-        m_vtkActor->VisibilityOff();
+    m_vtkActor->SetVisibility( this->isVisible() );
+
     //Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
