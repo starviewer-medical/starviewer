@@ -15,6 +15,7 @@ class ReferenceLinesToolData;
 class Q2DViewer;
 class Volume;
 class ImagePlane;
+class DrawerPolygon;
 
 /**
 Tool per aplicar reference lines
@@ -47,6 +48,9 @@ private slots:
     /// Actualitza el pla d'imatge a projectar. Es crida cada cop que al viewer es canvia de llesca
     void updateImagePlane();
 
+    /// Aquest slot es crida per actualitzar les dades quan tenim un nou input
+    void refreshInput();
+
 private:
     /// Projecta el pla de referència sobre el pla de localitzador
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane);
@@ -61,6 +65,8 @@ private:
     /// Ens guardem el frame of reference del nostre viewer, per no haver de "preguntar cada cop"
     QString m_myFrameOfReferenceUID;
 
+    /// Polígon que projectem
+    DrawerPolygon *m_referencePlane;
 };
 
 }

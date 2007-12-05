@@ -106,7 +106,8 @@ void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_da
     case vtkCommand::MouseWheelForwardEvent:
     case vtkCommand::MouseWheelBackwardEvent:
         m_mouseHasMoved = false;
-        emit selected();
+        if( !m_isActive )
+            emit selected();
     break;
 
     case vtkCommand::MouseMoveEvent:

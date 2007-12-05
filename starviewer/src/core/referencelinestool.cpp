@@ -32,20 +32,22 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
+    m_referencePlane = new DrawerPolygon;
+    m_2DViewer->getDrawer()->draw( m_referencePlane, QViewer::Top2DPlane );
+    m_2DViewer->getDrawer()->addToGroup( m_referencePlane, "ReferenceLines" );
+    refreshInput();
+
     // cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
-    connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( updateFrameOfReference(Volume *) ) );
+    connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( refreshInput() ) );
     // cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()) );
-    // cada cop que el viewer es seleccioni, ens hem de "netejar" del que ens puguin haver pintat altres
-    // TODO slot clearViewer(), encara per implementar
-    connect( m_2DViewer, SIGNAL(selected()), SLOT(clearViewer()) );
 
-    // TODO només crear-se la tool caldria que s'agafés la llesca actual del viewer seleccionat i s'actualitzessin les
-    // dades, com si haguéssim fet un setSlice
+    connect( m_2DViewer, SIGNAL(selected()),SLOT(refreshInput()) );
 }
 
 ReferenceLinesTool::~ReferenceLinesTool()
 {
+    delete m_referencePlane;
 }
 
 void ReferenceLinesTool::setToolData(ToolData * data)
@@ -58,12 +60,16 @@ void ReferenceLinesTool::setToolData(ToolData * data)
 
 void ReferenceLinesTool::updateProjectionLines()
 {
-    // intentarem projectar el pla que hi ha a m_myData
-    // primer cal que comparteixin el mateix FrameOfReference
-    if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
+    // en cas que no sigui el viewer que estem modificant
+    if( !m_2DViewer->isActive() )
     {
-        // aquí ja ho deixem en mans de la projecció
-        projectIntersection( m_myData->getImagePlane(), m_2DViewer->getCurrentImagePlane() );
+        // intentarem projectar el pla que hi ha a m_myData
+        // primer cal que comparteixin el mateix FrameOfReference
+        if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
+        {
+            // aquí ja ho deixem en mans de la projecció
+            projectIntersection( m_myData->getImagePlane(), m_2DViewer->getCurrentImagePlane() );
+        }
     }
 }
 
@@ -140,14 +146,13 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             p3[j] = brhc[j];
             p4[j] = blhc[j];
         }
-        DrawerPolygon *referencePlane = new DrawerPolygon;
-        referencePlane->addVertix( p1 );
-        referencePlane->addVertix( p2 );
-        referencePlane->addVertix( p3 );
-        referencePlane->addVertix( p4 );
 
-        // TODO es podria retornar el Polygon com a resultat i fer això fora
-        m_2DViewer->getDrawer()->draw( referencePlane, QViewer::Top2DPlane );
+        m_referencePlane->setVertix( 0,p1 );
+        m_referencePlane->setVertix( 1,p2 );
+        m_referencePlane->setVertix( 2,p3 );
+        m_referencePlane->setVertix( 3,p4 );
+        m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+        m_2DViewer->getDrawer()->refresh();
     }
 }
 
@@ -170,6 +175,16 @@ void ReferenceLinesTool::updateFrameOfReference(Volume *volume)
 void ReferenceLinesTool::updateImagePlane()
 {
     m_myData->setImagePlane( m_2DViewer->getCurrentImagePlane() );
+}
+
+void ReferenceLinesTool::refreshInput()
+{
+    m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+    if( m_2DViewer->getInput() )
+    {
+        updateFrameOfReference(m_2DViewer->getInput());
+        updateImagePlane();
+    }
 }
 
 }
