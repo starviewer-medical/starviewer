@@ -11,7 +11,6 @@
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "logging.h"
-
 #include "cacheimagedal.h"
 
 namespace udg {
@@ -193,7 +192,7 @@ Status CacheImageDAL::countImageNumber( DicomMask imageMask , int &imageNumber )
    return state;
 }
 
-Status CacheImageDAL::imageSize (  DicomMask imageMask , double &size )
+Status CacheImageDAL::imageSize (  DicomMask imageMask , quint64 &size )
 {
     int columns , rows , stateDatabase;
     char **reply = NULL , **error = NULL;
@@ -220,7 +219,7 @@ Status CacheImageDAL::imageSize (  DicomMask imageMask , double &size )
 
     if ( reply[1] != NULL )
     {
-        size = atof( reply [1] );
+        size = ( QString( reply [1] ) ).toULongLong();
     }
     else size = 0;
 
