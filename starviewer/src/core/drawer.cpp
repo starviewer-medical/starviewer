@@ -86,6 +86,12 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
     }
 }
 
+void Drawer::addToGroup( DrawerPrimitive *primitive, const QString &groupName )
+{
+    // no comprovem si ja existeix ni si està en cap altre de les llistes, no cal.
+    m_primitiveGroups.insert( groupName, primitive );
+}
+
 void Drawer::refresh()
 {
     if( m_currentPlane == m_2DViewer->getView() )
@@ -112,6 +118,17 @@ void Drawer::refresh()
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 {
+    // mirem si està en algun grup
+    QMutableMapIterator<QString, DrawerPrimitive *> groupsIterator( m_primitiveGroups );
+    while( groupsIterator.hasNext() )
+    {
+        groupsIterator.next();
+        if( primitive == groupsIterator.value() )
+        {
+            groupsIterator.remove();
+        }
+    }
+
     bool found = false;
     QMutableMapIterator< int, DrawerPrimitive * > axialIterator( m_axialPrimitives );
     while( axialIterator.hasNext() && !found )
@@ -122,6 +139,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
             found = true;
             axialIterator.remove();
             m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+
         }
     }
     // en principi una mateixa primitiva només estarà en una de les llistes
@@ -147,7 +165,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     while( coronalIterator.hasNext() && !found )
     {
         coronalIterator.next();
-        if( primitive = coronalIterator.value() )
+        if( primitive == coronalIterator.value() )
         {
             found = true;
             coronalIterator.remove();
@@ -217,6 +235,30 @@ void Drawer::show( int plane, int slice )
     break;
     }
     foreach( DrawerPrimitive *primitive, primitivesList )
+    {
+        if( primitive->isModified() )
+        {
+            primitive->update( DrawerPrimitive::VTKRepresentation );
+        }
+        primitive->visibilityOn();
+    }
+    m_2DViewer->refresh();
+}
+
+void Drawer::hideGroup(const QString &groupName)
+{
+    QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );
+    foreach( DrawerPrimitive *primitive, primitiveList )
+    {
+        primitive->visibilityOff();
+    }
+    m_2DViewer->refresh();
+}
+
+void Drawer::showGroup(const QString &groupName)
+{
+    QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );
+    foreach( DrawerPrimitive *primitive, primitiveList )
     {
         if( primitive->isModified() )
         {

@@ -38,6 +38,20 @@ public:
      */
     void draw( DrawerPrimitive *primitive, int plane, int slice = -1 );
 
+    /**
+     * Afegim una primitiva al grup indicat.
+     * @param primitive Primitiva que volem afegir
+     * @param groupName nom del grup on la volem incloure
+     */
+    void addToGroup( DrawerPrimitive *primitive, const QString &groupName );
+
+    /**
+     * Mostra/amaga les primitives que hi ha en un determinat grup
+     * @param groupName nom del grup que volem mostrar/amagar
+     */
+    void hideGroup(const QString &groupName);
+    void showGroup(const QString &groupName);
+
 public slots:
     /**
      * Refresca les primitives que s'han de veure pel viewer segons el seu estat
@@ -74,6 +88,9 @@ private:
     /// els canvis de llesca i de pla, per saber quines primitives hem de netejar
     int m_currentPlane;
     int m_currentSlice;
+
+    /// Grups de primitives. Les agrupem per nom
+    QMultiMap<QString, DrawerPrimitive *> m_primitiveGroups;
 };
 
 }
