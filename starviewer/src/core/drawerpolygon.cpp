@@ -93,6 +93,7 @@ void DrawerPolygon::updateVtkProp()
         m_vtkPolydata->Reset();
         buildVtkPoints();
         updateVtkActorProperties();
+        this->setModified(false);
     }
     else
     {
