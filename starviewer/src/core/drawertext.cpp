@@ -53,6 +53,20 @@ vtkProp *DrawerText::getAsVtkProp()
     return m_vtkActor;
 }
 
+void DrawerText::update( int representation )
+{
+    switch( representation )
+    {
+    case VTKRepresentation:
+        updateVtkProp();
+    break;
+
+    case OpenGLRepresentation:
+    break;
+
+    }
+}
+
 void DrawerText::updateVtkProp()
 {
     if( m_vtkActor )
