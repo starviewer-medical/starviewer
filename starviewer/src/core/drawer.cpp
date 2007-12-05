@@ -208,7 +208,11 @@ void Drawer::hide( int plane, int slice )
     }
     foreach( DrawerPrimitive *primitive, primitivesList )
     {
-        primitive->visibilityOff();
+        if( primitive->isVisible() )
+        {
+            primitive->visibilityOff();
+            primitive->update( DrawerPrimitive::VTKRepresentation );
+        }
     }
     m_2DViewer->refresh();
 }
@@ -236,11 +240,11 @@ void Drawer::show( int plane, int slice )
     }
     foreach( DrawerPrimitive *primitive, primitivesList )
     {
-        if( primitive->isModified() )
+        if( primitive->isModified() || !primitive->isVisible() )
         {
+            primitive->visibilityOn();
             primitive->update( DrawerPrimitive::VTKRepresentation );
         }
-        primitive->visibilityOn();
     }
     m_2DViewer->refresh();
 }
@@ -250,9 +254,13 @@ void Drawer::hideGroup(const QString &groupName)
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );
     foreach( DrawerPrimitive *primitive, primitiveList )
     {
-        primitive->visibilityOff();
+        if( primitive->isModified() || primitive->isVisible() )
+        {
+            primitive->visibilityOff();
+            primitive->update( DrawerPrimitive::VTKRepresentation );
+        }
     }
-    m_2DViewer->refresh();
+    this->refresh();
 }
 
 void Drawer::showGroup(const QString &groupName)
@@ -260,13 +268,13 @@ void Drawer::showGroup(const QString &groupName)
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );
     foreach( DrawerPrimitive *primitive, primitiveList )
     {
-        if( primitive->isModified() )
+        if( primitive->isModified() || !primitive->isVisible() )
         {
+            primitive->visibilityOn();
             primitive->update( DrawerPrimitive::VTKRepresentation );
         }
-        primitive->visibilityOn();
     }
-    m_2DViewer->refresh();
+    this->refresh();
 }
 
 }
