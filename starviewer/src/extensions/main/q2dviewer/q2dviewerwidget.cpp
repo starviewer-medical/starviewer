@@ -42,7 +42,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
-    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), this, SLOT( emitSincronize() ) );
+    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), this, SLOT( emitSynchronize() ) );
 }
 
 void Q2DViewerWidget::setInput( Volume *input )
@@ -169,9 +169,9 @@ void Q2DViewerWidget::setDefaultAction( QAction * synchronizeAction )
     m_synchronizeButton->setDefaultAction( synchronizeAction );
 }
 
-void Q2DViewerWidget::emitSincronize()
+void Q2DViewerWidget::emitSynchronize()
 {
-    emit sincronize( this, m_buttonSynchronizeAction->isChecked() );
+    emit synchronize( this, m_buttonSynchronizeAction->isChecked() );
 }
 
 }
