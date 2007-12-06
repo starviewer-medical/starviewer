@@ -392,6 +392,7 @@ void OptimalViewpointPlane::compute( int threadId, unsigned char value )
             for ( j = 1, multiplier = m_N; j < L_1; j++, multiplier *= m_N )
                 i += lastLValues[j] * multiplier;
 
+            Q_ASSERT_X( i < m_histogramL_1Size, "compute", qPrintable(QString("i = %1, value = %2").arg(i).arg(value)) );
             m_histogramL_1PerThread[threadId].add( i );
 
             if ( lastLValues.size() == m_L )
@@ -471,6 +472,7 @@ void OptimalViewpointPlane::castRays()
             for ( unsigned int j = 0; j < m_rayLength; j++ )    // iterate over current ray
             {
 //                 DEBUG_LOG( QString("j = %1").arg(j) );
+                Q_ASSERT_X( i + j * m_numberOfRays < m_planeDataSize, "castRays", qPrintable(QString("i = %1, j = %2").arg(i).arg(j)) );
                 unsigned char value = m_planeData[i + j * m_numberOfRays];
 //                 if ( value == 255 ) value = 0;
                 if ( value != 255   // don't count backgroud added by reslicer (255)
@@ -478,7 +480,6 @@ void OptimalViewpointPlane::castRays()
                    )
                     compute( 0, value );
             }
-
             endLBlock( 0 );
         }
     }

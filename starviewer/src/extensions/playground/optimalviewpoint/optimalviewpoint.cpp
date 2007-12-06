@@ -225,6 +225,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                 (*m_planes)[i]->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
                 (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
 //                 m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
+                (*m_planes)[i]->setEntropyL( m_parameters->getVisualizationBlockLength() );
                 (*m_planes)[i]->setEntropyN( m_numberOfClusters );
                 connect( (*m_planes)[i], SIGNAL( excessEntropyComputed(double) ),
                          this, SLOT( newResults() ) );
