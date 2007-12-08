@@ -13,6 +13,8 @@
 #include <QList>
 #include <QVector>
 
+#include "vector3.h"
+
 
 class vtkImageData;
 class vtkMatrix4x4;
@@ -55,6 +57,7 @@ public:
 
     /// Sets input image.
     void setInput( vtkImageData * input );
+    void setVector( const Vector3 & vector );
     /// Sets transformation matrix (for orientation).
     void setMatrix( vtkMatrix4x4 * matrix );
     /// Sets spacing of output resliced image.
@@ -136,6 +139,7 @@ private:
     vtkImageData * m_input;
     /// Number of labels of input image.
     unsigned short m_nLabels;
+    Vector3 m_vector;
     /// Transformation matrix.
     vtkMatrix4x4 * m_matrix;
     /// Spacing of resliced image.

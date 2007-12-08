@@ -64,6 +64,13 @@ void Slicer::setInput( vtkImageData * input )
 }
 
 
+void Slicer::setVector( const Vector3 & vector )
+{
+    m_vector = vector;
+    m_vector.normalize();
+}
+
+
 void Slicer::setMatrix( vtkMatrix4x4 * matrix )
 {
     m_matrix->DeepCopy( matrix );
@@ -180,6 +187,48 @@ void Slicer::reslice( bool saveMhd, bool doClip )
             out << "ElementType = MET_UCHAR\n";
             out << "ElementDataFile = resliced" << static_cast< short >( m_id ) << ".raw";
             outFileMhd.close();
+        }
+
+        QFile outFileXml( QDir::tempPath().append( QString( "/gmc%1.xml" ).arg( static_cast< short >( m_id ) ) ) );
+        if ( outFileXml.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream outXml( &outFileXml );
+            outXml << "<volume>\n";
+            outXml << "<property name=\"Slicing Axis\" type=\"vector\">\n";
+            outXml << "<![CDATA[(" << m_vector.x << ";" << m_vector.y << ";" << m_vector.z << ")]]>\n";
+            outXml << "</property>\n";
+            outXml << "<property name=\"Viewing Transformation\" type=\"matrix\">\n";
+            outXml << "<![CDATA[("
+                   << "(" << resliceAxes->Element[0][0] << ";" << resliceAxes->Element[0][1] << ";"
+                          << resliceAxes->Element[0][2] << ";" << resliceAxes->Element[0][3] << ");"
+                   << "(" << resliceAxes->Element[1][0] << ";" << resliceAxes->Element[1][1] << ";"
+                          << resliceAxes->Element[1][2] << ";" << resliceAxes->Element[1][3] << ");"
+                   << "(" << resliceAxes->Element[2][0] << ";" << resliceAxes->Element[2][1] << ";"
+                          << resliceAxes->Element[2][2] << ";" << resliceAxes->Element[2][3] << ");"
+                   << "(" << resliceAxes->Element[3][0] << ";" << resliceAxes->Element[3][1] << ";"
+                          << resliceAxes->Element[3][2] << ";" << resliceAxes->Element[3][3] << ")"
+                   << ")]]>\n";
+            outXml << "</property>\n";
+            outXml << "<similarities>\n\n</similarities>\n";
+            outXml << "</volume>\n";
+            outFileXml.close();
+        }
+
+        QFile outFileViola( QDir::tempPath().append( QString( "/viola_gmc%1.txt" ).arg( static_cast< short >( m_id ) ) ) );
+        if ( outFileViola.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream outViola( &outFileViola );
+            outViola << "(" << resliceAxes->Element[0][0] << ";" << resliceAxes->Element[0][1] << ";"
+                            << resliceAxes->Element[0][2] << ";" << resliceAxes->Element[0][3] << ");"
+                     << "(" << resliceAxes->Element[1][0] << ";" << resliceAxes->Element[1][1] << ";"
+                            << resliceAxes->Element[1][2] << ";" << resliceAxes->Element[1][3] << ");"
+                     << "(" << resliceAxes->Element[2][0] << ";" << resliceAxes->Element[2][1] << ";"
+                            << resliceAxes->Element[2][2] << ";" << resliceAxes->Element[2][3] << ");"
+                     << "(" << resliceAxes->Element[3][0] << ";" << resliceAxes->Element[3][1] << ";"
+                            << resliceAxes->Element[3][2] << ";" << resliceAxes->Element[3][3] << ")"
+                    << "\n";
+            outViola << "(" << m_vector.x << ";" << m_vector.y << ";" << m_vector.z << ")\n";
+            outFileViola.close();
         }
     }
 
@@ -772,11 +821,22 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
 
     // Print results i save them to a file
     QFile outFile( QDir::tempPath().append( QString( "/gmc%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
-    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    QFile outFileXml( QDir::tempPath().append( QString( "/gmc%1_%2.xml" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileViola( QDir::tempPath().append( QString( "/viola_gmc%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileXml.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileViola.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         QTextStream out( &outFile );
+        QTextStream outXml( &outFileXml );
+        QTextStream outViola( &outFileViola );
+
+        outXml << "<similarity>\n";
+
         DEBUG_LOG( QString( "[GMC] threshold = %1" ).arg( threshold ) );
         out << "threshold = " << threshold << "\n";
+        outXml << "<value type=\"float\"><![CDATA[" << threshold << "]]></value>\n";
+        outXml << "<slabs>\n";
         for ( int i = 0; i < finalGroups.size(); i++ )
         {
             const Group & gr = finalGroups[i];
@@ -785,8 +845,15 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
                 DEBUG_LOG( QString( "[GMC] group %1 : slice %2" ).arg( gr.id ).arg( gr.slices[j].id ) );
                 out << "group " << gr.id << " : slice " << gr.slices[j].id << "\n";
             }
+            outXml << "<position type=\"float\"><![CDATA[" << static_cast<double>(gr.slices[0].id) / m_sliceCount << "]]></position>\n";
+            outViola << "(" << threshold << ";" << static_cast<double>(gr.slices[0].id) / m_sliceCount << ")\n";
         }
+
+        outXml << "</slabs>\n</similarity>\n";
+
         outFile.close();
+        outFileXml.close();
+        outFileViola.close();
     }
 }
 

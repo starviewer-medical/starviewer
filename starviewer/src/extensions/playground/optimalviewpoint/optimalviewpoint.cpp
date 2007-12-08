@@ -65,6 +65,7 @@
 #include "logging.h"
 
 #include <QTextStream>
+#include <QTime>
 
 
 namespace udg {
@@ -399,10 +400,14 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                     QMessageBox::warning( 0, "No hi ha 42 punts!", QString::number( geographicVertices.size() ) );
                 QVector< Vector3 >::const_iterator it;
                 unsigned char i;
+                const QVector<Vector3> & vertices = cloud.getVertices();
 
                 for ( it = geographicVertices.begin(), i = 1; i <= 42; it++, i++ )
                 {
                     (*m_planes)[i]->setLatitude( it->y ); (*m_planes)[i]->setLongitude( it->z );
+                    const Vector3 & v = vertices[i-1];
+                    DEBUG_LOG( QString( "%1: (%2, %3, %4)" ).arg( i ).arg( v.x ).arg( v.y ).arg( v.z ) );
+                    DEBUG_LOG( QString( "%1: (%2, %3, %4)" ).arg( i ).arg( it->x ).arg( it->y ).arg( it->z ) );
                 }
             }
             break;
@@ -503,6 +508,9 @@ void OptimalViewpoint::updatePlanes()
     switch ( m_updatePlane )
     {
         case -1:    // All
+        {
+            QTime t;
+            t.start();
             for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
             {
                 QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
@@ -518,6 +526,10 @@ void OptimalViewpoint::updatePlanes()
                 QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
                                   (*m_planes)[i], SLOT( endLBlock(int) ) );
             }
+            int elapsed = t.elapsed();
+            DEBUG_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
+            INFO_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
+        }
             break;
 
         case 0:     // None
@@ -542,13 +554,28 @@ void OptimalViewpoint::updatePlanes()
             Slicer slicer( m_updatePlane );
 //             slicer.setInput( m_volume->getLabeledImage() );
             slicer.setInput( m_volume->getImage() );
+
+
+
+
+
+            ///\warning Això només funcionarà si són 42 plans!!!
+            POVSphereCloud cloud( 1.0, 1 );
+            cloud.createPOVCloud();
+            const QVector< Vector3 > & vertices = cloud.getVertices();
+            slicer.setVector( vertices[m_updatePlane - 1] );
+
+
+
+
+
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
             slicer.setReadExtentFromFile( m_readExtentFromFile );
             slicer.reslice();
-            slicer.computeSmi();
-            slicer.method1A( m_similarityThreshold );
-            slicer.method1B( m_similarityThreshold );
+//             slicer.computeSmi();
+//             slicer.method1A( m_similarityThreshold );
+//             slicer.method1B( m_similarityThreshold );
             slicer.groupingMethodC( m_similarityThreshold );
 
             break;
