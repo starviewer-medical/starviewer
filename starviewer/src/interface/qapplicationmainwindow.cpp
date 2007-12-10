@@ -78,7 +78,7 @@ void QApplicationMainWindow::createActions()
     m_newAction->setShortcut( tr("Ctrl+N") );
     m_newAction->setStatusTip(tr("Open a new working window") );
     m_newAction->setIcon( QIcon(":/images/new.png") );
-    connect( m_newAction , SIGNAL( triggered() ), this, SLOT( openBlankWindow() ) );
+    connect( m_newAction , SIGNAL( triggered() ), SLOT( openBlankWindow() ) );
 
     m_openAction = new QAction( this );
     m_openAction->setText( tr("&Open...") );
@@ -157,7 +157,7 @@ void QApplicationMainWindow::createActions()
     m_aboutAction->setShortcut( 0 );
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
     m_aboutAction->setIcon( QIcon(":/images/info.png"));
-    connect(m_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+    connect(m_aboutAction, SIGNAL(triggered()), SLOT(about()));
 
     m_closeAction = new QAction( this );
     m_closeAction->setText( tr("&Close") );
@@ -177,7 +177,7 @@ void QApplicationMainWindow::createActions()
     m_configurationAction->setText(tr("&Configuration..."));
     m_configurationAction->setStatusTip(tr("Modify Starviewer configuration"));
     m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
-    connect(m_configurationAction, SIGNAL(triggered()), this, SLOT(showConfigurationDialog()));
+    connect(m_configurationAction, SIGNAL(triggered()), SLOT(showConfigurationDialog()));
 }
 
 void QApplicationMainWindow::switchFullScreen( bool full )
@@ -433,7 +433,7 @@ void QApplicationMainWindow::markAsBetaVersion()
     m_betaVersionMenuText = new QLabel(menuBar());
     m_betaVersionMenuText->setText("<a href='beta'><img src=':/images/small-warning.png'></a>&nbsp;<a href='beta'>Beta Version</a>");
     m_betaVersionMenuText->setAlignment(Qt::AlignVCenter);
-    connect(m_betaVersionMenuText, SIGNAL(linkActivated(const QString &)), this, SLOT(showBetaVersionDialog()));
+    connect(m_betaVersionMenuText, SIGNAL(linkActivated(const QString &)), SLOT(showBetaVersionDialog()));
     updateBetaVersionTextPosition();
 }
 

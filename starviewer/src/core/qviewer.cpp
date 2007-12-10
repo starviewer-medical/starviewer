@@ -424,7 +424,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         patientMenu->setAttribute(Qt::WA_DeleteOnClose);
         patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), this, SLOT( setSeries(Series*) ));
+        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
 
         QString seriesUID;
         if( m_mainVolume )

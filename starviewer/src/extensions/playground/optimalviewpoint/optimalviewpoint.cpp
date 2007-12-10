@@ -2,71 +2,41 @@
 // SEMPRE ES VEUEN PER SOBRE).
 // SI CAL AFEGIR MIRALLS DESPRÉS D'AFEGIR ELS VOLUMS, DESPRÉS D'AFEGIR-LOS S'HAN
 // DE TREURE ELS VOLUMS I TORNAR-LOS A POSAR
-
-
-
-
-
-
-
-
 /***************************************************************************
  *   Copyright (C) 2006 by Grup de Gràfics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "optimalviewpoint.h"
-
-#include <vtkCamera.h>
-#include <vtkRenderer.h>
-
-
-
-
-#include <QDir>
-
-#include <vtkRenderWindow.h>
-
-
-#include <vtkRenderWindowInteractor.h>
-#include "vtkInteractorStyleSwitchGgg.h"
-#include <vtkImageActor.h>
-
-#include <vtkVolume.h>
-
-#include <vtkPiecewiseFunction.h>
-#include <vtkColorTransferFunction.h>
-
-#include "optimalviewpointvolume.h"
-#include <vtkImageCast.h>
-#include <vtkImageShiftScale.h>
-
-#include <vtkImageData.h>
-#include <QMessageBox>
-
-#include <math.h>
-
-// #include "optimalviewpointhelper.h"  // es feia servir per decidir automàticament quan calia recalcular
-
-
-#include "optimalviewpointplane.h"
-
-
 #include "povspherecloud.h"
 #include "vector3.h"
 #include "transferfunctionio.h"
 #include "slicer.h"
-
 #include "optimalviewpointparameters.h"
 #include "volume.h"
-
 #include "logging.h"
-
+#include "optimalviewpointvolume.h"
+#include "optimalviewpointplane.h"
+#include <cmath>
+//vtk
+#include <vtkCamera.h>
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkImageActor.h>
+#include <vtkVolume.h>
+#include <vtkPiecewiseFunction.h>
+#include <vtkColorTransferFunction.h>
+#include <vtkImageCast.h>
+#include <vtkImageShiftScale.h>
+#include <vtkImageData.h>
+#include "vtkInteractorStyleSwitchGgg.h"
+// Qt
+#include <QMessageBox>
+#include <QDir>
 #include <QTextStream>
 #include <QTime>
-
 
 namespace udg {
 
@@ -111,15 +81,10 @@ OptimalViewpoint::~OptimalViewpoint()
     // FALTA ESBORRAR ELS FITXERS TEMPORALS
 }
 
-/**
- * Retorna el renderer principal (el que ha de fer servir
- * MagicMirrorsViewer).
- */
 vtkRenderer * OptimalViewpoint::getMainRenderer() const
 {
     return m_renderer;
 }
-
 
 void OptimalViewpoint::setMainRenderer( vtkRenderer * mainRenderer )
 {
@@ -128,8 +93,6 @@ void OptimalViewpoint::setMainRenderer( vtkRenderer * mainRenderer )
 //     m_renderer->SetBackground( 0.5, 0.5, 0.5 );       // posem el fons gris
 }
 
-
-/// Assigna l'interactor de la finestra de visualització.
 void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
 {
     m_interactor = interactor;
@@ -143,7 +106,6 @@ void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
     interactorStyle->SetCurrentStyleToJoystickCamera(); // de moment, aquest per defecte
 }
 
-/// Afegeix un volum.
 void OptimalViewpoint::setImage( vtkImageData * image )
 {
     // fem un casting a int perquè a vegades hi ha problemes amb l'scalar range
@@ -158,17 +120,17 @@ void OptimalViewpoint::setImage( vtkImageData * image )
 //     castedImage->GetScalarRange( srange );
 //     double min = srange[0];
 //     double max = srange[1];
-// 
+//
 //     std::cout << "min = " << min << ", max = " << max << std::endl;
-// 
+//
 // //     double diff = max - min;
 // //     double slope = 255.0 / diff;
 // //     double inter = -slope * min;
 // //     double shift = inter / slope;
-// 
+//
 //     double shift = 0.0;
 //     double slope = 255.0 / max;
-// 
+//
 //     vtkImageShiftScale * shifter = vtkImageShiftScale::New();
 //     shifter->SetInput( castedImage );
 //     shifter->SetShift( shift );
@@ -194,8 +156,7 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     // calculem la mida òptima pels miralls
     this->m_planeSize = (unsigned short) ceil( volume->GetLength() );
 
-    connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const TransferFunction&) ),
-             this, SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
+    connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const TransferFunction&) ), SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
@@ -203,7 +164,6 @@ void OptimalViewpoint::setSegmentationFileName( QString name )
     m_volume->setSegmentationFileName( name );
 }
 
-/// Estableix el nombre de miralls.
 void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
 {
     int size = m_planes->size(); // nombre de plans actual
@@ -228,10 +188,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
 //                 m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
                 (*m_planes)[i]->setEntropyL( m_parameters->getVisualizationBlockLength() );
                 (*m_planes)[i]->setEntropyN( m_numberOfClusters );
-                connect( (*m_planes)[i], SIGNAL( excessEntropyComputed(double) ),
-                         this, SLOT( newResults() ) );
-                connect( (*m_planes)[i], SIGNAL( goingToRecompute() ),
-                         m_volume, SLOT( setComputing() ) );
+                connect( (*m_planes)[i], SIGNAL( excessEntropyComputed(double) ), SLOT( newResults() ) );
+                connect( (*m_planes)[i], SIGNAL( goingToRecompute() ), m_volume, SLOT( setComputing() ) );
 
                 (*m_planes)[i]->setVolume( m_volume );
             }
@@ -253,10 +211,6 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
     m_renderer->AddViewProp( m_volume->getMainVolume() );
 
     m_numberOfPlanes = numberOfPlanes;
-
-
-
-
 
     ////////////////////////////////////////////////////////////////////////////
     //////////////////// PROVA DE POSICIONAMENT DELS PLANS /////////////////////
@@ -470,7 +424,6 @@ void OptimalViewpoint::setBlockLength( unsigned char blockLength )
     }
 }
 
-/// Estableix totes les funcions de transferència.
 void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFunction )
 {
     //typedef QPair<qreal, QColor> QGradientStop;
@@ -479,7 +432,7 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
 
 //     vtkPiecewiseFunction * opacityTransferFunction = vtkPiecewiseFunction::New();
 //     vtkColorTransferFunction * colorTransferFunction = vtkColorTransferFunction::New();
-// 
+//
 //     for ( unsigned char k = 0; k < transferFunction.count(); k++ )
 //     {
 //         opacityTransferFunction->AddPoint(
@@ -491,7 +444,7 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
 //                 transferFunction[k].second.green() / 255.0,
 //                 transferFunction[k].second.blue() / 255.0 );
 //     }
-// 
+//
 //     m_volume->setOpacityTransferFunction( opacityTransferFunction );
 //     m_volume->setColorTransferFunction( colorTransferFunction );
 //     m_volume->setOpacityTransferFunction( transferFunction.getOpacityTransferFunction() );
@@ -500,7 +453,6 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
     m_volume->setTransferFunction( transferFunction );
 }
 
-/// Actualitza els miralls.
 void OptimalViewpoint::updatePlanes()
 {
     m_volume->synchronize();
@@ -555,19 +507,11 @@ void OptimalViewpoint::updatePlanes()
 //             slicer.setInput( m_volume->getLabeledImage() );
             slicer.setInput( m_volume->getImage() );
 
-
-
-
-
             ///\warning Això només funcionarà si són 42 plans!!!
             POVSphereCloud cloud( 1.0, 1 );
             cloud.createPOVCloud();
             const QVector< Vector3 > & vertices = cloud.getVertices();
             slicer.setVector( vertices[m_updatePlane - 1] );
-
-
-
-
 
             slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
             slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
@@ -583,7 +527,6 @@ void OptimalViewpoint::updatePlanes()
 
     m_volume->setComputing( false );
 }
-
 
 void OptimalViewpoint::renderPlanes( short plane )
 {
@@ -606,7 +549,6 @@ void OptimalViewpoint::renderPlanes( short plane )
             break;
     }
 }
-
 
 bool OptimalViewpoint::resultsChanged() const
 {
@@ -672,53 +614,36 @@ void OptimalViewpoint::setAdjustedTransferFunction( const TransferFunction & adj
     std::cout << "----------------------" << std::endl;
 }
 
-
-
 // nous paràmetres
-
-
-
 void OptimalViewpoint::setOpacityForComputing( bool on )
 {
     m_volume->setOpacityForComputing( on );
 }
-
-
 
 void OptimalViewpoint::setInterpolation( int interpolation )
 {
     m_volume->setInterpolation( interpolation );
 }
 
-
-
 void OptimalViewpoint::setSpecular( bool specular )
 {
     m_volume->setSpecular( specular );
 }
-
-
 
 void OptimalViewpoint::setSpecularPower( double specularPower )
 {
     m_volume->setSpecularPower( specularPower );
 }
 
-
-
 void OptimalViewpoint::setUpdatePlane( short updatePlane )
 {
     m_updatePlane = updatePlane;
 }
 
-
-
 void OptimalViewpoint::setCompute( bool compute )
 {
     m_compute = compute;
 }
-
-
 
 bool OptimalViewpoint::loadSegmentationFromFile()
 {
@@ -730,8 +655,6 @@ bool OptimalViewpoint::loadSegmentationFromFile()
     }
     return m_numberOfClusters > 0;
 }
-
-
 
 void OptimalViewpoint::doAutomaticSegmentation()
 {
@@ -777,37 +700,31 @@ void OptimalViewpoint::doAutomaticSegmentation()
     m_parameters->setNumberOfClusters( m_numberOfClusters );
 }
 
-
 void OptimalViewpoint::setSimilarityThreshold( double similarityThreshold )
 {
     m_similarityThreshold = similarityThreshold;
 }
-
 
 void OptimalViewpoint::setRenderCluster( bool renderCluster )
 {
     m_volume->setRenderCluster( renderCluster );
 }
 
-
 void OptimalViewpoint::setClusterLimits( unsigned short first, unsigned short last )
 {
     m_volume->setClusterLimits( first, last );
 }
-
 
 void OptimalViewpoint::setReadExtentFromFile( bool readExtentFromFile )
 {
     m_readExtentFromFile = readExtentFromFile;
 }
 
-
 void OptimalViewpoint::setParameters( OptimalViewpointParameters * parameters )
 {
     m_parameters = parameters;
     connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );
 }
-
 
 void OptimalViewpoint::readParameter( int parameter )
 {
@@ -838,7 +755,6 @@ void OptimalViewpoint::readParameter( int parameter )
             break;
     }
 }
-
 
 void OptimalViewpoint::newMethod2( int step, bool normalized )
 {
@@ -897,7 +813,6 @@ void OptimalViewpoint::newMethod2( int step, bool normalized )
     }
 }
 
-
 void OptimalViewpoint::rescale()
 {
     m_numberOfClusters = m_volume->rescale( 32 );
@@ -907,6 +822,5 @@ void OptimalViewpoint::rescale()
         m_parameters->setNumberOfClusters( m_numberOfClusters );
     }
 }
-
 
 }; // end namespace udg

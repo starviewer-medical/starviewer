@@ -230,53 +230,28 @@ void QSegmentationFrameworkExtension::createToolBars()
 
 void QSegmentationFrameworkExtension::createConnections()
 {
+    connect(m_ApplyCT,SIGNAL(clicked()), SLOT(applyCT()));
+    connect(m_ApplyIC,SIGNAL(clicked()), SLOT(applyIC()));
+    connect(m_ApplyCC,SIGNAL(clicked()), SLOT(applyCC()));
+    connect(m_ApplyNC,SIGNAL(clicked()), SLOT(applyNC()));
 
-    connect(m_ApplyCT,SIGNAL(clicked()), this, SLOT(applyCT()));
+    connect(m_clear,SIGNAL(clicked()), SLOT(clearSelected()));
+    connect(m_clearAll,SIGNAL(clicked()), SLOT(clearAll()));
 
-    connect(m_ApplyIC,SIGNAL(clicked()), this, SLOT(applyIC()));
-
-    connect(m_ApplyCC,SIGNAL(clicked()), this, SLOT(applyCC()));
-
-    connect(m_ApplyNC,SIGNAL(clicked()), this, SLOT(applyNC()));
-
-    connect(m_clear,SIGNAL(clicked()), this, SLOT(clearSelected()));
-
-    connect(m_clearAll,SIGNAL(clicked()), this, SLOT(clearAll()));
-
-    //connect(m_contournBotton,SIGNAL(clicked()), this, SLOT(Contorn()));
-
-    connect(m_selectOutSeed,SIGNAL(clicked()), this, SLOT(SelectOutSeed()));
-
-    connect(m_sliceViewSlider, SIGNAL(valueChanged(int)),this, SLOT(setAreaSlice(int)));
-
-    connect(m_opacity, SIGNAL(valueChanged(int)),this, SLOT(opacityChanged(int)));
-
-
+    connect(m_selectOutSeed,SIGNAL(clicked()), SLOT(SelectOutSeed()));
+    connect(m_sliceViewSlider, SIGNAL(valueChanged(int)), SLOT(setAreaSlice(int)));
+    connect(m_opacity, SIGNAL(valueChanged(int)), SLOT(opacityChanged(int)));
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
-
-    connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ) , this , SLOT( strokeEventHandler(unsigned long) ) );
-
-    connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
-
-    connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
-
-    connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
-
-    connect( m_contournAction , SIGNAL( triggered() ) , this , SLOT( calculateContorn() ) );
-
+    connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    connect( m_axialViewAction , SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
+    connect( m_sagitalViewAction , SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
+    connect( m_coronalViewAction , SIGNAL( triggered() ), SLOT( changeViewToCoronal() ) );
+    connect( m_contournAction , SIGNAL( triggered() ), SLOT( calculateContorn() ) );
     connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-
-    connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
-
+    connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
     connect( m_2DView, SIGNAL(sliceChanged(int)), m_sliceViewSlider , SLOT (setValue(int)));
-
-    connect(m_reset,SIGNAL(clicked()), this, SLOT(reset()));
-
-
+    connect(m_reset,SIGNAL(clicked()), SLOT(reset()));
 }
-
-
-
 
 void QSegmentationFrameworkExtension::setInput( Volume *input )
 {
@@ -1019,8 +994,8 @@ void QSegmentationFrameworkExtension::calculateContorn( )
 {
   if(!m_isCont){
   m_contorn = new ContournTool( m_2DView , m_maskVolume );
-  connect( m_contorn , SIGNAL( actualspline(double ) ) , this , SLOT( setSplineLength(double) ) );
-  connect( m_contorn , SIGNAL( originalspline(double, int ) ) , this , SLOT( setOriginalLength(double, int) ) );
+  connect( m_contorn , SIGNAL( actualspline(double ) ), SLOT( setSplineLength(double) ) );
+  connect( m_contorn , SIGNAL( originalspline(double, int ) ), SLOT( setOriginalLength(double, int) ) );
   m_isCont=true;
   }
 

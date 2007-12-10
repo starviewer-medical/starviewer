@@ -43,9 +43,9 @@ void QThickSlabWidget::createConnections()
     connect( m_slider , SIGNAL( valueChanged( int ) ) , m_spinBox , SLOT( setValue( int ) ) );
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
-    connect( m_2DView, SIGNAL ( selected() ), this, SLOT( emitSelectedViewer() ) );
-    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
-    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), this, SLOT( emitSincronize() ) );
+    connect( m_2DView, SIGNAL ( selected() ), SLOT( emitSelectedViewer() ) );
+    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateInput( Volume *) ) );
+    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), SLOT( emitSincronize() ) );
 }
 
 void QThickSlabWidget::setInput( Volume *input )

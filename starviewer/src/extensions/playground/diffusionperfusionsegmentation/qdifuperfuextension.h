@@ -181,10 +181,6 @@ private:
     /// \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createActions();
 
-    /// Crea la ToolBar d'eines i altres si n'hi ha
-    /// \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
-    void createToolBars();
-
     /// Crea les connexions entre signals i slots
     void createConnections();
 

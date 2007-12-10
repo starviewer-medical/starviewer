@@ -38,9 +38,9 @@ Q2DViewerBlackBoard::Q2DViewerBlackBoard( Q2DViewer *viewer, QObject *parent )
         m_lastSlice = m_2DViewer->getCurrentSlice();
         m_lastView = m_2DViewer->getView();
 
-        connect( m_2DViewer, SIGNAL( sliceChanged(int) ), this, SLOT( refreshObjects(int) ) );
-        connect( m_2DViewer, SIGNAL( rotationFactorChanged(int) ), this, SLOT( refreshRotation(int) ) );
-        connect( m_2DViewer, SIGNAL( rotationDegreesChanged(double) ), this, SLOT( refreshRotation(double) ) );
+        connect( m_2DViewer, SIGNAL( sliceChanged(int) ), SLOT( refreshObjects(int) ) );
+        connect( m_2DViewer, SIGNAL( rotationFactorChanged(int) ), SLOT( refreshRotation(int) ) );
+        connect( m_2DViewer, SIGNAL( rotationDegreesChanged(double) ), SLOT( refreshRotation(double) ) );
     }
     else
         DEBUG_LOG( "El viewer proporcionat és NUL!" );

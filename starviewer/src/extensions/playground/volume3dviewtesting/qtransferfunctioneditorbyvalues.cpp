@@ -4,28 +4,20 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-
 #include "qtransferfunctioneditorbyvalues.h"
 
-#include <math.h>
-
+#include "qtransferfunctionintervaleditor.h"
+#include <cmath>
 #include <QBoxLayout>
 #include <QScrollArea>
 #include <QScrollBar>
 
-#include "qtransferfunctionintervaleditor.h"
-
-
 namespace udg {
-
 
 QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * parent )
     : QTransferFunctionEditor( parent )
 {
     setupUi( this );
-
-
     // Creem una scroll area per si hi ha molts intervals (no es pot crear des del Qt Designer)
 
     QScrollArea * scrollArea = new QScrollArea( this );
@@ -42,9 +34,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
     scrollArea->setWidgetResizable( true );
     scrollArea->setFrameShape( QFrame::NoFrame );
 
-
     // Creem el primer interval
-
     QTransferFunctionIntervalEditor * first = new QTransferFunctionIntervalEditor( m_intervalEditorsWidget );
     first->setIsFirst( true );
     first->setIsLast( true );
@@ -55,28 +45,22 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
     connect( first, SIGNAL( endChanged(int) ), SLOT( markAsChanged() ) );
     connect( first, SIGNAL( colorChanged(const QColor&) ), SLOT( markAsChanged() ) );
 
-
     // Mida mínima de la scroll area
-
     QScrollBar scrollBar( Qt::Vertical );   // necessitem una scroll bar auxiliar per a saber-ne l'amplada
     scrollBar.show();
     scrollArea->setMinimumWidth( first->minimumSizeHint().width() + scrollBar.width() );
     scrollBar.hide();
 
-
     m_numberOfIntervals = 1;
-
     m_changed = true;
 
     connect( m_addPushButton, SIGNAL( clicked() ), SLOT( addInterval() ) );
     connect( m_removePushButton, SIGNAL( clicked() ), SLOT( removeInterval() ) );
 }
 
-
 QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
 {
 }
-
 
 void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunction & transferFunction )
 {
@@ -123,7 +107,6 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
     getTransferFunction();  // actualitzem m_transferFunction
 }
 
-
 const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() const
 {
     if ( m_changed )
@@ -145,12 +128,10 @@ const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() 
     return m_transferFunction;
 }
 
-
 void QTransferFunctionEditorByValues::addInterval()
 {
     addIntervalAndReturnIt();
 }
-
 
 void QTransferFunctionEditorByValues::removeInterval()
 {
@@ -172,7 +153,6 @@ void QTransferFunctionEditorByValues::removeInterval()
     markAsChanged();
 }
 
-
 QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAndReturnIt()
 {
     if ( m_numberOfIntervals == 256 ) return 0;
@@ -186,8 +166,8 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
     connect( last, SIGNAL( endChanged(int) ), afterLast, SLOT( setPreviousEnd(int) ) );
     connect( afterLast, SIGNAL( startChanged(int) ), last, SLOT( setNextStart(int) ) );
 
-    connect( afterLast, SIGNAL( startChanged(int) ), this, SLOT( markAsChanged() ) );
-    connect( afterLast, SIGNAL( endChanged(int) ), this, SLOT( markAsChanged() ) );
+    connect( afterLast, SIGNAL( startChanged(int) ), SLOT( markAsChanged() ) );
+    connect( afterLast, SIGNAL( endChanged(int) ), SLOT( markAsChanged() ) );
     connect( afterLast, SIGNAL( colorChanged(const QColor&) ), SLOT( markAsChanged() ) );
 
     last->setIsLast( false );
@@ -204,11 +184,9 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
     return afterLast;
 }
 
-
 void QTransferFunctionEditorByValues::markAsChanged()
 {
     m_changed = true;
 }
-
 
 }

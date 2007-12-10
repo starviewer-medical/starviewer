@@ -153,7 +153,7 @@ void OldDrawer::drawLine( Line *line, int slice, int view )
     addActorAndRefresh( lineActor, line, slice, view );
 
     //connectem la línia amb el drawer per quan s'actualitzi algun dels seus atributs
-    connect( line, SIGNAL( lineChanged( Line* ) ), this, SLOT( updateChangedLine( Line* ) ) );
+    connect( line, SIGNAL( lineChanged( Line* ) ), SLOT( updateChangedLine( Line* ) ) );
 
     //esborrem els objectes auxiliars
     lineActor->Delete();
@@ -257,7 +257,7 @@ void OldDrawer::drawText( Text *text, int slice, int view )
     addActorAndRefresh( textActor, text, slice, view );
 
     //connectem el text amb el drawer per quan s'actualitzi algun dels seus atributs
-    connect( text, SIGNAL( textChanged( Text* ) ), this, SLOT( updateChangedText( Text* ) ) );
+    connect( text, SIGNAL( textChanged( Text* ) ), SLOT( updateChangedText( Text* ) ) );
 
     //esborrem els objectes auxiliars
     textActor->Delete();
@@ -468,7 +468,7 @@ void OldDrawer::drawEllipse( Ellipse *ellipse, int slice, int view )
     addActorAndRefresh( actor, ellipse, slice, view );
 
     //connectem la línia amb el drawer per quan s'actualitzi algun dels seus atributs
-    connect( ellipse, SIGNAL( ellipseChanged( Ellipse* ) ), this, SLOT( updateChangedEllipse( Ellipse* ) ) );
+    connect( ellipse, SIGNAL( ellipseChanged( Ellipse* ) ), SLOT( updateChangedEllipse( Ellipse* ) ) );
 
     actor->Delete();
     mapper->Delete();

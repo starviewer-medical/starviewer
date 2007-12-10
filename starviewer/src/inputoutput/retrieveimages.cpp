@@ -3,6 +3,7 @@
 #include "struct.h"
 #include "processimagesingleton.h"
 #include "status.h"
+#include "logging.h"
 
 //includes per comprovar si un directori existeix
 #include <sys/types.h> // \TODO aquest include no és únic de UNIX????
@@ -242,9 +243,19 @@ OFCondition echoSCP(
                cbdata->dcmff->print( COUT );
             }
 #endif
-            //calculem la mida de l'image
+            //calculem la mida de l'image TODO alerta! això ens torna un Uint32! i ho guardem en un int
             imageSize = cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType );
 
+            DEBUG_LOG( QString("Image Size rebut: %1\n i 'stored' a la variable: %2 ").arg(cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType ) ).arg(imageSize) );
+            if( imageSize < 0 )
+            {
+                DEBUG_LOG( "La imatge amb: \nStudyUID:[" + retrievedImage.getStudyUID() +
+                "],\nSeriesUID:["+ retrievedImage.getSeriesUID() +
+                "] i\nImageUID:["+ retrievedImage.getSOPInstanceUID() +"]\n dóna mida negativa" );
+                ERROR_LOG( "La imatge amb: \nStudyUID:[" + retrievedImage.getStudyUID() +
+                "],\nSeriesUID:["+ retrievedImage.getSeriesUID() +
+                "] i\nImageUID:["+ retrievedImage.getSOPInstanceUID() +"]\n dóna mida negativa" );
+            }
             /* should really check the image to make sure it is consistent,
             * that its sopClass and sopInstance correspond with those in
             * the request.

@@ -250,14 +250,14 @@ void QMPRExtension::createConnections()
     connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
 
-    connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( axialSliceUpdated(int) ) );
+    connect( m_axial2DView, SIGNAL( sliceChanged(int) ), SLOT( axialSliceUpdated(int) ) );
 
     // gestionen els events de les finestres per poder manipular els plans
-    connect( m_axial2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleAxialViewEvents( unsigned long ) ) );
-    connect( m_sagital2DView , SIGNAL( eventReceived(unsigned long) ) , this , SLOT( handleSagitalViewEvents( unsigned long ) ) );
+    connect( m_axial2DView, SIGNAL( eventReceived(unsigned long) ), SLOT( handleAxialViewEvents( unsigned long ) ) );
+    connect( m_sagital2DView, SIGNAL( eventReceived(unsigned long) ), SLOT( handleSagitalViewEvents( unsigned long ) ) );
 
-    connect( m_thickSlabSpinBox , SIGNAL( valueChanged(double) ) , this , SLOT( updateThickSlab(double) ) );
-    connect( m_thickSlabSlider , SIGNAL( valueChanged(int) ) , this , SLOT( updateThickSlab(int) ) );
+    connect( m_thickSlabSpinBox, SIGNAL( valueChanged(double) ), SLOT( updateThickSlab(double) ) );
+    connect( m_thickSlabSlider, SIGNAL( valueChanged(int) ), SLOT( updateThickSlab(int) ) );
 
     // window level
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_axial2DView , SLOT( setWindowLevel(double,double) ) );
@@ -265,12 +265,12 @@ void QMPRExtension::createConnections()
     connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_coronal2DView , SLOT( setWindowLevel(double,double) ) );
 
     // layouts
-    connect( m_horizontalLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchHorizontalLayout() ) );
-    connect( m_mipAction , SIGNAL( triggered(bool) ) , this , SLOT( switchToMIPLayout(bool) ) );
+    connect( m_horizontalLayoutAction , SIGNAL( triggered() ), SLOT( switchHorizontalLayout() ) );
+    connect( m_mipAction , SIGNAL( triggered(bool) ), SLOT( switchToMIPLayout(bool) ) );
     connect( m_mipAction , SIGNAL( triggered(bool) ) , m_rotate3DToolButton , SLOT( setVisible(bool) ) );
 
     // quan canvia l'input de l'axial view hem de fer un altre cop el set input TODO millora de rendiment, s'hauria de fer primer l'input de l'extensió i no pas el del viewer per evitar que al 2D viewer se li doni dos cops l'input
-    connect( m_axial2DView, SIGNAL( volumeChanged(Volume *) ), this, SLOT( setInput(Volume *) ) );
+    connect( m_axial2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput(Volume *) ) );
 }
 
 void QMPRExtension::switchHorizontalLayout()

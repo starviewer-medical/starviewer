@@ -108,7 +108,7 @@ void Q2DViewerExtension::createActions()
     m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , this , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction, SIGNAL( triggered() ), SLOT( rotateClockWise() ) );
 
     m_rotateCounterClockWiseAction = new QAction( 0 );
     m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
@@ -117,7 +117,7 @@ void Q2DViewerExtension::createActions()
     m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
 
-    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , this , SLOT( rotateCounterClockWise() ) );
+    connect( m_rotateCounterClockWiseAction, SIGNAL( triggered() ), SLOT( rotateCounterClockWise() ) );
 
     m_flipHorizontalAction = new QAction(0);
     m_flipHorizontalAction->setText( tr("Flip Horizontal") );
@@ -125,7 +125,7 @@ void Q2DViewerExtension::createActions()
     m_flipHorizontalAction->setIcon( QIcon(":/images/flipHorizontal.png") );
     m_flipHorizontalToolButton->setDefaultAction( m_flipHorizontalAction );
 
-    connect( m_flipHorizontalAction , SIGNAL( triggered() ) , this , SLOT( horizontalFlip() ) );
+    connect( m_flipHorizontalAction , SIGNAL( triggered() ), SLOT( horizontalFlip() ) );
 
     m_flipVerticalAction = new QAction(0);
     m_flipVerticalAction->setText( tr("Flip Vertical") );
@@ -133,7 +133,7 @@ void Q2DViewerExtension::createActions()
     m_flipVerticalAction->setIcon( QIcon(":/images/flipVertical.png") );
     m_flipVerticalToolButton->setDefaultAction( m_flipVerticalAction );
 
-    connect( m_flipVerticalAction , SIGNAL( triggered() ) , this , SLOT( verticalFlip() ) );
+    connect( m_flipVerticalAction , SIGNAL( triggered() ), SLOT( verticalFlip() ) );
 
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
@@ -166,38 +166,36 @@ void Q2DViewerExtension::enablePresentationState(bool enable)
 
 void Q2DViewerExtension::createConnections()
 {
-    // adicionals, \TODO ara es fa "a saco" perÃ² s'ha de millorar
-    connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
-    connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
-    connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
+    // adicionals, TODO ara es fa "a saco" però s'ha de millorar
+    connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
+    connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
+    connect( m_coronalViewAction, SIGNAL( triggered() ), SLOT( changeViewToCoronal() ) );
 
     // Menus
-    connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedGrid() ) );
-    connect( m_buttonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveTable() ) );
-    connect( m_downImageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedImageGrid() ) );
-    connect( m_imageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveImageTable() ) );
+    connect( m_downButtonGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedGrid() ) );
+    connect( m_buttonGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveTable() ) );
+    connect( m_downImageGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedImageGrid() ) );
+    connect( m_imageGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
 
     // window level combo box
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , this , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox, SIGNAL( windowLevel(double,double) ), SLOT( setWindowLevel(double,double) ) );
 
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , this , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox, SIGNAL( defaultValue() ), SLOT( resetWindowLevelToDefault() ) );
 
     // Connexions del menu
-    connect( m_predefinedSeriesGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
-    connect( m_seriesTableGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+    connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
+    connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
 
     // EXTRA!!!!!\TODO es temporal
     // enable/disable presentation states
-    connect( m_presentationStateAction, SIGNAL( toggled(bool) ), this, SLOT( enablePresentationState(bool) ) );
+    connect( m_presentationStateAction, SIGNAL( toggled(bool) ), SLOT( enablePresentationState(bool) ) );
 
     // Connexions necessaries pel primer visualitzador
-    connect( m_selectedViewer , SIGNAL( selected( Q2DViewerWidget *) ) , this, SLOT( setViewerSelected( Q2DViewerWidget *) ) );
-    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+    connect( m_selectedViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
+    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
-    connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
-
-
+    connect( m_volumeInformation, SIGNAL( stateChanged ( int ) ), SLOT( showInformation( int ) ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -446,8 +444,8 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
     (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
-    connect( newViewer , SIGNAL( selected( Q2DViewerWidget *) ) , this, SLOT( setViewerSelected( Q2DViewerWidget *) ) );
+    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
+    connect( newViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
 
     int state = m_volumeInformation->checkState();
 
@@ -460,8 +458,7 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
         newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
     }
 
-    connect( newViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), this, SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-
+    connect( newViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
     return newViewer;
 }
@@ -535,9 +532,9 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
         m_selectedViewer->setSelected( true );
         validePhases();
 
-        connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+        connect( m_predefinedSlicesGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+        connect( m_sliceTableGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
     }
 }
 
@@ -627,7 +624,7 @@ void Q2DViewerExtension::setPatient( Patient *patient )
         {
             foreach( Volume *volume, series->getVolumesList() )
             {
-                connect( volume, SIGNAL(progress(int)), this, SLOT( updateVolumeLoadProgressNotification(int) ) );
+                connect( volume, SIGNAL(progress(int)), SLOT( updateVolumeLoadProgressNotification(int) ) );
             }
         }
     }
@@ -683,8 +680,7 @@ void Q2DViewerExtension::initializeTools()
     // registrem al manager les tools que van amb el viewer principal
     initializeDefaultTools( m_selectedViewer->getViewer() );
 
-    connect( m_selectedViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), this, SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-
+    connect( m_selectedViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 }
 
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
