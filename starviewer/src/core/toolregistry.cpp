@@ -20,6 +20,7 @@
 #include "screenshottool.h"
 #include "synchronizetool.h"
 #include "windowlevelpresetstool.h"
+#include "polylineroitool.h"
 
 #include <QAction>
 
@@ -80,6 +81,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "WindowLevelPresetsTool" )
     {
         tool = new WindowLevelPresetsTool( viewer );
+    }
+    else if( toolName == "PolylineROITool" )
+    {
+        tool = new PolylineROITool( viewer );
     }
     else
     {
@@ -168,6 +173,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     {
         toolAction->setText( tr("Window Level Presets tool") );
         toolAction->setStatusTip( tr("Enable/Disable Window Level Presets tool") );
+    }
+    else if( toolName == "PolylineROITool" )
+    {
+        toolAction->setText( tr("Polyline ROI tool") );
+        toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );
+        toolAction->setIcon( QIcon(":/images/polilinia.png") );
     }
     else
     {

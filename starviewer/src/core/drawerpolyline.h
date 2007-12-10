@@ -55,6 +55,15 @@ public:
     ///ens retorna la polilínia com a objecte VTK de representació
     vtkProp *getAsVtkProp();
 
+    ///ens retorna el nombre de punts que te la polilinia
+    int getNumberOfPoints();
+
+    ///ens retorna l'i-essim punt de la polilinia en cas de que existeixi.
+    double* getPoint( int position );
+
+    ///esborra tots els punts de la polilinia
+    void deleteAllPoints();
+
 public slots:
     void update( int representation );
 
@@ -70,7 +79,7 @@ private:
 
 private:
     /// Llista de punts de la polilínia
-    QList< QVector<double> > m_pointsList;
+    QList< double* > m_pointsList;
 
     /// Estructures de vtk, per construir la polilínia
     vtkPolyData *m_vtkPolydata;

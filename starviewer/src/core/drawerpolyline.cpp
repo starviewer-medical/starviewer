@@ -38,7 +38,7 @@ DrawerPolyline::~DrawerPolyline()
 
 void DrawerPolyline::addPoint( double point[3] )
 {
-    QVector<double> array(3);
+    double *array = new double[3];
     for( int i = 0; i<3; i++ )
         array[i] = point[i];
 
@@ -52,7 +52,7 @@ void DrawerPolyline::setPoint( int i, double point[3] )
         addPoint( point );
     else
     {
-        QVector<double> array(3);
+        double *array = new double[3];
         array = m_pointsList.takeAt(i);
         for( int j=0; j < 3; j++ )
             array[j] = point[j];
@@ -62,10 +62,28 @@ void DrawerPolyline::setPoint( int i, double point[3] )
     }
 }
 
+double* DrawerPolyline::getPoint( int position )
+{
+    if( position >= m_pointsList.count() )
+    {
+        double *array = new double[3];
+        return array;
+    } 
+   else
+    {
+        return m_pointsList.at( position );
+    }
+}
+
 void DrawerPolyline::removePoint( int i )
 {
     m_pointsList.removeAt( i );
     emit changed();
+}
+
+void DrawerPolyline::deleteAllPoints()
+{
+    m_pointsList.clear();
 }
 
 vtkProp *DrawerPolyline::getAsVtkProp()
@@ -130,9 +148,9 @@ void DrawerPolyline::buildVtkPoints()
 
     //donem els punts
     int i = 0;
-    foreach( QVector<double> vertix, m_pointsList )
+    foreach( double *vertix, m_pointsList )
     {
-        m_vtkPoints->InsertPoint( i, vertix.data() );
+        m_vtkPoints->InsertPoint( i, vertix );
         m_vtkCellArray->InsertCellPoint( i );
         i++;
     }
@@ -158,6 +176,11 @@ void DrawerPolyline::updateVtkActorProperties()
     //Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+}
+
+int DrawerPolyline::getNumberOfPoints()
+{
+    return m_pointsList.count();
 }
 
 }

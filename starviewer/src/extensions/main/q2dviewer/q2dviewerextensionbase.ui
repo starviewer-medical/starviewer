@@ -124,6 +124,28 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="m_polylineButton" >
+         <property name="text" >
+          <string>zoom</string>
+         </property>
+         <property name="icon" >
+          <iconset>../../../main/images/polilinia.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="m_roiToolButton" >
          <property name="text" >
           <string>zoom</string>
@@ -549,6 +571,8 @@
  </customwidgets>
  <resources>
   <include location="../main/main.qrc" />
+  <include location="q2dviewer.qrc" />
+  <include location="../../../main/main.qrc" />
  </resources>
  <connections/>
 </ui>
