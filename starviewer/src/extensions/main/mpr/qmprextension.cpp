@@ -627,6 +627,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     // donem una "tolerància" mínima
     if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
     {
+        this->setCursor( QCursor( Qt::OpenHandCursor ) );
         //desactivem les tools perquè no facin interferència
         disableAllTools();
         if( distanceToCoronal < distanceToSagital )
@@ -647,6 +648,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
 
 void QMPRExtension::pushAxialViewAxisActor()
 {
+    this->setCursor( QCursor( Qt::ClosedHandCursor ) );
     // obtenim el punt que s'ha clicat
     int x, y;
     x = m_axial2DView->getInteractor()->GetEventPosition()[0];
@@ -673,6 +675,7 @@ void QMPRExtension::releasePushAxialViewAxisActor()
 {
     if( m_pickedActorPlaneSource )
     {
+        this->setCursor( QCursor( Qt::ArrowCursor ) );
         if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
         {
             m_sagital2DView->getInteractor()->Render();
