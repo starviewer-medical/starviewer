@@ -661,6 +661,7 @@ void Q2DViewerExtension::initializeTools()
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+    m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
@@ -689,7 +690,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }
