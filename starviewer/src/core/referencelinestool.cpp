@@ -152,7 +152,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         m_referencePlane->setVertix( 2,p3 );
         m_referencePlane->setVertix( 3,p4 );
         m_2DViewer->getDrawer()->showGroup("ReferenceLines");
-        m_2DViewer->getDrawer()->refresh();
     }
 }
 
