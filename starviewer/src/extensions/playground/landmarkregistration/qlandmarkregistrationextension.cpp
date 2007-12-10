@@ -35,17 +35,6 @@
 #include <vtkPropPicker.h>
 #include <vtkAlgorithmOutput.h>
 
-/*
-#include <vtkImageMask.h>
-#include <vtkImageThreshold.h>
-#include <vtkImageIterator.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkDataSetMapper.h>
-#include <vtkContourGrid.h>
-#include <vtkDataSetMapper.h>
-#include <vtkThreshold.h>
-*/
-
 // ITK
 #include <itkRescaleIntensityImageFilter.h>
 #include <itkImageRegionConstIterator.h>
@@ -77,7 +66,6 @@ QLandmarkRegistrationExtension::QLandmarkRegistrationExtension(QWidget *parent)
 
     readSettings();
 }
-
 
 QLandmarkRegistrationExtension::~QLandmarkRegistrationExtension()
 {
@@ -160,43 +148,31 @@ void QLandmarkRegistrationExtension::createToolBars()
 
 void QLandmarkRegistrationExtension::createConnections()
 {
+    connect( m_savePushButton , SIGNAL( clicked() ), SLOT( saveTransform () ) );
+    connect( m_loadPushButton , SIGNAL( clicked() ), SLOT( loadTransform () ) );
+    connect( m_restorePushButton , SIGNAL( clicked() ), SLOT( restore () ) );
+    connect( m_tryAgainPushButton , SIGNAL( clicked() ), SLOT( tryAgain () ) );
+    connect( m_applyRegistrationPushButton , SIGNAL( clicked() ), SLOT( applyMethod() ) );
 
-    connect( m_savePushButton , SIGNAL( clicked() ), this, SLOT( saveTransform () ) );
+    connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( landmarkEventHandler (unsigned long) ) );
+    connect( m_2DView_2 , SIGNAL( eventReceived( unsigned long ) ), SLOT( landmarkEventHandler2 (unsigned long) ) );
 
-    connect( m_loadPushButton , SIGNAL( clicked() ), this, SLOT( loadTransform () ) );
-
-    connect( m_restorePushButton , SIGNAL( clicked() ), this, SLOT( restore () ) );
-
-    connect( m_tryAgainPushButton , SIGNAL( clicked() ), this, SLOT( tryAgain () ) );
-
-    connect( m_applyRegistrationPushButton , SIGNAL( clicked() ) , this , SLOT( applyMethod() ) );
-
-    connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ), this, SLOT( landmarkEventHandler (unsigned long) ) );
-
-    connect( m_2DView_2 , SIGNAL( eventReceived( unsigned long ) ), this, SLOT( landmarkEventHandler2 (unsigned long) ) );
-
-    connect( m_opacityOverlaySlider, SIGNAL( valueChanged(int) ) , this , SLOT( setOpacity(int) ) );
+    connect( m_opacityOverlaySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
 
     connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-
     connect( m_sliceViewSlider_2, SIGNAL( valueChanged(int) ) , m_2DView_2 , SLOT( setSlice(int) ) );
 
-    connect( m_seedList1TableWidget, SIGNAL( cellPressed(int, int) ) , this , SLOT( seed1Activated(int, int) ) );
+    connect( m_seedList1TableWidget, SIGNAL( cellPressed(int, int) ), SLOT( seed1Activated(int, int) ) );
+    connect( m_seedList2TableWidget, SIGNAL( cellPressed(int, int) ), SLOT( seed2Activated(int, int) ) );
 
-    connect( m_seedList2TableWidget, SIGNAL( cellPressed(int, int) ) , this , SLOT( seed2Activated(int, int) ) );
+    connect( m_2DView , SIGNAL( sliceChanged( int ) ), SLOT( sliceChanged1 (int) ) );
+    connect( m_2DView_2 , SIGNAL( sliceChanged( int ) ), SLOT( sliceChanged2 (int) ) );
 
-    connect( m_2DView , SIGNAL( sliceChanged( int ) ), this, SLOT( sliceChanged1 (int) ) );
+    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
+    connect( m_2DView_2, SIGNAL( volumeChanged(Volume *) ), SLOT( setSecondInput( Volume * ) ) );
 
-    connect( m_2DView_2 , SIGNAL( sliceChanged( int ) ), this, SLOT( sliceChanged2 (int) ) );
-
-    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
-
-    connect( m_2DView_2, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setSecondInput( Volume * ) ) );
-
-    connect( m_seriesSpinBox, SIGNAL( valueChanged(int) ) , this , SLOT( setPhase(int) ) );
-
-    connect( m_seriesSpinBox_2, SIGNAL( valueChanged(int) ) , this , SLOT( setSecondPhase(int) ) );
-
+    connect( m_seriesSpinBox, SIGNAL( valueChanged(int) ), SLOT( setPhase(int) ) );
+    connect( m_seriesSpinBox_2, SIGNAL( valueChanged(int) ), SLOT( setSecondPhase(int) ) );
 }
 
 void QLandmarkRegistrationExtension::readSettings()
@@ -221,10 +197,8 @@ void QLandmarkRegistrationExtension::writeSettings()
     settings.endGroup();
 }
 
-
 void QLandmarkRegistrationExtension::setInput( Volume *input )
 {
-
     m_inputVolume = input;
 
     if(m_inputVolume->getSeries()->getNumberOfPhases()==1)
@@ -247,7 +221,6 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     m_2DView->setView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
-
 
     int* dim;
     dim = m_firstVolume->getDimensions();
@@ -798,7 +771,6 @@ void QLandmarkRegistrationExtension::leftButtonEventHandler( int idVolume )
     }
 }
 
-
 void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
 {
     double pos[3];
@@ -854,7 +826,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
             m_seedActorVector1.push_back(pointActor);
             m_2DView->getInteractor()->Render();
 
-            //connect( m_2DView , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
+            //connect( m_2DView , SIGNAL( sliceChanged(int) ), SLOT( sliceChanged(int) ) );
 
         }
         else    // idVolume == 2
@@ -1291,9 +1263,7 @@ void QLandmarkRegistrationExtension::loadTransform(  )
 
         QApplication::restoreOverrideCursor();
         //std::cout<<"EndApply"<<std::endl;
-
     }
-
 }
 
 void QLandmarkRegistrationExtension::restore(  )

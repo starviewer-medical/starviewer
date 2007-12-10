@@ -24,13 +24,10 @@ class Volume;
  * Interfície per definir tots els paràmetres del mètode de visualització del
  * Punt de Vista Òptim.
  */
-class OptimalViewpointInputParametersForm
-    : public udg::QInputParameters, private ::Ui::OptimalViewpointInputParametersFormBase {
-
-    Q_OBJECT
-
+class OptimalViewpointInputParametersForm : public udg::QInputParameters, private ::Ui::OptimalViewpointInputParametersFormBase
+{
+Q_OBJECT
 public:
-
     OptimalViewpointInputParametersForm( QWidget * parent = 0 );
     virtual ~OptimalViewpointInputParametersForm();
 
@@ -38,7 +35,6 @@ public:
     void setParameters( OptimalViewpointParameters * parameters );
 
 public slots:
-
     /**
      * Slot que ens serveix per indicar que hem d'actualitzar el paràmetre que
      * ens diguin mitjançant un identificador (que, en realitat, serà un enum).
@@ -63,7 +59,6 @@ public slots:
     void setRangeMax( unsigned char rangeMax );
 
 protected:
-
     /**
      * Mètode reimplementat per inicialitzar la funció de transferència quan es
      * mostra el widget per primer cop. Si no es fa així hi ha problemes amb el

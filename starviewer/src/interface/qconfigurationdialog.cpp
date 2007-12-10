@@ -19,7 +19,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     this->addConfigurationWidget(screen, "PACS", AdvancedConfiguration);
 
     connect(screen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
-    connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), this, SLOT(setViewAdvancedConfiguration()));
+    connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
     connect(m_okButton , SIGNAL(clicked()), screen, SLOT(applyChanges()));
 
     m_optionsList->setCurrentRow(0);

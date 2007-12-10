@@ -71,8 +71,8 @@ QStudyTreeWidget::~QStudyTreeWidget()
 
 void QStudyTreeWidget::createConnections()
 {
-    connect( m_studyTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int ) ) , this, SLOT( clicked ( QTreeWidgetItem * , int ) ) );
-    connect( m_studyTreeView , SIGNAL( itemDoubleClicked ( QTreeWidgetItem * , int ) ), this , SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
+    connect( m_studyTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int ) ), SLOT( clicked ( QTreeWidgetItem * , int ) ) );
+    connect( m_studyTreeView , SIGNAL( itemDoubleClicked ( QTreeWidgetItem * , int ) ), SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
 }
 
 void QStudyTreeWidget::createContextMenu()

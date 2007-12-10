@@ -23,7 +23,7 @@ static const int DcmDatasetCacheFilesLimit = 1050;
 DcmDatasetCache::DcmDatasetCache()
     : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearIsActive(false)
 {
-    connect(this, SIGNAL(resetTimer()), this, SLOT(resetAutoclearTimer()));
+    connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
 }
 
 DcmDatasetCache::DcmDatasetCache(int seconds)
@@ -32,7 +32,7 @@ DcmDatasetCache::DcmDatasetCache(int seconds)
     // Només es marca com a activat, el timer no s'activa perquè no cal: no hi ha elements.
     m_autoclearIsActive = true;
     m_secondsForAutoclear = seconds;
-    connect(this, SIGNAL(resetTimer()), this, SLOT(resetAutoclearTimer()));
+    connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
 }
 
 DcmDatasetCache::~DcmDatasetCache()

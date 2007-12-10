@@ -29,8 +29,8 @@ OldVoxelInformationTool::OldVoxelInformationTool( Q2DViewer *viewer, QObject *pa
 {
     m_2DViewer = viewer;
     createCaptionActor();
-    
-    connect( m_2DViewer, SIGNAL( sliceChanged(int) ), this, SLOT( isNeededUpdateVoxelInformation() ) );
+
+    connect( m_2DViewer, SIGNAL( sliceChanged(int) ), SLOT( isNeededUpdateVoxelInformation() ) );
 }
 
 OldVoxelInformationTool::~OldVoxelInformationTool()
@@ -97,7 +97,7 @@ void OldVoxelInformationTool::createCaptionActor()
 void OldVoxelInformationTool::updateVoxelInformation()
 {
     double xyz[3];
-    
+
     double wPoint[4];
     int position[2];
 
@@ -108,14 +108,14 @@ void OldVoxelInformationTool::updateVoxelInformation()
     else
     {
         correctPositionOfCaption( position );
-    
+
         QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
         xyz[0] = wPoint[0];
         xyz[1] = wPoint[1];
         depthAccordingViewAndSlice( xyz );
         placeText( xyz );
     }
-    
+
     m_2DViewer->refresh();
 }
 
@@ -124,7 +124,7 @@ void OldVoxelInformationTool::depthAccordingViewAndSlice( double xyz[3] )
     int slice = m_2DViewer->getCurrentSlice();
     double *spacing = m_2DViewer->getInput()->getSpacing();
     double *origin = m_2DViewer->getInput()->getOrigin();
-    
+
     //codi que soluciona el bug de les coordenades del voxel information (BUG: 122)
     switch( m_2DViewer->getView() )
     {
@@ -138,7 +138,7 @@ void OldVoxelInformationTool::depthAccordingViewAndSlice( double xyz[3] )
             xyz[1] = origin[1] + (slice * spacing[1]);
         break;
     }
-    
+
 }
 
 void OldVoxelInformationTool::placeText( double textPosition[3] )
@@ -158,7 +158,7 @@ bool OldVoxelInformationTool::captionExceedsViewportTopLimit()
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
     int *dimensions = viewportDimensions();
     double captionHeigth = ((double)dimensions[1]*0.05);
-    
+
     return ( eventPosition[1]+captionHeigth > dimensions[1] );
 }
 
@@ -167,7 +167,7 @@ bool OldVoxelInformationTool::captionExceedsViewportRightLimit()
     int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
     int *dimensions = viewportDimensions();
     double captionWidth = ((double)dimensions[0]*0.3)+1.;
-    
+
     return ( eventPosition[0]+captionWidth > dimensions[0] );
 }
 
@@ -184,15 +184,15 @@ void OldVoxelInformationTool::correctPositionOfCaption( int correctPositionInVie
     int *dimensions = viewportDimensions();
     double captionWidth = ((double)dimensions[0]*0.3)+xSecurityRange;
     double captionHeight = ((double)dimensions[1]*0.05)+xSecurityRange;
-    
+
     correctPositionInViewPort[0] = eventPosition[0];
     correctPositionInViewPort[1] = eventPosition[1];
-    
+
     if ( captionExceedsViewportRightLimit() )
     {
         correctPositionInViewPort[0] = eventPosition[0] - ( eventPosition[0] + captionWidth - dimensions[0] );
     }
-    
+
     if ( captionExceedsViewportTopLimit() )
     {
         correctPositionInViewPort[1] = eventPosition[1] - ( eventPosition[1] + captionHeight - dimensions[1] );

@@ -127,7 +127,7 @@ void ExtensionHandler::updateConfiguration(const QString &configuration)
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), this, SLOT(processInput(QStringList,QString,QString,QString)) );
+    connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
 

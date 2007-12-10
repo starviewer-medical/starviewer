@@ -5,7 +5,11 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qdifuperfuextension.h"
-
+#include "strokesegmentationmethod.h"
+#include "toolsactionfactory.h"
+#include "volumecalculator.h"
+#include "series.h"
+#include "logging.h"
 // Qt
 #include <QMessageBox>
 #include <QSettings>
@@ -26,13 +30,6 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkUnstructuredGrid.h>
-
-#include "strokesegmentationmethod.h"
-#include "toolsactionfactory.h"
-#include "volumecalculator.h"
-
-#include "series.h"
-
 //prova recte
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkCurvatureAnisotropicDiffusionImageFilter.h"
@@ -41,7 +38,6 @@
 #include "itkMinimumMaximumImageCalculator.h"
 #include "udgPerfusionEstimator.h"
 #include "udgBinaryMaker.h"
-#include "logging.h"
 
 namespace udg {
 
@@ -81,16 +77,10 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
 
     m_actionFactory = 0;
 
-
     createActions();
-    createToolBars();
     createConnections();
-
-
     readSettings();
 }
-
-
 
 QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
 {
@@ -121,8 +111,6 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
     delete m_actionFactory;
 }
 
-
-
 void QDifuPerfuSegmentationExtension::createActions()
 {
     m_rotateClockWiseAction = new QAction( this );
@@ -132,11 +120,8 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_rotateClockWiseAction->setIcon( QIcon( ":/images/rotateClockWise.png" ) );
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
-    connect( m_rotateClockWiseAction, SIGNAL( triggered() ),
-             m_diffusion2DView, SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction, SIGNAL( triggered() ),
-             m_perfusion2DView, SLOT( rotateClockWise() ) );
-
+    connect( m_rotateClockWiseAction, SIGNAL( triggered() ), m_diffusion2DView, SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction, SIGNAL( triggered() ), m_perfusion2DView, SLOT( rotateClockWise() ) );
 
     m_editorAction = new QAction( this );
     m_editorAction->setText( tr("EditorTool") );
@@ -145,7 +130,6 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_editorAction->setCheckable( true );
     m_editorAction->setEnabled( false );
     m_editorToolButton->setDefaultAction( m_editorAction );
-
 
     // Pseudo-tool
     // TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
@@ -157,14 +141,10 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_voxelInformationAction->setCheckable( true );
     m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
 
-    connect( m_voxelInformationAction, SIGNAL( triggered(bool) ),
-             m_diffusion2DView, SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction, SIGNAL( triggered(bool) ),
-             m_perfusion2DView, SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-
+    connect( m_voxelInformationAction, SIGNAL( triggered(bool) ), m_diffusion2DView, SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+    connect( m_voxelInformationAction, SIGNAL( triggered(bool) ), m_perfusion2DView, SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
     // Tools
-
     m_actionFactory = new ToolsActionFactory();
 
     m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
@@ -183,11 +163,8 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_seedAction->setIcon( QIcon( ":/images/seed.png" ) );
     m_seedToolButton->setDefaultAction( m_seedAction );
 
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ),
-             m_diffusion2DView, SLOT( setTool(QString) ) );
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ),
-             m_perfusion2DView, SLOT( setTool(QString) ) );
-
+    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_diffusion2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_perfusion2DView, SLOT( setTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( this );
     m_toolsActionGroup->setExclusive( true );
@@ -221,7 +198,6 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_viewOverlayActionGroup->setExclusive( true );
     m_viewOverlayActionGroup->addAction( m_ventriclesViewAction );
     m_viewOverlayActionGroup->addAction( m_lesionViewAction );
-
 
     m_paintEditorAction = new QAction( 0 );
     m_paintEditorAction->setText( tr("Paint Editor Tool") );
@@ -261,111 +237,72 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_editorToolActionGroup->addAction( m_eraseEditorAction );
     m_editorToolActionGroup->addAction( m_eraseSliceEditorAction );
     m_editorToolActionGroup->addAction( m_eraseRegionEditorAction );
-
-
 }
-
-
-
-void QDifuPerfuSegmentationExtension::createToolBars()
-{
-}
-
-
 
 void QDifuPerfuSegmentationExtension::createConnections()
 {
     connect( m_diffusion2DView, SIGNAL( phaseChanged(int) ),
              m_selectedDiffusionImageSpinBox, SLOT( setValue(int) ) );
-    connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ),
-             this, SLOT( setDiffusionImage(int) ) );
+    connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setDiffusionImage(int) ) );
 
-    connect( m_openPerfusionImagePushButton, SIGNAL( clicked() ),
-             this, SIGNAL( openPerfusionImage() ) );
-    connect( m_perfusion2DView, SIGNAL( phaseChanged(int) ),
-             m_selectedPerfusionImageSpinBox, SLOT( setValue(int) ) );
-    connect( m_selectedPerfusionImageSpinBox, SIGNAL( valueChanged(int) ),
-             this, SLOT( setPerfusionImage(int) ) );
-    connect( m_perfusionThresholdViewerSlider, SIGNAL( valueChanged(int) ),
-             this, SLOT( setPerfusionLut(int) ) );
+    connect( m_openPerfusionImagePushButton, SIGNAL( clicked() ), SIGNAL( openPerfusionImage() ) );
+    connect( m_perfusion2DView, SIGNAL( phaseChanged(int) ), m_selectedPerfusionImageSpinBox, SLOT( setValue(int) ) );
+    connect( m_selectedPerfusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setPerfusionImage(int) ) );
+    connect( m_perfusionThresholdViewerSlider, SIGNAL( valueChanged(int) ), SLOT( setPerfusionLut(int) ) );
 
-    connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ),
-             this, SLOT( setStrokeLowerValue(int) ) );
-    connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ),
-             this, SLOT( setStrokeUpperValue(int) ) );
-    connect( m_strokeViewThresholdsPushButton, SIGNAL( clicked() ),
-             this, SLOT( viewThresholds() ) );
-    connect( m_diffusion2DView, SIGNAL( seedChanged() ), this, SLOT( setSeedPosition() ) );
-    connect( m_strokeApplyPushButton, SIGNAL( clicked() ),
-             this, SLOT( applyStrokeSegmentation() ) );
-    connect( m_strokeVolumeUpdatePushButton, SIGNAL( clicked() ),
-             this, SLOT( updateStrokeVolume() ) );
+    connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setStrokeLowerValue(int) ) );
+    connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setStrokeUpperValue(int) ) );
+    connect( m_strokeViewThresholdsPushButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+    connect( m_diffusion2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+    connect( m_strokeApplyPushButton, SIGNAL( clicked() ), SLOT( applyStrokeSegmentation() ) );
+    connect( m_strokeVolumeUpdatePushButton, SIGNAL( clicked() ), SLOT( updateStrokeVolume() ) );
 
-    connect( m_ventriclesApplyPushButton, SIGNAL( clicked() ),
-             this, SLOT( applyVentriclesMethod() ) );
+    connect( m_ventriclesApplyPushButton, SIGNAL( clicked() ), SLOT( applyVentriclesMethod() ) );
 
-    connect( m_applyRegistrationPushButton, SIGNAL( clicked() ),
-             this, SLOT( applyRegistration() ) );
+    connect( m_applyRegistrationPushButton, SIGNAL( clicked() ), SLOT( applyRegistration() ) );
 
-    connect( m_computeBlackpointEstimationPushButton, SIGNAL( clicked() ),
-             this, SLOT( computeBlackpointEstimation() ) );
+    connect( m_computeBlackpointEstimationPushButton, SIGNAL( clicked() ), SLOT( computeBlackpointEstimation() ) );
 
-    connect( m_penombraApplyPushButton, SIGNAL( clicked() ),
-             this, SLOT( applyPenombraSegmentation() ) );
+    connect( m_penombraApplyPushButton, SIGNAL( clicked() ), SLOT( applyPenombraSegmentation() ) );
 
-    connect( m_filterDiffusionPushButton, SIGNAL( clicked() ),
-             this, SLOT( applyFilterDiffusionImage() ) );
+    connect( m_filterDiffusionPushButton, SIGNAL( clicked() ), SLOT( applyFilterDiffusionImage() ) );
 
-
-
-    connect( m_diffusion2DView , SIGNAL( eventReceived( unsigned long ) ) , this , SLOT( strokeEventHandler(unsigned long) ) );
-  // caldria pel perfusion?????
-
-
-    connect( m_synchroCheckBox, SIGNAL( toggled(bool) ), this, SLOT( synchronizeSlices(bool) ) );
-
+    connect( m_diffusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    // caldria pel perfusion?????
+    connect( m_synchroCheckBox, SIGNAL( toggled(bool) ), SLOT( synchronizeSlices(bool) ) );
 
     // potser és millor fer-ho amb l'acció ( signal triggered() )
-  connect( m_lesionViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewLesionOverlay() ) );
+    connect( m_lesionViewToolButton , SIGNAL( clicked() ), SLOT( viewLesionOverlay() ) );
 
+    // potser és millor fer-ho amb l'acció ( signal triggered() )
+    connect( m_ventriclesViewToolButton , SIGNAL( clicked() ), SLOT( viewVentriclesOverlay() ) );
 
-  // potser és millor fer-ho amb l'acció ( signal triggered() )
-  connect( m_ventriclesViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewVentriclesOverlay() ) );
+    connect( m_eraseButton , SIGNAL( clicked() ), SLOT( setErase() ) );
 
-  connect( m_eraseButton , SIGNAL( clicked() ) , this , SLOT( setErase() ) );
+    connect( m_eraseSliceButton , SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
 
-  connect( m_eraseSliceButton , SIGNAL( clicked() ) , this , SLOT( setEraseSlice() ) );
+    connect( m_paintButton , SIGNAL( clicked() ), SLOT( setPaint() ) );
 
-  connect( m_paintButton , SIGNAL( clicked() ) , this , SLOT( setPaint() ) );
+    connect( m_eraseRegionButton , SIGNAL( clicked() ), SLOT( setEraseRegion() ) );
 
-  connect( m_eraseRegionButton , SIGNAL( clicked() ) , this , SLOT( setEraseRegion() ) );
+    connect( m_splitterLeftButton, SIGNAL( clicked() ), SLOT( moveViewerSplitterToLeft() ) );
+    connect( m_splitterCenterButton, SIGNAL( clicked() ), SLOT( moveViewerSplitterToCenter() ) );
+    connect( m_splitterRightButton, SIGNAL( clicked() ), SLOT( moveViewerSplitterToRight() ) );
 
-  connect( m_splitterLeftButton, SIGNAL( clicked() ), this, SLOT( moveViewerSplitterToLeft() ) );
-  connect( m_splitterCenterButton, SIGNAL( clicked() ), this, SLOT( moveViewerSplitterToCenter() ) );
-  connect( m_splitterRightButton, SIGNAL( clicked() ), this, SLOT( moveViewerSplitterToRight() ) );
+    connect( m_diffusionSliceSlider, SIGNAL( valueChanged(int) ) , m_diffusion2DView , SLOT( setSlice(int) ) );
+    connect( m_perfusionSliceSlider, SIGNAL( valueChanged(int) ) , m_perfusion2DView , SLOT( setSlice(int) ) );
 
+    connect( m_diffusion2DView, SIGNAL( sliceChanged(int) ), m_diffusionSliceSlider, SLOT( setValue(int) ) );
+    connect( m_perfusion2DView, SIGNAL( sliceChanged(int) ), m_perfusionSliceSlider, SLOT( setValue(int) ) );
 
+    connect( m_perfusion2DView, SIGNAL( sliceChanged(int) ), SLOT( setPerfusionSlice(int) ) );
 
-  connect( m_diffusionSliceSlider, SIGNAL( valueChanged(int) ) , m_diffusion2DView , SLOT( setSlice(int) ) );
-  connect( m_perfusionSliceSlider, SIGNAL( valueChanged(int) ) , m_perfusion2DView , SLOT( setSlice(int) ) );
+    connect( m_diffusionOpacitySlider, SIGNAL( valueChanged(int) ), SLOT( setDiffusionOpacity(int) ) );
+    connect( m_perfusionOpacitySlider, SIGNAL( valueChanged(int) ), SLOT( setPerfusionOpacity(int) ) );
 
-  connect( m_diffusion2DView, SIGNAL( sliceChanged(int) ), m_diffusionSliceSlider, SLOT( setValue(int) ) );
-  connect( m_perfusion2DView, SIGNAL( sliceChanged(int) ), m_perfusionSliceSlider, SLOT( setValue(int) ) );
-
-  connect( m_perfusion2DView, SIGNAL( sliceChanged(int) ), this, SLOT( setPerfusionSlice(int) ) );
-
-
-
-  connect( m_diffusionOpacitySlider, SIGNAL( valueChanged(int) ), this, SLOT( setDiffusionOpacity(int) ) );
-  connect( m_perfusionOpacitySlider, SIGNAL( valueChanged(int) ), this, SLOT( setPerfusionOpacity(int) ) );
-
-  connect( m_diffusion2DView, SIGNAL(volumeChanged(Volume *)) , this , SLOT( setDiffusionInput( Volume * ) ) );
-  connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)) , this , SLOT( setPerfusionInput( Volume * ) ) );
-
-
+    connect( m_diffusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setDiffusionInput( Volume * ) ) );
+    connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setPerfusionInput( Volume * ) ) );
 }
-
-
 
 void QDifuPerfuSegmentationExtension::readSettings()
 {
@@ -377,8 +314,6 @@ void QDifuPerfuSegmentationExtension::readSettings()
 
     settings.endGroup();
 }
-
-
 
 void QDifuPerfuSegmentationExtension::writeSettings()
 {
@@ -392,8 +327,6 @@ void QDifuPerfuSegmentationExtension::writeSettings()
 
     settings.endGroup();
 }
-
-
 
 void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
 {
@@ -424,12 +357,10 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
     m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
 }
 
-
 void QDifuPerfuSegmentationExtension::setMaxDiffusionImage( int max )
 {
     m_selectedDiffusionImageSpinBox->setMaximum( max - 1 );
 }
-
 
 void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 {
@@ -470,10 +401,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     m_diffusion2DView->setView( Q2DViewer::Axial );
     m_diffusion2DView->resetWindowLevelToDefault();
     m_diffusion2DView->render();
-
 }
-
-
 
 void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
 {
@@ -509,9 +437,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
     m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
 
     this->moveViewerSplitterToCenter();
-
 }
-
 
 void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
 {
@@ -546,13 +472,10 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
     m_perfusion2DView->render();
 }
 
-
 void QDifuPerfuSegmentationExtension::setMaxPerfusionImage( int max )
 {
     m_selectedPerfusionImageSpinBox->setMaximum( max - 1 );
 }
-
-
 
 void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 {
@@ -569,7 +492,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     m_perfusionMinValue = minmaxCalc->GetMinimum();
     m_perfusionMaxValue = minmaxCalc->GetMaximum();
 
-
      // TODO ara ho fem "a saco" però s'hauria de millorar
     m_perfusion2DView->setInput( m_perfusionMainVolume );
     m_perfusion2DView->setView( Q2DViewer::Axial );
@@ -578,7 +500,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
     //m_perfusion2DView->setWindowLevel( m_perfusionMaxValue - m_perfusionMinValue, 0.0 );
     setPerfusionLut(m_perfusionThresholdViewerSlider->value());
-
 
 //------------------------------------------------------------------------
 /*
@@ -656,21 +577,15 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 
 }
 
-
-
 void QDifuPerfuSegmentationExtension::setStrokeLowerValue( int x )
 {
     if ( x > m_strokeUpperValueSlider->value() ) m_strokeUpperValueSlider->setValue( x );
 }
 
-
-
 void QDifuPerfuSegmentationExtension::setStrokeUpperValue( int x )
 {
     if ( x < m_strokeLowerValueSlider->value() ) m_strokeLowerValueSlider->setValue( x );
 }
-
-
 
 void QDifuPerfuSegmentationExtension::viewThresholds()
 {
@@ -700,8 +615,6 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     m_diffusion2DView->getInteractor()->Render();
 }
 
-
-
 void QDifuPerfuSegmentationExtension::setSeedPosition()
 {
     m_diffusion2DView->getSeedPosition( m_seedPosition );
@@ -713,12 +626,9 @@ void QDifuPerfuSegmentationExtension::setSeedPosition()
     m_strokeApplyPushButton->setEnabled( true );
 }
 
-
-
 void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
-
 
     if ( !m_strokeSegmentationMethod ) m_strokeSegmentationMethod = new StrokeSegmentationMethod();
 
@@ -742,12 +652,10 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_diffusionOpacityLabel->setEnabled( true );
     m_diffusionOpacitySlider->setEnabled( true );
 
-
     m_strokeVolumeLineEdit->setText( QString::number( m_strokeVolume, 'f', 2 ) );
     m_strokeVolumeLabel->setEnabled( true );
     m_strokeVolumeLineEdit->setEnabled( true );
     m_strokeVolumeUpdatePushButton->setEnabled( true );
-
 
     m_editorAction->trigger();
     m_diffusion2DView->disableTools();
@@ -761,24 +669,18 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_editorTool = QDifuPerfuSegmentationExtension::Erase;
     m_editorSize->setEnabled(true);
 
-
     m_lesionViewAction->setEnabled( true );
     m_lesionViewAction->trigger();
     this->viewLesionOverlay();
 
-
     QApplication::restoreOverrideCursor();
 }
-
-
 
 void QDifuPerfuSegmentationExtension::updateStrokeVolume()
 {
     m_strokeVolume = this->calculateStrokeVolume();
     m_strokeVolumeLineEdit->setText( QString::number( m_strokeVolume, 'f', 2 ) );
 }
-
-
 
 double QDifuPerfuSegmentationExtension::calculateStrokeVolume()
 {
@@ -789,8 +691,6 @@ double QDifuPerfuSegmentationExtension::calculateStrokeVolume()
 
     return volumeCalculator.getVolume();
 }
-
-
 
 void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
 {
@@ -810,17 +710,13 @@ void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
     m_ventriclesViewAction->trigger();
     this->viewVentriclesOverlay();
 
-
     m_diffusionOpacityLabel->setEnabled( true );
     m_diffusionOpacitySlider->setEnabled( true );
 }
 
-
-
 void QDifuPerfuSegmentationExtension::applyRegistration()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
-
 
     ItkImageType::Pointer fixedImage = m_diffusionMainVolume->getItkData();
     ItkImageType::Pointer movingImage = m_perfusionMainVolume->getItkData();
@@ -960,11 +856,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         QMessageBox::warning( this, tr("Registration failed!"), tr("Registration failed!") );
     }
 
-
     QApplication::restoreOverrideCursor();
 }
-
-
 
 void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 {
@@ -1043,8 +936,6 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
     m_penombraApplyPushButton->setEnabled( true );
 }
 
-
-
 void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -1091,8 +982,6 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     QApplication::restoreOverrideCursor();
 }
 
-
-
 void QDifuPerfuSegmentationExtension::applyFilterDiffusionImage()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -1112,13 +1001,8 @@ void QDifuPerfuSegmentationExtension::applyFilterDiffusionImage()
 
     m_filterDiffusionPushButton->setEnabled( false );
 
-
     QApplication::restoreOverrideCursor();
 }
-
-
-
-
 
 void QDifuPerfuSegmentationExtension::strokeEventHandler( unsigned long id )
 {
@@ -1159,8 +1043,6 @@ void QDifuPerfuSegmentationExtension::leftButtonEventHandler( )
         m_diffusion2DView->enableTools();
     }
 }
-
-
 
 void QDifuPerfuSegmentationExtension::setEditorPoint(  )
 {
@@ -1208,8 +1090,6 @@ void QDifuPerfuSegmentationExtension::setLeftButtonOff( )
     m_isLeftButtonPressed = false;
 }
 
-
-
 void QDifuPerfuSegmentationExtension::setDiffusionOpacity( int opacity )
 {
     if ( m_activedMaskVolume != 0 )
@@ -1220,15 +1100,11 @@ void QDifuPerfuSegmentationExtension::setDiffusionOpacity( int opacity )
     }
 }
 
-
-
 void QDifuPerfuSegmentationExtension::setPerfusionOpacity( int opacity )
 {
     m_perfusionOverlay->SetOpacity( opacity / 100.0 );
     m_perfusion2DView->getInteractor()->Render();
 }
-
-
 
 void QDifuPerfuSegmentationExtension::setErase()
 {
@@ -1427,9 +1303,6 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask()
     //m_2DView->getInteractor()->Render();
 }
 
-
-
-
 void QDifuPerfuSegmentationExtension::eraseRegionMask()
 {
     double pos[3];
@@ -1469,7 +1342,6 @@ void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int
     }
 }
 
-
 void QDifuPerfuSegmentationExtension::viewLesionOverlay()
 {
     if(m_strokeMaskVolume != 0)
@@ -1493,8 +1365,6 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
         m_diffusion2DView->getInteractor()->Render();
     }
 }
-
-
 
 void QDifuPerfuSegmentationExtension::moveViewerSplitterToLeft(  )
 {
@@ -1540,13 +1410,9 @@ void QDifuPerfuSegmentationExtension::synchronizeSlices( bool sync )
     }
 }
 
-
-
 void QDifuPerfuSegmentationExtension::setPerfusionSlice( int slice )
 {
     if ( m_perfusionOverlay ) m_perfusionOverlay->SetZSlice( slice );
 }
-
-
 
 }

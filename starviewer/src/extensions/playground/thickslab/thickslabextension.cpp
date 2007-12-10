@@ -110,7 +110,7 @@ void ThickSlabExtension::createActions()
     m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , this , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ), SLOT( rotateClockWise() ) );
 
     m_rotateCounterClockWiseAction = new QAction( 0 );
     m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
@@ -119,7 +119,7 @@ void ThickSlabExtension::createActions()
     m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
 
-    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , this , SLOT( rotateCounterClockWise() ) );
+    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ), SLOT( rotateCounterClockWise() ) );
 
     m_flipHorizontalAction = new QAction(0);
     m_flipHorizontalAction->setText( tr("Flip Horizontal") );
@@ -127,7 +127,7 @@ void ThickSlabExtension::createActions()
     m_flipHorizontalAction->setIcon( QIcon(":/images/flipHorizontal.png") );
     m_flipHorizontalToolButton->setDefaultAction( m_flipHorizontalAction );
 
-    connect( m_flipHorizontalAction , SIGNAL( triggered() ) , this , SLOT( horizontalFlip() ) );
+    connect( m_flipHorizontalAction , SIGNAL( triggered() ), SLOT( horizontalFlip() ) );
 
     m_flipVerticalAction = new QAction(0);
     m_flipVerticalAction->setText( tr("Flip Vertical") );
@@ -135,7 +135,7 @@ void ThickSlabExtension::createActions()
     m_flipVerticalAction->setIcon( QIcon(":/images/flipVertical.png") );
     m_flipVerticalToolButton->setDefaultAction( m_flipVerticalAction );
 
-    connect( m_flipVerticalAction , SIGNAL( triggered() ) , this , SLOT( verticalFlip() ) );
+    connect( m_flipVerticalAction , SIGNAL( triggered() ), SLOT( verticalFlip() ) );
 
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
@@ -149,7 +149,7 @@ void ThickSlabExtension::createActions()
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
-    
+
     m_toolsActionGroup->addAction( m_distanceAction );
     m_toolsActionGroup->addAction( m_roiAction );
 }
@@ -170,35 +170,35 @@ void ThickSlabExtension::enablePresentationState(bool enable)
 void ThickSlabExtension::createConnections()
 {
     // adicionals, \TODO ara es fa "a saco" perÃ² s'ha de millorar
-    connect( m_axialViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToAxial() ) );
-    connect( m_sagitalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToSagital() ) );
-    connect( m_coronalViewAction , SIGNAL( triggered() ) , this , SLOT( changeViewToCoronal() ) );
+    connect( m_axialViewAction , SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
+    connect( m_sagitalViewAction , SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
+    connect( m_coronalViewAction , SIGNAL( triggered() ), SLOT( changeViewToCoronal() ) );
 
     // Menus
-    connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedGrid() ) );
-    connect( m_buttonGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveTable() ) );
-    connect( m_downImageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showPredefinedImageGrid() ) );
-    connect( m_imageGrid , SIGNAL( clicked ( bool ) ) , this , SLOT( showInteractiveImageTable() ) );
+    connect( m_downButtonGrid , SIGNAL( clicked ( bool ) ), SLOT( showPredefinedGrid() ) );
+    connect( m_buttonGrid , SIGNAL( clicked ( bool ) ), SLOT( showInteractiveTable() ) );
+    connect( m_downImageGrid , SIGNAL( clicked ( bool ) ), SLOT( showPredefinedImageGrid() ) );
+    connect( m_imageGrid , SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
 
     // window level combo box
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , this , SLOT( setWindowLevel(double,double) ) );
+    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ), SLOT( setWindowLevel(double,double) ) );
 
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , this , SLOT( resetWindowLevelToDefault() ) );
+    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ), SLOT( resetWindowLevelToDefault() ) );
 
     // Connexions del menu
-    connect( m_predefinedSeriesGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
-    connect( m_seriesTableGrid , SIGNAL( selectedGrid( int , int ) ) , this, SLOT( setGrid( int, int ) ) );
+    connect( m_predefinedSeriesGrid , SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
+    connect( m_seriesTableGrid , SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
 
     // EXTRA!!!!!\TODO es temporal
     // enable/disable presentation states
-    connect( m_presentationStateAction, SIGNAL( toggled(bool) ), this, SLOT( enablePresentationState(bool) ) );
+    connect( m_presentationStateAction, SIGNAL( toggled(bool) ), SLOT( enablePresentationState(bool) ) );
 
     // Connexions necessaries pel primer visualitzador
-    connect( m_selectedViewer , SIGNAL( selected( QThickSlabWidget * ) ) , this, SLOT( setViewerSelected( QThickSlabWidget * ) ) );
-    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
+    connect( m_selectedViewer , SIGNAL( selected( QThickSlabWidget * ) ), SLOT( setViewerSelected( QThickSlabWidget * ) ) );
+    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
-    connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ) , this, SLOT( showInformation( int ) ) );
+    connect( m_volumeInformation , SIGNAL( stateChanged ( int ) ), SLOT( showInformation( int ) ) );
 
     connect( m_slabThicknessSpinBox, SIGNAL( valueChanged(double) ), m_selectedViewer, SLOT( setSlabThickness(double) ) );
 }
@@ -444,7 +444,7 @@ QThickSlabWidget* ThickSlabExtension::getNewQThickSlabWidget()
     newViewer->getViewer()->render();
     (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
-    connect( newViewer , SIGNAL( selected( QThickSlabWidget * ) ) , this, SLOT( setViewerSelected( QThickSlabWidget * ) ) );
+    connect( newViewer , SIGNAL( selected( QThickSlabWidget * ) ), SLOT( setViewerSelected( QThickSlabWidget * ) ) );
 
     int state = m_volumeInformation->checkState();
 
@@ -521,7 +521,7 @@ void ThickSlabExtension::setViewerSelected( QThickSlabWidget * viewer )
 
         connect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), this, SLOT( validePhases() ) );
+        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( validePhases() ) );
     }
 }
 
@@ -611,7 +611,7 @@ void ThickSlabExtension::setPatient( Patient *patient )
         {
             foreach( Volume *volume, series->getVolumesList() )
             {
-                connect( volume, SIGNAL(progress(int)), this, SLOT( updateVolumeLoadProgressNotification(int) ) );
+                connect( volume, SIGNAL(progress(int)), SLOT( updateVolumeLoadProgressNotification(int) ) );
             }
         }
     }
@@ -778,7 +778,7 @@ void ThickSlabExtension::initializeTools()
     initializeDefaultTools( m_selectedViewer->getViewer() );
 
     /// \todo Comentat perquè no existeix l'slot.
-//     connect( m_selectedViewer, SIGNAL( sincronize( QThickSlabWidget *, bool ) ), this, SLOT( sincronization( QThickSlabWidget *, bool ) ) );
+//     connect( m_selectedViewer, SIGNAL( sincronize( QThickSlabWidget *, bool ) ), SLOT( sincronization( QThickSlabWidget *, bool ) ) );
 }
 
 void ThickSlabExtension::initializeDefaultTools( Q2DViewer *viewer )

@@ -59,10 +59,10 @@ QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient( QWidget * 
     vbox->addWidget(m_blue_shade);
     vbox->addWidget(m_alpha_shade);
 
-    connect(m_red_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
-    connect(m_green_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
-    connect(m_blue_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
-    connect(m_alpha_shade, SIGNAL(colorsChanged()), this, SLOT(pointsUpdated()));
+    connect(m_red_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
+    connect(m_green_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
+    connect(m_blue_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
+    connect(m_alpha_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
 
     connect( this, SIGNAL( gradientStopsChanged(const QGradientStops&) ), SLOT( setTransferFunction(const QGradientStops&) ) );
 }

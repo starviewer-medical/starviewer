@@ -133,7 +133,7 @@ void QCreateDicomdir::setWidthColumns()
 void QCreateDicomdir::setDicomdirSize()
 {
     QString sizeOfDicomdirText, sizeText;
-    float sizeInMb;
+    double sizeInMb;
 
     sizeInMb = m_dicomdirSize / ( 1024 * 1024 );//passem a Mb
     sizeText.setNum( sizeInMb , 'f' , 2 );
@@ -142,7 +142,7 @@ void QCreateDicomdir::setDicomdirSize()
     m_dicomdirSizeOnDiskLabel->setText( sizeOfDicomdirText );
 
     if ( sizeInMb < m_progressBarOcupat->maximum() )
-        m_progressBarOcupat->setValue( int( sizeInMb ) );
+        m_progressBarOcupat->setValue( QString::number(sizeInMb).toInt() );
     else
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 
@@ -649,15 +649,15 @@ void QCreateDicomdir::deviceChanged( int index )
                 break;
         case DVDROM:
                 m_stackedWidget->setCurrentIndex(0);
-                if( sizeInMB < 4400 )
+                if( sizeInMB < 4800 )
                 {
-                    m_progressBarOcupat->setMaximum( 4400 );
-                    m_DiskSpace = ( quint64 ) 4400 * ( quint64 ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
+                    m_progressBarOcupat->setMaximum( 4800 );
+                    m_DiskSpace = ( quint64 ) 4800 * ( quint64 ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
                     m_progressBarOcupat->repaint();
                 }
                 else
                 {
-                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4400 Mb" ) );
+                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4800 Mb" ) );
                 }
                 break;
     }

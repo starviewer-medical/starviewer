@@ -44,8 +44,8 @@ void PatientBrowserMenu::setPatient( Patient * patient )
     m_patientBrowserList->setPatient( patient );
 
     connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), m_patientAdditionalInfo, SLOT( setSeries(Series*) ));
-    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), this, SLOT( updatePosition() ));
-    connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), this, SLOT ( emitSelected(Series*) ));
+    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), SLOT( updatePosition() ));
+    connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), SLOT ( emitSelected(Series*) ));
 }
 
 void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
@@ -55,7 +55,7 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
     int y = point.y();
 
     int screen_x, screen_y;
-    
+
     if (qApp->desktop()->isVirtualDesktop())
     {
         screen_x = qApp->desktop()->geometry().width();

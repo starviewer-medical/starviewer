@@ -57,10 +57,10 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToCoronal() ) );
 
     // actualització de la funció de transferència
-    connect( m_transferFunctionUpdateButton, SIGNAL( clicked() ), this, SLOT( updateTransferFunctionFromEditor() ) );
+    connect( m_transferFunctionUpdateButton, SIGNAL( clicked() ), SLOT( updateTransferFunctionFromEditor() ) );
 
     // actualització del mètode de rendering
-    connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), this, SLOT( updateRenderingMethodFromCombo(int) ) );
+    connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )

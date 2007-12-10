@@ -4,22 +4,17 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-
 #include "optimalviewpointinputparametersform.h"
+
+#include "optimalviewpointparameters.h"
+#include "transferfunctionio.h"
+#include "logging.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
 
-#include "optimalviewpointparameters.h"
-#include "transferfunctionio.h"
-
-#include <iostream>
-
-
 namespace udg {
-
 
 OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidget * parent )
     : QInputParameters( parent )
@@ -46,13 +41,9 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
 
 //     connect( m_gradientEditor, SIGNAL( gradientStopsChanged(const QGradientStops &) ),
 //              this, SLOT( setTransferFunction(const QGradientStops &) ) );
-    connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ),
-             this, SLOT( setNumberOfPlanes(const QString &) ) );
+    connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ), SLOT( setNumberOfPlanes(const QString &) ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( writeAllParameters() ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SIGNAL( executionRequested() ) );
-    
-
-
 
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
@@ -65,11 +56,9 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     connect( m_updatePlaneRenderPushButton, SIGNAL( clicked() ), SLOT( requestRenderPlane() ) );
 }
 
-
 OptimalViewpointInputParametersForm::~OptimalViewpointInputParametersForm()
 {
 }
-
 
 // millor comprovar que només tingui efecte la primera vegada
 void OptimalViewpointInputParametersForm::setParameters( OptimalViewpointParameters * parameters )
@@ -84,16 +73,11 @@ void OptimalViewpointInputParametersForm::setParameters( OptimalViewpointParamet
     }
 }
 
-/**
- * Slot que ens serveix per indicar que hem d'actualitzar el paràmetre que
- * ens diguin mitjançant un identificador (que, en realitat, serà un enum).
- * Serveix per canviar els valors a partir d'una classe Parameters.
- */
 void OptimalViewpointInputParametersForm::readParameter( int index )
 {
     if( !m_parameters )
     {
-        std::cerr << "OptimalViewpointInputParametersForm: No hi ha paràmetres establerts" << std::endl;
+        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
     }
     else
     {
@@ -186,7 +170,7 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
 
             case OptimalViewpointParameters::NumberOfClusters:
                 m_numberOfClustersLabel->setText( QString("<b>%1 clusters</b>").arg( (short) m_parameters->getNumberOfClusters() ) );
-                std::cout << "nclusters = " << (short) m_parameters->getNumberOfClusters() << std::endl;
+                DEBUG_LOG( QString("nclusters = %1").arg((short) m_parameters->getNumberOfClusters()) );
                 break;
 
             case OptimalViewpointParameters::SimilarityThreshold:
@@ -212,15 +196,11 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
     }
 }
 
-/**
- * Escriu tots els valors de paràmetres que té actualment al Parameters
- * associat.
- */
 void OptimalViewpointInputParametersForm::writeAllParameters()
 {
     if( !m_parameters )
     {
-        std::cerr << "OptimalViewpointInputParametersForm: No hi ha paràmetres establerts" << std::endl;
+        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
     }
     else
     {
@@ -267,7 +247,7 @@ void OptimalViewpointInputParametersForm::writeSegmentationParameters()
 {
     if( !m_parameters )
     {
-        std::cerr << "OptimalViewpointInputParametersForm: No hi ha paràmetres establerts" << std::endl;
+        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
         return;
     }
 
@@ -280,9 +260,6 @@ void OptimalViewpointInputParametersForm::writeSegmentationParameters()
     m_parameters->setSegmentationSampleDistance( m_doubleSpinBoxSegmentationSampleDistance->value() );
 }
 
-
-
-/// Assigna la funció de transferència actual.
 void OptimalViewpointInputParametersForm::setTransferFunction( const TransferFunction & transferFunction )
 {
     m_transferFunction = transferFunction;
@@ -293,11 +270,6 @@ void OptimalViewpointInputParametersForm::setTransferFunction( const TransferFun
     m_editorByValues->setTransferFunction( m_transferFunction );
 }
 
-/**
- * Mètode reimplementat per inicialitzar la funció de transferència quan es
- * mostra el widget per primer cop. Si no es fa així hi ha problemes amb el
- * GradientEditor.
- */
 void OptimalViewpointInputParametersForm::showEvent( QShowEvent * event )
 {
     QWidget::showEvent( event );
@@ -315,7 +287,7 @@ void OptimalViewpointInputParametersForm::showEvent( QShowEvent * event )
 
 void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction )
 {
-    std::cout << "OVIPF::satf" << std::endl;
+    DEBUG_LOG("OVIPF::satf");
     adjustedTransferFunction.print();
     m_gradientEditor->setTransferFunction( adjustedTransferFunction );
 //     m_gradientEditor->pointsUpdated();
@@ -333,11 +305,6 @@ void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const Tra
     m_loadSegmentationWidget->setDisabled( true );
     m_automaticSegmentationRadioButton->setDisabled( true );
     m_automaticSegmentationWidget->setDisabled( true );
-
-
-
-
-
 //     m_segmentationOkPushButton->setDisabled( true );
     toggleSegmentationParameters();
 
@@ -345,14 +312,8 @@ void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const Tra
     disconnect( m_segmentationOkPushButton, SIGNAL( clicked() ), this, SLOT( requestSegmentation() ) );
     connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( toggleSegmentationParameters() ) );
 
-
-
-
-
-
     m_applyPushButton->setEnabled( true );
 }
-
 
 void OptimalViewpointInputParametersForm::toggleSegmentationParameters()
 {
@@ -375,7 +336,6 @@ void OptimalViewpointInputParametersForm::toggleSegmentationParameters()
         m_segmentationLine->show();
     }
 }
-
 
 void OptimalViewpointInputParametersForm::setNumberOfPlanes( const QString & numberOfPlanes )
 {
@@ -406,15 +366,15 @@ void OptimalViewpointInputParametersForm::openSegmentationFile()
     settings.endGroup();
 }
 
-
-
 void OptimalViewpointInputParametersForm::requestSegmentation()
 {
     if ( m_loadSegmentationRadioButton->isChecked() )
     {
         m_parameters->setSegmentation( OptimalViewpointParameters::LoadSegmentation );
-        if ( m_segmentationFileChosen ) emit segmentationRequested();
-        else QMessageBox::warning( this, tr("No segmentation file chosen"),
+        if ( m_segmentationFileChosen )
+            emit segmentationRequested();
+        else
+            QMessageBox::warning( this, tr("No segmentation file chosen"),
                                    tr("Please, choose a segmentation file or do an automatic segmentation.") );
     }
     else
@@ -423,8 +383,6 @@ void OptimalViewpointInputParametersForm::requestSegmentation()
         emit segmentationRequested();
     }
 }
-
-
 
 void OptimalViewpointInputParametersForm::loadTransferFunction()
 {
@@ -450,8 +408,6 @@ void OptimalViewpointInputParametersForm::loadTransferFunction()
 
     settings.endGroup();
 }
-
-
 
 void OptimalViewpointInputParametersForm::saveTransferFunction()
 {
@@ -479,13 +435,11 @@ void OptimalViewpointInputParametersForm::saveTransferFunction()
     settings.endGroup();
 }
 
-
 void OptimalViewpointInputParametersForm::setClusterFirst( int slice )
 {
     if ( m_clusterLastSpinBox->value() < slice )
         m_clusterLastSpinBox->setValue( slice );
 }
-
 
 void OptimalViewpointInputParametersForm::setClusterLast( int slice )
 {
@@ -501,7 +455,6 @@ void OptimalViewpointInputParametersForm::setNumberOfSlices( unsigned short numb
     m_clusterLastSpinBox->setValue( numberOfSlices - 1 );
 }
 
-
 void OptimalViewpointInputParametersForm::requestNewMethod()
 {
     if ( m_newMethodComboBox->currentText() == "2" )
@@ -510,18 +463,15 @@ void OptimalViewpointInputParametersForm::requestNewMethod()
     }
 }
 
-
 void OptimalViewpointInputParametersForm::setRangeMax( unsigned char rangeMax )
 {
     m_gradientEditor->setMaximum( rangeMax );
     m_editorByValues->setMaximum( rangeMax );
 }
 
-
 void OptimalViewpointInputParametersForm::requestRenderPlane()
 {
     emit renderPlaneRequested( m_updatePlaneSpinBox->value() );
 }
-
 
 };

@@ -471,7 +471,7 @@ void Volume::inputConstructor()
     m_seriesReader->AddObserver( itk::ProgressEvent(),  m_progressSignalAdaptor->GetCommand() );
 //
 //  Connect the adaptor's Signal to the Qt Widget Slot
-   connect( m_progressSignalAdaptor, SIGNAL( Signal() ), this, SLOT( slotProgress() ) );
+   connect( m_progressSignalAdaptor, SIGNAL( Signal() ), SLOT( slotProgress() ) );
 }
 
 void Volume::slotProgress()

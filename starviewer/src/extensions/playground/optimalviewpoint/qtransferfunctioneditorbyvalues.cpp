@@ -204,8 +204,8 @@ QTransferFunctionIntervalEditor * QTransferFunctionEditorByValues::addIntervalAn
     connect( last, SIGNAL( endChanged(int) ), afterLast, SLOT( setPreviousEnd(int) ) );
     connect( afterLast, SIGNAL( startChanged(int) ), last, SLOT( setNextStart(int) ) );
 
-    connect( afterLast, SIGNAL( startChanged(int) ), this, SLOT( markAsChanged() ) );
-    connect( afterLast, SIGNAL( endChanged(int) ), this, SLOT( markAsChanged() ) );
+    connect( afterLast, SIGNAL( startChanged(int) ), SLOT( markAsChanged() ) );
+    connect( afterLast, SIGNAL( endChanged(int) ), SLOT( markAsChanged() ) );
     connect( afterLast, SIGNAL( colorChanged(const QColor&) ), SLOT( markAsChanged() ) );
 
     last->setIsLast( false );
