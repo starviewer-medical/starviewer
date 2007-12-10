@@ -793,6 +793,7 @@ void Q2DViewer::setupInteraction()
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
 }
 
 void Q2DViewer::setInput( Volume* volume )
