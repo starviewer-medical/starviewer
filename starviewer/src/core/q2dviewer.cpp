@@ -537,23 +537,19 @@ void Q2DViewer::refreshAnnotations()
 
         sliceAnnotation = vtkCornerAnnotation::SafeDownCast ( m_sliceAnnotationsCollection->GetItemAsObject ( i ) );
         // informació de la finestra
-        if( !m_mainVolume )
-            m_upperLeftText = "";
-        else
+        if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
-            if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
-            {
-                m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                        .arg( m_imageSizeInformation[0] )
-                        .arg( m_imageSizeInformation[1] )
-                        .arg( renderer->GetSize()[0] )
-                        .arg( renderer->GetSize()[1] )
-                        .arg( m_windowLevelLUTMapper->GetWindow() )
-                        .arg( m_windowLevelLUTMapper->GetLevel() );
-            }
-            else
-                m_upperLeftText = "";
+            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                    .arg( m_imageSizeInformation[0] )
+                    .arg( m_imageSizeInformation[1] )
+                    .arg( renderer->GetSize()[0] )
+                    .arg( renderer->GetSize()[1] )
+                    .arg( m_windowLevelLUTMapper->GetWindow() )
+                    .arg( m_windowLevelLUTMapper->GetLevel() );
         }
+        else
+            m_upperLeftText = "";
+
         sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
 
         if ( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
@@ -852,8 +848,8 @@ void Q2DViewer::setInput( Volume* volume )
     updateScalarBar();
     updatePatientAnnotationInformation();
     updateGrid();
-    this->enableAnnotation( m_enabledAnnotations );
     setViewToAxial();
+    this->enableAnnotation( m_enabledAnnotations );
 }
 
 vtkInteractorStyle *Q2DViewer::getInteractorStyle()
