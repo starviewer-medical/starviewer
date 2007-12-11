@@ -178,7 +178,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     {
         toolAction->setText( tr("Polyline ROI tool") );
         toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );
-        toolAction->setIcon( QIcon(":/images/polilinia.png") );
+        toolAction->setIcon( QIcon(":/images/polyline.png") );
     }
     else
     {
