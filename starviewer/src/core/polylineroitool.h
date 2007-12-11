@@ -44,6 +44,15 @@ private:
     ///ns simula com quedaria la polilinia que estem editant si la tanquessim. ens serveix per a veure dinamicament l'evolucio de la polilinia.
     void simulateClosingPolyline();
 
+    /// metode per respondre els diferents tipus d'events de teclat
+    void answerToKeyEvent();
+
+    /// metode per calcular la mitjana de gris de la regio del polyline
+    double computeGrayMean();
+
+    /// calcula el voxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
+    int getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 );
+
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
