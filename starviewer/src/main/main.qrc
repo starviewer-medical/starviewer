@@ -83,7 +83,7 @@
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
         <file>images/small-warning.png</file>
-    	<file>images/polilinia.png</file>
+    	<file>images/polyline.png</file>
         <file>images/viewerInfo.png</file>
     </qresource>
 </RCC>
