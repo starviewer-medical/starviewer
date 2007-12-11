@@ -20,6 +20,7 @@ namespace udg {
 DrawerPolyline::DrawerPolyline(QObject *parent)
  : DrawerPrimitive(parent), m_vtkPolydata(0), m_vtkPoints(0), m_vtkCellArray(0), m_vtkActor(0), m_vtkMapper(0)
 {
+    m_vtkActor = NULL;
 }
 
 DrawerPolyline::~DrawerPolyline()
@@ -103,6 +104,11 @@ vtkProp *DrawerPolyline::getAsVtkProp()
     return m_vtkActor;
 }
 
+double* DrawerPolyline::getPolylineBounds()
+{
+    return m_vtkPolydata->GetBounds();
+}
+
 void DrawerPolyline::update( int representation )
 {
     switch( representation )
@@ -181,6 +187,40 @@ void DrawerPolyline::updateVtkActorProperties()
 int DrawerPolyline::getNumberOfPoints()
 {
     return m_pointsList.count();
+}
+
+double DrawerPolyline::computeArea()
+{
+    double area = 0.0;
+    double * actualPoint;
+    double * followPoint;
+
+    for ( int j = 0; j < m_pointsList.count()-1 ; j++ )
+    {
+        actualPoint = m_pointsList.at( j );
+
+        followPoint = m_pointsList.at( j+1 );
+
+        area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
+    }
+
+     //en el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
+     //per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
+     if ( area < 0 )
+     {
+        //donem el resultat el valor absolut
+        area *= -1;
+
+        //intercanviem els punts de la QList
+        swap();
+    }
+    return area;
+}
+
+void DrawerPolyline::swap()
+{
+    for ( int i = 0; i < (int)(m_pointsList.count()/2); i++ )
+        m_pointsList.swap( i, (m_pointsList.count()-1)-i );
 }
 
 }

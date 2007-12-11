@@ -64,6 +64,12 @@ public:
     ///esborra tots els punts de la polilinia
     void deleteAllPoints();
 
+    /// retorna els valors minims i maxims de les coordenades de la polilinia
+    double* getPolylineBounds();
+
+    /// Calcula l'area del poligon
+    double computeArea();
+
 public slots:
     void update( int representation );
 
@@ -76,6 +82,9 @@ private:
 
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
+
+    /// Mètode que intercanvia els punts de sentit antihorari a horari
+    void swap();
 
 private:
     /// Llista de punts de la polilínia
