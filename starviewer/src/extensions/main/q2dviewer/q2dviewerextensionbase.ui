@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
+    <width>1199</width>
     <height>391</height>
    </rect>
   </property>
@@ -22,7 +22,7 @@
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>0</number>
+      <number>6</number>
      </property>
      <item>
       <layout class="QHBoxLayout" >
@@ -30,12 +30,12 @@
         <number>0</number>
        </property>
        <property name="spacing" >
-        <number>0</number>
+        <number>6</number>
        </property>
        <item>
         <widget class="QToolButton" name="m_slicingToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>Slicing</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -80,6 +80,28 @@
         </widget>
        </item>
        <item>
+        <widget class="QToolButton" name="m_translateToolButton" >
+         <property name="text" >
+          <string>move</string>
+         </property>
+         <property name="icon" >
+          <iconset/>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QToolButton" name="m_zoomToolButton" >
          <property name="text" >
           <string>zoom</string>
@@ -104,7 +126,7 @@
        <item>
         <widget class="QToolButton" name="m_distanceToolButton" >
          <property name="text" >
-          <string>zoom</string>
+          <string>distance</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -148,7 +170,7 @@
        <item>
         <widget class="QToolButton" name="m_roiToolButton" >
          <property name="text" >
-          <string>zoom</string>
+          <string>ROI</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -168,31 +190,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_translateToolButton" >
-         <property name="text" >
-          <string>move</string>
-         </property>
-         <property name="icon" >
-          <iconset/>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
+        <widget class="Line" name="line" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QToolButton" name="m_axialViewToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>Axial</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -211,7 +218,7 @@
        <item>
         <widget class="QToolButton" name="m_sagitalViewToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>Sagital</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -230,7 +237,7 @@
        <item>
         <widget class="QToolButton" name="m_coronalViewToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>Coronal</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -249,7 +256,7 @@
        <item>
         <widget class="QToolButton" name="m_rotateClockWiseToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>+90</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -268,7 +275,7 @@
        <item>
         <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>-90</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -287,7 +294,7 @@
        <item>
         <widget class="QToolButton" name="m_flipHorizontalToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>FlipH</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -306,7 +313,7 @@
        <item>
         <widget class="QToolButton" name="m_flipVerticalToolButton" >
          <property name="text" >
-          <string>...</string>
+          <string>FlipV</string>
          </property>
          <property name="icon" >
           <iconset/>
@@ -417,11 +424,26 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="m_volumeInformation" >
+        <widget class="QToolButton" name="m_viewerInformationToolButton" >
          <property name="text" >
-          <string>Information</string>
+          <string>...</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/viewerInfo.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
          </property>
          <property name="checked" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
           <bool>true</bool>
          </property>
         </widget>
@@ -492,19 +514,6 @@
       </layout>
      </item>
      <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>16</width>
-         <height>42</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QToolButton" name="m_presentationStateSwitchToolButton" >
        <property name="enabled" >
         <bool>false</bool>
@@ -572,6 +581,7 @@
  <resources>
   <include location="../main/main.qrc" />
   <include location="q2dviewer.qrc" />
+  <include location="../../../main/main.qrc" />
   <include location="../../../main/main.qrc" />
  </resources>
  <connections/>
