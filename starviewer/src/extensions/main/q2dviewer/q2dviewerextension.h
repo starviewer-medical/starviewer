@@ -94,7 +94,7 @@ public slots:
     void showInteractiveImageTable();
 
     /// Mostrar la informació del volum a cada visualitzador o no.
-    void showInformation( int state );
+    void showViewerInformation( bool show );
 
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]

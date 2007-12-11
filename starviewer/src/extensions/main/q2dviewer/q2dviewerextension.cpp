@@ -195,7 +195,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
-    connect( m_volumeInformation, SIGNAL( stateChanged ( int ) ), SLOT( showInformation( int ) ) );
+    connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -447,16 +447,10 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
     connect( m_actionFactory, SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
     connect( newViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
 
-    int state = m_volumeInformation->checkState();
-
-    if( state == Qt::Unchecked )
-    {
-        newViewer->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
-    }
-    else if( state == Qt::Checked )
-    {
+    if( m_viewerInformationToolButton->isChecked() )
         newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
-    }
+    else
+        newViewer->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
 
     connect( newViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
@@ -763,22 +757,22 @@ void Q2DViewerExtension::hideColumns( int columns )
     }
 }
 
-void Q2DViewerExtension::showInformation( int state )
+void Q2DViewerExtension::showViewerInformation( bool show )
 {
     int numViewer;
 
-    if( state == Qt::Unchecked )
-    {
-        for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
-        {
-            m_vectorViewers.value( numViewer )->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
-        }
-    }
-    else if( state == Qt::Checked )
+    if( show )
     {
         for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
         {
             m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
+        }
+    }
+    else
+    {
+        for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
+        {
+            m_vectorViewers.value( numViewer )->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
         }
     }
 }
