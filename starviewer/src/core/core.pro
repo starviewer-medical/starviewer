@@ -53,7 +53,7 @@ HEADERS += extensionfactory.h \
            oldtranslatetool.h \
            qlogviewer.h \
            roitool.h \
-           distancetool.h \
+           olddistancetool.h \
            strokesegmentationmethod.h \
            itkErfcLevelSetFunction.h \
            itkErfcLevelSetImageFilter.h \
@@ -92,7 +92,7 @@ HEADERS += extensionfactory.h \
            itkgdcmdicomimagereader.h \
            vtkdicomimagereader.h \
            dcmtkdicomimagereader.h \
-           distancetooldata.h \
+           olddistancetooldata.h \
            volumegeneratorstep.h \
            patientbrowsermenu.h \
            patientbrowsermenubasicitem.h \
@@ -171,7 +171,7 @@ SOURCES += extensionmediator.cpp \
            oldtranslatetool.cpp \
            qlogviewer.cpp \
            roitool.cpp \
-           distancetool.cpp \
+           olddistancetool.cpp \
            strokesegmentationmethod.cpp \
            itkErfcLevelSetFunction.cpp \
            itkErfcLevelSetImageFilter.cpp \
@@ -210,7 +210,7 @@ SOURCES += extensionmediator.cpp \
            itkgdcmdicomimagereader.cpp \
            vtkdicomimagereader.cpp \
            dcmtkdicomimagereader.cpp \
-           distancetooldata.cpp \
+           olddistancetooldata.cpp \
            volumegeneratorstep.cpp \
            patientbrowsermenu.cpp \
            patientbrowsermenubasicitem.cpp \

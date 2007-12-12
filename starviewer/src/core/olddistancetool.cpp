@@ -4,10 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "distancetool.h"
+#include "olddistancetool.h"
 #include "q2dviewer.h"
 #include "distancerepresentation.h"
-#include "distancetooldata.h"
+#include "olddistancetooldata.h"
 #include "distance.h"
 #include "olddrawer.h"
 #include "drawingprimitive.h"
@@ -22,7 +22,7 @@
 
 namespace udg {
 
-DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
+OldDistanceTool::OldDistanceTool( Q2DViewer *viewer , QObject * )
 {
     m_nearestPoint = NOTHINGSELECTED;
     m_state = NONE;
@@ -37,11 +37,11 @@ DistanceTool::DistanceTool( Q2DViewer *viewer , QObject * )
 
     //Creem aquests objectes per quan seleccionem una distància poder treballar amb les dades i la representació. Es creem amb paràmetres qualssevol perquè
     //ara no importa el que continguin, perquè no s'han d'utilitzar encara.
-    m_selectedDistanceToolData = new DistanceToolData( m_distanceStartPosition, m_distanceStartPosition );
+    m_selectedDistanceToolData = new OldDistanceToolData( m_distanceStartPosition, m_distanceStartPosition );
     m_selectedDistanceRepresentation = new DistanceRepresentation( m_selectedDistanceToolData );
 }
 
-DistanceTool::~DistanceTool()
+OldDistanceTool::~OldDistanceTool()
 {
     delete m_selectedDistanceToolData;
     delete m_selectedDistanceRepresentation;
@@ -51,7 +51,7 @@ DistanceTool::~DistanceTool()
 
 }
 
-void DistanceTool::handleEvent( unsigned long eventID )
+void OldDistanceTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
     {
@@ -172,7 +172,7 @@ void DistanceTool::handleEvent( unsigned long eventID )
     }
 }
 
-void DistanceTool::createSelectedDistanceData( DistanceTool::PrimitivesSet *primitivesSet )
+void OldDistanceTool::createSelectedDistanceData( OldDistanceTool::PrimitivesSet *primitivesSet )
 {
     //ens assegurem de que no és null
     if ( !primitivesSet )
@@ -212,7 +212,7 @@ void DistanceTool::createSelectedDistanceData( DistanceTool::PrimitivesSet *prim
         m_correctData = true;
 }
 
-void DistanceTool::startDistanceAnnotation()
+void OldDistanceTool::startDistanceAnnotation()
 {
     int xy[2];
     double position[4];
@@ -228,7 +228,7 @@ void DistanceTool::startDistanceAnnotation()
     m_distanceStartPosition[2] = position[2];
 
     //creem les dades de la distància actual: li passem en aquest moment com a primer i segon punt el mateix perquè no té importància
-    DistanceToolData *distanceData = new DistanceToolData( m_distanceStartPosition, m_distanceStartPosition );
+    OldDistanceToolData *distanceData = new OldDistanceToolData( m_distanceStartPosition, m_distanceStartPosition );
 
     //creem la representació de la distància actual
     m_distanceRepresentation = new DistanceRepresentation( distanceData );
@@ -240,7 +240,7 @@ void DistanceTool::startDistanceAnnotation()
     m_2DViewer->getOldDrawer()->drawLine( m_distanceRepresentation->getLine(), m_2DViewer->getCurrentSlice(), m_2DViewer->getView() );
 }
 
-void DistanceTool::doDistanceSimulation()
+void OldDistanceTool::doDistanceSimulation()
 {
     int xy[2];
     double position[4];
@@ -253,7 +253,7 @@ void DistanceTool::doDistanceSimulation()
     m_distanceCurrentPosition[1] = position[1];
     m_distanceCurrentPosition[2] = position[2];
 
-    //actualitzem l'objecte DistanceToolData de la representació actual i això farà que s'actualitzi la línia en el visor
+    //actualitzem l'objecte OldDistanceToolData de la representació actual i això farà que s'actualitzi la línia en el visor
     m_distanceRepresentation->getDistanceToolData()->setSecondPoint( m_distanceCurrentPosition );
 
     //li diem a la representació que actualitzi la línia
@@ -262,7 +262,7 @@ void DistanceTool::doDistanceSimulation()
     m_2DViewer->refresh();
 }
 
-void DistanceTool::endDistanceAnnotation()
+void OldDistanceTool::endDistanceAnnotation()
 {
     //per finalitzar la distància, calculem el text i la posició de la distància. També calculem les coordenades del fons del text
     m_distanceRepresentation->refreshText( m_2DViewer->getView() );
@@ -274,7 +274,7 @@ void DistanceTool::endDistanceAnnotation()
     m_state = NONE;
 }
 
-void DistanceTool::getNearestPointOfSelectedDistance()
+void OldDistanceTool::getNearestPointOfSelectedDistance()
 {
     double *vertex1, *vertex2;
     int x, y;
@@ -306,7 +306,7 @@ void DistanceTool::getNearestPointOfSelectedDistance()
     m_selectedDistanceRepresentation->getLine()->refreshLine();
 }
 
-void DistanceTool::moveFirstPoint()
+void OldDistanceTool::moveFirstPoint()
 {
     int x, y;
     x = m_2DViewer->getInteractor()->GetEventPosition()[0];
@@ -318,7 +318,7 @@ void DistanceTool::moveFirstPoint()
     m_selectedDistanceRepresentation->getLine()->refreshLine();
 }
 
-void DistanceTool::moveSecondPoint()
+void OldDistanceTool::moveSecondPoint()
 {
     int x, y;
     x = m_2DViewer->getInteractor()->GetEventPosition()[0];
@@ -330,7 +330,7 @@ void DistanceTool::moveSecondPoint()
     m_selectedDistanceRepresentation->getLine()->refreshLine();
 }
 
-void DistanceTool::answerToKeyEvent()
+void OldDistanceTool::answerToKeyEvent()
 {
     //responem a la intenció d'esborrar una distància, sempre que hi hagi una distància seleccionada i
     //s'hagi polsat la tecla adequada (tecla sup) o seleccionar una distància amb el Ctrl i un botó del mouse
