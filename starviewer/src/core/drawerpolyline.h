@@ -68,7 +68,7 @@ public:
     double* getPolylineBounds();
 
     /// Calcula l'area del poligon
-    double computeArea();
+    double computeArea( int view );
 
 public slots:
     void update( int representation );
