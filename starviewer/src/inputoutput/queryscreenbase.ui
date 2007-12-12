@@ -1122,6 +1122,15 @@
        <property name="text" >
         <string>Advanced Search >></string>
        </property>
+       <property name="icon" >
+        <iconset resource="../main/main.qrc" >:/images/advancedSearch.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="checkable" >
         <bool>true</bool>
        </property>
@@ -1161,6 +1170,15 @@
        </property>
        <property name="text" >
         <string>Clear Search Fields</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../main/main.qrc" >:/images/clear.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
        <property name="autoDefault" >
         <bool>false</bool>
@@ -1222,9 +1240,18 @@
      <property name="currentIndex" >
       <number>0</number>
      </property>
+     <property name="iconSize" >
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
      <widget class="QWidget" name="m_tabCache" >
       <attribute name="title" >
        <string>Local Database</string>
+      </attribute>
+      <attribute name="icon" >
+       <iconset resource="../main/main.qrc" >:/images/database.png</iconset>
       </attribute>
       <layout class="QVBoxLayout" >
        <property name="margin" >
@@ -1309,6 +1336,9 @@
      <widget class="QWidget" name="m_tabPacs" >
       <attribute name="title" >
        <string>PACS Server</string>
+      </attribute>
+      <attribute name="icon" >
+       <iconset resource="../main/main.qrc" >:/images/pacsServer.png</iconset>
       </attribute>
       <layout class="QVBoxLayout" >
        <property name="margin" >
@@ -1527,26 +1557,24 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QPushButton" name="m_retrieveListButton" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>3</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>16777215</width>
-         <height>30</height>
-        </size>
-       </property>
+      <widget class="QToolButton" name="m_operationListToolButton" >
        <property name="text" >
         <string>Operation List</string>
        </property>
-       <property name="autoDefault" >
-        <bool>false</bool>
+       <property name="icon" >
+        <iconset resource="../main/main.qrc" >:/images/operationList.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1581,22 +1609,34 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>66</width>
-         <height>30</height>
+         <width>27</width>
+         <height>42</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_showPacsListButton" >
+      <widget class="QToolButton" name="m_showPACSNodesToolButton" >
        <property name="text" >
-        <string>Show PACS Nodes</string>
+        <string>PACS Nodes</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../main/main.qrc" >:/images/pacsNodes.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
        </property>
        <property name="checkable" >
         <bool>true</bool>
        </property>
-       <property name="autoDefault" >
-        <bool>false</bool>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1661,13 +1701,11 @@
   <tabstop>m_checkPT</tabstop>
   <tabstop>m_checkUS</tabstop>
   <tabstop>m_instanceNumberText</tabstop>
-  <tabstop>m_showPacsListButton</tabstop>
   <tabstop>m_advancedSearchButton</tabstop>
   <tabstop>m_searchButton</tabstop>
   <tabstop>m_textOtherModality</tabstop>
   <tabstop>m_retrieveButtonPACS</tabstop>
   <tabstop>m_viewButtonPACS</tabstop>
-  <tabstop>m_retrieveListButton</tabstop>
   <tabstop>m_createDicomdirButton</tabstop>
   <tabstop>m_tab</tabstop>
   <tabstop>m_clearButton</tabstop>
