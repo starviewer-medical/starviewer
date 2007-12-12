@@ -22,6 +22,7 @@
         <file>images/cdrom.png</file>
         <file>images/clear.png</file>
         <file>images/coronal.png</file>
+        <file>images/createDICOMDIR.png</file>
         <file>images/database.png</file>
         <file>images/distance.png</file>
         <file>images/down.png</file>
@@ -68,6 +69,7 @@
         <file>images/rotateClockWise.png</file>
         <file>images/rotateCounterClockWise.png</file>
         <file>images/sagital.png</file>
+        <file>images/search.png</file>
         <file>images/seed.png</file>
         <file>images/sequenceBegin.png</file>
         <file>images/sequenceEnd.png</file>
@@ -82,6 +84,7 @@
         <file>images/tabRemove.png</file>
         <file>images/usbpendrive.png</file>
         <file>images/verticalWidget.png</file>
+        <file>images/view.png</file>
         <file>images/view_left_right.png</file>
         <file>images/view_sidetree.png</file>
         <file>images/view_top_bottom.png</file>

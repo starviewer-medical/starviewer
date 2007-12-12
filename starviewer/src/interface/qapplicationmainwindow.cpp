@@ -108,7 +108,7 @@ void QApplicationMainWindow::createActions()
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR") );
 //     m_openDICOMDIRAction->setShortcut( tr("Ctrl+ ") );
     m_openDICOMDIRAction->setStatusTip( tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk") );
-//     m_openDICOMDIRAction->setIcon( QIcon(":/images/openDICOMDIRQuery.png") );
+    m_openDICOMDIRAction->setIcon( QIcon(":/images/createDICOMDIR.png") );
     m_signalMapper->setMapping( m_openDICOMDIRAction , 8 );
     connect( m_openDICOMDIRAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
