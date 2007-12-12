@@ -18,6 +18,7 @@ Drawer::Drawer( Q2DViewer *viewer, QObject *parent )
 {
     m_2DViewer = viewer;
     connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(refresh()) );
+    connect( m_2DViewer, SIGNAL(viewChanged(int)), SLOT(refresh()) );
 }
 
 Drawer::~Drawer()
