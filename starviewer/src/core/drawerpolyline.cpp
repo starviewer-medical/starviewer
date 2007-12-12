@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "drawerpolyline.h"
 #include "logging.h"
+#include "q2dviewer.h"
 // vtk
 #include <vtkPolyData.h>
 #include <vtkCellArray.h>
@@ -189,7 +190,7 @@ int DrawerPolyline::getNumberOfPoints()
     return m_pointsList.count();
 }
 
-double DrawerPolyline::computeArea()
+double DrawerPolyline::computeArea( int view )
 {
     double area = 0.0;
     double * actualPoint;
@@ -201,8 +202,21 @@ double DrawerPolyline::computeArea()
 
         followPoint = m_pointsList.at( j+1 );
 
-        area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
-    }
+        switch( view )
+        {
+            case Q2DViewer::Axial:
+                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
+                break;
+                        
+            case Q2DViewer::Sagittal:
+                area += ( ( followPoint[2]-actualPoint[2] )*(followPoint[1] + actualPoint[1] ) )/2.0;
+                break;
+                        
+            case Q2DViewer::Coronal:
+                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[2] + actualPoint[2] ) )/2.0;
+                break;
+        }
+    }        
 
      //en el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
      //per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI

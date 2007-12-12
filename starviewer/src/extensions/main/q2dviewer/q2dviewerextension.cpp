@@ -660,7 +660,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList exclusiveTools;
-    exclusiveTools << "ZoomTool" << "SlicingTool";
+    exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool";
     m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
