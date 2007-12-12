@@ -136,7 +136,7 @@ void QueryScreen::createConnections()
 {
     //connectem els butons
     connect( m_searchButton, SIGNAL( clicked() ), SLOT( searchStudy() ) );
-    connect( m_clearButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
+    connect( m_clearToolButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
     connect( m_retrieveButtonPACS, SIGNAL( clicked() ), SLOT( retrieve() ) );
     connect( m_retrieveButtonDICOMDIR, SIGNAL( clicked() ), SLOT( retrieve() ) );
     connect( m_operationListToolButton, SIGNAL( clicked() ), m_operationStateScreen, SLOT( show() ) );
@@ -145,7 +145,7 @@ void QueryScreen::createConnections()
     connect( m_viewButtonLocal, SIGNAL( clicked() ), SLOT( view() ) );
     connect( m_viewButtonPACS, SIGNAL( clicked() ), SLOT( view() ) );
     connect( m_viewButtonDICOMDIR, SIGNAL( clicked() ), SLOT( view() ) );
-    connect( m_createDicomdirButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
+    connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
 
     //connectem Slots dels StudyTreeWidget amb la interficie
     connect( m_studyTreeWidgetPacs, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
@@ -210,7 +210,7 @@ void QueryScreen::createConnections()
     connect( m_studyTreeWidgetCache, SIGNAL( convertToDicomDir( QStringList ) ), SLOT( convertToDicomdir( QStringList ) ) );
 
     //Amaga o ensenya la cerca avançada
-    connect( m_advancedSearchButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
+    connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
 
     connect( m_textOtherModality, SIGNAL( editingFinished () ), SLOT( textOtherModalityEdited() ) );
 
@@ -242,15 +242,15 @@ void QueryScreen::checkNewToDate( QDate date )
 void QueryScreen::setAdvancedSearchVisible(bool visible)
 {
     m_qwidgetAdvancedSearch->setVisible(visible);
-    m_qwidgetAdvancedSearch->setEnabled( m_advancedSearchButton->isChecked() );
+    m_qwidgetAdvancedSearch->setEnabled( m_advancedSearchToolButton->isChecked() );
 
     if (visible)
     {
-        m_advancedSearchButton->setText( m_advancedSearchButton->text().replace(">>","<<") );
+        m_advancedSearchToolButton->setText( m_advancedSearchToolButton->text().replace(">>","<<") );
     }
     else
     {
-        m_advancedSearchButton->setText( m_advancedSearchButton->text().replace("<<",">>") );
+        m_advancedSearchToolButton->setText( m_advancedSearchToolButton->text().replace("<<",">>") );
     }
 }
 
@@ -988,7 +988,7 @@ void QueryScreen::refreshTab( int index )
         case PACSQueryTab:
                 m_buttonGroupModality->setEnabled(true);
                 clearCheckedModality();
-                m_qwidgetAdvancedSearch->setEnabled( m_advancedSearchButton->isChecked() );
+                m_qwidgetAdvancedSearch->setEnabled( m_advancedSearchToolButton->isChecked() );
                 break;
         case DICOMDIRTab:
                 m_buttonGroupModality->setEnabled(false);

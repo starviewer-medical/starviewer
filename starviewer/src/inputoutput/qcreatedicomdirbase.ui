@@ -12,6 +12,9 @@
   <property name="windowTitle" >
    <string>Create DICOMDIR</string>
   </property>
+  <property name="windowIcon" >
+   <iconset resource="../main/main.qrc" >:/images/createDICOMDIR.png</iconset>
+  </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>9</number>

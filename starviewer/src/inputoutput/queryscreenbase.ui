@@ -12,6 +12,9 @@
   <property name="windowTitle" >
    <string>Query Study</string>
   </property>
+  <property name="windowIcon" >
+   <iconset resource="../main/main.qrc" >:/images/pacsQuery.png</iconset>
+  </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>9</number>
@@ -1118,7 +1121,7 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QPushButton" name="m_advancedSearchButton" >
+      <widget class="QToolButton" name="m_advancedSearchToolButton" >
        <property name="text" >
         <string>Advanced Search >></string>
        </property>
@@ -1127,15 +1130,18 @@
        </property>
        <property name="iconSize" >
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>32</width>
+         <height>32</height>
         </size>
        </property>
        <property name="checkable" >
         <bool>true</bool>
        </property>
-       <property name="autoDefault" >
-        <bool>false</bool>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -1153,21 +1159,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_clearButton" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>3</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>16777215</width>
-         <height>30</height>
-        </size>
-       </property>
+      <widget class="QToolButton" name="m_clearToolButton" >
        <property name="text" >
         <string>Clear Search Fields</string>
        </property>
@@ -1180,38 +1172,21 @@
          <height>32</height>
         </size>
        </property>
-       <property name="autoDefault" >
-        <bool>false</bool>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_searchButton" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>3</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>16777215</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="toolTip" >
-        <string>search</string>
-       </property>
-       <property name="layoutDirection" >
-        <enum>Qt::LeftToRight</enum>
-       </property>
        <property name="text" >
         <string>Search</string>
        </property>
        <property name="icon" >
-        <iconset/>
+        <iconset resource="../main/main.qrc" >:/images/search.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -1221,6 +1196,9 @@
        </property>
        <property name="default" >
         <bool>true</bool>
+       </property>
+       <property name="flat" >
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -1296,23 +1274,24 @@
           <number>6</number>
          </property>
          <item>
-          <widget class="QPushButton" name="m_viewButtonLocal" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>3</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
+          <widget class="QToolButton" name="m_viewButtonLocal" >
            <property name="text" >
             <string>View</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -1368,45 +1347,26 @@
           <number>6</number>
          </property>
          <item>
-          <widget class="QPushButton" name="m_viewButtonPACS" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>3</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
+          <widget class="QToolButton" name="m_viewButtonPACS" >
            <property name="text" >
             <string>View</string>
            </property>
-           <property name="autoDefault" >
-            <bool>false</bool>
+           <property name="icon" >
+            <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_retrieveButtonPACS" >
-           <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>1</hsizetype>
-             <vsizetype>3</vsizetype>
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="maximumSize" >
-            <size>
-             <width>16777215</width>
-             <height>30</height>
-            </size>
-           </property>
+          <widget class="QToolButton" name="m_retrieveButtonPACS" >
            <property name="text" >
             <string>Retrieve</string>
            </property>
@@ -1419,8 +1379,8 @@
              <height>32</height>
             </size>
            </property>
-           <property name="default" >
-            <bool>true</bool>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
            </property>
           </widget>
          </item>
@@ -1641,12 +1601,21 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="m_createDicomdirButton" >
+      <widget class="QToolButton" name="m_createDICOMDIRToolButton" >
        <property name="text" >
         <string>Create DICOMDIR</string>
        </property>
-       <property name="autoDefault" >
-        <bool>false</bool>
+       <property name="icon" >
+        <iconset resource="../main/main.qrc" >:/images/createDICOMDIR.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
       </widget>
      </item>
@@ -1701,14 +1670,8 @@
   <tabstop>m_checkPT</tabstop>
   <tabstop>m_checkUS</tabstop>
   <tabstop>m_instanceNumberText</tabstop>
-  <tabstop>m_advancedSearchButton</tabstop>
-  <tabstop>m_searchButton</tabstop>
   <tabstop>m_textOtherModality</tabstop>
-  <tabstop>m_retrieveButtonPACS</tabstop>
-  <tabstop>m_viewButtonPACS</tabstop>
-  <tabstop>m_createDicomdirButton</tabstop>
   <tabstop>m_tab</tabstop>
-  <tabstop>m_clearButton</tabstop>
   <tabstop>m_referringPhysiciansNameText</tabstop>
   <tabstop>m_studyModalityText</tabstop>
   <tabstop>m_seriesNumberText</tabstop>
