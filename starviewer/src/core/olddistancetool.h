@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGDISTANCETOOL_H
-#define UDGDISTANCETOOL_H
+#ifndef UDGOLDDISTANCETOOL_H
+#define UDGOLDDISTANCETOOL_H
 
 #include "oldtool.h"
 #include <QSet>
@@ -18,14 +18,14 @@ namespace udg {
 class Q2DViewer;
 class Distance;
 class DistanceRepresentation;
-class DistanceToolData;
+class OldDistanceToolData;
 class DrawingPrimitive;
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class DistanceTool : public OldTool
+class OldDistanceTool : public OldTool
 {
     Q_OBJECT
 public:
@@ -39,15 +39,15 @@ public:
     enum { NOTHINGSELECTED, FIRST, SECOND };
 
 
-    DistanceTool( Q2DViewer *viewer , QObject *parent = 0 );
+    OldDistanceTool( Q2DViewer *viewer , QObject *parent = 0 );
 
-    ~DistanceTool();
+    ~OldDistanceTool();
 
     /// tracta els events que succeeixen dins de l'escena
     void handleEvent( unsigned long eventID );
 
 private:
-    ///ens assigna els atributs als objectes DistanceToolData i DistanceRepresentation de la distància seleccionada
+    ///ens assigna els atributs als objectes OldDistanceToolData i DistanceRepresentation de la distància seleccionada
     void createSelectedDistanceData( PrimitivesSet *primitiveSet );
 
     ///actualitza la posició del primer punt de la distància seleccionada
@@ -87,7 +87,7 @@ private:
 
     ///objectes que ens servirà per crear la distància que l'usuari ha seleccionat
     DistanceRepresentation *m_selectedDistanceRepresentation;
-    DistanceToolData *m_selectedDistanceToolData;
+    OldDistanceToolData *m_selectedDistanceToolData;
 
     ///ens permet conèixer si s'han obtingut primitives correctes com a distància seleccionada
     bool m_correctData;

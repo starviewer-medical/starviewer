@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGDISTANCETOOLDATA_H
-#define UDGDISTANCETOOLDATA_H
+#ifndef UDGOLDDISTANCETOOLDATA_H
+#define UDGOLDDISTANCETOOLDATA_H
 
 #include "oldtooldata.h"
 
@@ -19,13 +19,13 @@ Classe que implementa una especialització de la classe ToolData, per a contenir
 @author Grup de Gràfics de Girona  ( GGG )
 */
 
-class DistanceToolData : public OldToolData {
+class OldDistanceToolData : public OldToolData {
 Q_OBJECT
 public:
     ///constructor amb paràmetres
-    DistanceToolData( double p1[3], double p2[3] );
+    OldDistanceToolData( double p1[3], double p2[3] );
 
-    ~DistanceToolData();
+    ~OldDistanceToolData();
 
     ///assignem el primer punt
     void setFirstPoint( double p1[3] );
