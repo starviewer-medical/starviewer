@@ -28,7 +28,9 @@ public:
 
     double applyMethod();
 
-    void applyMethodNextSlice( unsigned int slice, int step, int seedx, int seedy );
+    void applyMethodNextSlice( unsigned int slice, int step );
+
+    void regionGrowingRecursive( InternalImageType::Pointer mask, InternalImageType::Pointer im, int indexX, int indexY );
 
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();
@@ -85,6 +87,10 @@ public:
 
     void setUpperVentriclesThreshold (int x) {m_upperVentriclesThreshold=x;};
 
+    void setMinROI (int x[2]) {m_minROI[0]=x[0];m_minROI[1]=x[1];};
+
+    void setMaxROI (int x[2]) {m_maxROI[0]=x[0];m_maxROI[1]=x[1];};
+
 
 private:
 
@@ -111,6 +117,10 @@ private:
     double m_volume;
     int    m_cont;
     int    m_edemaCont;
+
+    ///indexs extrems de la ROI
+    int m_minROI[2];
+    int m_maxROI[2];
 
 
     ///valors mètode edema
