@@ -52,9 +52,6 @@ public slots:
 
     /// Executa l'algorisme de segmetnaci�
     void ApplyMethod();
-    void ApplyCleanSkullMethod( );
-    void ApplyRectumMethod( );
-    void ApplyVentriclesMethod( );
     void ApplyFilterMainImage( );
 
 /*  void changeViewToSagital();
@@ -70,7 +67,7 @@ public slots:
 private:
     /// tipus d'edició dels models
     enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
-    
+
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
     void createActions();
 
@@ -82,7 +79,7 @@ private:
 
     /// Guarda i llegeix les caracter�tiques
     void readSettings();
-    void writeSettings();    
+    void writeSettings();
 
 private slots:
      /// gestiona els events del m_2DView
@@ -90,9 +87,17 @@ private slots:
 
     /// gestiona els events del botó esquerre
     void leftButtonEventHandler( );
+    void onMouseMoveEventHandler( );
+    void leftButtonReleaseHandler( );
+
 
     /// visualitza la informaci�de la llavor del m�ode de segmentaci�
     void setSeedPosition( );
+
+    void setRegionOfInterest( );
+    void setMovingRegionOfInterest( );
+    void setReleaseRegionOfInterest( );
+    void viewRegionState(int st);
 
      /// determina la llavor del m�ode de segmentaci�
     void setEditorPoint( );
@@ -144,11 +149,12 @@ private slots:
 
     /// Visualitza els diferents overlays
     void viewLesionOverlay();
-    void viewRectumOverlay();
-    void viewVentriclesOverlay();
 
     /// Desa la màscara que s'està visualitzant
     void saveActivedMaskVolume();
+
+    /// Desactiva les tools en cas que s'activi una tool "externa"
+    void toolChanged( QAction* ac);
 
 /*    /// sincronitza les llesques de les s?ies que es visualitzen
     void synchronizeSlices( bool ok );
@@ -167,9 +173,6 @@ private:
 
     /// El volum on hi guardem el resultat de la segmentaci�
     Volume *m_lesionMaskVolume;
-    Volume *m_rectumMaskVolume;
-    Volume *m_ventriclesMaskVolume;
-    Volume *m_activedMaskVolume;
     vtkImageThreshold *m_imageThreshold;
 
     /// El volum on hi guardem la imatge principal filtrada
@@ -193,15 +196,15 @@ private:
     bool m_isLeftButtonPressed;
     vtkActor *squareActor;
     int m_cont;
-    int m_rectumCont;
-    int m_ventriclesCont;
-    int* m_activedCont;
     double m_volume;
-    double m_rectumVolume;
-    double m_ventriclesVolume;
-    double* m_activedVolume;
 
     int m_editorTool;
+
+    vtkActor *squareRegionActor;
+    double m_initialRegionPoint[2];
+    double m_finalRegionPoint[2];
+    bool m_isRegionSet;
+    bool m_isRegionSetting;
 /*    bool m_isErase;
     bool m_isPaint;
     bool m_isEraseSlice;*/
@@ -221,6 +224,7 @@ private:
     QAction *m_moveAction;
     QAction *m_seedAction;
     QAction *m_editorAction;
+    QAction *m_regionAction;
     QAction *m_voxelInformationAction;
     QAction *m_rotateClockWiseAction;
     ToolsActionFactory *m_actionFactory;
@@ -242,7 +246,6 @@ private:
     QActionGroup *m_viewOverlayActionGroup;
     QActionGroup* m_editorToolActionGroup;
 
-    bool m_enabledTools;
 };
 
 } // end namespace udg

@@ -61,9 +61,6 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
     setupUi( this );
     m_mainVolume     = 0;
     m_lesionMaskVolume = 0;
-    m_rectumMaskVolume  = 0;
-    m_ventriclesMaskVolume = 0;
-    m_activedMaskVolume = 0;
     m_filteredVolume   = 0;
 
     m_imageThreshold = 0;
@@ -71,10 +68,6 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
     //m_vtkFusionImage = 0;
 
     m_volume = 0.0;
-    m_rectumVolume = 0.0;
-
-    m_enabledTools=true;
-
 
     m_segMethod = new rectumSegmentationMethod();
 
@@ -83,11 +76,12 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
     m_editorTool = QRectumSegmentationExtension::NoEditor;
     m_isLeftButtonPressed = false;
     m_cont = 0;
-    m_rectumCont = 0;
-    m_ventriclesCont = 0;
+    m_isRegionSet = false;
+    m_isRegionSetting = false;
 
     //pointActor = vtkActor::New();
     squareActor = vtkActor::New();
+    squareRegionActor = vtkActor::New();
 
     createActions();
     createToolBars();
@@ -102,6 +96,7 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
     delete m_segMethod;
     //pointActor  -> Delete();
     squareActor -> Delete();
+    squareRegionActor -> Delete();
     if(m_filteredVolume != 0)
     {
         delete m_filteredVolume;
@@ -109,14 +104,6 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
     if(m_lesionMaskVolume != 0)
     {
         delete m_lesionMaskVolume;
-    }
-    if(m_ventriclesMaskVolume != 0)
-    {
-        delete m_ventriclesMaskVolume;
-    }
-    if(m_rectumMaskVolume != 0)
-    {
-        delete m_rectumMaskVolume;
     }
     if(m_imageThreshold != 0)
     {
@@ -136,7 +123,7 @@ void QRectumSegmentationExtension::createActions()
     m_voxelInformationAction->setCheckable( true );
     m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
 
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
+    //connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
@@ -173,6 +160,13 @@ void QRectumSegmentationExtension::createActions()
     m_editorAction->setEnabled( false );
     m_editorToolButton->setDefaultAction( m_editorAction );
 
+    m_regionAction = new QAction( 0 );
+    m_regionAction->setText( tr("RegionTool") );
+    m_regionAction->setStatusTip( tr("Enable/Disable region tool") );
+    m_regionAction->setCheckable( true );
+    m_regionAction->setEnabled( true );
+    m_regionToolButton->setDefaultAction( m_regionAction );
+
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
 
@@ -184,36 +178,9 @@ void QRectumSegmentationExtension::createActions()
     m_toolsActionGroup->addAction( m_moveAction );
     m_toolsActionGroup->addAction( m_seedAction );
     m_toolsActionGroup->addAction( m_editorAction );
+    m_toolsActionGroup->addAction( m_regionAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_seedAction->trigger();
-
-    m_lesionViewAction = new QAction( 0 );
-    m_lesionViewAction->setText( tr("Lesion Overlay") );
-    m_lesionViewAction->setStatusTip( tr("Enable/Disable lesion View Overlay") );
-    m_lesionViewAction->setCheckable( true );
-    m_lesionViewAction->setEnabled( false );
-    m_lesionViewToolButton->setDefaultAction( m_lesionViewAction );
-
-    m_rectumViewAction = new QAction( 0 );
-    m_rectumViewAction->setText( tr("Rectum Overlay") );
-    m_rectumViewAction->setStatusTip( tr("Enable/Disable rectum View Overlay") );
-    m_rectumViewAction->setCheckable( true );
-    m_rectumViewAction->setEnabled( false );
-    m_rectumViewToolButton->setDefaultAction( m_rectumViewAction );
-
-    m_ventriclesViewAction = new QAction( 0 );
-    m_ventriclesViewAction->setText( tr("Ventricles Overlay") );
-    m_ventriclesViewAction->setStatusTip( tr("Enable/Disable ventricles View Overlay") );
-    m_ventriclesViewAction->setCheckable( true );
-    m_ventriclesViewAction->setEnabled( false );
-    m_ventriclesViewToolButton->setDefaultAction( m_ventriclesViewAction );
-
-    m_viewOverlayActionGroup = new QActionGroup( 0 );
-    m_viewOverlayActionGroup->setExclusive( true );
-    m_viewOverlayActionGroup->addAction( m_ventriclesViewAction );
-    m_viewOverlayActionGroup->addAction( m_rectumViewAction );
-    m_viewOverlayActionGroup->addAction( m_lesionViewAction );
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
 
     m_paintEditorAction = new QAction( 0 );
     m_paintEditorAction->setText( tr("Paint Editor Tool") );
@@ -267,18 +234,6 @@ void QRectumSegmentationExtension::createConnections()
 
   connect( m_applyMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyMethod() ) );
 
-  connect( m_applyCleanSkullButton , SIGNAL( clicked() ) , this , SLOT( ApplyCleanSkullMethod() ) );
-
-  connect( m_applyVentriclesMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyVentriclesMethod() ) );
-
-  connect( m_applyRectumMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyRectumMethod() ) );
-
-  connect( m_lesionViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewLesionOverlay() ) );
-
-  connect( m_rectumViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewRectumOverlay() ) );
-
-  connect( m_ventriclesViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewVentriclesOverlay() ) );
-
   connect( m_eraseButton , SIGNAL( clicked() ) , this , SLOT( setErase() ) );
 
   connect( m_eraseSliceButton , SIGNAL( clicked() ) , this , SLOT( setEraseSlice() ) );
@@ -306,11 +261,17 @@ void QRectumSegmentationExtension::createConnections()
   connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
 
   connect( m_saveMaskPushButton, SIGNAL( clicked() ) , this , SLOT( saveActivedMaskVolume() ) );
+
+  connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ) , this , SLOT( viewRegionState(int) ) );
+
+  connect( m_toolsActionGroup, SIGNAL( triggered(QAction*) ) , this , SLOT( toolChanged(QAction*) ) );
 }
 
 void QRectumSegmentationExtension::setInput( Volume *input )
 {
     m_mainVolume = new Volume();
+    std::cout<<"Inici d'input"<<std::endl;
+
     //Prova pel mètode de FastMarching
 /*    typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
     typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleImageFilterType;
@@ -350,7 +311,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     m_2DView->setView( Q2DViewer::Axial );
-    m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
+    m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
 
@@ -399,19 +360,6 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_lowerValueSlider->setValue(35);
     m_upperValueSlider->setValue(170);
 
-    m_lowerValueVentriclesSpinBox->setMinimum(m_minValue);
-    m_lowerValueVentriclesSpinBox->setMaximum(m_maxValue);
-    m_upperValueVentriclesSpinBox->setMinimum(m_minValue);
-    m_upperValueVentriclesSpinBox->setMaximum(m_maxValue);
-    m_lowerValueVentriclesSlider->setMinimum(m_minValue);
-    m_lowerValueVentriclesSlider->setMaximum(m_maxValue);
-    m_upperValueVentriclesSlider->setMinimum(m_minValue);
-    m_upperValueVentriclesSlider->setMaximum(m_maxValue);
-    //empirical values!!
-    m_lowerValueVentriclesSlider->setValue(15);
-    m_upperValueVentriclesSlider->setValue(170);
-
-
     m_2DView->render();
 
 }
@@ -435,24 +383,15 @@ void QRectumSegmentationExtension::ApplyFilterMainImage( )
 
 }
 
-void QRectumSegmentationExtension::ApplyCleanSkullMethod( )
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    m_volume = m_segMethod->applyCleanSkullMethod();
-    //std::cout<<"Hem sortit de l'abisme!!!"<<std::endl;
-    m_cont = m_segMethod->getNumberOfVoxels();
-
-    m_resultsLineEdit->clear();
-    m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
-
-    m_2DView->getInteractor()->Render();
-    QApplication::restoreOverrideCursor();
-}
-
 void QRectumSegmentationExtension::ApplyMethod( )
 {
     if(!m_isSeed || !m_isMask){
         QMessageBox::critical( this , tr( "StarViewer" ) , tr( "ERROR: seed or mask undefined" ) );
+        return;
+    }
+    if(!m_isRegionSet)
+    {
+        QMessageBox::warning( this , QObject::tr( "Starviewer" ) , QObject::tr( "No hi ha ROI definida" ) );
         return;
     }
 
@@ -473,9 +412,33 @@ void QRectumSegmentationExtension::ApplyMethod( )
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_segMethod->setInsideMaskValue ( m_insideValue );
     m_segMethod->setOutsideMaskValue( m_outsideValue );
+    m_segMethod->setMultiplier(m_multiplierEdit->text().toDouble());
     double pos[3];
     m_2DView->getSeedPosition(pos);
     m_segMethod->setSeedPosition(pos[0],pos[1],pos[2]);
+    int x[2];
+    int y[2];
+    if(m_initialRegionPoint[0]<m_finalRegionPoint[0])
+    {
+        x[0]=(m_initialRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
+        y[0]=(m_finalRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
+    }else
+    {
+        x[0]=(m_finalRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
+        y[0]=(m_initialRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
+    }
+    if(m_initialRegionPoint[1]<m_finalRegionPoint[1])
+    {
+        x[1]=(m_initialRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
+        y[1]=(m_finalRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
+    }else
+    {
+        x[1]=(m_finalRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
+        y[1]=(m_initialRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
+    }
+    m_segMethod->setMinROI(x);
+    m_segMethod->setMaxROI(y);
+
     m_volume = m_segMethod->applyMethod();
     m_cont = m_segMethod->getNumberOfVoxels();
 
@@ -496,8 +459,6 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_eraseSliceButton->setEnabled(true);
     m_eraseRegionButton->setEnabled(true);
     m_editorSize->setEnabled(true);
-    m_applyVentriclesMethodButton->setEnabled(true);
-    m_applyCleanSkullButton->setEnabled(true);
     m_editorAction->trigger();
     m_2DView->disableTools();
     m_editorAction->setEnabled( true );
@@ -509,84 +470,12 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_eraseRegionEditorAction->trigger();
     m_editorTool = QRectumSegmentationExtension::EraseRegion;
 
-    m_lesionViewAction->setEnabled( true );
-    m_lesionViewAction->trigger( );
-    this->viewLesionOverlay();
+/*    this->viewLesionOverlay();
     //m_2DView->getInteractor()->Render();
+    m_cont = &m_cont;*/
     QApplication::restoreOverrideCursor();
     std::cout<<"Fi Apply method!!"<<std::endl;
  }
-
-void QRectumSegmentationExtension::ApplyVentriclesMethod( )
-{
-    if(m_ventriclesMaskVolume == 0)
-    {
-        m_ventriclesMaskVolume = new Volume();
-    }
-
-    if(m_imageThreshold == 0)
-    {
-        m_imageThreshold = vtkImageThreshold::New();
-    }
-    m_imageThreshold->SetInput( m_mainVolume->getVtkData() );
-    m_lowerVentriclesValue = m_lowerValueVentriclesSlider->value();
-    m_upperVentriclesValue = m_upperValueVentriclesSlider->value();
-    m_imageThreshold->ThresholdBetween( m_lowerVentriclesValue,  m_upperVentriclesValue);
-    m_imageThreshold->SetInValue( m_outsideValue );   //Inverse mask --> we want < lower or > upper
-    m_imageThreshold->SetOutValue( m_insideValue );
-    m_imageThreshold->Update();
-
-    m_ventriclesMaskVolume->setData(m_imageThreshold->GetOutput());
-
-    m_ventriclesViewAction->setEnabled( true );
-    m_ventriclesViewAction->trigger( );
-    this->viewVentriclesOverlay();
-    m_applyRectumMethodButton->setEnabled(true);
-
- }
-
-
-void QRectumSegmentationExtension::ApplyRectumMethod( )
-{
-    std::cout<<"Init Apply filter Rectum!!"<<std::endl;
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    if(m_rectumMaskVolume == 0)
-    {
-        m_rectumMaskVolume  = new Volume();
-    }
-
-    if(m_filteredVolume == 0)
-    {
-        m_segMethod->setVolume(m_mainVolume);
-    }
-    else
-    {
-        m_segMethod->setVolume(m_filteredVolume);
-    }
-    m_segMethod->setMask(m_lesionMaskVolume);
-    //m_segMethod->setInitialDistance(m_distanceEdit->text().toDouble());
-    m_segMethod->setMean(m_meanEdit->text().toDouble());
-    m_segMethod->setVariance(m_varianceEdit->text().toDouble());
-    m_segMethod->setConstant(m_constantEdit->text().toDouble());
-    m_segMethod->setStoppingTime(m_stoppingTimeEdit->text().toDouble());
-    m_segMethod->setMultiplier(m_multiplierEdit->text().toDouble());
-    m_segMethod->setAlpha(m_alphaEdit->text().toDouble());
-    m_segMethod->setLowerVentriclesThreshold(m_lowerVentriclesValue);
-    m_segMethod->setUpperVentriclesThreshold(m_upperVentriclesValue);
-    //std::cout<<" Init Apply filter Rectum!!"<<std::endl;
-    m_rectumVolume = m_segMethod->applyMethodRectum(m_rectumMaskVolume);
-    m_rectumCont = m_segMethod->getRectumNumberOfVoxels();
-    m_rectumVolumeLineEdit->clear();
-    m_rectumVolumeLineEdit->insert(QString("%1").arg(m_rectumVolume, 0, 'f', 2));
-    m_rectumViewAction->setEnabled( true );
-    m_rectumViewAction->trigger( );
-    //std::cout<<"FI Apply filter Rectum, Init view!!"<<std::endl;
-    this->viewRectumOverlay();
-    QApplication::restoreOverrideCursor();
-    //std::cout<<"Rectum cont: "<<m_rectumCont<<", "<<(*m_activedCont)<<std::endl;
-    //std::cout<<"Rectum vol: "<<m_rectumVolume<<", "<<(*m_activedVolume)<<std::endl;
-    std::cout<<"FI Apply filter Rectum!!"<<std::endl;
-}
 
 
 void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
@@ -594,7 +483,7 @@ void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
     switch( id )
     {
     case vtkCommand::MouseMoveEvent:
-        setPaintCursor();
+        onMouseMoveEventHandler();
     break;
 
     case vtkCommand::LeftButtonPressEvent:
@@ -602,7 +491,7 @@ void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        setLeftButtonOff();
+        leftButtonReleaseHandler();
     break;
 
     case vtkCommand::RightButtonPressEvent:
@@ -614,27 +503,49 @@ void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
 
 }
 
+void QRectumSegmentationExtension::onMouseMoveEventHandler( )
+{
+    if(m_editorToolButton->isChecked())    //Només en cas que estiguem en l'editor
+    {
+        setPaintCursor();
+    }
+    else
+    {
+        if(m_regionToolButton->isChecked())    //Només en cas que estiguem en la selecció de regió d'interés
+        {
+            setMovingRegionOfInterest();
+        }
+    }
+}
+
 void QRectumSegmentationExtension::leftButtonEventHandler( )
 {
     m_isLeftButtonPressed = true;
 
-    if(m_editorToolButton->isChecked())
+    if((m_editorToolButton->isChecked())||(m_regionToolButton->isChecked()))
     {
-        if(m_enabledTools==true)
+        m_2DView->disableTools();
+        if(m_editorToolButton->isChecked())
         {
-            //std::cout<<"Editor Tool"<<std::endl;
-            m_2DView->disableTools();
             setEditorPoint(  );
-            m_enabledTools=false;
         }
-   }
+        else
+        {
+            setRegionOfInterest();
+        }
+    }
     else
     {
-        if(m_enabledTools==false)
-        {
-            m_2DView->enableTools();
-            m_enabledTools=true;
-        }
+        m_2DView->enableTools();
+    }
+}
+
+void QRectumSegmentationExtension::leftButtonReleaseHandler( )
+{
+    setLeftButtonOff();
+    if(m_regionToolButton->isChecked())    //Només en cas que estiguem en la selecció de regió d'interés
+    {
+        setReleaseRegionOfInterest();
     }
 }
 
@@ -658,6 +569,97 @@ void QRectumSegmentationExtension::setSeedPosition( )
         m_applyMethodButton->setEnabled(true);
     }
 
+}
+
+void QRectumSegmentationExtension::setRegionOfInterest( )
+{
+    std::cout<<"SetRegionOfInterest"<<std::endl;
+    double pos[3];
+    m_2DView->getCurrentCursorPosition(pos);
+    m_initialRegionPoint[0]= pos[0];
+    m_initialRegionPoint[1]= pos[1];
+    m_isRegionSetting = true;
+}
+
+void QRectumSegmentationExtension::setMovingRegionOfInterest( )
+{
+    if(m_isRegionSetting)
+    {
+        std::cout<<"isSettingRegionOfInterest"<<std::endl;
+        double pos[3];
+        double spacing[3];
+        m_mainVolume->getSpacing(spacing);
+        m_2DView->getCurrentCursorPosition(pos);
+        m_finalRegionPoint[0]= pos[0];
+        m_finalRegionPoint[1]= pos[1];
+        std::cout<<"1"<<std::endl;
+
+        vtkPoints *points = vtkPoints::New();
+        points->SetNumberOfPoints(4);
+        points->SetPoint(0, m_initialRegionPoint[0], m_initialRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
+        points->SetPoint(1, m_initialRegionPoint[0], m_finalRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
+        points->SetPoint(2, m_finalRegionPoint[0], m_finalRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
+        points->SetPoint(3, m_finalRegionPoint[0], m_initialRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
+
+        std::cout<<"Points: ["<<m_initialRegionPoint[0]<<","<<m_initialRegionPoint[1]<<"] ,["<<m_finalRegionPoint[0]<<","<<m_finalRegionPoint[1]<<"]"<<std::endl;
+
+        vtkIdType pointIds[4];
+
+        pointIds[0] = 0;
+        pointIds[1] = 1;
+        pointIds[2] = 2;
+        pointIds[3] = 3;
+
+
+        std::cout<<"2"<<std::endl;
+        vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
+
+        grid->Allocate(1);
+        grid->SetPoints(points);
+
+        grid->InsertNextCell(VTK_QUAD,4,pointIds);
+
+        squareRegionActor -> GetProperty()->SetColor(0.45, 0.23, 0.26);
+        squareRegionActor -> GetProperty()->SetOpacity(0.2);
+
+        vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
+        squareMapper->SetInput( grid );
+
+        squareRegionActor->SetMapper( squareMapper );
+
+        std::cout<<"3"<<std::endl;
+        m_2DView->getRenderer()-> AddActor( squareRegionActor );
+        m_2DView->getInteractor()->Render();
+
+        squareRegionActor->VisibilityOn();
+
+        squareMapper-> Delete();
+        points      -> Delete();
+        grid        -> Delete();
+    }
+}
+
+void QRectumSegmentationExtension::setReleaseRegionOfInterest( )
+{
+    std::cout<<"FinalRegionOfInterest"<<std::endl;
+    m_isRegionSet=true;
+    m_isRegionSetting=false;
+    m_viewROICheckBox->setEnabled(true);
+    m_viewROICheckBox->setChecked(true);
+}
+
+void QRectumSegmentationExtension::viewRegionState(int st)
+{
+    if(st==Qt::Unchecked)
+    {
+        squareRegionActor->VisibilityOff();
+        m_2DView->render();
+    }
+    else
+    {
+        squareRegionActor->VisibilityOn();
+        m_2DView->render();
+    }
 }
 
 void QRectumSegmentationExtension::setEditorPoint(  )
@@ -693,14 +695,14 @@ void QRectumSegmentationExtension::setEditorPoint(  )
                     break;
                 }
             }
-//             double volume = this->updateMaskVolume();
+            double volume = this->updateMaskVolume();
             m_resultsLineEdit->clear();
             m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
-            m_rectumVolumeLineEdit->clear();
-            m_rectumVolumeLineEdit->insert(QString("%1").arg(m_rectumVolume, 0, 'f', 2));
-            m_2DView->setOverlayInput(m_activedMaskVolume);
+            m_2DView->setOverlayInput(m_lesionMaskVolume);
             m_2DView->getInteractor()->Render();
         }
+        m_resultsLineEdit->clear();
+        m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
     }
 }
 
@@ -711,10 +713,10 @@ void QRectumSegmentationExtension::setLeftButtonOff( )
 
 void QRectumSegmentationExtension::setOpacity( int op )
 {
-    if(m_activedMaskVolume != 0)
+    if(m_lesionMaskVolume != 0)
     {
         m_2DView->setOpacityOverlay(((double)op)/100.0);
-        m_2DView->setOverlayInput(m_activedMaskVolume);
+        m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->getInteractor()->Render();
     }
 }
@@ -771,69 +773,66 @@ void QRectumSegmentationExtension::setEraseRegion()
 
 void QRectumSegmentationExtension::setPaintCursor()
 {
-    if(m_editorToolButton->isChecked())    //Nom� en cas que estiguem en l'editor
+    if(m_isLeftButtonPressed)
     {
-        if(m_isLeftButtonPressed)
-        {
-            setEditorPoint();
-        }
+        setEditorPoint();
+    }
 
-        if(m_editorTool == QRectumSegmentationExtension::Erase || m_editorTool == QRectumSegmentationExtension::Paint)
-        {
-            int size = m_editorSize->value();
-            double pos[3];
-            double spacing[3];
-            m_lesionMaskVolume->getSpacing(spacing);
-            m_2DView->getCurrentCursorPosition(pos);
-            vtkPoints *points = vtkPoints::New();
-            points->SetNumberOfPoints(4);
+    if(m_editorTool == QRectumSegmentationExtension::Erase || m_editorTool == QRectumSegmentationExtension::Paint)
+    {
+        int size = m_editorSize->value();
+        double pos[3];
+        double spacing[3];
+        m_lesionMaskVolume->getSpacing(spacing);
+        m_2DView->getCurrentCursorPosition(pos);
+        vtkPoints *points = vtkPoints::New();
+        points->SetNumberOfPoints(4);
 
-            double sizeView[2];
-            sizeView[0]=(double)size*spacing[0];
-            sizeView[1]=(double)size*spacing[1];
+        double sizeView[2];
+        sizeView[0]=(double)size*spacing[0];
+        sizeView[1]=(double)size*spacing[1];
 
-            points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2]-1);
-            points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2]-1);
-            points->SetPoint(2, pos[0] + sizeView[0], pos[1] + sizeView[1], pos[2]-1);
-            points->SetPoint(3, pos[0] - sizeView[0], pos[1] + sizeView[1], pos[2]-1);
+        points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2]-1);
+        points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2]-1);
+        points->SetPoint(2, pos[0] + sizeView[0], pos[1] + sizeView[1], pos[2]-1);
+        points->SetPoint(3, pos[0] - sizeView[0], pos[1] + sizeView[1], pos[2]-1);
 
 
-            vtkIdType pointIds[4];
+        vtkIdType pointIds[4];
 
-            pointIds[0] = 0;
-            pointIds[1] = 1;
-            pointIds[2] = 2;
-            pointIds[3] = 3;
+        pointIds[0] = 0;
+        pointIds[1] = 1;
+        pointIds[2] = 2;
+        pointIds[3] = 3;
 
 
-            vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
+        vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
 
-            grid->Allocate(1);
-            grid->SetPoints(points);
+        grid->Allocate(1);
+        grid->SetPoints(points);
 
-            grid->InsertNextCell(VTK_QUAD,4,pointIds);
+        grid->InsertNextCell(VTK_QUAD,4,pointIds);
 
-            squareActor -> GetProperty()->SetColor(0.15, 0.83, 0.26);
-            squareActor -> GetProperty()->SetOpacity(0.2);
+        squareActor -> GetProperty()->SetColor(0.15, 0.83, 0.26);
+        squareActor -> GetProperty()->SetOpacity(0.2);
 
-            vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
-            squareMapper->SetInput( grid );
+        vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
+        squareMapper->SetInput( grid );
 
-            squareActor->SetMapper( squareMapper );
+        squareActor->SetMapper( squareMapper );
 
-            m_2DView->getRenderer()-> AddActor( squareActor );
-            m_2DView->getInteractor()->Render();
+        m_2DView->getRenderer()-> AddActor( squareActor );
+        m_2DView->getInteractor()->Render();
 
-            squareActor->VisibilityOn();
+        squareActor->VisibilityOn();
 
-            squareMapper-> Delete();
-            points      -> Delete();
-            grid        -> Delete();
-        }
-        else
-        {
-            squareActor->VisibilityOff();
-        }
+        squareMapper-> Delete();
+        points      -> Delete();
+        grid        -> Delete();
+    }
+    else
+    {
+        squareActor->VisibilityOff();
     }
 }
 
@@ -847,8 +846,8 @@ void QRectumSegmentationExtension::eraseMask(int size)
     int centralIndex[3];
     int index[3];
     m_2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    m_lesionMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+    m_lesionMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
@@ -860,17 +859,17 @@ void QRectumSegmentationExtension::eraseMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+            value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
-                (*m_activedCont)--;
+                m_cont--;
             }
         }
     }
     //m_lesionMaskVolume->getVtkData()->Update();
     //\TODO: Com que no canvia, no s'actualitza!! Ha de canviar
-    //m_2DView->setOverlayInput(m_activedMaskVolume);
+    //m_2DView->setOverlayInput(m_lesionMaskVolume);
 }
 
 void QRectumSegmentationExtension::paintMask(int size)
@@ -883,8 +882,8 @@ void QRectumSegmentationExtension::paintMask(int size)
     int centralIndex[3];
     int index[3];
     m_2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    m_lesionMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+    m_lesionMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
@@ -895,11 +894,11 @@ void QRectumSegmentationExtension::paintMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+            value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
             if((*value) != m_insideValue)
             {
                 (*value) = m_insideValue;
-                (*m_activedCont)++;
+                m_cont++;
             }
         }
     }
@@ -919,8 +918,8 @@ void QRectumSegmentationExtension::eraseSliceMask()
     int ext[6];
     m_lesionMaskVolume->getVtkData()->GetExtent(ext);
     m_2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    m_lesionMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+    m_lesionMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
@@ -932,11 +931,11 @@ void QRectumSegmentationExtension::eraseSliceMask()
         {
             index[0]=i;
             index[1]=j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+            value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
-                (*m_activedCont)--;
+                m_cont--;
             }
         }
     }
@@ -953,8 +952,8 @@ void QRectumSegmentationExtension::eraseRegionMask()
     int ext[6];
     m_lesionMaskVolume->getVtkData()->GetExtent(ext);
     m_2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    m_lesionMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+    m_lesionMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     index[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
     index[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
@@ -969,7 +968,7 @@ void QRectumSegmentationExtension::eraseRegionMask()
 void QRectumSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
 {
     int ext[6];
-    m_activedMaskVolume->getVtkData()->GetExtent(ext);
+    m_lesionMaskVolume->getVtkData()->GetExtent(ext);
     //std::cout<<"Extension: ["<<ext[0]<<" "<<ext[1]<<", "<<ext[2]<<" "<<ext[3]<<", "<<ext[4]<<" "<<ext[5]<<"], Index: ["<<a<<", "<<b<<", "<<c<<"]"<<std::endl;
     if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
     {
@@ -977,12 +976,12 @@ void QRectumSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
         index[0]=a;
         index[1]=b;
         index[2]=c;
-        int* value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+        int* value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
         if ((*value) == m_insideValue)
         {
             //std::cout<<m_outsideValue<<" "<<m_insideValue<<"->"<<(*value)<<std::endl;
             (*value)= m_outsideValue;
-            (*m_activedCont)--;
+            m_cont--;
             eraseRegionMaskRecursive( a+1, b, c);
             eraseRegionMaskRecursive( a-1, b, c);
             eraseRegionMaskRecursive( a, b+1, c);
@@ -1022,27 +1021,12 @@ void QRectumSegmentationExtension::viewThresholds()
 
 }
 
-void QRectumSegmentationExtension::viewRectumOverlay()
-{
-    if(m_rectumMaskVolume != 0)
-    {
-        m_activedMaskVolume = m_rectumMaskVolume;
-        m_activedCont = &m_rectumCont;
-        m_activedVolume = &m_rectumVolume;
-        m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
-        m_2DView->setOverlayToBlend();
-        m_2DView->setOverlayInput(m_rectumMaskVolume);
-        m_2DView->getInteractor()->Render();
-    }
-}
 
 void QRectumSegmentationExtension::viewLesionOverlay()
 {
     if(m_lesionMaskVolume != 0)
     {
-        m_activedMaskVolume = m_lesionMaskVolume;
-        m_activedCont = &m_cont;
-        m_activedVolume = &m_volume;
+        m_lesionMaskVolume = m_lesionMaskVolume;
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayToBlend();
         m_2DView->setOverlayInput(m_lesionMaskVolume);
@@ -1050,19 +1034,6 @@ void QRectumSegmentationExtension::viewLesionOverlay()
     }
 }
 
-void QRectumSegmentationExtension::viewVentriclesOverlay()
-{
-    if(m_ventriclesMaskVolume != 0)
-    {
-        m_activedMaskVolume = m_ventriclesMaskVolume;
-        m_activedCont = &m_ventriclesCont;
-        m_activedVolume = &m_ventriclesVolume;
-        m_2DView->setOverlayToBlend();
-        m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
-        m_2DView->setOverlayInput(m_ventriclesMaskVolume);
-        m_2DView->getInteractor()->Render();
-    }
-}
 
 double QRectumSegmentationExtension::calculateMaskVolume()
 {
@@ -1071,7 +1042,7 @@ double QRectumSegmentationExtension::calculateMaskVolume()
 
     int ext[6];
     int i,j,k;
-    (*m_activedCont) = 0;
+    m_cont = 0;
     m_lesionMaskVolume->getWholeExtent(ext);
 
     double spacing[3];
@@ -1098,15 +1069,15 @@ double QRectumSegmentationExtension::calculateMaskVolume()
             {
                 if ((*value) == m_insideValue)
                 {
-                    (*m_activedCont)++;
+                    m_cont++;
                 }
                 value++;
             }
         }
     }
-    volume = volume*(double)(*m_activedCont);
+    m_volume = volume*(double)m_cont;
 
-    return volume;
+    return m_volume;
 
 }
 
@@ -1126,12 +1097,12 @@ double QRectumSegmentationExtension::updateMaskVolume()
     }
 
 
-    (*m_activedVolume) = volume*(double)(*m_activedCont);
+    m_volume = volume*(double)m_cont;
     //std::cout<<"vtkvolume ="<<volume<<std::endl;
-    //std::cout<<"updateMask-> Rectum cont: "<<m_rectumCont<<", "<<(*m_activedCont)<<std::endl;
-    //std::cout<<"updateMask-> Rectum cont: "<<m_rectumVolume<<", "<<(*m_activedVolume)<<", "<<volume<<std::endl;
+    //std::cout<<"updateMask-> Rectum cont: "<<m_rectumCont<<", "<<m_cont<<std::endl;
+    //std::cout<<"updateMask-> Rectum cont: "<<m_rectumVolume<<", "<<m_volume<<", "<<volume<<std::endl;
 
-    return (*m_activedVolume);
+    return m_volume;
 
 }
 
@@ -1146,7 +1117,7 @@ void QRectumSegmentationExtension::saveActivedMaskVolume()
         }
         //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
         vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-        imageThreshold->SetInput( m_activedMaskVolume->getVtkData() );
+        imageThreshold->SetInput( m_lesionMaskVolume->getVtkData() );
         imageThreshold->ThresholdBetween( m_insideValue , m_insideValue); // només els que valen m_insideValue
         imageThreshold->SetInValue( 255 );
         imageThreshold->SetOutValue( 0 );
@@ -1160,6 +1131,18 @@ void QRectumSegmentationExtension::saveActivedMaskVolume()
 
         writer->Delete();
         imageThreshold->Delete();
+    }
+}
+
+void QRectumSegmentationExtension::toolChanged( QAction* ac)
+{
+    if(ac==m_seedAction || ac==m_regionAction)
+    {
+        m_2DView->disableTools();
+    }
+    else
+    {
+        m_2DView->enableTools();
     }
 }
 
