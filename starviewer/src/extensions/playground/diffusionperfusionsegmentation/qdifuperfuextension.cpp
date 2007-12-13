@@ -332,15 +332,10 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
 {
     if ( !input )
     {
-        qCritical() << "setDiffusionInput: null input";
+        ERROR_LOG("setDiffusionInput: null input");
         return;
     }
 
-    if ( m_diffusionInputVolume )
-    {
-        qWarning() << "setDiffusionInput: second input has no effect";
-        return;
-    }
     m_diffusionInputVolume = input;
 
     m_diffusionSliceSlider->setMinimum( 0 );
@@ -407,14 +402,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
 {
     if ( !input )
     {
-        qCritical() << "setPerfusionInput: null input";
+        ERROR_LOG( "setPerfusionInput: null input");
         return;
-    }
-
-    if ( m_perfusionInputVolume )
-    {
-        qWarning() << "setPerfusionInput: second input has no effect";
-        //return;
     }
 
     m_perfusionImageStackedWidget->setCurrentWidget( m_selectPerfusionImagePage );
