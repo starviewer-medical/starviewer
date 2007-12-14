@@ -49,6 +49,12 @@ public:
      * de ser un valor en l'interval [0, size()) (no es comprova).
      */
     void add( int value );
+    /**
+     * Decrementa el comptador d'ocurrències de \p value i el total. \p value ha
+     * de ser un valor en l'interval [0, size()) i el seu comptador
+     * d'ocurrències ha de ser > 0 (no es comprova).
+     */
+    void substract( int value );
     /// Crea un iterador sobre els valors de l'histograma i el retorna.
     QVectorIterator< unsigned long > * getIterator() const;
     /// Retorna el recompte total d'ocurrències.
@@ -61,6 +67,8 @@ public:
      * i es sumen tots els comptadors dels dos histogrames.
      */
     void combineWith( const Histogram & histogram );
+    /// Resta \p histogram d'aquest histograma. Es resten tots els comptadors.
+    void substract( const Histogram & histogram );
 
 private:
 
