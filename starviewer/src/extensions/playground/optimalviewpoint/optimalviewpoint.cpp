@@ -502,25 +502,43 @@ void OptimalViewpoint::updatePlanes()
                               (*m_planes)[m_updatePlane], SLOT( endLBlock(int) ) );
 
 
-            // slicer
-            Slicer slicer( m_updatePlane );
-//             slicer.setInput( m_volume->getLabeledImage() );
-            slicer.setInput( m_volume->getImage() );
 
-            ///\warning Això només funcionarà si són 42 plans!!!
-            POVSphereCloud cloud( 1.0, 1 );
-            cloud.createPOVCloud();
-            const QVector< Vector3 > & vertices = cloud.getVertices();
-            slicer.setVector( vertices[m_updatePlane - 1] );
 
-            slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
-            slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
-            slicer.setReadExtentFromFile( m_readExtentFromFile );
-            slicer.reslice();
-//             slicer.computeSmi();
-//             slicer.method1A( m_similarityThreshold );
-//             slicer.method1B( m_similarityThreshold );
-            slicer.groupingMethodC( m_similarityThreshold );
+            if ( m_parameters->getGroupingMethod() > 0 )
+            {
+                
+                // slicer
+                Slicer slicer( m_updatePlane );
+    //             slicer.setInput( m_volume->getLabeledImage() );
+                slicer.setInput( m_volume->getImage() );
+
+
+
+
+                ///\warning Això només funcionarà si són 42 plans!!!
+                POVSphereCloud cloud( 1.0, 1 );
+                cloud.createPOVCloud();
+                const QVector< Vector3 > & vertices = cloud.getVertices();
+                slicer.setVector( vertices[m_updatePlane - 1] );
+
+
+
+
+
+                slicer.setMatrix( (*m_planes)[m_updatePlane]->getTransformMatrix() );
+                slicer.setSpacing( m_volume->getImageSampleDistance(), m_volume->getImageSampleDistance(), m_volume->getSampleDistance() );
+                slicer.setReadExtentFromFile( m_readExtentFromFile );
+                slicer.reslice();
+    //             slicer.computeSmi();
+    //             slicer.method1A( m_similarityThreshold );
+    //             slicer.method1B( m_similarityThreshold );
+                switch ( m_parameters->getGroupingMethod() )
+                {
+                    case 1: slicer.groupingMethodC( m_similarityThreshold ); break;
+                    case 2: slicer.groupingMethodC_JS( m_similarityThreshold ); break;
+                    case 3: slicer.splittingMethodC( m_similarityThreshold ); break;
+                }
+            }
 
             break;
     }

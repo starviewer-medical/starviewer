@@ -14,6 +14,7 @@
 #include <QVector>
 
 #include "vector3.h"
+#include "histogram.h"
 
 
 class vtkImageData;
@@ -88,6 +89,10 @@ public:
     void method1B( double threshold );
     /// Works with fusioned slices.
     void groupingMethodC( double threshold );
+    /// Works with fusioned slices (Jensen-Shannon)
+    void groupingMethodC_JS( double threshold );
+    /// Works with fusioned slices
+    void splittingMethodC( double threshold );
 
     vtkImageData * getReslicedImage() const { return m_reslicedImage; }
 
@@ -111,6 +116,13 @@ private:
         Group * previous, * next;
     };
 
+    struct Partition
+    {
+        Group g1, g2;
+        Histogram g1Histogram, g2Histogram;
+        Histogram jointHistogram;
+    };
+
     /// Finds minimum extent in direction 0 and stores results in min0 and max0.
     void findExtent( const unsigned char * data,
                      int dim0, int dim1, int dim2,
@@ -131,6 +143,12 @@ private:
     double similarity( const Group & groupX, const Group & groupY ) const;
     /// Integrates \a groupY into \a groupX.
     void join( Group & groupX, Group & groupY ) const;
+    /// Returns Jensen-Shannon divergence between two groups.
+    double jensenShannonDivergence( const Group & groupX, const Group & groupY ) const;
+    /// Returns the first partition of a group.
+    Partition firstPartition( const Group & group ) const;
+    /// Converts \a partition in the next partition if that exists, and returns true if successful.
+    bool nextPartition( Partition & partition ) const;
 
     /// Object identifier.
     unsigned char m_id;
