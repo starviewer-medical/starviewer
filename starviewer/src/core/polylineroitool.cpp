@@ -12,7 +12,7 @@
 #include "series.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
-#include "drawertext.h"
+#include "drawertext.h"                      
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -20,7 +20,6 @@
 #include <vtkLine.h>
 #include <vtkPoints.h>
 //Qt
-
 
 namespace udg {
 
@@ -67,24 +66,6 @@ void PolylineROITool::handleEvent( long unsigned eventID )
 //                 DEBUG_LOG( "SIMPLE CLICK");
 //             }
 //             m_latestTime = totalTimeElapsed;
-
-        /*   
-           if ( !m_2DViewer->getOldDrawer()->hasSelectedSet() ) //cas en que no hi ha cap conjunt de primitives seleccionat.
-            {
-                switch ( m_state )
-                {
-                    case STOPPED:
-                        this->startROIAnnotation();
-                    break;
-
-                    case SIMULATING_ANNOTATION:
-//                         if ( m_ROIType != POLYLINE )
-                            this->stopROIAnnotation();
-//                         else
-//                             this->annotateNextPolylinePoint();
-                    break;
-                }
-            }*/
         break;
 
         case vtkCommand::MouseMoveEvent:
@@ -118,28 +99,9 @@ void PolylineROITool::annotateNewPoint()
     //capturem l'event de clic esquerre
     m_2DViewer->getInteractor()->GetEventPosition( xy );
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-
-    //només ens interessen els 3 primers valors de l'array de 4
-//     switch( m_2DViewer->getView() )
-//     {
-//         case Q2DViewer::Axial:
-            computed[0] = position[0];
-            computed[1] = position[1];
-            computed[2] = position[2];
-//             break;
-//             
-//         case Q2DViewer::Sagittal:
-//             computed[0] = position[2];
-//             computed[1] = position[1];
-//             computed[2] = position[0];
-//             break;
-//             
-//         case Q2DViewer::Coronal:
-//             computed[0] = position[0];
-//             computed[1] = position[2];
-//             computed[2] = position[1];
-//             break;
-//     }
+    computed[0] = position[0];
+    computed[1] = position[1];
+    computed[2] = position[2];
 
     //afegim el punt
     m_mainPolyline->addPoint( computed );
@@ -168,26 +130,9 @@ void PolylineROITool::simulateClosingPolyline()
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
-//     switch( m_2DViewer->getView() )
-//     {
-//         case Q2DViewer::Axial:
-            computed[0] = position[0];
-            computed[1] = position[1];
-            computed[2] = position[2];
-//             break;
-//             
-//         case Q2DViewer::Sagittal:
-//             computed[0] = position[2];
-//             computed[1] = position[1];
-//             computed[2] = position[0];
-//             break;
-//             
-//         case Q2DViewer::Coronal:
-//             computed[0] = position[0];
-//             computed[1] = position[2];
-//             computed[2] = position[1];
-//             break;
-//     }
+    computed[0] = position[0];
+    computed[1] = position[1];
+    computed[2] = position[2];
 
     //afegim els punts que simulen aquesta polilinia
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
@@ -392,7 +337,6 @@ double PolylineROITool::computeGrayMeanAxial()
     return mean;
 }
 
-
 double PolylineROITool::computeGrayMeanSagittal()
 {
     double mean = 0.0;
@@ -465,9 +409,7 @@ double PolylineROITool::computeGrayMeanSagittal()
             auxPoints->GetPoint(1,p1);
             
             if ((rayP1[1] <= p0[1] && rayP1[1] >= p1[1]) || (rayP1[1] >= p0[1] && rayP1[1] <= p1[1]))
-            {
                 indexList << index;
-            }
         }
 
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
@@ -516,9 +458,7 @@ double PolylineROITool::computeGrayMeanSagittal()
             }
         }
         else
-        {
             DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI ÉS IMPARELL!!" );
-        }
 
         //fem el següent pas en la coordenada que escombrem
         rayP1[1] += spacing1;
@@ -529,9 +469,7 @@ double PolylineROITool::computeGrayMeanSagittal()
 
     //destruïm els diferents segments que hem creat per simular la roi
     for ( index = 0; index < numberOfSegments; index++ )
-    {
         segments[index]->Delete();
-    }
 
     return mean;
 }
@@ -550,21 +488,18 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
             break;
     
         case Q2DViewer::Sagittal:
-            index[2] = (int)((coords[2] - origin[2])/spacing2);
-            index[1] = (int)((coords[1] - origin[1])/spacing1);
             index[0] = m_2DViewer->getCurrentSlice();
+            index[1] = (int)((coords[1] - origin[1])/spacing1);
+            index[2] = (int)((coords[2] - origin[2])/spacing2);
             break;
     
         case Q2DViewer::Coronal:
             index[0] = (int)((coords[0] - origin[0])/spacing0);
-            index[2] = (int)((coords[1] - origin[1])/spacing1);
             index[1] = m_2DViewer->getCurrentSlice();
+            index[2] = (int)((coords[2] - origin[2])/spacing2);
             break;
     }
-
-    int *value = (int*)m_2DViewer->getInput()->getVtkData()->GetScalarPointer(index);
-
-    return *value;
+    return *((int*)m_2DViewer->getInput()->getVtkData()->GetScalarPointer(index));
 } 
 
 double PolylineROITool::computeGrayMeanCoronal()
@@ -584,8 +519,6 @@ double PolylineROITool::computeGrayMeanCoronal()
     double t;
     double p0[3];
     double p1[3];
-    double p0aux[3];
-    double p1aux[3];
     int numberOfVoxels = 0;
     QList<double*> intersectionList;
     QList<int> indexList;
@@ -594,8 +527,6 @@ double PolylineROITool::computeGrayMeanCoronal()
     double rayP2[3];
     double verticalLimit;
 
-    DEBUG_LOG("......................................XXXXXXXXXXXXXXXXXXXXX................................");
-    
     //el nombre de segments és el mateix que el nombre de punts del polígon
     int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
 
@@ -617,72 +548,21 @@ double PolylineROITool::computeGrayMeanCoronal()
     }
 
     double *bounds = m_mainPolyline->getPolylineBounds();
-    DEBUG_LOG(tr("  --> BOUNDS = [%1,%2,%3,%4,%5,%6]").arg(bounds[0]).arg(bounds[1]).arg(bounds[2]).arg(bounds[3]).arg(bounds[4]).arg(bounds[5])); 
 
-//     rayP1[0] = bounds[0];//xmin
-//     rayP1[1] = bounds[2];//y
-//     rayP1[2] = bounds[4];//z
-//     rayP2[0] = bounds[1];//xmax
-//     rayP2[1] = bounds[2];//y
-//     rayP2[2] = bounds[4];//z
+    rayP1[0] = bounds[0];//xmin
+    rayP1[1] = bounds[2];//ymin
+    rayP1[2] = bounds[4];//zmin
+    rayP2[0] = bounds[1];//xmax
+    rayP2[1] = bounds[2];//ymin
+    rayP2[2] = bounds[4];//zmin
     
-    
- /*   
     spacing0 = m_2DViewer->getInput()->getSpacing()[0];
     spacing1 = m_2DViewer->getInput()->getSpacing()[1];
-    spacing2 = m_2DViewer->getInput()->getSpacing()[2];*/
+    spacing2 = m_2DViewer->getInput()->getSpacing()[2];
     
-//     verticalLimit = bounds[3];
+    verticalLimit = bounds[5];
     
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            rayP1[0] = bounds[0];//xmin
-            rayP1[1] = bounds[2];//y
-            rayP1[2] = bounds[4];//z
-            rayP2[0] = bounds[1];//xmax
-            rayP2[1] = bounds[2];//y
-            rayP2[2] = bounds[4];//z
-            
-            spacing0 = m_2DViewer->getInput()->getSpacing()[0];
-            spacing1 = m_2DViewer->getInput()->getSpacing()[1];
-            spacing2 = m_2DViewer->getInput()->getSpacing()[2];
-            
-            verticalLimit = bounds[3];
-            break;
-            
-        case Q2DViewer::Sagittal:
-            rayP1[0] = bounds[4];//zmin
-            rayP1[1] = bounds[2];//y
-            rayP1[2] = bounds[0];//x
-            rayP2[0] = bounds[5];//zmax
-            rayP2[1] = bounds[2];//y
-            rayP2[2] = bounds[0];//x
-            
-            spacing0 = m_2DViewer->getInput()->getSpacing()[2];
-            spacing1 = m_2DViewer->getInput()->getSpacing()[1];
-            spacing2 = m_2DViewer->getInput()->getSpacing()[0];
-            
-            verticalLimit = bounds[3];
-            break;
-            
-        case Q2DViewer::Coronal:
-            rayP1[0] = bounds[0];//xmin
-            rayP1[1] = bounds[4];//z
-            rayP1[2] = bounds[2];//y
-            rayP2[0] = bounds[1];//xmax
-            rayP2[1] = bounds[4];//z
-            rayP2[2] = bounds[2];//y
-            
-            spacing0 = m_2DViewer->getInput()->getSpacing()[0];
-            spacing1 = m_2DViewer->getInput()->getSpacing()[2];
-            spacing2 = m_2DViewer->getInput()->getSpacing()[1];
-            
-            verticalLimit = bounds[5];
-            break;
-    }
-    DEBUG_LOG(tr("  --> RAY P1 = [%1,%2,%3]  RAY P2 = [%4,%5,%6]").arg(rayP1[0]).arg(rayP1[1]).arg(rayP1[2]).arg(rayP2[0]).arg(rayP2[1]).arg(rayP2[2])); 
-    while( rayP1[1] <= verticalLimit )
+    while( rayP1[2] <= verticalLimit )
     {
         intersectionList.clear();
         indexList.clear();
@@ -690,45 +570,12 @@ double PolylineROITool::computeGrayMeanCoronal()
         for ( index = 0; index < numberOfSegments; index++ )
         {
             auxPoints = segments[index]->GetPoints();
-            auxPoints->GetPoint(0,p0aux);
-            auxPoints->GetPoint(1,p1aux);
+            auxPoints->GetPoint(0,p0);
+            auxPoints->GetPoint(1,p1);
             
-            switch( m_2DViewer->getView() )
-            {
-                case Q2DViewer::Axial:
-                    p0[0] = p0aux[0];
-                    p0[1] = p0aux[1];
-                    p0[2] = p0aux[2];
-                    p1[0] = p1aux[0];
-                    p1[1] = p1aux[1];
-                    p1[2] = p1aux[2];
-                    break;
-            
-                case Q2DViewer::Sagittal:
-                    p0[0] = p0aux[2];
-                    p0[1] = p0aux[1];
-                    p0[2] = p0aux[0];
-                    p1[0] = p1aux[2];
-                    p1[1] = p1aux[1];
-                    p1[2] = p1aux[0];
-                    break;
-            
-                case Q2DViewer::Coronal:
-                    p0[0] = p0aux[0];
-                    p0[1] = p0aux[2];
-                    p0[2] = p0aux[1];
-                    p1[0] = p1aux[0];
-                    p1[1] = p1aux[2];
-                    p1[2] = p1aux[1];
-                    break;
-            }
-            
-            if ((rayP1[1] <= p0[1] && rayP1[1] >= p1[1]) || (rayP1[1] >= p0[1] && rayP1[1] <= p1[1]))
-            {
+            if ((rayP1[2] <= p0[2] && rayP1[2] >= p1[2]) || (rayP1[2] >= p0[2] && rayP1[2] <= p1[2]))
                 indexList << index;
-            }
         }
-        DEBUG_LOG(tr("RAJOS TROBATS:  %1").arg(indexList.count())); 
 
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
@@ -736,32 +583,12 @@ double PolylineROITool::computeGrayMeanCoronal()
             if ( segments[segment]->IntersectWithLine(rayP1, rayP2, 0.0001, t, intersectPoint, pcoords, subId) > 0)
             {
                 double *findedPoint = new double[3];
-
-                switch( m_2DViewer->getView() )
-                {
-                    case Q2DViewer::Axial:
-                        findedPoint[0] = intersectPoint[0];
-                        findedPoint[1] = intersectPoint[1];
-                        findedPoint[2] = intersectPoint[2];
-                        break;
-            
-                    case Q2DViewer::Sagittal:
-                        findedPoint[0] = intersectPoint[2];
-                        findedPoint[1] = intersectPoint[1];
-                        findedPoint[2] = intersectPoint[0];
-                        break;
-            
-                    case Q2DViewer::Coronal:
-                        findedPoint[0] = intersectPoint[0];
-                        findedPoint[1] = intersectPoint[2];
-                        findedPoint[2] = intersectPoint[1];
-                        break;
-                }
-                
+                findedPoint[0] = intersectPoint[0];
+                findedPoint[1] = intersectPoint[1];
+                findedPoint[2] = intersectPoint[2];
                 intersectionList.append ( findedPoint );
             }
         }
-        DEBUG_LOG(tr("INTERSECTION LIST:  %1").arg(intersectionList.count())); 
         
         if ( (intersectionList.count() % 2)==0 )
         {
@@ -796,25 +623,19 @@ double PolylineROITool::computeGrayMeanCoronal()
             }
         }
         else
-        {
             DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI ÉS IMPARELL!!" );
-        }
 
         //fem el següent pas en la coordenada que escombrem
-        rayP1[1] += spacing1;
-        rayP2[1] += spacing1;
-        DEBUG_LOG(tr("  --> RAY P1 = [%1,%2,%3]  RAY P2 = [%4,%5,%6]").arg(rayP1[0]).arg(rayP1[1]).arg(rayP1[2]).arg(rayP2[0]).arg(rayP2[1]).arg(rayP2[2])); 
+        rayP1[2] += spacing1;
+        rayP2[2] += spacing1;
     }
 
     mean /= numberOfVoxels;
 
     //destruïm els diferents segments que hem creat per simular la roi
     for ( index = 0; index < numberOfSegments; index++ )
-    {
         segments[index]->Delete();
-    }
 
     return mean;
-
 }
 }
