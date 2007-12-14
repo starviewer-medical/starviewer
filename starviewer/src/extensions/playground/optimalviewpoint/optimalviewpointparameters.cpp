@@ -462,6 +462,19 @@ void OptimalViewpointParameters::setReadExtentFromFile( bool readExtentFromFile 
 }
 
 
+int OptimalViewpointParameters::getGroupingMethod() const
+{
+    return m_groupingMethod;
+}
+
+
+void OptimalViewpointParameters::setGroupingMethod( int groupingMethod )
+{
+    if ( m_groupingMethod != groupingMethod )
+    {
+        m_groupingMethod = groupingMethod; emit changed( GroupingMethod );
+    }
+}
 
 
 }

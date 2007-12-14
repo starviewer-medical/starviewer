@@ -469,6 +469,8 @@ void OptimalViewpointPlane::castRays()
         for ( unsigned int i = 0; i < m_numberOfRays; i++ ) // iterate over rays
         {
 //             DEBUG_LOG( QString("i = %1").arg(i) );
+            /// \todo Per fer-ho bé, seguint el sentit dels raigs, hauria de ser al revés, del final cap al principi
+            /// (perquè la Z+ és cap enfora)
             for ( unsigned int j = 0; j < m_rayLength; j++ )    // iterate over current ray
             {
 //                 DEBUG_LOG( QString("j = %1").arg(j) );

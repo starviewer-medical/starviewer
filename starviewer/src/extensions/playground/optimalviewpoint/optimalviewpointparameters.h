@@ -56,7 +56,9 @@ public:
         Cluster, ClusterFirst, ClusterLast,
 //         NumberOfSlices,
 
-        ReadExtentFromFile
+        ReadExtentFromFile,
+
+        GroupingMethod
     };
 
     /// Tipus de segmentació disponibles.
@@ -185,6 +187,9 @@ public:
     bool getReadExtentFromFile() const;
     void setReadExtentFromFile( bool readExtentFromFile );
 
+    int getGroupingMethod() const;
+    void setGroupingMethod( int groupingMethod );
+
 
 
 
@@ -245,6 +250,8 @@ private:
 //     unsigned short m_numberOfSlices;
 
     bool m_readExtentFromFile;
+
+    int m_groupingMethod;
 
 
 };

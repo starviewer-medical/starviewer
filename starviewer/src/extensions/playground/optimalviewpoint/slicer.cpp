@@ -750,12 +750,14 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
     }
 
     bool aboveThreshold = true;
+    unsigned short nGroups = m_sliceCount;
 
     while ( !sortedSimilarities.isEmpty() && aboveThreshold )
     {
         QMultiMap< double, unsigned short >::iterator it = --sortedSimilarities.end();  // last element
 
-        if ( it.key() > threshold )
+//         if ( it.key() > threshold )
+        if ( nGroups > 5 )
         {
             Group & groupX = groups[it.value()];    // group X
             Group & groupY = *groupX.next;          // group Y (following X)
@@ -798,6 +800,8 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
 
             // invalidate groupY (to later assign consecutive ids)
             groupY.id = groupX.id;
+
+            nGroups--;
         }
         else
         {
@@ -932,10 +936,10 @@ double Slicer::similarity( const Group & groupX, const Group & groupY ) const
 //     double max = H_X_ > H_Y_ ? H_X_ : H_Y_;
 //     double similarity = ( ( max > 0.0 ) ? ( I_X_Y_ / max ) : ( groupX.slices[0].data[0] == groupY.slices[0].data[0] ? 1.0 : 0.0 ) );
 
-    DEBUG_LOG( QString( "[*similarityG*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
-    DEBUG_LOG( QString( "[*similarityG*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
-    DEBUG_LOG( QString( "[*similarityG*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
-    DEBUG_LOG( QString( "[*similarityG*][semblança] I/H = %1" ).arg( similarity ) );
+//     DEBUG_LOG( QString( "[*similarityG*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+//     DEBUG_LOG( QString( "[*similarityG*][JE] H(X,Y) = %1" ).arg( H_X_Y_ ) );
+//     DEBUG_LOG( QString( "[*similarityG*][IM] I(X;Y) = %1" ).arg( I_X_Y_ ) );
+//     DEBUG_LOG( QString( "[*similarityG*][semblança] I/H = %1" ).arg( similarity ) );
 
     return similarity;
 }
@@ -951,6 +955,486 @@ void Slicer::join( Group & groupX, Group & groupY ) const
     groupX.slices << groupY.slices;
     groupX.next = groupY.next;
     if ( groupX.next ) groupX.next->previous = &groupX;
+}
+
+
+double Slicer::jensenShannonDivergence( const Group & groupX, const Group & groupY ) const
+{
+    DoubleHistogram histogramX( m_nLabels ), histogramY( m_nLabels );   // individual histograms
+    DoubleHistogram histogramXY( m_nLabels );                           // merge histogram
+    unsigned short nx = groupX.slices.size(), ny = groupY.slices.size();
+    double amountX = 1.0 / nx, amountY = 1.0 / ny, amountXY = 1.0 / ( nx + ny );
+
+    /*
+    // amb background
+    for ( unsigned int i = 0; i < m_sliceSize; i++ )
+    {
+        // iterate over all slices of every group
+        for ( unsigned short sx = 0; sx < nx; sx++ )
+        {
+            unsigned char valueX = groupX.slices[sx].data[i]; if ( valueX == m_newBackground ) valueX = 0;
+            //if ( valueX < m_nLabels && valueX > 0 ) // no comptem cap background
+            //{
+            histogramX.add( valueX, amountX );
+            histogramXY.add( valueX, amountXY );
+            //}
+        }
+        for ( unsigned short sy = 0; sy < ny; sy++ )
+        {
+            unsigned char valueY = groupY.slices[sy].data[i]; if ( valueY == m_newBackground ) valueY = 0;
+            //if ( valueY < m_nLabels && valueY > 0 ) // no comptem cap background
+            //{
+            histogramY.add( valueY, amountY );
+            histogramXY.add( valueY, amountXY );
+            //}
+        }
+    }
+    */
+
+    /*
+    // sense background
+    for ( unsigned int i = 0; i < m_sliceSize; i++ )
+    {
+        // iterate over all slices of every group
+        for ( unsigned short sx = 0; sx < nx; sx++ )
+        {
+            unsigned char valueX = groupX.slices[sx].data[i]; if ( valueX == m_newBackground ) valueX = 0;
+            if ( valueX < m_nLabels && valueX > 0 ) // no comptem cap background
+            {
+            histogramX.add( valueX );
+            histogramXY.add( valueX );
+            }
+        }
+        for ( unsigned short sy = 0; sy < ny; sy++ )
+        {
+            unsigned char valueY = groupY.slices[sy].data[i]; if ( valueY == m_newBackground ) valueY = 0;
+            if ( valueY < m_nLabels && valueY > 0 ) // no comptem cap background
+            {
+            histogramY.add( valueY );
+            histogramXY.add( valueY );
+            }
+        }
+    }
+    */
+
+    // sense background i amb altres pesos
+    for ( unsigned int i = 0; i < m_sliceSize; i++ )
+    {
+        // iterate over all slices of every group
+        for ( unsigned short sx = 0; sx < nx; sx++ )
+        {
+            unsigned char valueX = groupX.slices[sx].data[i]; if ( valueX == m_newBackground ) valueX = 0;
+            if ( valueX < m_nLabels && valueX > 0 ) // no comptem cap background
+            {
+            histogramX.add( valueX );
+            }
+        }
+        for ( unsigned short sy = 0; sy < ny; sy++ )
+        {
+            unsigned char valueY = groupY.slices[sy].data[i]; if ( valueY == m_newBackground ) valueY = 0;
+            if ( valueY < m_nLabels && valueY > 0 ) // no comptem cap background
+            {
+            histogramY.add( valueY );
+            }
+        }
+    }
+    double pointsPerSliceX = histogramX.count() / nx, pointsPerSliceY = histogramY.count() / ny;
+    double pointsPerSliceXY = pointsPerSliceX + pointsPerSliceY;
+    double piX = pointsPerSliceX / pointsPerSliceXY, piY = pointsPerSliceY / pointsPerSliceXY;
+//     DEBUG_LOG( QString( "piX = %1, piY = %2, piX + piY = %3" ).arg( piX ).arg( piY ).arg( piX + piY ) );
+    QVectorIterator< double > * _itHistogramX = histogramX.getIterator();
+    QVectorIterator< double > * _itHistogramY = histogramY.getIterator();
+    double cx = histogramX.count(), cy = histogramY.count();
+    int i = 0;
+    while ( _itHistogramX->hasNext() )
+    {
+        double x = _itHistogramX->next() / cx;
+        double y = _itHistogramY->next() / cy;
+        double xy = x * piX + y * piY;
+        histogramXY.add( i, xy );
+        i++;
+    }
+
+//     double sum = 0.0;
+    double H_X_ = 0.0;
+    double countX = histogramX.count();
+    QVectorIterator< double > * itHistogramX = histogramX.getIterator();
+    while ( itHistogramX->hasNext() )
+    {
+        double p_x_ = itHistogramX->next() / countX;
+        if ( p_x_ > 0.0 ) H_X_ -= p_x_ * log( p_x_ );
+//         sum += p_x_;
+    }
+    H_X_ /= log( 2.0 );
+    delete itHistogramX;
+//     DEBUG_LOG( QString( "sum p(x) = %1" ).arg( sum ) );
+
+//     sum = 0.0;
+    double H_Y_ = 0.0;
+    double countY = histogramY.count();
+    QVectorIterator< double > * itHistogramY = histogramY.getIterator();
+    while ( itHistogramY->hasNext() )
+    {
+        double p_y_ = itHistogramY->next() / countY;
+        if ( p_y_ > 0.0 ) H_Y_ -= p_y_ * log( p_y_ );
+//         sum += p_y_;
+    }
+    H_Y_ /= log( 2.0 );
+    delete itHistogramY;
+//     DEBUG_LOG( QString( "sum p(y) = %1" ).arg( sum ) );
+
+//     sum = 0.0;
+    double H_XY_ = 0.0;
+    double countXY = histogramXY.count();
+    QVectorIterator< double > * itHistogramXY = histogramXY.getIterator();
+    while ( itHistogramXY->hasNext() )
+    {
+        double p_xy_ = itHistogramXY->next() / countXY;
+        if ( p_xy_ > 0.0 ) H_XY_ -= p_xy_ * log( p_xy_ );
+//         sum += p_xy_;
+    }
+    H_XY_ /= log( 2.0 );
+    delete itHistogramXY;
+//     DEBUG_LOG( QString( "sum p(xy) = %1" ).arg( sum ) );
+
+    //double jsd = H_XY_ - nx * amountXY * H_X_ - ny * amountXY * H_Y_; // versió amb background
+//     double jsd = H_XY_ - (countX / countXY) * H_X_ - (countY / countXY) * H_Y_;   // versió sense background
+    double jsd = H_XY_ - piX * H_X_ - piY * H_Y_;   // versió sense background i amb altres pesos
+
+//     DEBUG_LOG( QString( "[*JSD*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+//     DEBUG_LOG( QString( "[*JSD*][CE] H(XY) = %1" ).arg( H_XY_ ) );
+//     DEBUG_LOG( QString( "[*JSD*][JSD] JSD = %1" ).arg( jsd ) );
+
+    return jsd;
+}
+
+
+// llesques fusionades (Jensen-Shannon)
+void Slicer::groupingMethodC_JS( double threshold )    /// \todo Fer-ho més eficient!!!
+{
+    // Start of the algorithm
+    /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
+    // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
+    // Should be done in a cleaner way.
+    QVector< Group > groups( m_sliceCount );   // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
+
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        Slice s = { i, i, m_reslicedData + i * m_sliceSize };
+        Group g;
+        g.id = i;
+        g.slices << s;
+        g.similarityToNext = 0.0;
+        g.previous = i > 0 ? &(groups[i - 1]) : 0;
+        groups[i] = g;
+        if ( g.previous ) groups[i].previous->next = &(groups[i]);
+    }
+    groups.last().next = 0;
+
+    QVector<double> divergences;
+    for ( int i = 0; i < m_sliceCount - 1; i++ )  // iterate over slices
+    {
+        divergences << jensenShannonDivergence( groups[i], groups[i+1] );
+    }
+
+    QMultiMap< double, unsigned short > sortedDivergences;  // divergences sorted in ascending order
+
+    for ( unsigned short i = 0; i < divergences.size(); i++ )
+    {
+        sortedDivergences.insert( divergences[i], i );
+        groups[i].similarityToNext = divergences[i];    // divergence to next
+    }
+
+    bool belowThreshold = true;
+    unsigned short nGroups = m_sliceCount;
+
+    while ( !sortedDivergences.isEmpty() && belowThreshold )
+    {
+        QMultiMap< double, unsigned short >::iterator it = sortedDivergences.begin();   // first element
+
+//         if ( it.key() < threshold )
+        if ( nGroups > 5 )
+        {
+            Group & groupX = groups[it.value()];    // group X
+            Group & groupY = *groupX.next;          // group Y (following X)
+            DEBUG_LOG( QString( "[*GMC_JS*] agrupem g%1(%2-%3) i g%4(%5-%6) (sim = %7)" ).arg( groupX.id ).arg( groupX.slices.first().id ).arg( groupX.slices.last().id ).arg( groupY.id ).arg( groupY.slices.first().id ).arg( groupY.slices.last().id ).arg( it.key() ) );
+            join( groupX, groupY );
+            DEBUG_LOG( "[*GMC_JS*] agrupats :)" );
+
+            // remove obsolete entries form sortedDivergences
+            sortedDivergences.erase( it );
+            if ( groupX.previous )
+            {
+                Group & groupW = *groupX.previous;
+                QMultiMap< double, unsigned short >::iterator itW = sortedDivergences.find( groupW.similarityToNext );
+                while ( itW != sortedDivergences.end() && itW.value() != groupW.id ) ++itW;
+                if ( itW != sortedDivergences.end() ) sortedDivergences.erase( itW );
+                else DEBUG_LOG( "[*GMC_JS*] problema esborrant groupW!!!" );
+            }
+            if ( groupY.next )
+            {
+                QMultiMap< double, unsigned short >::iterator itY = sortedDivergences.find( groupY.similarityToNext );
+                while ( itY != sortedDivergences.end() && itY.value() != groupY.id ) ++itY;
+                if ( itY != sortedDivergences.end() ) sortedDivergences.erase( itY );
+                else DEBUG_LOG( "[*GMC_JS*] problema esborrant groupY!!!" );
+            }
+
+            // compute new divergences
+            if ( groupX.previous )
+            {
+                Group & groupW = *groupX.previous;
+                groupW.similarityToNext = jensenShannonDivergence( groupW, groupX );
+                sortedDivergences.insert( groupW.similarityToNext, groupW.id );
+            }
+            if ( groupX.next )
+            {
+                Group & groupZ = *groupX.next;
+                groupX.similarityToNext = jensenShannonDivergence( groupX, groupZ );
+                sortedDivergences.insert( groupX.similarityToNext, groupX.id );
+            }
+            else groupX.similarityToNext = 0.0;
+
+            // invalidate groupY (to later assign consecutive ids)
+            groupY.id = groupX.id;
+
+            nGroups--;
+        }
+        else
+        {
+            belowThreshold = false;
+        }
+    }
+
+    // assign consecutive ids to groups
+    unsigned short g = 0;
+    QList< Group > finalGroups;
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        if ( i == groups[i].id )    // the group is valid
+        {
+            groups[i].id = g++;
+            finalGroups << groups[i];
+        }
+    }
+    // End of the algorithm
+    // The results are in the vector "finalGroups"
+
+    // Print results i save them to a file
+    QFile outFile( QDir::tempPath().append( QString( "/gmc_js%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileXml( QDir::tempPath().append( QString( "/gmc_js%1_%2.xml" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileViola( QDir::tempPath().append( QString( "/viola_gmc_js%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileXml.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileViola.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        QTextStream outXml( &outFileXml );
+        QTextStream outViola( &outFileViola );
+
+        outXml << "<similarity>\n";
+
+        DEBUG_LOG( QString( "[GMC_JS] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        outXml << "<value type=\"float\"><![CDATA[" << threshold << "]]></value>\n";
+        outXml << "<slabs>\n";
+        for ( int i = 0; i < finalGroups.size(); i++ )
+        {
+            const Group & gr = finalGroups[i];
+            for ( int j = 0; j < gr.slices.size(); j++ )
+            {
+                DEBUG_LOG( QString( "[GMC_JS] group %1 : slice %2" ).arg( gr.id ).arg( gr.slices[j].id ) );
+                out << "group " << gr.id << " : slice " << gr.slices[j].id << "\n";
+            }
+            outXml << "<position type=\"float\"><![CDATA[" << static_cast<double>(gr.slices[0].id) / m_sliceCount << "]]></position>\n";
+            outViola << "(" << threshold << ";" << static_cast<double>(gr.slices[0].id) / m_sliceCount << ")\n";
+        }
+
+        outXml << "</slabs>\n</similarity>\n";
+
+        outFile.close();
+        outFileXml.close();
+        outFileViola.close();
+    }
+}
+
+
+// llesques fusionades
+void Slicer::splittingMethodC( double threshold )   /// \todo Fer-ho més eficient!!!
+{
+    // Start of the algorithm
+    /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
+    // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
+    // Should be done in a cleaner way.
+    QVector< Group > groups( m_sliceCount );   // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
+
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        Slice s = { i, i, m_reslicedData + i * m_sliceSize };
+        Group g;
+        g.id = i;
+        g.slices << s;
+        g.similarityToNext = 0.0;
+        g.previous = i > 0 ? &(groups[i - 1]) : 0;
+        groups[i] = g;
+        if ( g.previous ) groups[i].previous->next = &(groups[i]);
+    }
+    groups.last().next = 0;
+
+    QVector<double> divergences;
+    for ( int i = 0; i < m_sliceCount - 1; i++ )  // iterate over slices
+    {
+        divergences << jensenShannonDivergence( groups[i], groups[i+1] );
+    }
+
+    QMultiMap< double, unsigned short > sortedDivergences;  // divergences sorted in ascending order
+
+    for ( unsigned short i = 0; i < divergences.size(); i++ )
+    {
+        sortedDivergences.insert( divergences[i], i );
+        groups[i].similarityToNext = divergences[i];    // divergence to next
+    }
+
+    bool belowThreshold = true;
+    unsigned short nGroups = m_sliceCount;
+
+    while ( !sortedDivergences.isEmpty() && belowThreshold )
+    {
+        QMultiMap< double, unsigned short >::iterator it = sortedDivergences.begin();   // first element
+
+//         if ( it.key() < threshold )
+        if ( nGroups > 5 )
+        {
+            Group & groupX = groups[it.value()];    // group X
+            Group & groupY = *groupX.next;          // group Y (following X)
+            DEBUG_LOG( QString( "[*GMC_JS*] agrupem g%1(%2-%3) i g%4(%5-%6) (sim = %7)" ).arg( groupX.id ).arg( groupX.slices.first().id ).arg( groupX.slices.last().id ).arg( groupY.id ).arg( groupY.slices.first().id ).arg( groupY.slices.last().id ).arg( it.key() ) );
+            join( groupX, groupY );
+            DEBUG_LOG( "[*GMC_JS*] agrupats :)" );
+
+            // remove obsolete entries form sortedDivergences
+            sortedDivergences.erase( it );
+            if ( groupX.previous )
+            {
+                Group & groupW = *groupX.previous;
+                QMultiMap< double, unsigned short >::iterator itW = sortedDivergences.find( groupW.similarityToNext );
+                while ( itW != sortedDivergences.end() && itW.value() != groupW.id ) ++itW;
+                if ( itW != sortedDivergences.end() ) sortedDivergences.erase( itW );
+                else DEBUG_LOG( "[*GMC_JS*] problema esborrant groupW!!!" );
+            }
+            if ( groupY.next )
+            {
+                QMultiMap< double, unsigned short >::iterator itY = sortedDivergences.find( groupY.similarityToNext );
+                while ( itY != sortedDivergences.end() && itY.value() != groupY.id ) ++itY;
+                if ( itY != sortedDivergences.end() ) sortedDivergences.erase( itY );
+                else DEBUG_LOG( "[*GMC_JS*] problema esborrant groupY!!!" );
+            }
+
+            // compute new divergences
+            if ( groupX.previous )
+            {
+                Group & groupW = *groupX.previous;
+                groupW.similarityToNext = jensenShannonDivergence( groupW, groupX );
+                sortedDivergences.insert( groupW.similarityToNext, groupW.id );
+            }
+            if ( groupX.next )
+            {
+                Group & groupZ = *groupX.next;
+                groupX.similarityToNext = jensenShannonDivergence( groupX, groupZ );
+                sortedDivergences.insert( groupX.similarityToNext, groupX.id );
+            }
+            else groupX.similarityToNext = 0.0;
+
+            // invalidate groupY (to later assign consecutive ids)
+            groupY.id = groupX.id;
+
+            nGroups--;
+        }
+        else
+        {
+            belowThreshold = false;
+        }
+    }
+
+    // assign consecutive ids to groups
+    unsigned short g = 0;
+    QList< Group > finalGroups;
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        if ( i == groups[i].id )    // the group is valid
+        {
+            groups[i].id = g++;
+            finalGroups << groups[i];
+        }
+    }
+    // End of the algorithm
+    // The results are in the vector "finalGroups"
+
+    // Print results i save them to a file
+    QFile outFile( QDir::tempPath().append( QString( "/gmc_js%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileXml( QDir::tempPath().append( QString( "/gmc_js%1_%2.xml" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileViola( QDir::tempPath().append( QString( "/viola_gmc_js%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileXml.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileViola.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        QTextStream outXml( &outFileXml );
+        QTextStream outViola( &outFileViola );
+
+        outXml << "<similarity>\n";
+
+        DEBUG_LOG( QString( "[GMC_JS] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        outXml << "<value type=\"float\"><![CDATA[" << threshold << "]]></value>\n";
+        outXml << "<slabs>\n";
+        for ( int i = 0; i < finalGroups.size(); i++ )
+        {
+            const Group & gr = finalGroups[i];
+            for ( int j = 0; j < gr.slices.size(); j++ )
+            {
+                DEBUG_LOG( QString( "[GMC_JS] group %1 : slice %2" ).arg( gr.id ).arg( gr.slices[j].id ) );
+                out << "group " << gr.id << " : slice " << gr.slices[j].id << "\n";
+            }
+            outXml << "<position type=\"float\"><![CDATA[" << static_cast<double>(gr.slices[0].id) / m_sliceCount << "]]></position>\n";
+            outViola << "(" << threshold << ";" << static_cast<double>(gr.slices[0].id) / m_sliceCount << ")\n";
+        }
+
+        outXml << "</slabs>\n</similarity>\n";
+
+        outFile.close();
+        outFileXml.close();
+        outFileViola.close();
+    }
+}
+
+
+Slicer::Partition Slicer::firstPartition( const Group & group ) const
+{
+    Partition partition;
+
+    if ( group.slices.size() > 1 )
+    {
+        Group g1, g2;
+        g2.id = 2; g2.slices << group.slices;
+        g1.id = 1; g1.slices << g2.slices.takeFirst();
+
+        partition.g1 = g1; partition.g2 = g2;
+
+        // tractar histogrames
+    }
+
+    return partition;
+}
+
+
+bool Slicer::nextPartition( Partition & partition ) const
+{
+    if ( partition.g2.slices.size() == 1 ) return false;
+
+    partition.g1.slices << partition.g2.slices.takeFirst();
+
+    // tractar histogrames
+
+    return true;
 }
 
 

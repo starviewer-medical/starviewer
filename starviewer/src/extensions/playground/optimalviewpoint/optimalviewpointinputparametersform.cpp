@@ -192,6 +192,10 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
             case OptimalViewpointParameters::ReadExtentFromFile:
                 m_readExtentFromFileCheckBox->setChecked( m_parameters->getReadExtentFromFile() );
                 break;
+
+            case OptimalViewpointParameters::GroupingMethod:
+                m_groupingMethodComboBox->setCurrentIndex( m_parameters->getGroupingMethod() );
+                break;
         }
     }
 }
@@ -239,6 +243,8 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         m_parameters->setClusterLast( m_clusterLastSpinBox->value() );
 
         m_parameters->setReadExtentFromFile( m_readExtentFromFileCheckBox->isChecked() );
+
+        m_parameters->setGroupingMethod( m_groupingMethodComboBox->currentIndex() );
     }
 }
 
