@@ -138,7 +138,7 @@ void QueryScreen::createConnections()
     connect( m_searchButton, SIGNAL( clicked() ), SLOT( searchStudy() ) );
     connect( m_clearToolButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
     connect( m_retrieveButtonPACS, SIGNAL( clicked() ), SLOT( retrieve() ) );
-    connect( m_retrieveButtonDICOMDIR, SIGNAL( clicked() ), SLOT( retrieve() ) );
+    connect( m_retrieveButtonDICOMDIR, SIGNAL( clicked() ), SLOT( importDicomdir() ) );
     connect( m_operationListToolButton, SIGNAL( clicked() ), m_operationStateScreen, SLOT( show() ) );
     connect( m_showPACSNodesToolButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
 
