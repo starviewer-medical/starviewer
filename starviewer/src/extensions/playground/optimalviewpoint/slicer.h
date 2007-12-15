@@ -141,6 +141,7 @@ private:
     void setRightGroup( QVector< unsigned short > & rightGroups, unsigned short slice, unsigned short group ) const;
     /// Returns similarity between two groups.
     double similarity( const Group & groupX, const Group & groupY ) const;
+    double similarity2( const Group & groupX, const Group & groupY ) const;
     /// Integrates \a groupY into \a groupX.
     void join( Group & groupX, Group & groupY ) const;
     /// Returns Jensen-Shannon divergence between two groups.
@@ -149,6 +150,12 @@ private:
     Partition firstPartition( const Group & group ) const;
     /// Converts \a partition in the next partition if that exists, and returns true if successful.
     bool nextPartition( Partition & partition ) const;
+    /// Fills histograms of the partition.
+    void fillHistograms( Partition & partition, bool background = true ) const;
+    /// Returns the similarity between the two groups of the partition.
+    double similarity( const Partition & partition ) const;
+    /// Makes effective a partition by setting the new data to its groups.
+    void split( Partition & partition ) const;
 
     /// Object identifier.
     unsigned char m_id;
