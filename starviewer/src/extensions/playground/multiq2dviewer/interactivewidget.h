@@ -25,6 +25,7 @@ class Volume;
 
 class InteractiveWidget : public QTreeView
 {
+    Q_OBJECT
 public:
     InteractiveWidget( QWidget *parent = 0 );
 
