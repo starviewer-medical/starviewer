@@ -271,7 +271,7 @@ void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     QVector< double > p_o_;
     double oneCount = oneHistogram.count();
     DEBUG_LOG( QString( "[*SMI*] one count = %1" ).arg( oneCount ) );
-    QVectorIterator< unsigned long > * itOneHistogram = oneHistogram.getIterator();
+    QVectorIterator<quint64> * itOneHistogram = oneHistogram.getIterator();
     while ( itOneHistogram->hasNext() )
     {
         double d = itOneHistogram->next() / oneCount;
@@ -296,7 +296,7 @@ void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 
         double I_s_O_ = 0.0;
         double count = histogram.count();
-        QVectorIterator< unsigned long > * itHistogram = histogram.getIterator();
+        QVectorIterator<quint64> * itHistogram = histogram.getIterator();
         unsigned char o = 0;
         while ( itHistogram->hasNext() )
         {
@@ -550,7 +550,7 @@ double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned c
 
     double H_X_ = 0.0;
     double countX = histogramX.count();
-    QVectorIterator< unsigned long > * itHistogramX = histogramX.getIterator();
+    QVectorIterator<quint64> * itHistogramX = histogramX.getIterator();
     while ( itHistogramX->hasNext() )
     {
         double p_x_ = itHistogramX->next() / countX;
@@ -561,7 +561,7 @@ double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned c
 
     double H_Y_ = 0.0;
     double countY = histogramY.count();
-    QVectorIterator< unsigned long > * itHistogramY = histogramY.getIterator();
+    QVectorIterator<quint64> * itHistogramY = histogramY.getIterator();
     while ( itHistogramY->hasNext() )
     {
         double p_y_ = itHistogramY->next() / countY;
@@ -572,7 +572,7 @@ double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned c
 
     double H_X_Y_ = 0.0;
     double count = jointHistogram.count();
-    QVectorIterator< unsigned long > * itJointHistogram = jointHistogram.getIterator();
+    QVectorIterator<quint64> * itJointHistogram = jointHistogram.getIterator();
     while ( itJointHistogram->hasNext() )
     {
         double p_x_y_ = itJointHistogram->next() / count;
@@ -616,7 +616,7 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
 
     double H_X_ = 0.0;
     double countX = histogramX.count();
-    QVectorIterator< unsigned long > * itHistogramX = histogramX.getIterator();
+    QVectorIterator<quint64> * itHistogramX = histogramX.getIterator();
     while ( itHistogramX->hasNext() )
     {
         double p_x_ = itHistogramX->next() / countX;
@@ -627,7 +627,7 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
 
     double H_Y_ = 0.0;
     double countY = histogramY.count();
-    QVectorIterator< unsigned long > * itHistogramY = histogramY.getIterator();
+    QVectorIterator<quint64> * itHistogramY = histogramY.getIterator();
     while ( itHistogramY->hasNext() )
     {
         double p_y_ = itHistogramY->next() / countY;
@@ -638,7 +638,7 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
 
     double H_X_Y_ = 0.0;
     double count = jointHistogram.count();
-    QVectorIterator< unsigned long > * itJointHistogram = jointHistogram.getIterator();
+    QVectorIterator<quint64> * itJointHistogram = jointHistogram.getIterator();
     while ( itJointHistogram->hasNext() )
     {
         double p_x_y_ = itJointHistogram->next() / count;
@@ -1581,7 +1581,7 @@ double Slicer::similarity( const Partition & partition ) const
     double sum = 0.0;
     double H_X_ = 0.0;
     double countX = partition.g1Histogram.count();
-    QVectorIterator<unsigned long> * itHistogramX = partition.g1Histogram.getIterator();
+    QVectorIterator<quint64> * itHistogramX = partition.g1Histogram.getIterator();
     while ( itHistogramX->hasNext() )
     {
         double p_x_ = itHistogramX->next() / countX;
@@ -1595,7 +1595,7 @@ double Slicer::similarity( const Partition & partition ) const
     sum = 0.0;
     double H_Y_ = 0.0;
     double countY = partition.g2Histogram.count();
-    QVectorIterator<unsigned long> * itHistogramY = partition.g2Histogram.getIterator();
+    QVectorIterator<quint64> * itHistogramY = partition.g2Histogram.getIterator();
     while ( itHistogramY->hasNext() )
     {
         double p_y_ = itHistogramY->next() / countY;
@@ -1609,7 +1609,7 @@ double Slicer::similarity( const Partition & partition ) const
     sum = 0.0;
     double H_X_Y_ = 0.0;
     double count = partition.jointHistogram.count();
-    QVectorIterator<unsigned long> * itJointHistogram = partition.jointHistogram.getIterator();
+    QVectorIterator<quint64> * itJointHistogram = partition.jointHistogram.getIterator();
     while ( itJointHistogram->hasNext() )
     {
         double p_x_y_ = itJointHistogram->next() / count;

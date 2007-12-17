@@ -56,13 +56,13 @@ void Histogram::substract( int value )
 }
 
 
-QVectorIterator< unsigned long > * Histogram::getIterator() const
+QVectorIterator<quint64 > * Histogram::getIterator() const
 {
-    return new QVectorIterator< unsigned long >( m_histogram );
+    return new QVectorIterator<quint64>( m_histogram );
 }
 
 
-unsigned long Histogram::count() const
+quint64 Histogram::count() const
 {
     return m_count;
 }
