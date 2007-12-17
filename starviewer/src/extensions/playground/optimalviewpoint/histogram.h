@@ -56,9 +56,9 @@ public:
      */
     void substract( int value );
     /// Crea un iterador sobre els valors de l'histograma i el retorna.
-    QVectorIterator< unsigned long > * getIterator() const;
+    QVectorIterator<quint64> * getIterator() const;
     /// Retorna el recompte total d'ocurrències.
-    unsigned long count() const;
+    quint64 count() const;
     /// Posa tots els comptadors (individuals i total) a 0.
     void reset();
 
@@ -73,9 +73,9 @@ public:
 private:
 
     /// Vector amb els comptadors d'ocurrències individuals.
-    QVector< unsigned long > m_histogram;
+    QVector<quint64> m_histogram;
     /// Comptador del nombre total d'ocurrències.
-    unsigned long m_count;
+    quint64 m_count;
 
 };
 

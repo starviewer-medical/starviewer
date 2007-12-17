@@ -259,7 +259,7 @@ void OptimalViewpointPlane::endEntropyComputing()
         }
         double H_XL_1_ = 0.0;
         double countL_1 = histogramL_1.count();
-        QVectorIterator< unsigned long > * itHistogramL_1 = histogramL_1.getIterator();
+        QVectorIterator<quint64> * itHistogramL_1 = histogramL_1.getIterator();
         while ( itHistogramL_1->hasNext() )
         {
             double p_XL_1_ = itHistogramL_1->next() / countL_1;
@@ -277,7 +277,7 @@ void OptimalViewpointPlane::endEntropyComputing()
         }
         double H_XL_ = 0.0;
         double countL = histogramL.count();
-        QVectorIterator< unsigned long > * itHistogramL = histogramL.getIterator();
+        QVectorIterator<quint64> * itHistogramL = histogramL.getIterator();
         while ( itHistogramL->hasNext() )
         {
             double p_XL_ = itHistogramL->next() / countL;
