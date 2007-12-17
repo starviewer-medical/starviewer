@@ -537,6 +537,7 @@ void OptimalViewpoint::updatePlanes()
                     case 1: slicer.groupingMethodC( m_similarityThreshold ); break;
                     case 2: slicer.groupingMethodC_JS( m_similarityThreshold ); break;
                     case 3: slicer.splittingMethodC( m_similarityThreshold ); break;
+                    case 4: slicer.splittingMethodC_JS( m_similarityThreshold ); break;
                 }
             }
 
