@@ -938,6 +938,11 @@
             <string>Splitting C</string>
            </property>
           </item>
+          <item>
+           <property name="text" >
+            <string>Splitting C (JS)</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>

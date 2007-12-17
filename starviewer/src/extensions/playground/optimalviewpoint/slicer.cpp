@@ -1460,7 +1460,7 @@ void Slicer::splittingMethodC( double threshold )   /// \todo Fer-ho més eficie
 }
 
 
-Slicer::Partition Slicer::firstPartition( const Group & group ) const
+Slicer::Partition Slicer::firstPartition( const Group & group, bool jensenShannon ) const
 {
     Partition partition;
 
@@ -1472,20 +1472,22 @@ Slicer::Partition Slicer::firstPartition( const Group & group ) const
 
         partition.g1 = g1; partition.g2 = g2;
 
-        fillHistograms( partition );
+        if ( jensenShannon ) fillHistograms_JS( partition );
+        else fillHistograms( partition );
     }
 
     return partition;
 }
 
 
-bool Slicer::nextPartition( Partition & partition ) const
+bool Slicer::nextPartition( Partition & partition, bool jensenShannon ) const
 {
     if ( partition.g2.slices.size() == 1 ) return false;
 
     partition.g1.slices << partition.g2.slices.takeFirst();
 
-    fillHistograms( partition );
+    if ( jensenShannon ) fillHistograms_JS( partition );
+    else fillHistograms( partition );
 
     return true;
 }
@@ -1648,6 +1650,218 @@ void Slicer::split( Partition & partition ) const
 
     for ( unsigned short i = 0; i < partition.g2.slices.size(); i++ )
         partition.g2.slices[i].group = partition.g2.id;
+}
+
+
+void Slicer::fillHistograms_JS( Partition & partition ) const
+{
+    if ( partition.g1.id == 0 ) return; // invalid partition
+
+    unsigned short nx = partition.g1.slices.size(), ny = partition.g2.slices.size();
+
+    if ( partition.g1Histogram.size() == 0 )    // first call with this partition
+    {
+        DEBUG_LOG( "fillHistograms_JS first call" );
+        partition.g1Histogram.setSize( m_nLabels );
+        partition.g2Histogram.setSize( m_nLabels );
+        partition.jointHistogram.setSize( m_nLabels );
+
+        for ( unsigned int i = 0; i < m_sliceSize; i++ )
+        {
+            // iterate over all slices of both groups
+            for ( unsigned short sx = 0; sx < nx; sx++ )
+            {
+                unsigned char valueX = partition.g1.slices[sx].data[i]; if ( valueX == m_newBackground ) valueX = 0;
+                partition.g1Histogram.add( valueX );
+                partition.jointHistogram.add( valueX );
+            }
+            for ( unsigned short sy = 0; sy < ny; sy++ )
+            {
+                unsigned char valueY = partition.g2.slices[sy].data[i]; if ( valueY == m_newBackground ) valueY = 0;
+                partition.g2Histogram.add( valueY );
+                partition.jointHistogram.add( valueY );
+            }
+        }
+    }
+    else    // just adjust histograms
+    {
+        DEBUG_LOG( "fillHistograms_JS adjust" );
+        for ( unsigned int i = 0; i < m_sliceSize; i++ )
+        {
+            unsigned char value = partition.g1.slices.last().data[i]; if ( value == m_newBackground ) value = 0;
+            partition.g1Histogram.add( value ); partition.g2Histogram.substract( value );
+        }
+    }
+
+    DEBUG_LOG( QString( "[*FH_JS*] H(g1).count() = %1" ).arg( partition.g1Histogram.count() ) );
+    DEBUG_LOG( QString( "[*FH_JS*] H(g2).count() = %1" ).arg( partition.g2Histogram.count() ) );
+    DEBUG_LOG( QString( "[*FH_JS*] H(g1,g2).count() = %1" ).arg( partition.jointHistogram.count() ) );
+}
+
+
+double Slicer::jensenShannonDivergence( const Partition & partition ) const
+{
+    double sum = 0.0;
+    double H_X_ = 0.0;
+    double countX = partition.g1Histogram.count();
+    QVectorIterator<quint64> * itHistogramX = partition.g1Histogram.getIterator();
+    while ( itHistogramX->hasNext() )
+    {
+        double p_x_ = itHistogramX->next() / countX;
+        if ( p_x_ > 0.0 ) H_X_ -= p_x_ * log( p_x_ );
+        sum += p_x_;
+    }
+    H_X_ /= log( 2.0 );
+    delete itHistogramX;
+    DEBUG_LOG( QString( "sum p(x) = %1" ).arg( sum ) );
+
+    sum = 0.0;
+    double H_Y_ = 0.0;
+    double countY = partition.g2Histogram.count();
+    QVectorIterator<quint64> * itHistogramY = partition.g2Histogram.getIterator();
+    while ( itHistogramY->hasNext() )
+    {
+        double p_y_ = itHistogramY->next() / countY;
+        if ( p_y_ > 0.0 ) H_Y_ -= p_y_ * log( p_y_ );
+        sum += p_y_;
+    }
+    H_Y_ /= log( 2.0 );
+    delete itHistogramY;
+    DEBUG_LOG( QString( "sum p(y) = %1" ).arg( sum ) );
+
+    sum = 0.0;
+    double H_XY_ = 0.0;
+    double countXY = partition.jointHistogram.count();
+    QVectorIterator<quint64> * itHistogramXY = partition.jointHistogram.getIterator();
+    while ( itHistogramXY->hasNext() )
+    {
+        double p_xy_ = itHistogramXY->next() / countXY;
+        if ( p_xy_ > 0.0 ) H_XY_ -= p_xy_ * log( p_xy_ );
+        sum += p_xy_;
+    }
+    H_XY_ /= log( 2.0 );
+    delete itHistogramXY;
+    DEBUG_LOG( QString( "sum p(xy) = %1" ).arg( sum ) );
+
+    double jsd = H_XY_ - (countX / countXY) * H_X_ - (countY / countXY) * H_Y_;
+
+    DEBUG_LOG( QString( "[*JSD_P*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+    DEBUG_LOG( QString( "[*JSD_P*][CE] H(XY) = %1" ).arg( H_XY_ ) );
+    DEBUG_LOG( QString( "[*JSD_P*][JSD] JSD = %1" ).arg( jsd ) );
+
+    return jsd;
+}
+
+
+// llesques fusionades
+void Slicer::splittingMethodC_JS( double threshold )   /// \todo Fer-ho més eficient!!!
+{
+    // Start of the algorithm
+    QList<Group> groups;    // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
+    Group firstGroup;
+    firstGroup.id = 0;
+
+    for ( unsigned short i = 0; i < m_sliceCount; i++ )
+    {
+        Slice s = { i, 0, m_reslicedData + i * m_sliceSize };
+        firstGroup.slices << s;
+    }
+
+    groups << firstGroup;
+
+    bool aboveThreshold = true;
+
+    while ( aboveThreshold )
+    {
+        double maxJsd = 0.0;
+        Partition maxPartition;
+        unsigned short maxGroup;
+
+        for ( unsigned short i = 0; i < groups.size(); i++ )
+        {
+            const Group & group = groups[i];
+
+            if ( group.slices.size() == 1 ) continue;
+
+            Partition partition = firstPartition( group, true );
+
+            do
+            {
+                double jsd = jensenShannonDivergence( partition );
+                if ( jsd > maxJsd )
+                {
+                    maxJsd = jsd;
+                    maxPartition = partition;
+                    maxGroup = i;
+                    DEBUG_LOG( QString( "[*SMC_JS*] max: %1 | %2 || jsd = %3" ).arg( partition.g1.slices.first().id ).arg( partition.g2.slices.first().id ).arg( jsd ) );
+                }
+            }
+            while ( nextPartition( partition, true ) );
+        }
+
+        //if ( maxJsd > threshold )
+        if ( maxPartition.g1.id != 0 )
+        {
+            split( maxPartition );  // en realitat no caldria, perquè en aquest mètode no fem servir els ids dels grups
+
+            groups.removeAt( maxGroup );
+            groups.insert( maxGroup, maxPartition.g2 );
+            groups.insert( maxGroup, maxPartition.g1 );
+
+            DEBUG_LOG( QString( "[*SMC_JS*] Split: %1 | %2 || jsd = %3" ).arg( maxPartition.g1.id ).arg( maxPartition.g2.id ).arg( maxJsd ) );
+
+            if ( groups.size() == 5 ) aboveThreshold = false;
+        }
+        else
+        {
+            aboveThreshold = false;
+        }
+    }
+
+    // assign consecutive ids to groups
+    for ( unsigned short i = 0; i < groups.size(); i++ )
+    {
+        groups[i].id = i;
+    }
+    // End of the algorithm
+    // The results are in the list "groups"
+
+    // Print results i save them to a file
+    QFile outFile( QDir::tempPath().append( QString( "/smc_js%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileXml( QDir::tempPath().append( QString( "/smc_js%1_%2.xml" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    QFile outFileViola( QDir::tempPath().append( QString( "/viola_smc_js%1_%2.txt" ).arg( static_cast< short >( m_id ) ).arg( threshold ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileXml.open( QFile::WriteOnly | QFile::Truncate )
+        && outFileViola.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        QTextStream outXml( &outFileXml );
+        QTextStream outViola( &outFileViola );
+
+        outXml << "<similarity>\n";
+
+        DEBUG_LOG( QString( "[SMC_JS] threshold = %1" ).arg( threshold ) );
+        out << "threshold = " << threshold << "\n";
+        outXml << "<value type=\"float\"><![CDATA[" << threshold << "]]></value>\n";
+        outXml << "<slabs>\n";
+        for ( int i = 0; i < groups.size(); i++ )
+        {
+            const Group & gr = groups[i];
+            for ( int j = 0; j < gr.slices.size(); j++ )
+            {
+                DEBUG_LOG( QString( "[SMC_JS] group %1 : slice %2" ).arg( gr.id ).arg( gr.slices[j].id ) );
+                out << "group " << gr.id << " : slice " << gr.slices[j].id << "\n";
+            }
+            outXml << "<position type=\"float\"><![CDATA[" << static_cast<double>(gr.slices[0].id) / m_sliceCount << "]]></position>\n";
+            outViola << "(" << threshold << ";" << static_cast<double>(gr.slices[0].id) / m_sliceCount << ")\n";
+        }
+
+        outXml << "</slabs>\n</similarity>\n";
+
+        outFile.close();
+        outFileXml.close();
+        outFileViola.close();
+    }
 }
 
 

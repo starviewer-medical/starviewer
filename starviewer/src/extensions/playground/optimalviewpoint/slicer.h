@@ -89,10 +89,12 @@ public:
     void method1B( double threshold );
     /// Works with fusioned slices.
     void groupingMethodC( double threshold );
-    /// Works with fusioned slices (Jensen-Shannon)
+    /// Works with fusioned slices (Jensen-Shannon).
     void groupingMethodC_JS( double threshold );
-    /// Works with fusioned slices
+    /// Works with fusioned slices.
     void splittingMethodC( double threshold );
+    /// Works with fusioned slices (Jensen-Shannon).
+    void splittingMethodC_JS( double threshold );
 
     vtkImageData * getReslicedImage() const { return m_reslicedImage; }
 
@@ -147,15 +149,19 @@ private:
     /// Returns Jensen-Shannon divergence between two groups.
     double jensenShannonDivergence( const Group & groupX, const Group & groupY ) const;
     /// Returns the first partition of a group.
-    Partition firstPartition( const Group & group ) const;
+    Partition firstPartition( const Group & group, bool jensenShannon = false ) const;
     /// Converts \a partition in the next partition if that exists, and returns true if successful.
-    bool nextPartition( Partition & partition ) const;
+    bool nextPartition( Partition & partition, bool jensenShannon = false ) const;
     /// Fills histograms of the partition.
     void fillHistograms( Partition & partition, bool background = true ) const;
     /// Returns the similarity between the two groups of the partition.
     double similarity( const Partition & partition ) const;
     /// Makes effective a partition by setting the new data to its groups.
     void split( Partition & partition ) const;
+    /// Fills histograms of the partition (Jensen-Shannon version).
+    void fillHistograms_JS( Partition & partition ) const;
+    /// Returns the Jensen-Shannon divergence between the two groups of the partition (w/ background).
+    double jensenShannonDivergence( const Partition & partition ) const;
 
     /// Object identifier.
     unsigned char m_id;
