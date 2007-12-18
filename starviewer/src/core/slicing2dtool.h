@@ -12,6 +12,7 @@
 namespace udg {
 
 class Q2DViewer;
+class Volume;
 
 /**
 Tool que serveix per fer slicing en un visor 2D
@@ -32,6 +33,9 @@ public:
 
 /// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
+    /// Es crida cada cop que l'input del viewer s'ha actualitzat
+    void inputChanged(Volume *input);
+
     /// Comença l'slicing
     void startSlicing();
 

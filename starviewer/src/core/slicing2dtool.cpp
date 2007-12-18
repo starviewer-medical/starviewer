@@ -26,6 +26,8 @@ Slicing2DTool::Slicing2DTool( Q2DViewer *viewer, QObject *parent )
     m_2DViewer = viewer;
     if( !m_2DViewer )
         DEBUG_LOG( "El 2DViewer és nul!" );
+    // cada cop que canvïi l'input cal fer algunes inicialitzacions
+    connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
 }
 
 Slicing2DTool::~Slicing2DTool()
@@ -105,6 +107,15 @@ void Slicing2DTool::endSlicing()
         m_state = NONE;
     else
         DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
+}
+
+void Slicing2DTool::inputChanged( Volume *input )
+{
+    m_state = NONE;
+    m_startPosition[0] = 0;
+    m_startPosition[1] = 0;
+    m_currentPosition[0] = 0;
+    m_currentPosition[1] = 0;
 }
 
 void Slicing2DTool::switchSlicingMode()
