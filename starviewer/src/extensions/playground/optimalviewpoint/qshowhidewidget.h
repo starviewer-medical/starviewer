@@ -18,6 +18,7 @@ class QShowHideWidget : public QWidget, private ::Ui::QShowHideWidgetBase
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
 
 public:
     QShowHideWidget(QWidget *parent = 0);
@@ -28,6 +29,8 @@ public slots:
 
     QString title() const;
     void setTitle( const QString & title );
+    bool isChecked() const;
+    void setChecked( bool checked );
 
 protected:
 

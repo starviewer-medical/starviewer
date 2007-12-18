@@ -35,6 +35,18 @@ void QShowHideWidget::setTitle( const QString & title )
 }
 
 
+bool QShowHideWidget::isChecked() const
+{
+    return m_checkBox->isChecked();
+}
+
+
+void QShowHideWidget::setChecked( bool checked )
+{
+    m_checkBox->setChecked( checked );
+}
+
+
 void QShowHideWidget::childEvent( QChildEvent * event )
 {
     if ( !( m_inited && event->added() ) ) return;
