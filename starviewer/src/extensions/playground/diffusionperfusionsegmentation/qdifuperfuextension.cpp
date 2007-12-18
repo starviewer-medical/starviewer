@@ -27,7 +27,6 @@
 #include <vtkLookupTable.h>
 #include <vtkPoints.h>
 #include <vtkProperty.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkUnstructuredGrid.h>
 //prova recte
@@ -601,7 +600,7 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     m_diffusionOpacityLabel->setEnabled( true );
     m_diffusionOpacitySlider->setEnabled( true );
 
-    m_diffusion2DView->getInteractor()->Render();
+    m_diffusion2DView->refresh();
 }
 
 void QDifuPerfuSegmentationExtension::setSeedPosition()
@@ -986,7 +985,7 @@ void QDifuPerfuSegmentationExtension::applyFilterDiffusionImage()
     m_diffusionMainVolume = filteredVolume;
 
     m_diffusion2DView->setInput( m_diffusionMainVolume );
-    m_diffusion2DView->getInteractor()->Render();
+    m_diffusion2DView->refresh();
 
     m_filterDiffusionPushButton->setEnabled( false );
 
@@ -1069,7 +1068,7 @@ void QDifuPerfuSegmentationExtension::setEditorPoint(  )
             m_strokeVolumeLineEdit->clear();
             m_strokeVolumeLineEdit->insert(QString("%1").arg(m_strokeVolume, 0, 'f', 2));
             m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
-            m_diffusion2DView->getInteractor()->Render();
+            m_diffusion2DView->refresh();
         }
     }
 }
@@ -1085,14 +1084,14 @@ void QDifuPerfuSegmentationExtension::setDiffusionOpacity( int opacity )
     {
         m_diffusion2DView->setOpacityOverlay(((double)opacity)/100.0);
         m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
-        m_diffusion2DView->getInteractor()->Render();
+        m_diffusion2DView->refresh();
     }
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionOpacity( int opacity )
 {
     m_perfusionOverlay->SetOpacity( opacity / 100.0 );
-    m_perfusion2DView->getInteractor()->Render();
+    m_perfusion2DView->refresh();
 }
 
 void QDifuPerfuSegmentationExtension::setErase()
@@ -1170,7 +1169,7 @@ void QDifuPerfuSegmentationExtension::setPaintCursor()
             m_squareActor->SetMapper( squareMapper );
 
             m_diffusion2DView->getRenderer()-> AddActor( m_squareActor );
-            m_diffusion2DView->getInteractor()->Render();
+            m_diffusion2DView->refresh();
 
             m_squareActor->VisibilityOn();
 
@@ -1220,7 +1219,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size)
         }
     }
     //m_strokeMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QDifuPerfuSegmentationExtension::paintMask(int size)
@@ -1253,7 +1252,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size)
         }
     }
     //m_strokeMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QDifuPerfuSegmentationExtension::eraseSliceMask()
@@ -1289,7 +1288,7 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask()
         }
     }
     //m_strokeMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QDifuPerfuSegmentationExtension::eraseRegionMask()
@@ -1339,7 +1338,7 @@ void QDifuPerfuSegmentationExtension::viewLesionOverlay()
         m_diffusion2DView->setOverlayToBlend();
         m_diffusion2DView->setOpacityOverlay(((double)m_diffusionOpacitySlider->value())/100.0);
         m_diffusion2DView->setOverlayInput(m_strokeMaskVolume);
-        m_diffusion2DView->getInteractor()->Render();
+        m_diffusion2DView->refresh();
     }
 }
 
@@ -1351,7 +1350,7 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
         m_diffusion2DView->setOverlayToBlend();
         m_diffusion2DView->setOpacityOverlay(((double)m_diffusionOpacitySlider->value())/100.0);
         m_diffusion2DView->setOverlayInput(m_ventriclesMaskVolume);
-        m_diffusion2DView->getInteractor()->Render();
+        m_diffusion2DView->refresh();
     }
 }
 

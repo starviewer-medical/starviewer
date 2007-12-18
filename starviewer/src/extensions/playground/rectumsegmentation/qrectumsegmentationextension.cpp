@@ -24,7 +24,6 @@
 // VTK
 #include <vtkRenderer.h>
 #include <vtkImageMask.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkImageThreshold.h>
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
@@ -376,7 +375,7 @@ void QRectumSegmentationExtension::ApplyFilterMainImage( )
         m_segMethod->applyFilter(m_filteredVolume);
         m_segMethod->setVolume(m_filteredVolume);
         m_2DView->setInput( m_filteredVolume );
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
         //delete m_mainVolume;
         QApplication::restoreOverrideCursor();
     }
@@ -471,7 +470,7 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_editorTool = QRectumSegmentationExtension::EraseRegion;
 
 /*    this->viewLesionOverlay();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
     m_cont = &m_cont;*/
     QApplication::restoreOverrideCursor();
     std::cout<<"Fi Apply method!!"<<std::endl;
@@ -629,7 +628,7 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
 
         std::cout<<"3"<<std::endl;
         m_2DView->getRenderer()-> AddActor( squareRegionActor );
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
 
         squareRegionActor->VisibilityOn();
 
@@ -699,7 +698,7 @@ void QRectumSegmentationExtension::setEditorPoint(  )
             m_resultsLineEdit->clear();
             m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
             m_2DView->setOverlayInput(m_lesionMaskVolume);
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
         }
         m_resultsLineEdit->clear();
         m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
@@ -717,7 +716,7 @@ void QRectumSegmentationExtension::setOpacity( int op )
     {
         m_2DView->setOpacityOverlay(((double)op)/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
 }
 
@@ -822,7 +821,7 @@ void QRectumSegmentationExtension::setPaintCursor()
         squareActor->SetMapper( squareMapper );
 
         m_2DView->getRenderer()-> AddActor( squareActor );
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
 
         squareActor->VisibilityOn();
 
@@ -903,7 +902,7 @@ void QRectumSegmentationExtension::paintMask(int size)
         }
     }
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QRectumSegmentationExtension::eraseSliceMask()
@@ -940,7 +939,7 @@ void QRectumSegmentationExtension::eraseSliceMask()
         }
     }
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QRectumSegmentationExtension::eraseRegionMask()
@@ -962,7 +961,7 @@ void QRectumSegmentationExtension::eraseRegionMask()
     //eraseRegionMaskRecursive(index[0], index[1], index[2]);
     eraseRegionMaskRecursive(index[0],index[1],index[2]);
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QRectumSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
@@ -1017,7 +1016,7 @@ void QRectumSegmentationExtension::viewThresholds()
 //     m_2DView->setOverlayToBlend();
 //     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
 //     m_2DView->setOverlayInput(m_lesionMaskVolume);
-//     m_2DView->getInteractor()->Render();
+//     m_2DView->refresh();
 
 }
 
@@ -1030,7 +1029,7 @@ void QRectumSegmentationExtension::viewLesionOverlay()
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayToBlend();
         m_2DView->setOverlayInput(m_lesionMaskVolume);
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
 }
 

@@ -183,7 +183,7 @@ void ContournTool::DibuixaSpline(){
 
 
 m_spline->Off();
-m_2DViewer->getInteractor()->Render();
+m_2DViewer->refresh();
 
 switch( m_2DViewer->getView() )
             {
@@ -205,7 +205,7 @@ switch( m_2DViewer->getView() )
 				}
             m_spline->On();
             m_spline->ClosedOn();
-            m_2DViewer->getInteractor()->Render();
+            m_2DViewer->refresh();
 
 
 
@@ -229,7 +229,7 @@ switch( m_2DViewer->getView() )
 				}
             m_spline->On();
             m_spline->ClosedOn();
-            m_2DViewer->getInteractor()->Render();
+            m_2DViewer->refresh();
 
 
             break;
@@ -251,7 +251,7 @@ switch( m_2DViewer->getView() )
 				}
             m_spline->On();
             m_spline->ClosedOn();
-            m_2DViewer->getInteractor()->Render();
+            m_2DViewer->refresh();
             break;
             }
 
@@ -266,12 +266,12 @@ void ContournTool::sliceChanged( int s )
    /* if(m_seedSlice==s)
     {
         m_spline->On();
-        m_2DViewer->getInteractor()->Render();
+        m_2DViewer->refresh();
     }
     else
     {
         m_spline->Off();
-        m_2DViewer->getInteractor()->Render();
+        m_2DViewer->refresh();
         doContouring();
 
     }*/
@@ -285,11 +285,11 @@ void ContournTool::viewChanged( int s )
     {
 
         m_spline->Off();
-        m_2DViewer->getInteractor()->Render();
+        m_2DViewer->refresh();
         doContouring();
 
     }
-    else{ m_2DViewer->getInteractor()->Render(); }*/
+    else{ m_2DViewer->refresh(); }*/
 
 }
 

@@ -23,7 +23,6 @@
 // VTK
 #include <vtkRenderer.h>
 #include <vtkImageMask.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkImageThreshold.h>
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
@@ -292,7 +291,7 @@ void QStrokeSegmentationExtension::ApplyMethod( )
     m_isErase = false;
     m_isEraseSlice = false;
     m_editorAction->setEnabled( true );
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
     QApplication::restoreOverrideCursor();
     std::cout<<"Fi Apply method!!"<<std::endl;
   /*
@@ -390,7 +389,7 @@ void QStrokeSegmentationExtension::ApplyMethod( )
     m_2DView->setOverlayToBlend();
     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
     m_2DView->setOverlayInput(m_maskVolume);
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
     QApplication::restoreOverrideCursor();
     std::cout<<"Fi Apply method!!"<<std::endl;
     */
@@ -485,7 +484,7 @@ void QStrokeSegmentationExtension::setEditorPoint(  )
             m_resultsLineEdit->clear();
             m_resultsLineEdit->insert(QString("%1").arg(volume, 0, 'f', 2));
             m_2DView->setOverlayInput(m_maskVolume);
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
         }
     }
 }
@@ -500,7 +499,7 @@ void QStrokeSegmentationExtension::setOpacity( int op )
     m_2DView->setOpacityOverlay(((double)op)/100.0);
     m_2DView->setOverlayInput(m_maskVolume);
 
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
 }
 
 void QStrokeSegmentationExtension::setLowerValue( int x )
@@ -657,7 +656,7 @@ void QStrokeSegmentationExtension::setPaintCursor()
             squareActor->SetMapper( squareMapper );
 
             m_2DView->getRenderer()-> AddActor( squareActor );
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
 
             squareActor->VisibilityOn();
 
@@ -704,7 +703,7 @@ void QStrokeSegmentationExtension::eraseMask(int size)
         }
     }
     //m_maskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QStrokeSegmentationExtension::paintMask(int size)
@@ -738,7 +737,7 @@ void QStrokeSegmentationExtension::paintMask(int size)
         }
     }
     //m_maskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QStrokeSegmentationExtension::eraseSliceMask()
@@ -775,7 +774,7 @@ void QStrokeSegmentationExtension::eraseSliceMask()
         }
     }
     //m_maskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QStrokeSegmentationExtension::updateVolume()
@@ -800,7 +799,7 @@ void QStrokeSegmentationExtension::viewThresholds()
     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
     m_2DView->setOverlayInput(m_maskVolume);
 
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
 
 }
 

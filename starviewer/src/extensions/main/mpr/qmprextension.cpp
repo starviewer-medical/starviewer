@@ -486,11 +486,11 @@ void QMPRExtension::releaseAxialViewAxisActor()
         m_pickedActorReslice->SetInterpolationModeToCubic();
         if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
         {
-            m_sagital2DView->getInteractor()->Render();
+            m_sagital2DView->refresh();
         }
         else
         {
-            m_coronal2DView->getInteractor()->Render();
+            m_coronal2DView->refresh();
         }
         // reactivem les tools
         enableAllTools();
@@ -583,7 +583,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
     if( m_pickedActorReslice )
     {
         m_pickedActorReslice->SetInterpolationModeToCubic();
-        m_coronal2DView->getInteractor()->Render();
+        m_coronal2DView->refresh();
         m_state = NONE;
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
@@ -678,11 +678,11 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         this->setCursor( QCursor( Qt::ArrowCursor ) );
         if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
         {
-            m_sagital2DView->getInteractor()->Render();
+            m_sagital2DView->refresh();
         }
         else
         {
-            m_coronal2DView->getInteractor()->Render();
+            m_coronal2DView->refresh();
         }
         m_state = NONE;
         m_pickedActorPlaneSource = 0;
@@ -740,7 +740,7 @@ void QMPRExtension::pushSagitalViewAxisActor()
 
 void QMPRExtension::releasePushSagitalViewAxisActor()
 {
-    m_coronal2DView->getInteractor()->Render();
+    m_coronal2DView->refresh();
     m_pickedActorPlaneSource = 0;
     m_pickedActorReslice = 0;
     m_state = NONE;
