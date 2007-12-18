@@ -31,7 +31,6 @@
 
 // VTK
 #include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 #include <vtkSplineWidget.h>
 #include <vtkPolyData.h>
@@ -909,7 +908,7 @@ if (m_isMask){
 
 m_2DView->setOpacityOverlay((double)Op/100.0);
 m_2DView->setOverlayInput(m_maskVolume);
-m_2DView->getInteractor()->Render();
+m_2DView->refresh();
 
 }
 
@@ -986,7 +985,7 @@ m_2DView->getInteractor()->Render();
 
 
 
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
 }
 */
 
@@ -1140,7 +1139,7 @@ void QSegmentationFrameworkExtension::Contorn(vtkImageData *segmentat){
     skin->VisibilityOn();
 
     m_2DView->getRenderer()-> AddActor( skin );
-    m_2DView->getInteractor()->Render();*/
+    m_2DView->refresh();*/
 }
 
 

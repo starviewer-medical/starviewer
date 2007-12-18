@@ -19,7 +19,6 @@
 #include <QSettings>
 #include <QAction>
 // vtk
-#include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
 #include <vtkAxisActor2D.h>
@@ -193,9 +192,9 @@ void QMPR3D2DExtension::update2DViews()
 
     this->updateActors();
 
-    m_axial2DView->getInteractor()->Render();
-    m_sagital2DView->getInteractor()->Render();
-    m_coronal2DView->getInteractor()->Render();
+    m_axial2DView->refresh();
+    m_sagital2DView->refresh();
+    m_coronal2DView->refresh();
 }
 
 void QMPR3D2DExtension::createActors()

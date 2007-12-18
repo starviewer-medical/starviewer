@@ -24,7 +24,6 @@
 // VTK
 #include <vtkRenderer.h>
 #include <vtkImageMask.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkImageThreshold.h>
 #include <vtkSphereSource.h>
 #include <vtkPolyDataMapper.h>
@@ -455,7 +454,7 @@ void QEdemaSegmentationExtension::ApplyFilterMainImage( )
         m_segMethod->applyFilter(m_filteredVolume);
         m_segMethod->setVolume(m_filteredVolume);
         m_2DView->setInput( m_filteredVolume );
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
         //delete m_mainVolume;
         QApplication::restoreOverrideCursor();
     }
@@ -472,7 +471,7 @@ void QEdemaSegmentationExtension::ApplyCleanSkullMethod( )
     m_resultsLineEdit->clear();
     m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
 
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
     QApplication::restoreOverrideCursor();
 }
 
@@ -539,7 +538,7 @@ void QEdemaSegmentationExtension::ApplyMethod( )
     m_lesionViewAction->setEnabled( true );
     m_lesionViewAction->trigger( );
     this->viewLesionOverlay();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
     QApplication::restoreOverrideCursor();
     std::cout<<"Fi Apply method!!"<<std::endl;
  }
@@ -717,7 +716,7 @@ void QEdemaSegmentationExtension::setEditorPoint(  )
             m_edemaVolumeLineEdit->clear();
             m_edemaVolumeLineEdit->insert(QString("%1").arg(m_edemaVolume, 0, 'f', 2));
             m_2DView->setOverlayInput(m_activedMaskVolume);
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
         }
     }
 }
@@ -733,7 +732,7 @@ void QEdemaSegmentationExtension::setOpacity( int op )
     {
         m_2DView->setOpacityOverlay(((double)op)/100.0);
         m_2DView->setOverlayInput(m_activedMaskVolume);
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
 }
 
@@ -841,7 +840,7 @@ void QEdemaSegmentationExtension::setPaintCursor()
             squareActor->SetMapper( squareMapper );
 
             m_2DView->getRenderer()-> AddActor( squareActor );
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
 
             squareActor->VisibilityOn();
 
@@ -888,7 +887,7 @@ void QEdemaSegmentationExtension::eraseMask(int size)
         }
     }
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QEdemaSegmentationExtension::paintMask(int size)
@@ -922,7 +921,7 @@ void QEdemaSegmentationExtension::paintMask(int size)
         }
     }
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QEdemaSegmentationExtension::eraseSliceMask()
@@ -959,7 +958,7 @@ void QEdemaSegmentationExtension::eraseSliceMask()
         }
     }
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QEdemaSegmentationExtension::eraseRegionMask()
@@ -981,7 +980,7 @@ void QEdemaSegmentationExtension::eraseRegionMask()
     //eraseRegionMaskRecursive(index[0], index[1], index[2]);
     eraseRegionMaskRecursive(index[0],index[1],index[2]);
     //m_lesionMaskVolume->getVtkData()->Update();
-    //m_2DView->getInteractor()->Render();
+    //m_2DView->refresh();
 }
 
 void QEdemaSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
@@ -1056,7 +1055,7 @@ void QEdemaSegmentationExtension::viewEdemaOverlay()
         m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_edemaMaskVolume);
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
 }
 
@@ -1072,7 +1071,7 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         std::cout<<"Extent les:"<<m_lesionMaskVolume->getWholeExtent()[0]<<" "<<m_lesionMaskVolume->getWholeExtent()[1]<<" "<<m_lesionMaskVolume->getWholeExtent()[2]<<" "<<m_lesionMaskVolume->getWholeExtent()[3]<<" "<<m_lesionMaskVolume->getWholeExtent()[4]<<" "<<m_lesionMaskVolume->getWholeExtent()[5]<<std::endl;
         std::cout<<"Extent les:"<<m_mainVolume->getWholeExtent()[0]<<" "<<m_mainVolume->getWholeExtent()[1]<<" "<<m_mainVolume->getWholeExtent()[2]<<" "<<m_mainVolume->getWholeExtent()[3]<<" "<<m_mainVolume->getWholeExtent()[4]<<" "<<m_mainVolume->getWholeExtent()[5]<<std::endl;
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
 }
 
@@ -1086,7 +1085,7 @@ void QEdemaSegmentationExtension::viewVentriclesOverlay()
         m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_ventriclesMaskVolume);
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
 }
 

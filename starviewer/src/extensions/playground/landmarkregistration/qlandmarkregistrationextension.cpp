@@ -31,7 +31,6 @@
 #include <vtkProperty.h>
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkPropPicker.h>
 #include <vtkAlgorithmOutput.h>
 
@@ -600,7 +599,7 @@ void QLandmarkRegistrationExtension::applyMethod()
     //     m_2DView->setOverlayInput(m_registeredVolume);
     //     m_opacityOverlaySlider->setEnabled(true);
     //     m_opacityLabel->setEnabled(true);
-    //     m_2DView->getInteractor()->Render();
+    //     m_2DView->refresh();
 
 
     m_2DView_2->setOverlayToBlend();
@@ -609,7 +608,7 @@ void QLandmarkRegistrationExtension::applyMethod()
     m_opacityOverlaySlider->setEnabled(true);
     m_opacityLabel->setEnabled(true);
     m_tryAgainPushButton->setEnabled(true);
-    m_2DView_2->getInteractor()->Render();
+    m_2DView_2->refresh();
 
     QApplication::restoreOverrideCursor();
     DEBUG_LOG("EndApply");
@@ -743,14 +742,14 @@ void QLandmarkRegistrationExtension::mouseMoveEventHandler( int idVolume )
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 0, newItem);
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 1, newItem2);
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 2, newItem3);
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
         }
         else    // idVolume == 2
         {
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 0, newItem);
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 1, newItem2);
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 2, newItem3);
-            m_2DView_2->getInteractor()->Render();
+            m_2DView_2->refresh();
         }
     }
 }
@@ -824,7 +823,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
 
             m_2DView->getRenderer()-> AddActor( pointActor );
             m_seedActorVector1.push_back(pointActor);
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
 
             //connect( m_2DView , SIGNAL( sliceChanged(int) ), SLOT( sliceChanged(int) ) );
 
@@ -839,7 +838,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
 
             m_2DView_2->getRenderer()-> AddActor( pointActor );
             m_seedActorVector2.push_back(pointActor);
-            m_2DView_2->getInteractor()->Render();
+            m_2DView_2->refresh();
         }
 
     pointMapper -> Delete();
@@ -895,7 +894,7 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
             it++;
             itList++;
         }
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
     else        // idVolume == 2
     {
@@ -922,7 +921,7 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
             itList++;
             it++;
         }
-        m_2DView_2->getInteractor()->Render();
+        m_2DView_2->refresh();
     }
 }
 
@@ -979,7 +978,7 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_2DView->getRenderer()-> RemoveActor( m_selectedActor );
             m_2DView->getRenderer()-> AddActor( pointActor );
             m_seedActorVector1[m_idSelectedSeed] = pointActor;
-            m_2DView->getInteractor()->Render();
+            m_2DView->refresh();
         }
         else    // idVolume == 2
         {
@@ -989,7 +988,7 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_2DView_2->getRenderer()-> RemoveActor( m_selectedActor );
             m_2DView_2->getRenderer()-> AddActor( pointActor );
             m_seedActorVector2[m_idSelectedSeed] = pointActor;
-            m_2DView_2->getInteractor()->Render();
+            m_2DView_2->refresh();
         }
         pointMapper -> Delete();
         point       -> Delete();
@@ -1018,7 +1017,7 @@ void QLandmarkRegistrationExtension::setOpacity( int op )
 {
     //     m_2DView->setOpacityOverlay(((double)op)/100.0);
     //     m_2DView->setOverlayInput(m_registeredVolume);
-    //     m_2DView->getInteractor()->Render();
+    //     m_2DView->refresh();
 
     m_2DView_2->setOpacityOverlay(((double)op)/100.0);
     m_2DView_2->setOverlayInput(m_registeredVolume);
@@ -1048,7 +1047,7 @@ void QLandmarkRegistrationExtension::seed1Activated( int row, int aux)
         m_seedLastActor1 = row;
         //m_2DView->setSlice(m_seedSliceVector1[row]);
         m_sliceViewSlider->setValue(m_seedSliceVector1[row]);
-        m_2DView->getInteractor()->Render();
+        m_2DView->refresh();
     }
     if(aux != -1)
     {
@@ -1068,7 +1067,7 @@ void QLandmarkRegistrationExtension::seed2Activated( int row, int aux)
         }
         m_seedLastActor2 = row;
         m_2DView_2->setSlice(m_seedSliceVector2[row]);
-        m_2DView_2->getInteractor()->Render();
+        m_2DView_2->refresh();
     }
     if(aux != -1)
     {
@@ -1112,7 +1111,7 @@ void QLandmarkRegistrationExtension::sliceChanged1( int s )
         itActor++;
         it++;
     }
-    m_2DView->getInteractor()->Render();
+    m_2DView->refresh();
     //std::cout<<"CurrentSlice:"<<m_2DView->getCurrentSlice()<<std::endl;
 /*    double pos[3];
     std::cout<<"ChapusSlice:"<<(int)((pos[2]/m_firstVolume->getSpacing()[2])+0.5)<<std::endl;*/
@@ -1138,7 +1137,7 @@ void QLandmarkRegistrationExtension::sliceChanged2( int s )
         itActor++;
         it++;
     }
-    m_2DView_2->getInteractor()->Render();
+    m_2DView_2->refresh();
 }
 
 void QLandmarkRegistrationExtension::saveTransform(  )
@@ -1259,7 +1258,7 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         m_2DView_2->setOverlayInput(m_registeredVolume);
         m_opacityOverlaySlider->setEnabled(true);
         m_opacityLabel->setEnabled(true);
-        m_2DView_2->getInteractor()->Render();
+        m_2DView_2->refresh();
 
         QApplication::restoreOverrideCursor();
         //std::cout<<"EndApply"<<std::endl;

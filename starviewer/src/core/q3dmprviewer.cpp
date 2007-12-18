@@ -12,7 +12,6 @@
 #include <vtkCellPicker.h>
 #include <vtkProperty.h>
 #include <vtkImagePlaneWidget.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyle.h>
 #include <vtkEventQtSlotConnect.h>
 #include <QVTKWidget.h>
@@ -295,21 +294,21 @@ void Q3DMPRViewer::resetViewToSagital()
 {
     this->resetPlanes();
     this->setCameraOrientation(SAGITAL);
-    this->getInteractor()->Render();
+    this->refresh();
 }
 
 void Q3DMPRViewer::resetViewToCoronal()
 {
     this->resetPlanes();
     this->setCameraOrientation(CORONAL);
-    this->getInteractor()->Render();
+    this->refresh();
 }
 
 void Q3DMPRViewer::resetViewToAxial()
 {
     this->resetPlanes();
     this->setCameraOrientation(AXIAL);
-    this->getInteractor()->Render();
+    this->refresh();
 }
 
 void Q3DMPRViewer::setSagitalVisibility(bool enable)
