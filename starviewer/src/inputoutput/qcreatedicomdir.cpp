@@ -51,7 +51,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     createConnections();
 
     //per defecte gravem al disc dur per tant, l'espai és il·limitat
-    m_DiskSpace = ( unsigned long ) 9999999 * (unsigned long) ( 1024 * 1024 );
+    m_DiskSpace = ( double ) 9999999 * (double) ( 1024 * 1024 );
 
     setWidthColumns();
 }
@@ -156,7 +156,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
 {
     CacheImageDAL cacheImageDAL;
     DicomMask imageMask;
-    unsigned long studySize;
+    double studySize;
     Status state;
 
     if ( !studyExists( study.getStudyUID() ) )
@@ -173,7 +173,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
         }
 
         //només comprovem l'espai si gravem a un cd o dvd
-        if ( studySize + m_dicomdirSize > m_DiskSpace && (m_currentDevice == CDROM || m_currentDevice == DVDROM )  )
+        if ( ( (studySize + m_dicomdirSize)  > m_DiskSpace) && (m_currentDevice == CDROM || m_currentDevice == DVDROM )  )
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
@@ -416,7 +416,7 @@ void QCreateDicomdir::removeSelectedStudy()
     DicomMask imageMask;
     CacheImageDAL cacheImageDAL;
     Status state;
-    unsigned long studySize;
+    double studySize;
     QList<QTreeWidgetItem *> selectedStudies;
 
     selectedStudies = m_dicomdirStudiesList->selectedItems();
@@ -632,14 +632,14 @@ void QCreateDicomdir::deviceChanged( int index )
         case HardDisk:
             m_stackedWidget->setCurrentIndex(1);
             // per gravar al disc no hi ha màxim TODO això no es del tot cert, caldria comprovar l'espai de disc
-            m_DiskSpace = ( unsigned long ) 9999999 * ( unsigned long ) ( 1024 * 1024 );
+            m_DiskSpace = ( double ) 9999999 * ( double ) ( 1024 * 1024 );
             break;
         case CDROM:
                 m_stackedWidget->setCurrentIndex(0);
                 if( sizeInMB < 700 )
                 {
                     m_progressBarOcupat->setMaximum( 700 );
-                    m_DiskSpace = ( unsigned long ) 700 * ( unsigned long ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
+                    m_DiskSpace = ( double ) 700 * ( double ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
                     m_progressBarOcupat->repaint();
                 }
                 else
@@ -652,7 +652,7 @@ void QCreateDicomdir::deviceChanged( int index )
                 if( sizeInMB < 4400 )
                 {
                     m_progressBarOcupat->setMaximum( 4400 );
-                    m_DiskSpace = ( unsigned long ) 4400 * ( unsigned long ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
+                    m_DiskSpace = ( double ) 4400 * ( double ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
                     m_progressBarOcupat->repaint();
                 }
                 else
