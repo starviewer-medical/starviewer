@@ -1744,6 +1744,8 @@ double Slicer::jensenShannonDivergence( const Partition & partition ) const
     DEBUG_LOG( QString( "sum p(xy) = %1" ).arg( sum ) );
 
     double jsd = H_XY_ - (countX / countXY) * H_X_ - (countY / countXY) * H_Y_;
+    // pesem jsd pel volum
+    jsd *= countXY;
 
     DEBUG_LOG( QString( "[*JSD_P*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
     DEBUG_LOG( QString( "[*JSD_P*][CE] H(XY) = %1" ).arg( H_XY_ ) );
