@@ -165,12 +165,12 @@ void QConfigurationScreen::loadCachePoolDefaults()
 
     m_textPoolSize->setText( QString::number( space / 1024 , 10 ) );
 
-    float usedMBs = used / 1024;
-    float freeMBs = (space - used) / 1024;
+    float usedMBs = used / 1024.f;
+    float freeMBs = (space - used) / 1024.f;
     float usedPercentage = static_cast<float>(used) / space * 100.f;
     float freePercentage = static_cast<float>(space - used) / space * 100.f;
 
-    m_cacheUtilization->setText( m_cacheUtilization->text()
+    m_cacheUtilization->setText( tr("<i>(Used: %1Gb, %2%;  Free: %3Gb, %4%)</i>")
             .arg(usedMBs, 0, 'f', 2)
             .arg(usedPercentage, 0, 'f', 1)
             .arg(freeMBs, 0, 'f', 2)
