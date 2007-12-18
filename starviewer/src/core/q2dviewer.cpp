@@ -796,7 +796,7 @@ void Q2DViewer::setInput( Volume* volume )
 {
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
-        m_oldDrawer->removeAllPrimitives();
+        m_drawer->removeAllPrimitives();
 
     if( volume == 0 )
         return;
@@ -2168,7 +2168,7 @@ void Q2DViewer::addRenderScene()
     actor->SetInput( m_viewer->GetWindowLevel()->GetOutput() );
     renderer->AddActor( actor );
     m_sliceActorCollection->AddItem( actor );
-
+    
     // li afegim les annotacions de texte corresponents
     sliceAnnotation = vtkCornerAnnotation::New();
     renderer->AddActor2D( sliceAnnotation );

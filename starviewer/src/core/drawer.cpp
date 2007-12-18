@@ -117,6 +117,35 @@ void Drawer::refresh()
     m_2DViewer->refresh();
 }
 
+void Drawer::removeAllPrimitives()
+{
+    QList <DrawerPrimitive*> list = m_axialPrimitives.values();
+    
+    QList <DrawerPrimitive*> sagitalList = m_sagitalPrimitives.values();
+    QList <DrawerPrimitive*> coronalList = m_coronalPrimitives.values();
+    
+    list += sagitalList;
+    list += coronalList;
+    list += m_top2DPlanePrimitives;
+    
+    foreach(DrawerPrimitive *primitive, list)
+    {
+        m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+        
+        QMutableMapIterator<QString, DrawerPrimitive *> groupsIterator( m_primitiveGroups );
+        while( groupsIterator.hasNext() )
+        {
+            groupsIterator.next();
+            if( primitive == groupsIterator.value() )
+            {
+                groupsIterator.remove();
+            }
+        }
+        
+        delete primitive;
+    }
+}
+
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 {
     // mirem si està en algun grup
