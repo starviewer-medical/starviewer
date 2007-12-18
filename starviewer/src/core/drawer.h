@@ -64,6 +64,9 @@ public slots:
      * @param primitive Primitiva que volem deixar de controlar
      */
     void erasePrimitive(DrawerPrimitive *primitive);
+    
+    ///esborra totes les primitives registrades al drawer.
+    void removeAllPrimitives();
 
 private:
     /**
