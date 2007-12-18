@@ -57,6 +57,12 @@ private:
      */
     void updateIncrement(int increment);
 
+    /**
+     * Ens diu si l'input actual té fases o no
+     * @return
+     */
+    bool currentInputHasPhases();
+
 private:
     enum { SliceMode, PhaseMode };
 
