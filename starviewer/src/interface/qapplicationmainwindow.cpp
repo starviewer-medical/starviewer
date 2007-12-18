@@ -404,7 +404,7 @@ void QApplicationMainWindow::about()
                "<p align='justify'>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing"
                " software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and"
                " molecular imaging."
-               "<p>Version : %1 </p>").arg( "0.4.0" )
+               "<p>Version : %1 </p>").arg( "0.4.1" )
                );
 }
 
