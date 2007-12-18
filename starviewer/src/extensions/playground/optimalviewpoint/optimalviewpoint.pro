@@ -6,7 +6,8 @@
 FORMS += optimalviewpointinputparametersformbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
          qtransferfunctionintervaleditorbase.ui \
-         qoptimalviewpointextensionbase.ui 
+         qoptimalviewpointextensionbase.ui \
+         qshowhidewidgetbase.ui
 HEADERS += doublehistogram.h \
            histogram.h \
            hoverpoints.h \
@@ -34,7 +35,8 @@ HEADERS += doublehistogram.h \
            transferfunctionio.h \
            slicer.h \
            qtransferfunctioneditor.h \
-           qtransferfunctioneditorbygradient.h 
+           qtransferfunctioneditorbygradient.h \
+           qshowhidewidget.h
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            hoverpoints.cpp \
@@ -62,7 +64,8 @@ SOURCES += doublehistogram.cpp \
            transferfunctionio.cpp \
            slicer.cpp \
            qtransferfunctioneditor.cpp \
-           qtransferfunctioneditorbygradient.cpp 
+           qtransferfunctioneditorbygradient.cpp \
+           qshowhidewidget.cpp
 
 RESOURCES += optimalviewpoint.qrc
 
