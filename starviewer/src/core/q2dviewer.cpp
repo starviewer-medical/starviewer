@@ -33,6 +33,7 @@
 #include <vtkInteractorStyleImage.h>
 #include <vtkImageViewer2.h>
 #include <vtkCamera.h>
+#include <vtkMath.h>
 // composició d'imatges
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h>
@@ -350,9 +351,9 @@ vtkScalarBarActor* Q2DViewer::createScalarBar()
     scalarBar->SetOrientationToVertical();
     scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
     scalarBar->SetPosition( 0.8 , -0.8 );
-    scalarBar->SetWidth( 0.1 );
+    scalarBar->SetWidth( 0.08 );
     scalarBar->SetHeight( 0.6 );
-    scalarBar->SetLabelFormat( "%.2f" );
+    scalarBar->SetLabelFormat( " %.f  " );
     scalarBar->SetNumberOfLabels( 3 );
     scalarBar->GetLabelTextProperty()->ItalicOff();
     scalarBar->GetLabelTextProperty()->BoldOff();
@@ -539,13 +540,13 @@ void Q2DViewer::refreshAnnotations()
         // informació de la finestra
         if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
-            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
                     .arg( m_imageSizeInformation[0] )
                     .arg( m_imageSizeInformation[1] )
                     .arg( renderer->GetSize()[0] )
                     .arg( renderer->GetSize()[1] )
-                    .arg( m_windowLevelLUTMapper->GetWindow() )
-                    .arg( m_windowLevelLUTMapper->GetLevel() );
+                    .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
+                    .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
         }
         else
             m_upperLeftText = "";
@@ -2018,12 +2019,12 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
             if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
             {
                 m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                        .arg( m_imageSizeInformation[0] )
-                        .arg( m_imageSizeInformation[1] )
-                        .arg( renderer->GetSize()[0] )
-                        .arg( renderer->GetSize()[1] )
-                        .arg( m_windowLevelLUTMapper->GetWindow() )
-                        .arg( m_windowLevelLUTMapper->GetLevel() );
+                    .arg( m_imageSizeInformation[0] )
+                    .arg( m_imageSizeInformation[1] )
+                    .arg( renderer->GetSize()[0] )
+                    .arg( renderer->GetSize()[1] )
+                    .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
+                    .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
             }
             else
                 m_upperLeftText = "";
