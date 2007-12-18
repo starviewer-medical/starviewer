@@ -48,9 +48,6 @@ public slots:
      */
     virtual void writeAllParameters();
 
-    /// Escriu els paràmetres de la segmentació al Parameters associat.
-    void writeSegmentationParameters();
-
     /// Assigna la funció de transferència actual.
     void setTransferFunction( const TransferFunction & transferFunction );
 
@@ -70,24 +67,16 @@ private slots:
 
     void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
     void setNumberOfPlanes( const QString & numberOfPlanes );
-    void openSegmentationFile();
-    /// Demana el tipus de segmentació adequat segons les opcions triades.
-    void requestSegmentation();
     void loadTransferFunction();
     void saveTransferFunction();
     void setClusterFirst( int slice );
     void setClusterLast( int slice );
-
-    void toggleSegmentationParameters();
 
     void requestNewMethod();
 
     void requestRenderPlane();
 
 signals:
-
-    /// Demana que es faci la segmentació.
-    void segmentationRequested();
 
     /// Demana que es carregui la segmentació des d'un fitxer.
     void loadSegmentationRequested();
@@ -104,9 +93,6 @@ private:
 
     /// Objecte que guardarà els paràmetres.
     OptimalViewpointParameters * m_parameters;
-
-    /// Serà cert quan l'usuari hagi triat el fitxer de segmentació.
-    bool m_segmentationFileChosen;
 
     /// Funció de transferència actual.
     TransferFunction m_transferFunction;

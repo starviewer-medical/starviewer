@@ -67,12 +67,23 @@ public slots:
 
     void renderPlane( short plane );
 
+    void readParameter( int index );
+
+private slots:
+
+    void openSegmentationFile();
+    /// Escriu els paràmetres de la segmentació al Parameters associat.
+    void writeSegmentationParameters();
+    void toggleSegmentationParameters();
+
 private:
 
     /// Paràmetres del mètode.
     OptimalViewpointParameters * m_parameters;
     /// Mètode.
     OptimalViewpoint * m_method;
+    /// Serà cert quan l'usuari hagi triat el fitxer de segmentació.
+    bool m_segmentationFileChosen;
 
 };
 
