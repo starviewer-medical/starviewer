@@ -131,19 +131,10 @@ void Drawer::removeAllPrimitives()
     foreach(DrawerPrimitive *primitive, list)
     {
         m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
-        
-        QMutableMapIterator<QString, DrawerPrimitive *> groupsIterator( m_primitiveGroups );
-        while( groupsIterator.hasNext() )
-        {
-            groupsIterator.next();
-            if( primitive == groupsIterator.value() )
-            {
-                groupsIterator.remove();
-            }
-        }
-        
         delete primitive;
     }
+    
+    m_primitiveGroups.clear();
 }
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
