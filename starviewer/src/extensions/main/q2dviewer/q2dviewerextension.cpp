@@ -138,7 +138,7 @@ void Q2DViewerExtension::createActions()
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
     m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
-    m_distanceToolButton->setDefaultAction( m_distanceAction );
+    m_oldDistanceToolButton->setDefaultAction( m_distanceAction );
 
     m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
     m_roiToolButton->setDefaultAction( m_roiAction );
@@ -653,6 +653,7 @@ void Q2DViewerExtension::initializeTools()
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
+    m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
@@ -660,7 +661,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList exclusiveTools;
-    exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool";
+    exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool";
     m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
@@ -680,7 +681,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }

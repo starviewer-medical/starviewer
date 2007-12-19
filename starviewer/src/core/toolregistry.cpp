@@ -21,6 +21,7 @@
 #include "synchronizetool.h"
 #include "windowlevelpresetstool.h"
 #include "polylineroitool.h"
+#include "distancetool.h"
 
 #include <QAction>
 
@@ -85,6 +86,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "PolylineROITool" )
     {
         tool = new PolylineROITool( viewer );
+    }
+    else if( toolName == "DistanceTool" )
+    {
+        tool = new DistanceTool( viewer );
     }
     else
     {
