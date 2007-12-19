@@ -13,6 +13,7 @@
 #include "toolmanager.h"
 #include "volume.h"
 #include "series.h"
+#include "toolconfiguration.h"
 // qt
 #include <QToolButton>
 #include <QSplitter>
@@ -153,6 +154,17 @@ void QMPR3D2DExtension::initializeTools()
     QStringList toolsMPRList;
     toolsMPRList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
     m_toolManager->setViewerTools( m_mpr3DView, toolsMPRList );
+
+    // creem la configuració
+    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
+    synchronizeConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
+
+    m_toolManager->setViewerTool( m_axial2DView, "SynchronizeTool", synchronizeConfiguration );
+    m_toolManager->setViewerTool( m_sagital2DView, "SynchronizeTool", synchronizeConfiguration );
+    m_toolManager->setViewerTool( m_coronal2DView, "SynchronizeTool", synchronizeConfiguration );
+    // TODO tenim pendent d'incorporar l'MPR 3D en la sincronització
+//     m_toolManager->setViewerTool( m_mpr3DView, "SynchronizeTool", synchronizeConfiguration );
+    m_toolManager->activateTool("SynchronizeTool");
 
     m_toolManager->refreshConnections();
 }
@@ -342,17 +354,6 @@ void QMPR3D2DExtension::createConnections()
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_axial2DView , SLOT( resetWindowLevelToDefault() ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_sagital2DView , SLOT( resetWindowLevelToDefault() ) );
     connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_coronal2DView , SLOT( resetWindowLevelToDefault() ) );
-
-    // sincronitzar window level
-    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_axial2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_coronal2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_sagital2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_axial2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_sagital2DView , SLOT( setWindowLevel( double , double ) ) );
-    connect( m_coronal2DView , SIGNAL( windowLevelChanged( double , double ) ) , m_mpr3DView , SLOT( setWindowLevel( double , double ) ) );
 
     // layouts
     connect( m_leftRightLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchBigView() ) );
