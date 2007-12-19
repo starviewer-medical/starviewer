@@ -309,19 +309,13 @@ void Q2DViewerExtension::initLayouts()
     m_gridLayout->setSpacing(0);
     m_gridLayout->setMargin(0);
 
-    m_verticalLayout = new QVBoxLayout();
-    m_verticalLayout->setSpacing(0);
-    m_verticalLayout->setMargin(0);
+    m_viewersLayout = new QGridLayout();
+    m_viewersLayout->setSpacing(0);
+    m_viewersLayout->setMargin(0);
+    
+    m_viewersLayout->addWidget( m_selectedViewer, 0, 0 );
+    m_gridLayout->addLayout( m_viewersLayout, 0, 0 );
 
-    QHBoxLayout *horizontal = new QHBoxLayout();
-    horizontal->setSpacing(0);
-    horizontal->setMargin(0);
-
-    horizontal->addWidget( m_selectedViewer );
-    m_verticalLayout->addLayout( horizontal,0 );
-    m_gridLayout->addLayout( m_verticalLayout,0,0 );
-
-    m_qHorizontalLayoutVector.push_back( horizontal );
     m_vectorViewers.push_back( m_selectedViewer );
     m_workingArea->setLayout(m_gridLayout);
 
@@ -330,29 +324,25 @@ void Q2DViewerExtension::initLayouts()
 
 void Q2DViewerExtension::addColumns( int columns )
 {
-    QVector<QHBoxLayout*>::Iterator it;
     int posViewer = m_columns;
     Q2DViewerWidget *newViewer;
 
+    int rows;
     while( columns > 0 )
     {
-        it = m_qHorizontalLayoutVector.begin();
+        rows = 0;
         m_columns += 1;
         m_totalColumns += 1;
-        // Afegim un widget a cada fila per tenir una columna més
-        int i = 0;
-        while( it != m_qHorizontalLayoutVector.end() )
+        while( rows < m_viewersLayout->rowCount() )
         {
             newViewer = getNewQ2DViewerWidget();
-            (*it)->addWidget( newViewer );
+            m_viewersLayout->addWidget( newViewer, rows, m_totalColumns-1);
             m_vectorViewers.insert( posViewer,newViewer );
             initializeDefaultTools( newViewer->getViewer() );
             posViewer += m_columns;
-            it++;
-            if( i >= m_rows )
+            if( rows >= m_rows )
                 newViewer->hide();
-            i++;
-
+            rows++;
         }
         posViewer = m_columns;
         columns--;
@@ -361,25 +351,22 @@ void Q2DViewerExtension::addColumns( int columns )
 
 void Q2DViewerExtension::addRows( int rows )
 {
-    QHBoxLayout *horizontal;
+//     QHBoxLayout *horizontal;
     Q2DViewerWidget *newViewer;
-    int i;
+    int column;
 
     while( rows > 0 )
     {
-        horizontal = new QHBoxLayout();
-        m_verticalLayout->addLayout( horizontal,0 );
-        m_qHorizontalLayoutVector.push_back( horizontal );
         m_rows += 1;
         m_totalRows += 1;
         //Afegim tants widgets com columnes
-        for(i = 0; i < m_totalColumns; i++)
+        for(column = 0; column < m_totalColumns; column++)
         {
             newViewer = getNewQ2DViewerWidget();
-            horizontal->addWidget( newViewer );
+            m_viewersLayout->addWidget( newViewer, m_rows-1, column);
             m_vectorViewers.push_back( newViewer );
             initializeDefaultTools( newViewer->getViewer() );
-            if( i >= m_columns)
+            if( column >= m_columns)
                 newViewer->hide();
         }
         rows--;
@@ -388,25 +375,24 @@ void Q2DViewerExtension::addRows( int rows )
 
 void Q2DViewerExtension::removeColumns( int columns )
 {
-    QVector<QHBoxLayout*>::Iterator it = m_qHorizontalLayoutVector.begin();
     int posViewer = m_columns-1;
     Q2DViewerWidget *oldViewer;
 
+    int rows;
     while( columns > 0 && m_columns > 1 )
     {
-        it = m_qHorizontalLayoutVector.begin();
+        rows = 0;
         // Eliminem un widget de cada fila per tenir una columna menys
-        while (it != m_qHorizontalLayoutVector.end())
+        while (rows < m_viewersLayout->rowCount() )
         {
             oldViewer = m_vectorViewers.value(posViewer);
-            ( *it )->removeWidget( oldViewer );
+            m_viewersLayout->removeWidget( oldViewer );
             m_vectorViewers.remove( posViewer );
-            // TODO eliminar els viewers que treiem del toolManager???
             if ( m_selectedViewer == oldViewer )
                 setViewerSelected( m_vectorViewers.value( 0 ) );
             delete oldViewer;
             posViewer += (m_columns-1);
-            it++;
+            rows++;
         }
         m_columns--;
         posViewer = m_columns-1;
@@ -417,18 +403,17 @@ void Q2DViewerExtension::removeColumns( int columns )
 void Q2DViewerExtension::removeRows( int rows )
 {
     int i;
-    m_verticalLayout->removeItem(m_verticalLayout->itemAt(m_verticalLayout->count()));
     int posViewer = m_vectorViewers.count()-1;
     Q2DViewerWidget *oldViewer;
 
     while( rows > 0 && m_rows > 1 )
     {
-         m_qHorizontalLayoutVector.pop_back();
         //Eliminem tants widgets com columnes
         for(i = 0; i < m_columns; i++)
         {
             oldViewer = m_vectorViewers.value(posViewer);
             m_vectorViewers.remove(posViewer);
+            m_viewersLayout->removeWidget( oldViewer );
             // TODO eliminar els viewers que treiem del toolManager???
             if ( m_selectedViewer == oldViewer )
                 setViewerSelected( m_vectorViewers.value( 0 ) );
