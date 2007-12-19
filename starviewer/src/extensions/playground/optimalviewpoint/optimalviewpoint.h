@@ -131,7 +131,7 @@ public:
     /// Fa una segmentació automàtica del volum.
     void doAutomaticSegmentation();
 
-    void rescale();
+    void rescale( unsigned char numberOfBins );
 
 
 

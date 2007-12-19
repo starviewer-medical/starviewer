@@ -62,7 +62,7 @@ public:
     };
 
     /// Tipus de segmentació disponibles.
-    enum SegmentationType { LoadSegmentation, AutomaticSegmentation };
+    enum SegmentationType { AutomaticSegmentation, LoadSegmentation, RegularSegmentation };
 
     OptimalViewpointParameters( QObject * parent = 0 );
     ~OptimalViewpointParameters();

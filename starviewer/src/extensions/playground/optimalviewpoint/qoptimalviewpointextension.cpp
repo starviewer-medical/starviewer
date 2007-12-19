@@ -49,6 +49,7 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 
     m_automaticSegmentationWidget->hide();
+    m_regularSegmentationWidget->hide();
 
     connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
     connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
@@ -86,6 +87,10 @@ void QOptimalViewpointExtension::doSegmentation()
             QMessageBox::warning( this, tr("No segmentation file chosen"),
                                    tr("Please, choose a segmentation file or do an automatic segmentation.") );
     }
+    else if ( m_regularSegmentationRadioButton->isChecked() )
+    {
+        m_parameters->setSegmentation( OptimalViewpointParameters::RegularSegmentation );
+    }
     else
     {
         m_parameters->setSegmentation( OptimalViewpointParameters::AutomaticSegmentation );
@@ -103,9 +108,11 @@ void QOptimalViewpointExtension::doSegmentation()
             break;
 
         case OptimalViewpointParameters::AutomaticSegmentation:
-            /// \warning HACK per fer una prova
-            //m_method->doAutomaticSegmentation();
-            m_method->rescale();
+            m_method->doAutomaticSegmentation();
+            break;
+
+        case OptimalViewpointParameters::RegularSegmentation:
+            m_method->rescale( m_segmentationNumberOfBinsSpinBox->value() );
             break;
     }
 
@@ -113,6 +120,8 @@ void QOptimalViewpointExtension::doSegmentation()
     m_loadSegmentationWidget->setDisabled( true );
     m_automaticSegmentationRadioButton->setDisabled( true );
     m_automaticSegmentationWidget->setDisabled( true );
+    m_regularSegmentationRadioButton->setDisabled( true );
+    m_regularSegmentationWidget->setDisabled( true );
 //     m_segmentationOkPushButton->setDisabled( true );
     toggleSegmentationParameters();
 
@@ -177,9 +186,12 @@ void QOptimalViewpointExtension::execute()
 }
 
 
-void QOptimalViewpointExtension::setScalarRange( unsigned char /*rangeMin*/, unsigned char rangeMax )
+void QOptimalViewpointExtension::setScalarRange( unsigned char rangeMin, unsigned char rangeMax )
 {
     m_inputParametersWidget->setRangeMax( rangeMax );
+    unsigned short maximum = rangeMax - rangeMin + 1;
+    if ( maximum < m_segmentationNumberOfBinsSpinBox->maximum() )
+        m_segmentationNumberOfBinsSpinBox->setMaximum( maximum );
 }
 
 
@@ -223,12 +235,12 @@ void QOptimalViewpointExtension::writeSegmentationParameters()
     }
 
     m_parameters->setSegmentationFileName( m_segmentationFileLabel->text() );
-    m_parameters->setSegmentationNumberOfIterations( m_spinBoxSegmentationIterations->value() );
-    m_parameters->setSegmentationBlockLength( m_spinBoxSegmentationBlockLength->value() );
-    m_parameters->setSegmentationNumberOfClusters( m_spinBoxSegmentationNumberOfClusters->value() );
-    m_parameters->setSegmentationNoise( m_doubleSpinBoxSegmentationNoise->value() );
-    m_parameters->setSegmentationImageSampleDistance( m_doubleSpinBoxSegmentationImageSampleDistance->value() );
-    m_parameters->setSegmentationSampleDistance( m_doubleSpinBoxSegmentationSampleDistance->value() );
+    m_parameters->setSegmentationNumberOfIterations( m_segmentationIterationsSpinBox->value() );
+    m_parameters->setSegmentationBlockLength( m_segmentationBlockLengthSpinBox->value() );
+    m_parameters->setSegmentationNumberOfClusters( m_segmentationNumberOfClustersSpinBox->value() );
+    m_parameters->setSegmentationNoise( m_segmentationNoiseDoubleSpinBox->value() );
+    m_parameters->setSegmentationImageSampleDistance( m_segmentationImageSampleDistanceDoubleSpinBox->value() );
+    m_parameters->setSegmentationSampleDistance( m_segmentationSampleDistanceDoubleSpinBox->value() );
 }
 
 
@@ -241,6 +253,8 @@ void QOptimalViewpointExtension::toggleSegmentationParameters()
         m_loadSegmentationWidget->hide();
         m_automaticSegmentationRadioButton->hide();
         m_automaticSegmentationWidget->hide();
+        m_regularSegmentationRadioButton->hide();
+        m_regularSegmentationWidget->hide();
         m_segmentationLine->hide();
     }
     else
@@ -250,6 +264,8 @@ void QOptimalViewpointExtension::toggleSegmentationParameters()
         if ( m_loadSegmentationRadioButton->isChecked() ) m_loadSegmentationWidget->show();
         m_automaticSegmentationRadioButton->show();
         if ( m_automaticSegmentationRadioButton->isChecked() ) m_automaticSegmentationWidget->show();
+        m_regularSegmentationRadioButton->show();
+        if ( m_regularSegmentationRadioButton->isChecked() ) m_regularSegmentationWidget->show();
         m_segmentationLine->show();
     }
 }
