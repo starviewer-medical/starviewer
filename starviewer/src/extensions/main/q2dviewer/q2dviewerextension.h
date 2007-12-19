@@ -191,8 +191,7 @@ private:
 
     /// Grids per mostrar diferents q2dviewers alhora.
     QGridLayout *m_gridLayout;
-    QVBoxLayout *m_verticalLayout;
-    QVector<QHBoxLayout*> m_qHorizontalLayoutVector;
+    QGridLayout *m_viewersLayout;
 
     /// Visualitzador seleccionat, també sempre en tindrem un
     Q2DViewerWidget *m_selectedViewer;
