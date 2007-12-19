@@ -832,9 +832,9 @@ void OptimalViewpoint::newMethod2( int step, bool normalized )
     }
 }
 
-void OptimalViewpoint::rescale()
+void OptimalViewpoint::rescale( unsigned char numberOfBins )
 {
-    m_numberOfClusters = m_volume->rescale( 32 );
+    m_numberOfClusters = m_volume->rescale( numberOfBins );
     if ( m_numberOfClusters > 0 )
     {
         m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );

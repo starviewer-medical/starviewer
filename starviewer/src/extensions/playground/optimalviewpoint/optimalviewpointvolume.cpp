@@ -220,6 +220,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_clusterImage = 0;
     m_clusterVolume = 0;
     m_clusterMapper = 0;
+    DEBUG_LOG( "end constructor" );
 }
 
 OptimalViewpointVolume::~OptimalViewpointVolume()
@@ -867,9 +868,11 @@ signed char OptimalViewpointVolume::rescale( int bins )
 {
     QVector< unsigned char > limits;
 
+    int nValues = m_rangeMax - m_rangeMin + 1;
+
     for ( int i = 1; i < bins; i++ )
     {
-        limits.push_back( i * 256 / bins - 1 );
+        limits.push_back( i * nValues / bins - 1 );
     }
 
     labelize( limits );
