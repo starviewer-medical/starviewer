@@ -424,64 +424,70 @@ void QConfigurationScreen::test()
     PacsServer pacsServer;
     QString message , logMessage;
     StarviewerSettings settings;
-
-    //Agafem les dades del PACS que estan el textbox per testejar
-    pacs.setAEPacs( m_textAETitle->text() );
-    pacs.setPacsPort( m_textPort->text() );
-    pacs.setPacsAdr( m_textAddress->text() );
-    pacs.setAELocal( settings.getAETitleMachine() );
-    pacsServer.setPacs( pacs );
-
-    state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
-
-    if ( !state.good() )
+    
+    //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
+    if ( m_PacsTreeView->selectedItems().count() > 0 )
     {
-        message.insert( 0 , tr( " Pacs " ) );
-        message.append( pacs.getAEPacs() );
-        message.append( tr ( " doesn't responds " ) );
-        message.append( '\n' );
-        message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
-        QMessageBox::warning( this , tr("Starviewer") , message );
-
-        logMessage.insert( 0 , "Doing echo pacs " );
-        logMessage.append( pacs.getAEPacs() );
-        logMessage.append( " doesn't responds. PACS ERROR : " );
-        logMessage.append( state.text() );
-        INFO_LOG( logMessage );
-    }
-    else
-    {
-        state = pacsServer.echo();
-
-        if ( state.good() )
+        //Agafem les dades del PACS que estan el textbox per testejar
+        pacs.setAEPacs( m_textAETitle->text() );
+        pacs.setPacsPort( m_textPort->text() );
+        pacs.setPacsAdr( m_textAddress->text() );
+        pacs.setAELocal( settings.getAETitleMachine() );
+        pacsServer.setPacs( pacs );
+    
+        state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
+    
+        if ( !state.good() )
         {
-            message.insert( 0 , tr( " Test of Pacs " ) );
+            message.insert( 0 , tr( " Pacs " ) );
             message.append( pacs.getAEPacs() );
-            message.append( tr ( " is correct " ) );
-            QMessageBox::information( this , tr("Starviewer") , message );
-
-            logMessage.insert( 0 , "Test of Pacs " );
+            message.append( tr ( " doesn't responds " ) );
+            message.append( '\n' );
+            message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
+            QMessageBox::warning( this , tr("Starviewer") , message );
+    
+            logMessage.insert( 0 , "Doing echo pacs " );
             logMessage.append( pacs.getAEPacs() );
-            logMessage.append( " is correct " );
+            logMessage.append( " doesn't responds. PACS ERROR : " );
+            logMessage.append( state.text() );
             INFO_LOG( logMessage );
         }
         else
         {
-            message.insert( 0 , tr( " Pacs " ) );
-            message.append( pacs.getAEPacs() );
-            message.append( tr ( " doesn't responds correctly" ) );
-            message.append( '\n' );
-            message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
-            QMessageBox::warning( this , tr("Starviewer") , message );
-
-            logMessage.insert( 0 , "Doing echo pacs " );
-            logMessage.append( pacs.getAEPacs() );
-            logMessage.append( " doesn't responds correctly. PACS ERROR : " );
-            logMessage.append( state.text() );
-            INFO_LOG( logMessage );
+            state = pacsServer.echo();
+    
+            if ( state.good() )
+            {
+                message.insert( 0 , tr( " Test of Pacs " ) );
+                message.append( pacs.getAEPacs() );
+                message.append( tr ( " is correct " ) );
+                QMessageBox::information( this , tr("Starviewer") , message );
+    
+                logMessage.insert( 0 , "Test of Pacs " );
+                logMessage.append( pacs.getAEPacs() );
+                logMessage.append( " is correct " );
+                INFO_LOG( logMessage );
+            }
+            else
+            {
+                message.insert( 0 , tr( " Pacs " ) );
+                message.append( pacs.getAEPacs() );
+                message.append( tr ( " doesn't responds correctly" ) );
+                message.append( '\n' );
+                message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
+                QMessageBox::warning( this , tr("Starviewer") , message );
+    
+                logMessage.insert( 0 , "Doing echo pacs " );
+                logMessage.append( pacs.getAEPacs() );
+                logMessage.append( " doesn't responds correctly. PACS ERROR : " );
+                logMessage.append( state.text() );
+                INFO_LOG( logMessage );
+            }
         }
     }
-
+    else
+        QMessageBox::information( this , tr("Information") , tr("To do a test of a pacs it is necessary to select an item of the list.") );
+        
 }
 
 bool QConfigurationScreen::validatePacsParameters()
