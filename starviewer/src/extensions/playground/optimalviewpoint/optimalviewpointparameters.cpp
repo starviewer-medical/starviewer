@@ -25,8 +25,6 @@ OptimalViewpointParameters::~OptimalViewpointParameters()
 
 void OptimalViewpointParameters::init()
 {
-    setVolumeObject( 0 );
-
     setSegmentation( LoadSegmentation );
 
     setSegmentationFileName( QString() );
@@ -37,21 +35,6 @@ void OptimalViewpointParameters::init()
     setSegmentationNoise( 32.0 );
     setSegmentationImageSampleDistance( 1.0 );
     setSegmentationSampleDistance( 1.0 );
-}
-
-
-Volume * OptimalViewpointParameters::getVolumeObject() const
-{
-    return m_volumeObject;
-}
-
-
-void OptimalViewpointParameters::setVolumeObject( Volume * volumeObject )
-{
-    if ( m_volumeObject != volumeObject )
-    {
-        m_volumeObject = volumeObject; emit changed( VolumeObject );
-    }
 }
 
 
