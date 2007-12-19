@@ -70,7 +70,7 @@ public:
     //typedef QVector<QGradientStop> QGradientStops;    // a <QGradient>
 //     typedef QGradientStops TransferFunction;                                // funció de transferència per un volum d'un mirall
 
-    OptimalViewpoint();
+    OptimalViewpoint( QObject * parent = 0 );
     virtual ~OptimalViewpoint();
 
     /**
