@@ -35,6 +35,12 @@ public:
     void setSecondPoint( double point[3] );
 
     vtkProp *getAsVtkProp();
+
+    /// Obté el punt mig de la linia
+    double *getMiddlePoint();
+
+    /// Calcula la distancia entre punt i punt
+    double computeDistance();
     
 public slots:
     
