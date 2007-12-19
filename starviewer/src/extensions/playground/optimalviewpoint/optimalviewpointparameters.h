@@ -38,7 +38,6 @@ public:
     /// Identificadors dels diversos paràmetres.
     enum OptimalViewpointParametersNames
     {
-        VolumeObject,
         Segmentation,
         SegmentationFileName,
         SegmentationNumberOfIterations, SegmentationBlockLength,
@@ -69,12 +68,6 @@ public:
 
     /// Inicialitza els valors dels paràmetres.
     void init();
-
-    //@{
-    /// Obtenir/assignar el volum.
-    Volume * getVolumeObject() const;
-    void setVolumeObject( Volume * volumeObject );
-    //@}
 
     //@{
     /// Obtenir/assignar el tipus de segmentació.
@@ -198,9 +191,6 @@ signals:
     void signalAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
 
 private:
-
-    /// Volum.
-    Volume * m_volumeObject;
 
     /// Tipus de segmentació.
     SegmentationType m_segmentation;

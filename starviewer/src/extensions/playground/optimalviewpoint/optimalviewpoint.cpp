@@ -751,10 +751,6 @@ void OptimalViewpoint::readParameter( int parameter )
     DEBUG_LOG( "readParameter" );
     switch ( parameter )
     {
-        case OptimalViewpointParameters::VolumeObject:
-            if ( m_parameters->getVolumeObject() )
-                setImage( m_parameters->getVolumeObject()->getVtkData() );
-            break;
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;

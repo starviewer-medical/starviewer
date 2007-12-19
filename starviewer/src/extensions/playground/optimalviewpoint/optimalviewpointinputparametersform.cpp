@@ -77,38 +77,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
     {
         switch ( index )
         {
-            case OptimalViewpointParameters::VolumeObject:
-//                 m_volume = m_parameters->getVolume();
-                break;
-/*
-            case OptimalViewpointParameters::SegmentationFileName:
-                m_segmentationFileLabel->setText( m_parameters->getSegmentationFileName() );
-                break;
-
-            case OptimalViewpointParameters::SegmentationNumberOfIterations:
-                m_spinBoxSegmentationIterations->setValue( m_parameters->getSegmentationNumberOfIterations() );
-                break;
-
-            case OptimalViewpointParameters::SegmentationBlockLength:
-                m_spinBoxSegmentationBlockLength->setValue( m_parameters->getSegmentationBlockLength() );
-                break;
-
-            case OptimalViewpointParameters::SegmentationNumberOfClusters:
-                m_spinBoxSegmentationNumberOfClusters->setValue( m_parameters->getSegmentationNumberOfClusters() );
-                break;
-
-            case OptimalViewpointParameters::SegmentationNoise:
-                m_doubleSpinBoxSegmentationNoise->setValue( m_parameters->getSegmentationNoise() );
-                break;
-
-            case OptimalViewpointParameters::SegmentationImageSampleDistance:
-                m_doubleSpinBoxSegmentationImageSampleDistance->setValue( m_parameters->getSegmentationImageSampleDistance() );
-                break;
-
-            case OptimalViewpointParameters::SegmentationSampleDistance:
-                m_doubleSpinBoxSegmentationSampleDistance->setValue( m_parameters->getSegmentationSampleDistance() );
-                break;
-*/
             case OptimalViewpointParameters::NumberOfPlanes:
                 m_comboNumberOfPlanes->setCurrentIndex( m_comboNumberOfPlanes->findText(
                         QString::number( m_parameters->getNumberOfPlanes() ) ) );
