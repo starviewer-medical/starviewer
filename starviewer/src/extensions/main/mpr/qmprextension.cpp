@@ -203,17 +203,13 @@ void QMPRExtension::initializeTools()
     initializeDefaultTools();
 
     // Per defecte sincronitzem només la tool de window level
-    ToolConfiguration * synchronizeAxialConfiguration = new ToolConfiguration();
-    synchronizeAxialConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
-    m_toolManager->setViewerTool( m_axial2DView, "SynchronizeTool", synchronizeAxialConfiguration );
+    // Amb una sola configuració en tenim prou per totes
+    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
+    synchronizeConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
 
-    ToolConfiguration * synchronizeCoronalConfiguration = new ToolConfiguration();
-    synchronizeCoronalConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
-    m_toolManager->setViewerTool( m_coronal2DView, "SynchronizeTool", synchronizeCoronalConfiguration );
-
-    ToolConfiguration * synchronizeSagitalConfiguration = new ToolConfiguration();
-    synchronizeSagitalConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
-    m_toolManager->setViewerTool( m_sagital2DView, "SynchronizeTool", synchronizeSagitalConfiguration );
+    m_toolManager->setViewerTool( m_axial2DView, "SynchronizeTool", synchronizeConfiguration );
+    m_toolManager->setViewerTool( m_sagital2DView, "SynchronizeTool", synchronizeConfiguration );
+    m_toolManager->setViewerTool( m_coronal2DView, "SynchronizeTool", synchronizeConfiguration );
 
     m_toolManager->activateTool("SynchronizeTool");
 }
