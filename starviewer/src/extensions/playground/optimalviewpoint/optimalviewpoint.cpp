@@ -40,7 +40,8 @@
 
 namespace udg {
 
-OptimalViewpoint::OptimalViewpoint()
+OptimalViewpoint::OptimalViewpoint( QObject * parent )
+    : QObject( parent )
 {
     m_renderer = 0;
 //     m_renderer = vtkRenderer::New();    // creem el renderer principal

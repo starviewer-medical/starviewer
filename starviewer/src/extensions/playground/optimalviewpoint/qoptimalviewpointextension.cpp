@@ -33,11 +33,18 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
     m_inputParametersWidget->setParameters( m_parameters );
 
-    m_method = new OptimalViewpoint();
+    m_method = new OptimalViewpoint( this );
     m_method->setParameters( m_parameters );
     m_method->setMainRenderer( m_viewerWidget->getRenderer() );
 
     m_parameters->init();
+
+    connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
+    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( doSegmentation() ) );
+
+
+
 
     connect( m_inputParametersWidget, SIGNAL( executionRequested() ), SLOT( execute() ) );
 
@@ -51,10 +58,6 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     m_automaticSegmentationWidget->hide();
     m_regularSegmentationWidget->hide();
 
-    connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
-    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
-    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( doSegmentation() ) );
-
     m_segmentationFileChosen = false;
 
     connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );    // hauria de poder funcionar tot sense això, però de moment cal
@@ -63,7 +66,7 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 QOptimalViewpointExtension::~QOptimalViewpointExtension()
 {
-    delete m_method;
+//     delete m_method;
 }
 
 
@@ -136,6 +139,31 @@ void QOptimalViewpointExtension::doSegmentation()
 }
 
 
+void QOptimalViewpointExtension::openSegmentationFile()
+{
+    QSettings settings;
+
+    settings.beginGroup( "OptimalViewpoint" );
+
+    QString segmentationFileDir = settings.value( "segmentationFiledir", QString() ).toString();
+
+    QString segmentationFileName =
+            QFileDialog::getOpenFileName( this, tr("Open segmentation file"),
+                                          segmentationFileDir, tr("Segmentation files (*.seg);;All files (*)") );
+
+    if ( !segmentationFileName.isNull() )
+    {
+        m_segmentationFileLabel->setText( segmentationFileName );
+        m_segmentationFileChosen = true;
+
+        QFileInfo segmentationFileInfo( segmentationFileName );
+        settings.setValue( "segmentationFileDir", segmentationFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
 void QOptimalViewpointExtension::execute()
 {
     // nous paràmetres
@@ -198,31 +226,6 @@ void QOptimalViewpointExtension::setScalarRange( unsigned char rangeMin, unsigne
 void QOptimalViewpointExtension::renderPlane( short plane )
 {
     m_method->renderPlanes( plane );
-}
-
-
-void QOptimalViewpointExtension::openSegmentationFile()
-{
-    QSettings settings;
-
-    settings.beginGroup( "OptimalViewpoint" );
-
-    QString segmentationFileDir = settings.value( "segmentationFiledir", QString() ).toString();
-
-    QString segmentationFileName =
-            QFileDialog::getOpenFileName( this, tr("Open segmentation file"),
-                                          segmentationFileDir, tr("Segmentation files (*.seg);;All files (*)") );
-
-    if ( !segmentationFileName.isNull() )
-    {
-        m_segmentationFileLabel->setText( segmentationFileName );
-        m_segmentationFileChosen = true;
-
-        QFileInfo segmentationFileInfo( segmentationFileName );
-        settings.setValue( "segmentationFileDir", segmentationFileInfo.absolutePath() );
-    }
-
-    settings.endGroup();
 }
 
 
