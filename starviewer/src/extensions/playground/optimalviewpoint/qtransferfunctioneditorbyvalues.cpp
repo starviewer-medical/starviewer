@@ -107,7 +107,7 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
     QList< double > points = transferFunction.getPoints();
-    bool first = true;
+    bool first = true, interval = false;
 
     foreach ( double x, points )
     {
@@ -128,13 +128,14 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
         {
             current->setIsInterval( true );
             current->setEnd( static_cast< int >( round( x ) ) );
+            interval = true;
         }
 
         first = false;
     }
 
-    //  esborrem l'últim interval (excepte si tenim la funció definida en tots els punts)
-    if ( points.size() < m_maximum + 1 ) removeInterval();
+    //  esborrem l'últim interval (excepte si tenim la funció definida individualment en tots els punts)
+    if ( points.size() < m_maximum + 1 || interval ) removeInterval();
 
     m_changed = true;
     getTransferFunction();  // actualitzem m_transferFunction
