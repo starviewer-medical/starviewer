@@ -10,10 +10,12 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerline.h"
+#include "drawertext.h"
 
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
+#include <vtkLine.h>
 
 namespace udg {
 
@@ -96,7 +98,18 @@ void DistanceTool::annotateNewPoint()
         else
             m_line->update( DrawerPrimitive::VTKRepresentation );
 
-        m_line = NULL;
+        //Posem el text
+
+        double *middlePoint = m_line->getMiddlePoint();
+
+        DrawerText * text = new DrawerText;
+        text->setText( tr("%1 mm").arg( m_line->computeDistance() ) );
+        text->setAttatchmentPoint( middlePoint );
+        text->update( DrawerPrimitive::VTKRepresentation );
+        m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+
+
+        m_line = NULL;//Acabem la linia. Encara no sabem com s'obtindran per modificar
     }
 
 }
