@@ -103,22 +103,23 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
 
     QTransferFunctionIntervalEditor * current =
             m_intervalEditorsWidget->findChild< QTransferFunctionIntervalEditor * >( "interval0" );
-    // sempre tindrem a punt el següent (per evitar restriccions amb els valors) i l'esborrarem al final
+    // sempre tindrem a punt el següent (per evitar restriccions amb els valors)
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
     QList< double > points = transferFunction.getPoints();
-    bool first = true, interval = false;
 
-    foreach ( double x, points )
+    for ( unsigned short i = 0; i < points.size(); i++ )
     {
-        if ( first ) current->setIsInterval( false );   // cas especial: primer
+        double x = points.at( i );
 
-        if ( first || transferFunction.get( x ) != current->color() )
+        if ( i == 0 ) current->setIsInterval( false );  // cas especial: primer
+
+        if ( i == 0 || transferFunction.get( x ) != current->color() )
         {
-            if ( !first )
+            if ( i > 0 )
             {
                 current = next;
-                next = addIntervalAndReturnIt();
+                if ( i < points.size() - 1 ) next = addIntervalAndReturnIt();   // si és l'últim no en creem cap més
             }
 
             current->setStart( static_cast< int >( round( x ) ) );
@@ -128,14 +129,8 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
         {
             current->setIsInterval( true );
             current->setEnd( static_cast< int >( round( x ) ) );
-            interval = true;
         }
-
-        first = false;
     }
-
-    //  esborrem l'últim interval (excepte si tenim la funció definida individualment en tots els punts)
-    if ( points.size() < m_maximum + 1 || interval ) removeInterval();
 
     m_changed = true;
     getTransferFunction();  // actualitzem m_transferFunction
