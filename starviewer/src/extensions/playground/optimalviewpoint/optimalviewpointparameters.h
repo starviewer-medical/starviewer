@@ -38,13 +38,6 @@ public:
     /// Identificadors dels diversos paràmetres.
     enum OptimalViewpointParametersNames
     {
-        Segmentation,
-        SegmentationFileName,
-        SegmentationNumberOfIterations, SegmentationBlockLength,
-            SegmentationNumberOfClusters, SegmentationNoise,
-            SegmentationImageSampleDistance, SegmentationSampleDistance,
-        NumberOfClusters,
-
         NumberOfPlanes, Shade, VisualizationBlockLength,
             VisualizationImageSampleDistance, VisualizationSampleDistance, TransferFunctionObject,
 
@@ -60,71 +53,22 @@ public:
         GroupingMethod
     };
 
-    /// Tipus de segmentació disponibles.
-    enum SegmentationType { AutomaticSegmentation, LoadSegmentation, RegularSegmentation };
-
     OptimalViewpointParameters( QObject * parent = 0 );
     ~OptimalViewpointParameters();
 
     /// Inicialitza els valors dels paràmetres.
     void init();
 
-    //@{
-    /// Obtenir/assignar el tipus de segmentació.
-    SegmentationType getSegmentation() const;
-    void setSegmentation( SegmentationType segmentation );
-    //@}
-
-    //@{
-    /// Obtenir/assignar el nom del fitxer de segmentació.
-    const QString & getSegmentationFileName() const;
-    void setSegmentationFileName( const QString & segmentationFileName );
-    //@}
-
-    //@{
-    /// Obtenir/assignar el nombre d'iteracions per a la segmentació.
-    unsigned short getSegmentationNumberOfIterations() const;
-    void setSegmentationNumberOfIterations( unsigned short segmentationNumberOfIterations );
-    //@}
-    //@{
-    /// Obtenir/assignar la longitud de bloc per a la segmentació.
-    unsigned char getSegmentationBlockLength() const;
-    void setSegmentationBlockLength( unsigned char segmentationBlockLenth );
-    //@}
-    //@{
-    /// Obtenir/assignar el nombre de clústers per a la segmentació.
-    unsigned char getSegmentationNumberOfClusters() const;
-    void setSegmentationNumberOfClusters( unsigned char segmentationNumberOfClusters );
-    //@}
-    //@{
-    /// Obtenir/assignar el soroll per a la segmentació.
-    double getSegmentationNoise() const;
-    void setSegmentationNoise( double segmentationNoise );
-    //@}
-    //@{
-    /// Obtenir/assignar la distància entre raigs per a la segmentació.
-    double getSegmentationImageSampleDistance() const;
-    void setSegmentationImageSampleDistance( double segmentationImageSampleDistance );
-    //@}
-    //@{
-    /// Obtenir/assignar la distància entre mostres per a la segmentació.
-    double getSegmentationSampleDistance() const;
-    void setSegmentationSampleDistance( double segmentationSampleDistance );
-    //@}
-
-    //@{
-    /// Obtenir/assignar el nombre de clústers després de la segmentació.
-    unsigned char getNumberOfClusters() const;
-    void setNumberOfClusters( unsigned char numberOfClusters );
-    //@}
 
 
 
     
 
+    //@{
+    /// get/set shade
     bool getShade() const;
-    
     void setShade( bool shade );
+    //@}
 
     double getVisualizationImageSampleDistance() const;
 
@@ -192,29 +136,7 @@ signals:
 
 private:
 
-    /// Tipus de segmentació.
-    SegmentationType m_segmentation;
 
-    /// Nom del fitxer de segmentació.
-    QString m_segmentationFileName;
-
-    /// Nombre d'iteracions per a la segmentació.
-    unsigned short m_segmentationNumberOfIterations;
-    /// Longitud de bloc per a la segmentació.
-    unsigned char m_segmentationBlockLength;
-    /// Nombre de clústers per a la segmentació.
-    unsigned char m_segmentationNumberOfClusters;
-    /// Soroll per a la segmentació.
-    double m_segmentationNoise;
-    /// Distància entre raigs per a la segmentació.
-    double m_segmentationImageSampleDistance;
-    /// Distància entre mostres per a la segmentació.
-    double m_segmentationSampleDistance;
-
-    /// Nombre de clústers després de la segmentació.
-    unsigned char m_numberOfClusters;
-
-    
     unsigned char m_numberOfPlanes;
     bool m_shade;
     double m_visualizationImageSampleDistance;

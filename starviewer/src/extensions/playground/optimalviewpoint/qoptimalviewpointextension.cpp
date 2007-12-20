@@ -40,7 +40,6 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     m_parameters->init();
 
     connect( m_openSegmentationFilePushButton, SIGNAL( clicked() ), SLOT( openSegmentationFile() ) );
-    connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( writeSegmentationParameters() ) );
     connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( doSegmentation() ) );
 
 
@@ -59,8 +58,6 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     m_regularSegmentationWidget->hide();
 
     m_segmentationFileChosen = false;
-
-    connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );    // hauria de poder funcionar tot sense això, però de moment cal
 }
 
 
@@ -82,41 +79,40 @@ void QOptimalViewpointExtension::setInput( Volume * input )
 
 void QOptimalViewpointExtension::doSegmentation()
 {
-    if ( m_loadSegmentationRadioButton->isChecked() )
+    if ( m_automaticSegmentationRadioButton->isChecked() )
     {
-        m_parameters->setSegmentation( OptimalViewpointParameters::LoadSegmentation );
+        m_method->doAutomaticSegmentation(
+                                           m_segmentationIterationsSpinBox->value(),
+                                           m_segmentationBlockLengthSpinBox->value(),
+                                           m_segmentationNumberOfClustersSpinBox->value(),
+                                           m_segmentationNoiseDoubleSpinBox->value(),
+                                           m_segmentationImageSampleDistanceDoubleSpinBox->value(),
+                                           m_segmentationSampleDistanceDoubleSpinBox->value()
+                                         );
+    }
+    else if ( m_loadSegmentationRadioButton->isChecked() )
+    {
         if ( !m_segmentationFileChosen )
+        {
             QMessageBox::warning( this, tr("No segmentation file chosen"),
-                                   tr("Please, choose a segmentation file or do an automatic segmentation.") );
+                                  tr("Please, choose a segmentation file or do another type of segmentation.") );
+            return;
+        }
+
+        if ( !m_method->doLoadSegmentation( m_segmentationFileLabel->text() ) )
+        {
+            QMessageBox::critical( this, tr("Segmentation error"),
+                                   QString( tr("Cannot load segmentation from file %1.") ).arg( m_segmentationFileLabel->text() ) );
+            return;
+        }
     }
-    else if ( m_regularSegmentationRadioButton->isChecked() )
+    else //if ( m_regularSegmentationRadioButton->isChecked() )
     {
-        m_parameters->setSegmentation( OptimalViewpointParameters::RegularSegmentation );
-    }
-    else
-    {
-        m_parameters->setSegmentation( OptimalViewpointParameters::AutomaticSegmentation );
+        m_method->doRegularSegmentation( m_segmentationNumberOfBinsSpinBox->value() );
     }
 
-    switch ( m_parameters->getSegmentation() )
-    {
-        case OptimalViewpointParameters::LoadSegmentation:
-            if ( !m_method->loadSegmentationFromFile() )
-            {
-                QMessageBox::critical( this, tr("Segmentation error"),
-                                       QString( tr("Cannot load segmentation from file %1.") ).arg( m_parameters->getSegmentationFileName() ) );
-                return;
-            }
-            break;
-
-        case OptimalViewpointParameters::AutomaticSegmentation:
-            m_method->doAutomaticSegmentation();
-            break;
-
-        case OptimalViewpointParameters::RegularSegmentation:
-            m_method->rescale( m_segmentationNumberOfBinsSpinBox->value() );
-            break;
-    }
+    m_numberOfClustersLabel->setText( QString("<b>%1 clusters</b>").arg( static_cast<short>( m_method->getNumberOfClusters() ) ) );
+    DEBUG_LOG( QString("nclusters = %1").arg( static_cast<short>( m_method->getNumberOfClusters() ) ) );
 
     m_loadSegmentationRadioButton->setDisabled( true );
     m_loadSegmentationWidget->setDisabled( true );
@@ -127,7 +123,6 @@ void QOptimalViewpointExtension::doSegmentation()
 //     m_segmentationOkPushButton->setDisabled( true );
     toggleSegmentationParameters();
 
-    disconnect( m_segmentationOkPushButton, SIGNAL( clicked() ), this, SLOT( writeSegmentationParameters() ) );
     disconnect( m_segmentationOkPushButton, SIGNAL( clicked() ), this, SLOT( doSegmentation() ) );
     connect( m_segmentationOkPushButton, SIGNAL( clicked() ), SLOT( toggleSegmentationParameters() ) );
 
@@ -228,24 +223,6 @@ void QOptimalViewpointExtension::renderPlane( short plane )
 }
 
 
-void QOptimalViewpointExtension::writeSegmentationParameters()
-{
-    if( !m_parameters )
-    {
-        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
-        return;
-    }
-
-    m_parameters->setSegmentationFileName( m_segmentationFileLabel->text() );
-    m_parameters->setSegmentationNumberOfIterations( m_segmentationIterationsSpinBox->value() );
-    m_parameters->setSegmentationBlockLength( m_segmentationBlockLengthSpinBox->value() );
-    m_parameters->setSegmentationNumberOfClusters( m_segmentationNumberOfClustersSpinBox->value() );
-    m_parameters->setSegmentationNoise( m_segmentationNoiseDoubleSpinBox->value() );
-    m_parameters->setSegmentationImageSampleDistance( m_segmentationImageSampleDistanceDoubleSpinBox->value() );
-    m_parameters->setSegmentationSampleDistance( m_segmentationSampleDistanceDoubleSpinBox->value() );
-}
-
-
 void QOptimalViewpointExtension::toggleSegmentationParameters()
 {
     if ( m_segmentationLine->isVisible() )
@@ -269,25 +246,6 @@ void QOptimalViewpointExtension::toggleSegmentationParameters()
         m_regularSegmentationRadioButton->show();
         if ( m_regularSegmentationRadioButton->isChecked() ) m_regularSegmentationWidget->show();
         m_segmentationLine->show();
-    }
-}
-
-
-void QOptimalViewpointExtension::readParameter( int index )
-{
-    if( !m_parameters )
-    {
-        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
-    }
-    else
-    {
-        switch ( index )
-        {
-            case OptimalViewpointParameters::NumberOfClusters:
-                m_numberOfClustersLabel->setText( QString("<b>%1 clusters</b>").arg( (short) m_parameters->getNumberOfClusters() ) );
-                DEBUG_LOG( QString("nclusters = %1").arg((short) m_parameters->getNumberOfClusters()) );
-                break;
-        }
     }
 }
 

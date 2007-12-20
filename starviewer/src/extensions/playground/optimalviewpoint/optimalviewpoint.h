@@ -127,11 +127,19 @@ public:
 
 
     /// Carrega la segmentació del volum des dun fitxer de text.
-    bool loadSegmentationFromFile();
+    bool doLoadSegmentation( const QString & fileName );
     /// Fa una segmentació automàtica del volum.
-    void doAutomaticSegmentation();
+    void doAutomaticSegmentation(
+                                  unsigned short iterations,
+                                  unsigned char blockLength,
+                                  unsigned char numberOfClusters,
+                                  double noise,
+                                  double imageSampleDistance,
+                                  double sampleDistance
+                                );
+    void doRegularSegmentation( unsigned char numberOfBins );
 
-    void rescale( unsigned char numberOfBins );
+    unsigned char getNumberOfClusters() const { return m_numberOfClusters; }
 
 
 
