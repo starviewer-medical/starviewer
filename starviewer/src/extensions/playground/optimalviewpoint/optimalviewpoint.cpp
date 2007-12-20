@@ -665,27 +665,34 @@ void OptimalViewpoint::setCompute( bool compute )
     m_compute = compute;
 }
 
-bool OptimalViewpoint::loadSegmentationFromFile()
+bool OptimalViewpoint::doLoadSegmentation( const QString & fileName )
 {
-    m_numberOfClusters = m_volume->loadSegmentationFromFile( m_parameters->getSegmentationFileName() );
+    m_numberOfClusters = m_volume->loadSegmentationFromFile( fileName );
     if ( m_numberOfClusters > 0 )
     {
         m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );
-        m_parameters->setNumberOfClusters( m_numberOfClusters );
+//         m_parameters->setNumberOfClusters( m_numberOfClusters );
     }
     return m_numberOfClusters > 0;
 }
 
-void OptimalViewpoint::doAutomaticSegmentation()
+void OptimalViewpoint::doAutomaticSegmentation(
+                                                unsigned short iterations,
+                                                unsigned char blockLength,
+                                                unsigned char numberOfClusters,
+                                                double noise,
+                                                double imageSampleDistance,
+                                                double sampleDistance
+                                              )
 {
-    m_volume->setImageSampleDistance( m_parameters->getSegmentationImageSampleDistance() );
-    m_volume->setSampleDistance( m_parameters->getSegmentationSampleDistance() );
+    m_volume->setImageSampleDistance( imageSampleDistance );
+    m_volume->setSampleDistance( sampleDistance );
 
     OptimalViewpointPlane * plane = new OptimalViewpointPlane( 0, m_planeSize );
     plane->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
     plane->setDistance( m_volume->getMainVolume()->GetLength() );
-    plane->setEntropyL( m_parameters->getSegmentationBlockLength() );
-    plane->setEntropyN( m_parameters->getSegmentationNumberOfClusters() );
+    plane->setEntropyL( blockLength );
+    plane->setEntropyN( numberOfClusters );
     plane->setVolume( m_volume );
 
     QObject::connect( m_volume, SIGNAL( needsExcessEntropy() ),
@@ -700,9 +707,9 @@ void OptimalViewpoint::doAutomaticSegmentation()
                       m_volume, SLOT( setExcessEntropy(double) ) );
 
     m_volume->setComputing( true );
-    m_numberOfClusters = m_volume->segmentateVolume( m_parameters->getSegmentationNumberOfIterations(),
-                                                     m_parameters->getSegmentationNumberOfClusters(),
-                                                     m_parameters->getSegmentationNoise() );
+    m_numberOfClusters = m_volume->segmentateVolume( iterations,
+                                                     numberOfClusters,
+                                                     noise );
     m_volume->setComputing( false );
 
     QObject::disconnect( m_volume, SIGNAL( needsExcessEntropy() ),
@@ -717,7 +724,7 @@ void OptimalViewpoint::doAutomaticSegmentation()
     delete plane;
 
     m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );
-    m_parameters->setNumberOfClusters( m_numberOfClusters );
+//     m_parameters->setNumberOfClusters( m_numberOfClusters );
 }
 
 void OptimalViewpoint::setSimilarityThreshold( double similarityThreshold )
@@ -829,13 +836,13 @@ void OptimalViewpoint::newMethod2( int step, bool normalized )
     }
 }
 
-void OptimalViewpoint::rescale( unsigned char numberOfBins )
+void OptimalViewpoint::doRegularSegmentation( unsigned char numberOfBins )
 {
     m_numberOfClusters = m_volume->rescale( numberOfBins );
     if ( m_numberOfClusters > 0 )
     {
         m_parameters->setAdjustedTransferFunction( m_adjustedTransferFunction );
-        m_parameters->setNumberOfClusters( m_numberOfClusters );
+//         m_parameters->setNumberOfClusters( m_numberOfClusters );
     }
 }
 
