@@ -107,6 +107,7 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
     QList< double > points = transferFunction.getPoints();
+    bool lastIsInterval = false;
 
     for ( unsigned short i = 0; i < points.size(); i++ )
     {
@@ -124,13 +125,17 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
 
             current->setStart( static_cast< int >( round( x ) ) );
             current->setColor( transferFunction.get( x ) );
+            lastIsInterval = false;
         }
         else
         {
             current->setIsInterval( true );
             current->setEnd( static_cast< int >( round( x ) ) );
+            lastIsInterval = true;
         }
     }
+
+    if ( lastIsInterval ) removeInterval();
 
     m_changed = true;
     getTransferFunction();  // actualitzem m_transferFunction
