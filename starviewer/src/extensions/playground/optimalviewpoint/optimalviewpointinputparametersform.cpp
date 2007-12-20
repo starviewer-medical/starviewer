@@ -82,10 +82,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
                         QString::number( m_parameters->getNumberOfPlanes() ) ) );
                 break;
 
-            case OptimalViewpointParameters::Shade:
-                m_checkBoxShade->setChecked( m_parameters->getShade() );
-                break;
-
             case OptimalViewpointParameters::VisualizationImageSampleDistance:
                 m_doubleSpinBoxVisualizationImageSampleDistance->setValue( m_parameters->getVisualizationImageSampleDistance() );
                 break;
@@ -108,10 +104,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
 
             case OptimalViewpointParameters::ComputeWithOpacity:
                 m_computeWithOpacityCheckBox->setChecked( m_parameters->getComputeWithOpacity() );
-                break;
-
-            case OptimalViewpointParameters::Interpolation:
-                m_interpolationComboBox->setCurrentIndex( m_parameters->getInterpolation() );
                 break;
 
             case OptimalViewpointParameters::Specular:
@@ -173,16 +165,7 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         this->setTransferFunction( m_editorByValues->getTransferFunction() );
 
         // actualitzem els valors dels paràmetres
-//         m_parameters->setVolumeId( m_volumeId );
-/*        m_parameters->setSegmentationFileName( m_segmentationFileLabel->text() );
-        m_parameters->setSegmentationNumberOfIterations( m_spinBoxSegmentationIterations->value() );
-        m_parameters->setSegmentationBlockLength( m_spinBoxSegmentationBlockLength->value() );
-        m_parameters->setSegmentationNumberOfClusters( m_spinBoxSegmentationNumberOfClusters->value() );
-        m_parameters->setSegmentationNoise( m_doubleSpinBoxSegmentationNoise->value() );
-        m_parameters->setSegmentationImageSampleDistance( m_doubleSpinBoxSegmentationImageSampleDistance->value() );
-        m_parameters->setSegmentationSampleDistance( m_doubleSpinBoxSegmentationSampleDistance->value() );*/
         m_parameters->setNumberOfPlanes( m_comboNumberOfPlanes->currentText().toUShort() );
-        m_parameters->setShade( m_checkBoxShade->isChecked() );
         m_parameters->setVisualizationImageSampleDistance( m_doubleSpinBoxVisualizationImageSampleDistance->value() );
         m_parameters->setVisualizationSampleDistance( m_doubleSpinBoxVisualizationSampleDistance->value() );
         m_parameters->setVisualizationBlockLength( m_spinBoxVisualizationBlockLength->value() );
@@ -191,9 +174,6 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
 
         // nous paràmetres
         m_parameters->setComputeWithOpacity( m_computeWithOpacityCheckBox->isChecked() );
-        if ( m_interpolationComboBox->currentIndex() < 0 )
-            m_interpolationComboBox->setCurrentIndex( 0 );
-        m_parameters->setInterpolation( m_interpolationComboBox->currentIndex() );
         m_parameters->setSpecular( m_specularCheckBox->isChecked() );
         m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
         m_parameters->setUpdatePlane( m_updatePlaneSpinBox->value() );

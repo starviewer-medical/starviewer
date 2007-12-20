@@ -58,6 +58,9 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     m_regularSegmentationWidget->hide();
 
     m_segmentationFileChosen = false;
+
+
+    connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );
 }
 
 
@@ -160,6 +163,7 @@ void QOptimalViewpointExtension::openSegmentationFile()
 
 void QOptimalViewpointExtension::execute()
 {
+    writeAllParameters();
     // nous paràmetres
 
     m_method->setOpacityForComputing( m_parameters->getComputeWithOpacity() );
@@ -246,6 +250,43 @@ void QOptimalViewpointExtension::toggleSegmentationParameters()
         m_regularSegmentationRadioButton->show();
         if ( m_regularSegmentationRadioButton->isChecked() ) m_regularSegmentationWidget->show();
         m_segmentationLine->show();
+    }
+}
+
+
+void QOptimalViewpointExtension::readParameter( int index )
+{
+    if( !m_parameters )
+    {
+        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
+    }
+    else
+    {
+        switch ( index )
+        {
+            case OptimalViewpointParameters::Shade:
+                m_shadeCheckBox->setChecked( m_parameters->getShade() );
+                break;
+
+            case OptimalViewpointParameters::Interpolation:
+                m_interpolationComboBox->setCurrentIndex( m_parameters->getInterpolation() );
+                break;
+        }
+    }
+}
+
+void QOptimalViewpointExtension::writeAllParameters()
+{
+    if( !m_parameters )
+    {
+        DEBUG_LOG("OptimalViewpointInputParametersForm: No hi ha paràmetres establerts");
+    }
+    else
+    {
+        m_parameters->setShade( m_shadeCheckBox->isChecked() );
+        if ( m_interpolationComboBox->currentIndex() < 0 )
+            m_interpolationComboBox->setCurrentIndex( 0 );
+        m_parameters->setInterpolation( m_interpolationComboBox->currentIndex() );
     }
 }
 

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>347</width>
-    <height>286</height>
+    <width>455</width>
+    <height>413</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
@@ -17,11 +17,11 @@
     <number>6</number>
    </property>
    <item>
-    <widget class="QSplitter" name="splitter" >
+    <widget class="QSplitter" name="m_splitter" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
@@ -31,7 +31,7 @@
        </property>
        <item>
         <widget class="udg::QShowHideWidget" native="1" name="m_segmentationWidget" >
-         <property name="title">
+         <property name="title" >
           <string>Segmentation</string>
          </property>
          <layout class="QVBoxLayout" >
@@ -508,6 +508,73 @@
              </widget>
             </item>
            </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="udg::QShowHideWidget" native="1" name="m_visualizationWidget" >
+         <property name="title" >
+          <string>Visualization</string>
+         </property>
+         <property name="checked" >
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="m_interpolationLabel" >
+              <property name="text" >
+               <string>Interpolation</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="m_interpolationComboBox" >
+              <property name="currentIndex" >
+               <number>0</number>
+              </property>
+              <item>
+               <property name="text" >
+                <string>Nearest Neighbour</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Linear (Interpolate &amp; Classify)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Linear (Classify &amp; Interpolate)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="m_shadeCheckBox" >
+            <property name="statusTip" >
+             <string>If checked, shading will be applied when rendering the volume</string>
+            </property>
+            <property name="text" >
+             <string>S&amp;hade</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
