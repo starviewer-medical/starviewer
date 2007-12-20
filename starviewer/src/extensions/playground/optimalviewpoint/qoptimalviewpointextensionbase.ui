@@ -73,6 +73,50 @@
                </property>
               </spacer>
              </item>
+             <item row="0" column="1" >
+              <layout class="QHBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
+               </property>
+               <property name="spacing" >
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_segmentationIterationsLabel" >
+                 <property name="sizePolicy" >
+                  <sizepolicy>
+                   <hsizetype>7</hsizetype>
+                   <vsizetype>5</vsizetype>
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text" >
+                  <string>&amp;Iterations</string>
+                 </property>
+                 <property name="buddy" >
+                  <cstring>m_segmentationIterationsSpinBox</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="m_segmentationIterationsSpinBox" >
+                 <property name="statusTip" >
+                  <string>Number of iterations of the genetic algorithm</string>
+                 </property>
+                 <property name="maximum" >
+                  <number>500</number>
+                 </property>
+                 <property name="minimum" >
+                  <number>1</number>
+                 </property>
+                 <property name="value" >
+                  <number>200</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
              <item row="1" column="1" >
               <layout class="QHBoxLayout" >
                <property name="margin" >
@@ -117,7 +161,7 @@
                </item>
               </layout>
              </item>
-             <item row="0" column="1" >
+             <item row="2" column="1" >
               <layout class="QHBoxLayout" >
                <property name="margin" >
                 <number>0</number>
@@ -126,7 +170,7 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QLabel" name="m_segmentationIterationsLabel" >
+                <widget class="QLabel" name="m_segmentationNumberOfClustersLabel" >
                  <property name="sizePolicy" >
                   <sizepolicy>
                    <hsizetype>7</hsizetype>
@@ -136,26 +180,26 @@
                   </sizepolicy>
                  </property>
                  <property name="text" >
-                  <string>&amp;Iterations</string>
+                  <string>&amp;Number of clusters</string>
                  </property>
                  <property name="buddy" >
-                  <cstring>m_segmentationIterationsSpinBox</cstring>
+                  <cstring>m_segmentationNumberOfClustersSpinBox</cstring>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="m_segmentationIterationsSpinBox" >
+                <widget class="QSpinBox" name="m_segmentationNumberOfClustersSpinBox" >
                  <property name="statusTip" >
-                  <string>Number of iterations of the genetic algorithm</string>
+                  <string>Number of clusters (N) of the volume, including empty space</string>
                  </property>
                  <property name="maximum" >
-                  <number>500</number>
+                  <number>6</number>
                  </property>
                  <property name="minimum" >
-                  <number>1</number>
+                  <number>2</number>
                  </property>
                  <property name="value" >
-                  <number>200</number>
+                  <number>4</number>
                  </property>
                 </widget>
                </item>
@@ -253,50 +297,6 @@
                  </property>
                  <property name="value" >
                   <double>1.000000000000000</double>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item row="2" column="1" >
-              <layout class="QHBoxLayout" >
-               <property name="margin" >
-                <number>0</number>
-               </property>
-               <property name="spacing" >
-                <number>6</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="m_segmentationNumberOfClustersLabel" >
-                 <property name="sizePolicy" >
-                  <sizepolicy>
-                   <hsizetype>7</hsizetype>
-                   <vsizetype>5</vsizetype>
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text" >
-                  <string>&amp;Number of clusters</string>
-                 </property>
-                 <property name="buddy" >
-                  <cstring>m_segmentationNumberOfClustersSpinBox</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="m_segmentationNumberOfClustersSpinBox" >
-                 <property name="statusTip" >
-                  <string>Number of clusters (N) of the volume, including empty space</string>
-                 </property>
-                 <property name="maximum" >
-                  <number>6</number>
-                 </property>
-                 <property name="minimum" >
-                  <number>2</number>
-                 </property>
-                 <property name="value" >
-                  <number>4</number>
                  </property>
                 </widget>
                </item>
