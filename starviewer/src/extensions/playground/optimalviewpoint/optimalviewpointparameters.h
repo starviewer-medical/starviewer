@@ -28,6 +28,8 @@ class Volume;
  * Tindrem un mètode set/get per tots i cadascun dels paràmetres del mètode. Els
  * mètodes set emetran el signal changed amb l'id de paràmetre que hem creat amb
  * el tipus enumerat.
+ *
+ * \todo Es podria fer amb propietats.
  */
 class OptimalViewpointParameters : public Parameters {
 
@@ -64,11 +66,7 @@ public:
 
     
 
-    //@{
-    /// get/set shade
     bool getShade() const;
-    void setShade( bool shade );
-    //@}
 
     double getVisualizationImageSampleDistance() const;
 
@@ -98,7 +96,6 @@ public:
     bool getComputeWithOpacity() const;
     void setComputeWithOpacity( bool computeWithOpacity );
     int getInterpolation() const;
-    void setInterpolation( int interpolation );
     bool getSpecular() const;
     void setSpecular( bool specular );
     double getSpecularPower() const;
@@ -127,6 +124,10 @@ public:
     int getGroupingMethod() const;
     void setGroupingMethod( int groupingMethod );
 
+public slots:
+
+    void setInterpolation( int interpolation );
+    void setShade( bool shade );
 
 
 

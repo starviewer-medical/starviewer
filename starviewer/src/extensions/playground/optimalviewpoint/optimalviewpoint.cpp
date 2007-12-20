@@ -144,8 +144,10 @@ void OptimalViewpoint::setImage( vtkImageData * image )
 //     m_volume = new OptimalViewpointVolume( shifter->GetOutput() );
     m_volume = new OptimalViewpointVolume( imageCaster->GetOutput() );
 
+    DEBUG_LOG( "emit scalarRange" );
     emit scalarRange( m_volume->getRangeMin(), m_volume->getRangeMax() );
 
+    DEBUG_LOG( "imageCaster->Delete()" );
     imageCaster->Delete();
 //     shifter->Delete();
 
@@ -157,7 +159,9 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     // calculem la mida òptima pels miralls
     this->m_planeSize = (unsigned short) ceil( volume->GetLength() );
 
+    DEBUG_LOG( "last connect" );
     connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const TransferFunction&) ), SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
+    DEBUG_LOG( "end setImage" );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
@@ -775,6 +779,9 @@ void OptimalViewpoint::readParameter( int parameter )
             break;
         case OptimalViewpointParameters::TransferFunctionObject:
             setTransferFunction( m_parameters->getTransferFunctionObject() );
+            break;
+        case OptimalViewpointParameters::Interpolation:
+            setInterpolation( m_parameters->getInterpolation() );
             break;
     }
 }
