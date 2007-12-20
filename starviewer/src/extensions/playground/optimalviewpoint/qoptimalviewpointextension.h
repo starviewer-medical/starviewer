@@ -67,6 +67,19 @@ public slots:
 
     void renderPlane( short plane );
 
+    /**
+     * Slot que ens serveix per indicar que hem d'actualitzar el paràmetre que
+     * ens diguin mitjançant un identificador (que, en realitat, serà un enum).
+     * Serveix per canviar els valors a partir d'una classe Parameters.
+     */
+    void readParameter( int index );
+
+    /**
+     * Escriu tots els valors de paràmetres que té actualment al Parameters
+     * associat.
+     */
+    void writeAllParameters();
+
 private slots:
 
     void openSegmentationFile();
