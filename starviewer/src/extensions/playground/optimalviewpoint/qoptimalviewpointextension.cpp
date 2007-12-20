@@ -61,6 +61,10 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 
     connect( m_parameters, SIGNAL( changed(int) ), SLOT( readParameter(int) ) );
+
+    connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
+
+    createConnections();
 }
 
 
@@ -75,8 +79,11 @@ void QOptimalViewpointExtension::setInput( Volume * input )
     Q_ASSERT( input );
     m_method->setImage( input->getVtkData() );
     int dims[3];
+    DEBUG_LOG( "input->getDimensions" );
     input->getDimensions( dims );
+    DEBUG_LOG( "m_inputParametersWidget->setNumberOfSlices" );
     m_inputParametersWidget->setNumberOfSlices( dims[2] );
+    DEBUG_LOG( "end setInput" );
 }
 
 
@@ -133,6 +140,9 @@ void QOptimalViewpointExtension::doSegmentation()
     m_method->setNumberOfPlanes( 0 );
     m_method->setTransferFunction( m_parameters->getTransferFunctionObject() );
     m_viewerWidget->render();
+
+    m_visualizationOkPushButton->setEnabled( true );
+    m_visualizationWidget->setChecked( true );
 }
 
 
@@ -167,7 +177,6 @@ void QOptimalViewpointExtension::execute()
     // nous paràmetres
 
     m_method->setOpacityForComputing( m_parameters->getComputeWithOpacity() );
-    m_method->setInterpolation( m_parameters->getInterpolation() );
     m_method->setSpecular( m_parameters->getSpecular() );
     m_method->setSpecularPower( m_parameters->getSpecularPower() );
     m_method->setUpdatePlane( m_parameters->getUpdatePlane() );
@@ -283,11 +292,25 @@ void QOptimalViewpointExtension::writeAllParameters()
     }
     else
     {
-        m_parameters->setShade( m_shadeCheckBox->isChecked() );
-        if ( m_interpolationComboBox->currentIndex() < 0 )
-            m_interpolationComboBox->setCurrentIndex( 0 );
-        m_parameters->setInterpolation( m_interpolationComboBox->currentIndex() );
     }
+}
+
+
+void QOptimalViewpointExtension::doVisualization()
+{
+    m_parameters->setShade( m_shadeCheckBox->isChecked() );
+    if ( m_interpolationComboBox->currentIndex() < 0 )
+        m_interpolationComboBox->setCurrentIndex( 0 );
+    m_parameters->setInterpolation( m_interpolationComboBox->currentIndex() );
+
+    m_viewerWidget->render();
+}
+
+
+void QOptimalViewpointExtension::createConnections()
+{
+//     connect( m_interpolationComboBox, SIGNAL( currentIndexChanged(int) ), m_parameters, SLOT( setInterpolation(int) ) );
+//     connect( m_shadeCheckBox, SIGNAL( toggled(bool) ), m_parameters, SLOT( setShade(bool) ) );
 }
 
 

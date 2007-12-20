@@ -59,6 +59,8 @@ public slots:
     /// Fa la segmentació segons els paràmetres actuals.
     void doSegmentation();
 
+    void doVisualization();
+
     ///Aplica el mètode segons els paràmetres actuals.
     void execute();
 
@@ -86,6 +88,8 @@ private slots:
     void toggleSegmentationParameters();
 
 private:
+
+    void createConnections();
 
     /// Paràmetres del mètode.
     OptimalViewpointParameters * m_parameters;
