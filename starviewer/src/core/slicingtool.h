@@ -33,6 +33,9 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+    /// Sobrecàrrega del mètode que tracta tots els events
+    bool event( QEvent * event);
+
 private slots:
     /// Comença l'slicing
     void startSlicing();
