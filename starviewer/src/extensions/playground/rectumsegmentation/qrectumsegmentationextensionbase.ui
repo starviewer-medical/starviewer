@@ -5,14 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
-    <height>396</height>
+    <width>903</width>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QHBoxLayout" >
    <property name="margin" >
     <number>9</number>
    </property>
@@ -394,6 +394,13 @@
          <widget class="QPushButton" name="m_saveMaskPushButton" >
           <property name="text" >
            <string>Save Mask</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_save3DPushButton" >
+          <property name="text" >
+           <string>Save 3D Visualization</string>
           </property>
          </widget>
         </item>

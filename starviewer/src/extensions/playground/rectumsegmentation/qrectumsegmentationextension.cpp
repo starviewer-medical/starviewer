@@ -51,6 +51,8 @@
 #include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "itkExtractImageFilter.h"
 
+#include "itkImageFileWriter.h"
+
 
 namespace udg {
 
@@ -260,6 +262,8 @@ void QRectumSegmentationExtension::createConnections()
   connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
 
   connect( m_saveMaskPushButton, SIGNAL( clicked() ) , this , SLOT( saveActivedMaskVolume() ) );
+
+  connect( m_save3DPushButton, SIGNAL( clicked() ) , this , SLOT( saveSegmentation3DVolume() ) );
 
   connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ) , this , SLOT( viewRegionState(int) ) );
 
@@ -1130,6 +1134,74 @@ void QRectumSegmentationExtension::saveActivedMaskVolume()
 
         writer->Delete();
         imageThreshold->Delete();
+    }
+}
+
+void QRectumSegmentationExtension::saveSegmentation3DVolume()
+{
+    QString fileName = QFileDialog::getSaveFileName( this, tr("Save Volume file"), m_savingMaskDirectory, tr("MetaImage Files (*.mhd)") );
+    if ( !fileName.isEmpty() )
+    {
+        if( QFileInfo( fileName ).suffix() != "mhd" )
+        {
+            fileName += ".mhd";
+        }
+        itk::Image<unsigned char, 3>::Pointer outputImage = itk::Image<unsigned char, 3>::New();
+        outputImage->SetRegions( m_mainVolume->getItkData()->GetBufferedRegion() );
+        outputImage->SetSpacing( m_mainVolume->getItkData()->GetSpacing() );
+        outputImage->SetOrigin( m_mainVolume->getItkData()->GetOrigin() );
+        outputImage->Allocate();
+
+        typedef itk::ImageRegionIterator<Volume::ItkImageType> ItkIterator;
+        ItkIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
+        ItkIterator itLesion( m_lesionMaskVolume->getItkData(), m_lesionMaskVolume->getItkData()->GetBufferedRegion() );
+        typedef itk::ImageRegionIterator< itk::Image<unsigned char, 3> > OutIterator;
+        OutIterator itOut( outputImage, outputImage->GetBufferedRegion() );
+
+        double pos[3];
+        m_2DView->getSeedPosition(pos);
+        int seedSl=(int) (pos[2]-m_mainVolume->getOrigin()[2])/m_mainVolume->getSpacing()[2];
+
+        int i,j,k;
+        std::cout<<"m_seedSlice: "<<m_seedSlice<<", pos[2]: "<<pos[2]<<", seedSl: "<<seedSl<<endl;
+        for(k=0;k<m_mainVolume->getDimensions()[2];k++)
+        {
+            for(j=0;j<m_mainVolume->getDimensions()[1];j++)
+            {
+                for(i=0;i<m_mainVolume->getDimensions()[0];i++)
+                {
+                    if(k<seedSl)
+                    {
+                        if(itLesion.Get()!=m_insideValue)
+                        {
+                            itOut.Set(0);
+                        }else{
+                            itOut.Set(255);
+                        }
+                    }else{
+                        if(itLesion.Get()!=m_insideValue)
+                        {
+                            //Ho reescalem de 1 fins a 254
+                            itOut.Set((((iter.Get()-m_minValue)*253)/m_maxValue)+1);
+                        }else{
+                            itOut.Set(255);
+                        }
+                    }
+                    ++itOut;
+                    ++iter;
+                    ++itLesion;
+                }
+            }
+        }
+
+        typedef itk::ImageFileWriter< itk::Image<unsigned char, 3> > ExternalWriterType;
+
+        ExternalWriterType::Pointer mapWriter = ExternalWriterType::New();
+        mapWriter->SetInput( outputImage );
+        mapWriter->SetFileName(qPrintable( fileName ));
+        mapWriter->Update();
+
+        m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
     }
 }
 
