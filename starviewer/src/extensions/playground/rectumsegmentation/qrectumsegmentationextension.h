@@ -153,6 +153,9 @@ private slots:
     /// Desa la màscara que s'està visualitzant
     void saveActivedMaskVolume();
 
+    /// Desa la màscara que s'està visualitzant en format "xulo" per veure-ho en 3D
+    void saveSegmentation3DVolume();
+
     /// Desactiva les tools en cas que s'activi una tool "externa"
     void toolChanged( QAction* ac);
 
