@@ -127,6 +127,7 @@ private:
 
     ItkImageType::PixelType m_diffusionMinValue, m_diffusionMaxValue;
     ItkImageType::PixelType m_perfusionMinValue, m_perfusionMaxValue;
+    ItkImageType::PixelType m_penombraMaskMinValue, m_penombraMaskMaxValue;
 
     vtkImageActor * m_perfusionOverlay;
     vtkLookupTable * m_perfusionHueLut;
@@ -227,14 +228,15 @@ private slots:
 
      /// gestiona els events del m_2DView
     void strokeEventHandler( unsigned long id );
+    void strokeEventHandler2( unsigned long id );
 
     /// gestiona els events del botó esquerre
-    void leftButtonEventHandler( );
+    void leftButtonEventHandler( int idViewer );
 
 
 
      /// determina la llavor del mètode de segmentació
-    void setEditorPoint( );
+    void setEditorPoint( int idViewer );
 
     /// desactiva el booleà que ens diu si està el botó esquerra apretat
     void setLeftButtonOff( );
@@ -254,13 +256,14 @@ private slots:
     void setEraseRegion();
 
     /// Dibuixa el cursor en la forma del pinzell
-    void setPaintCursor( );
+    void setPaintCursor( int idViewer );
 
-    void eraseMask(int size);
-    void paintMask(int size);
-    void eraseSliceMask();
-    void eraseRegionMask();
-    void eraseRegionMaskRecursive(int a, int b, int c);
+    void eraseMask(int size, int idViewer );
+    void paintMask(int size, int idViewer );
+    void eraseSliceMask( int idViewer );
+    void eraseRegionMask( int idViewer );
+    void eraseRegionMaskRecursive1(int a, int b, int c);
+    void eraseRegionMaskRecursive2(int a, int b, int c);
 
 
 

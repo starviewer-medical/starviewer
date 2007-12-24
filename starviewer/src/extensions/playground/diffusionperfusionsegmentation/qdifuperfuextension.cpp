@@ -68,6 +68,9 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
 
     m_penombraVolume = 0.0;
 
+    m_penombraMaskMaxValue = 254;
+    m_penombraMaskMinValue = 0;
+
     m_isLeftButtonPressed = false;
 
     m_squareActor = vtkActor::New();
@@ -267,6 +270,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
     connect( m_filterDiffusionPushButton, SIGNAL( clicked() ), SLOT( applyFilterDiffusionImage() ) );
 
     connect( m_diffusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    connect( m_perfusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler2 (unsigned long) ) );
     // caldria pel perfusion?????
     connect( m_synchroCheckBox, SIGNAL( toggled(bool) ), SLOT( synchronizeSlices(bool) ) );
 
@@ -632,6 +636,7 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_strokeSegmentationMethod->setSeedPosition( m_seedPosition[0], m_seedPosition[1], m_seedPosition[2] );
 
     m_strokeVolume = m_strokeSegmentationMethod->applyMethod();
+    m_strokeCont = (int)(m_strokeVolume / (m_diffusionMainVolume->getSpacing()[0]*m_diffusionMainVolume->getSpacing()[1]*m_diffusionMainVolume->getSpacing()[2]));
 
     m_diffusion2DView->setOverlayToBlend();
     m_diffusion2DView->setOpacityOverlay( m_diffusionOpacitySlider->value() / 100.0 );
@@ -782,6 +787,11 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
         m_perfusion2DView->setInput( m_perfusionRescaledVolume );
         m_perfusion2DView->resetWindowLevelToDefault();
+
+        m_perfusionSliceSlider->setMinimum( 0 );
+        m_perfusionSliceSlider->setMaximum( m_perfusionRescaledVolume->getDimensions()[2] -1  );
+        m_perfusionSliceSpinBox->setMinimum( 0 );
+        m_perfusionSliceSpinBox->setMaximum( m_perfusionRescaledVolume->getDimensions()[2] -1 );
 
         vtkLookupTable * hueLut = vtkLookupTable::New();
         hueLut->SetTableRange( 0.0, 255.0 );
@@ -938,7 +948,7 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 
     udgBinaryMaker< ItkImageType, ItkImageType > binaritzador;
     ItkImageType::Pointer penombraMask = ItkImageType::New();
-    binaritzador.SetInsideValue( 254 );
+    binaritzador.SetInsideValue( m_penombraMaskMaxValue );
     // el tercer paràmetre (strokelevel) ha de ser el valor mínim de la zona a segmentar
     // el quart paràmetre (max) ha de ser el valor màxim de la zona a segmentar (255)
     binaritzador.PenombraSegmentation( m_blackpointEstimatedVolume->getItkData(), penombraMask,
@@ -961,11 +971,12 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 
     VolumeCalculator volumeCalculator;
     volumeCalculator.setInput( m_penombraMaskVolume );
-    volumeCalculator.setInsideValue( 254 );
+    volumeCalculator.setInsideValue( m_penombraMaskMaxValue );
     m_penombraVolumeLabel->setEnabled( true );
     m_penombraVolumeLineEdit->setEnabled( true );
-    m_penombraVolumeLineEdit->setText( QString::number( volumeCalculator.getVolume(), 'f', 2 ) );
-
+    m_penombraVolume = volumeCalculator.getVolume();
+    m_penombraVolumeLineEdit->setText( QString::number( m_penombraVolume, 'f', 2 ) );
+    m_penombraCont = volumeCalculator.getVoxels();
 
     QApplication::restoreOverrideCursor();
 }
@@ -997,11 +1008,11 @@ void QDifuPerfuSegmentationExtension::strokeEventHandler( unsigned long id )
     switch( id )
     {
     case vtkCommand::MouseMoveEvent:
-        setPaintCursor();
+        setPaintCursor(1);
     break;
 
     case vtkCommand::LeftButtonPressEvent:
-        leftButtonEventHandler();
+        leftButtonEventHandler(1);
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
@@ -1016,28 +1027,75 @@ void QDifuPerfuSegmentationExtension::strokeEventHandler( unsigned long id )
     }
 }
 
-void QDifuPerfuSegmentationExtension::leftButtonEventHandler( )
+void QDifuPerfuSegmentationExtension::strokeEventHandler2( unsigned long id )
+{
+    switch( id )
+    {
+    case vtkCommand::MouseMoveEvent:
+        setPaintCursor(2);
+    break;
+
+    case vtkCommand::LeftButtonPressEvent:
+        leftButtonEventHandler(2);
+    break;
+
+    case vtkCommand::LeftButtonReleaseEvent:
+        setLeftButtonOff();
+    break;
+
+    case vtkCommand::RightButtonPressEvent:
+    break;
+
+    default:
+    break;
+    }
+}
+
+void QDifuPerfuSegmentationExtension::leftButtonEventHandler(int idViewer )
 {
     m_isLeftButtonPressed = true;
 
     if(m_editorToolButton->isChecked())
     {
         //DEBUG_LOG("Editor Tool");
-        m_diffusion2DView->disableTools();
-        setEditorPoint(  );
+        if(idViewer==1)
+        {
+            m_diffusion2DView->disableTools();
+            setEditorPoint( idViewer );
+        }
+        else    //idViewer=2
+        {
+            m_perfusion2DView->disableTools();
+            setEditorPoint( idViewer );
+        }
     }
     else
     {
-        m_diffusion2DView->enableTools();
+        if(idViewer==1)
+        {
+            m_diffusion2DView->enableTools();
+        }
+        else    //idViewer=2
+        {
+            m_perfusion2DView->enableTools();
+        }
     }
 }
 
-void QDifuPerfuSegmentationExtension::setEditorPoint(  )
+void QDifuPerfuSegmentationExtension::setEditorPoint( int idViewer )
 {
     double pos[3];
     if(m_editorTool != QDifuPerfuSegmentationExtension::NoEditor)
     {
-        m_diffusion2DView->getCurrentCursorPosition(pos);
+
+        if(idViewer==1)
+        {
+            m_diffusion2DView->getCurrentCursorPosition(pos);
+        }
+        else    //idViewer=2
+        {
+            m_perfusion2DView->getCurrentCursorPosition(pos);
+        }
 
         // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
         if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
@@ -1046,34 +1104,48 @@ void QDifuPerfuSegmentationExtension::setEditorPoint(  )
             {
                 case Erase:
                 {
-                    this->eraseMask(m_editorSize->value());
+                    this->eraseMask(m_editorSize->value(), idViewer);
                     break;
                 }
                 case Paint:
                 {
-                    this->paintMask(m_editorSize->value());
+                    this->paintMask(m_editorSize->value(), idViewer );
                     break;
                 }
                 case EraseSlice:
                 {
-                    this->eraseSliceMask();
+                    this->eraseSliceMask(  idViewer );
                     break;
                 }
                 case EraseRegion:
                 {
-                    this->eraseRegionMask();
+                    this->eraseRegionMask(  idViewer );
                     break;
                 }
             }
-            m_strokeVolumeLineEdit->clear();
-            m_strokeVolumeLineEdit->insert(QString("%1").arg(m_strokeVolume, 0, 'f', 2));
-            m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
-            m_diffusion2DView->refresh();
+            if(idViewer==1)
+            {
+                m_strokeVolumeLineEdit->clear();
+                m_strokeVolume=m_strokeMaskVolume->getSpacing()[0]*m_strokeMaskVolume->getSpacing()[1]*m_strokeMaskVolume->getSpacing()[2]*m_strokeCont;
+                m_strokeVolumeLineEdit->insert(QString("%1").arg(m_strokeVolume, 0, 'f', 2));
+                m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
+                m_diffusion2DView->refresh();
+            }else{
+                m_penombraVolumeLineEdit->clear();
+                m_penombraVolume=m_penombraMaskVolume->getSpacing()[0]*m_penombraMaskVolume->getSpacing()[1]*m_penombraMaskVolume->getSpacing()[2]*m_penombraCont;
+                m_penombraVolumeLineEdit->insert(QString("%1").arg(m_penombraVolume, 0, 'f', 2));
+                vtkImageCast * imageCast = vtkImageCast::New();
+                imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
+                imageCast->SetOutputScalarTypeToUnsignedChar();
+                m_perfusionOverlay->SetInput( imageCast->GetOutput() );
+                imageCast->Delete();
+                m_perfusion2DView->refresh();
+            }
         }
     }
 }
 
-void QDifuPerfuSegmentationExtension::setLeftButtonOff( )
+void QDifuPerfuSegmentationExtension::setLeftButtonOff(  )
 {
     m_isLeftButtonPressed = false;
 }
@@ -1114,17 +1186,24 @@ void QDifuPerfuSegmentationExtension::setEraseRegion()
     m_editorTool = QDifuPerfuSegmentationExtension::EraseRegion;
 }
 
-void QDifuPerfuSegmentationExtension::setPaintCursor()
+void QDifuPerfuSegmentationExtension::setPaintCursor(int idViewer)
 {
     if(m_editorToolButton->isChecked())    //Nom� en cas que estiguem en l'editor
     {
         if(m_isLeftButtonPressed)
         {
-            setEditorPoint();
+            setEditorPoint(idViewer);
         }
 
         double pos[3];
-        m_diffusion2DView->getCurrentCursorPosition(pos);
+        if(idViewer==1)
+        {
+            m_diffusion2DView->getCurrentCursorPosition(pos);
+        }
+        else    //idViewer=2
+        {
+            m_perfusion2DView->getCurrentCursorPosition(pos);
+        }
 
         if((m_editorTool == QDifuPerfuSegmentationExtension::Erase || m_editorTool == QDifuPerfuSegmentationExtension::Paint)&&(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) ))
         {
@@ -1168,8 +1247,16 @@ void QDifuPerfuSegmentationExtension::setPaintCursor()
 
             m_squareActor->SetMapper( squareMapper );
 
-            m_diffusion2DView->getRenderer()-> AddActor( m_squareActor );
-            m_diffusion2DView->refresh();
+            if(idViewer==1)
+            {
+                m_diffusion2DView->getRenderer()-> AddActor( m_squareActor );
+                m_diffusion2DView->refresh();
+            }
+            else    //idViewer=2
+            {
+                m_perfusion2DView->getRenderer()-> AddActor( m_squareActor );
+                m_perfusion2DView->refresh();
+            }
 
             m_squareActor->VisibilityOn();
 
@@ -1188,7 +1275,7 @@ void QDifuPerfuSegmentationExtension::setPaintCursor()
     }
 }
 
-void QDifuPerfuSegmentationExtension::eraseMask(int size)
+void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
 {
     int i,j;
     int* value;
@@ -1197,24 +1284,54 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size)
     double spacing[3];
     int centralIndex[3];
     int index[3];
-    m_diffusion2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    if(idViewer==1)
+    {
+        m_diffusion2DView->getCurrentCursorPosition(pos);
+        m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+        m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+        index[2]=m_diffusion2DView->getCurrentSlice();
+    }else{
+        m_perfusion2DView->getCurrentCursorPosition(pos);
+        m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+        m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+        index[2]=m_perfusion2DView->getCurrentSlice();
+    }
     centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_diffusion2DView->getCurrentSlice();
 
-    for(i=-size;i<=size;i++)
+    if(idViewer==1)
     {
-        for(j=-size;j<=size;j++)
+        for(i=-size;i<=size;i++)
         {
-            index[0]=centralIndex[0]+i;
-            index[1]=centralIndex[1]+j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-            if((*value) != m_diffusionMinValue)
+            for(j=-size;j<=size;j++)
             {
-                (*value) = m_diffusionMinValue;
+                index[0]=centralIndex[0]+i;
+                index[1]=centralIndex[1]+j;
+                value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+                if((*value) != m_diffusionMinValue)
+                {
+                    (*value) = m_diffusionMinValue;
+                    if(m_activedMaskVolume == m_strokeMaskVolume)
+                    {
+                        m_strokeCont--;
+                    }
+                }
+            }
+        }
+    }else{
+        for(i=-size;i<=size;i++)
+        {
+            for(j=-size;j<=size;j++)
+            {
+                index[0]=centralIndex[0]+i;
+                index[1]=centralIndex[1]+j;
+                value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                if((*value) == m_penombraMaskMaxValue)
+                {
+                    (*value) = m_penombraMaskMinValue;
+                    m_penombraCont--;
+                }
             }
         }
     }
@@ -1222,7 +1339,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size)
     //m_2DView->refresh();
 }
 
-void QDifuPerfuSegmentationExtension::paintMask(int size)
+void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
 {
     int i,j;
     int* value;
@@ -1231,23 +1348,53 @@ void QDifuPerfuSegmentationExtension::paintMask(int size)
     double spacing[3];
     int centralIndex[3];
     int index[3];
-    m_diffusion2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+    if(idViewer==1)
+    {
+        m_diffusion2DView->getCurrentCursorPosition(pos);
+        m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+        m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+        index[2]=m_diffusion2DView->getCurrentSlice();
+    }else{
+        m_perfusion2DView->getCurrentCursorPosition(pos);
+        m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+        m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+        index[2]=m_perfusion2DView->getCurrentSlice();
+    }
     centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_diffusion2DView->getCurrentSlice();
-    for(i=-size;i<=size;i++)
+
+    if(idViewer==1)
     {
-        for(j=-size;j<=size;j++)
+        for(i=-size;i<=size;i++)
         {
-            index[0]=centralIndex[0]+i;
-            index[1]=centralIndex[1]+j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-            if((*value) == m_diffusionMinValue)
+            for(j=-size;j<=size;j++)
             {
-                (*value) = m_diffusionMaxValue;
+                index[0]=centralIndex[0]+i;
+                index[1]=centralIndex[1]+j;
+                value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+                if((*value) == m_diffusionMinValue)
+                {
+                    (*value) = m_diffusionMaxValue;
+                    if(m_activedMaskVolume == m_strokeMaskVolume)
+                    {
+                        m_strokeCont++;
+                    }
+                }
+            }
+        }
+    }else{
+        for(i=-size;i<=size;i++)
+        {
+            for(j=-size;j<=size;j++)
+            {
+                index[0]=centralIndex[0]+i;
+                index[1]=centralIndex[1]+j;
+                value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                if((*value) != m_penombraMaskMaxValue)
+                {
+                    (*value) = m_penombraMaskMaxValue;
+                     m_penombraCont++;
+               }
             }
         }
     }
@@ -1255,35 +1402,49 @@ void QDifuPerfuSegmentationExtension::paintMask(int size)
     //m_2DView->refresh();
 }
 
-void QDifuPerfuSegmentationExtension::eraseSliceMask()
+void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
 {
     int i,j;
     int* value;
-    double pos[3];
-    double origin[3];
-    double spacing[3];
-    int centralIndex[3];
     int index[3];
     int ext[6];
-    m_strokeMaskVolume->getVtkData()->GetExtent(ext);
-    m_diffusion2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-    centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
-    centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
-    //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-    index[2]=m_diffusion2DView->getCurrentSlice();
-    //DEBUG_LOG("Esborrant llesca "<<index[2]);
-    for(i=ext[0];i<=ext[1];i++)
+
+    if(idViewer==1)
     {
-        for(j=ext[2];j<=ext[3];j++)
+        m_strokeMaskVolume->getVtkData()->GetExtent(ext);
+        index[2]=m_diffusion2DView->getCurrentSlice();
+        for(i=ext[0];i<=ext[1];i++)
         {
-            index[0]=i;
-            index[1]=j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-            if((*value) != m_diffusionMinValue)
+            for(j=ext[2];j<=ext[3];j++)
             {
-                (*value) = m_diffusionMinValue;
+                index[0]=i;
+                index[1]=j;
+                value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+                if((*value) != m_diffusionMinValue)
+                {
+                    (*value) = m_diffusionMinValue;
+                    if(m_activedMaskVolume == m_strokeMaskVolume)
+                    {
+                        m_strokeCont--;
+                    }
+                }
+            }
+        }
+    }else{
+        m_penombraMaskVolume->getVtkData()->GetExtent(ext);
+        index[2]=m_perfusion2DView->getCurrentSlice();
+        for(i=ext[0];i<=ext[1];i++)
+        {
+            for(j=ext[2];j<=ext[3];j++)
+            {
+                index[0]=i;
+                index[1]=j;
+                value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                if((*value) == m_penombraMaskMaxValue)
+                {
+                    (*value) = m_penombraMaskMinValue;
+                    m_penombraCont--;
+                }
             }
         }
     }
@@ -1291,22 +1452,33 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask()
     //m_2DView->refresh();
 }
 
-void QDifuPerfuSegmentationExtension::eraseRegionMask()
+void QDifuPerfuSegmentationExtension::eraseRegionMask( int idViewer)
 {
     double pos[3];
     double origin[3];
     double spacing[3];
     int index[3];
-    m_diffusion2DView->getCurrentCursorPosition(pos);
-    m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-    m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-    index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-    index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    index[2]=m_diffusion2DView->getCurrentSlice();
-    eraseRegionMaskRecursive(index[0],index[1],index[2]);
+    if(idViewer==1)
+    {
+        m_diffusion2DView->getCurrentCursorPosition(pos);
+        m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+        m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+        index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
+        index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
+        index[2]=m_diffusion2DView->getCurrentSlice();
+        eraseRegionMaskRecursive1(index[0],index[1],index[2]);
+    }else{
+        m_perfusion2DView->getCurrentCursorPosition(pos);
+        m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+        m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+        index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
+        index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
+        index[2]=m_perfusion2DView->getCurrentSlice();
+        eraseRegionMaskRecursive2(index[0],index[1],index[2]);
+    }
 }
 
-void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
+void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive1(int a, int b, int c)
 {
     int ext[6];
     m_activedMaskVolume->getVtkData()->GetExtent(ext);
@@ -1321,11 +1493,38 @@ void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int
         {
             //DEBUG_LOG(m_outsideValue<<" "<<m_insideValue<<"->"<<(*value));
             (*value)= m_diffusionMinValue;
+            if(m_activedMaskVolume == m_strokeMaskVolume)
+            {
+                m_strokeCont--;
+            }
             //(*m_activedCont)--;
-            eraseRegionMaskRecursive( a+1, b, c);
-            eraseRegionMaskRecursive( a-1, b, c);
-            eraseRegionMaskRecursive( a, b+1, c);
-            eraseRegionMaskRecursive( a, b-1, c);
+            eraseRegionMaskRecursive1( a+1, b, c);
+            eraseRegionMaskRecursive1( a-1, b, c);
+            eraseRegionMaskRecursive1( a, b+1, c);
+            eraseRegionMaskRecursive1( a, b-1, c);
+        }
+    }
+}
+
+void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive2(int a, int b, int c)
+{
+    int ext[6];
+    m_penombraMaskVolume->getVtkData()->GetExtent(ext);
+    if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
+    {
+        int index[3];
+        index[0]=a;
+        index[1]=b;
+        index[2]=c;
+        int* value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+        if ((*value) == m_penombraMaskMaxValue)
+        {
+            (*value)= m_penombraMaskMinValue;
+            m_penombraCont--;
+            eraseRegionMaskRecursive2( a+1, b, c);
+            eraseRegionMaskRecursive2( a-1, b, c);
+            eraseRegionMaskRecursive2( a, b+1, c);
+            eraseRegionMaskRecursive2( a, b-1, c);
         }
     }
 }
