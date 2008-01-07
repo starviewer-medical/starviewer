@@ -38,17 +38,8 @@ SlicingTool::~SlicingTool()
 {
 }
 
-bool SlicingTool::event( QEvent * event)
-{
-    DEBUG_LOG("REBO EVENT!!!!!!");
-    return true;
-}
-
 void SlicingTool::handleEvent( unsigned long eventID )
 {
-
-    DEBUG_LOG( tr("AnyEvent: %1,%2,%3,%4").arg( m_2DViewer->getInteractor()->GetKeySym() ).arg( m_2DViewer->getInteractor()->GetKeyCode() ).arg( m_2DViewer->getInteractor()->GetControlKey() ).arg( m_2DViewer->getInteractor()->GetShiftKey() ) );
-
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
@@ -88,14 +79,33 @@ void SlicingTool::handleEvent( unsigned long eventID )
             switchSlicingMode();
     break;
     case vtkCommand::KeyPressEvent:
-        if( strcmp(m_2DViewer->getInteractor()->GetKeySym(),"Home") == 0 )
+    {
+        QString keySymbol = m_2DViewer->getInteractor()->GetKeySym();
+        if( keySymbol == "Home" )
         {
-            this->updateIncrement( m_2DViewer->getCurrentSlice()*(-1) );
+            m_2DViewer->setSlice(0);
         }
-        else if ( strcmp(m_2DViewer->getInteractor()->GetKeySym(),"End") == 0 )
+        else if( keySymbol == "End" )
         {
-            this->updateIncrement( m_2DViewer->getNumberOfSlices() );
+            m_2DViewer->setSlice( m_2DViewer->getNumberOfSlices() );
         }
+        else if( keySymbol == "Up" )
+        {
+            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() + 1 );
+        }
+        else if( keySymbol == "Down" )
+        {
+            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() - 1 );
+        }
+        else if( keySymbol == "Left" )
+        {
+            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() - 1 );
+        }
+        else if( keySymbol == "Right" )
+        {
+            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + 1 );
+        }
+    }
     break;
 
     default:
