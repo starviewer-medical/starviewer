@@ -65,6 +65,16 @@ public:
     vtkRenderWindow *getRenderWindow();
 
     /**
+     * Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
+     * del ratolí durant l'últim event
+     * Les coordenades retornades estan en sistema de coordenades de Display
+     */
+    int getEventPositionX();
+    int getEventPositionY();
+    int getLastEventPositionX();
+    int getLastEventPositionY();
+
+    /**
      * Ens diu si el viewer és actiu en aquell moment
      * @return Cert si actiu, fals altrament
      */

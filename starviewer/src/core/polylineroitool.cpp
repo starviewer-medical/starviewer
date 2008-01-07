@@ -12,7 +12,7 @@
 #include "series.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
-#include "drawertext.h"                      
+#include "drawertext.h"
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -54,9 +54,9 @@ void PolylineROITool::handleEvent( long unsigned eventID )
 
 //             int totalTimeElapsed = m_time.elapsed();
 //             int timeElapsed = ( totalTimeElapsed - m_latestTime );
-// 
+//
 //             DEBUG_LOG( tr("CLIKS: %1").arg( m_2DViewer->getInteractor()->GetRepeatCount() ) );
-// 
+//
 //             if( timeElapsed < 350 )
 //             {
 //                 DEBUG_LOG( "DOBLE CLICK");
@@ -91,21 +91,22 @@ void PolylineROITool::annotateNewPoint()
         m_mainPolyline = new DrawerPolyline;
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
-    
-    int xy[2];
+
+    int x,y;
     double position[4];
     double computed[3];
 
     //capturem l'event de clic esquerre
-    m_2DViewer->getInteractor()->GetEventPosition( xy );
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
     computed[0] = position[0];
     computed[1] = position[1];
     computed[2] = position[2];
 
     //afegim el punt
     m_mainPolyline->addPoint( computed );
-    
+
 //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
@@ -118,16 +119,17 @@ void PolylineROITool::simulateClosingPolyline()
         m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
         m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
-    
+
     m_closingPolyline->deleteAllPoints();
 
-    int xy[2];
+    int x,y;
     double position[4];
     double computed[3];
 
     //capturem l'event de clic esquerre
-    m_2DViewer->getInteractor()->GetEventPosition( xy );
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
     computed[0] = position[0];
@@ -138,7 +140,7 @@ void PolylineROITool::simulateClosingPolyline()
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
     m_closingPolyline->addPoint( computed );
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
-    
+
 //actualitzem els atributs de la polilinia
     m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
@@ -156,7 +158,7 @@ void PolylineROITool::answerToKeyEvent()
     {
         m_mainPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
         m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-        
+
         double *bounds = m_mainPolyline->getPolylineBounds();
         if( !bounds )
         {
@@ -169,13 +171,13 @@ void PolylineROITool::answerToKeyEvent()
             intersection[0] = (bounds[1]+bounds[0])/2.0;
             intersection[1] = (bounds[3]+bounds[2])/2.0;
             intersection[2] = (bounds[5]+bounds[4])/2.0;
-            
+
             DrawerText * text = new DrawerText;
             text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean() ) );
             text->setAttatchmentPoint( intersection );
             text->update( DrawerPrimitive::VTKRepresentation );
             m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-        } 
+        }
         delete m_closingPolyline;
         m_closingPolyline=NULL;
         m_2DViewer->getDrawer()->refresh();
@@ -190,11 +192,11 @@ double PolylineROITool::computeGrayMean()
         case Q2DViewer::Axial:
             mean = computeGrayMeanAxial();
             break;
-            
+
         case Q2DViewer::Sagittal:
             mean = computeGrayMeanSagittal();
             break;
-            
+
         case Q2DViewer::Coronal:
             mean = computeGrayMeanCoronal();
             break;
@@ -247,20 +249,20 @@ double PolylineROITool::computeGrayMeanAxial()
     }
 
     double *bounds = m_mainPolyline->getPolylineBounds();
-            
+
     rayP1[0] = bounds[0];//xmin
     rayP1[1] = bounds[2];//y
     rayP1[2] = bounds[4];//z
     rayP2[0] = bounds[1];//xmax
     rayP2[1] = bounds[2];//y
     rayP2[2] = bounds[4];//z
-    
+
     spacing0 = m_2DViewer->getInput()->getSpacing()[0];
     spacing1 = m_2DViewer->getInput()->getSpacing()[1];
     spacing2 = m_2DViewer->getInput()->getSpacing()[2];
-    
+
     verticalLimit = bounds[3];
-    
+
     while( rayP1[1] <= verticalLimit )
     {
         intersectionList.clear();
@@ -271,7 +273,7 @@ double PolylineROITool::computeGrayMeanAxial()
             auxPoints = segments[index]->GetPoints();
             auxPoints->GetPoint(0,p0);
             auxPoints->GetPoint(1,p1);
-            
+
             if ((rayP1[1] <= p0[1] && rayP1[1] >= p1[1]) || (rayP1[1] >= p0[1] && rayP1[1] <= p1[1]))
                 indexList << index;
         }
@@ -287,7 +289,7 @@ double PolylineROITool::computeGrayMeanAxial()
                 intersectionList.append ( findedPoint );
             }
         }
-        
+
         if ( (intersectionList.count() % 2)==0 )
         {
             int limit = intersectionList.count()/2;
@@ -390,13 +392,13 @@ double PolylineROITool::computeGrayMeanSagittal()
     rayP2[0] = bounds[0];//xmin
     rayP2[1] = bounds[2];//ymin
     rayP2[2] = bounds[5];//zmax
-    
+
     spacing0 = m_2DViewer->getInput()->getSpacing()[0];
     spacing1 = m_2DViewer->getInput()->getSpacing()[1];
     spacing2 = m_2DViewer->getInput()->getSpacing()[2];
-            
+
     verticalLimit = bounds[3];
-    
+
     while( rayP1[1] <= verticalLimit )
     {
         intersectionList.clear();
@@ -407,7 +409,7 @@ double PolylineROITool::computeGrayMeanSagittal()
             auxPoints = segments[index]->GetPoints();
             auxPoints->GetPoint(0,p0);
             auxPoints->GetPoint(1,p1);
-            
+
             if ((rayP1[1] <= p0[1] && rayP1[1] >= p1[1]) || (rayP1[1] >= p0[1] && rayP1[1] <= p1[1]))
                 indexList << index;
         }
@@ -424,7 +426,7 @@ double PolylineROITool::computeGrayMeanSagittal()
                 intersectionList.append ( findedPoint );
             }
         }
-        
+
         if ( (intersectionList.count() % 2)==0 )
         {
             int limit = intersectionList.count()/2;
@@ -477,8 +479,8 @@ double PolylineROITool::computeGrayMeanSagittal()
 int PolylineROITool::getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 )
 {
     double *origin = m_2DViewer->getInput()->getOrigin();
-    int index[3]; 
-    
+    int index[3];
+
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
@@ -486,13 +488,13 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
             index[1] = (int)((coords[1] - origin[1])/spacing1);
             index[2] = m_2DViewer->getCurrentSlice();
             break;
-    
+
         case Q2DViewer::Sagittal:
             index[0] = m_2DViewer->getCurrentSlice();
             index[1] = (int)((coords[1] - origin[1])/spacing1);
             index[2] = (int)((coords[2] - origin[2])/spacing2);
             break;
-    
+
         case Q2DViewer::Coronal:
             index[0] = (int)((coords[0] - origin[0])/spacing0);
             index[1] = m_2DViewer->getCurrentSlice();
@@ -500,7 +502,7 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
             break;
     }
     return *((int*)m_2DViewer->getInput()->getVtkData()->GetScalarPointer(index));
-} 
+}
 
 double PolylineROITool::computeGrayMeanCoronal()
 {
@@ -555,13 +557,13 @@ double PolylineROITool::computeGrayMeanCoronal()
     rayP2[0] = bounds[1];//xmax
     rayP2[1] = bounds[2];//ymin
     rayP2[2] = bounds[4];//zmin
-    
+
     spacing0 = m_2DViewer->getInput()->getSpacing()[0];
     spacing1 = m_2DViewer->getInput()->getSpacing()[1];
     spacing2 = m_2DViewer->getInput()->getSpacing()[2];
-    
+
     verticalLimit = bounds[5];
-    
+
     while( rayP1[2] <= verticalLimit )
     {
         intersectionList.clear();
@@ -572,7 +574,7 @@ double PolylineROITool::computeGrayMeanCoronal()
             auxPoints = segments[index]->GetPoints();
             auxPoints->GetPoint(0,p0);
             auxPoints->GetPoint(1,p1);
-            
+
             if ((rayP1[2] <= p0[2] && rayP1[2] >= p1[2]) || (rayP1[2] >= p0[2] && rayP1[2] <= p1[2]))
                 indexList << index;
         }
@@ -589,7 +591,7 @@ double PolylineROITool::computeGrayMeanCoronal()
                 intersectionList.append ( findedPoint );
             }
         }
-        
+
         if ( (intersectionList.count() % 2)==0 )
         {
             int limit = intersectionList.count()/2;

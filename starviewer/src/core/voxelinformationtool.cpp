@@ -141,20 +141,18 @@ int* VoxelInformationTool::viewportDimensions()
 
 bool VoxelInformationTool::captionExceedsViewportTopLimit()
 {
-    int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
     int *dimensions = viewportDimensions();
     double captionHeigth = ((double)dimensions[1]*0.05);
 
-    return ( eventPosition[1]+captionHeigth > dimensions[1] );
+    return ( m_2DViewer->getEventPositionY()+captionHeigth > dimensions[1] );
 }
 
 bool VoxelInformationTool::captionExceedsViewportRightLimit()
 {
-    int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
     int *dimensions = viewportDimensions();
     double captionWidth = ((double)dimensions[0]*0.3)+1.;
 
-    return ( eventPosition[0]+captionWidth > dimensions[0] );
+    return ( m_2DViewer->getEventPositionX()+captionWidth > dimensions[0] );
 }
 
 bool VoxelInformationTool::captionExceedsViewportLimits()
@@ -165,22 +163,23 @@ bool VoxelInformationTool::captionExceedsViewportLimits()
 void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPort[2] )
 {
     double xSecurityRange = 20.;
-    int *eventPosition = m_2DViewer->getInteractor()->GetEventPosition();
+    int eventPositionX = m_2DViewer->getEventPositionX();
+    int eventPositionY = m_2DViewer->getEventPositionY();
     int *dimensions = viewportDimensions();
     double captionWidth = ((double)dimensions[0]*0.3)+xSecurityRange;
     double captionHeight = ((double)dimensions[1]*0.05)+xSecurityRange;
 
-    correctPositionInViewPort[0] = eventPosition[0];
-    correctPositionInViewPort[1] = eventPosition[1];
+    correctPositionInViewPort[0] = eventPositionX;
+    correctPositionInViewPort[1] = eventPositionY;
 
     if ( captionExceedsViewportRightLimit() )
     {
-        correctPositionInViewPort[0] = eventPosition[0] - ( eventPosition[0] + captionWidth - dimensions[0] );
+        correctPositionInViewPort[0] = eventPositionX - ( eventPositionX + captionWidth - dimensions[0] );
     }
 
     if ( captionExceedsViewportTopLimit() )
     {
-        correctPositionInViewPort[1] = eventPosition[1] - ( eventPosition[1] + captionHeight - dimensions[1] );
+        correctPositionInViewPort[1] = eventPositionY - ( eventPositionY + captionHeight - dimensions[1] );
     }
 }
 

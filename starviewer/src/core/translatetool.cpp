@@ -81,8 +81,8 @@ void TranslateTool::pan()
     focalDepth = viewFocus[2];
 
     QViewer::computeDisplayToWorld( renderer,
-                                (double)m_viewer->getInteractor()->GetEventPosition()[0],
-                                (double)m_viewer->getInteractor()->GetEventPosition()[1],
+                                (double)m_viewer->getEventPositionX(),
+                                (double)m_viewer->getEventPositionY(),
                                 focalDepth,
                                 newPickPoint);
 
@@ -90,8 +90,8 @@ void TranslateTool::pan()
     // so can't move it outside the loop
 
     QViewer::computeDisplayToWorld( renderer,
-                                (double)m_viewer->getInteractor()->GetLastEventPosition()[0],
-                                (double)m_viewer->getInteractor()->GetLastEventPosition()[1],
+                                (double)m_viewer->getLastEventPositionX(),
+                                (double)m_viewer->getLastEventPositionY(),
                                 focalDepth,
                                 oldPickPoint );
 
