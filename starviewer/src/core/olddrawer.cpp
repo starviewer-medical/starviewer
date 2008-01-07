@@ -798,7 +798,7 @@ OldDrawer::PrimitiveActorPair* OldDrawer::findPrimitiveActorPair( DrawingPrimiti
 
     if ( !found )
     {
-        ERROR_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
+        DEBUG_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
         desiredPrimitiveActorPair->first = NULL;
         desiredPrimitiveActorPair->second = NULL;
     }
@@ -843,7 +843,7 @@ OldDrawer::PrimitiveActorPair* OldDrawer::findPrimitiveActorPair( DrawingPrimiti
 
     if ( !found )
     {
-        ERROR_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
+        DEBUG_LOG( "No s'ha trobat la primitiva gràfica desitjada!!!" );
         desiredPrimitiveActorPair->first = NULL;
         desiredPrimitiveActorPair->second = NULL;
     }
@@ -1112,7 +1112,7 @@ OldDrawer::PrimitivesSet* OldDrawer::getSetOf( DrawingPrimitive *primitive )
 
     if ( notFound )
     {
-        ERROR_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
+        DEBUG_LOG( "No s'ha trobat el conjunt de primitives associades!!!!!" );
         set = NULL;
     }
     return( set );
@@ -1351,7 +1351,7 @@ OldDrawer::PrimitivesPairsList OldDrawer::getAllPrimitivesOfType( QString primit
             map = m_coronalPairs;
             break;
         default:
-            ERROR_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
+            DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
             break;
     }
 
@@ -1468,7 +1468,7 @@ bool OldDrawer::isPointIncludedInLineBounds( double point[3], double *lineP1, do
             coordinate2 = 2;
             break;
         default:
-            ERROR_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
+            DEBUG_LOG( "El Q2DViewer no té assignada cap de les 3 vistes possibles!?" );
             break;
     }
 
