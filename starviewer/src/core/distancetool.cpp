@@ -67,14 +67,14 @@ void DistanceTool::annotateNewPoint()
         m_hasFirstPoint = false;
         m_hasSecondPoint = false;
     }
-    
-    int xy[2];
+
     double position[4];
     double computed[3];
 
     //capturem l'event de clic esquerre
-    m_2DViewer->getInteractor()->GetEventPosition( xy );
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    int x = m_2DViewer->getEventPositionX();
+    int y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
     computed[0] = position[0];
     computed[1] = position[1];
     computed[2] = position[2];
@@ -86,7 +86,7 @@ void DistanceTool::annotateNewPoint()
         m_hasFirstPoint = true;
     }
     else
-    {   
+    {
         m_line->setSecondPoint( computed );
         //actualitzem els atributs de la linia
 
@@ -116,13 +116,13 @@ void DistanceTool::annotateNewPoint()
 
 void DistanceTool::simulateLine()
 {
-    int xy[2];
     double position[4];
     double computed[3];
 
     //capturem l'event de clic esquerre
-    m_2DViewer->getInteractor()->GetEventPosition( xy );
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    int x = m_2DViewer->getEventPositionX();
+    int y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
     computed[0] = position[0];
     computed[1] = position[1];
     computed[2] = position[2];

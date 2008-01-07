@@ -9,35 +9,22 @@
 
 #include "oldtool.h"
 
-class vtkInteractorStyle;
-
 namespace udg {
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-
-class Q2DViewer;
-class Q3DViewer;
-class Q3DMPRViewer;
-
 class OldTranslateTool : public OldTool
 {
 Q_OBJECT
 public:
     enum { NONE , TRANSLATING };
-    OldTranslateTool( Q2DViewer *viewer, QObject *parent = 0 );
-    OldTranslateTool( Q3DViewer *viewer, QObject *parent = 0 );
-    OldTranslateTool( Q3DMPRViewer *viewer, QObject *parent = 0 );
-
+    OldTranslateTool( QViewer *viewer, QObject *parent = 0 );
     ~OldTranslateTool();
 
     void handleEvent( unsigned long eventID );
 
 private:
-    /// interactor style que omplirem en el constructor depenent del visor
-    vtkInteractorStyle *m_interactorStyle;
-
     /// realitza la feina de desplaçament
     void pan();
 
@@ -51,6 +38,10 @@ private slots:
 
     /// Atura l'estat de translate
     void endTranslate();
+
+private:
+    /// Viewer sobre el qual s'actua
+    QViewer *m_viewer;
 };
 
 }

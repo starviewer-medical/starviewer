@@ -214,13 +214,13 @@ void OldDistanceTool::createSelectedDistanceData( OldDistanceTool::PrimitivesSet
 
 void OldDistanceTool::startDistanceAnnotation()
 {
-    int xy[2];
     double position[4];
 
     m_state = ANNOTATING;
 
-    m_2DViewer->getInteractor()->GetEventPosition( xy );
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    int eventPositionX = m_2DViewer->getEventPositionX();
+    int eventPositionY = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , eventPositionX, eventPositionY, 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
     m_distanceStartPosition[0] = position[0];
@@ -242,11 +242,11 @@ void OldDistanceTool::startDistanceAnnotation()
 
 void OldDistanceTool::doDistanceSimulation()
 {
-    int xy[2];
     double position[4];
 
-    m_2DViewer->getInteractor()->GetEventPosition (xy);
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    int x = m_2DViewer->getEventPositionX();
+    int y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
     m_distanceCurrentPosition[0] = position[0];
@@ -278,8 +278,8 @@ void OldDistanceTool::getNearestPointOfSelectedDistance()
 {
     double *vertex1, *vertex2;
     int x, y;
-    x = m_2DViewer->getInteractor()->GetEventPosition()[0];
-    y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
     double toWorld[4];
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
     double point[3] = { toWorld[0] , toWorld[1], toWorld[2] };
@@ -309,8 +309,8 @@ void OldDistanceTool::getNearestPointOfSelectedDistance()
 void OldDistanceTool::moveFirstPoint()
 {
     int x, y;
-    x = m_2DViewer->getInteractor()->GetEventPosition()[0];
-    y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
     double toWorld[4];
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
     double point[3] = { toWorld[0] , toWorld[1], toWorld[2] };
@@ -321,8 +321,8 @@ void OldDistanceTool::moveFirstPoint()
 void OldDistanceTool::moveSecondPoint()
 {
     int x, y;
-    x = m_2DViewer->getInteractor()->GetEventPosition()[0];
-    y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
     double toWorld[4];
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
     double point[3] = { toWorld[0] , toWorld[1], toWorld[2] };
