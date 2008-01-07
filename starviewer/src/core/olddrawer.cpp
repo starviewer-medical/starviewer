@@ -1122,8 +1122,8 @@ void OldDrawer::highlightNearestPrimitives()
 {
     double point[3] = { .0, .0, .0 };
     int x, y;
-    x = m_2DViewer->getInteractor()->GetEventPosition()[0];
-    y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
     double toWorld[4];
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
 

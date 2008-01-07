@@ -56,8 +56,8 @@ void WindowLevelTool::startWindowLevel()
         m_state = WINDOWLEVELING;
         m_initialWindow = m_2DViewer->getCurrentColorWindow();
         m_initialLevel = m_2DViewer->getCurrentColorLevel();
-        m_windowLevelStartPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
-        m_windowLevelStartPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+        m_windowLevelStartPosition[0] = m_2DViewer->getEventPositionX();
+        m_windowLevelStartPosition[1] = m_2DViewer->getEventPositionY();
     }
     else
         DEBUG_LOG( "::startWindowLevel(): El 2DViewer és NUL!" );
@@ -68,8 +68,8 @@ void WindowLevelTool::doWindowLevel()
     if( m_2DViewer )
     {
         m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
-        m_windowLevelCurrentPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
-        m_windowLevelCurrentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+        m_windowLevelCurrentPosition[0] = m_2DViewer->getEventPositionX();
+        m_windowLevelCurrentPosition[1] = m_2DViewer->getEventPositionY();
 
         int *size = m_2DViewer->getRenderer()->GetRenderWindow()->GetSize();
         double window = m_initialWindow;

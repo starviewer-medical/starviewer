@@ -84,6 +84,26 @@ vtkRenderWindow *QViewer::getRenderWindow()
     return m_vtkWidget->GetRenderWindow();
 }
 
+int QViewer::getEventPositionX()
+{
+    return this->getInteractor()->GetEventPosition()[0];
+}
+
+int QViewer::getEventPositionY()
+{
+    return this->getInteractor()->GetEventPosition()[1];
+}
+
+int QViewer::getLastEventPositionX()
+{
+    return this->getInteractor()->GetLastEventPosition()[0];
+}
+
+int QViewer::getLastEventPositionY()
+{
+    return this->getInteractor()->GetLastEventPosition()[1];
+}
+
 bool QViewer::isActive() const
 {
     return m_isActive;
@@ -404,11 +424,12 @@ void QViewer::contextMenuRelease()
     // Extret dels exemples de vtkEventQtSlotConnect
 
     // Obtenim la posició de l'event
-    int eventPosition[2];
-    this->getInteractor()->GetEventPosition( eventPosition );
+    int eventPositionX = this->getEventPositionX();
+    int eventPositionY = this->getEventPositionY();
+
     int* size = this->getInteractor()->GetSize();
     // remember to flip y
-    QPoint point = QPoint( eventPosition[0], size[1]-eventPosition[1] );
+    QPoint point = QPoint( eventPositionX, size[1]-eventPositionY );
 
     // map to global
     QPoint globalPoint = this->mapToGlobal( point );

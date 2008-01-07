@@ -102,12 +102,13 @@ void ROITool::startROIAnnotation()
     altres punts del polígon.
     -si la ROI és un polyline, caldran tants punts com vèrtexs tingui aquesta roi.
 */
-    int xy[2];
+    int x,y;
     double position[4];
 
     //esborrem els punts i vèrtexs del polyData
-    m_2DViewer->getInteractor()->GetEventPosition( xy );
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
     m_startPosition[0] = position[0];
@@ -139,11 +140,12 @@ void ROITool::startROIAnnotation()
 ///\TODO tenir en compte segons el tipus de primitiva que estem dibuixant
 void ROITool::doROISimulation()
 {
-    int xy[2];
+    int x,y;
     double position[4];
 
-    m_2DViewer->getInteractor()->GetEventPosition (xy);
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
+    x = m_2DViewer->getEventPositionX();
+    y = m_2DViewer->getEventPositionY();
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
 
     //establem el segon punt d'anotació de la roi
     //només ens interessen els 3 primers valors de l'array de 4
@@ -531,8 +533,8 @@ void ROITool::stopROIAnnotation()
 //     {
 //         int x, y;
 //         double toWorld[4],point[2];
-//         x = m_2DViewer->getInteractor()->GetEventPosition()[0];
-//         y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+//         x = m_2DViewer->getEventPositionX();
+//         y = m_2DViewer->getEventPositionY();
 //         m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
 //
 //         switch( m_2DViewer->getView() )
@@ -562,8 +564,8 @@ void ROITool::stopROIAnnotation()
 // void ROITool::highlightNearestROI()
 // {
 //     double point[3] = { .0, .0, .0 };
-//     int x = m_2DViewer->getInteractor()->GetEventPosition()[0];
-//     int y = m_2DViewer->getInteractor()->GetEventPosition()[1];
+//     int x = m_2DViewer->getEventPositionX();
+//     int y = m_2DViewer->getEventPositionY();
 //     double toWorld[4];
 //     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y , 0 , toWorld );
 //

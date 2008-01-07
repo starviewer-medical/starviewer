@@ -97,7 +97,7 @@ void SlicingTool::handleEvent( unsigned long eventID )
             this->updateIncrement( m_2DViewer->getNumberOfSlices() );
         }
     break;
-    
+
     default:
     break;
     }
@@ -108,8 +108,8 @@ void SlicingTool::startSlicing()
     if( m_2DViewer )
     {
         m_state = SLICING;
-        m_startPosition[0] = m_2DViewer->getInteractor()->GetEventPosition()[0];
-        m_startPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+        m_startPosition[0] = m_2DViewer->getEventPositionX();
+        m_startPosition[1] = m_2DViewer->getEventPositionY();
         m_time->start();
     }
     else
@@ -123,7 +123,7 @@ void SlicingTool::doSlicing()
         if( m_state == SLICING )
         {
             m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
-            m_currentPosition[1] = m_2DViewer->getInteractor()->GetEventPosition()[1];
+            m_currentPosition[1] = m_2DViewer->getEventPositionY();
             int dy = m_currentPosition[1] - m_startPosition[1];
 
             double timeElapsed = ( m_time->elapsed() - m_latestTime )/1000.0; // Es passa a segons

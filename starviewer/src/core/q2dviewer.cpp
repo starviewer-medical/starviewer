@@ -940,8 +940,6 @@ void Q2DViewer::setView( ViewType view )
     m_lastView = view;
     emit viewChanged( m_lastView );
     resetCamera();
-//     double *bounds = m_viewer->GetImageActor()->GetBounds();
-//     scaleToFit( bounds[0], bounds[2], bounds[1], bounds[3] );
 }
 
 void Q2DViewer::setViewToAxial()
@@ -1527,10 +1525,8 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
     bool found = false;
     if( !m_mainVolume )
         return found;
-
-    vtkRenderWindowInteractor* interactor = this->getInteractor();
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
-    m_picker->PickProp( interactor->GetEventPosition()[0], interactor->GetEventPosition()[1], m_viewer->GetRenderer() );
+    m_picker->PickProp( this->getEventPositionX(), this->getEventPositionY(), m_viewer->GetRenderer() );
     // calculem el pixel trobat
     m_picker->GetPickPosition( xyz );
 
@@ -2169,7 +2165,7 @@ void Q2DViewer::addRenderScene()
     actor->SetInput( m_viewer->GetWindowLevel()->GetOutput() );
     renderer->AddActor( actor );
     m_sliceActorCollection->AddItem( actor );
-    
+
     // li afegim les annotacions de texte corresponents
     sliceAnnotation = vtkCornerAnnotation::New();
     renderer->AddActor2D( sliceAnnotation );

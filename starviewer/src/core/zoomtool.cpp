@@ -83,7 +83,7 @@ void ZoomTool::doZoom()
             vtkInteractorStyle *interactor = m_viewer->getInteractorStyle();
 
             double *center = interactor->GetCurrentRenderer()->GetCenter();
-            int dy = m_viewer->getInteractor()->GetEventPosition()[1] - m_viewer->getInteractor()->GetLastEventPosition()[1];
+            int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
             // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
             double dyf = 10.0 * (double)(dy) / (double)(center[1]);
             m_viewer->zoom( pow((double)1.1, dyf) );
