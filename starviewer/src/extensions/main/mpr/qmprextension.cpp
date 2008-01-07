@@ -395,8 +395,8 @@ void QMPRExtension::detectAxialViewAxisActor()
 {
     // obtenim el punt que s'ha clicat \TODO unificar aquesta operació en un sol mètode privat o fer un mètode d'accès directament del propi viewer per obtenir les coordenades de món actuals on es troba el cursor
     int x, y;
-    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
-    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    x = m_axial2DView->getEventPositionX();
+    y = m_axial2DView->getEventPositionY();
     double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
@@ -439,8 +439,8 @@ void QMPRExtension::rotateAxialViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
-    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    x = m_axial2DView->getEventPositionX();
+    y = m_axial2DView->getEventPositionY();
     double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x , y , 0 , toWorld );
 
@@ -500,8 +500,8 @@ void QMPRExtension::detectSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
-    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    x = m_sagital2DView->getEventPositionX();
+    y = m_sagital2DView->getEventPositionY();
     double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
@@ -534,8 +534,8 @@ void QMPRExtension::rotateSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
-    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    x = m_sagital2DView->getEventPositionX();
+    y = m_sagital2DView->getEventPositionY();
     double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
@@ -602,8 +602,8 @@ void QMPRExtension::detectPushAxialViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
-    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    x = m_axial2DView->getEventPositionX();
+    y = m_axial2DView->getEventPositionY();
     double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
@@ -647,8 +647,8 @@ void QMPRExtension::pushAxialViewAxisActor()
     this->setCursor( QCursor( Qt::ClosedHandCursor ) );
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_axial2DView->getInteractor()->GetEventPosition()[0];
-    y = m_axial2DView->getInteractor()->GetEventPosition()[1];
+    x = m_axial2DView->getEventPositionX();
+    y = m_axial2DView->getEventPositionY();
     double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
 
@@ -692,8 +692,8 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
-    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    x = m_sagital2DView->getEventPositionX();
+    y = m_sagital2DView->getEventPositionY();
     double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
@@ -721,8 +721,8 @@ void QMPRExtension::pushSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
-    x = m_sagital2DView->getInteractor()->GetEventPosition()[0];
-    y = m_sagital2DView->getInteractor()->GetEventPosition()[1];
+    x = m_sagital2DView->getEventPositionX();
+    y = m_sagital2DView->getEventPositionY();
     double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
