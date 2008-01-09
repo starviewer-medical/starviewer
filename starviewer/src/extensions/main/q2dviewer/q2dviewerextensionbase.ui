@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1199</width>
+    <width>1394</width>
     <height>391</height>
    </rect>
   </property>
@@ -352,51 +352,69 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_buttonGrid" >
-         <property name="toolTip" >
-          <string>Series layout</string>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
          </property>
-         <property name="text" >
-          <string>...</string>
+         <property name="spacing" >
+          <number>0</number>
          </property>
-         <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_downButtonGrid" >
-         <property name="toolTip" >
-          <string>Series layout</string>
-         </property>
-         <property name="text" >
-          <string>...</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/down.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>12</width>
-           <height>12</height>
-          </size>
-         </property>
-         <property name="checkable" >
-          <bool>false</bool>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
+         <item>
+          <widget class="QToolButton" name="m_buttonGrid" >
+           <property name="toolTip" >
+            <string>Series layout</string>
+           </property>
+           <property name="text" >
+            <string>...</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_downButtonGrid" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip" >
+            <string>Series layout</string>
+           </property>
+           <property name="text" >
+            <string>...</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/down.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>12</width>
+             <height>12</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>false</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QToolButton" name="m_imageGrid" >
@@ -588,7 +606,19 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" native="1" name="m_workingArea" />
+    <widget class="QWidget" native="1" name="m_workingArea" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>7</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::StrongFocus</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
