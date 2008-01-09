@@ -39,6 +39,7 @@ QViewer::QViewer( QWidget *parent )
  : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_isActive(false)
 {
     m_vtkWidget = new QVTKWidget( this );
+    m_vtkWidget->setFocusPolicy( Qt::WheelFocus );
 
     //Afegim el layout
     QHBoxLayout* viewerLayout = new QHBoxLayout( this );
