@@ -80,6 +80,7 @@ void QStudyTreeWidget::createContextMenu()
     //acció veure
     m_viewAction = m_contextMenu.addAction( tr("&View") );
     m_viewAction->setShortcut( tr("Ctrl+V") );
+    m_viewAction->setIcon( QIcon(":/images/view.png") );
     connect( m_viewAction , SIGNAL( triggered() ) , SIGNAL( view() ) );
     // TODO per alguna raó desconeguda, QT ignora els shortCut especificats a través de QAction, i fem aquest workaround perquè funcionin. Mirar com solucionar-ho
     (void) new QShortcut( m_viewAction->shortcut() , this , SIGNAL( view() ) );
@@ -102,6 +103,7 @@ void QStudyTreeWidget::createContextMenu()
         // només es pot esborrar a local
         m_deleteStudyAction = m_contextMenu.addAction( tr("&Delete")) ;
         m_deleteStudyAction->setShortcut( Qt::Key_Delete );
+        m_deleteStudyAction->setIcon( QIcon(":/images/databaseRemove.png") );
         connect( m_deleteStudyAction , SIGNAL( triggered() ), SIGNAL( deleteSelectedStudies() ) );
         (void) new QShortcut( m_deleteStudyAction->shortcut() , this , SIGNAL( deleteSelectedStudies() ) );
 
