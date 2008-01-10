@@ -537,6 +537,8 @@ void OptimalViewpoint::updatePlanes()
     //             slicer.computeSmi();
     //             slicer.method1A( m_similarityThreshold );
     //             slicer.method1B( m_similarityThreshold );
+                QTime t;
+                t.start();
                 switch ( m_parameters->getGroupingMethod() )
                 {
                     case 1: slicer.groupingMethodC( m_similarityThreshold ); break;
@@ -544,6 +546,9 @@ void OptimalViewpoint::updatePlanes()
                     case 3: slicer.splittingMethodC( m_similarityThreshold ); break;
                     case 4: slicer.splittingMethodC_JS( m_similarityThreshold ); break;
                 }
+                int elapsed = t.elapsed();
+                DEBUG_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
+                INFO_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
             }
 
             break;
