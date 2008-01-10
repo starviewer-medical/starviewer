@@ -218,7 +218,8 @@ void Slicer::reslice( bool saveMhd, bool doClip )
         if ( outFileViola.open( QFile::WriteOnly | QFile::Truncate ) )
         {
             QTextStream outViola( &outFileViola );
-            outViola << "(" << resliceAxes->Element[0][0] << ";" << resliceAxes->Element[0][1] << ";"
+            outViola << "("
+                     << "(" << resliceAxes->Element[0][0] << ";" << resliceAxes->Element[0][1] << ";"
                             << resliceAxes->Element[0][2] << ";" << resliceAxes->Element[0][3] << ");"
                      << "(" << resliceAxes->Element[1][0] << ";" << resliceAxes->Element[1][1] << ";"
                             << resliceAxes->Element[1][2] << ";" << resliceAxes->Element[1][3] << ");"
@@ -226,7 +227,7 @@ void Slicer::reslice( bool saveMhd, bool doClip )
                             << resliceAxes->Element[2][2] << ";" << resliceAxes->Element[2][3] << ");"
                      << "(" << resliceAxes->Element[3][0] << ";" << resliceAxes->Element[3][1] << ";"
                             << resliceAxes->Element[3][2] << ";" << resliceAxes->Element[3][3] << ")"
-                    << "\n";
+                     << ")\n";
             outViola << "(" << m_vector.x << ";" << m_vector.y << ";" << m_vector.z << ")\n";
             outFileViola.close();
         }
@@ -720,6 +721,7 @@ double Slicer::newMethod2( int step, bool normalized )
 // llesques fusionades
 void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficient!!!
 {
+    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
     // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
@@ -757,7 +759,7 @@ void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficie
         QMultiMap< double, unsigned short >::iterator it = --sortedSimilarities.end();  // last element
 
 //         if ( it.key() > threshold )
-        if ( nGroups > 5 )
+        if ( nGroups > N_GROUPS )
         {
             Group & groupX = groups[it.value()];    // group X
             Group & groupY = *groupX.next;          // group Y (following X)
@@ -1202,6 +1204,7 @@ double Slicer::jensenShannonDivergence( const Group & groupX, const Group & grou
 // llesques fusionades (Jensen-Shannon)
 void Slicer::groupingMethodC_JS( double threshold )    /// \todo Fer-ho més eficient!!!
 {
+    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
     // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
@@ -1243,7 +1246,7 @@ void Slicer::groupingMethodC_JS( double threshold )    /// \todo Fer-ho més efi
         QMultiMap< double, unsigned short >::iterator it = sortedDivergences.begin();   // first element
 
 //         if ( it.key() < threshold )
-        if ( nGroups > 5 )
+        if ( nGroups > N_GROUPS )
         {
             Group & groupX = groups[it.value()];    // group X
             Group & groupY = *groupX.next;          // group Y (following X)
@@ -1351,6 +1354,7 @@ void Slicer::groupingMethodC_JS( double threshold )    /// \todo Fer-ho més efi
 // llesques fusionades
 void Slicer::splittingMethodC( double threshold )   /// \todo Fer-ho més eficient!!!
 {
+    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     QList<Group> groups;    // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
     Group firstGroup;
@@ -1405,7 +1409,7 @@ void Slicer::splittingMethodC( double threshold )   /// \todo Fer-ho més eficie
 
             DEBUG_LOG( QString( "[*SMC*] Split: %1 | %2 || sim = %3" ).arg( minPartition.g1.id ).arg( minPartition.g2.id ).arg( minSimilarity ) );
 
-            if ( groups.size() == 5 ) belowThreshold = false;
+            if ( groups.size() == N_GROUPS ) belowThreshold = false;
         }
         else
         {
@@ -1661,7 +1665,7 @@ void Slicer::fillHistograms_JS( Partition & partition ) const
 
     if ( partition.g1Histogram.size() == 0 )    // first call with this partition
     {
-        DEBUG_LOG( "fillHistograms_JS first call" );
+//         DEBUG_LOG( "fillHistograms_JS first call" );
         partition.g1Histogram.setSize( m_nLabels );
         partition.g2Histogram.setSize( m_nLabels );
         partition.jointHistogram.setSize( m_nLabels );
@@ -1685,7 +1689,7 @@ void Slicer::fillHistograms_JS( Partition & partition ) const
     }
     else    // just adjust histograms
     {
-        DEBUG_LOG( "fillHistograms_JS adjust" );
+//         DEBUG_LOG( "fillHistograms_JS adjust" );
         for ( unsigned int i = 0; i < m_sliceSize; i++ )
         {
             unsigned char value = partition.g1.slices.last().data[i]; if ( value == m_newBackground ) value = 0;
@@ -1693,15 +1697,15 @@ void Slicer::fillHistograms_JS( Partition & partition ) const
         }
     }
 
-    DEBUG_LOG( QString( "[*FH_JS*] H(g1).count() = %1" ).arg( partition.g1Histogram.count() ) );
-    DEBUG_LOG( QString( "[*FH_JS*] H(g2).count() = %1" ).arg( partition.g2Histogram.count() ) );
-    DEBUG_LOG( QString( "[*FH_JS*] H(g1,g2).count() = %1" ).arg( partition.jointHistogram.count() ) );
+//     DEBUG_LOG( QString( "[*FH_JS*] H(g1).count() = %1" ).arg( partition.g1Histogram.count() ) );
+//     DEBUG_LOG( QString( "[*FH_JS*] H(g2).count() = %1" ).arg( partition.g2Histogram.count() ) );
+//     DEBUG_LOG( QString( "[*FH_JS*] H(g1,g2).count() = %1" ).arg( partition.jointHistogram.count() ) );
 }
 
 
 double Slicer::jensenShannonDivergence( const Partition & partition ) const
 {
-    double sum = 0.0;
+//     double sum = 0.0;
     double H_X_ = 0.0;
     double countX = partition.g1Histogram.count();
     QVectorIterator<quint64> * itHistogramX = partition.g1Histogram.getIterator();
@@ -1709,13 +1713,13 @@ double Slicer::jensenShannonDivergence( const Partition & partition ) const
     {
         double p_x_ = itHistogramX->next() / countX;
         if ( p_x_ > 0.0 ) H_X_ -= p_x_ * log( p_x_ );
-        sum += p_x_;
+//         sum += p_x_;
     }
     H_X_ /= log( 2.0 );
     delete itHistogramX;
-    DEBUG_LOG( QString( "sum p(x) = %1" ).arg( sum ) );
+//     DEBUG_LOG( QString( "sum p(x) = %1" ).arg( sum ) );
 
-    sum = 0.0;
+//     sum = 0.0;
     double H_Y_ = 0.0;
     double countY = partition.g2Histogram.count();
     QVectorIterator<quint64> * itHistogramY = partition.g2Histogram.getIterator();
@@ -1723,13 +1727,13 @@ double Slicer::jensenShannonDivergence( const Partition & partition ) const
     {
         double p_y_ = itHistogramY->next() / countY;
         if ( p_y_ > 0.0 ) H_Y_ -= p_y_ * log( p_y_ );
-        sum += p_y_;
+//         sum += p_y_;
     }
     H_Y_ /= log( 2.0 );
     delete itHistogramY;
-    DEBUG_LOG( QString( "sum p(y) = %1" ).arg( sum ) );
+//     DEBUG_LOG( QString( "sum p(y) = %1" ).arg( sum ) );
 
-    sum = 0.0;
+//     sum = 0.0;
     double H_XY_ = 0.0;
     double countXY = partition.jointHistogram.count();
     QVectorIterator<quint64> * itHistogramXY = partition.jointHistogram.getIterator();
@@ -1737,19 +1741,19 @@ double Slicer::jensenShannonDivergence( const Partition & partition ) const
     {
         double p_xy_ = itHistogramXY->next() / countXY;
         if ( p_xy_ > 0.0 ) H_XY_ -= p_xy_ * log( p_xy_ );
-        sum += p_xy_;
+//         sum += p_xy_;
     }
     H_XY_ /= log( 2.0 );
     delete itHistogramXY;
-    DEBUG_LOG( QString( "sum p(xy) = %1" ).arg( sum ) );
+//     DEBUG_LOG( QString( "sum p(xy) = %1" ).arg( sum ) );
 
     double jsd = H_XY_ - (countX / countXY) * H_X_ - (countY / countXY) * H_Y_;
     // pesem jsd pel volum
     jsd *= countXY;
 
-    DEBUG_LOG( QString( "[*JSD_P*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
-    DEBUG_LOG( QString( "[*JSD_P*][CE] H(XY) = %1" ).arg( H_XY_ ) );
-    DEBUG_LOG( QString( "[*JSD_P*][JSD] JSD = %1" ).arg( jsd ) );
+//     DEBUG_LOG( QString( "[*JSD_P*][entropies] H(X) = %1, H(Y) = %2" ).arg( H_X_ ).arg( H_Y_ ) );
+//     DEBUG_LOG( QString( "[*JSD_P*][CE] H(XY) = %1" ).arg( H_XY_ ) );
+//     DEBUG_LOG( QString( "[*JSD_P*][JSD] JSD = %1" ).arg( jsd ) );
 
     return jsd;
 }
@@ -1758,6 +1762,7 @@ double Slicer::jensenShannonDivergence( const Partition & partition ) const
 // llesques fusionades
 void Slicer::splittingMethodC_JS( double threshold )   /// \todo Fer-ho més eficient!!!
 {
+    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     QList<Group> groups;    // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
     Group firstGroup;
@@ -1811,8 +1816,9 @@ void Slicer::splittingMethodC_JS( double threshold )   /// \todo Fer-ho més efi
             groups.insert( maxGroup, maxPartition.g1 );
 
             DEBUG_LOG( QString( "[*SMC_JS*] Split: %1 | %2 || jsd = %3" ).arg( maxPartition.g1.id ).arg( maxPartition.g2.id ).arg( maxJsd ) );
+            DEBUG_LOG( QString( "[*SMC_JS*] nGroups = %1, N_GROUPS = %2" ).arg( groups.size() ).arg( N_GROUPS ) );
 
-            if ( groups.size() == 5 ) aboveThreshold = false;
+            if ( groups.size() == N_GROUPS ) aboveThreshold = false;
         }
         else
         {
