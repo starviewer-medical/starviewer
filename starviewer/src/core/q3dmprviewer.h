@@ -94,17 +94,6 @@ public slots:
 
     /// Mètodes per donar diversos window level per defecte
     void resetWindowLevelToDefault();
-    void resetWindowLevelToBone();
-    void resetWindowLevelToEmphysema();
-    void resetWindowLevelToSoftTissuesNonContrast();
-    void resetWindowLevelToLiverNonContrast();
-    void resetWindowLevelToSoftTissuesContrastMedium();
-    void resetWindowLevelToLiverContrastMedium();
-    void resetWindowLevelToNeckContrastMedium();
-    void resetWindowLevelToAngiography();
-    void resetWindowLevelToOsteoporosis();
-    void resetWindowLevelToPetrousBone();
-    void resetWindowLevelToLung();
 
     /// mètodes per controlar la visibilitat de l'outline
     void enableOutline( bool enable );
