@@ -21,107 +21,92 @@
 <context>
     <name>udg::QCardiac2DViewerExtension</name>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="63"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="58"/>
         <source>&amp;Axial View</source>
         <translation>Vista &amp;Axial</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="64"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="59"/>
         <source>Ctrl+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="65"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="60"/>
         <source>Change Current View To Axial</source>
         <translation>Cambiar la vista actual a Axial</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="70"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="65"/>
         <source>&amp;Sagital View</source>
         <translation>Vista &amp;Sagital</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="71"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="66"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="72"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="67"/>
         <source>Change Current View To Saggital</source>
         <translation>Cambiar la vista actual a Sagital</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="78"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="73"/>
         <source>&amp;Coronal View</source>
         <translation>Vista &amp;Coronal</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="79"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="74"/>
         <source>Ctrl+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="80"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="75"/>
         <source>Change Current View To Coronal</source>
         <translation>Cambiar la vista actual a Coronal</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="86"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="81"/>
         <source>Space</source>
         <translation>Espacio</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="92"/>
-        <source>Voxel Information</source>
-        <translation>Información de vóxel</translation>
-    </message>
-    <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="93"/>
-        <source>Ctrl+I</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="94"/>
-        <source>Enable voxel information over cursor</source>
-        <translation>Activar la información de vóxel</translation>
-    </message>
-    <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="102"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="114"/>
         <source>Rotate Clockwise</source>
         <translation>Rotación en sentido horario</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="104"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="116"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rotación de la imagen en sentido horario</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="111"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="123"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rotación en sentido antihorario</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="113"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="125"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rotación de la imagen en sentido antihorario</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="314"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="313"/>
         <source>Save video file as...</source>
         <translation>Guardar archivo de video como...</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="333"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="332"/>
         <source>MPEG (*.mpg)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="338"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="337"/>
         <source>AVI (*.avi)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="356"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="355"/>
         <source>Making video</source>
         <translation>Produciendo video</translation>
     </message>
@@ -129,7 +114,7 @@
 <context>
     <name>udg::QCardiac2DViewerExtensionBase</name>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="304"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="260"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -149,22 +134,22 @@
         <translation>mover</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="282"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="238"/>
         <source>voxel information</source>
         <translation>información de vóxel</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="349"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="305"/>
         <source>WW/WL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="745"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="695"/>
         <source>Velocity</source>
         <translation>Velocidad</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextensionbase.ui" line="752"/>
+        <location filename="qcardiac2dviewerextensionbase.ui" line="702"/>
         <source>frames/sec</source>
         <translation>frames/seg</translation>
     </message>

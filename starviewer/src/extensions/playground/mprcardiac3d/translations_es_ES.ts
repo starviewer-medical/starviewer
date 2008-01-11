@@ -109,22 +109,22 @@
 <context>
     <name>udg::QMPRCardiac3DExtension</name>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="186"/>
+        <location filename="qmprcardiac3dextension.cpp" line="175"/>
         <source>Save video file as...</source>
         <translation>Guardar el fichero de video como...</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="205"/>
+        <location filename="qmprcardiac3dextension.cpp" line="194"/>
         <source>MPEG (*.mpg)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="210"/>
+        <location filename="qmprcardiac3dextension.cpp" line="199"/>
         <source>AVI (*.avi)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="227"/>
+        <location filename="qmprcardiac3dextension.cpp" line="216"/>
         <source>Making video</source>
         <translation>Produciendo video</translation>
     </message>

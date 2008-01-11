@@ -49,22 +49,22 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="150"/>
+        <location filename="extensionhandler.cpp" line="144"/>
         <source>Loading, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="149"/>
+        <location filename="extensionhandler.cpp" line="143"/>
         <source>Patient loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="236"/>
+        <location filename="extensionhandler.cpp" line="226"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="236"/>
+        <location filename="extensionhandler.cpp" line="226"/>
         <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -147,7 +147,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="420"/>
+        <location filename="qapplicationmainwindow.cpp" line="393"/>
         <source>About Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,7 +242,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="434"/>
+        <location filename="qapplicationmainwindow.cpp" line="407"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gr&#xc3;&#xa0;fics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,12 +297,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="474"/>
+        <location filename="qapplicationmainwindow.cpp" line="447"/>
         <source>Beta version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="483"/>
+        <location filename="qapplicationmainwindow.cpp" line="456"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This version of Starviewer is a preview release of our next Starviewer version and it is being made available for testing purposes only.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologist and our testing members that are helping us to improve this software. Current users of this version should not expect all of the extensions to work properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you  want to help us to improve our software, please, report any bug you found or any other feature request you have to us.&lt;/p&gt;&lt;h3&gt;We really appreciate that you give us your feedback!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>

@@ -49,22 +49,22 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="150"/>
+        <location filename="extensionhandler.cpp" line="144"/>
         <source>Loading, please wait...</source>
         <translation>Cargando, espere por favor...</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="149"/>
+        <location filename="extensionhandler.cpp" line="143"/>
         <source>Patient loading</source>
         <translation>Cargando paciente</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="236"/>
+        <location filename="extensionhandler.cpp" line="226"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="236"/>
+        <location filename="extensionhandler.cpp" line="226"/>
         <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
         <translation>Lo sentimos, ha habido algun error mientras se cargaban los datos de los pacientes:&lt;br&gt; %1</translation>
     </message>
@@ -147,7 +147,7 @@
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="420"/>
+        <location filename="qapplicationmainwindow.cpp" line="393"/>
         <source>About Starviewer</source>
         <translation>Sobre Starviewer</translation>
     </message>
@@ -242,7 +242,7 @@
         <translation>Los cambios tendrán efecto la próxima vez que inicie la aplicación</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="434"/>
+        <location filename="qapplicationmainwindow.cpp" line="407"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gr&#xc3;&#xa0;fics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
         <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy;2005-2007 Grup de Gràfics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer es un software de procesamiento de imágenes DICOM producidas a partir de equipamiento médico (MRI, CT, PET, PET-CT...). Puede leer otros formatos de archivos especificados por el estándar MetalO ( archivos *.mhd). Es completamente compatible con el estándar DICOM de comuniación de imagénes y formatos. Starviewer puede recibir las imágenes trasferidas por el protocolo de comunicación DICOM de qualquier PACS o modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, i Query/Retrive).&lt;p align=&apos;justify&apos;&gt;Starviewer está especialmente diseñado para la navegación y visualización de imagénes multimodalidad y multidimensional: visualizador 2D, visualizador MPR 2D (reconstucción multiplanar), visualizador 3D MPR y un visualizador híbrido MPR i MIP (Maximum Intensity Projection).&lt;p align=&apos;justify&apos;&gt;Starviewer es al mismo tiempo una estación DICOM PACS para la visualización y un software para el procesamiento de imágenes médicas para la investigación (radiología y visualización de imagen nuclear), visualización de imágenes funcionales, imágenes 3D y visualización de imágenes moleculares.&lt;p&gt;Versión: %1 &lt;/p&gt;</translation>
     </message>
@@ -297,12 +297,12 @@
         <translation>Cambiar al lenguage %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="474"/>
+        <location filename="qapplicationmainwindow.cpp" line="447"/>
         <source>Beta version</source>
         <translation>Versión Beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="483"/>
+        <location filename="qapplicationmainwindow.cpp" line="456"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This version of Starviewer is a preview release of our next Starviewer version and it is being made available for testing purposes only.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologist and our testing members that are helping us to improve this software. Current users of this version should not expect all of the extensions to work properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you  want to help us to improve our software, please, report any bug you found or any other feature request you have to us.&lt;/p&gt;&lt;h3&gt;We really appreciate that you give us your feedback!&lt;/h3&gt;</source>
         <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Esta versión de Starviewer es una versión previa de la próxima versión oficial de Starviewer y está en una fase de pruebas.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Esta versión previa está pensada para los radiólogos y miembros de testing que nos ayudan a mejorar esta aplicación. Los usuarios actuales de esta versión deben ser conscientes que no todas las funcionalidades funcionarán a la perfección durante esta fase.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quieres ayudarnos a mejorar la aplicación, por favor infórmanos de qualquier error o qualquier otra petición de funcionalidades que creas convenientes.&lt;/p&gt;&lt;h3&gt;Vuestra respuesta es fundamental para la mejora de Starviewer!&lt;/h3&gt;</translation>
     </message>
