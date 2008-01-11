@@ -172,7 +172,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     {
         toolAction->setText( tr("Synchronize tool") );
         toolAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
-        toolAction->setIcon( QIcon(":/images/boomerang.png") );
+        toolAction->setIcon( QIcon(":/images/synchronize.png") );
     }
     else if( toolName == "WindowLevelPresetsTool" )
     {
