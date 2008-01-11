@@ -66,6 +66,8 @@ void TranslateTool::doTranslate()
 
 void TranslateTool::pan()
 {
+    // Codi basat en codi extret de vtkInteractorStyleTrackballActor::Pan()
+    // Si fem servir "current renderer" en comptes de "default" el desplaçament no va del tot bé
     vtkRenderer *renderer = m_viewer->getInteractorStyle()->GetCurrentRenderer();
     if( !renderer )
         return;
